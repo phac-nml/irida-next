@@ -8,6 +8,9 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     @sample1 = samples(:sample1)
     @project1 = projects(:project1)
     @data_export1 = data_exports(:data_export_one)
+    @namespace = namespaces_project_namespaces(:project1_namespace)
+    @workflow1 = workflow_executions(:automated_workflow_execution)
+    @workflow2 = workflow_executions(:automated_example_completed)
   end
 
   test 'should view exports' do
@@ -33,7 +36,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     workflow_execution = workflow_executions(:irida_next_example_completed_with_output)
     params = { 'data_export' => {
                  'export_type' => 'analysis',
-                 'export_parameters' => { 'ids' => [workflow_execution.id] }
+                 'export_parameters' => { 'ids' => [workflow_execution.id], analysis_type: 'user' }
                },
                format: :turbo_stream }
     assert_difference('DataExport.count', 1) do
@@ -287,5 +290,69 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
       sample_ids: [@sample1.id]
     }
     assert_response :success
+  end
+
+  test 'should create new analysis export with multiple ids' do
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: {
+             export_type: 'analysis',
+             export_parameters: { 'ids' => [@workflow1.id, @workflow2.id],
+                                  'namespace_id' => @namespace.id,
+                                  'analysis_type' => 'project' }
+           }
+         }
+    assert_response :redirect
+  end
+
+  test 'should not create new analysis export with missing analysis_type' do
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: {
+             export_type: 'analysis',
+             export_parameters: { 'ids' => [@workflow1.id, @workflow2.id],
+                                  'namespace_id' => @namespace.id }
+           }
+         }
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not create new analysis export with invalid analysis_type' do
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: {
+             export_type: 'analysis',
+             export_parameters: { 'ids' => [@workflow1.id, @workflow2.id],
+                                  'namespace_id' => 'invalid_id' }
+           }
+         }
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not create new analysis export with both user and project workflow ids and analysis_type project' do
+    user_workflow = workflow_executions(:workflow_execution_valid)
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: {
+             export_type: 'analysis',
+             export_parameters: { 'ids' => [@workflow1.id, @workflow2.id, user_workflow.id],
+                                  'namespace_id' => @namespace.id,
+                                  'analysis_type' => 'project' }
+           }
+         }
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not create new analysis export with both user and project workflow ids and analysis_type user' do
+    user_workflow = workflow_executions(:workflow_execution_valid)
+    post data_exports_path(format: :turbo_stream),
+         params: {
+           data_export: {
+             export_type: 'analysis',
+             export_parameters: { 'ids' => [@workflow1.id, @workflow2.id, user_workflow.id],
+                                  'analysis_type' => 'user' }
+           }
+         }
+    assert_response :unprocessable_entity
   end
 end

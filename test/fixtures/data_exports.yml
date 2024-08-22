@@ -73,7 +73,7 @@ data_export_six:
   name: Data Export 6
   export_type: analysis
   status: processing
-  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid) %>]}
+  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid) %>], analysis_type: 'user'}
   email_notification: true
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
@@ -83,7 +83,7 @@ data_export_seven:
   name: Data Export 7
   export_type: analysis
   status: ready
-  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid) %>]}
+  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid) %>], analysis_type: 'user'}
   email_notification: true
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>

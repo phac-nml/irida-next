@@ -135,7 +135,7 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
-  def export_sample_data?
+  def export_data?
     return true if Member.can_export_data?(user, record) == true
 
     details[:name] = record.name

@@ -8,6 +8,7 @@ class DataExportTest < ActiveSupport::TestCase
     @project1 = projects(:project1)
     @sample1 = samples(:sample1)
     @user = users(:john_doe)
+    @workflow_execution = workflow_executions(:irida_next_example_completed_with_output)
   end
 
   test 'valid sample data export' do
@@ -53,7 +54,7 @@ class DataExportTest < ActiveSupport::TestCase
 
   test 'data export with invalid export_type' do
     data_export = DataExport.new(user: @user, status: 'ready', export_type: 'invalid type',
-                                 export_parameters: { ids: [@sample1.id] })
+                                 export_parameters: { ids: [@workflow_execution.id], analysis_type: 'user' })
     assert_not data_export.valid?
     data_export.export_type = 'analysis'
     assert data_export.valid?
@@ -78,7 +79,7 @@ class DataExportTest < ActiveSupport::TestCase
 
   test 'export with missing ids' do
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'analysis',
-                                 export_parameters: { not_ids: [@sample1.id] })
+                                 export_parameters: { not_ids: [@workflow_execution.id], analysis_type: 'user' })
     assert_not data_export.valid?
     assert_equal I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.missing_ids'),
                  data_export.errors[:export_parameters].first
@@ -190,6 +191,24 @@ class DataExportTest < ActiveSupport::TestCase
     assert_not data_export.valid?
     assert_equal I18n.t(
       'activerecord.errors.models.data_export.attributes.export_parameters.missing_attachment_formats'
+    ), data_export.errors[:export_parameters].first
+  end
+
+  test 'analysis export without analysis_type param' do
+    data_export = DataExport.new(user: @user, status: 'processing', export_type: 'analysis',
+                                 export_parameters: { ids: [@workflow_execution.id] })
+    assert_not data_export.valid?
+    assert_equal I18n.t(
+      'activerecord.errors.models.data_export.attributes.export_parameters.missing_analysis_type'
+    ), data_export.errors[:export_parameters].first
+  end
+
+  test 'analysis export with invalid analysis_type param' do
+    data_export = DataExport.new(user: @user, status: 'processing', export_type: 'analysis',
+                                 export_parameters: { ids: [@workflow_execution.id], analysis_type: 'invalid_type' })
+    assert_not data_export.valid?
+    assert_equal I18n.t(
+      'activerecord.errors.models.data_export.attributes.export_parameters.invalid_analysis_type'
     ), data_export.errors[:export_parameters].first
   end
 end

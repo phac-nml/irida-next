@@ -41,7 +41,7 @@
         },
         class: "button button--size-default button--state-default action-link" %>
       <% end %>
-      <% if allowed_to?(:export_sample_data?, @project) %>
+      <% if allowed_to?(:export_data?, @project) %>
         <%= viral_dropdown(label: t(".create_export_button.label"), aria: { label: t('.create_export_button.label') }, caret: true, action_link: true, action_link_value: 1, classes: "font-normal button button--size-default button--state-default action-link") do |dropdown| %>
           <% if @project.namespace.metadata_fields.empty? %>
             <% dropdown.with_item(
@@ -115,7 +115,7 @@
 
 <div class="flow-root">
   <div class="float-left inline-flex space-x-2">
-    <% if allowed_to?(:submit_workflow?, @project) || allowed_to?(:clone_sample?, @project) || allowed_to?(:transfer_sample?, @project) || allowed_to?(:export_sample_data?, @project) %>
+    <% if allowed_to?(:submit_workflow?, @project) || allowed_to?(:clone_sample?, @project) || allowed_to?(:transfer_sample?, @project) || allowed_to?(:export_data?, @project) %>
       <div class="float-left inline-flex space-x-2">
         <%= search_form_for(
                   @q,

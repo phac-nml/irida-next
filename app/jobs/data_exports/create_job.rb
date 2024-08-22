@@ -136,7 +136,7 @@ module DataExports
     def create_sample_zip(data_export)
       Tempfile.new(binmode: true).tap do |tempfile|
         ZipKit::Streamer.open(tempfile) do |zip|
-          samples = sample_query(data_export)
+          samples = sample_query(data_export.export_parameters['ids'])
           samples.each do |sample|
             next if sample.attachments.empty?
 
@@ -215,18 +215,15 @@ module DataExports
     def create_analysis_zip(data_export)
       Tempfile.new(binmode: true).tap do |tempfile|
         ZipKit::Streamer.open(tempfile) do |zip|
-          workflow_execution = WorkflowExecution.includes(
-            outputs: { file_attachment: :blob },
-            samples_workflow_executions: [:sample, { outputs: { file_attachment: :blob } }]
-          ).find(data_export.export_parameters['ids'][0])
+          workflow_executions = workflow_query(data_export.export_parameters['ids'])
+          workflow_executions.each do |workflow|
+            write_workflow_execution_outputs_and_manifest(workflow, zip)
 
-          write_workflow_execution_outputs_and_manifest(workflow_execution, zip)
-
-          samples_workflow_executions = workflow_execution.samples_workflow_executions
-          samples_workflow_executions.each do |swe|
-            write_samples_workflow_execution_outputs_and_manifest(swe, zip) unless swe.outputs.empty?
+            samples_workflow_executions = workflow.samples_workflow_executions
+            samples_workflow_executions.each do |swe|
+              write_samples_workflow_execution_outputs_and_manifest(workflow.id, swe, zip) unless swe.outputs.empty?
+            end
           end
-
           write_manifest(zip)
           write_simple_manifest(data_export_id: data_export.id.to_s, zip:)
         end
@@ -234,25 +231,32 @@ module DataExports
     end
 
     def write_workflow_execution_outputs_and_manifest(workflow_execution, zip)
-      workflow_execution.outputs.each do |output|
-        write_attachment(output.file.filename.to_s, zip, output)
+      workflow_execution_directory =
+        { 'name' => workflow_execution.id,
+          'type' => 'folder',
+          'irida-next-type' => 'workflow_execution',
+          'irida-next-name' => workflow_execution.name.nil? ? workflow_execution.id : workflow_execution.name,
+          'children' => [] }
 
-        @manifest['children'] << { 'name' => output.file.filename.to_s, 'type' => 'file' }
+      workflow_execution.outputs.each do |output|
+        directory = "#{workflow_execution.id}/#{output.file.filename}"
+        write_attachment(directory, zip, output)
+        workflow_execution_directory['children'] << { 'name' => output.file.filename.to_s, 'type' => 'file' }
       end
+      @manifest['children'] << workflow_execution_directory
     end
 
-    def write_samples_workflow_execution_outputs_and_manifest(swe, zip)
+    def write_samples_workflow_execution_outputs_and_manifest(we_id, swe, zip)
       sample = swe.sample
       sample_directory = { 'name' => sample.puid, 'type' => 'folder', 'irida-next-type' => 'sample',
                            'irida-next-name' => sample.name, 'children' => [] }
       swe.outputs.each do |output|
-        directory = "#{sample.puid}/#{output.file.filename}"
+        directory = "#{we_id}/#{sample.puid}/#{output.file.filename}"
         write_attachment(directory, zip, output)
 
         sample_directory['children'] << { 'name' => output.file.filename.to_s, 'type' => 'file' }
       end
-
-      @manifest['children'] << sample_directory
+      @manifest['children'].detect { |we| we['name'] == we_id }['children'] << sample_directory
     end
 
     # Linelist export specific functions---------------------------------------------------------------------
@@ -313,9 +317,9 @@ module DataExports
     end
 
     # Queries---------------------------------------------------------------------
-    def sample_query(data_export)
+    def sample_query(sample_ids)
       Sample.includes(project: :namespace, attachments: { file_attachment: :blob })
-            .where(id: data_export.export_parameters['ids'])
+            .where(id: sample_ids)
     end
 
     def attachments_query(sample, data_export)
@@ -326,6 +330,13 @@ module DataExports
           data_export.export_parameters['attachment_formats'].include?(attachment.metadata['format'])
         end
       end
+    end
+
+    def workflow_query(workflow_ids)
+      WorkflowExecution.includes(
+        outputs: { file_attachment: :blob },
+        samples_workflow_executions: [:sample, { outputs: { file_attachment: :blob } }]
+      ).where(id: workflow_ids)
     end
   end
 end
