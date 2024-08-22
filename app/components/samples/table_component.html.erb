@@ -136,9 +136,7 @@
                   <%= helpers.local_time(sample[column], :full_date) %>
                 <% elsif column == :updated_at || column == :attachments_updated_at %>
                   <% if sample[column].present? %>
-                    <div data-turbo-permanent="true">
-                      <%= helpers.local_time_ago(sample[column]) %>
-                    </div>
+                    <%= helpers.local_time_ago(sample[column]) %>
                   <% end %>
                 <% else %>
                   <%= sample[column.to_sym] %>

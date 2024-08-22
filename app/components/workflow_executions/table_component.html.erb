@@ -92,9 +92,7 @@
                   <%= helpers.local_time(workflow_execution[column], :full_date) %>
                 <% elsif column == :updated_at || column == :attachments_updated_at %>
                   <% if workflow_execution[column].present? %>
-                    <div data-turbo-permanent="true">
-                      <%= helpers.local_time_ago(workflow_execution[column]) %>
-                    </div>
+                    <%= helpers.local_time_ago(workflow_execution[column]) %>
                   <% end %>
                 <% else %>
                   <%= workflow_execution[column.to_sym] %>
