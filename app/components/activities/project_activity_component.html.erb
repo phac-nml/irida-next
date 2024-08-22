@@ -18,17 +18,19 @@
       ),
   ) %>
 <% elsif sample_link %>
+  <% url =
+    namespace_project_sample_path(
+      @activity[:current_project].parent,
+      @activity[:current_project].project,
+      id: @activity[:sample_id],
+    ) %>
   <%= t(
     "#{@activity[:key]}",
     user: @activity[:user],
     href:
       link_to(
         @activity[:sample_name],
-        namespace_project_sample_path(
-          @activity[:current_project].parent,
-          @activity[:current_project].project,
-          id: @activity[:sample_id],
-        ),
+        path_with_params(url, { tab: samples_tab }),
         class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
       ),
   ) %>

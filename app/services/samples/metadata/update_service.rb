@@ -25,16 +25,28 @@ module Samples
 
         transform_metadata_keys
 
-        Namespaces::ProjectNamespace.public_activity_off
         @sample.with_lock do
           perform_metadata_update
           @sample.save
         end
 
+        @project.namespace.create_activity key: 'namespaces_project_namespace.samples.metadata.update',
+                                           owner: current_user,
+                                           parameters:
+                                            {
+                                              sample_id: @sample.id,
+                                              sample_name: @sample.name,
+                                              action: 'metadata_update'
+                                            }
+
+        Namespaces::ProjectNamespace.public_activity_off
+
         update_metadata_summary
 
-        handle_not_updated_fields
         Namespaces::ProjectNamespace.public_activity_on
+
+        handle_not_updated_fields
+
         @metadata_changes
       rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError => e
         @sample.errors.add(:base, e.message)

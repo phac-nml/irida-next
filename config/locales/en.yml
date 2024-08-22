@@ -235,6 +235,8 @@ en:
         attachment:
           create_html: "%{user} uploaded sequencing data to sample %{href}"
           destroy_html: "%{user} removed sequencing data from sample %{href}"
+        metadata:
+          update_html: "%{user} updated sample %{href} metadata"
       transfer_html: "%{user} transferred project from namespace <span class='text-slate-800 dark:text-slate-300 font-medium'>%{old_namespace}</span>"
     workflow_execution:
       automated_workflow:

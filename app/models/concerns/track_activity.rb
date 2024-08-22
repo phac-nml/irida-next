@@ -131,7 +131,8 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   end
 
   def namespace_project_sample_activity_parameters(params, activity)
-    sample_activity_action_types = %w[sample_create sample_update sample_destroy attachment_create attachment_destroy]
+    sample_activity_action_types = %w[sample_create sample_update metadata_update sample_destroy attachment_create
+                                      attachment_destroy]
 
     if sample_activity_action_types.include?(activity.parameters[:action])
       params.merge!({
