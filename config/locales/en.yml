@@ -1260,10 +1260,6 @@ en:
             multi_keys_exists: Metadata keys '%{keys}' already exist.
           update:
             success: "Metadata was successfully updated"
-        file_imports:
-          create:
-            success: Sample metadata was successfully imported.
-            error: "Metadata was not successfully imported for the following samples:"
         update:
           success: "Metadata was successfully updated"
         file_imports:
@@ -1745,12 +1741,22 @@ en:
         file_imports:
           dialog:
             title: Upload Sample Metadata
+            dialog:
+            description: Importing a metadata spreadsheet allows multiple metadata fields to multiple samples be added, updated or removed at once.
             file: File
             file_help: CSV, TSV, XLS or XLSX.
             sample_id_column: Sample ID Column
             select_sample_id_column: Select a Sample ID Column
             submit_button: Import Metadata
             ignore_empty_values: Ignore empty values
+            ignore_empty_values:
+              description: If selected, any metadata fields without an associated value will be ignored and those metadata keys will not be removed from the sample if present. However, if this not selected, any samples with the metadata key and empty value will be deleted.
+            namespace:
+              description: "The spreadsheet is required to have a column that contains a sample identifier. "
+              group:
+                description_html: The identifier is case-sensitive and must contain the <b>sample ID</b>.
+              project:
+                description_html: The identifier is case-sensitive and can contain either the <b>sample name or ID</b>.
           errors:
             description: "The sample metadata import completed with the following errors:"
             ok_button: OK

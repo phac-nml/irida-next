@@ -272,7 +272,7 @@ module Samples
         response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, params).execute
         assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
                                           updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
-        assert_equal("Sample 'Project 2 Sample 1' is not found within this project",
+        assert_equal("Sample 'Project 2 Sample 3' is not found within this project",
                      @project.namespace.errors.messages_for(:sample).first)
         assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '20', 'metadatafield3' => '30' },
                      @sample1.reload.metadata)

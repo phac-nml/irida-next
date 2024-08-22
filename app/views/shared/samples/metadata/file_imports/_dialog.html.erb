@@ -10,6 +10,17 @@
           class="grid gap-4"
           data-controller="projects--samples--metadata--file-import"
         >
+          <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+            <%= t(".description") %>
+          </p>
+          <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+            <%= t(".namespace.description") %>
+            <% if @namespace.type == 'Group' %>
+              <%= t(".namespace.group.description_html") %>
+            <% else %>
+              <%= t(".namespace.project.description_html") %>
+            <% end %>
+          </p>
           <div class="form-field">
             <%= form.label :file,
                        t(".file"),
@@ -54,6 +65,17 @@
             <%= form.label :ignore_empty_values,
                        t(".ignore_empty_values"),
                        class: "ml-2 text-sm font-medium text-slate-900 dark:text-slate-300" %>
+            <%= viral_tooltip(title: t(:'.ignore_empty_values.description')) do %>
+              <div
+                class="
+                  inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500
+                  rounded-lg dark:text-blue-200
+                "
+              >
+                <%= viral_icon(name: "information_circle_solid", classes: "w-5 h-5") %>
+                <span class="sr-only"><%= t("components.flash.information_icon") %></span>
+              </div>
+            <% end %>
           </div>
           <div>
             <%= form.submit t(".submit_button"),
