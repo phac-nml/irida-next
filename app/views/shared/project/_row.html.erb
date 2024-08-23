@@ -46,6 +46,14 @@
     <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= project.description %></div>
   </td>
   <td class="p-4 whitespace-nowrap">
+    <%= viral_pill(
+      text: "#{project.samples.size} samples",
+      color: "transparent",
+      border: true,
+      classes: "ml-2",
+    ) %>
+  </td>
+  <td class="p-4 whitespace-nowrap">
     <%= local_time_ago(project.updated_at) %>
   </td>
 </tr>
