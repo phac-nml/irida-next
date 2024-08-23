@@ -6,6 +6,9 @@
         secondary: "Another fact goes here",
         value: num,
       ) %>
+      <%= select.with_empty_state do %>
+        No users found
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

@@ -6,6 +6,7 @@ module Viral
     erb_template <<~ERB
       <li class="w-full">
           <button
+            type="button"
             data-viral--select2-target="item"
             data-viral--select2-primary-param="<%= @primary %>"
             data-viral--select2-secondary-param="<%= @secondary %>"

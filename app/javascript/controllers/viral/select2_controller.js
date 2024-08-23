@@ -56,6 +56,21 @@ export default class extends Controller {
     }
   }
 
+  keyboardQuery(event) {
+    event.preventDefault();
+    const visible = this.itemTargets.filter(
+      (item) => !item.parentNode.classList.contains("hidden")
+    );
+    if (visible.length === 1) {
+      this.select({
+        params: {
+          primary: visible[0].dataset["viral-Select2PrimaryParam"],
+          value: visible[0].dataset["viral-Select2ValueParam"]
+        }
+      });
+    }
+  }
+
   #navigate(direction) {
     if (this.itemTargets.length === 0) return;
     const visible = this.itemTargets.filter(

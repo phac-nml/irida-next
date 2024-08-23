@@ -2,9 +2,13 @@
   data-controller="viral--select2"
   data-action="keyup->viral--select2#keydown"
 >
+  <label
+    for="select2-input"
+    class="sr-only"><%= name %></label>
   <input
     type="text"
-    data-action="focus->viral--select2#focus"
+    id="select2-input"
+    data-action="focus->viral--select2#focus keydown.enter->viral--select2#keyboardQuery"
     data-viral--select2-target="input"
     required="<%= required %>"
     autocomplete="off"
