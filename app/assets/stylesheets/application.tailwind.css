@@ -485,3 +485,14 @@ div.field_with_errors> :is(select) {
   display: flex;
   flex-direction: column;
 }
+
+.scrollbar::-webkit-scrollbar {
+  background-color: initial;
+  width: .75rem;
+  height: .75rem;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: grey !important;
+  border-radius: .25rem;
+}
