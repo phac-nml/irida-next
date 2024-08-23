@@ -1319,7 +1319,7 @@ module Projects
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
       assert_selector '#samples-table table thead tr th', count: 8
 
-      within 'div.overflow-x-auto' do |div|
+      within 'div.overflow-auto' do |div|
         div.scroll_to div.find('table thead th:nth-child(7)')
       end
 
@@ -2294,7 +2294,7 @@ module Projects
       end
       assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
 
-      within '#project_samples_table' do
+      within '.table-container' do
         assert_no_selector 'tr'
         assert_no_text @sample1.name
         assert_no_text @sample2.name
@@ -2378,7 +2378,7 @@ module Projects
       end
       assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
 
-      within '#project_samples_table' do
+      within '.table-container' do
         assert_no_selector 'tr'
         assert_no_text @sample1.name
         assert_no_text @sample2.name
