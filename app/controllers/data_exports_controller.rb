@@ -54,9 +54,9 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   end
 
   def redirect_from
-    if params['id'].include?('INXT_SAM')
+    if params['identifier'].include?('INXT_SAM')
       redirect_to_sample
-    elsif params['id'].include?('INXT_PRJ')
+    elsif params['identifier'].include?('INXT_PRJ')
       redirect_to_project
     else
       redirect_to_workflow_execution
@@ -155,19 +155,19 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   end
 
   def redirect_to_sample
-    sample = Sample.find_by(puid: params['id'])
+    sample = Sample.find_by(puid: params['identifier'])
     project = Project.find(sample.project_id)
     namespace = project.namespace.parent
     redirect_to namespace_project_sample_path(namespace, project, sample, tab: 'files')
   end
 
   def redirect_to_project
-    project = Namespace.find_by(puid: params['id']).project
+    project = Namespace.find_by(puid: params['identifier']).project
     redirect_to namespace_project_samples_path(project.parent, project)
   end
 
   def redirect_to_workflow_execution
-    workflow_execution = WorkflowExecution.find_by(id: params['id'])
+    workflow_execution = WorkflowExecution.find_by(id: params['identifier'])
     submitter = workflow_execution.submitter
     if submitter.user_type == 'human'
       redirect_to workflow_execution_path(workflow_execution)
