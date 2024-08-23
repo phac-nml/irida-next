@@ -26,7 +26,7 @@
         <% if item.is_a?(Integer) %>
           <%== a.(item, classes: active_link_classes) %>
         <% elsif item.is_a?(String) %>
-          <%= link_to item, nil, class: current_link_classes, data: { "aria-disabled": true } %>
+          <%= button_to item, nil, disabled: true, class: current_link_classes, data: { "aria-disabled": true } %>
 
         <% elsif item == :gap %>
           <%= button_to "...",
