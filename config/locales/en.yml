@@ -1373,14 +1373,17 @@ en:
         error: "Could not delete workflow %{workflow_name}"
         success: "Workflow %{workflow_name} was successfully deleted"
       index:
-        create_export_button: Create Export
-        title: Workflow Executions
-        subtitle: These are the automated workflow executions that have been launched for this project
         actions:
           cancel_button: Cancel
           cancel_confirm: Are you sure you want to cancel this workflow execution?
           delete_button: Delete
           delete_confirm: Are you sure you want to delete this workflow execution?
+        create_export_button: Create Export
+        deselect_all_button: Deselect All
+        select_all_button: Select All
+        subtitle: These are the automated workflow executions that have been launched for this project
+        title: Workflow Executions
+
       table:
         empty:
           title: No automated workflow executions.
@@ -1425,6 +1428,8 @@ en:
   workflow_executions:
     index:
       create_export_button: Create Export
+      deselect_all_button: Deselect All
+      select_all_button: Select All
       title: Workflow Executions
       actions:
         cancel_button: Cancel
@@ -1739,6 +1744,11 @@ en:
       submit_button: Submit
       title: Linelist Export
       xlsx: '.xslx'
+    list_workflow_execution:
+      id: "ID:"
+      name: "Name:"
+      run_id: "Run ID:"
+      workflow: "Workflow:"
     types:
       sample: SAMPLE
       analysis: ANALYSIS

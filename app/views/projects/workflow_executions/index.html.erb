@@ -1,6 +1,7 @@
 <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 
 <%= turbo_frame_tag "export_dialog" %>
+<%= turbo_frame_tag "selected" %>
 
 <%= turbo_stream_from @namespace.automation_bot, :workflow_executions %>
 
@@ -24,6 +25,33 @@
       class: "button button--size-default button--state-default action-link" %>
   <% end %>
 <% end %>
+<div class="flow-root">
+  <% if allowed_to?(:export_data?, @project.namespace) %>
+    <div class="float-left inline-flex space-x-2 mb-4">
+      <%= search_form_for(
+                @q,
+                url: select_namespace_project_workflow_executions_url(**request.query_parameters),
+                html: { id: "select-all-form" },
+                class: "filters align-middle"
+              ) do |f| %>
+        <input type="hidden" name="format" value="turbo_stream"/>
+        <input type="hidden" name="select" value="on"/>
+        <%= f.submit t(".select_all_button"),
+                  class: "button button--state-default button--size-default" %>
+      <% end %>
+      <%= search_form_for(
+                @q,
+                url: select_namespace_project_workflow_executions_url(**request.query_parameters),
+                html: { id: "deselect-all-form" },
+                class: "filters align-middle"
+              ) do |f| %>
+        <input type="hidden" name="format" value="turbo_stream"/>
+        <%= f.submit t(".deselect_all_button"),
+                  class: "button button--state-default button--size-default" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
 <%= render partial: "table",
 locals: {
   workflow_executions: @workflow_executions,

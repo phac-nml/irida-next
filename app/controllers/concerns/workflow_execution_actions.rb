@@ -6,7 +6,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
   included do
     before_action :set_default_tab, only: :show
-    before_action :current_page, only: %i[show index]
+    before_action :current_page, only: %i[show index select]
     before_action :workflow_execution, only: %i[show cancel destroy]
   end
 
@@ -66,6 +66,20 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
           render status: :unprocessable_entity, locals: {
             type: 'alert', message: t('.error', workflow_name: @workflow_execution.metadata['workflow_name'])
           }
+        end
+      end
+    end
+  end
+
+  def select
+    authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
+    @workflow_executions = []
+
+    respond_to do |format|
+      format.turbo_stream do
+        if params[:select].present?
+          @q = load_workflows.ransack(params[:q])
+          @workflow_executions = @q.result.select(:id)
         end
       end
     end
