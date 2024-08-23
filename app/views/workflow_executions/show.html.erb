@@ -13,7 +13,8 @@
                     new_data_export_path(
                       export_type: "analysis",
                       analysis_type: "user",
-                      workflow_execution_id: @workflow_execution.id
+                      workflow_execution_id: @workflow_execution.id,
+                      single_workflow: true
                     ),
                     data: {
                       turbo_stream: true
@@ -24,7 +25,8 @@
                     new_data_export_path(
                       export_type: "analysis",
                       analysis_type: "user",
-                      workflow_execution_id: @workflow_execution.id
+                      workflow_execution_id: @workflow_execution.id,
+                      single_workflow: true
                     ),
                     data: {
                       turbo_stream: true

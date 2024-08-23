@@ -24,9 +24,16 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   end
 
   def new
-    render turbo_stream: turbo_stream.update(params[:export_type] == 'analysis' ? 'export_dialog' : 'samples_dialog',
-                                             partial: "new_#{params[:export_type]}_export_dialog",
-                                             locals:), status: :ok
+    # Handles analysis exports created from show page
+    if params[:export_type] == 'analysis' && params[:single_workflow]
+      render turbo_stream: turbo_stream.update('export_dialog',
+                                               partial: 'new_single_analysis_export_dialog',
+                                               locals: new_locals), status: :ok
+    else
+      render turbo_stream: turbo_stream.update(params[:export_type] == 'analysis' ? 'export_dialog' : 'samples_dialog',
+                                               partial: "new_#{params[:export_type]}_export_dialog",
+                                               locals: new_locals), status: :ok
+    end
   end
 
   def create
@@ -128,16 +135,23 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
       }]
   end
 
-  def locals
+  def new_locals
     case params[:export_type]
     when 'analysis'
-      { open: true, workflow_execution_id: params[:workflow_execution_id], analysis_type: params['analysis_type'],
-        namespace_id: params['analysis_type'] == 'project' ? params[:namespace_id] : nil }
+      analysis_locals
     when 'sample'
       { open: true, namespace_id: params[:namespace_id], formats: Attachment::FORMAT_REGEX.keys.sort }
     when 'linelist'
       { open: true, namespace_id: params[:namespace_id] }
     end
+  end
+
+  def analysis_locals
+    local = { open: true,
+              analysis_type: params['analysis_type'],
+              namespace_id: params['analysis_type'] == 'project' ? params[:namespace_id] : nil }
+    local[:workflow_execution] = WorkflowExecution.find(params[:workflow_execution_id]) if params[:single_workflow]
+    local
   end
 
   def redirect_to_sample
