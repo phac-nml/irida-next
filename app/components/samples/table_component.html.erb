@@ -9,7 +9,7 @@
       <thead
         class='
           text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
-          dark:text-slate-400 sticky top-0 z-10
+          dark:text-slate-300 sticky top-0 z-10 special-thead
         '
       >
         <tr>
@@ -96,7 +96,7 @@
               <%= render_cell(
                 tag: index.zero? ? 'th' :'td',
                 scope: index.zero? ? 'row' : nil,
-                classes: class_names('px-3 py-3', 'sticky left-0 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-900': index.zero?, 'sticky left-56 bg-slate-50 dark:bg-slate-900': index == 1)
+                classes: class_names('px-3 py-3', 'sticky left-0 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-700': index.zero?, 'sticky left-56 bg-slate-50 dark:bg-slate-700': index == 1)
               ) do %>
                 <% if index.zero? && @abilities[:select_samples] %>
                   <%= check_box_tag "sample_ids[]",
@@ -115,7 +115,7 @@
                   <%= link_to(
                     project_sample_path(sample.project, sample),
                     data: { turbo: false },
-                    class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline"
+                    class: "text-slate-700 dark:text-slate-300 font-semibold hover:underline"
                   ) do %>
                     <span class="font-semibold">
                       <%= highlight(
@@ -132,7 +132,7 @@
                   data: {
                     turbo: false,
                   },
-                  class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+                  class: "font-semibold hover:underline" %>
                 <% elsif column == :created_at %>
                   <%= helpers.local_time(sample[column], :full_date) %>
                 <% elsif column == :updated_at || column == :attachments_updated_at %>
@@ -193,7 +193,8 @@
           <tr class="border-t dark:border-slate-700 border-slate-200">
             <td
               class="
-                sticky left-0 z-10 px-6 py-3 bg-slate-50 dark:bg-slate-900
+                text-slate-700 dark:text-slate-300 sticky left-0 z-10 px-6 py-3 bg-slate-50
+                dark:bg-slate-700
               "
               colspan="3"
             >
@@ -211,7 +212,7 @@
                 >0</strong>
               </span>
             </td>
-            <td colspan="100%" class="px-3 py-3 bg-slate-50 dark:bg-slate-900"></td>
+            <td colspan="100%" class="px-3 py-3 bg-slate-50 dark:bg-slate-700"></td>
           </tr>
         </tfoot>
       <% end %>

@@ -487,12 +487,16 @@ div.field_with_errors> :is(select) {
 }
 
 .scrollbar::-webkit-scrollbar {
-  background-color: initial;
   width: .75rem;
   height: .75rem;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-  background-color: grey !important;
+  --tw-bg-opacity: 1 !important;
+  @apply bg-slate-300 dark:bg-slate-600;
   border-radius: .25rem;
+}
+
+.scrollbar::-webkit-scrollbar-corner {
+  display: none;
 }
