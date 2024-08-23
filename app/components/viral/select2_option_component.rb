@@ -1,4 +1,4 @@
-# fr# frozen_string_literal: true
+# frozen_string_literal: true
 
 module Viral
   # Search component for rendering a searchable dropdown
