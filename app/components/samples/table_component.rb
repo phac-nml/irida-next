@@ -41,7 +41,7 @@ module Samples
     def system_arguments
       { tag: 'div' }.deep_merge(@system_arguments).tap do |args|
         args[:id] = 'samples-table'
-        args[:classes] = class_names(args[:classes], 'relative', 'overflow-x-auto')
+        args[:classes] = class_names(args[:classes], 'flex flex-col grow shrink min-h-0 overflow-y-auto')
         if @abilities[:select_samples]
           args[:data] ||= {}
           args[:data][:controller] = 'selection'
@@ -54,7 +54,7 @@ module Samples
     def wrapper_arguments
       {
         tag: 'div',
-        classes: class_names('table-container'),
+        classes: class_names('table-container flex flex-col shrink min-h-0'),
         data: { 'turbo-prefetch': false }
       }
     end

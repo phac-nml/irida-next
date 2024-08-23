@@ -3,14 +3,15 @@
     <table
       class='
         w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-        whitespace-nowrap
+        whitespace-nowrap grow shrink min-h-0
       '
     >
       <thead
         class='
           text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
-          dark:text-slate-400
+          dark:text-slate-400 sticky z-10
         '
+        style="inset-block-start: 0"
       >
         <tr>
           <% @columns.each_with_index do |column, index| %>
@@ -86,7 +87,8 @@
       </thead>
       <tbody
         class='
-          bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
+          overflow-y-auto bg-white divide-y divide-slate-200 dark:bg-slate-800
+          dark:divide-slate-700
         '
       >
         <% @samples.each do |sample| %>
@@ -155,7 +157,7 @@
             <% if @renders_row_actions %>
               <%= render_cell(
                 tag: 'td',
-                classes: class_names('px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2')
+                classes: class_names('px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 z-5 space-x-2')
               ) do %>
                 <% if @row_actions[:edit] %>
                   <%= link_to(
@@ -188,7 +190,7 @@
         <% end %>
       </tbody>
       <% if @abilities[:select_samples] && @has_samples %>
-        <tfoot>
+        <tfoot class="sticky z-10" style="inset-block-end: 0">
           <tr class="border-t dark:border-slate-700 border-slate-200">
             <td
               class="
