@@ -15,17 +15,14 @@
       <div class="grid gap-4">
         <div class="form-field">
           <%= form.label I18n.t("projects.group_links.new.label.shared_group") %>
-          <%= form.select :group_id,
-                      options_for_select(
-                        @namespace_linkable_groups.collect { |u| [u.name, u.id] },
-                        new_group_link.group_id
-                      ),
-                      {
-                        prompt:
-                          I18n.t("projects.group_links.new.placeholder.select_group")
-                      },
-                      required: true,
-                      "aria-label": t(:"projects.group_links.index.aria_labels.group_id") %>
+          <%= viral_select2(form:, name: :group_id) do |select| %>
+            <% @namespace_linkable_groups.each do |group| %>
+              <%= select.with_option(primary: group.name, secondary: group.id, value: group.id) %>
+            <% end %>
+            <%= select.with_empty_state do %>
+              <%= t(:'projects.group_links.new.empty_state') %>
+            <% end %>
+          <% end %>
         </div>
         <div class="form-field">
           <%= form.label I18n.t("projects.group_links.new.label.group_access_level") %>

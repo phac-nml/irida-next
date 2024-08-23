@@ -1032,6 +1032,7 @@ fr:
           shared_group: Group to share namespace with
           group_access_level: Maximum group access level
           access_expiration: Access expiration (optional)
+        empty_state: No groups are associated with that name or ID
         button:
           cancel: Cancel
           submit: Share
