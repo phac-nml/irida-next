@@ -11,8 +11,9 @@
           classes: "#{active_link_classes} border-e-0 rounded-s-lg",
         ) %>
       <% else %>
-        <%= link_to t(".previous"),
+        <%= button_to t(".previous"),
         nil,
+        disabled: true,
         class: "#{disabled_link_classes} border-e-0 rounded-s-lg",
         data: {
           "aria-disabled": true,
@@ -25,11 +26,12 @@
         <% if item.is_a?(Integer) %>
           <%== a.(item, classes: active_link_classes) %>
         <% elsif item.is_a?(String) %>
-          <%= link_to item, nil, class: current_link_classes, data: { "aria-disabled": true } %>
+          <%= button_to item, nil, disabled: true, class: current_link_classes, data: { "aria-disabled": true } %>
 
         <% elsif item == :gap %>
-          <%= link_to "...",
+          <%= button_to "...",
           nil,
+          disabled: true,
           class: disabled_link_classes,
           data: {
             "aria-disabled": true,
@@ -42,8 +44,9 @@
       <% if @pagy.next %>
         <%== a.(@pagy.next, t(".next"), classes: "#{active_link_classes} rounded-e-lg") %>
       <% else %>
-        <%= link_to t(".next"),
+        <%= button_to t(".next"),
         nil,
+        disabled: true,
         class: "#{disabled_link_classes} rounded-e-lg cursor-default",
         data: {
           "aria-disabled": true,
