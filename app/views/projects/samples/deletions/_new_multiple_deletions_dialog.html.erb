@@ -32,7 +32,7 @@
             data-action="scroll->infinite-scroll#scroll"
             data-infinite-scroll-target="scrollable"
           >
-            <%= turbo_frame_tag "list_select_samples" do %>
+            <%= turbo_frame_tag "list_selections" do %>
               <%= render partial: "shared/loading/samples_list_skeleton" %>
             <% end %>
           </div>

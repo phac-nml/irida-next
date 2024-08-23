@@ -272,7 +272,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text ActionController::Base.helpers.strip_tags(
         I18n.t('data_exports.new.sample_description.singular')
       )
-      within %(turbo-frame[id="list_select_samples"]) do
+      within %(turbo-frame[id="list_selections"]) do
         assert_text @sample1.name
         assert_text @sample1.puid
       end
@@ -327,7 +327,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text ActionController::Base.helpers.strip_tags(
         I18n.t('data_exports.new.sample_description.plural')
       ).gsub! 'COUNT_PLACEHOLDER', '2'
-      within %(turbo-frame[id="list_select_samples"]) do
+      within %(turbo-frame[id="list_selections"]) do
         assert_text @sample1.name
         assert_text @sample1.puid
         assert_text @sample2.name
@@ -388,7 +388,7 @@ class DataExportsTest < ApplicationSystemTestCase
     click_link I18n.t('projects.samples.index.create_export_button.sample_export'), match: :first
     within 'dialog[open].dialog--size-lg' do
       click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
-      within %(turbo-frame[id="list_select_samples"]) do
+      within %(turbo-frame[id="list_selections"]) do
         assert_text @sample1.name
         assert_text @sample1.puid
       end
@@ -446,7 +446,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     click_link I18n.t('workflow_executions.show.create_export_button'), match: :first
     within 'dialog[open].dialog--size-lg' do
-      assert_no_selector "turbo-frame[id='list_select_samples']"
+      assert_no_selector "turbo-frame[id='list_selections']"
       assert_text I18n.t('data_exports.new_analysis_export_dialog.name_label')
       assert_text I18n.t('data_exports.new_analysis_export_dialog.email_label')
       assert_text ActionController::Base.helpers.strip_tags(
@@ -578,7 +578,7 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text I18n.t('data_exports.new_linelist_export_dialog.name_label')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.email_label')
 
-      assert_no_selector 'turbo-frame[id="list_select_samples"]'
+      assert_no_selector 'turbo-frame[id="list_selections"]'
       assert_no_text @sample30.name
       assert_no_text @sample30.puid
       assert_no_text ActionController::Base.helpers.strip_tags(
@@ -589,8 +589,8 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text ActionController::Base.helpers.strip_tags(
         I18n.t('data_exports.new.sample_description.singular')
       )
-      assert_selector 'turbo-frame[id="list_select_samples"]'
-      within %(turbo-frame[id="list_select_samples"]) do
+      assert_selector 'turbo-frame[id="list_selections"]'
+      within %(turbo-frame[id="list_selections"]) do
         assert_text @sample30.name
         assert_text @sample30.puid
       end
