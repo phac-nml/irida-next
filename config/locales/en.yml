@@ -729,6 +729,7 @@ en:
         button:
           cancel: Cancel
           submit: Share
+        empty_state: No groups are associated with that name or ID
     members:
       access_level:
         aria_label: Access Level
