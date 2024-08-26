@@ -34,19 +34,23 @@ module Samples
     def clone_samples(sample_ids)
       cloned_sample_ids = {}
       sample_ids.each do |sample_id|
-        cloned_sample_id = clone_sample(sample_id)
+        sample = Sample.find_by(id: sample_id, project_id: @project.id)
+        cloned_sample_id = clone_sample(sample)
         cloned_sample_ids[sample_id] = cloned_sample_id unless cloned_sample_id.nil?
       end
       cloned_sample_ids
     end
 
-    def clone_sample(sample_id)
-      sample = Sample.find_by(id: sample_id, project_id: @project.id)
+    def clone_sample(sample)
       clone = sample.dup
       clone.project_id = @new_project.id
-      clone.project.namespace.update_metadata_summary_by_sample_addition(sample) if clone.valid?
-      clone_attachments(sample, clone) if clone.valid?
+      clone.generate_puid
       clone.save!
+
+      # update new project metadata sumnmary and then clone attachments to the sample
+      @new_project.namespace.update_metadata_summary_by_sample_addition(sample)
+      clone_attachments(sample, clone)
+
       clone.id
     rescue ActiveRecord::RecordInvalid
       @project.errors.add(:sample, I18n.t('services.samples.clone.sample_exists', sample_name: sample.name,

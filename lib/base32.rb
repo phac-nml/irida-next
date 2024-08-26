@@ -24,6 +24,16 @@ module Base32
     encoded.join
   end
 
+  def decode32(string)
+    number = 0
+
+    string.reverse.chars.each_with_index do |char, index|
+      number += ALPHABET.index(char) * (32**index)
+    end
+
+    number
+  end
+
   def encodable?(number, length)
     Math.log(number + 1, 32) <= length
   end

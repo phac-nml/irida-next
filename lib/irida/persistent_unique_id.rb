@@ -32,7 +32,7 @@ module Irida
       base32_string = Base32.encode32(time.year - 2000, 2)
       base32_string << Base32.encode32(time.month, 1)
       base32_string << Base32.encode32(time.day, 1)
-      base32_string << Base32.encode32(Integer(time.seconds_since_midnight * 1024), 6)
+      base32_string << Base32.encode32(Integer(time.seconds_since_midnight * 12_228), 6)
     end
 
     def valid_puid?(puid, object_class = nil)
