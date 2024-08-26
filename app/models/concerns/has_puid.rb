@@ -21,7 +21,7 @@ module HasPuid
     rescue ActiveRecord::RecordNotUnique => e
       raise e unless e.message.match(/Key \(puid\)=\(.*\) already exists./)
 
-      Rails.logger.info("Puid conflict encountered for #{klass}, regerating Puid and attempting to save again.")
+      Rails.logger.info("Puid conflict encountered for #{self.class}, regerating Puid and attempting to save again.")
       generate_puid(force: true)
       save!
     end
