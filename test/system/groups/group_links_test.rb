@@ -29,7 +29,8 @@ module Groups
           :'groups.group_links.new.sharing_namespace_with_group',
           name: @namespace.human_name
         )
-        find('#namespace_group_link_group_id').find(:xpath, '//option[contains(text(), "Group 7")]').select_option
+        find('input#select2-input').click
+        find("button[data-viral--select2-primary-param='Subgroup 3']").click
         find('#namespace_group_link_group_access_level').find(:xpath, 'option[3]').select_option
 
         click_button I18n.t(:'groups.group_links.new.button.submit')
