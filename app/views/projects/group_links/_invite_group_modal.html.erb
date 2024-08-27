@@ -17,7 +17,7 @@
           <%= form.label I18n.t("projects.group_links.new.label.shared_group") %>
           <%= viral_select2(form:, name: :group_id) do |select| %>
             <% @namespace_linkable_groups.each do |group| %>
-              <%= select.with_option(primary: group.name, secondary: group.id, value: group.id) %>
+              <%= select.with_option(primary: group.name, secondary: group.puid, value: group.id) %>
             <% end %>
             <%= select.with_empty_state do %>
               <%= t(:'projects.group_links.new.empty_state') %>
