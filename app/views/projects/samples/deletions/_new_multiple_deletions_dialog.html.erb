@@ -9,7 +9,7 @@
       data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
     >
       <%= form_with(
-        url: list_namespace_project_samples_path(type: 'sample'),
+        url: list_namespace_project_samples_path(list_class: 'sample'),
         data: { "infinite-scroll-target": "pageForm" }
       ) do %>
         <div data-infinite-scroll-target="pageFormContent"></div>

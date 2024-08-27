@@ -136,7 +136,7 @@ module Projects
       post list_namespace_project_samples_path(@namespace, @project, format: :turbo_stream), params: {
         page: 1,
         sample_ids: [@sample1.id],
-        type: 'sample'
+        list_class: 'sample'
       }
       assert_response :success
     end
