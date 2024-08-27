@@ -15,7 +15,7 @@
         class="font-normal text-slate-500 dark:text-slate-400"
       >
         <%= form_with(
-        url: list_data_exports_path(type: 'sample'),
+        url: list_data_exports_path(list_class: 'sample'),
         data: { "infinite-scroll-target": "pageForm" }
       ) do %>
           <div data-infinite-scroll-target="pageFormContent"></div>
@@ -157,7 +157,7 @@
               </div>
               <div class="hidden" data-viral--sortable-lists--two-lists-selection-target="field"></div>
               <div>
-                <%= form.submit t(".submit_button"),
+                <%= form.submit t("data_exports.new.submit_button"),
                             data: {
                               turbo_frame: "_top",
                               action:

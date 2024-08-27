@@ -288,7 +288,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     post list_data_exports_path(format: :turbo_stream), params: {
       page: 1,
       sample_ids: [@sample1.id],
-      type: 'sample'
+      list_class: 'sample'
     }
     assert_response :success
   end
