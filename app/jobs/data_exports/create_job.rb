@@ -217,10 +217,9 @@ module DataExports
         ZipKit::Streamer.open(tempfile) do |zip|
           workflow_executions = workflow_query(data_export.export_parameters['ids'])
           workflow_executions.each do |workflow|
-            write_workflow_execution_outputs_and_manifest(workflow, zip)
+            write_workflow_execution_outputs_and_manifest(workflow, zip) unless workflow.outputs.empty?
 
-            samples_workflow_executions = workflow.samples_workflow_executions
-            samples_workflow_executions.each do |swe|
+            workflow.samples_workflow_executions.each do |swe|
               write_samples_workflow_execution_outputs_and_manifest(workflow.id, swe, zip) unless swe.outputs.empty?
             end
           end

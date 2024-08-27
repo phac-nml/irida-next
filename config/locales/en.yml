@@ -1737,9 +1737,7 @@ en:
       run_id: "Run ID:"
       workflow: "Workflow:"
       single_selection: Workflow Executions (1 selected)
-      submit_button: Submit
-      description_html: This export will contain 1 workflow execution. After submission, you will be redirected to the export page. While the export status is <span class="bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1 mr-1">processing</span>, the contents of the export are being created. Once the export status is <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1">ready</span>, it will be available for download. You will have 3 business days to download the export before it's deleted.
-      title: Analysis Export
+      single_description_html: This export will contain 1 workflow execution. After submission, you will be redirected to the export page. While the export status is <span class="bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1 mr-1">processing</span>, the contents of the export are being created. Once the export status is <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1">ready</span>, it will be available for download. You will have 3 business days to download the export before it's deleted.
     new_linelist_export_dialog:
       available: Available
       csv: '.csv'

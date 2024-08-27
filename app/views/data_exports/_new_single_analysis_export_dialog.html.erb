@@ -1,5 +1,5 @@
 <%= viral_dialog(open: open, size: :large) do |dialog| %>
-  <%= dialog.with_header(title: t(".title")) %>
+  <%= dialog.with_header(title: t(:"data_exports.new_analysis_export_dialog.title")) %>
   <%= dialog.with_section do %>
     <div class="font-normal text-slate-500 dark:text-slate-400">
       <div class="grid gap-4">
@@ -49,7 +49,7 @@
                 text-base leading-relaxed text-slate-500 dark:text-slate-400 p-2.5 border border-t-0 border-slate-300
               "
             >
-              <%= t(".description_html") %>
+              <%= t(:"data_exports.new_single_analysis_export_dialog.single_description_html") %>
             </p>
             <div
             class="
@@ -90,7 +90,7 @@
               <% end %>
             </div>
             <div>
-              <%= form.submit t(".submit_button"),
+              <%= form.submit t(:"data_exports.new_analysis_export_dialog.submit_button"),
                           data: {
                             turbo_frame: "_top"
                           },

@@ -275,12 +275,12 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should redirect from project PUID' do
-    get redirect_from_data_export_path(@data_export1, puid: 'INXT_PRJ_AAAAAAAAAA')
+    get redirect_from_data_export_path(@data_export1, identifier: 'INXT_PRJ_AAAAAAAAAA')
     assert_response :redirect
   end
 
   test 'should redirect from sample PUID' do
-    get redirect_from_data_export_path(@data_export1, puid: 'INXT_SAM_AAAAAAAAAA')
+    get redirect_from_data_export_path(@data_export1, identifier: 'INXT_SAM_AAAAAAAAAA')
     assert_response :redirect
   end
 
