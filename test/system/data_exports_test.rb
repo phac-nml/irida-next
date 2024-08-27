@@ -294,7 +294,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
-      click_button I18n.t('data_exports.new_sample_export_dialog.submit_button')
+      click_button I18n.t('data_exports.new.submit_button')
     end
 
     assert_selector 'dl', count: 1
@@ -351,7 +351,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
       fill_in I18n.t('data_exports.new.name_label'), with: 'test data export'
       check I18n.t('data_exports.new.email_label')
-      click_button I18n.t('data_exports.new_sample_export_dialog.submit_button')
+      click_button I18n.t('data_exports.new.submit_button')
     end
 
     assert_selector 'dl', count: 1
@@ -494,7 +494,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
-      click_button I18n.t('data_exports.new_sample_export_dialog.submit_button')
+      click_button I18n.t('data_exports.new.submit_button')
     end
 
     assert_selector 'dl', count: 1
@@ -741,7 +741,7 @@ class DataExportsTest < ApplicationSystemTestCase
     within 'dialog[open].dialog--size-lg' do
       click_button I18n.t('viral.sortable_lists_component.add_all')
       find('input#data_export_name').fill_in with: 'test csv export'
-      click_button I18n.t('data_exports.new_linelist_export_dialog.submit_button')
+      click_button I18n.t('data_exports.new.submit_button')
     end
 
     within('dl') do
@@ -768,7 +768,7 @@ class DataExportsTest < ApplicationSystemTestCase
       click_button I18n.t('viral.sortable_lists_component.add_all')
       find('input#data_export_name').fill_in with: 'test xlsx export'
       find('input#xlsx-format').click
-      click_button I18n.t('data_exports.new_linelist_export_dialog.submit_button')
+      click_button I18n.t('data_exports.new.submit_button')
     end
 
     within('dl') do
@@ -899,7 +899,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
-      click_button I18n.t('data_exports.new_sample_export_dialog.submit_button')
+      click_button I18n.t('data_exports.new.submit_button')
     end
 
     assert_selector 'dl', count: 1
@@ -950,7 +950,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
-      click_button I18n.t('data_exports.new_sample_export_dialog.submit_button')
+      click_button I18n.t('data_exports.new.submit_button')
     end
 
     assert_selector 'dl', count: 1
