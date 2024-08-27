@@ -530,7 +530,8 @@ fr:
       title: Create group
       subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects
       name_placeholder: Awesome group name
-      path_help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
+      name_help: Group name must be at least 3 letters long and start with a letter, digit, or emoji. For more information see <a class="font-medium hover:underline" href="https://phac-nml.github.io/irida-next/docs/user/organization/groups/reserved-names/">Reserved group names</a>
+      path_help: The path is used in URLs.  It must be at least 3 letters long and can only contain letters, numbers, dashes and underscores
       submit: Create group
       cancel: Cancel
     history:

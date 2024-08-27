@@ -4,11 +4,17 @@
   <%= form.text_field :name,
                   data: {
                     "slugify-target": "name",
-                    action: "input->slugify#nameChanged"
+                    action: "input->slugify#nameChanged",
                   },
+                  minlength: 3,
+                  maxlength: 255,
+                  pattern: "[a-zA-Z0-9_\\-\\.\\s\\p{Emoji}]+",
                   placeholder: t(:"groups.create.name_placeholder"),
                   required: true %>
   <%= render "shared/form/field_errors", errors: group.errors.full_messages_for(:name) %>
+  <p class="field-hint">
+    <%== t(:"groups.create.name_help") %>
+  </p>
 </div>
 
 <% if group.new_record? %>
@@ -16,22 +22,11 @@
     <div class="grid grid-cols-2 gap-4">
       <div class="form-field">
         <%= form.label :parent_id %>
-        <div class="flex whitespace-nowrap items-center">
+        <div class="flex items-center whitespace-nowrap">
           <div
             class="
-              inline-flex
-              items-center
-              px-3
-              py-2.5
-              text-sm
-              text-slate-600
-              bg-slate-200
-              border
-              border-r-0
-              border-slate-300
-              rounded-l-lg
-              dark:bg-slate-600
-              dark:text-slate-400
+              inline-flex items-center px-3 py-2.5 text-sm text-slate-600 bg-slate-200 border
+              border-r-0 border-slate-300 rounded-l-lg dark:bg-slate-600 dark:text-slate-400
               dark:border-slate-600
             "
           >
@@ -43,7 +38,7 @@
             :id,
             :full_path,
             {},
-            { class: "prefixed" }
+            { class: "prefixed" },
           ) %>
           <div class="ml-4 dark:text-slate-200">/</div>
         </div>
@@ -53,8 +48,10 @@
         <%= form.label :path %>
         <%= form.text_field :path,
                         data: {
-                          "slugify-target": "path"
+                          "slugify-target": "path",
                         },
+                        minlength: 3,
+                        maxlength: 255,
                         pattern: Irida::PathRegex::PATH_REGEX_STR,
                         required: true %>
         <%= render "shared/form/field_errors", errors: group.errors.full_messages_for(:path) %>
@@ -68,7 +65,7 @@
       <%= form.label :path %>
       <%= form.text_field :path,
                       data: {
-                        "slugify-target": "path"
+                        "slugify-target": "path",
                       },
                       pattern: Irida::PathRegex::PATH_REGEX_STR,
                       required: true %>
