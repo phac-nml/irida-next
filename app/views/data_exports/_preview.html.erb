@@ -18,7 +18,7 @@
                 <%= viral_icon(name: "folder_open", classes: "w-5 h-5 m-0") %>
                 <span class="ml-2">
                   <%= link_to project["name"],
-                    redirect_from_data_export_path(identifier: project["name"]),
+                    redirect_data_export_path(identifier: project["name"]),
                     data: {
                         turbo: false
                     },
@@ -32,7 +32,7 @@
                       <%= viral_icon(name: "folder_open", classes: "w-5 h-5 m-0") %>
                       <span class="ml-2">
                         <%= link_to sample["name"],
-                        redirect_from_data_export_path(identifier: sample["name"]),
+                        redirect_data_export_path(identifier: sample["name"]),
                         data: {
                             turbo: false
                         },
@@ -75,7 +75,7 @@
                 <%= viral_icon(name: "folder_open", classes: "w-5 h-5 m-0") %>
                 <span class="ml-2">
                   <%= link_to workflow_execution_id["name"],
-                    redirect_from_data_export_path(identifier: workflow_execution_id["name"]),
+                    redirect_data_export_path(identifier: workflow_execution_id["name"]),
                     data: {
                         turbo: false
                     },
@@ -90,7 +90,7 @@
                         <%= viral_icon(name: "folder_open", classes: "w-5 h-5 m-0") %>
                         <span class="ml-2">
                           <%= link_to child["name"],
-                          redirect_from_data_export_path(identifier: child["name"]),
+                          redirect_data_export_path(identifier: child["name"]),
                           data: {
                               turbo: false
                           },

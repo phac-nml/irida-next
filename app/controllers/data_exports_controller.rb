@@ -53,7 +53,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     end
   end
 
-  def redirect_from
+  def redirect
     if params['identifier'].include?('INXT_SAM')
       redirect_to_sample
     elsif params['identifier'].include?('INXT_PRJ')

@@ -417,7 +417,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'svg.Viral-Icon__Svg.icon-document_text', count: 3
   end
 
-  test 'clicking links in preview tab for data export' do
+  test 'clicking links in preview tab for sample data export' do
     attachment1 = attachments(:attachment1)
     attachment2 = attachments(:attachment2)
     visit data_export_path(@data_export1, tab: 'preview')
@@ -440,6 +440,29 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_selector 'tr:nth-child(2) td:nth-child(2)', text: attachment2.puid
       assert_selector 'tr:nth-child(2) td:nth-child(3)', text: attachment2.file.filename.to_s
     end
+  end
+
+  test 'clicking links in preview tab for analysis data export' do
+    sample46 = samples(:sample46)
+    visit data_export_path(@data_export7, tab: 'preview')
+
+    click_link @workflow_execution1.id
+
+    assert_current_path(workflow_execution_path(@workflow_execution1))
+    assert_text @workflow_execution1.id
+
+    within first('dl') do
+      assert_text @workflow_execution1.run_id
+      assert_text @workflow_execution1.metadata['workflow_name']
+      assert_text @workflow_execution1.metadata['workflow_version']
+    end
+
+    visit data_export_path(@data_export7, tab: 'preview')
+
+    click_link sample46.puid
+
+    assert_text sample46.name
+    assert_text sample46.puid
   end
 
   test 'create analysis export from show page' do

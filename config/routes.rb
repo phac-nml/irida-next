@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     draw :workflow_executions unless Irida::Pipelines.instance.available_pipelines.empty?
     resources :data_exports, only: %i[index new create destroy show] do
       member do
-        get :redirect_from
+        get :redirect
       end
       collection do
         post :list
