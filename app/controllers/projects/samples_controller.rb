@@ -10,6 +10,7 @@ module Projects
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
     before_action :process_samples, only: %i[index search]
+    include Sortable
 
     def index
       @pagy, @samples = pagy_with_metadata_sort(@q.result)
