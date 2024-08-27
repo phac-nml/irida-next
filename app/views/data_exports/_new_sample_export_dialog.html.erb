@@ -63,14 +63,12 @@
               class="hidden"
               aria-labelledby="<%= "accordion-collapse-heading-samples" %>"
             >
-              <p
-                data-infinite-scroll-target="summary"
-                class="
-                  text-base leading-relaxed text-slate-500 dark:text-slate-400 p-2.5 border border-t-0 border-slate-300
-                "
-              >
-                <%= t(:"data_exports.new.sample_description.zero_html") %>
-              </p>
+              <div class="text-base leading-relaxed text-slate-500 dark:text-slate-400 p-2.5 border border-t-0 border-slate-300">
+                <span data-infinite-scroll-target="summary">
+                   <%= t(:"data_exports.new.sample_description.zero") %>
+                </span>
+                <span><%= t(:"data_exports.new.after_submission_description_html") %></span>
+              </div>
               <div
               class="
                 overflow-y-auto max-h-[200px] border border-t-0 border-slate-300 rounded-b block w-full

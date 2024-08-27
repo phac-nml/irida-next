@@ -270,8 +270,9 @@ class DataExportsTest < ApplicationSystemTestCase
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
       click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
+      assert_text I18n.t('data_exports.new.sample_description.singular')
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new.sample_description.singular')
+        I18n.t('data_exports.new.after_submission_description_html')
       )
       within %(turbo-frame[id="list_selections"]) do
         assert_text @sample1.name
@@ -325,9 +326,10 @@ class DataExportsTest < ApplicationSystemTestCase
 
     within 'dialog[open].dialog--size-lg' do
       click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '2'
+      assert_text I18n.t('data_exports.new.sample_description.plural').gsub! 'COUNT_PLACEHOLDER', '2'
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new.sample_description.plural')
-      ).gsub! 'COUNT_PLACEHOLDER', '2'
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
       within %(turbo-frame[id="list_selections"]) do
         assert_text @sample1.name
         assert_text @sample1.puid
@@ -393,8 +395,9 @@ class DataExportsTest < ApplicationSystemTestCase
         assert_text @sample1.name
         assert_text @sample1.puid
       end
+      assert_text I18n.t('data_exports.new.sample_description.singular')
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new.sample_description.singular')
+        I18n.t('data_exports.new.after_submission_description_html')
       )
     end
   end
@@ -621,13 +624,16 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_no_selector 'turbo-frame[id="list_selections"]'
       assert_no_text @sample30.name
       assert_no_text @sample30.puid
-      assert_no_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new.sample_description.singular')
-      )
+      assert_no_text I18n.t('data_exports.new.sample_description.singular')
 
+      assert_no_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
       click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
+      assert_text I18n.t('data_exports.new.sample_description.singular')
+
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new.sample_description.singular')
+        I18n.t('data_exports.new.after_submission_description_html')
       )
       assert_selector 'turbo-frame[id="list_selections"]'
       within %(turbo-frame[id="list_selections"]) do
@@ -876,15 +882,16 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_no_selector 'turbo-frame[id="list_selections"]'
       assert_no_text @workflow_execution1.id
       assert_no_text @workflow_execution2.id
+      assert_no_text I18n.t('data_exports.new_analysis_export_dialog.description.plural').gsub! 'COUNT_PLACEHOLDER', '2'
       assert_no_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_analysis_export_dialog.description.plural')
-      ).gsub! 'COUNT_PLACEHOLDER', '2'
-
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
       click_button I18n.t('data_exports.new_analysis_export_dialog.selection_count.non_zero').gsub! 'COUNT_PLACEHOLDER',
                                                                                                     '2'
+      assert_text  I18n.t('data_exports.new_analysis_export_dialog.description.plural').gsub! 'COUNT_PLACEHOLDER', '2'
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_analysis_export_dialog.description.plural')
-      ).gsub! 'COUNT_PLACEHOLDER', '2'
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
       assert_selector 'turbo-frame[id="list_selections"]'
       within %(turbo-frame[id="list_selections"]) do
         assert_text @workflow_execution1.id
@@ -931,14 +938,15 @@ class DataExportsTest < ApplicationSystemTestCase
 
       assert_no_selector 'turbo-frame[id="list_selections"]'
       assert_no_text workflow_execution.id
+      assert_no_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
       assert_no_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_analysis_export_dialog.description.singular')
+        I18n.t('data_exports.new.after_submission_description_html')
       )
-
       click_button I18n.t('data_exports.new_analysis_export_dialog.selection_count.non_zero').gsub! 'COUNT_PLACEHOLDER',
                                                                                                     '1'
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_analysis_export_dialog.description.singular')
+        I18n.t('data_exports.new.after_submission_description_html')
       )
       assert_selector 'turbo-frame[id="list_selections"]'
       within %(turbo-frame[id="list_selections"]) do
