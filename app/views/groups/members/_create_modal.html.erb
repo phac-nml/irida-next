@@ -10,12 +10,12 @@
       <div class="grid gap-4">
         <div class="form-field">
           <%= form.label :user_id %>
-          <%= viral_select2(form:, name: :user_id) do |select| %>
+          <%= viral_select2(form:, name: :user_id, placeholder: t("groups.members.new.select_user")) do |select| %>
             <% @available_users.each do |user| %>
               <% select.with_option(primary: user.email, value: user.id) %>
             <% end %>
             <%= select.with_empty_state do %>
-              <%= t(:"projects.members.new.empty_state") %>
+              <%= t(:"groups.members.new.empty_state") %>
             <% end %>
           <% end %>
         </div>

@@ -768,6 +768,7 @@ en:
         description: You are adding a new member to group %{name}
         add_member_to_group: Add member to group
         select_user: Select a User
+        empty_state: There are no users with the provided email or id
         select_access_level: Select Access Level
       destroy:
         error: "There was an error removing the group member"

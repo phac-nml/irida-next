@@ -85,7 +85,7 @@ body {
   }
 
   .form-field select {
-    @apply border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500;
+    @apply border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-slate-50 dark:text-opacity-60 dark:focus:ring-primary-500 dark:focus:border-primary-500;
   }
 
   .form-field select.error {
@@ -298,7 +298,9 @@ body {
   }
 
   /*GROUPS LIST TREE*/
-  .namespace-tree-container>.namespace-list-tree>.namespace-entry.has-children:first-child {
+  .namespace-tree-container
+    > .namespace-list-tree
+    > .namespace-entry.has-children:first-child {
     border-top: 0;
   }
 
@@ -352,7 +354,9 @@ body {
     @apply border-t-2 border-slate-200 dark:border-slate-600;
   }
 
-  .namespace-list-tree .namespace-list-tree .namespace-entry:last-child::before {
+  .namespace-list-tree
+    .namespace-list-tree
+    .namespace-entry:last-child::before {
     height: auto;
     top: 30px;
     bottom: 0;
@@ -375,7 +379,9 @@ body {
     @apply border-t border-slate-200 dark:border-slate-600;
   }
 
-  .namespace-list-tree .namespace-entry.has-children>.namespace-entry-contents:hover {
+  .namespace-list-tree
+    .namespace-entry.has-children
+    > .namespace-entry-contents:hover {
     @apply cursor-pointer border-slate-50 dark:border-slate-600 bg-slate-50 dark:bg-slate-600;
   }
 
