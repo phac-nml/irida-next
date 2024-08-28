@@ -109,4 +109,8 @@ class UserTest < ActiveSupport::TestCase
     assert_not @user.update_password_with_password(params)
     assert_equal 'Current password is invalid', @user.errors.full_messages.first
   end
+
+  test 'full_name should combine the users first and last names' do
+    assert_equal "#{@user.first_name} #{@user.last_name}", @user.full_name
+  end
 end
