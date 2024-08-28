@@ -538,5 +538,165 @@ module Groups
       assert_selector 'tfoot strong[data-selection-target="selected"]', text: '0'
       assert_selector 'table tbody tr', count: 20
     end
+
+    test 'should import metadata via csv' do
+      visit group_samples_url(@group)
+      click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
+      within('div[data-metadata--file-import-loaded-value="true"]') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
+        find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
+        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
+      end
+    end
+
+    test 'should not import metadata via invalid file type' do
+      visit group_samples_url(@group)
+      click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
+      within('div[data-metadata--file-import-loaded-value="true"]') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="import_metadata_dialog_alert"]) do
+        assert_text I18n.t('services.samples.metadata.import_file.invalid_file_extension')
+      end
+    end
+
+    test 'should import metadata with ignore empty values' do
+      group = groups(:subgroup_twelve_a)
+      project = projects(:project29)
+      sample = samples(:sample32)
+      visit group_samples_url(group)
+      click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
+      within('div[data-metadata--file-import-loaded-value="true"]') do
+        attach_file 'file_import[file]',
+                    Rails.root.join('test/fixtures/files/metadata/contains_empty_values_with_puid.csv')
+        find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
+        check 'Ignore empty values'
+        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
+      end
+      visit namespace_project_sample_url(group, project, sample)
+      assert_text I18n.t('projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      within %(turbo-frame[id="table-listing"]) do
+        assert_text I18n.t('projects.samples.show.table_header.key').upcase
+        assert_selector 'table#metadata-table tbody tr', count: 3
+        within('table#metadata-table tbody tr:first-child td:nth-child(2)') do
+          assert_text 'metadatafield1'
+        end
+        within('table#metadata-table tbody tr:first-child td:nth-child(3)') do
+          assert_text 'value1'
+        end
+      end
+    end
+
+    test 'should import metadata without ignore empty values' do
+      group = groups(:subgroup_twelve_a)
+      project = projects(:project29)
+      sample = samples(:sample32)
+      visit group_samples_url(group)
+      click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
+      within('div[data-metadata--file-import-loaded-value="true"]') do
+        attach_file 'file_import[file]',
+                    Rails.root.join('test/fixtures/files/metadata/contains_empty_values_with_puid.csv')
+        find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
+        assert_not find_field('Ignore empty values').checked?
+        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
+      end
+      visit namespace_project_sample_url(group, project, sample)
+      assert_text I18n.t('projects.samples.show.tabs.metadata')
+      click_on I18n.t('projects.samples.show.tabs.metadata')
+      within %(turbo-frame[id="table-listing"]) do
+        assert_text I18n.t('projects.samples.show.table_header.key').upcase
+        assert_selector 'table#metadata-table tbody tr', count: 2
+        assert_no_text 'metadatafield1'
+      end
+    end
+
+    test 'should not import metadata with duplicate header errors' do
+      visit group_samples_url(@group)
+      click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
+      within('div[data-metadata--file-import-loaded-value="true"]') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/duplicate_headers.csv')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="import_metadata_dialog_alert"]) do
+        assert_text I18n.t('services.samples.metadata.import_file.duplicate_column_names')
+      end
+    end
+
+    test 'should not import metadata with missing metadata row errors' do
+      visit group_samples_url(@group)
+      click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
+      within('div[data-metadata--file-import-loaded-value="true"]') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_rows.csv')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="import_metadata_dialog_alert"]) do
+        assert_text I18n.t('services.samples.metadata.import_file.missing_metadata_row')
+      end
+    end
+
+    test 'should not import metadata with missing metadata column errors' do
+      visit group_samples_url(@group)
+      click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
+      within('div[data-metadata--file-import-loaded-value="true"]') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="import_metadata_dialog_alert"]) do
+        assert_text I18n.t('services.samples.metadata.import_file.missing_metadata_column')
+      end
+    end
+
+    test 'should partially import metadata with missing sample errors' do
+      visit group_samples_url(@group)
+
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      assert_selector '#samples-table table thead tr th', count: 8
+      click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
+      within('div[data-metadata--file-import-loaded-value="true"]') do
+        attach_file 'file_import[file]',
+                    Rails.root.join('test/fixtures/files/metadata/mixed_project_samples_with_puid.csv')
+        find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
+        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.samples.metadata.file_imports.errors.description')
+        click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
+      end
+      assert_selector '#samples-table table thead tr th', count: 9
+    end
+
+    test 'should not import metadata with analysis values' do
+      group = groups(:group_twelve)
+      visit group_samples_url(group)
+      click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
+      within('div[data-metadata--file-import-loaded-value="true"]') do
+        attach_file 'file_import[file]',
+                    Rails.root.join('test/fixtures/files/metadata/contains_analysis_values_with_puid.csv')
+        find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
+        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+      end
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.samples.metadata.file_imports.errors.description')
+        click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
+      end
+    end
   end
 end

@@ -1,0 +1,6 @@
+<%= turbo_stream.update "samples_dialog",
+                    partial: "shared/samples/metadata/file_imports/dialog",
+                    locals: {
+                      open: true,
+                      url: group_samples_file_import_path,
+                    } %>

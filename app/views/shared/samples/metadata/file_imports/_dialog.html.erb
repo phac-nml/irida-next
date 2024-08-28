@@ -5,11 +5,19 @@
 
       <%= turbo_frame_tag "import_metadata_dialog_alert" %>
 
-      <%= form_for(:file_import, url: namespace_project_samples_file_import_path, method: :post) do |form| %>
-        <div
-          class="grid gap-4"
-          data-controller="projects--samples--metadata--file-import"
-        >
+      <%= form_for(:file_import, url: url, method: :post) do |form| %>
+        <div class="grid gap-4" data-controller="metadata--file-import">
+          <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+            <%= t(".description") %>
+          </p>
+          <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+            <%= t(".namespace.description") %>
+            <% if @namespace.type == 'Group' %>
+              <%= t(".namespace.group.description_html") %>
+            <% else %>
+              <%= t(".namespace.project.description_html") %>
+            <% end %>
+          </p>
           <div class="form-field">
             <%= form.label :file,
                        t(".file"),
@@ -21,8 +29,7 @@
                               # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
                               "text/csv,.tsv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                             data: {
-                              action:
-                                "change->projects--samples--metadata--file-import#readFile"
+                              action: "change->metadata--file-import#readFile",
                             },
                             class:
                               "block w-full text-sm text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 focus:outline-none dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
@@ -38,27 +45,38 @@
                         { prompt: t(".select_sample_id_column") },
                         required: true,
                         data: {
-                          "projects--samples--metadata--file-import-target": "selectInput",
-                          action:
-                            "change->projects--samples--metadata--file-import#toggleSubmitButton"
+                          "metadata--file-import-target": "selectInput",
+                          action: "change->metadata--file-import#toggleSubmitButton",
                         } %>
           </div>
           <div class="flex items-center">
             <%= form.check_box :ignore_empty_values,
                            {
                              class:
-                               "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600"
+                               "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600",
                            },
                            true,
                            false %>
-            <%= form.label :ignore_empty_values, t(".ignore_empty_values"),
+            <%= form.label :ignore_empty_values,
+                       t(".ignore_empty_values"),
                        class: "ml-2 text-sm font-medium text-slate-900 dark:text-slate-300" %>
+            <%= viral_tooltip(title: t(:'.ignore_empty_values.description')) do %>
+              <div
+                class="
+                  inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500
+                  rounded-lg dark:text-blue-200
+                "
+              >
+                <%= viral_icon(name: "information_circle_solid", classes: "w-5 h-5") %>
+                <span class="sr-only"><%= t("components.flash.information_icon") %></span>
+              </div>
+            <% end %>
           </div>
           <div>
             <%= form.submit t(".submit_button"),
                         class: "button button--size-default button--state-primary",
                         data: {
-                          "projects--samples--metadata--file-import-target": "submitButton"
+                          "metadata--file-import-target": "submitButton",
                         } %>
           </div>
         </div>
