@@ -16,34 +16,34 @@
       required="<%= required %>"
       autocomplete="off"
       class="
-        bg-white border border-slate-300 text-slate-900 text-sm rounded-lg
-        focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5
-        dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500
-        placeholder-slate-900 dark:placeholder-slate-50
+        border-slate-300 text-slate-800 sm:text-sm rounded-md focus:ring-primary-500
+        focus:border-primary-500 block w-full p-2.5 dark:bg-slate-800
+        dark:border-slate-600 dark:placeholder-slate-400 dark:text-slate-50
+        text-opacity-60 dark:focus:ring-primary-500 dark:focus:border-primary-500
       "
     >
     <div
       class="
-        absolute inset-y-0 end-2 flex items-center ps-3.5 pointer-events-none
+        absolute inset-y-0 end-[.75em] flex items-center ps-3.5 pointer-events-none
+        text-gray-500
       "
     >
-      <%= viral_icon(classes: "w-4 h-4 text-slate-700 dark:text-slate-500") do %>
-        <svg
-          data-slot="icon"
-          fill="none"
-          stroke-width="2.5"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="m19.5 8.25-7.5 7.5-7.5-7.5"
-          ></path>
-        </svg>
-      <% end %>
+      <svg
+        data-slot="icon"
+        fill="none"
+        stroke-width="3.75"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        class="w-[.9em] h-[.9em]"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="m19.5 8.25-7.5 7.5-7.5-7.5"
+        ></path>
+      </svg>
     </div>
   </div>
   <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
@@ -64,7 +64,7 @@
       <% end %>
       <% if empty_state? %>
         <li
-          class="hidden p-4 text-blue-800 border border-blue-300  bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800"
+          class="hidden p-4 text-blue-800 border border-blue-300  bg-blue-50 dark:bg-slate-800 dark:text-blue-400 dark:border-blue-800"
           data-viral--select2-target="empty"
         >
           <%= empty_state %>

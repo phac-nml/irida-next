@@ -85,7 +85,7 @@ body {
   }
 
   .form-field select {
-    @apply border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-slate-50 dark:text-opacity-60 dark:focus:ring-primary-500 dark:focus:border-primary-500;
+    @apply border-slate-300 text-opacity-60 text-slate-800 sm:text-sm rounded-md focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-slate-50 dark:text-opacity-60 dark:focus:ring-primary-500 dark:focus:border-primary-500;
   }
 
   .form-field select.error {
@@ -318,7 +318,7 @@ body {
     width: 20px;
   }
 
-  .namespace-list-tree>.namespace-entry:not(.has-children) .folder-caret {
+  .namespace-list-tree > .namespace-entry:not(.has-children) .folder-caret {
     opacity: 0;
   }
 
@@ -398,7 +398,7 @@ body {
     flex-shrink: 0;
   }
 
-  .namespace-list-tree .namespace-entry-contents .avatar-container>a {
+  .namespace-list-tree .namespace-entry-contents .avatar-container > a {
     width: 100%;
     text-decoration: none;
   }
@@ -424,7 +424,7 @@ body {
     flex-shrink: 0;
   }
 
-  .namespace-list-tree .namespace-entry-contents .stats>span {
+  .namespace-list-tree .namespace-entry-contents .stats > span {
     display: inline-flex;
     align-items: center;
     height: 16px;
@@ -469,7 +469,7 @@ body {
   @apply text-sm font-normal text-slate-500 dark:text-slate-400;
 }
 
-div.field_with_errors> :is(select) {
+div.field_with_errors > :is(select) {
   @apply text-red-900 placeholder-red-300 border-red-700;
 }
 
@@ -493,14 +493,14 @@ div.field_with_errors> :is(select) {
 }
 
 .scrollbar::-webkit-scrollbar {
-  width: .75rem;
-  height: .75rem;
+  width: 0.75rem;
+  height: 0.75rem;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
   --tw-bg-opacity: 1 !important;
   @apply bg-slate-300 dark:bg-slate-600;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
 }
 
 .scrollbar::-webkit-scrollbar-corner {
