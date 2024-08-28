@@ -116,6 +116,13 @@ module Projects
         }]
     end
 
+    def fixed
+      super
+      return unless action_name == 'index'
+
+      @fixed = false
+    end
+
     def current_page
       @current_page = t(:'projects.sidebar.samples')
     end

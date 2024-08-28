@@ -45,6 +45,10 @@ module Projects
 
     protected
 
+    def fixed
+      @fixed = false
+    end
+
     def redirect_path
       namespace_project_workflow_executions_path
     end
