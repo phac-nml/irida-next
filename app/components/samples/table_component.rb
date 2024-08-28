@@ -54,8 +54,7 @@ module Samples
     def wrapper_arguments
       {
         tag: 'div',
-        classes: class_names('table-container flex flex-col shrink min-h-0'),
-        data: { 'turbo-prefetch': false }
+        classes: class_names('table-container flex flex-col shrink min-h-0')
       }
     end
 

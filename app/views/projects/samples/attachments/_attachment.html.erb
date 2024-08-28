@@ -17,7 +17,7 @@
       "aria-label": attachment.file.filename,
       data: {
         selection_target: "rowSelection",
-        action: "input->selection#toggle"
+        action: "input->selection#toggle",
       },
       class:
         "text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
@@ -35,7 +35,7 @@
             <%= link_to attachment.file.filename,
             rails_blob_path(attachment.file),
             data: {
-              turbo: false
+              turbo: false,
             },
             class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
           </span>
@@ -46,7 +46,7 @@
             <%= link_to attachment.associated_attachment.file.filename,
             rails_blob_path(attachment.associated_attachment.file),
             data: {
-              turbo: false
+              turbo: false,
             },
             class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
           </span>
@@ -62,7 +62,7 @@
             <%= link_to attachment.file.filename,
             rails_blob_path(attachment.file),
             data: {
-              turbo: false
+              turbo: false,
             },
             class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
           </span>
@@ -73,11 +73,11 @@
 
   <td class="px-6 py-4"><%= viral_pill(
       text: attachment.metadata["format"],
-      color: find_pill_color_for_attachment(attachment, "format")
+      color: find_pill_color_for_attachment(attachment, "format"),
     ) %></td>
   <td class="px-6 py-4"><%= viral_pill(
       text: attachment.metadata["type"],
-      color: find_pill_color_for_attachment(attachment, "type")
+      color: find_pill_color_for_attachment(attachment, "type"),
     ) %></td>
 
   <% if attachment.associated_attachment %>
@@ -103,13 +103,10 @@
         t(".delete"),
         namespace_project_sample_attachment_new_destroy_path(
           sample_id: @sample.id,
-          attachment_id: attachment.id
+          attachment_id: attachment.id,
         ),
-        data: {
-          "turbo-prefetch": false,
-        },
         class:
-          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
+          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
       ) %>
     <% end %>
   </td>
