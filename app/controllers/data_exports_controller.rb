@@ -42,7 +42,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     else
       flash[:success] = t('.success', name: @data_export.name || @data_export.id)
 
-      redirect_to data_export_path(@data_export, format: :html)
+      redirect_to data_export_path(@data_export)
     end
   end
 

@@ -1,3 +1,5 @@
+<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+<%= turbo_stream_from @data_export %>
 <%= render Viral::PageHeaderComponent.new(
   title: @data_export.name || @data_export.id, id: @data_export.name.nil? ? nil : @data_export.id) do |component| %>
   <%= component.with_buttons do %>
@@ -70,14 +72,9 @@
       <% end %>
     <% end %>
   </div>
-  <div class="flex flex-col" data-turbo-temporary>
-    <%= turbo_frame_tag "data-export-listing",
-      src: data_export_path(format: :turbo_stream, tab: @tab || 'summary') do %>
-      <% if @tab == "preview" %>
-        <%= render partial: "shared/loading/list" %>
-      <% else %>
-        <%= render partial: "shared/loading/table" %>
-      <% end %>
-    <% end %>
-  </div>
+  <% if @tab == "preview" %>
+    <%= render partial: "preview" %>
+  <% else %>
+    <%= render partial: "summary" %>
+  <% end %>
 </div>

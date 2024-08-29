@@ -3,6 +3,7 @@
 # entity class for DataExport
 class DataExport < ApplicationRecord
   has_logidze
+  broadcasts_refreshes
 
   belongs_to :user
 
