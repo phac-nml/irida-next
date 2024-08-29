@@ -10,17 +10,18 @@ module Resolvers
              description: 'Optional group identifier to return list of samples for.',
              default_value: nil
 
-    argument :filter, Types::SampleFilterType, required: false, description: 'Ransack filter'
+    argument :filter, Types::SampleFilterType,
+             required: false,
+             description: 'Ransack filter',
+             default_value: nil
 
     def resolve(group_id:, filter:)
-      # todo, include both group_id and filter together
-      # todo, filter should respect authorized scope
-      if filter
+      if filter && group_id
+        get_by_group_id(group_id:).ransack(filter.to_h).result
+      elsif filter
         Sample.ransack(filter.to_h).result
       elsif group_id
-        group = IridaSchema.object_from_id(group_id, { expected_type: Group })
-        authorize!(group, to: :sample_listing?, with: GroupPolicy)
-        authorized_scope(Sample, type: :relation, as: :namespace_samples, scope_options: { namespace: group })
+        get_by_group_id(group_id:)
       else
         scope = authorized_scope Project, type: :relation
         Sample.where(project_id: scope.select(:id))
@@ -29,6 +30,14 @@ module Resolvers
 
     def ready?(**_args)
       authorize!(to: :query?, with: GraphqlPolicy, context: { token: context[:token] })
+    end
+
+    private
+
+    def get_by_group_id(group_id:)
+      group = IridaSchema.object_from_id(group_id, { expected_type: Group })
+      authorize!(group, to: :sample_listing?, with: GroupPolicy)
+      authorized_scope(Sample, type: :relation, as: :namespace_samples, scope_options: { namespace: group })
     end
   end
 end

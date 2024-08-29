@@ -1167,7 +1167,7 @@ type Query {
     """
     Ransack filter
     """
-    filter: SampleFilter
+    filter: SampleFilter = null
 
     """
     Returns the first _n_ elements from the list.
