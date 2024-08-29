@@ -120,7 +120,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     available_users = User.human_users.where.not(id: Member.select(:user_id).where(namespace: @namespace))
                           .where.not(id: current_user.id)
 
-    @available_users = available_users + available_bots
+    @available_users = User.where(id: available_users.select(:id) + available_bots.select(:id)).order(:email)
   end
 
   def available_bots # rubocop:disable Metrics/AbcSize
