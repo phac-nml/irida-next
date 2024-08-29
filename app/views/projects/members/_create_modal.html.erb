@@ -10,13 +10,18 @@
       <div class="grid gap-4">
         <div class="form-field">
           <%= form.label :user_id %>
-          <%= form.select :user_id,
-                      options_for_select(
-                        @available_users.collect { |u| [u.email, u.id] },
-                        selected: @new_member.user_id
-                      ),
-                      { prompt: t(:"projects.members.new.select_user") },
-                      required: true %>
+          <%= viral_select2(form:, name: :user_id, placeholder: t("projects.members.new.select_user")) do |select| %>
+            <% @available_users.each do |user| %>
+              <% select.with_option(
+                primary: user.email,
+                secondary: user.full_name,
+                value: user.id,
+              ) %>
+            <% end %>
+            <%= select.with_empty_state do %>
+              <%= t(:"projects.members.new.empty_state") %>
+            <% end %>
+          <% end %>
         </div>
 
         <% invalid_access_level = @new_member.errors.include?(:access_level) %>
@@ -34,19 +39,11 @@
           <%= form.label :expires_at %>
           <div class="relative max-w-sm">
             <div
-              class="
-                absolute
-                inset-y-0
-                left-0
-                flex
-                items-center
-                pl-3
-                pointer-events-none
-              "
+              class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none "
             >
               <%= viral_icon(
                 name: :calendar_days,
-                classes: "w-5 h-5 text-slate-500 dark:text-slate-400"
+                classes: "w-5 h-5 text-slate-500 dark:text-slate-400",
               ) %>
             </div>
             <%= form.text_field :expires_at,

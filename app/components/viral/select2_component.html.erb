@@ -1,0 +1,51 @@
+<div
+  data-controller="viral--select2"
+  data-action="keyup->viral--select2#keydown"
+  class="select2"
+>
+  <label for="select2-input" class="sr-only"><%= name %></label>
+  <input
+    type="text"
+    id="select2-input"
+    data-action="
+      focus->viral--select2#focus
+      keydown.enter->viral--select2#keyboardQuery
+    "
+    data-viral--select2-target="input"
+    placeholder="<%= placeholder %>"
+    required="<%= required %>"
+    autocomplete="off"
+    class="
+      border-slate-300 text-slate-800 sm:text-sm rounded-md focus:ring-primary-500
+      focus:border-primary-500 block w-full p-2.5 dark:bg-slate-800
+      dark:border-slate-600 dark:placeholder-slate-400 dark:text-slate-50
+      dark:focus:ring-primary-500 dark:focus:border-primary-500
+    "
+  >
+  <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
+
+  <div
+    data-viral--select2-target="dropdown"
+    class="z-10 hidden w-full bg-white divide-y rounded-lg shadow  divide-slate-100 dark:bg-slate-700"
+  >
+    <ul
+      data-viral--select2-target="scroller"
+      class="
+        max-h-[300px] w-full py-2 overflow-y-auto divide-y divide-slate-200
+        dark:divide-slate-800
+      "
+    >
+      <% options.each do |option| %>
+        <%= option %>
+      <% end %>
+      <% if empty_state? %>
+        <li
+          class="hidden p-4 text-blue-800 border border-blue-300  bg-blue-50 dark:bg-slate-800 dark:text-blue-400 dark:border-blue-800"
+          data-viral--select2-target="empty"
+        >
+          <%= empty_state %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

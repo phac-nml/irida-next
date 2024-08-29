@@ -729,6 +729,7 @@ fr:
         button:
           cancel: Cancel
           submit: Share
+        empty_state: No groups are associated with that name or ID
     members:
       access_level:
         aria_label: Access Level
@@ -767,6 +768,7 @@ fr:
         description: You are adding a new member to group %{name}
         add_member_to_group: Add member to group
         select_user: Select a User
+        empty_state: There are no users with the provided email or id
         select_access_level: Select Access Level
       destroy:
         error: "There was an error removing the group member"
@@ -1033,6 +1035,7 @@ fr:
           shared_group: Group to share namespace with
           group_access_level: Maximum group access level
           access_expiration: Access expiration (optional)
+        empty_state: No groups are associated with that name or ID
         button:
           cancel: Cancel
           submit: Share
@@ -1088,6 +1091,7 @@ fr:
         description: You are adding a new member to project %{name}
         select_user: Select a User
         select_access_level: Select Access Level
+        empty_state: There are no users with the provided email or id
       destroy:
         error: "There was an error removing the project member"
         success: "Project member %{user} successfully removed"

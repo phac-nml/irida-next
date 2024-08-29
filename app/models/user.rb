@@ -110,6 +110,10 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
     email.rpartition('@').first
   end
 
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
   private
 
   def build_namespace_name
