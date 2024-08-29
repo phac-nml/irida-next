@@ -94,6 +94,7 @@ module DataExports
                                'manifest.txt']
       actual_simple_manifest = ''
 
+      DataExports::CreateJob.perform_now(@data_export2)
       export_file = ActiveStorage::Blob.service.path_for(@data_export2.file.key)
       Zip::File.open(export_file) do |zip_file|
         zip_file.each do |entry|
