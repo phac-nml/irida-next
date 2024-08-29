@@ -84,8 +84,23 @@ body {
     @apply border border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-700 focus:border-primary-700 block w-full pl-10 p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
   }
 
-  .form-field select {
-    @apply border-slate-300 text-opacity-60 text-slate-800 sm:text-sm rounded-md focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-slate-50 dark:text-opacity-60 dark:focus:ring-primary-500 dark:focus:border-primary-500;
+  .form-field .select2 input[type="text"] {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' aria-hidden='true' viewBox='0 0 10 6'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 1 4 4 4-4'/%3E%3C/svg%3E");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 0.75em 0.75em;
+    padding-right: 2.5rem;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .form-field select,
+  .form-field select option {
+    @apply border-slate-300  text-slate-900 sm:text-sm rounded-md focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-slate-50 dark:text-opacity-60 dark:focus:ring-primary-500 dark:focus:border-primary-500;
+  }
+
+  .form-field select:has(option[value=""]:checked) {
+    @apply text-opacity-60 text-slate-900 dark:text-slate-400;
   }
 
   .form-field select.error {
@@ -103,7 +118,7 @@ body {
     line-height: inherit;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
-    @apply rounded-r-md border-0 p-2.5 block w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm text-slate-900 focus:border-green-500 focus:ring-green-500 dark:placeholder-slate-400 dark:shadow-sm-light dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply rounded-r-md border-0 p-2.5 block w-full bg-slate-50 border-slate-300 text-sm text-slate-900 focus:border-green-500 focus:ring-green-500 dark:placeholder-slate-400 dark:shadow-sm-light dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 
   .form-field.invalid label {
