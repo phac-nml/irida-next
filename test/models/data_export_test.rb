@@ -3,6 +3,13 @@
 require 'test_helper'
 
 class DataExportTest < ActiveSupport::TestCase
+  extend ActiveSupport::Concern
+
+  included do
+    include ActionCable::TestHelper
+
+    include Turbo::Streams::StreamName
+  end
   def setup
     @export1 = data_exports(:data_export_one)
     @project1 = projects(:project1)
@@ -210,5 +217,18 @@ class DataExportTest < ActiveSupport::TestCase
     assert_equal I18n.t(
       'activerecord.errors.models.data_export.attributes.export_parameters.invalid_analysis_type'
     ), data_export.errors[:export_parameters].first
+  end
+
+  test 'turbo stream broadcasts' do
+    data_export = DataExport.new(user: @user, status: 'processing', export_type: 'sample',
+                                 export_parameters: { ids: [@sample1.id], namespace_id: @project1.namespace.id,
+                                                      attachment_formats: Attachment::FORMAT_REGEX.keys })
+
+    assert_no_turbo_stream_broadcasts [users(:john_doe),
+                                       :data_exports]
+
+    assert_turbo_stream_broadcasts [users(:john_doe), :data_exports], count: 1 do
+      data_export.save
+    end
   end
 end

@@ -94,7 +94,6 @@ module DataExports
                                'manifest.txt']
       actual_simple_manifest = ''
 
-      DataExports::CreateJob.perform_now(@data_export2)
       export_file = ActiveStorage::Blob.service.path_for(@data_export2.file.key)
       Zip::File.open(export_file) do |zip_file|
         zip_file.each do |entry|
@@ -481,6 +480,14 @@ module DataExports
       end
       assert expected_files_in_zip.empty?
       assert_equal expected_manifest.to_json, data_export.manifest
+    end
+
+    test 'turbo stream broadcasts' do
+      assert_no_turbo_stream_broadcasts [users(:john_doe), :data_exports]
+
+      assert_turbo_stream_broadcasts [users(:john_doe), :data_exports], count: 3 do
+        DataExports::CreateJob.perform_now(@data_export2)
+      end
     end
   end
 end
