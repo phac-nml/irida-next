@@ -10,7 +10,7 @@
         data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
       >
         <%= form_with(
-        url: list_namespace_project_samples_path,
+        url: list_namespace_project_samples_path(list_class: 'sample'),
         data: { "infinite-scroll-target": "pageForm" }
       ) do %>
           <input type="hidden" name="format" value="turbo_stream"/>
@@ -38,7 +38,7 @@
               data-action="scroll->infinite-scroll#scroll"
               data-infinite-scroll-target="scrollable"
             >
-              <%= turbo_frame_tag "list_select_samples" do %>
+              <%= turbo_frame_tag "list_selections" do %>
                 <%= render partial: "shared/loading/samples_list_skeleton" %>
               <% end %>
             </div>

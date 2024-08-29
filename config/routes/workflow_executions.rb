@@ -20,4 +20,8 @@ resources :workflow_executions, only: %i[index create show destroy] do
       end
     end
   end
+
+  collection do
+    get :select
+  end
 end

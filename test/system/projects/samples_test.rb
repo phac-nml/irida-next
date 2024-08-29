@@ -277,7 +277,7 @@ module Projects
       within('span[data-controller-connected="true"] dialog') do
         assert_text I18n.t('projects.samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER',
                                                                                          '3')
-        within %(turbo-frame[id="list_select_samples"]) do
+        within %(turbo-frame[id="list_selections"]) do
           samples = @project.samples.pluck(:puid, :name)
           samples.each do |sample|
             assert_text sample[0]
@@ -301,7 +301,7 @@ module Projects
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
         assert_text I18n.t('projects.samples.transfers.dialog.description.singular')
-        within %(turbo-frame[id="list_select_samples"]) do
+        within %(turbo-frame[id="list_selections"]) do
           assert_text @sample1.name
         end
         select project2.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
@@ -325,7 +325,7 @@ module Projects
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       within %(turbo-frame[id="samples_dialog"]) do
-        assert_no_selector "turbo-frame[id='list_select_samples']"
+        assert_no_selector "turbo-frame[id='list_selections']"
         assert_text I18n.t('projects.samples.transfers.create.no_samples_transferred_error')
         errors = @project.errors.full_messages_for(:samples)
         errors.each { |error| assert_text error }
@@ -342,7 +342,7 @@ module Projects
       check sample30.name
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        within %(turbo-frame[id="list_select_samples"]) do
+        within %(turbo-frame[id="list_selections"]) do
           assert_text sample30.name
           assert_text sample30.puid
         end
@@ -350,7 +350,7 @@ module Projects
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       within %(turbo-frame[id="samples_dialog"]) do
-        assert_no_selector "turbo-frame[id='list_select_samples']"
+        assert_no_selector "turbo-frame[id='list_selections']"
         assert_text I18n.t('projects.samples.transfers.create.error')
         errors = @project.errors.full_messages_for(:samples)
         errors.each { |error| assert_text error }
@@ -368,7 +368,7 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        within %(turbo-frame[id="list_select_samples"]) do
+        within %(turbo-frame[id="list_selections"]) do
           samples = @project.samples.pluck(:puid, :name)
           samples.each do |sample|
             assert_text sample[0]
@@ -379,7 +379,7 @@ module Projects
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       within %(turbo-frame[id="samples_dialog"]) do
-        assert_no_selector "turbo-frame[id='list_select_samples']"
+        assert_no_selector "turbo-frame[id='list_selections']"
         assert_text I18n.t('projects.samples.transfers.create.error')
         errors = @project.errors.full_messages_for(:samples)
         errors.each { |error| assert_text error }
@@ -399,7 +399,7 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        within %(turbo-frame[id="list_select_samples"]) do
+        within %(turbo-frame[id="list_selections"]) do
           samples = @project.samples.pluck(:puid, :name)
           samples.each do |sample|
             assert_text sample[0]
@@ -425,7 +425,7 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        within %(turbo-frame[id="list_select_samples"]) do
+        within %(turbo-frame[id="list_selections"]) do
           samples = project2.samples.pluck(:puid, :name)
           samples.each do |sample|
             assert_text sample[0]
@@ -451,7 +451,7 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        within %(turbo-frame[id="list_select_samples"]) do
+        within %(turbo-frame[id="list_selections"]) do
           samples = @project.samples.pluck(:puid, :name)
           samples.each do |sample|
             assert_text sample[0]
@@ -2012,7 +2012,7 @@ module Projects
         assert_text I18n.t(
           'projects.samples.clones.dialog.description.plural'
         ).gsub! 'COUNT_PLACEHOLDER', '3'
-        within %(turbo-frame[id="list_select_samples"]) do
+        within %(turbo-frame[id="list_selections"]) do
           samples = @project.samples.pluck(:puid, :name)
           samples.each do |sample|
             assert_text sample[0]
@@ -2035,7 +2035,7 @@ module Projects
       click_link I18n.t('projects.samples.index.clone_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
         assert_text I18n.t('projects.samples.clones.dialog.description.singular')
-        within %(turbo-frame[id="list_select_samples"]) do
+        within %(turbo-frame[id="list_selections"]) do
           assert_text @sample1.name
         end
         select project2.full_path, from: I18n.t('projects.samples.clones.dialog.new_project_id')
@@ -2058,7 +2058,7 @@ module Projects
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
       within %(turbo-frame[id="samples_dialog"]) do
-        assert_no_selector "turbo-frame[id='list_select_samples']"
+        assert_no_selector "turbo-frame[id='list_selections']"
         assert_text I18n.t('projects.samples.clones.create.no_samples_cloned_error')
         errors = project2.errors.full_messages_for(:base)
         errors.each { |error| assert_text error }
@@ -2075,7 +2075,7 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.clone_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        within %(turbo-frame[id="list_select_samples"]) do
+        within %(turbo-frame[id="list_selections"]) do
           samples = @project.samples.pluck(:puid, :name)
           samples.each do |sample|
             assert_text sample[0]
@@ -2319,7 +2319,7 @@ module Projects
         assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.title')
         assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.description.singular',
                            sample_name: @sample1.name)
-        within %(turbo-frame[id="list_select_samples"]) do
+        within %(turbo-frame[id="list_selections"]) do
           assert_text @sample1.puid
         end
 

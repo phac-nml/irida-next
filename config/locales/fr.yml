@@ -1350,13 +1350,16 @@ fr:
         error: "Could not delete workflow %{workflow_name}"
         success: "Workflow %{workflow_name} was successfully deleted"
       index:
-        title: Workflow Executions
-        subtitle: These are the automated workflow executions that have been launched for this project
         actions:
           cancel_button: Cancel
           cancel_confirm: Are you sure you want to cancel this workflow execution?
           delete_button: Delete
           delete_confirm: Are you sure you want to delete this workflow execution?
+        create_export_button: Create Export
+        deselect_all_button: Deselect All
+        select_all_button: Select All
+        subtitle: These are the automated workflow executions that have been launched for this project
+        title: Workflow Executions
       table:
         empty:
           title: No automated workflow executions.
@@ -1400,6 +1403,9 @@ fr:
         canceled: Canceled
   workflow_executions:
     index:
+      create_export_button: Create Export
+      deselect_all_button: Deselect All
+      select_all_button: Select All
       title: Workflow Executions
       actions:
         cancel_button: Cancel
@@ -1685,45 +1691,51 @@ fr:
         summary: Summary
         preview: Preview
     new:
+      after_submission_description_html: After submission, you will be redirected to the export page. While the export status is <span class="bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1 mr-1">processing</span>, the contents of the export are being created. Once the export status is <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1">ready</span>, it will be available for download. You will have 3 business days to download the export before it's deleted.
+      email_label: Receive an email notification when your export is ready to download?
+      name_label: "Export Name (Optional):"
       samples_count:
         zero: "Samples (0 selected)"
         non-zero: "Samples (COUNT_PLACEHOLDER selected)"
       sample_description:
-        zero_html: This export will contain no samples. After submission, you will be redirected to the export page. While the export status is <span class="bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1 mr-1">processing</span>, the contents of the export are being created. Once the export status is <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1">ready</span>, it will be available for download. You will have 3 business days to download the export before it's deleted.
-        singular: This export will contain 1 sample. After submission, you will be redirected to the export page. While the export status is <span class="bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1 mr-1">processing</span>, the contents of the export are being created. Once the export status is <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1">ready</span>, it will be available for download. You will have 3 business days to download the export before it's deleted.
-        plural: This export will contain COUNT_PLACEHOLDER samples. After submission, you will be redirected to the export page. While the export status is <span class="bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1 mr-1">processing</span>, the contents of the export are being created. Once the export status is <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1">ready</span>, it will be available for download. You will have 3 business days to download the export before it's deleted.
+        zero_html: This export will contain no samples.
+        singular: This export will contain 1 sample.
+        plural: This export will contain COUNT_PLACEHOLDER samples.
+      submit_button: Submit
     new_sample_export_dialog:
       available: Available
-      email_label: Receive an email notification when your export is ready to download?
       format_description: By default, all files are included in sample exports. If you would like to filter which files are included based on format, include only those formats within the %{selected} list.
-      name_label: "Export Name (Optional):"
       samples: Samples
       select_formats: Select File Formats
       selected: Selected
-      submit_button: Submit
       title: Sample Export
     new_analysis_export_dialog:
-      email_label: Receive an email notification when your export is ready to download?
-      name_label: "Export Name (Optional):"
-      samples: Samples
-      submit_button: Submit
+      selection_count:
+        zero: "Workflow Executions (0 selected)"
+        non_zero: "Workflow Executions (COUNT_PLACEHOLDER selected)"
       description:
-        analysis_html: This export will contain the contents of workflow execution <strong class="text-slate-900 dark:text-white">%{id}</strong>. After submission, you will be redirected to the export page. While the export status is <span class="bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1 mr-1">processing</span>, the contents of the export are being created. Once the export status is <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1">ready</span>, it will be available for download. You will have 3 business days to download the export before it's deleted.
+        singular: This export will contain 1 workflow execution.
+        plural: This export will contain COUNT_PLACEHOLDER workflow executions.
       title: Analysis Export
+    new_single_analysis_export_dialog:
+      single_selection: Workflow Executions (1 selected)
+      single_description_html: This export will contain 1 workflow execution.
     new_linelist_export_dialog:
       available: Available
       csv: '.csv'
-      email_label: Receive an email notification when your export is ready to download?
       format: Format
       metadata: Metadata
       metadata_description: Select the metadata fields for export by moving the metadata fields from the %{available} list to the %{selected} list. The export's metadata ordering will be determined by the ordering of the %{selected} list.
-      name_label: "Export Name (Optional):"
       samples: Samples
       select_metadata: Select Metadata
       selected: Selected
-      submit_button: Submit
       title: Linelist Export
       xlsx: '.xslx'
+    list_workflow_execution:
+      id: "ID:"
+      name: "Name:"
+      run_id: "Run ID:"
+      workflow: "Workflow:"
     types:
       sample: SAMPLE
       analysis: ANALYSIS

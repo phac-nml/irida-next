@@ -4,7 +4,7 @@ module Projects
   # Controller actions for Samples
   class SamplesController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
     include Metadata
-    include SampleActions
+    include ListActions
     include Storable
 
     before_action :sample, only: %i[show edit update view_history_version]

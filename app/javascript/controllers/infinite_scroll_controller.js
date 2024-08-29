@@ -9,7 +9,7 @@ export default class extends Controller {
     "pageFormContent",
     "scrollable",
     "summary",
-    "sampleCount"
+    "selectionCount"
   ];
   static values = {
     pagedFieldName: String,
@@ -25,8 +25,8 @@ export default class extends Controller {
     this.numSelected = this.selectionOutlet.getNumSelected()
     this.#makePagedHiddenInputs();
     this.#replaceDescriptionPlaceholder();
-    if (this.hasSampleCountTarget) {
-      this.#replaceCountPlaceholder(this.sampleCountTarget, this.nonZeroHeaderValue);
+    if (this.hasSelectionCountTarget) {
+      this.#replaceCountPlaceholder(this.selectionCountTarget, this.nonZeroHeaderValue);
     }
   }
 

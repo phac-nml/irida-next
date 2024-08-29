@@ -15,7 +15,8 @@ class DataExportsTest < ApplicationSystemTestCase
     @sample1 = samples(:sample1)
     @sample2 = samples(:sample2)
     @sample30 = samples(:sample30)
-    @workflow_execution = workflow_executions(:irida_next_example_completed_with_output)
+    @workflow_execution1 = workflow_executions(:irida_next_example_completed_with_output)
+    @workflow_execution2 = workflow_executions(:workflow_execution_valid)
     login_as @user
   end
 
@@ -269,10 +270,11 @@ class DataExportsTest < ApplicationSystemTestCase
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
       click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
+      assert_text I18n.t('data_exports.new.sample_description.singular')
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new.sample_description.singular')
+        I18n.t('data_exports.new.after_submission_description_html')
       )
-      within %(turbo-frame[id="list_select_samples"]) do
+      within %(turbo-frame[id="list_selections"]) do
         assert_text @sample1.name
         assert_text @sample1.puid
       end
@@ -288,12 +290,12 @@ class DataExportsTest < ApplicationSystemTestCase
           assert_text format
         end
       end
-      assert_text I18n.t('data_exports.new_sample_export_dialog.name_label')
-      assert_text I18n.t('data_exports.new_sample_export_dialog.email_label')
+      assert_text I18n.t('data_exports.new.name_label')
+      assert_text I18n.t('data_exports.new.email_label')
 
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
-      click_button I18n.t('data_exports.new_sample_export_dialog.submit_button')
+      click_button I18n.t('data_exports.new.submit_button')
     end
 
     assert_selector 'dl', count: 1
@@ -324,10 +326,11 @@ class DataExportsTest < ApplicationSystemTestCase
 
     within 'dialog[open].dialog--size-lg' do
       click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '2'
+      assert_text I18n.t('data_exports.new.sample_description.plural').gsub! 'COUNT_PLACEHOLDER', '2'
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new.sample_description.plural')
-      ).gsub! 'COUNT_PLACEHOLDER', '2'
-      within %(turbo-frame[id="list_select_samples"]) do
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
+      within %(turbo-frame[id="list_selections"]) do
         assert_text @sample1.name
         assert_text @sample1.puid
         assert_text @sample2.name
@@ -345,12 +348,12 @@ class DataExportsTest < ApplicationSystemTestCase
           assert_text format
         end
       end
-      assert_text I18n.t('data_exports.new_sample_export_dialog.name_label')
-      assert_text I18n.t('data_exports.new_sample_export_dialog.email_label')
+      assert_text I18n.t('data_exports.new.name_label')
+      assert_text I18n.t('data_exports.new.email_label')
 
-      fill_in I18n.t('data_exports.new_sample_export_dialog.name_label'), with: 'test data export'
-      check I18n.t('data_exports.new_sample_export_dialog.email_label')
-      click_button I18n.t('data_exports.new_sample_export_dialog.submit_button')
+      fill_in I18n.t('data_exports.new.name_label'), with: 'test data export'
+      check I18n.t('data_exports.new.email_label')
+      click_button I18n.t('data_exports.new.submit_button')
     end
 
     assert_selector 'dl', count: 1
@@ -388,12 +391,13 @@ class DataExportsTest < ApplicationSystemTestCase
     click_link I18n.t('projects.samples.index.create_export_button.sample_export'), match: :first
     within 'dialog[open].dialog--size-lg' do
       click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
-      within %(turbo-frame[id="list_select_samples"]) do
+      within %(turbo-frame[id="list_selections"]) do
         assert_text @sample1.name
         assert_text @sample1.puid
       end
+      assert_text I18n.t('data_exports.new.sample_description.singular')
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new.sample_description.singular')
+        I18n.t('data_exports.new.after_submission_description_html')
       )
     end
   end
@@ -416,7 +420,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'svg.Viral-Icon__Svg.icon-document_text', count: 3
   end
 
-  test 'clicking links in preview tab for data export' do
+  test 'clicking links in preview tab for sample data export' do
     attachment1 = attachments(:attachment1)
     attachment2 = attachments(:attachment2)
     visit data_export_path(@data_export1, tab: 'preview')
@@ -441,21 +445,59 @@ class DataExportsTest < ApplicationSystemTestCase
     end
   end
 
-  test 'create analysis export' do
-    visit workflow_execution_path(@workflow_execution)
+  test 'clicking links in preview tab for analysis data export' do
+    sample46 = samples(:sample46)
+    visit data_export_path(@data_export7, tab: 'preview')
+
+    click_link @workflow_execution1.id
+
+    assert_current_path(workflow_execution_path(@workflow_execution1))
+    assert_text @workflow_execution1.id
+
+    within first('dl') do
+      assert_text @workflow_execution1.run_id
+      assert_text @workflow_execution1.metadata['workflow_name']
+      assert_text @workflow_execution1.metadata['workflow_version']
+    end
+
+    visit data_export_path(@data_export7, tab: 'preview')
+
+    click_link sample46.puid
+
+    assert_text sample46.name
+    assert_text sample46.puid
+  end
+
+  test 'create analysis export from show page' do
+    visit workflow_execution_path(@workflow_execution1)
 
     click_link I18n.t('workflow_executions.show.create_export_button'), match: :first
+
     within 'dialog[open].dialog--size-lg' do
-      assert_no_selector "turbo-frame[id='list_select_samples']"
-      assert_text I18n.t('data_exports.new_analysis_export_dialog.name_label')
-      assert_text I18n.t('data_exports.new_analysis_export_dialog.email_label')
-      assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_analysis_export_dialog.description.analysis_html',
-               id: @workflow_execution.id)
+      assert_accessible
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.title')
+      assert_text I18n.t('data_exports.new_single_analysis_export_dialog.single_selection')
+      assert_text I18n.t('data_exports.new.name_label')
+      assert_text I18n.t('data_exports.new.email_label')
+
+      assert_no_selector 'turbo-frame[id="list_selections"]'
+      assert_no_text @workflow_execution1.id
+      assert_no_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new_single_analysis_export_dialog.single_description_html')
       )
+
+      click_button I18n.t('data_exports.new_single_analysis_export_dialog.single_selection')
+      assert_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new_single_analysis_export_dialog.single_description_html')
+      )
+      assert_text @workflow_execution1.id
+      assert_text @workflow_execution1.run_id
+      assert_text @workflow_execution1.metadata['workflow_name']
+      assert_text @workflow_execution1.metadata['workflow_version']
+
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
-      click_button I18n.t('data_exports.new_analysis_export_dialog.submit_button')
+      click_button I18n.t('data_exports.new.submit_button')
     end
 
     assert_selector 'dl', count: 1
@@ -469,7 +511,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
-    visit workflow_execution_path(@workflow_execution)
+    visit workflow_execution_path(@workflow_execution1)
     assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                        text: I18n.t('projects.samples.index.create_export_button.label')
   end
@@ -499,8 +541,9 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_text we_output.file.filename.to_s
     assert_text swe_output.file.filename.to_s
     assert_text sample46.puid
+    assert_text @workflow_execution1.id
 
-    assert_selector 'svg.Viral-Icon__Svg.icon-folder_open', count: 1
+    assert_selector 'svg.Viral-Icon__Svg.icon-folder_open', count: 2
     assert_selector 'svg.Viral-Icon__Svg.icon-document_text', count: 3
   end
 
@@ -575,22 +618,25 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text I18n.t('data_exports.new_linelist_export_dialog.format')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.csv')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.xlsx')
-      assert_text I18n.t('data_exports.new_linelist_export_dialog.name_label')
-      assert_text I18n.t('data_exports.new_linelist_export_dialog.email_label')
+      assert_text I18n.t('data_exports.new.name_label')
+      assert_text I18n.t('data_exports.new.email_label')
 
-      assert_no_selector 'turbo-frame[id="list_select_samples"]'
+      assert_no_selector 'turbo-frame[id="list_selections"]'
       assert_no_text @sample30.name
       assert_no_text @sample30.puid
-      assert_no_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new.sample_description.singular')
-      )
+      assert_no_text I18n.t('data_exports.new.sample_description.singular')
 
-      click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
-      assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new.sample_description.singular')
+      assert_no_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.after_submission_description_html')
       )
-      assert_selector 'turbo-frame[id="list_select_samples"]'
-      within %(turbo-frame[id="list_select_samples"]) do
+      click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
+      assert_text I18n.t('data_exports.new.sample_description.singular')
+
+      assert_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
+      assert_selector 'turbo-frame[id="list_selections"]'
+      within %(turbo-frame[id="list_selections"]) do
         assert_text @sample30.name
         assert_text @sample30.puid
       end
@@ -701,7 +747,7 @@ class DataExportsTest < ApplicationSystemTestCase
     within 'dialog[open].dialog--size-lg' do
       click_button I18n.t('viral.sortable_lists_component.add_all')
       find('input#data_export_name').fill_in with: 'test csv export'
-      click_button I18n.t('data_exports.new_linelist_export_dialog.submit_button')
+      click_button I18n.t('data_exports.new.submit_button')
     end
 
     within('dl') do
@@ -728,7 +774,7 @@ class DataExportsTest < ApplicationSystemTestCase
       click_button I18n.t('viral.sortable_lists_component.add_all')
       find('input#data_export_name').fill_in with: 'test xlsx export'
       find('input#xlsx-format').click
-      click_button I18n.t('data_exports.new_linelist_export_dialog.submit_button')
+      click_button I18n.t('data_exports.new.submit_button')
     end
 
     within('dl') do
@@ -809,5 +855,113 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
                          text: I18n.t('viral.sortable_lists_component.remove_all')
     end
+  end
+
+  test 'new analysis export with multiple workflow executions from user workflow executions index page' do
+    visit workflow_executions_path
+    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+                    text: I18n.t('workflow_executions.index.create_export_button')
+
+    within %(#workflow-executions-table) do
+      find("input[type='checkbox'][value='#{@workflow_execution1.id}']").click
+      find("input[type='checkbox'][value='#{@workflow_execution2.id}']").click
+    end
+
+    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+                       text: I18n.t('workflow_executions.index.create_export_button')
+    click_link I18n.t('workflow_executions.index.create_export_button')
+
+    within 'dialog[open].dialog--size-lg' do
+      assert_accessible
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.title')
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.selection_count.non_zero').gsub! 'COUNT_PLACEHOLDER',
+                                                                                                   '2'
+      assert_text I18n.t('data_exports.new.name_label')
+      assert_text I18n.t('data_exports.new.email_label')
+
+      assert_no_selector 'turbo-frame[id="list_selections"]'
+      assert_no_text @workflow_execution1.id
+      assert_no_text @workflow_execution2.id
+      assert_no_text I18n.t('data_exports.new_analysis_export_dialog.description.plural').gsub! 'COUNT_PLACEHOLDER', '2'
+      assert_no_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
+      click_button I18n.t('data_exports.new_analysis_export_dialog.selection_count.non_zero').gsub! 'COUNT_PLACEHOLDER',
+                                                                                                    '2'
+      assert_text  I18n.t('data_exports.new_analysis_export_dialog.description.plural').gsub! 'COUNT_PLACEHOLDER', '2'
+      assert_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
+      assert_selector 'turbo-frame[id="list_selections"]'
+      within %(turbo-frame[id="list_selections"]) do
+        assert_text @workflow_execution1.id
+        assert_text @workflow_execution1.run_id
+        assert_text @workflow_execution1.metadata['workflow_name']
+        assert_text @workflow_execution1.metadata['workflow_version']
+        assert_text @workflow_execution2.id
+        assert_text @workflow_execution2.run_id
+        assert_text @workflow_execution2.metadata['workflow_name']
+        assert_text @workflow_execution2.metadata['workflow_version']
+      end
+
+      find('input#data_export_name').fill_in with: 'test data export'
+      find("input[type='checkbox'][id='data_export_email_notification']").click
+      click_button I18n.t('data_exports.new.submit_button')
+    end
+
+    assert_selector 'dl', count: 1
+    assert_selector 'div:nth-child(2) dd', text: 'test data export'
+  end
+
+  test 'new analysis export with single workflow execution from project workflow executions index page' do
+    workflow_execution = workflow_executions(:automated_workflow_execution)
+
+    visit namespace_project_workflow_executions_path(@group1, @project1)
+    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+                    text: I18n.t('projects.workflow_executions.index.create_export_button')
+
+    within %(#workflow-executions-table) do
+      find("input[type='checkbox'][value='#{workflow_execution.id}']").click
+    end
+
+    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+                       text: I18n.t('projects.workflow_executions.index.create_export_button')
+    click_link I18n.t('projects.workflow_executions.index.create_export_button')
+
+    within 'dialog[open].dialog--size-lg' do
+      assert_accessible
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.title')
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.selection_count.non_zero').gsub! 'COUNT_PLACEHOLDER',
+                                                                                                   '1'
+      assert_text I18n.t('data_exports.new.name_label')
+      assert_text I18n.t('data_exports.new.email_label')
+
+      assert_no_selector 'turbo-frame[id="list_selections"]'
+      assert_no_text workflow_execution.id
+      assert_no_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
+      assert_no_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
+      click_button I18n.t('data_exports.new_analysis_export_dialog.selection_count.non_zero').gsub! 'COUNT_PLACEHOLDER',
+                                                                                                    '1'
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
+      assert_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
+      assert_selector 'turbo-frame[id="list_selections"]'
+      within %(turbo-frame[id="list_selections"]) do
+        assert_text workflow_execution.id
+        assert_text workflow_execution.run_id
+        assert_text workflow_execution.metadata['workflow_name']
+        assert_text workflow_execution.metadata['workflow_version']
+      end
+
+      find('input#data_export_name').fill_in with: 'test data export'
+      find("input[type='checkbox'][id='data_export_email_notification']").click
+      click_button I18n.t('data_exports.new.submit_button')
+    end
+
+    assert_selector 'dl', count: 1
+    assert_selector 'div:nth-child(2) dd', text: 'test data export'
   end
 end

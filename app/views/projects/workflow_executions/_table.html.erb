@@ -4,6 +4,9 @@
   pagy,
   q,
   namespace: namespace,
+  abilities: {
+    select_workflow_executions: allowed_to?(:export_data?, namespace)
+  },
   row_actions: {
     cancel: allowed_to?(:update?, namespace),
     destroy: allowed_to?(:update?, namespace),

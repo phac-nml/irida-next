@@ -63,6 +63,11 @@ module DataExports
       end
     end
 
+    def write_manifests(zip, data_export_id)
+      write_manifest(zip)
+      write_simple_manifest(data_export_id, zip)
+    end
+
     def write_manifest(zip)
       manifest_file = Tempfile.new
       manifest_file.write(JSON.pretty_generate(JSON.parse(@manifest.to_json)))
@@ -72,8 +77,8 @@ module DataExports
       manifest_file.unlink
     end
 
-    def write_simple_manifest(data_export_id:, zip:)
-      output_lines = simple_manifest_begin(data_export_id:)
+    def write_simple_manifest(data_export_id, zip)
+      output_lines = simple_manifest_begin(data_export_id)
 
       simple_manifest_file = Tempfile.new
       File.open(simple_manifest_file, 'a+') { |f| f.puts(output_lines) }
@@ -83,7 +88,7 @@ module DataExports
       simple_manifest_file.unlink
     end
 
-    def simple_manifest_begin(data_export_id:)
+    def simple_manifest_begin(data_export_id)
       output_lines = [
         @manifest['type'],
         @manifest['date'],
@@ -150,9 +155,7 @@ module DataExports
 
             write_sample_attachments(sample, project, zip, attachments)
           end
-
-          write_manifest(zip)
-          write_simple_manifest(data_export_id: data_export.id.to_s, zip:)
+          write_manifests(zip, data_export.id)
         end
       end
     end
@@ -217,15 +220,15 @@ module DataExports
         ZipKit::Streamer.open(tempfile) do |zip|
           workflow_executions = workflow_query(data_export.export_parameters['ids'])
           workflow_executions.each do |workflow|
+            next if workflow.outputs.empty?
+
             write_workflow_execution_outputs_and_manifest(workflow, zip)
 
-            samples_workflow_executions = workflow.samples_workflow_executions
-            samples_workflow_executions.each do |swe|
+            workflow.samples_workflow_executions.each do |swe|
               write_samples_workflow_execution_outputs_and_manifest(workflow.id, swe, zip) unless swe.outputs.empty?
             end
           end
-          write_manifest(zip)
-          write_simple_manifest(data_export_id: data_export.id.to_s, zip:)
+          write_manifests(zip, data_export.id)
         end
       end
     end

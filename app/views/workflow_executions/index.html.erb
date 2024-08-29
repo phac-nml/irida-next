@@ -1,9 +1,51 @@
 <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 
+<%= turbo_frame_tag "export_dialog" %>
+<%= turbo_frame_tag "selected" %>
+
 <%= turbo_stream_from current_user, :workflow_executions %>
 
-<%= render Viral::PageHeaderComponent.new(title: t(".title")) %>
-
+<%= render Viral::PageHeaderComponent.new(title: t(".title")) do |component| %>
+  <%= component.with_buttons do %>
+   <%= link_to t(".create_export_button"),
+      new_data_export_path(
+        export_type: "analysis",
+        analysis_type: "user"
+      ),
+      data: {
+        action: "turbo:morph-element->action-link#idempotentConnect",
+        turbo_stream: true,
+        controller: "action-link",
+        action_link_required_value: 1,
+      },
+      class: "button button--size-default button--state-default action-link" %>
+  <% end %>
+<% end %>
+<div class="flow-root">
+  <div class="float-left inline-flex space-x-2 mb-4">
+    <%= search_form_for(
+              @q,
+              url: select_workflow_executions_url(**request.query_parameters),
+              html: { id: "select-all-form" },
+              class: "filters align-middle"
+            ) do |f| %>
+      <input type="hidden" name="format" value="turbo_stream"/>
+      <input type="hidden" name="select" value="on"/>
+      <%= f.submit t(".select_all_button"),
+                class: "button button--state-default button--size-default" %>
+    <% end %>
+    <%= search_form_for(
+              @q,
+              url: select_workflow_executions_url(**request.query_parameters),
+              html: { id: "deselect-all-form" },
+              class: "filters align-middle"
+            ) do |f| %>
+      <input type="hidden" name="format" value="turbo_stream"/>
+      <%= f.submit t(".deselect_all_button"),
+                class: "button button--state-default button--size-default" %>
+    <% end %>
+  </div>
+</div>
 <%= render partial: "table",
 locals: {
   workflow_executions: @workflow_executions,

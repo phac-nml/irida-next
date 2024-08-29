@@ -275,19 +275,29 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should redirect from project PUID' do
-    get redirect_from_data_export_path(@data_export1, puid: 'INXT_PRJ_AAAAAAAAAA')
+    get redirect_data_export_path(@data_export1, identifier: 'INXT_PRJ_AAAAAAAAAA')
     assert_response :redirect
   end
 
   test 'should redirect from sample PUID' do
-    get redirect_from_data_export_path(@data_export1, puid: 'INXT_SAM_AAAAAAAAAA')
+    get redirect_data_export_path(@data_export1, identifier: 'INXT_SAM_AAAAAAAAAA')
     assert_response :redirect
   end
 
   test 'should list samples' do
     post list_data_exports_path(format: :turbo_stream), params: {
       page: 1,
-      sample_ids: [@sample1.id]
+      sample_ids: [@sample1.id],
+      list_class: 'sample'
+    }
+    assert_response :success
+  end
+
+  test 'should list workflow executions' do
+    post list_data_exports_path(format: :turbo_stream), params: {
+      page: 1,
+      workflow_execution_ids: [@workflow1.id, @workflow2.id],
+      list_class: 'workflow_execution'
     }
     assert_response :success
   end

@@ -3,7 +3,7 @@
 # Controller actions for Data Exports
 class DataExportsController < ApplicationController # rubocop:disable Metrics/ClassLength
   include BreadcrumbNavigation
-  include SampleActions
+  include ListActions
 
   before_action :data_export, only: %i[destroy show]
   before_action :data_exports, only: %i[index destroy]
@@ -24,9 +24,16 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   end
 
   def new
-    render turbo_stream: turbo_stream.update(params[:export_type] == 'analysis' ? 'export_dialog' : 'samples_dialog',
-                                             partial: "new_#{params[:export_type]}_export_dialog",
-                                             locals:), status: :ok
+    # Handles analysis exports created from show page
+    if params[:export_type] == 'analysis' && params[:single_workflow]
+      render turbo_stream: turbo_stream.update('export_dialog',
+                                               partial: 'new_single_analysis_export_dialog',
+                                               locals: new_locals), status: :ok
+    else
+      render turbo_stream: turbo_stream.update(params[:export_type] == 'analysis' ? 'export_dialog' : 'samples_dialog',
+                                               partial: "new_#{params[:export_type]}_export_dialog",
+                                               locals: new_locals), status: :ok
+    end
   end
 
   def create
@@ -46,15 +53,13 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     end
   end
 
-  def redirect_from
-    if params['puid'].include?('INXT_SAM')
-      sample = Sample.find_by(puid: params['puid'])
-      project = Project.find(sample.project_id)
-      namespace = project.namespace.parent
-      redirect_to namespace_project_sample_path(namespace, project, sample, tab: 'files')
+  def redirect
+    if params['identifier'].include?('INXT_SAM')
+      redirect_to_sample
+    elsif params['identifier'].include?('INXT_PRJ')
+      redirect_to_project
     else
-      project = Namespace.find_by(puid: params['puid']).project
-      redirect_to namespace_project_samples_path(project.parent, project)
+      redirect_to_workflow_execution
     end
   end
 
@@ -130,15 +135,45 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
       }]
   end
 
-  def locals
+  def new_locals
     case params[:export_type]
     when 'analysis'
-      { open: true, workflow_execution_id: params[:workflow_execution_id], analysis_type: params['analysis_type'],
-        namespace_id: params['analysis_type'] == 'project' ? params[:namespace_id] : nil }
+      analysis_locals
     when 'sample'
       { open: true, namespace_id: params[:namespace_id], formats: Attachment::FORMAT_REGEX.keys.sort }
     when 'linelist'
       { open: true, namespace_id: params[:namespace_id] }
+    end
+  end
+
+  def analysis_locals
+    local = { open: true,
+              analysis_type: params['analysis_type'],
+              namespace_id: params['analysis_type'] == 'project' ? params[:namespace_id] : nil }
+    local[:workflow_execution] = WorkflowExecution.find(params[:workflow_execution_id]) if params[:single_workflow]
+    local
+  end
+
+  def redirect_to_sample
+    sample = Sample.find_by(puid: params['identifier'])
+    project = Project.find(sample.project_id)
+    namespace = project.namespace.parent
+    redirect_to namespace_project_sample_path(namespace, project, sample, tab: 'files')
+  end
+
+  def redirect_to_project
+    project = Namespace.find_by(puid: params['identifier']).project
+    redirect_to namespace_project_samples_path(project.parent, project)
+  end
+
+  def redirect_to_workflow_execution
+    workflow_execution = WorkflowExecution.find_by(id: params['identifier'])
+    submitter = workflow_execution.submitter
+    if submitter.user_type == 'human'
+      redirect_to workflow_execution_path(workflow_execution)
+    else
+      namespace = Namespace.find_by(puid: submitter.first_name)
+      redirect_to namespace_project_workflow_execution_path(namespace.parent, namespace.project, workflow_execution)
     end
   end
 end

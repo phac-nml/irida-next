@@ -71,6 +71,20 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
+  def select
+    authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
+    @workflow_executions = []
+
+    respond_to do |format|
+      format.turbo_stream do
+        if params[:select].present?
+          @q = load_workflows.ransack(params[:q])
+          @workflow_executions = @q.result.select(:id)
+        end
+      end
+    end
+  end
+
   private
 
   def workflow_properties

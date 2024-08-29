@@ -34,6 +34,9 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
           member do
             put :cancel
           end
+          collection do
+            get :select
+          end
         end
       end
 

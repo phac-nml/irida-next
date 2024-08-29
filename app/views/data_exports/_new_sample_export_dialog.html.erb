@@ -15,7 +15,7 @@
         class="font-normal text-slate-500 dark:text-slate-400"
       >
         <%= form_with(
-        url: list_data_exports_path,
+        url: list_data_exports_path(list_class: 'sample'),
         data: { "infinite-scroll-target": "pageForm" }
       ) do %>
           <div data-infinite-scroll-target="pageFormContent"></div>
@@ -48,7 +48,7 @@
                 aria-expanded="true"
                 aria-controls="<%= "accordion-collapse-body-samples" %>"
               >
-                <span data-infinite-scroll-target="sampleCount"><%= t(".samples") %></span>
+                <span data-infinite-scroll-target="selectionCount"><%= t(".samples") %></span>
                 <%= viral_icon(
                   name: "chevron_down",
                   classes: "mr-0 w-4 h-4 rotate-0",
@@ -63,14 +63,12 @@
               class="hidden"
               aria-labelledby="<%= "accordion-collapse-heading-samples" %>"
             >
-              <p
-                data-infinite-scroll-target="summary"
-                class="
-                  text-base leading-relaxed text-slate-500 dark:text-slate-400 p-2.5 border border-t-0 border-slate-300
-                "
-              >
-                <%= t(:"data_exports.new.sample_description.zero_html") %>
-              </p>
+              <div class="text-base leading-relaxed text-slate-500 dark:text-slate-400 p-2.5 border border-t-0 border-slate-300">
+                <span data-infinite-scroll-target="summary">
+                   <%= t(:"data_exports.new.sample_description.zero") %>
+                </span>
+                <span><%= t(:"data_exports.new.after_submission_description_html") %></span>
+              </div>
               <div
               class="
                 overflow-y-auto max-h-[200px] border border-t-0 border-slate-300 rounded-b block w-full
@@ -79,7 +77,7 @@
               data-action="scroll->infinite-scroll#scroll"
               data-infinite-scroll-target="scrollable"
               >
-                <%= turbo_frame_tag "list_select_samples" do %>
+                <%= turbo_frame_tag "list_selections" do %>
                   <%= render partial: "shared/loading/samples_list_skeleton" %>
                 <% end %>
               </div>
@@ -113,26 +111,7 @@
               }
             ) do |form| %>
             <div class="grid gap-4">
-              <div class="form-field mt-2">
-                <%= form.label :name, t(".name_label") %>
-                <%= form.text_field :name, class: "form-control" %>
-              </div>
-              <div class="flex items-center h-5">
-                <%= form.check_box :email_notification,
-                               {
-                                 checked: false,
-                                 class:
-                                   "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded
-                                                                                    focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800
-                                                                                    focus:ring-2 dark:bg-slate-700 dark:border-slate-600
-                                                                                    ",
-                               },
-                               true,
-                               false %>
-                <%= form.label :email_notification,
-                           t(".email_label"),
-                           class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
-              </div>
+              <%= render partial: "name_and_email", locals: {form:} %>
               <div>
                 <%= form.hidden_field :export_type, value: "sample" %>
                 <input type="hidden" aria-hidden="true"
@@ -140,7 +119,7 @@
               </div>
               <div class="hidden" data-viral--sortable-lists--two-lists-selection-target="field"></div>
               <div>
-                <%= form.submit t(".submit_button"),
+                <%= form.submit t("data_exports.new.submit_button"),
                             data: {
                               turbo_frame: "_top",
                               action: %(click->form--hidden-inputs#clearSelection click->viral--sortable-lists--two-lists-selection#constructParams),
