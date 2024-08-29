@@ -96,7 +96,7 @@ body {
 
   .form-field select,
   .form-field select option {
-    @apply border-slate-300  text-slate-900 sm:text-sm rounded-md focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-slate-50 dark:text-opacity-60 dark:focus:ring-primary-500 dark:focus:border-primary-500;
+    @apply border-slate-300  text-slate-900 sm:text-sm rounded-md focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500;
   }
 
   .form-field select:has(option[value=""]:checked) {
