@@ -70,7 +70,7 @@ body {
   .form-field input[type="search"],
   .form-field input[type="password"],
   .form-field input[type="email"] {
-    @apply border border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 placeholder-slate-500 dark:placeholder-slate-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500;
+    @apply border border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500;
   }
 
   .form-field input[type="text"].prefixed,
@@ -81,7 +81,7 @@ body {
   }
 
   .form-field.datepicker input[type="text"] {
-    @apply border border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-700 focus:border-primary-700 block w-full pl-10 p-2.5 dark:bg-slate-800 dark:border-slate-600 placeholder-slate-500 dark:placeholder-slate-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+    @apply border border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-700 focus:border-primary-700 block w-full pl-10 p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
   }
 
   .form-field .select2 input[type="text"] {
@@ -96,7 +96,7 @@ body {
 
   .form-field select,
   .form-field select option {
-    @apply border-slate-300  text-slate-900 sm:text-sm rounded-md focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 placeholder-slate-500 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500;
+    @apply border-slate-300  text-slate-900 sm:text-sm rounded-md focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500;
   }
 
   .form-field select:has(option[value=""]:checked) {
@@ -104,7 +104,7 @@ body {
   }
 
   .form-field select.error {
-    @apply border-red-500 text-slate-900 sm:text-sm rounded-md focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-slate-800 dark:border-red-400 placeholder-slate-500 dark:placeholder-slate-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500;
+    @apply border-red-500 text-slate-900 sm:text-sm rounded-md focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-slate-800 dark:border-red-400 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500;
   }
 
   .form-field select.prefixed {
@@ -118,7 +118,7 @@ body {
     line-height: inherit;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
-    @apply rounded-r-md border-0 p-2.5 block w-full bg-slate-50 border-slate-300 text-sm text-slate-900 focus:border-green-500 focus:ring-green-500 placeholder-slate-500 dark:placeholder-slate-400 dark:shadow-sm-light dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply rounded-r-md border-0 p-2.5 block w-full bg-slate-50 border-slate-300 text-sm text-slate-900 focus:border-green-500 focus:ring-green-500 dark:placeholder-gray-400 dark:shadow-sm-light dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 
   .form-field.invalid label {
@@ -138,7 +138,7 @@ body {
   }
 
   .form-field textarea {
-    @apply block w-full rounded-md border border-slate-300 text-sm text-slate-900 p-2.5 focus:border-green-500 focus:ring-green-500 placeholder-slate-500 dark:placeholder-slate-400 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply block w-full rounded-md border border-slate-300 text-sm text-slate-900 p-2.5 focus:border-green-500 focus:ring-green-500 dark:placeholder-gray-400 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 
   input[type="checkbox"] {
