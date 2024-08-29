@@ -100,7 +100,7 @@ body {
   }
 
   .form-field select:has(option[value=""]:checked) {
-    @apply text-slate-500 dark:text-opacity-60 dark:text-slate-400;
+    @apply text-slate-500 dark:text-slate-400;
   }
 
   .form-field select.error {
