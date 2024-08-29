@@ -45,6 +45,13 @@ module Groups
                                                                                                      :route] })
     end
 
+    def layout_fixed
+      super
+      return unless action_name == 'index'
+
+      @fixed = false
+    end
+
     def context_crumbs
       super
       case action_name

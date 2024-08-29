@@ -6,6 +6,7 @@ module Projects
     include BreadcrumbNavigation
 
     before_action :project
+    before_action :layout_fixed
 
     layout 'projects'
 
@@ -14,6 +15,10 @@ module Projects
     def project
       path = [params[:namespace_id], params[:project_id]].join('/')
       @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
+    end
+
+    def layout_fixed
+      @fixed = true
     end
 
     def context_crumbs
