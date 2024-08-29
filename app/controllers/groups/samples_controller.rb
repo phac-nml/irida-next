@@ -45,7 +45,7 @@ module Groups
                                                                                                      :route] })
     end
 
-    def fixed
+    def layout_fixed
       super
       return unless action_name == 'index'
 

@@ -45,7 +45,7 @@ module Projects
 
     protected
 
-    def fixed
+    def layout_fixed
       @fixed = false
     end
 

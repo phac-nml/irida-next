@@ -6,7 +6,7 @@ module Projects
     include BreadcrumbNavigation
 
     before_action :project
-    before_action :fixed
+    before_action :layout_fixed
 
     layout 'projects'
 
@@ -17,7 +17,7 @@ module Projects
       @project ||= Namespaces::ProjectNamespace.find_by_full_path(path).project # rubocop:disable Rails/DynamicFindBy
     end
 
-    def fixed
+    def layout_fixed
       @fixed = true
     end
 

@@ -5,13 +5,13 @@ module Groups
   class ApplicationController < ApplicationController
     include BreadcrumbNavigation
 
-    before_action :fixed
+    before_action :layout_fixed
 
     layout 'groups'
 
     private
 
-    def fixed
+    def layout_fixed
       @fixed = true
     end
 
