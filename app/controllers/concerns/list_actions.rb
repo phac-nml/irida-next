@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Common sample actions
+# List actions to display samples or workflow executions
 module ListActions
   extend ActiveSupport::Concern
 
