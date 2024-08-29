@@ -213,13 +213,14 @@ class DataExportTest < ActiveSupport::TestCase
   end
 
   test 'turbo stream broadcasts' do
+    user = users(:john_doe)
     data_export = DataExport.new(user: @user, status: 'processing', export_type: 'sample',
                                  export_parameters: { ids: [@sample1.id], namespace_id: @project1.namespace.id,
                                                       attachment_formats: Attachment::FORMAT_REGEX.keys })
 
-    assert_no_turbo_stream_broadcasts [users(:john_doe), :data_exports]
+    assert_no_turbo_stream_broadcasts [user, :data_exports]
 
-    assert_turbo_stream_broadcasts [users(:john_doe), :data_exports], count: 1 do
+    assert_turbo_stream_broadcasts [user, :data_exports], count: 1 do
       data_export.save
     end
   end

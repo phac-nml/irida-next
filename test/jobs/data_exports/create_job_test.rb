@@ -484,9 +484,10 @@ module DataExports
     end
 
     test 'turbo stream broadcasts' do
-      assert_no_turbo_stream_broadcasts [users(:john_doe), :data_exports]
+      user = users(:john_doe)
+      assert_no_turbo_stream_broadcasts [user, :data_exports]
 
-      assert_turbo_stream_broadcasts [users(:john_doe), :data_exports], count: 3 do
+      assert_turbo_stream_broadcasts [user, :data_exports], count: 3 do
         DataExports::CreateJob.perform_now(@data_export2)
       end
     end
