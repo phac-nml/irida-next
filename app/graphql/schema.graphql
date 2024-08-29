@@ -855,6 +855,11 @@ type Query {
     first: Int
 
     """
+    Optional group identifier to return list of projects for (includes direct, indirect, and shared projects).
+    """
+    groupId: ID = null
+
+    """
     Returns the last _n_ elements from the list.
     """
     last: Int
