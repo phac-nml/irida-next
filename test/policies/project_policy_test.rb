@@ -290,4 +290,20 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     assert_equal true, policy.submit_workflow?
   end
+
+  test 'group_projects scope includes linked projects and projects from linked groups' do
+    user = users(:private_ryan)
+    group = groups(:group_alpha)
+    policy = ProjectPolicy.new(group, user:)
+
+    scoped_projects = policy.apply_scope(Project, type: :relation, name: :group_projects,
+                                                  scope_options: { group: })
+
+    assert_equal 4, scoped_projects.count
+
+    assert scoped_projects.include?(projects(:projectAlpha))
+    assert scoped_projects.include?(projects(:projectAlpha1))
+    assert scoped_projects.include?(projects(:projectBravo))
+    assert scoped_projects.include?(projects(:projectCharlie))
+  end
 end

@@ -14,7 +14,7 @@ module Resolvers
       if group_id
         group = IridaSchema.object_from_id(group_id, { expected_type: Group })
         authorize!(group, to: :read?, with: GroupPolicy)
-        authorized_scope(Group, type: :relation, as: :group_projects, scope_options: { group: })
+        authorized_scope(Project, type: :relation, as: :group_projects, scope_options: { group: })
       else
         authorized_scope Project, type: :relation
       end
