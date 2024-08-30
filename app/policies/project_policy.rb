@@ -173,8 +173,8 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
       ).where(
         Arel.sql(
           'projects.namespace_id in (select id from personal_project_namespaces)
+        or projects.namespace_id in (select namespace_id from direct_project_namespaces)
         or projects.namespace_id in (select id from group_project_namespaces)
-        or projects.namespace_id in (select id from direct_project_namespaces)
         or projects.namespace_id in (select id from group_linked_project_namespaces)
         or projects.namespace_id in (select id from direct_linked_project_namespaces)'
         )
@@ -209,8 +209,8 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
         ).select(:namespace_id), type: Group.sti_name).self_and_descendant_ids).select(:id)
     ).where(
       Arel.sql(
-        'projects.namespace_id in (select * from group_project_namespaces)
-        or projects.namespace_id in (select * from direct_project_namespaces)'
+        'projects.namespace_id in (select namespace_id from direct_project_namespaces)
+        or projects.namespace_id in (select id from group_project_namespaces)'
       )
     ).include_route
   end
@@ -249,8 +249,8 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     ).where(
       Arel.sql(
         'projects.namespace_id in (select id from personal_project_namespaces)
+        or projects.namespace_id in (select namespace_id from direct_project_namespaces)
         or projects.namespace_id in (select id from group_project_namespaces)
-        or projects.namespace_id in (select id from direct_project_namespaces)
         or projects.namespace_id in (select id from group_linked_project_namespaces)
         or projects.namespace_id in (select id from direct_linked_project_namespaces)'
       )
@@ -281,13 +281,15 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
     relation
       .with(
-        direct_group_project_namespaces: Namespace.where(parent_id: group.self_and_descendants.select(:id)).select(:id),
+        direct_group_project_namespaces: Namespaces::ProjectNamespace.where(
+          parent_id: group.self_and_descendants.select(:id)
+        ).select(:id),
         linked_group_project_namespaces: Namespace.where(
           id: NamespaceGroupLink
                   .not_expired
                   .where(group_id: group.self_and_descendant_ids, group_access_level: minimum_access_level..)
                   .select(:namespace_id)
-        ).self_and_descendants.select(:id)
+        ).self_and_descendants.where(type: 'Project').select(:id)
       ).where(
         Arel.sql(
           'namespace_id in (select id from direct_group_project_namespaces)
