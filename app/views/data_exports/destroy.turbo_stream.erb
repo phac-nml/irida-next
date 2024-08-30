@@ -2,6 +2,4 @@
   <%= viral_flash(type:, data: message) %>
 <% end %>
 
-<% unless @data_export.persisted? %>
-  <%= turbo_stream.update "data_exports_table", partial: "table" %>
-<% end %>
+<turbo-stream action="refresh"></turbo-stream>

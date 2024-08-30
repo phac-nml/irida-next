@@ -7,6 +7,8 @@ class DataExport < ApplicationRecord
 
   belongs_to :user
 
+  after_commit { broadcast_refresh_to [user, :data_exports] }
+
   has_one_attached :file, dependent: :purge_later
 
   validates :status, presence: true, acceptance: { accept: %w[processing ready] }

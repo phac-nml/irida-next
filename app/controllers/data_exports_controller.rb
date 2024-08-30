@@ -63,22 +63,17 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     end
   end
 
-  def destroy # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def destroy
     DataExports::DestroyService.new(@data_export, current_user).execute
-    # Destroyed from data export show view
-    if !@data_export.persisted? && params[:redirect]
-      flash[:success] = t('.success', name: @data_export.name || @data_export.id)
-      redirect_to data_exports_path
-    # Destroyed from data exports listing index view
-    else
-      respond_to do |format|
-        format.turbo_stream do
-          if @data_export.persisted?
-            render status: :unprocessable_entity, locals: { type: 'alert', message: t('.error') }
-          else
-            render status: :ok,
-                   locals: { type: 'success', message: t('.success', name: @data_export.name || @data_export.id) }
-          end
+    respond_to do |format|
+      format.turbo_stream do
+        if @data_export.persisted?
+          render status: :unprocessable_entity,
+                 locals: { type: 'alert',
+                           message: t('.error', name: @data_export.name || @data_export.id) }
+        else
+          flash[:success] = t('.success', name: @data_export.name || @data_export.id)
+          redirect_to data_exports_path
         end
       end
     end

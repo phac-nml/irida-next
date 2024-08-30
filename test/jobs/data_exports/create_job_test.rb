@@ -482,5 +482,14 @@ module DataExports
       assert expected_files_in_zip.empty?
       assert_equal expected_manifest.to_json, data_export.manifest
     end
+
+    test 'turbo stream broadcasts' do
+      user = users(:john_doe)
+      assert_no_turbo_stream_broadcasts [user, :data_exports]
+
+      assert_turbo_stream_broadcasts [user, :data_exports], count: 3 do
+        DataExports::CreateJob.perform_now(@data_export2)
+      end
+    end
   end
 end

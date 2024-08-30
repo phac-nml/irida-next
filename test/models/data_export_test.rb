@@ -211,4 +211,16 @@ class DataExportTest < ActiveSupport::TestCase
       'activerecord.errors.models.data_export.attributes.export_parameters.invalid_analysis_type'
     ), data_export.errors[:export_parameters].first
   end
+
+  test 'turbo stream broadcasts' do
+    data_export = DataExport.new(user: @user, status: 'processing', export_type: 'sample',
+                                 export_parameters: { ids: [@sample1.id], namespace_id: @project1.namespace.id,
+                                                      attachment_formats: Attachment::FORMAT_REGEX.keys })
+
+    assert_no_turbo_stream_broadcasts [@user, :data_exports]
+
+    assert_turbo_stream_broadcasts [@user, :data_exports], count: 1 do
+      data_export.save
+    end
+  end
 end

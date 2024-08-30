@@ -1,5 +1,7 @@
+<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+
+<%= turbo_stream_from current_user, :data_exports %>
+
 <%= render Viral::PageHeaderComponent.new(title: t(".title")) %>
 
-<%= turbo_frame_tag "data_exports_table" do %>
-    <%= render partial: "table" %>
-<% end %>
+<%= render partial: "table" %>

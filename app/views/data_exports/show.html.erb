@@ -30,7 +30,7 @@
       <% end %>
         <%= link_to(
           t("data_exports.show.remove_button"),
-          data_export_path(@data_export, redirect: true),
+          data_export_path(@data_export),
           data: {
             turbo_method: :delete,
             turbo_confirm: t("data_exports.show.remove_button_confirmation", name: @data_export.name || @data_export.id)
