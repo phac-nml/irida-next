@@ -26,14 +26,14 @@ class SamplePolicy < ApplicationPolicy
       relation
         .with(
           direct_group_projects: Project.joins(:namespace)
-                                .where(namespace: { parent_id: namespace.self_and_descendants.select(:id) }).select(:id),
+                                .where(namespace: { parent_id: namespace.self_and_descendant_ids }).select(:id),
           linked_group_projects: Project.where(namespace_id: Namespace
             .where(
               id: NamespaceGroupLink
                       .not_expired
                       .where(group_id: namespace.self_and_descendant_ids, group_access_level: minimum_access_level..)
                       .select(:namespace_id)
-            ).self_and_descendants.select(:id))
+            ).self_and_descendant_ids)
           .select(:id)
         ).where(
           Arel.sql(

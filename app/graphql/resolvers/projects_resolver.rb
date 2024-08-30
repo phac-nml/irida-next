@@ -20,7 +20,7 @@ module Resolvers
       end
     end
 
-    def ready?(**args)
+    def ready?(**_args)
       authorize!(to: :query?, with: GraphqlPolicy, context: { token: context[:token] })
     end
   end
