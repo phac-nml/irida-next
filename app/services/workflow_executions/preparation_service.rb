@@ -14,6 +14,11 @@ module WorkflowExecutions
       @samplesheet_headers = parse_samplesheet_headers
       @samplesheet_rows = []
       @storage_service = ActiveStorage::Blob.service
+    rescue NoMethodError => e
+      @workflow_execution.errors.add(:base, "#{e.message}: workflow execution not found in executable pipelines")
+      @workflow_execution.state = :error
+      @workflow_execution.cleaned = true
+      @workflow_execution.save
     end
 
     def execute # rubocop:disable Metrics/MethodLength
