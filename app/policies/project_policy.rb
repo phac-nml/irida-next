@@ -163,9 +163,9 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
             type: Group.sti_name
           )).select(:id),
         group_linked_project_namespaces: Namespaces::ProjectNamespace.where(
-          parent_id: Group.where(id: NamespaceGroupLink.where(
-            group: Group.where(id: user.members.not_expired.joins(:namespace).select(:namespace_id)).self_and_descendants
-          ).not_expired.select(:namespace_id)).self_and_descendants
+          parent_id: Group.where(id: NamespaceGroupLink.where(group: Group.where(
+            id: user.members.not_expired.joins(:namespace).select(:namespace_id)
+          ).self_and_descendants).not_expired.select(:namespace_id)).self_and_descendants
         ).select(:id),
         direct_linked_project_namespaces: Namespaces::ProjectNamespace.where(id: NamespaceGroupLink.where(
           group: Group.where(id: user.members.not_expired.joins(:namespace).select(:namespace_id)).self_and_descendants
