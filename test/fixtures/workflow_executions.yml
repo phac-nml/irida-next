@@ -53,6 +53,18 @@ irida_next_example:
   email_notification: true
   cleaned: false
 
+irida_next_example_nonexecutable:
+  <<: *DEFAULTS
+  metadata:
+    { workflow_name: "phac-nml/iridanextexample", workflow_version: "1.0.3" }
+  workflow_params: { "assembler": "stub" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/iridanextexample"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  email_notification: true
+  cleaned: false
+
 irida_next_example_prepared:
   <<: *DEFAULTS
   metadata:
