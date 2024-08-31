@@ -3,7 +3,7 @@
 require 'application_system_test_case'
 
 class WorkflowExecutionsTest < ApplicationSystemTestCase
-  WORKFLOW_EXECUTION_COUNT = 18
+  WORKFLOW_EXECUTION_COUNT = 19
 
   setup do
     @user = users(:john_doe)
@@ -52,7 +52,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     workflow_execution2 = workflow_executions(:workflow_execution_invalid_metadata)
     workflow_execution8 = workflow_executions(:irida_next_example_canceling)
     workflow_execution9 = workflow_executions(:irida_next_example_canceled)
-    workflow_execution10 = workflow_executions(:workflow_execution_existing)
+    workflow_execution12 = workflow_executions(:irida_next_example_new)
 
     visit workflow_executions_path
 
@@ -64,7 +64,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within('#workflow-executions-table table tbody') do
       assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
       assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
-      assert_selector "tr:nth-child(#{@run_id_col}) td:nth-child(#{@run_id_col})", text: workflow_execution10.run_id
+      assert_selector "tr:nth-child(#{@run_id_col}) td:nth-child(#{@run_id_col})", text: workflow_execution12.run_id
       assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution.run_id
     end
 
@@ -74,7 +74,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within('#workflow-executions-table table tbody') do
       assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
       assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution.run_id
-      assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: workflow_execution9.run_id
+      assert_selector "tr:nth-child(3) td:nth-child(#{@run_id_col})", text: workflow_execution9.run_id
       assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
     end
 
