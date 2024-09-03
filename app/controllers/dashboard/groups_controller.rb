@@ -6,16 +6,16 @@ module Dashboard
     before_action :current_page
 
     def index
+      @flat = params[:q].present? && params[:q][:name_or_puid_cont].present?
       @q = authorized_groups.ransack(params[:q])
       set_default_sort
+      @pagy, @groups = pagy(@q.result.include_route)
       respond_to do |format|
         format.html
         format.turbo_stream do
           if toggling_group?
             toggle_group
             render :group
-          else
-            @pagy, @groups = pagy(@q.result.include_route)
           end
         end
       end
@@ -42,7 +42,11 @@ module Dashboard
     end
 
     def authorized_groups
-      authorized_scope(Group, type: :relation).without_descendants
+      if @flat
+        authorized_scope(Group, type: :relation)
+      else
+        authorized_scope(Group, type: :relation).without_descendants
+      end
     end
 
     def current_page

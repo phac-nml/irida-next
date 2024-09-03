@@ -47,7 +47,8 @@ module Viral
       args.merge({
                    id: "dd-#{SecureRandom.hex(10)}",
                    data:,
-                   tag: :button
+                   tag: :button,
+                   type: :button
                  })
     end
 

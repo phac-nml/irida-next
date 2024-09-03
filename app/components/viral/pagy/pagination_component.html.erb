@@ -1,4 +1,4 @@
-<% a = helpers.pagy_anchor(@pagy, anchor_string: 'data-turbo-action="replace"') %>
+<% a = helpers.pagy_anchor(@pagy, anchor_string: @data_string) %>
 <nav class="pagy nav" aria-label="<%= t(".aria-label")%>">
   <ul class="inline-flex h-10 -space-x-px text-base">
     <%# Previous page link %>

@@ -100,7 +100,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
 
     def ransackable_attributes(_auth_object = nil)
-      %w[created_at deleted_at name updated_at]
+      %w[created_at deleted_at name puid updated_at]
     end
 
     def ransackable_associations(_auth_object = nil)
