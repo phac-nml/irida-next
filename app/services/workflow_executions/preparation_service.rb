@@ -16,14 +16,9 @@ module WorkflowExecutions
       @storage_service = ActiveStorage::Blob.service
     end
 
-    def execute # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    def execute # rubocop:disable Metrics/MethodLength
       # confirm pipeline found
-      if @pipeline.nil?
-        @workflow_execution.state = :error
-        @workflow_execution.cleaned = true
-        @workflow_execution.save
-        return false
-      end
+      return false unless validate_pipeline
 
       @samplesheet_headers = @pipeline.samplesheet_headers
 
@@ -65,6 +60,15 @@ module WorkflowExecutions
     def find_pipeline
       Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
                                                  @workflow_execution.metadata['workflow_version'])
+    end
+
+    def validate_pipeline
+      return true unless @pipeline.nil?
+
+      @workflow_execution.state = :error
+      @workflow_execution.cleaned = true
+      @workflow_execution.save
+      false
     end
 
     def parse_attachments_from_samplesheet(samplesheet)
