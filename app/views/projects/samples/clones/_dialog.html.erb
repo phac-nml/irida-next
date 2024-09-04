@@ -1,4 +1,4 @@
-<%= viral_dialog(open: open, classes: ["overflow-visible"]) do |dialog| %>
+<%= viral_dialog(open: open, size: :large) do |dialog| %>
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
     <%= turbo_frame_tag "clone_samples_dialog_content" do %>
