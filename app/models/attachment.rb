@@ -33,8 +33,18 @@ class Attachment < ApplicationRecord
 
   delegate :byte_size, to: :file
 
+  ransack_alias :filename, :file_blob_filename
+
   def self.model_prefix
     'ATT'
+  end
+
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[puid created_at updated_at] + _ransack_aliases.keys
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[file_blob]
   end
 
   # override destroy so that on soft delete we don't delete the ActiveStorage::Attachment

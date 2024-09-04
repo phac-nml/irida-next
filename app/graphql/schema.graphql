@@ -138,6 +138,273 @@ type AttachmentEdge {
   node: Attachment
 }
 
+input AttachmentFilter {
+  created_at_blank: String
+  created_at_cont: String
+  created_at_cont_all: String
+  created_at_cont_any: String
+  created_at_does_not_match: String
+  created_at_does_not_match_all: String
+  created_at_does_not_match_any: String
+  created_at_end: String
+  created_at_end_all: String
+  created_at_end_any: String
+  created_at_eq: String
+  created_at_eq_all: String
+  created_at_eq_any: String
+  created_at_false: String
+  created_at_gt: String
+  created_at_gt_all: String
+  created_at_gt_any: String
+  created_at_gteq: String
+  created_at_gteq_all: String
+  created_at_gteq_any: String
+  created_at_i_cont: String
+  created_at_i_cont_all: String
+  created_at_i_cont_any: String
+  created_at_in: String
+  created_at_in_all: String
+  created_at_in_any: String
+  created_at_lt: String
+  created_at_lt_all: String
+  created_at_lt_any: String
+  created_at_lteq: String
+  created_at_lteq_all: String
+  created_at_lteq_any: String
+  created_at_matches: String
+  created_at_matches_all: String
+  created_at_matches_any: String
+  created_at_not_cont: String
+  created_at_not_cont_all: String
+  created_at_not_cont_any: String
+  created_at_not_end: String
+  created_at_not_end_all: String
+  created_at_not_end_any: String
+  created_at_not_eq: String
+  created_at_not_eq_all: String
+  created_at_not_eq_any: String
+  created_at_not_false: String
+  created_at_not_i_cont: String
+  created_at_not_i_cont_all: String
+  created_at_not_i_cont_any: String
+  created_at_not_in: String
+  created_at_not_in_all: String
+  created_at_not_in_any: String
+  created_at_not_null: String
+  created_at_not_start: String
+  created_at_not_start_all: String
+  created_at_not_start_any: String
+  created_at_not_true: String
+  created_at_null: String
+  created_at_present: String
+  created_at_start: String
+  created_at_start_all: String
+  created_at_start_any: String
+  created_at_true: String
+  filename_blank: String
+  filename_cont: String
+  filename_cont_all: String
+  filename_cont_any: String
+  filename_does_not_match: String
+  filename_does_not_match_all: String
+  filename_does_not_match_any: String
+  filename_end: String
+  filename_end_all: String
+  filename_end_any: String
+  filename_eq: String
+  filename_eq_all: String
+  filename_eq_any: String
+  filename_false: String
+  filename_gt: String
+  filename_gt_all: String
+  filename_gt_any: String
+  filename_gteq: String
+  filename_gteq_all: String
+  filename_gteq_any: String
+  filename_i_cont: String
+  filename_i_cont_all: String
+  filename_i_cont_any: String
+  filename_in: String
+  filename_in_all: String
+  filename_in_any: String
+  filename_lt: String
+  filename_lt_all: String
+  filename_lt_any: String
+  filename_lteq: String
+  filename_lteq_all: String
+  filename_lteq_any: String
+  filename_matches: String
+  filename_matches_all: String
+  filename_matches_any: String
+  filename_not_cont: String
+  filename_not_cont_all: String
+  filename_not_cont_any: String
+  filename_not_end: String
+  filename_not_end_all: String
+  filename_not_end_any: String
+  filename_not_eq: String
+  filename_not_eq_all: String
+  filename_not_eq_any: String
+  filename_not_false: String
+  filename_not_i_cont: String
+  filename_not_i_cont_all: String
+  filename_not_i_cont_any: String
+  filename_not_in: String
+  filename_not_in_all: String
+  filename_not_in_any: String
+  filename_not_null: String
+  filename_not_start: String
+  filename_not_start_all: String
+  filename_not_start_any: String
+  filename_not_true: String
+  filename_null: String
+  filename_present: String
+  filename_start: String
+  filename_start_all: String
+  filename_start_any: String
+  filename_true: String
+  puid_blank: String
+  puid_cont: String
+  puid_cont_all: String
+  puid_cont_any: String
+  puid_does_not_match: String
+  puid_does_not_match_all: String
+  puid_does_not_match_any: String
+  puid_end: String
+  puid_end_all: String
+  puid_end_any: String
+  puid_eq: String
+  puid_eq_all: String
+  puid_eq_any: String
+  puid_false: String
+  puid_gt: String
+  puid_gt_all: String
+  puid_gt_any: String
+  puid_gteq: String
+  puid_gteq_all: String
+  puid_gteq_any: String
+  puid_i_cont: String
+  puid_i_cont_all: String
+  puid_i_cont_any: String
+  puid_in: String
+  puid_in_all: String
+  puid_in_any: String
+  puid_lt: String
+  puid_lt_all: String
+  puid_lt_any: String
+  puid_lteq: String
+  puid_lteq_all: String
+  puid_lteq_any: String
+  puid_matches: String
+  puid_matches_all: String
+  puid_matches_any: String
+  puid_not_cont: String
+  puid_not_cont_all: String
+  puid_not_cont_any: String
+  puid_not_end: String
+  puid_not_end_all: String
+  puid_not_end_any: String
+  puid_not_eq: String
+  puid_not_eq_all: String
+  puid_not_eq_any: String
+  puid_not_false: String
+  puid_not_i_cont: String
+  puid_not_i_cont_all: String
+  puid_not_i_cont_any: String
+  puid_not_in: String
+  puid_not_in_all: String
+  puid_not_in_any: String
+  puid_not_null: String
+  puid_not_start: String
+  puid_not_start_all: String
+  puid_not_start_any: String
+  puid_not_true: String
+  puid_null: String
+  puid_present: String
+  puid_start: String
+  puid_start_all: String
+  puid_start_any: String
+  puid_true: String
+  updated_at_blank: String
+  updated_at_cont: String
+  updated_at_cont_all: String
+  updated_at_cont_any: String
+  updated_at_does_not_match: String
+  updated_at_does_not_match_all: String
+  updated_at_does_not_match_any: String
+  updated_at_end: String
+  updated_at_end_all: String
+  updated_at_end_any: String
+  updated_at_eq: String
+  updated_at_eq_all: String
+  updated_at_eq_any: String
+  updated_at_false: String
+  updated_at_gt: String
+  updated_at_gt_all: String
+  updated_at_gt_any: String
+  updated_at_gteq: String
+  updated_at_gteq_all: String
+  updated_at_gteq_any: String
+  updated_at_i_cont: String
+  updated_at_i_cont_all: String
+  updated_at_i_cont_any: String
+  updated_at_in: String
+  updated_at_in_all: String
+  updated_at_in_any: String
+  updated_at_lt: String
+  updated_at_lt_all: String
+  updated_at_lt_any: String
+  updated_at_lteq: String
+  updated_at_lteq_all: String
+  updated_at_lteq_any: String
+  updated_at_matches: String
+  updated_at_matches_all: String
+  updated_at_matches_any: String
+  updated_at_not_cont: String
+  updated_at_not_cont_all: String
+  updated_at_not_cont_any: String
+  updated_at_not_end: String
+  updated_at_not_end_all: String
+  updated_at_not_end_any: String
+  updated_at_not_eq: String
+  updated_at_not_eq_all: String
+  updated_at_not_eq_any: String
+  updated_at_not_false: String
+  updated_at_not_i_cont: String
+  updated_at_not_i_cont_all: String
+  updated_at_not_i_cont_any: String
+  updated_at_not_in: String
+  updated_at_not_in_all: String
+  updated_at_not_in_any: String
+  updated_at_not_null: String
+  updated_at_not_start: String
+  updated_at_not_start_all: String
+  updated_at_not_start_any: String
+  updated_at_not_true: String
+  updated_at_null: String
+  updated_at_present: String
+  updated_at_start: String
+  updated_at_start_all: String
+  updated_at_start_any: String
+  updated_at_true: String
+}
+
+"""
+Specify a sort for the attachments
+"""
+input AttachmentOrder {
+  direction: OrderDirection
+  field: AttachmentOrderField!
+}
+
+"""
+Field to sort the attachments by
+"""
+enum AttachmentOrderField {
+  created_at
+  updated_at
+}
+
 """
 Autogenerated input type of CreateDirectUpload
 """
@@ -561,6 +828,14 @@ interface Node {
 }
 
 """
+Sort by the specified order
+"""
+enum OrderDirection {
+  asc
+  desc
+}
+
+"""
 Information about pagination in a connection.
 """
 type PageInfo {
@@ -925,6 +1200,11 @@ type Sample implements Node {
     before: String
 
     """
+    Ransack filter
+    """
+    filter: AttachmentFilter = null
+
+    """
     Returns the first _n_ elements from the list.
     """
     first: Int
@@ -933,6 +1213,11 @@ type Sample implements Node {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Order by
+    """
+    orderBy: AttachmentOrder = null
   ): AttachmentConnection
 
   """
