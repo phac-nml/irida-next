@@ -18,7 +18,6 @@ module Types
           SampleType.connection_type,
           null: true,
           description: 'Samples on the project',
-          complexity: 5,
           resolver: Resolvers::ProjectSamplesResolver
 
     field :parent, NamespaceType, null: false, description: 'Parent namespace'
