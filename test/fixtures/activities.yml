@@ -1,0 +1,137 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+project1_namespace_create:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  key: "namespaces_project_namespace.create"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+project2_namespace_create:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid) %>
+  key: "namespaces_project_namespace.create"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+project1_namespace_member_james_doe_create:
+  trackable_type: "Member"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project_one_member_james_doe, :uuid) %>
+  key: "member.create"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+project1_namespace_member_ryan_doe_create:
+  trackable_type: "Member"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project_one_member_ryan_doe, :uuid) %>
+  key: "member.create"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+project1_namespace_sample_create:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  key: "namespaces_project_namespace.sample.create"
+  parameters:
+    {
+      sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1,
+      :uuid) %>,
+      sample_name: <%= ActiveRecord::FixtureSet.identify(:sample1,
+      :name) %>,
+      action: "sample_create",
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+project1_namespace_sample_clone:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  key: "namespaces_project_namespace.samples.clone"
+  parameters:
+    {
+      target_project: <%= ActiveRecord::FixtureSet.identify(:project2,
+      :uuid) %>,
+      action: "sample_clone",
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+project2_namespace_sample_cloned_from_project1:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid) %>
+  key: "namespaces_project_namespace.samples.cloned_from"
+  parameters:
+    {
+      source_project: <%= ActiveRecord::FixtureSet.identify(:project1,
+      :uuid) %>,
+      action: "sample_clone",
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+project1_namespace_sample_transfer:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  key: "namespaces_project_namespace.samples.transfer"
+  parameters:
+    {
+      target_project: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2,
+      :uuid) %>,
+      action: "sample_transfer",
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+project1_namespace_automated_workflow_execution:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  key: "workflow_execution.automated_workflow.launch"
+  parameters:
+    {
+      workflow_id: <%= ActiveRecord::FixtureSet.identify(:automated_workflow_execution,
+      :uuid) %>,
+      workflow_name: <%= ActiveRecord::FixtureSet.identify(:automated_workflow_execution,
+      :name) %>,
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+project1_shared_w_group_charlie:
+  trackable_type: "NamespaceGroupLink"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link18, :uuid) %>
+  key: "namespace_group_link.create"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+project1_multiple_samples_destroyed:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  key: "namespaces_project_namespace.samples.destroy_multiple"
+  parameters: { deleted_count: 3, action: "sample_destroy_multiple" }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+project1_namespace_transfer:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  key: "namespaces_project_namespace.transfer"
+  parameters: {
+    project_name: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :name) %>,
+    old_namespace: <%= ActiveRecord::FixtureSet.identify(:group_one, :name) %>,
+    new_namespace: <%= ActiveRecord::FixtureSet.identify(:group_two, :name) %>,
+    action: 'project_namespace_transfer'
+  }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+project1_sample1_metadata_update:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  key: "namespaces_project_namespace.samples.metadata.update"
+  parameters: {
+    sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>,
+    sample_name: <%= ActiveRecord::FixtureSet.identify(:sample1, :name) %>,
+    action: 'metadata_update'
+  }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

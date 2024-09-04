@@ -8,18 +8,16 @@
             dark:border-slate-700 dark:bg-slate-700
           "
         ></div>
-        <time
+        <div
           class="
             mb-1 text-sm font-normal leading-none text-slate-500 dark:text-slate-400
           "
-        ><%= helpers.local_time(activity[:created_at], :long) %></time>
+        ><%= helpers.local_time(activity[:created_at], :long) %></div>
         <p class="mb-4 text-base font-normal text-slate-500 dark:text-slate-400">
           <% if activity[:type] == 'Namespace' && activity[:key].include?('project_namespace') %>
             <%= render Activities::ProjectActivityComponent.new(activity: activity) %>
           <% elsif activity[:type] == 'WorkflowExecution' %>
             <%= render Activities::WorkflowExecutionActivityComponent.new(activity: activity) %>
-          <% elsif activity[:type] == 'Sample' %>
-            <%= render Activities::SampleActivityComponent.new(activity: activity) %>
           <% elsif activity[:type] == 'Member' %>
             <%= render Activities::MemberActivityComponent.new(activity: activity) %>
           <% elsif activity[:type] == 'NamespaceGroupLink' %>

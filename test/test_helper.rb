@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'simplecov'
+require 'public_activity/testing'
 
 module SimpleCov
   class SourceFile
@@ -59,5 +60,7 @@ module ActiveSupport
     include ArrayHelpers
     include ActiveJob::TestHelper
     include ActionMailer::TestHelper
+
+    PublicActivity.enabled = true
   end
 end

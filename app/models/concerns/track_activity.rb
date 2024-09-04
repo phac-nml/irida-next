@@ -42,10 +42,10 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
       current_project: activity_trackable,
       name: activity_trackable.name,
       type: 'Namespace',
-      action: activity.parameters[:action].presence || 'default'
+      action: activity.parameters.key?('action') ? activity.parameters['action'] : 'default'
     }
 
-    return base_params if activity.parameters[:action].blank?
+    return base_params if activity.parameters['action'].blank?
 
     params = transfer_activity_parameters(base_params, activity)
 
@@ -62,7 +62,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
       key: "activity.#{activity.key}_html",
       user: activity_creator(activity),
       namespace: activity_trackable,
-      workflow_id: activity.parameters[:workflow_id],
+      workflow_id: activity.parameters['workflow_id'],
       type: 'WorkflowExecution'
     }
   end
@@ -114,16 +114,16 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   end
 
   def transfer_activity_parameters(params, activity)
-    if activity.parameters[:action] == 'project_namespace_transfer'
+    if activity.parameters['action'] == 'project_namespace_transfer'
       params.merge!({
-                      old_namespace: activity.parameters[:old_namespace]
+                      old_namespace: activity.parameters['old_namespace']
                     })
     end
 
-    if activity.parameters[:action] == 'sample_transfer' || activity.parameters[:action] == 'sample_clone'
+    if activity.parameters['action'] == 'sample_transfer' || activity.parameters['action'] == 'sample_clone'
       params.merge!({
-                      source_project: get_object_by_id(activity.parameters[:source_project], Project),
-                      target_project: get_object_by_id(activity.parameters[:target_project], Project)
+                      source_project: get_object_by_id(activity.parameters['source_project'], Project),
+                      target_project: get_object_by_id(activity.parameters['target_project'], Project)
                     })
     end
 
@@ -134,16 +134,16 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     sample_activity_action_types = %w[sample_create sample_update metadata_update sample_destroy attachment_create
                                       attachment_destroy]
 
-    if sample_activity_action_types.include?(activity.parameters[:action])
+    if sample_activity_action_types.include?(activity.parameters['action'])
       params.merge!({
-                      sample_id: activity.parameters[:sample_id],
-                      sample_name: activity.parameters[:sample_name]
+                      sample_id: activity.parameters['sample_id'],
+                      sample_name: activity.parameters['sample_name']
                     })
     end
 
-    if activity.parameters[:action] == 'sample_destroy_multiple'
+    if activity.parameters['action'] == 'sample_destroy_multiple'
       params.merge!({
-                      deleted_count: activity.parameters[:deleted_count]
+                      deleted_count: activity.parameters['deleted_count']
                     })
     end
 
