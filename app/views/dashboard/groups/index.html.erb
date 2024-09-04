@@ -10,7 +10,10 @@
 <% end %>
 <div class="flex flex-col">
   <div
-    class="flex text-center border-b border-slate-200 dark:text-slate-400 dark:border-slate-700"
+    class="
+      flex text-center border-b border-slate-200 dark:text-slate-400
+      dark:border-slate-700
+    "
   >
     <div class="flex flex-row items-center ml-auto space-x-2 font-normal">
       <%= search_form_for @q, url: dashboard_groups_url, html: { "data-controller": "filters", "data-turbo-permanent": "true" } do |f| %>
@@ -18,15 +21,17 @@
         <%= f.label :name_cont, "SEARCH", class: "sr-only" %>
         <div class="relative lg:w-72">
           <div
-            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none "
+            class="
+              absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
+            "
           >
             <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
           </div>
           <%= f.search_field :name_or_puid_cont,
-                             "data-action": "filters#submit",
-                             class:
-                               "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                             placeholder: "PLACEHOLDER HERE" %>
+                         "data-action": "filters#submit",
+                         class:
+                           "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
+                         placeholder: "PLACEHOLDER HERE" %>
         </div>
       <% end %>
       <%= search_form_for @q, url: dashboard_groups_url, method: :post, html: { method: :post, "data-controller": "filters", "data-turbo": false } do %>
@@ -40,8 +45,8 @@
               { name: "name", dir: "asc" },
               { name: "name", dir: "desc" },
               { name: "updated_at", dir: "desc" },
-              { name: "updated_at", dir: "asc" }
-            ]
+              { name: "updated_at", dir: "asc" },
+            ],
           ) %>
         </div>
       <% end %>
@@ -54,7 +59,10 @@
       flat: @flat,
     ) %>
     <div class="flex flex-row-reverse">
-      <%= render Viral::Pagy::PaginationComponent.new(@pagy, data_string: "data-turbo='false'") %>
+      <%= render Viral::Pagy::PaginationComponent.new(
+        @pagy,
+        data_string: "data-turbo='false'",
+      ) %>
     </div>
   </div>
 </div>
