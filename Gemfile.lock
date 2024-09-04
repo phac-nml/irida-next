@@ -208,7 +208,16 @@ GEM
       concurrent-ruby (~> 1.1)
       webrick (~> 1.7)
       websocket-driver (~> 0.7)
+    ffi (1.17.0-aarch64-linux-gnu)
+    ffi (1.17.0-aarch64-linux-musl)
+    ffi (1.17.0-arm-linux-gnu)
+    ffi (1.17.0-arm-linux-musl)
+    ffi (1.17.0-arm64-darwin)
+    ffi (1.17.0-x86-linux-gnu)
+    ffi (1.17.0-x86-linux-musl)
+    ffi (1.17.0-x86_64-darwin)
     ffi (1.17.0-x86_64-linux-gnu)
+    ffi (1.17.0-x86_64-linux-musl)
     fiber-storage (1.0.0)
     fugit (1.11.1)
       et-orbi (~> 1, >= 1.2.11)
@@ -237,18 +246,18 @@ GEM
       google-apis-core (>= 0.15.0, < 2.a)
     google-apis-storage_v1 (0.42.0)
       google-apis-core (>= 0.15.0, < 2.a)
-    google-cloud-core (1.7.0)
+    google-cloud-core (1.7.1)
       google-cloud-env (>= 1.0, < 3.a)
       google-cloud-errors (~> 1.0)
     google-cloud-env (2.1.1)
       faraday (>= 1.0, < 3.a)
     google-cloud-errors (1.4.0)
-    google-cloud-storage (1.51.0)
+    google-cloud-storage (1.52.0)
       addressable (~> 2.8)
       digest-crc (~> 0.4)
       google-apis-core (~> 0.13)
       google-apis-iamcredentials_v1 (~> 0.18)
-      google-apis-storage_v1 (~> 0.37)
+      google-apis-storage_v1 (~> 0.38)
       google-cloud-core (~> 1.6)
       googleauth (~> 1.9)
       mini_mime (~> 1.0)
@@ -364,6 +373,16 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.3)
+    nokogiri (1.16.7-aarch64-linux)
+      racc (~> 1.4)
+    nokogiri (1.16.7-arm-linux)
+      racc (~> 1.4)
+    nokogiri (1.16.7-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.16.7-x86-linux)
+      racc (~> 1.4)
+    nokogiri (1.16.7-x86_64-darwin)
+      racc (~> 1.4)
     nokogiri (1.16.7-x86_64-linux)
       racc (~> 1.4)
     oauth2 (2.0.9)
@@ -565,6 +584,16 @@ GEM
     strscan (3.1.0)
     syntax_tree (6.2.0)
       prettier_print (>= 1.2.0)
+    tailwindcss-rails (2.7.3)
+      railties (>= 7.0.0)
+    tailwindcss-rails (2.7.3-aarch64-linux)
+      railties (>= 7.0.0)
+    tailwindcss-rails (2.7.3-arm-linux)
+      railties (>= 7.0.0)
+    tailwindcss-rails (2.7.3-arm64-darwin)
+      railties (>= 7.0.0)
+    tailwindcss-rails (2.7.3-x86_64-darwin)
+      railties (>= 7.0.0)
     tailwindcss-rails (2.7.3-x86_64-linux)
       railties (>= 7.0.0)
     terminal-table (3.0.2)
@@ -611,7 +640,19 @@ GEM
     zip_kit (6.3.1)
 
 PLATFORMS
-  x86_64-linux
+  aarch64-linux
+  aarch64-linux-gnu
+  aarch64-linux-musl
+  arm-linux
+  arm-linux-gnu
+  arm-linux-musl
+  arm64-darwin
+  x86-linux
+  x86-linux-gnu
+  x86-linux-musl
+  x86_64-darwin
+  x86_64-linux-gnu
+  x86_64-linux-musl
 
 DEPENDENCIES
   action_policy
