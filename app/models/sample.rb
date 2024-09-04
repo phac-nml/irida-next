@@ -9,6 +9,8 @@ class Sample < ApplicationRecord
   has_logidze
   acts_as_paranoid
 
+  after_restore :update_counter_cache
+
   belongs_to :project, counter_cache: true
 
   broadcasts_refreshes_to :project
@@ -78,5 +80,9 @@ class Sample < ApplicationRecord
     end
 
     { singles:, pe_forward:, pe_reverse: }
+  end
+
+  def update_counter_cache
+    Project.increment_counter(:samples_count, project_id) # rubocop:disable Rails/SkipsModelValidations
   end
 end
