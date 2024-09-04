@@ -13,6 +13,7 @@ module NamespaceTree
       <% end %>
     ERB
 
+    # rubocop:disable Metrics/ParameterLists
     def initialize(namespace:, type:, path: nil, path_args: {}, collapsed: true, flat: false)
       @namespace = namespace
       @type = type
@@ -21,5 +22,7 @@ module NamespaceTree
       @collapsed = collapsed
       @flat = flat
     end
+
+    # rubocop:enable Metrics/ParameterLists
   end
 end
