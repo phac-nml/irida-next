@@ -5,6 +5,7 @@ module NamespaceTree
   class NamespaceTreeComponent < Component
     attr_reader :parent, :namespaces, :path, :path_args, :collapsed, :flat
 
+    # rubocop: disable Metrics/ParameterLists
     def initialize(namespaces:, type:, parent: nil, path: nil, path_args: {}, flat: false)
       @parent = parent
       @namespaces = namespaces
@@ -14,5 +15,7 @@ module NamespaceTree
       @collapsed = true
       @flat = flat
     end
+
+    # rubocop: enable Metrics/ParameterLists
   end
 end
