@@ -51,14 +51,15 @@ module Projects
 
       Namespaces::ProjectNamespace.public_activity_on
 
-      project.namespace.create_activity action: :transfer, owner: current_user,
+      project.namespace.create_activity action: :transfer,
+                                        owner: current_user,
                                         parameters:
-      {
-        project_name: project.name,
-        old_namespace: @old_namespace.name,
-        new_namespace: @new_namespace.name,
-        action: 'project_namespace_transfer'
-      }
+                                        {
+                                          project_name: project.name,
+                                          old_namespace: @old_namespace.name,
+                                          new_namespace: @new_namespace.name,
+                                          action: 'project_namespace_transfer'
+                                        }
 
       UpdateMembershipsJob.perform_later(new_namespace_member_ids)
     end

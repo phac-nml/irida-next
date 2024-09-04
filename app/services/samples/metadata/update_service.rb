@@ -16,7 +16,7 @@ module Samples
         @metadata_changes = { added: [], updated: [], deleted: [], not_updated: [], unchanged: [] }
       end
 
-      def execute
+      def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         authorize! sample.project, to: :update_sample?
 
         validate_sample_in_project
