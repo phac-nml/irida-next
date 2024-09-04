@@ -2,7 +2,7 @@
   <%= viral_icon(name: :squares_2x2, classes: "h-5 w-5 text-slate-400 mr-2") %>
   <%= viral_avatar(
     name: @namespace.name,
-    size: :small,
+    size: :medium,
     colour_string: "#{@namespace.name}-#{@namespace.id}",
     data: {
       turbo: false,
@@ -26,27 +26,30 @@
   <div class="flex flex-col namespace-text">
     <div class="namespace-text grow shrink">
       <div class="flex flex-wrap items-center mr-3 font-semibold title">
-        <% if @namespace.type == "Group" %>
-          <%= link_to @namespace.name, group_path(@namespace), data: { turbo: false } %>
-        <% else %>
-          <%= link_to @namespace.name,
-          project_samples_path(@namespace.project),
-          data: {
-            turbo: false,
-          } %>
-        <% end %>
-        <%= viral_pill(
-          text:
-            t(
-              :"members.access_levels.level_#{Member.effective_access_level(@namespace, Current.user)}",
-            ),
-          color: "transparent",
-          border: true,
-          classes: "ml-2",
-        ) %>
-      </div>
-      <div class="description">
-        <p><%= @namespace.description %></p>
+        <div class="flex flex-col space-y-1.5">
+          <div class="space-x-2">
+            <% if @namespace.type == "Group" %>
+              <%= link_to @namespace.name, group_path(@namespace), data: { turbo: false } %>
+            <% else %>
+              <%= link_to @namespace.name,
+                          project_samples_path(@namespace.project),
+                          data: {
+                            turbo: false,
+                          } %>
+            <% end %>
+            <%= viral_pill(
+                  text:
+                    t(
+                      :"members.access_levels.level_#{Member.effective_access_level(@namespace, Current.user)}",
+                    ),
+                  color: "transparent",
+                  border: true,
+                  classes: "ml-2",
+                ) %></div>
+          <span class="text-sm text-gray-500 dark:text-gray-400">
+            <%= @namespace.puid %>
+          </span>
+        </div>
       </div>
     </div>
   </div>
