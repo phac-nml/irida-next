@@ -247,7 +247,7 @@ en:
       update_html: "%{user} updated %{namespace_type} member %{member}"
     namespace_group_link:
       create_html: "%{user} shared %{namespace_type} with group %{href}"
-      destroy_html: "%{user} unshared %{namespace_type} with group %{group_name}"
+      destroy_html: "%{user} unshared %{namespace_type} with group <span class='text-slate-800 dark:text-slate-300 font-medium'>%{group_name}</span>"
       update_html: "%{user} updated share between %{namespace_type} and group %{href}"
   datetime:
     distance_in_words:
