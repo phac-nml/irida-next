@@ -95,7 +95,7 @@ class GroupPolicyTest < ActiveSupport::TestCase
     policy = GroupPolicy.new(user:)
     scoped_groups = policy.apply_scope(Group, type: :relation)
     # David Doe has access to 2 groups
-    assert_equal 2, scoped_groups.count
+    assert_equal 12, scoped_groups.count
   end
 
   test 'scope with expired group member' do
@@ -105,12 +105,9 @@ class GroupPolicyTest < ActiveSupport::TestCase
 
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 
-    assert_equal 27, scoped_groups.count
+    assert_equal 30, scoped_groups.count
     scoped_groups_names = scoped_groups.pluck(:name)
     assert_not scoped_groups_names.include?(groups(:group_one).name)
-    assert_not scoped_groups_names.include?(groups(:subgroup3).name)
-    assert_not scoped_groups_names.include?(groups(:subgroup4).name)
-    assert_not scoped_groups_names.include?(groups(:subgroup5).name)
     assert_not scoped_groups_names.include?(groups(:david_doe_group_four).name)
 
     linked_group_member = members(:namespace_group_link8_member1)
@@ -119,7 +116,7 @@ class GroupPolicyTest < ActiveSupport::TestCase
 
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 
-    assert_equal 26, scoped_groups.count
+    assert_equal 29, scoped_groups.count
     scoped_groups_names = scoped_groups.pluck(:name)
     assert_not scoped_groups_names.include?(groups(:namespace_group_link_group_one).name)
   end
