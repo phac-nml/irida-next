@@ -31,7 +31,7 @@
                          "data-action": "filters#submit",
                          class:
                            "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                         placeholder: "PLACEHOLDER HERE" %>
+                             placeholder: t(:'.search.placeholder') %>
         </div>
       <% end %>
       <%= search_form_for @q, url: dashboard_groups_url, method: :post, html: { method: :post, "data-controller": "filters", "data-turbo": false } do %>
