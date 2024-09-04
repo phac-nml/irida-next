@@ -71,26 +71,31 @@ module Samples
       end
 
       if transferred_samples_ids.count.positive?
-        @project.namespace.create_activity key: 'namespaces_project_namespace.samples.transfer', owner: current_user,
-                                           parameters:
-                                           {
-                                             target_project: @new_project.id,
-                                             action: 'sample_transfer'
-                                           }
-
-        @new_project.namespace.create_activity key: 'namespaces_project_namespace.samples.transferred_from',
-                                               owner: current_user,
-                                               parameters:
-                                               {
-                                                 source_project: @project.id,
-                                                 action: 'sample_transfer'
-                                               }
+        create_activities
 
         @project.namespace.update_metadata_summary_by_sample_transfer(transferred_samples_ids,
                                                                       new_project_id)
       end
 
       transferred_samples_ids
+    end
+
+    def create_activities
+      @project.namespace.create_activity key: 'namespaces_project_namespace.samples.transfer',
+                                         owner: current_user,
+                                         parameters:
+                                          {
+                                            target_project: @new_project.id,
+                                            action: 'sample_transfer'
+                                          }
+
+      @new_project.namespace.create_activity key: 'namespaces_project_namespace.samples.transferred_from',
+                                             owner: current_user,
+                                             parameters:
+                                              {
+                                                source_project: @project.id,
+                                                action: 'sample_transfer'
+                                              }
     end
   end
 end

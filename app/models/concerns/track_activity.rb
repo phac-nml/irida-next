@@ -9,19 +9,22 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     tracked owner: proc { Current.user }
   end
 
-  def human_readable_activity(public_activities) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity
+  def human_readable_activity(public_activities) # rubocop:disable Metrics/MethodLength
     activities = []
     public_activities.each do |activity|
       trackable_type = activity.trackable_type
-      activity[:parameters] = activity.parameters.transform_keys(&:to_sym)
+      activity[:parameters] = convert_activity_parameter_keys(activity)
 
-      if trackable_type == 'Namespace' && activity.key.include?('project_namespace')
-        activities << project_activity(activity)
-      elsif trackable_type == 'Namespace' && activity.key.include?('workflow_execution')
-        activities << workflow_execution_activity(activity)
-      elsif trackable_type == 'Member'
+      case trackable_type
+      when 'Namespace'
+        if activity.key.include?('project_namespace')
+          activities << project_activity(activity)
+        elsif activity.key.include?('workflow_execution')
+          activities << workflow_execution_activity(activity)
+        end
+      when 'Member'
         activities << member_activity(activity)
-      elsif trackable_type == 'NamespaceGroupLink'
+      when 'NamespaceGroupLink'
         activities << namespace_group_link_activity(activity)
       end
     end
@@ -149,5 +152,10 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     end
 
     params
+  end
+
+  # convert string keys to symbols
+  def convert_activity_parameter_keys(activity)
+    activity.parameters.transform_keys(&:to_sym)
   end
 end

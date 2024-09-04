@@ -15,13 +15,14 @@ module Samples
       authorize! @project, to: :create_sample? unless @project.nil?
 
       if sample.save
-        @project.namespace.create_activity key: 'namespaces_project_namespace.samples.create', owner: current_user,
+        @project.namespace.create_activity key: 'namespaces_project_namespace.samples.create',
+                                           owner: current_user,
                                            parameters:
-        {
-          sample_id: sample.id,
-          sample_name: sample.name,
-          action: 'sample_create'
-        }
+                                            {
+                                              sample_id: sample.id,
+                                              sample_name: sample.name,
+                                              action: 'sample_create'
+                                            }
       end
 
       sample

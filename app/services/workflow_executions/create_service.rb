@@ -7,7 +7,7 @@ module WorkflowExecutions
       super
     end
 
-    def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def execute # rubocop:disable Metrics/AbcSize
       return false if params.empty?
 
       @workflow_execution = WorkflowExecution.new(params)
@@ -23,15 +23,7 @@ module WorkflowExecutions
       end
 
       if @workflow_execution.save
-        if @workflow_execution.submitter.automation_bot?
-          @workflow_execution.namespace.create_activity key: 'workflow_execution.automated_workflow.launch',
-                                                        owner: current_user,
-                                                        parameters:
-                                                        {
-                                                          workflow_id: @workflow_execution.id,
-                                                          workflow_name: @workflow_execution.name
-                                                        }
-        end
+        create_activities
         WorkflowExecutionPreparationJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution)
       end
 
@@ -68,6 +60,18 @@ module WorkflowExecutions
       else
         value
       end
+    end
+
+    def create_activities
+      return unless @workflow_execution.submitter.automation_bot?
+
+      @workflow_execution.namespace.create_activity key: 'workflow_execution.automated_workflow.launch',
+                                                    owner: current_user,
+                                                    parameters:
+                                                    {
+                                                      workflow_id: @workflow_execution.id,
+                                                      workflow_name: @workflow_execution.name
+                                                    }
     end
   end
 end
