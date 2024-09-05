@@ -284,7 +284,8 @@ module Projects
             assert_text sample[1]
           end
         end
-        select project2.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
+        find('input#select2-input').click
+        find("button[data-viral--select2-primary-param='#{project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
     end
@@ -304,7 +305,8 @@ module Projects
         within %(turbo-frame[id="list_selections"]) do
           assert_text @sample1.name
         end
-        select project2.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
+        find('input#select2-input').click
+        find("button[data-viral--select2-primary-param='#{project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
     end
@@ -321,7 +323,8 @@ module Projects
       Capybara.execute_script 'sessionStorage.clear()'
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        select project2.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
+        find('input#select2-input').click
+        find("button[data-viral--select2-primary-param='#{project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       within %(turbo-frame[id="samples_dialog"]) do
@@ -346,7 +349,8 @@ module Projects
           assert_text sample30.name
           assert_text sample30.puid
         end
-        select project26.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
+        find('input#select2-input').click
+        find("button[data-viral--select2-primary-param='#{project26.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       within %(turbo-frame[id="samples_dialog"]) do
@@ -375,7 +379,8 @@ module Projects
             assert_text sample[1]
           end
         end
-        select project25.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
+        find('input#select2-input').click
+        find("button[data-viral--select2-primary-param='#{project25.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       within %(turbo-frame[id="samples_dialog"]) do
@@ -406,7 +411,8 @@ module Projects
             assert_text sample[1]
           end
         end
-        select project2.full_path, from: I18n.t('projects.samples.transfers.dialog.new_project_id')
+        find('input#select2-input').click
+        find("button[data-viral--select2-primary-param='#{project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
     end
@@ -458,7 +464,42 @@ module Projects
             assert_text sample[1]
           end
         end
-        assert_no_selector "option[value='#{project32.full_path}']"
+        find('input#select2-input').click
+        assert_no_selector "button[data-viral--select2-primary-param='#{project32.full_path}']"
+      end
+    end
+
+    test 'empty state of transfer sample project selection' do
+      visit namespace_project_samples_url(@namespace, @project)
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 3
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
+      click_link I18n.t('projects.samples.index.clone_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        within %(turbo-frame[id="list_selections"]) do
+          samples = @project.samples.pluck(:puid, :name)
+          samples.each do |sample|
+            assert_text sample[0]
+            assert_text sample[1]
+          end
+        end
+        find('input#select2-input').fill_in with: 'invalid project name or puid'
+        assert_text I18n.t('projects.samples.transfers.dialog.empty_state')
+      end
+    end
+
+    test 'no available destination projects to transfer samples' do
+      sign_in users(:jean_doe)
+      namespace = namespaces_user_namespaces(:john_doe_namespace)
+      project = projects(:john_doe_project2)
+      visit namespace_project_samples_url(namespace, project)
+      within '#samples-table table tbody' do
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
+      click_link I18n.t('projects.samples.index.clone_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        assert "input[placeholder='#{I18n.t('projects.samples.transfers.dialog.no_available_projects')}']"
       end
     end
 
@@ -2019,7 +2060,8 @@ module Projects
             assert_text sample[1]
           end
         end
-        select project2.full_path, from: I18n.t('projects.samples.clones.dialog.new_project_id')
+        find('input#select2-input').click
+        find("button[data-viral--select2-primary-param='#{project2.full_path}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
       assert_text I18n.t('projects.samples.clones.create.success')
@@ -2038,7 +2080,8 @@ module Projects
         within %(turbo-frame[id="list_selections"]) do
           assert_text @sample1.name
         end
-        select project2.full_path, from: I18n.t('projects.samples.clones.dialog.new_project_id')
+        find('input#select2-input').click
+        find("button[data-viral--select2-primary-param='#{project2.full_path}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
       assert_text I18n.t('projects.samples.clones.create.success')
@@ -2054,7 +2097,8 @@ module Projects
       Capybara.execute_script 'sessionStorage.clear()'
       click_link I18n.t('projects.samples.index.clone_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        select project2.full_path, from: I18n.t('projects.samples.clones.dialog.new_project_id')
+        find('input#select2-input').click
+        find("button[data-viral--select2-primary-param='#{project2.full_path}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
       within %(turbo-frame[id="samples_dialog"]) do
@@ -2082,7 +2126,8 @@ module Projects
             assert_text sample[1]
           end
         end
-        select project25.full_path, from: I18n.t('projects.samples.clones.dialog.new_project_id')
+        find('input#select2-input').click
+        find("button[data-viral--select2-primary-param='#{project25.full_path}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
       within %(turbo-frame[id="samples_dialog"]) do
@@ -2090,6 +2135,40 @@ module Projects
         errors = @project.errors.full_messages_for(:samples)
         errors.each { |error| assert_text error }
         click_on I18n.t('projects.samples.shared.errors.ok_button')
+      end
+    end
+
+    test 'empty state of clone sample project selection' do
+      visit namespace_project_samples_url(@namespace, @project)
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 3
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
+      click_link I18n.t('projects.samples.index.clone_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        within %(turbo-frame[id="list_selections"]) do
+          samples = @project.samples.pluck(:puid, :name)
+          samples.each do |sample|
+            assert_text sample[0]
+            assert_text sample[1]
+          end
+        end
+        find('input#select2-input').fill_in with: 'invalid project name or puid'
+        assert_text I18n.t('projects.samples.clones.dialog.empty_state')
+      end
+    end
+
+    test 'no available destination projects to clone samples' do
+      sign_in users(:jean_doe)
+      namespace = namespaces_user_namespaces(:john_doe_namespace)
+      project = projects(:john_doe_project2)
+      visit namespace_project_samples_url(namespace, project)
+      within '#samples-table table tbody' do
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
+      click_link I18n.t('projects.samples.index.clone_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        assert "input[placeholder='#{I18n.t('projects.samples.clones.dialog.no_available_projects')}']"
       end
     end
 

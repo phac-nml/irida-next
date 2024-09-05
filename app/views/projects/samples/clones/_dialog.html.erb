@@ -1,4 +1,4 @@
-<%= viral_dialog(open: open) do |dialog| %>
+<%= viral_dialog(open: open, size: :large) do |dialog| %>
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
     <%= turbo_frame_tag "clone_samples_dialog_content" do %>
@@ -54,7 +54,30 @@
             <div class="grid gap-4">
               <div class="form-field">
                 <%= form.label :new_project_id, t(".new_project_id") %>
-                <%= form.collection_select(:new_project_id, @projects, :id, :full_path) %>
+                <% if @projects.empty? %>
+                  <input
+                    disabled
+                    placeholder="<%= t(".no_available_projects")%>"
+                    type="text"
+                    class="
+                      border-slate-300 text-slate-800 sm:text-sm rounded-md block w-full p-2.5
+                      dark:bg-slate-800 dark:border-slate-600 dark:text-slate-50
+                      "
+                    >
+                <% else %>
+                  <%= viral_select2(form:, name: :new_project_id, placeholder: t(".select_project")) do |select| %>
+                    <% @projects.each do |project| %>
+                      <% select.with_option(
+                        primary: project.full_path,
+                        secondary: project.puid,
+                        value: project.id,
+                      ) %>
+                    <% end %>
+                    <%= select.with_empty_state do %>
+                      <%= t(:".empty_state") %>
+                    <% end %>
+                  <% end %>
+                <% end %>
               </div>
               <div>
                 <%= form.submit t(".submit_button"),
