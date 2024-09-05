@@ -404,6 +404,8 @@ fr:
           updated_at_asc: Oldest updated
           updated_at_desc: Updated At
         title: Projects
+        row:
+          samples_count: "%{count} samples"
   data_exports:
     create:
       success: Data export '%{name}' was successfully started.
