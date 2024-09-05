@@ -3,7 +3,7 @@
   <%= dialog.with_section do %>
     <%= turbo_frame_tag "clone_samples_dialog_content" do %>
       <div
-        data-controller="infinite-scroll"
+        data-controller="infinite-scroll viral--select2"
         data-infinite-scroll-selection-outlet='#samples-table'
         data-infinite-scroll-paged-field-name-value="sample_ids[]"
         data-infinite-scroll-singular-description-value="<%= t(".description.singular") %>"
@@ -82,10 +82,11 @@
               <div>
                 <%= form.submit t(".submit_button"),
                             class: "button button--size-default button--state-primary",
-                            disabled: @projects.count.zero?,
+                            disabled: true,
                             data: {
                               action: "click->form--hidden-inputs#clearSelection",
                               "spinner-target": "submit",
+                              "viral--select2-target": "submitButton",
                             } %>
               </div>
             </div>

@@ -1,5 +1,4 @@
 <div
-  data-controller="viral--select2"
   data-action="keyup->viral--select2#keydown"
   class="select2"
 >
@@ -10,6 +9,7 @@
     data-action="
       focus->viral--select2#focus
       keydown.enter->viral--select2#keyboardQuery
+      input->viral--select2#validateInput
     "
     data-viral--select2-target="input"
     placeholder="<%= placeholder %>"

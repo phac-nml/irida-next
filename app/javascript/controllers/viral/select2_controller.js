@@ -2,9 +2,9 @@ import { Controller } from "@hotwired/stimulus";
 import { Dropdown } from "flowbite";
 
 export default class extends Controller {
-  static targets = ["input", "hidden", "dropdown", "scroller", "item", "empty"];
+  static targets = ["input", "hidden", "dropdown", "scroller", "item", "empty", "submitButton"];
   #found = false;
-
+  #storedInputvalue = ''
   connect() {
     this.dropdown = new Dropdown(this.dropdownTarget, this.inputTarget, {
       triggerType: "none",
@@ -32,8 +32,10 @@ export default class extends Controller {
   select(event) {
     this.#found = true;
     this.inputTarget.value = event.params.primary;
+    this.#storedInputvalue = event.params.primary;
     this.hiddenTarget.value = event.params.value;
     this.dropdown.hide();
+    this.submitButtonTarget.removeAttribute("disabled");
   }
 
   keydown(event) {
@@ -68,6 +70,12 @@ export default class extends Controller {
           value: visible[0].dataset["viral-Select2ValueParam"]
         }
       });
+    }
+  }
+
+  validateInput() {
+    if (this.inputTarget.value != this.#storedInputvalue) {
+      this.submitButtonTarget.setAttribute("disabled", "disabled");
     }
   }
 

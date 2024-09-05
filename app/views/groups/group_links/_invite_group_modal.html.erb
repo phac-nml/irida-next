@@ -11,7 +11,7 @@
       </p>
     </div>
 
-    <%= form_with(model: new_group_link, url: group_group_links_path(@namespace, tab: @tab)) do |form| %>
+    <%= form_with(model: new_group_link, url: group_group_links_path(@namespace, tab: @tab), data: {controller: "viral--select2"}) do |form| %>
       <div class="grid gap-4">
         <div class="form-field">
           <%= form.label I18n.t("groups.group_links.new.label.group_id") %>
@@ -65,7 +65,11 @@
         </div>
         <div class="my-4">
           <%= form.submit I18n.t("groups.group_links.new.button.submit"),
-                      class: "button button--size-default button--state-primary" %>
+                      class: "button button--size-default button--state-primary",
+                      disabled: true,
+                      data: {
+                        "viral--select2-target": "submitButton"
+                      } %>
           <button
             type="button"
             class="button button--size-default button--state-default"

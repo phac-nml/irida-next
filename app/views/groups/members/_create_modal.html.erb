@@ -6,7 +6,7 @@
         <%= I18n.t("groups.members.new.description", name: @namespace.human_name) %>
       </p>
     </div>
-    <%= form_with(model: @new_member, url: group_members_path(tab: @tab), method: :post) do |form| %>
+    <%= form_with(model: @new_member, url: group_members_path(tab: @tab), data: {controller: "viral--select2"}, method: :post) do |form| %>
       <div class="grid gap-4">
         <div class="form-field">
           <%= form.label :user_id %>
@@ -57,7 +57,10 @@
         <div>
           <%= form.submit t(:"groups.members.new.add_member_to_group"),
                       class: "button button--state-primary button--size-default mr-1",
-                      disabled: !@available_users.count.positive? %>
+                      disabled: true,
+                      data: {
+                        "viral--select2-target": "submitButton"
+                      } %>
         </div>
       </div>
     <% end %>
