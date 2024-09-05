@@ -500,10 +500,16 @@ div.field_with_errors > :is(select) {
   display: none;
 }
 
-.samples-app,
-.activity-app {
+.samples-app {
   height: calc(100vh - 50px - 32px);
   max-height: calc(100vh - 50px - 32px);
+  display: flex;
+  flex-direction: column;
+}
+
+.activity-app {
+  height: calc(100vh - 100px - 32px);
+  max-height: calc(100vh - 100px - 32px);
   display: flex;
   flex-direction: column;
 }
