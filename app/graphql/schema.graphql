@@ -1441,68 +1441,6 @@ input SampleFilter {
   created_at_start_all: [String!]
   created_at_start_any: [String!]
   created_at_true: String
-  id_blank: String
-  id_cont: String
-  id_cont_all: [String!]
-  id_cont_any: [String!]
-  id_does_not_match: String
-  id_does_not_match_all: [String!]
-  id_does_not_match_any: [String!]
-  id_end: String
-  id_end_all: [String!]
-  id_end_any: [String!]
-  id_eq: String
-  id_eq_all: [String!]
-  id_eq_any: [String!]
-  id_false: String
-  id_gt: String
-  id_gt_all: [String!]
-  id_gt_any: [String!]
-  id_gteq: String
-  id_gteq_all: [String!]
-  id_gteq_any: [String!]
-  id_i_cont: String
-  id_i_cont_all: [String!]
-  id_i_cont_any: [String!]
-  id_in: [String!]
-  id_in_all: [String!]
-  id_in_any: [String!]
-  id_lt: String
-  id_lt_all: [String!]
-  id_lt_any: [String!]
-  id_lteq: String
-  id_lteq_all: [String!]
-  id_lteq_any: [String!]
-  id_matches: String
-  id_matches_all: [String!]
-  id_matches_any: [String!]
-  id_not_cont: String
-  id_not_cont_all: [String!]
-  id_not_cont_any: [String!]
-  id_not_end: String
-  id_not_end_all: [String!]
-  id_not_end_any: [String!]
-  id_not_eq: String
-  id_not_eq_all: [String!]
-  id_not_eq_any: [String!]
-  id_not_false: String
-  id_not_i_cont: String
-  id_not_i_cont_all: [String!]
-  id_not_i_cont_any: [String!]
-  id_not_in: [String!]
-  id_not_in_all: [String!]
-  id_not_in_any: [String!]
-  id_not_null: String
-  id_not_start: String
-  id_not_start_all: [String!]
-  id_not_start_any: [String!]
-  id_not_true: String
-  id_null: String
-  id_present: String
-  id_start: String
-  id_start_all: [String!]
-  id_start_any: [String!]
-  id_true: String
   name_blank: String
   name_cont: String
   name_cont_all: [String!]
