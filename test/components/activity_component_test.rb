@@ -10,6 +10,9 @@ class ActivityComponentTest < ViewComponentTestCase
     @activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
     @project2_activities = project2_namespace.human_readable_activity(project2_namespace.retrieve_project_activity).reverse
 
+    # Limit set to 10 per page
+    @pagy = Pagy.new(count: 11, page: 1, limit: 10)
+
     assert_equal 11, @activities.length
     assert_equal 2, @project2_activities.length
 
@@ -37,16 +40,21 @@ class ActivityComponentTest < ViewComponentTestCase
                       activity[:key].include?('project_namespace.samples.cloned_from')
                     end)
 
-    render_inline ActivityComponent.new(activities: @activities)
+    render_inline ActivityComponent.new(activities: @activities, pagy: @pagy)
 
     assert_selector 'li', count: @activities.length
     assert_selector 'time', count: @activities.length
     assert_selector 'p', count: @activities.length
+    assert_button text: 'Load more', count: 1
 
-    render_inline ActivityComponent.new(activities: @project2_activities)
+    # Limit set to 10 per page
+    @pagy = Pagy.new(count: 2, page: 1, limit: 10)
+
+    render_inline ActivityComponent.new(activities: @project2_activities, pagy: @pagy)
 
     assert_selector 'li', count: @project2_activities.length
     assert_selector 'time', count: @project2_activities.length
     assert_selector 'p', count: @project2_activities.length
+    assert_button text: 'Load more', count: 0
   end
 end

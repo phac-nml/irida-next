@@ -233,8 +233,8 @@ en:
         destroy_multiple_html: "%{user} removed <span class='text-slate-800 dark:text-slate-300 font-medium'>%{deleted_count}</span> samples from project"
         update_html: "%{user} updated sample %{href}"
         attachment:
-          create_html: "%{user} uploaded sequencing data to sample %{href}"
-          destroy_html: "%{user} removed sequencing data from sample %{href}"
+          create_html: "%{user} attached files to sample %{href}"
+          destroy_html: "%{user} removed files from sample %{href}"
         metadata:
           update_html: "%{user} updated sample %{href} metadata"
       transfer_html: "%{user} transferred project from namespace <span class='text-slate-800 dark:text-slate-300 font-medium'>%{old_namespace}</span>"
@@ -332,6 +332,11 @@ en:
       label: Scopes
       read_api: Grants read access to the API.
   components:
+    activity:
+      load_more: Load more
+    pagination:
+      previous: Prev
+      next: Next
     clipboard:
       copied: Copied!
       copy: Copy to clipboard

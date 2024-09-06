@@ -14,7 +14,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
     # Begin on /-/ scope.
     # Use this for all project routes.
     scope '-' do
-      get :activity
+      match :activity, via: %i[get post]
       get :edit
       post :transfer
       resources :members, only: %i[create destroy index new update]

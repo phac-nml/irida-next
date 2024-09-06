@@ -1,0 +1,13 @@
+<%= turbo_stream.append "activities" do %>
+  <% @activities.each do |activity| %>
+    <%= render Activities::ListItemComponent.new(activity: activity, pagy: @pagy) %>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.update "next_link" do %>
+  <% if @pagy.next.present? %>
+    <%= button_to "Load more",
+    pagy_url_for(@pagy, @pagy.next),
+    class: "button button--state-default button--size-default" %>
+  <% end %>
+<% end %>
