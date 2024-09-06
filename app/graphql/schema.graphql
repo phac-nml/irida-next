@@ -1319,375 +1319,375 @@ type SampleEdge {
 input SampleFilter {
   attachments_updated_at_blank: String
   attachments_updated_at_cont: String
-  attachments_updated_at_cont_all: String
-  attachments_updated_at_cont_any: String
+  attachments_updated_at_cont_all: [String!]
+  attachments_updated_at_cont_any: [String!]
   attachments_updated_at_does_not_match: String
-  attachments_updated_at_does_not_match_all: String
-  attachments_updated_at_does_not_match_any: String
+  attachments_updated_at_does_not_match_all: [String!]
+  attachments_updated_at_does_not_match_any: [String!]
   attachments_updated_at_end: String
-  attachments_updated_at_end_all: String
-  attachments_updated_at_end_any: String
+  attachments_updated_at_end_all: [String!]
+  attachments_updated_at_end_any: [String!]
   attachments_updated_at_eq: String
-  attachments_updated_at_eq_all: String
-  attachments_updated_at_eq_any: String
+  attachments_updated_at_eq_all: [String!]
+  attachments_updated_at_eq_any: [String!]
   attachments_updated_at_false: String
   attachments_updated_at_gt: String
-  attachments_updated_at_gt_all: String
-  attachments_updated_at_gt_any: String
+  attachments_updated_at_gt_all: [String!]
+  attachments_updated_at_gt_any: [String!]
   attachments_updated_at_gteq: String
-  attachments_updated_at_gteq_all: String
-  attachments_updated_at_gteq_any: String
+  attachments_updated_at_gteq_all: [String!]
+  attachments_updated_at_gteq_any: [String!]
   attachments_updated_at_i_cont: String
-  attachments_updated_at_i_cont_all: String
-  attachments_updated_at_i_cont_any: String
-  attachments_updated_at_in: String
-  attachments_updated_at_in_all: String
-  attachments_updated_at_in_any: String
+  attachments_updated_at_i_cont_all: [String!]
+  attachments_updated_at_i_cont_any: [String!]
+  attachments_updated_at_in: [String!]
+  attachments_updated_at_in_all: [String!]
+  attachments_updated_at_in_any: [String!]
   attachments_updated_at_lt: String
-  attachments_updated_at_lt_all: String
-  attachments_updated_at_lt_any: String
+  attachments_updated_at_lt_all: [String!]
+  attachments_updated_at_lt_any: [String!]
   attachments_updated_at_lteq: String
-  attachments_updated_at_lteq_all: String
-  attachments_updated_at_lteq_any: String
+  attachments_updated_at_lteq_all: [String!]
+  attachments_updated_at_lteq_any: [String!]
   attachments_updated_at_matches: String
-  attachments_updated_at_matches_all: String
-  attachments_updated_at_matches_any: String
+  attachments_updated_at_matches_all: [String!]
+  attachments_updated_at_matches_any: [String!]
   attachments_updated_at_not_cont: String
-  attachments_updated_at_not_cont_all: String
-  attachments_updated_at_not_cont_any: String
+  attachments_updated_at_not_cont_all: [String!]
+  attachments_updated_at_not_cont_any: [String!]
   attachments_updated_at_not_end: String
-  attachments_updated_at_not_end_all: String
-  attachments_updated_at_not_end_any: String
+  attachments_updated_at_not_end_all: [String!]
+  attachments_updated_at_not_end_any: [String!]
   attachments_updated_at_not_eq: String
-  attachments_updated_at_not_eq_all: String
-  attachments_updated_at_not_eq_any: String
+  attachments_updated_at_not_eq_all: [String!]
+  attachments_updated_at_not_eq_any: [String!]
   attachments_updated_at_not_false: String
   attachments_updated_at_not_i_cont: String
-  attachments_updated_at_not_i_cont_all: String
-  attachments_updated_at_not_i_cont_any: String
-  attachments_updated_at_not_in: String
-  attachments_updated_at_not_in_all: String
-  attachments_updated_at_not_in_any: String
+  attachments_updated_at_not_i_cont_all: [String!]
+  attachments_updated_at_not_i_cont_any: [String!]
+  attachments_updated_at_not_in: [String!]
+  attachments_updated_at_not_in_all: [String!]
+  attachments_updated_at_not_in_any: [String!]
   attachments_updated_at_not_null: String
   attachments_updated_at_not_start: String
-  attachments_updated_at_not_start_all: String
-  attachments_updated_at_not_start_any: String
+  attachments_updated_at_not_start_all: [String!]
+  attachments_updated_at_not_start_any: [String!]
   attachments_updated_at_not_true: String
   attachments_updated_at_null: String
   attachments_updated_at_present: String
   attachments_updated_at_start: String
-  attachments_updated_at_start_all: String
-  attachments_updated_at_start_any: String
+  attachments_updated_at_start_all: [String!]
+  attachments_updated_at_start_any: [String!]
   attachments_updated_at_true: String
   created_at_blank: String
   created_at_cont: String
-  created_at_cont_all: String
-  created_at_cont_any: String
+  created_at_cont_all: [String!]
+  created_at_cont_any: [String!]
   created_at_does_not_match: String
-  created_at_does_not_match_all: String
-  created_at_does_not_match_any: String
+  created_at_does_not_match_all: [String!]
+  created_at_does_not_match_any: [String!]
   created_at_end: String
-  created_at_end_all: String
-  created_at_end_any: String
+  created_at_end_all: [String!]
+  created_at_end_any: [String!]
   created_at_eq: String
-  created_at_eq_all: String
-  created_at_eq_any: String
+  created_at_eq_all: [String!]
+  created_at_eq_any: [String!]
   created_at_false: String
   created_at_gt: String
-  created_at_gt_all: String
-  created_at_gt_any: String
+  created_at_gt_all: [String!]
+  created_at_gt_any: [String!]
   created_at_gteq: String
-  created_at_gteq_all: String
-  created_at_gteq_any: String
+  created_at_gteq_all: [String!]
+  created_at_gteq_any: [String!]
   created_at_i_cont: String
-  created_at_i_cont_all: String
-  created_at_i_cont_any: String
-  created_at_in: String
-  created_at_in_all: String
-  created_at_in_any: String
+  created_at_i_cont_all: [String!]
+  created_at_i_cont_any: [String!]
+  created_at_in: [String!]
+  created_at_in_all: [String!]
+  created_at_in_any: [String!]
   created_at_lt: String
-  created_at_lt_all: String
-  created_at_lt_any: String
+  created_at_lt_all: [String!]
+  created_at_lt_any: [String!]
   created_at_lteq: String
-  created_at_lteq_all: String
-  created_at_lteq_any: String
+  created_at_lteq_all: [String!]
+  created_at_lteq_any: [String!]
   created_at_matches: String
-  created_at_matches_all: String
-  created_at_matches_any: String
+  created_at_matches_all: [String!]
+  created_at_matches_any: [String!]
   created_at_not_cont: String
-  created_at_not_cont_all: String
-  created_at_not_cont_any: String
+  created_at_not_cont_all: [String!]
+  created_at_not_cont_any: [String!]
   created_at_not_end: String
-  created_at_not_end_all: String
-  created_at_not_end_any: String
+  created_at_not_end_all: [String!]
+  created_at_not_end_any: [String!]
   created_at_not_eq: String
-  created_at_not_eq_all: String
-  created_at_not_eq_any: String
+  created_at_not_eq_all: [String!]
+  created_at_not_eq_any: [String!]
   created_at_not_false: String
   created_at_not_i_cont: String
-  created_at_not_i_cont_all: String
-  created_at_not_i_cont_any: String
-  created_at_not_in: String
-  created_at_not_in_all: String
-  created_at_not_in_any: String
+  created_at_not_i_cont_all: [String!]
+  created_at_not_i_cont_any: [String!]
+  created_at_not_in: [String!]
+  created_at_not_in_all: [String!]
+  created_at_not_in_any: [String!]
   created_at_not_null: String
   created_at_not_start: String
-  created_at_not_start_all: String
-  created_at_not_start_any: String
+  created_at_not_start_all: [String!]
+  created_at_not_start_any: [String!]
   created_at_not_true: String
   created_at_null: String
   created_at_present: String
   created_at_start: String
-  created_at_start_all: String
-  created_at_start_any: String
+  created_at_start_all: [String!]
+  created_at_start_any: [String!]
   created_at_true: String
   id_blank: String
   id_cont: String
-  id_cont_all: String
-  id_cont_any: String
+  id_cont_all: [String!]
+  id_cont_any: [String!]
   id_does_not_match: String
-  id_does_not_match_all: String
-  id_does_not_match_any: String
+  id_does_not_match_all: [String!]
+  id_does_not_match_any: [String!]
   id_end: String
-  id_end_all: String
-  id_end_any: String
+  id_end_all: [String!]
+  id_end_any: [String!]
   id_eq: String
-  id_eq_all: String
-  id_eq_any: String
+  id_eq_all: [String!]
+  id_eq_any: [String!]
   id_false: String
   id_gt: String
-  id_gt_all: String
-  id_gt_any: String
+  id_gt_all: [String!]
+  id_gt_any: [String!]
   id_gteq: String
-  id_gteq_all: String
-  id_gteq_any: String
+  id_gteq_all: [String!]
+  id_gteq_any: [String!]
   id_i_cont: String
-  id_i_cont_all: String
-  id_i_cont_any: String
-  id_in: String
-  id_in_all: String
-  id_in_any: String
+  id_i_cont_all: [String!]
+  id_i_cont_any: [String!]
+  id_in: [String!]
+  id_in_all: [String!]
+  id_in_any: [String!]
   id_lt: String
-  id_lt_all: String
-  id_lt_any: String
+  id_lt_all: [String!]
+  id_lt_any: [String!]
   id_lteq: String
-  id_lteq_all: String
-  id_lteq_any: String
+  id_lteq_all: [String!]
+  id_lteq_any: [String!]
   id_matches: String
-  id_matches_all: String
-  id_matches_any: String
+  id_matches_all: [String!]
+  id_matches_any: [String!]
   id_not_cont: String
-  id_not_cont_all: String
-  id_not_cont_any: String
+  id_not_cont_all: [String!]
+  id_not_cont_any: [String!]
   id_not_end: String
-  id_not_end_all: String
-  id_not_end_any: String
+  id_not_end_all: [String!]
+  id_not_end_any: [String!]
   id_not_eq: String
-  id_not_eq_all: String
-  id_not_eq_any: String
+  id_not_eq_all: [String!]
+  id_not_eq_any: [String!]
   id_not_false: String
   id_not_i_cont: String
-  id_not_i_cont_all: String
-  id_not_i_cont_any: String
-  id_not_in: String
-  id_not_in_all: String
-  id_not_in_any: String
+  id_not_i_cont_all: [String!]
+  id_not_i_cont_any: [String!]
+  id_not_in: [String!]
+  id_not_in_all: [String!]
+  id_not_in_any: [String!]
   id_not_null: String
   id_not_start: String
-  id_not_start_all: String
-  id_not_start_any: String
+  id_not_start_all: [String!]
+  id_not_start_any: [String!]
   id_not_true: String
   id_null: String
   id_present: String
   id_start: String
-  id_start_all: String
-  id_start_any: String
+  id_start_all: [String!]
+  id_start_any: [String!]
   id_true: String
   name_blank: String
   name_cont: String
-  name_cont_all: String
-  name_cont_any: String
+  name_cont_all: [String!]
+  name_cont_any: [String!]
   name_does_not_match: String
-  name_does_not_match_all: String
-  name_does_not_match_any: String
+  name_does_not_match_all: [String!]
+  name_does_not_match_any: [String!]
   name_end: String
-  name_end_all: String
-  name_end_any: String
+  name_end_all: [String!]
+  name_end_any: [String!]
   name_eq: String
-  name_eq_all: String
-  name_eq_any: String
+  name_eq_all: [String!]
+  name_eq_any: [String!]
   name_false: String
   name_gt: String
-  name_gt_all: String
-  name_gt_any: String
+  name_gt_all: [String!]
+  name_gt_any: [String!]
   name_gteq: String
-  name_gteq_all: String
-  name_gteq_any: String
+  name_gteq_all: [String!]
+  name_gteq_any: [String!]
   name_i_cont: String
-  name_i_cont_all: String
-  name_i_cont_any: String
-  name_in: String
-  name_in_all: String
-  name_in_any: String
+  name_i_cont_all: [String!]
+  name_i_cont_any: [String!]
+  name_in: [String!]
+  name_in_all: [String!]
+  name_in_any: [String!]
   name_lt: String
-  name_lt_all: String
-  name_lt_any: String
+  name_lt_all: [String!]
+  name_lt_any: [String!]
   name_lteq: String
-  name_lteq_all: String
-  name_lteq_any: String
+  name_lteq_all: [String!]
+  name_lteq_any: [String!]
   name_matches: String
-  name_matches_all: String
-  name_matches_any: String
+  name_matches_all: [String!]
+  name_matches_any: [String!]
   name_not_cont: String
-  name_not_cont_all: String
-  name_not_cont_any: String
+  name_not_cont_all: [String!]
+  name_not_cont_any: [String!]
   name_not_end: String
-  name_not_end_all: String
-  name_not_end_any: String
+  name_not_end_all: [String!]
+  name_not_end_any: [String!]
   name_not_eq: String
-  name_not_eq_all: String
-  name_not_eq_any: String
+  name_not_eq_all: [String!]
+  name_not_eq_any: [String!]
   name_not_false: String
   name_not_i_cont: String
-  name_not_i_cont_all: String
-  name_not_i_cont_any: String
-  name_not_in: String
-  name_not_in_all: String
-  name_not_in_any: String
+  name_not_i_cont_all: [String!]
+  name_not_i_cont_any: [String!]
+  name_not_in: [String!]
+  name_not_in_all: [String!]
+  name_not_in_any: [String!]
   name_not_null: String
   name_not_start: String
-  name_not_start_all: String
-  name_not_start_any: String
+  name_not_start_all: [String!]
+  name_not_start_any: [String!]
   name_not_true: String
   name_null: String
   name_present: String
   name_start: String
-  name_start_all: String
-  name_start_any: String
+  name_start_all: [String!]
+  name_start_any: [String!]
   name_true: String
   puid_blank: String
   puid_cont: String
-  puid_cont_all: String
-  puid_cont_any: String
+  puid_cont_all: [String!]
+  puid_cont_any: [String!]
   puid_does_not_match: String
-  puid_does_not_match_all: String
-  puid_does_not_match_any: String
+  puid_does_not_match_all: [String!]
+  puid_does_not_match_any: [String!]
   puid_end: String
-  puid_end_all: String
-  puid_end_any: String
+  puid_end_all: [String!]
+  puid_end_any: [String!]
   puid_eq: String
-  puid_eq_all: String
-  puid_eq_any: String
+  puid_eq_all: [String!]
+  puid_eq_any: [String!]
   puid_false: String
   puid_gt: String
-  puid_gt_all: String
-  puid_gt_any: String
+  puid_gt_all: [String!]
+  puid_gt_any: [String!]
   puid_gteq: String
-  puid_gteq_all: String
-  puid_gteq_any: String
+  puid_gteq_all: [String!]
+  puid_gteq_any: [String!]
   puid_i_cont: String
-  puid_i_cont_all: String
-  puid_i_cont_any: String
-  puid_in: String
-  puid_in_all: String
-  puid_in_any: String
+  puid_i_cont_all: [String!]
+  puid_i_cont_any: [String!]
+  puid_in: [String!]
+  puid_in_all: [String!]
+  puid_in_any: [String!]
   puid_lt: String
-  puid_lt_all: String
-  puid_lt_any: String
+  puid_lt_all: [String!]
+  puid_lt_any: [String!]
   puid_lteq: String
-  puid_lteq_all: String
-  puid_lteq_any: String
+  puid_lteq_all: [String!]
+  puid_lteq_any: [String!]
   puid_matches: String
-  puid_matches_all: String
-  puid_matches_any: String
+  puid_matches_all: [String!]
+  puid_matches_any: [String!]
   puid_not_cont: String
-  puid_not_cont_all: String
-  puid_not_cont_any: String
+  puid_not_cont_all: [String!]
+  puid_not_cont_any: [String!]
   puid_not_end: String
-  puid_not_end_all: String
-  puid_not_end_any: String
+  puid_not_end_all: [String!]
+  puid_not_end_any: [String!]
   puid_not_eq: String
-  puid_not_eq_all: String
-  puid_not_eq_any: String
+  puid_not_eq_all: [String!]
+  puid_not_eq_any: [String!]
   puid_not_false: String
   puid_not_i_cont: String
-  puid_not_i_cont_all: String
-  puid_not_i_cont_any: String
-  puid_not_in: String
-  puid_not_in_all: String
-  puid_not_in_any: String
+  puid_not_i_cont_all: [String!]
+  puid_not_i_cont_any: [String!]
+  puid_not_in: [String!]
+  puid_not_in_all: [String!]
+  puid_not_in_any: [String!]
   puid_not_null: String
   puid_not_start: String
-  puid_not_start_all: String
-  puid_not_start_any: String
+  puid_not_start_all: [String!]
+  puid_not_start_any: [String!]
   puid_not_true: String
   puid_null: String
   puid_present: String
   puid_start: String
-  puid_start_all: String
-  puid_start_any: String
+  puid_start_all: [String!]
+  puid_start_any: [String!]
   puid_true: String
   updated_at_blank: String
   updated_at_cont: String
-  updated_at_cont_all: String
-  updated_at_cont_any: String
+  updated_at_cont_all: [String!]
+  updated_at_cont_any: [String!]
   updated_at_does_not_match: String
-  updated_at_does_not_match_all: String
-  updated_at_does_not_match_any: String
+  updated_at_does_not_match_all: [String!]
+  updated_at_does_not_match_any: [String!]
   updated_at_end: String
-  updated_at_end_all: String
-  updated_at_end_any: String
+  updated_at_end_all: [String!]
+  updated_at_end_any: [String!]
   updated_at_eq: String
-  updated_at_eq_all: String
-  updated_at_eq_any: String
+  updated_at_eq_all: [String!]
+  updated_at_eq_any: [String!]
   updated_at_false: String
   updated_at_gt: String
-  updated_at_gt_all: String
-  updated_at_gt_any: String
+  updated_at_gt_all: [String!]
+  updated_at_gt_any: [String!]
   updated_at_gteq: String
-  updated_at_gteq_all: String
-  updated_at_gteq_any: String
+  updated_at_gteq_all: [String!]
+  updated_at_gteq_any: [String!]
   updated_at_i_cont: String
-  updated_at_i_cont_all: String
-  updated_at_i_cont_any: String
-  updated_at_in: String
-  updated_at_in_all: String
-  updated_at_in_any: String
+  updated_at_i_cont_all: [String!]
+  updated_at_i_cont_any: [String!]
+  updated_at_in: [String!]
+  updated_at_in_all: [String!]
+  updated_at_in_any: [String!]
   updated_at_lt: String
-  updated_at_lt_all: String
-  updated_at_lt_any: String
+  updated_at_lt_all: [String!]
+  updated_at_lt_any: [String!]
   updated_at_lteq: String
-  updated_at_lteq_all: String
-  updated_at_lteq_any: String
+  updated_at_lteq_all: [String!]
+  updated_at_lteq_any: [String!]
   updated_at_matches: String
-  updated_at_matches_all: String
-  updated_at_matches_any: String
+  updated_at_matches_all: [String!]
+  updated_at_matches_any: [String!]
   updated_at_not_cont: String
-  updated_at_not_cont_all: String
-  updated_at_not_cont_any: String
+  updated_at_not_cont_all: [String!]
+  updated_at_not_cont_any: [String!]
   updated_at_not_end: String
-  updated_at_not_end_all: String
-  updated_at_not_end_any: String
+  updated_at_not_end_all: [String!]
+  updated_at_not_end_any: [String!]
   updated_at_not_eq: String
-  updated_at_not_eq_all: String
-  updated_at_not_eq_any: String
+  updated_at_not_eq_all: [String!]
+  updated_at_not_eq_any: [String!]
   updated_at_not_false: String
   updated_at_not_i_cont: String
-  updated_at_not_i_cont_all: String
-  updated_at_not_i_cont_any: String
-  updated_at_not_in: String
-  updated_at_not_in_all: String
-  updated_at_not_in_any: String
+  updated_at_not_i_cont_all: [String!]
+  updated_at_not_i_cont_any: [String!]
+  updated_at_not_in: [String!]
+  updated_at_not_in_all: [String!]
+  updated_at_not_in_any: [String!]
   updated_at_not_null: String
   updated_at_not_start: String
-  updated_at_not_start_all: String
-  updated_at_not_start_any: String
+  updated_at_not_start_all: [String!]
+  updated_at_not_start_any: [String!]
   updated_at_not_true: String
   updated_at_null: String
   updated_at_present: String
   updated_at_start: String
-  updated_at_start_all: String
-  updated_at_start_any: String
+  updated_at_start_all: [String!]
+  updated_at_start_any: [String!]
   updated_at_true: String
 }
 
