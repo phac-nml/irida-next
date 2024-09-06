@@ -17,7 +17,7 @@ module Resolvers
 
     def resolve(group_id:, filter:)
       samples = group_id ? samples_by_group_scope(group_id:) : samples_by_project_scope
-      filter ? samples.ransack(filter.to_h) : samples
+      filter ? samples.ransack(filter.to_h).result : samples
     end
 
     def ready?(**_args)
