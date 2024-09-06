@@ -1,127 +1,77 @@
-# Additional translations at https://github.com/heartcombo/devise/wiki/I18n
-
+---
 en:
   devise:
+    confirmations:
+      new:
+        submit_button: Submit button
+        title: Title
     layout:
       title: IRIDA Next
-    confirmations:
-      title: "Resend confirmation instructions"
-      confirmed: "Your email address has been successfully confirmed."
-      send_instructions: "You will receive an email with instructions for how to confirm your email address in a few minutes."
-      send_paranoid_instructions: "If your email address exists in our database, you will receive an email with instructions for how to confirm your email address in a few minutes."
-      submit_button: "Resend confirmation instructions"
-    failure:
-      already_authenticated: "You are already signed in."
-      inactive: "Your account is not activated yet."
-      invalid: "Invalid %{authentication_keys} or password."
-      locked: "Your account is locked."
-      last_attempt: "You have one more attempt before your account is locked."
-      not_found_in_database: "Invalid %{authentication_keys} or password."
-      timeout: "Your session expired. Please sign in again to continue."
-      unauthenticated: "You need to sign in or sign up before continuing."
-      unconfirmed: "You have to confirm your email address before continuing."
     mailer:
       confirmation_instructions:
-        subject: "Confirmation instructions"
-        greeting: "Welcome %{email}!"
-        instructions: "You can confirm your account email through the link below:"
-        confirm_button: "Confirm my account"
-      reset_password_instructions:
-        subject: "Reset password instructions"
-        greeting: "Hello %{email}!"
-        instructions: "Someone has requested a link to change your password. You can do this through the link below."
-        disclaimer_info: "If you didn't request this, please ignore this email."
-        link_info: "Your password won't change until you access the link above and create a new one."
-        reset_button: "Change my password"
-      unlock_instructions:
-        subject: "Unlock instructions"
-        greeting: "Hello %{email}!"
-        locked_info: "Your account has been locked due to an excessive number of unsuccessful sign in attempts."
-        instructions: "Click the link below to unlock your account:"
-        unlock_button: "Unlock my account"
+        confirm_button: Confirm my account
+        greeting: Welcome %{email}!
+        instructions: 'You can confirm your account email through the link below:'
       email_changed:
-        subject: "Email Changed"
-        greeting: "Hello %{email}!"
-        confirmed_email_info: "We're contacting you to notify you that your email has been changed to %{email}."
-        unconfirmed_email_info: "We're contacting you to notify you that your email is being changed to %{email}."
+        confirmed_email_info: We're contacting you to notify you that your email has been changed to %{email}.
+        greeting: Hello %{email}!
+        unconfirmed_email_info: We're contacting you to notify you that your email is being changed to %{email}.
       password_change:
-        subject: "Password Changed"
-        greeting: "Hello %{email}!"
-        password_change_info: "We're contacting you to notify you that your password has been changed."
-    omniauth_callbacks:
-      failure: 'Could not authenticate you from %{kind} because "%{reason}".'
-      success: "Successfully authenticated from %{kind} account."
+        greeting: Hello %{email}!
+        password_change_info: We're contacting you to notify you that your password has been changed.
+      reset_password_instructions:
+        disclaimer_info: If you didn't request this, please ignore this email.
+        greeting: Hello %{email}!
+        instructions: Someone has requested a link to change your password. You can do this through the link below.
+        link_info: Your password won't change until you access the link above and create a new one.
+        reset_button: Change my password
+      unlock_instructions:
+        greeting: Hello %{email}!
+        instructions: 'Click the link below to unlock your account:'
+        locked_info: Your account has been locked due to an excessive number of unsuccessful sign in attempts.
+        unlock_button: Unlock my account
     passwords:
-      no_token: "You can't access this page without coming from a password reset email. If you do come from a password reset email, please make sure you used the full URL provided."
-      send_instructions: "You will receive an email with instructions on how to reset your password in a few minutes."
-      send_paranoid_instructions: "If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes."
-      updated: "Your password has been changed successfully. You are now signed in."
-      updated_not_active: "Your password has been changed successfully."
-      new:
-        submit_button: "Send me reset password instructions"
       edit:
+        password_confirmation_label: Confirm new password
+        password_hint: "(%{minimum_password_length} characters minimum)"
+        password_label: New password
+        submit_button: Change my password
         title: Change your password
-        password_label: "New password"
-        password_confirmation_label: "Confirm new password"
-        password_hint: "(%{minimum_password_length} characters minimum)"
-        submit_button: "Change my password"
-    registrations:
       new:
-        password_hint: "(%{minimum_password_length} characters minimum)"
-        signed_up: "Already signed up?"
-        submit_button: "Sign up"
+        submit_button: Send me reset password instructions
+    registrations:
       edit:
-        title: "Edit %{resource_name}"
-        cancel_title: "Cancel my account"
+        back_link: Back
+        cancel_button: Cancel my account
+        cancel_confirmation: Are you sure?
+        cancel_title: Cancel my account
+        confirmation_message: 'Currently waiting confirmation for: %{email}'
+        current_password_hint: "(we need your current password to confirm your changes)"
         password_blank_hint: "(leave blank if you don't want to change it)"
         password_length_hint: "(%{minimum_password_length} characters minimum)"
-        current_password_hint: "(we need your current password to confirm your changes)"
-        confirmation_message: "Currently waiting confirmation for: %{email}"
+        submit_button: Update
+        title: Edit %{resource_name}
         unhappy: Unhappy?
-        submit_button: "Update"
-        cancel_button: "Cancel my account"
-        cancel_confirmation: "Are you sure?"
-        back_link: "Back"
-      destroyed: "Bye! Your account has been successfully cancelled. We hope to see you again soon."
-      signed_up: "Welcome! You have signed up successfully."
-      signed_up_but_inactive: "You have signed up successfully. However, we could not sign you in because your account is not yet activated."
-      signed_up_but_locked: "You have signed up successfully. However, we could not sign you in because your account is locked."
-      signed_up_but_unconfirmed: "A message with a confirmation link has been sent to your email address. Please follow the link to activate your account."
-      update_needs_confirmation: "You updated your account successfully, but we need to verify your new email address. Please check your email and follow the confirmation link to confirm your new email address."
-      updated: "Your account has been updated successfully."
-      updated_but_not_signed_in: "Your account has been updated successfully, but since your password was changed, you need to sign in again."
+      new:
+        password_hint: "(%{minimum_password_length} characters minimum)"
+        signed_up: Already signed up?
+        submit_button: Sign up
     sessions:
-      signed_in: "Signed in successfully."
-      signed_out: "Signed out successfully."
-      already_signed_out: "Signed out successfully."
       new_with_providers:
-        local_button: "Sign in with Local Account"
-        return_button: "Return to sign in selection"
-        omniauth: "Sign in with %{provider}"
+        local_button: Sign in with Local Account
+        omniauth: Sign in with %{provider}
+        return_button: Return to sign in selection
     shared:
       form:
-        sign_in: "Sign in"
+        sign_in: Sign in
       links:
-        create_an_account: "Don't have an account?"
-        create_an_account_link: "Register now"
-        forgot_password_link: "Forgot your password?"
-        confirmation_link: "Didn't receive confirmation instructions?"
-        unlock_link: "Didn't receive unlock instructions?"
-        sign_in_link: "Sign in"
+        confirmation_link: Didn't receive confirmation instructions?
+        create_an_account: Don't have an account?
+        create_an_account_link: Register now
+        forgot_password_link: Forgot your password?
+        sign_in_link: Sign in
+        unlock_link: Didn't receive unlock instructions?
     unlocks:
       new:
-        title: "Resend unlock instructions"
-        submit_button: "Resend unlock instructions"
-      send_instructions: "You will receive an email with instructions for how to unlock your account in a few minutes."
-      send_paranoid_instructions: "If your account exists, you will receive an email with instructions for how to unlock it in a few minutes."
-      unlocked: "Your account has been unlocked successfully. Please sign in to continue."
-  errors:
-    messages:
-      already_confirmed: "was already confirmed, please try signing in"
-      confirmation_period_expired: "needs to be confirmed within %{period}, please request a new one"
-      expired: "has expired, please request a new one"
-      not_found: "not found"
-      not_locked: "was not locked"
-      not_saved:
-        one: "1 error prohibited this %{resource} from being saved:"
-        other: "%{count} errors prohibited this %{resource} from being saved:"
+        submit_button: Resend unlock instructions
+        title: Resend unlock instructions

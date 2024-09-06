@@ -39,7 +39,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
                  locals: { namespace_group_link: @created_namespace_group_link,
                            access_levels: @access_levels,
                            type: 'success',
-                           message: t('.success',
+                           message: t('concerns.share_actions.create.success',
                                       namespace_name: @created_namespace_group_link.namespace.human_name,
                                       group_name: @created_namespace_group_link.group.human_name) }
         end
@@ -65,8 +65,9 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
         if @namespace_group_link.deleted?
           format.turbo_stream do
             render status: :ok, locals: { namespace_group_link: @namespace_group_link, type: 'success',
-                                          message: t('.success', namespace_name: @namespace.human_name,
-                                                                 group_name: @namespace_group_link.group.human_name) }
+                                          message: t('concerns.share_actions.destroy.success',
+                                                     namespace_name: @namespace.human_name,
+                                                     group_name: @namespace_group_link.group.human_name) }
           end
         else
           format.turbo_stream do
@@ -79,7 +80,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
         format.turbo_stream do
           render status: :bad_request,
                  locals: { type: 'alert',
-                           message: t('error') }
+                           message: t('concerns.share_actions.destroy.error') }
         end
       end
     end
@@ -88,9 +89,9 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
   def update # rubocop:disable Metrics/MethodLength
     @updated = GroupLinks::GroupLinkUpdateService.new(current_user, @namespace_group_link, group_link_params).execute
     updated_param = if group_link_params[:group_access_level].nil?
-                      t('.params.expiration_date')
+                      t('concerns.share_actions.update.params.expiration_date')
                     else
-                      t('.params.group_access_level')
+                      t('concerns.share_actions.update.params.group_access_level')
                     end
 
     respond_to do |format|
@@ -99,15 +100,16 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
           render status: :ok, locals: { namespace_group_link: @namespace_group_link,
                                         access_levels: @access_levels,
                                         type: 'success',
-                                        message: t('.success', namespace_name: @namespace.human_name,
-                                                               group_name: @namespace_group_link.group.human_name,
-                                                               param_name: updated_param) }
+                                        message: t('concerns.share_actions.update.success',
+                                                   namespace_name: @namespace.human_name,
+                                                   group_name: @namespace_group_link.group.human_name,
+                                                   param_name: updated_param) }
         end
       else
         format.turbo_stream do
           render status: :unprocessable_entity,
                  locals: { namespace_group_link: @namespace_group_link, type: 'alert',
-                           message: t('.error') }
+                           message: t('concerns.share_actions.update.error') }
         end
       end
     end

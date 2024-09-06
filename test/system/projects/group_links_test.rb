@@ -64,7 +64,7 @@ module Projects
         click_button 'Confirm'
       end
 
-      assert_text I18n.t(:'projects.group_links.destroy.success',
+      assert_text I18n.t(:'concerns.share_actions.destroy.success',
                          namespace_name: namespace_group_link.namespace.human_name,
                          group_name: namespace_group_link.group.human_name)
     end
@@ -133,7 +133,7 @@ module Projects
         find("#invited-group-#{namespace_group_link.group.id}-access-level-select").find(:xpath,
                                                                                          'option[2]').select_option
 
-        assert_text I18n.t(:'projects.group_links.update.success',
+        assert_text I18n.t(:'concerns.share_actions.update.success',
                            namespace_name: namespace_group_link.namespace.human_name,
                            group_name: namespace_group_link.group.human_name,
                            param_name: 'group access level')
@@ -160,7 +160,7 @@ module Projects
         find("#invited-group-#{namespace_group_link.group.id}-expiration").click.set(expiry_date)
                                                                           .send_keys(:return)
 
-        assert_text I18n.t(:'projects.group_links.update.success',
+        assert_text I18n.t(:'concerns.share_actions.update.success',
                            namespace_name: namespace_group_link.namespace.human_name,
                            group_name: namespace_group_link.group.human_name,
                            param_name: 'expiration')

@@ -144,7 +144,7 @@ module Groups
         click_button 'Confirm'
       end
 
-      assert_text I18n.t(:'groups.bots.destroy.success')
+      assert_text I18n.t(:'concerns.bot_actions.destroy.success')
 
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
       assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
@@ -275,7 +275,7 @@ module Groups
 
       within('dialog') do
         within('#personal-access-token-alert') do
-          assert_text I18n.t('groups.bots.personal_access_tokens.revoke.success', pat_name: token.name)
+          assert_text I18n.t('concerns.bot_personal_access_token_actions.revoke.success', pat_name: token.name)
         end
       end
     end

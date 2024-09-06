@@ -482,13 +482,15 @@ class DataExportsTest < ApplicationSystemTestCase
 
       assert_no_selector 'turbo-frame[id="list_selections"]'
       assert_no_text @workflow_execution1.id
+      assert_no_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
       assert_no_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_single_analysis_export_dialog.single_description_html')
+        I18n.t('data_exports.new.after_submission_description_html')
       )
 
       click_button I18n.t('data_exports.new_single_analysis_export_dialog.single_selection')
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new_single_analysis_export_dialog.single_description_html')
+        I18n.t('data_exports.new.after_submission_description_html')
       )
       assert_text @workflow_execution1.id
       assert_text @workflow_execution1.run_id

@@ -37,7 +37,7 @@ module BotActions
         if @new_bot_account[:bot_user_account].persisted?
           render status: :ok, locals: {
             type: 'success',
-            message: t('.success'),
+            message: t('concerns.bot_actions.create.success'),
             personal_access_token: @new_bot_account[:personal_access_token]
           }
         else
@@ -60,7 +60,7 @@ module BotActions
         if @bot_account.deleted?
           render status: :ok, locals: {
             type: 'success',
-            message: t('.success')
+            message: t('concerns.bot_actions.destroy.success')
           }
         else
           render status: :unprocessable_entity,

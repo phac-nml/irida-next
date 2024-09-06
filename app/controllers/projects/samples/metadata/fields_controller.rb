@@ -62,18 +62,25 @@ module Projects
           end
         end
 
-        def get_create_messages(added_keys, existing_keys)
+        def get_create_messages(added_keys, existing_keys) # rubocop:disable Metrics/MethodLength
           messages = []
           if added_keys.count == 1
-            messages << { type: 'success', message: t('.single_success', key: added_keys[0]) }
+            messages << { type: 'success',
+                          message: t('projects.samples.metadata.fields.create.single_success', key: added_keys[0]) }
           elsif added_keys.count.positive?
-            messages << { type: 'success', message: t('.multi_success', keys: added_keys.join(', ')) }
+            messages << { type: 'success',
+                          message: t('projects.samples.metadata.fields.create.multi_success',
+                                     keys: added_keys.join(', ')) }
           end
 
           if existing_keys.count == 1
-            messages << { type: 'error', message: t('.single_key_exists', key: existing_keys[0]) }
+            messages << { type: 'error',
+                          message: t('projects.samples.metadata.fields.create.single_key_exists',
+                                     key: existing_keys[0]) }
           elsif existing_keys.count.positive?
-            messages << { type: 'error', message: t('.multi_keys_exists', keys: existing_keys.join(', ')) }
+            messages << { type: 'error',
+                          message: t('projects.samples.metadata.fields.create.multi_keys_exists',
+                                     keys: existing_keys.join(', ')) }
           end
           messages
         end
@@ -84,7 +91,8 @@ module Projects
                               updated_metadata_field[:deleted]
           if modified_metadata.count.positive?
             update_render_params[:status] = :ok
-            update_render_params[:message] = { type: 'success', message: t('.success') }
+            update_render_params[:message] =
+              { type: 'success', message: t('projects.samples.metadata.fields.update.success') }
           else
             update_render_params[:status] = :unprocessable_entity
             update_render_params[:message] = { type: 'error', message: @sample.errors.full_messages.first }

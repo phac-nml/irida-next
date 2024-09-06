@@ -46,9 +46,13 @@ module Projects
           messages = []
 
           if deleted_keys.count == 1
-            messages << { type: 'success', message: t('.single_success', deleted_key: deleted_keys[0]) }
+            messages << { type: 'success',
+                          message: t('projects.samples.metadata.deletions.destroy.single_success',
+                                     deleted_key: deleted_keys[0]) }
           elsif deleted_keys.count.positive?
-            messages << { type: 'success', message: t('.multi_success', deleted_keys: deleted_keys.join(', ')) }
+            messages << { type: 'success',
+                          message: t('projects.samples.metadata.deletions.destroy.multi_success',
+                                     deleted_keys: deleted_keys.join(', ')) }
           end
           messages << { type: 'error', message: @sample.errors.full_messages.first } if @sample.errors.any?
           messages

@@ -239,8 +239,8 @@ module Projects
     test 'should destroy Sample from sample listing page' do
       visit namespace_project_samples_url(@namespace, @project)
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       table_row = find(:table_row, [@sample1.name])
 
       within table_row do
@@ -267,8 +267,8 @@ module Projects
     test 'should transfer multiple samples' do
       project2 = projects(:project2)
       visit namespace_project_samples_url(@namespace, @project)
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
@@ -293,8 +293,8 @@ module Projects
     test 'should transfer a single sample' do
       project2 = projects(:project2)
       visit namespace_project_samples_url(@namespace, @project)
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 3
         all('input[type="checkbox"]')[0].click
@@ -314,8 +314,8 @@ module Projects
     test 'should not transfer samples with session storage cleared' do
       project2 = projects(:project2)
       visit namespace_project_samples_url(@namespace, @project)
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
@@ -339,8 +339,8 @@ module Projects
       project26 = projects(:project26)
       sample30 = samples(:sample30)
       visit namespace_project_samples_url(@namespace, @project)
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 3
       check sample30.name
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
@@ -364,8 +364,8 @@ module Projects
     test 'should transfer some samples' do
       project25 = projects(:project25)
       visit namespace_project_samples_url(@namespace, @project)
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
@@ -396,8 +396,8 @@ module Projects
       login_as user
       project2 = projects(:project2)
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
@@ -423,8 +423,8 @@ module Projects
       namespace = groups(:group_hotel)
       project2 = projects(:projectHotel)
       visit namespace_project_samples_url(namespace, project2)
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 1, count: 1,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
+                                                                           locale: @user.locale))
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 1
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
@@ -449,8 +449,8 @@ module Projects
       # Project is a part of Group 8 and not a part of the current project hierarchy
       project32 = projects(:project32)
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
-                                                                               locale: user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: user.locale))
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
@@ -556,8 +556,8 @@ module Projects
 
       assert_selector 'a', text: I18n.t('projects.samples.index.new_button'), count: 1
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
-                                                                               locale: user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: user.locale))
       assert_selector '#samples-table table tbody tr', count: 3
       within('tbody tr:first-child') do
         assert_selector 'a', text: 'Edit', count: 1
@@ -575,8 +575,8 @@ module Projects
 
       assert_selector 'a', text: I18n.t('projects.samples.index.new_button'), count: 0
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
-                                                                               locale: user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: user.locale))
       assert_selector '#samples-table table tbody tr', count: 3
       assert_selector 'a', text: 'Edit', count: 0
       assert_selector 'a', text: 'Remove', count: 0
@@ -588,16 +588,16 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
       filter_text = samples(:sample1).name[-3..-1]
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 3
       assert_text @sample1.name
       assert_text @sample2.name
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: filter_text
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 1, count: 1,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
+                                                                           locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 1
       assert_selector 'mark', text: filter_text
       assert_no_text @sample2.name
@@ -606,8 +606,8 @@ module Projects
       # Refresh the page to ensure the search is still active
       visit namespace_project_samples_url(@namespace, @project)
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 1, count: 1,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
+                                                                           locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 1
       assert_selector 'mark', text: filter_text
       assert_no_text @sample2.name
@@ -617,8 +617,8 @@ module Projects
     test 'can sort samples by column' do
       visit namespace_project_samples_url(@namespace, @project)
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 3
       within('tbody tr:first-child th') do
         assert_text @sample1.puid
@@ -717,8 +717,8 @@ module Projects
     test 'can filter and then sort the list of samples by name' do
       visit namespace_project_samples_url(@namespace, @project)
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 3
       within('#samples-table table tbody tr:first-child td:nth-child(2)') do
         assert_text @sample1.name
@@ -726,8 +726,8 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 1, count: 1,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
+                                                                           locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 1
       assert_text @sample1.puid
       assert_text @sample1.name
@@ -746,8 +746,8 @@ module Projects
     test 'can filter and then sort the list of samples by puid' do
       visit namespace_project_samples_url(@namespace, @project)
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 3
       within('#samples-table table tbody tr:first-child th') do
         assert_text @sample1.puid
@@ -755,8 +755,8 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 1, count: 1,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
+                                                                           locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 1
       assert_text @sample1.puid
       assert_text @sample1.name
@@ -782,8 +782,8 @@ module Projects
     test 'can sort and then filter the list of samples by name' do
       visit namespace_project_samples_url(@namespace, @project)
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 3
       within('#samples-table table tbody tr:first-child td:nth-child(2)') do
         assert_text @sample1.name
@@ -801,8 +801,8 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 1, count: 1,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
+                                                                           locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 1
       assert_text @sample1.puid
       assert_text @sample1.name
@@ -811,8 +811,8 @@ module Projects
 
       visit namespace_project_samples_url(@namespace, @project)
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 1, count: 1,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
+                                                                           locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 1
       assert_text @sample1.puid
       assert_text @sample1.name
@@ -823,8 +823,8 @@ module Projects
     test 'can sort and then filter the list of samples by puid' do
       visit namespace_project_samples_url(@namespace, @project)
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 3
       within('#samples-table table tbody tr:first-child th') do
         assert_text @sample1.puid
@@ -842,8 +842,8 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 1, count: 1,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
+                                                                           locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 1
       assert_text @sample1.puid
       assert_text @sample1.name
@@ -1333,8 +1333,8 @@ module Projects
     test 'should be able to toggle metadata' do
       visit namespace_project_samples_url(@namespace, @project)
 
-      assert_text strip_tags(Viral::Pagy::LimitComponent.translate('.summary', from: 1, to: 3, count: 3,
-                                                                               locale: @user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       assert_selector '#samples-table table thead tr th', count: 6
 
       click_on 'Last Updated'

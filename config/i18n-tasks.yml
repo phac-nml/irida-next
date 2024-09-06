@@ -15,18 +15,18 @@ data:
 
   # Locale files or `Dir.glob` patterns where translations are read from:
   read:
-    ## Default:
-    # - config/locales/%{locale}.yml
-    ## More files:
-    # - config/locales/**/*.%{locale}.yml
+    - config/locales/%{locale}.yml
+    - config/locales/devise.%{locale}.yml
+    - app/components/**/*.%{locale}.yml
 
   # Locale files to write new keys to, based on a list of key pattern => file rules. Matched from top to bottom:
   # `i18n-tasks normalize -p` will force move the keys according to these rules
   write:
-    ## For example, write devise and simple form keys to their respective files:
-    # - ['{devise, simple_form}.*', 'config/locales/\1.%{locale}.yml']
-    ## Catch-all default:
-    # - config/locales/%{locale}.yml
+    - ["devise.*", "config/locales/devise.%{locale}.yml"]
+    # - ["{*}.{*}.{*_component}.:", 'app/components/\1/\2/\3.%{locale}.yml']
+    # - ["{*}.{*_component}.:", 'app/components/\1/\2.%{locale}.yml']
+    # - ["{*_component}.:", 'app/components/\1.%{locale}.yml']
+    - "config/locales/%{locale}.yml"
 
   # External locale data (e.g. gems).
   # This data is not considered unused and is never written to.
@@ -61,16 +61,14 @@ search:
     - app/controllers
     - app/helpers
     - app/mailers
-    - app/presenters
     - app/views
     - app/components
 
   ## Directories where method names which should not be part of a relative key resolution.
   # By default, if a relative translation is used inside a method, the name of the method will be considered part of the resolved key.
   # Directories listed here will not consider the name of the method part of the resolved key
-  #
-  # relative_exclude_method_name_paths:
-  #  -
+  relative_exclude_method_name_paths:
+    - app/components
 
   ## Files or `File.fnmatch` patterns to exclude from search. Some files are always excluded regardless of this setting:
   ##   *.jpg *.jpeg *.png *.gif *.svg *.ico *.eot *.otf *.ttf *.woff *.woff2 *.pdf *.css *.sass *.scss *.less
@@ -137,13 +135,18 @@ search:
 #   #   Keep in mind the context of all the strings for a more accurate translation.
 
 ## Do not consider these keys missing:
-# ignore_missing:
+ignore_missing:
+  - "action_policy.*"
+  - "activerecord.*"
 # - 'errors.messages.{accepted,blank,invalid,too_short,too_long}'
 # - '{devise,simple_form}.*'
 
 ## Consider these keys used:
-# ignore_unused:
-# - 'activerecord.attributes.*'
+ignore_unused:
+  - "action_policy.*"
+  - "activerecord.*"
+  - "*.sorting.*"
+  - "time.formats.full_date"
 # - '{devise,kaminari,will_paginate}.*'
 # - 'simple_form.{yes,no}'
 # - 'simple_form.{placeholders,hints,labels}.*'

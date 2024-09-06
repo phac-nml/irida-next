@@ -13,10 +13,11 @@ module FileImportActions
     @imported_metadata = ::Samples::Metadata::FileImportService.new(@namespace, current_user,
                                                                     file_import_params).execute
     if @namespace.errors.empty?
-      render status: :ok, locals: { type: :success, message: t('.success') }
+      render status: :ok, locals: { type: :success, message: t('concerns.file_import_actions.create.success') }
     elsif @namespace.errors.include?(:sample)
       errors = @namespace.errors.messages_for(:sample)
-      render status: :partial_content, locals: { type: :alert, message: t('.error'), errors: }
+      render status: :partial_content,
+             locals: { type: :alert, message: t('concerns.file_import_actions.create.error'), errors: }
     else
       error = @namespace.errors.full_messages_for(:base).first
       render status: :unprocessable_entity, locals: { type: :danger, message: error }

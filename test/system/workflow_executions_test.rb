@@ -126,7 +126,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within %(div[data-controller='viral--flash']) do
       assert_text I18n.t(
-        :'workflow_executions.cancel.success',
+        :'concerns.workflow_execution_actions.cancel.success',
         workflow_name: workflow_execution.metadata['workflow_name']
       )
     end
@@ -204,7 +204,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within %(div[data-controller='viral--flash']) do
       assert_text I18n.t(
-        :'workflow_executions.destroy.success',
+        :'concerns.workflow_execution_actions.destroy.success',
         workflow_name: workflow_execution.metadata['workflow_name']
       )
     end
