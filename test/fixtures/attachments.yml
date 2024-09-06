@@ -4,11 +4,13 @@ attachment1:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sample1 (Sample)
   puid: INXT_ATT_AAAAAAAAAA
+  created_at: <%= 3.hours.ago %>
 
 attachment2:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sample1 (Sample)
   puid: INXT_ATT_AAAAAAAAAB
+  created_at: <%= 2.hours.ago %>
 
 attachmentA:
   metadata: { "compression": "none", "format": "fastq" }

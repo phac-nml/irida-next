@@ -22,7 +22,6 @@ module Types
           AttachmentType.connection_type,
           null: true,
           description: 'Attachments on the sample',
-          complexity: 5,
           resolver: Resolvers::SampleAttachmentsResolver
 
     field :attachments_updated_at, GraphQL::Types::ISO8601DateTime,
