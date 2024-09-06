@@ -118,7 +118,7 @@ body {
     line-height: inherit;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
-    @apply rounded-r-md border-0 p-2.5 block w-full bg-slate-50 border-slate-300 text-sm text-slate-900 focus:border-green-500 focus:ring-green-500 dark:placeholder-slate-400 dark:shadow-sm-light dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply rounded-r-md border p-2.5 block w-full bg-white border-slate-300 text-sm text-slate-900 focus:border-green-500 focus:ring-green-500 dark:placeholder-slate-400 dark:shadow-sm-light dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 
   .form-field.invalid label {

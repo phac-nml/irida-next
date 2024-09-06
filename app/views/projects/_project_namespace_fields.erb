@@ -4,7 +4,7 @@
   <%= builder.text_field :name,
                      data: {
                        "slugify-target": "name",
-                       action: "input->slugify#nameChanged"
+                       action: "input->slugify#nameChanged",
                      },
                      required: true,
                      autofocus: true,
@@ -18,19 +18,8 @@
     <div class="flex items-center whitespace-nowrap">
       <div
         class="
-          inline-flex
-          items-center
-          px-3
-          py-2.5
-          text-sm
-          text-slate-600
-          bg-slate-200
-          border
-          border-r-0
-          border-slate-300
-          rounded-l-lg
-          dark:bg-slate-600
-          dark:text-slate-400
+          inline-flex items-center px-3 py-2.5 text-sm text-slate-600 bg-slate-200 border
+          border-r-0 border-slate-300 rounded-l-lg dark:bg-slate-600 dark:text-slate-400
           dark:border-slate-600
         "
       >
@@ -42,7 +31,7 @@
         :id,
         :full_path,
         { selected: params[:group_id] || @project.namespace.parent.id },
-        { class: "prefixed" }
+        { class: "prefixed" },
       ) %>
       <div class="ml-4 dark:text-slate-200">/</div>
     </div>
@@ -52,7 +41,7 @@
     <%= builder.label :path %>
     <%= builder.text_field :path,
                        data: {
-                         "slugify-target": "path"
+                         "slugify-target": "path",
                        },
                        pattern: Irida::PathRegex::PATH_REGEX_STR,
                        required: true,
@@ -67,7 +56,7 @@
   <%= builder.text_area :description,
                     {
                       :class => "form-control",
-                      "aria-label" => "Project description, not required"
+                      "aria-label" => "Project description, not required",
                     } %>
   <%= render "shared/form/field_errors",
   errors: @project.namespace.errors.full_messages_for(:description) %>
