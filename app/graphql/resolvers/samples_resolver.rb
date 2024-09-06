@@ -16,16 +16,8 @@ module Resolvers
              default_value: nil
 
     def resolve(group_id:, filter:)
-      if filter && group_id
-        get_by_group_id(group_id:).ransack(filter.to_h).result
-      elsif filter
-        Sample.ransack(filter.to_h).result
-      elsif group_id
-        get_by_group_id(group_id:)
-      else
-        scope = authorized_scope Project, type: :relation
-        Sample.where(project_id: scope.select(:id))
-      end
+      samples = group_id ? samples_by_group_scope(group_id:) : samples_by_project_scope
+      filter ? samples.ransack(filter.to_h) : samples
     end
 
     def ready?(**_args)
@@ -34,7 +26,12 @@ module Resolvers
 
     private
 
-    def get_by_group_id(group_id:)
+    def samples_by_project_scope
+      scope = authorized_scope Project, type: :relation
+      Sample.where(project_id: scope.select(:id))
+    end
+
+    def samples_by_group_scope(group_id:)
       group = IridaSchema.object_from_id(group_id, { expected_type: Group })
       authorize!(group, to: :sample_listing?, with: GroupPolicy)
       authorized_scope(Sample, type: :relation, as: :namespace_samples, scope_options: { namespace: group })
