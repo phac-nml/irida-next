@@ -45,11 +45,7 @@ module Projects
       new_namespace_member_ids = Member.for_namespace_and_ancestors(new_namespace)
                                        .where(user_id: project_ancestor_member_user_ids).select(&:id)
 
-      Namespaces::ProjectNamespace.public_activity_off
-
       project.namespace.update(parent_id: new_namespace.id)
-
-      Namespaces::ProjectNamespace.public_activity_on
 
       project.namespace.create_activity action: :transfer,
                                         owner: current_user,

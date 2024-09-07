@@ -222,7 +222,7 @@ en:
     namespaces_project_namespace:
       create_html: "%{user} created project"
       destroy_html: "%{user} removed project"
-      update_html: "%{user} updated project"
+      update_html: "%{user} updated project attributes"
       samples:
         clone_html: "%{user} cloned samples to project %{href}"
         cloned_from_html: "%{user} cloned samples from project %{href}"
@@ -231,7 +231,7 @@ en:
         create_html: "%{user} created sample %{href}"
         destroy_html: "%{user} removed sample <span class='text-slate-800 dark:text-slate-300 font-medium'>%{sample_name}</span>"
         destroy_multiple_html: "%{user} removed <span class='text-slate-800 dark:text-slate-300 font-medium'>%{deleted_count}</span> samples from project"
-        update_html: "%{user} updated sample %{href}"
+        update_html: "%{user} updated sample %{href} attributes"
         attachment:
           create_html: "%{user} attached files to sample %{href}"
           destroy_html: "%{user} removed files from sample %{href}"
@@ -241,14 +241,19 @@ en:
     workflow_execution:
       automated_workflow:
         launch_html: "Project automation bot launched workflow %{href}"
+      automated_workflow_completion:
+        outputs_written_html: "Project automation bot attached workflow %{href} outputs to sample %{sample_href}"
+        metadata_written_html: "Project automation bot wrote workflow %{href} metadata to sample %{sample_href}"
+        outputs_and_metadata_written_html: "Project automation bot attached workflow %{href} outputs and wrote metadata to sample %{sample_href}"
     member:
       create_html: "%{user} added member %{href} to %{namespace_type}"
       destroy_html: "%{user} removed member <span class='text-slate-800 dark:text-slate-300 font-medium'>%{member}</span> from %{namespace_type}"
-      update_html: "%{user} updated %{namespace_type} member %{member}"
+      destroy_self_html: "<span class='text-slate-800 dark:text-slate-300 font-medium'>%{member}</span> removed themself from %{namespace_type}"
+      update_html: "%{user} updated %{namespace_type} member %{member} attributes"
     namespace_group_link:
       create_html: "%{user} shared %{namespace_type} with group %{href}"
       destroy_html: "%{user} unshared %{namespace_type} with group <span class='text-slate-800 dark:text-slate-300 font-medium'>%{group_name}</span>"
-      update_html: "%{user} updated share between %{namespace_type} and group %{href}"
+      update_html: "%{user} updated share attributes between %{namespace_type} and group %{href}"
   datetime:
     distance_in_words:
       updated:

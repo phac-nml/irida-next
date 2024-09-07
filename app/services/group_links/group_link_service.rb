@@ -13,7 +13,7 @@ module GroupLinks
       @namespace_group_link = NamespaceGroupLink.new(params.merge(namespace:))
     end
 
-    def execute # rubocop:disable Metrics/AbcSize
+    def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       unless [Group.sti_name, Namespaces::ProjectNamespace.sti_name].include?(namespace.type)
         raise NamespaceGroupLinkError, I18n.t('services.groups.share.invalid_namespace_type')
       end
@@ -30,6 +30,11 @@ module GroupLinks
       raise NamespaceGroupLinkError, I18n.t('services.groups.share.group_not_found', group_id:) if group.nil?
 
       namespace_group_link.save
+
+      if namespace_group_link.persisted?
+        namespace_group_link.create_activity key: 'namespace_group_link.create',
+                                             owner: current_user
+      end
 
       namespace_group_link
     rescue GroupLinks::GroupLinkService::NamespaceGroupLinkError => e

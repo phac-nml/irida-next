@@ -14,6 +14,7 @@ module Samples
         @metadata = params['metadata']
         @analysis_id = params['analysis_id']
         @metadata_changes = { added: [], updated: [], deleted: [], not_updated: [], unchanged: [] }
+        @include_activity = params.key?('include_activity') ? params['include_activity'] : true
       end
 
       def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -30,20 +31,18 @@ module Samples
           @sample.save
         end
 
-        @project.namespace.create_activity key: 'namespaces_project_namespace.samples.metadata.update',
-                                           owner: current_user,
-                                           parameters:
-                                            {
-                                              sample_id: @sample.id,
-                                              sample_name: @sample.name,
-                                              action: 'metadata_update'
-                                            }
-
-        Namespaces::ProjectNamespace.public_activity_off
+        if @include_activity
+          @project.namespace.create_activity key: 'namespaces_project_namespace.samples.metadata.update',
+                                             owner: current_user,
+                                             parameters:
+                                              {
+                                                sample_id: @sample.id,
+                                                sample_name: @sample.name,
+                                                action: 'metadata_update'
+                                              }
+        end
 
         update_metadata_summary
-
-        Namespaces::ProjectNamespace.public_activity_on
 
         handle_not_updated_fields
 

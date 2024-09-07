@@ -5,8 +5,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
 
   included do
-    include PublicActivity::Model
-    tracked owner: proc { Current.user }
+    include PublicActivity::Common
   end
 
   def human_readable_activity(public_activities) # rubocop:disable Metrics/MethodLength
@@ -67,7 +66,9 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
       user: activity_creator(activity),
       namespace: activity_trackable,
       workflow_id: activity.parameters[:workflow_id],
-      type: 'WorkflowExecution'
+      type: 'WorkflowExecution',
+      sample_name: activity.parameters[:sample_name],
+      sample_id: activity.parameters[:sample_id]
     }
   end
 

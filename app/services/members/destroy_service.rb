@@ -12,7 +12,7 @@ module Members
       @namespace = namespace
     end
 
-    def execute # rubocop:disable Metrics/AbcSize
+    def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       if current_user != member.user
         authorize! @namespace, to: :destroy_member?
 
@@ -25,7 +25,12 @@ module Members
         end
       end
 
-      send_emails if member.destroy
+      member.destroy
+
+      if member.deleted?
+        send_emails
+        create_activities
+      end
     rescue Members::DestroyService::MemberDestroyError => e
       member.errors.add(:base, e.message)
       false
@@ -43,6 +48,14 @@ module Members
         next if manager_emails.empty?
 
         MemberMailer.access_revoked_manager_email(member, manager_emails, namespace, locale).deliver_later
+      end
+    end
+
+    def create_activities
+      if current_user == member.user
+        member.create_activity key: 'member.destroy_self', owner: current_user
+      else
+        member.create_activity key: 'member.destroy', owner: current_user
       end
     end
   end

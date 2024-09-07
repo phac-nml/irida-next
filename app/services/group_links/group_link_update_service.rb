@@ -13,7 +13,14 @@ module GroupLinks
     def execute
       authorize! @namespace_group_link.namespace, to: :update_namespace_with_group_link?
 
-      @namespace_group_link.update(params)
+      updated = @namespace_group_link.update(params)
+
+      if updated
+        namespace_group_link.create_activity key: 'namespace_group_link.update',
+                                             owner: current_user
+      end
+
+      updated
     end
   end
 end

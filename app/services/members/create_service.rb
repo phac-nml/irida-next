@@ -13,7 +13,7 @@ module Members
       @member = Member.new(params.merge(created_by: current_user, namespace:))
     end
 
-    def execute # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    def execute # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
       authorize! @namespace, to: :create_member? unless namespace.parent.nil? && namespace.owner == current_user
 
       if member.namespace.owner != current_user &&
@@ -26,7 +26,11 @@ module Members
       end
 
       has_previous_access = Member.can_view?(member.user, namespace) if member.valid?
-      send_emails if member.save && @email_notification && !has_previous_access
+      if member.save
+        send_emails if @email_notification && !has_previous_access
+        member.create_activity key: 'member.create', owner: current_user
+      end
+
       member
     rescue Members::CreateService::MemberCreateError => e
       member.errors.add(:base, e.message)
