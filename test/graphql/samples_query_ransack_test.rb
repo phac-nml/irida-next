@@ -66,8 +66,8 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
 
   test 'samples query should work with order by' do
     result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
-                                  context: { current_user: @user },
-                                  variables: { filter: { name_start: 'Project 1'},
+                                 context: { current_user: @user },
+                                 variables: { filter: { name_start: 'Project 1'},
                                               orderBy: { field: 'created_at', direction: 'asc' } })
 
     assert_nil result['errors'], 'should work and have no errors.'
@@ -101,8 +101,6 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
   end
 
   test 'ransack samples query with group id should work with order by' do
-    original_date = Time.zone.today
-
     Timecop.travel(5.days.from_now) do
       @sample.created_at = Time.zone.now
       @sample.save!
