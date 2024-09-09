@@ -98,7 +98,7 @@ class ProjectSamplesQueryTest < ActiveSupport::TestCase
 
     result = IridaSchema.execute(PROJECT_QUERY, context: { current_user: @user },
                                                 variables: { projectPath: project.full_path,
-                                                             sampleFilter: { name_cont: "Sample 2"} })
+                                                             sampleFilter: { name_cont: 'Sample 2' } })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
@@ -123,7 +123,7 @@ class ProjectSamplesQueryTest < ActiveSupport::TestCase
 
     result = IridaSchema.execute(PROJECT_QUERY, context: { current_user: @user },
                                                 variables: { projectPath: project.full_path,
-                                                             sampleOrderBy: { field: 'created_at', direction: 'asc'} })
+                                                             sampleOrderBy: { field: 'created_at', direction: 'asc' } })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
