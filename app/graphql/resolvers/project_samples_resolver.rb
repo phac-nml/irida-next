@@ -5,9 +5,21 @@ module Resolvers
   class ProjectSamplesResolver < BaseResolver
     alias project object
 
-    def resolve
-      scope = project
-      scope.samples
+    argument :filter, Types::SampleFilterType,
+             required: false,
+             description: 'Ransack filter',
+             default_value: nil
+
+    argument :order_by, Types::SampleOrderInputType,
+             required: false,
+             description: 'Order by',
+             default_value: nil
+
+    def resolve(filter:, order_by:)
+      ransack_obj = project.samples.ransack(filter&.to_h)
+      ransack_obj.sorts = ["#{order_by.field} #{order_by.direction}"] if order_by.present?
+
+      ransack_obj.result
     end
   end
 end
