@@ -52,9 +52,9 @@ module Nextflow
 
       def get_fastq_files(sample, direction, property)
         if sample.sorted_files[direction].present?
-          sample.sorted_files[direction]
+          sample.sorted_files[direction] || []
         elsif property != 'fastq_2'
-          samples.sorted_files[:singles]
+          sample.sorted_files[:singles] || []
         else
           []
         end
