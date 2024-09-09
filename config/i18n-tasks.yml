@@ -147,6 +147,7 @@ ignore_unused:
   - "activerecord.*"
   - "*.sorting.*"
   - "time.formats.full_date"
+  - "activity.*"
 # - '{devise,kaminari,will_paginate}.*'
 # - 'simple_form.{yes,no}'
 # - 'simple_form.{placeholders,hints,labels}.*'
