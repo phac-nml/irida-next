@@ -15,9 +15,17 @@ module Resolvers
              description: 'Ransack filter',
              default_value: nil
 
-    def resolve(group_id:, filter:)
+    argument :order_by, Types::SampleOrderInputType,
+             required: false,
+             description: 'Order by',
+             default_value: nil
+
+    def resolve(group_id:, filter:, order_by:)
       samples = group_id ? samples_by_group_scope(group_id:) : samples_by_project_scope
-      filter ? samples.ransack(filter.to_h).result : samples
+      ransack_obj = samples.ransack(filter&.to_h)
+      ransack_obj.sorts = ["#{order_by.field} #{order_by.direction}"] if order_by.present?
+
+      ransack_obj.result
     end
 
     def ready?(**_args)

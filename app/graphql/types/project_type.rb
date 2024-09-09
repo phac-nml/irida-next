@@ -34,7 +34,8 @@ module Types
     def self.scope_items(items, context)
       scope = authorized_scope Project, type: :relation,
                                         context: { user: context[:current_user], token: context[:token] }
-      scope.where(id: items.select(:id))
+      project_ids = items.pluck(:id)
+      scope.where(id: project_ids).in_order_of(:id, project_ids)
     end
 
     reauthorize_scoped_objects(false)
