@@ -16,7 +16,7 @@ module Groups
     end
 
     def search
-      redirect_to group_samples_path
+      redirect_to group_samples_path(params.permit(:limit))
     end
 
     def select
