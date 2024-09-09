@@ -570,7 +570,7 @@ fr:
         button:
           cancel: Cancel
           submit: Share
-        empty_state: Empty state
+        empty_state: No groups are associated with that name or ID
         label:
           access_expiration: Access expiration (optional)
           group_access_level: Maximum group access level
@@ -618,7 +618,7 @@ fr:
       new:
         add_member_to_group: Add member to group
         description: You are adding a new member to group %{name}
-        empty_state: Empty state
+        empty_state: There are no users with the provided email or id
         select_access_level: Select Access Level
         select_user: Select a User
         title: Add New Member
@@ -1005,7 +1005,7 @@ fr:
         button:
           cancel: Cancel
           submit: Share
-        empty_state: Empty state
+        empty_state: No groups are associated with that name or ID
         label:
           access_expiration: Access expiration (optional)
           group_access_level: Maximum group access level
@@ -1062,7 +1062,7 @@ fr:
       new:
         add_member_to_project: Add member to project
         description: You are adding a new member to project %{name}
-        empty_state: Empty state
+        empty_state: There are no users with the provided email or id
         select_access_level: Select Access Level
         select_user: Select a User
         title: Add New Member
@@ -1115,7 +1115,7 @@ fr:
             plural: The following COUNT_PLACEHOLDER samples are about to be cloned to another project.
             singular: The following sample is about to be cloned to another project.
             zero: No samples have been selected for cloning
-          empty_state: Empty state
+          empty_state: No projects are associated with that name or ID
           new_project_id: Project to clone samples to
           no_available_projects: No available projects
           samples: Samples
@@ -1278,7 +1278,7 @@ fr:
             plural: The following COUNT_PLACEHOLDER samples are about to be transferred, which will result in these samples no longer being accessible in this project. Maintainers can only transfer samples to another project within the same hierarchy.
             singular: The following sample is about to be transferred, which will result in the sample no longer being accessible in this project. Maintainers can only transfer samples to another project within the same hierarchy.
             zero: No samples have been selected for transfer
-          empty_state: Empty state
+          empty_state: No projects are associated with that name or ID
           new_project_id: Project to transfer samples to
           no_available_projects: No available projects
           samples: Samples
