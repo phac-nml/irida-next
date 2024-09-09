@@ -65,16 +65,17 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
   end
 
   test 'samples query should work with order by' do
-      result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
-                                   context: { current_user: @user },
-                                   variables: { filter: { name_start: 'Project 1'}, orderBy: { field: 'created_at', direction: 'asc' } })
+    result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
+                                  context: { current_user: @user },
+                                  variables: { filter: { name_start: 'Project 1'},
+                                              orderBy: { field: 'created_at', direction: 'asc' } })
 
-      assert_nil result['errors'], 'should work and have no errors.'
+    assert_nil result['errors'], 'should work and have no errors.'
 
-      data = result['data']['samples']['nodes']
+    data = result['data']['samples']['nodes']
 
-      assert_equal samples(:sample2).name, data[0]['name']
-      assert_equal samples(:sample2).puid, data[0]['puid']
+    assert_equal samples(:sample2).name, data[0]['name']
+    assert_equal samples(:sample2).puid, data[0]['puid']
   end
 
   test 'ransack samples query with group id should work' do
