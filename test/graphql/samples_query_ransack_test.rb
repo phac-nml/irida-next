@@ -4,8 +4,8 @@ require 'test_helper'
 
 class SamplesQueryRansackTest < ActiveSupport::TestCase
   SAMPLES_RANSACK_QUERY = <<~GRAPHQL
-    query($filter: SampleFilter) {
-      samples(filter: $filter) {
+    query($filter: SampleFilter, $orderBy: SampleOrder) {
+      samples(filter: $filter, orderBy: $orderBy) {
         nodes {
           name
           description
@@ -22,8 +22,8 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
   GRAPHQL
 
   SAMPLES_RANSACK_WITH_GROUP_QUERY = <<~GRAPHQL
-    query($filter: SampleFilter, $group_id: ID!) {
-      samples(filter: $filter, groupId: $group_id) {
+    query($filter: SampleFilter, $group_id: ID!, $orderBy: SampleOrder) {
+      samples(filter: $filter, groupId: $group_id, orderBy: $orderBy) {
         nodes {
           name
           description
@@ -64,6 +64,19 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     end
   end
 
+  test 'samples query should work with order by' do
+      result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
+                                   context: { current_user: @user },
+                                   variables: { filter: { name_start: 'Project 1'}, orderBy: { field: 'created_at', direction: 'asc' } })
+
+      assert_nil result['errors'], 'should work and have no errors.'
+
+      data = result['data']['samples']['nodes']
+
+      assert_equal samples(:sample2).name, data[0]['name']
+      assert_equal samples(:sample2).puid, data[0]['puid']
+  end
+
   test 'ransack samples query with group id should work' do
     original_date = Time.zone.today
 
@@ -82,6 +95,27 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
       data = result['data']['samples']['nodes']
 
       assert_equal 1, data.count
+      assert_equal @sample.puid, data[0]['puid']
+    end
+  end
+
+  test 'ransack samples query with group id should work with order by' do
+    original_date = Time.zone.today
+
+    Timecop.travel(5.days.from_now) do
+      @sample.created_at = Time.zone.now
+      @sample.save!
+
+      result = IridaSchema.execute(SAMPLES_RANSACK_WITH_GROUP_QUERY,
+                                   context: { current_user: @user },
+                                   variables:
+                                   { group_id: groups(:group_one).to_global_id.to_s,
+                                     orderBy: { field: 'created_at', direction: 'desc' } })
+
+      assert_nil result['errors'], 'should work and have no errors.'
+
+      data = result['data']['samples']['nodes']
+
       assert_equal @sample.puid, data[0]['puid']
     end
   end
