@@ -220,7 +220,11 @@
   <% end %>
   <% if @has_samples %>
     <div class="flex items-center justify-between">
-      <%= render Viral::Pagy::LimitComponent.new(@pagy, item: t(".limit.item")) %>
+      <%= render Viral::Pagy::LimitComponent.new(
+        @pagy,
+        item: t(".limit.item"),
+        id: "samples_table_pagination",
+      ) %>
       <%= render Viral::Pagy::PaginationComponent.new(@pagy) %>
     </div>
   <% end %>

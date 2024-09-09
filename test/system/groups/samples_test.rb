@@ -238,6 +238,32 @@ module Groups
       assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample1.name
     end
 
+    test 'can change pagination and then filter by puid' do
+      visit group_samples_url(@group)
+
+      find('div#samples_table_pagination button').click
+      within('div#samples_table_pagination ul') do
+        assert_selector 'a[href="?limit=10"]'
+        find('a[href="?limit=10"]').click
+      end
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
+                                                                           locale: @user.locale))
+      assert_selector 'table tbody tr', count: 10
+      within('table tbody tr:first-child th') do
+        assert_text @sample1.puid
+      end
+
+      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: @sample1.puid
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
+                                                                           locale: @user.locale))
+      assert_selector 'table tbody tr', count: 1
+      assert_text @sample1.name
+      assert_no_text @sample2.name
+      assert_selector 'div#samples_table_pagination button span', text: '10'
+    end
+
     test 'can sort and then filter the list of samples by name' do
       visit group_samples_url(@group)
 
