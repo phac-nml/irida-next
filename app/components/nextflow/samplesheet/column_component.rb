@@ -39,7 +39,7 @@ module Nextflow
 
       def render_fastq_cell(sample, property, entry, fields, index)
         direction = get_fastq_direction(property)
-        files = get_fastq_files(sample, direction, property)
+        files = get_fastq_files(sample, direction)
         data = get_fastq_data(files, direction, index, property)
         render_file_cell(property, entry, fields, files, @required, data, files&.first)
       end
@@ -50,11 +50,9 @@ module Nextflow
         property.match(/fastq_(\d+)/)[1].to_i == 1 ? :pe_forward : :pe_reverse
       end
 
-      def get_fastq_files(sample, direction, property)
+      def get_fastq_files(sample, direction)
         if sample.sorted_files[direction].present?
           sample.sorted_files[direction] || []
-        elsif property != 'fastq_2'
-          sample.sorted_files[:singles] || []
         else
           []
         end
