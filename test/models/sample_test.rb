@@ -77,14 +77,21 @@ class SampleTest < ActiveSupport::TestCase
   end
 
   test 'update samples_counter in project' do
-    assert_difference(-> { @project.samples.size } => -1) do
+    Project.reset_counters(@project.id, :samples_count)
+
+    @project.reload
+    assert_equal @project.samples.count, @project.samples_count
+
+    assert_difference(-> { @project.samples.count } => -1) do
       @sample.destroy
       @project.reload
+      assert_equal @project.samples.count, @project.samples_count
     end
 
-    assert_difference(-> { @project.samples.size } => +1) do
+    assert_difference(-> { @project.samples.count } => +1) do
       Sample.restore(@sample.id, recursive: true)
       @project.reload
+      assert_equal @project.samples.count, @project.samples_count
     end
   end
 
