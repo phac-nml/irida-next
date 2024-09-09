@@ -12,7 +12,7 @@
     user: @activity[:user],
     href:
       link_to(
-        project.name,
+        project.puid,
         namespace_project_samples_path(project.parent, project),
         class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
       ),
