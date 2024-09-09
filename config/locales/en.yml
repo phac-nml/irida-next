@@ -240,7 +240,8 @@ en:
       transfer_html: "%{user} transferred project from namespace <span class='text-slate-800 dark:text-slate-300 font-medium'>%{old_namespace}</span>"
     workflow_execution:
       automated_workflow:
-        launch_html: "Project automation bot launched workflow %{href}"
+        create_html: "%{user} setup automated workflow execution %{href} for the project"
+        launch_html: "Project automation bot launched workflow %{href} on sample %{sample_href}"
       automated_workflow_completion:
         outputs_written_html: "Project automation bot attached workflow %{href} outputs to sample %{sample_href}"
         metadata_written_html: "Project automation bot wrote workflow %{href} metadata to sample %{sample_href}"

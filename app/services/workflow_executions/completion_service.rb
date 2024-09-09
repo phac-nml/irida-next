@@ -148,7 +148,7 @@ module WorkflowExecutions
 
         files = swe.outputs.map { |output| output.file.signed_id }
         params = { files:, include_activity: false }
-        s = Attachments::CreateService.new(
+        Attachments::CreateService.new(
           current_user, swe.sample, params
         ).execute
       end
@@ -163,7 +163,7 @@ module WorkflowExecutions
                                                         parameters: {
                                                           workflow_id: @workflow_execution.id,
                                                           sample_id: swe.sample.id,
-                                                          sample_name: swe.sample.name
+                                                          sample_name: swe.sample.puid
                                                         }
           next
         end
@@ -173,7 +173,7 @@ module WorkflowExecutions
                                                         parameters: {
                                                           workflow_id: @workflow_execution.id,
                                                           sample_id: swe.sample.id,
-                                                          sample_name: swe.sample.name
+                                                          sample_name: swe.sample.puid
                                                         }
         end
 
@@ -183,7 +183,7 @@ module WorkflowExecutions
                                                       parameters: {
                                                         workflow_id: @workflow_execution.id,
                                                         sample_id: swe.sample.id,
-                                                        sample_name: swe.sample.name
+                                                        sample_name: swe.sample.puid
                                                       }
       end
     end

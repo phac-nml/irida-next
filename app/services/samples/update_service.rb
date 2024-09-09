@@ -21,7 +21,7 @@ module Samples
                                                  parameters:
                                                   {
                                                     sample_id: sample.id,
-                                                    sample_name: sample.name,
+                                                    sample_name: sample.puid,
                                                     action: 'sample_update'
                                                   }
       end

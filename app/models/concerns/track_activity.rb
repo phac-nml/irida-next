@@ -68,7 +68,8 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
       workflow_id: activity.parameters[:workflow_id],
       type: 'WorkflowExecution',
       sample_name: activity.parameters[:sample_name],
-      sample_id: activity.parameters[:sample_id]
+      sample_id: activity.parameters[:sample_id],
+      automated: activity.parameters[:automated]
     }
   end
 

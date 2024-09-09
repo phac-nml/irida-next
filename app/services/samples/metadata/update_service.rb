@@ -17,7 +17,7 @@ module Samples
         @include_activity = params.key?('include_activity') ? params['include_activity'] : true
       end
 
-      def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def execute # rubocop:disable Metrics/MethodLength
         authorize! sample.project, to: :update_sample?
 
         validate_sample_in_project
@@ -37,7 +37,7 @@ module Samples
                                              parameters:
                                               {
                                                 sample_id: @sample.id,
-                                                sample_name: @sample.name,
+                                                sample_name: @sample.puid,
                                                 action: 'metadata_update'
                                               }
         end
