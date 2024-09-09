@@ -250,16 +250,30 @@ module DataExports
     end
 
     def write_samples_workflow_execution_outputs_and_manifest(we_id, swe, zip)
-      sample = swe.sample
-      sample_directory = { 'name' => sample.puid, 'type' => 'folder', 'irida-next-type' => 'sample',
-                           'irida-next-name' => sample.name, 'children' => [] }
+      sample_params = retrieve_swe_sample_params(swe)
+      sample_directory = { 'name' => sample_params['puid'], 'type' => 'folder', 'irida-next-type' => 'sample',
+                           'irida-next-name' => sample_params['name'], 'children' => [] }
       swe.outputs.each do |output|
-        directory = "#{we_id}/#{sample.puid}/#{output.file.filename}"
+        directory = "#{we_id}/#{sample_params['puid']}/#{output.file.filename}"
         write_attachment(directory, zip, output)
 
         sample_directory['children'] << { 'name' => output.file.filename.to_s, 'type' => 'file' }
       end
       @manifest['children'].detect { |we| we['name'] == we_id }['children'] << sample_directory
+    end
+
+    def retrieve_swe_sample_params(swe)
+      sample_params = { 'puid' => swe.samplesheet_params['sample'] }
+      sample = swe.sample
+
+      # Handles if sample has been previously deleted
+      if sample.nil?
+        sample_params['name'] =
+          swe.samplesheet_params.key?('sample_name') ? swe.samplesheet_params['sample_name'] : 'Deleted Sample'
+      else
+        sample_params['name'] = sample.name
+      end
+      sample_params
     end
 
     # Linelist export specific functions---------------------------------------------------------------------

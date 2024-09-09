@@ -296,9 +296,9 @@ module DataExports
       workflow_execution = workflow_executions(:irida_next_example_completed_with_output)
       samples_workflow_execution = samples_workflow_executions(:sample46_irida_next_example_completed_with_output)
       sample = samples(:sample46)
-
+      sample_puid = samples_workflow_execution.samplesheet_params['sample']
       expected_files_in_zip = [
-        "#{workflow_execution.id}/#{sample.puid}/#{samples_workflow_execution.outputs[0].filename}",
+        "#{workflow_execution.id}/#{sample_puid}/#{samples_workflow_execution.outputs[0].filename}",
         'manifest.json',
         'manifest.txt',
         "#{workflow_execution.id}/#{workflow_execution.outputs[0].filename}"
@@ -327,7 +327,7 @@ module DataExports
                 'type' => 'file'
               },
               {
-                'name' => sample.puid,
+                'name' => sample_puid,
                 'type' => 'folder',
                 'irida-next-type' => 'sample',
                 'irida-next-name' => sample.name,
@@ -344,6 +344,85 @@ module DataExports
       }
 
       assert_equal expected_manifest.to_json, @data_export6.manifest
+      assert_equal 'ready', @data_export6.status
+    end
+
+    test 'content of analysis export after sample is deleted' do
+      workflow_execution = workflow_executions(:irida_next_example_completed_with_output)
+      samples_workflow_execution = samples_workflow_executions(:sample46_irida_next_example_completed_with_output)
+      sample = samples(:sample46)
+      sample_puid = samples_workflow_execution.samplesheet_params['sample']
+      actual_simple_manifest = ''
+
+      expected_files_in_zip = [
+        "#{workflow_execution.id}/#{sample_puid}/#{samples_workflow_execution.outputs[0].filename}",
+        'manifest.json',
+        'manifest.txt',
+        "#{workflow_execution.id}/#{workflow_execution.outputs[0].filename}"
+      ]
+
+      assert_difference(-> { Sample.count } => -1) do
+        sample.destroy
+      end
+
+      DataExports::CreateJob.perform_now(@data_export6)
+      export_file = ActiveStorage::Blob.service.path_for(@data_export6.file.key)
+      Zip::File.open(export_file) do |zip_file|
+        zip_file.each do |entry|
+          assert expected_files_in_zip.include?(entry.to_s)
+          actual_simple_manifest = entry.get_input_stream.read.force_encoding('utf-8') if entry.to_s == 'manifest.txt'
+          expected_files_in_zip.delete(entry.to_s)
+        end
+      end
+      assert expected_files_in_zip.empty?
+      expected_manifest = {
+        'type' => 'Analysis Export',
+        'date' => Date.current.strftime('%Y-%m-%d'),
+        'children' =>
+        [
+          { 'name' => workflow_execution.id,
+            'type' => 'folder',
+            'irida-next-type' => 'workflow_execution',
+            'irida-next-name' => workflow_execution.id,
+            'children' => [
+              {
+                'name' => workflow_execution.outputs[0].filename.to_s,
+                'type' => 'file'
+              },
+              {
+                'name' => sample_puid,
+                'type' => 'folder',
+                'irida-next-type' => 'sample',
+                'irida-next-name' => 'Deleted Sample',
+                'children' =>
+                [
+                  {
+                    'name' => samples_workflow_execution.outputs[0].filename.to_s,
+                    'type' => 'file'
+                  }
+                ]
+              }
+            ] }
+        ]
+      }
+
+      assert_equal expected_manifest.to_json, @data_export6.manifest
+
+      expected_simple_manifest = [
+        'Analysis Export',
+        Date.current.strftime('%Y-%m-%d').to_s,
+        '',
+        'contents:',
+        "#{@data_export6.id}/",
+        "└─ #{workflow_execution.id}/ (#{workflow_execution.id})",
+        "   ├─ #{workflow_execution.outputs[0].filename}",
+        "   └─ #{samples_workflow_execution.samplesheet_params['sample']}/ (Deleted Sample)",
+        "      └─ #{samples_workflow_execution.outputs[0].filename}",
+        ''
+      ].join("\n")
+
+      assert_equal expected_simple_manifest, actual_simple_manifest
+
       assert_equal 'ready', @data_export6.status
     end
 
