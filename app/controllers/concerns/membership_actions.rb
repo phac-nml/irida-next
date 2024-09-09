@@ -93,7 +93,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def update
+  def update # rubocop:disable Metrics/MethodLength
     updated = Members::UpdateService.new(@member, @namespace, current_user, member_params).execute
     respond_to do |format|
       if updated

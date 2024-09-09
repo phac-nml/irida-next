@@ -8,7 +8,9 @@ class ActivityComponentTest < ViewComponentTestCase
     project2_namespace = projects(:project2).namespace
 
     @activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
-    @project2_activities = project2_namespace.human_readable_activity(project2_namespace.retrieve_project_activity).reverse
+    @project2_activities = project2_namespace.human_readable_activity(
+      project2_namespace.retrieve_project_activity
+    ).reverse
 
     # Limit set to 10 per page
     @pagy = Pagy.new(count: 12, page: 1, limit: 10)
