@@ -82,7 +82,20 @@ project1_namespace_sample_transfer:
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
-project1_namespace_automated_workflow_execution:
+project1_namespace_automated_workflow_execution_create:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  key: "workflow_execution.automated_workflow.create"
+  parameters:
+    {
+      workflow_id: <%= ActiveRecord::FixtureSet.identify(:automated_workflow_execution,
+      :uuid) %>,
+      automated: true
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+project1_namespace_automated_workflow_execution_launch:
   trackable_type: "Namespace"
   trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   key: "workflow_execution.automated_workflow.launch"
@@ -92,6 +105,8 @@ project1_namespace_automated_workflow_execution:
       :uuid) %>,
       workflow_name: <%= ActiveRecord::FixtureSet.identify(:automated_workflow_execution,
       :name) %>,
+      sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>,
+      sample_name: <%= ActiveRecord::FixtureSet.identify(:sample1, :puid) %>
     }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
@@ -130,7 +145,7 @@ project1_sample1_metadata_update:
   key: "namespaces_project_namespace.samples.metadata.update"
   parameters: {
     sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>,
-    sample_name: <%= ActiveRecord::FixtureSet.identify(:sample1, :name) %>,
+    sample_name: <%= ActiveRecord::FixtureSet.identify(:sample1, :puid) %>,
     action: 'metadata_update'
   }
   created_at: <%= Time.zone.now %>

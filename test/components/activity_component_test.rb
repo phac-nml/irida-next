@@ -11,9 +11,9 @@ class ActivityComponentTest < ViewComponentTestCase
     @project2_activities = project2_namespace.human_readable_activity(project2_namespace.retrieve_project_activity).reverse
 
     # Limit set to 10 per page
-    @pagy = Pagy.new(count: 11, page: 1, limit: 10)
+    @pagy = Pagy.new(count: 12, page: 1, limit: 10)
 
-    assert_equal 11, @activities.length
+    assert_equal 12, @activities.length
     assert_equal 2, @project2_activities.length
 
     assert_equal(1, @activities.count { |activity| activity[:key].include?('project_namespace.create') })
@@ -21,6 +21,9 @@ class ActivityComponentTest < ViewComponentTestCase
     assert_equal(2, @activities.count { |activity| activity[:key].include?('member.create') })
     assert_equal(1, @activities.count { |activity| activity[:key].include?('project_namespace.samples.clone') })
     assert_equal(1, @activities.count { |activity| activity[:key].include?('project_namespace.samples.transfer') })
+    assert_equal(1, @activities.count do |activity|
+      activity[:key].include?('workflow_execution.automated_workflow.create')
+    end)
     assert_equal(1, @activities.count do |activity|
                       activity[:key].include?('workflow_execution.automated_workflow.launch')
                     end)
