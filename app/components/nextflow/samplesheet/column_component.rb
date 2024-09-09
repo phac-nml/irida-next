@@ -38,21 +38,37 @@ module Nextflow
       end
 
       def render_fastq_cell(sample, property, entry, fields, index)
-        direction = property.match(/fastq_(\d+)/)[1].to_i == 1 ? :pe_forward : :pe_reverse
-        files = sample.sorted_files[direction] || []
-        data = {}
-        if files.empty? && property != 'fastq_2'
-          files = sample.sorted_files[:singles] || []
+        direction = get_fastq_direction(property)
+        files = get_fastq_files(sample, direction, property)
+        data = get_fastq_data(files, direction, index, property)
+        render_file_cell(property, entry, fields, files, @required, data, files&.first)
+      end
+
+      private
+
+      def get_fastq_direction(property)
+        property.match(/fastq_(\d+)/)[1].to_i == 1 ? :pe_forward : :pe_reverse
+      end
+
+      def get_fastq_files(sample, direction, property)
+        if sample.sorted_files[direction].present?
+          sample.sorted_files[direction]
+        elsif property != 'fastq_2'
+          samples.sorted_files[:singles]
         else
-          data = {
-            'data-action' => 'change->nextflow--samplesheet#file_selected',
-            'data-nextflow--samplesheet-target' => "select#{direction.to_s.sub!('pe_', '').capitalize}",
-            'data-direction' => direction.to_s,
-            'data-index' => index
-          }
+          []
         end
-        render_file_cell(property, entry, fields, files,
-                         @required, data, files.nil? ? nil : files.first)
+      end
+
+      def get_fastq_data(files, direction, index, property)
+        return {} if files.empty? && property == 'fastq_2'
+
+        {
+          'data-action' => 'change->nextflow--samplesheet#file_selected',
+          'data-nextflow--samplesheet-target' => "select#{direction.to_s.sub!('pe_', '').capitalize}",
+          'data-direction' => direction.to_s,
+          'data-index' => index
+        }
       end
 
       def render_other_file_cell(sample, property, entry, fields)
