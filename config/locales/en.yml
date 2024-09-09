@@ -311,6 +311,8 @@ en:
       index:
         create_group_button: New group
         row_aria_label: See %{name} subgroups
+        search:
+          placeholder: Filter by name or puid
         sorting:
           created_at_asc: Oldest created
           created_at_desc: Last created
@@ -319,8 +321,6 @@ en:
           updated_at_asc: Oldest updated
           updated_at_desc: Updated At
         title: Groups
-        search:
-          placeholder: Filter by name or puid
     projects:
       index:
         all: All
