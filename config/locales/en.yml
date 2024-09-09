@@ -546,16 +546,16 @@ en:
             warning_html: You are going to transfer <strong>%{group_name}</strong> to another namespace. Once you confirm, this action cannot be undone.
           descriptions:
           - Transfer group to another parent group.
+          empty_state: No namespaces are associated with that name or ID
           new_namespace_id: Select a parent group
+          no_available_namespaces: You do not have access to any destination namespaces to transfer this group
           points:
           - Be careful. Changing a group's parent can have unintended side effects.
           - You can only transfer groups where you have sufficient permissions.
           - If the parent group's visibility is lower than the group's current visibility, visibility levels for subgroups and projects will be changed to match the new parent group's visibility.
+          select_group: Select Group
           submit: Transfer group
           title: Transfer group
-          empty_state: No namespaces are associated with that name or ID
-          no_available_namespaces: You do not have access to any destination namespaces to transfer this group
-          select_group: Select Group
       details:
         submit: Save changes
         subtitle: Group name and description
@@ -966,16 +966,16 @@ en:
           - Transfer your project into another namespace.
           - When you transfer your project to a group, you can easily manage multiple projects and users.
           - 'Things to be aware of before transferring your project:'
+          empty_state: No namespaces are associated with that name or ID
           new_namespace_id: Select a new namespace
+          no_available_namespaces: You do not have access to any destination namespaces to transfer this project
           points:
           - Be careful! Changing a project's namespace can have unintended side effects.
           - You can only transfer projects to groups where you have sufficient permissions.
           - Project visibility level will change to match namespace rules when transferring to a group.
+          select_namespace: Select Namespace
           submit: Transfer project
           title: Transfer project
-          empty_state: No namespaces are associated with that name or ID
-          no_available_namespaces: You do not have access to any destination namespaces to transfer this project
-          select_namespace: Select Namespace
       general:
         heading: Project name and description
         submit: Update project
