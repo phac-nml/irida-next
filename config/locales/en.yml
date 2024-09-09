@@ -319,6 +319,8 @@ en:
           updated_at_asc: Oldest updated
           updated_at_desc: Updated At
         title: Groups
+        search:
+          placeholder: Filter by name or puid
     projects:
       index:
         all: All
