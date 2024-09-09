@@ -156,6 +156,9 @@ group :development do
 
   # Solargraph
   gem 'solargraph'
+
+  # i18n-tasks
+  gem 'i18n-tasks', '~> 1.0.14'
 end
 
 group :test do

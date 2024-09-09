@@ -36,24 +36,27 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def destroy
+  def destroy # rubocop:disable Metrics/MethodLength
     WorkflowExecutions::DestroyService.new(@workflow_execution, current_user).execute
 
     respond_to do |format|
       format.turbo_stream do
         if @workflow_execution.deleted?
-          flash[:success] = t('.success', workflow_name: @workflow_execution.metadata['workflow_name'])
+          flash[:success] =
+            t('concerns.workflow_execution_actions.destroy.success',
+              workflow_name: @workflow_execution.metadata['workflow_name'])
           redirect_to redirect_path
         else
           render status: :unprocessable_entity, locals: {
-            type: 'alert', message: t('.error', workflow_name: @workflow_execution.metadata['workflow_name'])
+            type: 'alert', message: t('concerns.workflow_execution_actions.destroy.error',
+                                      workflow_name: @workflow_execution.metadata['workflow_name'])
           }
         end
       end
     end
   end
 
-  def cancel
+  def cancel # rubocop:disable Metrics/MethodLength
     WorkflowExecutions::CancelService.new(@workflow_execution, current_user).execute
 
     respond_to do |format|
@@ -61,10 +64,12 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
         if @workflow_execution.canceled? || @workflow_execution.canceling?
           render status: :ok,
                  locals: { type: 'success',
-                           message: t('.success', workflow_name: @workflow_execution.metadata['workflow_name']) }
+                           message: t('concerns.workflow_execution_actions.cancel.success',
+                                      workflow_name: @workflow_execution.metadata['workflow_name']) }
         else
           render status: :unprocessable_entity, locals: {
-            type: 'alert', message: t('.error', workflow_name: @workflow_execution.metadata['workflow_name'])
+            type: 'alert', message: t('concerns.workflow_execution_actions.cancel.error',
+                                      workflow_name: @workflow_execution.metadata['workflow_name'])
           }
         end
       end

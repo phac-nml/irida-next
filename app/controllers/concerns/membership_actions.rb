@@ -42,7 +42,8 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
       respond_to do |format|
         format.turbo_stream do
           render status: :ok, locals: { member: @new_member, type: 'success',
-                                        message: t('.success', user: @new_member.user.email) }
+                                        message: t('concerns.membership_actions.create.success',
+                                                   user: @new_member.user.email) }
         end
       end
     else
@@ -60,7 +61,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
 
     if @member.deleted?
       if current_user == @member.user
-        flash[:success] = t('.leave_success', name: @namespace.name)
+        flash[:success] = t('concerns.membership_actions.destroy.leave_success', name: @namespace.name)
         if @namespace.group_namespace?
           redirect_to dashboard_groups_path(format: :html)
         else
@@ -70,7 +71,8 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
         respond_to do |format|
           format.turbo_stream do
             render status: :ok, locals: { member: @member, type: 'success',
-                                          message: t('.success', user: @member.user.email) }
+                                          message: t('concerns.membership_actions.destroy.success',
+                                                     user: @member.user.email) }
           end
         end
       end
@@ -91,13 +93,14 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def update
+  def update # rubocop:disable Metrics/MethodLength
     updated = Members::UpdateService.new(@member, @namespace, current_user, member_params).execute
     respond_to do |format|
       if updated
         format.turbo_stream do
           render status: :ok, locals: { member: @member, access_levels: @access_levels, type: 'success',
-                                        message: t('.success', user_email: @member.user.email) }
+                                        message: t('concerns.membership_actions.update.success',
+                                                   user_email: @member.user.email) }
         end
       else
         format.turbo_stream do

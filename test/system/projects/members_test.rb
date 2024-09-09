@@ -26,7 +26,7 @@ module Projects
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
-      assert_selector 'th', text: I18n.t(:'projects.members.index.table_header.username').upcase
+      assert_selector 'th', text: I18n.t(:'members.table_component.user_email').upcase
 
       assert_selector 'tr', count: 20 + header_row_count
 
@@ -52,7 +52,7 @@ module Projects
 
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
 
-      assert_selector 'th', text: I18n.t(:'projects.members.index.table_header.username').upcase
+      assert_selector 'th', text: I18n.t(:'members.table_component.user_email').upcase
 
       assert_selector 'tr', count: members_count + header_row_count
 
@@ -112,7 +112,7 @@ module Projects
         click_button I18n.t(:'projects.members.new.add_member_to_project')
       end
 
-      assert_text I18n.t(:'projects.members.create.success', user: user_to_add.email)
+      assert_text I18n.t(:'concerns.membership_actions.create.success', user: user_to_add.email)
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       assert_selector 'tr', count: (@members_count + 1) + header_row_count
 
@@ -133,7 +133,7 @@ module Projects
         click_button I18n.t(:'components.confirmation.confirm')
       end
 
-      assert_text I18n.t(:'projects.members.destroy.success', user: project_member.user.email)
+      assert_text I18n.t(:'concerns.membership_actions.destroy.success', user: project_member.user.email)
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       assert_selector 'tr', count: (@members_count - 1) + header_row_count
     end
@@ -155,7 +155,7 @@ module Projects
         click_button I18n.t(:'components.confirmation.confirm')
       end
 
-      assert_text I18n.t(:'projects.members.destroy.success', user: project_member.user.email)
+      assert_text I18n.t(:'concerns.membership_actions.destroy.success', user: project_member.user.email)
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       assert_selector 'tr', count: (members_count - 1) + header_row_count
     end
@@ -172,7 +172,7 @@ module Projects
       assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
 
-      assert_selector 'th', text: I18n.t(:'projects.members.index.table_header.username').upcase
+      assert_selector 'th', text: I18n.t(:'members.table_component.user_email').upcase
 
       table_row = find(:table_row, { 'Username' => project_member.user.email })
 
@@ -184,7 +184,7 @@ module Projects
         click_button I18n.t(:'components.confirmation.confirm')
       end
 
-      assert_text I18n.t(:'projects.members.destroy.leave_success', name: project.name)
+      assert_text I18n.t(:'concerns.membership_actions.destroy.leave_success', name: project.name)
       assert_text I18n.t(:'dashboard.projects.index.title')
     end
 
@@ -200,7 +200,7 @@ module Projects
         click_button I18n.t(:'components.confirmation.confirm')
       end
 
-      assert_text I18n.t(:'projects.members.destroy.leave_success', name: @project.name)
+      assert_text I18n.t(:'concerns.membership_actions.destroy.leave_success', name: @project.name)
       assert_no_selector 'h1', text: I18n.t(:'projects.members.index.title')
     end
 
@@ -243,7 +243,7 @@ module Projects
         click_button I18n.t(:'projects.members.new.add_member_to_project')
       end
 
-      assert_text I18n.t(:'projects.members.create.success', user: user_to_add.email)
+      assert_text I18n.t(:'concerns.membership_actions.create.success', user: user_to_add.email)
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       assert_selector 'tr', count: 1 + header_row_count
       assert_not_nil find(:table_row, { 'Username' => user_to_add.email })
@@ -270,7 +270,7 @@ module Projects
         find("#member-#{project_member.id}-access-level-select").find(:xpath, 'option[2]').select_option
 
         within %(turbo-frame[id="member-update-alert"]) do
-          assert_text I18n.t(:'projects.members.update.success', user_email: project_member.user.email)
+          assert_text I18n.t(:'concerns.membership_actions.update.success', user_email: project_member.user.email)
         end
       end
     end
@@ -305,7 +305,7 @@ module Projects
 
       click_link I18n.t(:'projects.members.index.tabs.groups')
 
-      assert_selector 'th', text: I18n.t(:'groups.group_links.index.table_header.group').upcase
+      assert_selector 'th', text: I18n.t(:'groups.table_component.group_name').upcase
 
       assert_selector 'tr', count: 4 + header_row_count
 
@@ -333,7 +333,7 @@ module Projects
                                                      .native.send_keys(:return)
 
       within %(turbo-frame[id="member-update-alert"]) do
-        assert_text I18n.t(:'projects.members.update.success', user_email: project_member.user.email)
+        assert_text I18n.t(:'concerns.membership_actions.update.success', user_email: project_member.user.email)
       end
     end
 
@@ -376,7 +376,7 @@ module Projects
         click_button I18n.t(:'projects.members.new.add_member_to_project')
       end
 
-      assert_text I18n.t(:'projects.members.create.success', user: user_to_add.email)
+      assert_text I18n.t(:'concerns.membership_actions.create.success', user: user_to_add.email)
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       assert_selector 'tr', count: (members_count + 1) + header_row_count
 

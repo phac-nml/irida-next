@@ -1,136 +1,98 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
-#
-# true, false, on, off, yes, no
-#
-# Instead, surround them with single quotes.
-#
-# en:
-#   "true": "foo"
-#
-# To learn more, please read the Rails Internationalization guide
-# available at https://guides.rubyonrails.org/i18n.html.
-
+---
 en:
-  time:
-    formats:
-      default: "%Y-%m-%d %H:%M:%S"
-      full_date: "%B %d, %Y"
-      abbreviated: "%a %b%e %Y %H:%M"
-  date:
-    formats:
-      iso: "YYYY-MM-DD"
   action_policy:
     policy:
       create?: You are not authorized to create this resource on this server.
-      destroy?: You are not authorized to remove the requested resource from this server.
-      edit?: You are not authorized to update this resource on this server.
-      index?: You are not authorized to view the listing of resources on this server.
-      new?: You are not authorized to create this resource on this server.
-      read?: You are not authorized to view this resource on this server.
-      transfer?: You are not authorized to transfer the requested resource.
-      transfer_into_namespace?: You are not authorized to transfer to the requested namespace.
-      update?: You are not authorized to update this resource on this server.
       data_export:
         destroy?: You are not authorized to remove this data export on this server.
+      destroy?: You are not authorized to remove the requested resource from this server.
+      edit?: You are not authorized to update this resource on this server.
       group:
         create?: You are not authorized to create a project under group %{name} on this server.
+        create_bot_accounts?: You are not authorized to create bot accounts for group %{name} on this server.
+        create_member?: You are not authorized to create members for group %{name} on this server.
         create_subgroup?: You are not authorized to create a subgroup within group %{name} on this server.
         destroy?: You are not authorized to remove group %{name} from this server.
+        destroy_bot_accounts?: You are not authorized to destroy bot accounts for group %{name} on this server.
+        destroy_member?: You are not authorized to remove members for group %{name} on this server.
         edit?: You are not authorized to modify group %{name} on this server.
+        export_data?: You are not authorized to export data from project %{name} on this server.
+        link_namespace_with_group?: You are not authorized to link group %{name} with other groups on this server.
+        member_listing?: You are not authorized to view members for group %{name} on this server.
         new?: You are not authorized to create a project under group %{name} on this server.
         read?: You are not authorized to view group %{name} on this server.
+        sample_listing?: You are not authorized to view samples for group %{name} on this server.
+        submit_workflow?: You are not authorized to submit workflows for samples within group %{name} on this server.
         transfer?: You are not authorized to transfer group %{name} on this server.
         transfer_into_namespace?: You are not authorized to transfer into the group namespace %{name} on this server.
-        update?: You are not authorized to update group %{name} on this server.
-        member_listing?: You are not authorized to view members for group %{name} on this server.
-        create_member?: You are not authorized to create members for group %{name} on this server.
-        destroy_member?: You are not authorized to remove members for group %{name} on this server.
-        update_member?: You are not authorized to update members for group %{name} on this server.
-        sample_listing?: You are not authorized to view samples for group %{name} on this server.
-        link_namespace_with_group?: You are not authorized to link group %{name} with other groups on this server.
         unlink_namespace_with_group?: You are not authorized to unlink group %{name} from other groups on this server.
+        update?: You are not authorized to update group %{name} on this server.
+        update_member?: You are not authorized to update members for group %{name} on this server.
         update_namespace_with_group_link?: You are not authorized to update group %{name} links with other groups on this server.
-        submit_workflow?: You are not authorized to submit workflows for samples within group %{name} on this server.
-        create_bot_accounts?: You are not authorized to create bot accounts for group %{name} on this server.
-        destroy_bot_accounts?: You are not authorized to destroy bot accounts for group %{name} on this server.
-        export_data?: You are not authorized to export data from project %{name} on this server.
         update_sample_metadata?: You are not authorized to update sample metadata for group %{name} on this server.
-      project:
-        activity?: You are not authorized to view the activity for project %{name} on this server.
-        destroy?: You are not authorized to remove project %{name} from this server.
-        edit?: You are not authorized to modify project %{name} on this server.
-        new?: You are not authorized to create a project under the %{name} namespace on this server.
-        read?: You are not authorized to view project %{name} on this server.
-        transfer?: You are not authorized to transfer project %{name} on this server.
-        update?: You are not authorized to update project %{name} on this server.
-        sample_listing?: You are not authorized to view samples for project %{name} on this server.
-        create_sample?: You are not authorized to create samples for project %{name} on this server.
-        destroy_sample?: You are not authorized to remove samples from project %{name} on this server.
-        read_sample?: You are not authorized to view this sample for project %{name} on this server.
-        update_sample?: You are not authorized to update samples for project %{name} on this server.
-        transfer_sample?: You are not authorized to transfer samples for project %{name} on this server.
-        transfer_sample_into_project?: You are not authorized to transfer samples to project %{name} on this server.
-        clone_sample?: You are not authorized to clone samples from project %{name} on this server.
-        clone_sample_into_project?: You are not authorized to clone samples to project %{name} on this server.
-        submit_workflow?: You are not authorized to submit workflows for samples within project %{name} on this server.
+      index?: You are not authorized to view the listing of resources on this server.
       namespaces/project_namespace:
-        update?: You are not authorized to update the namespace for project %{name} on this server.
-        member_listing?: You are not authorized to view members for the project namespace %{name} on this server.
-        create_member?: You are not authorized to create members for the project namespace %{name} on this server.
-        destroy_member?: You are not authorized to remove members from the project namespace %{name} on this server.
-        update_member?: You are not authorized to update members for the project namespace %{name} on this server.
-        link_namespace_with_group?: You are not authorized to link project %{name} with other groups on this server.
-        unlink_namespace_with_group?: You are not authorized to unlink project %{name} from other groups on this server.
-        update_namespace_with_group_link?: You are not authorized to update project %{name} links with other groups on this server.
+        create_automated_workflow_executions?: You are not authorized to create automated workflow executions for project %{name}
         create_bot_accounts?: You are not authorized to create bot accounts for project %{name} on this server.
+        create_member?: You are not authorized to create members for the project namespace %{name} on this server.
+        destroy_automated_workflow_executions?: You are not authorized to destroy automated workflow executions for project %{name}
         destroy_bot_accounts?: You are not authorized to destroy bot accounts for project %{name} on this server.
-        create_automated_workflow_executions?: "You are not authorized to create automated workflow executions for project %{name}"
-        destroy_automated_workflow_executions?: "You are not authorized to destroy automated workflow executions for project %{name}"
-        update_automated_workflow_executions?: "You are not authorized to update automated workflow executions for project %{name}"
-        view_automated_workflow_executions?: "You are not authorized to view automated workflow executions for project %{name}"
-        submit_workflow?: You are not authorized to submit workflows for samples within project %{name} on this server.
-        view_workflow_executions?: You are not authorized to view workflow executions for project %{name} on this server.
+        destroy_member?: You are not authorized to remove members from the project namespace %{name} on this server.
         export_data?: You are not authorized to export data from project %{name} on this server.
+        link_namespace_with_group?: You are not authorized to link project %{name} with other groups on this server.
+        member_listing?: You are not authorized to view members for the project namespace %{name} on this server.
+        submit_workflow?: You are not authorized to submit workflows for samples within project %{name} on this server.
+        unlink_namespace_with_group?: You are not authorized to unlink project %{name} from other groups on this server.
+        update?: You are not authorized to update the namespace for project %{name} on this server.
+        update_automated_workflow_executions?: You are not authorized to update automated workflow executions for project %{name}
+        update_member?: You are not authorized to update members for the project namespace %{name} on this server.
+        update_namespace_with_group_link?: You are not authorized to update project %{name} links with other groups on this server.
         update_sample_metadata?: You are not authorized to update sample metadata for project %{name} on this server.
+        view_automated_workflow_executions?: You are not authorized to view automated workflow executions for project %{name}
+        view_workflow_executions?: You are not authorized to view workflow executions for project %{name} on this server.
       namespaces/user_namespace:
         create?: You are not authorized to create a project under the %{name} namespace
         transfer_into_namespace?: You are not authorized to transfer to the user %{name} namespace
+      new?: You are not authorized to create this resource on this server.
+      project:
+        activity?: You are not authorized to view the activity for project %{name} on this server.
+        clone_sample?: You are not authorized to clone samples from project %{name} on this server.
+        clone_sample_into_project?: You are not authorized to clone samples to project %{name} on this server.
+        create_sample?: You are not authorized to create samples for project %{name} on this server.
+        destroy?: You are not authorized to remove project %{name} from this server.
+        destroy_sample?: You are not authorized to remove samples from project %{name} on this server.
+        edit?: You are not authorized to modify project %{name} on this server.
+        new?: You are not authorized to create a project under the %{name} namespace on this server.
+        read?: You are not authorized to view project %{name} on this server.
+        read_sample?: You are not authorized to view this sample for project %{name} on this server.
+        sample_listing?: You are not authorized to view samples for project %{name} on this server.
+        submit_workflow?: You are not authorized to submit workflows for samples within project %{name} on this server.
+        transfer?: You are not authorized to transfer project %{name} on this server.
+        transfer_sample?: You are not authorized to transfer samples for project %{name} on this server.
+        transfer_sample_into_project?: You are not authorized to transfer samples to project %{name} on this server.
+        update?: You are not authorized to update project %{name} on this server.
+        update_sample?: You are not authorized to update samples for project %{name} on this server.
+      read?: You are not authorized to view this resource on this server.
       sample:
         destroy_attachment?: You are not authorized to delete attachments belonging to sample %{name}.
+      transfer?: You are not authorized to transfer the requested resource.
+      transfer_into_namespace?: You are not authorized to transfer to the requested namespace.
+      update?: You are not authorized to update this resource on this server.
       user:
         create?: You are not authorized to create a user on this server.
         destroy?: You are not authorized to remove user %{name} from this server.
         edit?: You are not authorized to update user %{name} on this server.
         index?: You are not authorized to view listing of users on this server.
         new?: You are not authorized to create a user on this server.
-        revoke?: You are not authorized to revoke personal access tokens for user %{name} on this server.
         read?: You are not authorized to view profile for user %{name} on this server.
+        revoke?: You are not authorized to revoke personal access tokens for user %{name} on this server.
         update?: You are not authorized to update user %{name} on this server.
       workflow_execution:
-        index?: "You are not authorized to view workflow executions for %{namespace_type} %{name}"
-        destroy?: "You are not authorized to destroy workflow executions for %{namespace_type} %{name}"
-        read?: "You are not authorized to view workflow execution %{id}"
-        create?: "You are not authorized to submit workflow executions for %{namespace_type} %{name}"
-        cancel?: "You are not authorized to cancel workflow executions for %{namespace_type} %{name}"
+        cancel?: You are not authorized to cancel workflow executions for %{namespace_type} %{name}
+        create?: You are not authorized to submit workflow executions for %{namespace_type} %{name}
+        destroy?: You are not authorized to destroy workflow executions for %{namespace_type} %{name}
+        index?: You are not authorized to view workflow executions for %{namespace_type} %{name}
+        read?: You are not authorized to view workflow execution %{id}
     unauthorized: You are not authorized to perform this action
   activerecord:
     attributes:
@@ -140,34 +102,37 @@ en:
       group:
         description: Description
         name: Group name
-        path: Path
         parent_id: Group URL
+        path: Path
+      member:
+        access_level: Access Level
+        expires_at: Access expiration (optional)
+        user_id: User
       namespaces/project_namespace:
-        name: Project Name
         description: Description
+        name: Project Name
         parent_id: Project URL
         path: Path
       personal_access_token:
+        created_at: Created
+        expires_at: Expiration Date
+        last_used_at: Last Used
         name: Token name
         scopes: Scopes
-        created_at: Created
-        last_used_at: Last Used
-        expires_at: Expiration Date
       sample:
-        name: Name
         description: Description
-      member:
-        access_level: Access Level
-        user_id: User
-        expires_at: Access expiration (optional)
+        name: Name
       user:
-        password: Password
-        password_confirmation: Password confirmation
         email: Email
-        provider: Authentication Provider
-        uid: Authentication Provider UID
         first_name: First Name
         last_name: Last Name
+        password: Password
+        password_confirmation: Password confirmation
+        provider: Authentication Provider
+        uid: Authentication Provider UID
+    concerns:
+      history:
+        system: System
     errors:
       models:
         attachment:
@@ -177,1499 +142,278 @@ en:
         data_export:
           attributes:
             export_parameters:
+              invalid_analysis_type: Invalid analysis type
+              invalid_attachment_format: "%{invalid_formats} are not valid attachment formats"
+              invalid_file_format: must have either a .xlsx or .csv format for linelist exports
+              invalid_namespace_id: must have valid namespace
+              missing_analysis_type: Missing analysis type
+              missing_attachment_formats: must have attachment formats for sample exports
+              missing_file_format: must contain a format for linelist exports
               missing_ids: does not contain any ids to export.
               missing_metadata_fields: must contain metadata fields for linelist exports
-              missing_file_format: must contain a format for linelist exports
-              invalid_file_format: must have either a .xlsx or .csv format for linelist exports
               missing_namespace_id: must have a namespace id
-              invalid_namespace_id: must have valid namespace
-              invalid_attachment_format: "%{invalid_formats} are not valid attachment formats"
-              missing_attachment_formats: must have attachment formats for sample exports
+        member:
+          attributes:
+            access_level:
+              inclusion: provided is not included in the list of valid access levels
+              invalid: " for %{user} should be greater than or equal to %{access_level} which is inherited via membership from group %{group_name}"
+          destroy:
+            last_member: Cannot remove this member as this would leave the %{namespace_type} without an owner.
+            last_member_self: You cannot remove yourself as this would leave the %{namespace_type} without an owner.
         namespace:
           attributes:
             name:
               blank: can't be blank
               taken: has already been taken
-        member:
-          attributes:
-            access_level:
-              invalid: " for %{user} should be greater than or equal to %{access_level} which is inherited via membership from group %{group_name}"
-              inclusion: "provided is not included in the list of valid access levels"
-          destroy:
-            last_member: "Cannot remove this member as this would leave the %{namespace_type} without an owner."
-            last_member_self: "You cannot remove yourself as this would leave the %{namespace_type} without an owner."
-        personal_access_token:
-          attributes:
-            scopes:
-              inclusion: can only contain available scopes
         namespace_group_link:
           attributes:
+            group_access_level:
+              inclusion: provided is not included in the list of valid access levels
             group_id:
               blank: Group must exist
+              comparison: Group must be other than %{group_id}
               taken: has already been shared with this namespace
-              comparison: "Group must be other than %{group_id}"
             namespace_id:
               blank: Namespace must exist
               taken: The namespace has already been shared with this group
             namespace_type:
               inclusion: can only be Group or Project
-            group_access_level:
-              inclusion: "provided is not included in the list of valid access levels"
+        personal_access_token:
+          attributes:
+            scopes:
+              inclusion: can only contain available scopes
     exceptions:
       personal_access_token:
-        not_found: "Could not find personal access token with id %{token_id}"
-    concerns:
-      history:
-        system: System
+        not_found: Could not find personal access token with id %{token_id}
     models:
-      member:
-        one: Member
-        other: Members
-        access_level:
-          no_access: No Access
-          guest: Guest
-          uploader: Uploader
-          analyst: Analyst
-          maintainer: Maintainer
-          owner: Owner
-        its_you: It's you
-        bot: Bot
-        direct: Direct member
       group:
         one: Group
         other: Groups
-      sample:
-        one: Sample
-        other: Samples
+      member:
+        access_level:
+          analyst: Analyst
+          guest: Guest
+          maintainer: Maintainer
+          no_access: No Access
+          owner: Owner
+          uploader: Uploader
+        bot: Bot
+        direct: Direct member
+        its_you: It's you
+        one: Member
+        other: Members
+      namespace_group_link:
+        direct: Direct shared
+        one: Namespace Group Link
+        other: Namespace Group Links
       namespaces/project_namespace:
         one: Project
         other: Projects
-      namespace_group_link:
-        one: Namespace Group Link
-        other: Namespace Group Links
-        direct: Direct shared
-  datetime:
-    distance_in_words:
-      updated:
-        about_x_hours:
-          one: Updated about %{count} hour ago
-          other: Updated about %{count} hours ago
-        about_x_months:
-          one: Updated about %{count} month ago
-          other: Updated about %{count} months ago
-        about_x_years:
-          one: Updated about %{count} year ago
-          other: Updated about %{count} years ago
-        almost_x_years:
-          one: Updated almost %{count} year ago
-          other: Updated almost %{count} years ago
-        half_a_minute: Updated half a minute ago
-        less_than_x_seconds:
-          one: Updated less than %{count} second ago
-          other: Updated less than %{count} seconds ago
-        less_than_x_minutes:
-          one: Updated less than a minute ago
-          other: Updated less than %{count} minutes ago
-        over_x_years:
-          one: Updated over %{count} year ago
-          other: Updated over %{count} years ago
-        x_seconds:
-          one: "Updated %{count} second ago"
-          other: "Updated %{count} seconds ago"
-        x_minutes:
-          one: "Updated %{count} minute ago"
-          other: "Updated %{count} minutes ago"
-        x_days:
-          one: "Updated %{count} day ago"
-          other: "Updated %{count} days ago"
-        x_months:
-          one: "Updated %{count} month ago"
-          other: "Updated %{count} months ago"
-        x_years:
-          one: "Updated %{count} year ago"
-          other: "Updated %{count} years ago"
-      about_x_hours:
-        one: about %{count} hour ago
-        other: about %{count} hours ago
-      about_x_months:
-        one: about %{count} month ago
-        other: about %{count} months ago
-      about_x_years:
-        one: about %{count} year ago
-        other: about %{count} years ago
-      almost_x_years:
-        one: almost %{count} year ago
-        other: almost %{count} years ago
-      half_a_minute: half a minute ago
-      less_than_x_seconds:
-        one: less than %{count} second ago
-        other: less than %{count} seconds ago
-      less_than_x_minutes:
-        one: less than a minute ago
-        other: less than %{count} minutes ago
-      over_x_years:
-        one: over %{count} year ago
-        other: over %{count} years ago
-      x_seconds:
-        one: "%{count} second ago"
-        other: "%{count} seconds ago"
-      x_minutes:
-        one: "%{count} minute ago"
-        other: "%{count} minutes ago"
-      x_days:
-        one: "%{count} day ago"
-        other: "%{count} days ago"
-      x_months:
-        one: "%{count} month ago"
-        other: "%{count} months ago"
-      x_years:
-        one: "%{count} year ago"
-        other: "%{count} years ago"
+      sample:
+        one: Sample
+        other: Samples
+  application:
+    errors:
+      access_denied: Access Denied.
+      not_found_on_server: The requested resource could not be found on the server.
+      resource_not_found: Resource Not Found.
   auth:
     scopes:
-      label: Scopes
       api: Grants complete read/write access to the API.
+      label: Scopes
       read_api: Grants read access to the API.
   components:
-    pagination:
-      previous: Prev
-      next: Next
     clipboard:
       copied: Copied!
       copy: Copy to clipboard
       toggle_visible: Toggle visibility
-    dialog:
-      close: Close dialog
     confirmation:
-      title: Confirmation required
       cancel: Cancel
       confirm: Confirm
       confirm_label: Confirmation value
+      title: Confirmation required
+    dialog:
+      close: Close dialog
     flash:
-      success_icon: Check icon
       error_icon: X icon
-      warning_icon: Exclamation icon
       information_icon: Information icon
-    nextflow:
-      required: Required
-      update_samples: Update samples with analysis results
-      email_notification: Receive an email notification when your analysis has completed?
+      success_icon: Check icon
+      warning_icon: Exclamation icon
     history:
-      latest: Latest
       created_by: "%{type} created by %{user}"
       deleted_by: "%{type} deleted by %{user}"
+      latest: Latest
+      link_text: Version %{version}
       modified_by: "%{type} modified by %{user}"
       restored_by: "%{type} restored by %{user}"
       transferred_by: "%{type} transferred by %{user}"
-      link_text: "Version %{version}"
     history_version:
-      previous_version: "Previous (Version %{version})"
-      current_version: "Current (Version %{version})"
-      keys_deleted: "Keys deleted:"
+      current_version: Current (Version %{version})
+      keys_deleted: 'Keys deleted:'
+      previous_version: Previous (Version %{version})
     list_filter:
-      title: Filter by sample names or Id
-      clear: Remove all tags
-      description: 'Paste a list of <kbd>,</kbd> seperated sample names or identifiers'
       apply: Apply filter
+      clear: Remove all tags
+      description: Paste a list of <kbd>,</kbd> seperated sample names or identifiers
       remove_tag: Remove
-  viral:
-    sortable_lists_component:
-      add_all: Add all
-      remove_all: Remove all
-  layouts:
-    application:
-      site_title: IRIDA Next
-  general:
-    name: IRIDA Next
-    help: Help
-    expand_sidebar: Expand sidebar
-    collapse_sidebar: Collapse sidebar
-    screen_reader:
-      close: Close
-    default_sidebar:
-      title: Your work
-      groups: Groups
-      projects: Projects
-      workflows: Workflow Executions
-      data_exports: Data Exports
-    navbar:
-      collapse:
-        aria_label: Collapse navigation menu
-      main_dropdown:
-        aria-label: Main navigation menu
-        groups: Groups
-        projects: Projects
-      search:
-        placeholder: Search
-      new_dropdown:
-        aria_label: New menu item
-        project: Create new project
-        group: Create new group
-      account_dropdown:
-        aria_label: Account menu dropdown
-        profile: Edit profile
-        sign_out: Sign out
-  dashboard:
-    projects:
-      index:
-        title: Projects
-        create_project_button: New project
-        all: All
-        personal: Personal
-        search:
-          placeholder: Filter by name
-        sorting:
-          updated_at_desc: Updated At
-          created_at_desc: Last created
-          namespace_name_asc: Name
-          namespace_name_desc: Name, descending
-          updated_at_asc: Oldest updated
-          created_at_asc: Oldest created
-    groups:
-      index:
-        title: Groups
-        create_group_button: New group
-        more_items: "%{count} more items"
-        row_aria_label: "See %{name} subgroups"
-        subgroups: Subgroups
-        sorting:
-          updated_at_desc: Updated At
-          created_at_desc: Last created
-          name_asc: Name
-          name_desc: Name, descending
-          updated_at_asc: Oldest updated
-          created_at_asc: Oldest created
-  profiles:
-    sidebar:
-      header: User Settings
-      profile: Profile
-      password: Password
-      account: Account
-      access_tokens: Access Tokens
-      preferences: Preferences
-    show:
-      email:
-        title: Email
-        subtitle: Email address linked to this account
-        pending: "Pending confirmation of %{email}"
-        submit: Update profile settings
-      missing: This field has not been provided by the Authentication Provider.
-      email_address: Email Address
-      first_name: First Name
-      last_name: Last Name
-    update:
-      success: Profile updated successfully
-    passwords:
-      update:
-        success: Password updated successfully
-        hint: You must provide your current password to update it
-        title: Password
-        subtitle: Update your account password
-        submit: Save password
-        forgot: Forgot your password?
-    accounts:
-      delete:
-        description: Deleting your account has the following effects
-        effects:
-          - All projects and groups you own will be deleted
-          - All projects and groups you are a member of will be left intact
-        button: Delete account
-        confirm: Are you sure you want to delete your account?
-    preferences:
-      show:
-        theme_title: Colour theme
-        system_theme: System
-        system_desc: The colour theme will update based on your operating system settings.
-        light_theme: Light
-        dark_theme: Dark
-        locale_title: Language
-        preferences: Preferences
-      update:
-        success: Language updated successfully
-      success: Preferences updated successfully
-      locale_form:
-        en: English
-        fr: French
-    personal_access_tokens:
-      access_token_section:
-        label: Your new personal access token
-        description: Make sure you save it - you won't be able to access it again.
-        aria_label: Personal access token, copy to clipboard
+      title: Filter by sample names or Id
+    nextflow:
+      email_notification: Receive an email notification when your analysis has completed?
+      required: Required
+      update_samples: Update samples with analysis results
+    pagination:
+      next: Next
+      previous: Prev
+  concerns:
+    bot_actions:
       create:
-        submit: Create personal access token
-        subtitle: Enter the name of your application, and we'll return a unique personal access token.
-        title: Add a personal access token
-      index:
-        active_personal_access_tokens: Active Personal Access Tokens (%{count})
-        expires_at: Expires
-        subtitle: You can generate a personal access token for each application you use that needs access to the IRIDA Next API.
-        title: Personal Access Tokens
-        action: Action
-      personal_access_token:
-        never: Never
-        revoke_button: Revoke
-        revoke_confirm: Are you sure you want to revoke this personal access token? This action cannot be undone.
-  groups:
-    owner: Owner
-    sidebar:
-      details: Details
-      members: Members
-      history: History
-      samples: Samples
-      settings: Settings
-      general: General
-      bot_accounts: Bot Accounts
-    index:
-      create_group_button: New group
-      group_dropdown:
-        label: Actions for group %{group_name}
-        delete: Delete group
-        delete_confirmation: Are you sure you want to delete this group?
-    create:
-      success: Group created successfully
-      title: Create group
-      subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects
-      name_placeholder: Awesome group name
-      name_help: Group name must be at least 3 letters long and start with a letter, digit, or emoji. For more information see <a class="font-medium hover:underline" href="https://phac-nml.github.io/irida-next/docs/user/organization/groups/reserved-names/">Reserved group names</a>
-      path_help: The path is used in URLs.  It must be at least 3 letters long and can only contain letters, numbers, dashes and underscores
-      submit: Create group
-      cancel: Cancel
-    history:
-      index:
-        title: History
-      group_history_modal:
-        close: Close
-        version_number: "Version %{version_number}"
-      group_history_modal_description:
-        group_created: "Group was created by %{user}"
-        group_deleted: "Group was deleted by %{user}"
-        group_modified: "Group attributes were modified by %{user}"
-        group_restored: "Group was restored by %{user}"
-        group_transferred: "Group was transferred by %{user}"
-    bots:
-      index:
-        title: Bot Accounts
-        subtitle: Setup bot accounts to perform actions within the group that cannot be attributed to a human user
-        add_new_bot: New bot account
-        bot:
-          remove: Remove
-          remove_confirmation: "Are you sure you want to remove this bot account from the group?"
-          remove_aria_label: Remove bot account
-          generate_new_token: Generate new token
-          generate_new_token_aria_label: Generate a new personal access token for bot account
-          never: Never
-        bot_listing:
-          username: Username
-          active_tokens: Active Tokens
-          created: Created
-          expiration: Expiration
-          access_level: Access Level
-          actions: Actions
-          empty_state:
-            title: No bot accounts
-            description: There are no bot accounts attributed to this group
-          new_bot_modal:
-            title: New Bot Account
-            description: Adding a bot account to associate certain actions which can't be attributed to a human user
-            token_name: Token Name
-            access_level: Access Level
-            select_access_level: Select access level
-            expires_at: Token Expiration Date (optional)
-            submit: Submit
-            cancel: Cancel
-          generate_personal_access_token_modal:
-            title: New Personal Access Token
-            description: "Generating a new personal access token for %{bot_account}"
-            name: Token Name
-            expires_at: Token Expiration Date (optional)
-            submit: Submit
-            cancel: Cancel
-        personal_access_tokens_listing_modal:
-          title: Personal access tokens
-          description: Viewing a list of active personal access tokens for %{bot_account}
-          available_tokens: Personal access tokens for %{bot_account}
-          actions : Actions
-          personal_access_token:
-            never: Never
-            revoke: Revoke
-            revoke_confirmation: "Are you sure you want to revoke this personal access token?"
-        access_level:
-          level_0: No Access
-          level_10: Guest
-          level_20: Uploader
-          level_30: Analyst
-          level_40: Maintainer
-          level_50: Owner
-        access_token_section:
-          label: "New personal access token for %{bot_name}"
-          description: Make sure you save it - you won't be able to access it again.
-          aria_label: Personal access token, copy to clipboard
-      create:
-        success: "Bot account was successfully added to the group"
+        success: Bot account was successfully added to the group
       destroy:
-        success: "Bot account was successfully removed from the group"
-      personal_access_tokens:
-        create:
-          success: Successfully generated new personal access token for bot
-        revoke:
-          success: "Successfully revoked personal access token %{pat_name}"
-          error: "There was an error revoking personal access token %{pat_name}"
-    destroy:
-      success: "Group %{group_name} was deleted"
-      error: "Could not delete %{group_name}"
-    edit:
-      title: Settings
-      details:
-        title: General
-        subtitle: Group name and description
-        name_placeholder: Awesome group name
-        submit: Save changes
-      advanced:
-        title: Advanced settings
-        transfer:
-          title: Transfer group
-          submit: Transfer group
-          new_namespace_id: Select a parent group
-          descriptions:
-            - Transfer group to another parent group.
-          points:
-            - Be careful. Changing a group's parent can have unintended side effects.
-            - You can only transfer groups where you have sufficient permissions.
-            - If the parent group's visibility is lower than the group's current visibility, visibility levels for subgroups and projects will be changed to match the new parent group's visibility.
-          confirm:
-            title: Confirmation required
-            warning_html: You are going to transfer <strong>%{group_name}</strong> to another namespace. Once you confirm, this action cannot be undone.
-            points_html:
-              - To prevent accidental actions we ask you to confirm your intention.
-              - Please type <kbd>%{group}</kbd> to proceed or close this dialog to cancel.
-        delete:
-          title: Delete group
-          description: Deleting a group is permanent and cannot be undone. All projects, subgroups, and direct members will be deleted along with the group.
-          submit: Delete group
-          confirm: Are you sure you want to delete this group?
-        path:
-          label: Path
-          title: Change group URL
-          description: Changing a group's URL can have unintended side effects.
-          submit: Change group URL
-    show:
-      create_subgroup_button: New subgroup
-      create_project_button: New project
-      tabs:
-        label: Group project details navigation
-        subgroups_and_projects: Subgroups and projects
-        shared_namespaces: Shared groups and projects
-      subgroups:
-        no_subgroups:
-          title: No subgroups
-          description: Create a subgroup to manage projects and members
-      shared_namespaces:
-        no_shared:
-          title: No shared groups or projects
-          description: Groups and projects can be shared with other groups through their members page.
-    new_subgroup:
-      title: Create subgroup
-      subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects
-      submit: Create subgroup
-      cancel: Cancel
-    update:
-      success: Group %{group_name} was successfully updated
-    transfer:
-      success: Group transferred successfully
-    group_links:
-      index:
-        unlink: Unlink
-        unlink_confirmation: Are you sure you want to unlink the group %{namespace_name} with group %{group_name}
-        aria_labels:
-          group_id: Id of group to share namespace with
-          group_access_level: Group Access Level
-          expires_at: Group access expiration
-        access_level:
-          level_0: No Access
-          level_10: Guest
-          level_20: Uploader
-          level_30: Analyst
-          level_40: Maintainer
-          level_50: Owner
-        inherited_from: "Inherited from"
-        table_header:
-          group: Group
-          source: Source
-          access_granted: Access Granted
-          access_level: Access Level
-          expiration: Expiration
-          action: Action
-        actions:
-          member_dropdown_aria_label: "Dropdown options for namespace link with group %{member}"
-          unlink_aria_label: "Unlink namespace from group %{member} button"
-        empty_state:
-          title: No groups
-          description: There are no groups that have been delegated access to this group
+        success: Bot account was successfully removed from the group
+    bot_personal_access_token_actions:
+      create:
+        success: Successfully generated new personal access token for bot
+      revoke:
+        success: Successfully revoked personal access token %{pat_name}
+    file_import_actions:
+      create:
+        error: 'Metadata was not successfully imported for the following samples:'
+        success: Sample metadata was successfully imported.
+    membership_actions:
+      create:
+        success: Member %{user} added successfully
+      destroy:
+        leave_success: You have successfully left %{name}
+        success: Member %{user} successfully removed
+      update:
+        success: Member %{user_email} updated successfully
+    share_actions:
       create:
         success: Successfully linked group %{namespace_name} with group %{group_name}
-        error: There was an error linking group with group
       destroy:
-        success: Successfully unlinked group %{namespace_name} from group %{group_name}
         error: There was an error unlinking group from group
+        success: Successfully unlinked group %{namespace_name} from group %{group_name}
       update:
+        error: There was an error updating the namespace group link
         params:
           expiration_date: expiration date
           group_access_level: group access level
         success: Successfully updated group %{namespace_name} with group %{group_name} link %{param_name}
-        error: There was an error updating the namespace group link
-      new:
-        title: Share namespace
-        sharing_namespace_with_group: "You're sharing group %{name} with a group"
-        placeholder:
-          select_access_level: Select access level
-          select_group: Select group
-        label:
-          group_id: Group to share namespace with
-          group_access_level: Maximum group access level
-          access_expiration: Access expiration (optional)
-        button:
-          cancel: Cancel
-          submit: Share
-        empty_state: No groups are associated with that name or ID
-    members:
-      access_level:
-        aria_label: Access Level
-      create:
-        error: "Error adding member"
-        success: "Group member %{user} added successfully"
-      index:
-        add: Add New Member
-        remove: Remove
-        leave_group: Leave group
-        invite_group: Invite Group
-        remove_confirmation: Are you sure you want to remove this member from the group?
-        leave_confirmation: Are you sure you want to remove yourself from this group?
-        title: Members
-        subtitle: "These are the members that have access to %{namespace_type} %{namespace_name}"
-        access_granted_by: "Access granted by %{grantor_email}"
-        actions:
-          button_add_aria_label: Add new group member link
-          link_remove_aria_label: "Remove group member %{member} link"
-          link_leave_group_aria_label: "Leave group button"
-        inherited_from: "Inherited from"
-        search:
-          placeholder: Filter by username
-          groups:
-            placeholder: Filter by group name
-        shared_inherited: Shared inherited
-        shared_direct: Shared direct
-        tabs:
-          members: Members
-          groups: Groups
-          aria_label: Group member tabs
-      update:
-        success: "Group member %{user_email} updated successfully"
-      new:
-        title: Add New Member
-        description: You are adding a new member to group %{name}
-        add_member_to_group: Add member to group
-        select_user: Select a User
-        empty_state: There are no users with the provided email or id
-        select_access_level: Select Access Level
-      destroy:
-        error: "There was an error removing the group member"
-        success: "Group member %{user} successfully removed"
-        leave_success: "You have successfully left the group %{name}"
-    samples:
-      index:
-        create_export_button:
-          label: Create Export
-          sample_export: Sample Export
-          linelist_export: Linelist Export
-        import_metadata_button: Import metadata
-        deselect_all_button: Deselect All
-        select_all_button: Select All
-        title: Samples
-        subtitle: These are the samples in %{namespace_type} %{namespace_name}
-        workflows:
-          button_sr: Launch workflow
-        search:
-          placeholder: Filter by ID or name
-          metadata: Metadata
-      table:
-        sample: Sample
-        project: Project
-        puid: ID
-        created_at: Created
-        updated_at: Last Updated
-        files_updated_at: Files Last Updated
-        counts:
-          samples: Samples
-          selected: Selected
-        no_samples: No Samples
-        no_associated_samples: There are no samples associated with this group.
-      metadata:
-        file_imports:
-          create:
-            success: Sample metadata was successfully imported.
-            error: "Metadata was not successfully imported for the following samples:"
-  models:
-    sample:
-      analysis: Analysis
-  projects:
-    create:
-      success: "Project %{project_name} was successfully created"
-    edit:
-      title: Settings
-      general:
-        title: General
-        heading: Project name and description
-        submit: Update project
-      advanced:
-        title: Advanced settings
-        destroy:
-          title: Delete project
-          description: Deleting a project is permanent and cannot be undone. All samples and direct members will be deleted along with the project.
-          submit: Delete project
-          confirm: Are you sure you want to delete this project?
-        path:
-          label: Path
-          title: Change project URL
-          submit: Change project URL
-          description: Changing a project's URL can have unintended side effects.
-          help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
-        transfer:
-          title: Transfer project
-          submit: Transfer project
-          new_namespace_id: Select a new namespace
-          descriptions:
-            - Transfer your project into another namespace.
-            - When you transfer your project to a group, you can easily manage multiple projects and users.
-            - "Things to be aware of before transferring your project:"
-          points:
-            - Be careful! Changing a project's namespace can have unintended side effects.
-            - You can only transfer projects to groups where you have sufficient permissions.
-            - Project visibility level will change to match namespace rules when transferring to a group.
-          confirm:
-            title: Confirmation required
-            warning_html: You are going to transfer <strong>%{project_name}</strong> to another namespace. Once you confirm, this action cannot be undone.
-            points_html:
-              - To prevent accidental actions we ask you to confirm your intention.
-              - Please type <kbd>%{project}</kbd> to proceed or close this dialog to cancel
-    history:
-      index:
-        title: History
-        subtitle: These are the changes that have been made to the project
-        latest: Latest
-        created_by: "Project created by %{user}"
-        modified_by: "Project modified by %{user}"
-      project_history_modal:
-        close: Close
-        version_number: "Version %{version_number}"
-      project_history_modal_description:
-        project_created: "Project was created by %{user}"
-        project_deleted: "Project was deleted by %{user}"
-        project_modified: "Project attributes were modified by %{user}"
-        project_restored: "Project was restored by %{user}"
-        project_transferred: "Project was transferred by %{user}"
-    automated_workflow_executions:
-      index:
-        title: Automated Workflow Executions
-        subtitle: Setup automated workflow executions to launch when pair end data is uploaded to the project
-        add_new_automated_workflow_execution: New automated workflow execution
-      actions:
-        delete_button: Delete
-        delete_confirm: Are you sure that you want to delete this automated workflow execution?
-        edit_button: Edit
-      table:
-        empty:
-          title: No automated workflow executions
-          description: No automated workflow executions have been configured for this project
-        headers:
-          id: ID
-          name: Name
-          workflow_name: Workflow Name
-          workflow_version: Workflow Version
-          created_at: Created
-          updated_at: Updated
-          actions: Actions
-      create:
-        error: "Could not create an automated workflow execution for %{workflow_name}"
-        success: "Automated workflow execution for %{workflow_name} was successfully created"
-      destroy:
-        error: "Could not delete automated workflow execution for %{workflow_name}"
-        success: "Automated workflow execution for %{workflow_name} was successfully deleted"
-      pipeline_selection_modal:
-        title: Workflow Selection
-      new_automated_workflow_execution_modal:
-        title: "%{workflow} parameters"
-      edit_dialog:
-        title: "Editing Automated Workflow Execution: %{workflow_name}"
-    bots:
-      index:
-        title: Bot Accounts
-        subtitle: Setup bot accounts to perform actions within the project that cannot be attributed to a human user
-        add_new_bot: New bot account
-        bot:
-          remove: Remove
-          remove_confirmation: "Are you sure you want to remove this bot account from the project?"
-          remove_aria_label: Remove bot account
-          generate_new_token: Generate new token
-          generate_new_token_aria_label: Generate a new personal access token for bot account
-          never: Never
-        bot_listing:
-          username: Username
-          active_tokens: Active Tokens
-          created: Created
-          expiration: Expiration
-          access_level: Access Level
-          actions: Actions
-          empty_state:
-            title: No bot accounts
-            description: There are no bot accounts attributed to this project
-          new_bot_modal:
-            title: New Bot Account
-            description: Adding a bot account to associate certain actions which can't be attributed to a human user
-            token_name: Token Name
-            access_level: Access Level
-            select_access_level: Select access level
-            expires_at: Token Expiration Date (optional)
-            submit: Submit
-            cancel: Cancel
-          generate_personal_access_token_modal:
-            title: New Personal Access Token
-            description: "Generating a new personal access token for %{bot_account}"
-            name: Token Name
-            expires_at: Token Expiration Date (optional)
-            submit: Submit
-            cancel: Cancel
-        personal_access_tokens_listing_modal:
-          title: Personal access tokens
-          description: Viewing a list of active personal access tokens for %{bot_account}
-          available_tokens: Personal access tokens for %{bot_account}
-          actions : Actions
-          personal_access_token:
-            never: Never
-            revoke: Revoke
-            revoke_confirmation: "Are you sure you want to revoke this personal access token?"
-        access_level:
-          level_0: No Access
-          level_10: Guest
-          level_20: Uploader
-          level_30: Analyst
-          level_40: Maintainer
-          level_50: Owner
-        access_token_section:
-          label: "New personal access token for %{bot_name}"
-          description: Make sure you save it - you won't be able to access it again.
-          aria_label: Personal access token, copy to clipboard
-      create:
-        success: "Bot account was successfully added to the project"
-      destroy:
-        success: "Bot account was successfully removed from the project"
-      personal_access_tokens:
-        create:
-          success: Successfully generated new personal access token for bot
-        revoke:
-          success: "Successfully revoked personal access token %{pat_name}"
-          error: "There was an error revoking personal access token %{pat_name}"
-    new:
-      title: Create project
-      placeholder: Awesome project name
-      description: Project description, not required
-      subtitle: Projects are where you can store and analyze your data
-      help: The path is used in URLs and must be at least 3 characters and can only contain letters, numbers, dashes and underscores
-      submit: Create project
-      cancel: Cancel
-      name: Name
-    sidebar:
-      details: Details
-      history: History
-      members: Members
-      samples: Samples
-      workflow_executions: Workflow Executions
-      settings: Settings
-      general: General
-      bot_accounts: Bot Accounts
-      automated_workflow_executions: Automated Workflow Executions
-    update:
-      success: "Project %{project_name} was successfully updated"
-    transfer:
-      success: "Project %{project_name} was successfully transferred"
-    destroy:
-      success: "Project %{project_name} was successfully deleted"
-    group_links:
-      index:
-        unlink: Unlink
-        unlink_confirmation: Are you sure you want to unlink the project %{namespace_name} with group %{group_name}
-        aria_labels:
-          group_id: Id of group to share namespace with
-          group_access_level: Group Access Level
-          expires_at: Group access expiration
-        access_level:
-          level_0: No Access
-          level_10: Guest
-          level_20: Uploader
-          level_30: Analyst
-          level_40: Maintainer
-          level_50: Owner
-        inherited_from: "Inherited from"
-        table_header:
-          group: Group
-          source: Source
-          access_granted: Access Granted
-          access_level: Access Level
-          expiration: Expiration
-          action: Action
-        actions:
-          member_dropdown_aria_label: "Dropdown options for namespace link with group %{member}"
-          unlink_aria_label: "Unlink namespace from group %{member} button"
-        empty_state:
-          title: No groups
-          description: There are no groups that have been delegated access to this project
-      create:
-        success: Successfully linked project %{namespace_name} with group %{group_name}
-        error: There was an error linking project with group
-      destroy:
-        success: Successfully unlinked project %{namespace_name} with group %{group_name}
-        error: There was an error unlinking project from group
-      update:
-        params:
-          expiration_date: expiration date
-          group_access_level: group access level
-        success: Successfully updated project %{namespace_name} with group %{group_name} link %{param_name}
-        error: There was an error updating the namespace group link
-      new:
-        title: Share namespace
-        sharing_namespace_with_group: "You're sharing group %{name} with a group"
-        placeholder:
-          select_access_level: Select access level
-          select_group: Select group
-        label:
-          shared_group: Group to share namespace with
-          group_access_level: Maximum group access level
-          access_expiration: Access expiration (optional)
-        empty_state: No groups are associated with that name or ID
-        button:
-          cancel: Cancel
-          submit: Share
-    members:
-      access_level:
-        aria_label: Access Level
-      create:
-        error: "Error adding member"
-        success: "Project member %{user} added successfully"
-      index:
-        add: Add New Member
-        remove: Remove
-        leave_project: Leave project
-        invite_group: Invite group
-        remove_confirmation: Are you sure you want to remove this member from the project?
-        leave_confirmation: Are you sure you want to remove yourself from the project?
-        title: Members
-        subtitle: "These are the members that have access to %{namespace_type} %{namespace_name}"
-        access_granted_by: "Access granted by %{grantor_email}"
-        access_level:
-          level_0: No Access
-          level_10: Guest
-          level_20: Uploader
-          level_30: Analyst
-          level_40: Maintainer
-          level_50: Owner
-        actions:
-          button_add_aria_label: Add new project member button
-          link_remove_aria_label: "Remove project member %{member} link"
-          link_leave_project_aria_label: "Leave project link"
-        search:
-          placeholder: Filter by username
-          groups:
-            placeholder: Filter by group name
-        shared_inherited: Shared inherited
-        shared_direct: Shared direct
-        table_header:
-          username: Username
-          access_level: Access Level
-          source: Source
-          access_granted: Access Granted
-          expiration: Expiration
-          action: Action
-        tabs:
-          members: Members
-          groups: Groups
-          aria_label: Project members tabs
-      update:
-        success: "Project member %{user_email} updated successfully"
-      new:
-        title: Add New Member
-        add_member_to_project: Add member to project
-        description: You are adding a new member to project %{name}
-        select_user: Select a User
-        select_access_level: Select Access Level
-        empty_state: There are no users with the provided email or id
-      destroy:
-        error: "There was an error removing the project member"
-        success: "Project member %{user} successfully removed"
-        leave_success: "You have successfully left the project %{name}"
-    samples:
-      show:
-        add_metadata: Add Metadata
-        new_attachment_button: Upload Files
-        concatenate_button: Concatenate Files
-        delete_files_button: Delete Files
-        delete_metadata_button: Delete Metadata
-        edit_button: Edit this sample
-        remove_button: Remove
-        remove_button_confirmation: Are you sure you want to remove this sample from the project?
-        error: The sample does not exist within the project.
-        files: Files
-        files_ignored: "fasta and fastq files must be compressed. The following file(s) cannot be uploaded:"
-        metadata:
-          actions:
-            dropdown:
-              update: Update
-              delete: Delete
-            delete_confirm: Are you sure you want to remove metadata field '%{deleted_key}' from the sample?
-            metadata_dropdown_aria_label: Dropdown options for metadata field %{key}
-          analysis: Analysis
-          update:
-            update: Update
-            update_metadata: Update Metadata
-            key: Key
-            value: Value
-        no_files: No Files
-        no_associated_files: There are no files associated with this sample.
-        no_metadata: No Metadata
-        no_associated_metadata: This sample has no metadata.
-        upload: Upload
-        upload_files: Upload Files
-        uploading: Uploading
-        table_header:
-          puid: ID
-          filename: Filename
-          format: Format
-          type: Type
-          size: Size
-          created_at: Uploaded
-          action: Action
-          key: Key
-          value: Value
-          source: Source
-          last_updated: Last Updated
-        tabs:
-          files: Files
-          metadata: Metadata
-          history: History
-        history:
-          modal:
-            created_by: "Sample created by %{user}"
-            deleted_by: "Sample deleted by %{user}"
-            modified_by: "Sample attributes modified by %{user}"
-            restored_by: "Sample restored by %{user}"
-            transferred_by: "Sample transferred by %{user}"
-            version: "Version %{version}"
-            close: Close
-      create:
-        success: Sample was successfully created.
-      new:
-        title: Create sample
-        subtitle: This is a subtitle to create a new project sample.
-        submit_button: Create sample
-        cancel_button: Cancel
-      index:
-        title: Samples
-        subtitle: This is a subtitle to list project samples.
-        workflows:
-          button_sr: Launch workflow
-        new_button: New sample
-        edit_button: Edit
-        remove_button: Remove
-        remove_button_confirmation: Are you sure you want to remove this sample from the project?
-        transfer_button: Transfer samples
-        import_metadata_button: Import metadata
-        clone_button: Clone samples
-        create_export_button:
-          label: Create Export
-          sample_export: Sample Export
-          linelist_export: Linelist Export
-        delete_samples_button: Delete Samples
-        actions:
-          button_add_aria_label: Add new sample button
-          dropdown_aria_label: Dropdown options for sample %{sample_name}
-        dropdown:
-          remove: Remove sample
-        search:
-          placeholder: Filter by ID or name
-        no_samples: No Samples
-        no_associated_samples: There are no samples associated with this project.
-        deselect_all_button: Deselect All
-        select_all_button: Select All
-      update:
-        success: Sample was successfully updated.
-      edit:
-        title: Edit sample
-        subtitle: This is a subtitle to edit a project sample.
-        form:
-          title: Name and Description
-        submit_button: Update sample
-        cancel_button: Cancel
-      shared:
-        errors:
-          ok_button: OK
-        metadata_toggle:
-          label: Metadata
-      transfers:
-        dialog:
-          title: Transfer Samples
-          description:
-            zero: No samples have been selected for transfer
-            singular: The following sample is about to be transferred, which will result in the sample no longer being accessible in this project. Maintainers can only transfer samples to another project within the same hierarchy.
-            plural: The following COUNT_PLACEHOLDER samples are about to be transferred, which will result in these samples no longer being accessible in this project. Maintainers can only transfer samples to another project within the same hierarchy.
-          samples: Samples
-          empty_state: No projects are associated with that name or ID
-          new_project_id: Project to transfer samples to
-          no_available_projects: You do not have access to any destination projects to transfer samples
-          select_project: Select Project
-          submit_button: Submit
-          spinner_message: Transferring samples, this might take a while...
-        create:
-          success: Samples were successfully transferred.
-          error: "The following list of samples failed to transfer:"
-          no_samples_transferred_error: "Samples were not transferred for the following reasons:"
-      clones:
-        create:
-          success: Samples were successfully cloned.
-          error: "The following list of samples failed to clone:"
-          no_samples_cloned_error: "Samples were not cloned for the following reasons:"
-        dialog:
-          title: Clone Samples
-          description:
-            zero: No samples have been selected for cloning
-            singular: The following sample is about to be cloned to another project.
-            plural: The following COUNT_PLACEHOLDER samples are about to be cloned to another project.
-          samples: Samples
-          empty_state: No projects are associated with that name or ID
-          new_project_id: Project to clone samples to
-          no_available_projects: You do not have access to any destination projects to clone samples
-          select_project: Select Project
-          submit_button: Submit
-          spinner_message: Cloning samples, this might take a while...
-      metadata:
-        deletions:
-          destroy:
-            single_success: Metadata key '%{deleted_key}' was successfully deleted.
-            multi_success: Metadata keys '%{deleted_keys}' were successfully deleted.
-          modal:
-            description: "Metadata fields selected for deletion:"
-            key_header: Key
-            submit_button: Delete
-            title: Delete Metadata
-            value_header: Value
-        destroy:
-          success: Metadata key '%{deleted_key}' was successfully deleted.
-        edit:
-          edit: Edit
-        fields:
-          create:
-            single_success: Metadata key '%{key}' was successfully added.
-            multi_success: Metadata keys '%{keys}' were successfully added.
-            single_key_exists: Metadata key '%{key}' already exist.
-            multi_keys_exists: Metadata keys '%{keys}' already exist.
-          update:
-            success: "Metadata was successfully updated"
-        update:
-          success: "Metadata was successfully updated"
-        file_imports:
-          create:
-            success: Sample metadata was successfully imported.
-            error: "Metadata was not successfully imported for the following samples:"
-        form:
-          create_field_button: Add another metadata field
-          field: Field
-          key: Key
-          remove_field: Remove Field
-          submit_button: Add
-          value: Value
-      attachments:
-        concatenations:
-          create:
-            success: Files were successfully concatenated.
-            basename_help: The basename can only contain letters, numbers, hyphens, periods, and underscores
-          modal:
-            title: Concatenate Files
-            description: "The following files were selected to be concatenated:"
-            basename: Filename
-            delete_originals: Delete Originals
-            submit_button: Concatenate
-        deletions:
-          modal:
-            title: Delete Files
-            description: "The following files were selected for deletion:"
-            submit_button: Delete
-          destroy:
-            success: Files were successfully deleted.
-            partial_success: Some files were successfully deleted.
-            error: "File %{filename} was not removed due to the following errors: %{errors}"
-        attachment:
-          delete: Delete
-        create:
-          success: File %{filename} was successfully uploaded.
-          failure: "File %{filename} was not uploaded due to the following errors: %{errors}"
-        destroy:
-          success: File %{filename} was successfully removed.
-          error: "File %{filename} was not removed due to the following errors: %{errors}"
-        error: File %{filename} was not removed.
-        delete_attachment_modal:
-          description: Are you sure that you want to delete this file rom the sample?
-          submit_button: Confirm
-          title: Delete File
-      table:
-        description: The project samples table contains all samples related to this project
-        sample: Sample
-        puid: ID
-        created_at: Created
-        updated_at: Last Updated
-        files_updated_at: Files Last Updated
-        action: Action
-        counts:
-          samples: Samples
-          selected: Selected
-      tagged_filter:
-        title: Filter by sample names or Id
-        clear: Remove all tags
-        description: 'Paste a list of <kbd>,</kbd> seperated sample names or identifiers'
-        apply: Apply filter
-        remove_tag: Remove
-      deletions:
-        new_deletion_dialog:
-          title: Delete Sample
-          description: Are you sure you want to delete sample '%{sample_name}'?
-          submit_button: Remove
-        new_multiple_deletions_dialog:
-            description:
-              zero: No samples have been selected for deletion
-              singular: "The following sample has been selected for deletion:"
-              plural: "The following COUNT_PLACEHOLDER samples have been selected for deletion:"
-            id: ID
-            loading: Loading...
-            name: Name
-            samples: Samples
-            spinner: Deleting samples. This may take a while...
-            submit_button: Confirm
-            title: Delete Samples
-        destroy_multiple:
-          no_deleted_samples: Selected samples could not be deleted
-          partial_error: "%{not_deleted} samples could not be deleted"
-          partial_success: "%{deleted} samples were successfully deleted"
-          success: Samples were successfully deleted
-        destroy:
-          success: Sample %{sample_name} was successfully removed from project %{project_name}.
-          error: The sample does not exist within the project.
-    workflow_executions:
+    workflow_execution_actions:
       cancel:
-        error: "Could not cancel workflow %{workflow_name}"
-        success: "Workflow %{workflow_name} was successfully canceled"
+        error: Could not cancel workflow %{workflow_name}
+        success: Workflow %{workflow_name} was successfully canceled
       destroy:
-        error: "Could not delete workflow %{workflow_name}"
-        success: "Workflow %{workflow_name} was successfully deleted"
-      index:
-        actions:
-          cancel_button: Cancel
-          cancel_confirm: Are you sure you want to cancel this workflow execution?
-          delete_button: Delete
-          delete_confirm: Are you sure you want to delete this workflow execution?
-        create_export_button: Create Export
-        deselect_all_button: Deselect All
-        select_all_button: Select All
-        subtitle: These are the automated workflow executions that have been launched for this project
-        title: Workflow Executions
-      table:
-        empty:
-          title: No automated workflow executions.
-          description: There are no automated workflow executions associated with this project.
-      show:
-        create_export_button: Create Export
-        remove_button: Remove
-        remove_button_confirmation: Are you sure that you want to remove this workflow execution?
-        cancel_button: Cancel
-        cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
-        tabs:
-          summary: Summary
-          params: Parameters
-          files: Files
-        params:
-          empty: This pipeline has no parameters.
-      summary:
-        run_id: Run ID
-        name: Name
-        workflow_name: Workflow Name
-        workflow_version: Workflow Version
-        created_at: Created
-        updated_at: Last Updated
-      files:
-        table_header:
-          puid: ID
-          filename: Filename
-          format: Format
-          type: Type
-          size: Size
-          created_at: Created At
-      state:
-        initial: New
-        prepared: Prepared
-        submitted: Submitted
-        running: Running
-        completing: Completing
-        completed: Completed
-        error: Error
-        canceling: Canceling
-        canceled: Canceled
-  workflow_executions:
-    index:
-      create_export_button: Create Export
-      deselect_all_button: Deselect All
-      select_all_button: Select All
-      title: Workflow Executions
-      actions:
-        cancel_button: Cancel
-        cancel_confirm: Are you sure you want to cancel this workflow execution?
-        delete_button: Delete
-        delete_confirm: Are you sure you want to delete this workflow execution?
-    table:
-      empty:
-        title: No workflow executions.
-        description: There are no workflow executions associated with this submitter.
-    show:
-      create_export_button: Create Export
-      remove_button: Remove
-      remove_button_confirmation: Are you sure that you want to remove this workflow execution?
-      cancel_button: Cancel
-      cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
-      tabs:
-        summary: Summary
-        params: Parameters
-        samplesheet: Samplesheet
-        files: Files
-      params:
-        empty: This pipeline has no parameters.
-    summary:
-      run_id: Run ID
-      name: Name
-      workflow_name: Workflow Name
-      workflow_version: Workflow Version
-      created_at: Created
-      updated_at: Last Updated
-    samples:
-      empty: No samples could be found for this workflow execution
-    files:
-      table_header:
-        puid: ID
-        filename: Filename
-        format: Format
-        type: Type
-        size: Size
-        created_at: Created At
-    cancel:
-      error: "Could not cancel workflow %{workflow_name}"
-      success: "Workflow %{workflow_name} was successfully canceled"
-    destroy:
-      error: "Could not delete workflow %{workflow_name}"
-      success: "Workflow %{workflow_name} was successfully deleted"
-    submissions:
-      pipeline_selection:
-        title: Workflow Selection
-        loading: Preparing workflow arguments for COUNT_PLACEHOLDER samples, this may take a bit of time.
-      create:
-        title: "%{workflow} parameters"
-        submit: Submit
-        update: Update
-    state:
-      initial: New
-      prepared: Prepared
-      submitted: Submitted
-      running: Running
-      completing: Completing
-      completed: Completed
-      error: Error
-      canceling: Canceling
-      canceled: Canceled
-  services:
-    attachments:
-      concatenation:
-        filename_missing: Base file name not provided. Please provide a base name for the concatenated file.
-        incorrect_file_pairs: Incorrect file pairing. Forward and reverse read file counts do not match.
-        incorrect_file_types: "Files are not of the same type. Paired-end files can only be concatenated with other paired-end files, and single-end files can only be concatenated with other single-end files."
-        incorrect_attachable: All or some of then selected files do not belong to the sample.
-        incorrect_fastq_file_types: "Incorrect file types. '.fastq' files can only be concatenated with other '.fastq' files. '.fastq.gz' files can only be concatenated with other '.fastq.gz' files"
-        no_files_selected: No files were selected to concatenate. Please select files then try again.
-        incorrect_basename: The base file name can only contain letters, numbers, hyphens, periods, and underscores
-      destroy:
-        does_not_belong_to_attachable: This attachment does not belong to this sample.
-        associated_att_does_not_belong_to_attachable: This associated attachment does not belong to the sample.
-    bots:
-      create:
-        required:
-          token_name: Unable to create bot account as the token name is required
-          scopes: Unable to create bot account as the bot API scope must be selected
-          access_level: Unable to create bot account as an access level must be selected
-    data_exports:
-      create:
-        invalid_export_samples: Unable to create export due to either sample permissions or not found samples.
-        invalid_export_workflow_executions: Unable to create export due to either workflow execution permissions or not found workflow executions.
-    members:
-      create:
-        role_not_allowed: "A maintainer can only add members to the %{namespace_type} %{namespace_name} up to the Maintainer role"
-      destroy:
-        role_not_allowed: A maintainer can only remove a member up to the Maintainer role
-      update:
-        cannot_update_self: "You cannot update your own %{namespace_type} role"
-        role_not_allowed: "A maintainer can only update a member's role up to the Maintainer role"
-    samples:
-      clone:
-        empty_new_project_id: Destination project was not selected.
-        empty_sample_ids: The sample ids are empty.
-        same_project: The source and destination projects are the same. Please select a different destination project.
-        sample_exists: "Sample %{sample_puid}: Conflicts with sample named '%{sample_name}' in the target project"
-      transfer:
-        empty_new_project_id: Destination project was not selected.
-        empty_sample_ids: The sample ids are empty.
-        same_project: The samples already exist in the project. Please select a different project.
-        sample_exists: "Sample %{sample_puid}: Conflicts with sample named '%{sample_name}' in the target project"
-        samples_not_found: "Samples with the following sample ids could not be transferred as they were not found in the source project: %{sample_ids}"
-        maintainer_transfer_not_allowed: A maintainer can only transfer samples to other projects within the same hierarchy with a common ancestor
-      metadata:
-        sample_does_not_belong_to_project: "Sample '%{sample_name}'' does not belong to project '%{project_name}'"
-        empty_metadata: "No metadata was received to update sample '%{sample_name}'"
-        fields:
-          single_all_keys_exist: Metadata key '%{key}' already exist.
-          multi_all_keys_exist: Metadata keys '%{keys}' already exist.
-          sample_does_not_belong_to_project: "Sample '%{sample_name}'' does not belong to project '%{project_name}'"
-        user_cannot_update_metadata: "Metadata fields '%{metadata_fields}' of sample '%{sample_name}' cannot be overwritten by a user as it was previously updated with an analysis. "
-        update_fields:
-          metadata_was_not_changed: "Metadata fields were not changed."
-          key_exists: "Sample already contains metadata field '%{key}'."
-          user_cannot_edit_metadata_key: "Metadata key '%{key}' cannot be updated by a user."
-        import_file:
-          empty_file: The file cannot be empty.
-          empty_sample_id_column: The sample id column cannot be empty.
-          invalid_file_extension: The file can only be a csv or excel.
-          duplicate_column_names: The file has duplicate column header names. Please remove the columns with duplicate header names and retry uploading.
-          missing_sample_id_column: The file is missing the sample id column.  Please make sure the sample id column exists and retry uploading.
-          missing_metadata_column: The file does not have any metadata columns. Please add some columns of metadata to the file and retry uploading.
-          missing_metadata_row: The file does not have any metadata rows. Please add some rows of metadata to the file and retry uploading.
-          sample_not_found: "Sample '%{sample_name}' is not found within this %{namespace_type}"
-          sample_metadata_fields_not_updated: "Sample '%{sample_name}' with field(s) '%{metadata_fields}' cannot be updated."
-    personal_access_tokens:
-      create:
-        required:
-          token_name: Unable to generate personal access token as the name is required
-          scopes: Unable to generate personal access token as the API scope must be selected
-    namespaces:
-      share:
-        invalid_namespace_type: Only a group or project namespace can be shared with a group.
+        error: Could not delete workflow %{workflow_name}
+        success: Workflow %{workflow_name} was successfully deleted
+  dashboard:
     groups:
-      transfer:
-        namespace_empty: The new namespace is empty.
-        same_group_and_namespace: The new namespace must be different from the group.
-        namespace_group_exists: A group with the same name/path already exists in the new namespace.
-      share:
-        group_not_found: Group with id %{group_id} to share namespace with cannot be found.
-        group_self_reference: Group cannot be shared with itself.
+      index:
+        create_group_button: New group
+        row_aria_label: See %{name} subgroups
+        sorting:
+          created_at_asc: Oldest created
+          created_at_desc: Last created
+          name_asc: Name
+          name_desc: Name, descending
+          updated_at_asc: Oldest updated
+          updated_at_desc: Updated At
+        title: Groups
     projects:
-      transfer:
-        namespace_project_exists: Project with the same name or path already exists in the target namespace.
-  application:
-    errors:
-      access_denied: Access Denied.
-      not_authorized: You are not authorized to access the requested resource on this server.
-      resource_not_found: Resource Not Found.
-      not_found_on_server: The requested resource could not be found on the server.
-  ransack:
-    sort_dropdown_component:
-      sorting:
-        updated_at_desc: Updated At
-        created_at_desc: Last created
-        name_asc: Name
-        name_desc: Name, descending
-        namespace_name_asc: Name
-        namespace_name_desc: Name, descending
-        updated_at_asc: Oldest updated
-        created_at_asc: Oldest created
-  mailers:
-    email_template:
-      automated_message: This email was sent from an automated system. Please do not reply to this email.
-      copy_paste: "Or copy and paste this link into your browser:"
-      greeting: Hello,
-      greeting_with_name: Hello %{name},
-      thanks: Thanks,
-    data_export_mailer:
-      email_subject: "Export Ready - %{name}"
-      export_ready:
-        ready_for_download_html: "Your export <strong>%{name}</strong> is ready for download."
-        view_exports: "To view and download the export, click the button below:"
-        download_before_html: "Please download the export before <strong>%{date}</strong> as it will be deleted after this time."
-    group_link_mailer:
-      access_granted_user_email:
-        subject: Group '%{group_name}' has been granted access to %{namespace_type} '%{namespace_name}'
-        body_html: Group '%{group_name}' has been <strong>granted</strong> access to %{namespace_type} '%{namespace_name}'
-        view_details: "To view %{namespace_type} '%{namespace_name}', click the button below:"
-      access_revoked_user_email:
-        subject: "%{namespace_type} '%{namespace_name}' access has been revoked for Group '%{group_name}'"
-        body_html: "%{namespace_type} '%{namespace_name}' access has been <strong>revoked</strong> for Group '%{group_name}'"
-      access_granted_manager_email:
-        subject: Group '%{group_name}' has been granted access to %{namespace_type} '%{namespace_name}'
-        body_html: Group '%{group_name}' has been <strong>granted</strong> access to %{namespace_type} '%{namespace_name}'
-        view_details: "To view all the members of %{namespace_type} '%{namespace_name}', click the button below:"
-      access_revoked_manager_email:
-        subject: "%{namespace_type} '%{namespace_name}' access has been revoked for Group '%{group_name}'"
-        body_html: "%{namespace_type} '%{namespace_name}' access has been <strong>revoked</strong> for Group '%{group_name}'"
-    member_mailer:
-      access_granted_user_email:
-        subject: You have been granted access to %{type} '%{name}'
-        body_html: You have been <strong>granted</strong> access to %{type} '%{name}'
-        view_details: "To view %{type} '%{name}', click the button below:"
-      access_revoked_user_email:
-        subject: Your access to %{type} '%{name}' has been revoked
-        body_html: Your access to %{type} '%{name}' has been <strong>revoked</strong>
-      access_granted_manager_email:
-        subject: User '%{first_name} %{last_name}' (%{email}) has been granted access to %{type} '%{name}'
-        body_html: User '%{first_name} %{last_name}' (%{email}) has been <strong>granted</strong> access to %{type} '%{name}'
-        view_details: "To view all the members of %{type} '%{name}', click the button below:"
-      access_revoked_manager_email:
-        subject: "%{type} '%{name}' access has been revoked for User '%{first_name} %{last_name}' (%{email})"
-        body_html: "%{type} '%{name}' access has been <strong>revoked</strong> for User '%{first_name} %{last_name}' (%{email})"
-        view_details: "To view all the members of %{type} '%{name}', click the button below:"
-    pipeline_mailer:
-      complete_user_email:
-        subject: Pipeline Completed - %{id}
-        body_html: Your pipeline <strong>%{id}</strong> has completed successfully.
-      complete_manager_email:
-        subject: Pipeline Completed - %{id}
-        body_html: Pipeline <strong>%{id}</strong> has completed successfully.
-      error_user_email:
-        subject: Pipeline Errored - %{id}
-        body_html: Your pipeline <strong>%{id}</strong> did not complete successfully due to errors.
-      error_manager_email:
-        subject: Pipeline Errored - %{id}
-        body_html: Pipeline <strong>%{id}</strong> did not complete successfully due to errors.
-      view_details: "To view the pipeline summary, click the button below:"
+      index:
+        all: All
+        create_project_button: New project
+        personal: Personal
+        search:
+          placeholder: Filter by name
+        sorting:
+          created_at_asc: Oldest created
+          created_at_desc: Last created
+          namespace_name_asc: Name
+          namespace_name_desc: Name, descending
+          updated_at_asc: Oldest updated
+          updated_at_desc: Updated At
+        title: Projects
   data_exports:
     create:
       success: Data export '%{name}' was successfully started.
-      error: An error has occured with creating the data export.
+    destroy:
+      error: Data export '%{name}' could not be deleted.
+      success: Data export '%{name}' was successfully deleted.
     index:
-      title: Data Exports
-      table_header:
-        id: ID
-        name: Name
-        type: Type
-        status: Status
-        created_at: Created
-        expires_at: Expires
-        action: Action
       actions:
-        dropdown: See dropdown actions for data export %{name}
-        download: Download
-        download_aria_label: Download data export %{name}
         delete: Delete
         delete_aria_label: Delete data export %{name}
+        download: Download
+        download_aria_label: Download data export %{name}
       delete_confirmation: Are you sure you would like to delete data export '%{name}'?
       no_data_exports: No Data Exports
       no_data_exports_message: You currently have no data exports.
+      table_header:
+        action: Action
+        created_at: Created
+        expires_at: Expires
+        id: ID
+        name: Name
+        status: Status
+        type: Type
+      title: Data Exports
+    list_workflow_execution:
+      id: Id
+      name: Name
+      run_id: Run
+      workflow: Workflow
+    new:
+      after_submission_description_html: After submission, you will be redirected to the export page. While the export status is <span class="bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1 mr-1">processing</span>, the contents of the export are being created. Once the export status is <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1">ready</span>, it will be available for download. You will have 3 business days to download the export before it's deleted.
+      email_label: Receive an email notification when your export is ready to download?
+      name_label: 'Export Name (Optional):'
+      sample_description:
+        plural: This export will contain COUNT_PLACEHOLDER samples.
+        singular: This export will contain 1 sample.
+        zero: This export will contain no samples.
+      samples_count:
+        non_zero: Samples (COUNT_PLACEHOLDER selected)
+        zero: Samples (0 selected)
+      submit_button: Submit button
+    new_analysis_export_dialog:
+      description:
+        plural: This export will contain COUNT_PLACEHOLDER workflow executions.
+        singular: This export will contain 1 workflow execution.
+        zero: This export will contain no workflow executions.
+      selection_count:
+        non_zero: Workflow Executions (COUNT_PLACEHOLDER selected)
+        zero: Workflow Executions (0 selected)
+      title: Analysis Export
+    new_linelist_export_dialog:
+      available: Available
+      csv: ".csv"
+      format: Format
+      metadata: Metadata
+      metadata_description: Select the metadata fields for export by moving the metadata fields from the %{available} list to the %{selected} list. The export's metadata ordering will be determined by the ordering of the %{selected} list.
+      selected: Selected
+      title: Linelist Export
+      xlsx: ".xslx"
+    new_sample_export_dialog:
+      available: Available
+      format_description: By default, all files are included in sample exports. If you would like to filter which files are included based on format, include only those formats within the %{selected} list.
+      samples: Samples
+      select_formats: Select File Formats
+      selected: Selected
+      title: Sample Export
+    new_single_analysis_export_dialog:
+      single_selection: Workflow Executions (1 selected)
+    preview:
+      manifest_json: manifest.json
+    show:
+      download: Download
+      remove_button: Remove
+      remove_button_confirmation: Are you sure you would like to delete data export '%{name}'?
+      tabs:
+        preview: Preview
+        summary: Summary
+    status:
+      processing: PROCESSING
+      ready: READY
     summary:
       created_at: Created
       expires_at: Expires
@@ -1679,118 +423,328 @@ en:
       once_ready: Available once export is ready
       status: Status
       type: Type
-    destroy:
-      success: Data export '%{name}' was successfully deleted.
-      error: Data export '%{name}' could not be deleted.
-    remove:
-      success: Data export '%{name}' was successfully deleted.
-      error: Data export '%{name}' could not be deleted.
-    preview:
-      manifest_json: manifest.json
-    remove:
-      success: Data export '%{name}' was successfully deleted.
-      error: Data export '%{name}' could not be deleted.
-    show:
-      download: Download
-      remove_button: Remove
-      remove_button_confirmation: Are you sure you would like to delete data export '%{name}'?
-      tabs:
-        summary: Summary
-        preview: Preview
-    new:
-      after_submission_description_html: After submission, you will be redirected to the export page. While the export status is <span class="bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1 mr-1">processing</span>, the contents of the export are being created. Once the export status is <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1">ready</span>, it will be available for download. You will have 3 business days to download the export before it's deleted.
-      email_label: Receive an email notification when your export is ready to download?
-      name_label: "Export Name (Optional):"
-      samples_count:
-        zero: "Samples (0 selected)"
-        non_zero: "Samples (COUNT_PLACEHOLDER selected)"
-      sample_description:
-        zero: This export will contain no samples.
-        singular: This export will contain 1 sample.
-        plural: This export will contain COUNT_PLACEHOLDER samples.
-      submit_button: Submit
-    new_sample_export_dialog:
-      available: Available
-      format_description: By default, all files are included in sample exports. If you would like to filter which files are included based on format, include only those formats within the %{selected} list.
-      samples: Samples
-      select_formats: Select File Formats
-      selected: Selected
-      title: Sample Export
-    new_analysis_export_dialog:
-      selection_count:
-        zero: "Workflow Executions (0 selected)"
-        non_zero: "Workflow Executions (COUNT_PLACEHOLDER selected)"
-      description:
-        zero: This export will contain no workflow executions.
-        singular: This export will contain 1 workflow execution.
-        plural: This export will contain COUNT_PLACEHOLDER workflow executions.
-      title: Analysis Export
-    new_single_analysis_export_dialog:
-      id: "ID:"
-      name: "Name:"
-      run_id: "Run ID:"
-      workflow: "Workflow:"
-      single_selection: Workflow Executions (1 selected)
-      single_description_html: This export will contain 1 workflow execution.
-    new_linelist_export_dialog:
-      available: Available
-      csv: '.csv'
-      format: Format
-      metadata: Metadata
-      metadata_description: Select the metadata fields for export by moving the metadata fields from the %{available} list to the %{selected} list. The export's metadata ordering will be determined by the ordering of the %{selected} list.
-      samples: Samples
-      select_metadata: Select Metadata
-      selected: Selected
-      title: Linelist Export
-      xlsx: '.xslx'
-    list_workflow_execution:
-      id: "ID:"
-      name: "Name:"
-      run_id: "Run ID:"
-      workflow: "Workflow:"
     types:
-      sample: SAMPLE
       analysis: ANALYSIS
       linelist: LINELIST
-    status:
-      processing: PROCESSING
-      ready: READY
-  shared:
-    alert:
-      list:
-        danger: Danger
-    loading:
-      samples_list_skeleton:
-        loading: Loading...
-      spinner:
-        loading: Loading...
+      sample: SAMPLE
+  date:
+    formats:
+      iso: YYYY-MM-DD
+  errors:
+    messages:
+      not_saved:
+        one: '1 error prohibited this %{resource} from being saved:'
+        other: "%{count} errors prohibited this %{resource} from being saved:"
+  general:
+    default_sidebar:
+      data_exports: Data Exports
+      groups: Groups
+      projects: Projects
+      title: Your work
+      workflows: Workflow Executions
+    help: Help
+    name: IRIDA Next
+    navbar:
+      account_dropdown:
+        aria_label: Account menu dropdown
+        profile: Edit profile
+        sign_out: Sign out
+      collapse:
+        aria_label: Collapse navigation menu
+      new_dropdown:
+        aria_label: New menu item
+        group: Create new group
+        project: Create new project
+    screen_reader:
+      close: Close
+  groups:
+    bots:
+      index:
+        access_level:
+          level_0: No Access
+          level_10: Guest
+          level_20: Uploader
+          level_30: Analyst
+          level_40: Maintainer
+          level_50: Owner
+        access_token_section:
+          aria_label: Personal access token, copy to clipboard
+          description: Make sure you save it - you won't be able to access it again.
+          label: New personal access token for %{bot_name}
+        add_new_bot: New bot account
+        bot:
+          generate_new_token: Generate new token
+          generate_new_token_aria_label: Generate a new personal access token for bot account
+          never: Never
+          remove: Remove
+          remove_aria_label: Remove bot account
+          remove_confirmation: Are you sure you want to remove this bot account from the group?
+        bot_listing:
+          access_level: Access Level
+          actions: Actions
+          active_tokens: Active Tokens
+          created: Created
+          empty_state:
+            description: There are no bot accounts attributed to this group
+            title: No bot accounts
+          expiration: Expiration
+          generate_personal_access_token_modal:
+            cancel: Cancel
+            description: Generating a new personal access token for %{bot_account}
+            expires_at: Token Expiration Date (optional)
+            name: Token Name
+            submit: Submit
+            title: New Personal Access Token
+          new_bot_modal:
+            access_level: Access Level
+            cancel: Cancel
+            description: Adding a bot account to associate certain actions which can't be attributed to a human user
+            expires_at: Token Expiration Date (optional)
+            select_access_level: Select access level
+            submit: Submit
+            title: New Bot Account
+            token_name: Token Name
+          username: Username
+        personal_access_tokens_listing_modal:
+          actions: Actions
+          description: Viewing a list of active personal access tokens for %{bot_account}
+          personal_access_token:
+            never: Never
+            revoke: Revoke
+            revoke_confirmation: Are you sure you want to revoke this personal access token?
+          title: Personal access tokens
+        subtitle: Setup bot accounts to perform actions within the group that cannot be attributed to a human user
+        title: Bot Accounts
+    create:
+      cancel: Cancel
+      name_help: Name help
+      name_placeholder: Awesome group name
+      path_help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
+      submit: Create group
+      subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects
+      success: Group created successfully
+      title: Create group
+    destroy:
+      success: Group %{group_name} was deleted
+    edit:
+      advanced:
+        delete:
+          confirm: Are you sure you want to delete this group?
+          description: Deleting a group is permanent and cannot be undone. All projects, subgroups, and direct members will be deleted along with the group.
+          submit: Delete group
+          title: Delete group
+        path:
+          description: Changing a group's URL can have unintended side effects.
+          submit: Change group URL
+          title: Change group URL
+        title: Advanced settings
+        transfer:
+          confirm:
+            points_html:
+            - To prevent accidental actions we ask you to confirm your intention.
+            - Please type <kbd>%{group}</kbd> to proceed or close this dialog to cancel.
+            warning_html: You are going to transfer <strong>%{group_name}</strong> to another namespace. Once you confirm, this action cannot be undone.
+          descriptions:
+          - Transfer group to another parent group.
+          new_namespace_id: Select a parent group
+          points:
+          - Be careful. Changing a group's parent can have unintended side effects.
+          - You can only transfer groups where you have sufficient permissions.
+          - If the parent group's visibility is lower than the group's current visibility, visibility levels for subgroups and projects will be changed to match the new parent group's visibility.
+          submit: Transfer group
+          title: Transfer group
+      details:
+        submit: Save changes
+        subtitle: Group name and description
+        title: General
+      title: Settings
+    group_links:
+      index:
+        aria_labels:
+          expires_at: Group access expiration
+          group_access_level: Group Access Level
+      new:
+        button:
+          cancel: Cancel
+          submit: Share
+        empty_state: Empty state
+        label:
+          access_expiration: Access expiration (optional)
+          group_access_level: Maximum group access level
+          group_id: Group to share namespace with
+        placeholder:
+          select_access_level: Select access level
+        sharing_namespace_with_group: You're sharing group %{name} with a group
+        title: Share namespace
+    history:
+      group_history_modal:
+        close: Close
+        version_number: Version %{version_number}
+      group_history_modal_description:
+        group_created: Group was created by %{user}
+        group_deleted: Group was deleted by %{user}
+        group_modified: Group attributes were modified by %{user}
+        group_restored: Group was restored by %{user}
+        group_transferred: Group was transferred by %{user}
+      index:
+        title: History
+    index:
+      create_group_button: New group
+      group_dropdown:
+        delete: Delete group
+        delete_confirmation: Are you sure you want to delete this group?
+        label: Actions for group %{group_name}
+    members:
+      access_level:
+        aria_label: Access Level
+      index:
+        actions:
+          button_add_aria_label: Add new group member link
+          link_leave_group_aria_label: Leave group button
+          link_remove_aria_label: Remove group member %{member} link
+        add: Add New Member
+        invite_group: Invite Group
+        leave_confirmation: Are you sure you want to remove yourself from this group?
+        leave_group: Leave group
+        remove: Remove
+        remove_confirmation: Are you sure you want to remove this member from the group?
+        search:
+          groups:
+            placeholder: Filter by group name
+          placeholder: Filter by username
+        subtitle: These are the members that have access to %{namespace_type} %{namespace_name}
+        tabs:
+          aria_label: Group member tabs
+          groups: Groups
+          members: Members
+        title: Members
+      new:
+        add_member_to_group: Add member to group
+        description: You are adding a new member to group %{name}
+        empty_state: Empty state
+        select_access_level: Select Access Level
+        select_user: Select a User
+        title: Add New Member
+    new_subgroup:
+      cancel: Cancel
+      submit: Create subgroup
+      subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects
+      title: Create subgroup
+    owner: Owner
     samples:
-      metadata:
-        file_imports:
-          dialog:
-            title: Upload Sample Metadata
-            dialog:
-            description: Importing a metadata spreadsheet allows multiple metadata fields to multiple samples be added, updated or removed at once.
-            file: File
-            file_help: CSV, TSV, XLS or XLSX.
-            sample_id_column: Sample ID Column
-            select_sample_id_column: Select a Sample ID Column
-            submit_button: Import Metadata
-            ignore_empty_values: Ignore empty values
-            ignore_empty_values:
-              description: If selected, any metadata fields without an associated value will be ignored and those metadata keys will not be removed from the sample if present. However, if this not selected, any samples with the metadata key and empty value will be deleted.
-            namespace:
-              description: "The spreadsheet is required to have a column that contains a sample identifier. "
-              group:
-                description_html: The identifier is case-sensitive and must contain the <b>sample ID</b>.
-              project:
-                description_html: The identifier is case-sensitive and can contain either the <b>sample name or ID</b>.
-          errors:
-            description: "The sample metadata import completed with the following errors:"
-            ok_button: OK
-          success:
-            description: The metadata was imported successfully!
-            ok_button: OK
+      index:
+        create_export_button:
+          label: Create Export
+          linelist_export: Linelist Export
+          sample_export: Sample Export
+        deselect_all_button: Deselect All
+        import_metadata_button: Import metadata
+        search:
+          placeholder: Filter by ID or name
+        select_all_button: Select All
+        subtitle: These are the samples in %{namespace_type} %{namespace_name}
+        title: Samples
+        workflows:
+          button_sr: Launch workflow
+      table:
+        no_associated_samples: There are no samples associated with this group.
+        no_samples: No Samples
+    show:
+      create_project_button: New project
+      create_subgroup_button: New subgroup
+      shared_namespaces:
+        no_shared:
+          description: Groups and projects can be shared with other groups through their members page.
+          title: No shared groups or projects
+      subgroups:
+        no_subgroups:
+          description: Create a subgroup to manage projects and members
+          title: No subgroups
+      tabs:
+        label: Group project details navigation
+        shared_namespaces: Shared groups and projects
+        subgroups_and_projects: Subgroups and projects
+      title: Title
+    sidebar:
+      bot_accounts: Bot Accounts
+      details: Details
+      general: General
+      history: History
+      members: Members
+      samples: Samples
+      settings: Settings
+    table_component:
+      action: Action
+      expires_at: Expiration
+      group_access_level: Access Level
+      group_name: Group
+      namespace_name: Source
+      updated_at: Access Granted
+    transfer:
+      success: Group transferred successfully
+    update:
+      success: Group %{group_name} was successfully updated
+  layouts:
+    application:
+      site_title: IRIDA Next
+  mailers:
+    data_export_mailer:
+      email_subject: Export Ready - %{name}
+      export_ready:
+        download_before_html: Please download the export before <strong>%{date}</strong> as it will be deleted after this time.
+        ready_for_download_html: Your export <strong>%{name}</strong> is ready for download.
+        view_exports: 'To view and download the export, click the button below:'
+    email_template:
+      automated_message: This email was sent from an automated system. Please do not reply to this email.
+      copy_paste: 'Or copy and paste this link into your browser:'
+      greeting: Hello,
+      greeting_with_name: Hello %{name},
+      thanks: Thanks,
+    group_link_mailer:
+      access_granted_manager_email:
+        body_html: Group '%{group_name}' has been <strong>granted</strong> access to %{namespace_type} '%{namespace_name}'
+        subject: Group '%{group_name}' has been granted access to %{namespace_type} '%{namespace_name}'
+        view_details: 'To view all the members of %{namespace_type} ''%{namespace_name}'', click the button below:'
+      access_granted_user_email:
+        body_html: Group '%{group_name}' has been <strong>granted</strong> access to %{namespace_type} '%{namespace_name}'
+        subject: Group '%{group_name}' has been granted access to %{namespace_type} '%{namespace_name}'
+        view_details: 'To view %{namespace_type} ''%{namespace_name}'', click the button below:'
+      access_revoked_manager_email:
+        body_html: "%{namespace_type} '%{namespace_name}' access has been <strong>revoked</strong> for Group '%{group_name}'"
+        subject: "%{namespace_type} '%{namespace_name}' access has been revoked for Group '%{group_name}'"
+      access_revoked_user_email:
+        body_html: "%{namespace_type} '%{namespace_name}' access has been <strong>revoked</strong> for Group '%{group_name}'"
+        subject: "%{namespace_type} '%{namespace_name}' access has been revoked for Group '%{group_name}'"
+    member_mailer:
+      access_granted_manager_email:
+        body_html: User '%{first_name} %{last_name}' (%{email}) has been <strong>granted</strong> access to %{type} '%{name}'
+        subject: User '%{first_name} %{last_name}' (%{email}) has been granted access to %{type} '%{name}'
+        view_details: 'To view all the members of %{type} ''%{name}'', click the button below:'
+      access_granted_user_email:
+        body_html: You have been <strong>granted</strong> access to %{type} '%{name}'
+        subject: You have been granted access to %{type} '%{name}'
+        view_details: 'To view %{type} ''%{name}'', click the button below:'
+      access_revoked_manager_email:
+        body_html: "%{type} '%{name}' access has been <strong>revoked</strong> for User '%{first_name} %{last_name}' (%{email})"
+        subject: "%{type} '%{name}' access has been revoked for User '%{first_name} %{last_name}' (%{email})"
+        view_details: 'To view all the members of %{type} ''%{name}'', click the button below:'
+      access_revoked_user_email:
+        body_html: Your access to %{type} '%{name}' has been <strong>revoked</strong>
+        subject: Your access to %{type} '%{name}' has been revoked
+    pipeline_mailer:
+      complete_manager_email:
+        body_html: Pipeline <strong>%{id}</strong> has completed successfully.
+        subject: Pipeline Completed - %{id}
+      complete_user_email:
+        body_html: Your pipeline <strong>%{id}</strong> has completed successfully.
+        subject: Pipeline Completed - %{id}
+      error_manager_email:
+        body_html: Pipeline <strong>%{id}</strong> did not complete successfully due to errors.
+        subject: Pipeline Errored - %{id}
+      error_user_email:
+        body_html: Your pipeline <strong>%{id}</strong> did not complete successfully due to errors.
+        subject: Pipeline Errored - %{id}
+      view_details: 'To view the pipeline summary, click the button below:'
   members:
     access_levels:
       level_0: No Access
@@ -1800,12 +754,823 @@ en:
       level_40: Maintainer
       level_50: Owner
     table_component:
-      user_email: Username
-      access_level: Access level
-      namespace_name: Source
-      created_at: Access granted
-      expires_at: Expiration
+      access_level: Access Level
       action: Action
       aria_labels:
         expires_at: Member expiration
+      created_at: Access Granted
+      expires_at: Expiration
+      group_access_level: Access Level
+      group_name: Group
       inherited_from: Inherited from
+      namespace_name: Source
+      updated_at: Access Granted
+      user_email: Username
+  models:
+    sample:
+      analysis: Analysis
+  namespace_tree:
+    row:
+      row_contents_component:
+        stats:
+          projects: Projects
+          subnamespaces: Subnamespaces
+  nextflow:
+    samplesheet:
+      column_component:
+        default: Default
+        required: Required
+    samplesheet_component:
+      label: Label
+      loading: Loading
+  nextflow_component:
+    name:
+      helper: Helper
+      label: Label
+  profiles:
+    accounts:
+      delete:
+        button: Delete account
+        confirm: Are you sure you want to delete your account?
+        description: Deleting your account has the following effects
+        effects:
+        - All projects and groups you own will be deleted
+        - All projects and groups you are a member of will be left intact
+    passwords:
+      update:
+        forgot: Forgot your password?
+        hint: You must provide your current password to update it
+        submit: Save password
+        subtitle: Update your account password
+        success: Password updated successfully
+        title: Password
+    personal_access_tokens:
+      access_token_section:
+        aria_label: Personal access token, copy to clipboard
+        description: Make sure you save it - you won't be able to access it again.
+        label: Your new personal access token
+      create:
+        submit: Create personal access token
+        subtitle: Enter the name of your application, and we'll return a unique personal access token.
+        title: Add a personal access token
+      index:
+        action: Action
+        active_personal_access_tokens: Active Personal Access Tokens (%{count})
+        expires_at: Expires
+        subtitle: You can generate a personal access token for each application you use that needs access to the IRIDA Next API.
+        title: Personal Access Tokens
+      personal_access_token:
+        never: Never
+        revoke_button: Revoke
+        revoke_confirm: Are you sure you want to revoke this personal access token? This action cannot be undone.
+    preferences:
+      locale_form:
+        en: English
+        fr: French
+      show:
+        dark_theme: Dark
+        light_theme: Light
+        locale_title: Language
+        preferences: Preferences
+        system_desc: The colour theme will update based on your operating system settings.
+        system_theme: System
+        theme_title: Colour theme
+      update:
+        success: Language updated successfully
+    show:
+      email:
+        submit: Update profile settings
+      email_address: Email Address
+      first_name: First Name
+      last_name: Last Name
+      missing: This field has not been provided by the Authentication Provider.
+    sidebar:
+      access_tokens: Access Tokens
+      account: Account
+      header: User Settings
+      password: Password
+      preferences: Preferences
+      profile: Profile
+    update:
+      success: Profile updated successfully
+  projects:
+    automated_workflow_executions:
+      actions:
+        delete_button: Delete
+        delete_confirm: Are you sure that you want to delete this automated workflow execution?
+        edit_button: Edit
+      create:
+        error: Could not create an automated workflow execution for %{workflow_name}
+        success: Automated workflow execution for %{workflow_name} was successfully created
+      destroy:
+        error: Could not delete automated workflow execution for %{workflow_name}
+        success: Automated workflow execution for %{workflow_name} was successfully deleted
+      edit_dialog:
+        title: 'Editing Automated Workflow Execution: %{workflow_name}'
+      index:
+        add_new_automated_workflow_execution: New automated workflow execution
+        subtitle: Setup automated workflow executions to launch when pair end data is uploaded to the project
+        title: Automated Workflow Executions
+      new_automated_workflow_execution_modal:
+        title: "%{workflow} parameters"
+      pipeline_selection_modal:
+        title: Workflow Selection
+      table:
+        empty:
+          description: No automated workflow executions have been configured for this project
+          title: No automated workflow executions
+        headers:
+          actions: Actions
+          created_at: Created
+          id: ID
+          name: Name
+          updated_at: Updated
+          workflow_name: Workflow Name
+          workflow_version: Workflow Version
+    bots:
+      index:
+        access_level:
+          level_0: No Access
+          level_10: Guest
+          level_20: Uploader
+          level_30: Analyst
+          level_40: Maintainer
+          level_50: Owner
+        access_token_section:
+          aria_label: Personal access token, copy to clipboard
+          description: Make sure you save it - you won't be able to access it again.
+          label: New personal access token for %{bot_name}
+        add_new_bot: New bot account
+        bot:
+          generate_new_token: Generate new token
+          generate_new_token_aria_label: Generate a new personal access token for bot account
+          never: Never
+          remove: Remove
+          remove_aria_label: Remove bot account
+          remove_confirmation: Are you sure you want to remove this bot account from the project?
+        bot_listing:
+          access_level: Access Level
+          actions: Actions
+          active_tokens: Active Tokens
+          created: Created
+          empty_state:
+            description: There are no bot accounts attributed to this project
+            title: No bot accounts
+          expiration: Expiration
+          generate_personal_access_token_modal:
+            cancel: Cancel
+            description: Generating a new personal access token for %{bot_account}
+            expires_at: Token Expiration Date (optional)
+            name: Token Name
+            submit: Submit
+            title: New Personal Access Token
+          new_bot_modal:
+            access_level: Access Level
+            cancel: Cancel
+            description: Adding a bot account to associate certain actions which can't be attributed to a human user
+            expires_at: Token Expiration Date (optional)
+            select_access_level: Select access level
+            submit: Submit
+            title: New Bot Account
+            token_name: Token Name
+          username: Username
+        personal_access_tokens_listing_modal:
+          actions: Actions
+          description: Viewing a list of active personal access tokens for %{bot_account}
+          personal_access_token:
+            never: Never
+            revoke: Revoke
+            revoke_confirmation: Are you sure you want to revoke this personal access token?
+          title: Personal access tokens
+        subtitle: Setup bot accounts to perform actions within the project that cannot be attributed to a human user
+        title: Bot Accounts
+    create:
+      success: Project %{project_name} was successfully created
+    destroy:
+      success: Project %{project_name} was successfully deleted
+    edit:
+      advanced:
+        destroy:
+          confirm: Are you sure you want to delete this project?
+          description: Deleting a project is permanent and cannot be undone. All samples and direct members will be deleted along with the project.
+          submit: Delete project
+          title: Delete project
+        path:
+          description: Changing a project's URL can have unintended side effects.
+          help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
+          submit: Change project URL
+          title: Change project URL
+        title: Advanced settings
+        transfer:
+          confirm:
+            points_html:
+            - To prevent accidental actions we ask you to confirm your intention.
+            - Please type <kbd>%{project}</kbd> to proceed or close this dialog to cancel
+            warning_html: You are going to transfer <strong>%{project_name}</strong> to another namespace. Once you confirm, this action cannot be undone.
+          descriptions:
+          - Transfer your project into another namespace.
+          - When you transfer your project to a group, you can easily manage multiple projects and users.
+          - 'Things to be aware of before transferring your project:'
+          new_namespace_id: Select a new namespace
+          points:
+          - Be careful! Changing a project's namespace can have unintended side effects.
+          - You can only transfer projects to groups where you have sufficient permissions.
+          - Project visibility level will change to match namespace rules when transferring to a group.
+          submit: Transfer project
+          title: Transfer project
+      general:
+        heading: Project name and description
+        submit: Update project
+        title: General
+      title: Settings
+    group_links:
+      index:
+        access_level:
+          level_0: No Access
+          level_10: Guest
+          level_20: Uploader
+          level_30: Analyst
+          level_40: Maintainer
+          level_50: Owner
+        actions:
+          unlink_aria_label: Unlink namespace from group %{member} button
+        aria_labels:
+          expires_at: Group access expiration
+          group_access_level: Group Access Level
+        empty_state:
+          description: There are no groups that have been delegated access to this project
+          title: No groups
+        inherited_from: Inherited from
+        unlink: Unlink
+        unlink_confirmation: Are you sure you want to unlink the project %{namespace_name} with group %{group_name}
+      new:
+        button:
+          cancel: Cancel
+          submit: Share
+        empty_state: Empty state
+        label:
+          access_expiration: Access expiration (optional)
+          group_access_level: Maximum group access level
+          shared_group: Group to share namespace with
+        placeholder:
+          select_access_level: Select access level
+          select_group: Select group
+        sharing_namespace_with_group: You're sharing group %{name} with a group
+        title: Share namespace
+    history:
+      index:
+        subtitle: These are the changes that have been made to the project
+        title: History
+      project_history_modal:
+        close: Close
+        version_number: Version %{version_number}
+      project_history_modal_description:
+        project_created: Project was created by %{user}
+        project_deleted: Project was deleted by %{user}
+        project_modified: Project attributes were modified by %{user}
+        project_restored: Project was restored by %{user}
+        project_transferred: Project was transferred by %{user}
+    members:
+      access_level:
+        aria_label: Access Level
+      index:
+        access_level:
+          level_0: No Access
+          level_10: Guest
+          level_20: Uploader
+          level_30: Analyst
+          level_40: Maintainer
+          level_50: Owner
+        actions:
+          button_add_aria_label: Add new project member button
+          link_leave_project_aria_label: Leave project link
+          link_remove_aria_label: Remove project member %{member} link
+        add: Add New Member
+        invite_group: Invite group
+        leave_confirmation: Are you sure you want to remove yourself from the project?
+        leave_project: Leave project
+        remove: Remove
+        remove_confirmation: Are you sure you want to remove this member from the project?
+        search:
+          groups:
+            placeholder: Filter by group name
+          placeholder: Filter by username
+        subtitle: These are the members that have access to %{namespace_type} %{namespace_name}
+        tabs:
+          aria_label: Project members tabs
+          groups: Groups
+          members: Members
+        title: Members
+      new:
+        add_member_to_project: Add member to project
+        description: You are adding a new member to project %{name}
+        empty_state: Empty state
+        select_access_level: Select Access Level
+        select_user: Select a User
+        title: Add New Member
+    new:
+      description: Project description, not required
+      help: The path is used in URLs and must be at least 3 characters and can only contain letters, numbers, dashes and underscores
+      placeholder: Awesome project name
+      submit: Create project
+      subtitle: Projects are where you can store and analyze your data
+      title: Create project
+    samples:
+      attachments:
+        attachment:
+          delete: Delete
+        concatenations:
+          create:
+            basename_help: The basename can only contain letters, numbers, hyphens, periods, and underscores
+            success: Files were successfully concatenated.
+          modal:
+            basename: Filename
+            description: 'The following files were selected to be concatenated:'
+            submit_button: Concatenate
+            title: Concatenate Files
+        create:
+          failure: 'File %{filename} was not uploaded due to the following errors: %{errors}'
+          success: File %{filename} was successfully uploaded.
+        delete_attachment_modal:
+          description: Are you sure that you want to delete this file rom the sample?
+          submit_button: Confirm
+          title: Delete File
+        deletions:
+          destroy:
+            error: 'File %{filename} was not removed due to the following errors: %{errors}'
+            partial_success: Some files were successfully deleted.
+            success: Files were successfully deleted.
+          modal:
+            description: 'The following files were selected for deletion:'
+            submit_button: Delete
+            title: Delete Files
+        destroy:
+          error: 'File %{filename} was not removed due to the following errors: %{errors}'
+          success: File %{filename} was successfully removed.
+      clones:
+        create:
+          error: 'The following list of samples failed to clone:'
+          no_samples_cloned_error: 'Samples were not cloned for the following reasons:'
+          success: Samples were successfully cloned.
+        dialog:
+          description:
+            plural: The following COUNT_PLACEHOLDER samples are about to be cloned to another project.
+            singular: The following sample is about to be cloned to another project.
+            zero: No samples have been selected for cloning
+          empty_state: Empty state
+          new_project_id: Project to clone samples to
+          no_available_projects: No available projects
+          samples: Samples
+          select_project: Select project
+          spinner_message: Cloning samples, this might take a while...
+          submit_button: Submit
+          title: Clone Samples
+      create:
+        success: Sample was successfully created.
+      deletions:
+        destroy:
+          success: Sample %{sample_name} was successfully removed from project %{project_name}.
+        destroy_multiple:
+          no_deleted_samples: Selected samples could not be deleted
+          partial_error: "%{not_deleted} samples could not be deleted"
+          partial_success: "%{deleted} samples were successfully deleted"
+          success: Samples were successfully deleted
+        new_deletion_dialog:
+          description: Are you sure you want to delete sample '%{sample_name}'?
+          submit_button: Remove
+          title: Delete Sample
+        new_multiple_deletions_dialog:
+          description:
+            plural: 'The following COUNT_PLACEHOLDER samples have been selected for deletion:'
+            singular: 'The following sample has been selected for deletion:'
+            zero: No samples have been selected for deletion
+          loading: Loading...
+          samples: Samples
+          spinner: Deleting samples. This may take a while...
+          submit_button: Confirm
+          title: Delete Samples
+      edit:
+        cancel_button: Cancel
+        form:
+          title: Name and Description
+        submit_button: Update sample
+        title: Edit sample
+      index:
+        actions:
+          button_add_aria_label: Add new sample button
+        clone_button: Clone samples
+        create_export_button:
+          label: Create Export
+          linelist_export: Linelist Export
+          sample_export: Sample Export
+        delete_samples_button: Delete Samples
+        deselect_all_button: Deselect All
+        edit_button: Edit
+        import_metadata_button: Import metadata
+        new_button: New sample
+        no_associated_samples: There are no samples associated with this project.
+        no_samples: No Samples
+        remove_button: Remove
+        search:
+          placeholder: Filter by ID or name
+        select_all_button: Select All
+        title: Samples
+        transfer_button: Transfer samples
+        workflows:
+          button_sr: Launch workflow
+      metadata:
+        deletions:
+          destroy:
+            multi_success: Metadata keys '%{deleted_keys}' were successfully deleted.
+            single_success: Metadata key '%{deleted_key}' was successfully deleted.
+          modal:
+            description: 'Metadata fields selected for deletion:'
+            key_header: Key
+            submit_button: Delete
+            title: Delete Metadata
+            value_header: Value
+        destroy:
+          error: Error
+          success: Metadata key '%{deleted_key}' was successfully deleted.
+        fields:
+          create:
+            multi_keys_exists: Metadata keys '%{keys}' already exist.
+            multi_success: Metadata keys '%{keys}' were successfully added.
+            single_key_exists: Metadata key '%{key}' already exist.
+            single_success: Metadata key '%{key}' was successfully added.
+          update:
+            success: Metadata was successfully updated
+        form:
+          create_field_button: Add another metadata field
+          key: Key
+          remove_field: Remove Field
+          submit_button: Add
+          value: Value
+      new:
+        cancel_button: Cancel
+        submit_button: Create sample
+        subtitle: This is a subtitle to create a new project sample.
+        title: Create sample
+      shared:
+        errors:
+          ok_button: OK
+        metadata_toggle:
+          label: Metadata
+      show:
+        add_metadata: Add Metadata
+        concatenate_button: Concatenate Files
+        delete_files_button: Delete Files
+        delete_metadata_button: Delete Metadata
+        edit_button: Edit this sample
+        files: Files
+        files_ignored: 'fasta and fastq files must be compressed. The following file(s) cannot be uploaded:'
+        history:
+          modal:
+            created_by: Sample created by %{user}
+            deleted_by: Sample deleted by %{user}
+            modified_by: Sample attributes modified by %{user}
+            restored_by: Sample restored by %{user}
+            transferred_by: Sample transferred by %{user}
+            version: Version %{version}
+        metadata:
+          actions:
+            delete_confirm: Are you sure you want to remove metadata field '%{deleted_key}' from the sample?
+            dropdown:
+              delete: Delete
+              update: Update
+          update:
+            key: Key
+            update: Update
+            update_metadata: Update Metadata
+            value: Value
+        new_attachment_button: Upload Files
+        no_associated_files: There are no files associated with this sample.
+        no_associated_metadata: This sample has no metadata.
+        no_files: No Files
+        no_metadata: No Metadata
+        remove_button: Remove
+        remove_button_confirmation: Are you sure you want to remove this sample from the project?
+        table_header:
+          action: Action
+          created_at: Uploaded
+          filename: Filename
+          format: Format
+          key: Key
+          last_updated: Last Updated
+          puid: ID
+          size: Size
+          source: Source
+          type: Type
+          value: Value
+        tabs:
+          files: Files
+          history: History
+          metadata: Metadata
+        upload: Upload
+        upload_files: Upload Files
+        uploading: Uploading
+      transfers:
+        create:
+          error: 'The following list of samples failed to transfer:'
+          no_samples_transferred_error: 'Samples were not transferred for the following reasons:'
+          success: Samples were successfully transferred.
+        dialog:
+          description:
+            plural: The following COUNT_PLACEHOLDER samples are about to be transferred, which will result in these samples no longer being accessible in this project. Maintainers can only transfer samples to another project within the same hierarchy.
+            singular: The following sample is about to be transferred, which will result in the sample no longer being accessible in this project. Maintainers can only transfer samples to another project within the same hierarchy.
+            zero: No samples have been selected for transfer
+          empty_state: Empty state
+          new_project_id: Project to transfer samples to
+          no_available_projects: No available projects
+          samples: Samples
+          select_project: Select project
+          spinner_message: Transferring samples, this might take a while...
+          submit_button: Submit
+          title: Transfer Samples
+      update:
+        success: Sample was successfully updated.
+    sidebar:
+      automated_workflow_executions: Automated Workflow Executions
+      bot_accounts: Bot Accounts
+      details: Details
+      general: General
+      history: History
+      members: Members
+      samples: Samples
+      settings: Settings
+      workflow_executions: Workflow Executions
+    transfer:
+      success: Success
+    update:
+      success: Project %{project_name} was successfully updated
+    workflow_executions:
+      files:
+        table_header:
+          created_at: Created At
+          filename: Filename
+          format: Format
+          puid: ID
+          size: Size
+          type: Type
+      index:
+        create_export_button: Create export button
+        deselect_all_button: Deselect all button
+        select_all_button: Select all button
+        subtitle: These are the automated workflow executions that have been launched for this project
+        title: Workflow Executions
+      show:
+        cancel_button: Cancel
+        cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
+        create_export_button: Create Export
+        remove_button: Remove
+        remove_button_confirmation: Are you sure that you want to remove this workflow execution?
+      summary:
+        created_at: Created
+        name: Name
+        run_id: Run ID
+        updated_at: Last Updated
+        workflow_name: Workflow Name
+        workflow_version: Workflow Version
+      table:
+        empty:
+          description: There are no automated workflow executions associated with this project.
+          title: No automated workflow executions.
+  ransack:
+    sort_dropdown_component:
+      sorting:
+        created_at_asc: Oldest created
+        created_at_desc: Last created
+        name_asc: Name
+        name_desc: Name, descending
+        namespace_name_asc: Name
+        namespace_name_desc: Name, descending
+        updated_at_asc: Oldest updated
+        updated_at_desc: Updated At
+  samples:
+    table_component:
+      action: Action
+      attachments_updated_at: Files Last Updated
+      counts:
+        samples: Samples
+        selected: Selected
+      created_at: Created
+      limit:
+        item: Samples
+      name: Sample Name
+      project: Project
+      puid: Sample ID
+      select_page: Select / Deselect visible samples
+      updated_at: Last Updated
+  services:
+    attachments:
+      concatenation:
+        filename_missing: Base file name not provided. Please provide a base name for the concatenated file.
+        incorrect_attachable: All or some of then selected files do not belong to the sample.
+        incorrect_basename: The base file name can only contain letters, numbers, hyphens, periods, and underscores
+        incorrect_fastq_file_types: Incorrect file types. '.fastq' files can only be concatenated with other '.fastq' files. '.fastq.gz' files can only be concatenated with other '.fastq.gz' files
+        incorrect_file_pairs: Incorrect file pairing. Forward and reverse read file counts do not match.
+        incorrect_file_types: Files are not of the same type. Paired-end files can only be concatenated with other paired-end files, and single-end files can only be concatenated with other single-end files.
+        no_files_selected: No files were selected to concatenate. Please select files then try again.
+      destroy:
+        associated_att_does_not_belong_to_attachable: This associated attachment does not belong to the sample.
+        does_not_belong_to_attachable: This attachment does not belong to this sample.
+    bots:
+      create:
+        required:
+          access_level: Unable to create bot account as an access level must be selected
+          scopes: Unable to create bot account as the bot API scope must be selected
+          token_name: Unable to create bot account as the token name is required
+    data_exports:
+      create:
+        invalid_export_samples: Unable to create export due to either sample permissions or not found samples.
+        invalid_export_workflow_executions: Unable to create export due to either workflow execution permissions or not found workflow executions.
+    groups:
+      share:
+        group_not_found: Group with id %{group_id} to share namespace with cannot be found.
+        group_self_reference: Group cannot be shared with itself.
+        invalid_namespace_type: Invalid namespace type
+      transfer:
+        namespace_empty: The new namespace is empty.
+        namespace_group_exists: A group with the same name/path already exists in the new namespace.
+        same_group_and_namespace: The new namespace must be different from the group.
+    members:
+      create:
+        role_not_allowed: A maintainer can only add members to the %{namespace_type} %{namespace_name} up to the Maintainer role
+      destroy:
+        role_not_allowed: A maintainer can only remove a member up to the Maintainer role
+      update:
+        cannot_update_self: You cannot update your own %{namespace_type} role
+        role_not_allowed: A maintainer can only update a member's role up to the Maintainer role
+    personal_access_tokens:
+      create:
+        required:
+          scopes: Unable to generate personal access token as the API scope must be selected
+          token_name: Unable to generate personal access token as the name is required
+    projects:
+      create:
+        namespace_required: Namespace required
+      transfer:
+        namespace_empty: Namespace empty
+        namespace_project_exists: Project with the same name or path already exists in the target namespace.
+        project_in_namespace: Project in namespace
+    samples:
+      clone:
+        empty_new_project_id: Destination project was not selected.
+        empty_sample_ids: The sample ids are empty.
+        same_project: The source and destination projects are the same. Please select a different destination project.
+        sample_exists: 'Sample %{sample_puid}: Conflicts with sample named ''%{sample_name}'' in the target project'
+      metadata:
+        empty_metadata: No metadata was received to update sample '%{sample_name}'
+        fields:
+          multi_all_keys_exist: Metadata keys '%{keys}' already exist.
+          sample_does_not_belong_to_project: Sample '%{sample_name}'' does not belong to project '%{project_name}'
+          single_all_keys_exist: Metadata key '%{key}' already exist.
+        import_file:
+          duplicate_column_names: The file has duplicate column header names. Please remove the columns with duplicate header names and retry uploading.
+          empty_file: The file cannot be empty.
+          empty_sample_id_column: The sample id column cannot be empty.
+          invalid_file_extension: The file can only be a csv or excel.
+          missing_metadata_column: The file does not have any metadata columns. Please add some columns of metadata to the file and retry uploading.
+          missing_metadata_row: The file does not have any metadata rows. Please add some rows of metadata to the file and retry uploading.
+          missing_sample_id_column: The file is missing the sample id column.  Please make sure the sample id column exists and retry uploading.
+          sample_metadata_fields_not_updated: Sample '%{sample_name}' with field(s) '%{metadata_fields}' cannot be updated.
+          sample_not_found: Sample '%{sample_name}' is not found within this project
+        sample_does_not_belong_to_project: Sample '%{sample_name}'' does not belong to project '%{project_name}'
+        update_fields:
+          key_exists: Sample already contains metadata field '%{key}'.
+          metadata_was_not_changed: Metadata fields were not changed.
+          user_cannot_edit_metadata_key: Metadata key '%{key}' cannot be updated by a user.
+        user_cannot_update_metadata: 'Metadata fields ''%{metadata_fields}'' of sample ''%{sample_name}'' cannot be overwritten by a user as it was previously updated with an analysis. '
+      transfer:
+        empty_new_project_id: Destination project was not selected.
+        empty_sample_ids: The sample ids are empty.
+        maintainer_transfer_not_allowed: A maintainer can only transfer samples to other projects within the same hierarchy with a common ancestor
+        same_project: The samples already exist in the project. Please select a different project.
+        sample_exists: 'Sample %{sample_puid}: Conflicts with sample named ''%{sample_name}'' in the target project'
+        samples_not_found: 'Samples with the following sample ids could not be transferred as they were not found in the source project: %{sample_ids}'
+  shared:
+    alert:
+      list:
+        danger: Danger
+    loading:
+      samples_list_skeleton:
+        loading: Loading...
+    samples:
+      metadata:
+        file_imports:
+          dialog:
+            description: Description
+            file: File
+            file_help: File help
+            ignore_empty_values:
+              description: Description
+            namespace:
+              description: Description
+              group:
+                description_html: Description html
+              project:
+                description_html: Description html
+            sample_id_column: Sample id column
+            select_sample_id_column: Select sample id column
+            submit_button: Submit button
+            title: Title
+          errors:
+            description: Description
+            ok_button: Ok button
+          success:
+            description: Description
+            ok_button: Ok button
+  time:
+    formats:
+      abbreviated: "%a %b%e %Y %H:%M"
+      default: "%Y-%m-%d %H:%M:%S"
+      full_date: "%B %d, %Y"
+  viral:
+    pagy:
+      limit_component:
+        items: "%{items} per page:"
+        summary:
+          one: Displaying <span class='font-bold'>%{count}</span> item
+          other: Displaying <span class='font-bold'>%{from}-%{to}</span> of <span class='font-bold'>%{count}</span> items
+      pagination_component:
+        aria-label: Pagination
+        next: Next
+        previous: Previous
+    sortable_lists_component:
+      add_all: Add all
+      remove_all: Remove all
+  workflow_executions:
+    files:
+      table_header:
+        created_at: Created At
+        filename: Filename
+        format: Format
+        puid: ID
+        size: Size
+        type: Type
+    index:
+      actions:
+        cancel_button: Cancel
+        cancel_confirm: Are you sure you want to cancel this workflow execution?
+        delete_button: Delete
+        delete_confirm: Are you sure you want to delete this workflow execution?
+      create_export_button: Create export button
+      deselect_all_button: Deselect all button
+      select_all_button: Select all button
+      title: Workflow Executions
+    samples:
+      empty: No samples could be found for this workflow execution
+    show:
+      cancel_button: Cancel
+      cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
+      create_export_button: Create Export
+      remove_button: Remove
+      remove_button_confirmation: Are you sure that you want to remove this workflow execution?
+      tabs:
+        files: Files
+        params: Parameters
+        samplesheet: Samplesheet
+        summary: Summary
+    state:
+      canceled: Canceled
+      canceling: Canceling
+      completed: Completed
+      completing: Completing
+      error: Error
+      initial: New
+      prepared: Prepared
+      running: Running
+      submitted: Submitted
+    submissions:
+      create:
+        submit: Submit
+        title: "%{workflow} parameters"
+        update: Update
+      pipeline_selection:
+        loading: Preparing workflow arguments for COUNT_PLACEHOLDER samples, this may take a bit of time.
+        title: Workflow Selection
+    summary:
+      created_at: Created
+      name: Name
+      run_id: Run ID
+      updated_at: Last Updated
+      workflow_name: Workflow Name
+      workflow_version: Workflow Version
+    table:
+      empty:
+        description: There are no workflow executions associated with this submitter.
+        title: No workflow executions.
+    table_component:
+      actions: Actions
+      counts:
+        selected: Selected
+        workflow_executions: Workflow executions
+      created_at: Created
+      id: ID
+      name: Name
+      run_id: Run ID
+      select_page: Select / Deselect visible samples
+      state: State
+      updated_at: Last Updated
+      workflow_name: Workflow Name
+      workflow_version: Workflow Version

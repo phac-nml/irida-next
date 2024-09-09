@@ -1,4 +1,0 @@
-en:
-  required: Required
-  dropdown_prompt: Select an option
-  default: "%{label} (default)"

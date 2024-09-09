@@ -98,7 +98,7 @@ module Projects
 
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
-                        text: I18n.t(:"projects.workflow_executions.state.#{workflow_execution.state}")
+                        text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
         assert_link 'Cancel', count: 1
         click_link 'Cancel'
       end
@@ -108,7 +108,7 @@ module Projects
 
       within %(div[data-controller='viral--flash']) do
         assert_text I18n.t(
-          :'projects.workflow_executions.cancel.success',
+          :'concerns.workflow_execution_actions.cancel.success',
           workflow_name: workflow_execution.metadata['workflow_name']
         )
       end
@@ -129,7 +129,7 @@ module Projects
 
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
-                        text: I18n.t(:"projects.workflow_executions.state.#{workflow_execution.state}")
+                        text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
         assert_no_link 'Delete'
       end
     end
@@ -146,7 +146,7 @@ module Projects
 
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
-                        text: I18n.t(:"projects.workflow_executions.state.#{workflow_execution.state}")
+                        text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
         assert_no_link 'Delete'
       end
     end
@@ -163,7 +163,7 @@ module Projects
 
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
-                        text: I18n.t(:"projects.workflow_executions.state.#{workflow_execution.state}")
+                        text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
         assert_link 'Delete', count: 1
         click_link 'Delete'
       end
@@ -173,7 +173,7 @@ module Projects
 
       within %(div[data-controller='viral--flash']) do
         assert_text I18n.t(
-          :'projects.workflow_executions.destroy.success',
+          :'concerns.workflow_execution_actions.destroy.success',
           workflow_name: workflow_execution.metadata['workflow_name']
         )
       end
@@ -193,7 +193,7 @@ module Projects
 
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
-                        text: I18n.t(:"projects.workflow_executions.state.#{workflow_execution.state}")
+                        text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
         assert_link 'Delete', count: 1
         click_link 'Delete'
       end
@@ -216,7 +216,7 @@ module Projects
 
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
-                        text: I18n.t(:"projects.workflow_executions.state.#{workflow_execution.state}")
+                        text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
         assert_no_link 'Delete'
       end
     end
@@ -233,7 +233,7 @@ module Projects
 
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
-                        text: I18n.t(:"projects.workflow_executions.state.#{workflow_execution.state}")
+                        text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
         assert_link 'Delete', count: 1
         click_link 'Delete'
       end
@@ -256,7 +256,7 @@ module Projects
 
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
-                        text: I18n.t(:"projects.workflow_executions.state.#{workflow_execution.state}")
+                        text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
         assert_no_link 'Delete'
       end
     end
@@ -273,7 +273,7 @@ module Projects
 
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
-                        text: I18n.t(:"projects.workflow_executions.state.#{workflow_execution.state}")
+                        text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
         assert_no_link 'Delete'
       end
     end
@@ -284,15 +284,15 @@ module Projects
       visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
 
       assert_text workflow_execution.id
-      assert_text I18n.t(:"projects.workflow_executions.state.#{workflow_execution.state}")
+      assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
       assert_text workflow_execution.metadata['workflow_name']
       assert_text workflow_execution.metadata['workflow_version']
 
-      click_on I18n.t('projects.workflow_executions.show.tabs.files')
+      click_on I18n.t('workflow_executions.show.tabs.files')
 
       assert_text 'FILENAME'
 
-      click_on I18n.t('projects.workflow_executions.show.tabs.params')
+      click_on I18n.t('workflow_executions.show.tabs.params')
 
       assert_selector 'div.project_name-param > span', text: '--project_name'
       assert_selector 'div.project_name-param > input[value="assembly"]'

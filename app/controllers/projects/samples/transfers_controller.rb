@@ -30,7 +30,8 @@ module Projects
         else
           errors = @project.errors.full_messages_for(:base)
           render status: :unprocessable_entity,
-                 locals: { type: :alert, message: t('.no_samples_transferred_error'), errors: }
+                 locals: { type: :alert, message: t('.no_samples_transferred_error'),
+                           errors: }
         end
       end
 
@@ -43,9 +44,13 @@ module Projects
       def render_sample_errors
         errors = @project.errors.messages_for(:samples)
         if @transferred_samples_ids.count.positive?
-          render status: :partial_content, locals: { type: :alert, message: t('.error'), errors: }
+          render status: :partial_content,
+                 locals: { type: :alert, message: t('projects.samples.transfers.create.error'),
+                           errors: }
         else
-          render status: :unprocessable_entity, locals: { type: :alert, message: t('.error'), errors: }
+          render status: :unprocessable_entity,
+                 locals: { type: :alert, message: t('projects.samples.transfers.create.error'),
+                           errors: }
         end
       end
 

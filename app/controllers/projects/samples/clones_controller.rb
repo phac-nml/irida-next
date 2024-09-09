@@ -33,9 +33,11 @@ module Projects
       def render_sample_errors
         errors = @project.errors.messages_for(:sample)
         if @cloned_sample_ids.count.positive?
-          render status: :partial_content, locals: { type: :alert, message: t('.error'), errors: }
+          render status: :partial_content,
+                 locals: { type: :alert, message: t('projects.samples.clones.create.error'), errors: }
         else
-          render status: :unprocessable_entity, locals: { type: :alert, message: t('.error'), errors: }
+          render status: :unprocessable_entity,
+                 locals: { type: :alert, message: t('projects.samples.clones.create.error'), errors: }
         end
       end
 

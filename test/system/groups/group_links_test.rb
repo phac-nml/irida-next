@@ -55,15 +55,15 @@ module Groups
       table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
 
       within table_row do
-        click_link I18n.t(:'groups.group_links.index.unlink')
+        click_link I18n.t(:'projects.group_links.index.unlink')
       end
 
       within('#turbo-confirm[open]') do
         click_button 'Confirm'
       end
 
-      assert_text I18n.t(:'groups.group_links.destroy.success', namespace_name: namespace_group_link.namespace.name,
-                                                                group_name: namespace_group_link.group.name)
+      assert_text I18n.t(:'concerns.share_actions.destroy.success', namespace_name: namespace_group_link.namespace.name,
+                                                                    group_name: namespace_group_link.group.name)
 
       assert_selector 'tr', count: (@group_links_count - 1) + header_row_count
     end
@@ -78,7 +78,7 @@ module Groups
       namespace_group_link.destroy
 
       within table_row do
-        click_link I18n.t(:'groups.group_links.index.unlink')
+        click_link I18n.t(:'projects.group_links.index.unlink')
       end
 
       within('#turbo-confirm[open]') do
@@ -106,7 +106,7 @@ module Groups
       table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
 
       within table_row do
-        click_link I18n.t(:'groups.group_links.index.unlink')
+        click_link I18n.t(:'projects.group_links.index.unlink')
       end
 
       member_namespace_ids_to_update = @namespace.shared_with_group_links.of_ancestors.pluck(:group_id) +
@@ -135,7 +135,7 @@ module Groups
         find("#invited-group-#{namespace_group_link.group.id}-access-level-select").find(:xpath,
                                                                                          'option[2]').select_option
 
-        assert_text I18n.t(:'groups.group_links.update.success',
+        assert_text I18n.t(:'concerns.share_actions.update.success',
                            namespace_name: namespace_group_link.namespace.human_name,
                            group_name: namespace_group_link.group.human_name,
                            param_name: 'group access level')
@@ -164,7 +164,7 @@ module Groups
         find("#invited-group-#{namespace_group_link.group.id}-expiration").click.set(expiry_date)
                                                                           .native.send_keys(:return)
 
-        assert_text I18n.t(:'groups.group_links.update.success',
+        assert_text I18n.t(:'concerns.share_actions.update.success',
                            namespace_name: namespace_group_link.namespace.human_name,
                            group_name: namespace_group_link.group.human_name,
                            param_name: 'expiration')

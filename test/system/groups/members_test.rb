@@ -107,7 +107,7 @@ module Groups
         click_button I18n.t(:'groups.members.new.add_member_to_group')
       end
 
-      assert_text I18n.t(:'groups.members.create.success', user: user_to_add.email)
+      assert_text I18n.t(:'concerns.membership_actions.create.success', user: user_to_add.email)
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
       assert_selector 'tr', count: (@members_count + 1) + header_row_count
       assert_not_nil find(:table_row, { 'Username' => user_to_add.email })
@@ -128,7 +128,7 @@ module Groups
         click_button 'Confirm'
       end
 
-      assert_text I18n.t(:'groups.members.destroy.success', user: group_member.user.email)
+      assert_text I18n.t(:'concerns.membership_actions.destroy.success', user: group_member.user.email)
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
       assert_selector 'tr', count: (@members_count - 1) + header_row_count
     end
@@ -146,7 +146,7 @@ module Groups
         click_button 'Confirm'
       end
 
-      assert_text I18n.t(:'groups.members.destroy.leave_success', name: @namespace.name)
+      assert_text I18n.t(:'concerns.membership_actions.destroy.leave_success', name: @namespace.name)
     end
 
     test 'can not add a member to the group' do
@@ -169,7 +169,7 @@ module Groups
         find("#member-#{group_member.id}-access-level-select").find(:xpath, 'option[2]').select_option
 
         within %(turbo-frame[id="member-update-alert"]) do
-          assert_text I18n.t(:'groups.members.update.success', user_email: group_member.user.email)
+          assert_text I18n.t(:'concerns.membership_actions.update.success', user_email: group_member.user.email)
         end
       end
     end
@@ -203,7 +203,7 @@ module Groups
 
       click_link I18n.t(:'groups.members.index.tabs.groups')
 
-      assert_selector 'th', text: I18n.t(:'groups.group_links.index.table_header.group').upcase
+      assert_selector 'th', text: I18n.t(:'groups.table_component.group_name').upcase
 
       assert_selector 'tr', count: 4 + header_row_count
 
@@ -231,7 +231,7 @@ module Groups
       end
 
       within %(turbo-frame[id="member-update-alert"]) do
-        assert_text I18n.t(:'groups.members.update.success', user_email: group_member.user.email)
+        assert_text I18n.t(:'concerns.membership_actions.update.success', user_email: group_member.user.email)
       end
 
       group_member_row = find(:table_row, [group_member.user.email])
@@ -274,7 +274,7 @@ module Groups
         click_button I18n.t(:'groups.members.new.add_member_to_group')
       end
 
-      assert_text I18n.t(:'groups.members.create.success', user: user_to_add.email)
+      assert_text I18n.t(:'concerns.membership_actions.create.success', user: user_to_add.email)
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
       assert_selector 'tr', count: (members_count + 1) + header_row_count
       assert_not_nil find(:table_row, { 'Username' => user_to_add.email })

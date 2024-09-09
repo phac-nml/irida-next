@@ -66,7 +66,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
 
   def transfer
     if Projects::TransferService.new(@project, current_user).execute(new_namespace)
-      flash[:success] = t('.transfer.success', project_name: @project.name)
+      flash[:success] = t('.success', project_name: @project.name)
       respond_to do |format|
         format.turbo_stream { redirect_to project_path(@project) }
       end
