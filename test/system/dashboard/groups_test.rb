@@ -198,7 +198,7 @@ module Dashboard
       assert_text groups(:group_b).name
 
       #   Test empty state
-      fill_in I18n.t(:'dashboard.groups.index.search.placeholder'), with: 'group z'
+      fill_in I18n.t(:'dashboard.groups.index.search.placeholder'), with: 'z6z6z6'
       assert_text I18n.t(:'dashboard.groups.index.no_groups_description')
     end
   end
