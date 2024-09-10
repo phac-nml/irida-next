@@ -615,7 +615,7 @@ en:
       new:
         add_member_to_group: Add member to group
         description: You are adding a new member to group %{name}
-        empty_state: There are no users with the provided email or id
+        empty_state: There are no users with the provided email or name
         select_access_level: Select Access Level
         select_user: Select a User
         title: Add New Member
@@ -1056,7 +1056,7 @@ en:
       new:
         add_member_to_project: Add member to project
         description: You are adding a new member to project %{name}
-        empty_state: There are no users with the provided email or id
+        empty_state: There are no users with the provided email or name
         select_access_level: Select Access Level
         select_user: Select a User
         title: Add New Member
