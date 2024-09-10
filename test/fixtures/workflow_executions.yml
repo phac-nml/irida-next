@@ -56,7 +56,7 @@ irida_next_example:
 irida_next_example_nonexecutable:
   <<: *DEFAULTS
   metadata:
-    { workflow_name: "phac-nml/iridanextexample", workflow_version: "1.0.3" }
+    { workflow_name: "phac-nml/iridanextexample", workflow_version: "1.0.0" }
   workflow_params: { "assembler": "stub" }
   workflow_engine_parameters: { "-r": "dev" }
   workflow_url: "https://github.com/phac-nml/iridanextexample"
