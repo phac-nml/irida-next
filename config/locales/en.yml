@@ -1147,6 +1147,7 @@ en:
           title: Name and Description
         submit_button: Update sample
         title: Edit sample
+        subtitle: Update the name and description of the current sample
       index:
         actions:
           button_add_aria_label: Add new sample button
@@ -1201,7 +1202,7 @@ en:
       new:
         cancel_button: Cancel
         submit_button: Create sample
-        subtitle: This is a subtitle to create a new project sample.
+        subtitle: Create a new sample in the current Project
         title: Create sample
       shared:
         errors:
