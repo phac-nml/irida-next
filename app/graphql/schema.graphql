@@ -990,6 +990,273 @@ type ProjectEdge {
   node: Project
 }
 
+input ProjectFilter {
+  created_at_blank: String
+  created_at_cont: String
+  created_at_cont_all: [String!]
+  created_at_cont_any: [String!]
+  created_at_does_not_match: String
+  created_at_does_not_match_all: [String!]
+  created_at_does_not_match_any: [String!]
+  created_at_end: String
+  created_at_end_all: [String!]
+  created_at_end_any: [String!]
+  created_at_eq: String
+  created_at_eq_all: [String!]
+  created_at_eq_any: [String!]
+  created_at_false: String
+  created_at_gt: String
+  created_at_gt_all: [String!]
+  created_at_gt_any: [String!]
+  created_at_gteq: String
+  created_at_gteq_all: [String!]
+  created_at_gteq_any: [String!]
+  created_at_i_cont: String
+  created_at_i_cont_all: [String!]
+  created_at_i_cont_any: [String!]
+  created_at_in: [String!]
+  created_at_in_all: [String!]
+  created_at_in_any: [String!]
+  created_at_lt: String
+  created_at_lt_all: [String!]
+  created_at_lt_any: [String!]
+  created_at_lteq: String
+  created_at_lteq_all: [String!]
+  created_at_lteq_any: [String!]
+  created_at_matches: String
+  created_at_matches_all: [String!]
+  created_at_matches_any: [String!]
+  created_at_not_cont: String
+  created_at_not_cont_all: [String!]
+  created_at_not_cont_any: [String!]
+  created_at_not_end: String
+  created_at_not_end_all: [String!]
+  created_at_not_end_any: [String!]
+  created_at_not_eq: String
+  created_at_not_eq_all: [String!]
+  created_at_not_eq_any: [String!]
+  created_at_not_false: String
+  created_at_not_i_cont: String
+  created_at_not_i_cont_all: [String!]
+  created_at_not_i_cont_any: [String!]
+  created_at_not_in: [String!]
+  created_at_not_in_all: [String!]
+  created_at_not_in_any: [String!]
+  created_at_not_null: String
+  created_at_not_start: String
+  created_at_not_start_all: [String!]
+  created_at_not_start_any: [String!]
+  created_at_not_true: String
+  created_at_null: String
+  created_at_present: String
+  created_at_start: String
+  created_at_start_all: [String!]
+  created_at_start_any: [String!]
+  created_at_true: String
+  deleted_at_blank: String
+  deleted_at_cont: String
+  deleted_at_cont_all: [String!]
+  deleted_at_cont_any: [String!]
+  deleted_at_does_not_match: String
+  deleted_at_does_not_match_all: [String!]
+  deleted_at_does_not_match_any: [String!]
+  deleted_at_end: String
+  deleted_at_end_all: [String!]
+  deleted_at_end_any: [String!]
+  deleted_at_eq: String
+  deleted_at_eq_all: [String!]
+  deleted_at_eq_any: [String!]
+  deleted_at_false: String
+  deleted_at_gt: String
+  deleted_at_gt_all: [String!]
+  deleted_at_gt_any: [String!]
+  deleted_at_gteq: String
+  deleted_at_gteq_all: [String!]
+  deleted_at_gteq_any: [String!]
+  deleted_at_i_cont: String
+  deleted_at_i_cont_all: [String!]
+  deleted_at_i_cont_any: [String!]
+  deleted_at_in: [String!]
+  deleted_at_in_all: [String!]
+  deleted_at_in_any: [String!]
+  deleted_at_lt: String
+  deleted_at_lt_all: [String!]
+  deleted_at_lt_any: [String!]
+  deleted_at_lteq: String
+  deleted_at_lteq_all: [String!]
+  deleted_at_lteq_any: [String!]
+  deleted_at_matches: String
+  deleted_at_matches_all: [String!]
+  deleted_at_matches_any: [String!]
+  deleted_at_not_cont: String
+  deleted_at_not_cont_all: [String!]
+  deleted_at_not_cont_any: [String!]
+  deleted_at_not_end: String
+  deleted_at_not_end_all: [String!]
+  deleted_at_not_end_any: [String!]
+  deleted_at_not_eq: String
+  deleted_at_not_eq_all: [String!]
+  deleted_at_not_eq_any: [String!]
+  deleted_at_not_false: String
+  deleted_at_not_i_cont: String
+  deleted_at_not_i_cont_all: [String!]
+  deleted_at_not_i_cont_any: [String!]
+  deleted_at_not_in: [String!]
+  deleted_at_not_in_all: [String!]
+  deleted_at_not_in_any: [String!]
+  deleted_at_not_null: String
+  deleted_at_not_start: String
+  deleted_at_not_start_all: [String!]
+  deleted_at_not_start_any: [String!]
+  deleted_at_not_true: String
+  deleted_at_null: String
+  deleted_at_present: String
+  deleted_at_start: String
+  deleted_at_start_all: [String!]
+  deleted_at_start_any: [String!]
+  deleted_at_true: String
+  name_blank: String
+  name_cont: String
+  name_cont_all: [String!]
+  name_cont_any: [String!]
+  name_does_not_match: String
+  name_does_not_match_all: [String!]
+  name_does_not_match_any: [String!]
+  name_end: String
+  name_end_all: [String!]
+  name_end_any: [String!]
+  name_eq: String
+  name_eq_all: [String!]
+  name_eq_any: [String!]
+  name_false: String
+  name_gt: String
+  name_gt_all: [String!]
+  name_gt_any: [String!]
+  name_gteq: String
+  name_gteq_all: [String!]
+  name_gteq_any: [String!]
+  name_i_cont: String
+  name_i_cont_all: [String!]
+  name_i_cont_any: [String!]
+  name_in: [String!]
+  name_in_all: [String!]
+  name_in_any: [String!]
+  name_lt: String
+  name_lt_all: [String!]
+  name_lt_any: [String!]
+  name_lteq: String
+  name_lteq_all: [String!]
+  name_lteq_any: [String!]
+  name_matches: String
+  name_matches_all: [String!]
+  name_matches_any: [String!]
+  name_not_cont: String
+  name_not_cont_all: [String!]
+  name_not_cont_any: [String!]
+  name_not_end: String
+  name_not_end_all: [String!]
+  name_not_end_any: [String!]
+  name_not_eq: String
+  name_not_eq_all: [String!]
+  name_not_eq_any: [String!]
+  name_not_false: String
+  name_not_i_cont: String
+  name_not_i_cont_all: [String!]
+  name_not_i_cont_any: [String!]
+  name_not_in: [String!]
+  name_not_in_all: [String!]
+  name_not_in_any: [String!]
+  name_not_null: String
+  name_not_start: String
+  name_not_start_all: [String!]
+  name_not_start_any: [String!]
+  name_not_true: String
+  name_null: String
+  name_present: String
+  name_start: String
+  name_start_all: [String!]
+  name_start_any: [String!]
+  name_true: String
+  updated_at_blank: String
+  updated_at_cont: String
+  updated_at_cont_all: [String!]
+  updated_at_cont_any: [String!]
+  updated_at_does_not_match: String
+  updated_at_does_not_match_all: [String!]
+  updated_at_does_not_match_any: [String!]
+  updated_at_end: String
+  updated_at_end_all: [String!]
+  updated_at_end_any: [String!]
+  updated_at_eq: String
+  updated_at_eq_all: [String!]
+  updated_at_eq_any: [String!]
+  updated_at_false: String
+  updated_at_gt: String
+  updated_at_gt_all: [String!]
+  updated_at_gt_any: [String!]
+  updated_at_gteq: String
+  updated_at_gteq_all: [String!]
+  updated_at_gteq_any: [String!]
+  updated_at_i_cont: String
+  updated_at_i_cont_all: [String!]
+  updated_at_i_cont_any: [String!]
+  updated_at_in: [String!]
+  updated_at_in_all: [String!]
+  updated_at_in_any: [String!]
+  updated_at_lt: String
+  updated_at_lt_all: [String!]
+  updated_at_lt_any: [String!]
+  updated_at_lteq: String
+  updated_at_lteq_all: [String!]
+  updated_at_lteq_any: [String!]
+  updated_at_matches: String
+  updated_at_matches_all: [String!]
+  updated_at_matches_any: [String!]
+  updated_at_not_cont: String
+  updated_at_not_cont_all: [String!]
+  updated_at_not_cont_any: [String!]
+  updated_at_not_end: String
+  updated_at_not_end_all: [String!]
+  updated_at_not_end_any: [String!]
+  updated_at_not_eq: String
+  updated_at_not_eq_all: [String!]
+  updated_at_not_eq_any: [String!]
+  updated_at_not_false: String
+  updated_at_not_i_cont: String
+  updated_at_not_i_cont_all: [String!]
+  updated_at_not_i_cont_any: [String!]
+  updated_at_not_in: [String!]
+  updated_at_not_in_all: [String!]
+  updated_at_not_in_any: [String!]
+  updated_at_not_null: String
+  updated_at_not_start: String
+  updated_at_not_start_all: [String!]
+  updated_at_not_start_any: [String!]
+  updated_at_not_true: String
+  updated_at_null: String
+  updated_at_present: String
+  updated_at_start: String
+  updated_at_start_all: [String!]
+  updated_at_start_any: [String!]
+  updated_at_true: String
+}
+
+"""
+Specify a sort for the projects
+"""
+input ProjectOrder {
+  direction: OrderDirection
+  field: ProjectOrderField!
+}
+
+"""
+Field to sort the samples by
+"""
+enum ProjectOrderField {
+  created_at
+  updated_at
+}
+
 """
 The query root of this schema
 """
@@ -1135,6 +1402,11 @@ type Query {
     before: String
 
     """
+    Ransack filter
+    """
+    filter: ProjectFilter = null
+
+    """
     Returns the first _n_ elements from the list.
     """
     first: Int
@@ -1148,6 +1420,11 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+
+    """
+    Order by
+    """
+    orderBy: ProjectOrder = null
   ): ProjectConnection
 
   """
