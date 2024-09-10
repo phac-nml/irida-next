@@ -588,12 +588,6 @@ fr:
         group_transferred: Group was transferred by %{user}
       index:
         title: History
-    index:
-      create_group_button: New group
-      group_dropdown:
-        delete: Delete group
-        delete_confirmation: Are you sure you want to delete this group?
-        label: Actions for group %{group_name}
     members:
       access_level:
         aria_label: Access Level
@@ -630,7 +624,6 @@ fr:
       submit: Create subgroup
       subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects
       title: Create subgroup
-    owner: Owner
     samples:
       index:
         create_export_button:
