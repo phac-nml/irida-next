@@ -101,22 +101,17 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
   end
 
   test 'ransack samples query with group id should work with order by' do
-    Timecop.travel(5.days.from_now) do
-      @sample.created_at = Time.zone.now
-      @sample.save!
+    result = IridaSchema.execute(SAMPLES_RANSACK_WITH_GROUP_QUERY,
+                                 context: { current_user: @user },
+                                 variables:
+                                 { group_id: groups(:group_one).to_global_id.to_s,
+                                   orderBy: { field: 'created_at', direction: 'desc' } })
 
-      result = IridaSchema.execute(SAMPLES_RANSACK_WITH_GROUP_QUERY,
-                                   context: { current_user: @user },
-                                   variables:
-                                   { group_id: groups(:group_one).to_global_id.to_s,
-                                     orderBy: { field: 'created_at', direction: 'desc' } })
+    assert_nil result['errors'], 'should work and have no errors.'
 
-      assert_nil result['errors'], 'should work and have no errors.'
+    data = result['data']['samples']['nodes']
 
-      data = result['data']['samples']['nodes']
-
-      assert_equal @sample.puid, data[0]['puid']
-    end
+    assert_equal @sample.puid, data[0]['puid']
   end
 
   test 'ransack group samples query should throw authorization error' do
