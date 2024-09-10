@@ -60,6 +60,10 @@ class Group < Namespace
   has_many :shared_projects, through: :shared_project_namespaces, class_name: 'Project', source: :project
   has_many :shared_with_groups, through: :shared_with_group_links, source: :group
 
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[id name puid created_at updated_at]
+  end
+
   def self.sti_name
     'Group'
   end
