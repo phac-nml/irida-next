@@ -6,7 +6,7 @@ module NamespaceTree
     with_collection_parameter :namespace
 
     erb_template <<~ERB
-      <% if @namespace.children_of_type?(@type) && !@flat %>
+      <% if @namespace.children_of_type?(@type) && !@render_flat_list %>
         <%= render NamespaceTree::Row::WithChildrenComponent.new(namespace: @namespace, type: @type, children: Group.none, path: @path, path_args: @path_args, collapsed: @collapsed) %>
         <% else %>
         <%= render NamespaceTree::Row::WithoutChildrenComponent.new(namespace: @namespace, path: @path, path_args: @path_args) %>
@@ -14,13 +14,13 @@ module NamespaceTree
     ERB
 
     # rubocop:disable Metrics/ParameterLists
-    def initialize(namespace:, type:, path: nil, path_args: {}, collapsed: true, flat: false)
+    def initialize(namespace:, type:, path: nil, path_args: {}, collapsed: true, render_flat_list: false)
       @namespace = namespace
       @type = type
       @path = path
       @path_args = path_args
       @collapsed = collapsed
-      @flat = flat
+      @render_flat_list = render_flat_list
     end
 
     # rubocop:enable Metrics/ParameterLists

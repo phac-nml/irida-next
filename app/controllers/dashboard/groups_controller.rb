@@ -6,7 +6,7 @@ module Dashboard
     before_action :current_page
 
     def index
-      @flat = params[:q].present? && params[:q][:name_or_puid_cont].present?
+      @render_flat_list = params[:q].present? && params[:q][:name_or_puid_cont].present?
       @q = authorized_groups.ransack(params[:q])
       set_default_sort
       @pagy, @groups = pagy(@q.result.include_route)
@@ -42,7 +42,7 @@ module Dashboard
     end
 
     def authorized_groups
-      if @flat
+      if @render_flat_list
         authorized_scope(Group, type: :relation)
       else
         authorized_scope(Group, type: :relation).without_descendants

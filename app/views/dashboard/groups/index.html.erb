@@ -57,7 +57,7 @@
       <%= render NamespaceTreeContainerComponent.new(
         namespaces: @groups,
         path: "dashboard_groups_path",
-        flat: @flat,
+        render_flat_list: @render_flat_list,
       ) %>
       <div class="flex flex-row-reverse">
         <%= render Viral::Pagy::PaginationComponent.new(
