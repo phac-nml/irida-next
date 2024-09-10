@@ -861,7 +861,7 @@ en:
         title: 'Editing Automated Workflow Execution: %{workflow_name}'
       index:
         add_new_automated_workflow_execution: New automated workflow execution
-        subtitle: Setup automated workflow executions to launch when pair end data is uploaded to the project
+        subtitle: Setup automated workflow executions to launch when paired-end data is uploaded to the project
         title: Automated Workflow Executions
       new_automated_workflow_execution_modal:
         title: "%{workflow} parameters"
