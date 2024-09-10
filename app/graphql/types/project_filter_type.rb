@@ -3,7 +3,7 @@
 module Types
   # Project Filter Type
   class ProjectFilterType < BaseInputObject # rubocop:disable GraphQL/ObjectDescription
-    Namespaces::ProjectNamespace.ransackable_attributes.excluding('id').each do |attr|
+    Project.ransackable_attributes.excluding('id').each do |attr|
       Ransack.predicates.keys.map do |key|
         value_type = Ransack.predicates[key].wants_array ? [String] : String
         argument :"#{attr}_#{key}".to_sym,
