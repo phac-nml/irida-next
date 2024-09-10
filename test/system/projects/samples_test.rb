@@ -617,9 +617,8 @@ module Projects
     test 'can change pagination and then filter by name' do
       visit namespace_project_samples_url(@namespace, @project)
 
-      find('div#samples_table_pagination button').click
-      within('div#samples_table_pagination ul') do
-        assert_selector 'a[href="?limit=10"]'
+      within('div#samples_table_page_limit') do
+        find('button').click
         find('a[href="?limit=10"]').click
       end
 
@@ -636,7 +635,7 @@ module Projects
       assert_selector 'table tbody tr', count: 1
       assert_text @sample1.name
       assert_no_text @sample2.name
-      assert_selector 'div#samples_table_pagination button span', text: '10'
+      assert_selector 'div#samples_table_page_limit button div span', text: '10'
     end
 
     test 'can sort samples by column' do
