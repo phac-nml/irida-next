@@ -1053,68 +1053,6 @@ input ProjectFilter {
   created_at_start_all: [String!]
   created_at_start_any: [String!]
   created_at_true: String
-  deleted_at_blank: String
-  deleted_at_cont: String
-  deleted_at_cont_all: [String!]
-  deleted_at_cont_any: [String!]
-  deleted_at_does_not_match: String
-  deleted_at_does_not_match_all: [String!]
-  deleted_at_does_not_match_any: [String!]
-  deleted_at_end: String
-  deleted_at_end_all: [String!]
-  deleted_at_end_any: [String!]
-  deleted_at_eq: String
-  deleted_at_eq_all: [String!]
-  deleted_at_eq_any: [String!]
-  deleted_at_false: String
-  deleted_at_gt: String
-  deleted_at_gt_all: [String!]
-  deleted_at_gt_any: [String!]
-  deleted_at_gteq: String
-  deleted_at_gteq_all: [String!]
-  deleted_at_gteq_any: [String!]
-  deleted_at_i_cont: String
-  deleted_at_i_cont_all: [String!]
-  deleted_at_i_cont_any: [String!]
-  deleted_at_in: [String!]
-  deleted_at_in_all: [String!]
-  deleted_at_in_any: [String!]
-  deleted_at_lt: String
-  deleted_at_lt_all: [String!]
-  deleted_at_lt_any: [String!]
-  deleted_at_lteq: String
-  deleted_at_lteq_all: [String!]
-  deleted_at_lteq_any: [String!]
-  deleted_at_matches: String
-  deleted_at_matches_all: [String!]
-  deleted_at_matches_any: [String!]
-  deleted_at_not_cont: String
-  deleted_at_not_cont_all: [String!]
-  deleted_at_not_cont_any: [String!]
-  deleted_at_not_end: String
-  deleted_at_not_end_all: [String!]
-  deleted_at_not_end_any: [String!]
-  deleted_at_not_eq: String
-  deleted_at_not_eq_all: [String!]
-  deleted_at_not_eq_any: [String!]
-  deleted_at_not_false: String
-  deleted_at_not_i_cont: String
-  deleted_at_not_i_cont_all: [String!]
-  deleted_at_not_i_cont_any: [String!]
-  deleted_at_not_in: [String!]
-  deleted_at_not_in_all: [String!]
-  deleted_at_not_in_any: [String!]
-  deleted_at_not_null: String
-  deleted_at_not_start: String
-  deleted_at_not_start_all: [String!]
-  deleted_at_not_start_any: [String!]
-  deleted_at_not_true: String
-  deleted_at_null: String
-  deleted_at_present: String
-  deleted_at_start: String
-  deleted_at_start_all: [String!]
-  deleted_at_start_any: [String!]
-  deleted_at_true: String
   name_blank: String
   name_cont: String
   name_cont_all: [String!]
@@ -1177,6 +1115,68 @@ input ProjectFilter {
   name_start_all: [String!]
   name_start_any: [String!]
   name_true: String
+  puid_blank: String
+  puid_cont: String
+  puid_cont_all: [String!]
+  puid_cont_any: [String!]
+  puid_does_not_match: String
+  puid_does_not_match_all: [String!]
+  puid_does_not_match_any: [String!]
+  puid_end: String
+  puid_end_all: [String!]
+  puid_end_any: [String!]
+  puid_eq: String
+  puid_eq_all: [String!]
+  puid_eq_any: [String!]
+  puid_false: String
+  puid_gt: String
+  puid_gt_all: [String!]
+  puid_gt_any: [String!]
+  puid_gteq: String
+  puid_gteq_all: [String!]
+  puid_gteq_any: [String!]
+  puid_i_cont: String
+  puid_i_cont_all: [String!]
+  puid_i_cont_any: [String!]
+  puid_in: [String!]
+  puid_in_all: [String!]
+  puid_in_any: [String!]
+  puid_lt: String
+  puid_lt_all: [String!]
+  puid_lt_any: [String!]
+  puid_lteq: String
+  puid_lteq_all: [String!]
+  puid_lteq_any: [String!]
+  puid_matches: String
+  puid_matches_all: [String!]
+  puid_matches_any: [String!]
+  puid_not_cont: String
+  puid_not_cont_all: [String!]
+  puid_not_cont_any: [String!]
+  puid_not_end: String
+  puid_not_end_all: [String!]
+  puid_not_end_any: [String!]
+  puid_not_eq: String
+  puid_not_eq_all: [String!]
+  puid_not_eq_any: [String!]
+  puid_not_false: String
+  puid_not_i_cont: String
+  puid_not_i_cont_all: [String!]
+  puid_not_i_cont_any: [String!]
+  puid_not_in: [String!]
+  puid_not_in_all: [String!]
+  puid_not_in_any: [String!]
+  puid_not_null: String
+  puid_not_start: String
+  puid_not_start_all: [String!]
+  puid_not_start_any: [String!]
+  puid_not_true: String
+  puid_null: String
+  puid_present: String
+  puid_start: String
+  puid_start_all: [String!]
+  puid_start_any: [String!]
+  puid_true: String
   updated_at_blank: String
   updated_at_cont: String
   updated_at_cont_all: [String!]
