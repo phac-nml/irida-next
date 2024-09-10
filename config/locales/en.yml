@@ -773,7 +773,7 @@ en:
       row_contents_component:
         stats:
           projects: Projects
-          subnamespaces: Subnamespaces
+          subnamespaces: Subgroups
   nextflow:
     samplesheet:
       column_component:
