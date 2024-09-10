@@ -28,7 +28,7 @@
                 },
                 class:
                   "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300
-                                                                                                                                                                                                                                                                                                                                                                              border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
+                                                                                                                                                                                                                                                                                                                                                                                            border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
               ) %>
             <% else %>
               <% dropdown.with_item(
@@ -89,9 +89,9 @@
       </div>
       <div class="float-right">
         <%= search_form_for @q, url: search_group_samples_url, html: { method: :post, "data-controller": "filters", "data-turbo-action": "replace", "data-filters-selection-outlet": "#samples-table", class: "filters" } do |f| %>
-          <input type="hidden" name="limit" value="<%=@pagy.limit%>"/>
           <div class="flex flex-row-reverse items-center mb-4 space-x-2">
             <input type="hidden" name="format" value="turbo_stream"/>
+            <input type="hidden" name="limit" value="<%=@pagy.limit%>"/>
 
             <%= render partial: "projects/samples/shared/metadata_toggle", locals: { form: f } %>
             <%= render ListFilterComponent.new(
