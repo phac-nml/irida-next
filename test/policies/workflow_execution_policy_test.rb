@@ -57,6 +57,6 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
     scoped_user_workflow_executions = @policy.apply_scope(WorkflowExecution, type: :relation, name: :user,
                                                                              scope_options: { user: @user })
 
-    assert_equal 18, scoped_user_workflow_executions.count
+    assert_equal 19, scoped_user_workflow_executions.count
   end
 end

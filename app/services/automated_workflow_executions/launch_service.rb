@@ -12,7 +12,8 @@ module AutomatedWorkflowExecutions
       @sample = sample
       @pe_attachment_pair = pe_attachment_pair
       @workflow = Irida::Pipelines.instance.find_pipeline_by(@automated_workflow_execution.metadata['workflow_name'],
-                                                             @automated_workflow_execution.metadata['workflow_version'])
+                                                             @automated_workflow_execution.metadata['workflow_version'],
+                                                             'automatable')
     end
 
     def execute

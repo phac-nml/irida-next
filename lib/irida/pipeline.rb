@@ -4,7 +4,7 @@ module Irida
   # Class to store pipeline values
   class Pipeline
     attr_accessor :name, :description, :metadata, :type, :type_version,
-                  :engine, :engine_version, :url, :version, :schema_loc, :schema_input_loc, :automatable
+                  :engine, :engine_version, :url, :version, :schema_loc, :schema_input_loc, :automatable, :executable
 
     IGNORED_PARAMS = %w[outdir email].freeze
 
@@ -21,6 +21,7 @@ module Irida
       @schema_loc = schema_loc
       @schema_input_loc = schema_input_loc
       @automatable = version['automatable'] || false
+      @executable = true unless version['executable'] == false
       @overrides = overrides_for_entry(entry)
     end
 

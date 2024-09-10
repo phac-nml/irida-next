@@ -39,13 +39,13 @@ class PipelinesTest < ActiveSupport::TestCase
   test 'registers pipelines' do
     assert_not @pipelines.available_pipelines.empty?
 
-    workflow = @pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.2')
+    workflow = @pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.2', 'available')
     assert_not_nil workflow
 
-    workflow = @pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.1')
+    workflow = @pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.1', 'available')
     assert_not_nil workflow
 
-    workflow = @pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.0')
+    workflow = @pipelines.find_pipeline_by('phac-nml/iridanextexample', '1.0.0', 'available')
     assert_not_nil workflow
   end
 
@@ -55,5 +55,13 @@ class PipelinesTest < ActiveSupport::TestCase
     assert @pipelines.automatable_pipelines['phac-nml/iridanextexample_1.0.2']
     assert_not @pipelines.automatable_pipelines['phac-nml/iridanextexample_1.0.1']
     assert_not @pipelines.automatable_pipelines['phac-nml/iridanextexample_1.0.0']
+  end
+
+  test 'executable pipelines' do
+    assert_not @pipelines.executable_pipelines.empty?
+
+    assert @pipelines.executable_pipelines['phac-nml/iridanextexample_1.0.2']
+    assert @pipelines.executable_pipelines['phac-nml/iridanextexample_1.0.1']
+    assert_not @pipelines.executable_pipelines['phac-nml/iridanextexample_1.0.0']
   end
 end

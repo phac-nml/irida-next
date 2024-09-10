@@ -26,7 +26,7 @@ module WorkflowExecutions
     private
 
     def workflows
-      @workflows = Irida::Pipelines.instance.available_pipelines
+      @workflows = Irida::Pipelines.instance.executable_pipelines
     end
 
     def workflow

@@ -8,13 +8,13 @@ require 'irida/pipeline'
 
 module Irida
   # Class that reads a workflow config file and registers the available pipelines
-  class Pipelines
+  class Pipelines # rubocop:disable Metrics/ClassLength
     PipelinesJsonFormatException = Class.new StandardError
     PIPELINES_JSON_SCHEMA = Rails.root.join('config/schemas/pipelines_schema.json')
 
     class_attribute :instance
 
-    attr_reader :available_pipelines, :automatable_pipelines
+    attr_reader :available_pipelines, :automatable_pipelines, :executable_pipelines
 
     def initialize(**params)
       @pipeline_config_dir =
@@ -27,13 +27,14 @@ module Irida
         params.key?(:pipeline_schema_status_file) ? params[:pipeline_schema_status_file] : 'status.json'
       @available_pipelines = {}
       @automatable_pipelines = {}
+      @executable_pipelines = {}
 
       register_pipelines
     end
 
     # Registers the available pipelines. This method is called
     # by an initializer which runs when the server is started up
-    def register_pipelines
+    def register_pipelines # rubocop:disable Metrics/AbcSize
       data = read_json_config
 
       data.each do |entry|
@@ -45,6 +46,9 @@ module Irida
 
           pipeline = Pipeline.new(entry, version, nextflow_schema_location, schema_input_location)
           @available_pipelines["#{entry['name']}_#{version['name']}"] = pipeline
+          next unless version['executable'] != false
+
+          @executable_pipelines["#{entry['name']}_#{version['name']}"] = pipeline
           @automatable_pipelines["#{entry['name']}_#{version['name']}"] = pipeline if version['automatable']
         end
       end
@@ -144,8 +148,15 @@ module Irida
       end
     end
 
-    def find_pipeline_by(name, version)
-      @available_pipelines["#{name}_#{version}"]
+    def find_pipeline_by(name, version, type = 'executable')
+      case type
+      when 'available'
+        @available_pipelines["#{name}_#{version}"]
+      when 'automatable'
+        @automatable_pipelines["#{name}_#{version}"]
+      else
+        @executable_pipelines["#{name}_#{version}"]
+      end
     end
   end
 end

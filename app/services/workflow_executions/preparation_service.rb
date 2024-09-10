@@ -11,12 +11,17 @@ module WorkflowExecutions
     def initialize(workflow_execution, user = nil, params = {})
       super(user, params)
       @workflow_execution = workflow_execution
-      @samplesheet_headers = parse_samplesheet_headers
+      @pipeline = find_pipeline
       @samplesheet_rows = []
       @storage_service = ActiveStorage::Blob.service
     end
 
     def execute # rubocop:disable Metrics/MethodLength
+      # confirm pipeline found
+      return false unless validate_pipeline
+
+      @samplesheet_headers = @pipeline.samplesheet_headers
+
       # confirm params/permissions
       # build workflow execution run directory
       @workflow_execution.blob_run_directory = generate_run_directory
@@ -52,10 +57,18 @@ module WorkflowExecutions
 
     private
 
-    def parse_samplesheet_headers
-      workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
-                                                            @workflow_execution.metadata['workflow_version'])
-      workflow.samplesheet_headers
+    def find_pipeline
+      Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
+                                                 @workflow_execution.metadata['workflow_version'])
+    end
+
+    def validate_pipeline
+      return true unless @pipeline.nil?
+
+      @workflow_execution.state = :error
+      @workflow_execution.cleaned = true
+      @workflow_execution.save
+      false
     end
 
     def parse_attachments_from_samplesheet(samplesheet)

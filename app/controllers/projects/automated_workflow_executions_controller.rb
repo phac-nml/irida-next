@@ -23,14 +23,16 @@ module Projects
       authorize! @namespace, to: :create_automated_workflow_executions?
 
       @workflow = if params[:workflow_name].present? && params[:workflow_version].present?
-                    Irida::Pipelines.instance.find_pipeline_by(params[:workflow_name], params[:workflow_version])
+                    Irida::Pipelines.instance.find_pipeline_by(params[:workflow_name], params[:workflow_version],
+                                                               'automatable')
                   end
     end
 
     def edit
       authorize! @namespace, to: :update_automated_workflow_executions?
       @workflow = Irida::Pipelines.instance.find_pipeline_by(@automated_workflow_execution.metadata['workflow_name'],
-                                                             @automated_workflow_execution.metadata['workflow_version'])
+                                                             @automated_workflow_execution.metadata['workflow_version'],
+                                                             'available')
       render turbo_stream: turbo_stream.update('automated_workflow_execution_modal',
                                                partial: 'edit_dialog',
                                                locals: {
