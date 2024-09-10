@@ -57,7 +57,7 @@
                 },
                 class:
                   "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
               ) %>
             <% else %>
               <% dropdown.with_item(
@@ -147,6 +147,7 @@
         <div class="flex flex-row-reverse items-center mb-4 space-x-2">
           <input type="hidden" name="format" value="turbo_stream"/>
           <input type="hidden" name="limit" value="<%=@pagy.limit%>"/>
+          <input type="hidden" name="page" value="<%=@pagy.page%>"/>
 
           <%= render partial: "projects/samples/shared/metadata_toggle", locals: { form: f } %>
           <%= render ListFilterComponent.new(

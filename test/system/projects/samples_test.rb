@@ -639,6 +639,53 @@ module Projects
       assert_selector 'div#limit-component button div span', text: '10'
     end
 
+    test 'can change pagination and then filter by name' do
+      visit namespace_project_samples_url(@namespace, @project)
+
+      within('div#limit-component') do
+        find('button').click
+        find('a[href="?limit=10"]').click
+      end
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      assert_selector '#samples-table table tbody tr', count: 3
+      assert_text @sample1.name
+      assert_text @sample2.name
+
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.name
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
+                                                                           locale: @user.locale))
+      assert_selector 'table tbody tr', count: 1
+      assert_text @sample1.name
+      assert_no_text @sample2.name
+      assert_selector 'div#limit-component button div span', text: '10'
+    end
+
+    test 'can change pagination and then toggle metadata' do
+      visit namespace_project_samples_url(@namespace, @project)
+
+      within('div#limit-component') do
+        find('button').click
+        find('a[href="?limit=10"]').click
+      end
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      assert_selector '#samples-table table tbody tr', count: 3
+      assert_selector '#samples-table table thead tr th', count: 6
+
+      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      assert_selector '#samples-table table tbody tr', count: 3
+      assert_selector '#samples-table table thead tr th', count: 8
+      assert_selector 'div#limit-component button div span', text: '10'
+    end
+
     test 'can sort samples by column' do
       visit namespace_project_samples_url(@namespace, @project)
 
