@@ -3,8 +3,8 @@ en:
   devise:
     confirmations:
       new:
-        submit_button: Submit button
-        title: Title
+        submit_button: Resend confirmation instructions
+        title: Resend confirmation instructions
     layout:
       title: IRIDA Next
     mailer:

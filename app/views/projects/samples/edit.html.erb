@@ -1,30 +1,17 @@
-<%= render Viral::PageHeaderComponent.new(title: t("projects.samples.edit.title"), subtitle: t("projects.samples.new.subtitle")) do |component| %>
+<%= render Viral::PageHeaderComponent.new(title: t("projects.samples.edit.title"), subtitle: t("projects.samples.edit.subtitle")) do |component| %>
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
 <% end %>
 <div class="p-4">
   <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
     <div
       class="
-        p-4
-        bg-white
-        border
-        border-slate-200
-        rounded-lg
-        shadow-sm
-        2xl:col-span-2
-        dark:border-slate-700
-        sm:p-6
-        dark:bg-slate-800
+        p-4 bg-white border border-slate-200 rounded-lg shadow-sm 2xl:col-span-2
+        dark:border-slate-700 sm:p-6 dark:bg-slate-800
       "
     >
       <h2
         class="
-          mb-4
-          text-xl
-          font-semibold
-          leading-tight
-          text-slate-900
-          dark:text-white
+          mb-4 text-xl font-semibold leading-tight text-slate-900 dark:text-white
         "
       >
         <%= t("projects.samples.edit.form.title") %>
@@ -34,10 +21,10 @@
           <%= render partial: "form_fields", locals: { form: form, sample: @sample } %>
           <div>
             <%= form.submit t("projects.samples.edit.submit_button"),
-                            class: "button button--state-primary button--size-default mr-1" %>
+                        class: "button button--state-primary button--size-default mr-1" %>
             <%= link_to t("projects.samples.edit.cancel_button"),
-                        namespace_project_sample_path(id: @sample.id),
-                        class: "button button--state-default button--size-default" %>
+            namespace_project_sample_path(id: @sample.id),
+            class: "button button--state-default button--size-default" %>
           </div>
         </div>
       <% end %>
