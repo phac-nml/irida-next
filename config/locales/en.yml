@@ -359,10 +359,10 @@ en:
         type: Type
       title: Data Exports
     list_workflow_execution:
-      id: Id
-      name: Name
-      run_id: Run
-      workflow: Workflow
+      id: "ID:"
+      name: "Name:"
+      run_id: "Run ID:"
+      workflow: "Workflow:"
     new:
       after_submission_description_html: After submission, you will be redirected to the export page. While the export status is <span class="bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1 mr-1">processing</span>, the contents of the export are being created. Once the export status is <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1">ready</span>, it will be available for download. You will have 3 business days to download the export before it's deleted.
       email_label: Receive an email notification when your export is ready to download?
