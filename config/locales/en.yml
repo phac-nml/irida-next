@@ -394,6 +394,8 @@ en:
         all: All
         create_project_button: New project
         personal: Personal
+        row:
+          samples_count: "%{count} samples"
         search:
           placeholder: Filter by name
         sorting:
@@ -404,8 +406,6 @@ en:
           updated_at_asc: Oldest updated
           updated_at_desc: Updated At
         title: Projects
-        row:
-          samples_count: "%{count} samples"
   data_exports:
     create:
       success: Data export '%{name}' was successfully started.
