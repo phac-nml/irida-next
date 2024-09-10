@@ -770,7 +770,7 @@ fr:
   nextflow:
     samplesheet:
       column_component:
-        default: Default
+        default: "%{label} (default)"
         required: Required
     samplesheet_component:
       label: Label
