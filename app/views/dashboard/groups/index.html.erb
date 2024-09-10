@@ -31,7 +31,7 @@
                          "data-action": "filters#submit",
                          class:
                            "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                             placeholder: t(:'.search.placeholder') %>
+                         placeholder: t(:".search.placeholder") %>
         </div>
       <% end %>
       <%= search_form_for @q, url: dashboard_groups_url, method: :post, html: { method: :post, "data-controller": "filters", "data-turbo": false } do %>
@@ -52,17 +52,27 @@
       <% end %>
     </div>
   </div>
-  <div class="flex flex-col gap-2" id="groups_tree">
-    <%= render NamespaceTreeContainerComponent.new(
-      namespaces: @groups,
-      path: "dashboard_groups_path",
-      flat: @flat,
-    ) %>
-    <div class="flex flex-row-reverse">
-      <%= render Viral::Pagy::PaginationComponent.new(
-        @pagy,
-        data_string: "data-turbo='false'",
+  <% if @groups.any? %>
+    <div class="flex flex-col gap-2" id="groups_tree">
+      <%= render NamespaceTreeContainerComponent.new(
+        namespaces: @groups,
+        path: "dashboard_groups_path",
+        flat: @flat,
+      ) %>
+      <div class="flex flex-row-reverse">
+        <%= render Viral::Pagy::PaginationComponent.new(
+          @pagy,
+          data_string: "data-turbo='false'",
+        ) %>
+      </div>
+    </div>
+  <% else %>
+    <div class="flex flex-col gap-2">
+      <%= render Viral::EmptyStateComponent.new(
+        icon_name: "squares_2x2",
+        title: t(".no_groups_title"),
+        description: t(".no_groups_description"),
       ) %>
     </div>
-  </div>
+  <% end %>
 </div>
