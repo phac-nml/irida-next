@@ -1146,8 +1146,8 @@ en:
         form:
           title: Name and Description
         submit_button: Update sample
-        title: Edit sample
         subtitle: Update the name and description of the current sample
+        title: Edit sample
       index:
         actions:
           button_add_aria_label: Add new sample button
