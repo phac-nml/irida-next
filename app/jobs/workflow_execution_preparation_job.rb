@@ -7,10 +7,9 @@ class WorkflowExecutionPreparationJob < ApplicationJob
   def perform(workflow_execution)
     return if workflow_execution.canceling? || workflow_execution.canceled?
 
-    preparation_service = WorkflowExecutions::PreparationService.new(workflow_execution)
-    return unless preparation_service.execute
+    result = WorkflowExecutions::PreparationService.new(workflow_execution).execute
 
-    if preparation_service.find_pipeline
+    if result
       WorkflowExecutionSubmissionJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
     else
       @workflow_execution.state = :error
