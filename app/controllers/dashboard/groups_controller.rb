@@ -6,22 +6,34 @@ module Dashboard
     before_action :current_page
 
     def index
-      @render_flat_list = params[:q].present? && params[:q][:name_or_puid_cont].present?
-      @q = authorized_groups.ransack(params[:q])
+      @render_flat_list = flat_list_requested?
+      @q = build_ransack_query
       set_default_sort
       @pagy, @groups = pagy(@q.result.include_route)
-      respond_to do |format|
-        format.html
-        format.turbo_stream do
-          if toggling_group?
-            toggle_group
-            render :group
-          end
-        end
-      end
+      respond_to_format
     end
 
     private
+
+    def flat_list_requested?
+      params.dig(:q, :name_or_puid_cont).present?
+    end
+
+    def build_ransack_query
+      authorized_groups.ransack(params[:q])
+    end
+
+    def respond_to_format
+      respond_to do |format|
+        format.html
+        format.turbo_stream { handle_turbo_stream }
+      end
+    end
+
+    def handle_turbo_stream
+      toggle_group if toggling_group?
+      render :group if toggling_group?
+    end
 
     def set_default_sort
       @q.sorts = 'created_at desc' if @q.sorts.empty?
