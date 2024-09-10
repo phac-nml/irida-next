@@ -517,7 +517,7 @@ en:
         title: Bot Accounts
     create:
       cancel: Cancel
-      name_help: Name help
+      name_help: Group name must be at least 3 letters long and start with a letter, digit, or emoji. For more information see <a class="font-medium hover:underline" href="https://phac-nml.github.io/irida-next/docs/user/organization/groups/reserved-names/">Reserved group names</a>
       name_placeholder: Awesome group name
       path_help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
       submit: Create group
@@ -567,7 +567,7 @@ en:
         button:
           cancel: Cancel
           submit: Share
-        empty_state: Empty state
+        empty_state: No groups are associated with that name or ID
         label:
           access_expiration: Access expiration (optional)
           group_access_level: Maximum group access level
@@ -621,7 +621,7 @@ en:
       new:
         add_member_to_group: Add member to group
         description: You are adding a new member to group %{name}
-        empty_state: Empty state
+        empty_state: There are no users with the provided email or id
         select_access_level: Select Access Level
         select_user: Select a User
         title: Add New Member
@@ -664,7 +664,6 @@ en:
         label: Group project details navigation
         shared_namespaces: Shared groups and projects
         subgroups_and_projects: Subgroups and projects
-      title: Title
     sidebar:
       bot_accounts: Bot Accounts
       details: Details
@@ -778,15 +777,15 @@ en:
   nextflow:
     samplesheet:
       column_component:
-        default: Default
+        default: "%{label} (default)"
         required: Required
     samplesheet_component:
-      label: Label
-      loading: Loading
+      label: Samples
+      loading: Loading ...
   nextflow_component:
     name:
-      helper: Helper
-      label: Label
+      helper: A custom name will make it easier to search for this in the future.
+      label: Name (Optional)
   profiles:
     accounts:
       delete:
@@ -1007,7 +1006,7 @@ en:
         button:
           cancel: Cancel
           submit: Share
-        empty_state: Empty state
+        empty_state: No groups are associated with that name or ID
         label:
           access_expiration: Access expiration (optional)
           group_access_level: Maximum group access level
@@ -1064,7 +1063,7 @@ en:
       new:
         add_member_to_project: Add member to project
         description: You are adding a new member to project %{name}
-        empty_state: Empty state
+        empty_state: There are no users with the provided email or id
         select_access_level: Select Access Level
         select_user: Select a User
         title: Add New Member
@@ -1092,7 +1091,7 @@ en:
           failure: 'File %{filename} was not uploaded due to the following errors: %{errors}'
           success: File %{filename} was successfully uploaded.
         delete_attachment_modal:
-          description: Are you sure that you want to delete this file rom the sample?
+          description: Are you sure that you want to delete this file from the sample?
           submit_button: Confirm
           title: Delete File
         deletions:
@@ -1279,7 +1278,7 @@ en:
             plural: The following COUNT_PLACEHOLDER samples are about to be transferred, which will result in these samples no longer being accessible in this project. Maintainers can only transfer samples to another project within the same hierarchy.
             singular: The following sample is about to be transferred, which will result in the sample no longer being accessible in this project. Maintainers can only transfer samples to another project within the same hierarchy.
             zero: No samples have been selected for transfer
-          empty_state: Empty state
+          empty_state: No projects are associated with that name or ID
           new_project_id: Project to transfer samples to
           no_available_projects: No available projects
           samples: Samples
@@ -1313,10 +1312,10 @@ en:
           size: Size
           type: Type
       index:
-        create_export_button: Create export button
-        deselect_all_button: Deselect all button
-        select_all_button: Select all button
-        subtitle: These are the automated workflow executions that have been launched for this project
+        create_export_button: Create Export
+        deselect_all_button: Deselect All
+        select_all_button: Select All
+        subtitle: These are the workflow executions that have been automatically launched for this project
         title: Workflow Executions
       show:
         cancel_button: Cancel
@@ -1459,27 +1458,27 @@ en:
       metadata:
         file_imports:
           dialog:
-            description: Description
+            description: Importing a metadata spreadsheet allows multiple metadata fields to multiple samples be added, updated or removed at once.
             file: File
-            file_help: File help
+            file_help: CSV, TSV, XLS or XLSX.
             ignore_empty_values:
-              description: Description
+              description: If selected, any metadata fields without an associated value will be ignored and those metadata keys will not be removed from the sample if present. However, if this not selected, any samples with the metadata key and empty value will be deleted.
             namespace:
-              description: Description
+              description: 'The spreadsheet is required to have a column that contains a sample identifier. '
               group:
-                description_html: Description html
+                description_html: The identifier is case-sensitive and must contain the <b>sample ID</b>.
               project:
-                description_html: Description html
-            sample_id_column: Sample id column
-            select_sample_id_column: Select sample id column
-            submit_button: Submit button
-            title: Title
+                description_html: The identifier is case-sensitive and can contain either the <b>sample name or ID</b>.
+            sample_id_column: Sample ID Column
+            select_sample_id_column: Select a Sample ID Column
+            submit_button: Import Metadata
+            title: Upload Sample Metadata
           errors:
-            description: Description
-            ok_button: Ok button
+            description: 'The sample metadata import completed with the following errors:'
+            ok_button: OK
           success:
-            description: Description
-            ok_button: Ok button
+            description: The metadata was imported successfully!
+            ok_button: OK
   time:
     formats:
       abbreviated: "%a %b%e %Y %H:%M"
@@ -1514,9 +1513,9 @@ en:
         cancel_confirm: Are you sure you want to cancel this workflow execution?
         delete_button: Delete
         delete_confirm: Are you sure you want to delete this workflow execution?
-      create_export_button: Create export button
-      deselect_all_button: Deselect all button
-      select_all_button: Select all button
+      create_export_button: Create Export
+      deselect_all_button: Deselect All
+      select_all_button: Select All
       title: Workflow Executions
     samples:
       empty: No samples could be found for this workflow execution

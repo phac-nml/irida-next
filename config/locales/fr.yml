@@ -664,7 +664,6 @@ fr:
         label: Group project details navigation
         shared_namespaces: Shared groups and projects
         subgroups_and_projects: Subgroups and projects
-      title: Title
     sidebar:
       bot_accounts: Bot Accounts
       details: Details
