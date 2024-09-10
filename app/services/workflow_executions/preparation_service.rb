@@ -55,12 +55,12 @@ module WorkflowExecutions
       @workflow_execution.save
     end
 
-    private
-
     def find_pipeline
       Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
                                                  @workflow_execution.metadata['workflow_version'])
     end
+
+    private
 
     def validate_pipeline
       return true unless @pipeline.nil?
