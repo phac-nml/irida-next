@@ -1,5 +1,3 @@
-<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
-
 <%= render Viral::PageHeaderComponent.new(title: t(".title")) do |component| %>
   <%= component.with_buttons do %>
     <%= link_to t(:".create_group_button"),
