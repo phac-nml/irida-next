@@ -12,6 +12,7 @@ module Viral
 
       def system_arguments
         { tag: 'div' }.deep_merge(@system_arguments).tap do |args|
+          args[:id] = 'limit-component'
           args[:classes] = class_names('inline-flex items-center mt-4 space-x-2 text-slate-500 dark:text-slate-400')
         end
       end

@@ -241,7 +241,7 @@ module Groups
     test 'can change pagination and then filter by puid' do
       visit group_samples_url(@group)
 
-      within('div#samples_table_page_limit') do
+      within('div#limit-component') do
         find('button').click
         find('a[href="?limit=10"]').click
       end
@@ -260,7 +260,7 @@ module Groups
       assert_selector 'table tbody tr', count: 1
       assert_text @sample1.name
       assert_no_text @sample2.name
-      assert_selector 'div#samples_table_page_limit button div span', text: '10'
+      assert_selector 'div#limit-component button div span', text: '10'
     end
 
     test 'can sort and then filter the list of samples by name' do
