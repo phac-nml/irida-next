@@ -26,6 +26,9 @@ class Project < ApplicationRecord
   delegate :parent, to: :namespace
   delegate :puid, to: :namespace
 
+  ransack_alias :name, :namespace_name
+  ransack_alias :puid, :namespace_puid
+
   scope :include_route, -> { includes(namespace: [{ parent: :route }, :route]) }
 
   def to_param
@@ -33,7 +36,7 @@ class Project < ApplicationRecord
   end
 
   def self.ransackable_attributes(_auth_object = nil)
-    %w[id created_at updated_at]
+    %w[id created_at updated_at] + _ransack_aliases.keys
   end
 
   def self.ransackable_associations(_auth_object = nil)
