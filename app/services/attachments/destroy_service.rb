@@ -35,7 +35,7 @@ module Attachments
                                                       owner: current_user,
                                                       trackable_id: @attachable.id,
                                                       parameters: {
-                                                        sample_name: @attachable.puid,
+                                                        sample_puid: @attachable.puid,
                                                         sample_id: @attachable.id,
                                                         action: 'attachment_destroy'
                                                       }

@@ -29,7 +29,7 @@
     user: @activity[:user],
     href:
       link_to(
-        @activity[:sample_name],
+        @activity[:sample_puid],
         path_with_params(url, { tab: samples_tab }),
         class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
       ),
@@ -39,13 +39,11 @@
     "#{@activity[:key]}",
     user: @activity[:user],
     name: @activity[:name],
-    project_name: @activity[:project_name],
-    new_project_name: @activity[:new_project_name],
     transferred_sample_ids: @activity[:transferred_sample_ids],
     cloned_sample_ids: @activity[:cloned_sample_ids],
     old_namespace: @activity[:old_namespace],
     new_namespace: @activity[:new_namespace],
-    sample_name: @activity[:sample_name],
+    sample_puid: @activity[:sample_puid],
     deleted_count: @activity[:deleted_count],
   ) %>
 <% end %>

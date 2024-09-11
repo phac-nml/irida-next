@@ -73,7 +73,7 @@ module WorkflowExecutions
                                                       workflow_name: @workflow_execution.name,
                                                       sample_id:
                                                       @workflow_execution.samples_workflow_executions.first.sample.id,
-                                                      sample_name:
+                                                      sample_puid:
                                                       @workflow_execution.samples_workflow_executions.first.sample.puid
                                                     }
     end

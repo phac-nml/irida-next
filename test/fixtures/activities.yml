@@ -36,8 +36,8 @@ project1_namespace_sample_create:
     {
       sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1,
       :uuid) %>,
-      sample_name: <%= ActiveRecord::FixtureSet.identify(:sample1,
-      :name) %>,
+      sample_puid: <%= ActiveRecord::FixtureSet.identify(:sample1,
+      :puid) %>,
       action: "sample_create",
     }
   created_at: <%= Time.zone.now %>
@@ -106,7 +106,7 @@ project1_namespace_automated_workflow_execution_launch:
       workflow_name: <%= ActiveRecord::FixtureSet.identify(:automated_workflow_execution,
       :name) %>,
       sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>,
-      sample_name: <%= ActiveRecord::FixtureSet.identify(:sample1, :puid) %>
+      sample_puid: <%= ActiveRecord::FixtureSet.identify(:sample1, :puid) %>
     }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>

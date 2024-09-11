@@ -163,7 +163,7 @@ module WorkflowExecutions
                                                         parameters: {
                                                           workflow_id: @workflow_execution.id,
                                                           sample_id: swe.sample.id,
-                                                          sample_name: swe.sample.puid
+                                                          sample_puid: swe.sample.puid
                                                         }
           next
         end
@@ -173,7 +173,7 @@ module WorkflowExecutions
                                                         parameters: {
                                                           workflow_id: @workflow_execution.id,
                                                           sample_id: swe.sample.id,
-                                                          sample_name: swe.sample.puid
+                                                          sample_puid: swe.sample.puid
                                                         }
         end
 
@@ -183,7 +183,7 @@ module WorkflowExecutions
                                                       parameters: {
                                                         workflow_id: @workflow_execution.id,
                                                         sample_id: swe.sample.id,
-                                                        sample_name: swe.sample.puid
+                                                        sample_puid: swe.sample.puid
                                                       }
       end
     end

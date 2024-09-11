@@ -28,7 +28,7 @@ module Samples
                                            owner: current_user,
                                            parameters:
                                             {
-                                              sample_name: sample.puid,
+                                              sample_puid: sample.puid,
                                               action: 'sample_destroy'
                                             }
       end

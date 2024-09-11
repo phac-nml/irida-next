@@ -51,9 +51,8 @@ module Projects
                                         owner: current_user,
                                         parameters:
                                         {
-                                          project_name: project.name,
-                                          old_namespace: @old_namespace.name,
-                                          new_namespace: @new_namespace.name,
+                                          old_namespace: @old_namespace.puid,
+                                          new_namespace: @new_namespace.puid,
                                           action: 'project_namespace_transfer'
                                         }
 

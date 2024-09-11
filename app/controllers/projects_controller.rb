@@ -74,17 +74,8 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     end
   end
 
-  def transfer # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  def transfer
     if Projects::TransferService.new(@project, current_user).execute(new_namespace)
-
-      @project.namespace.create_activity key: 'namespaces_project_namespace.transfer', owner: current_user,
-                                         parameters:
-                                         {
-                                           project_name: @project.name,
-                                           old_namespace: @project.namespace.name,
-                                           new_namespace: new_namespace.name
-                                         }
-
       flash[:success] = t('.success', project_name: @project.name)
       respond_to do |format|
         format.turbo_stream { redirect_to project_path(@project) }

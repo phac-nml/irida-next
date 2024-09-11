@@ -67,7 +67,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
       namespace: activity_trackable,
       workflow_id: activity.parameters[:workflow_id],
       type: 'WorkflowExecution',
-      sample_name: activity.parameters[:sample_name],
+      sample_puid: activity.parameters[:sample_puid],
       sample_id: activity.parameters[:sample_id],
       automated: activity.parameters[:automated]
     }
@@ -122,7 +122,8 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   def transfer_activity_parameters(params, activity)
     if activity.parameters[:action] == 'project_namespace_transfer'
       params.merge!({
-                      old_namespace: activity.parameters[:old_namespace]
+                      old_namespace: activity.parameters[:old_namespace],
+                      new_namespace: activity.parameters[:new_namespace]
                     })
     end
 
@@ -143,7 +144,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     if sample_activity_action_types.include?(activity.parameters[:action])
       params.merge!({
                       sample_id: activity.parameters[:sample_id],
-                      sample_name: activity.parameters[:sample_name]
+                      sample_puid: activity.parameters[:sample_puid]
                     })
     end
 
