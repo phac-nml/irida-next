@@ -20,14 +20,14 @@ class GroupsQueryTest < ActiveSupport::TestCase
 
   def setup
     @user = users(:john_doe)
-    @group = groups(:group_one)
   end
 
   test 'ransack groups query should work' do
+    group = groups(:group_one)
     original_date = Time.zone.today
     Timecop.travel(5.days.from_now) do
-      @group.created_at = Time.zone.now
-      @group.save!
+      group.created_at = Time.zone.now
+      group.save!
 
       result = IridaSchema.execute(GROUPS_RANSACK_QUERY,
                                    context: { current_user: @user },
@@ -38,7 +38,7 @@ class GroupsQueryTest < ActiveSupport::TestCase
       data = result['data']['groups']['nodes']
 
       assert_equal 1, data.count
-      assert_equal @group.puid, data[0]['puid']
+      assert_equal group.puid, data[0]['puid']
     end
   end
 
