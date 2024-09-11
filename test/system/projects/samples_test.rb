@@ -18,6 +18,9 @@ module Projects
       @project29 = projects(:project29)
       @namespace = groups(:group_one)
       @group12a = groups(:subgroup_twelve_a)
+
+      Project.reset_counters(@project.id, :samples_count)
+      Project.reset_counters(@project29.id, :samples_count)
     end
 
     test 'visiting the index' do
@@ -422,6 +425,7 @@ module Projects
       login_as user
       namespace = groups(:group_hotel)
       project2 = projects(:projectHotel)
+      Project.reset_counters(project2.id, :samples_count)
       visit namespace_project_samples_url(namespace, project2)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
@@ -1628,6 +1632,7 @@ module Projects
     test 'should not import metadata with analysis values' do
       subgroup12aa = groups(:subgroup_twelve_a_a)
       project31 = projects(:project31)
+      Project.reset_counters(project31.id, :samples_count)
       visit namespace_project_samples_url(subgroup12aa, project31)
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
       within('div[data-metadata--file-import-loaded-value="true"]') do

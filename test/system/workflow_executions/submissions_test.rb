@@ -11,6 +11,8 @@ module WorkflowExecutions
       @sample44 = samples(:sample44)
       @project = projects(:project37)
       @namespace = groups(:group_sixteen)
+
+      Project.reset_counters(@project.id, :samples_count)
     end
 
     test 'should display a pipeline selection modal for project samples as owner' do
@@ -122,6 +124,7 @@ module WorkflowExecutions
       namespace = namespaces_user_namespaces(:user29_namespace)
       project = projects(:user29_project1)
       sample = samples(:sample45)
+      Project.reset_counters(project.id, :samples_count)
 
       visit namespace_project_samples_url(namespace_id: namespace.path, project_id: project.path)
 
