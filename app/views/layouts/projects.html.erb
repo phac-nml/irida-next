@@ -25,10 +25,10 @@
           ) %>
           <% if allowed_to?(:view_history?, @project) %>
             <%= render section.with_item(
-              url: project_history_path(@project),
+              url: project_activity_path(@project),
               icon: "list_bullet",
-              label: t(:"projects.sidebar.history"),
-              selected: @current_page == t(:"projects.sidebar.history"),
+              label: t(:"projects.sidebar.activity"),
+              selected: @current_page == t(:"projects.sidebar.activity"),
             ) %>
           <% end %>
           <% if allowed_to?(:view_workflow_executions?, @project.namespace) && @pipelines_enabled %>
@@ -70,9 +70,9 @@
                 ) %>
               <% end %>
               <% multi_level_menu.with_menu_item(
-                url: project_activity_path(@project),
-                label: t(:"projects.sidebar.activity"),
-                selected: @current_page == t(:"projects.sidebar.activity"),
+                url: project_history_path(@project),
+                label: t(:"projects.sidebar.history"),
+                selected: @current_page == t(:"projects.sidebar.history"),
               ) %>
             <% end %>
           <% end %>
