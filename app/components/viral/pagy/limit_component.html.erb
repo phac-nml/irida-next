@@ -1,5 +1,8 @@
 <div
-  class="inline-flex items-center mt-4 space-x-2  text-slate-500 dark:text-slate-400"
+  id="limit-component"
+  class="
+    inline-flex items-center mt-4 space-x-2 text-slate-500 dark:text-slate-400
+  "
 >
   <span><%= t(".items", items: @item) %></span>
   <%= viral_dropdown(label: @pagy.limit) do |dropdown| %>
