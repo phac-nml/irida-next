@@ -310,7 +310,11 @@ en:
     groups:
       index:
         create_group_button: New group
+        no_groups_description: No groups found matching your search
+        no_groups_title: No groups found
         row_aria_label: See %{name} subgroups
+        search:
+          placeholder: Filter by name or puid
         sorting:
           created_at_asc: Oldest created
           created_at_desc: Last created

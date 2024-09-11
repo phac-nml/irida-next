@@ -184,5 +184,22 @@ module Dashboard
       assert_text I18n.t(:'groups.create.success')
       assert_selector 'h1', text: 'New group'
     end
+
+    test 'can search for a group by name or puid' do
+      visit dashboard_groups_url
+
+      fill_in I18n.t(:'dashboard.groups.index.search.placeholder'), with: 'group a'
+
+      assert_text groups(:group_a).name
+      assert_no_text groups(:group_b).name
+
+      fill_in I18n.t(:'dashboard.groups.index.search.placeholder'), with: groups(:group_b).puid
+      assert_no_text groups(:group_a).name
+      assert_text groups(:group_b).name
+
+      #   Test empty state
+      fill_in I18n.t(:'dashboard.groups.index.search.placeholder'), with: 'z6z6z6'
+      assert_text I18n.t(:'dashboard.groups.index.no_groups_description')
+    end
   end
 end
