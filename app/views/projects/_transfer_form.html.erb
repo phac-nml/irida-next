@@ -1,21 +1,32 @@
 <%= form_with(url: namespace_project_transfer_path, method: :post, class: "grid gap-4", id: "edit_advanced_transfer",
-              data: { turbo_confirm: "" }) do |form| %>
+              data: { turbo_confirm: "", controller: "viral--select2" }) do |form| %>
   <div class="form-field">
     <%= form.label :new_namespace_id,
                t(:"projects.edit.advanced.transfer.new_namespace_id") %>
-    <%= form.collection_select(
-      :new_namespace_id,
-      @authorized_namespaces,
-      :id,
-      :full_name,
-      { prompt: t(:"projects.edit.advanced.transfer.new_namespace_id") },
-      {
-        data: {
-          action: "transfer#onChange"
-        },
-        class: @error.present? ? "error" : ""
-      }
-    ) %>
+    <% if @authorized_namespaces.empty? %>
+      <input
+        disabled
+        placeholder="<%= t(:"projects.edit.advanced.transfer.no_available_namespaces") %>"
+        type="text"
+        class="
+          border-slate-300 text-slate-800 sm:text-sm rounded-md block w-full p-2.5
+          dark:bg-slate-800 dark:border-slate-600 dark:text-slate-50
+          "
+        >
+    <% else %>
+      <%= viral_select2(form:, name: :new_namespace_id, placeholder: t(:"projects.edit.advanced.transfer.select_namespace")) do |select| %>
+        <% @authorized_namespaces.each do |namespace| %>
+          <% select.with_option(
+            primary: namespace.full_path,
+            secondary: namespace.puid,
+            value: namespace.id,
+          ) %>
+        <% end %>
+        <%= select.with_empty_state do %>
+          <%= t(:"projects.edit.advanced.transfer.empty_state") %>
+        <% end %>
+      <% end %>
+    <% end %>
     <% if @error.present? %>
       <p class="text-sm text-red-500 dark:text-red-400"><%= @error %></p>
     <% end %>
@@ -26,7 +37,7 @@
                 class: "button button--state-destructive button--size-default",
                 disabled: true,
                 data: {
-                  "transfer-target": "submitButton",
+                  "viral--select2-target": "submitButton",
                   turbo_content: ".confirm-transfer",
                   confirm_value: @project.name
                 } %>

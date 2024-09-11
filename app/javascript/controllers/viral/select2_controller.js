@@ -5,6 +5,7 @@ export default class extends Controller {
   static targets = ["input", "hidden", "dropdown", "scroller", "item", "empty", "submitButton"];
   #found = false;
   #storedInputvalue = ''
+
   connect() {
     this.dropdown = new Dropdown(this.dropdownTarget, this.inputTarget, {
       triggerType: "none",

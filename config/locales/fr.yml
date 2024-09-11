@@ -550,11 +550,14 @@ fr:
             warning_html: You are going to transfer <strong>%{group_name}</strong> to another namespace. Once you confirm, this action cannot be undone.
           descriptions:
           - Transfer group to another parent group.
+          empty_state: No namespaces are associated with that name or ID
           new_namespace_id: Select a parent group
+          no_available_namespaces: You do not have access to any destination namespaces to transfer this group
           points:
           - Be careful. Changing a group's parent can have unintended side effects.
           - You can only transfer groups where you have sufficient permissions.
           - If the parent group's visibility is lower than the group's current visibility, visibility levels for subgroups and projects will be changed to match the new parent group's visibility.
+          select_group: Select Group
           submit: Transfer group
           title: Transfer group
       details:
@@ -571,7 +574,7 @@ fr:
         button:
           cancel: Cancel
           submit: Share
-        empty_state: Empty state
+        empty_state: No groups are associated with that name or ID
         label:
           access_expiration: Access expiration (optional)
           group_access_level: Maximum group access level
@@ -619,7 +622,7 @@ fr:
       new:
         add_member_to_group: Add member to group
         description: You are adding a new member to group %{name}
-        empty_state: Empty state
+        empty_state: There are no users with the provided email or name
         select_access_level: Select Access Level
         select_user: Select a User
         title: Add New Member
@@ -967,11 +970,14 @@ fr:
           - Transfer your project into another namespace.
           - When you transfer your project to a group, you can easily manage multiple projects and users.
           - 'Things to be aware of before transferring your project:'
+          empty_state: No namespaces are associated with that name or ID
           new_namespace_id: Select a new namespace
+          no_available_namespaces: You do not have access to any destination namespaces to transfer this project
           points:
           - Be careful! Changing a project's namespace can have unintended side effects.
           - You can only transfer projects to groups where you have sufficient permissions.
           - Project visibility level will change to match namespace rules when transferring to a group.
+          select_namespace: Select Namespace
           submit: Transfer project
           title: Transfer project
       general:
@@ -1003,7 +1009,7 @@ fr:
         button:
           cancel: Cancel
           submit: Share
-        empty_state: Empty state
+        empty_state: No groups are associated with that name or ID
         label:
           access_expiration: Access expiration (optional)
           group_access_level: Maximum group access level
@@ -1060,7 +1066,7 @@ fr:
       new:
         add_member_to_project: Add member to project
         description: You are adding a new member to project %{name}
-        empty_state: Empty state
+        empty_state: There are no users with the provided email or name
         select_access_level: Select Access Level
         select_user: Select a User
         title: Add New Member
@@ -1113,7 +1119,7 @@ fr:
             plural: The following COUNT_PLACEHOLDER samples are about to be cloned to another project.
             singular: The following sample is about to be cloned to another project.
             zero: No samples have been selected for cloning
-          empty_state: Empty state
+          empty_state: No projects are associated with that name or ID
           new_project_id: Project to clone samples to
           no_available_projects: No available projects
           samples: Samples
@@ -1276,7 +1282,7 @@ fr:
             plural: The following COUNT_PLACEHOLDER samples are about to be transferred, which will result in these samples no longer being accessible in this project. Maintainers can only transfer samples to another project within the same hierarchy.
             singular: The following sample is about to be transferred, which will result in the sample no longer being accessible in this project. Maintainers can only transfer samples to another project within the same hierarchy.
             zero: No samples have been selected for transfer
-          empty_state: Empty state
+          empty_state: No projects are associated with that name or ID
           new_project_id: Project to transfer samples to
           no_available_projects: No available projects
           samples: Samples

@@ -288,13 +288,12 @@ class GroupsTest < ApplicationSystemTestCase
     click_link I18n.t('groups.sidebar.general')
 
     assert_selector 'h2', text: I18n.t('groups.edit.advanced.transfer.title')
-    within %(div[data-controller="transfer"][data-controller-connected="true"]) do
-      within %(form[action="/group-1/transfer"]) do
-        assert_selector 'input[type=submit]:disabled'
-        find('#new_namespace_id').find("option[value='#{group3.id}']").select_option
-        assert_selector 'input[type=submit]:not(:disabled)'
-        click_on I18n.t('groups.edit.advanced.transfer.submit')
-      end
+    within %(form[action="/group-1/transfer"]) do
+      assert_selector 'input[type=submit]:disabled'
+      find('input#select2-input').click
+      find("button[data-viral--select2-primary-param='#{group3.full_path}']").click
+      assert_selector 'input[type=submit]:not(:disabled)'
+      click_on I18n.t('groups.edit.advanced.transfer.submit')
     end
 
     within('#turbo-confirm') do
@@ -304,6 +303,20 @@ class GroupsTest < ApplicationSystemTestCase
     end
 
     assert_text I18n.t('groups.transfer.success')
+  end
+
+  test 'empty state of transfer group' do
+    group1 = groups(:group_one)
+    visit group_url(group1)
+
+    click_on I18n.t('groups.sidebar.settings')
+    click_link I18n.t('groups.sidebar.general')
+
+    assert_selector 'h2', text: I18n.t('groups.edit.advanced.transfer.title')
+    within %(form[action="/group-1/transfer"]) do
+      find('input#select2-input').fill_in with: 'invalid project name or puid'
+      assert_text I18n.t(:'groups.edit.advanced.transfer.empty_state')
+    end
   end
 
   test 'user with maintainer access should not be able to see the transfer group section' do
