@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_22_144703) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_12_152940) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -171,6 +171,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_22_144703) do
     t.uuid "owner_id"
     t.uuid "parent_id"
     t.string "puid", null: false
+    t.datetime "attachments_updated_at"
     t.index ["created_at"], name: "index_namespaces_on_created_at"
     t.index ["deleted_at"], name: "index_namespaces_on_deleted_at"
     t.index ["metadata_summary"], name: "index_namespaces_on_metadata_summary", using: :gin
@@ -203,6 +204,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_22_144703) do
     t.datetime "deleted_at"
     t.uuid "creator_id", null: false
     t.uuid "namespace_id", null: false
+    t.integer "samples_count"
     t.index ["created_at"], name: "index_projects_on_created_at"
     t.index ["creator_id"], name: "index_projects_on_creator_id"
     t.index ["deleted_at"], name: "index_projects_on_deleted_at"
