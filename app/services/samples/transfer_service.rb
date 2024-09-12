@@ -48,12 +48,14 @@ module Samples
 
     def transfer(new_project_id, sample_ids) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       transferred_samples_ids = []
+      transferred_samples_puids = []
       not_found_sample_ids = []
 
       sample_ids.each do |sample_id|
         sample = Sample.find_by(id: sample_id, project_id: @project.id)
         sample.update!(project_id: new_project_id)
         transferred_samples_ids << sample_id
+        transferred_samples_puids << sample.puid
       rescue StandardError
         if sample
           @project.errors.add(:samples, I18n.t('services.samples.transfer.sample_exists',
@@ -71,7 +73,7 @@ module Samples
       end
 
       if transferred_samples_ids.count.positive?
-        create_activities
+        create_activities(transferred_samples_ids, transferred_samples_puids)
 
         @project.namespace.update_metadata_summary_by_sample_transfer(transferred_samples_ids,
                                                                       new_project_id)
@@ -80,12 +82,14 @@ module Samples
       transferred_samples_ids
     end
 
-    def create_activities
+    def create_activities(transferred_samples_ids, transferred_samples_puids) # rubocop:disable Metrics/MethodLength
       @project.namespace.create_activity key: 'namespaces_project_namespace.samples.transfer',
                                          owner: current_user,
                                          parameters:
                                           {
                                             target_project: @new_project.id,
+                                            transferred_samples_ids:,
+                                            transferred_samples_puids:,
                                             action: 'sample_transfer'
                                           }
 
@@ -94,6 +98,8 @@ module Samples
                                              parameters:
                                               {
                                                 source_project: @project.id,
+                                                transferred_samples_ids:,
+                                                transferred_samples_puids:,
                                                 action: 'sample_transfer'
                                               }
     end

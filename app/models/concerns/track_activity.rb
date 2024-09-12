@@ -119,7 +119,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     relation.with_deleted.find_by(id: identifier)
   end
 
-  def transfer_activity_parameters(params, activity)
+  def transfer_activity_parameters(params, activity) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     if activity.parameters[:action] == 'project_namespace_transfer'
       params.merge!({
                       old_namespace: activity.parameters[:old_namespace],
@@ -127,10 +127,21 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
                     })
     end
 
-    if activity.parameters[:action] == 'sample_transfer' || activity.parameters[:action] == 'sample_clone'
+    if activity.parameters[:action] == 'sample_transfer'
       params.merge!({
                       source_project: get_object_by_id(activity.parameters[:source_project], Project),
-                      target_project: get_object_by_id(activity.parameters[:target_project], Project)
+                      target_project: get_object_by_id(activity.parameters[:target_project], Project),
+                      transferred_samples_ids: activity.parameters[:transferred_samples_ids],
+                      transferred_samples_puids: activity.parameters[:transferred_samples_puids]
+                    })
+    end
+
+    if activity.parameters[:action] == 'sample_clone'
+      params.merge!({
+                      source_project: get_object_by_id(activity.parameters[:source_project], Project),
+                      target_project: get_object_by_id(activity.parameters[:target_project], Project),
+                      cloned_samples_ids: activity.parameters[:cloned_samples_ids],
+                      cloned_samples_puids: activity.parameters[:cloned_samples_puids]
                     })
     end
 
@@ -150,7 +161,8 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
     if activity.parameters[:action] == 'sample_destroy_multiple'
       params.merge!({
-                      deleted_count: activity.parameters[:deleted_count]
+                      deleted_count: activity.parameters[:deleted_count],
+                      samples_deleted_puids: activity.parameters[:samples_deleted_puids]
                     })
     end
 

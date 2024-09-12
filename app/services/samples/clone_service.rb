@@ -33,14 +33,16 @@ module Samples
 
     def clone_samples(sample_ids)
       cloned_sample_ids = {}
+      cloned_sample_puids = {}
 
       sample_ids.each do |sample_id|
         sample = Sample.find_by(id: sample_id, project_id: @project.id)
-        cloned_sample_id = clone_sample(sample)
-        cloned_sample_ids[sample_id] = cloned_sample_id unless cloned_sample_id.nil?
+        cloned_sample = clone_sample(sample)
+        cloned_sample_ids[sample_id] = cloned_sample.id unless cloned_sample.nil?
+        cloned_sample_puids[sample.puid] = cloned_sample.puid unless cloned_sample.nil?
       end
 
-      create_activities if cloned_sample_ids.count.positive?
+      create_activities(cloned_sample_ids, cloned_sample_puids) if cloned_sample_ids.count.positive?
 
       cloned_sample_ids
     end
@@ -55,7 +57,7 @@ module Samples
       @new_project.namespace.update_metadata_summary_by_sample_addition(sample)
       clone_attachments(sample, clone)
 
-      clone.id
+      clone
     rescue ActiveRecord::RecordInvalid
       @project.errors.add(:sample, I18n.t('services.samples.clone.sample_exists', sample_name: sample.name,
                                                                                   sample_puid: sample.puid))
@@ -67,12 +69,14 @@ module Samples
       Attachments::CreateService.new(current_user, clone, { files:, include_activity: false }).execute
     end
 
-    def create_activities
+    def create_activities(cloned_sample_ids, cloned_sample_puids) # rubocop:disable Metrics/MethodLength
       @project.namespace.create_activity key: 'namespaces_project_namespace.samples.clone',
                                          owner: current_user,
                                          parameters:
                                           {
                                             target_project: @new_project.id,
+                                            cloned_samples_ids: cloned_sample_ids,
+                                            cloned_samples_puids: cloned_sample_puids,
                                             action: 'sample_clone'
                                           }
 
@@ -81,6 +85,8 @@ module Samples
                                              parameters:
                                               {
                                                 source_project: @project.id,
+                                                cloned_samples_ids: cloned_sample_ids,
+                                                cloned_samples_puids: cloned_sample_puids,
                                                 action: 'sample_clone'
                                               }
     end
