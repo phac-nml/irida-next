@@ -894,7 +894,7 @@ type Project implements Node {
   """
   metadataSummary(
     """
-    Optional array of keys to limit metadata result to.
+    Optional array of keys to limit metadata summary result to.
     """
     keys: [String!] = null
   ): JSON!
