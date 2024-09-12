@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Projects
-  # Controller actions for Samples
+  # Controller actions for Project Attachments
   class AttachmentsController < Projects::ApplicationController
     before_action :current_page
 
@@ -12,9 +12,35 @@ module Projects
     end
 
     def new
+      authorize! @project, to: :create_attachment?
+
+      render turbo_stream: turbo_stream.update('attachment_modal',
+                                               partial: 'new_attachment_modal',
+                                               locals: {
+                                                 open: true,
+                                                 attachment: Attachment.new(attachable: @project.namespace)
+                                               }), status: :ok
     end
 
     def create
+      authorize! @project, to: :update_sample?
+
+      @attachments = ::Attachments::CreateService.new(current_user, @project.namespace, attachment_params).execute
+
+      status = if !@attachments.count.positive?
+                 :unprocessable_entity
+               elsif @attachments.count(&:persisted?) == @attachments.count
+                 :ok
+               else
+                 :multi_status
+               end
+
+      respond_to do |format|
+        format.turbo_stream do
+          render status:, locals: { attachment: Attachment.new(attachable: @project.namespace),
+                                    attachments: @attachments }
+        end
+      end
     end
 
     private
@@ -25,6 +51,10 @@ module Projects
 
     def set_default_sort
       @q.sorts = 'updated_at desc' if @q.sorts.empty?
+    end
+
+    def attachment_params
+      params.require(:attachment).permit(:attachable_id, :attachable_type, files: [])
     end
   end
 end

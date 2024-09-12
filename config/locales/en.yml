@@ -917,9 +917,19 @@ en:
     activity:
       title: Project Activity
     attachments:
+      create:
+        failure: 'File %{filename} was not uploaded due to the following errors: %{errors}'
+        success: File %{filename} was successfully uploaded.
+      form:
+        files: Files
+        files_ignored: 'fasta and fastq files must be compressed. The following file(s) cannot be uploaded:'
+        upload: Upload
+        uploading: Uploading
       index:
         title: Files
         subtitle: These are the files that belong to project %{project_name}
+        upload_files: Upload Files
+      new_attachment_modal:
         upload_files: Upload Files
       table:
         empty:

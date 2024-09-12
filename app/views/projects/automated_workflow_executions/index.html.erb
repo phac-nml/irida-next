@@ -1,3 +1,5 @@
+<%= turbo_frame_tag "selected" %>
+
 <%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t('.subtitle')) do |component| %>
   <%= component.with_icon(name: :rocket_launch, classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>

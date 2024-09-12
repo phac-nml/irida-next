@@ -1,10 +1,14 @@
+<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+
+<%= turbo_frame_tag "attachment_modal" %>
+
 <%= render Viral::PageHeaderComponent.new(
   title: t(".title"),
   subtitle: t(".subtitle", project_name: @project.name),
 ) do |component| %>
   <%= component.with_buttons do %>
    <%= link_to t(".upload_files"),
-      new_namespace_project_attachment_path,
+      new_namespace_project_attachment_path(id: @project.id),
       class: "button button--size-default button--state-default" %>
   <% end %>
 <% end %>
