@@ -1,0 +1,18 @@
+<%= render Viral::PageHeaderComponent.new(
+  title: t(".title"),
+  subtitle: t(".subtitle", project_name: @project.name),
+) do |component| %>
+  <%= component.with_buttons do %>
+   <%= link_to t(".upload_files"),
+      new_namespace_project_attachment_path,
+      class: "button button--size-default button--state-default" %>
+  <% end %>
+<% end %>
+
+<%= render partial: "table",
+locals: {
+  attachments: @attachments,
+  pagy: @pagy,
+  q: @q,
+  project: @project
+} %>

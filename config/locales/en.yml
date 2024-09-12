@@ -260,6 +260,22 @@ en:
       access_denied: Access Denied.
       not_found_on_server: The requested resource could not be found on the server.
       resource_not_found: Resource Not Found.
+  attachments:
+    table_component:
+      action: Action
+      actions: Actions
+      counts:
+        attachments: Attachments
+        selected: Selected
+      created_at: Uploaded
+      delete_confirm: Are you sure you would like to delete attachment '%{name}'?
+      filename: Filename
+      format: Format
+      id: ID
+      remove: Delete
+      select_page: Select / Deselect visible attachments
+      size: Size
+      type: Type
   auth:
     scopes:
       api: Grants complete read/write access to the API.
@@ -900,6 +916,15 @@ en:
   projects:
     activity:
       title: Project Activity
+    attachments:
+      index:
+        title: Files
+        subtitle: These are the files that belong to project %{project_name}
+        upload_files: Upload Files
+      table:
+        empty:
+          description: There are no files associated with this project.
+          title: No Files
     automated_workflow_executions:
       actions:
         delete_button: Delete
@@ -1344,6 +1369,7 @@ en:
       automated_workflow_executions: Automated Workflow Executions
       bot_accounts: Bot Accounts
       details: Details
+      files: Files
       general: General
       history: History
       members: Members

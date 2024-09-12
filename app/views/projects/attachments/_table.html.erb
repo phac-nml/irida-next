@@ -1,0 +1,18 @@
+<%# TODO: VERIFY THIS locals: (project:, pagy:, q:, attachments:) -%>
+<%= render Attachments::TableComponent.new(
+  attachments,
+  pagy,
+  q,
+  namespace: project.namespace,
+  project: project,
+  abilities: {
+    select_attachments: allowed_to?(:destroy_attachment?, project)
+  },
+  row_actions: {
+    destroy: allowed_to?(:destroy_attachment?, project),
+  },
+  empty: {
+    title: t(:".empty.title"),
+    description: t(:".empty.description"),
+  },
+) %>
