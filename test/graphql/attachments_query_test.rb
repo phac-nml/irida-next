@@ -23,6 +23,26 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     }
   GRAPHQL
 
+  ATTACHMENTS_PROJECT_QUERY = <<~GRAPHQL
+    query($puid: ID!, $attachmentFilter: AttachmentFilter, $attachmentOrderBy: AttachmentOrder) {
+      project(puid: $puid) {
+        id
+        attachments(filter: $attachmentFilter, orderBy: $attachmentOrderBy) {
+          edges {
+            node {
+              id,
+              metadata,
+              filename,
+              byteSize,
+              createdAt,
+              updatedAt
+            }
+          }
+        }
+      }
+    }
+  GRAPHQL
+
   ATTACHMENTS_URL_QUERY = <<~GRAPHQL
     query($puid: ID!) {
       sample(puid: $puid) {
@@ -92,6 +112,35 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     data = result['data']['sample']
 
     assert_not_empty data, 'sample type should work'
+
+    assert_not_empty data['attachments']
+    assert_not_empty data['attachments']['edges']
+
+    attachments = data['attachments']['edges']
+    assert_equal 2, attachments.count
+
+    assert_equal 'test_file.fastq', attachments[0]['node']['filename']
+    assert_equal 'test_file_A.fastq', attachments[1]['node']['filename']
+
+    assert_equal 2102, attachments[0]['node']['byteSize']
+    assert_equal 2101, attachments[1]['node']['byteSize']
+
+    assert_equal 'fastq', attachments[0]['node']['metadata']['format']
+    assert_equal 'none', attachments[0]['node']['metadata']['compression']
+    assert_equal 'fastq', attachments[1]['node']['metadata']['format']
+    assert_equal 'none', attachments[1]['node']['metadata']['compression']
+  end
+
+  test 'attachment query on project should work' do
+    project = projects(:project1)
+    result = IridaSchema.execute(ATTACHMENTS_PROJECT_QUERY, context: { current_user: @user },
+                                                            variables: { puid: project.puid })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['project']
+
+    assert_not_empty data, 'project type should work'
 
     assert_not_empty data['attachments']
     assert_not_empty data['attachments']['edges']
