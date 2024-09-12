@@ -11,11 +11,8 @@ module Attachments
     end
 
     def execute # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-      if @attachable.instance_of?(Namespaces::ProjectNamespace)
-        authorize! @attachable.project, to: :destroy_attachment?
-      else
-        authorize! @attachable, to: :destroy_attachment?
-      end
+      attachable_authorization
+
       destroyed_attachments = []
       if @attachment.attachable_id != @attachable.id
         raise AttachmentsDestroyError, I18n.t('services.attachments.destroy.does_not_belong_to_attachable')
@@ -50,6 +47,16 @@ module Attachments
     rescue Attachments::DestroyService::AttachmentsDestroyError => e
       @attachment.errors.add(:base, e.message)
       destroyed_attachments
+    end
+
+    private
+
+    def attachable_authorization
+      if @attachable.instance_of?(Namespaces::ProjectNamespace)
+        authorize! @attachable.project, to: :destroy_attachment?
+      else
+        authorize! @attachable, to: :destroy_attachment?
+      end
     end
   end
 end

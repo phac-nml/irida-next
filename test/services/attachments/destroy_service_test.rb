@@ -22,7 +22,7 @@ module Attachments
 
     test 'delete attachment with correct permissions' do
       assert_not_nil @sample.attachments_updated_at
-      puts @attachment1.associated_attachment
+
       Timecop.travel(Time.zone.now + 5) do
         assert_difference -> { Attachment.count } => -1 do
           Attachments::DestroyService.new(@sample, @attachment1, @user).execute
