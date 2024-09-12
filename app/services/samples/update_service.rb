@@ -13,7 +13,20 @@ module Samples
     def execute
       authorize! sample.project, to: :update_sample?
 
-      sample.update(params)
+      sample_updated = sample.update(params)
+
+      if sample_updated
+        sample.project.namespace.create_activity key: 'namespaces_project_namespace.samples.update',
+                                                 owner: current_user,
+                                                 parameters:
+                                                  {
+                                                    sample_id: sample.id,
+                                                    sample_puid: sample.puid,
+                                                    action: 'sample_update'
+                                                  }
+      end
+
+      sample_updated
     end
   end
 end

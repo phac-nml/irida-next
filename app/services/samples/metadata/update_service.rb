@@ -14,9 +14,10 @@ module Samples
         @metadata = params['metadata']
         @analysis_id = params['analysis_id']
         @metadata_changes = { added: [], updated: [], deleted: [], not_updated: [], unchanged: [] }
+        @include_activity = params.key?('include_activity') ? params['include_activity'] : true
       end
 
-      def execute
+      def execute # rubocop:disable Metrics/MethodLength
         authorize! sample.project, to: :update_sample?
 
         validate_sample_in_project
@@ -30,9 +31,21 @@ module Samples
           @sample.save
         end
 
+        if @include_activity
+          @project.namespace.create_activity key: 'namespaces_project_namespace.samples.metadata.update',
+                                             owner: current_user,
+                                             parameters:
+                                              {
+                                                sample_id: @sample.id,
+                                                sample_puid: @sample.puid,
+                                                action: 'metadata_update'
+                                              }
+        end
+
         update_metadata_summary
 
         handle_not_updated_fields
+
         @metadata_changes
       rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError => e
         @sample.errors.add(:base, e.message)

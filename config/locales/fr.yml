@@ -133,6 +133,8 @@ fr:
     concerns:
       history:
         system: System
+      track_activity:
+        system: System
     errors:
       models:
         attachment:
@@ -212,6 +214,43 @@ fr:
       sample:
         one: Sample
         other: Samples
+  activity:
+    member:
+      create_html: "%{user} added member %{href} to %{namespace_type}"
+      destroy_html: "%{user} removed member <span class='text-slate-800 dark:text-slate-300 font-medium'>%{member}</span> from %{namespace_type}"
+      destroy_self_html: "<span class='text-slate-800 dark:text-slate-300 font-medium'>%{member}</span> removed themself from %{namespace_type}"
+      update_html: "%{user} updated %{namespace_type} member %{href} attributes"
+    namespace_group_link:
+      create_html: "%{user} shared %{namespace_type} with group %{href}"
+      destroy_html: "%{user} unshared %{namespace_type} with group <span class='text-slate-800 dark:text-slate-300 font-medium'>%{group_name}</span>"
+      update_html: "%{user} updated share attributes between %{namespace_type} and group %{href}"
+    namespaces_project_namespace:
+      create_html: "%{user} created project"
+      destroy_html: "%{user} removed project"
+      samples:
+        attachment:
+          create_html: "%{user} attached files to sample %{href}"
+          destroy_html: "%{user} removed files from sample %{href}"
+        clone_html: "%{user} cloned <span class='text-slate-800 dark:text-slate-300 font-medium'>%{cloned_samples_count}</span> samples to project %{href}"
+        cloned_from_html: "%{user} cloned <span class='text-slate-800 dark:text-slate-300 font-medium'>%{cloned_samples_count}</span> samples from project %{href}"
+        create_html: "%{user} created sample %{href}"
+        destroy_html: "%{user} removed sample <span class='text-slate-800 dark:text-slate-300 font-medium'>%{sample_puid}</span>"
+        destroy_multiple_html: "%{user} removed <span class='text-slate-800 dark:text-slate-300 font-medium'>%{deleted_count}</span> samples from project"
+        metadata:
+          update_html: "%{user} updated sample %{href} metadata"
+        transfer_html: "%{user} transferred <span class='text-slate-800 dark:text-slate-300 font-medium'>%{transferred_samples_count}</span> samples to project %{href}"
+        transferred_from_html: "%{user} transferred <span class='text-slate-800 dark:text-slate-300 font-medium'>%{transferred_samples_count}</span> samples from project %{href}"
+        update_html: "%{user} updated sample %{href} attributes"
+      transfer_html: "%{user} transferred project from namespace <span class='text-slate-800 dark:text-slate-300 font-medium'>%{old_namespace}</span> to <span class='text-slate-800 dark:text-slate-300 font-medium'>%{new_namespace}</span>"
+      update_html: "%{user} updated project attributes"
+    workflow_execution:
+      automated_workflow:
+        create_html: "%{user} setup automated workflow execution %{href} for the project"
+        launch_html: Project automation bot launched workflow %{href} on sample %{sample_href}
+      automated_workflow_completion:
+        metadata_written_html: Project automation bot wrote workflow %{href} metadata to sample %{sample_href}
+        outputs_and_metadata_written_html: Project automation bot attached workflow %{href} outputs and wrote metadata to sample %{sample_href}
+        outputs_written_html: Project automation bot attached workflow %{href} outputs to sample %{sample_href}
   application:
     errors:
       access_denied: Access Denied.
@@ -223,6 +262,8 @@ fr:
       label: Scopes
       read_api: Grants read access to the API.
   components:
+    activity:
+      load_more: Load more
     clipboard:
       copied: Copied!
       copy: Copy to clipboard
@@ -853,6 +894,8 @@ fr:
     update:
       success: Profile updated successfully
   projects:
+    activity:
+      title: Project Activity
     automated_workflow_executions:
       actions:
         delete_button: Delete
@@ -1293,6 +1336,7 @@ fr:
       update:
         success: Sample was successfully updated.
     sidebar:
+      activity: Activity
       automated_workflow_executions: Automated Workflow Executions
       bot_accounts: Bot Accounts
       details: Details

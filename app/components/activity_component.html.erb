@@ -1,0 +1,17 @@
+<div>
+  <ol class="relative border-s border-slate-200 dark:border-slate-700">
+    <%= helpers.turbo_frame_tag "activities" do %>
+      <% activities.each do |activity| %>
+        <%= render Activities::ListItemComponent.new(activity: activity) %>
+      <% end %>
+    <% end %>
+  </ol>
+
+  <div id="next_link">
+    <% if @pagy.next.present? %>
+      <%= button_to t(:"components.activity.load_more"),
+      helpers.pagy_url_for(@pagy, @pagy.next),
+      class: "button button--state-default button--size-default" %>
+    <% end %>
+  </div>
+</div>

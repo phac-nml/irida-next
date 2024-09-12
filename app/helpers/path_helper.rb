@@ -11,7 +11,7 @@ module PathHelper
             end
 
     params.each do |param, value|
-      query[param] = value
+      query[param] = value if value.present?
     end
 
     parsed.query = URI.encode_www_form(query)

@@ -3,10 +3,15 @@
 module Projects
   # Service used to Delete Projects
   class DestroyService < BaseProjectService
-    def execute
+    def execute # rubocop:disable Metrics/AbcSize
       authorize! project, to: :destroy?
 
       project.namespace.destroy!
+
+      if project.namespace.deleted?
+        @project.namespace.create_activity key: 'namespaces_project_namespace.destroy',
+                                           owner: current_user
+      end
 
       return unless project.namespace.deleted? && project.namespace.type != Namespaces::UserNamespace.sti_name
 

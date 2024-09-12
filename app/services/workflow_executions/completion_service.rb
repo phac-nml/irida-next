@@ -38,6 +38,7 @@ module WorkflowExecutions
       if @workflow_execution.update_samples?
         merge_metadata_onto_samples
         put_output_attachments_onto_samples
+        create_activities
       end
 
       @workflow_execution.state = :completed
@@ -132,7 +133,8 @@ module WorkflowExecutions
 
         params = {
           'metadata' => swe.metadata,
-          'analysis_id' => @workflow_execution.id
+          'analysis_id' => @workflow_execution.id,
+          'include_activity' => false
         }
         Samples::Metadata::UpdateService.new(
           swe.sample.project, swe.sample, current_user, params
@@ -145,10 +147,44 @@ module WorkflowExecutions
         next if swe.outputs.empty?
 
         files = swe.outputs.map { |output| output.file.signed_id }
-        params = { files: }
+        params = { files:, include_activity: false }
         Attachments::CreateService.new(
           current_user, swe.sample, params
         ).execute
+      end
+    end
+
+    def create_activities # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+      @workflow_execution.samples_workflow_executions&.each do |swe|
+        next if swe.metadata.nil? && swe.outputs.empty?
+
+        if !swe.metadata.nil? && !swe.outputs.empty?
+          @workflow_execution.namespace.create_activity key: 'workflow_execution.automated_workflow_completion.outputs_and_metadata_written', # rubocop:disable Layout/LineLength
+                                                        parameters: {
+                                                          workflow_id: @workflow_execution.id,
+                                                          sample_id: swe.sample.id,
+                                                          sample_puid: swe.sample.puid
+                                                        }
+          next
+        end
+
+        unless swe.metadata.nil?
+          @workflow_execution.namespace.create_activity key: 'workflow_execution.automated_workflow_completion.metadata_written', # rubocop:disable Layout/LineLength
+                                                        parameters: {
+                                                          workflow_id: @workflow_execution.id,
+                                                          sample_id: swe.sample.id,
+                                                          sample_puid: swe.sample.puid
+                                                        }
+        end
+
+        next if swe.outputs.empty?
+
+        @workflow_execution.namespace.create_activity key: 'workflow_execution.automated_workflow_completion.outputs_written', # rubocop:disable Layout/LineLength
+                                                      parameters: {
+                                                        workflow_id: @workflow_execution.id,
+                                                        sample_id: swe.sample.id,
+                                                        sample_puid: swe.sample.puid
+                                                      }
       end
     end
   end

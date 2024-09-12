@@ -91,5 +91,22 @@ module Namespaces
     def automation_bot
       users.find_by(user_type: User.user_types[:project_automation_bot])
     end
+
+    def retrieve_project_activity
+      PublicActivity::Activity.where(
+        trackable_id: id,
+        trackable_type: 'Namespace'
+      ).or(
+        PublicActivity::Activity.where(
+          trackable_id: Member.joins(:user).with_deleted.where(namespace: self).select(:id).where.not(user:
+          { user_type: User.user_types[:project_automation_bot] }), trackable_type: 'Member'
+        )
+      ).or(
+        PublicActivity::Activity.where(
+          trackable_id: NamespaceGroupLink.with_deleted.where(namespace: self).select(:id),
+          trackable_type: 'NamespaceGroupLink'
+        )
+      )
+    end
   end
 end

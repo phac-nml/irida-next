@@ -25,10 +25,10 @@
           ) %>
           <% if allowed_to?(:view_history?, @project) %>
             <%= render section.with_item(
-              url: project_history_path(@project),
+              url: project_activity_path(@project),
               icon: "list_bullet",
-              label: t(:"projects.sidebar.history"),
-              selected: @current_page == t(:"projects.sidebar.history"),
+              label: t(:"projects.sidebar.activity"),
+              selected: @current_page == t(:"projects.sidebar.activity"),
             ) %>
           <% end %>
           <% if allowed_to?(:view_workflow_executions?, @project.namespace) && @pipelines_enabled %>
@@ -46,7 +46,8 @@
               selectable_pages: [
                 t(:"projects.sidebar.general"),
                 t(:"projects.sidebar.bot_accounts"),
-                t(:"projects.sidebar.automated_workflow_executions")
+                t(:"projects.sidebar.automated_workflow_executions"),
+                t(:"projects.sidebar.activity")
               ],
               current_page: @current_page
             ) do |multi_level_menu| %>
@@ -68,6 +69,11 @@
                     @current_page == t(:"projects.sidebar.automated_workflow_executions"),
                 ) %>
               <% end %>
+              <% multi_level_menu.with_menu_item(
+                url: project_history_path(@project),
+                label: t(:"projects.sidebar.history"),
+                selected: @current_page == t(:"projects.sidebar.history"),
+              ) %>
             <% end %>
           <% end %>
         <% end %>

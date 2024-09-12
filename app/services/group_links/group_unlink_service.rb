@@ -16,6 +16,11 @@ module GroupLinks
       authorize! namespace_group_link.namespace, to: :unlink_namespace_with_group?
 
       namespace_group_link.destroy
+
+      return unless namespace_group_link.deleted?
+
+      namespace_group_link.create_activity key: 'namespace_group_link.destroy',
+                                           owner: current_user
     end
   end
 end

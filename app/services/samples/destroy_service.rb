@@ -21,20 +21,41 @@ module Samples
     private
 
     def destroy_single
-      sample.destroy
+      sample_destroyed = sample.destroy
+
+      if sample_destroyed
+        @project.namespace.create_activity key: 'namespaces_project_namespace.samples.destroy',
+                                           owner: current_user,
+                                           parameters:
+                                            {
+                                              sample_puid: sample.puid,
+                                              action: 'sample_destroy'
+                                            }
+      end
 
       update_metadata_summary(sample)
     end
 
-    def destroy_multiple
+    def destroy_multiple # rubocop:disable Metrics/MethodLength
       samples = Sample.where(id: sample_ids).where(project_id: project.id)
       samples_to_delete_count = samples.count
+      samples_deleted_puids = []
 
       samples = samples.destroy_all
 
       samples.each do |sample|
         update_metadata_summary(sample)
+        samples_deleted_puids << sample.puid
       end
+
+      @project.namespace.create_activity key: 'namespaces_project_namespace.samples.destroy_multiple',
+                                         owner: current_user,
+                                         parameters:
+                                         {
+                                           deleted_count: samples_to_delete_count,
+                                           samples_deleted_puids:,
+                                           action: 'sample_destroy_multiple'
+                                         }
 
       samples_to_delete_count
     end

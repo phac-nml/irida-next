@@ -8,7 +8,14 @@ module Projects
 
       namespace_params = params.delete(:namespace_attributes)
 
-      project.namespace.update(namespace_params)
+      updated = project.namespace.update(namespace_params)
+
+      if updated
+        @project.namespace.create_activity key: 'namespaces_project_namespace.update',
+                                           owner: current_user
+      end
+
+      updated
     end
   end
 end

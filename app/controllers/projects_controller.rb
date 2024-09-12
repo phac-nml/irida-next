@@ -61,7 +61,17 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
 
   def activity
     authorize! @project
-    # No necessary code here
+
+    project_activities = @project.namespace.retrieve_project_activity.order(created_at: :desc)
+
+    @pagy, raw_activities = pagy(project_activities, limit: 10)
+
+    @activities = @project.namespace.human_readable_activity(raw_activities)
+
+    respond_to do |format|
+      format.html
+      format.turbo_stream
+    end
   end
 
   def transfer
@@ -171,6 +181,8 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
                       t(:'general.default_sidebar.projects')
                     when 'history'
                       t(:'projects.sidebar.history')
+                    when 'activity'
+                      t(:'projects.sidebar.activity')
                     else
                       t(:'projects.sidebar.general')
                     end

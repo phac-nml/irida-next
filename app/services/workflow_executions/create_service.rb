@@ -23,6 +23,7 @@ module WorkflowExecutions
       end
 
       if @workflow_execution.save
+        create_activities
         WorkflowExecutionPreparationJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution)
       end
 
@@ -59,6 +60,22 @@ module WorkflowExecutions
       else
         value
       end
+    end
+
+    def create_activities
+      return unless @workflow_execution.submitter.automation_bot?
+
+      @workflow_execution.namespace.create_activity key: 'workflow_execution.automated_workflow.launch',
+                                                    owner: current_user,
+                                                    parameters:
+                                                    {
+                                                      workflow_id: @workflow_execution.id,
+                                                      workflow_name: @workflow_execution.name,
+                                                      sample_id:
+                                                      @workflow_execution.samples_workflow_executions.first.sample.id,
+                                                      sample_puid:
+                                                      @workflow_execution.samples_workflow_executions.first.sample.puid
+                                                    }
     end
   end
 end

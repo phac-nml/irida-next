@@ -2,6 +2,7 @@
 
 # Main application controller
 class ApplicationController < ActionController::Base
+  include PublicActivity::StoreController
   include Irida::Auth
   include Pagy::Backend
   include RouteHelper

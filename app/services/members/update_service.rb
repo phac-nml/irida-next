@@ -29,7 +29,10 @@ module Members
 
       updated = member.update(params)
 
-      UpdateMembershipsJob.perform_later(member.id) if updated
+      if updated
+        UpdateMembershipsJob.perform_later(member.id)
+        member.create_activity key: 'member.update', owner: current_user
+      end
 
       updated
     rescue Members::UpdateService::MemberUpdateError => e

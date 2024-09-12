@@ -110,6 +110,9 @@ gem 'good_job', '~> 4.1', '>= 4.1.1'
 gem 'roo', '~> 2.10.0'
 gem 'roo-xls'
 
+# activity tracking
+gem 'public_activity'
+
 # create zip file for data exports
 gem 'zip_kit'
 

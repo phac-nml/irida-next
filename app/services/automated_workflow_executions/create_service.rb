@@ -15,6 +15,15 @@ module AutomatedWorkflowExecutions
 
       @automated_workflow_execution.save
 
+      if @automated_workflow_execution.persisted?
+        namespace.create_activity key: 'workflow_execution.automated_workflow.create',
+                                  owner: current_user,
+                                  parameters: {
+                                    workflow_id: @automated_workflow_execution.id,
+                                    automated: true
+                                  }
+      end
+
       @automated_workflow_execution
     end
   end
