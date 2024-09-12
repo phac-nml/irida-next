@@ -197,3 +197,23 @@ sample22_test_file_text:
   name: file
   record: sample22AttachmentText (Attachment)
   blob: sample22_test_file_text_blob
+
+project1_attachment1_file_test_file_fastq:
+  name: file
+  record: project1Attachment1 (Attachment)
+  blob: project1_attachment1_file_test_file_fastq_blob
+
+project1_attachment2_file_test_file_A_fastq:
+  name: file
+  record: project1Attachment2 (Attachment)
+  blob: project1_attachment2_file_test_file_A_fastq_blob
+
+group1_attachment1_file_test_file_fastq:
+  name: file
+  record: group1Attachment1 (Attachment)
+  blob: group1_attachment1_file_test_file_fastq_blob
+
+group1_attachment2_file_test_file_A_fastq:
+  name: file
+  record: group1Attachment2 (Attachment)
+  blob: group1_attachment2_file_test_file_A_fastq_blob

@@ -11,6 +11,7 @@ module Attachments
       @project1 = projects(:project1)
       @group1 = groups(:group_one)
       @fastq_se_blob = active_storage_blobs(:test_file_fastq_blob)
+      @attachment_b_blob = active_storage_blobs(:attachmentB_file_test_file_fastq_blob)
       @testsample_illumina_pe_fwd_blob = active_storage_blobs(:testsample_illumina_pe_forward_blob)
       @testsample_illumina_pe_rev_blob = active_storage_blobs(:testsample_illumina_pe_reverse_blob)
       @testsample_illumina_without_lane_pe_fwd_blob =
@@ -231,16 +232,20 @@ module Attachments
     end
 
     test 'create project attachment with valid params and authorization' do
-      valid_params = { files: [@fastq_se_blob] }
+      valid_params = { files: [@attachment_b_blob] }
+      original_updated_time = @project1.namespace.attachments_updated_at
 
       assert_difference -> { Attachment.count } => 1 do
         Attachments::CreateService.new(@user, @project1.namespace, valid_params).execute
       end
+
+      assert_not_equal original_updated_time, @project1.namespace.attachments_updated_at
     end
 
     test 'cannot create project attachment with valid params and invalid authorization' do
-      valid_params = { files: [@fastq_se_blob] }
+      valid_params = { files: [@attachment_b_blob] }
       user = users(:jane_doe)
+      original_updated_time = @project1.namespace.attachments_updated_at
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
         Attachments::CreateService.new(user, @project1.namespace, valid_params).execute
@@ -252,19 +257,25 @@ module Attachments
       assert_equal I18n.t(:'action_policy.policy.project.create_attachment?',
                           name: @project1.name),
                    exception.result.message
+
+      assert_equal original_updated_time, @project1.namespace.attachments_updated_at
     end
 
     test 'create group attachment with valid params and authorization' do
-      valid_params = { files: [@fastq_se_blob] }
+      valid_params = { files: [@attachment_b_blob] }
+      original_updated_time = @group1.attachments_updated_at
 
       assert_difference -> { Attachment.count } => 1 do
         Attachments::CreateService.new(@user, @group1, valid_params).execute
       end
+
+      assert_not_equal original_updated_time, @group1.attachments_updated_at
     end
 
     test 'cannot create group attachment with valid params and invalid authorization' do
-      valid_params = { files: [@fastq_se_blob] }
+      valid_params = { files: [@attachment_b_blob] }
       user = users(:jane_doe)
+      original_updated_time = @group1.attachments_updated_at
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
         Attachments::CreateService.new(user, @group1, valid_params).execute
@@ -276,6 +287,7 @@ module Attachments
       assert_equal I18n.t(:'action_policy.policy.group.create_attachment?',
                           name: @group1.name),
                    exception.result.message
+      assert_equal original_updated_time, @group1.attachments_updated_at
     end
   end
 end

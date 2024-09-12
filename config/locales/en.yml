@@ -14,6 +14,7 @@ en:
         create_member?: You are not authorized to create members for group %{name} on this server.
         create_subgroup?: You are not authorized to create a subgroup within group %{name} on this server.
         destroy?: You are not authorized to remove group %{name} from this server.
+        destroy_attachment?: You are not authorized to destroy attachments for group %{name} on this server.
         destroy_bot_accounts?: You are not authorized to destroy bot accounts for group %{name} on this server.
         destroy_member?: You are not authorized to remove members for group %{name} on this server.
         edit?: You are not authorized to modify group %{name} on this server.
@@ -62,6 +63,7 @@ en:
         create_attachment?: You are not authorized to create attachments for project %{name} on this server.
         create_sample?: You are not authorized to create samples for project %{name} on this server.
         destroy?: You are not authorized to remove project %{name} from this server.
+        destroy_attachment?: You are not authorized to destroy attachments for project %{name} on this server.
         destroy_sample?: You are not authorized to remove samples from project %{name} on this server.
         edit?: You are not authorized to modify project %{name} on this server.
         new?: You are not authorized to create a project under the %{name} namespace on this server.

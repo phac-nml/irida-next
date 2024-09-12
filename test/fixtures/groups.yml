@@ -12,6 +12,7 @@ group_one:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 633, "metadatafield2": 106 }
   puid: INXT_GRP_AAAAAAAAAA
+  attachments_updated_at: <%= 2.hours.ago %>
 
 subgroup1:
   <<: *DEFAULTS

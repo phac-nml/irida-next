@@ -349,3 +349,28 @@ sample22AttachmentText:
   metadata: {"format": "text", "compression": "none"}
   attachable: sample22 (Sample)
   puid: INXT_ATT_ABAAAAAAAI
+
+project1Attachment1:
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: project1_namespace (Namespace)
+  puid: INXT_ATT_ABAAAAAAAJ
+  created_at: <%= 3.hours.ago %>
+
+project1Attachment2:
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: project1_namespace (Namespace)
+  puid: INXT_ATT_ABAAAAAAAK
+  created_at: <%= 2.hours.ago %>
+
+group1Attachment1:
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: group_one (Namespace)
+  puid: INXT_ATT_ABAAAAAAAL
+  created_at: <%= 3.hours.ago %>
+
+group1Attachment2:
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: group_one (Namespace)
+  puid: INXT_ATT_ABAAAAAAAM
+  created_at: <%= 2.hours.ago %>
+
