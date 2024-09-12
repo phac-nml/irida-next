@@ -25,6 +25,7 @@ class Project < ApplicationRecord
   delegate :full_name, to: :namespace
   delegate :parent, to: :namespace
   delegate :puid, to: :namespace
+  delegate :metadata_summary, to: :namespace
 
   ransack_alias :name, :namespace_name
   ransack_alias :puid, :namespace_puid

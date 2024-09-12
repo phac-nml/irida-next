@@ -35,6 +35,18 @@ class ProjectsQueryRansackTest < ActiveSupport::TestCase
     }
   GRAPHQL
 
+  PROJECTS_RANSACK_WITH_METADATA_SUMMARY_QUERY = <<~GRAPHQL
+    query($filter: ProjectFilter, $orderBy: ProjectOrder, $keys: [String!]) {
+      projects(filter: $filter, orderBy: $orderBy) {
+        nodes {
+          name
+          metadataSummary(keys: $keys)
+        }
+        totalCount
+      }
+    }
+  GRAPHQL
+
   def setup
     @user = users(:john_doe)
     @project = projects(:project1)
@@ -149,5 +161,20 @@ class ProjectsQueryRansackTest < ActiveSupport::TestCase
 
       assert_nil data
     end
+  end
+
+  test 'projects query with metadata sumamry should work' do
+    result = IridaSchema.execute(PROJECTS_RANSACK_WITH_METADATA_SUMMARY_QUERY,
+                                 context: { current_user: @user },
+                                 variables: { filter: { name_cont: 'Project 1' },
+                                              orderBy: { field: 'created_at', direction: 'asc' },
+                                              keys: ['metadatafield2'] })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['projects']
+
+    assert_not_empty data, 'projects type should work'
+    assert_equal 35, data['nodes'][0]['metadataSummary']['metadatafield2']
   end
 end

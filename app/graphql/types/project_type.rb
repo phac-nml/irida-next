@@ -9,6 +9,12 @@ module Types
     field :description, String, null: true, description: 'Description of the project.'
     field :full_name, String, null: false, description: 'Full name of the project.'
     field :full_path, ID, null: false, description: 'Full path of the project.' # rubocop:disable GraphQL/ExtractType
+    field :metadata_summary,
+          GraphQL::Types::JSON,
+          null: false,
+          description: 'Metadata summary for the project',
+          resolver: Resolvers::ProjectMetadataSummaryResolver
+
     field :name, String, null: false, description: 'Name of the project.'
     field :path, String, null: false, description: 'Path of the project.'
     field :puid, ID, null: false,

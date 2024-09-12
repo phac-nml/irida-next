@@ -890,6 +890,16 @@ type Project implements Node {
   id: ID!
 
   """
+  Metadata summary for the project
+  """
+  metadataSummary(
+    """
+    Optional array of keys to limit metadata summary result to.
+    """
+    keys: [String!] = null
+  ): JSON!
+
+  """
   Name of the project.
   """
   name: String!
