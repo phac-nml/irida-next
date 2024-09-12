@@ -85,6 +85,18 @@ class GroupPolicyTest < ActiveSupport::TestCase
     assert @policy.update_sample_metadata?
   end
 
+  test '#view_attachments?' do
+    assert @policy.view_attachments?
+  end
+
+  test '#create_attachment?' do
+    assert @policy.create_attachment?
+  end
+
+  test '#destroy_attachment?' do
+    assert @policy.destroy_attachment?
+  end
+
   test 'scope' do
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 

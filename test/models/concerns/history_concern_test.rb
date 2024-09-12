@@ -227,7 +227,6 @@ class HistoryConcernTest < ActionDispatch::IntegrationTest
     log_data = group.log_data_without_changes
 
     assert log_data.is_a?(Array)
-
     assert log_data[0][:version] == 1
     assert_equal 'System', log_data[0][:user]
     assert_equal false, log_data[0][:deleted]

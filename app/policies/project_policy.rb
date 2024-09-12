@@ -151,6 +151,30 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
+  def view_attachments?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_view_attachments?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def create_attachment?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_create_attachment?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def destroy_attachment?
+    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    return true if Member.can_destroy_attachment?(user, record.namespace) == true
+
+    details[:name] = record.name
+    false
+  end
+
   scope_for :relation do |relation| # rubocop:disable Metrics/BlockLength
     relation
       .with(

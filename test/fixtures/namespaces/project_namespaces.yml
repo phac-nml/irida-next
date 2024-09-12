@@ -13,6 +13,7 @@ project1_namespace:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 10, "metadatafield2": 35 }
   puid: INXT_PRJ_AAAAAAAAAA
+  attachments_updated_at: <%= 2.hours.ago %>
 
 project2_namespace:
   <<: *DEFAULTS

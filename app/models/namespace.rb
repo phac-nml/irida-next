@@ -21,6 +21,8 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
            },
            class_name: 'Namespace', foreign_key: :parent_id, inverse_of: :parent, dependent: :destroy
 
+  has_many :attachments, as: :attachable, dependent: :destroy
+
   validates :owner, presence: true, if: ->(n) { n.owner_required? }
   validates :name, presence: true, length: { minimum: 3, maximum: 255 }
   validates :name, uniqueness: { case_sensitive: false, scope: %i[type] }, if: -> { parent_id.blank? }

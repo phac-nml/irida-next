@@ -191,6 +191,27 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
+  def view_attachments?
+    return true if Member.can_view_attachments?(user, record) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def create_attachment?
+    return true if Member.can_create_attachment?(user, record) == true
+
+    details[:name] = record.name
+    false
+  end
+
+  def destroy_attachment?
+    return true if Member.can_destroy_attachment?(user, record) == true
+
+    details[:name] = record.name
+    false
+  end
+
   scope_for :relation do |relation|
     relation.with(
       user_groups: relation.where(id: user.members.not_expired.select(:namespace_id)).self_and_descendant_ids,

@@ -99,3 +99,9 @@ sample22_test_file_fastq_fwd_blob: <%= ActiveStorage::FixtureSet.blob filename: 
 sample22_test_file_fastq_rev_blob: <%= ActiveStorage::FixtureSet.blob filename: "08-5578-small_S1_L001_R2_001.fastq", service_name: "test" %>
 sample22_test_file_fasta_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_5.fasta", service_name: "test" %>
 sample22_test_file_text_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_14.txt", service_name: "test" %>
+
+project1_attachment1_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file.fastq", service_name: "test" %>
+project1_attachment2_file_test_file_A_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_A.fastq", service_name: "test" %>
+
+group1_attachment1_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file.fastq", service_name: "test" %>
+group1_attachment2_file_test_file_A_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_A.fastq", service_name: "test" %>
