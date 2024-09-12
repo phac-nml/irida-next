@@ -28,12 +28,12 @@ module Mutations
         }
       end
 
-      files_attached = Attachments::CreateService.new(current_user, project, { files: args[:files] }).execute
+      files_attached = Attachments::CreateService.new(current_user, project.namespace, { files: args[:files] }).execute
 
       status, user_errors = attachment_status_and_errors(files_attached:, file_blob_id_list: args[:files])
 
       # append query level errors
-      user_errors.push(*get_errors_from_object(sample, 'sample'))
+      user_errors.push(*get_errors_from_object(project, 'project'))
 
       {
         project:,
