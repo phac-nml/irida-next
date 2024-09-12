@@ -246,6 +246,7 @@ module Groups
         find('a[href="?limit=10"]').click
       end
 
+      assert_selector 'div#limit-component button div span', text: '10'
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
                                                                            locale: @user.locale))
       assert_selector 'table tbody tr', count: 10
