@@ -3,9 +3,10 @@
 module Types
   class GroupOrderFieldInputType < BaseEnum # rubocop:disable Style/Documentation
     graphql_name 'GroupOrderField'
-    description 'Field to sort the samples by'
+    description 'Field to sort the groups by'
     value 'created_at'
     value 'updated_at'
+    value 'name'
   end
 
   class GroupOrderInputType < BaseInputObject # rubocop:disable Style/Documentation
