@@ -33,7 +33,7 @@ module Mutations
       status, user_errors = attachment_status_and_errors(files_attached:, file_blob_id_list: args[:files])
 
       # append query level errors
-      user_errors.push(*get_errors_from_object(project, 'project'))
+      user_errors.push(*get_errors_from_object(project.namespace, 'project'))
 
       {
         project:,
