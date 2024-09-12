@@ -16,7 +16,7 @@ module Resolvers
     alias project object
 
     def resolve(filter:, order_by:)
-      ransack_obj = Attachment.where(attachable: project.samples).joins(:file_blob).ransack(filter&.to_h)
+      ransack_obj = project.attachments.joins(:file_blob).ransack(filter&.to_h)
       ransack_obj.sorts = ["#{order_by.field} #{order_by.direction}"] if order_by.present?
 
       ransack_obj.result
