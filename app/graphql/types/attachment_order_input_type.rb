@@ -6,6 +6,7 @@ module Types
     description 'Field to sort the attachments by'
     value 'created_at'
     value 'updated_at'
+    value 'filename'
   end
 
   class AttachmentOrderInputType < BaseInputObject # rubocop:disable Style/Documentation

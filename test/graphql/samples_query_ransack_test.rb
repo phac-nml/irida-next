@@ -73,9 +73,16 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     assert_nil result['errors'], 'should work and have no errors.'
 
     data = result['data']['samples']['nodes']
+    assert_equal 3, data.count
 
     assert_equal samples(:sample2).name, data[0]['name']
     assert_equal samples(:sample2).puid, data[0]['puid']
+
+    assert_equal samples(:sample1).name, data[1]['name']
+    assert_equal samples(:sample1).puid, data[1]['puid']
+
+    assert_equal samples(:sample37).name, data[2]['name']
+    assert_equal samples(:sample37).puid, data[2]['puid']
   end
 
   test 'ransack samples query with group id should work' do
@@ -105,13 +112,21 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
                                  context: { current_user: @user },
                                  variables:
                                  { group_id: groups(:group_one).to_global_id.to_s,
-                                   orderBy: { field: 'created_at', direction: 'desc' } })
+                                   orderBy: { field: 'created_at', direction: 'asc' } })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
     data = result['data']['samples']['nodes']
+    assert_equal 25, data.count
 
-    assert_equal @sample.puid, data[0]['puid']
+    assert_equal samples(:sample30).name, data[0]['name']
+    assert_equal samples(:sample30).puid, data[0]['puid']
+
+    assert_equal samples(:sample29).name, data[1]['name']
+    assert_equal samples(:sample29).puid, data[1]['puid']
+
+    assert_equal samples(:sample28).name, data[2]['name']
+    assert_equal samples(:sample28).puid, data[2]['puid']
   end
 
   test 'ransack group samples query should throw authorization error' do

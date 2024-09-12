@@ -62,13 +62,15 @@ class ProjectsQueryRansackTest < ActiveSupport::TestCase
     result = IridaSchema.execute(PROJECTS_RANSACK_QUERY,
                                  context: { current_user: @user },
                                  variables: { filter: { name_cont: 'Project 1' },
-                                              orderBy: { field: 'created_at', direction: 'asc' } })
+                                              orderBy: { field: 'name', direction: 'asc' } })
 
     assert_nil result['errors'], 'should work and have no errors.'
     data = result['data']['projects']['nodes']
 
     assert_equal 12, data.count # Project 1, Project 10, Project 11, etc
-    assert_equal @project.puid, data[0]['puid']
+    assert_equal projects(:namespace_group_link_group_one_project1).puid, data[0]['puid']
+    assert_equal projects(:project1).puid, data[1]['puid']
+    assert_equal projects(:project10).puid, data[2]['puid']
   end
 
   test 'ransack projects query with group id should work' do
@@ -94,13 +96,15 @@ class ProjectsQueryRansackTest < ActiveSupport::TestCase
     result = IridaSchema.execute(PROJECTS_RANSACK_WITH_GROUP_QUERY,
                                  context: { current_user: @user },
                                  variables: { group_id: groups(:group_one).to_global_id.to_s,
-                                              orderBy: { field: 'created_at', direction: 'desc' } })
+                                              orderBy: { field: 'name', direction: 'desc' } })
 
     assert_nil result['errors'], 'should work and have no errors.'
     data = result['data']['projects']['nodes']
 
     assert_equal 22, data.count
-    assert_equal @project.puid, data[0]['puid']
+    assert_equal projects(:project9).puid, data[0]['puid']
+    assert_equal projects(:project8).puid, data[1]['puid']
+    assert_equal projects(:project7).puid, data[2]['puid']
   end
 
   test 'ransack projects query should throw authorization error' do
