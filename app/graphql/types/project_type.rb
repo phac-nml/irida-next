@@ -6,6 +6,12 @@ module Types
     implements GraphQL::Types::Relay::Node
     description 'A project'
 
+    field :attachments,
+          AttachmentType.connection_type,
+          null: true,
+          description: 'Attachments on the project',
+          resolver: Resolvers::ProjectAttachmentsResolver
+
     field :description, String, null: true, description: 'Description of the project.'
     field :full_name, String, null: false, description: 'Full name of the project.'
     field :full_path, ID, null: false, description: 'Full path of the project.' # rubocop:disable GraphQL/ExtractType
