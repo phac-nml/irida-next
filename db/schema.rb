@@ -46,25 +46,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_12_152940) do
     t.index ["blob_id"], name: "index_active_storage_variant_records_on_blob_id"
   end
 
-  create_table "activities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "trackable_type"
-    t.uuid "trackable_id"
-    t.string "owner_type"
-    t.uuid "owner_id"
-    t.string "key"
-    t.text "parameters"
-    t.string "recipient_type"
-    t.uuid "recipient_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["owner_id", "owner_type"], name: "index_activities_on_owner_id_and_owner_type"
-    t.index ["owner_type", "owner_id"], name: "index_activities_on_owner"
-    t.index ["recipient_id", "recipient_type"], name: "index_activities_on_recipient_id_and_recipient_type"
-    t.index ["recipient_type", "recipient_id"], name: "index_activities_on_recipient"
-    t.index ["trackable_id", "trackable_type"], name: "index_activities_on_trackable_id_and_trackable_type"
-    t.index ["trackable_type", "trackable_id"], name: "index_activities_on_trackable"
-  end
-
   create_table "attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.jsonb "metadata", default: {}, null: false
     t.datetime "deleted_at"
@@ -204,7 +185,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_12_152940) do
     t.datetime "deleted_at"
     t.uuid "creator_id", null: false
     t.uuid "namespace_id", null: false
-    t.integer "samples_count"
     t.index ["created_at"], name: "index_projects_on_created_at"
     t.index ["creator_id"], name: "index_projects_on_creator_id"
     t.index ["deleted_at"], name: "index_projects_on_deleted_at"

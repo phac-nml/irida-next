@@ -8,6 +8,8 @@ module Attachments
       @user = users(:john_doe)
       @sample = samples(:sample2)
       @sample1 = samples(:sample1)
+      @project1 = projects(:project1)
+      @group1 = groups(:group_one)
       @fastq_se_blob = active_storage_blobs(:test_file_fastq_blob)
       @testsample_illumina_pe_fwd_blob = active_storage_blobs(:testsample_illumina_pe_forward_blob)
       @testsample_illumina_pe_rev_blob = active_storage_blobs(:testsample_illumina_pe_reverse_blob)
@@ -226,6 +228,54 @@ module Attachments
           Attachments::CreateService.new(users(:jeff_doe), sample, params).execute
         end
       end
+    end
+
+    test 'create project attachment with valid params and authorization' do
+      valid_params = { files: [@fastq_se_blob] }
+
+      assert_difference -> { Attachment.count } => 1 do
+        Attachments::CreateService.new(@user, @project1.namespace, valid_params).execute
+      end
+    end
+
+    test 'cannot create project attachment with valid params and invalid authorization' do
+      valid_params = { files: [@fastq_se_blob] }
+      user = users(:jane_doe)
+
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        Attachments::CreateService.new(user, @project1.namespace, valid_params).execute
+      end
+
+      assert_equal ProjectPolicy, exception.policy
+      assert_equal :create_attachment?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.project.create_attachment?',
+                          name: @project1.name),
+                   exception.result.message
+    end
+
+    test 'create group attachment with valid params and authorization' do
+      valid_params = { files: [@fastq_se_blob] }
+
+      assert_difference -> { Attachment.count } => 1 do
+        Attachments::CreateService.new(@user, @group1, valid_params).execute
+      end
+    end
+
+    test 'cannot create group attachment with valid params and invalid authorization' do
+      valid_params = { files: [@fastq_se_blob] }
+      user = users(:jane_doe)
+
+      exception = assert_raises(ActionPolicy::Unauthorized) do
+        Attachments::CreateService.new(user, @group1, valid_params).execute
+      end
+
+      assert_equal GroupPolicy, exception.policy
+      assert_equal :create_attachment?, exception.rule
+      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+      assert_equal I18n.t(:'action_policy.policy.group.create_attachment?',
+                          name: @group1.name),
+                   exception.result.message
     end
   end
 end

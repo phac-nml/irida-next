@@ -69,8 +69,8 @@ module Attachments
         authorize! @attachable.project, to: :update_sample?
       elsif @attachable.instance_of?(Namespaces::ProjectNamespace)
         authorize! @attachable.project, to: :create_attachment?
-      elsif @attachable.instance_of?(Namespace)
-        authorize! @attachable.group, to: :create_attachment?
+      elsif @attachable.instance_of?(Group)
+        authorize! @attachable, to: :create_attachment?
       end
     end
 

@@ -9,6 +9,7 @@ fr:
       edit?: You are not authorized to update this resource on this server.
       group:
         create?: You are not authorized to create a project under group %{name} on this server.
+        create_attachment?: You are not authorized to create attachments for group %{name} on this server.
         create_bot_accounts?: You are not authorized to create bot accounts for group %{name} on this server.
         create_member?: You are not authorized to create members for group %{name} on this server.
         create_subgroup?: You are not authorized to create a subgroup within group %{name} on this server.
@@ -58,6 +59,7 @@ fr:
         activity?: You are not authorized to view the activity for project %{name} on this server.
         clone_sample?: You are not authorized to clone samples from project %{name} on this server.
         clone_sample_into_project?: You are not authorized to clone samples to project %{name} on this server.
+        create_attachment?: You are not authorized to create attachments for project %{name} on this server.
         create_sample?: You are not authorized to create samples for project %{name} on this server.
         destroy?: You are not authorized to remove project %{name} from this server.
         destroy_sample?: You are not authorized to remove samples from project %{name} on this server.

@@ -192,21 +192,21 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def view_attachments?
-    return true if Member.can_view_attachments?(user, record.namespace) == true
+    return true if Member.can_view_attachments?(user, record) == true
 
     details[:name] = record.name
     false
   end
 
   def create_attachment?
-    return true if Member.can_create_attachment?(user, record.namespace) == true
+    return true if Member.can_create_attachment?(user, record) == true
 
     details[:name] = record.name
     false
   end
 
   def destroy_attachment?
-    return true if Member.can_destroy_attachment?(user, record.namespace) == true
+    return true if Member.can_destroy_attachment?(user, record) == true
 
     details[:name] = record.name
     false
