@@ -39,7 +39,6 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
     end
     resources :subgroups, only: %i[index]
     resources :shared_namespaces, only: %i[index]
-    resources :attachments, only: %i[create destroy index new]
 
     get '/history' => 'history#index', as: :history
     get '/history/new' => 'history#new', as: :view_history

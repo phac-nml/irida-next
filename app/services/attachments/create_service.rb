@@ -28,7 +28,7 @@ module Attachments
     end
 
     def execute # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/MethodLength
-      authorize! @attachable.project, to: :update_sample? if @attachable.instance_of?(Sample)
+      attachable_authorization
 
       valid_fastq_attachments = @attachments.select { |attachment| attachment.valid? && attachment.fastq? }
 
@@ -63,6 +63,16 @@ module Attachments
     end
 
     private
+
+    def attachable_authorization
+      if @attachable.instance_of?(Sample)
+        authorize! @attachable.project, to: :update_sample?
+      elsif @attachable.instance_of?(Namespaces::ProjectNamespace)
+        authorize! @attachable.project, to: :create_attachment?
+      elsif @attachable.instance_of?(Namespace)
+        authorize! @attachable.group, to: :create_attachment?
+      end
+    end
 
     def identify_illumina_paired_end_files(attachments)
       # auto-vivify hash, as found on stack overflow http://stackoverflow.com/questions/5878529/how-to-assign-hashab-c-if-hasha-doesnt-exist
