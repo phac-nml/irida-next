@@ -210,6 +210,22 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       manager_emails
     end
 
+    def can_view_attachments?(user, object_namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
+      effective_access_level(object_namespace, user, include_group_links) >= Member::AccessLevel::ANALYST
+    end
+
+    def can_create_attachment?(user, object_namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
+      Member::AccessLevel.manageable.include?(
+        effective_access_level(object_namespace, user, include_group_links)
+      )
+    end
+
+    def can_destroy_attachment?(user, object_namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
+      Member::AccessLevel.manageable.include?(
+        effective_access_level(object_namespace, user, include_group_links)
+      )
+    end
+
     def ransackable_attributes(_auth_object = nil)
       %w[access_level created_at expires_at]
     end
