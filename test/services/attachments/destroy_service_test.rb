@@ -88,7 +88,7 @@ module Attachments
     end
 
     test 'delete project attachment with incorrect permissions' do
-      user = users(:joan_doe)
+      user = users(:jane_doe)
 
       Timecop.travel(Time.zone.now + 5) do
         exception = assert_raises(ActionPolicy::Unauthorized) do

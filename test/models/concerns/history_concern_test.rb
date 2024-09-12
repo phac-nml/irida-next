@@ -61,7 +61,7 @@ class HistoryConcernTest < ActionDispatch::IntegrationTest
     Project.restore(project.id, recursive: true)
     project.namespace.create_logidze_snapshot!
 
-    assert project.namespace.reload_log_data.versions.length == 3
+    assert project.namespace.reload_log_data.versions.length == 4
 
     log_data = project.namespace.log_data_without_changes
 
@@ -80,7 +80,12 @@ class HistoryConcernTest < ActionDispatch::IntegrationTest
     assert log_data[2][:version] == 3
     assert_equal 'System', log_data[2][:user]
     assert_equal false, log_data[2][:deleted]
-    assert_equal true, log_data[2][:restored]
+    assert_equal false, log_data[2][:restored]
+
+    assert log_data[3][:version] == 4
+    assert_equal 'System', log_data[3][:user]
+    assert_equal false, log_data[3][:deleted]
+    assert_equal true, log_data[3][:restored]
   end
 
   test 'get sample logidze log data without changes' do
@@ -222,12 +227,11 @@ class HistoryConcernTest < ActionDispatch::IntegrationTest
     Group.restore(group.id, recursive: true)
     group.create_logidze_snapshot!
 
-    assert group.reload_log_data.versions.length == 3
+    assert group.reload_log_data.versions.length == 4
 
     log_data = group.log_data_without_changes
 
     assert log_data.is_a?(Array)
-
     assert log_data[0][:version] == 1
     assert_equal 'System', log_data[0][:user]
     assert_equal false, log_data[0][:deleted]
@@ -241,6 +245,11 @@ class HistoryConcernTest < ActionDispatch::IntegrationTest
     assert log_data[2][:version] == 3
     assert_equal 'System', log_data[2][:user]
     assert_equal false, log_data[2][:deleted]
-    assert_equal true, log_data[2][:restored]
+    assert_equal false, log_data[2][:restored]
+
+    assert log_data[3][:version] == 4
+    assert_equal 'System', log_data[3][:user]
+    assert_equal false, log_data[3][:deleted]
+    assert_equal true, log_data[3][:restored]
   end
 end
