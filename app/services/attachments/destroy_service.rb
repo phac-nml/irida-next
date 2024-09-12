@@ -31,16 +31,7 @@ module Attachments
 
       attachment_destroyed = @attachment.destroy
 
-      if attachment_destroyed
-        @attachable.project.namespace.create_activity key: 'namespaces_project_namespace.samples.attachment.destroy',
-                                                      owner: current_user,
-                                                      trackable_id: @attachable.id,
-                                                      parameters: {
-                                                        sample_puid: @attachable.puid,
-                                                        sample_id: @attachable.id,
-                                                        action: 'attachment_destroy'
-                                                      }
-      end
+      create_activity if attachment_destroyed
 
       destroyed_attachments.append(@attachment)
       destroyed_attachments
@@ -57,6 +48,19 @@ module Attachments
       else
         authorize! @attachable, to: :destroy_attachment?
       end
+    end
+
+    def create_activity
+      return unless @attachable.instance_of?(Sample)
+
+      @attachable.project.namespace.create_activity key: 'namespaces_project_namespace.samples.attachment.destroy',
+                                                    owner: current_user,
+                                                    trackable_id: @attachable.id,
+                                                    parameters: {
+                                                      sample_puid: @attachable.puid,
+                                                      sample_id: @attachable.id,
+                                                      action: 'attachment_destroy'
+                                                    }
     end
   end
 end
