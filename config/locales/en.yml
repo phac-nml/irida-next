@@ -956,6 +956,8 @@ en:
         upload_files: Upload Files
       new_attachment_modal:
         upload_files: Upload Files
+      new_attachment_modal:
+        upload_files: Upload Files
       table:
         empty:
           description: There are no files associated with this project.
