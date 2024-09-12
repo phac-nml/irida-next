@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# Clipboard component for copying text to clipboard
-class ClipboardComponent < Component
+# Token component for displaying a token
+class TokenComponent < Component
   attr_reader :value, :label
 
   def initialize(value:, aria_label:, **system_arguments)
