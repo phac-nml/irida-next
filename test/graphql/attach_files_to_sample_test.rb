@@ -41,7 +41,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
   test 'attachFilesToSample mutation should work with valid params, global id, and api scope token' do
     sample = samples(:sampleJeff)
-    blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
+    blob_file = active_storage_blobs(:attachment_attach_files_to_object_test_blob)
 
     assert_equal 0, sample.attachments.count
 
@@ -67,7 +67,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
   test 'attachFilesToSample mutation should work with valid params, puid, and api scope token' do
     sample = samples(:sampleJeff)
-    blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
+    blob_file = active_storage_blobs(:attachment_attach_files_to_object_test_blob)
 
     assert_equal 0, sample.attachments.count
 
@@ -95,7 +95,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     user = users(:projectJeff_bot)
     token = personal_access_tokens(:projectJeff_bot_account_valid_pat)
     sample = samples(:sampleJeff)
-    blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
+    blob_file = active_storage_blobs(:attachment_attach_files_to_object_test_blob)
 
     assert_equal 0, sample.attachments.count
 
@@ -121,7 +121,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
   test 'attachFilesToSample mutation should not work with read api scope token' do
     sample = samples(:sampleJeff)
-    blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
+    blob_file = active_storage_blobs(:attachment_attach_files_to_object_test_blob)
 
     assert_equal 0, sample.attachments.count
 
@@ -141,7 +141,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
   test 'attachFilesToSample mutation attach same file to sample error' do
     sample = samples(:sampleJeff)
-    blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
+    blob_file = active_storage_blobs(:attachment_attach_files_to_object_test_blob)
 
     assert_equal 0, sample.attachments.count
 
@@ -265,7 +265,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
     sample = samples(:sampleJeff)
 
     blob_file_a = active_storage_blobs(:attachment_md5_a_test_blob)
-    blob_file_b = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
+    blob_file_b = active_storage_blobs(:attachment_attach_files_to_object_test_blob)
 
     # match blob_file_b.filename to blob_file_a.filename
     blob_file_b.filename = 'md5_a'
@@ -309,8 +309,8 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
   test 'attachFilesToSample mutation attach 2 files at once' do
     sample = samples(:sampleJeff)
-    blob_file_a = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
-    blob_file_b = active_storage_blobs(:attachment_attach_files_to_sample_b_test_blob)
+    blob_file_a = active_storage_blobs(:attachment_attach_files_to_object_test_blob)
+    blob_file_b = active_storage_blobs(:attachment_attach_files_to_object_b_test_blob)
 
     assert_equal 0, sample.attachments.count
 
@@ -365,7 +365,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
 
   test 'attachFilesToSample mutation should not work with blob missing file' do
     sample = samples(:sampleJeff)
-    # blob_file_missing = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
+    # blob_file_missing = active_storage_blobs(:attachment_attach_files_to_object_test_blob)
     blob_file_missing = ActiveStorage::Blob.create_before_direct_upload!(
       filename: 'missing.file', byte_size: 404, checksum: 'Y33CgI35hFoI6p+WBXYl+A=='
     )
@@ -394,7 +394,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
   end
 
   test 'attachFilesToSample mutation should not work with invalid sample id' do
-    blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
+    blob_file = active_storage_blobs(:attachment_attach_files_to_object_test_blob)
 
     sample = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
@@ -406,7 +406,7 @@ class AttachFilesToSampleTest < ActiveSupport::TestCase
   end
 
   test 'attachFilesToSample mutation should not work with invalid sample gid' do
-    blob_file = active_storage_blobs(:attachment_attach_files_to_sample_test_blob)
+    blob_file = active_storage_blobs(:attachment_attach_files_to_object_test_blob)
 
     result = IridaSchema.execute(ATTACH_FILES_TO_SAMPLE_BY_SAMPLE_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
