@@ -169,8 +169,8 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
   test 'attachment query should work with order by' do
     result = IridaSchema.execute(ATTACHMENTS_QUERY, context: { current_user: @user },
                                                     variables: { puid: @sample.puid,
-                                                                 attachmentOrderBy: { field: 'created_at',
-                                                                                      direction: 'desc' } })
+                                                                 attachmentOrderBy: { field: 'filename',
+                                                                                      direction: 'asc' } })
 
     assert_nil result['errors'], 'should work and have no errors.'
 

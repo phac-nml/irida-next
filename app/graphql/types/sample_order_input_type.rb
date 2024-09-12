@@ -6,6 +6,7 @@ module Types
     description 'Field to sort the samples by'
     value 'created_at'
     value 'updated_at'
+    value 'name'
   end
 
   class SampleOrderInputType < BaseInputObject # rubocop:disable Style/Documentation
