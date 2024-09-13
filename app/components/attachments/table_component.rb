@@ -12,8 +12,6 @@ module Attachments
       attachments,
       pagy,
       q,
-      namespace: nil,
-      project: nil,
       row_actions: false,
       abilities: {},
       empty: {},
@@ -22,8 +20,6 @@ module Attachments
       @attachments = attachments
       @pagy = pagy
       @q = q
-      @namespace = namespace
-      @project = project
       @abilities = abilities
       @row_actions = row_actions
       @empty = empty
