@@ -1,0 +1,38 @@
+<span class="flex items-center space-x-1" data-controller="clipboard">
+  <span>
+    <% if content.present? %>
+      <%= content %>
+    <% else %>
+      <%= value %>
+    <% end %>
+  </span>
+  <button
+    type="button"
+    title="Copy to clipboard"
+    data-action="clipboard#copy"
+    aria-label="Copy to clipboard"
+    data-clipboard-target="button"
+    class="
+      p-1 bg-white border rounded-full dark:bg-slate-700 border-slate-200
+      dark:border-slate-800
+    "
+    value="<%= value %>"
+  >
+    <%= viral_icon(
+      name: :clipboard,
+      color: :white,
+      classes: "size-3 pointer-events-none text-slate-400 dark:text-slate-800",
+    ) %>
+  </button>
+  <div
+    data-clipboard-target="content"
+    role="tooltip"
+    class="
+      absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white
+      transition-opacity duration-300 bg-green-600 rounded-lg shadow-sm opacity-0
+      tooltip dark:bg-green-700
+    "
+  >
+    Copied
+  </div>
+</span>
