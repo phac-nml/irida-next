@@ -24,7 +24,9 @@ module Ransack
     end
 
     def icon
-      unless @ransack_obj&.sorts.present? && @ransack_obj.sorts[0].name == URI.encode_www_form_component(@field.to_s)
+      return unless @ransack_obj&.sorts.present?
+      sort_attr = @ransack_obj.sorts[0].attr_name.nil? ? @ransack_obj.sorts[0].name : @ransack_obj.sorts[0].attr_name
+      unless sort_attr == URI.encode_www_form_component(@field.to_s)
         return
       end
 
