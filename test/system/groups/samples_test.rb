@@ -250,9 +250,8 @@ module Groups
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
                                                                            locale: @user.locale))
       assert_selector 'table tbody tr', count: 10
-      within('table tbody tr:first-child th') do
-        assert_text @sample1.puid
-      end
+      assert_text @sample1.puid
+      assert_text @sample2.puid
 
       fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: @sample1.puid
 
@@ -261,6 +260,30 @@ module Groups
       assert_selector 'table tbody tr', count: 1
       assert_text @sample1.name
       assert_no_text @sample2.name
+      assert_selector 'div#limit-component button div span', text: '10'
+    end
+
+    test 'can change pagination and then toggle metadata' do
+      visit group_samples_url(@group)
+
+      within('div#limit-component') do
+        find('button').click
+        find('a[href="?limit=10"]').click
+      end
+
+      assert_selector 'div#limit-component button div span', text: '10'
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
+                                                                           locale: @user.locale))
+      assert_selector 'table tbody tr', count: 10
+      assert_selector 'table thead tr th', count: 6
+
+      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
+                                                                           locale: @user.locale))
+      assert_selector 'table tbody tr', count: 10
+      assert_selector 'table thead tr th', count: 8
       assert_selector 'div#limit-component button div span', text: '10'
     end
 

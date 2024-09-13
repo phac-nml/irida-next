@@ -18,7 +18,7 @@ module Projects
     end
 
     def search
-      redirect_to namespace_project_samples_path(request.request_parameters.slice(:limit))
+      redirect_to namespace_project_samples_path(request.request_parameters.slice(:limit, :page))
     end
 
     def show
