@@ -2062,7 +2062,7 @@ module Projects
 
       click_on I18n.t('projects.samples.show.tabs.metadata')
 
-      within %(div[id="workflow-execution-tabs"]) do
+      within %(#sample-tabs) do
         click_on I18n.t('projects.samples.show.tabs.files')
       end
 
