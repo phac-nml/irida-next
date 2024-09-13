@@ -50,6 +50,15 @@ module Projects
       @current_page = t(:'projects.sidebar.files')
     end
 
+    def context_crumbs
+      super
+      @context_crumbs +=
+        [{
+          name: t(:'projects.sidebar.files'),
+          path: namespace_project_attachments_path(@project.parent, @project)
+        }]
+    end
+
     def set_default_sort
       @q.sorts = 'updated_at desc' if @q.sorts.empty?
     end
