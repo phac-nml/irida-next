@@ -33,10 +33,11 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
   private
 
-  def project_activity(activity)
+  def project_activity(activity) # rubocop:disable Metrics/MethodLength
     activity_trackable = activity_trackable(activity, Project)
 
     base_params = {
+      id: activity.id,
       created_at: activity.created_at.strftime(
         I18n.t('time.formats.abbreviated')
       ),

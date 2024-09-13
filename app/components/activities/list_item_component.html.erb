@@ -21,4 +21,39 @@
       <%= render Activities::NamespaceGroupLinkActivityComponent.new(activity: activity) %>
     <% end %>
   </p>
+  <div >
+
+  <% if @activity_requires_dialog %>
+    <%= viral_dialog(id: "activity-#{activity[:id]}-modal") do |dialog| %>
+      <%= dialog.with_trigger do %>
+        <%= viral_button(
+          data: {
+            action: "click->viral--dialog#open",
+          },
+          aria: {
+            label: "#{@dialog_launch_button_text} button",
+          }
+        ) do %>
+          <%= @dialog_launch_button_text %>
+        <% end %>
+      <% end %>
+      <%= dialog.with_header(title: @dialog_title) %>
+      <%= dialog.with_section do %>
+
+        <div class="space-y-4">
+          <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+            <%= @dialog_description %>
+          </p>
+        </div>
+
+        <div class="space-y-8">
+          <ul>
+            <% @sample_puids.each do |sample_puid| %>
+              <li><%= sample_puid %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
 </li>
