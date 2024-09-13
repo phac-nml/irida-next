@@ -842,6 +842,7 @@ fr:
         stats:
           projects: Projects
           subnamespaces: Subnamespaces
+          samples: Samples
   nextflow:
     samplesheet:
       column_component:
