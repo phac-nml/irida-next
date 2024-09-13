@@ -206,7 +206,7 @@ project1_attachment1_file_test_file_fastq:
 project1_attachment2_file_test_file_A_fastq:
   name: file
   record: project1Attachment2 (Attachment)
-  blob: project1_attachment2_file_test_file_A_fastq_blob
+  blob: project1_attachment2_file_data_export_8_csv_blob
 
 group1_attachment1_file_test_file_fastq:
   name: file

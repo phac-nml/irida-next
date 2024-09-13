@@ -930,7 +930,7 @@ fr:
       index:
         search:
           placeholder: Filter by ID or Filename
-        subtitle: These are the files that belong to project %{project_name}
+        subtitle: These are the files that belong to Project %{project_name}
         title: Files
         upload_files: Upload Files
       new_attachment_modal:

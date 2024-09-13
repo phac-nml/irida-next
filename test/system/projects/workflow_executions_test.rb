@@ -288,7 +288,9 @@ module Projects
       assert_text workflow_execution.metadata['workflow_name']
       assert_text workflow_execution.metadata['workflow_version']
 
-      click_on I18n.t('workflow_executions.show.tabs.files')
+      within %(div[id="workflow-execution-tabs"]) do
+        click_on I18n.t('workflow_executions.show.tabs.files')
+      end
 
       assert_text 'FILENAME'
 
