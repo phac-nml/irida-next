@@ -276,13 +276,13 @@ module Groups
       visit group_members_url(@namespace, tab: 'invited_groups')
 
       assert_text 'Displaying 2 items'
-      assert_selector '#members-tabs table tbody tr', count: 2
+      assert_selector 'table tbody tr', count: 2
 
       fill_in placeholder: I18n.t(:'groups.members.index.search.groups.placeholder'), with: @group_link5.group.name
 
       assert_text 'Displaying 1 item'
-      assert_selector '#members-tabs table tbody tr', count: 1
-      assert_selector "#members-tabs table tbody tr td:nth-child(#{group_name_col})", text: @group_link5.group.name
+      assert_selector 'table tbody tr', count: 1
+      assert_selector "table tbody tr td:nth-child(#{group_name_col})", text: @group_link5.group.name
     end
 
     test 'can sort by column' do
