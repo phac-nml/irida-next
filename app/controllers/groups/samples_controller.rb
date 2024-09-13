@@ -16,7 +16,12 @@ module Groups
     end
 
     def search
-      redirect_to group_samples_path(request.request_parameters.slice(:limit, :page))
+      request_params = if params[:page].present?
+                         request.request_parameters.slice(:limit, :page)
+                       else
+                         request.request_parameters.slice(:limit)
+                       end
+      redirect_to group_samples_path(request_params)
     end
 
     def select
