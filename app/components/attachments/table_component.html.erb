@@ -31,12 +31,33 @@
                 class:
                   "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
               <% end %>
-                <% if column == :id %>
-                  <%= render Ransack::SortComponent.new(
+              <% if column == :id %>
+                <%= render Ransack::SortComponent.new(
                   ransack_obj: @q,
                   label: t(".#{column}"),
                   url: helpers.sorting_url(@q, "puid"),
                   field: "puid",
+                  data: {
+                    turbo_action: "replace",
+                  },
+                ) %>
+              <% elsif column == :size %>
+                <%= render Ransack::SortComponent.new(
+                  ransack_obj: @q,
+                  label: t(".#{column}"),
+                  url: helpers.sorting_url(@q, "byte_size"),
+                  field: "byte_size",
+                  data: {
+                    turbo_action: "replace",
+                  },
+                ) %>
+              <% elsif column == :format || column == :type %>
+                <%= render Ransack::SortComponent.new(
+                  ransack_obj: @q,
+                  label: column,
+                  url:
+                    helpers.sorting_url(@q, URI.encode_www_form_component("metadata_#{column}")),
+                  field: "metadata_#{column}",
                   data: {
                     turbo_action: "replace",
                   },

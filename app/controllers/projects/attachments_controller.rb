@@ -3,12 +3,13 @@
 module Projects
   # Controller actions for Project Attachments
   class AttachmentsController < Projects::ApplicationController
+    include Metadata
     before_action :current_page
 
     def index
       @q = @project.namespace.attachments.ransack(params[:q])
       set_default_sort
-      @pagy, @attachments = pagy(@q.result)
+      @pagy, @attachments = pagy_with_metadata_sort(@q.result)
     end
 
     def new
