@@ -264,6 +264,7 @@ en:
     table_component:
       action: Action
       actions: Actions
+      byte_size: Size
       counts:
         attachments: Attachments
         selected: Selected
@@ -276,7 +277,6 @@ en:
         item: Attachments
       remove: Delete
       select_page: Select / Deselect visible attachments
-      size: Size
       type: Type
   auth:
     scopes:

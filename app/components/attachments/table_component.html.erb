@@ -41,22 +41,12 @@
                     turbo_action: "replace",
                   },
                 ) %>
-              <% elsif column == :size %>
+              <% elsif column == :byte_size || column == :filename %>
                 <%= render Ransack::SortComponent.new(
                   ransack_obj: @q,
                   label: t(".#{column}"),
-                  url: helpers.sorting_url(@q, "file_blob_byte_size"),
-                  field: "file_blob_byte_size",
-                  data: {
-                    turbo_action: "replace",
-                  },
-                ) %>
-              <% elsif column == :filename %>
-                <%= render Ransack::SortComponent.new(
-                  ransack_obj: @q,
-                  label: t(".#{column}"),
-                  url: helpers.sorting_url(@q, "file_blob_filename"),
-                  field: "file_blob_filename",
+                  url: helpers.sorting_url(@q, "file_blob_#{column}"),
+                  field: "file_blob_#{column}",
                   data: {
                     turbo_action: "replace",
                   },
@@ -142,7 +132,7 @@
                     text: attachment.metadata[column.to_s],
                     color: helpers.find_pill_color_for_attachment(attachment, column.to_s),
                   ) %>
-                <% elsif column == :size %>
+                <% elsif column == :byte_size %>
                   <%= number_to_human_size(attachment.file.blob.byte_size) %>
                 <% elsif column == :created_at%>
                   <%= helpers.local_time_ago(attachment.created_at) %>

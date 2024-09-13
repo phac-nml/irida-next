@@ -64,7 +64,7 @@ module Attachments
     private
 
     def columns
-      %i[id filename format type size created_at]
+      %i[id filename format type byte_size created_at]
     end
   end
 end
