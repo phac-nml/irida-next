@@ -1,8 +1,9 @@
-<%# TODO: VERIFY THIS locals: (project:, pagy:, q:, attachments:) -%>
+<%# locals: (project:, pagy:, q:, attachments:) -%>
 <%= render Attachments::TableComponent.new(
   attachments,
   pagy,
   q,
+  project,
   abilities: {
     select_attachments: allowed_to?(:destroy_attachment?, project)
   },

@@ -24,12 +24,12 @@
             selected: @current_page == t(:"projects.sidebar.samples"),
           ) %>
           <% if allowed_to?(:view_attachments?, @project) %>
-          <%= render section.with_item(
-            url: namespace_project_attachments_path(@project.parent, @project),
-            icon: "document_text",
-            label: t(:"projects.sidebar.files"),
-            selected: @current_page == t(:"projects.sidebar.files"),
-          ) %>
+            <%= render section.with_item(
+              url: namespace_project_attachments_path(@project.parent, @project),
+              icon: "document_text",
+              label: t(:"projects.sidebar.files"),
+              selected: @current_page == t(:"projects.sidebar.files"),
+            ) %>
           <% end %>
           <% if allowed_to?(:view_history?, @project) %>
             <%= render section.with_item(
