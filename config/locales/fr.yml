@@ -260,6 +260,24 @@ fr:
       access_denied: Access Denied.
       not_found_on_server: The requested resource could not be found on the server.
       resource_not_found: Resource Not Found.
+  attachments:
+    table_component:
+      action: Action
+      actions: Actions
+      counts:
+        attachments: Attachments
+        selected: Selected
+      created_at: Uploaded
+      delete_confirm: Are you sure you would like to delete attachment '%{name}'?
+      filename: Filename
+      format: Format
+      id: ID
+      limit:
+        item: Attachments
+      remove: Delete
+      select_page: Select / Deselect visible attachments
+      size: Size
+      type: Type
   auth:
     scopes:
       api: Grants complete read/write access to the API.
@@ -900,6 +918,27 @@ fr:
   projects:
     activity:
       title: Project Activity
+    attachments:
+      create:
+        failure: 'File %{filename} was not uploaded due to the following errors: %{errors}'
+        success: File %{filename} was successfully uploaded.
+      form:
+        files: Files
+        files_ignored: 'fasta and fastq files must be compressed. The following file(s) cannot be uploaded:'
+        upload: Upload
+        uploading: Uploading
+      index:
+        search:
+          placeholder: Filter by ID or Filename
+        subtitle: These are the files that belong to project %{project_name}
+        title: Files
+        upload_files: Upload Files
+      new_attachment_modal:
+        upload_files: Upload Files
+      table:
+        empty:
+          description: There are no files associated with this project.
+          title: No Files
     automated_workflow_executions:
       actions:
         delete_button: Delete
@@ -1345,6 +1384,7 @@ fr:
       bot_accounts: Bot Accounts
       details: Details
       general: General
+      files: Files
       history: History
       members: Members
       samples: Samples
