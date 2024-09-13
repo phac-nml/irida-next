@@ -272,6 +272,8 @@ en:
       filename: Filename
       format: Format
       id: ID
+      limit:
+        item: Attachments
       remove: Delete
       select_page: Select / Deselect visible attachments
       size: Size

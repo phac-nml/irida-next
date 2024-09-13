@@ -2,23 +2,24 @@
 
 <%= turbo_frame_tag "attachment_modal" %>
 
-<%= render Viral::PageHeaderComponent.new(
-  title: t(".title"),
-  subtitle: t(".subtitle", project_name: @project.name),
-) do |component| %>
-  <%= component.with_buttons do %>
-   <%= link_to t(".upload_files"),
-      new_namespace_project_attachment_path(id: @project.id),
-      data: {
-        turbo_frame: "attachment_modal",
-        turbo_stream: true,
-      },
-      class: "button button--size-default button--state-default" %>
+<div class="fixed-table-component">
+  <%= render Viral::PageHeaderComponent.new(
+    title: t(".title"),
+    subtitle: t(".subtitle", project_name: @project.name),
+  ) do |component| %>
+    <%= component.with_buttons do %>
+    <%= link_to t(".upload_files"),
+        new_namespace_project_attachment_path(id: @project.id),
+        data: {
+          turbo_frame: "attachment_modal",
+          turbo_stream: true,
+        },
+        class: "button button--size-default button--state-default" %>
+    <% end %>
   <% end %>
-<% end %>
 
-<div class="flow-root">
-    <div class="float-right">
+  <div class="flow-root">
+    <div class="flex flex-row-reverse items-center mb-4 space-x-2">
       <%= search_form_for @q, url: namespace_project_attachments_path(@project.parent, @project), html: { "data-controller": "filters", "data-turbo-permanent": "true" } do |f| %>
         <%= f.hidden_field :format, value: "turbo_stream" %>
         <%= f.label :name_cont, "SEARCH", class: "sr-only" %>
@@ -30,7 +31,7 @@
           >
             <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
           </div>
-          <%= f.search_field :filename_or_puid_cont,
+          <%= f.search_field :puid_or_file_blob_filename_cont,
                          "data-action": "filters#submit",
                          class:
                            "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",

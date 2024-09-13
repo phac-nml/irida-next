@@ -3,7 +3,7 @@
 require 'ransack/helpers/form_helper'
 
 module Attachments
-  # Component for rendering a table of Samples
+  # Component for rendering a table of Attachments
   class TableComponent < Component
     include Ransack::Helpers::FormHelper
 
@@ -37,7 +37,7 @@ module Attachments
     def system_arguments
       { tag: 'div' }.deep_merge(@system_arguments).tap do |args|
         args[:id] = 'attachments-table'
-        args[:classes] = class_names(args[:classes], 'relative', 'overflow-x-auto')
+        args[:classes] = class_names(args[:classes], 'overflow-auto scrollbar')
         if @abilities[:select_attachments]
           args[:data] ||= {}
           args[:data][:controller] = 'selection'
@@ -50,14 +50,14 @@ module Attachments
     def wrapper_arguments
       {
         tag: 'div',
-        classes: class_names('table-container')
+        classes: class_names('table-container flex flex-col shrink min-h-0')
       }
     end
 
-    def row_arguments(sample)
+    def row_arguments(attachment)
       { tag: 'tr' }.tap do |args|
         args[:classes] = class_names('bg-white', 'border-b', 'dark:bg-slate-800', 'dark:border-slate-700')
-        args[:id] = sample.id
+        args[:id] = attachment.id
       end
     end
 

@@ -9,7 +9,7 @@
       <thead
         class='
           text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
-          dark:text-slate-400
+          dark:text-slate-300 sticky top-0 z-10
         '
       >
         <tr>
@@ -88,7 +88,8 @@
       </thead>
       <tbody
         class='
-          bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
+          overflow-y-auto bg-white divide-y divide-slate-200 dark:bg-slate-800
+          dark:divide-slate-700
         '
       >
         <% @attachments.each do |attachment| %>
@@ -194,34 +195,10 @@
     </table>
   <% end %>
   <% unless @attachments.empty? %>
-    <%= render PaginationComponent.new(
-      info: helpers.pagy_info(@pagy),
-      prev_url:
-        (
-          if @pagy.prev
-            helpers.pagy_url_for(@pagy, @pagy.prev).gsub(
-              "workflow_executions.turbo_stream",
-              "workflow_executions",
-            )
-          else
-            nil
-          end
-        ),
-      next_url:
-        (
-          if @pagy.next
-            helpers.pagy_url_for(@pagy, @pagy.next).gsub(
-              "workflow_executions.turbo_stream",
-              "workflow_executions",
-            )
-          else
-            nil
-          end
-        ),
-      data: {
-        turbo_action: "replace",
-      },
-    ) %>
+    <div class="flex items-center justify-between">
+      <%= render Viral::Pagy::LimitComponent.new(@pagy, item: t(".limit.item")) %>
+      <%= render Viral::Pagy::PaginationComponent.new(@pagy) %>
+    </div>
   <% end %>
   <div class="empty_state_message">
     <%= viral_empty(

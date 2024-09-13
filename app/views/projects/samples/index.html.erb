@@ -6,7 +6,7 @@
 
 <%= turbo_stream_from @project %>
 
-<div class="samples-app">
+<div class="fixed-table-component">
   <%= render Viral::PageHeaderComponent.new(title: t('.title')) do |component| %>
     <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
     <%= component.with_buttons do %>
