@@ -1,4 +1,4 @@
-<div class=" justify-between w-full mb-4 page-header sm:flex ">
+<div class="justify-between w-full mb-4 page-header sm:flex">
   <div class="flex items-start">
     <% if icon.present? %>
       <span class="mr-2"><%= icon %></span>
@@ -9,25 +9,17 @@
         <div class="flex items-center">
           <h1
             class="
-              text-2xl
-              font-medium
-              leading-tight
-              text-slate-900
-              dark:text-white
-              inline
+              inline text-2xl font-medium leading-tight text-slate-900 dark:text-white
             "
           ><%= title %></h1>
-          <%= viral_pill(text: id, color: id_color, classes: "ml-2") %>
+          <%= render ClipboardComponent.new(value: id) do %>
+            <%= viral_pill(text: id, color: id_color, classes: "ml-2") %>
+          <% end %>
         </div>
       <% else %>
         <h1
           class="
-            text-2xl
-            font-medium
-            leading-tight
-            text-slate-900
-            dark:text-white
-            inline
+            inline text-2xl font-medium leading-tight text-slate-900 dark:text-white
           "
         ><%= title %></h1>
       <% end %>
