@@ -17,7 +17,7 @@
     <h2 class="text-xl font-semibold leading-tight text-slate-900 dark:text-white">
       <%= t("projects.bots.index.access_token_section.label", bot_name: bot_account_name) %>
     </h2>
-    <%= render ClipboardComponent.new(
+    <%= render TokenComponent.new(
       value: token,
       aria_label: t("projects.bots.index.access_token_section.aria_label"),
       classes: "my-2"
