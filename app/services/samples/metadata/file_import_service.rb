@@ -111,11 +111,17 @@ module Samples
           metadata_changes = process_sample_metadata_row(sample_id, metadata)
           response[sample_id] = metadata_changes if metadata_changes
         rescue ActiveRecord::RecordNotFound
-          @namespace.errors.add(:sample,
-                                I18n.t('services.samples.metadata.import_file.sample_not_found',
-                                       sample_name: sample_id, namespace_type: @namespace.type.downcase))
+          @namespace.errors.add(:sample, error_message(sample_id))
         end
         response
+      end
+
+      def error_message(sample_id)
+        if @namespace.type == 'Group'
+          I18n.t('services.samples.metadata.import_file.sample_not_found_within_group', sample_puid: sample_id)
+        else
+          I18n.t('services.samples.metadata.import_file.sample_not_found_within_project', sample_puid: sample_id)
+        end
       end
 
       def process_sample_metadata_row(sample_id, metadata)

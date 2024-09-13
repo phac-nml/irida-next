@@ -110,8 +110,10 @@ module Samples
         assert_empty Samples::Metadata::FileImportService.new(@group, @john_doe,
                                                               params).execute
         assert_equal(@group.errors.messages_for(:sample).first,
-                     I18n.t('services.samples.metadata.import_file.sample_not_found',
-                            sample_name: @sample1.name, namespace_type: @group.type.downcase))
+                     I18n.t(
+                       'services.samples.metadata.import_file.sample_not_found_within_group',
+                       sample_puid: @sample1.name
+                     ))
       end
 
       test 'import sample metadata via csv file using sample puids for group' do
@@ -272,7 +274,11 @@ module Samples
         response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, params).execute
         assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
                                           updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
-        assert_equal("Sample 'Project 2 Sample 3' is not found within this project",
+
+        assert_equal(I18n.t(
+                       'services.samples.metadata.import_file.sample_not_found_within_project',
+                       sample_puid: 'Project 2 Sample 3'
+                     ),
                      @project.namespace.errors.messages_for(:sample).first)
         assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '20', 'metadatafield3' => '30' },
                      @sample1.reload.metadata)
