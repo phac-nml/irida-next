@@ -18,6 +18,7 @@ class Attachment < ApplicationRecord
 
   has_logidze
   acts_as_paranoid
+  broadcasts_refreshes
 
   belongs_to :attachable, touch: :attachments_updated_at, polymorphic: true
 

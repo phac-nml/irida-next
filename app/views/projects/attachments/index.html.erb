@@ -9,6 +9,10 @@
   <%= component.with_buttons do %>
    <%= link_to t(".upload_files"),
       new_namespace_project_attachment_path(id: @project.id),
+      data: {
+        turbo_frame: "attachment_modal",
+        turbo_stream: true,
+      },
       class: "button button--size-default button--state-default" %>
   <% end %>
 <% end %>

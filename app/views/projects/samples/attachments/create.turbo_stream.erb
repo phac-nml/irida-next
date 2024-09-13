@@ -3,14 +3,14 @@
     <%= turbo_stream.append "flashes" do %>
       <%= viral_flash(
         type: :success,
-        data: t(".success", filename: attachment.file.filename)
+        data: t(".success", filename: attachment.file.filename),
       ) %>
     <% end %>
     <% if !attachment.associated_attachment || (attachment.associated_attachment && attachment.metadata['direction'] == 'forward') %>
       <%= turbo_stream.append "attachments-table-body",
                           partial: "attachment",
                           locals: {
-                            attachment: attachment
+                            attachment: attachment,
                           } %>
     <% end %>
   <% else %>
@@ -21,8 +21,8 @@
           t(
             ".failure",
             filename: attachment.file.filename,
-            errors: attachment.errors.full_messages.join(".")
-          )
+            errors: attachment.errors.full_messages.join("."),
+          ),
       ) %>
     <% end %>
   <% end %>
@@ -31,5 +31,5 @@
                     partial: "new_attachment_modal",
                     locals: {
                       open: false,
-                      attachment: attachment
+                      attachment: attachment,
                     } %>
