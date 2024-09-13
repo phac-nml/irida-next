@@ -57,7 +57,7 @@
 </div>
 
 <div class="flex flex-wrap justify-between flex-none metadata shrink-0">
-  <div class="grid grid-cols-2 gap-3 mt-2 stats text-slate-500 group-stats">
+  <div class="grid grid-cols-3 gap-3 mt-2 stats text-slate-500 group-stats">
     <% if @namespace.type == "Group" %>
       <%= viral_tooltip(title: t(:'.stats.projects')) do %>
         <span class="flex items-center text-sm">
@@ -69,6 +69,13 @@
         <span class="flex items-center">
           <%= viral_icon(name: :squares_2x2, color: :subdued, classes: "h-2 w-5") %><%= @namespace.children.count %>
         </span>
+      <% end %>
+      <% if @sample_count > 0 %>
+        <%= viral_tooltip(title: t(:'.stats.samples')) do %>
+          <span class="flex items-center">
+            <%= viral_icon(name: :beaker, color: :subdued, classes: "h-5 w-5") %><%= @sample_count %>
+          </span>
+        <% end %>
       <% end %>
     <% end %>
   </div>
