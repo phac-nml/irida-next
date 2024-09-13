@@ -145,7 +145,6 @@
                 classes: class_names('px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 z-5 space-x-2')
               ) do %>
                 <% if @row_actions[:destroy] %>
-
                   <%= link_to(
                     t('.remove'),
                     namespace_project_attachment_path(

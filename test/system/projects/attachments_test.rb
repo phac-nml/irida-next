@@ -16,7 +16,9 @@ module Projects
     end
 
     test 'visiting the index' do
-      visit namespace_project_attachments_path(@namespace, @project1)
+      visit namespace_project_path(@namespace, @project1)
+      click_on I18n.t('projects.sidebar.files')
+
       assert_selector 'h1', text: I18n.t('projects.attachments.index.title')
       assert_selector '#attachments-table table tbody tr', count: 2
       assert_selector 'tr:first-child th', text: @attachment1.puid
@@ -50,6 +52,13 @@ module Projects
       visit namespace_project_attachments_path(@namespace, @project1)
 
       assert_no_selector 'a', text: I18n.t('projects.attachments.index.upload_files')
+    end
+
+    test 'user without proper access cannot view files link on sidebar' do
+      login_as users(:ryan_doe)
+      visit namespace_project_path(@namespace, @project1)
+
+      assert_no_selector 'a', text: I18n.t('projects.sidebar.files')
     end
 
     test 'should not be able to attach a duplicate file to a project' do
