@@ -7,6 +7,7 @@ module Projects
     before_action :current_page
 
     def index
+      puts params[:q]
       @q = @project.namespace.attachments.ransack(params[:q])
       set_default_sort
       @pagy, @attachments = pagy_with_metadata_sort(@q.result)
