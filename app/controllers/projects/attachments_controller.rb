@@ -44,10 +44,6 @@ module Projects
       end
     end
 
-    def search
-      redirect_to namespace_project_attachments_path(@project.parent, @project, limit: params[:limit])
-    end
-
     private
 
     def current_page
