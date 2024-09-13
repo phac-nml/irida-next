@@ -8,9 +8,9 @@
   </span>
   <button
     type="button"
-    title="Copy to clipboard"
+    title="<%= t("components.clipboard.title") %>"
     data-action="clipboard#copy"
-    aria-label="Copy to clipboard"
+    aria-label="<%= t("components.clipboard.title") %>"
     data-clipboard-target="button"
     class="
       p-1 bg-white border rounded-full dark:bg-slate-700 border-slate-200
@@ -33,6 +33,6 @@
       tooltip dark:bg-green-700
     "
   >
-    Copied
+    <%= t("components.clipboard.copied") %>
   </div>
 </span>
