@@ -1485,7 +1485,8 @@ fr:
           missing_metadata_row: The file does not have any metadata rows. Please add some rows of metadata to the file and retry uploading.
           missing_sample_id_column: The file is missing the sample id column.  Please make sure the sample id column exists and retry uploading.
           sample_metadata_fields_not_updated: Sample '%{sample_name}' with field(s) '%{metadata_fields}' cannot be updated.
-          sample_not_found: Sample '%{sample_name}' is not found within this project
+          sample_not_found_within_group: Could not find sample with puid '%{sample_puid}' in this group.
+          sample_not_found_within_project: Could not find sample with puid or name '%{sample_puid}' in this project.
         sample_does_not_belong_to_project: Sample '%{sample_name}'' does not belong to project '%{project_name}'
         update_fields:
           key_exists: Sample already contains metadata field '%{key}'.
