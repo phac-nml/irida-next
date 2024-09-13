@@ -215,14 +215,20 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
 
     def can_create_attachment?(user, object_namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
+      effective_access_level = effective_access_level(object_namespace, user, include_group_links)
+      return true if (effective_access_level == Member::AccessLevel::UPLOADER) && Current.token&.active?
+
       Member::AccessLevel.manageable.include?(
-        effective_access_level(object_namespace, user, include_group_links)
+        effective_access_level
       )
     end
 
     def can_destroy_attachment?(user, object_namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
+      effective_access_level = effective_access_level(object_namespace, user, include_group_links)
+      return true if (effective_access_level == Member::AccessLevel::UPLOADER) && Current.token&.active?
+
       Member::AccessLevel.manageable.include?(
-        effective_access_level(object_namespace, user, include_group_links)
+        effective_access_level
       )
     end
 
