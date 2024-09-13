@@ -8,6 +8,18 @@ module NamespaceTree
         @namespace = namespace
         @path = path
         @path_args = path_args
+        @sample_count = total_samples
+      end
+
+      def total_samples
+        case @namespace.type
+        when 'Group'
+          @namespace.project_namespaces.sum { |project_namespace| project_namespace.project.samples.size }
+        when 'Project'
+          @namespace.project.samples.size
+        when 'User'
+          0
+        end
       end
     end
   end
