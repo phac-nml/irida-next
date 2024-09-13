@@ -45,8 +45,18 @@
                 <%= render Ransack::SortComponent.new(
                   ransack_obj: @q,
                   label: t(".#{column}"),
-                  url: helpers.sorting_url(@q, "byte_size"),
-                  field: "byte_size",
+                  url: helpers.sorting_url(@q, "file_blob_byte_size"),
+                  field: "file_blob_byte_size",
+                  data: {
+                    turbo_action: "replace",
+                  },
+                ) %>
+              <% elsif column == :filename %>
+                <%= render Ransack::SortComponent.new(
+                  ransack_obj: @q,
+                  label: t(".#{column}"),
+                  url: helpers.sorting_url(@q, "file_blob_filename"),
+                  field: "file_blob_filename",
                   data: {
                     turbo_action: "replace",
                   },
