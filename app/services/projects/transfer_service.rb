@@ -35,7 +35,7 @@ module Projects
 
     private
 
-    def transfer(project) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def transfer(project) # rubocop:disable Metrics/AbcSize
       if Namespaces::ProjectNamespace.where(parent_id: new_namespace.id).exists?(['path = ? or name = ?',
                                                                                   project.path, project.name])
         raise TransferError, I18n.t('services.projects.transfer.namespace_project_exists')
@@ -47,6 +47,12 @@ module Projects
 
       project.namespace.update(parent_id: new_namespace.id)
 
+      create_activities(project)
+
+      UpdateMembershipsJob.perform_later(new_namespace_member_ids)
+    end
+
+    def create_activities(project) # rubocop:disable Metrics/MethodLength
       project.namespace.create_activity action: :transfer,
                                         owner: current_user,
                                         parameters:
@@ -56,7 +62,28 @@ module Projects
                                           action: 'project_namespace_transfer'
                                         }
 
-      UpdateMembershipsJob.perform_later(new_namespace_member_ids)
+      @old_namespace.create_activity key: 'group.projects.transfer_out',
+                                     owner: current_user,
+                                     parameters:
+                                     {
+                                       project_id: project.id,
+                                       old_namespace: @old_namespace.puid,
+                                       new_namespace: @new_namespace.puid,
+                                       action: 'project_namespace_transfer'
+                                     }
+
+      return unless @new_namespace.group_namespace?
+
+      @new_namespace.create_activity key: 'group.projects.transfer_in',
+                                     owner: current_user,
+                                     parameters:
+                                     {
+                                       project_id: project.id,
+                                       old_namespace: @old_namespace.puid,
+                                       new_namespace: @new_namespace.puid,
+                                       action: 'project_namespace_transfer'
+                                     }
+
     end
   end
 end

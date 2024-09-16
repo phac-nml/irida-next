@@ -8,5 +8,16 @@ module Activities
 
       @system_arguments = system_arguments
     end
+
+    def members_page
+      if @activity[:member].namespace.group_namespace?
+        group_members_path(@activity[:member].namespace)
+      elsif @activity[:member].namespace.project_namespace?
+        namespace_project_members_path(
+          @activity[:member].namespace.project.parent,
+          @activity[:member].namespace.project
+        )
+      end
+    end
   end
 end

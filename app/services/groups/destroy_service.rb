@@ -14,7 +14,12 @@ module Groups
       authorize! @group, to: :destroy?
       group.destroy
 
-      return unless group.deleted? && !group.parent.nil?
+      if @group.deleted?
+        @group.create_activity key: 'group.destroy',
+                               owner: current_user
+
+        return if group.parent.nil?
+      end
 
       group.update_metadata_summary_by_namespace_deletion
     end

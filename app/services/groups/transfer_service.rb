@@ -27,6 +27,15 @@ module Groups
 
       @group.update(parent_id: new_namespace.id)
 
+      @group.create_activity action: :transfer,
+                             owner: current_user,
+                             parameters:
+                             {
+                               old_namespace: @old_namespace.puid,
+                               new_namespace: @new_namespace.puid,
+                               action: 'group_namespace_transfer'
+                             }
+
       UpdateMembershipsJob.perform_later(new_namespace_member_ids)
 
       new_namespace.update_metadata_summary_by_namespace_transfer(@group, old_namespace)

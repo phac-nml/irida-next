@@ -12,7 +12,14 @@ module Groups
 
     def execute
       authorize! @group, to: :update?
-      group.update(params)
+      updated = group.update(params)
+
+      if updated
+        @group.create_activity key: 'group.update',
+                               owner: current_user
+      end
+
+      updated
     end
   end
 end

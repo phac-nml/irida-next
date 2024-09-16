@@ -18,6 +18,8 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
       when 'Namespace'
         if activity.key.include?('project_namespace')
           activities << project_activity(activity)
+        elsif activity.key.include?('group')
+          activities << group_activity(activity)
         elsif activity.key.include?('workflow_execution')
           activities << workflow_execution_activity(activity)
         end
@@ -53,6 +55,27 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     params = transfer_activity_parameters(base_params, activity)
 
     namespace_project_sample_activity_parameters(params, activity)
+  end
+
+  def group_activity(activity)
+    activity_trackable = activity_trackable(activity, Group)
+
+    base_params = {
+      created_at: activity.created_at.strftime(
+        I18n.t('time.formats.abbreviated')
+      ),
+      key: "activity.#{activity.key}_html",
+      user: activity_creator(activity),
+      group: activity_trackable,
+      project: get_object_by_id(activity.parameters[:project_id], Project),
+      name: activity_trackable.name,
+      type: 'Namespace',
+      action: activity.parameters.key?(:action) ? activity.parameters[:action] : 'default'
+    }
+
+    return base_params if activity.parameters[:action].blank?
+
+    transfer_activity_parameters(base_params, activity)
   end
 
   def workflow_execution_activity(activity)
@@ -120,7 +143,9 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   end
 
   def transfer_activity_parameters(params, activity) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-    if activity.parameters[:action] == 'project_namespace_transfer'
+    if activity.parameters[:action] == 'project_namespace_transfer' ||
+       activity.parameters[:action] == 'group_namespace_transfer'
+
       params.merge!({
                       old_namespace: activity.parameters[:old_namespace],
                       new_namespace: activity.parameters[:new_namespace]

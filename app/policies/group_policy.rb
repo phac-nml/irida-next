@@ -2,6 +2,13 @@
 
 # Policy for groups authorization
 class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
+  def activity?
+    return true if Member.can_view?(user, record) == true
+
+    details[:name] = record.name
+    false
+  end
+
   def create?
     return true if Member.can_create?(user, record) == true
 

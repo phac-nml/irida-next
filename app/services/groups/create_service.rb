@@ -10,16 +10,21 @@ module Groups
       @group = Group.new(params.merge(owner: current_user))
     end
 
-    def execute
+    def execute # rubocop:disable Metrics/AbcSize
       authorize! group.parent, to: :create_subgroup? if params[:parent_id]
 
       group.save
 
-      if group.parent.nil? && group.persisted?
-        Members::CreateService.new(current_user, group, {
-                                     user: current_user,
-                                     access_level: Member::AccessLevel::OWNER
-                                   }).execute
+      if group.persisted?
+        if group.parent.nil?
+          Members::CreateService.new(current_user, group, {
+                                       user: current_user,
+                                       access_level: Member::AccessLevel::OWNER
+                                     }).execute
+        end
+
+        @group.create_activity key: 'group.create',
+                               owner: current_user
       end
 
       group
