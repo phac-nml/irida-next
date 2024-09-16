@@ -14,9 +14,8 @@ module Viral
         if current_url.include? '?'
           split_url = current_url.split('?')
           base_url = split_url[0]
-          get_params = split_url[1].split('&')
           reconstructed_params = "?limit=#{limit}"
-          get_params.each do |param|
+          split_url[1].split('&').each do |param|
             reconstructed_params << "&#{param}" unless param.include? 'limit='
           end
           "#{base_url}#{reconstructed_params}"
