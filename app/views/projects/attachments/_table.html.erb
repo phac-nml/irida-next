@@ -5,7 +5,8 @@
   q,
   project,
   abilities: {
-    select_attachments: allowed_to?(:destroy_attachment?, project)
+    # Uncomment when ready to use multi-select functionality
+    # select_attachments: allowed_to?(:destroy_attachment?, project)
   },
   row_actions: {
     destroy: allowed_to?(:destroy_attachment?, project),
