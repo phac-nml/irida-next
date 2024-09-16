@@ -2,7 +2,7 @@
   <%= t(
     "#{@activity[:key]}",
     user: @activity[:user],
-    project_puid: @activity[:project].puid,
+    project_puid: @activity[:project_puid],
     old_namespace: @activity[:old_namespace],
     new_namespace: @activity[:new_namespace],
   ) %>
@@ -20,5 +20,11 @@
     new_namespace: @activity[:new_namespace],
   ) %>
 <% else %>
-  <%= t("#{@activity[:key]}", user: @activity[:user], name: @activity[:name]) %>
+  <%= t(
+    "#{@activity[:key]}",
+    user: @activity[:user],
+    name: @activity[:name],
+    href: @activity[:project_puid],
+    project_puid: @activity[:project_puid],
+  ) %>
 <% end %>

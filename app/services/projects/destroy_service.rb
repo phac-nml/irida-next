@@ -16,7 +16,6 @@ module Projects
     end
 
     def create_activities
-
       @project.namespace.create_activity key: 'namespaces_project_namespace.destroy',
                                          owner: current_user
 
@@ -25,9 +24,9 @@ module Projects
       @project.namespace.parent.create_activity key: 'group.projects.destroy',
                                                 owner: current_user,
                                                 parameters: {
-                                                  project_puid: @project.puid
+                                                  project_puid: @project.namespace.puid,
+                                                  action: 'group_project_destroy'
                                                 }
-
     end
   end
 end

@@ -68,6 +68,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
       user: activity_creator(activity),
       group: activity_trackable,
       project: get_object_by_id(activity.parameters[:project_id], Project),
+      project_puid: activity.parameters[:project_puid],
       name: activity_trackable.name,
       type: 'Namespace',
       action: activity.parameters.key?(:action) ? activity.parameters[:action] : 'default'

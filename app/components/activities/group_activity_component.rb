@@ -10,7 +10,7 @@ module Activities
     end
 
     def project_link
-      @activity[:group] && @activity[:project]
+      @activity[:group] && @activity[:project] && !@activity[:project].namespace.nil?
     end
 
     def transfer_out

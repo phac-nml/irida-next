@@ -78,7 +78,8 @@ module Projects
       @project.namespace.parent.create_activity key: 'group.projects.create',
                                                 owner: current_user,
                                                 parameters: {
-                                                  project_id: @project.id
+                                                  project_id: @project.id,
+                                                  project_puid: @project.puid
                                                 }
     end
   end
