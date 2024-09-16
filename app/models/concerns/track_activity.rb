@@ -8,7 +8,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     include PublicActivity::Common
   end
 
-  def human_readable_activity(public_activities) # rubocop:disable Metrics/MethodLength
+  def human_readable_activity(public_activities) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
     activities = []
     public_activities.each do |activity|
       trackable_type = activity.trackable_type
@@ -57,7 +57,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     namespace_project_sample_activity_parameters(params, activity)
   end
 
-  def group_activity(activity)
+  def group_activity(activity) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     activity_trackable = activity_trackable(activity, Group)
 
     base_params = {

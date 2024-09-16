@@ -83,7 +83,6 @@ module Projects
                                        new_namespace: @new_namespace.puid,
                                        action: 'project_namespace_transfer'
                                      }
-
     end
   end
 end

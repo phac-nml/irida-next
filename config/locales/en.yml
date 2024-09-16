@@ -222,7 +222,7 @@ en:
     group:
       create_html: "%{user} created group"
       projects:
-        create_html: "%{user} created project %{href} within group"
+        create_html: "%{user} created project <span class='text-slate-800 dark:text-slate-300 font-medium'>%{href}</span> within group"
         destroy_html: "%{user} removed project <span class='text-slate-800 dark:text-slate-300 font-medium'>%{project_puid}</span> from group"
         transfer_in_html: "%{user} transferred project %{href} from namespace <span class='text-slate-800 dark:text-slate-300 font-medium'>%{old_namespace}</span> to <span class='text-slate-800 dark:text-slate-300 font-medium'>%{new_namespace}</span>"
         transfer_out_html: "%{user} transferred project <span class='text-slate-800 dark:text-slate-300 font-medium'>%{project_puid}</span>  from namespace <span class='text-slate-800 dark:text-slate-300 font-medium'>%{old_namespace}</span> to <span class='text-slate-800 dark:text-slate-300 font-medium'>%{new_namespace}</span>"
