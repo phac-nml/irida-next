@@ -619,7 +619,7 @@ module Projects
 
       within('div#limit-component') do
         find('button').click
-        find('a[href="?limit=10"]').click
+        click_link '10'
       end
 
       assert_selector 'div#limit-component button div span', text: '10'
