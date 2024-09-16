@@ -6,14 +6,18 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   include ListActions
 
   before_action :data_export, only: %i[destroy show]
-  before_action :data_exports, only: %i[index destroy]
+  before_action :data_exports, only: %i[destroy]
   before_action :namespace, only: :new
   before_action :current_page
   before_action :set_default_tab, only: :show
 
   TABS = %w[summary preview].freeze
 
-  def index; end
+  def index
+    @q = load_data_exports.ransack(params[:q])
+    set_default_sort
+    @pagy, @data_exports = pagy(@q.result)
+  end
 
   def show
     authorize! @data_export, to: :read_export?
@@ -81,6 +85,10 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
 
   private
 
+  def set_default_sort
+    @q.sorts = 'created_at desc' if @q.sorts.empty?
+  end
+
   def data_export_params
     params.require(:data_export).permit(:name, :export_type, :email_notification,
                                         export_parameters: [:linelist_format, :namespace_id, :analysis_type,
@@ -92,7 +100,11 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   end
 
   def data_exports
-    @data_exports = DataExport.where(user: current_user)
+    @data_exports = load_data_exports
+  end
+
+  def load_data_exports
+    DataExport.where(user: current_user)
   end
 
   def namespace

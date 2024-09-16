@@ -17,6 +17,14 @@ class DataExport < ApplicationRecord
 
   validate :validate_export_parameters
 
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[id name export_type status created_at expires_at]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[]
+  end
+
   private
 
   def validate_export_parameters
