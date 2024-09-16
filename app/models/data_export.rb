@@ -17,6 +17,10 @@ class DataExport < ApplicationRecord
 
   validate :validate_export_parameters
 
+  ransacker :id do
+    Arel.sql('id::varchar')
+  end
+
   def self.ransackable_attributes(_auth_object = nil)
     %w[id name export_type status created_at expires_at]
   end
