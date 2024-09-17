@@ -59,6 +59,13 @@ module Projects
         }]
     end
 
+    def layout_fixed
+      super
+      return unless action_name == 'index'
+
+      @fixed = false
+    end
+
     def set_default_sort
       @q.sorts = 'updated_at desc' if @q.sorts.empty?
     end
