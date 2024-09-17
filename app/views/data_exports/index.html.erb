@@ -4,4 +4,34 @@
 
 <%= render Viral::PageHeaderComponent.new(title: t(".title")) %>
 
-<%= render partial: "table" %>
+<div class="flow-root">
+  <div class="flex flex-row-reverse items-center mb-4 space-x-2">
+    <%= search_form_for @q, url: data_exports_url, html: { "data-controller": "filters" } do |f| %>
+      <%# <%= hidden_field_tag :limit, @pagy.limit %>
+      <%# <%= f.hidden_field :s, value: "#{@q.sorts[0].name} #{@q.sorts[0].dir}" %>
+      <%# <%= f.hidden_field :format, value: "turbo_stream" %>
+      <%# <%= f.label :name_cont, "SEARCH", class: "sr-only" %>
+      <div class="relative lg:w-72">
+        <div
+          class="
+            absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
+          "
+        >
+          <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
+        </div>
+        <%= f.search_field :id_or_name_cont,
+                       "data-action": "filters#submit",
+                       class:
+                         "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
+                       placeholder: t(:".search.placeholder") %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= render partial: "table",
+locals: {
+  data_exports: @data_exports,
+  pagy: @pagy,
+  q: @q,
+} %>
