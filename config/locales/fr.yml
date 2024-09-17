@@ -34,10 +34,10 @@ fr:
         update_sample_metadata?: You are not authorized to update sample metadata for group %{name} on this server.
       index?: You are not authorized to view the listing of resources on this server.
       namespaces/project_namespace:
-        create_automated_workflow_executions?: You are not authorized to create automated workflow executions for project %{name}
+        create_automated_workflow_executions?: You are not authorized to create automated pipelines for project %{name}
         create_bot_accounts?: You are not authorized to create bot accounts for project %{name} on this server.
         create_member?: You are not authorized to create members for the project namespace %{name} on this server.
-        destroy_automated_workflow_executions?: You are not authorized to destroy automated workflow executions for project %{name}
+        destroy_automated_workflow_executions?: You are not authorized to destroy automated pipelines for project %{name}
         destroy_bot_accounts?: You are not authorized to destroy bot accounts for project %{name} on this server.
         destroy_member?: You are not authorized to remove members from the project namespace %{name} on this server.
         export_data?: You are not authorized to export data from project %{name} on this server.
@@ -46,11 +46,11 @@ fr:
         submit_workflow?: You are not authorized to submit workflows for samples within project %{name} on this server.
         unlink_namespace_with_group?: You are not authorized to unlink project %{name} from other groups on this server.
         update?: You are not authorized to update the namespace for project %{name} on this server.
-        update_automated_workflow_executions?: You are not authorized to update automated workflow executions for project %{name}
+        update_automated_workflow_executions?: You are not authorized to update automated pipelines for project %{name}
         update_member?: You are not authorized to update members for the project namespace %{name} on this server.
         update_namespace_with_group_link?: You are not authorized to update project %{name} links with other groups on this server.
         update_sample_metadata?: You are not authorized to update sample metadata for project %{name} on this server.
-        view_automated_workflow_executions?: You are not authorized to view automated workflow executions for project %{name}
+        view_automated_workflow_executions?: You are not authorized to view automated pipelines for project %{name}
         view_workflow_executions?: You are not authorized to view workflow executions for project %{name} on this server.
       namespaces/user_namespace:
         create?: You are not authorized to create a project under the %{name} namespace
@@ -264,7 +264,7 @@ fr:
       update_html: "%{user} updated project attributes"
     workflow_execution:
       automated_workflow:
-        create_html: "%{user} setup automated workflow execution %{href} for the project"
+        create_html: "%{user} setup automated pipeline execution %{href} for the project"
         launch_html: Project automation bot launched workflow %{href} on sample %{sample_href}
       automated_workflow_completion:
         metadata_written_html: Project automation bot wrote workflow %{href} metadata to sample %{sample_href}
@@ -966,28 +966,28 @@ fr:
     automated_workflow_executions:
       actions:
         delete_button: Delete
-        delete_confirm: Are you sure that you want to delete this automated workflow execution?
+        delete_confirm: Are you sure that you want to delete this automated pipeline?
         edit_button: Edit
       create:
-        error: Could not create an automated workflow execution for %{workflow_name}
-        success: Automated workflow execution for %{workflow_name} was successfully created
+        error: Could not create an automated pipeline for %{workflow_name}
+        success: Automated pipeline for %{workflow_name} was successfully created
       destroy:
-        error: Could not delete automated workflow execution for %{workflow_name}
-        success: Automated workflow execution for %{workflow_name} was successfully deleted
+        error: Could not delete automated pipeline for %{workflow_name}
+        success: Automated pipeline for %{workflow_name} was successfully deleted
       edit_dialog:
-        title: 'Editing Automated Workflow Execution: %{workflow_name}'
+        title: 'Editing Automated Pipeline: %{workflow_name}'
       index:
-        add_new_automated_workflow_execution: New automated workflow execution
-        subtitle: Setup automated workflow executions to launch when paired-end data is uploaded to the project
-        title: Automated Workflow Executions
+        add_new_automated_workflow_execution: New automated pipeline
+        subtitle: Setup automated pipelines to launch when paired-end data is uploaded to the project
+        title: Automated Pipelines
       new_automated_workflow_execution_modal:
         title: "%{workflow} parameters"
       pipeline_selection_modal:
         title: Workflow Selection
       table:
         empty:
-          description: No automated workflow executions have been configured for this project
-          title: No automated workflow executions
+          description: No automated pipelines have been configured for this project
+          title: No automated pipelines
         headers:
           actions: Actions
           created_at: Created
@@ -1404,7 +1404,7 @@ fr:
         success: Sample was successfully updated.
     sidebar:
       activity: Activity
-      automated_workflow_executions: Automated Workflow Executions
+      automated_workflow_executions: Automated Pipelines
       bot_accounts: Bot Accounts
       details: Details
       files: Files
