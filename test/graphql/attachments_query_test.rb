@@ -233,11 +233,11 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     attachments = data['attachments']['edges']
     assert_equal 2, attachments.count
 
-    assert_equal 'test_file_A.fastq', attachments[0]['node']['filename']
-    assert_equal 'test_file.fastq', attachments[1]['node']['filename']
+    assert_equal 'test_file.fastq', attachments[0]['node']['filename']
+    assert_equal 'test_file_A.fastq', attachments[1]['node']['filename']
 
-    assert_equal 2101, attachments[0]['node']['byteSize']
-    assert_equal 2102, attachments[1]['node']['byteSize']
+    assert_equal 2102, attachments[0]['node']['byteSize']
+    assert_equal 2101, attachments[1]['node']['byteSize']
 
     assert_equal 'fastq', attachments[0]['node']['metadata']['format']
     assert_equal 'none', attachments[0]['node']['metadata']['compression']

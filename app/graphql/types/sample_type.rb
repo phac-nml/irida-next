@@ -30,7 +30,7 @@ module Types
 
     def project
       context.scoped_set!(:projects_preauthorized, true)
-      context[:project] || sample.project
+      context[:project] || object.project
     end
 
     def self.authorized?(object, context)
