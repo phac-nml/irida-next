@@ -32,15 +32,8 @@ module Mutations
 
       status, user_errors = attachment_status_and_errors(files_attached:, file_blob_id_list: args[:files])
 
-      # query level errors
-      sample.errors.each do |error|
-        user_errors.append(
-          {
-            path: ['sample', error.attribute.to_s.camelize(:lower)],
-            message: error.message
-          }
-        )
-      end
+      # append query level errors
+      user_errors.push(*get_errors_from_object(sample, 'sample'))
 
       {
         sample:,
@@ -51,41 +44,6 @@ module Mutations
 
     def ready?(**_args)
       authorize!(to: :mutate?, with: GraphqlPolicy, context: { user: context[:current_user], token: context[:token] })
-    end
-
-    private
-
-    def attachment_status_and_errors(files_attached:, file_blob_id_list:)
-      # initialize status hash such that all blob ids given by user are included
-      status = Hash[*file_blob_id_list.collect { |v| [v, nil] }.flatten]
-      user_errors = []
-
-      files_attached.each do |attachment|
-        id = attachment.file.blob.signed_id
-        if attachment.persisted?
-          status[id] = :success
-        else
-          status[id] = :error
-          attachment.errors.each do |error|
-            user_errors.append({ path: ['attachment', id], message: error.message })
-          end
-        end
-      end
-
-      add_missing_blob_id_error(status:, user_errors:)
-    end
-
-    def add_missing_blob_id_error(status:, user_errors:)
-      # any nil status is an error
-      status.each do |id, value|
-        next unless value.nil?
-
-        status[id] = :error
-        user_errors.append({ path: ['blob_id', id],
-                             message: 'Blob id could not be processed. Blob id is invalid or file is missing.' })
-      end
-
-      [status, user_errors]
     end
   end
 end
