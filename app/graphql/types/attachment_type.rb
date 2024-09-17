@@ -29,7 +29,7 @@ module Types
       super && (context[:attachments_preauthorized] ||
         allowed_to?(
           :read?,
-          object.attachable.project,
+          object.attachable, # TODO: make sure this works with samples/projects
           context: { user: context[:current_user], token: context[:token] }
         ))
     end
