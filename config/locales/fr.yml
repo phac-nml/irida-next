@@ -284,13 +284,13 @@ fr:
         attachments: Attachments
         selected: Selected
       created_at: Uploaded
+      delete: Delete
       delete_confirm: Are you sure you would like to delete attachment '%{name}'?
       filename: Filename
       format: Format
       id: ID
       limit:
         item: Attachments
-      remove: Delete
       select_page: Select / Deselect visible attachments
       type: Type
   auth:

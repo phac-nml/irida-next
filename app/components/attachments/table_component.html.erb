@@ -146,18 +146,16 @@
               ) do %>
                 <% if @row_actions[:destroy] %>
                   <%= link_to(
-                    t('.remove'),
-                    namespace_project_attachment_path(
-                      id: attachment.id
-                    ),
-                    data: {
-                      turbo_stream: true,
-                      turbo_method: :delete,
-                      turbo_confirm: t('.delete_confirm', name: attachment.file.filename.to_s),
-                    },
-                    class:
-                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                  ) %>
+                   t(".delete"),
+                      namespace_project_attachment_new_destroy_path(
+                        attachment_id: attachment.id,
+                      ),
+                      data: {
+                        turbo_stream: true,
+                      },
+                      class:
+                        "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                    ) %>
                 <% end %>
               <% end %>
             <% end %>

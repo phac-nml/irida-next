@@ -18,7 +18,9 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
       get :edit
       post :transfer
       resources :members, only: %i[create destroy index new update]
-      resources :attachments, only: %i[create destroy index new]
+      resources :attachments, only: %i[create destroy index new] do
+        get :new_destroy
+      end
 
       resources :bots, only: %i[create destroy index new] do
         resources :personal_access_tokens, module: :bots, only: %i[index new create] do
