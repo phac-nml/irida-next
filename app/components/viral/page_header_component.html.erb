@@ -18,9 +18,7 @@
               rounded-full dark:bg-indigo-900 dark:text-indigo-300
             "
           >
-            <%= render ClipboardComponent.new(value: id) do %>
-              <p class="text-sm text-slate-500 dark:text-slate-300"><%= id %></p>
-            <% end %>
+            <%= render ClipboardComponent.new(value: id) %>
           </span>
         </div>
       <% else %>

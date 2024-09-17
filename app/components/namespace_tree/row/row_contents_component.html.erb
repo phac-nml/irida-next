@@ -42,9 +42,7 @@
               rounded-full dark:bg-indigo-900 dark:text-indigo-300
             "
           >
-            <%= render ClipboardComponent.new(value: @namespace.puid) do %>
-              <p class="text-sm text-slate-500 dark:text-slate-300"><%= @namespace.puid %></p>
-            <% end %>
+            <%= render ClipboardComponent.new(value: @namespace.puid) %>
           </span>
           <%= viral_pill(
             text:
