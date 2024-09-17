@@ -9,7 +9,8 @@
     # select_attachments: allowed_to?(:destroy_attachment?, project)
   },
   row_actions: {
-    destroy: allowed_to?(:destroy_attachment?, project),
+    # Uncomment when ready to use destroy
+    # destroy: allowed_to?(:destroy_attachment?, project),
   },
   empty: {
     title: t(:".empty.title"),
