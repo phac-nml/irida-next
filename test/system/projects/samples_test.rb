@@ -619,7 +619,7 @@ module Projects
 
       within('div#limit-component') do
         find('button').click
-        find('a[href="?limit=10"]').click
+        click_link '10'
       end
 
       assert_selector 'div#limit-component button div span', text: '10'
@@ -644,7 +644,7 @@ module Projects
 
       within('div#limit-component') do
         find('button').click
-        find('a[href="?limit=10"]').click
+        click_link '10'
       end
 
       assert_selector 'div#limit-component button div span', text: '10'
@@ -2061,7 +2061,11 @@ module Projects
       end
 
       click_on I18n.t('projects.samples.show.tabs.metadata')
-      click_on I18n.t('projects.samples.show.tabs.files')
+
+      within %(#sample-tabs) do
+        click_on I18n.t('projects.samples.show.tabs.files')
+      end
+
       within %(turbo-frame[id="table-listing"]) do
         assert all('input[type="checkbox"]')[0].checked?
         assert all('input[type="checkbox"]')[2].checked?

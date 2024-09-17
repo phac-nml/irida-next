@@ -7,7 +7,7 @@
   <span><%= t(".items", items: @item) %></span>
   <%= viral_dropdown(label: @pagy.limit) do |dropdown| %>
     <% Pagy::DEFAULT[:limits].each do |limit| %>
-      <% dropdown.with_item(label: limit, url: "?limit=#{limit}") %>
+      <% dropdown.with_item(label: limit, url: current_url_with_limit(limit)) %>
     <% end %>
   <% end %>
   <span><%== t(".summary", to: @pagy.to, from: @pagy.from, count: @pagy.count) %></span>

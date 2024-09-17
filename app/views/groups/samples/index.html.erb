@@ -4,7 +4,7 @@
 <%= turbo_frame_tag "samples_alert" %>
 <%= turbo_frame_tag "selected" %>
 
-<div class="samples-app">
+<div class="fixed-table-component">
   <%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @group.class.model_name.human, namespace_name: @group.name)) do |component| %>
     <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
     <%= component.with_buttons do %>

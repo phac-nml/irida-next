@@ -263,13 +263,13 @@ module Projects
       visit namespace_project_members_url(@namespace.parent, @project, tab: 'invited_groups')
 
       assert_text 'Displaying 4 items'
-      assert_selector '#project-members table tbody tr', count: 4
+      assert_selector 'table tbody tr', count: 4
 
       fill_in placeholder: I18n.t(:'projects.members.index.search.groups.placeholder'), with: @group_link2.group.name
 
       assert_text 'Displaying 1 item'
-      assert_selector '#project-members table tbody tr', count: 1
-      assert_selector "#project-members table tbody tr td:nth-child(#{group_name_col})", text: @group_link2.group.name
+      assert_selector 'table tbody tr', count: 1
+      assert_selector "table tbody tr td:nth-child(#{group_name_col})", text: @group_link2.group.name
     end
 
     test 'can sort by column' do

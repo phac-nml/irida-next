@@ -1,0 +1,209 @@
+<%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
+  <%= render Viral::BaseComponent.new(**system_arguments) do %>
+    <table
+      class='
+        w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+        whitespace-nowrap
+      '
+    >
+      <thead
+        class='
+          text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
+          dark:text-slate-300 sticky top-0 z-10
+        '
+      >
+        <tr>
+          <% @columns.each_with_index do |column, index| %>
+            <%= render_cell(
+              tag: 'th',
+              scope: 'col',
+              classes: class_names('px-3 py-3', 'sticky left-0 min-w-56 max-w-56 z-10 bg-slate-50 dark:bg-slate-700': index.zero?, 'sticky left-56 z-10 bg-slate-50 dark:bg-slate-700': index == 1)
+            ) do %>
+              <% if index.zero? and @abilities[:select_attachments] %>
+                <%= check_box_tag "select-page",
+                title: t(:".select_page"),
+                "aria-label": t(:".select_page"),
+                data: {
+                  action: "input->selection#togglePage",
+                  controller: "filters",
+                  selection_target: "selectPage",
+                },
+                class:
+                  "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+              <% end %>
+              <% if column == :id %>
+                <%= render Ransack::SortComponent.new(
+                  ransack_obj: @q,
+                  label: t(".#{column}"),
+                  url: helpers.sorting_url(@q, "puid"),
+                  field: "puid",
+                  data: {
+                    turbo_action: "replace",
+                  },
+                ) %>
+              <% elsif column == :byte_size || column == :filename %>
+                <%= render Ransack::SortComponent.new(
+                  ransack_obj: @q,
+                  label: t(".#{column}"),
+                  url: helpers.sorting_url(@q, "file_blob_#{column}"),
+                  field: "file_blob_#{column}",
+                  data: {
+                    turbo_action: "replace",
+                  },
+                ) %>
+              <% elsif column == :format || column == :type %>
+                <%= render Ransack::SortComponent.new(
+                  ransack_obj: @q,
+                  label: column,
+                  url:
+                    helpers.sorting_url(@q, URI.encode_www_form_component("metadata_#{column}")),
+                  field: "metadata_#{column}",
+                  data: {
+                    turbo_action: "replace",
+                  },
+                ) %>
+              <% else %>
+                <%= render Ransack::SortComponent.new(
+                  ransack_obj: @q,
+                  label: t(".#{column}"),
+                  url: helpers.sorting_url(@q, column),
+                  field: column,
+                  data: {
+                    turbo_action: "replace",
+                  },
+                ) %>
+              <% end %>
+            <% end %>
+          <% end %>
+          <% if @renders_row_actions %>
+            <%= render_cell(
+              tag: 'th',
+              scope: 'col',
+              classes: class_names('px-3 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
+            ) do %>
+              <%= t(".actions") %>
+            <% end %>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody
+        class='
+          overflow-y-auto bg-white divide-y divide-slate-200 dark:bg-slate-800
+          dark:divide-slate-700
+        '
+      >
+        <% @attachments.each do |attachment| %>
+          <%= render Viral::BaseComponent.new(**row_arguments(attachment)) do %>
+            <% @columns.each_with_index do |column, index| %>
+              <%= render_cell(
+                tag: index.zero? ? 'th' :'td',
+                scope: index.zero? ? 'row' : nil,
+                classes: class_names('px-3 py-3', 'sticky left-0 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-700': index.zero?, 'sticky left-56 bg-slate-50 dark:bg-slate-700': index == 1)
+              ) do %>
+                <% if index.zero? && @abilities[:select_attachments] %>
+                  <%= check_box_tag "attachment_ids[]",
+                  attachment.id,
+                  nil,
+                  id: dom_id(attachment),
+                  "aria-label": attachment.file.filename.to_s,
+                  data: {
+                    action: "input->selection#toggle",
+                    selection_target: "rowSelection",
+                  },
+                  class:
+                    "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+                <% end %>
+                <% if column == :id %>
+                  <%= attachment.puid %>
+                <% elsif column == :filename %>
+                  <div class="flex items-center">
+                    <%= viral_icon(name: :document_text, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
+                    <span>
+                      <%= link_to attachment.file.filename,
+                      rails_blob_path(attachment.file),
+                      data: {
+                        turbo: false,
+                      },
+                      class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+                    </span>
+                  </div>
+                <% elsif column == :format || column == :type %>
+                  <%= viral_pill(
+                    text: attachment.metadata[column.to_s],
+                    color: helpers.find_pill_color_for_attachment(attachment, column.to_s),
+                  ) %>
+                <% elsif column == :byte_size %>
+                  <%= number_to_human_size(attachment.file.blob.byte_size) %>
+                <% elsif column == :created_at%>
+                  <%= helpers.local_time_ago(attachment.created_at) %>
+                <% end %>
+              <% end %>
+            <% end %>
+            <% if @renders_row_actions %>
+              <%= render_cell(
+                tag: 'td',
+                classes: class_names('px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 z-5 space-x-2')
+              ) do %>
+                <% if @row_actions[:destroy] %>
+                  <%= link_to(
+                    t('.remove'),
+                    namespace_project_attachment_path(
+                      id: attachment.id
+                    ),
+                    data: {
+                      turbo_stream: true,
+                      turbo_method: :delete,
+                      turbo_confirm: t('.delete_confirm', name: attachment.file.filename.to_s),
+                    },
+                    class:
+                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                  ) %>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </tbody>
+      <% if @abilities[:select_attachments] && !@attachments.empty? %>
+        <tfoot class="sticky bottom-0 z-10">
+          <tr class="border-t dark:border-slate-700 border-slate-200">
+            <td
+              class="
+                sticky left-0 z-10 px-6 py-3 bg-slate-50 dark:bg-slate-900
+              "
+              colspan="3"
+            >
+              <span>
+                <%= t(".counts.attachments") %>:
+                <strong data-action="turbo:morph-element->selection#idempotentConnect"><%= @pagy.count %></strong>
+              </span>
+              <span>
+                <%= t(".counts.selected") %>:
+                <strong
+                  data-selection-target="selected"
+                  data-action="
+                    turbo:morph-element->selection#idempotentConnect
+                  "
+                >0</strong>
+              </span>
+            </td>
+            <td colspan="100%" class="px-3 py-3 bg-slate-50 dark:bg-slate-900"></td>
+          </tr>
+        </tfoot>
+      <% end %>
+    </table>
+  <% end %>
+  <% unless @attachments.empty? %>
+    <div class="flex items-center justify-between">
+      <%= render Viral::Pagy::LimitComponent.new(@pagy, item: t(".limit.item")) %>
+      <%= render Viral::Pagy::PaginationComponent.new(@pagy) %>
+    </div>
+  <% end %>
+  <div class="empty_state_message">
+    <%= viral_empty(
+      title: @empty[:title],
+      description: @empty[:description],
+      icon_name: :document_text,
+    ) %>
+  </div>
+<% end %>

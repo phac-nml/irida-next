@@ -3,6 +3,7 @@
 # entity class for Attachment
 class Attachment < ApplicationRecord
   include HasPuid
+  include MetadataSortable
 
   FORMAT_REGEX = {
     'fasta' => /^\S+\.fn?a(sta)?(\.gz)?$/,
@@ -18,6 +19,7 @@ class Attachment < ApplicationRecord
 
   has_logidze
   acts_as_paranoid
+  broadcasts_refreshes
 
   belongs_to :attachable, touch: :attachments_updated_at, polymorphic: true
 
@@ -34,6 +36,7 @@ class Attachment < ApplicationRecord
   delegate :byte_size, to: :file
 
   ransack_alias :filename, :file_blob_filename
+  ransack_alias :byte_size, :file_blob_byte_size
 
   def self.model_prefix
     'ATT'
