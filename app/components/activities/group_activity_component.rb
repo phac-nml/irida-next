@@ -15,7 +15,7 @@ module Activities
 
     def group_link
       (@activity[:transferred_group] && @activity[:action] == 'group_namespace_transfer') ||
-      (@activity[:created_group] && @activity[:action] == 'group_subgroup_create')
+        (@activity[:created_group] && @activity[:action] == 'group_subgroup_create')
     end
 
     def transfer_out

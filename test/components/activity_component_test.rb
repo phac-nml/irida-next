@@ -62,4 +62,30 @@ class ActivityComponentTest < ViewComponentTestCase
     assert_selector 'p', count: @project2_activities.length
     assert_button text: 'Load more', count: 0
   end
+
+  test 'listing of group activity' do
+    group = groups(:group_one)
+
+    @activities = group.human_readable_activity(group.retrieve_group_activity).reverse
+
+    # Limit set to 10 per page
+    @pagy = Pagy.new(count: 7, page: 1, limit: 10)
+
+    assert_equal 7, @activities.length
+
+    assert_equal(1, @activities.count { |activity| activity[:key].include?('group.create') })
+    assert_equal(1, @activities.count { |activity| activity[:key].include?('group.subgroups.create') })
+    assert_equal(1, @activities.count { |activity| activity[:key].include?('group.projects.create') })
+    assert_equal(1, @activities.count { |activity| activity[:key].include?('group.projects.transfer_out') })
+    assert_equal(1, @activities.count { |activity| activity[:key].include?('group.projects.transfer_in') })
+    assert_equal(1, @activities.count { |activity| activity[:key].include?('group.transfer_in_no_exisiting_namespace') })
+    assert_equal(1, @activities.count { |activity| activity[:key].include?('member.create') })
+
+    render_inline ActivityComponent.new(activities: @activities, pagy: @pagy)
+
+    assert_selector 'li', count: @activities.length
+    assert_selector 'time', count: @activities.length
+    assert_selector 'p', count: @activities.length
+    assert_button text: 'Load more', count: 0
+  end
 end

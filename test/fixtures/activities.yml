@@ -150,3 +150,79 @@ project1_sample1_metadata_update:
   }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
+
+group1_create:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  key: "group.create"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+group1_subgroup_create:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  key: "group.subgroups.create"
+  parameters: {
+    created_group_id: <%= ActiveRecord::FixtureSet.identify(:subgroup1, :uuid) %>,
+    action: 'group_subgroup_create'
+  }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+group1_project_create:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  key: "group.projects.create"
+  parameters: {
+    project_id: <%= ActiveRecord::FixtureSet.identify(:project1, :uuid) %>,
+    project_puid: <%= ActiveRecord::FixtureSet.identify(:project1, :puid) %>,
+  }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+group1_project_transfer_out:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  key: "group.projects.transfer_out"
+  parameters: {
+    project_id: <%= ActiveRecord::FixtureSet.identify(:project1, :uuid) %>,
+    old_namespace: <%= ActiveRecord::FixtureSet.identify(:group_one, :puid) %>,
+    new_namespace: <%= ActiveRecord::FixtureSet.identify(:group_two, :puid) %>,
+    project_puid: <%= ActiveRecord::FixtureSet.identify(:project1, :puid) %>,
+    action: 'project_namespace_transfer'
+  }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+group1_project_transfer_in:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  key: "group.projects.transfer_in"
+  parameters: {
+    project_id: <%= ActiveRecord::FixtureSet.identify(:project1, :uuid) %>,
+    old_namespace: <%= ActiveRecord::FixtureSet.identify(:group_two, :puid) %>,
+    new_namespace: <%= ActiveRecord::FixtureSet.identify(:group_one, :puid) %>,
+    project_puid: <%= ActiveRecord::FixtureSet.identify(:project1, :puid) %>,
+    action: 'project_namespace_transfer'
+  }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+group1_group_transfer_in:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  key: "group.transfer_in_no_exisiting_namespace"
+  parameters: {
+    transferred_group_id: <%= ActiveRecord::FixtureSet.identify(:group_two, :uuid) %>,
+    new_namespace: <%= ActiveRecord::FixtureSet.identify(:group_one, :puid) %>,
+    action: 'group_namespace_transfer'
+  }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+group1_member_james_doe_create:
+  trackable_type: "Member"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one_member_james_doe, :uuid) %>
+  key: "member.create"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
