@@ -963,8 +963,6 @@ fr:
         upload_files: Upload Files
       new_attachment_modal:
         upload_files: Upload Files
-      new_attachment_modal:
-        upload_files: Upload Files
       table:
         empty:
           description: There are no files associated with this project.
@@ -1413,8 +1411,6 @@ fr:
       automated_workflow_executions: Automated Workflow Executions
       bot_accounts: Bot Accounts
       details: Details
-      files: Files
-      general: General
       files: Files
       general: General
       history: History
