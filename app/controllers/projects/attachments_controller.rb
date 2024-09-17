@@ -57,6 +57,7 @@ module Projects
 
     def destroy # rubocop:disable Metrics/MethodLength
       authorize! @project, to: :destroy_attachment?
+
       @destroyed_attachments = ::Attachments::DestroyService.new(@project.namespace, @attachment, current_user).execute
       respond_to do |format|
         if @destroyed_attachments.count.positive?
