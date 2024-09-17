@@ -57,7 +57,7 @@ module Projects
                                                }), status: :ok
     end
 
-    def destroy # rubocop:disable Metrics/MethodLength
+    def destroy # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       authorize! @project, to: :destroy_attachment?
 
       @destroyed_attachments = ::Attachments::DestroyService.new(@project.namespace, @attachment, current_user).execute
