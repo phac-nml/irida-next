@@ -35,12 +35,12 @@ module Types
     field :parent, NamespaceType, null: false, description: 'Parent namespace'
 
     def self.authorized?(object, context)
-      super &&
+      super && (context[:projects_preauthorized] ||
         allowed_to?(
           :read?,
           object,
           context: { user: context[:current_user], token: context[:token] }
-        )
+        ))
     end
   end
 end
