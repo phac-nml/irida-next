@@ -16,7 +16,7 @@ module Resolvers
              default_value: nil
 
     def resolve(filter:, order_by:)
-      ransack_obj = project.samples.ransack(filter&.to_h)
+      ransack_obj = Sample.where(project_id: project.id).ransack(filter&.to_h)
       ransack_obj.sorts = ["#{order_by.field} #{order_by.direction}"] if order_by.present?
 
       ransack_obj.result
