@@ -92,8 +92,8 @@ class AttachFilesToGroupTest < ActiveSupport::TestCase
   end
 
   test 'attachFilesToGroup mutation should work with valid params, puid, and api scope token for uploader access level' do # rubocop:disable Layout/LineLength
-    user = users(:group_jeff_bot)
-    token = personal_access_tokens(:group_jeff_bot_account_valid_pat)
+    user = users(:groupJeff_bot)
+    token = personal_access_tokens(:groupJeff_bot_account_valid_pat)
     group = groups(:group_jeff)
     blob_file = active_storage_blobs(:attachment_attach_files_to_object_test_blob)
 
