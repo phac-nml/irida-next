@@ -27,14 +27,7 @@ module Groups
 
       @group.update(parent_id: new_namespace.id)
 
-      @group.create_activity action: :transfer,
-                             owner: current_user,
-                             parameters:
-                             {
-                               old_namespace: @old_namespace.puid,
-                               new_namespace: @new_namespace.puid,
-                               action: 'group_namespace_transfer'
-                             }
+      create_activities(old_namespace, new_namespace)
 
       UpdateMembershipsJob.perform_later(new_namespace_member_ids)
 
@@ -55,6 +48,70 @@ module Groups
 
       raise TransferError,
             I18n.t('services.groups.transfer.same_group_and_namespace')
+    end
+
+    def create_activities(old_namespace, new_namespace) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      if old_namespace && new_namespace
+
+        old_namespace.create_activity key: 'group.transfer_out',
+                                      owner: current_user,
+                                      parameters:
+                                      {
+                                        transferred_group_id: @group.id,
+                                        old_namespace: old_namespace.puid,
+                                        new_namespace: new_namespace.puid,
+                                        action: 'group_namespace_transfer'
+                                      }
+
+        @group.create_activity key: 'group.transfer_out',
+                               owner: current_user,
+                               parameters:
+                               {
+                                 transferred_group_id: @group.id,
+                                 old_namespace: old_namespace.puid,
+                                 new_namespace: new_namespace.puid,
+                                 action: 'group_namespace_transfer'
+                               }
+
+        new_namespace.create_activity key: 'group.transfer_in',
+                                      owner: current_user,
+                                      parameters:
+                                      {
+                                        transferred_group_id: @group.id,
+                                        old_namespace: old_namespace.puid,
+                                        new_namespace: new_namespace.puid,
+                                        action: 'group_namespace_transfer'
+                                      }
+
+        @group.create_activity key: 'group.transfer_in',
+                               owner: current_user,
+                               parameters:
+                               {
+                                 transferred_group_id: @group.id,
+                                 old_namespace: old_namespace.puid,
+                                 new_namespace: new_namespace.puid,
+                                 action: 'group_namespace_transfer'
+                               }
+
+      elsif new_namespace
+        new_namespace.create_activity key: 'group.transfer_in_no_exisiting_namespace',
+                                      owner: current_user,
+                                      parameters:
+                                      {
+                                        transferred_group_id: @group.id,
+                                        new_namespace: new_namespace.puid,
+                                        action: 'group_namespace_transfer'
+                                      }
+
+        @group.create_activity key: 'group.transfer_in_no_exisiting_namespace',
+                               owner: current_user,
+                               parameters:
+                               {
+                                 transferred_group_id: @group.id,
+                                 new_namespace: new_namespace.puid,
+                                 action: 'group_namespace_transfer'
+                               }
+      end
     end
   end
 end
