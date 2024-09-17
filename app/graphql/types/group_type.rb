@@ -6,7 +6,7 @@ module Types
     implements GraphQL::Types::Relay::Node
     description 'A group'
 
-    field :descendant_groups, PreauthorizedGroupType.connection_type,
+    field :descendant_groups, Types::PreauthorizedGroupType.connection_type,
           null: true,
           description: 'List of descendant groups of this group.',
           complexity: 5,
