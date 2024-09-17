@@ -9,6 +9,8 @@ module Projects
     before_action :attachment, only: %i[destroy]
 
     def index
+      authorize! @project, to: :view_attachments?
+
       @q = @project.namespace.attachments.ransack(params[:q])
       set_default_sort
       @pagy, @attachments = pagy_with_metadata_sort(@q.result)

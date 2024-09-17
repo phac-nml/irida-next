@@ -30,7 +30,7 @@
     <%= render ConfirmationComponent.new %>
   </div>
 </div>
-<div id="flashes" class="fixed flex flex-col top-5 right-6">
+<div id="flashes" class="fixed flex flex-col top-5 right-6 z-50">
   <% flash.each do |key, value| %>
     <%= viral_flash(type: key, data: value) %>
   <% end %>

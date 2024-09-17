@@ -943,6 +943,13 @@ fr:
       create:
         failure: 'File %{filename} was not uploaded due to the following errors: %{errors}'
         success: File %{filename} was successfully uploaded.
+      delete_attachment_modal:
+        description: Are you sure that you want to delete this file from the project?
+        submit_button: Confirm
+        title: Delete File
+      destroy:
+        error: 'File %{filename} was not removed due to the following errors: %{errors}'
+        success: File %{filename} was successfully removed.
       form:
         files: Files
         files_ignored: 'fasta and fastq files must be compressed. The following file(s) cannot be uploaded:'
@@ -953,6 +960,8 @@ fr:
           placeholder: Filter by ID or Filename
         subtitle: These are the files that belong to Project %{project_name}
         title: Files
+        upload_files: Upload Files
+      new_attachment_modal:
         upload_files: Upload Files
       new_attachment_modal:
         upload_files: Upload Files
