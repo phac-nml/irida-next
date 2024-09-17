@@ -96,7 +96,6 @@ module Projects
 
     def new_destroy_params
       @attachment = Attachment.find_by(id: params[:attachment_id])
-      @sample = @attachment.attachable
     end
 
     def attachment
