@@ -12,8 +12,6 @@ module Resolvers
                            For example a group namespace, `INXT_GRP_GGGGGGGGGG.`'
     validates required: { one_of: %i[full_path puid] }
 
-    type Types::NamespaceType, null: true
-
     def resolve(args)
       if args[:full_path]
         # Resolve Group or Namespaces::UserNamespace by full path

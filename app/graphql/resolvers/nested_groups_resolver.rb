@@ -3,8 +3,6 @@
 module Resolvers
   # Nested Groups Resolver
   class NestedGroupsResolver < BaseResolver
-    type Types::GroupType, null: true
-
     argument :include_parent_descendants, GraphQL::Types::Boolean,
              required: false,
              description: 'List of descendant groups of the parent group.',

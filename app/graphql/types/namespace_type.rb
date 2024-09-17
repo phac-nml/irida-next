@@ -15,7 +15,7 @@ module Types
                      description: 'Persistent Unique Identifier of the namespace. For example for a group,
                                   `INXT_GRP_AAAAAAAAAA`.'
 
-    field :projects, ProjectType.connection_type,
+    field :projects, PreauthorizedProjectType.connection_type,
           null: true,
           description: 'Projects within this namespace',
           complexity: 5,

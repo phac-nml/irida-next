@@ -3,8 +3,6 @@
 module Resolvers
   # Groups Resolver
   class GroupsResolver < BaseResolver
-    type Types::GroupType.connection_type, null: true
-
     argument :filter, Types::GroupFilterType,
              required: false,
              description: 'Ransack filter',

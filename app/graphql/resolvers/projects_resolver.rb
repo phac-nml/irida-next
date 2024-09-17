@@ -3,8 +3,6 @@
 module Resolvers
   # Projects Resolver
   class ProjectsResolver < BaseResolver
-    type Types::ProjectType.connection_type, null: true
-
     argument :group_id, GraphQL::Types::ID,
              required: false,
              description: 'Optional group identifier to return list of projects for (includes direct, indirect, and shared projects).', # rubocop:disable Layout/LineLength

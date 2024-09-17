@@ -8,7 +8,7 @@ module Types
 
     field :description, String, null: true, description: 'Description of the sample.'
     field :name, String, null: false, description: 'Name of the sample.'
-    field :project, ProjectType, null: false, description: 'Project the sample is on.'
+    field :project, PreauthorizedProjectType, null: false, description: 'Project the sample is on.'
     field :puid, ID, null: false,
                      description: 'Persistent Unique Identifier of the sample. For example, `INXT_SAM_AAAAAAAAAAAA`.'
 
@@ -19,7 +19,7 @@ module Types
           resolver: Resolvers::SampleMetadataResolver
 
     field :attachments,
-          AttachmentType.connection_type,
+          PreauthorizedAttachmentType.connection_type,
           null: true,
           description: 'Attachments on the sample',
           resolver: Resolvers::SampleAttachmentsResolver

@@ -11,8 +11,6 @@ module Resolvers
              description: 'Persistent Unique Identifer of the group. For example, `INXT_GRP_GGGGGGGGGG.`'
     validates required: { one_of: %i[full_path puid] }
 
-    type Types::GroupType, null: true
-
     def resolve(args)
       if args[:full_path]
         Group.find_by_full_path(args[:full_path]) # rubocop:disable Rails/DynamicFindBy

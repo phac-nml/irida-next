@@ -7,7 +7,7 @@ module Types
     description 'A project'
 
     field :attachments,
-          AttachmentType.connection_type,
+          PreauthorizedAttachmentType.connection_type,
           null: true,
           description: 'Attachments on the project',
           resolver: Resolvers::ProjectAttachmentsResolver
@@ -27,12 +27,12 @@ module Types
                      description: 'Persistent Unique Identifier of the project. For example, `INXT_PRJ_AAAAAAAAAA`.'
 
     field :samples,
-          SampleType.connection_type,
+          PreauthorizedSampleType.connection_type,
           null: true,
           description: 'Samples on the project',
           resolver: Resolvers::ProjectSamplesResolver
 
-    field :parent, NamespaceType, null: false, description: 'Parent namespace'
+    field :parent, PreauthorizedNamespaceType, null: false, description: 'Parent namespace'
 
     def self.authorized?(object, context)
       super &&

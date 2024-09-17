@@ -3,8 +3,6 @@
 module Resolvers
   # Namespace Resolver
   class NamespaceProjectsResolver < BaseResolver
-    type Types::ProjectType, null: true
-
     argument :include_sub_groups, GraphQL::Types::Boolean,
              required: false,
              description: 'Include projects from subgroups.',

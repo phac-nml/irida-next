@@ -3,8 +3,6 @@
 module Resolvers
   # Attachment Metadata Resolver
   class AttachmentMetadataResolver < BaseResolver
-    type GraphQL::Types::JSON, null: false
-
     argument :keys, [GraphQL::Types::String],
              required: false,
              description: 'Optional array of keys to limit metadata result to.',

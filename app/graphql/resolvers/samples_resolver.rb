@@ -3,8 +3,6 @@
 module Resolvers
   # Samples Resolver
   class SamplesResolver < BaseResolver
-    type Types::SampleType.connection_type, null: true
-
     argument :group_id, GraphQL::Types::ID,
              required: false,
              description: 'Optional group identifier to return list of samples for.',

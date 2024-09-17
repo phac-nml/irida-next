@@ -14,8 +14,6 @@ module Resolvers
              description: 'Persistent Unique Identifier of the sample. For example, `INXT_SAM_AAAAAAAAAA`.'
     validates required: { one_of: %i[sample_name sample_puid] }
 
-    type Types::SampleType, null: true
-
     def resolve(args)
       project = Namespaces::ProjectNamespace.find_by(puid: args[:project_puid])&.project
       if args[:sample_puid]

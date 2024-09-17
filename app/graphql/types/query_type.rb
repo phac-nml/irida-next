@@ -16,8 +16,8 @@ module Types
 
     field :group, Types::GroupType, null: true, authorize: { to: :read? }, resolver: Resolvers::GroupResolver,
                                     description: 'Find a group.'
-    field :groups, Types::GroupType.connection_type, null: false, resolver: Resolvers::GroupsResolver,
-                                                     description: 'Find groups.'
+    field :groups, Types::PreauthorizedGroupType.connection_type, null: false, resolver: Resolvers::GroupsResolver,
+                                                                  description: 'Find groups.'
 
     field :namespace, Types::NamespaceType, null: true, authorize: { to: :read? },
                                             resolver: Resolvers::NamespaceResolver,
@@ -26,14 +26,14 @@ module Types
     field :project, Types::ProjectType, null: true, authorize: { to: :read? }, resolver: Resolvers::ProjectResolver,
                                         description: 'Find a project.'
 
-    field :projects, Types::ProjectType.connection_type, null: true, resolver: Resolvers::ProjectsResolver,
-                                                         description: 'Find projects.'
+    field :projects, Types::PreauthorizedProjectType.connection_type, null: true, resolver: Resolvers::ProjectsResolver,
+                                                                      description: 'Find projects.'
 
     field :sample, Types::SampleType, null: true, resolver: Resolvers::SampleResolver,
                                       description: 'Find a sample.'
 
-    field :samples, Types::SampleType.connection_type, null: true, resolver: Resolvers::SamplesResolver,
-                                                       description: 'Find samples.'
+    field :samples, Types::PreauthorizedSampleType.connection_type, null: true, resolver: Resolvers::SamplesResolver,
+                                                                    description: 'Find samples.'
 
     field :project_sample, Types::SampleType, null: true, resolver: Resolvers::ProjectSampleResolver,
                                               description: 'Find a sample within a project.'
