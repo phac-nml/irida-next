@@ -36,14 +36,5 @@ module Types
           context: { user: context[:current_user], token: context[:token] }
         )
     end
-
-    def self.scope_items(items, context)
-      scope = authorized_scope Project, type: :relation,
-                                        context: { user: context[:current_user], token: context[:token] }
-      sample_ids = items.pluck(:id)
-      Sample.where(id: sample_ids, project_id: scope.select(:id)).in_order_of(:id, sample_ids)
-    end
-
-    reauthorize_scoped_objects(false)
   end
 end
