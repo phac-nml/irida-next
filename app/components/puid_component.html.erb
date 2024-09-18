@@ -1,14 +1,12 @@
-<span
-  class="
-    inline-flex items-center pl-2 text-xs font-medium text-indigo-800 bg-indigo-100
-    border border-indigo-300 rounded-full dark:bg-indigo-900 dark:text-indigo-300
-    dark:border-indigo-700
-  "
->
+<% puid_classes =
+  "inline-flex items-center pl-2 text-xs font-medium rounded-full #{
+    "text-indigo-800 bg-indigo-100 border-indigo-300 dark:bg-indigo-900 dark:text-indigo-300 dark:border-indigo-700"
+  }" %>
+
+<code class="<%= puid_classes %>" aria-label="PUID: <%= puid %>">
   <%= render ClipboardComponent.new(
     value: puid,
     button_classes:
-      "p-1 bg-white border border-indigo-300 rounded-full hover:bg-indigo-100 text-indigo-800 hover:text-indigo-900
-        dark:bg-indigo-900 dark:text-indigo-300 dark:border-indigo-700 dark:hover:bg-indigo-800",
+      "p-1 bg-white border border-indigo-300 rounded-full hover:bg-indigo-100 text-indigo-800 hover:text-indigo-900 dark:bg-indigo-900 dark:text-indigo-300 dark:border-indigo-700 dark:hover:bg-indigo-800",
   ) %>
-</span>
+</code>
