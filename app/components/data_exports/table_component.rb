@@ -12,13 +12,13 @@ module DataExports
       data_exports,
       pagy,
       q,
-      row_actions: {},
+      empty: {},
       **system_arguments
     )
       @data_exports = data_exports
       @pagy = pagy
       @q = q
-      @row_actions = row_actions
+      @empty = empty
       @system_arguments = system_arguments
 
       @columns = columns
@@ -28,24 +28,21 @@ module DataExports
     def system_arguments
       { tag: 'div' }.deep_merge(@system_arguments).tap do |args|
         args[:id] = 'data-exports-table'
-        # args[:classes] = class_names(args[:classes], 'overflow-auto scrollbar')
+        args[:classes] = class_names(args[:classes], 'overflow-auto scrollbar')
       end
     end
 
     def wrapper_arguments
       {
         tag: 'div',
-        classes: class_names('table-container relative overflow-x-auto" data-turbo-temporary')
-        # classes: class_names('table-container flex flex-col shrink min-h-0')
+        classes: class_names('table-container flex flex-col shrink min-h-0 data-turbo-temporary')
       }
     end
 
     def row_arguments(data_export)
       { tag: 'tr' }.tap do |args|
-        args[:classes] = class_names('text-sm', 'font-normal', 'text-slate-500', 'dark:text-slate-400')
-        # args[:classes] = class_names('bg-white', 'border-b', 'dark:bg-slate-800', 'dark:border-slate-700')
-        args[:id] = dom_id(data_export)
-        # args[:id] = data_export.id
+        args[:classes] = class_names('bg-white', 'border-b', 'dark:bg-slate-800', 'dark:border-slate-700')
+        args[:id] = data_export.id
       end
     end
 

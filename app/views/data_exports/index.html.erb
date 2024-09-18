@@ -7,10 +7,7 @@
 <div class="flow-root">
   <div class="flex flex-row-reverse items-center mb-4 space-x-2">
     <%= search_form_for @q, url: data_exports_url, html: { "data-controller": "filters" } do |f| %>
-      <%# <%= hidden_field_tag :limit, @pagy.limit %>
-      <%# <%= f.hidden_field :s, value: "#{@q.sorts[0].name} #{@q.sorts[0].dir}" %>
-      <%# <%= f.hidden_field :format, value: "turbo_stream" %>
-      <%# <%= f.label :name_cont, "SEARCH", class: "sr-only" %>
+      <%= f.label :name_cont, "SEARCH", class: "sr-only" %>
       <div class="relative lg:w-72">
         <div
           class="

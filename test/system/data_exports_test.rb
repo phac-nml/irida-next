@@ -3,13 +3,17 @@
 require 'application_system_test_case'
 
 class DataExportsTest < ApplicationSystemTestCase
-  def setup
+  include ActionView::Helpers::SanitizeHelper
+
+  def setup # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     @user = users(:john_doe)
     @data_export1 = data_exports(:data_export_one)
     @data_export2 = data_exports(:data_export_two)
     @data_export6 = data_exports(:data_export_six)
     @data_export7 = data_exports(:data_export_seven)
+    @data_export8 = data_exports(:data_export_eight)
     @data_export9 = data_exports(:data_export_nine)
+    @data_export10 = data_exports(:data_export_ten)
     @group1 = groups(:group_one)
     @project1 = projects(:project1)
     @sample1 = samples(:sample1)
@@ -965,5 +969,137 @@ class DataExportsTest < ApplicationSystemTestCase
 
     assert_selector 'dl', count: 1
     assert_selector 'div:nth-child(2) dd', text: 'test data export'
+  end
+
+  test 'can sort by column' do
+    visit data_exports_path
+
+    assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 7, count: 7,
+                                                                         locale: @user.locale))
+    assert_selector 'table tbody tr', count: 7
+
+    click_on 'ID'
+    assert_selector 'table thead th:first-child svg.icon-arrow_up'
+    within('table tbody') do
+      assert_selector 'tr:first-child td:first-child', text: @data_export9.id
+      assert_selector 'tr:nth-child(2) td:first-child', text: @data_export8.id
+    end
+
+    click_on 'ID'
+    assert_selector 'table thead th:first-child svg.icon-arrow_down'
+    within('table tbody') do
+      assert_selector 'tr:first-child td:first-child', text: @data_export7.id
+      assert_selector 'tr:nth-child(2) td:first-child', text: @data_export2.id
+    end
+
+    click_on 'Name'
+    assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+    within('table tbody') do
+      assert_selector 'tr:first-child td:nth-child(2)', text: @data_export1.name
+      assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @data_export10.name
+    end
+
+    click_on 'Name'
+    assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
+    within('table tbody') do
+      assert_selector 'tr:first-child td:nth-child(2)', text: @data_export2.name
+      assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @data_export9.name
+    end
+
+    click_on 'Type'
+    assert_selector 'table thead th:nth-child(3) svg.icon-arrow_up'
+    within('table tbody') do
+      assert_selector 'tr:first-child td:nth-child(3)', text: I18n.t(:"data_exports.types.#{@data_export7.export_type}")
+      assert_selector 'tr:nth-child(2) td:nth-child(3)',
+                      text: I18n.t(:"data_exports.types.#{@data_export6.export_type}")
+    end
+
+    click_on 'Type'
+    assert_selector 'table thead th:nth-child(3) svg.icon-arrow_down'
+    within('table tbody') do
+      assert_selector 'tr:first-child td:nth-child(3)', text: I18n.t(:"data_exports.types.#{@data_export2.export_type}")
+      assert_selector 'tr:nth-child(2) td:nth-child(3)',
+                      text: I18n.t(:"data_exports.types.#{@data_export10.export_type}")
+    end
+
+    click_on 'Status'
+    assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
+    within('table tbody') do
+      assert_selector 'tr:first-child td:nth-child(4)', text: I18n.t(:"data_exports.status.#{@data_export2.status}")
+      assert_selector 'tr:nth-child(2) td:nth-child(4)', text: I18n.t(:"data_exports.status.#{@data_export6.status}")
+    end
+
+    click_on 'Status'
+    assert_selector 'table thead th:nth-child(4) svg.icon-arrow_down'
+    within('table tbody') do
+      assert_selector 'tr:first-child td:nth-child(4)', text: I18n.t(:"data_exports.status.#{@data_export1.status}")
+      assert_selector 'tr:nth-child(2) td:nth-child(4)', text: I18n.t(:"data_exports.status.#{@data_export7.status}")
+    end
+
+    click_on 'Created'
+    assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
+    within('table tbody') do
+      assert_selector 'tr:first-child td:nth-child(5)',
+                      text: I18n.l(@data_export1.created_at.localtime, format: :full_date)
+      assert_selector 'tr:nth-child(2) td:nth-child(5)',
+                      text: I18n.l(@data_export2.created_at.localtime, format: :full_date)
+    end
+
+    click_on 'Created'
+    assert_selector 'table thead th:nth-child(5) svg.icon-arrow_down'
+    within('table tbody') do
+      assert_selector 'tr:first-child td:nth-child(5)',
+                      text: I18n.l(@data_export10.created_at.localtime, format: :full_date)
+      assert_selector 'tr:nth-child(2) td:nth-child(5)',
+                      text: I18n.l(@data_export9.created_at.localtime, format: :full_date)
+    end
+
+    click_on 'Expires'
+    assert_selector 'table thead th:nth-child(6) svg.icon-arrow_up'
+    within('table tbody') do
+      assert_selector 'tr:first-child td:nth-child(6)',
+                      text: I18n.l(@data_export1.expires_at.localtime, format: :full_date)
+      assert_selector 'tr:nth-child(2) td:nth-child(6)',
+                      text: I18n.l(@data_export7.expires_at.localtime, format: :full_date)
+    end
+
+    click_on 'Expires'
+    assert_selector 'table thead th:nth-child(6) svg.icon-arrow_down'
+    within('table tbody') do
+      assert_selector 'tr:first-child td:nth-child(6)', text: ''
+      assert_selector 'tr:nth-child(2) td:nth-child(6)', text: ''
+    end
+  end
+
+  test 'can filter by id or name' do
+    visit data_exports_path
+
+    assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 7, count: 7,
+                                                                         locale: @user.locale))
+    assert_selector 'table tbody tr', count: 7
+
+    fill_in placeholder: I18n.t(:'data_exports.index.search.placeholder'),
+            with: @data_export1.id
+
+    assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
+                                                                         locale: @user.locale))
+    assert_selector 'table tbody tr', count: 1
+
+    within('table tbody') do
+      assert_text @data_export1.id
+      assert_text @data_export1.name
+    end
+
+    fill_in placeholder: I18n.t(:'data_exports.index.search.placeholder'),
+            with: @data_export1.name
+
+    assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
+                                                                         locale: @user.locale))
+    assert_selector 'table tbody tr', count: 1
+
+    within('table tbody') do
+      assert_text @data_export1.id
+      assert_text @data_export1.name
+    end
   end
 end

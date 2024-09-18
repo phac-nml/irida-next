@@ -1,4 +1,3 @@
-<%# <div class="table-container relative overflow-x-auto" data-turbo-temporary> %>
 <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
   <%= render Viral::BaseComponent.new(**system_arguments) do %>
     <table
@@ -18,7 +17,7 @@
             <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-6 py-3')
+              classes: class_names('px-3 py-3')
             ) do %>
               <%= render Ransack::SortComponent.new(
                 ransack_obj: @q,
@@ -34,7 +33,7 @@
           <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-6 py-3')
+              classes: class_names('px-3 py-3')
             ) do %>
             <%= t("data_exports.index.table_header.action") %>
           <% end %>
@@ -43,7 +42,7 @@
       <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
         <% @data_exports.each do |data_export| %>
           <%= render Viral::BaseComponent.new(**row_arguments(data_export)) do %>
-            <td class="px-6 py-3">
+            <td class="px-3 py-3">
               <%= link_to data_export.id,
               data_export_path(data_export),
               data: {
@@ -51,7 +50,7 @@
               },
               class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
             </td>
-            <td class="px-6 py-3">
+            <td class="px-3 py-3">
               <% unless data_export.name.nil? %>
                 <%= link_to data_export.name,
                 data_export_path(data_export),
@@ -61,25 +60,25 @@
                 class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
               <% end %>
             </td>
-            <td class="px-6 py-3">
+            <td class="px-3 py-3">
               <%= t(:"data_exports.types.#{data_export.export_type}") %>
             </td>
-            <td class="px-6 py-3">
+            <td class="px-3 py-3">
               <% if data_export.status == 'ready' %>
                 <%= viral_pill(text: t(:"data_exports.status.#{data_export.status}"), color: :green) %>
               <% else %>
                 <%= viral_pill(text: t(:"data_exports.status.#{data_export.status}"), color: :slate) %>
               <% end %>
             </td>
-            <td class="px-6 py-3">
+            <td class="px-3 py-3">
               <%= helpers.local_time(data_export.created_at, :full_date) %>
             </td>
-            <td class="px-6 py-3">
+            <td class="px-3 py-3">
               <% unless data_export.expires_at.nil? %>
                 <%= helpers.local_time(data_export.expires_at, :full_date) %>
               <% end %>
             </td>
-            <td class="px-6 py-3 space-x-2">
+            <td class="px-3 py-3 space-x-2">
               <% if data_export.status == 'ready' %>
                 <%= link_to(
                   t(:"data_exports.index.actions.download"),
@@ -140,8 +139,8 @@
   <% end %>
   <div class="empty_state_message">
     <%= viral_empty(
-      title: t(:"data_exports.index.no_data_exports"),
-      description: t(:"data_exports.index.no_data_exports_message"),
+      title: @empty[:title],
+      description: @empty[:description],
       icon_name: :document_text,
     ) %>
   </div>
