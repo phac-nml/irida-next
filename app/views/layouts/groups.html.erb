@@ -17,12 +17,14 @@
             label: t(:"groups.sidebar.samples"),
             selected: @current_page == t(:"groups.sidebar.samples"),
           ) %>
-          <%= render section.with_item(
-            url: group_attachments_path(@group),
-            icon: "document_text",
-            label: t(:"groups.sidebar.files"),
-            selected: @current_page == t(:"groups.sidebar.files"),
-          ) %>
+          <% if allowed_to?(:view_attachments?, @group) %>
+            <%= render section.with_item(
+              url: group_attachments_path(@group),
+              icon: "document_text",
+              label: t(:"groups.sidebar.files"),
+              selected: @current_page == t(:"groups.sidebar.files"),
+            ) %>
+          <% end %>
           <%= render section.with_item(
             url: group_members_path(@group),
             icon: "users",

@@ -551,6 +551,27 @@ fr:
   groups:
     activity:
       title: Group activity
+    attachments:
+      create:
+        failure: 'File %{filename} was not uploaded due to the following errors: %{errors}'
+        success: File %{filename} was successfully uploaded.
+      form:
+        files: Files
+        files_ignored: 'fasta and fastq files must be compressed. The following file(s) cannot be uploaded:'
+        upload: Upload
+        uploading: Uploading
+      index:
+        search:
+          placeholder: Filter by ID or Filename
+        subtitle: These are the files that belong to Project %{group_name}
+        title: Files
+        upload_files: Upload Files
+      new_attachment_modal:
+        upload_files: Upload Files
+      table:
+        empty:
+          description: There are no files associated with this project.
+          title: No Files
     bots:
       index:
         access_level:

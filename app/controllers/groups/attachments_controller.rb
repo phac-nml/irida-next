@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 module Groups
-  # Controller actions for Project Attachments
+  # Controller actions for Group Attachments
   class AttachmentsController < Groups::ApplicationController
     include Metadata
     before_action :group, :current_page
 
     def index
+      authorize! @group, to: :view_attachments?
+
       @q = @group.attachments.ransack(params[:q])
       set_default_sort
       @pagy, @attachments = pagy_with_metadata_sort(@q.result)
@@ -24,8 +26,6 @@ module Groups
     end
 
     def create
-      authorize! @group, to: :create_attachment?
-
       @attachments = ::Attachments::CreateService.new(current_user, @group, attachment_params).execute
 
       status = if !@attachments.count.positive?
