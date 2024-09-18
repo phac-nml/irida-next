@@ -8,15 +8,13 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
       sample(puid: $puid) {
         id
         attachments(filter: $attachmentFilter, orderBy: $attachmentOrderBy) {
-          edges {
-            node {
-              id,
-              metadata,
-              filename,
-              byteSize,
-              createdAt,
-              updatedAt
-            }
+          nodes {
+            id,
+            metadata,
+            filename,
+            byteSize,
+            createdAt,
+            updatedAt
           }
         }
       }
@@ -28,15 +26,13 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
       project(puid: $puid) {
         id
         attachments(filter: $attachmentFilter, orderBy: $attachmentOrderBy) {
-          edges {
-            node {
-              id,
-              metadata,
-              filename,
-              byteSize,
-              createdAt,
-              updatedAt
-            }
+          nodes {
+            id,
+            metadata,
+            filename,
+            byteSize,
+            createdAt,
+            updatedAt
           }
         }
       }
@@ -48,16 +44,14 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
       sample(puid: $puid) {
         id
         attachments {
-          edges {
-            node {
-              id,
-              filename,
-              attachmentUrl,
-              createdAt,
-              updatedAt
-            }
+          nodes {
+            id,
+             filename,
+            attachmentUrl,
+             createdAt,
+            updatedAt
           }
-        }
+         }
       }
     }
   GRAPHQL
@@ -67,13 +61,11 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
       sample(puid: $puid) {
         id
         attachments {
-          edges {
-            node {
-              id,
-              metadata(
-                keys: ["format"]
-              )
-            }
+          nodes {
+            id,
+            metadata(
+              keys: ["format"]
+            )
           }
         }
       }
@@ -85,11 +77,9 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
       sample(puid: $samp_puid) {
         id
         attachments(first: $first) {
-          edges {
-            node {
-              id,
-              metadata
-            }
+          nodes {
+            id,
+            metadata
           }
         }
       }
@@ -114,21 +104,21 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     assert_not_empty data, 'sample type should work'
 
     assert_not_empty data['attachments']
-    assert_not_empty data['attachments']['edges']
+    assert_not_empty data['attachments']['nodes']
 
-    attachments = data['attachments']['edges']
+    attachments = data['attachments']['nodes']
     assert_equal 2, attachments.count
 
-    assert_equal 'test_file.fastq', attachments[0]['node']['filename']
-    assert_equal 'test_file_A.fastq', attachments[1]['node']['filename']
+    assert_equal 'test_file.fastq', attachments[0]['filename']
+    assert_equal 'test_file_A.fastq', attachments[1]['filename']
 
-    assert_equal 2102, attachments[0]['node']['byteSize']
-    assert_equal 2101, attachments[1]['node']['byteSize']
+    assert_equal 2102, attachments[0]['byteSize']
+    assert_equal 2101, attachments[1]['byteSize']
 
-    assert_equal 'fastq', attachments[0]['node']['metadata']['format']
-    assert_equal 'none', attachments[0]['node']['metadata']['compression']
-    assert_equal 'fastq', attachments[1]['node']['metadata']['format']
-    assert_equal 'none', attachments[1]['node']['metadata']['compression']
+    assert_equal 'fastq', attachments[0]['metadata']['format']
+    assert_equal 'none', attachments[0]['metadata']['compression']
+    assert_equal 'fastq', attachments[1]['metadata']['format']
+    assert_equal 'none', attachments[1]['metadata']['compression']
   end
 
   test 'attachment query on project should work' do
@@ -143,21 +133,21 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     assert_not_empty data, 'project type should work'
 
     assert_not_empty data['attachments']
-    assert_not_empty data['attachments']['edges']
+    assert_not_empty data['attachments']['nodes']
 
-    attachments = data['attachments']['edges']
+    attachments = data['attachments']['nodes']
     assert_equal 2, attachments.count
 
-    assert_equal 'test_file.fastq', attachments[0]['node']['filename']
-    assert_equal 'data_export_8.csv', attachments[1]['node']['filename']
+    assert_equal 'test_file.fastq', attachments[0]['filename']
+    assert_equal 'data_export_8.csv', attachments[1]['filename']
 
-    assert_equal 2102, attachments[0]['node']['byteSize']
-    assert_equal 84, attachments[1]['node']['byteSize']
+    assert_equal 2102, attachments[0]['byteSize']
+    assert_equal 84, attachments[1]['byteSize']
 
-    assert_equal 'fastq', attachments[0]['node']['metadata']['format']
-    assert_equal 'none', attachments[0]['node']['metadata']['compression']
-    assert_equal 'csv', attachments[1]['node']['metadata']['format']
-    assert_equal 'none', attachments[1]['node']['metadata']['compression']
+    assert_equal 'fastq', attachments[0]['metadata']['format']
+    assert_equal 'none', attachments[0]['metadata']['compression']
+    assert_equal 'csv', attachments[1]['metadata']['format']
+    assert_equal 'none', attachments[1]['metadata']['compression']
   end
 
   test 'attachment query should work for uploader access level' do
@@ -173,21 +163,21 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     assert_not_empty data, 'sample type should work'
 
     assert_not_empty data['attachments']
-    assert_not_empty data['attachments']['edges']
+    assert_not_empty data['attachments']['nodes']
 
-    attachments = data['attachments']['edges']
+    attachments = data['attachments']['nodes']
     assert_equal 2, attachments.count
 
-    assert_equal 'test_file.fastq', attachments[0]['node']['filename']
-    assert_equal 'test_file_A.fastq', attachments[1]['node']['filename']
+    assert_equal 'test_file.fastq', attachments[0]['filename']
+    assert_equal 'test_file_A.fastq', attachments[1]['filename']
 
-    assert_equal 2102, attachments[0]['node']['byteSize']
-    assert_equal 2101, attachments[1]['node']['byteSize']
+    assert_equal 2102, attachments[0]['byteSize']
+    assert_equal 2101, attachments[1]['byteSize']
 
-    assert_equal 'fastq', attachments[0]['node']['metadata']['format']
-    assert_equal 'none', attachments[0]['node']['metadata']['compression']
-    assert_equal 'fastq', attachments[1]['node']['metadata']['format']
-    assert_equal 'none', attachments[1]['node']['metadata']['compression']
+    assert_equal 'fastq', attachments[0]['metadata']['format']
+    assert_equal 'none', attachments[0]['metadata']['compression']
+    assert_equal 'fastq', attachments[1]['metadata']['format']
+    assert_equal 'none', attachments[1]['metadata']['compression']
   end
 
   test 'attachment query should work with filter' do
@@ -202,17 +192,17 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     assert_not_empty data, 'sample type should work'
 
     assert_not_empty data['attachments']
-    assert_not_empty data['attachments']['edges']
+    assert_not_empty data['attachments']['nodes']
 
-    attachments = data['attachments']['edges']
+    attachments = data['attachments']['nodes']
     assert_equal 1, attachments.count
 
-    assert_equal 'test_file_A.fastq', attachments[0]['node']['filename']
+    assert_equal 'test_file_A.fastq', attachments[0]['filename']
 
-    assert_equal 2101, attachments[0]['node']['byteSize']
+    assert_equal 2101, attachments[0]['byteSize']
 
-    assert_equal 'fastq', attachments[0]['node']['metadata']['format']
-    assert_equal 'none', attachments[0]['node']['metadata']['compression']
+    assert_equal 'fastq', attachments[0]['metadata']['format']
+    assert_equal 'none', attachments[0]['metadata']['compression']
   end
 
   test 'attachment query should work with order by' do
@@ -228,21 +218,21 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     assert_not_empty data, 'sample type should work'
 
     assert_not_empty data['attachments']
-    assert_not_empty data['attachments']['edges']
+    assert_not_empty data['attachments']['nodes']
 
-    attachments = data['attachments']['edges']
+    attachments = data['attachments']['nodes']
     assert_equal 2, attachments.count
 
-    assert_equal 'test_file.fastq', attachments[0]['node']['filename']
-    assert_equal 'test_file_A.fastq', attachments[1]['node']['filename']
+    assert_equal 'test_file.fastq', attachments[0]['filename']
+    assert_equal 'test_file_A.fastq', attachments[1]['filename']
 
-    assert_equal 2102, attachments[0]['node']['byteSize']
-    assert_equal 2101, attachments[1]['node']['byteSize']
+    assert_equal 2102, attachments[0]['byteSize']
+    assert_equal 2101, attachments[1]['byteSize']
 
-    assert_equal 'fastq', attachments[0]['node']['metadata']['format']
-    assert_equal 'none', attachments[0]['node']['metadata']['compression']
-    assert_equal 'fastq', attachments[1]['node']['metadata']['format']
-    assert_equal 'none', attachments[1]['node']['metadata']['compression']
+    assert_equal 'fastq', attachments[0]['metadata']['format']
+    assert_equal 'none', attachments[0]['metadata']['compression']
+    assert_equal 'fastq', attachments[1]['metadata']['format']
+    assert_equal 'none', attachments[1]['metadata']['compression']
   end
 
   test 'attachment url query should work' do
@@ -257,11 +247,11 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
 
     assert_nil result['errors'], 'should work and have no errors.'
 
-    attachments = result['data']['sample']['attachments']['edges']
+    attachments = result['data']['sample']['attachments']['nodes']
     assert_equal 2, attachments.count
 
-    assert_equal file_url1, attachments[0]['node']['attachmentUrl']
-    assert_equal file_url2, attachments[1]['node']['attachmentUrl']
+    assert_equal file_url1, attachments[0]['attachmentUrl']
+    assert_equal file_url2, attachments[1]['attachmentUrl']
   end
 
   test 'attachment url query should not work due to expired token for uploader access level' do
@@ -283,9 +273,9 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
 
     assert_nil result['errors'], 'should work and have no errors.'
 
-    attachments = result['data']['sample']['attachments']['edges']
-    metadata1 = attachments[0]['node']['metadata']
-    metadata2 = attachments[1]['node']['metadata']
+    attachments = result['data']['sample']['attachments']['nodes']
+    metadata1 = attachments[0]['metadata']
+    metadata2 = attachments[1]['metadata']
 
     assert_equal 'fastq', metadata1['format'], "should have requested 'format'"
     assert_equal 'fastq', metadata2['format'], "should have requested 'format'"
@@ -303,10 +293,10 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
 
     assert_nil result['errors'], 'should work and have no errors.'
 
-    attachment1 = result['data']['sample']['attachments']['edges'][0]
-    attachment2 = result['data']['sample']['attachments']['edges'][1]
-    metadata1 = attachment1['node']['metadata']
-    metadata2 = attachment2['node']['metadata']
+    attachment1 = result['data']['sample']['attachments']['nodes'][0]
+    attachment2 = result['data']['sample']['attachments']['nodes'][1]
+    metadata1 = attachment1['metadata']
+    metadata2 = attachment2['metadata']
 
     assert_equal 'forward', metadata1['direction']
     assert_equal 'reverse', metadata2['direction']
@@ -315,7 +305,7 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     assert_equal 'pe', metadata2['type']
 
     # check they reference each other
-    assert_equal attachment1['node']['id'], "gid://irida/Attachment/#{metadata2['associated_attachment_id']}"
-    assert_equal attachment2['node']['id'], "gid://irida/Attachment/#{metadata1['associated_attachment_id']}"
+    assert_equal attachment1['id'], "gid://irida/Attachment/#{metadata2['associated_attachment_id']}"
+    assert_equal attachment2['id'], "gid://irida/Attachment/#{metadata1['associated_attachment_id']}"
   end
 end
