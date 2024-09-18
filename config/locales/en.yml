@@ -24,7 +24,7 @@ en:
         new?: You are not authorized to create a project under group %{name} on this server.
         read?: You are not authorized to view group %{name} on this server.
         sample_listing?: You are not authorized to view samples for group %{name} on this server.
-        submit_pipeline?: You are not authorized to submit pipelines for samples within group %{name} on this server.
+        submit_workflow?: You are not authorized to submit pipelines for samples within group %{name} on this server.
         transfer?: You are not authorized to transfer group %{name} on this server.
         transfer_into_namespace?: You are not authorized to transfer into the group namespace %{name} on this server.
         unlink_namespace_with_group?: You are not authorized to unlink group %{name} from other groups on this server.
@@ -34,34 +34,28 @@ en:
         update_sample_metadata?: You are not authorized to update sample metadata for group %{name} on this server.
       index?: You are not authorized to view the listing of resources on this server.
       namespaces/project_namespace:
-        create_automated_pipeline_executions?: You are not authorized to create automated pipelines for project %{name}
+        create_automated_workflow_executions?: You are not authorized to create automated pipelines for project %{name}
         create_bot_accounts?: You are not authorized to create bot accounts for project %{name} on this server.
         create_member?: You are not authorized to create members for the project namespace %{name} on this server.
-        destroy_automated_pipeline_executions?: You are not authorized to destroy automated pipelines for project %{name}
+        destroy_automated_workflow_executions?: You are not authorized to destroy automated pipelines for project %{name}
         destroy_bot_accounts?: You are not authorized to destroy bot accounts for project %{name} on this server.
         destroy_member?: You are not authorized to remove members from the project namespace %{name} on this server.
         export_data?: You are not authorized to export data from project %{name} on this server.
         link_namespace_with_group?: You are not authorized to link project %{name} with other groups on this server.
         member_listing?: You are not authorized to view members for the project namespace %{name} on this server.
-        submit_pipeline?: You are not authorized to submit pipelines for samples within project %{name} on this server.
+        submit_workflow?: You are not authorized to submit pipelines for samples within project %{name} on this server.
         unlink_namespace_with_group?: You are not authorized to unlink project %{name} from other groups on this server.
         update?: You are not authorized to update the namespace for project %{name} on this server.
-        update_automated_pipeline_executions?: You are not authorized to update automated pipelines for project %{name}
+        update_automated_workflow_executions?: You are not authorized to update automated pipelines for project %{name}
         update_member?: You are not authorized to update members for the project namespace %{name} on this server.
         update_namespace_with_group_link?: You are not authorized to update project %{name} links with other groups on this server.
         update_sample_metadata?: You are not authorized to update sample metadata for project %{name} on this server.
-        view_automated_pipeline_executions?: You are not authorized to view automated pipelines for project %{name}
-        view_pipeline_executions?: You are not authorized to view pipeline executions for project %{name} on this server.
+        view_automated_workflow_executions?: You are not authorized to view automated pipelines for project %{name}
+        view_workflow_executions?: You are not authorized to view pipeline executions for project %{name} on this server.
       namespaces/user_namespace:
         create?: You are not authorized to create a project under the %{name} namespace
         transfer_into_namespace?: You are not authorized to transfer to the user %{name} namespace
       new?: You are not authorized to create this resource on this server.
-      pipeline_execution:
-        cancel?: You are not authorized to cancel pipeline executions for %{namespace_type} %{name}
-        create?: You are not authorized to submit pipeline executions for %{namespace_type} %{name}
-        destroy?: You are not authorized to destroy pipeline executions for %{namespace_type} %{name}
-        index?: You are not authorized to view pipeline executions for %{namespace_type} %{name}
-        read?: You are not authorized to view pipeline execution %{id}
       project:
         activity?: You are not authorized to view the activity for project %{name} on this server.
         clone_sample?: You are not authorized to copy samples from project %{name} on this server.
@@ -76,7 +70,7 @@ en:
         read?: You are not authorized to view project %{name} on this server.
         read_sample?: You are not authorized to view this sample for project %{name} on this server.
         sample_listing?: You are not authorized to view samples for project %{name} on this server.
-        submit_pipeline?: You are not authorized to submit pipelines for samples within project %{name} on this server.
+        submit_workflow?: You are not authorized to submit pipelines for samples within project %{name} on this server.
         transfer?: You are not authorized to transfer project %{name} on this server.
         transfer_sample?: You are not authorized to transfer samples for project %{name} on this server.
         transfer_sample_into_project?: You are not authorized to transfer samples to project %{name} on this server.
@@ -97,6 +91,12 @@ en:
         read?: You are not authorized to view profile for user %{name} on this server.
         revoke?: You are not authorized to revoke personal access tokens for user %{name} on this server.
         update?: You are not authorized to update user %{name} on this server.
+      workflow_execution:
+        cancel?: You are not authorized to cancel pipeline executions for %{namespace_type} %{name}
+        create?: You are not authorized to submit pipeline executions for %{namespace_type} %{name}
+        destroy?: You are not authorized to destroy pipeline executions for %{namespace_type} %{name}
+        index?: You are not authorized to view pipeline executions for %{namespace_type} %{name}
+        read?: You are not authorized to view pipeline execution %{id}
     unauthorized: You are not authorized to perform this action
   activerecord:
     attributes:
