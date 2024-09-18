@@ -19,8 +19,10 @@ class AttachmentTest < ActiveSupport::TestCase
   end
 
   test 'invalid when file checksum matches another Attachment associated with the Attachable' do
-    new_attachment = @sample.attachments.build(file: { io: Rails.root.join('test/fixtures/files/test_file_A.fastq').open,
-                                                       filename: 'test_file_A.fastq' })
+    new_attachment = @sample.attachments.build(
+      file: { io: Rails.root.join('test/fixtures/files/test_file_A.fastq').open,
+              filename: 'test_file_A.fastq' }
+    )
     assert_not new_attachment.valid?
     assert new_attachment.errors.added?(:file, :checksum_uniqueness)
   end
