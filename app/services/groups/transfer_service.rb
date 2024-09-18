@@ -63,16 +63,6 @@ module Groups
                                         action: 'group_namespace_transfer'
                                       }
 
-        @group.create_activity key: 'group.transfer_out',
-                               owner: current_user,
-                               parameters:
-                               {
-                                 transferred_group_id: @group.id,
-                                 old_namespace: old_namespace.puid,
-                                 new_namespace: new_namespace.puid,
-                                 action: 'group_namespace_transfer'
-                               }
-
         new_namespace.create_activity key: 'group.transfer_in',
                                       owner: current_user,
                                       parameters:
