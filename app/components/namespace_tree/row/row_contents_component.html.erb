@@ -36,14 +36,7 @@
               turbo: false,
             } %>
           <% end %>
-          <span
-            class="
-              pl-2 text-xs font-medium text-indigo-800 bg-indigo-100 border border-indigo-300
-              rounded-full dark:bg-indigo-900 dark:text-indigo-300
-            "
-          >
-            <%= render ClipboardComponent.new(value: @namespace.puid) %>
-          </span>
+          <%= render PuidComponent.new(puid: @namespace.puid) %>
           <%= viral_pill(
             text:
               t(

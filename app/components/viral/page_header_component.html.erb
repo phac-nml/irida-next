@@ -12,14 +12,7 @@
               inline text-2xl font-medium leading-tight text-slate-900 dark:text-white
             "
           ><%= title %></h1>
-          <span
-            class="
-              pl-2 text-xs font-medium text-indigo-800 bg-indigo-100 border border-indigo-300
-              rounded-full dark:bg-indigo-900 dark:text-indigo-300
-            "
-          >
-            <%= render ClipboardComponent.new(value: id) %>
-          </span>
+          <%= render PuidComponent.new(puid: id) %>
         </div>
       <% else %>
         <h1
