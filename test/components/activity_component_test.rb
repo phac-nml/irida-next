@@ -78,9 +78,11 @@ class ActivityComponentTest < ViewComponentTestCase
     assert_equal(1, @activities.count { |activity| activity[:key].include?('group.projects.create') })
     assert_equal(1, @activities.count { |activity| activity[:key].include?('group.projects.transfer_out') })
     assert_equal(1, @activities.count { |activity| activity[:key].include?('group.projects.transfer_in') })
-    assert_equal(1, @activities.count { |activity|
+    assert_equal(1, @activities.count do |activity|
                       activity[:key].include?(
-                        'group.transfer_in_no_exisiting_namespace') })
+                        'group.transfer_in_no_exisiting_namespace'
+                      )
+                    end)
     assert_equal(1, @activities.count { |activity| activity[:key].include?('member.create') })
 
     render_inline ActivityComponent.new(activities: @activities, pagy: @pagy)
