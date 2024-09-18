@@ -21,6 +21,7 @@ module Resolvers
              default_value: nil
 
     def resolve(group_id:, filter:, order_by:)
+      context.scoped_set!(:samples_preauthorized, true)
       samples = group_id ? samples_by_group_scope(group_id:) : samples_by_project_scope
       ransack_obj = samples.ransack(filter&.to_h)
       ransack_obj.sorts = ["#{order_by.field} #{order_by.direction}"] if order_by.present?

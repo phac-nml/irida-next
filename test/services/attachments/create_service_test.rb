@@ -10,7 +10,7 @@ module Attachments
       @sample1 = samples(:sample1)
       @project1 = projects(:project1)
       @group1 = groups(:group_one)
-      @fastq_se_blob = active_storage_blobs(:test_file_fastq_blob)
+      @fastq_se_blob = active_storage_blobs(:test_file_A_fastq_blob)
       @attachment_b_blob = active_storage_blobs(:attachmentB_file_test_file_fastq_blob)
       @testsample_illumina_pe_fwd_blob = active_storage_blobs(:testsample_illumina_pe_forward_blob)
       @testsample_illumina_pe_rev_blob = active_storage_blobs(:testsample_illumina_pe_reverse_blob)

@@ -340,7 +340,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector 'table tbody tr', count: 1
     assert_text 'INXT_SAM_AAAAAAAAAA'
     assert_text 'INXT_ATT_AAAAAAAAAA'
-    assert_text 'test_file.fastq'
+    assert_text 'test_file_A.fastq'
   end
 
   test 'can view workflow execution with samplesheet with multiple files' do
@@ -353,7 +353,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector 'table tbody tr', count: 1
     assert_text 'INXT_SAM_AAAAAAAAAA'
     assert_text 'INXT_ATT_AAAAAAAAAA'
-    assert_text 'test_file.fastq'
+    assert_text 'test_file_A.fastq'
     assert_text 'INXT_ATT_AAAAAAAAAB'
     assert_text 'test_file_A.fastq'
   end

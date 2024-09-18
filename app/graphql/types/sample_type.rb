@@ -28,13 +28,18 @@ module Types
           null: true,
           description: 'Datetime when associated attachments were last updated.'
 
+    def project
+      context.scoped_set!(:projects_preauthorized, true)
+      context[:project] || object.project
+    end
+
     def self.authorized?(object, context)
-      super &&
+      super && (context[:samples_preauthorized] ||
         allowed_to?(
           :read_sample?,
           object.project,
           context: { user: context[:current_user], token: context[:token] }
-        )
+        ))
     end
   end
 end

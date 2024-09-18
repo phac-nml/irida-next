@@ -13,7 +13,7 @@ data_export_one:
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
   user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  manifest: '{"type":"Samples Export","date": "2024-01-01","children":[{"name":"INXT_PRJ_AAAAAAAAAA","type":"folder","irida-next-type":"project","irida-next-name":"Project 1","children":[{"name":"INXT_SAM_AAAAAAAAAA","type":"folder","irida-next-type":"sample","irida-next-name":"Project 1 Sample 1","children":[{"name":"INXT_ATT_AAAAAAAAAA","type":"folder","irida-next-type":"attachment","children":[{"name":"test_file.fastq","type":"file","metadata":{"format":"fastq"}}]},{"name":"INXT_ATT_AAAAAAAAAB","type":"folder","irida-next-type":"attachment","children":[{"name":"test_file_A.fastq","type":"file","metadata":{"format":"fastq"}}]}]}]}]}'
+  manifest: '{"type":"Samples Export","date": "2024-01-01","children":[{"name":"INXT_PRJ_AAAAAAAAAA","type":"folder","irida-next-type":"project","irida-next-name":"Project 1","children":[{"name":"INXT_SAM_AAAAAAAAAA","type":"folder","irida-next-type":"sample","irida-next-name":"Project 1 Sample 1","children":[{"name":"INXT_ATT_AAAAAAAAAA","type":"folder","irida-next-type":"attachment","children":[{"name":"test_file_A.fastq","type":"file","metadata":{"format":"fastq"}}]},{"name":"INXT_ATT_AAAAAAAAAB","type":"folder","irida-next-type":"attachment","children":[{"name":"test_file_B.fastq","type":"file","metadata":{"format":"fastq"}}]}]}]}]}'
 
 data_export_two:
   export_type: sample

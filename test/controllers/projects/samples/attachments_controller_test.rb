@@ -55,7 +55,7 @@ module Projects
           post namespace_project_sample_attachments_url(@namespace, @project, @sample1),
                params: { attachment: {
                  files: [fixture_file_upload('test_file_1.fastq', 'text/plain'),
-                         fixture_file_upload('test_file.fastq', 'text/plain')]
+                         fixture_file_upload('test_file_A.fastq', 'text/plain')]
                } },
                as: :turbo_stream
         end
@@ -65,7 +65,7 @@ module Projects
         assert_no_difference('Attachment.count') do
           post namespace_project_sample_attachments_url(@namespace, @project, @sample1),
                params: { attachment: {
-                 files: [fixture_file_upload('test_file.fastq', 'text/plain')]
+                 files: [fixture_file_upload('test_file_A.fastq', 'text/plain')]
                } },
                as: :turbo_stream
         end

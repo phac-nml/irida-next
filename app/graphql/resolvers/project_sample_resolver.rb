@@ -18,6 +18,7 @@ module Resolvers
 
     def resolve(args)
       project = Namespaces::ProjectNamespace.find_by(puid: args[:project_puid])&.project
+      context.scoped_set!(:project, project)
       if args[:sample_puid]
         Sample.find_by(puid: args[:sample_puid], project:)
       else
