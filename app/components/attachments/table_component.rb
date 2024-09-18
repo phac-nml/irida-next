@@ -12,8 +12,7 @@ module Attachments
       attachments,
       pagy,
       q,
-      group,
-      project: nil,
+      namespace,
       row_actions: false,
       abilities: {},
       empty: {},
@@ -22,8 +21,7 @@ module Attachments
       @attachments = attachments
       @pagy = pagy
       @q = q
-      @project = project
-      @group = group
+      @namespace = namespace
       @abilities = abilities
       @row_actions = row_actions
       @empty = empty
@@ -66,7 +64,7 @@ module Attachments
     end
 
     def destroy_path(attachment)
-      if @project.nil?
+      if @namespace.type == 'Group'
         group_attachment_path(
           id: attachment.id
         )
