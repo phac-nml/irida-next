@@ -177,9 +177,7 @@
                 <% if @row_actions[:destroy] %>
                   <%= link_to(
                    t(".delete"),
-                      namespace_project_attachment_new_destroy_path(
-                        attachment_id: attachment.id,
-                      ),
+                      destroy_path(attachment),
                       data: {
                         turbo_stream: true,
                       },

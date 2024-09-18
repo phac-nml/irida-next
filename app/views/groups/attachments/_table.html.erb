@@ -1,0 +1,19 @@
+<%# locals: (group:, pagy:, q:, attachments:) -%>
+<%= render Attachments::TableComponent.new(
+  attachments,
+  pagy,
+  q,
+  group,
+  abilities: {
+    # Uncomment when ready to use multi-select functionality
+    # select_attachments: allowed_to?(:destroy_attachment?, project)
+  },
+  row_actions: {
+    # Uncomment when ready to use destroy
+    # destroy: allowed_to?(:destroy_attachment?, project),
+  },
+  empty: {
+    title: t(:".empty.title"),
+    description: t(:".empty.description"),
+  },
+) %>
