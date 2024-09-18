@@ -12,7 +12,15 @@
       <%= form_for(:deletion, url: namespace_project_attachment_path(id: @attachment.id), method: :delete) do |form| %>
         <%= form.submit t(".submit_button"),
                     class: "
-                      button
+                      inline-flex
+                      items-center
+                      justify-center
+                      w-1/2
+                      border
+                      rounded-md
+                      cursor-pointer
+                      sm:w-auto
+                      focus:z-10
                       text-sm
                       px-5
                       py-2.5
