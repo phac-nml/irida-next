@@ -1627,21 +1627,21 @@ fr:
     index:
       actions:
         cancel_button: Cancel
-        cancel_confirm: Are you sure you want to cancel this workflow execution?
+        cancel_confirm: Are you sure you want to cancel this pipeline?
         delete_button: Delete
-        delete_confirm: Are you sure you want to delete this workflow execution?
+        delete_confirm: Are you sure you want to delete this pipeline?
       create_export_button: Create Export
       deselect_all_button: Deselect All
       select_all_button: Select All
-      title: Workflow Executions
+      title: Pipelines
     samples:
-      empty: No samples could be found for this workflow execution
+      empty: No samples could be found for this pipeline
     show:
       cancel_button: Cancel
-      cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
+      cancel_button_confirmation: Are you sure that you want to cancel this pipeline?
       create_export_button: Create Export
       remove_button: Remove
-      remove_button_confirmation: Are you sure that you want to remove this workflow execution?
+      remove_button_confirmation: Are you sure that you want to remove this pipeline?
       tabs:
         files: Files
         params: Parameters
@@ -1663,24 +1663,24 @@ fr:
         title: "%{workflow} parameters"
         update: Update
       pipeline_selection:
-        loading: Preparing workflow arguments for COUNT_PLACEHOLDER samples, this may take a bit of time.
-        title: Workflow Selection
+        loading: Preparing pipeline arguments for COUNT_PLACEHOLDER samples, this may take a bit of time.
+        title: Pipeline Selection
     summary:
       created_at: Created
       name: Name
       run_id: Run ID
       updated_at: Last Updated
-      workflow_name: Workflow Name
-      workflow_version: Workflow Version
+      workflow_name: Pipeline Name
+      workflow_version: Pipeline Version
     table:
       empty:
-        description: There are no workflow executions associated with this submitter.
-        title: No workflow executions.
+        description: There are no pipelines associated with this submitter.
+        title: No pipelines.
     table_component:
       actions: Actions
       counts:
         selected: Selected
-        workflow_executions: Workflow executions
+        workflow_executions: Pipelines
       created_at: Created
       id: ID
       name: Name
@@ -1688,5 +1688,5 @@ fr:
       select_page: Select / Deselect visible samples
       state: State
       updated_at: Last Updated
-      workflow_name: Workflow Name
-      workflow_version: Workflow Version
+      workflow_name: Pipeline Name
+      workflow_version: Pipeline Version
