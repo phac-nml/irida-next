@@ -9,8 +9,7 @@
     # select_attachments: allowed_to?(:destroy_attachment?, namespace)
   },
   row_actions: {
-    # Uncomment when ready to use destroy
-    # destroy: allowed_to?(:destroy_attachment?, namespace),
+    destroy: allowed_to?(:destroy_attachment?, namespace)
   },
   empty: {
     title: t(:".empty.title"),

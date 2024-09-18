@@ -65,7 +65,7 @@ module Attachments
 
     def destroy_path(attachment)
       if @namespace.type == 'Group'
-        group_attachment_path(
+        group_attachment_new_destroy_path(
           id: attachment.id
         )
       else

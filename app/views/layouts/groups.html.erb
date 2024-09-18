@@ -26,6 +26,12 @@
             ) %>
           <% end %>
           <%= render section.with_item(
+            url: group_attachments_path(@group),
+            icon: "document_text",
+            label: t(:"groups.sidebar.files"),
+            selected: @current_page == t(:"groups.sidebar.files"),
+          ) %>
+          <%= render section.with_item(
             url: group_members_path(@group),
             icon: "users",
             label: t(:"groups.sidebar.members"),
