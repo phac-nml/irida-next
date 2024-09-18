@@ -26,31 +26,32 @@
   <div class="flex flex-col namespace-text">
     <div class="namespace-text grow shrink">
       <div class="flex flex-wrap items-center mr-3 font-semibold title">
-        <div class="flex flex-col space-y-1.5">
-          <div class="space-x-2">
-            <% if @namespace.type == "Group" %>
-              <%= link_to @namespace.name, group_path(@namespace), data: { turbo: false } %>
-            <% else %>
-              <%= link_to @namespace.name,
-                          project_samples_path(@namespace.project),
-                          data: {
-                            turbo: false,
-                          } %>
-            <% end %>
-            <%= viral_pill(
-                  text:
-                    t(
-                      :"members.access_levels.level_#{Member.effective_access_level(@namespace, Current.user)}",
-                    ),
-                  color: "transparent",
-                  border: true,
-                  classes: "ml-2",
-                ) %></div>
-          <span class="text-sm text-gray-500 dark:text-gray-400">
-            <%= @namespace.puid %>
-          </span>
+        <div class="flex items-center space-x-2">
+          <% if @namespace.type == "Group" %>
+            <%= link_to @namespace.name, group_path(@namespace), data: { turbo: false } %>
+          <% else %>
+            <%= link_to @namespace.name,
+            project_samples_path(@namespace.project),
+            data: {
+              turbo: false,
+            } %>
+          <% end %>
+          <%= render PuidComponent.new(puid: @namespace.puid) %>
+          <%= viral_pill(
+            text:
+              t(
+                :"members.access_levels.level_#{Member.effective_access_level(@namespace, Current.user)}",
+              ),
+            color: "transparent",
+            border: true,
+            classes: "ml-2",
+          ) %>
         </div>
+
       </div>
+      <p class="text-sm text-gray-500 dark:text-gray-400">
+        <%= @namespace.description %>
+      </p>
     </div>
   </div>
 </div>
@@ -66,7 +67,7 @@
       <% end %>
       <%= viral_tooltip(title: t(:'.stats.subnamespaces')) do %>
         <span class="flex items-center">
-          <%= viral_icon(name: :squares_2x2, color: :subdued, classes: "h-5 w-5") %><%= @namespace.children.count %>
+          <%= viral_icon(name: :squares_2x2, color: :subdued, classes: "h-2 w-5") %><%= @namespace.children.count %>
         </span>
       <% end %>
     <% end %>

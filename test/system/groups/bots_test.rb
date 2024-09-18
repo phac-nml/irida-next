@@ -88,7 +88,7 @@ module Groups
 
         assert_selector 'h2', text: I18n.t('groups.bots.index.access_token_section.label', bot_name: bot_account_name)
         assert_selector 'p', text: I18n.t('groups.bots.index.access_token_section.description')
-        assert_selector 'button', text: I18n.t('components.clipboard.copy')
+        assert_selector 'button', text: I18n.t('components.token.copy')
       end
 
       assert_selector 'tr', count: 1 + header_row_count
@@ -230,7 +230,7 @@ module Groups
         bot_account_name = namespace_bot.user.email
         assert_selector 'h2', text: I18n.t('groups.bots.index.access_token_section.label', bot_name: bot_account_name)
         assert_selector 'p', text: I18n.t('groups.bots.index.access_token_section.description')
-        assert_selector 'button', text: I18n.t('components.clipboard.copy')
+        assert_selector 'button', text: I18n.t('components.token.copy')
       end
     end
 

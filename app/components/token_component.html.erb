@@ -1,0 +1,47 @@
+<%= render Viral::BaseComponent.new(tag: 'div', **system_arguments, data: {
+  controller: "token",
+  "token-item-value": value }) do %>
+  <div class="relative mr-2 grow">
+    <input
+      type="text"
+      data-token-target="input"
+      class="
+        w-full font-mono text-sm border rounded-md text-slate-900 border-slate-300
+        bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700
+        dark:border-slate-600 dark:placeholder-slate-400 dark:text-white
+        dark:focus:ring-primary-500 dark:focus:border-primary-500
+      "
+      value="<%= '*' * value.length %>"
+      readonly
+      aria-label="<%= label %>"
+    >
+    <button
+      type="button"
+      class="
+        absolute inset-y-0 bottom-0 right-0 p-2 rounded-r-md focus:outline-none
+      "
+      data-action="click->token#toggleVisibility"
+      aria-label="<%= t(:'components.token.toggle_visible') %>"
+    >
+      <span data-token-target="hide">
+        <%= viral_icon(name: "eye", classes: "w-5 h-5 text-slate-500 dark:text-slate-400") %>
+      </span>
+      <span data-token-target="view" class="flex items-center hidden">
+        <%= viral_icon(name: "eye_slash", classes: "w-5 h-5") %>
+      </span>
+    </button>
+  </div>
+  <button
+    type="submit"
+    data-action="click->token#copyToClipboard"
+    class="
+      px-4 py-2 text-sm text-white rounded-md focus:outline-none bg-primary-700
+      hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:text-white
+      dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800
+    "
+  >
+    <span data-token-target="initial"><%= t("components.token.copy") %></span>
+    <span data-token-target="copied" class="flex items-center hidden"><%= viral_icon(name: "check", classes: "w-5 h-5") %>
+      <%= t("components.token.copied") %></span>
+  </button>
+<% end %>

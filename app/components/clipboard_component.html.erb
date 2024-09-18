@@ -1,80 +1,35 @@
-<%= render Viral::BaseComponent.new(tag: 'div', **system_arguments, data: {
-  controller: "clipboard",
-  "clipboard-item-value": value }) do %>
-  <div class="relative mr-2 grow">
-    <input
-      type="text"
-      data-clipboard-target="input"
-      class="
-        w-full
-        font-mono
-        text-sm
-        text-slate-900
-        border
-        border-slate-300
-        rounded-md
-        bg-slate-50
-        focus:ring-primary-500
-        focus:border-primary-500
-        dark:bg-slate-700
-        dark:border-slate-600
-        dark:placeholder-slate-400
-        dark:text-white
-        dark:focus:ring-primary-500
-        dark:focus:border-primary-500
-      "
-      value="<%= '*' * value.length %>"
-      readonly
-      aria-label="<%= label %>"
-    >
-    <button
-      type="button"
-      class="
-        absolute
-        inset-y-0
-        bottom-0
-        right-0
-        p-2
-        rounded-r-md
-        focus:outline-none
-      "
-      data-action="
-        click->clipboard#toggleVisibility
-      "
-      aria-label="<%= t(:'components.clipboard.toggle_visible') %>"
-    >
-      <span data-clipboard-target="hide">
-        <%= viral_icon(name: "eye", classes: "w-5 h-5 text-slate-500 dark:text-slate-400") %>
-      </span>
-      <span data-clipboard-target="view" class="flex items-center hidden">
-        <%= viral_icon(name: "eye_slash", classes: "w-5 h-5") %>
-      </span>
-    </button>
-  </div>
+<span class="flex items-center space-x-1" data-controller="clipboard">
+  <span>
+    <% if content.present? %>
+      <%= content %>
+    <% else %>
+      <%= value %>
+    <% end %>
+  </span>
   <button
-    type="submit"
-    data-action="
-        click->clipboard#copyToClipboard
-      "
+    type="button"
+    title="<%= t("components.clipboard.title") %>"
+    data-action="clipboard#copy"
+    aria-label="<%= t("components.clipboard.title") %>"
+    data-clipboard-target="button"
+    class="<%= button_classes %>"
+    value="<%= value %>"
+  >
+    <%= viral_icon(
+      name: :clipboard,
+      color: :white,
+      classes: "size-3 pointer-events-none",
+    ) %>
+  </button>
+  <div
+    data-clipboard-target="content"
+    role="tooltip"
     class="
-      focus:outline-none
-      text-sm
-      text-white
-      bg-primary-700
-      hover:bg-primary-800
-      focus:ring-4
-      focus:ring-primary-300
-      rounded-md
-      py-2
-      px-4
-      dark:text-white
-      dark:bg-primary-600
-      dark:hover:bg-primary-700
-      dark:focus:ring-primary-800
+      absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white
+      transition-opacity bg-green-600 rounded-lg shadow-sm opacity-80 duration-600
+      tooltip dark:bg-green-700
     "
   >
-    <span data-clipboard-target="initial"><%= t("components.clipboard.copy") %></span>
-    <span data-clipboard-target="copied" class="flex items-center hidden"><%= viral_icon(name: "check", classes: "w-5 h-5") %>
-      <%= t("components.clipboard.copied") %></span>
-  </button>
-<% end %>
+    <%= t("components.clipboard.copied") %>
+  </div>
+</span>

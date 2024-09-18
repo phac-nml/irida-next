@@ -1,16 +1,13 @@
 # frozen_string_literal: true
 
-# Clipboard component for copying text to clipboard
-class ClipboardComponent < Component
-  attr_reader :value, :label
-
-  def initialize(value:, aria_label:, **system_arguments)
+# Clipboard component for copying to clipboard
+class ClipboardComponent < Viral::Component
+  def initialize(value:, button_classes: '')
     @value = value
-    @label = aria_label
-    @system_arguments = system_arguments
-    @system_arguments[:classes] = class_names(
-      @system_arguments[:classes],
-      'flex'
-    )
+    @button_classes = button_classes
   end
+
+  private
+
+  attr_reader :value, :button_classes
 end
