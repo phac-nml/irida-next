@@ -162,9 +162,9 @@ module Projects
         click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
       end
 
-      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file.fastq')
+      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file_A.fastq')
       within('#table-listing') do
-        assert_no_text 'test_file.fastq'
+        assert_no_text 'test_file_A.fastq'
       end
     end
 
@@ -908,8 +908,8 @@ module Projects
       end
       click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        assert_text 'test_file.fastq'
         assert_text 'test_file_A.fastq'
+        assert_text 'test_file_B.fastq'
         fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
         assert_html5_inputs_valid
@@ -958,8 +958,8 @@ module Projects
       end
       click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        assert_text 'test_file.fastq'
         assert_text 'test_file_A.fastq'
+        assert_text 'test_file_B.fastq'
         fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
         check 'Delete originals'
         click_on I18n.t('projects.samples.attachments.concatenations.modal.submit_button')
@@ -1132,21 +1132,21 @@ module Projects
       visit namespace_project_sample_url(@namespace, @project, @sample1)
       within %(turbo-frame[id="table-listing"]) do
         assert_selector 'table #attachments-table-body tr', count: 2
-        find('table #attachments-table-body tr', text: 'test_file.fastq').find('input').click
         find('table #attachments-table-body tr', text: 'test_file_A.fastq').find('input').click
+        find('table #attachments-table-body tr', text: 'test_file_B.fastq').find('input').click
       end
       click_link I18n.t('projects.samples.show.delete_files_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        assert_text 'test_file.fastq'
         assert_text 'test_file_A.fastq'
+        assert_text 'test_file_B.fastq'
         click_on I18n.t('projects.samples.attachments.deletions.modal.submit_button')
         assert_html5_inputs_valid
       end
       assert_text I18n.t('projects.samples.attachments.deletions.destroy.success')
       within %(turbo-frame[id="table-listing"]) do
         assert_selector 'table #attachments-table-body tr', count: 0
-        assert_no_text 'test_file.fastq'
         assert_no_text 'test_file_A.fastq'
+        assert_no_text 'test_file_B.fastq'
         assert_text I18n.t('projects.samples.show.no_files')
         assert_text I18n.t('projects.samples.show.no_associated_files')
       end
@@ -2536,23 +2536,23 @@ module Projects
         click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
       end
 
-      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file.fastq')
+      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file_A.fastq')
       within('#table-listing') do
-        assert_no_text 'test_file.fastq'
-        assert_text 'test_file_A.fastq'
+        assert_no_text 'test_file_A.fastq'
+        assert_text 'test_file_B.fastq'
       end
 
       click_link I18n.t('projects.samples.show.delete_files_button'), match: :first
 
       within('dialog') do
-        assert_text 'test_file_A.fastq'
-        assert_no_text 'test_file.fastq'
+        assert_text 'test_file_B.fastq'
+        assert_no_text 'test_file_A.fastq'
         click_button I18n.t('projects.samples.attachments.deletions.modal.submit_button')
       end
 
       assert_text I18n.t('projects.samples.attachments.deletions.destroy.success')
       assert_no_text 'test_file_A.fastq'
-      assert_no_text 'test_file.fastq'
+      assert_no_text 'test_file_B.fastq'
       assert_text I18n.t('projects.samples.show.no_files')
       assert_selector 'a.cursor-not-allowed.pointer-events-none', count: 2
     end

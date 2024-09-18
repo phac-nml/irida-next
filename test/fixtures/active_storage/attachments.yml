@@ -1,12 +1,12 @@
-attachment1_file_test_file_fastq:
+attachment1_file_test_file_A_fastq:
   name: file
   record: attachment1 (Attachment)
-  blob: attachment1_file_test_file_fastq_blob
+  blob: attachment1_file_test_file_A_fastq_blob
 
-attachment2_file_test_file_A_fastq:
+attachment2_file_test_file_B_fastq:
   name: file
   record: attachment2 (Attachment)
-  blob: attachment2_file_test_file_A_fastq_blob
+  blob: attachment2_file_test_file_B_fastq_blob
 
 attachmentA_file_test_file_fastq:
   name: file

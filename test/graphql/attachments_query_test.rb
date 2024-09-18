@@ -109,10 +109,10 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     attachments = data['attachments']['nodes']
     assert_equal 2, attachments.count
 
-    assert_equal 'test_file.fastq', attachments[0]['filename']
-    assert_equal 'test_file_A.fastq', attachments[1]['filename']
+    assert_equal 'test_file_A.fastq', attachments[0]['filename']
+    assert_equal 'test_file_B.fastq', attachments[1]['filename']
 
-    assert_equal 2102, attachments[0]['byteSize']
+    assert_equal 2101, attachments[0]['byteSize']
     assert_equal 2101, attachments[1]['byteSize']
 
     assert_equal 'fastq', attachments[0]['metadata']['format']
@@ -168,10 +168,10 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     attachments = data['attachments']['nodes']
     assert_equal 2, attachments.count
 
-    assert_equal 'test_file.fastq', attachments[0]['filename']
-    assert_equal 'test_file_A.fastq', attachments[1]['filename']
+    assert_equal 'test_file_A.fastq', attachments[0]['filename']
+    assert_equal 'test_file_B.fastq', attachments[1]['filename']
 
-    assert_equal 2102, attachments[0]['byteSize']
+    assert_equal 2101, attachments[0]['byteSize']
     assert_equal 2101, attachments[1]['byteSize']
 
     assert_equal 'fastq', attachments[0]['metadata']['format']
@@ -223,10 +223,10 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     attachments = data['attachments']['nodes']
     assert_equal 2, attachments.count
 
-    assert_equal 'test_file.fastq', attachments[0]['filename']
-    assert_equal 'test_file_A.fastq', attachments[1]['filename']
+    assert_equal 'test_file_A.fastq', attachments[0]['filename']
+    assert_equal 'test_file_B.fastq', attachments[1]['filename']
 
-    assert_equal 2102, attachments[0]['byteSize']
+    assert_equal 2101, attachments[0]['byteSize']
     assert_equal 2101, attachments[1]['byteSize']
 
     assert_equal 'fastq', attachments[0]['metadata']['format']

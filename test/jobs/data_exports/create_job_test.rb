@@ -61,7 +61,7 @@ module DataExports
               'irida-next-type' => 'attachment',
               'children' =>
               [{
-                'name' => 'test_file.fastq',
+                'name' => 'test_file_A.fastq',
                 'type' => 'file',
                 'metadata' => { 'format' => 'fastq' }
               }]
@@ -71,7 +71,7 @@ module DataExports
                'type' => 'folder',
                'irida-next-type' => 'attachment',
                'children' => [{
-                 'name' => 'test_file_A.fastq',
+                 'name' => 'test_file_B.fastq',
                  'type' => 'file',
                  'metadata' => { 'format' => 'fastq' }
                }]
@@ -114,9 +114,9 @@ module DataExports
         '└─ INXT_PRJ_AAAAAAAAAA/ (Project 1)',
         '   └─ INXT_SAM_AAAAAAAAAA/ (Project 1 Sample 1)',
         '      ├─ INXT_ATT_AAAAAAAAAA/',
-        '      │  └─ test_file.fastq',
+        '      │  └─ test_file_A.fastq',
         '      └─ INXT_ATT_AAAAAAAAAB/',
-        '         └─ test_file_A.fastq',
+        '         └─ test_file_B.fastq',
         ''
       ].join("\n")
 
