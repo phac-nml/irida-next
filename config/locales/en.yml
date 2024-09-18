@@ -563,14 +563,14 @@ en:
       index:
         search:
           placeholder: Filter by ID or Filename
-        subtitle: These are the files that belong to Project %{group_name}
+        subtitle: These are the files that belong to Group %{group_name}
         title: Files
         upload_files: Upload Files
       new_attachment_modal:
         upload_files: Upload Files
       table:
         empty:
-          description: There are no files associated with this project.
+          description: There are no files associated with this group.
           title: No Files
     bots:
       index:
