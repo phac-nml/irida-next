@@ -28,8 +28,6 @@ module Projects
     end
 
     def create
-      authorize! @project, to: :update_sample?
-
       @attachments = ::Attachments::CreateService.new(current_user, @project.namespace, attachment_params).execute
 
       status = if !@attachments.count.positive?
