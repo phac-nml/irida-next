@@ -201,6 +201,13 @@ projectJeff_bot:
   last_name: Bot
   user_type: <%= User.user_types[:project_bot] %>
 
+groupJeff_bot:
+  <<: *DEFAULTS
+  email: <%= "inxt_grp_aaaaaajeff_001@localhost" %>
+  first_name: INXT_GRP_AAAAAAJEFF
+  last_name: Bot
+  user_type: <%= User.user_types[:group_bot] %>
+
 empty_doe:
   <<: *DEFAULTS
   email: <%= "empty_doe@localhost" %>

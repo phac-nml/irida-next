@@ -19,3 +19,7 @@ invalid_user_bot:
 projectJeff_bot:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_jeff_namespace, :uuid) %>
   user_id: <%= ActiveRecord::FixtureSet.identify(:projectJeff_bot, :uuid) %>
+
+groupJeff_bot:
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_jeff, :uuid) %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:groupJeff_bot, :uuid) %>

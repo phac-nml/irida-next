@@ -117,6 +117,17 @@ projectJeff_bot_account_valid_pat:
   token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "FX3wwK3sWCjn1xdCyZtA") %>
   last_used_at: nil
 
+groupJeff_bot_account_valid_pat:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:groupJeff_bot, :uuid) %>
+  scopes:
+    - read_api
+    - api
+  name: Valid PAT1 %>
+  revoked: false
+  expires_at: <%= 10.days.from_now.to_date %>
+  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "FX3wwK3sWCjn1xdCyZtB") %>
+  last_used_at: nil
+
 user_bot_account0_expired_pat:
   user_id: <%= ActiveRecord::FixtureSet.identify(:user_bot_account0, :uuid) %>
   scopes:

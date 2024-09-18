@@ -33,6 +33,16 @@ module Mutations
       nil
     end
 
+    def get_group_from_id_or_puid_args(args)
+      if args[:group_id]
+        IridaSchema.object_from_id(args[:group_id], { expected_type: Group })
+      else
+        Group.find_by!(puid: args[:group_puid])
+      end
+    rescue ActiveRecord::RecordNotFound
+      nil
+    end
+
     def attachment_status_and_errors(files_attached:, file_blob_id_list:)
       # initialize status hash such that all blob ids given by user are included
       status = Hash[*file_blob_id_list.collect { |v| [v, nil] }.flatten]

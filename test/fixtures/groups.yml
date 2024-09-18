@@ -346,3 +346,11 @@ empty_group:
   description: Group without any Samples
   owner_id: <%= ActiveRecord::FixtureSet.identify(:empty_doe, :uuid) %>
   puid: INXT_GRP_AAAAAAAABHI
+
+group_jeff:
+  <<: *DEFAULTS
+  name: Group Jeff
+  path: group-jeff
+  description: Group Jeff description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+  puid: INXT_GRP_AAAAAAJEFF

@@ -6,6 +6,12 @@ module Types
     implements GraphQL::Types::Relay::Node
     description 'A group'
 
+    field :attachments,
+          AttachmentType.connection_type,
+          null: true,
+          description: 'Attachments on the group',
+          resolver: Resolvers::GroupAttachmentsResolver
+
     field :descendant_groups, connection_type,
           null: true,
           description: 'List of descendant groups of this group.',
