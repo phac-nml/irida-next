@@ -1,0 +1,50 @@
+<div class="mt-16 grid grid-cols-8 gap-4">
+  <div class="col-span-4"><div
+      class="
+        rounded-lg border border-gray-200 p-4 dark:border-gray-700 dark:bg-gray-800
+      "
+    >
+      <h3 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white">Activity</h3>
+      <%= render ProjectDashboard::ActivityComponent.new(activities: @activities) %>
+
+      <%= link_to "View more",
+      namespace_project_activity_path(@project.namespace.parent, @project),
+      class: "button button--state-default button--size-default" %>
+    </div></div>
+  <div class="col-span-3"><div
+      class="
+        rounded-lg border border-gray-200 p-4 dark:border-gray-700 dark:bg-gray-800
+      "
+    >
+      <h3 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white">Samples</h3>
+      <%= render ProjectDashboard::SamplesComponent.new(
+        samples: @samples,
+        project: @project,
+      ) %>
+      <%= link_to "View more",
+      namespace_project_samples_path(@project.namespace.parent, @project),
+      class: "button button--state-default button--size-default" %>
+    </div></div>
+  <div class="col-span-1"><div
+      class="
+        border-l-2 border-gray-200 p-4 dark:border-gray-700 dark:bg-gray-800
+      "
+    >
+      <h3 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white">Project Information</h3>
+
+      <p class="py-2">This is the project description......This is the project
+        description......This is the project description......</p>
+
+      <p class="py-2">Number of samples in project:
+        <%= @project.samples.count %></p>
+
+      <p class="py-2">Number of automated workflow executions:
+        <%= @project.namespace.automated_workflow_executions.count %></p>
+
+      <p class="py-2">Number of members in project:
+        <%= @project.namespace.project_members.count %></p>
+
+      <p class="py-2">Created:
+        <%= helpers.local_time(@project.created_at, :long) %></p>
+    </div></div>
+</div>

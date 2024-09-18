@@ -1,0 +1,28 @@
+<ol class="relative border-s border-slate-200 dark:border-slate-700">
+  <% samples.each do |sample| %>
+    <li class="mb-4 ms-4">
+      <div
+        class="
+          mb-1 text-sm font-normal leading-none text-slate-500 dark:text-slate-400
+        "
+      >
+        <% if sample.deleted? %>
+          <%= helpers.local_time(sample.deleted_at, :long) %>
+        <% else %>
+          <%= helpers.local_time(sample.created_at, :long) %>
+        <% end %>
+      </div>
+      <p class="mb-4 text-base font-normal text-slate-500 dark:text-slate-400">
+        <% if sample.deleted? %>
+          <%= sample.name %>
+        <% else %>
+          <%= link_to sample.name,
+          namespace_project_sample_path(@project.namespace.parent, @project, sample),
+          class: "text-slate-800 dark:text-slate-300 font-medium hover:underline" %>
+        <% end %>
+        -
+        <%= viral_pill(text: sample.puid, color: :green) %>
+      </p>
+    </li>
+  <% end %>
+</ol>

@@ -13,6 +13,11 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
 
   def show
     authorize! @project, to: :read?
+
+    project_activities = @project.namespace.retrieve_project_activity.order(created_at: :desc).limit(10)
+    @activities = @project.namespace.human_readable_activity(project_activities)
+
+    @samples = @project.samples.with_deleted.order(created_at: :desc).limit(10)
   end
 
   def new
