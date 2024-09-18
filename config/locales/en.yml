@@ -382,11 +382,11 @@ en:
         success: Successfully updated group %{namespace_name} with group %{group_name} link %{param_name}
     workflow_execution_actions:
       cancel:
-        error: Could not cancel pipeline %{pipeline_name}
-        success: Pipeline %{pipeline_name} was successfully canceled
+        error: Could not cancel pipeline %{workflow_name}
+        success: Pipeline %{workflow_name} was successfully canceled
       destroy:
-        error: Could not delete pipeline %{pipeline_name}
-        success: Pipeline %{pipeline_name} was successfully deleted
+        error: Could not delete pipeline %{workflow_name}
+        success: Pipeline %{workflow_name} was successfully deleted
   dashboard:
     groups:
       index:
