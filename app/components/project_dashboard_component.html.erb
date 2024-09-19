@@ -5,7 +5,7 @@
         rounded-lg border border-gray-200 p-4 dark:border-gray-700 dark:bg-gray-800
       "
     >
-      <h3 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white"><%= t(:"components.project_dashboard.activity_title") %></h3>
+      <p class="mb-4 text-xl font-semibold text-gray-900 dark:text-white"><%= t(:"components.project_dashboard.activity_title") %></p>
       <%= render ProjectDashboard::ActivityComponent.new(activities: @activities) %>
 
       <%= link_to t(:"components.project_dashboard.view_more"),
@@ -18,7 +18,7 @@
         rounded-lg border border-gray-200 p-4 dark:border-gray-700 dark:bg-gray-800
       "
     >
-      <h3 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white"><%= t(:"components.project_dashboard.samples_title") %></h3>
+      <p class="mb-4 text-xl font-semibold text-gray-900 dark:text-white"><%= t(:"components.project_dashboard.samples_title") %></p>
       <%= render ProjectDashboard::SamplesComponent.new(
         samples: @samples,
         project: @project,
