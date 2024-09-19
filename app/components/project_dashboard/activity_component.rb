@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ProjectDashboard
-  # Component for rendering an activity list item
+  # Component for rendering latest activity
   class ActivityComponent < Component
     attr_accessor :activities
 

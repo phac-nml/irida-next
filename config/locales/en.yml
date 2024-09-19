@@ -347,6 +347,9 @@ en:
       information:
         created_on: Created on
         no_description: No description provided for project
+        number_of_automated_workflow_executions: Number of automated workflow executions in project
+        number_of_members: Number of members in project
+        number_of_samples: Number of samples in project
       samples_title: Samples Recently Updated
       view_more: View more
     token:

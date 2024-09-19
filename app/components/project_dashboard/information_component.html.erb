@@ -9,7 +9,7 @@
 <hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700"/>
 
 <span class="flex items-center">
-  <%= viral_tooltip(title: 'Number of samples in project') do %>
+  <%= viral_tooltip(title: t(:"components.project_dashboard.information.number_of_samples")) do %>
     <span class="flex items-center">
       <%= viral_icon(name: :squares_2x2, color: :subdued, classes: "h-5 w-5 m-0 mr-2") %>
       <%= @project.samples.count %>
@@ -18,7 +18,7 @@
 </span>
 
 <span class="flex items-center">
-  <%= viral_tooltip(title: 'Number of automated workflow executions project') do %>
+  <%= viral_tooltip(title: t(:"components.project_dashboard.information.number_of_automated_workflow_executions")) do %>
     <span class="flex items-center">
       <%= viral_icon(name: :command_line, color: :subdued, classes: "h-5 w-5 m-0 mr-2") %>
       <%= @project.namespace.automated_workflow_executions.count %>
@@ -27,7 +27,7 @@
 </span>
 
 <span class="flex items-center">
-  <%= viral_tooltip(title: 'Number of project members') do %>
+  <%= viral_tooltip(title: t(:"components.project_dashboard.information.number_of_members")) do %>
     <span class="flex items-center">
       <%= viral_icon(name: :users, color: :subdued, classes: "h-5 w-5 m-0 mr-2") %>
       <%= @project.namespace.project_members.count %>
