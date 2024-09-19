@@ -46,14 +46,6 @@
     <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= project.description %></div>
   </td>
   <td class="p-4 whitespace-nowrap">
-    <%= viral_pill(
-      text: t(:"dashboard.projects.index.row.samples", count: project.samples.size),
-      color: "transparent",
-      border: true,
-      classes: "ml-2",
-    ) %>
-  </td>
-  <td class="p-4 whitespace-nowrap">
     <div class="flex flex-row-reverse">
       <%= viral_tooltip(title: t(:"dashboard.projects.index.row.samples")) do %>
         <span class="flex items-center text-sm">
