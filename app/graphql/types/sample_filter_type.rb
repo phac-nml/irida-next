@@ -2,9 +2,9 @@
 
 module Types
   # Sample Filter Type
-  class SampleFilterType < BaseInputObject # rubocop:disable GraphQL/ObjectDescription
-    Sample.ransackable_attributes.excluding(%w[id metadata deleted_at]).each do |attr|
-      Ransack.predicates.keys.map do |key|
+  class SampleFilterType < BaseRansackFilterInputObject # rubocop:disable GraphQL/ObjectDescription
+    Sample.ransackable_attributes.excluding(DEFAULT_EXCLUDED_ATTRIBUTES).each do |attr|
+      default_predicate_keys.map do |key|
         value_type = Ransack.predicates[key].wants_array ? [String] : String
         argument :"#{attr}_#{key}".to_sym,
                  value_type,

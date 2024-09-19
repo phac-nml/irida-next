@@ -2,10 +2,10 @@
 
 module Types
   # Attachment Filter Input Type
-  class AttachmentFilterInputType < BaseInputObject # rubocop:disable GraphQL/ObjectDescription
+  class AttachmentFilterInputType < BaseRansackFilterInputObject # rubocop:disable GraphQL/ObjectDescription
     graphql_name 'AttachmentFilter'
-    Attachment.ransackable_attributes.excluding(%w[id metadata deleted_at]).each do |attr|
-      Ransack.predicates.keys.map do |key|
+    Attachment.ransackable_attributes.excluding(DEFAULT_EXCLUDED_ATTRIBUTES).each do |attr|
+      default_predicate_keys.map do |key|
         value_type = Ransack.predicates[key].wants_array ? [String] : String
         argument :"#{attr}_#{key}".to_sym,
                  value_type,
