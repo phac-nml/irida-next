@@ -32,8 +32,7 @@ module Projects
 
       if project.persisted?
         create_automation_bot
-        @project.namespace.create_activity key: 'namespaces_project_namespace.create',
-                                           owner: current_user
+        create_activities
       end
 
       return unless !Member.namespace_owners_include_user?(current_user,
@@ -66,6 +65,22 @@ module Projects
       }
 
       Members::CreateService.new(current_user, project.namespace, member_params).execute
+    end
+
+    private
+
+    def create_activities
+      @project.namespace.create_activity key: 'namespaces_project_namespace.create',
+                                         owner: current_user
+
+      return unless @project.namespace.parent.group_namespace?
+
+      @project.namespace.parent.create_activity key: 'group.projects.create',
+                                                owner: current_user,
+                                                parameters: {
+                                                  project_id: @project.id,
+                                                  project_puid: @project.puid
+                                                }
     end
   end
 end

@@ -5,7 +5,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   layout :resolve_layout
   before_action :parent_group, only: %i[new]
   before_action :tab, only: %i[show]
-  before_action :group, only: %i[edit show destroy update transfer]
+  before_action :group, only: %i[activity edit show destroy update transfer]
   before_action :authorized_namespaces, except: %i[index show destroy]
   before_action :current_page
 
@@ -59,6 +59,21 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
           render status: :unprocessable_entity
         end
       end
+    end
+  end
+
+  def activity
+    authorize! @group
+
+    group_activities = @group.retrieve_group_activity.order(created_at: :desc)
+
+    @pagy, raw_activities = pagy(group_activities, limit: 10)
+
+    @activities = @group.human_readable_activity(raw_activities)
+
+    respond_to do |format|
+      format.html
+      format.turbo_stream
     end
   end
 
@@ -117,7 +132,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def resolve_layout
     case action_name
-    when 'show', 'edit', 'update'
+    when 'show', 'edit', 'update', 'activity'
       'groups'
     when 'new', 'create'
       if @group
@@ -162,6 +177,8 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
                       end
                     when 'show'
                       t(:'groups.sidebar.details')
+                    when 'activity'
+                      t(:'groups.sidebar.activity')
                     else
                       t(:'groups.sidebar.general')
                     end

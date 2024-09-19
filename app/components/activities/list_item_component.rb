@@ -5,10 +5,8 @@ module Activities
   class ListItemComponent < Component
     attr_accessor :activity
 
-    def initialize(activity: nil, **system_arguments)
+    def initialize(activity: nil)
       @activity = activity
-
-      @system_arguments = system_arguments
     end
   end
 end

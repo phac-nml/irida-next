@@ -81,4 +81,21 @@ class Group < Namespace
 
     metadata_fields.uniq
   end
+
+  def retrieve_group_activity
+    PublicActivity::Activity.where(
+      trackable_id: id,
+      trackable_type: 'Namespace'
+    ).or(
+      PublicActivity::Activity.where(
+        trackable_id: Member.joins(:user).with_deleted.where(namespace: self).select(:id).where.not(user:
+        { user_type: User.user_types[:project_automation_bot] }), trackable_type: 'Member'
+      )
+    ).or(
+      PublicActivity::Activity.where(
+        trackable_id: NamespaceGroupLink.with_deleted.where(namespace: self).select(:id),
+        trackable_type: 'NamespaceGroupLink'
+      )
+    )
+  end
 end

@@ -11,7 +11,9 @@
     "
   ><%= helpers.local_time(activity[:created_at], :long) %></div>
   <p class="mb-4 text-base font-normal text-slate-500 dark:text-slate-400">
-    <% if activity[:type] == 'Namespace' && activity[:key].include?('project_namespace') %>
+    <% if activity[:type] == 'Namespace' && activity[:key].include?('group') %>
+      <%= render Activities::GroupActivityComponent.new(activity: activity) %>
+    <% elsif activity[:type] == 'Namespace' && activity[:key].include?('project_namespace') %>
       <%= render Activities::ProjectActivityComponent.new(activity: activity) %>
     <% elsif activity[:type] == 'WorkflowExecution' %>
       <%= render Activities::WorkflowExecutionActivityComponent.new(activity: activity) %>

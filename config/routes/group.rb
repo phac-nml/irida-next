@@ -53,5 +53,6 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
     patch '/', action: :update
     put '/', action: :update
     put :transfer
+    match :activity, via: %i[get post]
   end
 end

@@ -28,7 +28,7 @@ module Members
       has_previous_access = Member.can_view?(member.user, namespace) if member.valid?
       if member.save
         send_emails if @email_notification && !has_previous_access
-        member.create_activity key: 'member.create', owner: current_user
+        member.create_activity key: 'member.create', owner: current_user if @member.user != current_user
       end
 
       member

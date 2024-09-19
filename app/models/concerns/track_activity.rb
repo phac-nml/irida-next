@@ -8,7 +8,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     include PublicActivity::Common
   end
 
-  def human_readable_activity(public_activities) # rubocop:disable Metrics/MethodLength
+  def human_readable_activity(public_activities) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
     activities = []
     public_activities.each do |activity|
       trackable_type = activity.trackable_type
@@ -18,6 +18,8 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
       when 'Namespace'
         if activity.key.include?('project_namespace')
           activities << project_activity(activity)
+        elsif activity.key.include?('group')
+          activities << group_activity(activity)
         elsif activity.key.include?('workflow_execution')
           activities << workflow_execution_activity(activity)
         end
@@ -37,9 +39,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     activity_trackable = activity_trackable(activity, Project)
 
     base_params = {
-      created_at: activity.created_at.strftime(
-        I18n.t('time.formats.abbreviated')
-      ),
+      created_at: format_created_at(activity.created_at),
       key: "activity.#{activity.key}_html",
       user: activity_creator(activity),
       current_project: activity_trackable,
@@ -55,13 +55,33 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     namespace_project_sample_activity_parameters(params, activity)
   end
 
+  def group_activity(activity) # rubocop:disable Metrics/AbcSize
+    activity_trackable = activity_trackable(activity, Group)
+
+    base_params = {
+      created_at: format_created_at(activity.created_at),
+      key: "activity.#{activity.key}_html",
+      user: activity_creator(activity),
+      group: activity_trackable,
+      project: get_object_by_id(activity.parameters[:project_id], Project),
+      project_puid: activity.parameters[:project_puid],
+      name: activity_trackable.name,
+      type: 'Namespace',
+      action: activity.parameters.key?(:action) ? activity.parameters[:action] : 'default'
+    }
+
+    return base_params if activity.parameters[:action].blank?
+
+    params = additional_group_activity_params(base_params, activity)
+
+    transfer_activity_parameters(params, activity)
+  end
+
   def workflow_execution_activity(activity)
     activity_trackable = activity_trackable(activity, Namespace)
 
     {
-      created_at: activity.created_at.strftime(
-        I18n.t('time.formats.abbreviated')
-      ),
+      created_at: format_created_at(activity.created_at),
       key: "activity.#{activity.key}_html",
       user: activity_creator(activity),
       namespace: activity_trackable,
@@ -77,9 +97,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     activity_trackable = activity_trackable(activity, Member)
 
     {
-      created_at: activity.created_at.strftime(
-        I18n.t('time.formats.abbreviated')
-      ),
+      created_at: format_created_at(activity.created_at),
       key: "activity.#{activity.key}_html",
       user: activity_creator(activity),
       namespace_type: activity_trackable.namespace.type.downcase,
@@ -93,10 +111,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     activity_trackable = activity_trackable(activity, NamespaceGroupLink)
 
     {
-      created_at: activity.created_at.strftime(
-        I18n.t('time.formats.abbreviated')
-      ),
-
+      created_at: format_created_at(activity.created_at),
       key: "activity.#{activity.key}_html",
       user: activity_creator(activity),
       namespace_type: activity_trackable.namespace.type.downcase,
@@ -120,11 +135,17 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   end
 
   def transfer_activity_parameters(params, activity) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-    if activity.parameters[:action] == 'project_namespace_transfer'
+    if activity.parameters[:action] == 'project_namespace_transfer' ||
+       activity.parameters[:action] == 'group_namespace_transfer'
+
       params.merge!({
                       old_namespace: activity.parameters[:old_namespace],
                       new_namespace: activity.parameters[:new_namespace]
                     })
+    end
+
+    if activity.parameters[:action] == 'group_namespace_transfer'
+      params.merge!({ transferred_group: get_object_by_id(activity.parameters[:transferred_group_id], Group) })
     end
 
     if activity.parameters[:action] == 'sample_transfer'
@@ -167,6 +188,20 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     end
 
     params
+  end
+
+  def format_created_at(created_at)
+    created_at.strftime(I18n.t('time.formats.abbreviated'))
+  end
+
+  def additional_group_activity_params(params, activity)
+    if activity.parameters[:action] == 'group_subgroup_destroy'
+      params.merge!({ removed_group_puid: activity.parameters[:removed_group_puid] })
+    end
+
+    return params unless activity.parameters[:action] == 'group_subgroup_create'
+
+    params.merge!({ created_group: get_object_by_id(activity.parameters[:created_group_id], Group) })
   end
 
   # convert string keys to symbols

@@ -5,10 +5,8 @@ module Activities
   class ProjectActivityComponent < Component
     include PathHelper
 
-    def initialize(activity: nil, **system_arguments)
+    def initialize(activity: nil)
       @activity = activity
-
-      @system_arguments = system_arguments
     end
 
     def sample_link
