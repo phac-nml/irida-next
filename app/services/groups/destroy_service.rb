@@ -10,23 +10,21 @@ module Groups
       @group = group
     end
 
-    def execute # rubocop:disable Metrics/MethodLength
+    def execute
       authorize! @group, to: :destroy?
       group.destroy
 
       if @group.deleted?
         @group.create_activity key: 'group.destroy',
-                               owner: current_user,
-                               parameters: {
-                                 removed_group_puid: @group.puid
-                               }
+                               owner: current_user
 
         return if group.parent.nil?
 
-        @group.parent.create_activity key: 'group.destroy',
+        @group.parent.create_activity key: 'group.subgroups.destroy',
                                       owner: current_user,
                                       parameters: {
-                                        removed_group_puid: @group.puid
+                                        removed_group_puid: @group.puid,
+                                        action: 'group_subgroup_destroy'
                                       }
       end
 

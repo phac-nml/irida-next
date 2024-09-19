@@ -4,9 +4,8 @@
 class ActivityComponent < Component
   attr_accessor :activities, :pagy
 
-  def initialize(activities:, pagy:, **system_arguments)
+  def initialize(activities:, pagy:)
     @activities = activities
     @pagy = pagy
-    @system_arguments = system_arguments
   end
 end
