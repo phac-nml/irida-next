@@ -425,6 +425,16 @@ input AttachmentFilter {
   filename_start_all: [String!]
   filename_start_any: [String!]
   filename_true: String
+
+  """
+  Filter attachments by metadata which contains the supplied key value pairs
+  """
+  metadata_jcont: JSON
+
+  """
+  Filter attachments by metadata which contains the key
+  """
+  metadata_jcont_key: String
   puid_blank: String
   puid_cont: String
   puid_cont_all: [String!]
@@ -2275,6 +2285,16 @@ input SampleFilter {
   created_at_start_all: [String!]
   created_at_start_any: [String!]
   created_at_true: String
+
+  """
+  Filter samples by metadata which contains the supplied key value pairs
+  """
+  metadata_jcont: JSON
+
+  """
+  Filter samples by metadata which contains the key
+  """
+  metadata_jcont_key: String
   name_blank: String
   name_cont: String
   name_cont_all: [String!]

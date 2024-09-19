@@ -357,4 +357,71 @@ class AttachmentsQueryTest < ActiveSupport::TestCase
     assert_equal attachment1['id'], "gid://irida/Attachment/#{metadata2['associated_attachment_id']}"
     assert_equal attachment2['id'], "gid://irida/Attachment/#{metadata1['associated_attachment_id']}"
   end
+
+  test 'attachment query should work with metadata_jcont filter' do
+    result = IridaSchema.execute(
+      ATTACHMENTS_QUERY,
+      context: { current_user: @user_paired },
+      variables: { attachmentFilter: { metadata_jcont: { type: 'pe' } }, puid: @sample_paired.puid }
+    )
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['sample']['attachments']['nodes']
+
+    assert_equal 6, data.count
+
+    attachment1 = data[0]
+    attachment2 = data[1]
+    metadata1 = attachment1['metadata']
+    metadata2 = attachment2['metadata']
+
+    assert_equal 'forward', metadata1['direction']
+    assert_equal 'reverse', metadata2['direction']
+
+    assert_equal 'pe', metadata1['type']
+    assert_equal 'pe', metadata2['type']
+
+    # check they reference each other
+    assert_equal attachment1['id'], "gid://irida/Attachment/#{metadata2['associated_attachment_id']}"
+    assert_equal attachment2['id'], "gid://irida/Attachment/#{metadata1['associated_attachment_id']}"
+  end
+
+  test 'attachment query should work with metadata_jcont filter to select only forward files' do
+    result = IridaSchema.execute(
+      ATTACHMENTS_QUERY,
+      context: { current_user: @user_paired },
+      variables: { attachmentFilter: { metadata_jcont: { type: 'pe', direction: 'forward' } },
+                   puid: @sample_paired.puid }
+    )
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['sample']['attachments']['nodes']
+    assert_equal 3, data.count
+
+    attachment1 = data[0]
+    metadata1 = attachment1['metadata']
+
+    assert_equal 'forward', metadata1['direction']
+
+    assert_equal 'pe', metadata1['type']
+  end
+
+  test 'attachment query should work with metadata_jcont_key filter' do
+    result = IridaSchema.execute(
+      ATTACHMENTS_QUERY,
+      context: { current_user: @user_paired },
+      variables: { attachmentFilter: { metadata_jcont_key: 'thisone' },
+                   puid: @sample_paired.puid }
+    )
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    attachments = result['data']['sample']['attachments']['nodes']
+
+    puts attachments
+
+    assert_equal 0, attachments.count
+  end
 end
