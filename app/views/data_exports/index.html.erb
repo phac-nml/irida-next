@@ -6,8 +6,8 @@
 
 <div class="flow-root">
   <div class="flex flex-row-reverse items-center mb-4 space-x-2">
-    <%= search_form_for @q, url: data_exports_url, html: { "data-controller": "filters" } do |f| %>
-      <%= f.label :name_cont, "SEARCH", class: "sr-only" %>
+    <%= search_form_for @q, url: data_exports_url, html: { "data-controller": "filters", "data-turbo-permanent": "true" } do |f| %>
+      <%= f.label :id_or_name_cont, "SEARCH", class: "sr-only" %>
       <div class="relative lg:w-72">
         <div
           class="
