@@ -1083,9 +1083,9 @@ class DataExportsTest < ApplicationSystemTestCase
 
     assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                          locale: @user.locale))
-    assert_selector 'table tbody tr', count: 1
 
     within('table tbody') do
+      assert_selector ' tr', count: 1
       assert_text @data_export1.id
       assert_text @data_export1.name
     end
@@ -1093,13 +1093,15 @@ class DataExportsTest < ApplicationSystemTestCase
     fill_in placeholder: I18n.t(:'data_exports.index.search.placeholder'),
             with: @data_export1.name
 
-    assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
+    assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
                                                                          locale: @user.locale))
-    assert_selector 'table tbody tr', count: 1
 
     within('table tbody') do
+      assert_selector 'tr', count: 2
       assert_text @data_export1.id
       assert_text @data_export1.name
+      assert_text @data_export10.id
+      assert_text @data_export10.name
     end
   end
 end
