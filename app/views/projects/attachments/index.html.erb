@@ -8,14 +8,40 @@
     subtitle: t(".subtitle", project_name: @project.name),
   ) do |component| %>
     <%= component.with_buttons do %>
-      <% if allowed_to?(:create_attachment?, @project) %>
-        <%= link_to t(".upload_files"),
-        new_namespace_project_attachment_path(id: @project.id),
-        data: {
-          turbo_frame: "attachment_modal",
-          turbo_stream: true,
-        },
-        class: "button button--size-default button--state-default" %>
+    <% if allowed_to?(:create_attachment?, @project) %>
+      <%= link_to t(".upload_files"),
+          new_namespace_project_attachment_path(id: @project.id),
+          data: {
+            turbo_frame: "attachment_modal",
+            turbo_stream: true,
+          },
+          class: "
+            inline-flex
+            items-center
+            justify-center
+            w-1/2
+            text-sm
+            border
+            rounded-md
+            cursor-pointer
+            sm:w-auto
+            focus:z-10
+            px-5
+            py-2.5
+            bg-white
+            text-slate-900
+            border-slate-200
+            focus:outline-none
+            hover:bg-slate-100
+            hover:text-slate-950
+            focus:ring-slate-200
+            dark:focus:ring-slate-700
+            dark:bg-slate-800
+            dark:text-slate-400
+            dark:border-slate-600
+            dark:hover:text-white
+            dark:hover:bg-slate-700
+          " %>
       <% end %>
     <% end %>
   <% end %>

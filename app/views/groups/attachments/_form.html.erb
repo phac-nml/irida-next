@@ -40,7 +40,31 @@
 
     <div>
       <%= form.submit t(".upload"),
-                  class: "button button--state-primary button--size-default",
+                  class: "
+                    inline-flex
+                    items-center
+                    justify-center
+                    w-1/2
+                    text-sm
+                    border
+                    rounded-md
+                    cursor-pointer
+                    sm:w-auto
+                    focus:z-10
+                    px-5
+                    py-2.5
+                    text-white
+                    border-primary-800
+                    bg-primary-700
+                    focus:outline-none
+                    hover:bg-primary-800
+                    focus:ring-primary-300
+                    dark:focus:ring-primary-700
+                    dark:bg-primary-800
+                    dark:text-white
+                    dark:border-primary-900
+                    dark:hover:bg-primary-700
+                  ",
                   data: {
                     "attachment-upload-target": "submitButton",
                   } %>
