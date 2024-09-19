@@ -56,31 +56,25 @@
   </div>
 </div>
 
-<div class="flex flex-wrap justify-end flex-none metadata shrink-0">
-  <div class="grid grid-cols-2 gap-3 mt-2 stats text-slate-500 group-stats">
-    <% if @namespace.type == "Group" %>
-      <%= viral_tooltip(title: t(:'.stats.projects')) do %>
-        <span class="flex items-center text-sm">
-          <%= viral_icon(name: :rectangle_stack, color: :subdued, classes: "h-5 w-5 mr-1") %>
-          <%= @namespace.project_namespaces.count %>
-        </span>
-      <% end %>
-      <%= viral_tooltip(title: t(:'.stats.subnamespaces')) do %>
-        <span class="flex items-center text-sm">
-          <%= viral_icon(name: :squares_2x2, color: :subdued, classes: "h-5 w-5") %><%= @namespace.children.count %>
-        </span>
-      <% end %>
+<div class="flex flex-row-reverse gap-x-3 text-slate-500">
+  <% if @namespace.type == "Group" %>
+    <%= viral_tooltip(title: t(:'.stats.projects')) do %>
+      <span class="flex items-center text-sm">
+        <%= viral_icon(name: :rectangle_stack, color: :subdued, classes: "h-5 w-5") %>
+        <%= @namespace.project_namespaces.count %>
+      </span>
     <% end %>
-    <% if @namespace.type == "Project" %>
-      <div class="grid grid-cols-subgrid gap-3 col-span-2">
-        <div class="col-start-2">
-          <%= viral_tooltip(title: t(:'.stats.samples')) do %>
-            <span class="flex items-center text-sm">
-              <%= viral_icon(name: :beaker, color: :subdued, classes: "h-5 w-5") %><%= @sample_count %>
-            </span>
-          <% end %>
-        </div>
-      </div>
+    <%= viral_tooltip(title: t(:'.stats.subnamespaces')) do %>
+      <span class="flex items-center text-sm">
+        <%= viral_icon(name: :squares_2x2, color: :subdued, classes: "h-5 w-5") %><%= @namespace.children.count %>
+      </span>
     <% end %>
-  </div>
+  <% end %>
+  <% if @namespace.type == "Project" %>
+    <%= viral_tooltip(title: t(:'.stats.samples')) do %>
+      <span class="flex items-center text-sm">
+        <%= viral_icon(name: :beaker, color: :subdued, classes: "h-5 w-5") %><%= @sample_count %>
+      </span>
+    <% end %>
+  <% end %>
 </div>

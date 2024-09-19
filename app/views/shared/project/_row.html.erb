@@ -54,20 +54,14 @@
     ) %>
   </td>
   <td class="p-4 whitespace-nowrap">
-    <div class="flex flex-wrap justify-end flex-none metadata shrink-0">
-      <div class="grid grid-cols-3 gap-3 mt-2 stats text-slate-500 group-stats">
-        <div class="grid grid-cols-subgrid gap-3 col-span-3">
-          <div class="col-start-3">
-            <%= viral_tooltip(title: t(:"dashboard.projects.index.row.samples")) do %>
-              <span class="flex items-center text-sm">
-                <%= viral_icon(name: :beaker, color: :subdued, classes: "h-5 w-5") %><%= project.samples.size %>
-              </span>
-            <% end %>
-          </div>
-        </div>
-      </div>
+    <div class="flex flex-row-reverse">
+      <%= viral_tooltip(title: t(:"dashboard.projects.index.row.samples")) do %>
+        <span class="flex items-center text-sm">
+          <%= viral_icon(name: :beaker, color: :subdued, classes: "h-5 w-5") %><%= project.samples.size %>
+        </span>
+      <% end %>
     </div>
-    <span class="flex justify-end items-center text-sm">
+    <span class="flex items-center justify-end text-sm">
       <%= local_time_ago(project.updated_at) %>
     </span>
   </td>
