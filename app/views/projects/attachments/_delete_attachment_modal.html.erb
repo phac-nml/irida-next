@@ -9,8 +9,8 @@
       <p class="mb-4">
         <% if @attachment.associated_attachment %>
           <%= t(".multi_description",
-          filenames: [@attachment.file.filename.to_s,
-          @attachment.associated_attachment.file.filename.to_s].join("'")) %>
+          filenames:
+          "'#{@attachment.file.filename.to_s}', '#{@attachment.associated_attachment.file.filename.to_s}'") %>
         <% else %>
           <%= t(".single_description", filename: @attachment.file.filename.to_s) %>
         <% end %>
