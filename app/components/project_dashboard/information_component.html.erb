@@ -29,7 +29,7 @@
 <span class="flex items-center">
   <%= viral_tooltip(title: 'Number of project members') do %>
     <span class="flex items-center">
-      <%= viral_icon(name: :squares_2x2, color: :subdued, classes: "h-5 w-5 m-0 mr-2") %>
+      <%= viral_icon(name: :users, color: :subdued, classes: "h-5 w-5 m-0 mr-2") %>
       <%= @project.namespace.project_members.count %>
     </span>
   <% end %>
