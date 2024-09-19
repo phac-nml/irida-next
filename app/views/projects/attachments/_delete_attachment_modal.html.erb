@@ -7,7 +7,13 @@
     <div
       class="mb-4 font-normal text-slate-500 dark:text-slate-400 overflow-x-visible">
       <p class="mb-4">
-        <%= t(".description") %>
+        <% if @attachment.associated_attachment %>
+          <%= t(".multi_description",
+          filenames: [@attachment.file.filename.to_s,
+          @attachment.associated_attachment.file.filename.to_s].join("'")) %>
+        <% else %>
+          <%= t(".single_description", filename: @attachment.file.filename.to_s) %>
+        <% end %>
       </p>
       <%= form_for(:deletion, url: namespace_project_attachment_path(id: @attachment.id), method: :delete) do |form| %>
         <%= form.submit t(".submit_button"),
