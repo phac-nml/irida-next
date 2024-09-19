@@ -70,7 +70,7 @@ fr:
         read?: You are not authorized to view project %{name} on this server.
         read_sample?: You are not authorized to view this sample for project %{name} on this server.
         sample_listing?: You are not authorized to view samples for project %{name} on this server.
-        submit_workflow?: You are not authorized to submit pipelines for samples within project %{name} on this server.
+        submit_workflow?: You are not authorized to submit workflows for samples within project %{name} on this server.
         transfer?: You are not authorized to transfer project %{name} on this server.
         transfer_sample?: You are not authorized to transfer samples for project %{name} on this server.
         transfer_sample_into_project?: You are not authorized to transfer samples to project %{name} on this server.
@@ -1290,7 +1290,7 @@ fr:
         title: Samples
         transfer_button: Transfer samples
         workflows:
-          button_sr: Launch pipeline
+          button_sr: Launch workflow
       metadata:
         deletions:
           destroy:
@@ -1633,15 +1633,15 @@ fr:
       create_export_button: Create Export
       deselect_all_button: Deselect All
       select_all_button: Select All
-      title: Pipelines
+      title: Workflow Executions
     samples:
-      empty: No samples could be found for this pipeline
+      empty: No samples could be found for this workflow execution
     show:
       cancel_button: Cancel
-      cancel_button_confirmation: Are you sure that you want to cancel this pipeline?
+      cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
       create_export_button: Create Export
       remove_button: Remove
-      remove_button_confirmation: Are you sure that you want to remove this pipeline?
+      remove_button_confirmation: Are you sure that you want to remove this workflow execution?
       tabs:
         files: Files
         params: Parameters
@@ -1663,15 +1663,15 @@ fr:
         title: "%{workflow} parameters"
         update: Update
       pipeline_selection:
-        loading: Preparing pipeline arguments for COUNT_PLACEHOLDER samples, this may take a bit of time.
-        title: Pipeline Selection
+        loading: Preparing workflow execution arguments for COUNT_PLACEHOLDER samples, this may take a bit of time.
+        title: Workflow Selection
     summary:
       created_at: Created
       name: Name
       run_id: Run ID
       updated_at: Last Updated
-      workflow_name: Pipeline Name
-      workflow_version: Pipeline Version
+      workflow_name: Workflow Name
+      workflow_version: Workflow Version
     table:
       empty:
         description: There are no pipelines associated with this submitter.
@@ -1680,7 +1680,7 @@ fr:
       actions: Actions
       counts:
         selected: Selected
-        workflow_executions: Pipelines
+        workflow_executions: Workflow Executions
       created_at: Created
       id: ID
       name: Name
@@ -1688,5 +1688,5 @@ fr:
       select_page: Select / Deselect visible samples
       state: State
       updated_at: Last Updated
-      workflow_name: Pipeline Name
-      workflow_version: Pipeline Version
+      workflow_name: Workflow Name
+      workflow_version: Workflow Version
