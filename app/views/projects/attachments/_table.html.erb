@@ -6,10 +6,10 @@
   namespace,
   abilities: {
     # Uncomment when ready to use multi-select functionality
-    # select_attachments: allowed_to?(:destroy_attachment?, project)
+    # select_attachments: allowed_to?(:destroy_attachment?, namespace.project)
   },
   row_actions: {
-    destroy: allowed_to?(:destroy_attachment?, project),
+    destroy: allowed_to?(:destroy_attachment?, namespace.project),
   },
   empty: {
     title: t(:".empty.title"),
