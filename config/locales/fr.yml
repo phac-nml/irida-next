@@ -24,7 +24,7 @@ fr:
         new?: You are not authorized to create a project under group %{name} on this server.
         read?: You are not authorized to view group %{name} on this server.
         sample_listing?: You are not authorized to view samples for group %{name} on this server.
-        submit_workflow?: You are not authorized to submit pipelines for samples within group %{name} on this server.
+        submit_workflow?: You are not authorized to submit workflows for samples within group %{name} on this server.
         transfer?: You are not authorized to transfer group %{name} on this server.
         transfer_into_namespace?: You are not authorized to transfer into the group namespace %{name} on this server.
         unlink_namespace_with_group?: You are not authorized to unlink group %{name} from other groups on this server.
@@ -43,7 +43,7 @@ fr:
         export_data?: You are not authorized to export data from project %{name} on this server.
         link_namespace_with_group?: You are not authorized to link project %{name} with other groups on this server.
         member_listing?: You are not authorized to view members for the project namespace %{name} on this server.
-        submit_workflow?: You are not authorized to submit pipelines for samples within project %{name} on this server.
+        submit_workflow?: You are not authorized to submit workflows for samples within project %{name} on this server.
         unlink_namespace_with_group?: You are not authorized to unlink project %{name} from other groups on this server.
         update?: You are not authorized to update the namespace for project %{name} on this server.
         update_automated_workflow_executions?: You are not authorized to update automated pipelines for project %{name}
