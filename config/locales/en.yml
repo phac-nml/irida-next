@@ -43,7 +43,7 @@ en:
         export_data?: You are not authorized to export data from project %{name} on this server.
         link_namespace_with_group?: You are not authorized to link project %{name} with other groups on this server.
         member_listing?: You are not authorized to view members for the project namespace %{name} on this server.
-        submit_workflow?: You are not authorized to submit pipelines for samples within project %{name} on this server.
+        submit_workflow?: You are not authorized to submit workflows for samples within project %{name} on this server.
         unlink_namespace_with_group?: You are not authorized to unlink project %{name} from other groups on this server.
         update?: You are not authorized to update the namespace for project %{name} on this server.
         update_automated_workflow_executions?: You are not authorized to update automated pipelines for project %{name}
@@ -70,7 +70,7 @@ en:
         read?: You are not authorized to view project %{name} on this server.
         read_sample?: You are not authorized to view this sample for project %{name} on this server.
         sample_listing?: You are not authorized to view samples for project %{name} on this server.
-        submit_workflow?: You are not authorized to submit pipelines for samples within project %{name} on this server.
+        submit_workflow?: You are not authorized to submit workflows for samples within project %{name} on this server.
         transfer?: You are not authorized to transfer project %{name} on this server.
         transfer_sample?: You are not authorized to transfer samples for project %{name} on this server.
         transfer_sample_into_project?: You are not authorized to transfer samples to project %{name} on this server.
@@ -219,21 +219,6 @@ en:
         one: Sample
         other: Samples
   activity:
-    group:
-      create_html: "%{user} created group"
-      destroy_html: "%{user} removed group"
-      projects:
-        create_html: "%{user} created project <span class='text-slate-800 dark:text-slate-300 font-medium'>%{href}</span> within group"
-        destroy_html: "%{user} removed project <span class='text-slate-800 dark:text-slate-300 font-medium'>%{project_puid}</span> from group"
-        transfer_in_html: "%{user} transferred project %{href} from namespace <span class='text-slate-800 dark:text-slate-300 font-medium'>%{old_namespace}</span> to <span class='text-slate-800 dark:text-slate-300 font-medium'>%{new_namespace}</span>"
-        transfer_out_html: "%{user} transferred project <span class='text-slate-800 dark:text-slate-300 font-medium'>%{project_puid}</span>  from namespace <span class='text-slate-800 dark:text-slate-300 font-medium'>%{old_namespace}</span> to <span class='text-slate-800 dark:text-slate-300 font-medium'>%{new_namespace}</span>"
-      subgroups:
-        create_html: "%{user} created subgroup <span class='text-slate-800 dark:text-slate-300 font-medium'>%{href}</span>"
-        destroy_html: "%{user} removed descendant group <span class='text-slate-800 dark:text-slate-300 font-medium'>%{removed_group_puid}</span>"
-      transfer_in_html: "%{user} transferred group <span class='text-slate-800 dark:text-slate-300 font-medium'>%{href}</span> into group <span class='text-slate-800 dark:text-slate-300 font-medium'>%{new_namespace}</span> from <span class='text-slate-800 dark:text-slate-300 font-medium'>%{old_namespace}</span>"
-      transfer_in_no_exisiting_namespace_html: "%{user} transferred group <span class='text-slate-800 dark:text-slate-300 font-medium'>%{href}</span> into group <span class='text-slate-800 dark:text-slate-300 font-medium'>%{new_namespace}</span>"
-      transfer_out_html: "%{user} transferred group <span class='text-slate-800 dark:text-slate-300 font-medium'>%{group_puid}</span> into group <span class='text-slate-800 dark:text-slate-300 font-medium'>%{new_namespace}</span>"
-      update_html: "%{user} updated group attributes"
     member:
       create_html: "%{user} added member %{href} to %{namespace_type}"
       destroy_html: "%{user} removed member <span class='font-medium text-slate-800 dark:text-slate-300'>%{member}</span> from %{namespace_type}"
@@ -545,8 +530,6 @@ en:
     screen_reader:
       close: Close
   groups:
-    activity:
-      title: Group activity
     bots:
       index:
         access_level:
@@ -750,7 +733,6 @@ en:
         shared_namespaces: Shared groups and projects
         subgroups_and_projects: Subgroups and projects
     sidebar:
-      activity: Activity
       bot_accounts: Bot Accounts
       details: Details
       general: General
@@ -1290,7 +1272,7 @@ en:
         title: Samples
         transfer_button: Transfer samples
         workflows:
-          button_sr: Launch pipeline
+          button_sr: Launch workflow
       metadata:
         deletions:
           destroy:
@@ -1633,15 +1615,15 @@ en:
       create_export_button: Create Export
       deselect_all_button: Deselect All
       select_all_button: Select All
-      title: Pipelines
+      title: Workflow Executions
     samples:
-      empty: No samples could be found for this pipeline
+      empty: No samples could be found for this workflow execution
     show:
       cancel_button: Cancel
-      cancel_button_confirmation: Are you sure that you want to cancel this pipeline?
+      cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
       create_export_button: Create Export
       remove_button: Remove
-      remove_button_confirmation: Are you sure that you want to remove this pipeline?
+      remove_button_confirmation: Are you sure that you want to remove this workflow execution?
       tabs:
         files: Files
         params: Parameters
@@ -1663,15 +1645,15 @@ en:
         title: "%{workflow} parameters"
         update: Update
       pipeline_selection:
-        loading: Preparing pipeline arguments for COUNT_PLACEHOLDER samples, this may take a bit of time.
-        title: Pipeline Selection
+        loading: Preparing workflow execution arguments for COUNT_PLACEHOLDER samples, this may take a bit of time.
+        title: Workflow Selection
     summary:
       created_at: Created
       name: Name
       run_id: Run ID
       updated_at: Last Updated
-      workflow_name: Pipeline Name
-      workflow_version: Pipeline Version
+      workflow_name: Workflow Name
+      workflow_version: Workflow Version
     table:
       empty:
         description: There are no pipelines associated with this submitter.
@@ -1680,7 +1662,7 @@ en:
       actions: Actions
       counts:
         selected: Selected
-        workflow_executions: Pipelines
+        workflow_executions: Workflow Executions
       created_at: Created
       id: ID
       name: Name
@@ -1688,5 +1670,5 @@ en:
       select_page: Select / Deselect visible samples
       state: State
       updated_at: Last Updated
-      workflow_name: Pipeline Name
-      workflow_version: Pipeline Version
+      workflow_name: Workflow Name
+      workflow_version: Workflow Version
