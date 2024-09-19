@@ -179,4 +179,40 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
       assert_nil data
     end
   end
+
+  test 'ransack samples query with metadata_jcont_key filter should work' do
+    result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
+                                 context: { current_user: @user },
+                                 variables: { filter: { metadata_jcont_key: 'metadatafield1' } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['samples']['nodes']
+
+    assert_equal 4, data.count
+  end
+
+  test 'ransack samples query with metadata_jcont filter should work' do
+    result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
+                                 context: { current_user: @user },
+                                 variables: { filter: { metadata_jcont: { metadatafield1: 'value1' } } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['samples']['nodes']
+
+    assert_equal 4, data.count
+  end
+
+  test 'ransack samples query with metadata_jcont_key filter should work with non_existent key' do
+    result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
+                                 context: { current_user: @user },
+                                 variables: { filter: { metadata_jcont_key: 'non_existent' } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['samples']['nodes']
+
+    assert_equal 0, data.count
+  end
 end
