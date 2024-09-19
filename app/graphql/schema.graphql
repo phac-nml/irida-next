@@ -265,6 +265,12 @@ input AttachmentFilter {
   byte_size_in: [String!]
   byte_size_in_all: [String!]
   byte_size_in_any: [String!]
+  byte_size_jcont: String
+  byte_size_jcont_all: [String!]
+  byte_size_jcont_any: [String!]
+  byte_size_jcont_key: String
+  byte_size_jcont_key_all: [String!]
+  byte_size_jcont_key_any: [String!]
   byte_size_lt: String
   byte_size_lt_all: [String!]
   byte_size_lt_any: [String!]
@@ -327,6 +333,12 @@ input AttachmentFilter {
   created_at_in: [String!]
   created_at_in_all: [String!]
   created_at_in_any: [String!]
+  created_at_jcont: String
+  created_at_jcont_all: [String!]
+  created_at_jcont_any: [String!]
+  created_at_jcont_key: String
+  created_at_jcont_key_all: [String!]
+  created_at_jcont_key_any: [String!]
   created_at_lt: String
   created_at_lt_all: [String!]
   created_at_lt_any: [String!]
@@ -389,6 +401,12 @@ input AttachmentFilter {
   filename_in: [String!]
   filename_in_all: [String!]
   filename_in_any: [String!]
+  filename_jcont: String
+  filename_jcont_all: [String!]
+  filename_jcont_any: [String!]
+  filename_jcont_key: String
+  filename_jcont_key_all: [String!]
+  filename_jcont_key_any: [String!]
   filename_lt: String
   filename_lt_all: [String!]
   filename_lt_any: [String!]
@@ -425,6 +443,16 @@ input AttachmentFilter {
   filename_start_all: [String!]
   filename_start_any: [String!]
   filename_true: String
+
+  """
+  Filter attachments by metadata which contains the supplied key value pairs
+  """
+  metadata_jcont: JSON
+
+  """
+  Filter attachments by metadata which contains the key
+  """
+  metadata_jcont_key: String
   puid_blank: String
   puid_cont: String
   puid_cont_all: [String!]
@@ -451,6 +479,12 @@ input AttachmentFilter {
   puid_in: [String!]
   puid_in_all: [String!]
   puid_in_any: [String!]
+  puid_jcont: String
+  puid_jcont_all: [String!]
+  puid_jcont_any: [String!]
+  puid_jcont_key: String
+  puid_jcont_key_all: [String!]
+  puid_jcont_key_any: [String!]
   puid_lt: String
   puid_lt_all: [String!]
   puid_lt_any: [String!]
@@ -513,6 +547,12 @@ input AttachmentFilter {
   updated_at_in: [String!]
   updated_at_in_all: [String!]
   updated_at_in_any: [String!]
+  updated_at_jcont: String
+  updated_at_jcont_all: [String!]
+  updated_at_jcont_any: [String!]
+  updated_at_jcont_key: String
+  updated_at_jcont_key_all: [String!]
+  updated_at_jcont_key_any: [String!]
   updated_at_lt: String
   updated_at_lt_all: [String!]
   updated_at_lt_any: [String!]
@@ -906,6 +946,12 @@ input GroupFilter {
   created_at_in: [String!]
   created_at_in_all: [String!]
   created_at_in_any: [String!]
+  created_at_jcont: String
+  created_at_jcont_all: [String!]
+  created_at_jcont_any: [String!]
+  created_at_jcont_key: String
+  created_at_jcont_key_all: [String!]
+  created_at_jcont_key_any: [String!]
   created_at_lt: String
   created_at_lt_all: [String!]
   created_at_lt_any: [String!]
@@ -968,6 +1014,12 @@ input GroupFilter {
   name_in: [String!]
   name_in_all: [String!]
   name_in_any: [String!]
+  name_jcont: String
+  name_jcont_all: [String!]
+  name_jcont_any: [String!]
+  name_jcont_key: String
+  name_jcont_key_all: [String!]
+  name_jcont_key_any: [String!]
   name_lt: String
   name_lt_all: [String!]
   name_lt_any: [String!]
@@ -1030,6 +1082,12 @@ input GroupFilter {
   puid_in: [String!]
   puid_in_all: [String!]
   puid_in_any: [String!]
+  puid_jcont: String
+  puid_jcont_all: [String!]
+  puid_jcont_any: [String!]
+  puid_jcont_key: String
+  puid_jcont_key_all: [String!]
+  puid_jcont_key_any: [String!]
   puid_lt: String
   puid_lt_all: [String!]
   puid_lt_any: [String!]
@@ -1092,6 +1150,12 @@ input GroupFilter {
   updated_at_in: [String!]
   updated_at_in_all: [String!]
   updated_at_in_any: [String!]
+  updated_at_jcont: String
+  updated_at_jcont_all: [String!]
+  updated_at_jcont_any: [String!]
+  updated_at_jcont_key: String
+  updated_at_jcont_key_all: [String!]
+  updated_at_jcont_key_any: [String!]
   updated_at_lt: String
   updated_at_lt_all: [String!]
   updated_at_lt_any: [String!]
@@ -1548,6 +1612,12 @@ input ProjectFilter {
   created_at_in: [String!]
   created_at_in_all: [String!]
   created_at_in_any: [String!]
+  created_at_jcont: String
+  created_at_jcont_all: [String!]
+  created_at_jcont_any: [String!]
+  created_at_jcont_key: String
+  created_at_jcont_key_all: [String!]
+  created_at_jcont_key_any: [String!]
   created_at_lt: String
   created_at_lt_all: [String!]
   created_at_lt_any: [String!]
@@ -1610,6 +1680,12 @@ input ProjectFilter {
   name_in: [String!]
   name_in_all: [String!]
   name_in_any: [String!]
+  name_jcont: String
+  name_jcont_all: [String!]
+  name_jcont_any: [String!]
+  name_jcont_key: String
+  name_jcont_key_all: [String!]
+  name_jcont_key_any: [String!]
   name_lt: String
   name_lt_all: [String!]
   name_lt_any: [String!]
@@ -1672,6 +1748,12 @@ input ProjectFilter {
   puid_in: [String!]
   puid_in_all: [String!]
   puid_in_any: [String!]
+  puid_jcont: String
+  puid_jcont_all: [String!]
+  puid_jcont_any: [String!]
+  puid_jcont_key: String
+  puid_jcont_key_all: [String!]
+  puid_jcont_key_any: [String!]
   puid_lt: String
   puid_lt_all: [String!]
   puid_lt_any: [String!]
@@ -1734,6 +1816,12 @@ input ProjectFilter {
   updated_at_in: [String!]
   updated_at_in_all: [String!]
   updated_at_in_any: [String!]
+  updated_at_jcont: String
+  updated_at_jcont_all: [String!]
+  updated_at_jcont_any: [String!]
+  updated_at_jcont_key: String
+  updated_at_jcont_key_all: [String!]
+  updated_at_jcont_key_any: [String!]
   updated_at_lt: String
   updated_at_lt_all: [String!]
   updated_at_lt_any: [String!]
@@ -2177,6 +2265,12 @@ input SampleFilter {
   attachments_updated_at_in: [String!]
   attachments_updated_at_in_all: [String!]
   attachments_updated_at_in_any: [String!]
+  attachments_updated_at_jcont: String
+  attachments_updated_at_jcont_all: [String!]
+  attachments_updated_at_jcont_any: [String!]
+  attachments_updated_at_jcont_key: String
+  attachments_updated_at_jcont_key_all: [String!]
+  attachments_updated_at_jcont_key_any: [String!]
   attachments_updated_at_lt: String
   attachments_updated_at_lt_all: [String!]
   attachments_updated_at_lt_any: [String!]
@@ -2239,6 +2333,12 @@ input SampleFilter {
   created_at_in: [String!]
   created_at_in_all: [String!]
   created_at_in_any: [String!]
+  created_at_jcont: String
+  created_at_jcont_all: [String!]
+  created_at_jcont_any: [String!]
+  created_at_jcont_key: String
+  created_at_jcont_key_all: [String!]
+  created_at_jcont_key_any: [String!]
   created_at_lt: String
   created_at_lt_all: [String!]
   created_at_lt_any: [String!]
@@ -2275,6 +2375,16 @@ input SampleFilter {
   created_at_start_all: [String!]
   created_at_start_any: [String!]
   created_at_true: String
+
+  """
+  Filter samples by metadata which contains the supplied key value pairs
+  """
+  metadata_jcont: JSON
+
+  """
+  Filter samples by metadata which contains the key
+  """
+  metadata_jcont_key: String
   name_blank: String
   name_cont: String
   name_cont_all: [String!]
@@ -2301,6 +2411,12 @@ input SampleFilter {
   name_in: [String!]
   name_in_all: [String!]
   name_in_any: [String!]
+  name_jcont: String
+  name_jcont_all: [String!]
+  name_jcont_any: [String!]
+  name_jcont_key: String
+  name_jcont_key_all: [String!]
+  name_jcont_key_any: [String!]
   name_lt: String
   name_lt_all: [String!]
   name_lt_any: [String!]
@@ -2363,6 +2479,12 @@ input SampleFilter {
   puid_in: [String!]
   puid_in_all: [String!]
   puid_in_any: [String!]
+  puid_jcont: String
+  puid_jcont_all: [String!]
+  puid_jcont_any: [String!]
+  puid_jcont_key: String
+  puid_jcont_key_all: [String!]
+  puid_jcont_key_any: [String!]
   puid_lt: String
   puid_lt_all: [String!]
   puid_lt_any: [String!]
@@ -2425,6 +2547,12 @@ input SampleFilter {
   updated_at_in: [String!]
   updated_at_in_all: [String!]
   updated_at_in_any: [String!]
+  updated_at_jcont: String
+  updated_at_jcont_all: [String!]
+  updated_at_jcont_any: [String!]
+  updated_at_jcont_key: String
+  updated_at_jcont_key_all: [String!]
+  updated_at_jcont_key_any: [String!]
   updated_at_lt: String
   updated_at_lt_all: [String!]
   updated_at_lt_any: [String!]
