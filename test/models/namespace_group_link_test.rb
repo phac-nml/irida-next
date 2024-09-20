@@ -119,7 +119,7 @@ class NamespaceGroupLinkTest < ActiveSupport::TestCase
 
       I18n.available_locales.each do |locale|
         user_emails = Member.user_emails(group_group_link.group, locale)
-        manager_emails = Member.manager_emails(group_group_link.namespace, locale)
+        manager_emails = Member.manager_emails(group_group_link.namespace, locale, Member::AccessLevel::OWNER)
         unless user_emails.empty?
           assert_enqueued_email_with GroupLinkMailer, :access_revoked_user_email,
                                      args: [user_emails, group_group_link.group,
@@ -142,7 +142,7 @@ class NamespaceGroupLinkTest < ActiveSupport::TestCase
 
       I18n.available_locales.each do |locale|
         user_emails = Member.user_emails(group_group_link.group, locale)
-        manager_emails = Member.manager_emails(group_group_link.namespace, locale)
+        manager_emails = Member.manager_emails(group_group_link.namespace, locale, Member::AccessLevel::OWNER)
         unless user_emails.empty?
           assert_enqueued_email_with GroupLinkMailer, :access_granted_user_email,
                                      args: [user_emails, group_group_link.group,

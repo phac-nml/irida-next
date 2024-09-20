@@ -21,15 +21,8 @@ module Members
         @new_member = Members::CreateService.new(@user, @group, valid_params, true).execute
       end
 
-      assert_enqueued_emails 3
+      assert_enqueued_emails 1
       assert_enqueued_email_with MemberMailer, :access_granted_user_email, args: [@new_member, @group]
-      I18n.available_locales.each do |locale|
-        manager_emails = Member.manager_emails(@group, locale, @new_member)
-        next if manager_emails.empty?
-
-        assert_enqueued_email_with MemberMailer, :access_granted_manager_email,
-                                   args: [@new_member, manager_emails, @group, locale]
-      end
     end
 
     test 'create group member with no email notification' do
@@ -52,15 +45,8 @@ module Members
         @new_member = Members::CreateService.new(@user, @project_namespace, valid_params, true).execute
       end
 
-      assert_enqueued_emails 3
+      assert_enqueued_emails 1
       assert_enqueued_email_with MemberMailer, :access_granted_user_email, args: [@new_member, @project_namespace]
-      I18n.available_locales.each do |locale|
-        manager_emails = Member.manager_emails(@project_namespace, locale, @new_member)
-        next if manager_emails.empty?
-
-        assert_enqueued_email_with MemberMailer, :access_granted_manager_email,
-                                   args: [@new_member, manager_emails, @project_namespace, locale]
-      end
     end
 
     test 'create group member with invalid params' do
@@ -185,15 +171,8 @@ module Members
         @new_member = Members::CreateService.new(@user, group, valid_params, true).execute
       end
 
-      assert_enqueued_emails 3
+      assert_enqueued_emails 1
       assert_enqueued_email_with MemberMailer, :access_granted_user_email, args: [@new_member, group]
-      I18n.available_locales.each do |locale|
-        manager_emails = Member.manager_emails(group, locale, @new_member)
-        next if manager_emails.empty?
-
-        assert_enqueued_email_with MemberMailer, :access_granted_manager_email,
-                                   args: [@new_member, manager_emails, group, locale]
-      end
     end
 
     test 'valid authorization to create project member' do
@@ -207,15 +186,8 @@ module Members
         @new_member = Members::CreateService.new(@user, @project_namespace, valid_params, true).execute
       end
 
-      assert_enqueued_emails 3
+      assert_enqueued_emails 1
       assert_enqueued_email_with MemberMailer, :access_granted_user_email, args: [@new_member, @project_namespace]
-      I18n.available_locales.each do |locale|
-        manager_emails = Member.manager_emails(@project_namespace, locale, @new_member)
-        next if manager_emails.empty?
-
-        assert_enqueued_email_with MemberMailer, :access_granted_manager_email,
-                                   args: [@new_member, manager_emails, @project_namespace, locale]
-      end
     end
 
     test 'create group member logged using logidze' do

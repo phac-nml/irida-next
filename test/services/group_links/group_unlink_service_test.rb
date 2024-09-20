@@ -27,7 +27,7 @@ module GroupLinks
                                             locale]
         end
 
-        manager_emails = Member.manager_emails(namespace_group_link.namespace, locale)
+        manager_emails = Member.manager_emails(namespace_group_link.namespace, locale, Member::AccessLevel::OWNER)
         next if manager_emails.empty?
 
         assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
@@ -68,7 +68,7 @@ module GroupLinks
                                             locale]
         end
 
-        manager_emails = Member.manager_emails(namespace_group_link.namespace, locale)
+        manager_emails = Member.manager_emails(namespace_group_link.namespace, locale, Member::AccessLevel::OWNER)
         next if manager_emails.empty?
 
         assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
@@ -128,7 +128,7 @@ module GroupLinks
                                             locale]
         end
 
-        manager_emails = Member.manager_emails(namespace_group_link.namespace, locale)
+        manager_emails = Member.manager_emails(namespace_group_link.namespace, locale, Member::AccessLevel::OWNER)
         next if manager_emails.empty?
 
         assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
@@ -157,7 +157,7 @@ module GroupLinks
                                             locale]
         end
 
-        manager_emails = Member.manager_emails(namespace_group_link.namespace, locale)
+        manager_emails = Member.manager_emails(namespace_group_link.namespace, locale, Member::AccessLevel::OWNER)
         next if manager_emails.empty?
 
         assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
@@ -198,7 +198,7 @@ module GroupLinks
                                             locale]
         end
 
-        manager_emails = Member.manager_emails(namespace_group_link.namespace, locale)
+        manager_emails = Member.manager_emails(namespace_group_link.namespace, locale, Member::AccessLevel::OWNER)
         next if manager_emails.empty?
 
         assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
@@ -252,7 +252,7 @@ module GroupLinks
                                             locale]
         end
 
-        manager_emails = Member.manager_emails(namespace_group_link.namespace, locale)
+        manager_emails = Member.manager_emails(namespace_group_link.namespace, locale, Member::AccessLevel::OWNER)
         next if manager_emails.empty?
 
         assert_enqueued_email_with GroupLinkMailer, :access_revoked_manager_email,
