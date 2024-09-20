@@ -51,8 +51,6 @@
       <%= search_form_for @q, url: namespace_project_attachments_path(@project.parent, @project), html: { "data-controller": "filters" } do |f| %>
         <%= hidden_field_tag :limit, @pagy.limit %>
         <%= f.hidden_field :s, value: "#{@q.sorts[0].name} #{@q.sorts[0].dir}" %>
-        <%= f.hidden_field :format, value: "turbo_stream" %>
-
         <%= f.label :puid_or_file_blob_filename_cont, "SEARCH", class: "sr-only" %>
         <div class="relative lg:w-72">
           <div

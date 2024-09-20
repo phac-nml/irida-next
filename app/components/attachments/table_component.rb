@@ -69,8 +69,8 @@ module Attachments
           id: attachment.id
         )
       else
-        namespace_project_attachment_path(
-          id: attachment.id
+        namespace_project_attachment_new_destroy_path(
+          attachment_id: attachment.id
         )
       end
     end
