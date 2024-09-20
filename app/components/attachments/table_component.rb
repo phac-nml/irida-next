@@ -63,14 +63,14 @@ module Attachments
       render(Viral::BaseComponent.new(**arguments), &)
     end
 
-    def destroy_path(attachment)
+    def destroy_path(attachment_id)
       if @namespace.type == 'Group'
-        group_attachment_path(
-          id: attachment.id
+        group_attachment_new_destroy_path(
+          attachment_id:
         )
       else
         namespace_project_attachment_new_destroy_path(
-          attachment_id: attachment.id
+          attachment_id:
         )
       end
     end

@@ -177,7 +177,7 @@
                 <% if @row_actions[:destroy] %>
                   <%= link_to(
                    t(".delete"),
-                      destroy_path(attachment),
+                      destroy_path(attachment.id),
                       data: {
                         turbo_stream: true,
                       },

@@ -25,7 +25,9 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
       end
     end
 
-    resources :attachments, only: %i[create destroy index new]
+    resources :attachments, only: %i[create destroy index new] do
+      get :new_destroy
+    end
     resources :group_links, only: %i[create destroy update index new]
     resources :samples, only: %i[index] do
       scope module: :samples, as: :samples do

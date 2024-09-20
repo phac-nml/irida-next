@@ -1,0 +1,23 @@
+<% if destroyed_attachments %>
+  <%= turbo_stream.update "attachment_modal",
+                      partial: "delete_attachment_modal",
+                      locals: {
+                        open: false,
+                      } %>
+
+  <% destroyed_attachments.each do |attachment| %>
+    <%= turbo_stream.append "flashes" do %>
+      <%= viral_flash(
+        type: :success,
+        data: t(".success", filename: attachment.file.filename),
+      ) %>
+    <% end %>
+  <% end %>
+
+  <turbo-stream action="refresh"></turbo-stream>
+
+<% else %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type: :error, data: message) %>
+  <% end %>
+<% end %>

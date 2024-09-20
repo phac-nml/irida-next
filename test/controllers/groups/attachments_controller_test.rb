@@ -41,5 +41,38 @@ module Groups
              as: :turbo_stream
       end
     end
+
+    test 'should get new_destroy' do
+      get group_attachment_new_destroy_path(@namespace, @attachment1)
+      assert_response :success
+    end
+
+    test 'should not get new_destroy without proper access' do
+      sign_in users(:ryan_doe)
+      get group_attachment_new_destroy_path(@namespace, @attachment1)
+      assert_response :unauthorized
+    end
+
+    test 'should destroy attachment' do
+      assert_difference -> { Attachment.count } => -1 do
+        delete group_attachment_url(@namespace, @attachment1),
+               as: :turbo_stream
+      end
+      assert_response :success
+    end
+
+    test 'should not destroy attachment that does not belong to project' do
+      attachment = attachments(:attachmentA)
+      delete group_attachment_url(@namespace, attachment),
+             as: :turbo_stream
+      assert_response :unprocessable_entity
+    end
+
+    test 'should not destroy attachment without proper access' do
+      sign_in users(:ryan_doe)
+      delete group_attachment_url(@namespace, @attachment1),
+             as: :turbo_stream
+      assert_response :unauthorized
+    end
   end
 end
