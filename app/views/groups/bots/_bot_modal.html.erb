@@ -36,11 +36,11 @@
         <div
           class="
             p-6 bg-white border border-slate-200 rounded-lg shadow dark:bg-slate-800
-            dark:border-slate-700
+            dark:border-slate-700 grid gap-4
           "
         >
           <p class="font-semibold dark:text-white"><%= t("groups.bots.index.bot_listing.new_bot_modal.token_details") %></p>
-          <div class="form-field py-4">
+          <div class="form-field">
             <%= form.label :token_name,
                        t("groups.bots.index.bot_listing.new_bot_modal.token_name") %>
             <%= form.text_field :token_name,
@@ -50,7 +50,7 @@
 
           </div>
 
-          <div class="form-field datepicker py-4" data-controller="datepicker">
+          <div class="form-field datepicker" data-controller="datepicker">
             <%= form.label :expires_at,
                        t("groups.bots.index.bot_listing.new_bot_modal.expires_at") %>
             <div class="relative max-w-sm">
@@ -73,7 +73,7 @@
             </div>
           </div>
 
-          <div class="form-field py-4">
+          <div class="form-field">
             <%= form.label :scopes %>
             <% Irida::Auth.all_available_scopes.each do |scope| %>
               <div class="flex">
@@ -102,17 +102,17 @@
         <%= form.submit t("groups.bots.index.bot_listing.new_bot_modal.submit"),
                     class:
                       "focus:outline-none
-                                                                                                                                                          text-sm
-                                                                                                                                                          text-white
-                                                                                                                                                          bg-primary-700
-                                                                                                                                                          hover:bg-primary-800
-                                                                                                                                                          focus:ring-0
-                                                                                                                                                          rounded-md
-                                                                                                                                                          p-2
-                                                                                                                                                          dark:text-white
-                                                                                                                                                          dark:bg-primary-600
-                                                                                                                                                          dark:hover:bg-primary-700
-                                                                                                                                                          cursor-pointer" %>
+                                                                                                                                                                                  text-sm
+                                                                                                                                                                                  text-white
+                                                                                                                                                                                  bg-primary-700
+                                                                                                                                                                                  hover:bg-primary-800
+                                                                                                                                                                                  focus:ring-0
+                                                                                                                                                                                  rounded-md
+                                                                                                                                                                                  p-2
+                                                                                                                                                                                  dark:text-white
+                                                                                                                                                                                  dark:bg-primary-600
+                                                                                                                                                                                  dark:hover:bg-primary-700
+                                                                                                                                                                                  cursor-pointer" %>
         <button
           type="button"
           class="
