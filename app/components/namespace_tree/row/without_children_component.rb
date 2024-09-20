@@ -8,6 +8,7 @@ module NamespaceTree
         @namespace = namespace
         @path = path
         @path_args = path_args
+        @sample_count = @namespace.type == 'Project' ? @namespace.project.samples.size : 0
       end
     end
   end

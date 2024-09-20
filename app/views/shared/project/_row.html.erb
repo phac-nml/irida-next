@@ -46,6 +46,15 @@
     <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= project.description %></div>
   </td>
   <td class="p-4 whitespace-nowrap">
-    <%= local_time_ago(project.updated_at) %>
+    <div class="flex flex-row-reverse">
+      <%= viral_tooltip(title: t(:"dashboard.projects.index.row.samples")) do %>
+        <span class="flex items-center text-sm">
+          <%= viral_icon(name: :beaker, color: :subdued, classes: "h-5 w-5") %><%= project.samples.size %>
+        </span>
+      <% end %>
+    </div>
+    <span class="flex items-center justify-end text-sm">
+      <%= local_time_ago(project.updated_at) %>
+    </span>
   </td>
 </tr>

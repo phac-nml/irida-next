@@ -409,6 +409,8 @@ fr:
         all: All
         create_project_button: New project
         personal: Personal
+        row:
+          samples: Samples
         search:
           placeholder: Filter by name
         sorting:
@@ -857,6 +859,7 @@ fr:
       row_contents_component:
         stats:
           projects: Projects
+          samples: Samples
           subnamespaces: Subnamespaces
   nextflow:
     samplesheet:

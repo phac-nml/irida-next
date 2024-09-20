@@ -204,6 +204,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_12_193934) do
     t.datetime "deleted_at"
     t.uuid "creator_id", null: false
     t.uuid "namespace_id", null: false
+    t.integer "samples_count"
     t.index ["created_at"], name: "index_projects_on_created_at"
     t.index ["creator_id"], name: "index_projects_on_creator_id"
     t.index ["deleted_at"], name: "index_projects_on_deleted_at"

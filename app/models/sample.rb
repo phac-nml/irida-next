@@ -9,7 +9,7 @@ class Sample < ApplicationRecord
   has_logidze
   acts_as_paranoid
 
-  belongs_to :project
+  belongs_to :project, counter_cache: true
 
   broadcasts_refreshes_to :project
 

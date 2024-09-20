@@ -14,7 +14,7 @@ module Projects
 
     def index
       @pagy, @samples = pagy_with_metadata_sort(@q.result)
-      @has_samples = load_samples.count.positive?
+      @has_samples = @project.samples.size.positive?
     end
 
     def search

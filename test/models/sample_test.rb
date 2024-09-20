@@ -5,6 +5,7 @@ require 'test_helper'
 class SampleTest < ActiveSupport::TestCase
   def setup
     @sample = samples(:sample1)
+    @project = projects(:project1)
   end
 
   test 'valid sample' do
@@ -72,6 +73,25 @@ class SampleTest < ActiveSupport::TestCase
 
     assert_difference(-> { Sample.count } => +1) do
       Sample.restore(@sample.id, recursive: true)
+    end
+  end
+
+  test 'update samples_counter in project' do
+    Project.reset_counters(@project.id, :samples_count)
+
+    @project.reload
+    assert_equal @project.samples.count, @project.samples_count
+
+    assert_difference(-> { @project.samples.count } => -1) do
+      @sample.destroy
+      @project.reload
+      assert_equal @project.samples.count, @project.samples_count
+    end
+
+    assert_difference(-> { @project.samples.count } => +1) do
+      Sample.restore(@sample.id, recursive: true)
+      @project.reload
+      assert_equal @project.samples.count, @project.samples_count
     end
   end
 
