@@ -636,6 +636,7 @@ fr:
             select_access_level: Select access level
             submit: Submit
             title: New Bot Account
+            token_details: Token details
             token_name: Token Name
           username: Username
         personal_access_tokens_listing_modal:
@@ -1094,6 +1095,7 @@ fr:
             select_access_level: Select access level
             submit: Submit
             title: New Bot Account
+            token_details: Token details
             token_name: Token Name
           username: Username
         personal_access_tokens_listing_modal:
