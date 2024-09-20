@@ -40,10 +40,10 @@
             dark:border-slate-700
           "
         >
-          <p class="font-semibold"><%= t("projects.bots.index.bot_listing.new_bot_modal.token_details") %></p>
+          <p class="font-semibold dark:text-white"><%= t("projects.bots.index.bot_listing.new_bot_modal.token_details") %></p>
           <div class="form-field py-4">
 
-            <div class="form-field">
+            <div class="form-field py-4">
               <%= form.label :token_name,
                          t("projects.bots.index.bot_listing.new_bot_modal.token_name") %>
               <%= form.text_field :token_name,
@@ -53,7 +53,7 @@
 
             </div>
 
-            <div class="form-field datepicker" data-controller="datepicker">
+            <div class="form-field datepicker py-4" data-controller="datepicker">
               <%= form.label :expires_at,
                          t("projects.bots.index.bot_listing.new_bot_modal.expires_at") %>
               <div class="relative max-w-sm">
@@ -107,19 +107,19 @@
         <%= form.submit t("projects.bots.index.bot_listing.new_bot_modal.submit"),
                     class:
                       "
-                                                                                      focus:outline-none
-                                                                                      text-sm
-                                                                                      text-white
-                                                                                      bg-primary-700
-                                                                                      hover:bg-primary-800
-                                                                                      focus:ring-0
-                                                                                      rounded-md
-                                                                                      p-2
-                                                                                      dark:text-white
-                                                                                      dark:bg-primary-600
-                                                                                      dark:hover:bg-primary-700
-                                                                                      cursor-pointer
-                                                                                      " %>
+                                                                                                                              focus:outline-none
+                                                                                                                              text-sm
+                                                                                                                              text-white
+                                                                                                                              bg-primary-700
+                                                                                                                              hover:bg-primary-800
+                                                                                                                              focus:ring-0
+                                                                                                                              rounded-md
+                                                                                                                              p-2
+                                                                                                                              dark:text-white
+                                                                                                                              dark:bg-primary-600
+                                                                                                                              dark:hover:bg-primary-700
+                                                                                                                              cursor-pointer
+                                                                                                                              " %>
         <button
           type="button"
           class="
