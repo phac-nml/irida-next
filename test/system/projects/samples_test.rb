@@ -497,6 +497,7 @@ module Projects
       sign_in users(:jean_doe)
       namespace = namespaces_user_namespaces(:john_doe_namespace)
       project = projects(:john_doe_project2)
+      Project.reset_counters(project.id, :samples_count)
       visit namespace_project_samples_url(namespace, project)
       within '#samples-table table tbody' do
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
@@ -2220,6 +2221,7 @@ module Projects
       sign_in users(:jean_doe)
       namespace = namespaces_user_namespaces(:john_doe_namespace)
       project = projects(:john_doe_project2)
+      Project.reset_counters(project.id, :samples_count)
       visit namespace_project_samples_url(namespace, project)
       within '#samples-table table tbody' do
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
@@ -2431,12 +2433,9 @@ module Projects
       end
       assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
 
-      within '.table-container' do
-        assert_no_selector 'tr'
-        assert_no_text @sample1.name
-        assert_no_text @sample2.name
-        assert_no_text @sample3.name
+      within 'div[role="alert"]' do
         assert_text I18n.t('projects.samples.index.no_samples')
+        assert_text I18n.t('projects.samples.index.no_associated_samples')
       end
     end
 
@@ -2515,12 +2514,9 @@ module Projects
       end
       assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
 
-      within '.table-container' do
-        assert_no_selector 'tr'
-        assert_no_text @sample1.name
-        assert_no_text @sample2.name
-        assert_no_text @sample3.name
+      within 'div[role="alert"]' do
         assert_text I18n.t('projects.samples.index.no_samples')
+        assert_text I18n.t('projects.samples.index.no_associated_samples')
       end
 
       assert_selector 'a.cursor-not-allowed.pointer-events-none', count: 4

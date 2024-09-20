@@ -1,0 +1,12 @@
+<% if pagy.vars[:size].positive? && pagy.count.positive? %>
+  <div class="flex items-center justify-between">
+    <%= render Viral::Pagy::LimitComponent.new(pagy, item: item) %>
+    <%= render Viral::Pagy::PaginationComponent.new(pagy) %>
+  </div>
+<% else %>
+  <%= render Viral::EmptyStateComponent.new(
+    icon_name: :magnifying_glass,
+    title: t("components.viral.pagy.empty_state.title"),
+    description: t("components.viral.pagy.empty_state.description"),
+  ) %>
+<% end %>

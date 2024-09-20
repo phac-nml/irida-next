@@ -21,6 +21,9 @@ class DataExportsTest < ApplicationSystemTestCase
     @sample30 = samples(:sample30)
     @workflow_execution1 = workflow_executions(:irida_next_example_completed_with_output)
     @workflow_execution2 = workflow_executions(:workflow_execution_valid)
+
+    Project.reset_counters(@project1.id, :samples_count)
+
     login_as @user
   end
 
@@ -367,6 +370,7 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'checking off samples on different page does not affect current page\'s export samples' do
     subgroup12a = groups(:subgroup_twelve_a)
     project29 = projects(:project29)
+    Project.reset_counters(project29.id, :samples_count)
     sample32 = samples(:sample32)
 
     visit namespace_project_samples_url(subgroup12a, project29)
@@ -555,6 +559,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
   test 'projects with samples containing no metadata should have linelist export link disabled' do
     project = projects(:project2)
+    Project.reset_counters(project.id, :samples_count)
     sample3 = samples(:sample3)
 
     visit namespace_project_samples_url(@group1, project)
