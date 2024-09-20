@@ -128,7 +128,7 @@
                   <% end %>
                 <% elsif column == :project %>
                   <%= link_to sample.project.puid,
-                  project_path(sample.project),
+                  project_samples_path(sample.project),
                   data: {
                     turbo: false,
                   },
