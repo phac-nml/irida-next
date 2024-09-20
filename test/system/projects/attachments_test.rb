@@ -38,7 +38,7 @@ module Projects
 
       within('dialog') do
         attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
-        click_on I18n.t('projects.attachments.form.upload')
+        click_on I18n.t('attachments.dialogs.new_attachment_component.upload')
       end
 
       assert_selector '#attachments-table table tbody tr', count: 3
@@ -69,14 +69,14 @@ module Projects
 
       within('dialog') do
         attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
-        click_on I18n.t('projects.attachments.form.upload')
+        click_on I18n.t('attachments.dialogs.new_attachment_component.upload')
       end
       assert_selector '#attachments-table table tbody tr', count: 3
       click_on I18n.t('projects.attachments.index.upload_files')
 
       within('dialog') do
         attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
-        click_on I18n.t('projects.attachments.form.upload')
+        click_on I18n.t('attachments.dialogs.new_attachment_component.upload')
       end
 
       assert_text 'checksum matches existing file'
@@ -244,7 +244,7 @@ module Projects
       end
 
       within('dialog') do
-        click_on I18n.t('projects.attachments.delete_attachment_modal.submit_button')
+        click_on I18n.t('attachments.dialogs.delete_attachment_component.submit_button')
       end
 
       assert_text I18n.t('projects.attachments.destroy.success', filename: @attachment1.file.filename.to_s)
@@ -256,7 +256,7 @@ module Projects
       end
 
       within('dialog') do
-        click_on I18n.t('projects.attachments.delete_attachment_modal.submit_button')
+        click_on I18n.t('attachments.dialogs.delete_attachment_component.submit_button')
       end
 
       assert_text I18n.t('projects.attachments.destroy.success', filename: @attachment2.file.filename.to_s)
@@ -276,7 +276,7 @@ module Projects
       within('dialog') do
         attach_file 'attachment[files][]', [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq.gz'),
                                             Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq.gz')]
-        click_on I18n.t('projects.attachments.form.upload')
+        click_on I18n.t('attachments.dialogs.new_attachment_component.upload')
       end
       assert_selector '#attachments-table table tbody tr', count: 3
       assert_text 'Displaying 1-4 of 4 items'
@@ -292,7 +292,7 @@ module Projects
       end
 
       within('dialog') do
-        click_on I18n.t('projects.attachments.delete_attachment_modal.submit_button')
+        click_on I18n.t('attachments.dialogs.delete_attachment_component.submit_button')
       end
 
       assert_text 'Displaying 1-2 of 2 items'

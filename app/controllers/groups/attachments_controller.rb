@@ -23,7 +23,8 @@ module Groups
                                                partial: 'new_attachment_modal',
                                                locals: {
                                                  open: true,
-                                                 attachment: Attachment.new(attachable: @group)
+                                                 attachment: Attachment.new(attachable: @group),
+                                                 namespace: @group
                                                }), status: :ok
     end
 
@@ -51,7 +52,9 @@ module Groups
       render turbo_stream: turbo_stream.update('attachment_modal',
                                                partial: 'delete_attachment_modal',
                                                locals: {
-                                                 open: true
+                                                 open: true,
+                                                 attachment: @attachment,
+                                                 namespace: @group
                                                }), status: :ok
     end
 

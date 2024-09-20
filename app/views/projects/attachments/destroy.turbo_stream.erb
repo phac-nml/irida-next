@@ -3,6 +3,8 @@
                       partial: "delete_attachment_modal",
                       locals: {
                         open: false,
+                        attachment: @attachment,
+                        namespace: @project.namespace,
                       } %>
 
   <% destroyed_attachments.each do |attachment| %>

@@ -1,0 +1,78 @@
+<%= viral_dialog(open: @open) do |dialog| %>
+  <% dialog.with_header(title: t(".upload_files")) %>
+  <% dialog.with_section do %>
+    <%= form_with(model: @attachment, url: upload_path) do |form| %>
+      <%= form.hidden_field :attachable_id %>
+      <%= form.hidden_field :attachable_type %>
+
+      <div
+        class="grid gap-4"
+        data-controller="attachment-upload"
+        data-attachment-upload-button-text-value='<%=t(".uploading") %>'
+      >
+
+        <div
+          class="form-field"
+          data-controller="file-upload"
+          data-file-upload-ignore-value='[".fasta", ".fna", ".fa", ".fastq", ".fq"]'
+          data-file-upload-error-value="<%= t('.files_ignored') %>"
+        >
+          <%= form.label :files,
+                    t(".files"),
+                    class:
+                      "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
+          <%= form.file_field :files,
+                          multiple: true,
+                          direct_upload: true,
+                          required: true,
+                          data: {
+                            "file-input-target": "input",
+                            "attachment-upload-target": "attachmentsInput",
+                            action: "change->file-upload#handleFileChange",
+                          },
+                          class:
+                            "block w-full mb-5 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 focus:outline-none dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
+
+          <%= viral_alert(message: t('.files_ignored'), type: :info, data: { "file-upload-target": "alert" }, classes: "hidden") do %>
+            <ul
+              class="max-w-md mt-4 space-y-1 list-disc list-inside"
+              data-file-upload-target="error"
+            >REPLACE</ul>
+          <% end %>
+        </div>
+
+        <div>
+          <%= form.submit t(".upload"),
+                      class: "
+                        inline-flex
+                        items-center
+                        justify-center
+                        w-1/2
+                        text-sm
+                        border
+                        rounded-md
+                        cursor-pointer
+                        sm:w-auto
+                        focus:z-10
+                        px-5
+                        py-2.5
+                        text-white
+                        border-primary-800
+                        bg-primary-700
+                        focus:outline-none
+                        hover:bg-primary-800
+                        focus:ring-primary-300
+                        dark:focus:ring-primary-700
+                        dark:bg-primary-800
+                        dark:text-white
+                        dark:border-primary-900
+                        dark:hover:bg-primary-700
+                      ",
+                      data: {
+                        "attachment-upload-target": "submitButton",
+                      } %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

@@ -18,12 +18,14 @@ module Projects
 
     def new
       authorize! @project, to: :create_attachment?
+      namespace = @project.namespace
 
       render turbo_stream: turbo_stream.update('attachment_modal',
                                                partial: 'new_attachment_modal',
                                                locals: {
                                                  open: true,
-                                                 attachment: Attachment.new(attachable: @project.namespace)
+                                                 attachment: Attachment.new(attachable: namespace),
+                                                 namespace:
                                                }), status: :ok
     end
 
@@ -51,7 +53,9 @@ module Projects
       render turbo_stream: turbo_stream.update('attachment_modal',
                                                partial: 'delete_attachment_modal',
                                                locals: {
-                                                 open: true
+                                                 open: true,
+                                                 attachment: @attachment,
+                                                 namespace: @project.namespace
                                                }), status: :ok
     end
 
