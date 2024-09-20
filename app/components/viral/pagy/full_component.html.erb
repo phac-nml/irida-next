@@ -1,0 +1,24 @@
+<% if pagy.vars[:size].positive? && pagy.count.positive? %>
+  <div class="flex items-center justify-between">
+    <%= render Viral::Pagy::LimitComponent.new(pagy, item: item) %>
+    <%= render Viral::Pagy::PaginationComponent.new(pagy) %>
+  </div>
+<% else %>
+  <div class="flex items-center p-4 space-x-4 shadow dark:shadow-slate-900">
+    <span class="flex-shrink text-gray-500 dark:text-gray-400">
+      <%= viral_icon(name: :magnifying_glass, classes: "w-10 h-10") %>
+    </span>
+    <div>
+      <h1
+        class="
+          mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white
+        "
+      >
+        <%= t("components.viral.pagy.empty_state.title") %>
+      </h1>
+      <p class="font-normal text-gray-700 dark:text-gray-400">
+        <%= t("components.viral.pagy.empty_state.description") %>
+      </p>
+    </div>
+  </div>
+<% end %>

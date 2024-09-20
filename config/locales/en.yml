@@ -356,6 +356,11 @@ en:
       copied: Copied!
       copy: Copy to clipboard
       toggle_visible: Toggle visibility
+    viral:
+      pagy:
+        empty_state:
+          description: No items found matching your search
+          title: No items found
   concerns:
     bot_actions:
       create:
