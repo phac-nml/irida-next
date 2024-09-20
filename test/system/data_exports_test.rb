@@ -1110,5 +1110,12 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text @data_export10.id
       assert_text @data_export10.name
     end
+
+    fill_in placeholder: I18n.t(:'data_exports.index.search.placeholder'),
+            with: 'something that does not exist'
+    within 'div[role="alert"]' do
+      assert_text I18n.t('components.viral.pagy.empty_state.title')
+      assert_text I18n.t('components.viral.pagy.empty_state.description')
+    end
   end
 end
