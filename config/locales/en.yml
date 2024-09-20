@@ -636,11 +636,12 @@ en:
           new_bot_modal:
             access_level: Access Level
             cancel: Cancel
-            description: Adding a bot account to associate certain actions which can't be attributed to a human user
+            description: This will create a bot user with email format 'inxt_grp_GROUP_PUID_bot_n@iridanext.com', add them as a member to the Group with 'Access level' role, and then create a personal access token for the bot using the details below
             expires_at: Token Expiration Date (optional)
             select_access_level: Select access level
             submit: Submit
             title: New Bot Account
+            token_details: Token details
             token_name: Token Name
           username: Username
         personal_access_tokens_listing_modal:
@@ -651,7 +652,7 @@ en:
             revoke: Revoke
             revoke_confirmation: Are you sure you want to revoke this personal access token?
           title: Personal access tokens
-        subtitle: Setup bot accounts to perform actions within the group that cannot be attributed to a human user
+        subtitle: Setup bot accounts to be able to perform actions through the API that cannot be attributed to an individual user.
         title: Bot Accounts
     create:
       cancel: Cancel
@@ -1094,11 +1095,12 @@ en:
           new_bot_modal:
             access_level: Access Level
             cancel: Cancel
-            description: Adding a bot account to associate certain actions which can't be attributed to a human user
+            description: This will create a bot user with email format 'inxt_prj_PROJECT_PUID_bot_n@iridanext.com', add them as a member to the Project with 'Access level' role, and then create a personal access token for the bot using the details below
             expires_at: Token Expiration Date (optional)
             select_access_level: Select access level
             submit: Submit
             title: New Bot Account
+            token_details: Token details
             token_name: Token Name
           username: Username
         personal_access_tokens_listing_modal:
@@ -1109,7 +1111,7 @@ en:
             revoke: Revoke
             revoke_confirmation: Are you sure you want to revoke this personal access token?
           title: Personal access tokens
-        subtitle: Setup bot accounts to perform actions within the project that cannot be attributed to a human user
+        subtitle: Setup bot accounts to be able to perform actions through the API that cannot be attributed to an individual user.
         title: Bot Accounts
     create:
       success: Project %{project_name} was successfully created
