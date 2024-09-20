@@ -28,8 +28,8 @@ module Dashboard
       assert_selector 'tr', count: 20
 
       click_link @project.human_name
-      assert_current_path(namespace_project_samples_path(@project.parent, @project))
-      assert_selector 'h1', text: I18n.t(:'projects.samples.index.title')
+      assert_current_path(namespace_project_path(@project.parent, @project))
+      assert_selector 'h1', text: @project.name
     end
 
     test 'can see the list of projects in user\'s groups and namespace group links' do
@@ -51,8 +51,8 @@ module Dashboard
       assert_selector 'tr', count: 20
 
       click_link @project.human_name
-      assert_current_path(namespace_project_samples_path(@project.parent, @project))
-      assert_selector 'h1', text: I18n.t(:'projects.samples.index.title')
+      assert_current_path(namespace_project_path(@project.parent, @project))
+      assert_selector 'h1', text: @project.name
     end
 
     test 'can filter the list of projects to only see personal ones' do
@@ -183,8 +183,8 @@ module Dashboard
       end
 
       new_project = @user.namespace.project_namespaces.find_by(name: project_name).project
-      assert_current_path(namespace_project_samples_path(new_project.parent, new_project))
-      assert_selector 'h1', text: I18n.t(:'projects.samples.index.title')
+      assert_current_path(namespace_project_path(new_project.parent, new_project))
+      assert_selector 'h1', text: new_project.name
     end
 
     test 'can see projects that the user has been added to as a member' do

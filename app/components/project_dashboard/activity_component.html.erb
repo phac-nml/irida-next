@@ -1,0 +1,5 @@
+<ol class="relative border-s border-slate-200 dark:border-slate-700">
+  <% activities.each do |activity| %>
+    <%= render Activities::ListItemComponent.new(activity: activity) %>
+  <% end %>
+</ol>

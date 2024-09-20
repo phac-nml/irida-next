@@ -341,6 +341,17 @@ fr:
     pagination:
       next: Next
       previous: Prev
+    project_dashboard:
+      activity_title: Latest Activity
+      info_title: Project Information
+      information:
+        created_on: Created on
+        no_description: No description provided for project
+        number_of_automated_workflow_executions: Number of automated pipelines configured
+        number_of_members: Number of members
+        number_of_samples: Number of samples
+      samples_title: Samples Recently Updated
+      view_more: View more
     token:
       copied: Copied!
       copy: Copy to clipboard
@@ -808,9 +819,9 @@ fr:
     email_template:
       automated_message: This email was sent from an automated system. Please do not reply to this email.
       copy_paste: 'Or copy and paste this link into your browser:'
-      greeting: Hello,
-      greeting_with_name: Hello %{name},
-      thanks: Thanks,
+      greeting: Bonjour,
+      greeting_with_name: Bonjour %{name},
+      thanks: Merci,
     group_link_mailer:
       access_granted_manager_email:
         body_html: Group '%{group_name}' has been <strong>granted</strong> access to %{namespace_type} '%{namespace_name}'

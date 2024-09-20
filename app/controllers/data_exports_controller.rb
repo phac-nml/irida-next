@@ -170,7 +170,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
 
   def redirect_to_project
     project = Namespace.find_by(puid: params['identifier']).project
-    redirect_to namespace_project_samples_path(project.parent, project)
+    redirect_to namespace_project_path(project.parent, project)
   end
 
   def redirect_to_workflow_execution
