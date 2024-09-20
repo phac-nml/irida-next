@@ -2,27 +2,27 @@
   <div class="col-span-4">
     <div
       class="
-        p-4 bg-white border border-gray-200 rounded-lg dark:border-gray-700
-        dark:bg-gray-800
+        p-4 bg-white border rounded-lg border-slate-200 dark:border-slate-700
+        dark:bg-slate-800
       "
     >
-      <p class="mb-4 text-xl font-semibold text-gray-900 dark:text-white"><%= t(:"components.project_dashboard.activity_title") %></p>
+      <p class="mb-4 text-xl font-semibold text-slate-900 dark:text-white"><%= t(:"components.project_dashboard.activity_title") %></p>
       <%= render ProjectDashboard::ActivityComponent.new(activities: @activities) %>
 
       <%= link_to t(:"components.project_dashboard.view_more"),
       namespace_project_activity_path(@project.namespace.parent, @project),
       class:
-        "button button--state-default button--size-default dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600" %>
+        "button button--state-default button--size-default dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600" %>
     </div>
   </div>
   <div class="col-span-4">
     <div
       class="
-        p-4 bg-white border border-gray-200 rounded-lg dark:border-gray-700
-        dark:bg-gray-800
+        p-4 bg-white border rounded-lg border-slate-200 dark:border-slate-700
+        dark:bg-slate-800
       "
     >
-      <p class="mb-4 text-xl font-semibold text-gray-900 dark:text-white"><%= t(:"components.project_dashboard.samples_title") %></p>
+      <p class="mb-4 text-xl font-semibold text-slate-900 dark:text-white"><%= t(:"components.project_dashboard.samples_title") %></p>
       <%= render ProjectDashboard::SamplesComponent.new(
         samples: @samples,
         project: @project,
@@ -30,12 +30,12 @@
       <%= link_to t(:"components.project_dashboard.view_more"),
       namespace_project_samples_path(@project.namespace.parent, @project),
       class:
-        "button button--state-default button--size-default dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600" %>
+        "button button--state-default button--size-default dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600" %>
     </div>
   </div>
   <div class="col-span-1">
     <div>
-      <p class="font-semibold text-gray-900 dark:text-white"><%= t(:"components.project_dashboard.info_title") %></p>
+      <p class="font-semibold text-slate-900 dark:text-white"><%= t(:"components.project_dashboard.info_title") %></p>
       <%= render ProjectDashboard::InformationComponent.new(project: @project) %>
     </div>
   </div>
