@@ -5,6 +5,8 @@ module Groups
   class AttachmentsController < Groups::ApplicationController
     include Metadata
     before_action :group, :current_page
+    before_action :new_destroy_params, only: %i[new_destroy]
+    before_action :attachment, only: %i[destroy]
 
     def index
       authorize! @group, to: :view_attachments?
@@ -44,6 +46,35 @@ module Groups
       end
     end
 
+    def new_destroy
+      authorize! @group, to: :destroy_attachment?
+      render turbo_stream: turbo_stream.update('attachment_modal',
+                                               partial: 'delete_attachment_modal',
+                                               locals: {
+                                                 open: true
+                                               }), status: :ok
+    end
+
+    def destroy # rubocop:disable Metrics/MethodLength
+      @destroyed_attachments = ::Attachments::DestroyService.new(@group, @attachment, current_user).execute
+      respond_to do |format|
+        if @destroyed_attachments.count.positive?
+          status = destroy_status(@attachment, @destroyed_attachments.length)
+          format.turbo_stream do
+            render status:, locals: { destroyed_attachments: @destroyed_attachments }
+          end
+        else
+          format.turbo_stream do
+            render status: :unprocessable_entity,
+                   locals: { message: t('.error',
+                                        filename: @attachment.file.filename,
+                                        errors: @attachment.errors.full_messages.first),
+                             destroyed_attachments: nil }
+          end
+        end
+      end
+    end
+
     private
 
     def group
@@ -76,6 +107,20 @@ module Groups
 
     def attachment_params
       params.require(:attachment).permit(:attachable_id, :attachable_type, files: [])
+    end
+
+    def new_destroy_params
+      @attachment = Attachment.find_by(id: params[:attachment_id])
+    end
+
+    def attachment
+      @attachment = Attachment.find_by(id: params[:id])
+    end
+
+    def destroy_status(attachment, count)
+      return count == 2 ? :ok : :multi_status if attachment.associated_attachment
+
+      count == 1 ? :ok : :unprocessable_entity
     end
   end
 end

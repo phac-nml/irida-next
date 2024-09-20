@@ -229,5 +229,81 @@ module Groups
         assert_no_text @attachment1.file.filename.to_s
       end
     end
+
+    test 'can delete files with delete action link' do
+      visit group_attachments_path(@namespace)
+
+      assert_text 'Displaying 1-2 of 2 items'
+      assert_selector 'table tbody tr', count: 2
+
+      within('table tbody') do
+        assert_text @attachment1.file.filename.to_s
+        assert_text @attachment2.file.filename.to_s
+        click_link I18n.t('attachments.table_component.delete'), match: :first
+      end
+
+      within('dialog') do
+        click_on I18n.t('groups.attachments.delete_attachment_modal.submit_button')
+      end
+
+      assert_text I18n.t('groups.attachments.destroy.success', filename: @attachment1.file.filename.to_s)
+
+      within('table tbody') do
+        assert_no_text @attachment1.file.filename.to_s
+        assert_text @attachment2.file.filename.to_s
+        click_link I18n.t('attachments.table_component.delete'), match: :first
+      end
+
+      within('dialog') do
+        click_on I18n.t('groups.attachments.delete_attachment_modal.submit_button')
+      end
+
+      assert_text I18n.t('groups.attachments.destroy.success', filename: @attachment2.file.filename.to_s)
+
+      assert_text I18n.t('groups.attachments.table.empty.title')
+      assert_text I18n.t('groups.attachments.table.empty.description')
+    end
+
+    test 'can upload and delete paired end files' do
+      visit group_attachments_path(@namespace)
+
+      assert_text 'Displaying 1-2 of 2 items'
+      assert_selector 'table tbody tr', count: 2
+
+      click_on I18n.t('groups.attachments.index.upload_files')
+
+      within('dialog') do
+        attach_file 'attachment[files][]', [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq.gz'),
+                                            Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq.gz')]
+        click_on I18n.t('groups.attachments.form.upload')
+      end
+      assert_selector '#attachments-table table tbody tr', count: 3
+      assert_text 'Displaying 1-4 of 4 items'
+
+      within('table tbody') do
+        assert_selector 'tr:first-child td:nth-child(2)', text: 'TestSample_S1_L001_R2_001.fastq.gz'
+        assert_selector 'tr:first-child td:nth-child(2)', text: 'TestSample_S1_L001_R1_001.fastq.gz'
+        assert_selector 'tr:first-child td:nth-child(3)', text: 'fastq'
+        assert_selector 'tr:first-child td:nth-child(4)', text: 'illumina_pe'
+        within('tr:first-child') do
+          click_link I18n.t('attachments.table_component.delete'), match: :first
+        end
+      end
+
+      within('dialog') do
+        click_on I18n.t('groups.attachments.delete_attachment_modal.submit_button')
+      end
+
+      assert_text 'Displaying 1-2 of 2 items'
+      assert_selector 'table tbody tr', count: 2
+
+      within('table tbody') do
+        assert_no_text 'TestSample_S1_L001_R2_001.fastq.gz'
+        assert_no_text 'TestSample_S1_L001_R1_001.fastq.gz'
+      end
+
+      assert_text I18n.t('groups.attachments.destroy.success', filename: 'TestSample_S1_L001_R2_001.fastq.gz')
+      assert_text I18n.t('groups.attachments.destroy.success', filename: 'TestSample_S1_L001_R1_001.fastq.gz')
+    end
   end
 end
