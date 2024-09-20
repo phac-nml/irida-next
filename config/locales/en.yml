@@ -461,7 +461,7 @@ en:
       samples_count:
         non_zero: Samples (COUNT_PLACEHOLDER selected)
         zero: Samples (0 selected)
-      submit_button: Submit button
+      submit_button: Submit
     new_analysis_export_dialog:
       description:
         plural: This export will contain COUNT_PLACEHOLDER workflow executions.
