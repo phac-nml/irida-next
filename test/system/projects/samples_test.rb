@@ -2431,9 +2431,12 @@ module Projects
       end
       assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
 
-      within 'div[role="alert"]' do
+      within '.table-container' do
+        assert_no_selector 'tr'
+        assert_no_text @sample1.name
+        assert_no_text @sample2.name
+        assert_no_text @sample3.name
         assert_text I18n.t('projects.samples.index.no_samples')
-        assert_text I18n.t('projects.samples.index.no_associated_samples')
       end
     end
 
