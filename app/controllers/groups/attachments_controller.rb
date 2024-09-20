@@ -2,7 +2,7 @@
 
 module Groups
   # Controller actions for Group Attachments
-  class AttachmentsController < Groups::ApplicationController
+  class AttachmentsController < Groups::ApplicationController # rubocop:disable Metrics/ClassLength
     include Metadata
     before_action :group, :current_page
     before_action :new_destroy_params, only: %i[new_destroy]
