@@ -2220,6 +2220,7 @@ module Projects
       sign_in users(:jean_doe)
       namespace = namespaces_user_namespaces(:john_doe_namespace)
       project = projects(:john_doe_project2)
+      Project.reset_counters(project.id, :samples_count)
       visit namespace_project_samples_url(namespace, project)
       within '#samples-table table tbody' do
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
