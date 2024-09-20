@@ -8,14 +8,14 @@
     subtitle: t(".subtitle", project_name: @project.name),
   ) do |component| %>
     <%= component.with_buttons do %>
-    <% if allowed_to?(:create_attachment?, @project) %>
-      <%= link_to t(".upload_files"),
-          new_namespace_project_attachment_path(id: @project.id),
-          data: {
-            turbo_frame: "attachment_modal",
-            turbo_stream: true,
-          },
-          class: "button button--size-default button--state-default" %>
+      <% if allowed_to?(:create_attachment?, @project) %>
+        <%= link_to t(".upload_files"),
+        new_namespace_project_attachment_path(id: @project.id),
+        data: {
+          turbo_frame: "attachment_modal",
+          turbo_stream: true,
+        },
+        class: "button button--size-default button--state-default" %>
       <% end %>
     <% end %>
   <% end %>
@@ -27,7 +27,7 @@
         <%= f.hidden_field :s, value: "#{@q.sorts[0].name} #{@q.sorts[0].dir}" %>
         <%= f.hidden_field :format, value: "turbo_stream" %>
 
-        <%= f.label :name_cont, "SEARCH", class: "sr-only" %>
+        <%= f.label :puid_or_file_blob_filename_cont, "SEARCH", class: "sr-only" %>
         <div class="relative lg:w-72">
           <div
             class="
@@ -50,6 +50,6 @@
     attachments: @attachments,
     pagy: @pagy,
     q: @q,
-    project: @project
+    project: @project,
   } %>
 </div>

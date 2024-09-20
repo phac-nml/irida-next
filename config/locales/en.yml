@@ -434,16 +434,20 @@ en:
         download: Download
         download_aria_label: Download data export %{name}
       delete_confirmation: Are you sure you would like to delete data export '%{name}'?
+      limit:
+        item: Data Exports
       no_data_exports: No Data Exports
       no_data_exports_message: You currently have no data exports.
+      search:
+        placeholder: Filter by ID or name
       table_header:
         action: Action
         created_at: Created
         expires_at: Expires
+        export_type: Type
         id: ID
         name: Name
         status: Status
-        type: Type
       title: Data Exports
     list_workflow_execution:
       id: 'ID:'

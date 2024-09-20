@@ -16,7 +16,7 @@
     <div class="flex flex-row items-center ml-auto space-x-2 font-normal">
       <%= search_form_for @q, url: dashboard_groups_url, html: { "data-controller": "filters", "data-turbo-permanent": "true" } do |f| %>
         <%= f.hidden_field :format, value: "turbo_stream" %>
-        <%= f.label :name_cont, "SEARCH", class: "sr-only" %>
+        <%= f.label :name_or_puid_cont, "SEARCH", class: "sr-only" %>
         <div class="relative lg:w-72">
           <div
             class="
