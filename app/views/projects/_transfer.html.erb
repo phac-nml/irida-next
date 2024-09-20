@@ -6,13 +6,7 @@
     <% end %>
     <ul
       class="
-        mb-4
-        ml-4
-        space-y-1
-        text-slate-500
-        list-disc
-        list-inside
-        dark:text-slate-400
+        mb-4 ml-4 space-y-1 text-slate-500 list-disc list-inside dark:text-slate-400
       "
     >
 
@@ -20,24 +14,18 @@
         <li><%= item %></li>
       <% end %>
     </ul>
-    <div data-controller="transfer">
+    <div>
       <div class="hidden confirm-transfer">
         <div
           class="
-            flex
-            p-4
-            mb-4
-            text-red-800
-            rounded-lg
-            bg-red-50
-            dark:bg-slate-800
+            flex p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-slate-800
             dark:text-red-400
           "
         >
           <%= viral_icon(name: "exclamation_circle", classes: "h-6 w-6 flex-none") %>
           <span class="flex-1 ml-4"><%= t(
               "projects.edit.advanced.transfer.confirm.warning_html",
-              project_name: @project.human_name
+              project_name: @project.human_name,
             ) %></span>
         </div>
         <div class="mb-4">
