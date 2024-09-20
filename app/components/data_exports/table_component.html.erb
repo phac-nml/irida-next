@@ -1,4 +1,4 @@
-<% if @data_exports.any? && @pagy.vars[:size].positive? %>
+<% if @has_data_exports %>
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
       <table

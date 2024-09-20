@@ -9,12 +9,14 @@ module DataExports
 
     # rubocop:disable Naming/MethodParameterName
     def initialize(
+      has_data_exports,
       data_exports,
       pagy,
       q,
       empty: {},
       **system_arguments
     )
+      @has_data_exports = has_data_exports
       @data_exports = data_exports
       @pagy = pagy
       @q = q
