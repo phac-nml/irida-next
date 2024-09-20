@@ -92,11 +92,11 @@ en:
         revoke?: You are not authorized to revoke personal access tokens for user %{name} on this server.
         update?: You are not authorized to update user %{name} on this server.
       workflow_execution:
-        cancel?: You are not authorized to cancel pipeline executions for %{namespace_type} %{name}
-        create?: You are not authorized to submit pipeline executions for %{namespace_type} %{name}
-        destroy?: You are not authorized to destroy pipeline executions for %{namespace_type} %{name}
-        index?: You are not authorized to view pipeline executions for %{namespace_type} %{name}
-        read?: You are not authorized to view pipeline execution %{id}
+        cancel?: You are not authorized to cancel workflow executions for %{namespace_type} %{name}
+        create?: You are not authorized to submit workflow executions for %{namespace_type} %{name}
+        destroy?: You are not authorized to destroy workflow executions for %{namespace_type} %{name}
+        index?: You are not authorized to view workflow executions for %{namespace_type} %{name}
+        read?: You are not authorized to view workflow execution %{id}
     unauthorized: You are not authorized to perform this action
   activerecord:
     attributes:
@@ -268,7 +268,7 @@ en:
         outputs_and_metadata_written_html: Project automation bot attached pipeline %{href} outputs and wrote metadata to sample %{sample_href}
         outputs_written_html: Project automation bot attached pipeline %{href} outputs to sample %{sample_href}
       automated_workflow:
-        create_html: "%{user} setup automated pipeline execution %{href} for the project"
+        create_html: "%{user} setup automated pipeline %{href} for the project"
         launch_html: Project automation bot launched pipeline %{href} on sample %{sample_href}
   application:
     errors:
@@ -382,11 +382,11 @@ en:
         success: Successfully updated group %{namespace_name} with group %{group_name} link %{param_name}
     workflow_execution_actions:
       cancel:
-        error: Could not cancel pipeline %{workflow_name}
-        success: Pipeline %{workflow_name} was successfully canceled
+        error: Could not cancel workflow %{workflow_name}
+        success: Workflow %{workflow_name} was successfully canceled
       destroy:
-        error: Could not delete pipeline %{workflow_name}
-        success: Pipeline %{workflow_name} was successfully deleted
+        error: Could not delete workflow %{workflow_name}
+        success: Workflow %{workflow_name} was successfully deleted
   dashboard:
     groups:
       index:
@@ -464,12 +464,12 @@ en:
       submit_button: Submit button
     new_analysis_export_dialog:
       description:
-        plural: This export will contain COUNT_PLACEHOLDER pipeline executions.
-        singular: This export will contain 1 pipeline execution.
-        zero: This export will contain no pipeline executions.
+        plural: This export will contain COUNT_PLACEHOLDER workflow executions.
+        singular: This export will contain 1 workflow execution.
+        zero: This export will contain no workflow executions.
       selection_count:
-        non_zero: Pipeline Executions (COUNT_PLACEHOLDER selected)
-        zero: Pipeline Executions (0 selected)
+        non_zero: Workflow Executions (COUNT_PLACEHOLDER selected)
+        zero: Workflow Executions (0 selected)
       title: Analysis Export
     new_linelist_export_dialog:
       available: Available
@@ -994,8 +994,8 @@ en:
           id: ID
           name: Name
           updated_at: Updated
-          workflow_name: Pipeline Name
-          workflow_version: Pipeline Version
+          workflow_name: Workflow Name
+          workflow_version: Workflow Version
     bots:
       index:
         access_level:
@@ -1674,8 +1674,8 @@ en:
       workflow_version: Workflow Version
     table:
       empty:
-        description: There are no pipelines associated with this submitter.
-        title: No pipelines.
+        description: There are no workflows associated with this submitter.
+        title: No workflows.
     table_component:
       actions: Actions
       counts:
