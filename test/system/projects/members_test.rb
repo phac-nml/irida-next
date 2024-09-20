@@ -223,10 +223,10 @@ module Projects
         click_on I18n.t(:'projects.new.submit')
       end
 
-      assert_selector 'h1', text: I18n.t(:'projects.samples.index.title')
+      assert_selector 'h1', text: project_name
 
       new_project = @user.namespace.project_namespaces.find_by(name: project_name).project
-      assert_current_path(namespace_project_samples_path(new_project.parent, new_project))
+      assert_current_path(namespace_project_path(new_project.parent, new_project))
 
       click_link 'Members'
 

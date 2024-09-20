@@ -64,7 +64,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
                                                         parent_id: parent_namespace.id } } }
     end
 
-    assert_redirected_to project_samples_path(Project.last)
+    assert_redirected_to project_path(Project.last)
   end
 
   test 'should not create a new project under another user\'s namespace' do

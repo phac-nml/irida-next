@@ -36,7 +36,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     if @project.persisted?
       flash[:success] = t('.success', project_name: @project.name)
       redirect_to(
-        project_samples_path(@project)
+        project_path(@project)
       )
     else
       render :new, status: :unprocessable_entity
