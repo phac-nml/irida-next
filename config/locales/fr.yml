@@ -1413,7 +1413,7 @@ fr:
       members: Members
       samples: Samples
       settings: Settings
-      workflow_executions: Pipeline Executions
+      workflow_executions: Workflow Executions
     transfer:
       success: Success
     update:
@@ -1431,25 +1431,25 @@ fr:
         create_export_button: Create Export
         deselect_all_button: Deselect All
         select_all_button: Select All
-        subtitle: These are the pipeline executions that have been automatically launched for this project
-        title: Pipeline Executions
+        subtitle: These are the workflow executions that have been automatically launched for this project
+        title: Workflow Executions
       show:
         cancel_button: Cancel
-        cancel_button_confirmation: Are you sure that you want to cancel this pipeline execution?
+        cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
         create_export_button: Create Export
         remove_button: Remove
-        remove_button_confirmation: Are you sure that you want to remove this pipeline execution?
+        remove_button_confirmation: Are you sure that you want to remove this workflow execution?
       summary:
         created_at: Created
         name: Name
         run_id: Run ID
         updated_at: Last Updated
-        workflow_name: Pipeline Name
-        workflow_version: Pipeline Version
+        workflow_name: Workflow Name
+        workflow_version: Workflow Version
       table:
         empty:
-          description: There are no automated pipeline executions associated with this project.
-          title: No automated pipeline executions.
+          description: There are no automated pipelines associated with this project.
+          title: No automated pipelines.
   ransack:
     sort_dropdown_component:
       sorting:
@@ -1627,9 +1627,9 @@ fr:
     index:
       actions:
         cancel_button: Cancel
-        cancel_confirm: Are you sure you want to cancel this pipeline?
+        cancel_confirm: Are you sure you want to cancel this workflow execution?
         delete_button: Delete
-        delete_confirm: Are you sure you want to delete this pipeline?
+        delete_confirm: Are you sure you want to delete this workflow execution?
       create_export_button: Create Export
       deselect_all_button: Deselect All
       select_all_button: Select All
