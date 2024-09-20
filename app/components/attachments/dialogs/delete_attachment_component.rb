@@ -2,7 +2,7 @@
 
 module Attachments
   module Dialogs
-    # Component for rendering a new upload dialog component for attachments
+    # Component for rendering a destroy dialog for attachments
     class DeleteAttachmentComponent < Component
       def initialize(
         attachment,

@@ -2,7 +2,7 @@
 
 module Attachments
   module Dialogs
-    # Component for rendering a new upload dialog component for attachments
+    # Component for rendering a upload dialog for attachments
     class NewAttachmentComponent < Component
       def initialize(
         attachment,
