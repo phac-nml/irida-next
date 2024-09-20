@@ -11,7 +11,9 @@ module Projects
     def index
       authorize! @project, to: :view_attachments?
 
-      @q = @project.namespace.attachments.ransack(params[:q])
+      @q = @project.namespace.attachments
+                   .where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
+                   .ransack(params[:q])
       set_default_sort
       @pagy, @attachments = pagy_with_metadata_sort(@q.result)
     end

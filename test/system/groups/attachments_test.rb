@@ -278,7 +278,7 @@ module Groups
         click_on I18n.t('groups.attachments.form.upload')
       end
       assert_selector '#attachments-table table tbody tr', count: 3
-      assert_text 'Displaying 1-4 of 4 items'
+      assert_text 'Displaying 1-3 of 3 items'
 
       within('table tbody') do
         assert_selector 'tr:first-child td:nth-child(2)', text: 'TestSample_S1_L001_R2_001.fastq.gz'

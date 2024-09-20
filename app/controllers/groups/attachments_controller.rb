@@ -11,7 +11,9 @@ module Groups
     def index
       authorize! @group, to: :view_attachments?
 
-      @q = @group.attachments.ransack(params[:q])
+      @q = @group.attachments
+                 .where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
+                 .ransack(params[:q])
       set_default_sort
       @pagy, @attachments = pagy_with_metadata_sort(@q.result)
     end

@@ -93,7 +93,6 @@
         '
       >
         <% @attachments.each do |attachment| %>
-          <% next if attachment.associated_attachment && attachment.metadata['direction'] == 'reverse' %>
           <%= render Viral::BaseComponent.new(**row_arguments(attachment)) do %>
             <% @columns.each_with_index do |column, index| %>
               <%= render_cell(
@@ -117,7 +116,7 @@
                 <% if column == :id %>
                   <%= attachment.puid %>
                 <% elsif column == :filename %>
-                  <% if attachment.associated_attachment && attachment.metadata['direction'] == 'forward' %>
+                  <% if attachment.associated_attachment %>
                     <div>
                       <div class="flex mb-4 items-center">
                         <%= viral_icon(name: :arrow_right, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
