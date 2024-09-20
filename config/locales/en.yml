@@ -284,13 +284,13 @@ en:
         attachments: Attachments
         selected: Selected
       created_at: Uploaded
+      delete: Delete
       delete_confirm: Are you sure you would like to delete attachment '%{name}'?
       filename: Filename
       format: Format
       id: ID
       limit:
         item: Attachments
-      remove: Delete
       select_page: Select / Deselect visible attachments
       type: Type
   auth:
@@ -946,6 +946,14 @@ en:
       create:
         failure: 'File %{filename} was not uploaded due to the following errors: %{errors}'
         success: File %{filename} was successfully uploaded.
+      delete_attachment_modal:
+        multi_description: Are you sure that you want to delete files %{filenames} from the project?
+        single_description: Are you sure that you want to delete file '%{filename}' from the project?
+        submit_button: Confirm
+        title: Delete File
+      destroy:
+        error: 'File %{filename} was not removed due to the following errors: %{errors}'
+        success: File %{filename} was successfully removed.
       form:
         files: Files
         files_ignored: 'fasta and fastq files must be compressed. The following file(s) cannot be uploaded:'

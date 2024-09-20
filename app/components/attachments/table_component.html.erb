@@ -93,6 +93,7 @@
         '
       >
         <% @attachments.each do |attachment| %>
+          <% next if attachment.associated_attachment && attachment.metadata['direction'] == 'reverse' %>
           <%= render Viral::BaseComponent.new(**row_arguments(attachment)) do %>
             <% @columns.each_with_index do |column, index| %>
               <%= render_cell(
@@ -116,17 +117,46 @@
                 <% if column == :id %>
                   <%= attachment.puid %>
                 <% elsif column == :filename %>
-                  <div class="flex items-center">
-                    <%= viral_icon(name: :document_text, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
-                    <span>
-                      <%= link_to attachment.file.filename,
-                      rails_blob_path(attachment.file),
-                      data: {
-                        turbo: false,
-                      },
-                      class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
-                    </span>
-                  </div>
+                  <% if attachment.associated_attachment && attachment.metadata['direction'] == 'forward' %>
+                    <div>
+                      <div class="flex mb-4 items-center">
+                        <%= viral_icon(name: :arrow_right, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
+                        <span>
+                          <%= link_to attachment.file.filename,
+                          rails_blob_path(attachment.file),
+                          data: {
+                            turbo: false,
+                          },
+                          class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+                        </span>
+                      </div>
+                      <div class="flex items-center">
+                        <%= viral_icon(name: :arrow_left, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
+                        <span>
+                          <%= link_to attachment.associated_attachment.file.filename,
+                          rails_blob_path(attachment.associated_attachment.file),
+                          data: {
+                            turbo: false,
+                          },
+                          class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+                        </span>
+                      </div>
+                    </div>
+                <% else %>
+                    <div>
+                      <div class="flex items-center">
+                        <%= viral_icon(name: :document_text, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
+                        <span>
+                          <%= link_to attachment.file.filename,
+                          rails_blob_path(attachment.file),
+                          data: {
+                            turbo: false,
+                          },
+                          class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+                        </span>
+                      </div>
+                    </div>
+                <% end %>
                 <% elsif column == :format || column == :type %>
                   <%= viral_pill(
                     text: attachment.metadata[column.to_s],
@@ -146,18 +176,16 @@
               ) do %>
                 <% if @row_actions[:destroy] %>
                   <%= link_to(
-                    t('.remove'),
-                    namespace_project_attachment_path(
-                      id: attachment.id
-                    ),
-                    data: {
-                      turbo_stream: true,
-                      turbo_method: :delete,
-                      turbo_confirm: t('.delete_confirm', name: attachment.file.filename.to_s),
-                    },
-                    class:
-                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                  ) %>
+                   t(".delete"),
+                      namespace_project_attachment_new_destroy_path(
+                        attachment_id: attachment.id,
+                      ),
+                      data: {
+                        turbo_stream: true,
+                      },
+                      class:
+                        "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                    ) %>
                 <% end %>
               <% end %>
             <% end %>
