@@ -34,10 +34,10 @@ en:
         update_sample_metadata?: You are not authorized to update sample metadata for group %{name} on this server.
       index?: You are not authorized to view the listing of resources on this server.
       namespaces/project_namespace:
-        create_automated_workflow_executions?: You are not authorized to create automated workflow executions for project %{name}
+        create_automated_workflow_executions?: You are not authorized to create automated pipelines for project %{name}
         create_bot_accounts?: You are not authorized to create bot accounts for project %{name} on this server.
         create_member?: You are not authorized to create members for the project namespace %{name} on this server.
-        destroy_automated_workflow_executions?: You are not authorized to destroy automated workflow executions for project %{name}
+        destroy_automated_workflow_executions?: You are not authorized to destroy automated pipelines for project %{name}
         destroy_bot_accounts?: You are not authorized to destroy bot accounts for project %{name} on this server.
         destroy_member?: You are not authorized to remove members from the project namespace %{name} on this server.
         export_data?: You are not authorized to export data from project %{name} on this server.
@@ -46,20 +46,20 @@ en:
         submit_workflow?: You are not authorized to submit workflows for samples within project %{name} on this server.
         unlink_namespace_with_group?: You are not authorized to unlink project %{name} from other groups on this server.
         update?: You are not authorized to update the namespace for project %{name} on this server.
-        update_automated_workflow_executions?: You are not authorized to update automated workflow executions for project %{name}
+        update_automated_workflow_executions?: You are not authorized to update automated pipelines for project %{name}
         update_member?: You are not authorized to update members for the project namespace %{name} on this server.
         update_namespace_with_group_link?: You are not authorized to update project %{name} links with other groups on this server.
         update_sample_metadata?: You are not authorized to update sample metadata for project %{name} on this server.
-        view_automated_workflow_executions?: You are not authorized to view automated workflow executions for project %{name}
-        view_workflow_executions?: You are not authorized to view workflow executions for project %{name} on this server.
+        view_automated_workflow_executions?: You are not authorized to view automated pipelines for project %{name}
+        view_workflow_executions?: You are not authorized to view pipeline executions for project %{name} on this server.
       namespaces/user_namespace:
         create?: You are not authorized to create a project under the %{name} namespace
         transfer_into_namespace?: You are not authorized to transfer to the user %{name} namespace
       new?: You are not authorized to create this resource on this server.
       project:
         activity?: You are not authorized to view the activity for project %{name} on this server.
-        clone_sample?: You are not authorized to clone samples from project %{name} on this server.
-        clone_sample_into_project?: You are not authorized to clone samples to project %{name} on this server.
+        clone_sample?: You are not authorized to copy samples from project %{name} on this server.
+        clone_sample_into_project?: You are not authorized to copy samples to project %{name} on this server.
         create_attachment?: You are not authorized to create attachments for project %{name} on this server.
         create_sample?: You are not authorized to create samples for project %{name} on this server.
         destroy?: You are not authorized to remove project %{name} from this server.
@@ -223,16 +223,16 @@ en:
       create_html: "%{user} created group"
       destroy_html: "%{user} removed group"
       projects:
-        create_html: "%{user} created project <span class='text-slate-800 dark:text-slate-300 font-medium'>%{href}</span> within group"
-        destroy_html: "%{user} removed project <span class='text-slate-800 dark:text-slate-300 font-medium'>%{project_puid}</span> from group"
-        transfer_in_html: "%{user} transferred project %{href} from namespace <span class='text-slate-800 dark:text-slate-300 font-medium'>%{old_namespace}</span> to <span class='text-slate-800 dark:text-slate-300 font-medium'>%{new_namespace}</span>"
-        transfer_out_html: "%{user} transferred project <span class='text-slate-800 dark:text-slate-300 font-medium'>%{project_puid}</span>  from namespace <span class='text-slate-800 dark:text-slate-300 font-medium'>%{old_namespace}</span> to <span class='text-slate-800 dark:text-slate-300 font-medium'>%{new_namespace}</span>"
+        create_html: "%{user} created project <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span> within group"
+        destroy_html: "%{user} removed project <span class='font-medium text-slate-800 dark:text-slate-300'>%{project_puid}</span> from group"
+        transfer_in_html: "%{user} transferred project %{href} from namespace <span class='font-medium text-slate-800 dark:text-slate-300'>%{old_namespace}</span> to <span class='font-medium text-slate-800 dark:text-slate-300'>%{new_namespace}</span>"
+        transfer_out_html: "%{user} transferred project <span class='font-medium text-slate-800 dark:text-slate-300'>%{project_puid}</span>  from namespace <span class='font-medium text-slate-800 dark:text-slate-300'>%{old_namespace}</span> to <span class='font-medium text-slate-800 dark:text-slate-300'>%{new_namespace}</span>"
       subgroups:
-        create_html: "%{user} created subgroup <span class='text-slate-800 dark:text-slate-300 font-medium'>%{href}</span>"
-        destroy_html: "%{user} removed descendant group <span class='text-slate-800 dark:text-slate-300 font-medium'>%{removed_group_puid}</span>"
-      transfer_in_html: "%{user} transferred group <span class='text-slate-800 dark:text-slate-300 font-medium'>%{href}</span> into group <span class='text-slate-800 dark:text-slate-300 font-medium'>%{new_namespace}</span> from <span class='text-slate-800 dark:text-slate-300 font-medium'>%{old_namespace}</span>"
-      transfer_in_no_exisiting_namespace_html: "%{user} transferred group <span class='text-slate-800 dark:text-slate-300 font-medium'>%{href}</span> into group <span class='text-slate-800 dark:text-slate-300 font-medium'>%{new_namespace}</span>"
-      transfer_out_html: "%{user} transferred group <span class='text-slate-800 dark:text-slate-300 font-medium'>%{group_puid}</span> into group <span class='text-slate-800 dark:text-slate-300 font-medium'>%{new_namespace}</span>"
+        create_html: "%{user} created subgroup <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span>"
+        destroy_html: "%{user} removed descendant group <span class='font-medium text-slate-800 dark:text-slate-300'>%{removed_group_puid}</span>"
+      transfer_in_html: "%{user} transferred group <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span> into group <span class='font-medium text-slate-800 dark:text-slate-300'>%{new_namespace}</span> from <span class='font-medium text-slate-800 dark:text-slate-300'>%{old_namespace}</span>"
+      transfer_in_no_exisiting_namespace_html: "%{user} transferred group <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span> into group <span class='font-medium text-slate-800 dark:text-slate-300'>%{new_namespace}</span>"
+      transfer_out_html: "%{user} transferred group <span class='font-medium text-slate-800 dark:text-slate-300'>%{group_puid}</span> into group <span class='font-medium text-slate-800 dark:text-slate-300'>%{new_namespace}</span>"
       update_html: "%{user} updated group attributes"
     member:
       create_html: "%{user} added member %{href} to %{namespace_type}"
@@ -250,8 +250,8 @@ en:
         attachment:
           create_html: "%{user} attached files to sample %{href}"
           destroy_html: "%{user} removed files from sample %{href}"
-        clone_html: "%{user} cloned <span class='font-medium text-slate-800 dark:text-slate-300'>%{cloned_samples_count}</span> samples to project %{href}"
-        cloned_from_html: "%{user} cloned <span class='font-medium text-slate-800 dark:text-slate-300'>%{cloned_samples_count}</span> samples from project %{href}"
+        clone_html: "%{user} copied <span class='font-medium text-slate-800 dark:text-slate-300'>%{cloned_samples_count}</span> samples to project %{href}"
+        cloned_from_html: "%{user} copied <span class='font-medium text-slate-800 dark:text-slate-300'>%{cloned_samples_count}</span> samples from project %{href}"
         create_html: "%{user} created sample %{href}"
         destroy_html: "%{user} removed sample <span class='font-medium text-slate-800 dark:text-slate-300'>%{sample_puid}</span>"
         destroy_multiple_html: "%{user} removed <span class='font-medium text-slate-800 dark:text-slate-300'>%{deleted_count}</span> samples from project"
@@ -263,13 +263,13 @@ en:
       transfer_html: "%{user} transferred project from namespace <span class='font-medium text-slate-800 dark:text-slate-300'>%{old_namespace}</span> to <span class='font-medium text-slate-800 dark:text-slate-300'>%{new_namespace}</span>"
       update_html: "%{user} updated project attributes"
     workflow_execution:
+      automated_pipeline_completion:
+        metadata_written_html: Project automation bot wrote pipeline %{href} metadata to sample %{sample_href}
+        outputs_and_metadata_written_html: Project automation bot attached pipeline %{href} outputs and wrote metadata to sample %{sample_href}
+        outputs_written_html: Project automation bot attached pipeline %{href} outputs to sample %{sample_href}
       automated_workflow:
-        create_html: "%{user} setup automated workflow execution %{href} for the project"
-        launch_html: Project automation bot launched workflow %{href} on sample %{sample_href}
-      automated_workflow_completion:
-        metadata_written_html: Project automation bot wrote workflow %{href} metadata to sample %{sample_href}
-        outputs_and_metadata_written_html: Project automation bot attached workflow %{href} outputs and wrote metadata to sample %{sample_href}
-        outputs_written_html: Project automation bot attached workflow %{href} outputs to sample %{sample_href}
+        create_html: "%{user} setup automated pipeline %{href} for the project"
+        launch_html: Project automation bot launched pipeline %{href} on sample %{sample_href}
   application:
     errors:
       access_denied: Access Denied.
@@ -465,7 +465,7 @@ en:
       samples_count:
         non_zero: Samples (COUNT_PLACEHOLDER selected)
         zero: Samples (0 selected)
-      submit_button: Submit button
+      submit_button: Submit
     new_analysis_export_dialog:
       description:
         plural: This export will contain COUNT_PLACEHOLDER workflow executions.
@@ -978,28 +978,28 @@ en:
     automated_workflow_executions:
       actions:
         delete_button: Delete
-        delete_confirm: Are you sure that you want to delete this automated workflow execution?
+        delete_confirm: Are you sure that you want to delete this automated pipeline?
         edit_button: Edit
       create:
-        error: Could not create an automated workflow execution for %{workflow_name}
-        success: Automated workflow execution for %{workflow_name} was successfully created
+        error: Could not create an automated pipeline for %{workflow_name}
+        success: Automated pipeline for %{workflow_name} was successfully created
       destroy:
-        error: Could not delete automated workflow execution for %{workflow_name}
-        success: Automated workflow execution for %{workflow_name} was successfully deleted
+        error: Could not delete automated pipeline for %{workflow_name}
+        success: Automated pipeline for %{workflow_name} was successfully deleted
       edit_dialog:
-        title: 'Editing Automated Workflow Execution: %{workflow_name}'
+        title: 'Editing Automated Pipeline: %{workflow_name}'
       index:
-        add_new_automated_workflow_execution: New automated workflow execution
-        subtitle: Setup automated workflow executions to launch when paired-end data is uploaded to the project
-        title: Automated Workflow Executions
+        add_new_automated_workflow_execution: New automated pipeline
+        subtitle: Setup automated pipelines to launch when paired-end data is uploaded to the project
+        title: Automated Pipelines
       new_automated_workflow_execution_modal:
         title: "%{workflow} parameters"
       pipeline_selection_modal:
-        title: Workflow Selection
+        title: Pipeline Selection
       table:
         empty:
-          description: No automated workflow executions have been configured for this project
-          title: No automated workflow executions
+          description: No automated pipelines have been configured for this project
+          title: No automated pipelines
         headers:
           actions: Actions
           created_at: Created
@@ -1233,22 +1233,22 @@ en:
           success: File %{filename} was successfully removed.
       clones:
         create:
-          error: 'The following list of samples failed to clone:'
-          no_samples_cloned_error: 'Samples were not cloned for the following reasons:'
-          success: Samples were successfully cloned.
+          error: 'The following list of samples failed to copy:'
+          no_samples_cloned_error: 'Samples were not copied for the following reasons:'
+          success: Samples were successfully copied.
         dialog:
           description:
-            plural: The following COUNT_PLACEHOLDER samples are about to be cloned to another project.
-            singular: The following sample is about to be cloned to another project.
-            zero: No samples have been selected for cloning
+            plural: The following COUNT_PLACEHOLDER samples are about to be copied to another project.
+            singular: The following sample is about to be copied to another project.
+            zero: No samples have been selected for copying
           empty_state: No projects are associated with that name or ID
-          new_project_id: Project to clone samples to
+          new_project_id: Project to copy samples to
           no_available_projects: No available projects
           samples: Samples
           select_project: Select project
-          spinner_message: Cloning samples, this might take a while...
+          spinner_message: Copying samples, this might take a while...
           submit_button: Submit
-          title: Clone Samples
+          title: Copy Samples
       create:
         success: Sample was successfully created.
       deletions:
@@ -1283,7 +1283,7 @@ en:
       index:
         actions:
           button_add_aria_label: Add new sample button
-        clone_button: Clone samples
+        clone_button: Copy samples
         create_export_button:
           label: Create Export
           linelist_export: Linelist Export
@@ -1416,7 +1416,7 @@ en:
         success: Sample was successfully updated.
     sidebar:
       activity: Activity
-      automated_workflow_executions: Automated Workflow Executions
+      automated_workflow_executions: Automated Pipelines
       bot_accounts: Bot Accounts
       details: Details
       files: Files
@@ -1460,8 +1460,8 @@ en:
         workflow_version: Workflow Version
       table:
         empty:
-          description: There are no automated workflow executions associated with this project.
-          title: No automated workflow executions.
+          description: There are no automated pipelines associated with this project.
+          title: No automated pipelines.
   ransack:
     sort_dropdown_component:
       sorting:
@@ -1675,7 +1675,7 @@ en:
         title: "%{workflow} parameters"
         update: Update
       pipeline_selection:
-        loading: Preparing workflow arguments for COUNT_PLACEHOLDER samples, this may take a bit of time.
+        loading: Preparing workflow execution arguments for COUNT_PLACEHOLDER samples, this may take a bit of time.
         title: Workflow Selection
     summary:
       created_at: Created
@@ -1686,13 +1686,13 @@ en:
       workflow_version: Workflow Version
     table:
       empty:
-        description: There are no workflow executions associated with this submitter.
-        title: No workflow executions.
+        description: There are no workflows associated with this submitter.
+        title: No workflows.
     table_component:
       actions: Actions
       counts:
         selected: Selected
-        workflow_executions: Workflow executions
+        workflow_executions: Workflow Executions
       created_at: Created
       id: ID
       name: Name

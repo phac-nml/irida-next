@@ -59,7 +59,8 @@ module Projects
       click_link I18n.t(:'projects.automated_workflow_executions.index.add_new_automated_workflow_execution')
 
       within('dialog') do
-        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_selector '.dialog--header',
+                        text: I18n.t(:'projects.automated_workflow_executions.pipeline_selection_modal.title')
         assert_link text: 'phac-nml/iridanextexample', count: 1
         click 'phac-nml/iridanextexample'
       end
