@@ -7,7 +7,7 @@ module Groups
     setup do
       sign_in users(:john_doe)
       @namespace = groups(:group_one)
-      @attachment1 = attachments(:project1Attachment1)
+      @attachment1 = attachments(:group1Attachment1)
     end
 
     test 'should get index' do
