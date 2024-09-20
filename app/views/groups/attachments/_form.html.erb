@@ -1,4 +1,4 @@
-<%= form_with(model: attachment, url: namespace_project_attachments_path(id: @project.id)) do |form| %>
+<%= form_with(model: attachment, url: group_attachments_path(id: @group.id)) do |form| %>
   <%= form.hidden_field :attachable_id %>
   <%= form.hidden_field :attachable_type %>
 
@@ -64,7 +64,7 @@
                     dark:text-white
                     dark:border-primary-900
                     dark:hover:bg-primary-700
-                    ",
+                  ",
                   data: {
                     "attachment-upload-target": "submitButton",
                   } %>

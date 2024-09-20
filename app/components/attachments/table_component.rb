@@ -12,7 +12,7 @@ module Attachments
       attachments,
       pagy,
       q,
-      project,
+      namespace,
       row_actions: false,
       abilities: {},
       empty: {},
@@ -21,7 +21,7 @@ module Attachments
       @attachments = attachments
       @pagy = pagy
       @q = q
-      @project = project
+      @namespace = namespace
       @abilities = abilities
       @row_actions = row_actions
       @empty = empty
@@ -61,6 +61,18 @@ module Attachments
 
     def render_cell(**arguments, &)
       render(Viral::BaseComponent.new(**arguments), &)
+    end
+
+    def destroy_path(attachment)
+      if @namespace.type == 'Group'
+        group_attachment_path(
+          id: attachment.id
+        )
+      else
+        namespace_project_attachment_new_destroy_path(
+          attachment_id: attachment.id
+        )
+      end
     end
 
     private

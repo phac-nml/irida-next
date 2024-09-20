@@ -5,12 +5,12 @@
 <div class="fixed-table-component">
   <%= render Viral::PageHeaderComponent.new(
     title: t(".title"),
-    subtitle: t(".subtitle", project_name: @project.name),
+    subtitle: t(".subtitle", group_name: @group.name),
   ) do |component| %>
     <%= component.with_buttons do %>
-    <% if allowed_to?(:create_attachment?, @project) %>
+    <% if allowed_to?(:create_attachment?, @group) %>
       <%= link_to t(".upload_files"),
-          new_namespace_project_attachment_path(id: @project.id),
+          new_group_attachment_path(id: @group.id),
           data: {
             turbo_frame: "attachment_modal",
             turbo_stream: true,
@@ -48,10 +48,10 @@
 
   <div class="flow-root">
     <div class="flex flex-row-reverse items-center mb-4 space-x-2">
-      <%= search_form_for @q, url: namespace_project_attachments_path(@project.parent, @project), html: { "data-controller": "filters" } do |f| %>
+      <%= search_form_for @q, url: group_attachments_path(@group), html: { "data-controller": "filters" } do |f| %>
         <%= hidden_field_tag :limit, @pagy.limit %>
         <%= f.hidden_field :s, value: "#{@q.sorts[0].name} #{@q.sorts[0].dir}" %>
-        <%= f.label :puid_or_file_blob_filename_cont, "SEARCH", class: "sr-only" %>
+        <%= f.label :name_cont, "SEARCH", class: "sr-only" %>
         <div class="relative lg:w-72">
           <div
             class="
@@ -74,6 +74,6 @@
     attachments: @attachments,
     pagy: @pagy,
     q: @q,
-    namespace: @project.namespace
+    namespace: @group
   } %>
 </div>

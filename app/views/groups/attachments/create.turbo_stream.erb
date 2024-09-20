@@ -1,0 +1,30 @@
+<% attachments&.each do |attachment| %>
+  <% if attachment.persisted? %>
+    <%= turbo_stream.append "flashes" do %>
+      <%= viral_flash(
+        type: :success,
+        data: t(".success", filename: attachment.file.filename),
+      ) %>
+    <% end %>
+  <% else %>
+    <%= turbo_stream.append "flashes" do %>
+      <%= viral_flash(
+        type: :error,
+        data:
+          t(
+            ".failure",
+            filename: attachment.file.filename,
+            errors: attachment.errors.full_messages.join("."),
+          ),
+      ) %>
+    <% end %>
+  <% end %>
+<% end %>
+<%= turbo_stream.update "attachment_modal",
+                    partial: "new_attachment_modal",
+                    locals: {
+                      open: false,
+                      attachment: attachment,
+                    } %>
+
+<turbo-stream action="refresh"></turbo-stream>
