@@ -4,13 +4,13 @@
       <table
         class="
           w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-          dark:divide-slate-600 whitespace-nowrap
+          whitespace-nowrap
         "
       >
         <thead
           class="
-            text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700
-            dark:text-slate-400
+            sticky top-0 z-10 text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
+            dark:text-slate-300
           "
         >
           <tr>
@@ -40,7 +40,12 @@
             <% end %>
           </tr>
         </thead>
-        <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+        <tbody
+          class="
+            overflow-y-auto bg-white divide-y divide-slate-200 dark:bg-slate-800
+            dark:divide-slate-700
+          "
+        >
           <% @data_exports.each do |data_export| %>
             <%= render Viral::BaseComponent.new(**row_arguments(data_export)) do %>
               <td class="px-3 py-3">
