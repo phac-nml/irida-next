@@ -35,6 +35,7 @@ bin/rails graphql:dump_schema
 
 ```bash
 cd docs-site
+pnpm update
 pnpm build
 npm run serve
 ```
