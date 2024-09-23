@@ -135,9 +135,6 @@ en:
         provider: Authentication Provider
         uid: Authentication Provider UID
     concerns:
-      atttachment_actions:
-        destroy:
-          error: 'File %{filename} was not removed due to the following errors: %{errors}'
       history:
         system: System
       track_activity:
@@ -378,6 +375,9 @@ en:
           description: No items found matching your search
           title: No items found
   concerns:
+    attachment_actions:
+      destroy:
+        error: 'File %{filename} was not removed due to the following errors: %{errors}'
     bot_actions:
       create:
         success: Bot account was successfully added to the group
