@@ -135,9 +135,6 @@ en:
         provider: Authentication Provider
         uid: Authentication Provider UID
     concerns:
-      atttachment_actions:
-        destroy:
-          error: 'File %{filename} was not removed due to the following errors: %{errors}'
       history:
         system: System
       track_activity:
