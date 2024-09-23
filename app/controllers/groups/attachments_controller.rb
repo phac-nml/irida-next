@@ -31,7 +31,7 @@ module Groups
       @context_crumbs +=
         [{
           name: t(:'groups.sidebar.files'),
-          path: group_attachments_path(@namespace)
+          path: group_attachments_path(@group)
         }]
     end
   end
