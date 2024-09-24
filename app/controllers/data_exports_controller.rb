@@ -14,7 +14,9 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   TABS = %w[summary preview].freeze
 
   def index
-    @q = load_data_exports.ransack(params[:q])
+    all_data_exports = load_data_exports
+    @has_data_exports = all_data_exports.count.positive?
+    @q = all_data_exports.ransack(params[:q])
     set_default_sort
     @pagy, @data_exports = pagy(@q.result)
   end

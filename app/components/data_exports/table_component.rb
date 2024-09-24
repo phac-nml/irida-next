@@ -7,14 +7,16 @@ module DataExports
   class TableComponent < Component
     include Ransack::Helpers::FormHelper
 
-    # rubocop:disable Naming/MethodParameterName
+    # rubocop:disable Naming/MethodParameterName, Metrics/ParameterLists
     def initialize(
+      has_data_exports,
       data_exports,
       pagy,
       q,
       empty: {},
       **system_arguments
     )
+      @has_data_exports = has_data_exports
       @data_exports = data_exports
       @pagy = pagy
       @q = q
@@ -23,7 +25,7 @@ module DataExports
 
       @columns = columns
     end
-    # rubocop:enable Naming/MethodParameterName
+    # rubocop:enable Naming/MethodParameterName, Metrics/ParameterLists
 
     def system_arguments
       { tag: 'div' }.deep_merge(@system_arguments).tap do |args|

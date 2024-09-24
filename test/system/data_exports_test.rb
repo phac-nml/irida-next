@@ -140,8 +140,10 @@ class DataExportsTest < ApplicationSystemTestCase
     end
 
     assert_no_selector 'table'
-    assert_text I18n.t('data_exports.index.no_data_exports')
-    assert_text I18n.t('data_exports.index.no_data_exports_message')
+    within 'div[role="alert"]' do
+      assert_text I18n.t('data_exports.index.no_data_exports')
+      assert_text I18n.t('data_exports.index.no_data_exports_message')
+    end
   end
 
   test 'can navigate to individual data export page from data exports page' do
@@ -1107,6 +1109,13 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text @data_export1.name
       assert_text @data_export10.id
       assert_text @data_export10.name
+    end
+
+    fill_in placeholder: I18n.t(:'data_exports.index.search.placeholder'),
+            with: 'something that does not exist'
+    within 'div[role="alert"]' do
+      assert_text I18n.t('components.viral.pagy.empty_state.title')
+      assert_text I18n.t('components.viral.pagy.empty_state.description')
     end
   end
 end
