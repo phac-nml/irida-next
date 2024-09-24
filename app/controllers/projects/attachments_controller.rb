@@ -2,7 +2,7 @@
 
 module Projects
   # Controller actions for Project Attachments
-  class AttachmentsController < Projects::ApplicationController
+  class AttachmentsController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
     include Metadata
     before_action :current_page
     before_action :new_destroy_params, only: %i[new_destroy]
@@ -11,9 +11,8 @@ module Projects
     def index
       authorize! @project, to: :view_attachments?
 
-      @q = @project.namespace.attachments
-                   .where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
-                   .ransack(params[:q])
+      @render_individual_attachments = filter_requested?
+      @q = build_ransack_query
       set_default_sort
       @pagy, @attachments = pagy_with_metadata_sort(@q.result)
     end
@@ -91,6 +90,20 @@ module Projects
           name: t(:'projects.sidebar.files'),
           path: namespace_project_attachments_path(@project.parent, @project)
         }]
+    end
+
+    def filter_requested?
+      params.dig(:q, :puid_or_file_blob_filename_cont).present?
+    end
+
+    def build_ransack_query
+      if @render_individual_attachments
+        @project.namespace.attachments.all.ransack(params[:q])
+      else
+        @project.namespace.attachments
+                .where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
+                .ransack(params[:q])
+      end
     end
 
     def new_destroy_params

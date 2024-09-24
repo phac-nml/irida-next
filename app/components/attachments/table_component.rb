@@ -13,6 +13,7 @@ module Attachments
       pagy,
       q,
       namespace,
+      render_individual_attachments,
       row_actions: false,
       abilities: {},
       empty: {},
@@ -24,6 +25,7 @@ module Attachments
       @namespace = namespace
       @abilities = abilities
       @row_actions = row_actions
+      @render_individual_attachments = render_individual_attachments
       @empty = empty
       @renders_row_actions = @row_actions.select { |_key, value| value }.count.positive?
       @system_arguments = system_arguments

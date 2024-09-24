@@ -116,10 +116,16 @@
                 <% if column == :id %>
                   <%= attachment.puid %>
                 <% elsif column == :filename %>
-                  <% if attachment.associated_attachment %>
+                  <% if @render_individual_attachments %>
                     <div>
-                      <div class="flex mb-4 items-center">
-                        <%= viral_icon(name: :arrow_right, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
+                      <div class="flex items-center">
+                        <% if attachment.associated_attachment && attachment.metadata['direction'] == 'forward' %>
+                          <%= viral_icon(name: :arrow_right, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
+                        <% elsif attachment.associated_attachment %>
+                          <%= viral_icon(name: :arrow_left, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
+                        <% else %>
+                          <%= viral_icon(name: :document_text, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
+                        <% end %>
                         <span>
                           <%= link_to attachment.file.filename,
                           rails_blob_path(attachment.file),
@@ -129,19 +135,34 @@
                           class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
                         </span>
                       </div>
-                      <div class="flex items-center">
-                        <%= viral_icon(name: :arrow_left, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
-                        <span>
-                          <%= link_to attachment.associated_attachment.file.filename,
-                          rails_blob_path(attachment.associated_attachment.file),
-                          data: {
-                            turbo: false,
-                          },
-                          class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
-                        </span>
-                      </div>
                     </div>
-                <% else %>
+                  <% else %>
+                    <% if attachment.associated_attachment %>
+                      <div>
+                        <div class="flex mb-4 items-center">
+                          <%= viral_icon(name: :arrow_right, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
+                          <span>
+                            <%= link_to attachment.file.filename,
+                            rails_blob_path(attachment.file),
+                            data: {
+                              turbo: false,
+                            },
+                            class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+                          </span>
+                        </div>
+                        <div class="flex items-center">
+                          <%= viral_icon(name: :arrow_left, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
+                          <span>
+                            <%= link_to attachment.associated_attachment.file.filename,
+                            rails_blob_path(attachment.associated_attachment.file),
+                            data: {
+                              turbo: false,
+                            },
+                            class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+                          </span>
+                        </div>
+                      </div>
+                  <% else %>
                     <div>
                       <div class="flex items-center">
                         <%= viral_icon(name: :document_text, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
@@ -155,6 +176,7 @@
                         </span>
                       </div>
                     </div>
+                  <% end %>
                 <% end %>
                 <% elsif column == :format || column == :type %>
                   <%= viral_pill(

@@ -2,7 +2,7 @@
 
 module Groups
   # Controller actions for Group Attachments
-  class AttachmentsController < Groups::ApplicationController
+  class AttachmentsController < Groups::ApplicationController # rubocop:disable Metrics/ClassLength
     include Metadata
     before_action :group, :current_page
     before_action :new_destroy_params, only: %i[new_destroy]
@@ -11,9 +11,8 @@ module Groups
     def index
       authorize! @group, to: :view_attachments?
 
-      @q = @group.attachments
-                 .where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
-                 .ransack(params[:q])
+      @render_individual_attachments = filter_requested?
+      @q = build_ransack_query
       set_default_sort
       @pagy, @attachments = pagy_with_metadata_sort(@q.result)
     end
@@ -94,6 +93,20 @@ module Groups
           name: t(:'groups.sidebar.files'),
           path: group_attachments_path(@group)
         }]
+    end
+
+    def filter_requested?
+      params.dig(:q, :puid_or_file_blob_filename_cont).present?
+    end
+
+    def build_ransack_query
+      if @render_individual_attachments
+        @group.attachments.all.ransack(params[:q])
+      else
+        @group.attachments
+              .where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
+              .ransack(params[:q])
+      end
     end
 
     def layout_fixed
