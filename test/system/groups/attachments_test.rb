@@ -317,7 +317,7 @@ module Groups
       within('dialog') do
         attach_file 'attachment[files][]', [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq.gz'),
                                             Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq.gz')]
-        click_on I18n.t('projects.attachments.form.upload')
+        click_on I18n.t('attachments.dialogs.new_attachment_component.upload')
       end
       assert_selector '#attachments-table table tbody tr', count: 3
       assert_text 'Displaying 1-3 of 3 items'
