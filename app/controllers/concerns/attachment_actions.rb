@@ -6,7 +6,7 @@ module AttachmentActions # rubocop:disable Metrics/ModuleLength
 
   included do
     before_action proc { current_page }
-    before_action proc { set_model }
+    before_action proc { set_namespace }
     before_action proc { set_authorization_object }
     before_action :new_destroy_params, only: %i[new_destroy]
     before_action :attachment, only: %i[destroy]

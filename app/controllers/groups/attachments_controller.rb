@@ -14,7 +14,7 @@ module Groups
       @group = Group.find_by_full_path(params[:group_id]) # rubocop:disable Rails/DynamicFindBy
     end
 
-    def set_model
+    def set_namespace
       @namespace = group
     end
 

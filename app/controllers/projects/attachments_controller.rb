@@ -8,7 +8,7 @@ module Projects
 
     private
 
-    def set_model
+    def set_namespace
       @namespace = @project.namespace
     end
 
