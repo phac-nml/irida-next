@@ -278,7 +278,7 @@ module Groups
         click_on I18n.t('attachments.dialogs.new_attachment_component.upload')
       end
       assert_selector '#attachments-table table tbody tr', count: 3
-      assert_text 'Displaying 1-4 of 4 items'
+      assert_text 'Displaying 1-3 of 3 items'
 
       within('table tbody') do
         assert_selector 'tr:first-child td:nth-child(2)', text: 'TestSample_S1_L001_R2_001.fastq.gz'
@@ -304,6 +304,45 @@ module Groups
 
       assert_text I18n.t('groups.attachments.destroy.success', filename: 'TestSample_S1_L001_R2_001.fastq.gz')
       assert_text I18n.t('groups.attachments.destroy.success', filename: 'TestSample_S1_L001_R1_001.fastq.gz')
+    end
+
+    test 'rendering paired end attachments separately when filtering' do
+      visit group_attachments_path(@namespace)
+
+      assert_text 'Displaying 1-2 of 2 items'
+      assert_selector 'table tbody tr', count: 2
+
+      click_on I18n.t('projects.attachments.index.upload_files')
+
+      within('dialog') do
+        attach_file 'attachment[files][]', [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq.gz'),
+                                            Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq.gz')]
+        click_on I18n.t('projects.attachments.form.upload')
+      end
+      assert_selector '#attachments-table table tbody tr', count: 3
+      assert_text 'Displaying 1-3 of 3 items'
+
+      within('table tbody') do
+        assert_selector 'tr:first-child td:nth-child(2)', text: 'TestSample_S1_L001_R2_001.fastq.gz'
+        assert_selector 'tr:first-child td:nth-child(2)', text: 'TestSample_S1_L001_R1_001.fastq.gz'
+        assert_selector 'tr:first-child td:nth-child(3)', text: 'fastq'
+        assert_selector 'tr:first-child td:nth-child(4)', text: 'illumina_pe'
+      end
+
+      fill_in placeholder: I18n.t(:'projects.attachments.index.search.placeholder'),
+              with: 'fastq.gz'
+
+      assert_selector '#attachments-table table tbody tr', count: 2
+      assert_text 'Displaying 1-2 of 2 items'
+
+      within('table tbody') do
+        assert_selector 'tr:first-child td:nth-child(2)', text: 'TestSample_S1_L001_R2_001.fastq.gz'
+        assert_selector 'tr:first-child td:nth-child(3)', text: 'fastq'
+        assert_selector 'tr:first-child td:nth-child(4)', text: 'illumina_pe'
+        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: 'TestSample_S1_L001_R1_001.fastq.gz'
+        assert_selector 'tr:nth-child(2) td:nth-child(3)', text: 'fastq'
+        assert_selector 'tr:nth-child(2) td:nth-child(4)', text: 'illumina_pe'
+      end
     end
   end
 end
