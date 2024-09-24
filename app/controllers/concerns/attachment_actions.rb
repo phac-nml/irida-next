@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Common Attachment Actions
-module AttachmentActions
+module AttachmentActions # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
 
   included do
@@ -15,7 +15,8 @@ module AttachmentActions
   def index
     authorize! @authorize_object, to: :view_attachments?
 
-    @q = @namespace.attachments.ransack(params[:q])
+    @render_individual_attachments = filter_requested?
+    @q = build_ransack_query
     set_default_sort
     @pagy, @attachments = pagy_with_metadata_sort(@q.result)
   end
@@ -27,7 +28,8 @@ module AttachmentActions
                                              partial: 'new_attachment_modal',
                                              locals: {
                                                open: true,
-                                               attachment: Attachment.new(attachable: @namespace)
+                                               attachment: Attachment.new(attachable: @namespace),
+                                               namespace: @namespace
                                              }), status: :ok
   end
 
@@ -55,7 +57,9 @@ module AttachmentActions
     render turbo_stream: turbo_stream.update('attachment_modal',
                                              partial: 'delete_attachment_modal',
                                              locals: {
-                                               open: true
+                                               open: true,
+                                               attachment: @attachment,
+                                               namespace: @namespace
                                              }), status: :ok
   end
 
@@ -80,6 +84,20 @@ module AttachmentActions
   end
 
   private
+
+  def filter_requested?
+    params.dig(:q, :puid_or_file_blob_filename_cont).present?
+  end
+
+  def build_ransack_query
+    if @render_individual_attachments
+      @namespace.attachments.all.ransack(params[:q])
+    else
+      @namespace.attachments
+                .where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
+                .ransack(params[:q])
+    end
+  end
 
   def new_destroy_params
     @attachment = Attachment.find_by(id: params[:attachment_id])
