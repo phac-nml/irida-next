@@ -1,19 +1,19 @@
 <%= render Viral::PageHeaderComponent.new(title: @group.name, id: @group.puid, subtitle: @group.description) do |component| %>
   <%= component.icon do %>
     <%= viral_avatar(
-          name: @group.name,
-          colour_string: "#{@group.name}-#{@group.id}",
-          size: :large
-        ) %>
+      name: @group.name,
+      colour_string: "#{@group.name}-#{@group.id}",
+      size: :large,
+    ) %>
   <% end %>
   <%= component.with_buttons do %>
     <% if allowed_to?(:new?, @group) %>
       <%= link_to t(:"groups.show.create_subgroup_button"),
-                  new_group_path(parent_id: @group.id),
-                  class: "button button--size-default button--state-default" %>
+      new_group_path(parent_id: @group.id),
+      class: "button button--size-default button--state-default" %>
       <%= link_to t(:"groups.show.create_project_button"),
-                  new_project_path(group_id: @group.id),
-                  class: "button button--size-default button--state-primary ml-2" %>
+      new_project_path(group_id: @group.id),
+      class: "button button--size-default button--state-primary ml-2" %>
     <% end %>
   <% end %>
 <% end %>
@@ -23,44 +23,16 @@
     <%= t(:".tabs.subgroups_and_projects") %>
   <% end %>
   <%= tabs.with_tab(url: group_path(@group, tab: "shared_namespaces"), controls: "group-projects", selected: @tab == "shared_namespaces") do %>
-    <%= t(:'.tabs.shared_namespaces') %>
+    <%= t(:".tabs.shared_namespaces") %>
   <% end %>
 
   <%= tabs.with_tab_content do %>
-    <%= turbo_frame_tag "group_show_tab_content", "data-turbo-temporary": true, src: (
-      if @tab == "shared_namespaces"
-        group_shared_namespaces_path(@group, format: :turbo_stream)
-      else
-        group_subgroups_path(@group, format: :turbo_stream)
-      end
-    ) do %>
-      <table class="min-w-full table-fixed dark:divide-slate-600">
-        <tbody
-          class="
-            bg-white
-            divide-y
-            divide-slate-200
-            dark:bg-slate-800
-            dark:divide-slate-700
-          "
-        >
-        <% 10.times do %>
-          <tr>
-
-            <td class="p-4 animate-pulse">
-              <div class="flex-1 py-1 space-y-6">
-                <div class="space-y-3">
-                  <div class="w-48 h-2 rounded bg-slate-200"></div>
-                  <div class="w-32 h-2 rounded bg-slate-200"></div>
-                </div>
-              </div>
-            </td>
-
-          </tr>
-        <% end %>
-        </tbody>
-      </table>
+    <% if @tab == "shared_namespaces" %>
+      <%# group_shared_namespaces_path(@group, format: :turbo_stream) %>
+    <% else %>
+      <%# group_subgroups_path(@group, format: :turbo_stream) %>
+      <%= render "groups/subgroups/index", locals: { namespaces: @namespaces } %>
     <% end %>
+
   <% end %>
 <% end %>
-

@@ -15,6 +15,21 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def show
     authorize! @group, to: :read?
+
+    @q = namespace_children.ransack(params[:q])
+    set_default_sort
+    @pagy, @namespaces = pagy(@q.result.include_route)
+
+    respond_to do |format|
+      format.html
+      format.turbo_stream do
+        if params.key? :parent_id
+          render_subgroup
+        else
+          @namespaces = namespace_children
+        end
+      end
+    end
   end
 
   def new
@@ -104,6 +119,18 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   end
 
   private
+
+  def set_default_sort
+    @q.sorts = 'created_at desc' if @q.sorts.empty?
+  end
+
+  def render_subgroup
+    @group = Group.find(params[:parent_id])
+    @collapsed = params[:collapse] == 'true'
+    @children = @collapsed ? Namespace.none : namespace_children
+    @depth = params[:depth].to_i
+    render :subgroup
+  end
 
   def parent_group
     @group = Group.find(params[:parent_id]) if params[:parent_id]
