@@ -71,15 +71,15 @@ class Group < Namespace
   def metadata_fields
     metadata_fields = metadata_summary.keys
 
-    metadata_fields.concat add_shared_namespace_metadata_keys(self)
+    metadata_fields.concat shared_namespace_metadata_keys(self)
 
     descendants.each do |descendant|
-      metadata_fields.concat add_shared_namespace_metadata_keys(descendant)
+      metadata_fields.concat shared_namespace_metadata_keys(descendant)
     end
     metadata_fields.uniq
   end
 
-  def add_shared_namespace_metadata_keys(namespace)
+  def shared_namespace_metadata_keys(namespace)
     metadata_fields = []
     namespace.shared_groups.each do |shared_group|
       metadata_fields.concat shared_group.metadata_summary.keys
