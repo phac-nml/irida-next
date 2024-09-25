@@ -444,7 +444,7 @@ fr:
         row:
           samples: Samples
         search:
-          placeholder: Filter by name
+          placeholder: Filter by name or puid
         sorting:
           created_at_asc: Oldest created
           created_at_desc: Last created

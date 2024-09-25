@@ -25,7 +25,7 @@ module Dashboard
     end
 
     def authorized_projects(finder_params)
-      if finder_params[:personal]
+      if finder_params[:personal] == 'true'
         authorized_scope(Project, type: :relation, as: :personal)
       else
         authorized_scope(Project, type: :relation)

@@ -82,6 +82,18 @@ module Dashboard
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
     end
 
+    test 'can search the list of projects by puid' do
+      visit dashboard_projects_url
+
+      assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
+      assert_text 'Displaying items 1-20 of 38 in total'
+      assert_selector 'tr', count: 20
+
+      fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.puid
+
+      assert_selector 'tr', count: 1
+    end
+
     test 'can sort the list of projects' do
       visit dashboard_projects_url
 
