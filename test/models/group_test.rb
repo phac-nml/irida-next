@@ -4,9 +4,12 @@ require 'test_helper'
 
 class GroupTest < ActiveSupport::TestCase
   def setup
+    @user = users(:john_doe)
     @group = groups(:group_one)
     @subgroup_one = groups(:subgroup1)
     @group_three = groups(:group_three)
+    @group_three_subgroup1 = groups(:subgroup_one_group_three)
+    @sample23 = samples(:sample23)
   end
 
   test 'valid group' do
@@ -205,5 +208,48 @@ class GroupTest < ActiveSupport::TestCase
 
   test '#metadata_summary incorporates fields from shared projects' do
     assert_equal %w[metadatafield1 metadatafield2], groups(:group_alpha).metadata_fields
+  end
+
+  test 'group should have samples_count from all projects within' do
+    expected_samples_count = @group.samples_count
+
+    policy = ProjectPolicy.new(user: @user)
+    actual_samples_count = policy.apply_scope(Project,
+                                              type: :relation, name: :group_projects,
+                                              scope_options: { group: }).select(:samples_count).pluck(:samples_count).sum
+
+    assert_equal expected_samples_count, actual_samples_count
+  end
+
+  test 'update samples_count by sample transfer' do
+    assert_equal 1, @group_three.samples_count
+    assert_equal 1, @group_three_subgroup1.samples_count
+
+    @group_three.update_samples_count_by_sample_transfer([@sample23.id], @project_namespace.project.id)
+
+    assert_equal 0, @group_three.samples_count
+    assert_equal 0, @group_three_subgroup1.samples_count
+  end
+
+  test 'update samples_count by sample deletion' do
+    assert_equal 1, @group_three.samples_count
+    assert_equal 1, @group_three_subgroup1.samples_count
+
+    @group_three.update_samples_count_by_sample_deletion(@sample23, @sample23.project_id)
+
+    assert_equal 0, @group_three.samples_count
+    assert_equal 0, @group_three_subgroup1.samples_count
+  end
+
+  test 'update samples_count by sample addition' do
+    sample = Sample.new(name: 'New Sample')
+
+    assert_equal 1, @group_three.samples_count
+    assert_equal 1, @group_three_subgroup1.samples_count
+
+    @group_three.update_samples_count_by_sample_addition(sample, @sample23.project_id)
+
+    assert_equal 2, @group_three.samples_count
+    assert_equal 2, @group_three_subgroup1.samples_count
   end
 end
