@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Migration to remove any activities from a Group where a Workflow key exists
+# Migration to remove any activities from a group where an automated workflow key exists
 class RemoveGroupActivitiesWithWorkflowKeys < ActiveRecord::Migration[7.2]
   def change
     PublicActivity::Activity.where(

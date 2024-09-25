@@ -93,6 +93,36 @@ module WorkflowExecutions
         blob_run_directory: blob_run_directory_f
       )
 
+      # normal2/ without update_samples
+      # get a new secure token for each workflow execution
+      @automated_workflow_execution_with_samples_with_update_samples =
+        workflow_executions(:irida_next_example_completing_g)
+      blob_run_directory_g = ActiveStorage::Blob.generate_unique_secure_token
+      @automated_workflow_execution_with_samples_with_update_samples.blob_run_directory = blob_run_directory_g
+
+      # create file blobs
+      @normal2_output_json_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal4/iridanext.output.json',
+        blob_run_directory: blob_run_directory_g,
+        gzip: true
+      )
+      @normal2_output_summary_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal4/summary.txt',
+        blob_run_directory: blob_run_directory_g
+      )
+      @normal2_output_analysis1_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal4/analysis1.txt',
+        blob_run_directory: blob_run_directory_g
+      )
+      @normal2_output_analysis2_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal4/analysis2.txt',
+        blob_run_directory: blob_run_directory_g
+      )
+      @normal2_output_analysis3_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal4/analysis3.txt',
+        blob_run_directory: blob_run_directory_g
+      )
+
       # missing_entry/
       # get a new secure token for each workflow execution
       @workflow_execution_missing_entry = workflow_executions(:irida_next_example_completing_d)
@@ -144,6 +174,9 @@ module WorkflowExecutions
       )
 
       # associated test samples
+      @sampleA = samples(:sampleA)
+      @sampleB = samples(:sampleB)
+      @sampleC = samples(:sampleC)
       @sample41 = samples(:sample41)
       @sample42 = samples(:sample42)
     end
@@ -449,6 +482,54 @@ module WorkflowExecutions
         trackable_id: workflow_execution.namespace.id,
         trackable_type: 'Namespace'
       )
+    end
+
+    test 'metadata on automated samples_workflow_executions are not merged into underlying samples when
+    update_samples' do
+      workflow_execution = @automated_workflow_execution_with_samples_with_update_samples
+
+      new_metadata1 = { 'number' => 1,
+                        'metadatafield1' => 'value1',
+                        'organism' => 'an organism' }
+      new_metadata2 = { 'number' => 2,
+                        'metadatafield2' => 'value2',
+                        'organism' => 'a different organism' }
+      # Test start
+      assert 'completing', workflow_execution.state
+
+      assert_equal 'my_run_id_g', workflow_execution.run_id
+
+      assert_equal({}, @sampleA.metadata)
+      assert_equal({}, @sampleB.metadata)
+      assert_equal({}, @sampleC.metadata)
+
+      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+
+      @sampleA.reload
+      assert_not_equal new_metadata1, @sampleA.metadata
+
+      @sampleB.reload
+      assert_not_equal new_metadata2, @sampleB.metadata
+
+      @sampleC.reload
+      assert_equal({}, @sampleC.metadata)
+
+      assert_equal 'completed', workflow_execution.state
+
+      assert workflow_execution.email_notification
+      assert_enqueued_emails 2
+      I18n.available_locales.each do |locale|
+        manager_emails = Member.manager_emails(workflow_execution.namespace, locale)
+        next if manager_emails.empty?
+
+        assert_enqueued_email_with PipelineMailer, :complete_manager_email,
+                                   args: [workflow_execution, manager_emails, locale]
+      end
+
+      assert_equal PublicActivity::Activity.find_by(
+        trackable_id: workflow_execution.namespace.id,
+        trackable_type: 'Namespace'
+      ).key, 'workflow_execution.automated_workflow_completion.outputs_and_metadata_written'
     end
 
     test 'outputs on samples_workflow_executions added to samples attachments when update_samples' do
