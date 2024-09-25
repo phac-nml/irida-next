@@ -43,7 +43,7 @@
       </li>
     </ul>
     <div class="flex flex-row items-center ml-auto space-x-2 font-normal">
-      <%= search_form_for @q, url: dashboard_projects_url(**request.query_parameters.slice(:personal)), html: {"data-controller": "filters"} do |f| %>
+      <%= search_form_for @q, url: dashboard_projects_url(**request.query_parameters), html: { "data-controller": "filters" } do |f| %>
         <input type="hidden" name="format" value="turbo_stream"/>
         <input type="hidden" name="personal" value="<%= params['personal'] %>">
         <%= f.label :namespace_name_or_namespace_puid_cont,
