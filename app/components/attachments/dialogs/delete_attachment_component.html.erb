@@ -9,10 +9,15 @@
       <p class="mb-4">
         <% if @attachment.associated_attachment %>
           <%= t(".description.paired_end",
-          filenames:
-          "'#{@attachment.file.filename.to_s}', '#{@attachment.associated_attachment.file.filename.to_s}'") %>
+            filenames:
+            "'#{@attachment.file.filename.to_s}', '#{@attachment.associated_attachment.file.filename.to_s}'",
+            attachable_type: @namespace.type.downcase)
+          %>
         <% else %>
-          <%= t(".description.single", filename: @attachment.file.filename.to_s) %>
+          <%= t(".description.single",
+            filename: @attachment.file.filename.to_s,
+            attachable_type: @namespace.type.downcase)
+            %>
         <% end %>
       </p>
       <%= form_for(:deletion, url: destroy_path, method: :delete) do |form| %>
