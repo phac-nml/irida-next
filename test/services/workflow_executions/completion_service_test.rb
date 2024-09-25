@@ -168,6 +168,11 @@ module WorkflowExecutions
       assert workflow_execution.email_notification
       assert_enqueued_emails 1
       assert_enqueued_email_with PipelineMailer, :complete_user_email, args: [workflow_execution]
+
+      assert_nil PublicActivity::Activity.find_by(
+        trackable_id: workflow_execution.namespace.id,
+        trackable_type: 'Namespace'
+      )
     end
 
     test 'finalize non complete workflow_execution' do
@@ -181,6 +186,13 @@ module WorkflowExecutions
       assert_not_equal 'completed', workflow_execution.state
 
       assert_no_enqueued_emails
+
+      public_activity = PublicActivity::Activity.find_by(
+        trackable_id: workflow_execution.namespace.id,
+        trackable_type: 'Namespace'
+      )
+      assert_not_nil public_activity
+      assert_equal public_activity.key, 'namespaces_project_namespace.create'
     end
 
     test 'complete completing workflow_execution with no files' do
@@ -197,6 +209,11 @@ module WorkflowExecutions
       assert_equal 'completed', workflow_execution.state
 
       assert_no_enqueued_emails
+
+      assert_nil PublicActivity::Activity.find_by(
+        trackable_id: workflow_execution.namespace.id,
+        trackable_type: 'Namespace'
+      )
     end
 
     test 'sample outputs on samples_workflow_executions' do
@@ -251,6 +268,11 @@ module WorkflowExecutions
       assert_equal 'completed', workflow_execution.state
 
       assert_no_enqueued_emails
+
+      assert_nil PublicActivity::Activity.find_by(
+        trackable_id: workflow_execution.namespace.id,
+        trackable_type: 'Namespace'
+      )
     end
 
     test 'sample metadata on samples_workflow_executions' do
@@ -281,6 +303,11 @@ module WorkflowExecutions
       assert_equal 'completed', workflow_execution.state
 
       assert_no_enqueued_emails
+
+      assert_nil PublicActivity::Activity.find_by(
+        trackable_id: workflow_execution.namespace.id,
+        trackable_type: 'Namespace'
+      )
     end
 
     test 'metadata on samples_workflow_executions merged into underlying samples when update_samples' do
@@ -327,6 +354,11 @@ module WorkflowExecutions
       assert_equal 'completed', workflow_execution.state
 
       assert_no_enqueued_emails
+
+      assert_nil PublicActivity::Activity.find_by(
+        trackable_id: workflow_execution.namespace.id,
+        trackable_type: 'Namespace'
+      )
     end
 
     test 'metadata on samples_workflow_executions are not merged into underlying samples when not update_samples' do
@@ -363,6 +395,11 @@ module WorkflowExecutions
       assert workflow_execution.email_notification
       assert_enqueued_emails 1
       assert_enqueued_email_with PipelineMailer, :complete_user_email, args: [workflow_execution]
+
+      assert_nil PublicActivity::Activity.find_by(
+        trackable_id: workflow_execution.namespace.id,
+        trackable_type: 'Namespace'
+      )
     end
 
     test 'metadata on automated samples_workflow_executions are not merged into underlying samples when not
@@ -407,6 +444,11 @@ module WorkflowExecutions
         assert_enqueued_email_with PipelineMailer, :complete_manager_email,
                                    args: [workflow_execution, manager_emails, locale]
       end
+
+      assert_nil PublicActivity::Activity.find_by(
+        trackable_id: workflow_execution.namespace.id,
+        trackable_type: 'Namespace'
+      )
     end
 
     test 'outputs on samples_workflow_executions added to samples attachments when update_samples' do
@@ -432,6 +474,11 @@ module WorkflowExecutions
       assert_equal 'completed', workflow_execution.state
 
       assert_no_enqueued_emails
+
+      assert_nil PublicActivity::Activity.find_by(
+        trackable_id: workflow_execution.namespace.id,
+        trackable_type: 'Namespace'
+      )
     end
 
     test 'outputs on samples_workflow_executions not added to samples attachments when not update_samples' do
@@ -455,6 +502,11 @@ module WorkflowExecutions
       assert workflow_execution.email_notification
       assert_enqueued_emails 1
       assert_enqueued_email_with PipelineMailer, :complete_user_email, args: [workflow_execution]
+
+      assert_nil PublicActivity::Activity.find_by(
+        trackable_id: workflow_execution.namespace.id,
+        trackable_type: 'Namespace'
+      )
     end
 
     test 'complex metadata on samples_workflow_executions' do
@@ -501,6 +553,11 @@ module WorkflowExecutions
       assert_equal 'completed', workflow_execution.state
 
       assert_no_enqueued_emails
+
+      assert_nil PublicActivity::Activity.find_by(
+        trackable_id: workflow_execution.namespace.id,
+        trackable_type: 'Namespace'
+      )
     end
 
     test 'sample outputs metadata on samples_workflow_executions missing entry' do
@@ -541,6 +598,11 @@ module WorkflowExecutions
       assert_equal 'completed', workflow_execution.state
 
       assert_no_enqueued_emails
+
+      assert_nil PublicActivity::Activity.find_by(
+        trackable_id: workflow_execution.namespace.id,
+        trackable_type: 'Namespace'
+      )
     end
   end
 end
