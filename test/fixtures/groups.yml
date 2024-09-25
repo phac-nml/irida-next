@@ -60,6 +60,7 @@ david_doe_group_four:
   path: group-4
   description: David's first group
   puid: INXT_GRP_AAAAAAAAAF
+  metadata_summary: { "unique_metadata_field": 1 }
 
 group_five:
   <<: *DEFAULTS

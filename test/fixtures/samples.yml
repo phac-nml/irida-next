@@ -109,6 +109,8 @@ sample28:
   puid: INXT_SAM_AAAAAAAAA6
   created_at: <%= 31.weeks.ago %>
   updated_at: <%= 31.days.ago %>
+  metadata: { 'unique_metadata_field': 'unique_value' }
+  metadata_provenance: { 'unique_metadata_field': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
 
 sample29:
   name: Sample 2
