@@ -100,16 +100,6 @@ module AttachmentActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def build_ransack_query
-    if @render_individual_attachments
-      @namespace.attachments.all.ransack(params[:q])
-    else
-      @namespace.attachments
-                .where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
-                .ransack(params[:q])
-    end
-  end
-
   def new_destroy_params
     @attachment = Attachment.find_by(id: params[:attachment_id])
   end
