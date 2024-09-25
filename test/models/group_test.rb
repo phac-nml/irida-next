@@ -222,34 +222,25 @@ class GroupTest < ActiveSupport::TestCase
   end
 
   test 'update samples_count by sample transfer' do
-    assert_equal 1, @group_three.samples_count
-    assert_equal 1, @group_three_subgroup1.samples_count
-
-    @group_three.update_samples_count_by_sample_transfer([@sample23.id], @project_namespace.project.id)
-
-    assert_equal 0, @group_three.samples_count
-    assert_equal 0, @group_three_subgroup1.samples_count
+    assert_difference -> { @group_three.samples_count } => -1,
+                      -> { @group_three_subgroup1.samples_count } => -1 do
+      @group_three.update_samples_count_by_sample_transfer([@sample23.id], @project_namespace.project.id)
+    end
   end
 
   test 'update samples_count by sample deletion' do
-    assert_equal 1, @group_three.samples_count
-    assert_equal 1, @group_three_subgroup1.samples_count
-
-    @group_three.update_samples_count_by_sample_deletion(@sample23, @sample23.project_id)
-
-    assert_equal 0, @group_three.samples_count
-    assert_equal 0, @group_three_subgroup1.samples_count
+    assert_difference -> { @group_three.samples_count } => -1,
+                      -> { @group_three_subgroup1.samples_count } => -1 do
+      @group_three.update_samples_count_by_sample_deletion(@sample23, @sample23.project_id)
+    end
   end
 
   test 'update samples_count by sample addition' do
     sample = Sample.new(name: 'New Sample')
 
-    assert_equal 1, @group_three.samples_count
-    assert_equal 1, @group_three_subgroup1.samples_count
-
-    @group_three.update_samples_count_by_sample_addition(sample, @sample23.project_id)
-
-    assert_equal 2, @group_three.samples_count
-    assert_equal 2, @group_three_subgroup1.samples_count
+    assert_difference -> { @group_three.samples_count } => 1,
+                      -> { @group_three_subgroup1.samples_count } => 1 do
+      @group_three.update_samples_count_by_sample_addition(sample, @sample23.project_id)
+    end
   end
 end
