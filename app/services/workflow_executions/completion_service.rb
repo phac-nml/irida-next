@@ -155,6 +155,8 @@ module WorkflowExecutions
     end
 
     def create_activities # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+      return unless current_user.automation_bot?
+
       @workflow_execution.samples_workflow_executions&.each do |swe|
         next if swe.metadata.nil? && swe.outputs.empty?
 
