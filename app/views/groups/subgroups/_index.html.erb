@@ -1,10 +1,10 @@
 <%= search_form_for @q, url: group_path(@group), html: { "data-turbo-permanent": "true" } do |f| %>
-  <%= f.label :puid_or_name_cont, "SEARCH", class: "sr-only"%>
+  <%= f.label :puid_or_name_cont, "SEARCH", class: "sr-only" %>
   <%= f.search_field :puid_or_name_cont,
                  placeholder: "Shitty search",
                  value: params[:search],
-                 class: "form-control mb-3" %>
-  <%= f.submit "SEARCH", class: "btn btn-primary mb-3" %>
+                 class: "form-control mb-3",
+                 onchange: "this.form.requestSubmit();" %>
 <% end %>
 
 <% if @namespaces.length > 0 %>
