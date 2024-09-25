@@ -375,6 +375,9 @@ fr:
           description: No items found matching your search
           title: No items found
   concerns:
+    attachment_actions:
+      destroy:
+        error: 'File %{filename} was not removed due to the following errors: %{errors}'
     bot_actions:
       create:
         success: Bot account was successfully added to the group
@@ -585,7 +588,6 @@ fr:
         failure: 'File %{filename} was not uploaded due to the following errors: %{errors}'
         success: File %{filename} was successfully uploaded.
       destroy:
-        error: 'File %{filename} was not removed due to the following errors: %{errors}'
         success: File %{filename} was successfully removed.
       index:
         search:
@@ -999,7 +1001,6 @@ fr:
         failure: 'File %{filename} was not uploaded due to the following errors: %{errors}'
         success: File %{filename} was successfully uploaded.
       destroy:
-        error: 'File %{filename} was not removed due to the following errors: %{errors}'
         success: File %{filename} was successfully removed.
       index:
         search:
