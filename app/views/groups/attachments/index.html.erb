@@ -48,7 +48,7 @@
 
   <div class="flow-root">
     <div class="flex flex-row-reverse items-center mb-4 space-x-2">
-      <%= search_form_for @q, url: group_attachments_path(@group), html: { "data-controller": "filters" } do |f| %>
+      <%= search_form_for @q, url: group_attachments_path(@group), html: { "data-controller": "filters", "data-turbo-action": "replace" } do |f| %>
         <%= hidden_field_tag :limit, @pagy.limit %>
         <%= f.hidden_field :s, value: "#{@q.sorts[0].name} #{@q.sorts[0].dir}" %>
         <%= f.label :name_cont, "SEARCH", class: "sr-only" %>
