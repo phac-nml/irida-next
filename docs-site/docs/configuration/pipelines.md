@@ -4,11 +4,11 @@ id: pipelines
 title: Registering Pipelines
 ---
 
-Pipelines must be registered in IRIDA Next to be able to launch workflows. They are registered when the server is started up and Future restarts of the server will only register new pipelines that are added to the configuration file, and schema files for a particular pipeline will update if newer versions are available in the repository.
+Pipelines are registered when the IRIDA Next server is started up.  Future restarts of the server will only register new pipelines that are added to the configuration file, and schema files for a particular pipeline will update if newer versions are available in the repository.
 
 ## Pipeline repository
 
-Currently only **Nextflow** pipelines are supported and they must have a Github repository. Each pipeline is required to have a `nextflow_schema.json` file at the top level of the repository, and a `schema_input.json` file under an `assets` directory within the repository.
+Currently, only **Nextflow** pipelines are supported and they must have a GitHub repository. Each pipeline is required to have a `nextflow_schema.json` file at the top level of the repository, and a `schema_input.json` file under an `assets` directory within the repository.
 
 ## Setup
 
@@ -18,7 +18,7 @@ The configuration file to register pipelines is in `json` format and stored in t
 
 This `pipelines.json` file should be in the format below and can include the following:
 
-- **URL** *(Required)* of the pipeline Github repository
+- **URL** *(Required)* of the pipeline GitHub repository
 - **name** *(Required)* of the pipeline
 - **description** *(Required)* of the pipeline
 - **versions** *(Required)* of the pipeline that should be available to launch.
