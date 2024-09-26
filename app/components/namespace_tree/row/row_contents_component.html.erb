@@ -58,6 +58,11 @@
 
 <div class="flex flex-row-reverse gap-x-3 text-slate-500">
   <% if @namespace.type == "Group" %>
+    <%= viral_tooltip(title: t(:'.stats.samples')) do %>
+      <span class="flex items-center text-sm">
+        <%= viral_icon(name: :beaker, color: :subdued, classes: "h-5 w-5") %><%= @namespace.samples_count %>
+      </span>
+    <% end %>
     <%= viral_tooltip(title: t(:'.stats.projects')) do %>
       <span class="flex items-center text-sm">
         <%= viral_icon(name: :rectangle_stack, color: :subdued, classes: "h-5 w-5") %>
