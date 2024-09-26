@@ -20,6 +20,7 @@ module Mutations
 
     def resolve(args)
       namespace = get_namespace(args)
+      # slugify path, if no path given slugify name to use as path
       args[:path] = if args[:path]
                       args[:path].to_s.parameterize(separator: '_')
                     else
@@ -35,7 +36,7 @@ module Mutations
     private
 
     def get_namespace(args)
-      # Only search for a group if an id/puid was provided
+      # Only search for a group if an id/puid was provided, otherwise use user namespace
       if args[:group_id] || args[:group_puid]
         group = get_group_from_id_or_puid_args(args)
 
@@ -44,7 +45,7 @@ module Mutations
           return { project: nil, errors: user_errors }
         end
 
-        group.namespace
+        group
       else
         current_user.namespace
       end
