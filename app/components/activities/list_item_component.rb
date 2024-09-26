@@ -5,9 +5,8 @@ module Activities
   class ListItemComponent < Component
     attr_accessor :activity
 
-    def initialize(activity: nil, pagy: nil)
+    def initialize(activity: nil)
       @activity = activity
-      @pagy = pagy
     end
   end
 end
