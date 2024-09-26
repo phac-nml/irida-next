@@ -213,10 +213,8 @@ class GroupTest < ActiveSupport::TestCase
   test 'group should have samples_count from all projects within' do
     expected_samples_count = @group.samples_count
 
-    policy = ProjectPolicy.new(user: @user)
-    actual_samples_count = policy.apply_scope(Project,
-                                              type: :relation, name: :group_projects,
-                                              scope_options: { group: }).select(:samples_count).pluck(:samples_count).sum
+    Project.joins(:namespace).where(namespace: { parent_id: @group.self_and_descendants })
+           .select(:samples_count).pluck(:samples_count).sum
 
     assert_equal expected_samples_count, actual_samples_count
   end
