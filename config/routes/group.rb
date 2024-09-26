@@ -52,6 +52,7 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
         constraints: { id: Irida::PathRegex.full_namespace_route_regex },
         controller: :groups) do
     get '/', action: :show
+    post '/', action: :show
     delete '/', action: :destroy
     patch '/', action: :update
     put '/', action: :update

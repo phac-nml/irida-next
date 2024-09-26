@@ -16,20 +16,14 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   def show
     authorize! @group, to: :read?
 
-    @q = namespace_children.ransack(params[:q])
+    @q = if flat_list_requested?
+           namespace_children.ransack(params[:q])
+         else
+           # I have no idea what should go here
+           namespace_children.ransack(params[:q])
+         end
     set_default_sort
     @pagy, @namespaces = pagy(@q.result.include_route)
-
-    respond_to do |format|
-      format.html
-      format.turbo_stream do
-        if params.key? :parent_id
-          render_subgroup
-        else
-          @namespaces = namespace_children
-        end
-      end
-    end
   end
 
   def new
@@ -124,12 +118,8 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     @q.sorts = 'created_at desc' if @q.sorts.empty?
   end
 
-  def render_subgroup
-    @group = Group.find(params[:parent_id])
-    @collapsed = params[:collapse] == 'true'
-    @children = @collapsed ? Namespace.none : namespace_children
-    @depth = params[:depth].to_i
-    render :subgroup
+  def flat_list_requested?
+    params.dig(:q, :name_or_puid_cont).present?
   end
 
   def parent_group

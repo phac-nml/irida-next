@@ -7,16 +7,7 @@ module Groups
 
     def index
       authorize! @group, to: :read?
-      respond_to do |format|
-        format.html { redirect_to group_path(@group) }
-        format.turbo_stream do
-          if params.key? :parent_id
-            render_subgroup
-          else
-            @namespaces = namespace_children
-          end
-        end
-      end
+      render_subgroup
     end
 
     private

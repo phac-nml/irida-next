@@ -6,7 +6,6 @@ module Dashboard
     before_action :current_page
 
     def index
-      @render_flat_list = flat_list_requested?
       @q = build_ransack_query
       set_default_sort
       @pagy, @groups = pagy(@q.result.include_route)
@@ -54,7 +53,7 @@ module Dashboard
     end
 
     def authorized_groups
-      if @render_flat_list
+      if flat_list_requested?
         authorized_scope(Group, type: :relation)
       else
         authorized_scope(Group, type: :relation).without_descendants
