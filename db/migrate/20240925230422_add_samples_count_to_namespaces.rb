@@ -3,6 +3,6 @@
 # migration to add samples count to namespaces table
 class AddSamplesCountToNamespaces < ActiveRecord::Migration[7.2]
   def change
-    add_column :namespaces, :samples_count, :integer
+    add_column :namespaces, :samples_count, :integer, default: 0
   end
 end

@@ -172,7 +172,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_03_193845) do
     t.uuid "parent_id"
     t.string "puid", null: false
     t.datetime "attachments_updated_at"
-    t.integer "samples_count"
+    t.integer "samples_count", default: 0
     t.index ["created_at"], name: "index_namespaces_on_created_at"
     t.index ["deleted_at"], name: "index_namespaces_on_deleted_at"
     t.index ["metadata_summary"], name: "index_namespaces_on_metadata_summary", using: :gin
