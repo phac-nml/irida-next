@@ -174,9 +174,9 @@ module WorkflowExecutions
       )
 
       # associated test samples
-      @sampleA = samples(:sampleA)
-      @sampleB = samples(:sampleB)
-      @sampleC = samples(:sampleC)
+      @sample_a = samples(:sampleA)
+      @sample_b = samples(:sampleB)
+      @sample_c = samples(:sampleC)
       @sample41 = samples(:sample41)
       @sample42 = samples(:sample42)
     end
@@ -499,20 +499,20 @@ module WorkflowExecutions
 
       assert_equal 'my_run_id_g', workflow_execution.run_id
 
-      assert_equal({}, @sampleA.metadata)
-      assert_equal({}, @sampleB.metadata)
-      assert_equal({}, @sampleC.metadata)
+      assert_equal({}, @sample_a.metadata)
+      assert_equal({}, @sample_b.metadata)
+      assert_equal({}, @sample_c.metadata)
 
       assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
 
-      @sampleA.reload
-      assert_not_equal new_metadata1, @sampleA.metadata
+      @sample_a.reload
+      assert_not_equal new_metadata1, @sample_a.metadata
 
-      @sampleB.reload
-      assert_not_equal new_metadata2, @sampleB.metadata
+      @sample_b.reload
+      assert_not_equal new_metadata2, @sample_b.metadata
 
-      @sampleC.reload
-      assert_equal({}, @sampleC.metadata)
+      @sample_c.reload
+      assert_equal({}, @sample_c.metadata)
 
       assert_equal 'completed', workflow_execution.state
 
