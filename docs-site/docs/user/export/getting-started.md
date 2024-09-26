@@ -8,12 +8,12 @@ In IRIDA Next, you can download data from multiple samples or all files associat
 
 ## Export Types
 
-There are two types of exports in IRIDA Next:
+There are three types of exports in IRIDA Next:
 
 | Export Type      | Description                                                                                                                           |
 | :--------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
 | Sample           | Allows users to select any number of samples belonging to either a group or project and download all the associated files.    |
-| Linelist         | Allows users to select any number of samples belonging to either a group or project and download all the associated metadata. |                                                     |
+| Linelist         | Allows users to select any number of samples belonging to either a group or project and download all the associated metadata. |
 | Analysis         | Allows users to download all files associated with a workflow execution.                                                      |
 
 ## Requirements
@@ -23,7 +23,7 @@ The following is required to create an export:
   * Project that has at least one associated sample, and files uploaded to the sample.
   * At least the Analyst role for the Project or Group containing the samples for export.
 * Linelist Export
-  * Project that has at least one associated sample, and metadata added to the sample.
+  * Project that has at least one associated sample that contains metadata.
   * At least the Analyst role for the Project or Group containing the samples for export.
 * Analysis Export
   * User Workflow Execution
@@ -37,7 +37,7 @@ The following is required to create an export:
 Exports allow users to download their data from IRIDA Next with a single click. Follow these [steps](../export/working-with-exports) to learn how to work with exports.
 
 Sample and Analysis exports:
-* The files are added to a single, compressed folder. In addition to the exported files selected by the user, two additional files are included:
+* The files are added to a single, compressed folder. In addition to the exported files selected by the user, three additional files are included:
   * Each export includes a **manifest.json** and **manifest.txt** file that contains an overview of what's included in the export.
   * Each analysis export includes a **summary.txt.gz** file that contains the pipeline summary.
 

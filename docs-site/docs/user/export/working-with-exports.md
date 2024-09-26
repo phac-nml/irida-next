@@ -19,7 +19,7 @@ To view a single export:
   1. Follow the [steps](../export/working-with-exports#view-exports) to navigate to the exports page.
   2. Click either the **ID** or **name** of the desired export.
 
-Each individual export will contain a summary tab and a preview tab is available for Sample and Analysis exports. The preview tab contains an overview of the export contents, and is only available once the export status is **Ready**.
+Each individual export will contain a summary tab. Sample and Analysis exports will also have a preview tab available. The preview tab contains an overview of the export contents, and is only available once the export status is **Ready**.
 
 ## Create Sample Export
 
@@ -52,7 +52,7 @@ To create a sample export:
   5. In the dropdown, select **Linelist Export**
   6. A pop-up will appear asking the following:
   * The metadata fields you'd like to include within the export. This allows you to filter out any metadata fields you do not wish to export. You are required to include at least one metadata field to create an export.
-  * The file format for the export.
+  * The file format of the export.
   * If you'd like to give the export a name (not required).
   * If you'd like to receive an e-mail notification when the export is ready to download (not required).
 
