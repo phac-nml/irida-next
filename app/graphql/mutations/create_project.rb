@@ -20,6 +20,12 @@ module Mutations
 
     def resolve(args)
       namespace = get_namespace(args)
+
+      if namespace.nil? || !namespace.persisted?
+        user_errors = [{ path: ['group'], message: 'Group not found by provided ID or PUID' }]
+        return { project: nil, errors: user_errors }
+      end
+
       # slugify path, if no path given slugify name to use as path
       args[:path] = if args[:path]
                       args[:path].to_s.parameterize(separator: '_')
@@ -38,14 +44,7 @@ module Mutations
     def get_namespace(args)
       # Only search for a group if an id/puid was provided, otherwise use user namespace
       if args[:group_id] || args[:group_puid]
-        group = get_group_from_id_or_puid_args(args)
-
-        if group.nil? || !group.persisted?
-          user_errors = [{ path: ['group'], message: 'Group not found by provided ID or PUID' }]
-          return { project: nil, errors: user_errors }
-        end
-
-        group
+        get_group_from_id_or_puid_args(args)
       else
         current_user.namespace
       end
