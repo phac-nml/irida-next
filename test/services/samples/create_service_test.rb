@@ -97,5 +97,31 @@ module Samples
       assert_equal 'new-project2-sample', sample.at(version: 1).name
       assert_equal 'first sample for project2', sample.at(version: 1).description
     end
+
+    test 'samples count updated after sample creation' do
+      # Reference group/projects descendants tree:
+      # group12 < subgroup12b (project30 > sample 33)
+      #    |
+      #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
+      group12 = groups(:group_twelve)
+      subgroup12a = groups(:subgroup_twelve_a)
+      subgroup12b = groups(:subgroup_twelve_b)
+      subgroup12aa = groups(:subgroup_twelve_a_a)
+      project31 = projects(:project31)
+      valid_params = { name: 'sample36', description: 'new sample for project31' }
+
+      assert_equal(2, subgroup12aa.samples_count)
+      assert_equal(3, subgroup12a.samples_count)
+      assert_equal(1, subgroup12b.samples_count)
+      assert_equal(4, group12.samples_count)
+
+      assert_no_changes -> { subgroup12b.reload.samples_count } do
+        Samples::CreateService.new(@user, project31, valid_params).execute
+      end
+
+      assert_equal(3, subgroup12aa.reload.samples_count)
+      assert_equal(4, subgroup12a.reload.samples_count)
+      assert_equal(5, group12.reload.samples_count)
+    end
   end
 end
