@@ -107,4 +107,17 @@ class Group < Namespace
       )
     )
   end
+
+  def update_samples_count_by_create_service
+    namespaces_to_update = self_and_ancestors.where(type: Group.sti_name)
+    add_to_samples_count(namespaces_to_update)
+  end
+
+  def add_to_samples_count(namespaces)
+    namespaces.each do |namespace|
+      namespace.samples_count += 1
+
+      namespace.save
+    end
+  end
 end
