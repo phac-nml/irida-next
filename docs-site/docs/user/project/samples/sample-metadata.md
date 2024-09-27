@@ -137,11 +137,11 @@ This would result in the following sample metadata:
 
 Prerequisites:
 
-- You must have at least a **Maintainer** role for the sample's project
-- A sample added to the project
+- You must have at least a **Maintainer** role for the sample's project or group
+- A sample added to the project or group
 
-1. From the left sidebar, select **Projects**
-2. Select the project
+1. From the left sidebar, select **Projects** or **Groups**
+2. Select the project or group
 3. From the left sidebar, select **Samples**
 4. Click **Import Metadata**
 
