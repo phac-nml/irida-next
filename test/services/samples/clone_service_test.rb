@@ -184,16 +184,31 @@ module Samples
     end
 
     test 'samples count updates after cloning sample' do
-      assert_equal(5, @group.samples_count)
-      assert_equal(20, @new_project.samples_count)
-      clone_samples_params = { new_project_id: @new_project.id, sample_ids: [@sample30.id] }
-      cloned_sample_ids = Samples::CloneService.new(@project, @john_doe).execute(clone_samples_params[:new_project_id],
-                                                                                 clone_samples_params[:sample_ids])
+      # Reference group/projects descendants tree:
+      # group12 < subgroup12b (project30 > sample 33)
+      #    |
+      #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
+      group12 = groups(:group_twelve)
+      subgroup12a = groups(:subgroup_twelve_a)
+      subgroup12b = groups(:subgroup_twelve_b)
+      subgroup12aa = groups(:subgroup_twelve_a_a)
+      project30 = projects(:project30)
+      project31 = projects(:project31)
+      sample33 = samples(:sample33)
+
+      assert_equal(2, subgroup12aa.samples_count)
+      assert_equal(3, subgroup12a.samples_count)
+      assert_equal(1, subgroup12b.samples_count)
+      assert_equal(4, group12.samples_count)
+
+      clone_samples_params = { new_project_id: project31.id, sample_ids: [sample33.id] }
+      cloned_sample_ids = Samples::CloneService.new(project30, @john_doe).execute(clone_samples_params[:new_project_id],
+                                                                                  clone_samples_params[:sample_ids])
       cloned_sample_ids.each do |sample_id, clone_id|
         sample = Sample.find_by(id: sample_id)
         clone = Sample.find_by(id: clone_id)
-        assert_equal @project.id, sample.project_id
-        assert_equal @new_project.id, clone.project_id
+        assert_equal project30.id, sample.project_id
+        assert_equal project31.id, clone.project_id
         assert_not_equal sample.puid, clone.puid
         assert_equal sample.name, clone.name
         assert_equal sample.description, clone.description
@@ -203,8 +218,11 @@ module Samples
         clone_blobs = clone.attachments.map { |attachment| attachment.file.blob }
         assert_equal sample_blobs.sort, clone_blobs.sort
       end
-      assert_equal(5, @group.samples_count)
-      assert_equal(21, @new_project.samples_count)
+
+      assert_equal(3, subgroup12aa.reload.samples_count)
+      assert_equal(4, subgroup12a.reload.samples_count)
+      assert_equal(1, subgroup12b.reload.samples_count)
+      assert_equal(5, group12.reload.samples_count)
     end
   end
 end
