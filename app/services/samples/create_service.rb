@@ -31,7 +31,7 @@ module Samples
     end
 
     def update_samples_count
-      @project.parent.update_samples_count_by_create_service
+      @project.parent.update_samples_count_by_addition_services
     end
   end
 end
