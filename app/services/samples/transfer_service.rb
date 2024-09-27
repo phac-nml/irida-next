@@ -77,6 +77,7 @@ module Samples
 
         @project.namespace.update_metadata_summary_by_sample_transfer(transferred_samples_ids,
                                                                       new_project_id)
+        update_samples_count(transferred_samples_ids.count) if @project.parent.type == 'Group'
       end
 
       transferred_samples_ids
@@ -102,6 +103,10 @@ module Samples
                                                 transferred_samples_puids:,
                                                 action: 'sample_transfer'
                                               }
+    end
+
+    def update_samples_count(transferred_samples_count)
+      @project.parent.update_samples_count_by_transfer_service(@new_project, transferred_samples_count)
     end
   end
 end
