@@ -132,7 +132,7 @@ class GroupsTest < ApplicationSystemTestCase
     click_on I18n.t('groups.sidebar.settings')
     click_link I18n.t('groups.sidebar.general')
 
-    within all('form[action="/group-1"]')[0] do
+    within 'form[action="/group-1"]' do
       fill_in I18n.t('activerecord.attributes.group.name'), with: group_name
       fill_in I18n.t('activerecord.attributes.group.description'), with: group_description
       click_on I18n.t('groups.edit.details.submit')
