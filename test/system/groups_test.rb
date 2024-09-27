@@ -403,4 +403,12 @@ class GroupsTest < ApplicationSystemTestCase
     assert_selector 'div.namespace-entry-contents', count: 0
     assert_text I18n.t('groups.show.shared_namespaces.no_shared.title')
   end
+
+  test 'search subgroups and projects' do
+    @group = groups(:group_one)
+    visit group_url(@group)
+    assert_text I18n.t(:'components.pagination.next')
+    fill_in I18n.t('general.search.name_puid'), with: 'project 2'
+    assert_selector 'li.namespace-entry', count: 5
+  end
 end

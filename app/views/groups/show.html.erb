@@ -52,7 +52,6 @@
           </table>
         <% end %>
       <% else %>
-        <%# group_subgroups_path(@group, format: :turbo_stream) %>
         <%= render "groups/subgroups/index", locals: { namespaces: @namespaces } %>
       <% end %>
     </div>
