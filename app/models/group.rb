@@ -108,9 +108,9 @@ class Group < Namespace
     )
   end
 
-  def add_to_samples_count(namespaces)
+  def add_to_samples_count(namespaces, addition_amount)
     namespaces.each do |namespace|
-      namespace.samples_count += 1
+      namespace.samples_count += addition_amount
 
       namespace.save
     end
@@ -124,13 +124,21 @@ class Group < Namespace
     end
   end
 
-  def update_samples_count_by_create_service
+  def update_samples_count_by_create_service(added_samples_count = 1)
     namespaces_to_update = self_and_ancestors.where(type: Group.sti_name)
-    add_to_samples_count(namespaces_to_update)
+    add_to_samples_count(namespaces_to_update, added_samples_count)
   end
 
   def update_samples_count_by_destroy_service(deleted_samples_count)
     namespaces_to_update = self_and_ancestors.where(type: Group.sti_name)
     subtract_from_samples_count(namespaces_to_update, deleted_samples_count)
+  end
+
+  def update_samples_count_by_transfer_service(new_project, transferred_samples_count)
+    namespaces_to_update = self_and_ancestors.where(type: Group.sti_name)
+    subtract_from_samples_count(namespaces_to_update, transferred_samples_count)
+
+    namespaces_to_update = new_project.parent.self_and_ancestors.where(type: Group.sti_name)
+    add_to_samples_count(namespaces_to_update, transferred_samples_count)
   end
 end
