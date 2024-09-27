@@ -204,6 +204,7 @@ group_twelve:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 3, "metadatafield2": 3 }
   puid: INXT_GRP_AAAAAAAAAX
+  samples_count: 4
 
 subgroup_twelve_a:
   <<: *DEFAULTS
@@ -214,6 +215,7 @@ subgroup_twelve_a:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
   metadata_summary: { "metadatafield1": 2, "metadatafield2": 2 }
   puid: INXT_GRP_AAAAAAAAAY
+  samples_count: 3
 
 subgroup_twelve_b:
   <<: *DEFAULTS
@@ -224,6 +226,7 @@ subgroup_twelve_b:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   puid: INXT_GRP_AAAAAAAAAZ
+  samples_count: 1
 
 subgroup_twelve_a_a:
   <<: *DEFAULTS
@@ -234,6 +237,7 @@ subgroup_twelve_a_a:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_a, :uuid) %>
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   puid: INXT_GRP_AAAAAAAAA2
+  samples_count: 2
 
 group_delta:
   <<: *DEFAULTS
