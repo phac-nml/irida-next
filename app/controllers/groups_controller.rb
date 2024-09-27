@@ -17,9 +17,9 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     authorize! @group, to: :read?
 
     @q = if flat_list_requested?
-           namespace_children.ransack(params[:q])
+           @group.self_and_descendants_of_type([Namespaces::ProjectNamespace.sti_name,
+                                                Group.sti_name]).ransack(params[:q])
          else
-           # I have no idea what should go here
            namespace_children.ransack(params[:q])
          end
     set_default_sort
