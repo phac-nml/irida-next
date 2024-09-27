@@ -160,45 +160,45 @@ module Samples
       # group12 < subgroup12b (project30 > sample 33)
       #    |
       #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
-      @sample33 = samples(:sample33)
-      @sample34 = samples(:sample34)
-      @sample35 = samples(:sample35)
-      @project29 = projects(:project29)
-      @project30 = projects(:project30)
-      @project31 = projects(:project31)
-      @group12 = groups(:group_twelve)
-      @subgroup12a = groups(:subgroup_twelve_a)
-      @subgroup12b = groups(:subgroup_twelve_b)
-      @subgroup12aa = groups(:subgroup_twelve_a_a)
+      sample33 = samples(:sample33)
+      sample34 = samples(:sample34)
+      sample35 = samples(:sample35)
+      project29 = projects(:project29)
+      project30 = projects(:project30)
+      project31 = projects(:project31)
+      group12 = groups(:group_twelve)
+      subgroup12a = groups(:subgroup_twelve_a)
+      subgroup12b = groups(:subgroup_twelve_b)
+      subgroup12aa = groups(:subgroup_twelve_a_a)
 
-      @sample_transfer_params1 = { new_project_id: @project30.id,
-                                   sample_ids: [@sample34.id, @sample35.id] }
+      sample_transfer_params1 = { new_project_id: project30.id,
+                                  sample_ids: [sample34.id, sample35.id] }
 
       assert_equal(2, subgroup12aa.samples_count)
       assert_equal(3, subgroup12a.samples_count)
       assert_equal(1, subgroup12b.samples_count)
       assert_equal(4, group12.samples_count)
 
-      assert_no_changes -> { @group12.reload.samples_count } do
-        Samples::TransferService.new(@project31, @john_doe).execute(@sample_transfer_params1[:new_project_id],
-                                                                    @sample_transfer_params1[:sample_ids])
+      assert_no_changes -> { group12.reload.samples_count } do
+        Samples::TransferService.new(project31, @john_doe).execute(sample_transfer_params1[:new_project_id],
+                                                                   sample_transfer_params1[:sample_ids])
       end
 
-      assert_equal(0, subgroup12aa.samples_count)
-      assert_equal(1, subgroup12a.samples_count)
-      assert_equal(3, subgroup12b.samples_count)
+      assert_equal(0, subgroup12aa.reload.samples_count)
+      assert_equal(1, subgroup12a.reload.samples_count)
+      assert_equal(3, subgroup12b.reload.samples_count)
 
-      @sample_transfer_params2 = { new_project_id: @project29.id,
-                                   sample_ids: [@sample33.id, @sample34.id, @sample35.id] }
+      sample_transfer_params2 = { new_project_id: project29.id,
+                                  sample_ids: [sample33.id, sample34.id, sample35.id] }
 
-      assert_no_changes -> { @group12.reload.samples_count } do
-        Samples::TransferService.new(@project30, @john_doe).execute(@sample_transfer_params2[:new_project_id],
-                                                                    @sample_transfer_params2[:sample_ids])
+      assert_no_changes -> { group12.reload.samples_count } do
+        Samples::TransferService.new(project30, @john_doe).execute(sample_transfer_params2[:new_project_id],
+                                                                   sample_transfer_params2[:sample_ids])
       end
 
-      assert_equal(0, subgroup12aa.samples_count)
-      assert_equal(4, subgroup12a.samples_count)
-      assert_equal(0, subgroup12b.samples_count)
+      assert_equal(0, subgroup12aa.reload.samples_count)
+      assert_equal(4, subgroup12a.reload.samples_count)
+      assert_equal(0, subgroup12b.reload.samples_count)
     end
   end
 end
