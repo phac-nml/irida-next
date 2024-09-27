@@ -17,8 +17,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     authorize! @group, to: :read?
 
     @q = if flat_list_requested?
-           @group.self_and_descendants_of_type([Namespaces::ProjectNamespace.sti_name,
-                                                Group.sti_name]).ransack(params[:q])
+           namespace_descendants.ransack(params[:q])
          else
            namespace_children.ransack(params[:q])
          end
@@ -145,6 +144,11 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
         Namespaces::ProjectNamespace.sti_name, Group.sti_name
       ]
     )
+  end
+
+  def namespace_descendants
+    @group.self_and_descendants_of_type([Namespaces::ProjectNamespace.sti_name,
+                                         Group.sti_name])
   end
 
   def resolve_layout
