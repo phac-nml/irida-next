@@ -149,9 +149,9 @@ module Samples
       end
 
       assert_equal(1, subgroup12aa.reload.samples_count)
-      assert_equal(2, subgroup12a.samples_count)
-      assert_equal(1, subgroup12b.samples_count)
-      assert_equal(3, group12.samples_count)
+      assert_equal(2, subgroup12a.reload.samples_count)
+      assert_equal(1, subgroup12b.reload.samples_count)
+      assert_equal(3, group12.reload.samples_count)
     end
 
     test 'samples count updated after multiple sample deletion' do
@@ -163,27 +163,22 @@ module Samples
       subgroup12a = groups(:subgroup_twelve_a)
       subgroup12b = groups(:subgroup_twelve_b)
       subgroup12aa = groups(:subgroup_twelve_a_a)
-      project30 = projects(:project30)
       project31 = projects(:project31)
-      sample33 = samples(:sample33)
       sample34 = samples(:sample34)
+      sample35 = samples(:sample35)
 
       assert_equal(2, subgroup12aa.samples_count)
       assert_equal(3, subgroup12a.samples_count)
       assert_equal(1, subgroup12b.samples_count)
       assert_equal(4, group12.samples_count)
 
-      Samples::TransferService.new(project30, @user).execute(project31.id, [sample33.id])
-
-      assert_equal(3, subgroup12aa.reload.samples_count)
-
       assert_no_changes -> { subgroup12b.reload.samples_count } do
-        Samples::DestroyService.new(project31, @user, { sample_ids: [sample33.id, sample34.id] }).execute
+        Samples::DestroyService.new(project31, @user, { sample_ids: [sample34.id, sample35.id] }).execute
       end
 
-      assert_equal(1, subgroup12aa.reload.samples_count)
-      assert_equal(2, subgroup12a.reload.samples_count)
-      assert_equal(0, subgroup12b.reload.samples_count)
+      assert_equal(0, subgroup12aa.reload.samples_count)
+      assert_equal(1, subgroup12a.reload.samples_count)
+      assert_equal(1, subgroup12b.reload.samples_count)
       assert_equal(2, group12.reload.samples_count)
     end
   end
