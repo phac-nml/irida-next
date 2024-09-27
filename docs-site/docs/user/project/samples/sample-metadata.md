@@ -56,7 +56,7 @@ A dialog will pop-up where you can update the metadata.
 
 ## Learn About Importing Metadata
 
-Importing metadata allows you to add multiple metadata fields to multiple samples all at once. This requires a spreadsheet in .csv, .xls, or .xlsx format.
+Importing metadata allows you to add multiple metadata fields to multiple samples all at once. This requires a spreadsheet in .csv, .tsv, .xls, or .xlsx format.
 
 This is an example of the expected spreadsheet format:
 
