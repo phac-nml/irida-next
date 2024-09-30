@@ -27,6 +27,8 @@ module Projects
 
       @new_namespace.update_metadata_summary_by_namespace_transfer(@project.namespace, @old_namespace)
 
+      update_samples_count if @old_namespace.type == 'Group'
+
       true
     rescue Projects::TransferService::TransferError => e
       project.errors.add(:new_namespace, e.message)
@@ -83,6 +85,12 @@ module Projects
                                        new_namespace: @new_namespace.puid,
                                        action: 'project_namespace_transfer'
                                      }
+    end
+
+    def update_samples_count
+      transferred_samples_count = @project.samples.size
+      @old_namespace.update_samples_count_by_transfer_service(@new_namespace, transferred_samples_count,
+                                                              @new_namespace.type)
     end
   end
 end
