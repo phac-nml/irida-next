@@ -188,26 +188,29 @@ module Projects
       # group12 < subgroup12b (project30 > sample 33)
       #    |
       #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
-      @project31 = projects(:project31)
-      @group12 = groups(:group_twelve)
-      @subgroup12a = groups(:subgroup_twelve_a)
-      @subgroup12b = groups(:subgroup_twelve_b)
-      @subgroup12aa = groups(:subgroup_twelve_a_a)
+      project31 = projects(:project31)
+      Project.reset_counters(project31.id, :samples_count)
+      project31.reload.samples_count
 
-      assert_equal(2, @subgroup12aa.samples_count)
-      assert_equal(3, @subgroup12a.samples_count)
-      assert_equal(1, @subgroup12b.samples_count)
-      assert_equal(4, @group12.samples_count)
+      group12 = groups(:group_twelve)
+      subgroup12a = groups(:subgroup_twelve_a)
+      subgroup12b = groups(:subgroup_twelve_b)
+      subgroup12aa = groups(:subgroup_twelve_a_a)
 
-      assert_no_changes -> { @group12.reload.samples_count } do
-        assert_no_changes -> { @project31.namespace.reload.samples_count } do
-          Projects::TransferService.new(@project31, @john_doe).execute(@subgroup12b)
+      assert_equal(2, subgroup12aa.samples_count)
+      assert_equal(3, subgroup12a.samples_count)
+      assert_equal(1, subgroup12b.samples_count)
+      assert_equal(4, group12.samples_count)
+
+      assert_no_changes -> { group12.reload.samples_count } do
+        assert_no_changes -> { project31.namespace.reload.samples_count } do
+          Projects::TransferService.new(project31, @john_doe).execute(subgroup12b)
         end
       end
 
-      assert_equal(0, @subgroup12aa.reload.samples_count)
-      assert_equal(1, @subgroup12a.samples_count)
-      assert_equal(3, @subgroup12b.samples_count)
+      assert_equal(0, subgroup12aa.reload.samples_count)
+      assert_equal(1, subgroup12a.reload.samples_count)
+      assert_equal(3, subgroup12b.reload.samples_count)
     end
   end
 end
