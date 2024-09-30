@@ -132,11 +132,19 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
     subtract_from_samples_count(namespaces_to_update, deleted_samples_count)
   end
 
-  def update_samples_count_by_transfer_service(new_project, transferred_samples_count)
+  def update_samples_count_by_transfer_service(destination, transferred_samples_count, destination_type = 'Project')
     namespaces_to_update = self_and_ancestors.where(type: Group.sti_name)
     subtract_from_samples_count(namespaces_to_update, transferred_samples_count)
 
-    namespaces_to_update = new_project.parent.self_and_ancestors.where(type: Group.sti_name)
+    case destination_type
+    when 'Project'
+      namespaces_to_update = destination.parent.self_and_ancestors.where(type: Group.sti_name)
+    when 'Group'
+      namespaces_to_update = destination.self_and_ancestors.where(type: Group.sti_name)
+    else
+      return
+    end
+
     add_to_samples_count(namespaces_to_update, transferred_samples_count)
   end
 end
