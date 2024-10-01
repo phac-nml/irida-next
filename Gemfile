@@ -59,7 +59,7 @@ gem 'faraday-net_http_persistent', '~> 2.0'
 # gem "sassc-rails"
 
 # Tailwind CSS [https://tailwindcss.com]
-gem 'tailwindcss-rails', '~> 2.7.6'
+gem 'tailwindcss-rails', '~> 2.7'
 gem 'view_component', '~> 3.15'
 
 # Pagy

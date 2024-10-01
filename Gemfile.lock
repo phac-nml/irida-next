@@ -711,7 +711,7 @@ DEPENDENCIES
   solargraph
   sprockets-rails
   stimulus-rails
-  tailwindcss-rails (~> 2.7.6)
+  tailwindcss-rails (~> 2.7)
   timecop
   turbo-rails
   tzinfo-data
