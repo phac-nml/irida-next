@@ -7,7 +7,7 @@ module Groups
     include Storable
 
     before_action :group, :current_page
-    before_action :process_samples, only: %i[index search]
+    before_action :process_samples, only: %i[index search select]
     include Sortable
 
     def index
@@ -27,8 +27,7 @@ module Groups
       respond_to do |format|
         format.turbo_stream do
           if params[:select].present?
-            @q = authorized_samples.ransack(search_params.merge({ updated_at_lt: params[:timestamp] }))
-            @selected_sample_ids = @q.result.select(:id).pluck(:id)
+            @selected_sample_ids = @q.result.where(updated_at: ..params[:timestamp].to_datetime).select(:id).pluck(:id)
           end
         end
       end
@@ -76,8 +75,11 @@ module Groups
       authorize! @group, to: :sample_listing?
       @search_params = search_params
       set_metadata_fields
-
-      @q = authorized_samples.ransack(@search_params)
+      query_parser = Irida::SearchSyntax::Ransack.new(text: :name_or_puid_cont,
+                                                      # params: { project: 'project_namespace_puid' },
+                                                      metadata_fields: @fields)
+      parsed_params = query_parser.parse(@search_params.fetch(:name_or_puid_cont, nil))
+      @q = authorized_samples.ransack(@search_params.except(:name_or_puid_cont).merge(parsed_params))
     end
 
     def search_params
@@ -87,7 +89,11 @@ module Groups
         updated_params[:s] = default_sort
         update_store(search_key, updated_params)
       end
-      updated_params
+      query_parser = Irida::SearchSyntax::Ransack.new(text: :name_or_puid_cont,
+                                                      # params: { project: 'project_namespace_puid' },
+                                                      metadata_fields: @fields)
+      parsed_params = query_parser.parse(@search_params.fetch(:name_or_puid_cont, nil))
+      updated_params.except(:name_or_puid_cont).merge(parsed_params)
     end
 
     def search_key

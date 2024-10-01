@@ -68,6 +68,9 @@ gem 'pagy', '~> 9.0.5' # omit patch digit
 # Ransack
 gem 'ransack', '~> 4.2.1'
 
+# Search Syntax
+gem 'search_syntax'
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 

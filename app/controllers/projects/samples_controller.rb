@@ -9,7 +9,7 @@ module Projects
 
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
-    before_action :process_samples, only: %i[index search]
+    before_action :process_samples, only: %i[index search select]
     include Sortable
 
     def index
@@ -84,8 +84,7 @@ module Projects
       respond_to do |format|
         format.turbo_stream do
           if params[:select].present?
-            @q = load_samples.ransack(search_params.merge({ updated_at_lt: params[:timestamp] }))
-            @samples = @q.result.select(:id)
+            @samples = @q.result.where(updated_at: ..params[:timestamp].to_datetime).select(:id)
           end
         end
       end
@@ -145,7 +144,9 @@ module Projects
       @search_params = search_params
 
       set_metadata_fields
-      @q = load_samples.ransack(@search_params)
+      query_parser = Irida::SearchSyntax::Ransack.new(text: :name_or_puid_cont, metadata_fields: @fields)
+      parsed_params = query_parser.parse(@search_params.fetch(:name_or_puid_cont, nil))
+      @q = load_samples.ransack(@search_params.except(:name_or_puid_cont).merge(parsed_params))
     end
 
     def search_params
