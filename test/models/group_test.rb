@@ -211,34 +211,46 @@ class GroupTest < ActiveSupport::TestCase
   end
 
   test 'group should have samples_count from all projects within' do
-    expected_samples_count = @group.samples_count
+    group12 = groups(:group_twelve)
 
-    Project.joins(:namespace).where(namespace: { parent_id: @group.self_and_descendants })
-           .select(:samples_count).pluck(:samples_count).sum
+    project29 = projects(:project29)
+    Project.reset_counters(project29.id, :samples_count)
+    project29.reload.samples_count
+
+    project30 = projects(:project30)
+    Project.reset_counters(project30.id, :samples_count)
+    project30.reload.samples_count
+
+    project31 = projects(:project31)
+    Project.reset_counters(project31.id, :samples_count)
+    project31.reload.samples_count
+
+    expected_samples_count = group12.samples_count
+    actual_samples_count = Project.joins(:namespace).where(namespace: { parent_id: group12.self_and_descendants })
+                                  .select(:samples_count).pluck(:samples_count).sum
 
     assert_equal expected_samples_count, actual_samples_count
   end
 
   test 'update samples_count by sample transfer' do
-    assert_difference -> { @group_three.samples_count } => -1,
-                      -> { @group_three_subgroup1.samples_count } => -1 do
-      @group_three.update_samples_count_by_sample_transfer([@sample23.id], @project_namespace.project.id)
+    project = projects(:project22)
+    assert_difference -> { @group_three.reload.samples_count } => -1,
+                      -> { @group_three_subgroup1.reload.samples_count } => -1 do
+      @group_three_subgroup1.update_samples_count_by_transfer_service(project, 1)
     end
   end
 
   test 'update samples_count by sample deletion' do
-    assert_difference -> { @group_three.samples_count } => -1,
-                      -> { @group_three_subgroup1.samples_count } => -1 do
-      @group_three.update_samples_count_by_sample_deletion(@sample23, @sample23.project_id)
+    assert_difference -> { @group_three.reload.samples_count } => -1,
+                      -> { @group_three_subgroup1.reload.samples_count } => -1 do
+      @group_three_subgroup1.update_samples_count_by_destroy_service(1)
     end
   end
 
   test 'update samples_count by sample addition' do
-    sample = Sample.new(name: 'New Sample')
-
-    assert_difference -> { @group_three.samples_count } => 1,
-                      -> { @group_three_subgroup1.samples_count } => 1 do
-      @group_three.update_samples_count_by_sample_addition(sample, @sample23.project_id)
+    assert_difference -> { @group_three.reload.samples_count } => 1,
+                      -> { @group_three_subgroup1.reload.samples_count } => 1 do
+      @group_three_subgroup1.update_samples_count_by_addition_services(1)
     end
   end
 end
