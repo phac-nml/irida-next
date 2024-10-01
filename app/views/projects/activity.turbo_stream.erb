@@ -1,6 +1,6 @@
 <%= turbo_stream.append "activities" do %>
   <% @activities.each do |activity| %>
-    <%= render Activities::ListItemComponent.new(activity: activity, pagy: @pagy) %>
+    <%= render Activities::ListItemComponent.new(activity: activity) %>
   <% end %>
 <% end %>
 

@@ -263,13 +263,13 @@ en:
       transfer_html: "%{user} transferred project from namespace <span class='font-medium text-slate-800 dark:text-slate-300'>%{old_namespace}</span> to <span class='font-medium text-slate-800 dark:text-slate-300'>%{new_namespace}</span>"
       update_html: "%{user} updated project attributes"
     workflow_execution:
-      automated_pipeline_completion:
-        metadata_written_html: Project automation bot wrote pipeline %{href} metadata to sample %{sample_href}
-        outputs_and_metadata_written_html: Project automation bot attached pipeline %{href} outputs and wrote metadata to sample %{sample_href}
-        outputs_written_html: Project automation bot attached pipeline %{href} outputs to sample %{sample_href}
       automated_workflow:
         create_html: "%{user} setup automated pipeline %{href} for the project"
         launch_html: Project automation bot launched pipeline %{href} on sample %{sample_href}
+      automated_workflow_completion:
+        metadata_written_html: Project automation bot wrote pipeline %{href} metadata to sample %{sample_href}
+        outputs_and_metadata_written_html: Project automation bot attached pipeline %{href} outputs and wrote metadata to sample %{sample_href}
+        outputs_written_html: Project automation bot attached pipeline %{href} outputs to sample %{sample_href}
   application:
     errors:
       access_denied: Access Denied.

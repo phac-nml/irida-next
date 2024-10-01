@@ -1,0 +1,58 @@
+{
+    "files": {
+        "global": [
+            {
+                "path": "summary.txt"
+            }
+        ],
+        "samples": {
+            "INXT_SAM_AAAAAAAAA3": [
+                {
+                    "path": "analysis1.txt"
+                },
+                {
+                    "path": "analysis2.txt"
+                }
+            ],
+            "INXT_SAM_AAAAAAAAA4": [
+                {
+                    "path": "analysis3.txt"
+                }
+            ]
+        }
+    },
+    "metadata": {
+        "samples": {
+            "INXT_SAM_AAAAAAAAA3": {
+                "organism": "an organism",
+                "amr": [
+                    {
+                        "gene": "x",
+                        "start": 1234,
+                        "end": 5678
+                    },
+                    {
+                        "gene": "y",
+                        "start": 1,
+                        "end": 2
+                    }
+                ]
+            },
+            "INXT_SAM_AAAAAAAAA4": {
+                "organism": "a different organism",
+                "amr": [
+                    {
+                        "gene": "x",
+                        "start": 2345,
+                        "end": 6789
+                    },
+                    {
+                        "gene": "y",
+                        "start": 2,
+                        "end": 3
+                    }
+                ]
+            }
+        }
+    }
+}
