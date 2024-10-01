@@ -8,6 +8,8 @@ module Groups
     def initialize(group, user = nil, params = {})
       super(user, params.except(:group, :group_id))
       @group = group
+      @deleted_samples_count = Project.joins(:namespace).where(namespace: { parent_id: @group.self_and_descendants })
+                                      .select(:samples_count).pluck(:samples_count).sum
     end
 
     def execute
@@ -26,9 +28,15 @@ module Groups
                                         removed_group_puid: @group.puid,
                                         action: 'group_subgroup_destroy'
                                       }
+
+        update_samples_count
       end
 
       group.update_metadata_summary_by_namespace_deletion
+    end
+
+    def update_samples_count
+      @group.update_samples_count_by_destroy_service(@deleted_samples_count)
     end
   end
 end
