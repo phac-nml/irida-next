@@ -345,5 +345,22 @@ module Projects
         assert_selector 'tr:nth-child(2) td:nth-child(4)', text: 'illumina_pe'
       end
     end
+
+    test 'empty search state' do
+      visit namespace_project_attachments_path(@namespace, @project1)
+
+      assert_text 'Displaying 1-2 of 2 items'
+      assert_selector 'table tbody tr', count: 2
+
+      fill_in placeholder: I18n.t(:'projects.attachments.index.search.placeholder'),
+              with: 'filter that results in no attachments'
+
+      assert_no_selector 'table'
+
+      within 'div[role="alert"]' do
+        assert_text I18n.t('components.viral.pagy.empty_state.title')
+        assert_text I18n.t('components.viral.pagy.empty_state.description')
+      end
+    end
   end
 end

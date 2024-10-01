@@ -203,7 +203,7 @@ module Groups
       assert_text 'Displaying 1-2 of 2 items'
       assert_selector 'table tbody tr', count: 2
 
-      fill_in placeholder: I18n.t(:'projects.attachments.index.search.placeholder'),
+      fill_in placeholder: I18n.t(:'groups.attachments.index.search.placeholder'),
               with: @attachment1.file.filename.to_s
 
       assert_text 'Displaying 1 item'
@@ -216,7 +216,7 @@ module Groups
         assert_no_text @attachment2.file.filename.to_s
       end
 
-      fill_in placeholder: I18n.t(:'projects.attachments.index.search.placeholder'),
+      fill_in placeholder: I18n.t(:'groups.attachments.index.search.placeholder'),
               with: @attachment2.puid
 
       assert_text 'Displaying 1 item'
@@ -312,7 +312,7 @@ module Groups
       assert_text 'Displaying 1-2 of 2 items'
       assert_selector 'table tbody tr', count: 2
 
-      click_on I18n.t('projects.attachments.index.upload_files')
+      click_on I18n.t('groups.attachments.index.upload_files')
 
       within('dialog') do
         attach_file 'attachment[files][]', [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq.gz'),
@@ -329,7 +329,7 @@ module Groups
         assert_selector 'tr:first-child td:nth-child(4)', text: 'illumina_pe'
       end
 
-      fill_in placeholder: I18n.t(:'projects.attachments.index.search.placeholder'),
+      fill_in placeholder: I18n.t(:'groups.attachments.index.search.placeholder'),
               with: 'fastq.gz'
 
       assert_selector '#attachments-table table tbody tr', count: 2
@@ -342,6 +342,23 @@ module Groups
         assert_selector 'tr:nth-child(2) td:nth-child(2)', text: 'TestSample_S1_L001_R1_001.fastq.gz'
         assert_selector 'tr:nth-child(2) td:nth-child(3)', text: 'fastq'
         assert_selector 'tr:nth-child(2) td:nth-child(4)', text: 'illumina_pe'
+      end
+    end
+
+    test 'empty search state' do
+      visit group_attachments_path(@namespace)
+
+      assert_text 'Displaying 1-2 of 2 items'
+      assert_selector 'table tbody tr', count: 2
+
+      fill_in placeholder: I18n.t(:'groups.attachments.index.search.placeholder'),
+              with: 'filter that results in no attachments'
+
+      assert_no_selector 'table'
+
+      within 'div[role="alert"]' do
+        assert_text I18n.t('components.viral.pagy.empty_state.title')
+        assert_text I18n.t('components.viral.pagy.empty_state.description')
       end
     end
   end

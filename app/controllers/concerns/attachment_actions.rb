@@ -16,7 +16,9 @@ module AttachmentActions # rubocop:disable Metrics/ModuleLength
     authorize! @authorize_object, to: :view_attachments?
 
     @render_individual_attachments = filter_requested?
-    @q = build_ransack_query
+    all_attachments = load_attachments
+    @has_attachments = all_attachments.count.positive?
+    @q = all_attachments.ransack(params[:q])
     set_default_sort
     @pagy, @attachments = pagy_with_metadata_sort(@q.result)
   end
@@ -89,13 +91,12 @@ module AttachmentActions # rubocop:disable Metrics/ModuleLength
     params.dig(:q, :puid_or_file_blob_filename_cont).present?
   end
 
-  def build_ransack_query
+  def load_attachments
     if @render_individual_attachments
-      @namespace.attachments.all.ransack(params[:q])
+      @namespace.attachments.all
     else
       @namespace.attachments
                 .where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
-                .ransack(params[:q])
     end
   end
 

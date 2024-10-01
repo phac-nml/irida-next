@@ -1,10 +1,11 @@
-<%# locals: (namespace:, pagy:, q:, attachments:, render_individual_attachments:) -%>
+<%# locals: (namespace:, pagy:, q:, attachments:, render_individual_attachments:, has_attachments:) -%>
 <%= render Attachments::TableComponent.new(
   attachments,
   pagy,
   q,
   namespace,
   render_individual_attachments,
+  has_attachments,
   abilities: {
     # Uncomment when ready to use multi-select functionality
     # select_attachments: allowed_to?(:destroy_attachment?, namespace.project)

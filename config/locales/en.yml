@@ -279,8 +279,8 @@ en:
     dialogs:
       delete_attachment_component:
         description:
-          paired_end: Are you sure that you want to delete files %{filenames} from the group?
-          single: Are you sure that you want to delete file '%{filename}' from the group?
+          paired_end: Are you sure that you want to delete files %{filenames} from the %{attachable_type}?
+          single: Are you sure that you want to delete file '%{filename}' from the %{attachable_type}?
         submit_button: Confirm
         title: Delete File
       new_attachment_component:
