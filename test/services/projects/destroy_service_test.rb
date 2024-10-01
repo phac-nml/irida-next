@@ -77,7 +77,10 @@ module Projects
       @subgroup12a = groups(:subgroup_twelve_a)
       @subgroup12b = groups(:subgroup_twelve_b)
       @subgroup12aa = groups(:subgroup_twelve_a_a)
+
       @project31 = projects(:project31)
+      Project.reset_counters(@project31.id, :samples_count)
+      @project31.reload.samples_count
 
       assert_equal(2, @subgroup12aa.samples_count)
       assert_equal(3, @subgroup12a.samples_count)
@@ -90,9 +93,9 @@ module Projects
 
       assert(@project31.namespace.reload.deleted?)
       assert_equal(0, @subgroup12aa.reload.samples_count)
-      assert_equal(1, @subgroup12a.samples_count)
-      assert_equal(1, @subgroup12b.samples_count)
-      assert_equal(2, @group12.samples_count)
+      assert_equal(1, @subgroup12a.reload.samples_count)
+      assert_equal(1, @subgroup12b.reload.samples_count)
+      assert_equal(2, @group12.reload.samples_count)
     end
   end
 end
