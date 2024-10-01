@@ -40,7 +40,10 @@ The following table lists group permissions available for each role:
 | Add Group Member             |       |          |         | ✓(1)       | ✓     |
 | Edit Group Member            |       |          |         | ✓(1)       | ✓     |
 | Remove Group Member          |       |          |         | ✓(1)       | ✓     |
-| View Group Members           | ✓     |          | ✓       | ✓          | ✓     |
+| View Group Members           | ✓     |          |         | ✓          | ✓     |
+| View Group Files             |       |          | ✓       | ✓          | ✓     |
+| Upload Group Files           |       |          |         | ✓          | ✓     |
+| Remove Group Files           |       |          |         | ✓          | ✓     |
 
 1. A user with the **Maintainer** role can only modify members upto and including their role
 2. A user or bot account with the **Uploader** role can only perform these actions via the api
@@ -68,6 +71,9 @@ When you add a member to a subgroup where they are also a member of one of the p
     | Remove Bot Account                  |       |          |         | ✓          | ✓     |
     | Set up Automated Workflow Execution |       |          |         | ✓          | ✓     |
     | View Project History                |       |          |         | ✓          | ✓     |
+    | View Project Files                  |       |          | ✓       | ✓          | ✓     |
+    | Upload Project Files                |       |          |         | ✓          | ✓     |
+    | Remove Project Files                |       |          |         | ✓          | ✓     |
 
 
   1. A user or bot account with the **Uploader** role can only perform these actions via the api
