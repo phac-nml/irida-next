@@ -1,5 +1,4 @@
 import { Controller } from "@hotwired/stimulus";
-import { Datepicker } from "flowbite-datepicker";
 
 export default class extends Controller {
   static targets = ["datePicker"];
@@ -8,7 +7,7 @@ export default class extends Controller {
   connect() {
     if (this.datePickerTarget.dataset.datepickerAutosubmit) {
       this.datePickerTarget.addEventListener("changeDate", (e) =>
-        this.handleDateSelected(e)
+        this.handleDateSelected(e),
       );
     }
 
@@ -31,7 +30,7 @@ export default class extends Controller {
   disconnect() {
     if (this.datePickerTarget.dataset.datepickerAutosubmit) {
       this.datePickerTarget.removeEventListener("changeDate", (e) =>
-        this.handleDateSelected(e)
+        this.handleDateSelected(e),
       );
     }
   }
