@@ -12,6 +12,8 @@ module Projects
 
       return unless project.namespace.deleted? && project.namespace.type != Namespaces::UserNamespace.sti_name
 
+      update_samples_count if @project.parent.type == 'Group'
+
       project.namespace.update_metadata_summary_by_namespace_deletion
     end
 
@@ -27,6 +29,11 @@ module Projects
                                                   project_puid: @project.namespace.puid,
                                                   action: 'group_project_destroy'
                                                 }
+    end
+
+    def update_samples_count
+      deleted_samples_count = @project.samples.size
+      @project.parent.update_samples_count_by_destroy_service(deleted_samples_count)
     end
   end
 end
