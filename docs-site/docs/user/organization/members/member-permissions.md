@@ -40,7 +40,7 @@ The following table lists group permissions available for each role:
 | Add Group Member             |       |          |         | ✓(1)       | ✓     |
 | Edit Group Member            |       |          |         | ✓(1)       | ✓     |
 | Remove Group Member          |       |          |         | ✓(1)       | ✓     |
-| View Group Members           | ✓     |          |         | ✓          | ✓     |
+| View Group Members           | ✓     |          | ✓       | ✓          | ✓     |
 | View Group Files             |       |          | ✓       | ✓          | ✓     |
 | Upload Group Files           |       |          |         | ✓          | ✓     |
 | Remove Group Files           |       |          |         | ✓          | ✓     |
