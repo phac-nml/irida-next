@@ -47,7 +47,7 @@ class NamespaceGroupLink < ApplicationRecord
         GroupLinkMailer.access_revoked_user_email(user_emails, group, namespace, locale).deliver_later
       end
 
-      manager_emails = Member.manager_emails(namespace, locale)
+      manager_emails = Member.manager_emails(namespace, locale, Member::AccessLevel::OWNER)
       next if manager_emails.empty?
 
       GroupLinkMailer.access_revoked_manager_email(manager_emails, group, namespace, locale).deliver_later
@@ -61,7 +61,7 @@ class NamespaceGroupLink < ApplicationRecord
         GroupLinkMailer.access_granted_user_email(user_emails, group, namespace, locale).deliver_later
       end
 
-      manager_emails = Member.manager_emails(namespace, locale)
+      manager_emails = Member.manager_emails(namespace, locale, Member::AccessLevel::OWNER)
       next if manager_emails.empty?
 
       GroupLinkMailer.access_granted_manager_email(manager_emails, group, namespace, locale).deliver_later

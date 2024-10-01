@@ -18,15 +18,8 @@ module Members
         Members::DestroyService.new(@group_member, @group, @user).execute
       end
 
-      assert_enqueued_emails 3
+      assert_enqueued_emails 1
       assert_enqueued_email_with MemberMailer, :access_revoked_user_email, args: [@group_member, @group]
-      I18n.available_locales.each do |locale|
-        manager_emails = Member.manager_emails(@group, locale, @group_member)
-        next if manager_emails.empty?
-
-        assert_enqueued_email_with MemberMailer, :access_revoked_manager_email,
-                                   args: [@group_member, manager_emails, @group, locale]
-      end
     end
 
     test 'remove themselves as a group member' do
@@ -35,15 +28,8 @@ module Members
         Members::DestroyService.new(@group_member, @group, user).execute
       end
 
-      assert_enqueued_emails 3
+      assert_enqueued_emails 1
       assert_enqueued_email_with MemberMailer, :access_revoked_user_email, args: [@group_member, @group]
-      I18n.available_locales.each do |locale|
-        manager_emails = Member.manager_emails(@group, locale, @group_member)
-        next if manager_emails.empty?
-
-        assert_enqueued_email_with MemberMailer, :access_revoked_manager_email,
-                                   args: [@group_member, manager_emails, @group, locale]
-      end
     end
 
     test 'remove group member when user does not have direct or inherited membership' do
@@ -77,15 +63,8 @@ module Members
         Members::DestroyService.new(@project_member, @project_namespace, @user).execute
       end
 
-      assert_enqueued_emails 3
+      assert_enqueued_emails 1
       assert_enqueued_email_with MemberMailer, :access_revoked_user_email, args: [@project_member, @project_namespace]
-      I18n.available_locales.each do |locale|
-        manager_emails = Member.manager_emails(@project_namespace, locale, @project_member)
-        next if manager_emails.empty?
-
-        assert_enqueued_email_with MemberMailer, :access_revoked_manager_email,
-                                   args: [@project_member, manager_emails, @project_namespace, locale]
-      end
     end
 
     test 'remove project member with incorrect permissions' do

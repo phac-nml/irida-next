@@ -25,7 +25,7 @@ module GroupLinks
                                      args: [user_emails, group, namespace, locale]
         end
 
-        manager_emails = Member.manager_emails(namespace, locale)
+        manager_emails = Member.manager_emails(namespace, locale, Member::AccessLevel::OWNER)
         next if manager_emails.empty?
 
         assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
@@ -111,7 +111,7 @@ module GroupLinks
                                      args: [user_emails, group, namespace, locale]
         end
 
-        manager_emails = Member.manager_emails(namespace, locale)
+        manager_emails = Member.manager_emails(namespace, locale, Member::AccessLevel::OWNER)
         next if manager_emails.empty?
 
         assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
@@ -152,7 +152,7 @@ module GroupLinks
                                      args: [user_emails, group, namespace, locale]
         end
 
-        manager_emails = Member.manager_emails(namespace, locale)
+        manager_emails = Member.manager_emails(namespace, locale, Member::AccessLevel::OWNER)
         next if manager_emails.empty?
 
         assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
@@ -210,7 +210,7 @@ module GroupLinks
                                      args: [user_emails, group, namespace, locale]
         end
 
-        manager_emails = Member.manager_emails(namespace, locale)
+        manager_emails = Member.manager_emails(namespace, locale, Member::AccessLevel::OWNER)
         next if manager_emails.empty?
 
         assert_enqueued_email_with GroupLinkMailer, :access_granted_manager_email,
