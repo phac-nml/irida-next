@@ -90,6 +90,14 @@ module Groups
       @subgroup12b = groups(:subgroup_twelve_b)
       @subgroup12aa = groups(:subgroup_twelve_a_a)
 
+      @project30 = projects(:project30)
+      Project.reset_counters(@project30.id, :samples_count)
+      @project30.reload.samples_count
+
+      @project31 = projects(:project31)
+      Project.reset_counters(@project31.id, :samples_count)
+      @project31.reload.samples_count
+
       assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
       assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
       assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.metadata_summary)
@@ -126,6 +134,14 @@ module Groups
       @subgroup12b = groups(:subgroup_twelve_b)
       @subgroup12aa = groups(:subgroup_twelve_a_a)
 
+      @project30 = projects(:project30)
+      Project.reset_counters(@project30.id, :samples_count)
+      @project30.reload.samples_count
+
+      @project31 = projects(:project31)
+      Project.reset_counters(@project31.id, :samples_count)
+      @project31.reload.samples_count
+
       assert_equal(2, @subgroup12aa.samples_count)
       assert_equal(3, @subgroup12a.samples_count)
       assert_equal(1, @subgroup12b.samples_count)
@@ -138,8 +154,8 @@ module Groups
       end
 
       assert_equal(2, @subgroup12aa.samples_count)
-      assert_equal(1, @subgroup12a.samples_count)
-      assert_equal(3, @subgroup12b.samples_count)
+      assert_equal(1, @subgroup12a.reload.samples_count)
+      assert_equal(3, @subgroup12b.reload.samples_count)
 
       assert_no_changes -> { @group12.reload.samples_count } do
         assert_no_changes -> { @subgroup12aa.reload.samples_count } do
