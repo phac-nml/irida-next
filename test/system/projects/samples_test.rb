@@ -2364,7 +2364,8 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '1'
       end
 
-      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: ' '
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: ' '
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: ' '
 
       within 'tfoot' do
         assert_text 'Samples: 3'

@@ -591,6 +591,7 @@ module Groups
       end
 
       fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: ' '
+      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: ' '
 
       assert_text 'Samples: 26'
       assert_selector 'tfoot strong[data-selection-target="selected"]', text: '0'
