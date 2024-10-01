@@ -283,7 +283,7 @@ module Groups
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
                                                                            locale: @user.locale))
       assert_selector 'table tbody tr', count: 10
-      assert_selector 'table thead tr th', count: 8
+      assert_selector 'table thead tr th', count: 9
       assert_selector 'div#limit-component button div span', text: '10'
     end
 
@@ -375,12 +375,21 @@ module Groups
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
 
-      assert_selector 'table thead tr th', count: 8
+      assert_selector 'table thead tr th', count: 9
       within('table tbody tr:first-child') do
         assert_text @sample30.name
         assert_selector 'td:nth-child(7)', text: 'value1'
         assert_selector 'td:nth-child(8)', text: 'value2'
+        assert_selector 'td:nth-child(9)', text: ''
       end
+
+      within('table tbody tr:nth-child(3)') do
+        assert_text @sample28.name
+        assert_selector 'td:nth-child(7)', text: ''
+        assert_selector 'td:nth-child(8)', text: ''
+        assert_selector 'td:nth-child(9)', text: 'unique_value'
+      end
+
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
       assert_selector 'table thead tr th', count: 6
     end
@@ -392,7 +401,7 @@ module Groups
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       assert_selector 'table thead tr th', count: 6
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
-      assert_selector 'table thead tr th', count: 8
+      assert_selector 'table thead tr th', count: 9
 
       click_on 'metadatafield1'
       assert_selector 'table thead th:nth-child(7) svg.icon-arrow_up'
@@ -717,7 +726,7 @@ module Groups
       visit group_samples_url(@group)
 
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
-      assert_selector '#samples-table table thead tr th', count: 8
+      assert_selector '#samples-table table thead tr th', count: 9
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
       within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]',
