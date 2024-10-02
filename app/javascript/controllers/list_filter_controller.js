@@ -13,7 +13,7 @@ export default class extends Controller {
 
   connect() {
     this.idempotentConnect();
-    this.#originalState = this.tagsTarget.innerHTML;
+    this.#originalState = this.tagsTarget.cloneNode(true);
   }
 
   idempotentConnect() {
@@ -115,21 +115,19 @@ export default class extends Controller {
 
   #formatTag(item) {
     const clone = this.templateTarget.content.cloneNode(true);
-    clone.querySelector(".label").innerText = item;
-    clone.querySelector("input").value = item;
-    clone.querySelector("input").id = Date.now().toString(36);
+    const input = clone.querySelector("input");
+
+    clone.querySelector(".label").textContent = item;
+    input.value = item;
+    input.id = crypto.randomUUID();
+
     return clone;
   }
 
   #updateCount() {
     const count = this.tagsTarget.querySelectorAll(".search-tag").length;
-    if (count > 0) {
-      this.countTarget.innerText = count;
-      this.countTarget.classList.remove("hidden");
-      this.countTarget.classList.add("inline-flex");
-    } else {
-      this.countTarget.classList.remove("inline-flex");
-      this.countTarget.classList.add("hidden");
-    }
+    this.countTarget.innerText = count || "";
+    this.countTarget.classList.toggle("hidden", count === 0);
+    this.countTarget.classList.toggle("inline-flex", count > 0);
   }
 }
