@@ -36,7 +36,8 @@ To upload files to a group:
 
 1. From the left sidebar, select **Groups**
 2. Select the group
-3. Click the filename you'd like to download
+3. From the left sidebar, select **Files**
+4. Click the filename you'd like to download
 
 ## Delete Group files
 
@@ -46,4 +47,5 @@ Prerequisites:
 
 1. From the left sidebar, select **Groups**
 2. Select the group
-3. Select **Delete** for the files you would like to delete.
+3. From the left sidebar, select **Files**
+4. Select **Delete** for the files you would like to delete.

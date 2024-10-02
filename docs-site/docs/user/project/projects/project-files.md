@@ -36,7 +36,8 @@ To upload files to a project:
 
 1. From the left sidebar, select **Projects**
 2. Select the project
-3. Click the filename you'd like to download
+3. From the left sidebar, select **Files**
+4. Click the filename you'd like to download
 
 ## Delete Project files
 
@@ -46,4 +47,5 @@ Prerequisites:
 
 1. From the left sidebar, select **Projects**
 2. Select the project
-3. Select **Delete** for the files you would like to delete.
+3. From the left sidebar, select **Files**
+4. Select **Delete** for the files you would like to delete.
