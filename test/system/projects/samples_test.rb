@@ -497,7 +497,7 @@ module Projects
       within('span[data-controller-connected="true"] dialog') do
         assert_text I18n.t('projects.samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER', '200')
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{project2.full_path}']").click
+        find("button[data-viral--select2-primary-param='#{project2.full_path}']", visible: false).click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
 
