@@ -97,8 +97,8 @@ class CreateProjectMutationTest < ActiveSupport::TestCase
 
     project = Project.last
     assert_equal group.id, project.parent.id
-    assert_equal 'new_project_one', project.path
-    assert_equal 'group-1/new_project_one', project.full_path
+    assert_equal 'new-project-one', project.path
+    assert_equal 'group-1/new-project-one', project.full_path
   end
 
   test 'createProject mutation should work with valid params, group puid, and api scope token' do
@@ -123,8 +123,8 @@ class CreateProjectMutationTest < ActiveSupport::TestCase
 
     project = Project.last
     assert_equal group.puid, project.parent.puid
-    assert_equal 'new_project_one', project.path
-    assert_equal 'group-1/new_project_one', project.full_path
+    assert_equal 'new-project-one', project.path
+    assert_equal 'group-1/new-project-one', project.full_path
   end
 
   test 'createProject mutation should work with valid params, no group id/puid, and api scope token' do
@@ -146,8 +146,8 @@ class CreateProjectMutationTest < ActiveSupport::TestCase
 
     project = Project.last
     assert_equal @user.namespace.puid, project.parent.puid
-    assert_equal 'new_project_one', project.path
-    assert_equal 'john.doe_at_localhost/new_project_one', project.full_path
+    assert_equal 'new-project-one', project.path
+    assert_equal 'john.doe_at_localhost/new-project-one', project.full_path
   end
 
   test 'createProject mutation should work with custom path' do
@@ -166,11 +166,11 @@ class CreateProjectMutationTest < ActiveSupport::TestCase
     assert_not_empty data['project']
 
     assert_equal 'New Project One', data['project']['name']
-    assert_equal 'new_custom_path', data['project']['path']
-    assert_equal 'john.doe_at_localhost/new_custom_path', data['project']['fullPath']
+    assert_equal 'new-custom-path', data['project']['path']
+    assert_equal 'john.doe_at_localhost/new-custom-path', data['project']['fullPath']
   end
 
-  test 'createProject mutation should not work with valid params, and api scope token with uploader access level' do # rubocop:disable Layout/LineLength
+  test 'createProject mutation should not work with valid params, and api scope token with uploader access level' do
     user = users(:groupJeff_bot)
     token = personal_access_tokens(:groupJeff_bot_account_valid_pat)
     group = groups(:group_jeff)
