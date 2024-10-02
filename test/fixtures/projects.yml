@@ -135,14 +135,17 @@ project28:
 project29:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project29_namespace, :uuid) %>
+  samples_count: 1
 
 project30:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project30_namespace, :uuid) %>
+  samples_count: 1
 
 project31:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project31_namespace, :uuid) %>
+  samples_count: 2
 
 projectAlpha:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
