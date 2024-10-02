@@ -25,20 +25,20 @@ To add a bot account to a group:
 
 You should now see the new bot account listed within the bot accounts table. Above the table you should also see a section for the newly created personal access token. Copy the personal access token, as it cannot be accessed afterwards.
 
-## Remove Bot Account
+## Delete Bot Account
 
 Prerequisites:
 
 - You must have at least a **Maintainer** role.
 
-To remove an existing bot account from a group:
+To delete an existing bot account from a group:
 
 1. From the left sidebar, select **Groups** and find your group.
 2. From the left sidebar, select **Settings > Bot Accounts**.
-3. On the right hand side of the row for the bot account you want to remove, click the **Remove** link.
-4. Confirm that you would like to remove the bot account by clicking the **Confirm** button.
+3. On the right hand side of the row for the bot account you want to delete, click the **Delete bot** link.
+4. Confirm that you would like to permanently delete the bot account by clicking the **Confirm** button.
 
-All memberships associated with the removed bot will automatically be removed.
+All memberships associated with the deleted bot will automatically be removed.
 
 ## Add Membership
 

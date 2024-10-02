@@ -138,7 +138,7 @@ module Projects
 
       within('table') do
         within('table tbody tr:first-child td:last-child') do
-          click_link 'Remove'
+          click_link I18n.t(:'projects.bots.index.bot.remove')
         end
       end
 
