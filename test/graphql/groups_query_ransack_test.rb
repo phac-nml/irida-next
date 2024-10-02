@@ -52,18 +52,18 @@ class GroupsQueryTest < ActiveSupport::TestCase
 
     data = result['data']['groups']['nodes']
 
-    assert_equal 6, data.count # Group 1, Group 10, Group 11, etc
+    assert_equal 7, data.count # Group 1, Group 10, Group 11, etc
 
-    assert_equal groups(:group_sixteen).name, data[0]['name']
-    assert_equal groups(:group_sixteen).puid, data[0]['puid']
+    assert_equal groups(:group_seventeen).name, data[0]['name']
+    assert_equal groups(:group_seventeen).puid, data[0]['puid']
 
-    assert_equal groups(:group_fifteen).name, data[1]['name']
-    assert_equal groups(:group_fifteen).puid, data[1]['puid']
+    assert_equal groups(:group_sixteen).name, data[1]['name']
+    assert_equal groups(:group_sixteen).puid, data[1]['puid']
 
-    assert_equal groups(:group_ten).name, data[4]['name']
-    assert_equal groups(:group_ten).puid, data[4]['puid']
+    assert_equal groups(:group_ten).name, data[5]['name']
+    assert_equal groups(:group_ten).puid, data[5]['puid']
 
-    assert_equal groups(:group_one).name, data[5]['name']
-    assert_equal groups(:group_one).puid, data[5]['puid']
+    assert_equal groups(:group_one).name, data[6]['name']
+    assert_equal groups(:group_one).puid, data[6]['puid']
   end
 end

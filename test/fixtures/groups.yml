@@ -324,6 +324,14 @@ group_sixteen:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   puid: INXT_GRP_AAAAAAAABG
 
+group_seventeen:
+  <<: *DEFAULTS
+  name: Group 17
+  path: group-17
+  description: Group 17 description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  puid: INXT_GRP_AAAAAAAABI
+
 user30_group_one:
   <<: *DEFAULTS
   name: User 30 Group 1
