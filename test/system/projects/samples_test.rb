@@ -2273,6 +2273,7 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      assert_selector 'turbo-frame#selected div', count: 0 # verifies the refresh is complete
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -2288,11 +2289,13 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '2'
       end
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      assert_selector 'turbo-frame#selected div', count: 0 # verifies the refresh is complete
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 3
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
       click_button I18n.t(:'projects.samples.index.deselect_all_button')
+      assert_selector 'turbo-frame#selected div', count: 0 # verifies the refresh is complete
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 3
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
@@ -2355,6 +2358,7 @@ module Projects
       end
 
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      assert_selector 'turbo-frame#selected div', count: 0 # verifies the refresh is complete
 
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 1
@@ -2364,7 +2368,6 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '1'
       end
 
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: ' '
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: ' '
 
       within 'tfoot' do
