@@ -8,7 +8,7 @@ module Layout
 
       renders_many :menu_items, ItemComponent
 
-      def initialize(title: nil, icon: nil, selectable_pages: nil, current_page: nil)
+      def initialize(title: nil, icon: nil, selectable_pages: [], current_page: nil)
         @title = title
         @icon = icon
         @selectable_pages = selectable_pages
