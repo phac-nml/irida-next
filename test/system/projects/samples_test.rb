@@ -478,6 +478,7 @@ module Projects
       namespace17 = groups(:group_seventeen)
       project38 = projects(:project38)
       project2 = projects(:project2)
+      samples = [samples(:bulk_sample1), samples(:bulk_sample2)]
 
       Project.reset_counters(project38.id, :samples_count)
       visit namespace_project_samples_url(namespace17, project38)
@@ -496,8 +497,14 @@ module Projects
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
         assert_text I18n.t('projects.samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER', '200')
+        within %(turbo-frame[id="list_selections"]) do
+          samples.pluck(:puid, :name).each do |sample|
+            assert_text sample[0]
+            assert_text sample[1]
+          end
+        end
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{project2.full_path}']", visible: false).click
+        find("button[data-viral--select2-primary-param='#{project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
 
