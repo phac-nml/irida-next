@@ -89,6 +89,7 @@ export default class extends Controller {
       this.inputTarget.value = "";
     }
     this.#updateCount();
+    this.#originalState = null;
   }
 
   #handleBackspace(event) {
