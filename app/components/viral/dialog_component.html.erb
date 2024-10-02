@@ -17,13 +17,18 @@
         <% sections.each_with_index do |section, index| %>
           <%= section %>
           <% if sections.length - 1 != index %>
-            <hr class="h-px my-4 bg-slate-200 border-0 dark:bg-slate-600"/>
+            <hr class="h-px my-4 border-0 bg-slate-200 dark:bg-slate-600"/>
           <% end %>
         <% end %>
       <% end %>
 
       <% if render_footer? %>
-        <div class="dialog--footer">
+        <div
+          class="
+            flex items-center p-5 space-x-2 border-t rounded-b border-slate-200
+            dark:border-slate-600
+          "
+        >
           <% if primary_action? %>
             <%= primary_action %>
           <% end %>
