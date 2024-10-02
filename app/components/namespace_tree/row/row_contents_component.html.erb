@@ -2,7 +2,7 @@
   <%= viral_icon(name: :squares_2x2, classes: "h-5 w-5 text-slate-400 mr-2") %>
   <%= viral_avatar(
     name: @namespace.name,
-    size: :medium,
+    size: @icon_size,
     colour_string: "#{@namespace.name}-#{@namespace.id}",
     data: {
       turbo: false,
@@ -13,7 +13,7 @@
   <%= viral_icon(name: :rectangle_stack, classes: "h-5 w-5 text-slate-400 mr-2") %>
   <%= viral_avatar(
     name: @namespace.name,
-    size: :small,
+    size: @icon_size,
     colour_string: "#{@namespace.name}-#{@namespace.id}",
     data: {
       turbo: false,

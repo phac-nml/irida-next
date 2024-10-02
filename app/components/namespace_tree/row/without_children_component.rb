@@ -4,11 +4,11 @@ module NamespaceTree
   module Row
     # Component for the contents of a namespace row that has no children
     class WithoutChildrenComponent < Viral::Component
-      def initialize(namespace:, path: nil, path_args: {})
+      def initialize(namespace:, path: nil, path_args: {}, icon_size: :small)
         @namespace = namespace
         @path = path
         @path_args = path_args
-        @sample_count = @namespace.type == 'Project' ? @namespace.project.samples.size : 0
+        @icon_size = icon_size
       end
     end
   end
