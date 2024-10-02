@@ -32,9 +32,9 @@ module Mutations
 
       # slugify path, if no path given slugify name to use as path
       args[:path] = if args[:path]
-                      args[:path].to_s.parameterize(separator: '_')
+                      args[:path].to_s.parameterize(separator: '-')
                     else
-                      args[:name].to_s.parameterize(separator: '_')
+                      args[:name].to_s.parameterize(separator: '-')
                     end
       create_group(args, parent_group)
     end

@@ -98,8 +98,8 @@ class CreateProjectMutationTest < ActiveSupport::TestCase
     group = Group.last
     # Top level group
     assert_equal parent_group.to_global_id, group.parent.to_global_id
-    assert_equal 'new_group_one', group.path
-    assert_equal 'group-1/new_group_one', group.full_path
+    assert_equal 'new-group-one', group.path
+    assert_equal 'group-1/new-group-one', group.full_path
   end
 
   test 'createGroup mutation should work with valid params, parent group puid, and api scope token' do
@@ -125,8 +125,8 @@ class CreateProjectMutationTest < ActiveSupport::TestCase
     group = Group.last
     # Top level group
     assert_equal parent_group.puid, group.parent.puid
-    assert_equal 'new_group_one', group.path
-    assert_equal 'group-1/new_group_one', group.full_path
+    assert_equal 'new-group-one', group.path
+    assert_equal 'group-1/new-group-one', group.full_path
   end
 
   test 'createGroup mutation should work with valid params, no parent group id/puid, and api scope token' do
@@ -149,8 +149,8 @@ class CreateProjectMutationTest < ActiveSupport::TestCase
     group = Group.last
     # Top level group
     assert_equal nil, group.parent
-    assert_equal 'new_group_one', group.path
-    assert_equal 'new_group_one', group.full_path
+    assert_equal 'new-group-one', group.path
+    assert_equal 'new-group-one', group.full_path
   end
 
   test 'createGroup mutation should work with custom path' do
@@ -172,8 +172,8 @@ class CreateProjectMutationTest < ActiveSupport::TestCase
     assert_equal 'New Group Two Description', data['group']['description']
 
     group = Group.last
-    assert_equal 'my_custom_path', group.path
-    assert_equal 'my_custom_path', group.full_path
+    assert_equal 'my-custom-path', group.path
+    assert_equal 'my-custom-path', group.full_path
   end
 
   test 'createGroup mutation should not work with valid params, and api scope token with uploader access level' do
