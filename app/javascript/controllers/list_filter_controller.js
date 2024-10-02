@@ -2,22 +2,27 @@ import { Controller } from "@hotwired/stimulus";
 
 // Key code constants for keyboard events.
 const BACKSPACE = 8; // Represents the backspace key.
-const SPACE = 32;    // Represents the spacebar key.
-const COMMA = 188;   // Represents the comma key.
+const SPACE = 32; // Represents the spacebar key.
+const COMMA = 188; // Represents the comma key.
 
 export default class extends Controller {
   static targets = ["tags", "template", "input", "count"];
   static outlets = ["selection"];
   static values = { filters: { type: Array, default: [] } };
+  #originalState;
 
   connect() {
     this.idempotentConnect();
+    this.#originalState = this.tagsTarget.innerHTML;
   }
 
   idempotentConnect() {
-    this.filtersValue.filter(sample => sample.length > 0).forEach(sample => {
-      this.tagsTarget.insertBefore(this.#formatTag(sample), this.inputTarget);
-    });
+    this.filtersValue
+      .filter((sample) => sample.length > 0)
+      .forEach((sample) => {
+        this.tagsTarget.insertBefore(this.#formatTag(sample), this.inputTarget);
+      });
+
     this.#updateCount();
   }
 
@@ -61,6 +66,10 @@ export default class extends Controller {
       this.tagsTarget.removeChild(tag);
     }
     this.inputTarget.value = "";
+  }
+
+  cancel() {
+    this.tagsTarget.innerHTML = this.#originalState;
   }
 
   focus() {
