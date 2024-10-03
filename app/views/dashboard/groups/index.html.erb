@@ -14,23 +14,15 @@
     "
   >
     <div class="flex flex-row items-center ml-auto space-x-2 font-normal">
-      <%= search_form_for @q, url: dashboard_groups_url, html: { "data-controller": "filters", "data-turbo-permanent": "true" } do |f| %>
-        <%= f.label :name_or_puid_cont, "SEARCH", class: "sr-only" %>
-        <div class="relative lg:w-72">
-          <div
-            class="
-              absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
-            "
-          >
-            <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
-          </div>
-          <%= f.search_field :name_or_puid_cont,
-                         "data-action": "filters#submit",
-                         class:
-                           "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                         placeholder: t(:".search.placeholder") %>
-        </div>
-      <% end %>
+      <%= render SearchComponent.new(
+        query: @q,
+        url: dashboard_groups_url,
+        search_attribute: :name_or_puid_cont,
+        placeholder: t(:".search.placeholder"),
+        html: {
+          "data-turbo-permanent": "true",
+        },
+      ) %>
       <%= search_form_for @q, url: dashboard_groups_url, method: :post, html: { method: :post, "data-controller": "filters", "data-turbo": false } do %>
         <div class="flex flex-row items-center ml-auto space-x-2 font-normal py-1.5">
           <%= render Ransack::SortDropdownComponent.new(
