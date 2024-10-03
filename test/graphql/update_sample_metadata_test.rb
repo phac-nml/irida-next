@@ -283,4 +283,39 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     ]
     assert_equal expected_error, data['errors']
   end
+
+  test 'updateSampleMetadata mutation should convert data types to strings' do
+    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_SAMPLE_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { sampleId: @sample.to_global_id.to_s,
+                                              metadata: { anInteger: 1, aTrueBoolean: true, aFalseBoolean: false,
+                                                          aDate: Date.parse('2024-03-11'), anEmpty: '', aNil: nil } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['updateSampleMetadata']
+
+    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    assert_empty data['errors']
+    assert_not_empty data['status']
+    assert_not_empty data['status'][:added]
+
+    assert data['status'][:added].include?('aninteger')
+    assert data['status'][:added].include?('atrueboolean')
+    assert data['status'][:added].include?('afalseboolean')
+    assert data['status'][:added].include?('adate')
+    assert_not data['status'][:added].include?('anempty')
+    assert_not data['status'][:added].include?('anil')
+
+    assert_not_empty data['sample']
+    assert_not_empty data['sample']['metadata']
+    assert_not_empty data['sample']['metadata']['aninteger']
+    assert_equal '1', data['sample']['metadata']['aninteger']
+    assert_not_empty data['sample']['metadata']['atrueboolean']
+    assert_equal 'true', data['sample']['metadata']['atrueboolean']
+    assert_not_empty data['sample']['metadata']['afalseboolean']
+    assert_equal 'false', data['sample']['metadata']['afalseboolean']
+    assert_not_empty data['sample']['metadata']['adate']
+    assert_equal '2024-03-11', data['sample']['metadata']['adate']
+  end
 end
