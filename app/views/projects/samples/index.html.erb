@@ -57,7 +57,7 @@
                 },
                 class:
                   "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
               ) %>
             <% else %>
               <% dropdown.with_item(
@@ -114,12 +114,8 @@
     <% end %>
   <% end %>
 
-  <div class="flex">
-    <div
-      class="
-        inline-flex flex-grow mb-2 space-x-2 border border-red-200 dark:border-slate-700
-      "
-    >
+  <div class="flex mb-2">
+    <div class="inline-flex flex-grow space-x-2">
       <% if allowed_to?(:submit_workflow?, @project) || allowed_to?(:clone_sample?, @project) || allowed_to?(:transfer_sample?, @project) || allowed_to?(:export_data?, @project) %>
         <%= search_form_for(
                   @q,
@@ -148,11 +144,7 @@
         <% end %>
       <% end %>
     </div>
-    <div
-      class="
-        flex space-x-2 border grow-0 border-slate-200 dark:border-slate-700
-      "
-    >
+    <div class="flex grow-0">
       <%= render SearchComponent.new(
         query: @q,
         url: search_namespace_project_samples_url,
