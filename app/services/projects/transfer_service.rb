@@ -6,7 +6,7 @@ module Projects
     TransferError = Class.new(StandardError)
     attr_reader :new_namespace, :old_namespace
 
-    def execute(new_namespace) # rubocop:disable Metrics/AbcSize
+    def execute(new_namespace) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       @new_namespace = new_namespace
       @old_namespace = @project.parent
 

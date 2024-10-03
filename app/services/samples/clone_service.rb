@@ -31,7 +31,7 @@ module Samples
       raise CloneError, I18n.t('services.samples.clone.same_project')
     end
 
-    def clone_samples(sample_ids)
+    def clone_samples(sample_ids) # rubocop:disable Metrics/AbcSize
       cloned_sample_ids = {}
       cloned_sample_puids = {}
 
