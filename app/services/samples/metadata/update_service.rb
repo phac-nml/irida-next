@@ -77,6 +77,7 @@ module Samples
 
       def perform_metadata_update
         @metadata.each do |key, value|
+          value = value.to_s # remove data types
           if value.blank?
             if @sample.metadata.key?(key)
               @sample.metadata.delete(key)
