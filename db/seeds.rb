@@ -73,22 +73,22 @@ def seed_namespace_group_links(user, namespace, group, group_access_level)
                                      expires_at: @namespace_group_link_expiry_date }).execute
 end
 
-def fake_metadata # rubocop:disable Metrics/MethodLength
+def fake_metadata # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   indsc_abbr = %w[SRR ERR DRR]
   random_abbr = indsc_abbr.sample
-  random_date = Faker::Date.between(from: 2.years.ago.to_s, to: Time.zone.today)
+  random_date = Faker::Date.between(from: 2.years.ago.to_s, to: Time.zone.today).to_s
 
   {
-    'WGS_id' => Faker::Number.number(digits: 10),
+    'WGS_id' => Faker::Number.number(digits: 10).to_s,
     'NCBI_ACCESSION' => "NM_#{Faker::Number.decimal(l_digits: 7, r_digits: 1)}",
     'country' => Faker::Address.country,
     'food' => Faker::Food.dish,
     'gender' => Faker::Gender.binary_type,
-    'age' => Faker::Number.between(from: 1, to: 100),
+    'age' => Faker::Number.between(from: 1, to: 100).to_s,
     'onset' => random_date,
     'earliest_date' => random_date,
     'patient_sex' => Faker::Gender.binary_type,
-    'patient_age' => Faker::Number.between(from: 1, to: 100),
+    'patient_age' => Faker::Number.between(from: 1, to: 100).to_s,
     'insdc_accession' => "#{random_abbr}#{Faker::Number.number(digits: 8)}"
   }
 end
