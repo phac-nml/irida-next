@@ -42,24 +42,34 @@
     <%= tabs.with_tab(url: namespace_project_members_path(tab: "invited_groups"), controls: "project-members", selected: @tab == "invited_groups") do %>
       <%= t(:"projects.members.index.tabs.groups") %>
     <% end %>
-    <% if @tab == "invited_groups" %>
-      <%= tabs.with_search_bar(
-        q: @q,
-        url: namespace_project_group_links_url(**request.query_parameters),
-        search_attribute: :group_name_cont,
-        placeholder: t(".search.groups.placeholder"),
-        tab: @tab,
-      ) %>
-    <% else %>
-      <%= tabs.with_search_bar(
-        q: @q,
-        url: namespace_project_members_url(**request.query_parameters),
-        search_attribute: :user_email_cont,
-        placeholder: t(".search.placeholder"),
-        tab: @tab,
-      ) %>
-    <% end %>
+
     <%= tabs.with_tab_content do %>
+      <div class="flex my-2">
+        <div class="grow"></div>
+        <div class="shrink-0">
+          <% if @tab == "invited_groups" %>
+            <%= render SearchComponent.new(
+          query: @q,
+          url: namespace_project_group_links_url(**request.query_parameters),
+          search_attribute: :group_name_cont,
+          placeholder: t(".search.groups.placeholder"),
+        ) do %>
+              <input type="hidden" name="tab" value="invited_groups"/>
+              <input type="hidden" name="format" value="turbo_stream"/>
+            <% end %>
+          <% else %>
+            <%= render SearchComponent.new(
+          query: @q,
+          url: namespace_project_members_url(**request.query_parameters),
+          search_attribute: :user_email_cont,
+          placeholder: t(".search.placeholder"),
+        ) do %>
+              <input type="hidden" name="tab" value=""/>
+              <input type="hidden" name="format" value="turbo_stream"/>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
       <div class="flex flex-col">
         <%= turbo_frame_tag "members", "data-turbo-temporary": true,
                             src:
