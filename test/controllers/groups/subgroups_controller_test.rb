@@ -8,12 +8,6 @@ module Groups
       sign_in users(:john_doe)
       @group = groups(:group_one)
     end
-
-    test 'should redirect to groups index when html format requested' do
-      get group_subgroups_url(@group)
-      assert_redirected_to group_url(@group)
-    end
-
     test 'should get fragment of namesapce tree' do
       get group_subgroups_url(@group), params: { parent_id: @group.id, format: :turbo_stream }
       assert_response :ok

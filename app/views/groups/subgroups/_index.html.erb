@@ -1,0 +1,20 @@
+<div class="space-y-2">
+
+  <% if @namespaces.length > 0 %>
+    <%= render NamespaceTreeContainerComponent.new(
+      namespaces: @namespaces,
+      path: "group_subgroups_path",
+      path_args: {
+        group_id: @group.full_path,
+      },
+      type: [Group.sti_name, Namespaces::ProjectNamespace.sti_name],
+    ) %>
+    <%= render Viral::Pagy::FullComponent.new(@pagy, item: "Subgroups and projects") %>
+  <% else %>
+    <%= viral_empty(
+      title: t(:"groups.show.subgroups.no_subgroups.title"),
+      description: t(:"groups.show.subgroups.no_subgroups.description"),
+      icon_name: :squares_2x2,
+    ) %>
+  <% end %>
+</div>

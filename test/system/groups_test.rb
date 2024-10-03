@@ -132,11 +132,9 @@ class GroupsTest < ApplicationSystemTestCase
     click_on I18n.t('groups.sidebar.settings')
     click_link I18n.t('groups.sidebar.general')
 
-    within all('form[action="/group-1"]')[0] do
-      fill_in I18n.t('activerecord.attributes.group.name'), with: group_name
-      fill_in I18n.t('activerecord.attributes.group.description'), with: group_description
-      click_on I18n.t('groups.edit.details.submit')
-    end
+    fill_in I18n.t('activerecord.attributes.group.name'), with: group_name
+    fill_in I18n.t('activerecord.attributes.group.description'), with: group_description
+    click_on I18n.t('groups.edit.details.submit')
 
     assert_text I18n.t('groups.update.success', group_name:)
 
@@ -389,7 +387,9 @@ class GroupsTest < ApplicationSystemTestCase
     assert_selector 'h1', text: @group.name
 
     assert_selector 'a.active', text: I18n.t(:'groups.show.tabs.subgroups_and_projects')
-    assert_selector 'li.namespace-entry', count: 21
+    assert_selector 'li.namespace-entry', count: 20
+    click_on I18n.t(:'components.pagination.next')
+    assert_selector 'li.namespace-entry', count: 1
 
     click_on I18n.t(:'groups.show.tabs.shared_namespaces')
     assert_selector 'a.active', text: I18n.t(:'groups.show.tabs.shared_namespaces')
@@ -402,5 +402,13 @@ class GroupsTest < ApplicationSystemTestCase
     click_on I18n.t(:'groups.show.tabs.shared_namespaces')
     assert_selector 'div.namespace-entry-contents', count: 0
     assert_text I18n.t('groups.show.shared_namespaces.no_shared.title')
+  end
+
+  test 'search subgroups and projects' do
+    @group = groups(:group_one)
+    visit group_url(@group)
+    assert_text I18n.t(:'components.pagination.next')
+    fill_in I18n.t('general.search.name_puid'), with: 'project 2'
+    assert_selector 'li.namespace-entry', count: 5
   end
 end

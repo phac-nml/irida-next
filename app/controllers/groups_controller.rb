@@ -15,6 +15,14 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def show
     authorize! @group, to: :read?
+
+    @q = if flat_list_requested?
+           namespace_descendants.ransack(params[:q])
+         else
+           namespace_children.ransack(params[:q])
+         end
+    set_default_sort
+    @pagy, @namespaces = pagy(@q.result.include_route)
   end
 
   def new
@@ -105,6 +113,14 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   private
 
+  def set_default_sort
+    @q.sorts = 'created_at desc' if @q.sorts.empty?
+  end
+
+  def flat_list_requested?
+    params.dig(:q, :name_or_puid_cont).present?
+  end
+
   def parent_group
     @group = Group.find(params[:parent_id]) if params[:parent_id]
   end
@@ -128,6 +144,11 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
         Namespaces::ProjectNamespace.sti_name, Group.sti_name
       ]
     )
+  end
+
+  def namespace_descendants
+    @group.self_and_descendants_of_type([Namespaces::ProjectNamespace.sti_name,
+                                         Group.sti_name])
   end
 
   def resolve_layout

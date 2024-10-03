@@ -4,15 +4,19 @@
 class NamespaceTreeContainerComponent < ViewComponent::Base
   erb_template <<-ERB
       <div class="namespace-tree-container">
-        <%= render NamespaceTree::NamespaceTreeComponent.new(namespaces: @namespaces, path: @path, path_args: @path_args, type: @type, render_flat_list: @render_flat_list) %>
+        <%= render NamespaceTree::NamespaceTreeComponent.new(namespaces: @namespaces, path: @path, path_args: @path_args, type: @type, render_flat_list: @render_flat_list, icon_size: @icon_size) %>
       </div>
   ERB
 
-  def initialize(namespaces:, path: nil, path_args: {}, type: Group.sti_name, render_flat_list: false)
+  # rubocop: disable Metrics/ParameterLists
+  def initialize(namespaces:, path: nil, path_args: {}, type: Group.sti_name, render_flat_list: false,
+                 icon_size: :small)
     @namespaces = namespaces
     @path = path
     @path_args = path_args
     @type = type
     @render_flat_list = render_flat_list
+    @icon_size = icon_size
   end
+  # rubocop: enable Metrics/ParameterLists
 end

@@ -6,13 +6,7 @@
 >
   <div
     class="
-      flex
-      items-center
-      w-full
-      py-3
-      pr-3
-      text-left
-      namespace-entry-contents
+      flex items-center w-full py-3 pr-3 text-left namespace-entry-contents
     "
     data-action="click->groups--row#toggle"
     aria-label="<%= t(:'dashboard.groups.index.row_aria_label', name: @namespace.name) %>"
@@ -32,7 +26,8 @@
       namespace: @namespace,
       path: @path,
       path_args: @path_args,
-      collapsed: @collapsed
+      collapsed: @collapsed,
+      icon_size: @icon_size,
     ) %>
   </div>
   <% unless @collapsed %>
@@ -41,7 +36,8 @@
       namespaces: @children,
       path: @path,
       path_args: @path_args,
-      type: @type
+      type: @type,
+      icon_size: @icon_size,
     ) %>
   <% end %>
 </li>

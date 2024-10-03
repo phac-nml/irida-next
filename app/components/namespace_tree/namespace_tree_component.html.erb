@@ -1,4 +1,4 @@
-<ul class="groups-list namespace-list-tree flex flex-col">
+<ul class="flex flex-col groups-list namespace-list-tree">
   <%= render NamespaceTree::RowComponent.with_collection(
     namespaces,
     path: path,
@@ -6,5 +6,6 @@
     type: @type,
     collapsed: collapsed,
     render_flat_list: render_flat_list,
+    icon_size: icon_size,
   ) %>
 </ul>
