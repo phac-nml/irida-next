@@ -74,7 +74,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_03_125314) do
     t.jsonb "log_data"
     t.uuid "attachable_id", null: false
     t.string "puid", null: false
-    t.index "((lower((metadata)::text))::jsonb)", name: "index_attachments_on_metadata", using: :gin
+    t.index "((lower((metadata)::text))::jsonb)", name: "index_attachments_on_metadata_ci", using: :gin
     t.index ["attachable_id"], name: "index_attachments_on_attachable_id"
     t.index ["created_at"], name: "index_attachments_on_created_at"
     t.index ["puid"], name: "index_attachments_on_puid"
@@ -238,7 +238,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_03_125314) do
     t.string "puid", null: false
     t.uuid "project_id", null: false
     t.datetime "attachments_updated_at"
-    t.index "((lower((metadata)::text))::jsonb)", name: "index_samples_on_metadata", using: :gin
+    t.index "((lower((metadata)::text))::jsonb)", name: "index_samples_on_metadata_ci", using: :gin
     t.index ["created_at"], name: "index_samples_on_created_at"
     t.index ["deleted_at"], name: "index_samples_on_deleted_at"
     t.index ["id", "project_id"], name: "index_samples_on_id_and_project_id", unique: true
