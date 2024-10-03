@@ -3,7 +3,7 @@
 module Projects
   # Service used to Delete Projects
   class DestroyService < BaseProjectService
-    def execute
+    def execute # rubocop:disable Metrics/AbcSize
       authorize! project, to: :destroy?
 
       project.namespace.destroy!
