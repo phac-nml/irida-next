@@ -192,10 +192,34 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     assert_equal 4, data.count
   end
 
+  test 'ransack samples query with metadata_jcont_key filter should work ignoring case' do
+    result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
+                                 context: { current_user: @user },
+                                 variables: { filter: { metadata_jcont_key: 'MetadataField1' } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['samples']['nodes']
+
+    assert_equal 4, data.count
+  end
+
   test 'ransack samples query with metadata_jcont filter should work' do
     result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
                                  context: { current_user: @user },
                                  variables: { filter: { metadata_jcont: { metadatafield1: 'value1' } } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['samples']['nodes']
+
+    assert_equal 4, data.count
+  end
+
+  test 'ransack samples query with metadata_jcont filter should work ignoring case' do
+    result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
+                                 context: { current_user: @user },
+                                 variables: { filter: { metadata_jcont: { MetadataField1: 'Value1' } } })
 
     assert_nil result['errors'], 'should work and have no errors.'
 

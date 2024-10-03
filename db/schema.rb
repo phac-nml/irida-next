@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_25_155747) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_03_125314) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -74,9 +74,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_25_155747) do
     t.jsonb "log_data"
     t.uuid "attachable_id", null: false
     t.string "puid", null: false
+    t.index "((lower((metadata)::text))::jsonb)", name: "index_attachments_on_metadata_ci", using: :gin
     t.index ["attachable_id"], name: "index_attachments_on_attachable_id"
     t.index ["created_at"], name: "index_attachments_on_created_at"
-    t.index ["metadata"], name: "index_attachments_on_metadata", using: :gin
     t.index ["puid"], name: "index_attachments_on_puid"
   end
 
@@ -238,10 +238,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_25_155747) do
     t.string "puid", null: false
     t.uuid "project_id", null: false
     t.datetime "attachments_updated_at"
+    t.index "((lower((metadata)::text))::jsonb)", name: "index_samples_on_metadata_ci", using: :gin
     t.index ["created_at"], name: "index_samples_on_created_at"
     t.index ["deleted_at"], name: "index_samples_on_deleted_at"
     t.index ["id", "project_id"], name: "index_samples_on_id_and_project_id", unique: true
-    t.index ["metadata"], name: "index_samples_on_metadata", using: :gin
     t.index ["metadata_provenance"], name: "index_samples_on_metadata_provenance", using: :gin
     t.index ["name", "project_id"], name: "index_sample_name_with_project", unique: true, where: "(deleted_at IS NULL)"
     t.index ["project_id"], name: "index_samples_on_project_id"
