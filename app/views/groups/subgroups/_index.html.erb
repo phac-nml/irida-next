@@ -1,21 +1,5 @@
 <div class="space-y-2">
-  <div class="flex flex-row-reverse">
-    <%= search_form_for @q, url: group_path(@group), html: { "data-turbo-permanent": "true", "data-controller": "filters" } do |f| %>
-      <%= f.label :name_or_puid_cont, t("general.search.name_puid"), class: "sr-only" %>
-      <div class="relative lg:w-72">
-        <div
-          class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none "
-        >
-          <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
-        </div>
-        <%= f.search_field :name_or_puid_cont,
-                       "data-action": "filters#submit",
-                       class:
-                         "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                       placeholder: t("general.search.name_puid") %>
-      </div>
-    <% end %>
-  </div>
+
   <% if @namespaces.length > 0 %>
     <%= render NamespaceTreeContainerComponent.new(
       namespaces: @namespaces,
