@@ -1393,7 +1393,7 @@ module Projects
       assert_text I18n.t('projects.samples.metadata.fields.update.success')
       assert_no_text 'value1'
       assert_text 'metadatafield1'
-      assert_text 'newMetadataValue'
+      assert_text 'newmetadatavalue'
     end
 
     test 'update both metadata key and value at same time' do
@@ -1422,7 +1422,7 @@ module Projects
       assert_no_text 'metadatafield1'
       assert_no_text 'value1'
       assert_text 'newmetadatakey' # NOTE: downcase
-      assert_text 'newMetadataValue'
+      assert_text 'newmetadatavalue'
     end
 
     test 'cannot update metadata key with key that already exists' do
@@ -1597,7 +1597,7 @@ module Projects
         click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
       end
 
-      assert_selector 'table thead tr th', count: 9
+      assert_selector 'table thead tr th', count: 10
     end
 
     test 'should not import metadata via invalid file type' do

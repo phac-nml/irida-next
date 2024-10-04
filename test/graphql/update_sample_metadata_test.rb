@@ -284,12 +284,13 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     assert_equal expected_error, data['errors']
   end
 
-  test 'updateSampleMetadata mutation should convert data types to strings' do
+  test 'updateSampleMetadata mutation should convert keys and values to strings and lower case them' do
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_SAMPLE_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
                                  variables: { sampleId: @sample.to_global_id.to_s,
-                                              metadata: { integer: 1, true_boolean: true, false_boolean: false,
-                                                          date: Date.parse('2024-03-11'), empty: '', nil: nil } })
+                                              metadata: { integer: 1, True_Boolean: true, false_boolean: false,
+                                                          date: Date.parse('2024-03-11'), string: 'A Test', empty: '',
+                                                          nil: nil } })
     # Question: Do we want to handle & test nested JSON?
 
     assert_nil result['errors'], 'should work and have no errors.'
@@ -305,6 +306,7 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     assert data['status'][:added].include?('true_boolean')
     assert data['status'][:added].include?('false_boolean')
     assert data['status'][:added].include?('date')
+    assert data['status'][:added].include?('string')
     assert_not data['status'][:added].include?('empty')
     assert_not data['status'][:added].include?('nil')
 
@@ -319,6 +321,8 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     assert_equal 'false', data['sample']['metadata']['false_boolean']
     assert data['sample']['metadata'].include?('date')
     assert_equal '2024-03-11', data['sample']['metadata']['date']
+    assert data['sample']['metadata'].include?('string')
+    assert_equal 'a test', data['sample']['metadata']['string']
     assert_not data['sample']['metadata'].include?('empty')
     assert_not data['sample']['metadata'].include?('nil')
   end

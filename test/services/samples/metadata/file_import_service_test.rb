@@ -139,13 +139,15 @@ module Samples
         xls = File.new('test/fixtures/files/metadata/valid.xls', 'r')
         params = { file: xls, sample_id_column: 'sample_name' }
         response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, params).execute
-        assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
+        assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3 metadatafield4],
                                           updated: [], deleted: [], not_updated: [], unchanged: [] },
-                       @sample2.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
+                       @sample2.name => { added: %w[metadatafield1 metadatafield2 metadatafield3 metadatafield4],
                                           updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
-        assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '2024-01-04', 'metadatafield3' => 'true' },
+        assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '2024-01-04', 'metadatafield3' => 'true',
+                       'metadatafield4' => 'a test' },
                      @sample1.reload.metadata)
-        assert_equal({ 'metadatafield1' => '15', 'metadatafield2' => '2024-12-31', 'metadatafield3' => 'false' },
+        assert_equal({ 'metadatafield1' => '15', 'metadatafield2' => '2024-12-31', 'metadatafield3' => 'false',
+                       'metadatafield4' => 'another test' },
                      @sample2.reload.metadata)
       end
 
@@ -155,13 +157,15 @@ module Samples
         xlsx = File.new('test/fixtures/files/metadata/valid.xlsx', 'r')
         params = { file: xlsx, sample_id_column: 'sample_name' }
         response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, params).execute
-        assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
+        assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3 metadatafield4],
                                           updated: [], deleted: [], not_updated: [], unchanged: [] },
-                       @sample2.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
+                       @sample2.name => { added: %w[metadatafield1 metadatafield2 metadatafield3 metadatafield4],
                                           updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
-        assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '2024-01-04', 'metadatafield3' => 'true' },
+        assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '2024-01-04', 'metadatafield3' => 'true',
+                       'metadatafield4' => 'a test' },
                      @sample1.reload.metadata)
-        assert_equal({ 'metadatafield1' => '15', 'metadatafield2' => '2024-12-31', 'metadatafield3' => 'false' },
+        assert_equal({ 'metadatafield1' => '15', 'metadatafield2' => '2024-12-31', 'metadatafield3' => 'false',
+                       'metadatafield4' => 'another test' },
                      @sample2.reload.metadata)
       end
 
