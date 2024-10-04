@@ -483,7 +483,7 @@ module Projects
       Project.reset_counters(project38.id, :samples_count)
       visit namespace_project_samples_url(namespace17, project38)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 200,
-                                                                           locale: user.locale))
+                                                                           locale: @user.locale))
 
       click_button I18n.t(:'projects.samples.index.select_all_button')
 
@@ -512,8 +512,8 @@ module Projects
       Project.reset_counters(project2.id, :samples_count)
       visit namespace_project_samples_url(namespace1, project2)
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 200,
-                                                                           locale: user.locale))
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 220,
+                                                                           locale: @user.locale))
 
       click_button I18n.t(:'projects.samples.index.select_all_button')
 
