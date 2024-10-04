@@ -183,10 +183,10 @@ class CreateProjectMutationTest < ActiveSupport::TestCase
 
     assert_not_empty data, 'createProject should be populated when no authorization errors'
     assert_not_empty data['errors']
-    assert_empty data['project']
+    assert_nil data['project']
 
     assert_equal 1, data['errors'].count
-    expected_error = { path: ['project', 'namespace.path'], message: 'Namespace Path is not valid' }
+    expected_error = { 'path' => ['project', 'namespace.path'], 'message' => 'Namespace Path is not valid' }
 
     assert_equal expected_error, data['errors'][0]
   end
