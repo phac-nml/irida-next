@@ -87,11 +87,7 @@ module Groups
         updated_params[:s] = default_sort
         update_store(search_key, updated_params)
       end
-      query_parser = Irida::SearchSyntax::Ransack.new(text: :name_or_puid_cont,
-                                                      # params: { project: 'project_namespace_puid' },
-                                                      metadata_fields: @fields)
-      parsed_params = query_parser.parse(@search_params.fetch(:name_or_puid_cont, nil))
-      updated_params.except(:name_or_puid_cont).merge(parsed_params)
+      updated_params
     end
 
     def search_key
