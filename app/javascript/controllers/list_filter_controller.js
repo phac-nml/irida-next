@@ -75,14 +75,10 @@ export default class extends Controller {
     }
 
     // Get all the text in the tagsTarget
-    const tags = this.tagsTarget.querySelectorAll("span.search-tag");
-    const text = Array.from(tags).map(
-      (tag) => tag.querySelector(".label").innerText,
-    );
-    if (this.inputTarget.value.length > 0) {
-      text.push(this.inputTarget.value);
-      this.inputTarget.value = "";
-    }
+    const inputs = this.tagsTarget.querySelectorAll("input");
+    const text = Array.from(inputs)
+      .filter(Boolean)
+      .map((tag) => tag.value);
     this.filtersValue = text;
 
     this.#updateCount();

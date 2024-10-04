@@ -2591,7 +2591,7 @@ module Projects
 
     def long_filter_text
       text = (1..500).map { |n| "sample#{n}" }.join(', ')
-      "#{text}, #{@sample1.puid}" # Need to comma to force the tag to be created
+      "#{text}, #{@sample1.name}" # Need to comma to force the tag to be created
     end
   end
 end
