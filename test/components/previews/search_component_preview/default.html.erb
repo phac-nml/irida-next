@@ -1,6 +1,6 @@
 <%= render SearchComponent.new(
-  Member.ransack,
-  url,
-  :user_email_cont,
-  "a placeholder",
+  q: Member.ransack,
+  url: url,
+  search_attribute: :user_email_cont,
+  placeholder: "a placeholder",
 ) %>

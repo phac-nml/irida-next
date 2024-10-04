@@ -1,5 +1,4 @@
 import { Controller } from "@hotwired/stimulus";
-import { Tooltip } from "flowbite";
 
 export default class extends Controller {
   static targets = ["button", "content"];

@@ -2,20 +2,21 @@
 import "@hotwired/turbo-rails";
 import "controllers";
 import * as ActiveStorage from "@rails/activestorage";
-import LocalTime from "local-time"
+import LocalTime from "local-time";
+import "flowbite";
 
-LocalTime.start()
+LocalTime.start();
 ActiveStorage.start();
 
 document.addEventListener("turbo:morph", () => {
-  LocalTime.run()
-})
+  LocalTime.run();
+});
 
 Turbo.setConfirmMethod((message, element) => {
   const dialog = document.getElementById("turbo-confirm");
   if (!dialog) {
     console.error(
-      "Missing #turbo-confirm dialog. Please add it to your layout."
+      "Missing #turbo-confirm dialog. Please add it to your layout.",
     );
   }
 
@@ -59,7 +60,7 @@ Turbo.setConfirmMethod((message, element) => {
         dialog.innerHTML = defaultState;
         resolve(dialog.returnValue === "confirm");
       },
-      { once: true }
+      { once: true },
     );
   });
 });

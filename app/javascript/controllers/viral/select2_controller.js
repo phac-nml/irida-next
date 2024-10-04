@@ -1,10 +1,17 @@
 import { Controller } from "@hotwired/stimulus";
-import { Dropdown } from "flowbite";
 
 export default class extends Controller {
-  static targets = ["input", "hidden", "dropdown", "scroller", "item", "empty", "submitButton"];
+  static targets = [
+    "input",
+    "hidden",
+    "dropdown",
+    "scroller",
+    "item",
+    "empty",
+    "submitButton",
+  ];
   #found = false;
-  #storedInputvalue = ''
+  #storedInputvalue = "";
 
   connect() {
     this.dropdown = new Dropdown(this.dropdownTarget, this.inputTarget, {
@@ -62,14 +69,14 @@ export default class extends Controller {
   keyboardQuery(event) {
     event.preventDefault();
     const visible = this.itemTargets.filter(
-      (item) => !item.parentNode.classList.contains("hidden")
+      (item) => !item.parentNode.classList.contains("hidden"),
     );
     if (visible.length === 1) {
       this.select({
         params: {
           primary: visible[0].dataset["viral-Select2PrimaryParam"],
-          value: visible[0].dataset["viral-Select2ValueParam"]
-        }
+          value: visible[0].dataset["viral-Select2ValueParam"],
+        },
       });
     }
   }
