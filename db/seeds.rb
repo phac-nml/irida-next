@@ -35,7 +35,7 @@ end
   filename: 'reference.fasta'
 ).signed_id
 
-def seed_project(project_params:, creator:, namespace:)
+def seed_project(project_params:, creator:, namespace:) # rubocop:disable Metrics/MethodLength
   project = Projects::CreateService.new(creator,
                                         {
                                           namespace_attributes: project_params.slice(
@@ -52,8 +52,11 @@ def seed_project(project_params:, creator:, namespace:)
     end
   end
 
-  # seed the project samples
-  seed_samples(project, project_params[:sample_count]) if project_params[:sample_count]
+  # prevent sample broadcasts
+  Sample.suppressing_turbo_broadcasts do
+    # seed the project samples
+    seed_samples(project, project_params[:sample_count]) if project_params[:sample_count]
+  end
 end
 
 def seed_members(email, access_level, namespace)
@@ -100,8 +103,10 @@ def seed_samples(project, sample_count)
 
     # Add metadata
     Samples::Metadata::UpdateService.new(project, sample, project.creator, { 'metadata' => fake_metadata }).execute
-
-    seed_attachments(sample)
+    # prevent sample attachment broadcasts
+    Attachment.suppressing_turbo_broadcasts do
+      seed_attachments(sample)
+    end
   end
 end
 
@@ -134,7 +139,10 @@ def seed_group(group_params:, owner: nil, parent: nil) # rubocop:disable Metrics
   if group_params[:projects] # rubocop:disable Style/SafeNavigation
     group_params[:projects].each do |project_params|
       Rails.logger.info { "seeding... Group: #{group_params[:name]}, Project: #{project_params[:name]}" }
-      seed_project(project_params:, creator: owner, namespace: group)
+      # prevent project broadcasts
+      Project.suppressing_turbo_broadcasts do
+        seed_project(project_params:, creator: owner, namespace: group)
+      end
     end
   end
 
@@ -785,8 +793,14 @@ if Rails.env.development?
     seed_namespace_group_links(proj.namespace.owner, proj.namespace, direct_group_to_link_to_namespace,
                                Member::AccessLevel::ANALYST)
   end
-
-  seed_workflow_executions
-
-  seed_exports
+  # prevent workflow and workflow attachment broadcasts
+  Attachment.suppressing_turbo_broadcasts do
+    WorkflowExecution.suppressing_turbo_broadcasts do
+      seed_workflow_executions
+    end
+  end
+  # prevent data export broadcasts
+  DataExport.suppressing_turbo_broadcasts do
+    seed_exports
+  end
 end
