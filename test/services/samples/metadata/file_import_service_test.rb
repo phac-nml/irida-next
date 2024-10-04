@@ -143,10 +143,9 @@ module Samples
                                           updated: [], deleted: [], not_updated: [], unchanged: [] },
                        @sample2.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
                                           updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
-        # TODO: Fix decimal place formatting
-        assert_equal({ 'metadatafield1' => '10.0', 'metadatafield2' => '20.0', 'metadatafield3' => '30.0' },
+        assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '2024-01-04', 'metadatafield3' => 'true' },
                      @sample1.reload.metadata)
-        assert_equal({ 'metadatafield1' => '15.0', 'metadatafield2' => '25.0', 'metadatafield3' => '35.0' },
+        assert_equal({ 'metadatafield1' => '15', 'metadatafield2' => '2024-12-31', 'metadatafield3' => 'false' },
                      @sample2.reload.metadata)
       end
 
@@ -160,9 +159,9 @@ module Samples
                                           updated: [], deleted: [], not_updated: [], unchanged: [] },
                        @sample2.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
                                           updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
-        assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '20', 'metadatafield3' => '30' },
+        assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '2024-01-04', 'metadatafield3' => 'true' },
                      @sample1.reload.metadata)
-        assert_equal({ 'metadatafield1' => '15', 'metadatafield2' => '25', 'metadatafield3' => '35' },
+        assert_equal({ 'metadatafield1' => '15', 'metadatafield2' => '2024-12-31', 'metadatafield3' => 'false' },
                      @sample2.reload.metadata)
       end
 
