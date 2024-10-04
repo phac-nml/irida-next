@@ -128,6 +128,37 @@ module Groups
       assert_no_text @sample2.name
     end
 
+    test 'can search the list of samples by metadata field and value presence when metadata is toggled' do
+      visit group_samples_url(@group)
+      filter_text = 'metadatafield1:value1'
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+
+      assert_selector 'table tbody tr', count: 20
+      assert_text @sample1.name
+      assert_text @sample2.name
+
+      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+
+      assert_selector '#samples-table table thead tr th', count: 9
+      assert_selector 'div#limit-component button div span', text: '20'
+
+      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: filter_text
+
+      assert_selector '#samples-table table tbody tr', count: 1
+      assert_selector '#samples-table table thead tr th', count: 9
+      assert_selector 'div#limit-component button div span', text: '20'
+
+      assert_text @sample30.name
+      assert_no_text @sample1.name
+      assert_no_text @sample2.name
+    end
+
     test 'can sort the list of samples' do
       visit group_samples_url(@group)
 
