@@ -144,10 +144,10 @@ module Samples
                        @sample2.name => { added: %w[metadatafield1 metadatafield2 metadatafield3 metadatafield4],
                                           updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
         assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '2024-01-04', 'metadatafield3' => 'true',
-                       'metadatafield4' => 'a test' },
+                       'metadatafield4' => 'A Test' },
                      @sample1.reload.metadata)
         assert_equal({ 'metadatafield1' => '15', 'metadatafield2' => '2024-12-31', 'metadatafield3' => 'false',
-                       'metadatafield4' => 'another test' },
+                       'metadatafield4' => 'Another Test' },
                      @sample2.reload.metadata)
       end
 
@@ -162,10 +162,10 @@ module Samples
                        @sample2.name => { added: %w[metadatafield1 metadatafield2 metadatafield3 metadatafield4],
                                           updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
         assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '2024-01-04', 'metadatafield3' => 'true',
-                       'metadatafield4' => 'a test' },
+                       'metadatafield4' => 'A Test' },
                      @sample1.reload.metadata)
         assert_equal({ 'metadatafield1' => '15', 'metadatafield2' => '2024-12-31', 'metadatafield3' => 'false',
-                       'metadatafield4' => 'another test' },
+                       'metadatafield4' => 'Another Test' },
                      @sample2.reload.metadata)
       end
 

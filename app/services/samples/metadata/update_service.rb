@@ -70,7 +70,7 @@ module Samples
       def perform_metadata_update
         @metadata.each do |key, value|
           key = key.to_s.downcase
-          value = value.to_s.downcase # remove data types
+          value = value.to_s # remove data types
           if value.blank?
             if @sample.metadata.key?(key)
               @sample.metadata.delete(key)

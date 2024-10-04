@@ -322,7 +322,7 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     assert data['sample']['metadata'].include?('date')
     assert_equal '2024-03-11', data['sample']['metadata']['date']
     assert data['sample']['metadata'].include?('string')
-    assert_equal 'a test', data['sample']['metadata']['string']
+    assert_equal 'A Test', data['sample']['metadata']['string']
     assert_not data['sample']['metadata'].include?('empty')
     assert_not data['sample']['metadata'].include?('nil')
   end
