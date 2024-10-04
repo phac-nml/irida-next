@@ -158,7 +158,7 @@ class CreateProjectMutationTest < ActiveSupport::TestCase
                                  context: { current_user: @user, token: @api_scope_token },
                                  variables: { name: 'New Group Two',
                                               description: 'New Group Two Description',
-                                              path: 'My Custom Path' })
+                                              path: 'my-custom-path' })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
@@ -174,6 +174,27 @@ class CreateProjectMutationTest < ActiveSupport::TestCase
     group = Group.last
     assert_equal 'my-custom-path', group.path
     assert_equal 'my-custom-path', group.full_path
+  end
+
+  test 'createGroup mutation should not work with invalid custom path' do
+    result = IridaSchema.execute(CREATE_GROUP_MUTATION_WITH_CUSTOM_PATH,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { name: 'New Group Two',
+                                              description: 'New Group Two Description',
+                                              path: 'Invalid Custom Path' })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['createGroup']
+
+    assert_not_empty data, 'createGroup should be populated when no authorization errors'
+    assert_not_empty data['errors']
+    assert_nil data['group']
+
+    assert_equal 1, data['errors'].count
+    expected_error = { 'path' => %w[group path], 'message' => 'Namespace Path is not valid' }
+
+    assert_equal expected_error, data['errors'][0]
   end
 
   test 'createGroup mutation should not work with valid params, and api scope token with uploader access level' do
