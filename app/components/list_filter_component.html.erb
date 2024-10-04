@@ -3,9 +3,9 @@
   data-list-filter-selection-outlet="#samples-table"
   data-list-filter-filters-value="<%= filters.present? ? filters.to_s : '[]' %>"
 >
-  <%= viral_dialog(id: 'list-filter-dialog', closable: false) do |dialog| %>
+  <%= viral_dialog(id: 'list-filter-dialog') do |dialog| %>
     <%= dialog.with_trigger do %>
-      <%= viral_button(data: { action: "click->viral--dialog#open" }, aria: { label: t(:'components.list_filter.title') }, title: t(:'components.list_filter.title'), classes: "relative") do %>
+      <%= viral_button(data: { action: "list-filter#idempotentConnect viral--dialog#open" }, aria: { label: t(:'components.list_filter.title') }, title: t(:'components.list_filter.title'), classes: "relative") do %>
         <%= viral_icon(name: "document_magnifying_glass", classes: "w-5 h-5 inline-block") %>
         <div
           data-list-filter-target="count"
@@ -95,22 +95,5 @@
     <%= dialog.with_primary_action(
       "data-action": "list-filter#afterSubmit filters#submit viral--dialog#close",
     ) { t(:"components.list_filter.apply") } %>
-
-    <%= dialog.with_secondary_action(
-    ) do %>
-      <button
-        type="button"
-        class="
-          py-2.5 px-5 text-sm font-medium text-slate-900 focus:outline-none bg-white
-          rounded-lg border border-slate-200 hover:bg-slate-100 hover:text-primary-700
-          focus:z-10 focus:ring-4 focus:ring-slate-100 dark:focus:ring-slate-700
-          dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600
-          dark:hover:text-white dark:hover:bg-slate-700
-        "
-        data-action="click->list-filter#cancel viral--dialog#close"
-      >
-        <%= t(:"components.list_filter.close") %>
-      </button>
-    <% end %>
   <% end %>
 </div>

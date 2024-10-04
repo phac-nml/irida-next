@@ -344,7 +344,6 @@ fr:
     list_filter:
       apply: Apply filter
       clear: Remove all tags
-      close: Cancel
       description: Paste a list of <kbd>,</kbd> separated sample names or identifiers
       remove_tag: Remove
       title: Filter by sample names or Id
