@@ -57,7 +57,7 @@
                 },
                 class:
                   "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
               ) %>
             <% else %>
               <% dropdown.with_item(
@@ -126,7 +126,12 @@
                 ) do |f| %>
             <input type="hidden" name="format" value="turbo_stream"/>
             <input type="hidden" name="select" value="on"/>
-            <input type="hidden" name="timestamp" value="<%=@timestamp%>"/>
+            <input
+              type="hidden"
+              name="timestamp"
+              value="<%=@timestamp%>"
+              data-turbo-temporary
+            >
             <%= f.submit t(".select_all_button"),
                      class: "button button--state-default button--size-default" %>
           <% end %>
@@ -168,6 +173,7 @@
                 <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
               </div>
               <%= f.search_field :name_or_puid_cont,
+                             value: @search_params[:name_or_puid_cont],
                              "data-action": "filters#submit",
                              class:
                                "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",

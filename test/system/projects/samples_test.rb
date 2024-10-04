@@ -482,6 +482,8 @@ module Projects
 
       Project.reset_counters(project38.id, :samples_count)
       visit namespace_project_samples_url(namespace17, project38)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 200,
+                                                                           locale: @user.locale))
 
       click_button I18n.t(:'projects.samples.index.select_all_button')
 
@@ -509,6 +511,9 @@ module Projects
 
       Project.reset_counters(project2.id, :samples_count)
       visit namespace_project_samples_url(namespace1, project2)
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 220,
+                                                                           locale: @user.locale))
 
       click_button I18n.t(:'projects.samples.index.select_all_button')
 
@@ -665,6 +670,48 @@ module Projects
       assert_selector 'mark', text: filter_text
       assert_no_text @sample2.name
       assert_no_text @sample3.name
+    end
+
+    test 'can search the list of samples by metadata field and value presence when metadata is toggled' do
+      visit namespace_project_samples_url(@namespace, @project)
+      filter_text = 'metadatafield1:value1'
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      assert_selector '#samples-table table tbody tr', count: 3
+      assert_text @sample1.name
+      assert_text @sample2.name
+      assert_text @sample3.name
+
+      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      assert_selector '#samples-table table tbody tr', count: 3
+      assert_selector '#samples-table table thead tr th', count: 8
+      assert_selector 'div#limit-component button div span', text: '20'
+
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: filter_text
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
+                                                                           locale: @user.locale))
+      assert_selector '#samples-table table tbody tr', count: 1
+      assert_field type: 'search', with: filter_text
+      assert_no_text @sample1.name
+      assert_no_text @sample2.name
+      assert_text @sample3.name
+
+      # Refresh the page to ensure the search is still active
+      visit namespace_project_samples_url(@namespace, @project)
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
+                                                                           locale: @user.locale))
+      assert_selector '#samples-table table tbody tr', count: 1
+      assert_field type: 'search', with: filter_text
+      assert_no_text @sample1.name
+      assert_no_text @sample2.name
+      assert_text @sample3.name
     end
 
     test 'can change pagination and then filter by name' do
