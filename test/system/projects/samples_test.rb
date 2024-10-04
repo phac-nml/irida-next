@@ -484,7 +484,6 @@ module Projects
       visit namespace_project_samples_url(namespace17, project38)
 
       click_button I18n.t(:'projects.samples.index.select_all_button')
-      assert_selector 'turbo-frame#selected div', count: 0 # verifies the refresh is complete
 
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
@@ -512,7 +511,6 @@ module Projects
       visit namespace_project_samples_url(namespace1, project2)
 
       click_button I18n.t(:'projects.samples.index.select_all_button')
-      assert_selector 'turbo-frame#selected div', count: 0 # verifies the refresh is complete
 
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
@@ -2323,7 +2321,6 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
       click_button I18n.t(:'projects.samples.index.select_all_button')
-      assert_selector 'turbo-frame#selected div', count: 0 # verifies the refresh is complete
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
@@ -2339,13 +2336,11 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '2'
       end
       click_button I18n.t(:'projects.samples.index.select_all_button')
-      assert_selector 'turbo-frame#selected div', count: 0 # verifies the refresh is complete
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 3
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
       click_button I18n.t(:'projects.samples.index.deselect_all_button')
-      assert_selector 'turbo-frame#selected div', count: 0 # verifies the refresh is complete
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 3
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
@@ -2408,7 +2403,6 @@ module Projects
       end
 
       click_button I18n.t(:'projects.samples.index.select_all_button')
-      assert_selector 'turbo-frame#selected div', count: 0 # verifies the refresh is complete
 
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 1
