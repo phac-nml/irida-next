@@ -21,8 +21,9 @@
     <% end %>
   <% end %>
 
-  <div class="flow-root">
-    <div class="flex flex-row-reverse mb-2">
+  <div class="flex mb-2">
+    <div class="grow"></div>
+    <div class="grow-0">
       <%= render SearchComponent.new(
         query: @q,
         search_attribute: :puid_or_file_blob_filename_cont,
@@ -32,7 +33,6 @@
         <%= hidden_field_tag :limit, @pagy.limit %>
         <%= render Ransack::HiddenSortFieldComponent.new(@q) %>
       <% end %>
-
     </div>
   </div>
   <%= render partial: "table",
