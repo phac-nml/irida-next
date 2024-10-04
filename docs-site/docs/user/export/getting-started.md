@@ -27,7 +27,7 @@ The following is required to create an export:
   * At least the Analyst role for the Project or Group containing the samples for export.
 * Analysis Export
   * User Workflow Execution
-    * A user workflow execution in the completed state
+    * A user workflow execution in the completed state.
   * Automated Workflow Execution
     * Project that has at least one automated workflow execution in the completed state.
     * At least the Analyst role for the project containing the automated workflow execution.
