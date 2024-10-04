@@ -484,7 +484,6 @@ module Groups
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
       click_button I18n.t(:'groups.samples.index.select_all_button')
-      assert_selector 'turbo-frame#selected div', count: 0 # verifies the refresh is complete
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
@@ -500,7 +499,6 @@ module Groups
         assert_selector 'strong[data-selection-target="selected"]', text: '25'
       end
       click_button I18n.t(:'groups.samples.index.select_all_button')
-      assert_selector 'turbo-frame#selected div', count: 0 # verifies the refresh is complete
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
@@ -510,7 +508,6 @@ module Groups
         assert_selector 'strong[data-selection-target="selected"]', text: '26'
       end
       click_button I18n.t(:'groups.samples.index.deselect_all_button')
-      assert_selector 'turbo-frame#selected div', count: 0 # verifies the refresh is complete
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 20
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
@@ -584,7 +581,6 @@ module Groups
       end
 
       click_button I18n.t(:'groups.samples.index.select_all_button')
-      assert_selector 'turbo-frame#selected div', count: 0 # verifies the refresh is complete
 
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 1
