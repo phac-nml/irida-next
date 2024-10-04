@@ -8,65 +8,33 @@
     subtitle: t(".subtitle", group_name: @group.name),
   ) do |component| %>
     <%= component.with_buttons do %>
-    <% if allowed_to?(:create_attachment?, @group) %>
-      <%= link_to t(".upload_files"),
-          new_group_attachment_path(id: @group.id),
-          data: {
-            turbo_frame: "attachment_modal",
-            turbo_stream: true,
-          },
-          class: "
-            inline-flex
-            items-center
-            justify-center
-            w-1/2
-            text-sm
-            border
-            rounded-md
-            cursor-pointer
-            sm:w-auto
-            focus:z-10
-            px-5
-            py-2.5
-            bg-white
-            text-slate-900
-            border-slate-200
-            focus:outline-none
-            hover:bg-slate-100
-            hover:text-slate-950
-            focus:ring-slate-200
-            dark:focus:ring-slate-700
-            dark:bg-slate-800
-            dark:text-slate-400
-            dark:border-slate-600
-            dark:hover:text-white
-            dark:hover:bg-slate-700
-          " %>
+      <% if allowed_to?(:create_attachment?, @group) %>
+        <%= link_to t(".upload_files"),
+        new_group_attachment_path(id: @group.id),
+        data: {
+          turbo_frame: "attachment_modal",
+          turbo_stream: true,
+        },
+        class:
+          "inline-flex items-center justify-center w-1/2 text-sm border rounded-md cursor-pointer sm:w-auto focus:z-10 px-5 py-2.5 bg-white text-slate-900 border-slate-200 focus:outline-none hover:bg-slate-100 hover:text-slate-950 focus:ring-slate-200 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700" %>
       <% end %>
     <% end %>
   <% end %>
 
   <div class="flow-root">
-    <div class="flex flex-row-reverse items-center mb-4 space-x-2">
-      <%= search_form_for @q, url: group_attachments_path(@group), html: { "data-controller": "filters", "data-turbo-action": "replace" } do |f| %>
-        <%= hidden_field_tag :limit, @pagy.limit %>
-        <%= f.hidden_field :s, value: "#{@q.sorts[0].name} #{@q.sorts[0].dir}" %>
-        <%= f.label :name_cont, "SEARCH", class: "sr-only" %>
-        <div class="relative lg:w-72">
-          <div
-            class="
-              absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
-            "
-          >
-            <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
-          </div>
-          <%= f.search_field :puid_or_file_blob_filename_cont,
-                         "data-action": "filters#submit",
-                         class:
-                           "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                         placeholder: t(:".search.placeholder") %>
-        </div>
-      <% end %>
+    <div class="flex mb-2">
+      <div class="grow"></div>
+      <div class="grow-0">
+        <%= render SearchComponent.new(
+        query: @q,
+        search_attribute: :puid_or_file_blob_filename_cont,
+        placeholder: t(:".search.placeholder"),
+        url: group_attachments_path(@group),
+      ) do %>
+          <%= hidden_field_tag :limit, @pagy.limit %>
+          <%= render Ransack::HiddenSortFieldComponent.new(@q) %>
+        <% end %>
+      </div>
     </div>
   </div>
   <%= render partial: "table",
@@ -76,6 +44,6 @@
     q: @q,
     namespace: @group,
     render_individual_attachments: @render_individual_attachments,
-    has_attachments: @has_attachments
+    has_attachments: @has_attachments,
   } %>
 </div>
