@@ -33,13 +33,13 @@ module Irida
                 result[key] = node[:value]
               end
               false
-            elsif @metadata_fields.include?(node[:name])
+            elsif @metadata_fields.include?(node[:name].downcase)
               # all metadata searching uses metadata_jcont ransacker
               key = 'metadata_jcont'
               search_value = {}
               search_value = JSON.parse(result[key]) if result.key?(key)
               # if we already processed a metadata field, ignore subsequent instances of field and push an error
-              if search_value.key?(node[:name])
+              if search_value.key?(node[:name].downcase)
                 errors.push(::SearchSyntax::DuplicateParamError.new(
                               name: node[:name],
                               start: node[:start],
@@ -47,7 +47,7 @@ module Irida
                             ))
               # else add it to the search_value hash and then transform back to a JSON string
               else
-                search_value[node[:name]] = node[:value]
+                search_value[node[:name].downcase] = node[:value]
                 result[key] = JSON.generate(search_value)
               end
               false
