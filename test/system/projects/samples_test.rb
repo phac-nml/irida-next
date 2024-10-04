@@ -692,7 +692,7 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 1
-      assert_text filter_text
+      assert_field type: 'search', with: filter_text
       assert_no_text @sample1.name
       assert_no_text @sample2.name
       assert_text @sample3.name
@@ -703,7 +703,7 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 1
-      assert_text filter_text
+      assert_field type: 'search', with: filter_text
       assert_no_text @sample1.name
       assert_no_text @sample2.name
       assert_text @sample3.name
