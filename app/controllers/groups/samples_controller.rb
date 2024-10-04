@@ -11,6 +11,7 @@ module Groups
     include Sortable
 
     def index
+      @timestamp = DateTime.current
       @pagy, @samples = pagy_with_metadata_sort(@q.result)
       @has_samples = authorized_samples.count.positive?
     end
@@ -26,7 +27,7 @@ module Groups
       respond_to do |format|
         format.turbo_stream do
           if params[:select].present?
-            @q = authorized_samples.ransack(search_params)
+            @q = authorized_samples.ransack(search_params.merge({ updated_at_lt: params[:timestamp] }))
             @selected_sample_ids = @q.result.select(:id).pluck(:id)
           end
         end

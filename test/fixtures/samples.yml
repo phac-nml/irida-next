@@ -353,3 +353,14 @@ sample_canceled_unclean_DELETE:
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
   attachments_updated_at: <%= 2.hours.ago %>
+
+
+<% (1..200).each do |n| %>
+bulk_sample<%= (n) %>:
+  name: <%= "Project 38 Sample #{n}" %>
+  description: <%= "Project 38 Sample #{n} description." %>
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project38, :uuid) %>
+  puid: <%= "INXT_SAM_AAAAAAAAC#{n}" %>
+  created_at: <%= n.weeks.ago %>
+  updated_at: <%= n.days.ago %>
+<% end %>

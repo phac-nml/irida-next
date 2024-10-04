@@ -101,7 +101,7 @@ class GroupPolicyTest < ActiveSupport::TestCase
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 
     # John Doe has access to 28 groups
-    assert_equal 32, scoped_groups.count
+    assert_equal 33, scoped_groups.count
 
     user = users(:david_doe)
     policy = GroupPolicy.new(user:)
@@ -117,7 +117,7 @@ class GroupPolicyTest < ActiveSupport::TestCase
 
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 
-    assert_equal 30, scoped_groups.count
+    assert_equal 31, scoped_groups.count
     scoped_groups_names = scoped_groups.pluck(:name)
     assert_not scoped_groups_names.include?(groups(:group_one).name)
     assert_not scoped_groups_names.include?(groups(:david_doe_group_four).name)
@@ -128,7 +128,7 @@ class GroupPolicyTest < ActiveSupport::TestCase
 
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 
-    assert_equal 29, scoped_groups.count
+    assert_equal 30, scoped_groups.count
     scoped_groups_names = scoped_groups.pluck(:name)
     assert_not scoped_groups_names.include?(groups(:namespace_group_link_group_one).name)
   end

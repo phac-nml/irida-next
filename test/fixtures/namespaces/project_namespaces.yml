@@ -302,7 +302,7 @@ project28_namespace:
   description: Project 28 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:david_doe_group_four, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:david_doe, :uuid) %>
-  metadata_summary: { "unique_metadata_field": 1}
+  metadata_summary: { "unique_metadata_field": 1 }
   puid: INXT_PRJ_AAAAAAAABA
 
 project29_namespace:
@@ -350,7 +350,7 @@ projectBravo_namespace:
   description: Project Bravo description
   type: Project
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_bravo, :uuid) %>
-  metadata_summary: {'metadatafield1': 1, 'metadatafield2': 1}
+  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   puid: INXT_PRJ_AAAAAAAABF
 
 projectCharlie_namespace:
@@ -470,6 +470,15 @@ project37_namespace:
   description: Project 37 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_sixteen, :uuid) %>
   puid: INXT_PRJ_AAAAAAACBC
+
+project38_namespace:
+  <<: *DEFAULTS
+  name: Project 38
+  path: project-38
+  description: Project 38 description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_seventeen, :uuid) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  puid: INXT_PRJ_AAAAAAACBF
 
 user29_project1_namespace:
   <<: *DEFAULTS

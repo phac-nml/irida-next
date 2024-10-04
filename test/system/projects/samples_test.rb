@@ -473,6 +473,54 @@ module Projects
       end
     end
 
+    test 'should update pagination & selection during transfer samples' do
+      namespace1 = groups(:group_one)
+      namespace17 = groups(:group_seventeen)
+      project38 = projects(:project38)
+      project2 = projects(:project2)
+      samples = [samples(:bulk_sample1), samples(:bulk_sample2)]
+
+      Project.reset_counters(project38.id, :samples_count)
+      visit namespace_project_samples_url(namespace17, project38)
+
+      click_button I18n.t(:'projects.samples.index.select_all_button')
+
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 200'
+        assert_selector 'strong[data-selection-target="selected"]', text: '200'
+      end
+
+      click_link I18n.t('projects.samples.index.transfer_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        assert_text I18n.t('projects.samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER', '200')
+        within %(turbo-frame[id="list_selections"]) do
+          samples.pluck(:puid, :name).each do |sample|
+            assert_text sample[0]
+            assert_text sample[1]
+          end
+        end
+        find('input#select2-input').click
+        find("button[data-viral--select2-primary-param='#{project2.full_path}']").click
+        click_on I18n.t('projects.samples.transfers.dialog.submit_button')
+      end
+
+      Project.reset_counters(project2.id, :samples_count)
+      visit namespace_project_samples_url(namespace1, project2)
+
+      click_button I18n.t(:'projects.samples.index.select_all_button')
+
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 220'
+        assert_selector 'strong[data-selection-target="selected"]', text: '220'
+      end
+    end
+
     test 'empty state of transfer sample project selection' do
       visit namespace_project_samples_url(@namespace, @project)
       within '#samples-table table tbody' do
@@ -2364,7 +2412,7 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '1'
       end
 
-      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: ' '
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: ' '
 
       within 'tfoot' do
         assert_text 'Samples: 3'

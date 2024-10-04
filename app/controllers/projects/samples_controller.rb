@@ -13,6 +13,7 @@ module Projects
     include Sortable
 
     def index
+      @timestamp = DateTime.current
       @pagy, @samples = pagy_with_metadata_sort(@q.result)
       @has_samples = @project.samples.size.positive?
     end
@@ -83,7 +84,7 @@ module Projects
       respond_to do |format|
         format.turbo_stream do
           if params[:select].present?
-            @q = load_samples.ransack(search_params)
+            @q = load_samples.ransack(search_params.merge({ updated_at_lt: params[:timestamp] }))
             @samples = @q.result.select(:id)
           end
         end

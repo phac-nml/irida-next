@@ -14,17 +14,17 @@ module Dashboard
       visit dashboard_projects_url
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
-      assert_text 'Displaying items 1-20 of 38 in total'
+      assert_text 'Displaying items 1-20 of 39 in total'
       assert_selector 'tr', count: 20
       assert_text @project.human_name
       assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
 
       click_on I18n.t(:'components.pagination.next')
-      assert_text 'Displaying items 21-38 of 38 in total'
-      assert_selector 'tr', count: 18
+      assert_text 'Displaying items 21-39 of 39 in total'
+      assert_selector 'tr', count: 19
       click_on I18n.t(:'components.pagination.previous')
-      assert_text 'Displaying items 1-20 of 38 in total'
+      assert_text 'Displaying items 1-20 of 39 in total'
       assert_selector 'tr', count: 20
 
       click_link @project.human_name
@@ -72,7 +72,7 @@ module Dashboard
       visit dashboard_projects_url
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
-      assert_text 'Displaying items 1-20 of 38 in total'
+      assert_text 'Displaying items 1-20 of 39 in total'
       assert_selector 'tr', count: 20
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.name
@@ -86,7 +86,7 @@ module Dashboard
       visit dashboard_projects_url
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
-      assert_text 'Displaying items 1-20 of 38 in total'
+      assert_text 'Displaying items 1-20 of 39 in total'
       assert_selector 'tr', count: 20
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.puid
@@ -98,7 +98,7 @@ module Dashboard
       visit dashboard_projects_url
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
-      assert_text 'Displaying items 1-20 of 38 in total'
+      assert_text 'Displaying items 1-20 of 39 in total'
       assert_selector 'tr', count: 20
       within('tbody tr:first-child') do
         assert_text @project.human_name
@@ -119,7 +119,7 @@ module Dashboard
       visit dashboard_projects_url
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
-      assert_text 'Displaying items 1-20 of 38 in total'
+      assert_text 'Displaying items 1-20 of 39 in total'
       assert_selector 'tr', count: 20
       within('tbody tr:first-child') do
         assert_text @project.human_name
@@ -146,7 +146,7 @@ module Dashboard
       visit dashboard_projects_url
 
       assert_selector 'h1', text: I18n.t(:'dashboard.projects.index.title')
-      assert_text 'Displaying items 1-20 of 38 in total'
+      assert_text 'Displaying items 1-20 of 39 in total'
       assert_selector 'tr', count: 20
       within('tbody tr:first-child') do
         assert_text @project.human_name
@@ -157,7 +157,7 @@ module Dashboard
       assert_no_text I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
       assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
 
-      assert_text 'Displaying items 1-20 of 38 in total'
+      assert_text 'Displaying items 1-20 of 39 in total'
       assert_selector 'tbody tr', count: 20
       within('tbody tr:first-child') do
         assert_text projects(:projectHotel).human_name
