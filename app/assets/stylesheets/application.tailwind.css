@@ -291,10 +291,6 @@ body {
     @apply p-5;
   }
 
-  .dialog--footer {
-    @apply flex items-center p-5 space-x-2 border-t rounded-b border-slate-200 dark:border-slate-600;
-  }
-
   .avatar {
     @apply relative inline-flex items-center justify-center flex-none overflow-hidden rounded-md text-slate-800 dark:text-slate-300;
     --tw-avatar-bg-lightness: 35%;
@@ -313,7 +309,9 @@ body {
   }
 
   /*GROUPS LIST TREE*/
-  .namespace-tree-container > .namespace-list-tree > .namespace-entry.has-children:first-child {
+  .namespace-tree-container
+    > .namespace-list-tree
+    > .namespace-entry.has-children:first-child {
     border-top: 0;
   }
 
@@ -367,7 +365,9 @@ body {
     @apply border-t-2 border-slate-200 dark:border-slate-600;
   }
 
-  .namespace-list-tree .namespace-list-tree .namespace-entry:last-child::before {
+  .namespace-list-tree
+    .namespace-list-tree
+    .namespace-entry:last-child::before {
     height: auto;
     top: 30px;
     bottom: 0;
@@ -390,7 +390,9 @@ body {
     @apply border-t border-slate-200 dark:border-slate-600;
   }
 
-  .namespace-list-tree .namespace-entry.has-children > .namespace-entry-contents:hover {
+  .namespace-list-tree
+    .namespace-entry.has-children
+    > .namespace-entry-contents:hover {
     @apply cursor-pointer border-slate-50 dark:border-slate-600 bg-slate-50 dark:bg-slate-600;
   }
 

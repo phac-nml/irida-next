@@ -2,8 +2,8 @@ import { Controller } from "@hotwired/stimulus";
 
 // Key code constants for keyboard events.
 const BACKSPACE = 8; // Represents the backspace key.
-const SPACE = 32;    // Represents the spacebar key.
-const COMMA = 188;   // Represents the comma key.
+const SPACE = 32; // Represents the spacebar key.
+const COMMA = 188; // Represents the comma key.
 
 export default class extends Controller {
   static targets = ["tags", "template", "input", "count"];
@@ -11,13 +11,18 @@ export default class extends Controller {
   static values = { filters: { type: Array, default: [] } };
 
   connect() {
-    this.idempotentConnect();
+    this.#updateCount();
   }
 
   idempotentConnect() {
-    this.filtersValue.filter(sample => sample.length > 0).forEach(sample => {
-      this.tagsTarget.insertBefore(this.#formatTag(sample), this.inputTarget);
-    });
+    this.clear();
+
+    this.filtersValue
+      .filter(Boolean)
+      .forEach((sample) =>
+        this.tagsTarget.insertBefore(this.#formatTag(sample), this.inputTarget),
+      );
+
     this.#updateCount();
   }
 
@@ -56,10 +61,7 @@ export default class extends Controller {
   }
 
   clear() {
-    const tags = this.tagsTarget.querySelectorAll(".search-tag");
-    for (const tag of tags) {
-      this.tagsTarget.removeChild(tag);
-    }
+    this.#clearTags();
     this.inputTarget.value = "";
   }
 
@@ -71,15 +73,25 @@ export default class extends Controller {
     if (this.hasSelectionOutlet) {
       this.selectionOutlet.clear();
     }
-    // check to see if there is any text in the input
-    if (this.inputTarget.value.length > 0) {
-      this.tagsTarget.insertBefore(
-        this.#formatTag(this.inputTarget.value),
-        this.inputTarget,
-      );
-      this.inputTarget.value = "";
-    }
+
+    // Get all the text in the tagsTarget
+    const inputs = this.tagsTarget.querySelectorAll("input");
+    const text = Array.from(inputs)
+      .filter(Boolean)
+      .map((tag) => tag.value);
+    this.filtersValue = text;
+
     this.#updateCount();
+  }
+
+  afterClose() {
+    this.clear();
+  }
+
+  #clearTags() {
+    while (this.tagsTarget.firstChild !== this.inputTarget) {
+      this.tagsTarget.firstChild.remove();
+    }
   }
 
   #handleBackspace(event) {
@@ -105,21 +117,21 @@ export default class extends Controller {
 
   #formatTag(item) {
     const clone = this.templateTarget.content.cloneNode(true);
-    clone.querySelector(".label").innerText = item;
-    clone.querySelector("input").value = item;
-    clone.querySelector("input").id = Date.now().toString(36);
+    const input = clone.querySelector("input");
+
+    clone.querySelector(".label").textContent = item;
+    input.value = item;
+    input.id = crypto.randomUUID();
+
     return clone;
   }
 
   #updateCount() {
-    const count = this.tagsTarget.querySelectorAll(".search-tag").length;
-    if (count > 0) {
-      this.countTarget.innerText = count;
-      this.countTarget.classList.remove("hidden");
-      this.countTarget.classList.add("inline-flex");
-    } else {
-      this.countTarget.classList.remove("inline-flex");
-      this.countTarget.classList.add("hidden");
-    }
+    const count = this.filtersValue.filter(
+      (sample) => sample.length > 0,
+    ).length;
+    this.countTarget.innerText = count;
+    this.countTarget.classList.toggle("hidden", count === 0);
+    this.countTarget.classList.toggle("inline-flex", count > 0);
   }
 }

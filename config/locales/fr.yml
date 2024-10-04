@@ -344,7 +344,7 @@ fr:
     list_filter:
       apply: Apply filter
       clear: Remove all tags
-      description: Paste a list of <kbd>,</kbd> seperated sample names or identifiers
+      description: Paste a list of <kbd>,</kbd> separated sample names or identifiers
       remove_tag: Remove
       title: Filter by sample names or Id
     nextflow:

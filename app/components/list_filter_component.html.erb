@@ -3,16 +3,16 @@
   data-list-filter-selection-outlet="#samples-table"
   data-list-filter-filters-value="<%= filters.present? ? filters.to_s : '[]' %>"
 >
-  <%= viral_dialog(id: 'list-filter-dialog', closable: false) do |dialog| %>
+  <%= viral_dialog(id: 'list-filter-dialog') do |dialog| %>
     <%= dialog.with_trigger do %>
-      <%= viral_button(data: { action: "click->viral--dialog#open" }, aria: { label: t(:'components.list_filter.title') }, title: t(:'components.list_filter.title'), classes: "relative") do %>
+      <%= viral_button(data: { action: "list-filter#idempotentConnect viral--dialog#open" }, aria: { label: t(:'components.list_filter.title') }, title: t(:'components.list_filter.title'), classes: "relative") do %>
         <%= viral_icon(name: "document_magnifying_glass", classes: "w-5 h-5 inline-block") %>
         <div
           data-list-filter-target="count"
           class="
-            hidden absolute items-center justify-center h-6 text-xs font-bold text-white
-            bg-red-800 border-2 border-white rounded-full -top-2 -end-2
-            dark:border-slate-900 px-2
+            absolute items-center justify-center hidden h-6 px-2 text-xs font-bold
+            text-white bg-red-800 border-2 border-white rounded-full -top-2 -end-2
+            dark:border-slate-900
           "
         >8</div>
       <% end %>
@@ -26,11 +26,11 @@
                             multiple: true,
                             class: "hidden",
                             data: "turbo-temporary" %>
-          <span class="label font-mono text-base font-semibold mr-1"></span>
+          <span class="mr-1 font-mono text-base font-semibold label"></span>
           <button
             type="button"
             class="
-              inline-flex items-center p-1 text-sm text-slate-400 bg-transparent rounded-full
+              inline-flex items-center p-1 text-sm bg-transparent rounded-full text-slate-400
               hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-600
               dark:hover:text-blue-300
             "
@@ -62,7 +62,7 @@
             type="text"
             name="q[name_or_puid_in][]"
             class="
-              focus:outline-none focus:ring-0 border-none bg-transparent grow
+              bg-transparent border-none focus:outline-none focus:ring-0 grow
             "
             autofocus
             aria-label="<%= t(:'components.list_filter.description') %>"
@@ -77,7 +77,7 @@
             type="button"
             class="
               absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold
-              text-slate-600 bg-slate-100 border-3 border-slate-10 rounded-full bottom-2 end-2
+              rounded-full text-slate-600 bg-slate-100 border-3 border-slate-10 bottom-2 end-2
               dark:text-slate-300 dark:border-slate-900 dark:bg-slate-600
               dark:hover:bg-slate-500 hover:bg-slate-300
             "
