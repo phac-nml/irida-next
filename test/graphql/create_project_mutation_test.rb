@@ -155,7 +155,7 @@ class CreateProjectMutationTest < ActiveSupport::TestCase
                                  context: { current_user: @user, token: @api_scope_token },
                                  variables: { name: 'New Project One',
                                               description: 'New Project One Description',
-                                              path: 'New Custom Path' })
+                                              path: 'new-custom-path' })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
@@ -168,6 +168,27 @@ class CreateProjectMutationTest < ActiveSupport::TestCase
     assert_equal 'New Project One', data['project']['name']
     assert_equal 'new-custom-path', data['project']['path']
     assert_equal 'john.doe_at_localhost/new-custom-path', data['project']['fullPath']
+  end
+
+  test 'createProject mutation should not work with invalid custom path' do
+    result = IridaSchema.execute(CREATE_PROJECT_MUTATION_WITH_CUSTOM_PATH,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { name: 'New Project One',
+                                              description: 'New Project One Description',
+                                              path: 'Invalid Custom Path' })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['createProject']
+
+    assert_not_empty data, 'createProject should be populated when no authorization errors'
+    assert_not_empty data['errors']
+    assert_empty data['project']
+
+    assert_equal 1, data['errors'].count
+    expected_error = { path: ['project', 'namespace.path'], message: 'Namespace Path is not valid' }
+
+    assert_equal expected_error, data['errors'][0]
   end
 
   test 'createProject mutation should not work with valid params, and api scope token with uploader access level' do
