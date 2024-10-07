@@ -76,6 +76,7 @@ module Dashboard
       assert_selector 'tr', count: 20
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.name
+      find('input[type="search"]').native.send_keys(:return)
 
       assert_selector 'tr', count: 12
       assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
@@ -90,7 +91,7 @@ module Dashboard
       assert_selector 'tr', count: 20
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.puid
-
+      find('input[type="search"]').native.send_keys(:return)
       assert_selector 'tr', count: 1
     end
 
@@ -125,7 +126,7 @@ module Dashboard
         assert_text @project.human_name
       end
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.name
-
+      find('input[type="search"]').native.send_keys(:return)
       assert_text 'Displaying 12 items'
       assert_selector 'tr', count: 12
       assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
@@ -164,6 +165,7 @@ module Dashboard
       end
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.name
+      find('input[type="search"]').native.send_keys(:return)
 
       assert_text 'Displaying 12 items'
       assert_selector 'tr', count: 12
