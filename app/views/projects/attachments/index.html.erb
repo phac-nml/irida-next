@@ -31,7 +31,6 @@
         url: namespace_project_attachments_path(@project.parent, @project),
       ) do %>
         <%= hidden_field_tag :limit, @pagy.limit %>
-        <%= render Ransack::HiddenSortFieldComponent.new(@q) %>
       <% end %>
     </div>
   </div>
