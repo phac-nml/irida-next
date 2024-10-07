@@ -57,7 +57,7 @@
                 },
                 class:
                   "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
               ) %>
             <% else %>
               <% dropdown.with_item(
@@ -125,12 +125,12 @@
           <input type="hidden" name="format" value="turbo_stream"/>
           <input type="hidden" name="select" value="on"/>
           <input
-              type="hidden"
-              name="timestamp"
-              value="<%=@timestamp%>"
-              data-turbo-temporary
-            >
-            <%= f.submit t(".select_all_button"),
+            type="hidden"
+            name="timestamp"
+            value="<%=@timestamp%>"
+            data-turbo-temporary
+          >
+          <%= f.submit t(".select_all_button"),
                    class: "button button--state-default button--size-default" %>
         <% end %>
         <%= search_form_for(
@@ -148,7 +148,7 @@
       <%= render SearchComponent.new(
         query: @q,
         url: search_namespace_project_samples_url,
-        search_attribute: @search_params[:name_or_puid_cont],
+        search_attribute: :name_or_puid_cont,
         placeholder: t(".search.placeholder"),
         html: { method: :post },
       ) do %>
