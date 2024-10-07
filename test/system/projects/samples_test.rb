@@ -95,7 +95,10 @@ module Projects
 
       within('dialog') do
         attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
+        # check that button goes from being enabled to disabled when clicked
+        assert_selector 'input[type=submit]:not(:disabled)'
         click_on I18n.t('projects.samples.show.upload')
+        assert_selector 'input[type=submit]:disabled'
       end
 
       assert_text I18n.t('projects.samples.attachments.create.success', filename: 'test_file_2.fastq.gz')
