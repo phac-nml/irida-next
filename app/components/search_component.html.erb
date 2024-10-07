@@ -1,4 +1,5 @@
 <%= search_form_for @query, url: @url, **@kwargs do |f| %>
+  <%= render Ransack::HiddenSortFieldComponent.new(@query) %>
   <%= f.label @search_attribute, @placeholder, class: "sr-only" %>
   <div class="relative">
     <%= f.search_field @search_attribute,
@@ -7,9 +8,7 @@
                      "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
                    placeholder: @placeholder %>
     <div
-      class="
-        absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
-      "
+      class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none "
     >
       <%= viral_icon(
         name: "magnifying_glass",

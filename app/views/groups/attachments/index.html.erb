@@ -32,7 +32,6 @@
         url: group_attachments_path(@group),
       ) do %>
           <%= hidden_field_tag :limit, @pagy.limit %>
-          <%= render Ransack::HiddenSortFieldComponent.new(@q) %>
         <% end %>
       </div>
     </div>
