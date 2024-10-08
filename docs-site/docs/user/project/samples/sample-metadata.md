@@ -83,7 +83,7 @@ The following metadata will be added:
     | MetadataField2 | value5 |
     | MetadataField3 | value6 |
 
-When creating the spreadsheet, you are required to have a column that contains a sample identifier. The identifier is case-sensitive and can contain either the sample names or IDs.
+When creating the spreadsheet, you are required to have a column that contains a sample identifier. The identifier is case-sensitive and can contain either the sample names or IDs. When importing metadata from a **project**, the sample identifier can be either the **sample name or ID**. If importing metadata from a **group**, the sample identifier must be the **sample ID**.
 
 **An important note:** When importing a metadata spreadsheet, you will be asked if you'd like to **Ignore empty values**. If this is **selected**, any metadata fields without an associated value will be ignored and those metadata keys will not be removed from the sample if present. However, if this **not selected**, any samples with the metadata key and empty value will be **deleted**.
 
@@ -145,7 +145,7 @@ Prerequisites:
 3. From the left sidebar, select **Samples**
 4. Click **Import Metadata**
 
-A dialog will pop-up to select the spreadsheet to be imported. After selecting the spreadsheet file, identify which column contains the sample identifier and whether you'd like to [Ignore empty values](sample-metadata#learn-about-importing-metadata)
+A dialog will pop-up to select the spreadsheet to be imported. After selecting the spreadsheet file, identify which column contains the sample identifier and whether you'd like to [Ignore empty values](sample-metadata#learn-about-importing-metadata).
 
 ## Delete Metadata
 
