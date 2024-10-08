@@ -4,9 +4,12 @@ require 'test_helper'
 
 class GroupTest < ActiveSupport::TestCase
   def setup
+    @user = users(:john_doe)
     @group = groups(:group_one)
     @subgroup_one = groups(:subgroup1)
     @group_three = groups(:group_three)
+    @group_three_subgroup1 = groups(:subgroup_one_group_three)
+    @sample23 = samples(:sample23)
   end
 
   test 'valid group' do
@@ -205,5 +208,49 @@ class GroupTest < ActiveSupport::TestCase
 
   test '#metadata_summary incorporates fields from shared projects' do
     assert_equal %w[metadatafield1 metadatafield2], groups(:group_alpha).metadata_fields
+  end
+
+  test 'group should have samples_count from all projects within' do
+    group12 = groups(:group_twelve)
+
+    project29 = projects(:project29)
+    Project.reset_counters(project29.id, :samples_count)
+    project29.reload.samples_count
+
+    project30 = projects(:project30)
+    Project.reset_counters(project30.id, :samples_count)
+    project30.reload.samples_count
+
+    project31 = projects(:project31)
+    Project.reset_counters(project31.id, :samples_count)
+    project31.reload.samples_count
+
+    expected_samples_count = group12.samples_count
+    actual_samples_count = Project.joins(:namespace).where(namespace: { parent_id: group12.self_and_descendants })
+                                  .select(:samples_count).pluck(:samples_count).sum
+
+    assert_equal expected_samples_count, actual_samples_count
+  end
+
+  test 'update samples_count by sample transfer' do
+    project = projects(:project22)
+    assert_difference -> { @group_three.reload.samples_count } => -1,
+                      -> { @group_three_subgroup1.reload.samples_count } => -1 do
+      @group_three_subgroup1.update_samples_count_by_transfer_service(project, 1)
+    end
+  end
+
+  test 'update samples_count by sample deletion' do
+    assert_difference -> { @group_three.reload.samples_count } => -1,
+                      -> { @group_three_subgroup1.reload.samples_count } => -1 do
+      @group_three_subgroup1.update_samples_count_by_destroy_service(1)
+    end
+  end
+
+  test 'update samples_count by sample addition' do
+    assert_difference -> { @group_three.reload.samples_count } => 1,
+                      -> { @group_three_subgroup1.reload.samples_count } => 1 do
+      @group_three_subgroup1.update_samples_count_by_addition_services(1)
+    end
   end
 end

@@ -33,6 +33,8 @@ module Samples
                                             }
       end
 
+      update_samples_count if @project.parent.type == 'Group'
+
       update_metadata_summary(sample)
     end
 
@@ -48,6 +50,8 @@ module Samples
         samples_deleted_puids << sample.puid
       end
 
+      update_samples_count(samples_to_delete_count) if @project.parent.type == 'Group'
+
       @project.namespace.create_activity key: 'namespaces_project_namespace.samples.destroy_multiple',
                                          owner: current_user,
                                          parameters:
@@ -62,6 +66,10 @@ module Samples
 
     def update_metadata_summary(sample)
       sample.project.namespace.update_metadata_summary_by_sample_deletion(sample) if sample.deleted?
+    end
+
+    def update_samples_count(deleted_samples_count = 1)
+      @project.parent.update_samples_count_by_destroy_service(deleted_samples_count)
     end
   end
 end
