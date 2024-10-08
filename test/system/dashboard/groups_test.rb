@@ -233,5 +233,45 @@ module Dashboard
         assert_no_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
       end
     end
+
+    test 'should update samples count after a deletion' do
+      login_as users(:john_doe)
+      visit dashboard_groups_url
+
+      assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
+      group_twelve_samples_count = 0
+      group_twelve_a_samples_count = 0
+
+      within :xpath, "//li[contains(@class, 'namespace-entry')][.//*/a[text()='#{groups(:group_twelve).name}']]" do
+        assert_text groups(:group_twelve).name
+        group_twelve_samples_count = find('span.samples-count').text.to_i
+        find('a.folder-toggle-wrap').click
+      end
+
+      within :xpath,
+             "(//li[contains(@class, 'namespace-entry')][.//*/a[text()='#{groups(:subgroup_twelve_a).name}']])[last()]" do
+        assert_text groups(:subgroup_twelve_a).name
+        group_twelve_a_samples_count = find('span.samples-count').text.to_i
+        find('a.folder-toggle-wrap').click
+      end
+
+      assert_difference('Group.count', -1) do
+        Groups::DestroyService.new(groups(:subgroup_twelve_a_a), users(:john_doe)).execute
+      end
+
+      visit current_url
+
+      within :xpath, "//li[contains(@class, 'namespace-entry')][.//*/a[text()='#{groups(:group_twelve).name}']]" do
+        assert_text groups(:group_twelve).name
+        assert_equal group_twelve_samples_count - 2, find('span.samples-count').text.to_i
+        find('a.folder-toggle-wrap').click
+      end
+
+      within :xpath,
+             "(//li[contains(@class, 'namespace-entry')][.//*/a[text()='#{groups(:subgroup_twelve_a).name}']])[last()]" do
+        assert_text groups(:subgroup_twelve_a).name
+        assert_equal group_twelve_a_samples_count - 2, find('span.samples-count').text.to_i
+      end
+    end
   end
 end
