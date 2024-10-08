@@ -189,12 +189,14 @@ module Dashboard
       visit dashboard_groups_url
 
       fill_in I18n.t(:'dashboard.groups.index.search.placeholder'), with: 'group a'
+      find('input[type="search"]').native.send_keys(:return)
 
       assert_text groups(:group_a).name
       assert_no_text groups(:group_b).name
 
       fill_in I18n.t(:'dashboard.groups.index.search.placeholder'), with: groups(:group_b).puid
       find('input[type="search"]').native.send_keys(:return)
+
       assert_no_text groups(:group_a).name
       assert_text groups(:group_b).name
 
