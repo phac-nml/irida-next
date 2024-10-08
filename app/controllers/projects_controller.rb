@@ -162,6 +162,11 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
         name: I18n.t('projects.edit.title'),
         path: namespace_project_edit_path
       }]
+    when 'activity'
+      @context_crumbs += [{
+        name: I18n.t('projects.activity.title'),
+        path: namespace_project_activity_path
+      }]
     end
   end
 
