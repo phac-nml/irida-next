@@ -25,6 +25,16 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   acts_as_paranoid
 
+  has_many :access_grants,
+           class_name: 'Doorkeeper::AccessGrant',
+           as: :resource_owner,
+           dependent: :delete_all # or :destroy if you need callbacks
+
+  has_many :access_tokens,
+           class_name: 'Doorkeeper::AccessToken',
+           as: :resource_owner,
+           dependent: :delete_all # or :destroy if you need callbacks
+
   has_many :personal_access_tokens, dependent: :destroy
   has_many :data_exports, dependent: :destroy
 

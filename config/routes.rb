@@ -10,6 +10,8 @@ Rails.application.routes.draw do
                         host: ENV.fetch('RAILS_HOST', 'localhost')
   end
 
+  use_doorkeeper
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")

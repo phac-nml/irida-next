@@ -50,6 +50,9 @@ gem 'omniauth-azure-activedirectory-v2'
 gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-saml'
 
+# use doorkeeper for Oauth2 provider
+gem 'doorkeeper'
+
 # API Integrations
 gem 'faraday'
 gem 'faraday-multipart'
