@@ -31,6 +31,12 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   scope :not_expired, -> { where('expires_at IS NULL OR expires_at > ?', Time.zone.now.beginning_of_day) }
 
+  scope :without_automation_bots, lambda {
+                                    joins(:user).where.not(
+                                      user: { user_type: User.user_types[:project_automation_bot] }
+                                    )
+                                  }
+
   class << self
     DEFAULT_CAN_OPTIONS = {
       include_group_links: true
