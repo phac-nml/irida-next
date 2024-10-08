@@ -122,11 +122,7 @@ module WorkflowExecutions
       run_output_data['metadata']['samples']&.each do |sample_puid, sample_metadata|
         # This assumes the sample puid matches, i.e. happy path
         samples_workflow_execution = get_samples_workflow_executions_by_sample_puid(puid: sample_puid)
-        sample_metadata = flatten(sample_metadata)
-        sample_metadata.each_key do |key|
-          sample_metadata[key.to_s.downcase] = sample_metadata[key].to_s # remove data types
-        end
-        samples_workflow_execution.metadata = sample_metadata
+        samples_workflow_execution.metadata = flatten(sample_metadata)
         samples_workflow_execution.save!
       end
     end

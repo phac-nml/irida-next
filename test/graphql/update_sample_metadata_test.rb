@@ -291,7 +291,6 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
                                               metadata: { integer: 1, True_Boolean: true, false_boolean: false,
                                                           date: Date.parse('2024-03-11'), string: 'A Test', empty: '',
                                                           nil: nil } })
-    # Question: Do we want to handle & test nested JSON?
 
     assert_nil result['errors'], 'should work and have no errors.'
 

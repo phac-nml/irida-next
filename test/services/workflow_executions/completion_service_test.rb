@@ -318,9 +318,9 @@ module WorkflowExecutions
 
       assert_equal 'my_run_id_c', workflow_execution.run_id
 
-      metadata1 = { 'number' => '1',
+      metadata1 = { 'number' => 1,
                     'organism' => 'an organism' }
-      metadata2 = { 'number' => '2',
+      metadata2 = { 'number' => 2,
                     'organism' => 'a different organism' }
 
       assert_equal 2, workflow_execution.samples_workflow_executions.count
@@ -401,10 +401,10 @@ module WorkflowExecutions
                         'organism' => 'the organism' }
       old_metadata2 = { 'metadatafield2' => 'value2',
                         'organism' => 'some organism' }
-      new_metadata1 = { 'number' => '1',
+      new_metadata1 = { 'number' => 1,
                         'metadatafield1' => 'value1',
                         'organism' => 'an organism' }
-      new_metadata2 = { 'number' => '2',
+      new_metadata2 = { 'number' => 2,
                         'metadatafield2' => 'value2',
                         'organism' => 'a different organism' }
       # Test start
@@ -444,10 +444,10 @@ module WorkflowExecutions
                         'organism' => 'the organism' }
       old_metadata2 = { 'metadatafield2' => 'value2',
                         'organism' => 'some organism' }
-      new_metadata1 = { 'number' => '1',
+      new_metadata1 = { 'number' => 1,
                         'metadatafield1' => 'value1',
                         'organism' => 'an organism' }
-      new_metadata2 = { 'number' => '2',
+      new_metadata2 = { 'number' => 2,
                         'metadatafield2' => 'value2',
                         'organism' => 'a different organism' }
       # Test start
@@ -488,10 +488,10 @@ module WorkflowExecutions
     update_samples' do
       workflow_execution = @automated_workflow_execution_with_samples_with_update_samples
 
-      new_metadata1 = { 'number' => '1',
+      new_metadata1 = { 'number' => 1,
                         'metadatafield1' => 'value1',
                         'organism' => 'an organism' }
-      new_metadata2 = { 'number' => '2',
+      new_metadata2 = { 'number' => 2,
                         'metadatafield2' => 'value2',
                         'organism' => 'a different organism' }
       # Test start
@@ -600,21 +600,21 @@ module WorkflowExecutions
       assert_equal 'my_run_id_e', workflow_execution.run_id
 
       metadata1 = {
-        'amr.0.end' => '5678',
+        'amr.0.end' => 5678,
         'amr.0.gene' => 'x',
-        'amr.0.start' => '1234',
-        'amr.1.end' => '2',
+        'amr.0.start' => 1234,
+        'amr.1.end' => 2,
         'amr.1.gene' => 'y',
-        'amr.1.start' => '1',
+        'amr.1.start' => 1,
         'organism' => 'an organism'
       }
       metadata2 = {
-        'amr.0.end' => '6789',
+        'amr.0.end' => 6789,
         'amr.0.gene' => 'x',
-        'amr.0.start' => '2345',
-        'amr.1.end' => '3',
+        'amr.0.start' => 2345,
+        'amr.1.end' => 3,
         'amr.1.gene' => 'y',
-        'amr.1.start' => '2',
+        'amr.1.start' => 2,
         'organism' => 'a different organism'
       }
 
@@ -669,7 +669,7 @@ module WorkflowExecutions
       assert_equal @missing_entry_output_analysis3_file_blob.filename, output3.filename
       assert_equal @missing_entry_output_analysis3_file_blob.checksum, output3.file.checksum
 
-      metadata1 = { 'number' => '1',
+      metadata1 = { 'number' => 1,
                     'organism' => 'an organism' }
 
       assert_equal 2, workflow_execution.samples_workflow_executions.count
