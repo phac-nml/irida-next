@@ -89,7 +89,7 @@ module Samples
                          Roo::Spreadsheet.open(@file)
                        end
 
-        @headers = @spreadsheet.row(1).collect(&:strip)
+        @headers = @spreadsheet.row(1).compact.collect(&:strip)
 
         validate_file_headers
 

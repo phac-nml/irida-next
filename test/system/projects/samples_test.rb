@@ -521,7 +521,7 @@ module Projects
       click_button I18n.t(:'projects.samples.index.select_all_button')
 
       within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 20, wait: 1
       end
       within 'tfoot' do
         assert_text 'Samples: 220'
