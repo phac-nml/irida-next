@@ -241,7 +241,7 @@ module Samples
         assert_equal({ 'metadatafield1' => '15', 'metadatafield3' => '35' }, @sample2.reload.metadata)
       end
 
-      test 'import sample metadata with a multiple empty columns' do
+      test 'import sample metadata with multiple empty columns' do
         assert_equal({}, @sample1.metadata)
         assert_equal({}, @sample2.metadata)
         params = { file: File.new('test/fixtures/files/metadata/contains_empty_columns.csv', 'r'),
