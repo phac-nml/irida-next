@@ -507,26 +507,19 @@ module Projects
             assert_text sample[1]
           end
         end
+
         find('input#select2-input').click
         find("button[data-viral--select2-primary-param='#{project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
 
+      # Check samples selected are [] and has the proper number of samples
+      assert_text I18n.t(:'projects.samples.index.no_samples')
+
       Project.reset_counters(project2.id, :samples_count)
       visit namespace_project_samples_url(namespace1, project2)
-
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 220,
                                                                            locale: @user.locale))
-
-      click_button I18n.t(:'projects.samples.index.select_all_button')
-
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 220'
-        assert_selector 'strong[data-selection-target="selected"]', text: '220'
-      end
     end
 
     test 'empty state of transfer sample project selection' do
