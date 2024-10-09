@@ -39,9 +39,9 @@ module Projects
       within('dialog') do
         attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
         # check that button goes from being enabled to disabled when clicked
-        assert_selector 'input[type=submit]:not(:disabled)'
+        assert_selector '#t-upload-button:not(:disabled)'
         click_on I18n.t('attachments.dialogs.new_attachment_component.upload')
-        assert_selector 'input[type=submit]:disabled'
+        assert_selector '#t-upload-button:disabled'
       end
 
       assert_selector '#attachments-table table tbody tr', count: 3

@@ -18,9 +18,9 @@
           data-file-upload-error-value="<%= t('.files_ignored') %>"
         >
           <%= form.label :files,
-                    t(".files"),
-                    class:
-                      "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
+                     t(".files"),
+                     class:
+                       "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
           <%= form.file_field :files,
                           multiple: true,
                           direct_upload: true,
@@ -43,6 +43,7 @@
 
         <div>
           <%= form.submit t(".upload"),
+                      id: "t-upload-button",
                       class: "button button--state-primary button--size-default",
                       data: {
                         "attachment-upload-target": "submitButton",
