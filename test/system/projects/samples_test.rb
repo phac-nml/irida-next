@@ -518,6 +518,7 @@ module Projects
 
       Project.reset_counters(project2.id, :samples_count)
       visit namespace_project_samples_url(namespace1, project2)
+
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 220,
                                                                            locale: @user.locale))
     end
