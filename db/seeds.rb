@@ -76,7 +76,7 @@ end
 def fake_metadata # rubocop:disable Metrics/MethodLength
   indsc_abbr = %w[SRR ERR DRR]
   random_abbr = indsc_abbr.sample
-  random_date = Faker::Date.between(from: 2.years.ago.to_s, to: Time.zone.today)
+  random_date = Faker::Date.between(from: 2.years.ago, to: Time.zone.today)
 
   {
     'WGS_id' => Faker::Number.number(digits: 10),

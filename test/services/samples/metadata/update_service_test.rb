@@ -67,9 +67,9 @@ module Samples
         assert_equal({ 'metadatafield1' => 4, 'metadatafield2' => 4 }, @group12.reload.metadata_summary)
       end
 
-      test 'add metadata and verify to_s and downcase' do
+      test 'add metadata and verify to_s, downcase, and whitespace' do
         freeze_time
-        params = { 'metadata' => { 'MetaDATAfield1' => 'value1', MetaDATAfield2: 'value2' } }
+        params = { 'metadata' => { ' MetaDATAfield1 ' => ' value1 ', MetaDATAfield2: 'value2' } }
 
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project31.namespace.metadata_summary)
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)

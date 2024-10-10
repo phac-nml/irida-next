@@ -350,10 +350,10 @@ module WorkflowExecutions
                         'organism' => 'the organism' }
       old_metadata2 = { 'metadatafield2' => 'value2',
                         'organism' => 'some organism' }
-      new_metadata1 = { 'number' => 1,
+      new_metadata1 = { 'number' => '1',
                         'metadatafield1' => 'value1',
                         'organism' => 'an organism' }
-      new_metadata2 = { 'number' => 2,
+      new_metadata2 = { 'number' => '2',
                         'metadatafield2' => 'value2',
                         'organism' => 'a different organism' }
       # Test start

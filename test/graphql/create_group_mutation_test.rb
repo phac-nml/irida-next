@@ -148,7 +148,7 @@ class CreateProjectMutationTest < ActiveSupport::TestCase
 
     group = Group.last
     # Top level group
-    assert_equal nil, group.parent
+    assert_nil group.parent
     assert_equal 'new-group-one', group.path
     assert_equal 'new-group-one', group.full_path
   end

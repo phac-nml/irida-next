@@ -1597,7 +1597,7 @@ module Projects
         click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
       end
 
-      assert_selector 'table thead tr th', count: 9
+      assert_selector 'table thead tr th', count: 10
     end
 
     test 'should not import metadata via invalid file type' do
