@@ -521,6 +521,15 @@ module Projects
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 220,
                                                                            locale: @user.locale))
+
+      click_button I18n.t(:'projects.samples.index.select_all_button')
+
+      within 'tfoot' do
+        sample_counts = all('strong')
+        total_samples = sample_counts[0].text.to_i
+        selected_samples = sample_counts[1].text.to_i
+        assert selected_samples <= total_samples
+      end
     end
 
     test 'empty state of transfer sample project selection' do
