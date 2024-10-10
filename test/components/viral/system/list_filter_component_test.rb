@@ -20,7 +20,7 @@ module System
           find('input').text puid2
           click_button I18n.t(:'components.list_filter.apply')
         end
-        assert_selector 'div[data-list-filter-target="count"]', text: '2'
+        assert_selector 'span[data-list-filter-target="count"]', text: '2'
 
         click_button I18n.t(:'components.list_filter.title')
         within 'dialog' do
@@ -33,7 +33,7 @@ module System
           assert_selector 'span.label', count: 0
           click_button I18n.t(:'components.list_filter.apply')
         end
-        assert_no_selector 'div[data-list-filter-target="count"]'
+        assert_no_selector 'span[data-list-filter-target="count"]'
       end
     end
   end
