@@ -270,6 +270,23 @@ module Samples
         assert_equal({ 'metadatafield2' => '20', 'metadatafield3' => '30' }, sample32.reload.metadata)
       end
 
+      test 'import sample metadata with whitespace keys and values' do
+        assert_equal({}, @sample1.metadata)
+        assert_equal({}, @sample2.metadata)
+        params = { file: File.new('test/fixtures/files/metadata/contains_whitespace_keys_and_values.csv', 'r'),
+                   sample_id_column: 'sample_name' }
+        response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe,
+                                                            params).execute
+        assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] },
+                       @sample2.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
+        assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '20', 'metadatafield3' => '30' },
+                     @sample1.reload.metadata)
+        assert_equal({ 'metadatafield1' => '15', 'metadatafield2' => '25', 'metadatafield3' => '35' },
+                     @sample2.reload.metadata)
+      end
+
       test 'import sample metadata with a sample that does not belong to project' do
         assert_equal({}, @sample1.metadata)
         assert_equal({}, @sample2.metadata)
