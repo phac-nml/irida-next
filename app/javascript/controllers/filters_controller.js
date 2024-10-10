@@ -5,16 +5,7 @@ import _ from "lodash";
 export default class extends Controller {
   static outlets = ["selection"];
 
-  initialize() {
-    this.submit = this.submit.bind(this);
-  }
-
-  connect() {
-    this.submit = _.debounce(this.submit, 500);
-  }
-
   submit() {
-    this.element.requestSubmit();
     if (this.hasSelectionOutlet) {
       this.selectionOutlet.clear();
     }

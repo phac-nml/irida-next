@@ -1,7 +1,7 @@
 <div
   id="<%= id %>"
   class="
-    flex text-sm font-medium text-center text-slate-500 border-b border-slate-200
+    flex text-sm font-medium text-center border-b text-slate-500 border-slate-200
     dark:text-slate-400 dark:border-slate-700
   "
 >
@@ -17,11 +17,6 @@
       </li>
     <% end %>
   </ul>
-  <% if search_bar? %>
-    <div class="flex flex-row ml-auto">
-      <%= search_bar %>
-    </div>
-  <% end %>
 </div>
 <div role="region" aria-live="polite">
   <%= tab_content %>

@@ -6,7 +6,6 @@ module Viral
     attr_reader :id, :label
 
     renders_many :tabs, Viral::Tabs::TabComponent
-    renders_one :search_bar, SearchComponent
     renders_one :tab_content
 
     def initialize(id:, label:)

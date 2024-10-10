@@ -65,6 +65,7 @@ export default class extends Controller {
   }
 
   clear() {
+    console.log("clear");
     sessionStorage.removeItem(this.#storageKey);
     this.#updateUI([]);
   }
@@ -118,8 +119,10 @@ export default class extends Controller {
 
   #setSelectPageCheckboxValue() {
     if (this.hasSelectPageTarget) {
-      const uncheckedBoxes = this.rowSelectionTargets.filter(row => !row.checked)
-      this.selectPageTarget.checked = uncheckedBoxes.length === 0
+      const uncheckedBoxes = this.rowSelectionTargets.filter(
+        (row) => !row.checked,
+      );
+      this.selectPageTarget.checked = uncheckedBoxes.length === 0;
     }
   }
 

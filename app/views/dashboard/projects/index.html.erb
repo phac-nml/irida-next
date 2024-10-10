@@ -10,7 +10,7 @@
   <div
     class="flex text-sm font-medium text-center border-b  text-slate-500 border-slate-200 dark:text-slate-400 dark:border-slate-700"
   >
-    <ul class="flex flex-wrap -mb-px">
+    <ul class="flex flex-1">
       <li class="mr-2">
         <%= link_to t(".all"),
         dashboard_projects_url(),
@@ -42,29 +42,8 @@
         } %>
       </li>
     </ul>
-    <div class="flex flex-row items-center ml-auto space-x-2 font-normal">
-      <%= search_form_for @q, url: dashboard_projects_url(**request.query_parameters), html: { "data-controller": "filters" } do |f| %>
-        <input type="hidden" name="format" value="turbo_stream"/>
-        <input type="hidden" name="personal" value="<%= params['personal'] %>">
-        <%= f.label :namespace_name_or_namespace_puid_cont,
-                t(".search.placeholder"),
-                class: "sr-only" %>
-        <div class="relative lg:w-72">
-          <div
-            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none "
-          >
-            <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
-          </div>
-          <%= turbo_frame_tag "project_hidden_values" %>
-          <%= f.search_field :namespace_name_or_namespace_puid_cont,
-                         "data-action": "filters#submit",
-                         class:
-                           "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                         placeholder: t(".search.placeholder") %>
-        </div>
-      <% end %>
-      <%= turbo_frame_tag "project_sort_dropdown" %>
-    </div>
+    <%= turbo_frame_tag "project_sort_dropdown" %>
+
   </div>
   <div class="flex flex-col" data-turbo-temporary>
     <% if @has_projects %>
