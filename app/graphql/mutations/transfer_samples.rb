@@ -23,7 +23,7 @@ module Mutations
     validates required: { one_of: %i[project_id project_puid] }
 
     field :errors, [Types::UserErrorType], null: false, description: 'A list of errors that prevented the mutation.'
-    field :samples, [ID], description: 'List of transfered samples ids.'
+    field :samples, [ID], description: 'List of transfered sample ids.'
 
     def resolve(args) # rubocop:disable Metrics/MethodLength
       project = get_project_from_id_or_puid_args(args)
@@ -39,7 +39,7 @@ module Mutations
         }
       end
 
-      new_project_args = {project_id: args[:new_project_id], project_puid: args[:new_project_puid]}
+      new_project_args = { project_id: args[:new_project_id], project_puid: args[:new_project_puid] }
       new_project = get_project_from_id_or_puid_args(new_project_args)
 
       if new_project.nil? || !new_project.persisted?
@@ -63,9 +63,8 @@ module Mutations
     private
 
     def transfer_samples(project, new_project_id, sample_ids) # rubocop:disable Metrics/MethodLength
-      # samples = Samples::TransferService.new(
-      #   project, current_user, new_project.id, sample_list
-      # ).execute
+      # remove prefix from sample_ids
+      sample_ids.each { |sample_id| sample_id.sub!('gid://irida/Sample/', '') }
 
       samples = Samples::TransferService.new(
         project, current_user
@@ -83,6 +82,8 @@ module Mutations
           errors: user_errors
         }
       else
+        # add the prefix to sample_ids
+        samples.each { |sample_id| sample_id.prepend('gid://irida/Sample/') }
         {
           samples:,
           errors: []
