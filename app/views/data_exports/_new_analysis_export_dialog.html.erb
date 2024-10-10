@@ -42,9 +42,9 @@
               "
               data-action="collapsible#toggle"
               aria-expanded="true"
-              aria-controls="<%= "accordion-collapse-body-workflows" %>"
+              aria-controls="<%= "accordion-collapse-body-completed-workflows" %>"
             >
-              <span data-infinite-scroll-target="selectionCount">"<%= t(".selection_count.zero") %>"</span>
+              <%= turbo_frame_tag "completed_header" %>
               <%= viral_icon(
                 name: "chevron_down",
                 classes: "mr-0 w-4 h-4 rotate-0",
@@ -55,7 +55,7 @@
 
           <div
             data-collapsible-target="item"
-            id="<%= "accordion-collapse-body-workflows" %>"
+            id="<%= "accordion-collapse-body-completed-workflows" %>"
             class="hidden"
             aria-labelledby="<%= "accordion-collapse-heading-workflows" %>"
           >
@@ -73,7 +73,65 @@
             data-action="scroll->infinite-scroll#scroll"
             data-infinite-scroll-target="scrollable"
             >
-              <%= turbo_frame_tag "list_selections" do %>
+              <%= turbo_frame_tag "list_completed" do %>
+                <%= render partial: "shared/loading/samples_list_skeleton" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <div data-controller="collapsible">
+          <h2 id="<%= "accordion-collapse-heading-workflows" %>">
+            <button
+              type="button"
+              class="
+                flex
+                items-center
+                justify-between
+                w-full
+                p-3
+                font-medium
+                rtl:text-right
+                text-black
+                dark:text-white
+                border
+                border-slate-200
+                dark:border-slate-700
+                hover:bg-slate-100
+                dark:hover:bg-slate-800
+                gap-3
+                rounded-t
+              "
+              data-action="collapsible#toggle"
+              aria-expanded="true"
+              aria-controls="<%= "accordion-collapse-body-non-completed-workflows" %>"
+            >
+              <%= turbo_frame_tag "non_completed_header" %>
+              <%= viral_icon(
+                name: "chevron_down",
+                classes: "mr-0 w-4 h-4 rotate-0",
+                "data-collapsible-target": "icon"
+              ) %>
+            </button>
+          </h2>
+
+          <div
+            data-collapsible-target="item"
+            id="<%= "accordion-collapse-body-non-completed-workflows" %>"
+            class="hidden"
+            aria-labelledby="<%= "accordion-collapse-heading-workflows" %>"
+          >
+            <div class="text-base leading-relaxed text-slate-500 dark:text-slate-400 p-2.5 border border-t-0 border-slate-300">
+              <%= t(:"data_exports.new.excluded_description") %>
+            </div>
+            <div
+            class="
+              overflow-y-auto max-h-[200px] border border-t-0 border-slate-300 rounded-b block w-full
+              p-2.5 dark:bg-slate-800 dark:border-slate-600
+            "
+            data-action="scroll->infinite-scroll#scroll"
+            data-infinite-scroll-target="scrollable"
+            >
+              <%= turbo_frame_tag "list_non_completed" do %>
                 <%= render partial: "shared/loading/samples_list_skeleton" %>
               <% end %>
             </div>

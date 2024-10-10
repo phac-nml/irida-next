@@ -9,7 +9,9 @@ module ListActions
     if params[:list_class] == 'sample'
       @samples = Sample.where(id: params[:sample_ids])
     elsif params[:list_class] == 'workflow_execution'
-      @workflow_executions = WorkflowExecution.where(id: params[:workflow_execution_ids])
+      workflow_executions = WorkflowExecution.where(id: params[:workflow_execution_ids])
+      @completed_workflow_executions = workflow_executions.where(state: 'completed')
+      @non_completed_workflow_executions = workflow_executions.where.not(state: 'completed')
     end
 
     respond_to do |format|

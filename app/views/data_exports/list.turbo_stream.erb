@@ -1,17 +1,46 @@
-<% if @page == 1 %>
-  <%= turbo_stream.replace "list_selections" do %>
-    <%= turbo_frame_tag "list_selections" %>
+<% if defined? @samples %>
+  <% if @page == 1 %>
+    <%= turbo_stream.replace "list_selections" do %>
+      <%= turbo_frame_tag "list_selections" %>
+    <% end %>
   <% end %>
-<% end %>
 
-<%= turbo_stream.append("list_selections") do %>
-  <% if defined? @samples %>
+  <%= turbo_stream.append("list_selections") do %>
     <% @samples.each do |sample| %>
       <%= render "list_sample", sample: sample %>
     <% end %>
-  <% elsif defined? @workflow_executions %>
-    <% @workflow_executions.each do |workflow_execution| %>
-      <%= render "list_workflow_execution", workflow_execution: workflow_execution %>
+  <% end %>
+
+<% elsif defined? @completed_workflow_executions %>
+  <% if @page == 1 %>
+    <%= turbo_stream.replace "list_completed" do %>
+      <%= turbo_frame_tag "list_completed" %>
+    <% end %>
+    <%= turbo_stream.replace "list_non_completed" do %>
+      <%= turbo_frame_tag "list_non_completed" %>
     <% end %>
   <% end %>
+
+  <%= turbo_stream.append("list_completed") do %>
+    <% @completed_workflow_executions.each do |completed_workflow_execution| %>
+      <%= render "list_workflow_execution",
+      workflow_execution: completed_workflow_execution %>
+    <% end %>
+  <% end %>
+  <%= turbo_stream.replace "completed_header",
+                       partial: "list_completed_header",
+                       locals: {
+                         count: @completed_workflow_executions.count,
+                       } %>
+  <%= turbo_stream.append("list_non_completed") do %>
+    <% @non_completed_workflow_executions.each do |non_completed_workflow_execution| %>
+      <%= render "list_workflow_execution",
+      workflow_execution: non_completed_workflow_execution %>
+    <% end %>
+  <% end %>
+  <%= turbo_stream.replace "non_completed_header",
+                       partial: "list_excluded_workflow_header",
+                       locals: {
+                         count: @non_completed_workflow_executions.count,
+                       } %>
 <% end %>
