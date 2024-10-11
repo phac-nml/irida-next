@@ -356,6 +356,7 @@ module Groups
 
       fill_in placeholder: I18n.t(:'groups.attachments.index.search.placeholder'),
               with: 'filter that results in no attachments'
+      find('input[type="search"]').native.send_keys(:return)
 
       assert_no_selector 'table'
 
