@@ -266,6 +266,7 @@ module Projects
       assert_selector 'table tbody tr', count: 4
 
       fill_in placeholder: I18n.t(:'projects.members.index.search.groups.placeholder'), with: @group_link2.group.name
+      find('input[type="search"]').native.send_keys(:return)
 
       assert_text 'Displaying 1 item'
       assert_selector 'table tbody tr', count: 1
