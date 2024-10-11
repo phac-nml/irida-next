@@ -202,6 +202,7 @@ module Dashboard
 
       #   Test empty state
       fill_in I18n.t(:'dashboard.groups.index.search.placeholder'), with: 'z6z6z6'
+      find('input[type="search"]').native.send_keys(:return)
       assert_text I18n.t(:'dashboard.groups.index.no_groups_description')
     end
   end
