@@ -120,6 +120,7 @@ module Groups
       assert_text @sample2.name
 
       fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: 'Sample 1'
+      find('input[type="search"]').native.send_keys(:return)
 
       assert_text 'Samples: 13'
       assert_selector 'table tbody tr', count: 13
@@ -602,6 +603,7 @@ module Groups
       end
 
       fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: @sample1.name
+      find('input[type="search"]').native.send_keys(:return)
 
       assert_text 'Samples: 1'
       assert_selector 'table tbody tr', count: 1
