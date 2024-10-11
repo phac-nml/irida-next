@@ -28,9 +28,10 @@
     <% end %>
   <% end %>
   <%= turbo_stream.replace "completed_header",
-                       partial: "list_completed_header",
+                       partial: "list_workflow_execution_header",
                        locals: {
                          count: @completed_workflow_executions.count,
+                         type: "completed",
                        } %>
   <%= turbo_stream.append("list_non_completed") do %>
     <% @non_completed_workflow_executions.each do |non_completed_workflow_execution| %>
@@ -39,8 +40,9 @@
     <% end %>
   <% end %>
   <%= turbo_stream.replace "non_completed_header",
-                       partial: "list_excluded_workflow_header",
+                       partial: "list_workflow_execution_header",
                        locals: {
                          count: @non_completed_workflow_executions.count,
+                         type: "non_completed",
                        } %>
 <% end %>
