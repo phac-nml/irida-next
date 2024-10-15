@@ -44,7 +44,7 @@ Prerequisites:
   * A project must contain at least one sample, and that sample must contain metadata.
   * You must have at least the Analyst role to the project and/or group you will create the export from.
 
-To create a sample export:
+To create a sample linelist export:
 1. Navigate to the [project](../project/projects/manage-projects#view-projects-you-have-access-to) or [group](../organization/groups/manage#view-groups) that contains the samples you would like to export.
 2. From the left sidebar, select **Samples**.
 3. Click the checkbox of each sample you'd like to export.
