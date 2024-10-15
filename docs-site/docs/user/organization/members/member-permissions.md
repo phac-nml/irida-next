@@ -89,6 +89,7 @@ When you add a member to a subgroup where they are also a member of one of the p
     | Delete Samples        |       |          |         |            | ✓     |
     | Transfer Samples      |       |          |         | ✓(2)       | ✓     |
     | Clone Samples         |       |          |         | ✓          | ✓     |
+    | Export Samples        |       |          | ✓       | ✓          | ✓     |
     | View Sample History   |       |          |         | ✓          | ✓     |
 
   1. A user or bot account with the **Uploader** role can only perform these actions via the api
