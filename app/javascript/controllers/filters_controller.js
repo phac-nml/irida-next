@@ -6,6 +6,7 @@ export default class extends Controller {
   static outlets = ["selection"];
 
   submit() {
+    this.element.requestSubmit();
     if (this.hasSelectionOutlet) {
       this.selectionOutlet.clear();
     }

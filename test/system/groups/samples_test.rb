@@ -150,6 +150,7 @@ module Groups
       assert_selector 'div#limit-component button div span', text: '20'
 
       fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: filter_text
+      find('input[type="search"]').native.send_keys(:return)
 
       assert_selector '#samples-table table tbody tr', count: 1
       assert_selector '#samples-table table thead tr th', count: 9
@@ -223,6 +224,7 @@ module Groups
       end
 
       fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: 'Sample 1'
+      find('input[type="search"]').native.send_keys(:return)
 
       assert_text 'Samples: 13'
       assert_selector 'table tbody tr', count: 13
@@ -255,6 +257,7 @@ module Groups
       end
 
       fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: @sample1.puid
+      find('input[type="search"]').native.send_keys(:return)
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
@@ -286,6 +289,7 @@ module Groups
       assert_text @sample2.puid
 
       fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: @sample1.puid
+      find('input[type="search"]').native.send_keys(:return)
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
@@ -348,6 +352,7 @@ module Groups
       end
 
       fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: 'Sample 1'
+      find('input[type="search"]').native.send_keys(:return)
 
       assert_text '1-13 of 13'
       assert_selector 'table tbody tr', count: 13
