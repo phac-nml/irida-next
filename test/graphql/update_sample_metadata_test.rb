@@ -283,4 +283,46 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     ]
     assert_equal expected_error, data['errors']
   end
+
+  test 'updateSampleMetadata mutation should convert keys and values to strings and lower case them' do
+    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_SAMPLE_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { sampleId: @sample.to_global_id.to_s,
+                                              metadata: { integer: 1, True_Boolean: true, false_boolean: false,
+                                                          date: Date.parse('2024-03-11'), string: 'A Test', empty: '',
+                                                          nil: nil } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['updateSampleMetadata']
+
+    assert_not_empty data, 'updateSampleMetadata should be populated when no authorization errors'
+    assert_empty data['errors']
+
+    assert_not_empty data['status']
+    assert_not_empty data['status'][:added]
+    assert data['status'][:added].include?('integer')
+    assert data['status'][:added].include?('true_boolean')
+    assert data['status'][:added].include?('false_boolean')
+    assert data['status'][:added].include?('date')
+    assert data['status'][:added].include?('string')
+    assert_not data['status'][:added].include?('empty')
+    assert_not data['status'][:added].include?('nil')
+
+    assert_not_empty data['sample']
+    assert_not_empty data['sample']['metadata']
+    assert_not_empty data['sample']['metadata']['integer']
+    assert data['sample']['metadata'].include?('integer')
+    assert_equal '1', data['sample']['metadata']['integer']
+    assert data['sample']['metadata'].include?('true_boolean')
+    assert_equal 'true', data['sample']['metadata']['true_boolean']
+    assert data['sample']['metadata'].include?('false_boolean')
+    assert_equal 'false', data['sample']['metadata']['false_boolean']
+    assert data['sample']['metadata'].include?('date')
+    assert_equal '2024-03-11', data['sample']['metadata']['date']
+    assert data['sample']['metadata'].include?('string')
+    assert_equal 'A Test', data['sample']['metadata']['string']
+    assert_not data['sample']['metadata'].include?('empty')
+    assert_not data['sample']['metadata'].include?('nil')
+  end
 end

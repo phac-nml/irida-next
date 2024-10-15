@@ -24,8 +24,6 @@ module Samples
 
         validate_metadata_param
 
-        transform_metadata_keys
-
         @sample.with_lock do
           perform_metadata_update
           @sample.save
@@ -69,14 +67,10 @@ module Samples
               I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample.name)
       end
 
-      def transform_metadata_keys
-        # Without transforming and downcasing keys,
-        # issues with overwritting can occur and multiples of the same key can appear
-        @metadata = @metadata.transform_keys { |key| key.to_s.downcase }
-      end
-
       def perform_metadata_update
         @metadata.each do |key, value|
+          key = key.to_s.downcase.strip
+          value = value.to_s.strip # remove data types
           if value.blank?
             if @sample.metadata.key?(key)
               @sample.metadata.delete(key)
