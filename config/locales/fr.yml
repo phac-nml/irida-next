@@ -344,7 +344,7 @@ fr:
     list_filter:
       apply: Apply filter
       clear: Remove all tags
-      description: Paste a list of <kbd>,</kbd> separated sample names or identifiers
+      description: Paste a list of <kbd>,</kbd> seperated sample names or identifiers
       remove_tag: Remove
       title: Filter by sample names or Id
     nextflow:
@@ -481,8 +481,14 @@ fr:
         name: Name
         status: Status
       title: Data Exports
+    list:
+      error: Analysis exports will only include completed workflow executions. Please select workflow executions in the completed state.
     list_workflow_execution:
+      canceled: Canceled
+      error: Errored
+      exclusion_reason: 'Reason for exclusion:'
       id: 'ID:'
+      in_progress: Currently running
       name: 'Name:'
       run_id: 'Run ID:'
       workflow: 'Workflow:'
@@ -499,13 +505,6 @@ fr:
         zero: Samples (0 selected)
       submit_button: Submit
     new_analysis_export_dialog:
-      description:
-        plural: This export will contain COUNT_PLACEHOLDER workflow executions.
-        singular: This export will contain 1 workflow execution.
-        zero: This export will contain no workflow executions.
-      selection_count:
-        non_zero: Workflow Executions (COUNT_PLACEHOLDER selected)
-        zero: Workflow Executions (0 selected)
       title: Analysis Export
     new_linelist_export_dialog:
       available: Available
@@ -524,6 +523,7 @@ fr:
       selected: Selected
       title: Sample Export
     new_single_analysis_export_dialog:
+      description: This export will contain 1 workflow execution.
       single_selection: Workflow Executions (1 selected)
     preview:
       manifest_json: manifest.json
@@ -550,6 +550,11 @@ fr:
       analysis: ANALYSIS
       linelist: LINELIST
       sample: SAMPLE
+    workflow_execution_collapse:
+      included_description: This export will contain the listed workflow executions below.
+      included_header: Workflow Executions (%{count})
+      excluded_description: These workflow executions will be excluded from the export as they do not have the completed state.
+      excluded_header: Excluded Workflow Executions (%{count})
   date:
     formats:
       iso: YYYY-MM-DD
@@ -838,9 +843,9 @@ fr:
     email_template:
       automated_message: This email was sent from an automated system. Please do not reply to this email.
       copy_paste: 'Or copy and paste this link into your browser:'
-      greeting: Bonjour,
-      greeting_with_name: Bonjour %{name},
-      thanks: Merci,
+      greeting: Hello,
+      greeting_with_name: Hello %{name},
+      thanks: Thanks,
     group_link_mailer:
       access_granted_manager_email:
         body_html: Group '%{group_name}' has been <strong>granted</strong> access to %{namespace_type} '%{namespace_name}'

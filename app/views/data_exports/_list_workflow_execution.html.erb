@@ -7,12 +7,15 @@
   <div class="font-normal text-gray-500 dark:text-gray-400">
     <%= t(".workflow") %> <%= workflow_execution.metadata["workflow_name"] %> <%= workflow_execution.metadata["workflow_version"] %>
   </div>
-  <div class="font-normal text-gray-500 dark:text-gray-400">
-    <%= t(".workflow") %> <%= workflow_execution.metadata["workflow_name"] %> <%= workflow_execution.metadata["workflow_version"] %>
-  </div>
   <% unless workflow_execution.state == 'completed' %>
-  <div class="font-normal text-gray-500 dark:text-gray-400">
-    <%= t(".workflow") %> <%= workflow_execution.metadata["workflow_name"] %> <%= workflow_execution.metadata["workflow_version"] %>
+  <div class="font-normal text-red-500 dark:text-red-400">
+    <% if workflow_execution.in_progress? %>
+      <%= t(".exclusion_reason") %> <%= t(".in_progress") %>
+    <% elsif workflow_execution.state == 'error'%>
+      <%= t(".exclusion_reason") %> <%= t(".error") %>
+    <% elsif workflow_execution.state == 'canceled'%>
+      <%= t(".exclusion_reason") %> <%= t(".canceled") %>
+    <% end %>
   </div>
   <% end %>
 </div>

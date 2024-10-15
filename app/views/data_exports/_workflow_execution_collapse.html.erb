@@ -1,5 +1,5 @@
 <div data-controller="collapsible">
-  <h2 id="<%= "accordion-collapse-heading-workflows" %>">
+  <h2 id="<%= "accordion-collapse-heading-#{type}-workflows" %>">
     <button
       type="button"
       class="
@@ -22,9 +22,13 @@
       "
       data-action="collapsible#toggle"
       aria-expanded="true"
-      aria-controls="<%= "accordion-collapse-body-non-completed-workflows" %>"
+      aria-controls="<%= "accordion-collapse-body-#{type}-workflows" %>"
     >
-      hi
+      <% if type == 'completed' %>
+        <%= t(".included_header", count: workflow_executions.count) %>
+      <% else %>
+        <%= t(".excluded_header", count: workflow_executions.count) %>
+      <% end %>
       <%= viral_icon(
         name: "chevron_down",
         classes: "mr-0 w-4 h-4 rotate-0",
@@ -35,12 +39,17 @@
 
   <div
     data-collapsible-target="item"
-    id="<%= "accordion-collapse-body-non-completed-workflows" %>"
+    id="<%= "accordion-collapse-body-#{type}-workflows" %>"
     class="hidden"
     aria-labelledby="<%= "accordion-collapse-heading-workflows" %>"
   >
     <div class="text-base leading-relaxed text-slate-500 dark:text-slate-400 p-2.5 border border-t-0 border-slate-300">
-      <%= t(:"data_exports.new.excluded_description") %>
+      <% if type == 'completed' %>
+        <span><%= t(".included_description") %></span>
+        <span><%= t(:"data_exports.new.after_submission_description_html") %></span>
+      <% else %>
+        <%= t(".excluded_description") %>
+      <% end %>
     </div>
     <div
     class="
@@ -50,8 +59,14 @@
     data-action="scroll->infinite-scroll#scroll"
     data-infinite-scroll-target="scrollable"
     >
-      <%= workflows.each do |workflow| %>
-        <%= render "list_workflow_execution", workflow_execution: workflow %>
+      <% if type == 'completed' %>
+        <%= turbo_frame_tag "list_completed_workflow_executions" do %>
+          <%= render partial: "shared/loading/samples_list_skeleton" %>
+        <% end %>
+      <% else %>
+        <%= turbo_frame_tag "list_non_completed_workflow_executions" do %>
+        <%= render partial: "shared/loading/samples_list_skeleton" %>
+      <% end %>
       <% end %>
     </div>
   </div>

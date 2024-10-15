@@ -2,12 +2,9 @@
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
     <div
-      data-controller="infinite-scroll test"
+      data-controller="infinite-scroll new-analysis-export"
       data-infinite-scroll-selection-outlet='#workflow-executions-table'
       data-infinite-scroll-paged-field-name-value="workflow_execution_ids[]"
-      data-infinite-scroll-singular-description-value="<%= t(".description.singular") %>"
-      data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
-      data-infinite-scroll-non-zero-header-value="<%= t(".selection_count.non_zero") %>"
       class="font-normal text-slate-500 dark:text-slate-400"
     >
       <%= form_with(
@@ -16,9 +13,9 @@
     ) do %>
         <div data-infinite-scroll-target="pageFormContent"></div>
       <% end %>
-
+      <%= turbo_frame_tag "error" %>
       <div class="grid gap-4">
-        <%= turbo_frame_tag "completed_list", data: { "test-target": "completedList"} %>
+        <%= turbo_frame_tag "completed_list" %>
         <%= turbo_frame_tag "non_completed_list" %>
         <%= form_for(:data_export, url: data_exports_path, method: :post,
             data: {
@@ -49,7 +46,7 @@
                           data: {
                             turbo_frame: "_top",
                             action: "click->form--hidden-inputs#clearSelection",
-                            "test-target": "submitButton"
+                            "new-analysis-export-target": "submitButton"
                           },
                           class: "button button--state-primary button--size-default" %>
             </div>

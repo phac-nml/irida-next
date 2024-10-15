@@ -25,7 +25,9 @@ export default class extends Controller {
     this.allIds = this.selectionOutlet.getStoredItems();
     this.numSelected = this.selectionOutlet.getNumSelected()
     this.#makePagedHiddenInputs();
-    this.#replaceDescriptionPlaceholder();
+    if (this.hasSummaryTarget) {
+      this.#replaceDescriptionPlaceholder();
+    }
     if (this.hasSelectionCountTarget) {
       this.#replaceCountPlaceholder(this.selectionCountTarget, this.nonZeroHeaderValue);
     }

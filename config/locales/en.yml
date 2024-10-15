@@ -481,15 +481,20 @@ en:
         name: Name
         status: Status
       title: Data Exports
+    list:
+      error: Analysis exports will only include completed workflow executions. Please select workflow executions in the completed state.
     list_workflow_execution:
+      canceled: Canceled
+      error: Errored
+      exclusion_reason: 'Reason for exclusion:'
       id: 'ID:'
+      in_progress: Currently running
       name: 'Name:'
       run_id: 'Run ID:'
       workflow: 'Workflow:'
     new:
       after_submission_description_html: After submission, you will be redirected to the export page. While the export status is <span class="bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1 mr-1">processing</span>, the contents of the export are being created. Once the export status is <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1">ready</span>, it will be available for download. You will have 3 business days to download the export before it's deleted.
       email_label: Receive an email notification when your export is ready to download?
-      excluded_description: These workflow executions will be excluded from the export as they do not have the completed state.
       name_label: 'Export Name (Optional):'
       sample_description:
         plural: This export will contain COUNT_PLACEHOLDER samples.
@@ -500,13 +505,6 @@ en:
         zero: Samples (0 selected)
       submit_button: Submit
     new_analysis_export_dialog:
-      description:
-        plural: This export will contain the listed workflow executions below.
-        singular: This export will contain the listed workflow executions below.
-        zero: This export will contain no workflow executions.
-      selection_count:
-        non_zero: Workflow Executions (COUNT_PLACEHOLDER selected)
-        zero: Workflow Executions (0 selected)
       title: Analysis Export
     new_linelist_export_dialog:
       available: Available
@@ -525,6 +523,7 @@ en:
       selected: Selected
       title: Sample Export
     new_single_analysis_export_dialog:
+      description: This export will contain 1 workflow execution.
       single_selection: Workflow Executions (1 selected)
     preview:
       manifest_json: manifest.json
@@ -551,6 +550,11 @@ en:
       analysis: ANALYSIS
       linelist: LINELIST
       sample: SAMPLE
+    workflow_execution_collapse:
+      included_description: This export will contain the listed workflow executions below.
+      included_header: Workflow Executions (%{count})
+      excluded_description: These workflow executions will be excluded from the export as they do not have the completed state.
+      excluded_header: Excluded Workflow Executions (%{count})
   date:
     formats:
       iso: YYYY-MM-DD

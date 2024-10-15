@@ -16,18 +16,50 @@
     <%= turbo_stream.replace "completed_list",
                          partial: "workflow_execution_collapse",
                          locals: {
-                           workflows: @completed_workflow_executions,
-                           count: @completed_workflow_executions.count,
+                           workflow_executions: @completed_workflow_executions,
                            type: "completed",
                          } %>
+    <% if @page == 1 %>
+      <%= turbo_stream.replace "list_completed_workflow_executions" do %>
+        <%= turbo_frame_tag "list_completed_workflow_executions" %>
+      <% end %>
+    <% end %>
+
+    <%= turbo_stream.append("list_completed_workflow_executions") do %>
+      <% @completed_workflow_executions.each do |workflow_execution| %>
+        <%= render "list_workflow_execution", workflow_execution: %>
+      <% end %>
+    <% end %>
+  <% else %>
+    <%= turbo_stream.update("error") do %>
+      <div
+        class="
+          flex p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-slate-800
+          dark:text-red-400
+        "
+      >
+        <%= viral_icon(name: "exclamation_circle", classes: "h-6 w-6 flex-none") %>
+        <span class="flex-1 ml-4" data-new-analysis-export-target="error"><%= t(".error") %></span>
+      </div>
+    <% end %>
   <% end %>
   <% if @non_completed_workflow_executions.count.positive? %>
     <%= turbo_stream.replace "non_completed_list",
                          partial: "workflow_execution_collapse",
                          locals: {
-                           workflows: @non_completed_workflow_executions,
-                           count: @non_completed_workflow_executions.count,
+                           workflow_executions: @non_completed_workflow_executions,
                            type: "non_completed",
                          } %>
+    <% if @page == 1 %>
+      <%= turbo_stream.replace "list_non_completed_workflow_executions" do %>
+        <%= turbo_frame_tag "list_non_completed_workflow_executions" %>
+      <% end %>
+    <% end %>
+
+    <%= turbo_stream.append("list_non_completed_workflow_executions") do %>
+      <% @non_completed_workflow_executions.each do |workflow_execution| %>
+        <%= render "list_workflow_execution", workflow_execution: %>
+      <% end %>
+    <% end %>
   <% end %>
 <% end %>
