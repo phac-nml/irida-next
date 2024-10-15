@@ -4,9 +4,9 @@ export default class extends Controller {
   static targets = ["completedList", "error", "submitButton"];
 
   errorTargetConnected() {
-    this.check()
+    this.disableSubmit()
   }
-  check() {
+  disableSubmit() {
     this.submitButtonTarget.disabled = true
   }
 }
