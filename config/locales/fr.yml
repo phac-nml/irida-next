@@ -551,10 +551,10 @@ fr:
       linelist: LINELIST
       sample: SAMPLE
     workflow_execution_collapse:
-      included_description: This export will contain the listed workflow executions below.
-      included_header: Workflow Executions (%{count})
       excluded_description: These workflow executions will be excluded from the export as they do not have the completed state.
       excluded_header: Excluded Workflow Executions (%{count})
+      included_description: This export will contain the listed workflow executions below.
+      included_header: Workflow Executions (%{count})
   date:
     formats:
       iso: YYYY-MM-DD
