@@ -65,7 +65,6 @@ export default class extends Controller {
   }
 
   clear() {
-    console.log("clear");
     sessionStorage.removeItem(this.#storageKey);
     this.#updateUI([]);
   }
