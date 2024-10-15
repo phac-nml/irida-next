@@ -14,6 +14,7 @@ class DataExportsTest < ApplicationSystemTestCase
     @data_export8 = data_exports(:data_export_eight)
     @data_export9 = data_exports(:data_export_nine)
     @data_export10 = data_exports(:data_export_ten)
+    @data_export11 = data_exports(:data_export_eleven)
     @group1 = groups(:group_one)
     @project1 = projects(:project1)
     @sample1 = samples(:sample1)
@@ -35,7 +36,7 @@ class DataExportsTest < ApplicationSystemTestCase
     visit data_exports_path
 
     within('tbody') do
-      assert_selector 'tr', count: 7
+      assert_selector 'tr', count: 8
       assert_selector 'tr:first-child td:first-child ', text: @data_export1.id
       assert_selector 'tr:first-child td:nth-child(2)', text: @data_export1.name
 
@@ -85,6 +86,14 @@ class DataExportsTest < ApplicationSystemTestCase
 
   test 'can delete data exports on listing page' do
     visit data_exports_path
+
+    assert_selector 'table tbody tr', count: 8
+    within('tbody') do
+      click_link I18n.t('data_exports.index.actions.delete'), match: :first
+    end
+    within('#turbo-confirm[open]') do
+      click_button I18n.t(:'components.confirmation.confirm')
+    end
 
     assert_selector 'table tbody tr', count: 7
     within('tbody') do
@@ -218,7 +227,7 @@ class DataExportsTest < ApplicationSystemTestCase
     visit data_exports_path
 
     within('tbody') do
-      assert_selector 'tr', count: 7
+      assert_selector 'tr', count: 8
       assert_text @data_export2.id
     end
 
@@ -231,7 +240,7 @@ class DataExportsTest < ApplicationSystemTestCase
     end
 
     within('tbody') do
-      assert_selector 'tr', count: 6
+      assert_selector 'tr', count: 7
       assert_no_text @data_export2.id
     end
   end
@@ -261,7 +270,7 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'create export from project samples page' do
     visit data_exports_path
     within('tbody') do
-      assert_selector 'tr', count: 7
+      assert_selector 'tr', count: 8
       assert_no_text 'test data export'
     end
     # project samples page
@@ -317,7 +326,7 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'create export from group samples page' do
     visit data_exports_path
     within('tbody') do
-      assert_selector 'tr', count: 7
+      assert_selector 'tr', count: 8
       assert_no_text 'test data export'
     end
     # project samples page
@@ -1130,9 +1139,9 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'can sort by column' do
     visit data_exports_path
 
-    assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 7, count: 7,
+    assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 8, count: 8,
                                                                          locale: @user.locale))
-    assert_selector 'table tbody tr', count: 7
+    assert_selector 'table tbody tr', count: 8
 
     click_on 'ID'
     assert_selector 'table thead th:first-child svg.icon-arrow_up'
@@ -1230,9 +1239,9 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'can filter by id or name' do
     visit data_exports_path
 
-    assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 7, count: 7,
+    assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 8, count: 8,
                                                                          locale: @user.locale))
-    assert_selector 'table tbody tr', count: 7
+    assert_selector 'table tbody tr', count: 8
 
     fill_in placeholder: I18n.t(:'data_exports.index.search.placeholder'),
             with: @data_export1.id
@@ -1249,15 +1258,17 @@ class DataExportsTest < ApplicationSystemTestCase
     fill_in placeholder: I18n.t(:'data_exports.index.search.placeholder'),
             with: @data_export1.name
 
-    assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
+    assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                          locale: @user.locale))
 
     within('table tbody') do
-      assert_selector 'tr', count: 2
+      assert_selector 'tr', count: 3
       assert_text @data_export1.id
       assert_text @data_export1.name
       assert_text @data_export10.id
       assert_text @data_export10.name
+      assert_text @data_export11.id
+      assert_text @data_export11.name
     end
 
     fill_in placeholder: I18n.t(:'data_exports.index.search.placeholder'),
