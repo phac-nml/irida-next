@@ -226,6 +226,36 @@ module Samples
                      I18n.t('services.samples.metadata.import_file.missing_metadata_row'))
       end
 
+      test 'import sample metadata with an empty header' do
+        assert_equal({}, @sample1.metadata)
+        assert_equal({}, @sample2.metadata)
+        params = { file: File.new('test/fixtures/files/metadata/contains_empty_header.csv', 'r'),
+                   sample_id_column: 'sample_name' }
+        response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe,
+                                                            params).execute
+        assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield3],
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] },
+                       @sample2.name => { added: %w[metadatafield1 metadatafield3],
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
+        assert_equal({ 'metadatafield1' => '10', 'metadatafield3' => '30' }, @sample1.reload.metadata)
+        assert_equal({ 'metadatafield1' => '15', 'metadatafield3' => '35' }, @sample2.reload.metadata)
+      end
+
+      test 'import sample metadata with multiple empty columns' do
+        assert_equal({}, @sample1.metadata)
+        assert_equal({}, @sample2.metadata)
+        params = { file: File.new('test/fixtures/files/metadata/contains_empty_columns.csv', 'r'),
+                   sample_id_column: 'sample_name' }
+        response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe,
+                                                            params).execute
+        assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield3],
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] },
+                       @sample2.name => { added: %w[metadatafield1 metadatafield3],
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
+        assert_equal({ 'metadatafield1' => '10', 'metadatafield3' => '30' }, @sample1.reload.metadata)
+        assert_equal({ 'metadatafield1' => '15', 'metadatafield3' => '35' }, @sample2.reload.metadata)
+      end
+
       test 'import sample metadata with empty values set to true' do
         sample32 = samples(:sample32)
         project29 = projects(:project29)
