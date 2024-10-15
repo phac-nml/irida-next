@@ -12,37 +12,22 @@
   <% end %>
 
 <% elsif defined? @completed_workflow_executions %>
-  <% if @page == 1 %>
-    <%= turbo_stream.replace "list_completed" do %>
-      <%= turbo_frame_tag "list_completed" %>
-    <% end %>
-    <%= turbo_stream.replace "list_non_completed" do %>
-      <%= turbo_frame_tag "list_non_completed" %>
-    <% end %>
+  <% if @completed_workflow_executions.count.positive? %>
+    <%= turbo_stream.replace "completed_list",
+                         partial: "workflow_execution_collapse",
+                         locals: {
+                           workflows: @completed_workflow_executions,
+                           count: @completed_workflow_executions.count,
+                           type: "completed",
+                         } %>
   <% end %>
-
-  <%= turbo_stream.append("list_completed") do %>
-    <% @completed_workflow_executions.each do |completed_workflow_execution| %>
-      <%= render "list_workflow_execution",
-      workflow_execution: completed_workflow_execution %>
-    <% end %>
+  <% if @non_completed_workflow_executions.count.positive? %>
+    <%= turbo_stream.replace "non_completed_list",
+                         partial: "workflow_execution_collapse",
+                         locals: {
+                           workflows: @non_completed_workflow_executions,
+                           count: @non_completed_workflow_executions.count,
+                           type: "non_completed",
+                         } %>
   <% end %>
-  <%= turbo_stream.replace "completed_header",
-                       partial: "list_workflow_execution_header",
-                       locals: {
-                         count: @completed_workflow_executions.count,
-                         type: "completed",
-                       } %>
-  <%= turbo_stream.append("list_non_completed") do %>
-    <% @non_completed_workflow_executions.each do |non_completed_workflow_execution| %>
-      <%= render "list_workflow_execution",
-      workflow_execution: non_completed_workflow_execution %>
-    <% end %>
-  <% end %>
-  <%= turbo_stream.replace "non_completed_header",
-                       partial: "list_workflow_execution_header",
-                       locals: {
-                         count: @non_completed_workflow_executions.count,
-                         type: "non_completed",
-                       } %>
 <% end %>
