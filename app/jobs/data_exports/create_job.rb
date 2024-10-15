@@ -353,7 +353,7 @@ module DataExports
       WorkflowExecution.includes(
         outputs: { file_attachment: :blob },
         samples_workflow_executions: [:sample, { outputs: { file_attachment: :blob } }]
-      ).where(id: workflow_ids)
+      ).where(id: workflow_ids, state: 'completed')
     end
   end
 end

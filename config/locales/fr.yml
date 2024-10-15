@@ -344,7 +344,7 @@ fr:
     list_filter:
       apply: Apply filter
       clear: Remove all tags
-      description: Paste a list of <kbd>,</kbd> seperated sample names or identifiers
+      description: Paste a list of <kbd>,</kbd> separated sample names or identifiers
       remove_tag: Remove
       title: Filter by sample names or Id
     nextflow:
@@ -843,9 +843,9 @@ fr:
     email_template:
       automated_message: This email was sent from an automated system. Please do not reply to this email.
       copy_paste: 'Or copy and paste this link into your browser:'
-      greeting: Hello,
-      greeting_with_name: Hello %{name},
-      thanks: Thanks,
+      greeting: Bonjour,
+      greeting_with_name: Bonjour %{name},
+      thanks: Merci,
     group_link_mailer:
       access_granted_manager_email:
         body_html: Group '%{group_name}' has been <strong>granted</strong> access to %{namespace_type} '%{namespace_name}'
