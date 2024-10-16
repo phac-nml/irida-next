@@ -284,7 +284,27 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
     assert_equal expected_error, data['errors']
   end
 
-  test 'updateSampleMetadata mutation should convert keys and values to strings and lower case them' do
+  test 'updateSampleMetadata mutation should not work with nested metadata' do
+    result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_SAMPLE_PUID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { samplePuid: @sample.puid,
+                                              metadata: { key1: { nestedKey1: 'nestedValue1' } } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['updateSampleMetadata']
+
+    assert_not_empty data
+    assert_not_empty data['errors']
+
+    expected_error = [
+      'path' => %w[sample base],
+      'message' => 'Metadata cannot contain nested JSON'
+    ]
+    assert_equal expected_error, data['errors']
+  end
+
+  test 'updateSampleMetadata mutation should convert keys and values to strings and lower case keys' do
     result = IridaSchema.execute(UPDATE_SAMPLE_METADATA_BY_SAMPLE_ID_MUTATION,
                                  context: { current_user: @user, token: @api_scope_token },
                                  variables: { sampleId: @sample.to_global_id.to_s,
