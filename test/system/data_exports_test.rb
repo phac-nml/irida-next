@@ -20,7 +20,7 @@ class DataExportsTest < ApplicationSystemTestCase
     @sample2 = samples(:sample2)
     @sample30 = samples(:sample30)
     @workflow_execution1 = workflow_executions(:irida_next_example_completed_with_output)
-    @workflow_execution2 = workflow_executions(:workflow_execution_valid)
+    @workflow_execution2 = workflow_executions(:irida_next_example_completed)
     @workflow_execution3 = workflow_executions(:irida_next_example_error)
     @workflow_execution4 = workflow_executions(:automated_workflow_execution)
     @workflow_execution5 = workflow_executions(:automated_example_error)
