@@ -6,7 +6,7 @@ class UpdateMetadataValuesToText < ActiveRecord::Migration[7.2]
     reversible do |dir|
       dir.up do
         execute <<~SQL.squish
-          update samples set metadata = (select jsonb_object_agg(key, value) from jsonb_each_text(metadata));
+          update samples set metadata = (select jsonb_object_agg(key, value) from jsonb_each_text(metadata)) where metadata != '{}';
         SQL
       end
     end
