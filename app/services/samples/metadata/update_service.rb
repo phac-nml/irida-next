@@ -67,16 +67,16 @@ module Samples
               I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample.name)
       end
 
-      def validate_metadata_value(value)
+      def validate_metadata_value(key, value)
         return unless value.is_a?(Hash)
 
         raise SampleMetadataUpdateError,
-              I18n.t('services.samples.metadata.nested_metadata', sample_name: @sample.name)
+              I18n.t('services.samples.metadata.nested_metadata', sample_name: @sample.name, key:)
       end
 
       def perform_metadata_update
         @metadata.each do |key, value|
-          validate_metadata_value(value)
+          validate_metadata_value(key, value)
 
           key = key.to_s.downcase.strip
           value = value.to_s.strip # remove data types
