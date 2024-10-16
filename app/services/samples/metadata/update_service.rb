@@ -67,9 +67,16 @@ module Samples
               I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample.name)
       end
 
+      def validate_metadata_value(value)
+        return unless value.is_a?(Hash)
+
+        raise SampleMetadataUpdateError,
+              I18n.t('services.samples.metadata.nested_metadata', sample_name: @sample.name)
+      end
+
       def perform_metadata_update
         @metadata.each do |key, value|
-          raise SampleMetadataUpdateError, 'Metadata cannot contain nested JSON' if value.is_a?(Hash)
+          validate_metadata_value(value)
 
           key = key.to_s.downcase.strip
           value = value.to_s.strip # remove data types
