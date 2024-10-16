@@ -69,8 +69,11 @@ module Samples
 
       def perform_metadata_update
         @metadata.each do |key, value|
+          raise SampleMetadataUpdateError, 'Metadata cannot contain nested JSON' if value.is_a?(Hash)
+
           key = key.to_s.downcase.strip
           value = value.to_s.strip # remove data types
+
           if value.blank?
             if @sample.metadata.key?(key)
               @sample.metadata.delete(key)
