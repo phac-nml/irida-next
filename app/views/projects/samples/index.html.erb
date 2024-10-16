@@ -6,7 +6,7 @@
 
 <%= turbo_stream_from @project %>
 
-<div class="fixed-table-component">
+<div class="fixed-table-component" data-controller="filters">
   <%= render Viral::PageHeaderComponent.new(title: t('.title')) do |component| %>
     <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
     <%= component.with_buttons do %>
@@ -56,8 +56,7 @@
                   turbo_stream: true,
                 },
                 class:
-                  "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
+                  "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300 border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
               ) %>
             <% else %>
               <% dropdown.with_item(
@@ -155,8 +154,8 @@
         <input type="hidden" name="format" value="turbo_stream"/>
         <input type="hidden" name="limit" value="<%=@pagy.limit%>"/>
       <% end %>
-      <%= search_form_for @q, url: search_namespace_project_samples_url, html: { method: :post, "data-controller": "metadata-toggle", "data-turbo-action": "replace", "data-metadata-toggle-page-value": @pagy.page, "data-filters-selection-outlet": "#samples-table" }, class:
-        "inline-flex items-center space-x-2" do |f| %>
+      <%= search_form_for @q, url: search_namespace_project_samples_url, html: { method: :post, "data-controller": "filters metadata-toggle", "data-turbo-action": "replace", "data-metadata-toggle-page-value": @pagy.page, "data-filters-selection-outlet": "#samples-table" }, class:
+        "inline-flex items-center space-x-2 filters" do |f| %>
         <input type="hidden" name="format" value="turbo_stream"/>
         <input type="hidden" name="limit" value="<%=@pagy.limit%>"/>
         <%= render ListFilterComponent.new(
