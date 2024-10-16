@@ -47,6 +47,10 @@ class WorkflowExecution < ApplicationRecord
     %w[completed error canceled].include?(state) && cleaned?
   end
 
+  def in_progress?
+    %w[initial prepared submitted running completing canceling].include?(state)
+  end
+
   def sent_to_ga4gh?
     %w[prepared initial].exclude?(state)
   end

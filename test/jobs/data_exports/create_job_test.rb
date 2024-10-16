@@ -426,6 +426,62 @@ module DataExports
       assert_equal 'ready', @data_export6.status
     end
 
+    test 'content of analysis export with completed and non-completed workflow executions' do
+      data_export = data_exports(:data_export_eleven)
+      workflow_execution = workflow_executions(:irida_next_example_completed_with_output)
+      samples_workflow_execution = samples_workflow_executions(:sample46_irida_next_example_completed_with_output)
+      sample = samples(:sample46)
+      sample_puid = samples_workflow_execution.samplesheet_params['sample']
+      expected_files_in_zip = [
+        "#{workflow_execution.id}/#{sample_puid}/#{samples_workflow_execution.outputs[0].filename}",
+        'manifest.json',
+        'manifest.txt',
+        "#{workflow_execution.id}/#{workflow_execution.outputs[0].filename}"
+      ]
+      DataExports::CreateJob.perform_now(data_export)
+      export_file = ActiveStorage::Blob.service.path_for(data_export.file.key)
+      Zip::File.open(export_file) do |zip_file|
+        zip_file.each do |entry|
+          assert expected_files_in_zip.include?(entry.to_s)
+          expected_files_in_zip.delete(entry.to_s)
+        end
+      end
+      assert expected_files_in_zip.empty?
+      expected_manifest = {
+        'type' => 'Analysis Export',
+        'date' => Date.current.strftime('%Y-%m-%d'),
+        'children' =>
+        [
+          { 'name' => workflow_execution.id,
+            'type' => 'folder',
+            'irida-next-type' => 'workflow_execution',
+            'irida-next-name' => workflow_execution.id,
+            'children' => [
+              {
+                'name' => workflow_execution.outputs[0].filename.to_s,
+                'type' => 'file'
+              },
+              {
+                'name' => sample_puid,
+                'type' => 'folder',
+                'irida-next-type' => 'sample',
+                'irida-next-name' => sample.name,
+                'children' =>
+                [
+                  {
+                    'name' => samples_workflow_execution.outputs[0].filename.to_s,
+                    'type' => 'file'
+                  }
+                ]
+              }
+            ] }
+        ]
+      }
+
+      assert_equal expected_manifest.to_json, data_export.manifest
+      assert_equal 'ready', data_export.status
+    end
+
     test 'create csv linelist export with project namespace.type and csv content' do
       sample32 = samples(:sample32)
       data_export8 = data_exports(:data_export_eight)
