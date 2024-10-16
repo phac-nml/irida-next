@@ -97,6 +97,7 @@
         <%= render SearchComponent.new(
           query: @q,
           url: search_group_samples_url,
+          value: @search_params[:name_or_puid_cont],
           search_attribute: :name_or_puid_cont,
           placeholder: t(".search.placeholder"),
           html: { method: :post },
