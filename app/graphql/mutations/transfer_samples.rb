@@ -64,7 +64,7 @@ module Mutations
 
     def transfer_samples(project, new_project_id, sample_ids) # rubocop:disable Metrics/MethodLength
       # remove prefix from sample_ids
-      sample_ids.each { |sample_id| sample_id.sub!('gid://irida/Sample/', '') }
+      sample_ids.each { |sample_id| sample_id.sub!(SAMPLE_ID_PREFIX, '') }
 
       samples = Samples::TransferService.new(
         project, current_user
@@ -83,7 +83,7 @@ module Mutations
         }
       else
         # add the prefix to sample_ids
-        samples.each { |sample_id| sample_id.prepend('gid://irida/Sample/') }
+        samples.each { |sample_id| sample_id.prepend(SAMPLE_ID_PREFIX) }
         {
           samples:,
           errors: []

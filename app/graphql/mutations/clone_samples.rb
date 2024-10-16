@@ -64,7 +64,7 @@ module Mutations
 
     def clone_samples(project, new_project_id, sample_ids) # rubocop:disable Metrics/MethodLength
       # remove prefix from sample_ids
-      sample_ids.each { |sample_id| sample_id.sub!('gid://irida/Sample/', '') }
+      sample_ids.each { |sample_id| sample_id.sub!(SAMPLE_ID_PREFIX, '') }
 
       samples = Samples::CloneService.new(
         project, current_user
@@ -83,10 +83,9 @@ module Mutations
         }
       else
         # add the prefix to sample_ids
-        prefix = 'gid://irida/Sample/'
         prepended_samples = samples.map do |key, value|
-          { original: "#{prefix}#{key}",
-            copy: "#{prefix}#{value}" }
+          { original: "#{SAMPLE_ID_PREFIX}#{key}",
+            copy: "#{SAMPLE_ID_PREFIX}#{value}" }
         end
 
         {

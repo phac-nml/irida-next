@@ -12,6 +12,8 @@ module Mutations
 
     protected
 
+    SAMPLE_ID_PREFIX = 'gid://irida/Sample/'
+
     def get_sample_from_id_or_puid_args(args)
       if args[:sample_id]
         IridaSchema.object_from_id(args[:sample_id], { expected_type: Sample })
