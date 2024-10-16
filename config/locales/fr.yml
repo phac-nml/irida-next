@@ -1603,7 +1603,7 @@ fr:
           sample_metadata_fields_not_updated: Sample '%{sample_name}' with field(s) '%{metadata_fields}' cannot be updated.
           sample_not_found_within_group: Could not find sample with puid '%{sample_puid}' in this group.
           sample_not_found_within_project: Could not find sample with puid or name '%{sample_puid}' in this project.
-        nested_metadata: Sample '%{sample_name}' cannot contain nested JSON for metadata.
+        nested_metadata: Sample '%{sample_name}' with metadata key '%{key}' cannot contain nested JSON.
         sample_does_not_belong_to_project: Sample '%{sample_name}'' does not belong to project '%{project_name}'
         update_fields:
           key_exists: Sample already contains metadata field '%{key}'.

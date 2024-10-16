@@ -299,7 +299,7 @@ class UpdateSampleMetadataMutationTest < ActiveSupport::TestCase
 
     expected_error = [
       'path' => %w[sample base],
-      'message' => I18n.t('services.samples.metadata.nested_metadata', sample_name: @sample.name)
+      'message' => I18n.t('services.samples.metadata.nested_metadata', sample_name: @sample.name, key: 'key1')
     ]
     assert_equal expected_error, data['errors']
   end
