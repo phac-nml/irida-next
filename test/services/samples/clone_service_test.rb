@@ -36,6 +36,14 @@ module Samples
                    I18n.t('services.samples.clone.same_project'))
     end
 
+    test 'not clone samples with not matching sample ids' do
+      clone_samples_params = { new_project_id: @new_project.id, sample_ids: ['gid://irida/Sample/not_a_real_id'] }
+      assert_empty Samples::CloneService.new(@project, @john_doe).execute(clone_samples_params[:new_project_id],
+                                                                          clone_samples_params[:sample_ids])
+      assert_equal(I18n.t('services.samples.clone.samples_not_found', sample_ids: 'gid://irida/Sample/not_a_real_id'),
+                   @project.errors.messages_for(:samples).first)
+    end
+
     test 'authorized to clone samples from source project' do
       clone_samples_params = { new_project_id: @new_project.id, sample_ids: [@sample1.id, @sample2.id] }
       Samples::CloneService.new(@project, @john_doe).execute(clone_samples_params[:new_project_id],
