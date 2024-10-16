@@ -1551,6 +1551,7 @@ en:
       create:
         invalid_export_samples: Unable to create export due to either sample permissions or not found samples.
         invalid_export_workflow_executions: Unable to create export due to either workflow execution permissions or not found workflow executions.
+        non_completed_workflow_executions: Unable to create export due to selected workflow executions having a state other than 'Completed'.
     groups:
       share:
         group_not_found: Group with id %{group_id} to share namespace with cannot be found.

@@ -13,6 +13,8 @@ module DataExports
       @workflow_execution2 = workflow_executions(:irida_next_example_completed)
       @workflow_execution3 = workflow_executions(:automated_workflow_execution)
       @workflow_execution4 = workflow_executions(:automated_example_completed)
+      @workflow_execution5 = workflow_executions(:irida_next_example_error)
+      @workflow_execution6 = workflow_executions(:automated_example_error)
     end
 
     test 'create data export with valid sample export params' do
@@ -509,6 +511,33 @@ module DataExports
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(@user, params).execute
         assert_equal I18n.t('services.data_exports.create.invalid_export_workflow_executions'),
+                     data_export.errors.full_messages.first
+      end
+    end
+
+    test 'cannot create analysis export with non-completed workflow executions from user analysis_type' do
+      params = { 'export_type' => 'analysis',
+                 'export_parameters' => { 'ids' =>
+                  [@workflow_execution1.id, @workflow_execution5.id],
+                                          'analysis_type' => 'user' } }
+
+      assert_no_difference -> { DataExport.count } do
+        data_export = DataExports::CreateService.new(@user, params).execute
+        assert_equal I18n.t('services.data_exports.create.non_completed_workflow_executions'),
+                     data_export.errors.full_messages.first
+      end
+    end
+
+    test 'cannot create analysis export with non-completed workflow executions from project analysis_type' do
+      params = { 'export_type' => 'analysis',
+                 'export_parameters' => { 'ids' =>
+         [@workflow_execution3.id, @workflow_execution6.id],
+                                          'analysis_type' => 'project',
+                                          'namespace_id' => @project1.namespace.id } }
+
+      assert_no_difference -> { DataExport.count } do
+        data_export = DataExports::CreateService.new(@user, params).execute
+        assert_equal I18n.t('services.data_exports.create.non_completed_workflow_executions'),
                      data_export.errors.full_messages.first
       end
     end
