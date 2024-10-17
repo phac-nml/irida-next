@@ -51,6 +51,7 @@ module Mutations
       metadata_changes = Samples::Metadata::UpdateService.new(sample.project, sample, current_user,
                                                               { 'metadata' => metadata }).execute
 
+      sample.reload
       user_errors = sample.errors.map do |error|
         {
           path: ['sample', error.attribute.to_s.camelize(:lower)],
