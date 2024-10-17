@@ -6,6 +6,10 @@ module Dashboard
   class GroupsTest < ApplicationSystemTestCase
     def setup
       login_as users(:alph_abet)
+      @group12 = groups(:group_twelve)
+      @subgroup12a = groups(:subgroup_twelve_a)
+      @subgroup12aa = groups(:subgroup_twelve_a_a)
+      @subgroup12b = groups(:subgroup_twelve_b)
     end
 
     test 'can see the list of groups' do
@@ -212,18 +216,13 @@ module Dashboard
 
       assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
 
-      group12 = groups(:group_twelve)
-      subgroup12a = groups(:subgroup_twelve_a)
-      subgroup12aa = groups(:subgroup_twelve_a_a)
-      subgroup12b = groups(:subgroup_twelve_b)
+      assert_equal 4, @group12.samples_count
 
-      assert_equal 4, group12.samples_count
-
-      within("#group_#{group12.id}-samples-count") do
-        assert_text group12.samples_count
+      within("#group_#{@group12.id}-samples-count") do
+        assert_text @group12.samples_count
       end
 
-      visit group_url(subgroup12aa)
+      visit group_url(@subgroup12aa)
       click_on I18n.t('groups.sidebar.settings')
       click_link I18n.t('groups.sidebar.general')
 
@@ -237,24 +236,24 @@ module Dashboard
       click_button I18n.t('components.confirmation.confirm')
 
       visit dashboard_groups_url
-      within("li#group_#{group12.id}") do
+      within("li#group_#{@group12.id}") do
         find('a.folder-toggle-wrap').click
       end
 
-      assert_equal 2, group12.reload.samples_count
-      assert_equal 1, subgroup12a.reload.samples_count
-      assert_equal 1, subgroup12b.reload.samples_count
+      assert_equal 2, @group12.reload.samples_count
+      assert_equal 1, @subgroup12a.reload.samples_count
+      assert_equal 1, @subgroup12b.reload.samples_count
 
-      within("#group_#{group12.id}-samples-count") do
-        assert_text group12.samples_count
+      within("#group_#{@group12.id}-samples-count") do
+        assert_text @group12.samples_count
       end
 
-      within("#group_#{subgroup12a.id}-samples-count") do
-        assert_text subgroup12a.samples_count
+      within("#group_#{@subgroup12a.id}-samples-count") do
+        assert_text @subgroup12a.samples_count
       end
 
-      within("#group_#{subgroup12b.id}-samples-count") do
-        assert_text subgroup12b.samples_count
+      within("#group_#{@subgroup12b.id}-samples-count") do
+        assert_text @subgroup12b.samples_count
       end
     end
 
@@ -264,18 +263,13 @@ module Dashboard
 
       assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
 
-      group12 = groups(:group_twelve)
-      subgroup12a = groups(:subgroup_twelve_a)
-      subgroup12aa = groups(:subgroup_twelve_a_a)
-      subgroup12b = groups(:subgroup_twelve_b)
+      assert_equal 4, @group12.samples_count
 
-      assert_equal 4, group12.samples_count
-
-      within("#group_#{group12.id}-samples-count") do
-        assert_text group12.samples_count
+      within("#group_#{@group12.id}-samples-count") do
+        assert_text @group12.samples_count
       end
 
-      visit group_url(subgroup12aa)
+      visit group_url(@subgroup12aa)
 
       click_on I18n.t('groups.sidebar.settings')
       click_link I18n.t('groups.sidebar.general')
@@ -284,38 +278,38 @@ module Dashboard
       within %(form[action="/group-12/subgroup-12-a/subgroup-12-a-a/transfer"]) do
         assert_selector 'input[type=submit]:disabled'
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{subgroup12b.full_path}']").click
+        find("button[data-viral--select2-primary-param='#{@subgroup12b.full_path}']").click
         assert_selector 'input[type=submit]:not(:disabled)'
         click_on I18n.t('groups.edit.advanced.transfer.submit')
       end
 
       within('#turbo-confirm') do
         assert_text I18n.t('components.confirmation.title')
-        fill_in I18n.t('components.confirmation.confirm_label'), with: subgroup12aa.path
+        fill_in I18n.t('components.confirmation.confirm_label'), with: @subgroup12aa.path
         click_on I18n.t('components.confirmation.confirm')
       end
 
       assert_text I18n.t('groups.transfer.success')
 
       visit dashboard_groups_url
-      within("li#group_#{group12.id}") do
+      within("li#group_#{@group12.id}") do
         find('a.folder-toggle-wrap').click
       end
 
-      assert_equal 4, group12.reload.samples_count
-      assert_equal 1, subgroup12a.reload.samples_count
-      assert_equal 3, subgroup12b.reload.samples_count
+      assert_equal 4, @group12.reload.samples_count
+      assert_equal 1, @subgroup12a.reload.samples_count
+      assert_equal 3, @subgroup12b.reload.samples_count
 
-      within("#group_#{group12.id}-samples-count") do
-        assert_text group12.samples_count
+      within("#group_#{@group12.id}-samples-count") do
+        assert_text @group12.samples_count
       end
 
-      within("#group_#{subgroup12a.id}-samples-count") do
-        assert_text subgroup12a.samples_count
+      within("#group_#{@subgroup12a.id}-samples-count") do
+        assert_text @subgroup12a.samples_count
       end
 
-      within("#group_#{subgroup12b.id}-samples-count") do
-        assert_text subgroup12b.samples_count
+      within("#group_#{@subgroup12b.id}-samples-count") do
+        assert_text @subgroup12b.samples_count
       end
     end
 
@@ -325,17 +319,13 @@ module Dashboard
 
       assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
 
-      group12 = groups(:group_twelve)
-      subgroup12a = groups(:subgroup_twelve_a)
-      subgroup12b = groups(:subgroup_twelve_b)
-      project31 = projects(:project31)
+      assert_equal 4, @group12.samples_count
 
-      assert_equal 4, group12.samples_count
-
-      within("#group_#{group12.id}-samples-count") do
-        assert_text group12.samples_count
+      within("#group_#{@group12.id}-samples-count") do
+        assert_text @group12.samples_count
       end
 
+      project31 = projects(:project31)
       visit project_edit_path(project31)
       assert_selector 'a', text: I18n.t(:'projects.edit.advanced.destroy.submit'), count: 1
       click_link I18n.t(:'projects.edit.advanced.destroy.submit')
@@ -347,24 +337,24 @@ module Dashboard
       assert_text I18n.t(:'projects.destroy.success', project_name: project31.name)
 
       visit dashboard_groups_url
-      within("li#group_#{group12.id}") do
+      within("li#group_#{@group12.id}") do
         find('a.folder-toggle-wrap').click
       end
 
-      assert_equal 2, group12.reload.samples_count
-      assert_equal 1, subgroup12a.reload.samples_count
-      assert_equal 1, subgroup12b.reload.samples_count
+      assert_equal 2, @group12.reload.samples_count
+      assert_equal 1, @subgroup12a.reload.samples_count
+      assert_equal 1, @subgroup12b.reload.samples_count
 
-      within("#group_#{group12.id}-samples-count") do
-        assert_text group12.samples_count
+      within("#group_#{@group12.id}-samples-count") do
+        assert_text @group12.samples_count
       end
 
-      within("#group_#{subgroup12a.id}-samples-count") do
-        assert_text subgroup12a.samples_count
+      within("#group_#{@subgroup12a.id}-samples-count") do
+        assert_text @subgroup12a.samples_count
       end
 
-      within("#group_#{subgroup12b.id}-samples-count") do
-        assert_text subgroup12b.samples_count
+      within("#group_#{@subgroup12b.id}-samples-count") do
+        assert_text @subgroup12b.samples_count
       end
     end
 
@@ -374,24 +364,19 @@ module Dashboard
 
       assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
 
-      group12 = groups(:group_twelve)
-      subgroup12a = groups(:subgroup_twelve_a)
-      subgroup12b = groups(:subgroup_twelve_b)
-      project31 = projects(:project31)
+      assert_equal 4, @group12.samples_count
 
-      assert_equal 4, group12.samples_count
-
-      within("#group_#{group12.id}-samples-count") do
-        assert_text group12.samples_count
+      within("#group_#{@group12.id}-samples-count") do
+        assert_text @group12.samples_count
       end
 
+      project31 = projects(:project31)
       visit project_edit_path(project31)
-
       assert_selector 'h2', text: I18n.t('projects.edit.advanced.transfer.title')
       within %(form[action="/group-12/subgroup-12-a/subgroup-12-a-a/project-31/-/transfer"]) do
         assert_selector 'input[type=submit]:disabled'
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{subgroup12b.full_path}']").click
+        find("button[data-viral--select2-primary-param='#{@subgroup12b.full_path}']").click
         assert_selector 'input[type=submit]:not(:disabled)'
         click_on I18n.t('projects.edit.advanced.transfer.submit')
       end
@@ -405,24 +390,24 @@ module Dashboard
       assert_text I18n.t('projects.transfer.success')
 
       visit dashboard_groups_url
-      within("li#group_#{group12.id}") do
+      within("li#group_#{@group12.id}") do
         find('a.folder-toggle-wrap').click
       end
 
-      assert_equal 4, group12.reload.samples_count
-      assert_equal 1, subgroup12a.reload.samples_count
-      assert_equal 3, subgroup12b.reload.samples_count
+      assert_equal 4, @group12.reload.samples_count
+      assert_equal 1, @subgroup12a.reload.samples_count
+      assert_equal 3, @subgroup12b.reload.samples_count
 
-      within("#group_#{group12.id}-samples-count") do
-        assert_text group12.samples_count
+      within("#group_#{@group12.id}-samples-count") do
+        assert_text @group12.samples_count
       end
 
-      within("#group_#{subgroup12a.id}-samples-count") do
-        assert_text subgroup12a.samples_count
+      within("#group_#{@subgroup12a.id}-samples-count") do
+        assert_text @subgroup12a.samples_count
       end
 
-      within("#group_#{subgroup12b.id}-samples-count") do
-        assert_text subgroup12b.samples_count
+      within("#group_#{@subgroup12b.id}-samples-count") do
+        assert_text @subgroup12b.samples_count
       end
     end
 
@@ -432,19 +417,15 @@ module Dashboard
 
       assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
 
-      group12 = groups(:group_twelve)
-      subgroup12a = groups(:subgroup_twelve_a)
-      subgroup12b = groups(:subgroup_twelve_b)
-      project29 = projects(:project29)
-      sample32 = samples(:sample32)
+      assert_equal 4, @group12.samples_count
 
-      assert_equal 4, group12.samples_count
-
-      within("#group_#{group12.id}-samples-count") do
-        assert_text group12.samples_count
+      within("#group_#{@group12.id}-samples-count") do
+        assert_text @group12.samples_count
       end
 
-      visit namespace_project_sample_url(subgroup12a, project29, sample32)
+      project29 = projects(:project29)
+      sample32 = samples(:sample32)
+      visit namespace_project_sample_url(@subgroup12a, project29, sample32)
       click_link I18n.t('projects.samples.show.remove_button')
 
       within('#turbo-confirm[open]') do
@@ -452,24 +433,24 @@ module Dashboard
       end
 
       visit dashboard_groups_url
-      within("li#group_#{group12.id}") do
+      within("li#group_#{@group12.id}") do
         find('a.folder-toggle-wrap').click
       end
 
-      assert_equal 3, group12.reload.samples_count
-      assert_equal 2, subgroup12a.reload.samples_count
-      assert_equal 1, subgroup12b.reload.samples_count
+      assert_equal 3, @group12.reload.samples_count
+      assert_equal 2, @subgroup12a.reload.samples_count
+      assert_equal 1, @subgroup12b.reload.samples_count
 
-      within("#group_#{group12.id}-samples-count") do
-        assert_text group12.samples_count
+      within("#group_#{@group12.id}-samples-count") do
+        assert_text @group12.samples_count
       end
 
-      within("#group_#{subgroup12a.id}-samples-count") do
-        assert_text subgroup12a.samples_count
+      within("#group_#{@subgroup12a.id}-samples-count") do
+        assert_text @subgroup12a.samples_count
       end
 
-      within("#group_#{subgroup12b.id}-samples-count") do
-        assert_text subgroup12b.samples_count
+      within("#group_#{@subgroup12b.id}-samples-count") do
+        assert_text @subgroup12b.samples_count
       end
     end
 
@@ -479,19 +460,14 @@ module Dashboard
 
       assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
 
-      group12 = groups(:group_twelve)
-      subgroup12a = groups(:subgroup_twelve_a)
-      subgroup12aa = groups(:subgroup_twelve_a_a)
-      subgroup12b = groups(:subgroup_twelve_b)
-      project31 = projects(:project31)
+      assert_equal 4, @group12.samples_count
 
-      assert_equal 4, group12.samples_count
-
-      within("#group_#{group12.id}-samples-count") do
-        assert_text group12.samples_count
+      within("#group_#{@group12.id}-samples-count") do
+        assert_text @group12.samples_count
       end
 
-      visit namespace_project_samples_url(subgroup12aa, project31)
+      project31 = projects(:project31)
+      visit namespace_project_samples_url(@subgroup12aa, project31)
 
       click_link I18n.t('projects.samples.index.new_button')
 
@@ -499,24 +475,24 @@ module Dashboard
       click_button I18n.t('projects.samples.new.submit_button')
 
       visit dashboard_groups_url
-      within("li#group_#{group12.id}") do
+      within("li#group_#{@group12.id}") do
         find('a.folder-toggle-wrap').click
       end
 
-      assert_equal 5, group12.reload.samples_count
-      assert_equal 4, subgroup12a.reload.samples_count
-      assert_equal 1, subgroup12b.reload.samples_count
+      assert_equal 5, @group12.reload.samples_count
+      assert_equal 4, @subgroup12a.reload.samples_count
+      assert_equal 1, @subgroup12b.reload.samples_count
 
-      within("#group_#{group12.id}-samples-count") do
-        assert_text group12.samples_count
+      within("#group_#{@group12.id}-samples-count") do
+        assert_text @group12.samples_count
       end
 
-      within("#group_#{subgroup12a.id}-samples-count") do
-        assert_text subgroup12a.samples_count
+      within("#group_#{@subgroup12a.id}-samples-count") do
+        assert_text @subgroup12a.samples_count
       end
 
-      within("#group_#{subgroup12b.id}-samples-count") do
-        assert_text subgroup12b.samples_count
+      within("#group_#{@subgroup12b.id}-samples-count") do
+        assert_text @subgroup12b.samples_count
       end
     end
 
@@ -526,21 +502,16 @@ module Dashboard
 
       assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
 
-      group12 = groups(:group_twelve)
-      subgroup12a = groups(:subgroup_twelve_a)
-      subgroup12aa = groups(:subgroup_twelve_a_a)
-      subgroup12b = groups(:subgroup_twelve_b)
+      assert_equal 4, @group12.samples_count
+
+      within("#group_#{@group12.id}-samples-count") do
+        assert_text @group12.samples_count
+      end
+
       project31 = projects(:project31)
       project30 = projects(:project30)
       sample34 = samples(:sample34)
-
-      assert_equal 4, group12.samples_count
-
-      within("#group_#{group12.id}-samples-count") do
-        assert_text group12.samples_count
-      end
-
-      visit namespace_project_samples_url(subgroup12aa, project31)
+      visit namespace_project_samples_url(@subgroup12aa, project31)
 
       find("input[type='checkbox'][id='sample_#{sample34.id}']").click
       click_link I18n.t('projects.samples.index.transfer_button')
@@ -556,24 +527,24 @@ module Dashboard
       end
 
       visit dashboard_groups_url
-      within("li#group_#{group12.id}") do
+      within("li#group_#{@group12.id}") do
         find('a.folder-toggle-wrap').click
       end
 
-      assert_equal 4, group12.reload.samples_count
-      assert_equal 2, subgroup12a.reload.samples_count
-      assert_equal 2, subgroup12b.reload.samples_count
+      assert_equal 4, @group12.reload.samples_count
+      assert_equal 2, @subgroup12a.reload.samples_count
+      assert_equal 2, @subgroup12b.reload.samples_count
 
-      within("#group_#{group12.id}-samples-count") do
-        assert_text group12.samples_count
+      within("#group_#{@group12.id}-samples-count") do
+        assert_text @group12.samples_count
       end
 
-      within("#group_#{subgroup12a.id}-samples-count") do
-        assert_text subgroup12a.samples_count
+      within("#group_#{@subgroup12a.id}-samples-count") do
+        assert_text @subgroup12a.samples_count
       end
 
-      within("#group_#{subgroup12b.id}-samples-count") do
-        assert_text subgroup12b.samples_count
+      within("#group_#{@subgroup12b.id}-samples-count") do
+        assert_text @subgroup12b.samples_count
       end
     end
 
@@ -583,21 +554,16 @@ module Dashboard
 
       assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
 
-      group12 = groups(:group_twelve)
-      subgroup12a = groups(:subgroup_twelve_a)
-      subgroup12aa = groups(:subgroup_twelve_a_a)
-      subgroup12b = groups(:subgroup_twelve_b)
+      assert_equal 4, @group12.samples_count
+
+      within("#group_#{@group12.id}-samples-count") do
+        assert_text @group12.samples_count
+      end
+
       project31 = projects(:project31)
       project30 = projects(:project30)
       sample34 = samples(:sample34)
-
-      assert_equal 4, group12.samples_count
-
-      within("#group_#{group12.id}-samples-count") do
-        assert_text group12.samples_count
-      end
-
-      visit namespace_project_samples_url(subgroup12aa, project31)
+      visit namespace_project_samples_url(@subgroup12aa, project31)
 
       find("input[type='checkbox'][id='sample_#{sample34.id}']").click
       click_link I18n.t('projects.samples.index.clone_button')
@@ -614,24 +580,24 @@ module Dashboard
       assert_text I18n.t('projects.samples.clones.create.success')
 
       visit dashboard_groups_url
-      within("li#group_#{group12.id}") do
+      within("li#group_#{@group12.id}") do
         find('a.folder-toggle-wrap').click
       end
 
-      assert_equal 5, group12.reload.samples_count
-      assert_equal 3, subgroup12a.reload.samples_count
-      assert_equal 2, subgroup12b.reload.samples_count
+      assert_equal 5, @group12.reload.samples_count
+      assert_equal 3, @subgroup12a.reload.samples_count
+      assert_equal 2, @subgroup12b.reload.samples_count
 
-      within("#group_#{group12.id}-samples-count") do
-        assert_text group12.samples_count
+      within("#group_#{@group12.id}-samples-count") do
+        assert_text @group12.samples_count
       end
 
-      within("#group_#{subgroup12a.id}-samples-count") do
-        assert_text subgroup12a.samples_count
+      within("#group_#{@subgroup12a.id}-samples-count") do
+        assert_text @subgroup12a.samples_count
       end
 
-      within("#group_#{subgroup12b.id}-samples-count") do
-        assert_text subgroup12b.samples_count
+      within("#group_#{@subgroup12b.id}-samples-count") do
+        assert_text @subgroup12b.samples_count
       end
     end
   end
