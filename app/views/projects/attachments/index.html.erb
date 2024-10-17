@@ -27,6 +27,7 @@
       <%= render SearchComponent.new(
         query: @q,
         search_attribute: :puid_or_file_blob_filename_cont,
+        value: @search_params[:puid_or_file_blob_filename_cont],
         placeholder: t(:".search.placeholder"),
         url: namespace_project_attachments_path(@project.parent, @project),
       ) do %>
