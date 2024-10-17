@@ -81,6 +81,10 @@ module Dashboard
       assert_selector 'tr', count: 12
       assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+
+      assert_selector %(input[type="search"]) do |input|
+        assert_equal @project.name, input['value']
+      end
     end
 
     test 'can search the list of projects by puid' do

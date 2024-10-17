@@ -38,7 +38,7 @@
 
 <%= turbo_stream.update "project_sort_dropdown" do %>
   <div class="inline-flex space-x-2">
-    <%= render SearchComponent.new(query: @q, url: dashboard_projects_url(**request.query_parameters), search_attribute: :namespace_name_or_namespace_puid_cont, placeholder: t(".search.placeholder")) do %>
+    <%= render SearchComponent.new(query: @q, url: dashboard_projects_url(**request.query_parameters), value: @search_params[:namespace_name_or_namespace_puid_cont], search_attribute: :namespace_name_or_namespace_puid_cont, placeholder: t(".search.placeholder")) do %>
       <input type="hidden" name="personal" value="<%= params['personal'] %>">
       <input type="hidden" name="format" value="turbo_stream"/>
     <% end %>
