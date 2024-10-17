@@ -82,7 +82,7 @@ module Dashboard
       assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
 
-      assert_selector %(input[type="search"]) do |input|
+      assert_selector %(input.t-search-component) do |input|
         assert_equal @project.name, input['value']
       end
     end
