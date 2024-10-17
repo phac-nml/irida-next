@@ -316,7 +316,7 @@ module Groups
       assert_selector "table tbody tr td:nth-child(#{username_col})", text: @member_bot.user.email
 
       fill_in placeholder: I18n.t(:'groups.members.index.search.placeholder'), with: @member_james.user.email
-      find('input[type="search"]').native.send_keys(:return)
+      find('input.t-search-component').native.send_keys(:return)
 
       assert_text 'Displaying 1 item'
       assert_selector 'table tbody tr', count: 1
