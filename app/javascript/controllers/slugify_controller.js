@@ -13,7 +13,7 @@ export default class extends Controller {
    * path input to be the slugified version of the name.
    */
   initialize() {
-    this.pathTarget.placeholder = slugify(this.nameTarget.placeholder);
+    this.pathTarget.placeholder = this.#slugify(this.nameTarget.placeholder);
   }
 
   /**
@@ -21,6 +21,10 @@ export default class extends Controller {
    * to be the slugified version of the name.
    */
   nameChanged() {
-    this.pathTarget.value = slugify(this.nameTarget.value);
+    this.pathTarget.value = this.#slugify(this.nameTarget.value);
+  }
+
+  #slugify(value) {
+    return slugify(value, { decamelize: false });
   }
 }
