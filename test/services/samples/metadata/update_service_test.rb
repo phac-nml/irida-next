@@ -168,8 +168,8 @@ module Samples
                                              'updated_at' => '2000-01-01T00:00:00.000+00:00' },
                        'metadatafield3' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
                      @sample34.metadata_provenance)
-        assert_equal({ added: %w[metadatafield3], updated: [], deleted: [],
-                       not_updated: %w[metadatafield1], unchanged: [] }, metadata_changes)
+        assert_equal({ added: %w[], updated: [], deleted: [],
+                       not_updated: %w[metadatafield1 metadatafield3], unchanged: [] }, metadata_changes)
         assert @sample34.errors.full_messages.include?(
           I18n.t('services.samples.metadata.user_cannot_update_metadata',
                  sample_name: @sample34.name,
@@ -344,7 +344,10 @@ module Samples
         project = projects(:projectA)
         metadata_changes = Samples::Metadata::UpdateService.new(project, @sample33, @user, params).execute
 
-        assert_equal({ added: [], updated: [], deleted: [], not_updated: [], unchanged: [] }, metadata_changes)
+        assert_equal(
+          { added: [], updated: [], deleted: [], not_updated: %w[metadatafield1 metadatafield2],
+            unchanged: [] }, metadata_changes
+        )
         assert @sample33.errors.full_messages.include?(
           I18n.t('services.samples.metadata.sample_does_not_belong_to_project', sample_name: @sample33.name,
                                                                                 project_name: project.name)

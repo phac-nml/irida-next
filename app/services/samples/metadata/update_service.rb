@@ -3,7 +3,7 @@
 module Samples
   module Metadata
     # Service used to Update Samples::Metadata
-    class UpdateService < BaseService
+    class UpdateService < BaseService # rubocop:disable Metrics/ClassLength
       SampleMetadataUpdateError = Class.new(StandardError)
       attr_accessor :sample, :metadata, :analysis_id
 
@@ -47,10 +47,19 @@ module Samples
         @metadata_changes
       rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError => e
         @sample.errors.add(:base, e.message)
+        clear_metadata_changes
         @metadata_changes
       end
 
       private
+
+      def clear_metadata_changes
+        @metadata_changes[:added] = []
+        @metadata_changes[:updated] = []
+        @metadata_changes[:deleted] = []
+        @metadata_changes[:not_updated] = @metadata.nil? ? [] : @metadata.keys
+        @metadata_changes[:unchanged] = []
+      end
 
       def validate_sample_in_project
         return unless @project.id != @sample.project.id

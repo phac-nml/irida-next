@@ -282,7 +282,7 @@ module Samples
         params = { file: csv, sample_id_column: 'sample_name' }
         response = Samples::Metadata::FileImportService.new(project31.namespace, @john_doe, params).execute
         assert_empty response
-        assert_equal("Sample 'Sample 34' with field(s) 'metadatafield1' cannot be updated.",
+        assert_equal("Sample 'Sample 34' with field(s) 'metadatafield1, metadatafield3' cannot be updated.",
                      project31.namespace.errors.messages_for(:sample).first)
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2', 'metadatafield3' => '20' },
                      sample34.reload.metadata)
