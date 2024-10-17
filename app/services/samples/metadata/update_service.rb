@@ -81,15 +81,14 @@ module Samples
           key = key.to_s.downcase.strip
           value = value.to_s.strip # remove data types
 
-          if value.blank?
-            if @sample.metadata.key?(key)
-              @metadata_changes[:deleted] << key
-              remove_metadata_from_sample(key)
-            end
-          else
-            status = get_metadata_changes_status(key, value)
-            @metadata_changes[status] << key
-            add_metadata_to_sample(key, value) if %i[updated added].include?(status)
+          status = get_metadata_change_status(key, value)
+          next unless status
+
+          @metadata_changes[status] << key
+          if %i[updated added].include?(status)
+            add_metadata_to_sample(key, value)
+          elsif status == :deleted
+            remove_metadata_from_sample(key)
           end
         end
       end
@@ -109,9 +108,11 @@ module Samples
         @sample.metadata[key] = value
       end
 
-      def get_metadata_changes_status(key, value)
-        if @sample.metadata_provenance.key?(key) && @analysis_id.nil? &&
-           @sample.metadata_provenance[key]['source'] == 'analysis'
+      def get_metadata_change_status(key, value) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+        if value.blank?
+          :deleted if @sample.metadata.key?(key)
+        elsif @sample.metadata_provenance.key?(key) && @analysis_id.nil? &&
+              @sample.metadata_provenance[key]['source'] == 'analysis'
           :not_updated
         elsif @sample.metadata.key?(key) && @sample.metadata[key] == value
           :unchanged
