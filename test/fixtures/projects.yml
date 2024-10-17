@@ -3,231 +3,289 @@
 project1:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  samples_count: 3
 
 project2:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid) %>
+  samples_count: 20
 
 john_doe_project2:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid) %>
+  samples_count: 1
 
 john_doe_project3:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project3_namespace, :uuid) %>
+  samples_count: 0
 
 john_doe_project4:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project4_namespace, :uuid) %>
+  samples_count: 0
 
 project4:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project4_namespace, :uuid) %>
+  samples_count: 1
 
 project5:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project5_namespace, :uuid) %>
+  samples_count: 0
 
 project6:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project6_namespace, :uuid) %>
+  samples_count: 0
 
 project7:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project7_namespace, :uuid) %>
+  samples_count: 0
 
 project8:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project8_namespace, :uuid) %>
+  samples_count: 0
 
 project9:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project9_namespace, :uuid) %>
+  samples_count: 0
 
 project10:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project10_namespace, :uuid) %>
+  samples_count: 0
 
 project11:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project11_namespace, :uuid) %>
+  samples_count: 0
 
 project12:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project12_namespace, :uuid) %>
+  samples_count: 0
 
 project13:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project13_namespace, :uuid) %>
+  samples_count: 0
 
 project14:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project14_namespace, :uuid) %>
+  samples_count: 0
 
 project15:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project15_namespace, :uuid) %>
+  samples_count: 0
 
 project16:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project16_namespace, :uuid) %>
+  samples_count: 0
 
 project17:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project17_namespace, :uuid) %>
+  samples_count: 0
 
 project18:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project18_namespace, :uuid) %>
+  samples_count: 0
 
 project19:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project19_namespace, :uuid) %>
+  samples_count: 0
 
 project20:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project20_namespace, :uuid) %>
+  samples_count: 0
 
 project21:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project21_namespace, :uuid) %>
+  samples_count: 0
 
 project22:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid) %>
+  samples_count: 0
 
 project23:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project23_namespace, :uuid) %>
+  samples_count: 0
 
 project24:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project24_namespace, :uuid) %>
+  samples_count: 0
 
 project25:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project25_namespace, :uuid) %>
+  samples_count: 2
 
 project26:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project26_namespace, :uuid) %>
+  samples_count: 3
 
 project32:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project32_namespace, :uuid) %>
+  samples_count: 0
 
 projectA:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
+  samples_count: 3
 
 namespace_group_link_group_one_project1:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:user24, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one_project1_namespace, :uuid) %>
+  samples_count: 0
 
 namespace_group_link_group_three_project1:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:user24, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three_project1_namespace, :uuid) %>
+  samples_count: 0
 
 project28:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:david_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project28_namespace, :uuid) %>
+  samples_count: 1
 
 project29:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project29_namespace, :uuid) %>
+  samples_count: 1
 
 project30:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project30_namespace, :uuid) %>
+  samples_count: 1
 
 project31:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project31_namespace, :uuid) %>
+  samples_count: 2
 
 projectAlpha:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha_namespace, :uuid) %>
+  samples_count: 1
 
 projectBravo:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectBravo_namespace, :uuid) %>
+  samples_count: 1
 
 projectCharlie:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectCharlie_namespace, :uuid) %>
+  samples_count: 1
 
 projectAlpha1:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha1_namespace, :uuid) %>
+  samples_count: 1
 
 projectDelta:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_joan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectDelta_namespace, :uuid) %>
+  samples_count: 0
 
 projectEcho:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_joan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectEcho_namespace, :uuid) %>
+  samples_count: 0
 
 projectDeltaSubgroupA:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_joan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectDeltaSubgroupA_namespace, :uuid) %>
+  samples_count: 0
 
 projectEchoSubgroupB:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_joan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectEchoSubgroupB_namespace, :uuid) %>
+  samples_count: 0
 
 projectFoxtrotSubgroupA:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_micha, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectFoxtrotSubgroupA_namespace, :uuid) %>
+  samples_count: 0
 
 project27:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:user27, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:user27_project1_namespace, :uuid) %>
+  samples_count: 0
 
 projectHotel:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectHotel_namespace, :uuid) %>
+  samples_count: 1
 
 projectJeff:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_jeff_namespace, :uuid) %>
+  samples_count: 1
 
 project33:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project33_namespace, :uuid) %>
+  samples_count: 0
 
 project34:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project34_namespace, :uuid) %>
+  samples_count: 1
 
 project35:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project35_namespace, :uuid) %>
+  samples_count: 3
 
 project36:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_jeff_namespace, :uuid) %>
+  samples_count: 2
 
 project37:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:user21, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project37_namespace, :uuid) %>
+  samples_count: 3
 
 project38:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project38_namespace, :uuid) %>
+  samples_count: 200
 
 user29_project1:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:user29, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:user29_project1_namespace, :uuid) %>
+  samples_count: 1
 
 project_janitor_end_to_end:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
+  samples_count: 1
 
 project_janitor_DELETE:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
+  samples_count: 4
 
 empty_project:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:empty_project_namespace, :uuid) %>
+  samples_count: 0

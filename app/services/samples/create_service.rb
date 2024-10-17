@@ -25,7 +25,13 @@ module Samples
                                             }
       end
 
+      update_samples_count if @project.parent.type == 'Group'
+
       sample
+    end
+
+    def update_samples_count
+      @project.parent.update_samples_count_by_addition_services
     end
   end
 end
