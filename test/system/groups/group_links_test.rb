@@ -279,6 +279,7 @@ module Groups
       assert_selector 'table tbody tr', count: 2
 
       fill_in placeholder: I18n.t(:'groups.members.index.search.groups.placeholder'), with: @group_link5.group.name
+      find('input.t-search-component').native.send_keys(:return)
 
       assert_text 'Displaying 1 item'
       assert_selector 'table tbody tr', count: 1

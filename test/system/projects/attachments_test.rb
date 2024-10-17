@@ -209,6 +209,7 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.attachments.index.search.placeholder'),
               with: @attachment1.file.filename.to_s
+      find('input.t-search-component').native.send_keys(:return)
 
       assert_text 'Displaying 1 item'
       assert_selector 'table tbody tr', count: 1
@@ -222,6 +223,7 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.attachments.index.search.placeholder'),
               with: @attachment2.puid
+      find('input.t-search-component').native.send_keys(:return)
 
       assert_text 'Displaying 1 item'
       assert_selector 'table tbody tr', count: 1
@@ -326,6 +328,9 @@ module Projects
       assert_selector '#attachments-table table tbody tr', count: 3
       assert_text 'Displaying 1-3 of 3 items'
 
+      # Clear all notifications as this was interfering with entering and submitting the search below
+      all('div#flashes button[data-action="viral--flash#dismiss"]').each(&:click)
+
       within('table tbody') do
         assert_selector 'tr:first-child td:nth-child(2)', text: 'TestSample_S1_L001_R2_001.fastq.gz'
         assert_selector 'tr:first-child td:nth-child(2)', text: 'TestSample_S1_L001_R1_001.fastq.gz'
@@ -335,6 +340,7 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.attachments.index.search.placeholder'),
               with: 'fastq.gz'
+      find('input.t-search-component').native.send_keys(:return)
 
       assert_selector '#attachments-table table tbody tr', count: 2
       assert_text 'Displaying 1-2 of 2 items'
@@ -357,6 +363,7 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.attachments.index.search.placeholder'),
               with: 'filter that results in no attachments'
+      find('input.t-search-component').native.send_keys(:return)
 
       assert_no_selector 'table'
 

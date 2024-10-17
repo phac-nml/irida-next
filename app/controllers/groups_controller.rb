@@ -16,10 +16,11 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   def show
     authorize! @group, to: :read?
 
+    @search_params = params[:q] || {}
     @q = if flat_list_requested?
-           namespace_descendants.ransack(params[:q])
+           namespace_descendants.ransack(@search_params)
          else
-           namespace_children.ransack(params[:q])
+           namespace_children.ransack(@search_params)
          end
     set_default_sort
     @pagy, @namespaces = pagy(@q.result.include_route)

@@ -16,7 +16,8 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   def index
     all_data_exports = load_data_exports
     @has_data_exports = all_data_exports.count.positive?
-    @q = all_data_exports.ransack(params[:q])
+    @search_params = params[:q] || {}
+    @q = all_data_exports.ransack(@search_params)
     set_default_sort
     @pagy, @data_exports = pagy(@q.result)
   end

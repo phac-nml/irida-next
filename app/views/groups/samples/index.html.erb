@@ -28,7 +28,7 @@
                 },
                 class:
                   "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
               ) %>
             <% else %>
               <% dropdown.with_item(
@@ -61,8 +61,8 @@
   <% end %>
 
   <% if @has_samples %>
-    <div class="flow-root">
-      <div class="float-left inline-flex space-x-2">
+    <div class="flex mb-2">
+      <div class="inline-flex flex-grow space-x-2">
         <% if allowed_to?(:submit_workflow?, @group) || allowed_to?(:export_data?, @group) %>
           <%= search_form_for(
                   @q,
@@ -93,36 +93,28 @@
           <% end %>
         <% end %>
       </div>
-      <div class="float-right">
-        <%= search_form_for @q, url: search_group_samples_url, html: { method: :post, "data-controller": "filters metadata-toggle", "data-turbo-action": "replace", "data-metadata-toggle-page-value": @pagy.page, "data-filters-selection-outlet": "#samples-table", class: "filters" } do |f| %>
-          <div class="flex flex-row-reverse items-center mb-4 space-x-2">
-            <input type="hidden" name="format" value="turbo_stream"/>
-            <input type="hidden" name="limit" value="<%=@pagy.limit%>"/>
+      <div class="inline-flex grow-0">
+        <%= render SearchComponent.new(
+          query: @q,
+          url: search_group_samples_url,
+          value: @search_params[:name_or_puid_cont],
+          search_attribute: :name_or_puid_cont,
+          placeholder: t(".search.placeholder"),
+          html: { method: :post },
+        ) do %>
+          <input type="hidden" name="format" value="turbo_stream"/>
+          <input type="hidden" name="limit" value="<%=@pagy.limit%>"/>
+        <% end %>
+        <%= search_form_for @q, url: search_group_samples_url, html: { method: :post, "data-controller": "filters metadata-toggle", "data-turbo-action": "replace", "data-metadata-toggle-page-value": @pagy.page, "data-filters-selection-outlet": "#samples-table", class: "filters inline-flex items-center space-x-2" } do |f| %>
+          <input type="hidden" name="format" value="turbo_stream"/>
+          <input type="hidden" name="limit" value="<%=@pagy.limit%>"/>
 
-            <%= render partial: "projects/samples/shared/metadata_toggle", locals: { form: f } %>
-            <%= render ListFilterComponent.new(
-              form: f,
-              filters: @search_params[:name_or_puid_in],
-            ) %>
-            <%= f.label :name_or_puid_cont,
-                    placeholder: t(".search.placeholder"),
-                    class: "sr-only" %>
-            <div class="relative lg:w-72">
-              <div
-                class="
-                  absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
-                "
-              >
-                <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
-              </div>
-              <%= f.search_field :name_or_puid_cont,
-                             value: @search_params[:name_or_puid_cont],
-                             "data-action": "filters#submit",
-                             class:
-                               "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                             placeholder: t(".search.placeholder") %>
-            </div>
-          </div>
+          <%= render ListFilterComponent.new(
+            form: f,
+            filters: @search_params[:name_or_puid_in],
+          ) %>
+          <%= render partial: "projects/samples/shared/metadata_toggle", locals: { form: f } %>
+
         <% end %>
       </div>
     </div>

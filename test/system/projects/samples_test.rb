@@ -659,6 +659,7 @@ module Projects
       assert_text @sample2.name
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: filter_text
+      find('input.t-search-component').native.send_keys(:return)
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
@@ -699,11 +700,14 @@ module Projects
       assert_selector 'div#limit-component button div span', text: '20'
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: filter_text
+      find('input.t-search-component').native.send_keys(:return)
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 1
-      assert_field type: 'search', with: filter_text
+      assert_selector %(input.t-search-component) do |input|
+        assert_equal filter_text, input['value']
+      end
       assert_no_text @sample1.name
       assert_no_text @sample2.name
       assert_text @sample3.name
@@ -714,7 +718,9 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 1
-      assert_field type: 'search', with: filter_text
+      assert_selector %(input.t-search-component) do |input|
+        assert_equal filter_text, input['value']
+      end
       assert_no_text @sample1.name
       assert_no_text @sample2.name
       assert_text @sample3.name
@@ -736,6 +742,7 @@ module Projects
       assert_text @sample2.name
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.name
+      find('input.t-search-component').native.send_keys(:return)
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
@@ -880,6 +887,7 @@ module Projects
       end
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
+      find('input.t-search-component').native.send_keys(:return)
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
@@ -909,6 +917,7 @@ module Projects
       end
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
+      find('input.t-search-component').native.send_keys(:return)
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
@@ -955,6 +964,7 @@ module Projects
       end
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
+      find('input.t-search-component').native.send_keys(:return)
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
@@ -996,6 +1006,7 @@ module Projects
       end
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
+      find('input.t-search-component').native.send_keys(:return)
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
@@ -2449,6 +2460,7 @@ module Projects
       end
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
+      find('input.t-search-component').native.send_keys(:return)
 
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 1
@@ -2466,6 +2478,7 @@ module Projects
       end
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: ' '
+      find('input.t-search-component').native.send_keys(:return)
 
       within 'tfoot' do
         assert_text 'Samples: 3'
