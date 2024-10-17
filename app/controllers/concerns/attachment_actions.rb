@@ -18,7 +18,7 @@ module AttachmentActions # rubocop:disable Metrics/ModuleLength
     @render_individual_attachments = filter_requested?
     all_attachments = load_attachments
     @has_attachments = all_attachments.count.positive?
-    @search_params = params[:q]
+    @search_params = params[:q] || {}
     @q = all_attachments.ransack(@search_params)
     set_default_sort
     @pagy, @attachments = pagy_with_metadata_sort(@q.result)
