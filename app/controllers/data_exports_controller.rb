@@ -42,14 +42,15 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     end
   end
 
-  def create
+  def create # rubocop:disable Metrics/AbcSize
     @data_export = DataExports::CreateService.new(current_user, data_export_params).execute
 
     if @data_export.errors.any?
       respond_to do |format|
         format.turbo_stream do
           render status: :unprocessable_entity,
-                 locals: { type: 'alert', message: @data_export.errors.full_messages.first }
+                 locals: { type: 'alert', message: @data_export.errors.full_messages.first,
+                           export_type: data_export_params['export_type'] }
         end
       end
     else

@@ -47,10 +47,13 @@ module DataExports
                             else
                               authorized_export_user_workflows
                             end
-      return unless workflow_executions.count != params['export_parameters']['ids'].count
+      if workflow_executions.count != params['export_parameters']['ids'].count
 
-      raise DataExportCreateError,
-            I18n.t('services.data_exports.create.invalid_export_workflow_executions')
+        raise DataExportCreateError,
+              I18n.t('services.data_exports.create.invalid_export_workflow_executions')
+      end
+
+      validate_workflow_executions_state(workflow_executions)
     end
 
     def assign_initial_export_attributes
@@ -76,6 +79,15 @@ module DataExports
     def authorized_export_user_workflows
       authorized_scope(WorkflowExecution, type: :relation, as: :user, scope_options: { user: current_user })
         .where(id: params['export_parameters']['ids'])
+    end
+
+    def validate_workflow_executions_state(workflow_executions)
+      completed_workflow_executions = workflow_executions.where(state: 'completed')
+
+      return if completed_workflow_executions.count == workflow_executions.count
+
+      raise DataExportCreateError,
+            I18n.t('services.data_exports.create.non_completed_workflow_executions')
     end
   end
 end
