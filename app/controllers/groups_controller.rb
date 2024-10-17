@@ -180,6 +180,11 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     case action_name
     when 'new', 'create', 'show'
       @context_crumbs
+    when 'activity'
+      @context_crumbs += [{
+        name: I18n.t('groups.activity.title'),
+        path: group_activity_path
+      }]
     else
       @context_crumbs += [{
         name: I18n.t('groups.edit.title'),

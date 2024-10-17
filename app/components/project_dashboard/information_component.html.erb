@@ -30,7 +30,7 @@
   <%= viral_tooltip(title: t(:"components.project_dashboard.information.number_of_members")) do %>
     <span class="flex items-center">
       <%= viral_icon(name: :users, color: :subdued, classes: "h-5 w-5 m-0 mr-2") %>
-      <%= @project.namespace.project_members.count %>
+      <%= @project.namespace.project_members.without_automation_bots.count %>
     </span>
   <% end %>
 </span>
