@@ -160,9 +160,6 @@ group :development do
   gem 'listen'
   gem 'lookbook', '~> 2.1', '>= 2.1.1'
 
-  # Solargraph
-  gem 'solargraph'
-
   # i18n-tasks
   gem 'i18n-tasks', '~> 1.0.14'
 end
