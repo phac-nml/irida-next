@@ -17,7 +17,7 @@ module Samples
         @include_activity = params.key?('include_activity') ? params['include_activity'] : true
       end
 
-      def execute # rubocop:disable Metrics/MethodLength
+      def execute # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         authorize! sample.project, to: :update_sample?
 
         validate_sample_in_project
@@ -46,20 +46,11 @@ module Samples
 
         @metadata_changes
       rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError => e
-        @sample.errors.add(:base, e.message)
-        clear_metadata_changes
-        @metadata_changes
+        @sample.reload.errors.add(:base, e.message)
+        { added: [], updated: [], deleted: [], not_updated: @metadata.nil? ? [] : @metadata.keys, unchanged: [] }
       end
 
       private
-
-      def clear_metadata_changes
-        @metadata_changes[:added] = []
-        @metadata_changes[:updated] = []
-        @metadata_changes[:deleted] = []
-        @metadata_changes[:not_updated] = @metadata.nil? ? [] : @metadata.keys
-        @metadata_changes[:unchanged] = []
-      end
 
       def validate_sample_in_project
         return unless @project.id != @sample.project.id
@@ -92,34 +83,40 @@ module Samples
 
           if value.blank?
             if @sample.metadata.key?(key)
-              @sample.metadata.delete(key)
-              @sample.metadata_provenance.delete(key)
               @metadata_changes[:deleted] << key
+              remove_metadata_from_sample(key)
             end
           else
-            assign_metadata_to_sample(key, value)
+            status = get_metadata_changes_status(key, value)
+            @metadata_changes[status] << key
+            add_metadata_to_sample(key, value) if %i[updated added].include?(status)
           end
         end
       end
 
-      def assign_metadata_to_sample(key, value) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
-        # We don't overwrite existing @sample.metadata_provenance or @sample.metadata
-        # that has a {source: 'analysis'} with a user
+      def remove_metadata_from_sample(key)
+        @sample.metadata.delete(key)
+        @sample.metadata_provenance.delete(key)
+      end
+
+      def add_metadata_to_sample(key, value)
+        @sample.metadata_provenance[key] =
+          if @analysis_id.nil?
+            { source: 'user', id: current_user.id, updated_at: Time.current }
+          else
+            { source: 'analysis', id: @analysis_id, updated_at: Time.current }
+          end
+        @sample.metadata[key] = value
+      end
+
+      def get_metadata_changes_status(key, value)
         if @sample.metadata_provenance.key?(key) && @analysis_id.nil? &&
            @sample.metadata_provenance[key]['source'] == 'analysis'
-          @metadata_changes[:not_updated] << key
+          :not_updated
         elsif @sample.metadata.key?(key) && @sample.metadata[key] == value
-          # Do not update if the current value matches the given value
-          @metadata_changes[:unchanged] << key
+          :unchanged
         else
-          @sample.metadata.key?(key) ? @metadata_changes[:updated] << key : @metadata_changes[:added] << key
-          @sample.metadata_provenance[key] =
-            if @analysis_id.nil?
-              { source: 'user', id: current_user.id, updated_at: Time.current }
-            else
-              { source: 'analysis', id: @analysis_id, updated_at: Time.current }
-            end
-          @sample.metadata[key] = value
+          @sample.metadata.key?(key) ? :updated : :added
         end
       end
 
