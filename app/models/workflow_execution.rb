@@ -64,6 +64,10 @@ class WorkflowExecution < ApplicationRecord
     }.compact
   end
 
+  ransacker :id do
+    Arel.sql('id::varchar')
+  end
+
   def self.ransackable_attributes(_auth_object = nil)
     %w[id name run_id state created_at updated_at]
   end

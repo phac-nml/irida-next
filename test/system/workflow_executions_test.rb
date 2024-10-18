@@ -9,6 +9,10 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     @user = users(:john_doe)
     login_as @user
 
+    @workflow_execution1 = workflow_executions(:irida_next_example_completed)
+    @workflow_execution2 = workflow_executions(:irida_next_example_completed_2_files)
+    @workflow_execution3 = workflow_executions(:irida_next_example_completed_with_output)
+
     @id_col = '1'
     @name_col = '2'
     @state_col = '3'
@@ -184,17 +188,15 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'should delete a completed workflow' do
-    workflow_execution = workflow_executions(:irida_next_example_completed)
-
     visit workflow_executions_path
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    tr = find('a', text: workflow_execution.id).ancestor('tr')
+    tr = find('a', text: @workflow_execution1.id).ancestor('tr')
 
     within tr do
       assert_selector "td:nth-child(#{@state_col})",
-                      text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
+                      text: I18n.t(:"workflow_executions.state.#{@workflow_execution1.state}")
       assert_link 'Delete', count: 1
       click_link 'Delete'
     end
@@ -205,11 +207,11 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within %(div[data-controller='viral--flash']) do
       assert_text I18n.t(
         :'concerns.workflow_execution_actions.destroy.success',
-        workflow_name: workflow_execution.metadata['workflow_name']
+        workflow_name: @workflow_execution1.metadata['workflow_name']
       )
     end
 
-    assert_no_text workflow_execution.id
+    assert_no_text @workflow_execution1.id
   end
 
   test 'should delete an errored workflow' do
@@ -331,9 +333,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'can view workflow execution with samplesheet' do
-    workflow_execution = workflow_executions(:irida_next_example_completed)
-
-    visit workflow_execution_path(workflow_execution)
+    visit workflow_execution_path(@workflow_execution1)
 
     click_on I18n.t('workflow_executions.show.tabs.samplesheet')
 
@@ -344,9 +344,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'can view workflow execution with samplesheet with multiple files' do
-    workflow_execution = workflow_executions(:irida_next_example_completed_2_files)
-
-    visit workflow_execution_path(workflow_execution)
+    visit workflow_execution_path(@workflow_execution2)
 
     click_on I18n.t('workflow_executions.show.tabs.samplesheet')
 
@@ -359,9 +357,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'can remove workflow execution from workflow execution page' do
-    workflow_execution = workflow_executions(:irida_next_example_completed)
-
-    visit workflow_execution_path(workflow_execution)
+    visit workflow_execution_path(@workflow_execution1)
 
     click_link I18n.t(:'workflow_executions.show.remove_button')
 
@@ -371,7 +367,56 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     within %(#workflow-executions-table table tbody) do
       assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT - 1
-      assert_no_text workflow_execution.id
+      assert_no_text @workflow_execution1.id
+    end
+  end
+
+  test 'can filter by ID and name on workflow execution index page' do
+    visit workflow_executions_path
+
+    assert_text 'Displaying 19 items'
+    assert_selector 'table tbody tr', count: 19
+
+    within('table tbody') do
+      assert_text @workflow_execution2.id
+      assert_text @workflow_execution2.name
+      assert_text @workflow_execution3.id
+      assert_text @workflow_execution3.name
+    end
+
+    fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
+            with: @workflow_execution2.id
+    find('input.t-search-component').native.send_keys(:return)
+
+    assert_text 'Displaying 1 item'
+    assert_selector 'table tbody tr', count: 1
+
+    within('table tbody') do
+      assert_text @workflow_execution2.id
+      assert_text @workflow_execution2.name
+      assert_no_text @workflow_execution3.id
+      assert_no_text @workflow_execution3.name
+    end
+
+    fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
+            with: ''
+    find('input.t-search-component').native.send_keys(:return)
+
+    assert_text 'Displaying 19 items'
+    assert_selector 'table tbody tr', count: 19
+
+    fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
+            with: @workflow_execution3.name
+    find('input.t-search-component').native.send_keys(:return)
+
+    assert_text 'Displaying 1 item'
+    assert_selector 'table tbody tr', count: 1
+
+    within('table tbody') do
+      assert_no_text @workflow_execution2.id
+      assert_no_text @workflow_execution2.name
+      assert_text @workflow_execution3.id
+      assert_text @workflow_execution3.name
     end
   end
 end
