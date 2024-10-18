@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.license       = 'MIT'
   spec.files         = Dir['lib/**/*', 'app/**/*']
   spec.require_paths = ['lib']
-  spec.required_ruby_version = '>= 3.2.0'
+  spec.required_ruby_version = Gem::Requirement.new('>= 3.2.0')
   spec.add_dependency 'view_component', '~> 3.15'
   spec.metadata['rubygems_mfa_required'] = 'true'
 end
