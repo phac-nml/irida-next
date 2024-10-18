@@ -5,6 +5,7 @@ module Samples
     # Service used to Update Samples::Metadata
     class UpdateService < BaseService # rubocop:disable Metrics/ClassLength
       SampleMetadataUpdateError = Class.new(StandardError)
+      SampleMetadataUpdateValidationError = Class.new(StandardError)
       attr_accessor :sample, :metadata, :analysis_id
 
       def initialize(project, sample, user = nil, params = {})
@@ -45,9 +46,12 @@ module Samples
         handle_not_updated_fields
 
         @metadata_changes
-      rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError => e
+      rescue Samples::Metadata::UpdateService::SampleMetadataUpdateValidationError => e
         @sample.reload.errors.add(:base, e.message)
         { added: [], updated: [], deleted: [], not_updated: @metadata.nil? ? [] : @metadata.keys, unchanged: [] }
+      rescue Samples::Metadata::UpdateService::SampleMetadataUpdateError => e
+        @sample.reload.errors.add(:base, e.message)
+        @metadata_changes
       end
 
       private
@@ -55,7 +59,7 @@ module Samples
       def validate_sample_in_project
         return unless @project.id != @sample.project.id
 
-        raise SampleMetadataUpdateError,
+        raise SampleMetadataUpdateValidationError,
               I18n.t('services.samples.metadata.sample_does_not_belong_to_project', sample_name: @sample.name,
                                                                                     project_name: @project.name)
       end
@@ -63,14 +67,14 @@ module Samples
       def validate_metadata_param
         return unless @metadata.nil? || @metadata == {}
 
-        raise SampleMetadataUpdateError,
+        raise SampleMetadataUpdateValidationError,
               I18n.t('services.samples.metadata.empty_metadata', sample_name: @sample.name)
       end
 
       def validate_metadata_value(key, value)
         return unless value.is_a?(Hash)
 
-        raise SampleMetadataUpdateError,
+        raise SampleMetadataUpdateValidationError,
               I18n.t('services.samples.metadata.nested_metadata', sample_name: @sample.name, key:)
       end
 

@@ -1609,7 +1609,7 @@ en:
           key_exists: Sample already contains metadata field '%{key}'.
           metadata_was_not_changed: Metadata fields were not changed.
           user_cannot_edit_metadata_key: Metadata key '%{key}' cannot be updated by a user.
-        user_cannot_update_metadata: 'Metadata fields ''%{metadata_fields}'' of sample ''%{sample_name}'' cannot be overwritten by a user as it was previously updated with an analysis. '
+        user_cannot_update_metadata: Metadata fields '%{metadata_fields}' of sample '%{sample_name}' cannot be overwritten by a user as it was previously updated with an analysis.
       transfer:
         empty_new_project_id: Destination project was not selected.
         empty_sample_ids: The sample ids are empty.
