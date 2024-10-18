@@ -27,7 +27,6 @@
       <div class="grow-0">
         <%= render SearchComponent.new(
         query: @q,
-        value: @search_params[:puid_or_file_blob_filename_cont],
         search_attribute: :puid_or_file_blob_filename_cont,
         placeholder: t(:".search.placeholder"),
         url: group_attachments_path(@group),
