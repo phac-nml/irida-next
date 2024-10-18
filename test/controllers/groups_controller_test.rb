@@ -118,7 +118,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
   test 'should not delete a group' do
     sign_in users(:joan_doe)
 
-    group = groups(:group_twelve)
+    group = groups(:group_one)
     assert_no_difference('Group.count') do
       delete group_path(group)
     end
@@ -177,7 +177,7 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should transfer group' do
     sign_in users(:john_doe)
-    group = groups(:group_twelve)
+    group = groups(:group_one)
     new_namespace = groups(:group_two)
 
     put group_transfer_path(group),

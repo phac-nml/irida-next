@@ -282,7 +282,7 @@ class GroupsTest < ApplicationSystemTestCase
   end
 
   test 'can transfer a group' do
-    group1 = groups(:group_two)
+    group1 = groups(:group_one)
     group3 = groups(:group_three)
     visit group_url(group1)
 
@@ -290,7 +290,7 @@ class GroupsTest < ApplicationSystemTestCase
     click_link I18n.t('groups.sidebar.general')
 
     assert_selector 'h2', text: I18n.t('groups.edit.advanced.transfer.title')
-    within %(form[action="/group-2/transfer"]) do
+    within %(form[action="/group-1/transfer"]) do
       assert_selector 'input[type=submit]:disabled'
       find('input#select2-input').click
       find("button[data-viral--select2-primary-param='#{group3.full_path}']").click
