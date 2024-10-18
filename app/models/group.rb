@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Namespace for Groups
-class Group < Namespace
+class Group < Namespace # rubocop:disable Metrics/ClassLength
   include History
 
   has_many :group_members, foreign_key: :namespace_id, inverse_of: :group,
@@ -106,5 +106,45 @@ class Group < Namespace
         trackable_type: 'NamespaceGroupLink'
       )
     )
+  end
+
+  def add_to_samples_count(namespaces, addition_amount)
+    namespaces.each do |namespace|
+      namespace.samples_count += addition_amount
+      namespace.save
+    end
+  end
+
+  def subtract_from_samples_count(namespaces, subtraction_amount)
+    namespaces.each do |namespace|
+      namespace.samples_count -= subtraction_amount
+      namespace.save
+    end
+  end
+
+  def update_samples_count_by_addition_services(added_samples_count = 1)
+    namespaces_to_update = self_and_ancestors.where(type: Group.sti_name)
+    add_to_samples_count(namespaces_to_update, added_samples_count)
+  end
+
+  def update_samples_count_by_destroy_service(deleted_samples_count)
+    namespaces_to_update = self_and_ancestors.where(type: Group.sti_name)
+    subtract_from_samples_count(namespaces_to_update, deleted_samples_count)
+  end
+
+  def update_samples_count_by_transfer_service(destination, transferred_samples_count, destination_type = 'Project')
+    namespaces_to_update = self_and_ancestors.where(type: Group.sti_name)
+    subtract_from_samples_count(namespaces_to_update, transferred_samples_count)
+
+    case destination_type
+    when 'Project'
+      namespaces_to_update = destination.parent.self_and_ancestors.where(type: Group.sti_name)
+    when 'Group'
+      namespaces_to_update = destination.self_and_ancestors.where(type: Group.sti_name)
+    else
+      return
+    end
+
+    add_to_samples_count(namespaces_to_update, transferred_samples_count)
   end
 end
