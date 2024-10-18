@@ -6,8 +6,7 @@ module Dashboard
     before_action :current_page
 
     def index
-      @search_params = params[:q] || {}
-      @q = authorized_projects(params).ransack(@search_params)
+      @q = authorized_projects(params).ransack(params[:q])
       set_default_sort
       respond_to do |format|
         format.html do
