@@ -1044,6 +1044,7 @@ en:
           created_at: Created
           id: ID
           name: Name
+          status: Status
           updated_at: Updated
           workflow_name: Workflow Name
           workflow_version: Workflow Version
