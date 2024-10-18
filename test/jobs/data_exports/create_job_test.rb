@@ -320,7 +320,7 @@ module DataExports
           { 'name' => workflow_execution.id,
             'type' => 'folder',
             'irida-next-type' => 'workflow_execution',
-            'irida-next-name' => workflow_execution.id,
+            'irida-next-name' => workflow_execution.name,
             'children' => [
               {
                 'name' => workflow_execution.outputs[0].filename.to_s,
@@ -383,7 +383,7 @@ module DataExports
           { 'name' => workflow_execution.id,
             'type' => 'folder',
             'irida-next-type' => 'workflow_execution',
-            'irida-next-name' => workflow_execution.id,
+            'irida-next-name' => workflow_execution.name,
             'children' => [
               {
                 'name' => workflow_execution.outputs[0].filename.to_s,
