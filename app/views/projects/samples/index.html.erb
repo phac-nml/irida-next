@@ -6,7 +6,7 @@
 
 <%= turbo_stream_from @project %>
 
-<div class="fixed-table-component" data-controller="filters">
+<div class="fixed-table-component">
   <%= render Viral::PageHeaderComponent.new(title: t('.title')) do |component| %>
     <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
     <%= component.with_buttons do %>
@@ -150,7 +150,7 @@
         value: @search_params[:name_or_puid_cont],
         search_attribute: :name_or_puid_cont,
         placeholder: t(".search.placeholder"),
-        html: { method: :post },
+        html: { method: :post, "data-controller": "filters"},
       ) do %>
         <input type="hidden" name="format" value="turbo_stream"/>
         <input type="hidden" name="limit" value="<%=@pagy.limit%>"/>
