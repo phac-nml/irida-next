@@ -18,6 +18,7 @@
         query: @q,
         url: dashboard_groups_url,
         search_attribute: :name_or_puid_cont,
+        value: @search_params[:name_or_puid_cont],
         placeholder: t(:".search.placeholder"),
         html: {
           "data-turbo-permanent": "true",

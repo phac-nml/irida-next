@@ -19,7 +19,8 @@ module Dashboard
     end
 
     def build_ransack_query
-      authorized_groups.ransack(params[:q])
+      @search_params = params[:q] || {}
+      authorized_groups.ransack(@search_params)
     end
 
     def respond_to_format
