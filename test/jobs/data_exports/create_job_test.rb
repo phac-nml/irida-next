@@ -414,7 +414,7 @@ module DataExports
         '',
         'contents:',
         "#{@data_export6.id}/",
-        "└─ #{workflow_execution.id}/ (#{workflow_execution.id})",
+        "└─ #{workflow_execution.id}/ (#{workflow_execution.name})",
         "   ├─ #{workflow_execution.outputs[0].filename}",
         "   └─ #{samples_workflow_execution.samplesheet_params['sample']}/ (Deleted Sample)",
         "      └─ #{samples_workflow_execution.outputs[0].filename}",
