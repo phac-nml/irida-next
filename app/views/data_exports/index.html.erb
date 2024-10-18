@@ -9,7 +9,6 @@
     <%= render SearchComponent.new(
       query: @q,
       url: data_exports_url,
-      value: @search_params[:id_or_name_cont],
       search_attribute: :id_or_name_cont,
       placeholder: t(:".search.placeholder"),
     ) %>
