@@ -796,9 +796,7 @@ if Rails.env.development?
   # prevent workflow and workflow attachment broadcasts
   Attachment.suppressing_turbo_broadcasts do
     WorkflowExecution.suppressing_turbo_broadcasts do
-      100.times do
-        seed_workflow_executions
-      end
+      seed_workflow_executions
     end
   end
   # prevent data export broadcasts
