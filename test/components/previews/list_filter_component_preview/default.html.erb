@@ -1,3 +1,6 @@
 <%= form_with do |form| %>
   <%= render ListFilterComponent.new(form:, filters: []) %>
+  <%= render Flowbite::Component.new do %>
+    Hello World
+  <% end %>
 <% end %>

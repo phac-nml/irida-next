@@ -13,6 +13,12 @@ GIT
       net-http-persistent (~> 4.0)
       nokogiri (~> 1, >= 1.10.8)
 
+PATH
+  remote: embedded_gems/flowbite
+  specs:
+    flowbite_view_components (0.0.1)
+      view_component (~> 3.15)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -650,6 +656,7 @@ DEPENDENCIES
   faraday
   faraday-multipart
   faraday-net_http_persistent (~> 2.0)
+  flowbite_view_components!
   fx
   good_job (~> 4.1, >= 4.1.1)
   google-cloud-storage (~> 1.11)
