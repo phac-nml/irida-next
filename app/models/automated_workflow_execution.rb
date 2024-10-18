@@ -2,6 +2,8 @@
 
 # entity class for Automated Workflow Executions
 class AutomatedWorkflowExecution < ApplicationRecord
+  attr_accessor :disabled
+
   METADATA_JSON_SCHEMA = Rails.root.join('config/schemas/workflow_execution_metadata.json')
 
   has_logidze
