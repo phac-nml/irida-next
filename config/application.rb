@@ -75,3 +75,6 @@ module Irida
     ActiveRecord::SessionStore::Session.serializer = :json
   end
 end
+
+require 'view_component'
+require 'flowbite/view_components'
