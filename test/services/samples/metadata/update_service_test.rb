@@ -344,7 +344,10 @@ module Samples
         project = projects(:projectA)
         metadata_changes = Samples::Metadata::UpdateService.new(project, @sample33, @user, params).execute
 
-        assert_equal({ added: [], updated: [], deleted: [], not_updated: [], unchanged: [] }, metadata_changes)
+        assert_equal(
+          { added: [], updated: [], deleted: [], not_updated: %w[metadatafield1 metadatafield2],
+            unchanged: [] }, metadata_changes
+        )
         assert @sample33.errors.full_messages.include?(
           I18n.t('services.samples.metadata.sample_does_not_belong_to_project', sample_name: @sample33.name,
                                                                                 project_name: project.name)
