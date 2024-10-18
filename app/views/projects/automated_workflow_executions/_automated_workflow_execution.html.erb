@@ -28,6 +28,13 @@
   <td class="px-6 py-4 whitespace-nowrap">
     <%= local_time_ago(automated_workflow_execution["updated_at"]) %>
   </td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <% if automated_workflow_execution["disabled"] %>
+      <%= viral_pill(text: "DISABLED", color: "red") %>
+    <% else %>
+      <%= viral_pill(text: "ENABLED", color: "green") %>
+    <% end %>
+  </td>
   <td
     class="
       px-6 py-4 space-x-2 whitespace-nowrap sticky right-0 bg-white dark:bg-slate-800
