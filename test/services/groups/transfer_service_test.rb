@@ -8,6 +8,11 @@ module Groups
       @john_doe = users(:john_doe)
       @jane_doe = users(:jane_doe)
       @group = groups(:group_one)
+
+      @group12 = groups(:group_twelve)
+      @subgroup12a = groups(:subgroup_twelve_a)
+      @subgroup12b = groups(:subgroup_twelve_b)
+      @subgroup12aa = groups(:subgroup_twelve_a_a)
     end
 
     test 'transfer group with permission' do
@@ -85,19 +90,6 @@ module Groups
       # group12 < subgroup12b (project30 > sample 33)
       #    |
       #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
-      @group12 = groups(:group_twelve)
-      @subgroup12a = groups(:subgroup_twelve_a)
-      @subgroup12b = groups(:subgroup_twelve_b)
-      @subgroup12aa = groups(:subgroup_twelve_a_a)
-
-      @project30 = projects(:project30)
-      Project.reset_counters(@project30.id, :samples_count)
-      @project30.reload.samples_count
-
-      @project31 = projects(:project31)
-      Project.reset_counters(@project31.id, :samples_count)
-      @project31.reload.samples_count
-
       assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
       assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
       assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.metadata_summary)
@@ -129,19 +121,6 @@ module Groups
       # group12 < subgroup12b (project30 > sample 33)
       #    |
       #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
-      @group12 = groups(:group_twelve)
-      @subgroup12a = groups(:subgroup_twelve_a)
-      @subgroup12b = groups(:subgroup_twelve_b)
-      @subgroup12aa = groups(:subgroup_twelve_a_a)
-
-      @project30 = projects(:project30)
-      Project.reset_counters(@project30.id, :samples_count)
-      @project30.reload.samples_count
-
-      @project31 = projects(:project31)
-      Project.reset_counters(@project31.id, :samples_count)
-      @project31.reload.samples_count
-
       assert_equal(2, @subgroup12aa.samples_count)
       assert_equal(3, @subgroup12a.samples_count)
       assert_equal(1, @subgroup12b.samples_count)
