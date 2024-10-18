@@ -55,7 +55,7 @@
         <% end %>
       <% else %>
         <div class="flex flex-row-reverse mb-2">
-            <%= render SearchComponent.new(query: @q, url: group_path(@group), value: @search_params[:name_or_puid_cont], search_attribute: :name_or_puid_cont, placeholder: t("general.search.name_puid")) %>
+            <%= render SearchComponent.new(query: @q, url: group_path(@group), search_attribute: :name_or_puid_cont, placeholder: t("general.search.name_puid")) %>
         </div>
         <%= render "groups/subgroups/index", locals: { namespaces: @namespaces } %>
       <% end %>
