@@ -8,8 +8,7 @@ module Groups
     def initialize(group, user = nil, params = {})
       super(user, params.except(:group, :group_id))
       @group = group
-      @deleted_samples_count = Project.joins(:namespace).where(namespace: { parent_id: @group.self_and_descendants })
-                                      .select(:samples_count).pluck(:samples_count).sum
+      @deleted_samples_count = @group.samples_count
     end
 
     def execute
