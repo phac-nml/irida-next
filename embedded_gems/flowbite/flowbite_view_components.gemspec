@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.version       = Flowbite::ViewComponents::Version::STRING
   spec.summary       = 'Flowbite View Components'
   spec.license       = 'MIT'
-  spec.files         = Dir['lib/**/*', 'app/**/*']
+  spec.files         = Dir['lib/**/*']
   spec.require_paths = ['lib']
   spec.required_ruby_version = Gem::Requirement.new('>= 3.2.0')
   spec.add_dependency 'view_component', '~> 3.15'
