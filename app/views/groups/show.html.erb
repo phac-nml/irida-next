@@ -55,23 +55,7 @@
         <% end %>
       <% else %>
         <div class="flex flex-row-reverse mb-2">
-          <%= search_form_for @q, url: group_path(@group), html: { "data-controller": "filters" } do |f| %>
-            <%= f.label :name_or_puid_cont, t("general.search.name_puid"), class: "sr-only" %>
-            <div class="relative lg:w-72">
-              <div
-                class="
-                  absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
-                "
-              >
-                <%= viral_icon(name: "magnifying_glass", classes: "h-5 w-5") %>
-              </div>
-              <%= f.search_field :name_or_puid_cont,
-                             "data-action": "filters#submit",
-                             class:
-                               "block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                             placeholder: t("general.search.name_puid") %>
-            </div>
-          <% end %>
+            <%= render SearchComponent.new(query: @q, url: group_path(@group), search_attribute: :name_or_puid_cont, placeholder: t("general.search.name_puid")) %>
         </div>
         <%= render "groups/subgroups/index", locals: { namespaces: @namespaces } %>
       <% end %>

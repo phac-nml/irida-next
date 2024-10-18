@@ -1087,6 +1087,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     fill_in placeholder: I18n.t(:'data_exports.index.search.placeholder'),
             with: @data_export1.id
+    find('input.t-search-component').native.send_keys(:return)
 
     assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                          locale: @user.locale))
@@ -1099,6 +1100,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     fill_in placeholder: I18n.t(:'data_exports.index.search.placeholder'),
             with: @data_export1.name
+    find('input.t-search-component').native.send_keys(:return)
 
     assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
                                                                          locale: @user.locale))
@@ -1113,6 +1115,8 @@ class DataExportsTest < ApplicationSystemTestCase
 
     fill_in placeholder: I18n.t(:'data_exports.index.search.placeholder'),
             with: 'something that does not exist'
+    find('input.t-search-component').native.send_keys(:return)
+
     within 'div[role="alert"]' do
       assert_text I18n.t('components.viral.pagy.empty_state.title')
       assert_text I18n.t('components.viral.pagy.empty_state.description')

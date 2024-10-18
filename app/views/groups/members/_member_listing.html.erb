@@ -1,11 +1,27 @@
-<%= render Members::TableComponent.new(
-  @namespace,
-  @members,
-  @access_levels,
-  @q,
-  current_user,
-  {
-    update_member: allowed_to?(:update_member?, @namespace),
-    destroy_member: allowed_to?(:destroy_member?, @namespace),
-  },
-) %>
+<div class="flex flex-col gap-2 mt-2">
+  <div class="flex">
+    <div class="flex-1"></div>
+    <div class="grow-0">
+      <%= render SearchComponent.new(
+      query: @q,
+      url: group_members_url(**request.query_parameters),
+      search_attribute: :user_email_cont,
+      placeholder: t("groups.members.index.search.placeholder"),
+    ) do %>
+        <input type="hidden" name="format" value="turbo_stream"/>
+      <% end %>
+    </div>
+  </div>
+
+  <%= render Members::TableComponent.new(
+    @namespace,
+    @members,
+    @access_levels,
+    @q,
+    current_user,
+    {
+      update_member: allowed_to?(:update_member?, @namespace),
+      destroy_member: allowed_to?(:destroy_member?, @namespace),
+    },
+  ) %>
+</div>

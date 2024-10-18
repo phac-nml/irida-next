@@ -409,6 +409,8 @@ class GroupsTest < ApplicationSystemTestCase
     visit group_url(@group)
     assert_text I18n.t(:'components.pagination.next')
     fill_in I18n.t('general.search.name_puid'), with: 'project 2'
+    find('input.t-search-component').native.send_keys(:return)
+
     assert_selector 'li.namespace-entry', count: 5
   end
 end

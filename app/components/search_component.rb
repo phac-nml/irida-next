@@ -6,13 +6,14 @@ require 'ransack/helpers/form_helper'
 class SearchComponent < Component
   include Ransack::Helpers::FormHelper
 
-  # rubocop:disable Naming/MethodParameterName
-  def initialize(q:, url:, search_attribute:, placeholder:, tab: '')
-    @q = q
+  # rubocop:disable Metrics/ParameterLists
+  def initialize(query:, url:, search_attribute:, placeholder:, value: nil, **kwargs)
+    @query = query
     @url = url
+    @value = value
     @search_attribute = search_attribute
     @placeholder = placeholder
-    @tab = tab
+    @kwargs = kwargs
   end
-  # rubocop:enable Naming/MethodParameterName
+  # rubocop:enable Metrics/ParameterLists
 end
