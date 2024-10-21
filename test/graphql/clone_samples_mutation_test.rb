@@ -101,41 +101,28 @@ class CloneSamplesMutationTest < ActiveSupport::TestCase
     end
   end
 
-  # test 'copySamples mutation should work with valid params, puids, and api scope token with uploader access level' do
-  #   user = users(:user_bot_account0)
-  #   token = personal_access_tokens(:user_bot_account0_valid_pat)
-  #   project1 = projects(:project1)
-  #   project2 = projects(:project2)
+  test 'copySamples mutation should not work with valid params, puids, and api scope token with uploader access level' do # rubocop:disable Layout/LineLength
+    user = users(:user_bot_account0)
+    token = personal_access_tokens(:user_bot_account0_valid_pat)
+    project1 = projects(:project1)
+    project2 = projects(:project2)
 
-  #   result = IridaSchema.execute(CLONE_SAMPLE_USING_PROJECT_PUID_MUTATION,
-  #                                context: { current_user: user, token: },
-  #                                variables: { projectPuid: project1.puid,
-  #                                             newProjectPuid: project2.puid,
-  #                                             sampleIds: [
-  #                                               project1.samples[0].to_global_id.to_s,
-  #                                               project1.samples[1].to_global_id.to_s
-  #                                             ] })
+    result = IridaSchema.execute(CLONE_SAMPLE_USING_PROJECT_PUID_MUTATION,
+                                 context: { current_user: user, token: },
+                                 variables: { projectPuid: project1.puid,
+                                              newProjectPuid: project2.puid,
+                                              sampleIds: [
+                                                project1.samples[0].to_global_id.to_s,
+                                                project1.samples[1].to_global_id.to_s
+                                              ] })
 
-  #   assert_nil result['errors'], 'should work and have no errors.'
+    assert_not_nil result['errors'], 'should have errors.'
 
-  #   data = result['data']['copySamples']
-
-  #   assert_not_empty data, 'copySample should be populated when no authorization errors'
-  #   assert_empty data['errors']
-  #   assert_not_empty data['samples']
-
-  #   data['samples'].each do |original_copy_pair|
-  #     original_id = original_copy_pair[:original]
-  #     original_sample = IridaSchema.object_from_id(original_id, {expected_type: Sample})
-  #     copy_id = original_copy_pair[:copy]
-  #     copy_sample = IridaSchema.object_from_id(copy_id, {expected_type: Sample})
-
-  #     assert_equal project1.id, original_sample.project.id
-  #     assert_equal project2.id, copy_sample.project.id
-  #     assert_equal original_sample.name, copy_sample.name
-  #     assert_equal original_sample.description, copy_sample.description
-  #   end
-  # end
+    assert_not_empty result['errors']
+    assert_equal 'You are not authorized to copy samples from project Project 1 on this server.',
+                 result['errors'][0]['message']
+    assert_equal ['copySamples'], result['errors'][0]['path']
+  end
 
   test 'copySamples mutation should not work with invalid params and api scope token' do
     project1 = projects(:project1)
