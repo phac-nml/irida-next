@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'flowbite/view_components/version'
 require 'flowbite/view_components/engine'
 
 module Flowbite
   # :nodoc:
   module ViewComponents
-    DEPRECATION_HORIZON = '1.0'.freeze
+    DEPRECATION_HORIZON = '1.0'
 
     # flowbit/view_components root directorey
     def self.root
