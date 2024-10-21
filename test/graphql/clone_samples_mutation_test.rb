@@ -318,8 +318,106 @@ class CloneSamplesMutationTest < ActiveSupport::TestCase
     assert_equal expected_error, result['errors'][0]
   end
 
-  # TODO: test copy sample to itself
-  # TODO: test sample is not on original project
-  # TODO: test no samples given
-  # TODO: test copy a sample from p1 to p2, then from p2 to p1, should fail with duplicate sample
+  test 'copySamples mutation should fail at copying samples onto its own project' do
+    project1 = projects(:project1)
+
+    result = IridaSchema.execute(CLONE_SAMPLE_USING_PROJECT_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { projectId: project1.to_global_id.to_s,
+                                              newProjectId: project1.to_global_id.to_s,
+                                              sampleIds: [
+                                                project1.samples[0].to_global_id.to_s,
+                                                project1.samples[1].to_global_id.to_s
+                                              ] })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['copySamples']
+
+    assert_not_empty data, 'copySample should be populated when no authorization errors'
+    assert_not_empty data['errors']
+    assert_equal 'The source and destination projects are the same. Please select a different destination project.',
+                 data['errors'][0]['message']
+  end
+
+  test 'copySamples mutation should not work when sample is not on original project' do(
+    project1 = projects(:project1)
+    project2 = projects(:project2)
+
+    result = IridaSchema.execute(CLONE_SAMPLE_USING_PROJECT_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { projectId: project2.to_global_id.to_s,
+                                              newProjectId: project1.to_global_id.to_s,
+                                              sampleIds: [
+                                                project1.samples[0].to_global_id.to_s,
+                                                project1.samples[1].to_global_id.to_s
+                                              ] })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['copySamples']
+
+    assert_not_empty data, 'copySample should be populated when no authorization errors'
+    assert_not_empty data['errors']
+    assert data['errors'][0]['message'].include?('Samples with the following sample ids could not be copied as they were not found in the source project:')) # rubocop:disable Layout/LineLength
+  end
+
+  test 'copySamples mutation should not work with no samples given' do
+    project1 = projects(:project1)
+    project2 = projects(:project2)
+
+    result = IridaSchema.execute(CLONE_SAMPLE_USING_PROJECT_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { projectId: project1.to_global_id.to_s,
+                                              newProjectId: project2.to_global_id.to_s,
+                                              sampleIds: [] })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['copySamples']
+
+    assert_not_empty data, 'copySample should be populated when no authorization errors'
+    assert_not_empty data['errors']
+    assert_equal 'The sample ids are empty.', data['errors'][0]['message']
+  end
+
+  test 'copySamples mutation should not work when copying a sample back from where it was copied from' do
+    project1 = projects(:project1)
+    project2 = projects(:project2)
+
+    result1 = IridaSchema.execute(CLONE_SAMPLE_USING_PROJECT_ID_MUTATION,
+                                  context: { current_user: @user, token: @api_scope_token },
+                                  variables: { projectId: project1.to_global_id.to_s,
+                                               newProjectId: project2.to_global_id.to_s,
+                                               sampleIds: [
+                                                 project1.samples[0].to_global_id.to_s,
+                                                 project1.samples[1].to_global_id.to_s
+                                               ] })
+
+    assert_nil result1['errors'], 'should work and have no errors.'
+    data1 = result1['data']['copySamples']
+    s1 = data1['samples'][0][:copy]
+
+    # now copy it back to p1
+    result2 = IridaSchema.execute(CLONE_SAMPLE_USING_PROJECT_ID_MUTATION,
+                                  context: { current_user: @user, token: @api_scope_token },
+                                  variables: { projectId: project2.to_global_id.to_s,
+                                               newProjectId: project1.to_global_id.to_s,
+                                               sampleIds: [
+                                                 s1
+                                               ] })
+
+    assert_nil result2['errors'], 'should work and have no errors.'
+    data2 = result2['data']['copySamples']
+
+    assert_not_empty data2, 'copySample should be populated when no authorization errors'
+    assert_not_empty data2['errors']
+
+    sample1 = IridaSchema.object_from_id(s1, { expected_type: Sample })
+
+    assert_equal I18n.t(:'action_policy.policy.samples.clone.sample_named',
+                        sample_name: sample1.name,
+                        sample_puid: sample1.puid),
+                 data2['errors'][0]['message']
+  end
 end
