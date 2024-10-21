@@ -294,7 +294,7 @@ class CloneSamplesMutationTest < ActiveSupport::TestCase
                                                 project1.samples[1].to_global_id.to_s
                                               ] })
 
-    expected_error = { 'message' => 'Project not found by provided ID or PUID', 'path' => ['project'] }
+    expected_error = { 'message' => 'Project not found by provided ID or PUID', 'path' => ['new_project'] }
 
     assert_equal expected_error, result['data']['copySamples']['errors'][0]
   end
