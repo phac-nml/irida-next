@@ -1,6 +1,29 @@
-<%= render Flowbite::Button.new do %>
-  Default
-<% end %>
-<%= render Flowbite::Button.new(scheme: :primary) do %>
-  Primary
-<% end %>
+<div class="space-x-1">
+  <%= render Flowbite::Button.new(scheme: :primary) do %>
+    Primary
+  <% end %>
+  <%= render Flowbite::Button.new(scheme: :blue) do %>
+    Blue
+  <% end %>
+  <%= render Flowbite::Button.new do %>
+    Alternative
+  <% end %>
+  <%= render Flowbite::Button.new(scheme: :dark) do %>
+    Dark
+  <% end %>
+  <%= render Flowbite::Button.new(scheme: :light) do %>
+    Light
+  <% end %>
+  <%= render Flowbite::Button.new(scheme: :green) do %>
+    Green
+  <% end %>
+  <%= render Flowbite::Button.new(scheme: :red) do %>
+    Red
+  <% end %>
+  <%= render Flowbite::Button.new(scheme: :yellow) do %>
+    Yellow
+  <% end %>
+  <%= render Flowbite::Button.new(scheme: :purple) do %>
+    Purple
+  <% end %>
+</div>
