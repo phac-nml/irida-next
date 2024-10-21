@@ -316,8 +316,118 @@ class TransferSamplesMutationTest < ActiveSupport::TestCase
     assert_equal expected_error, result['errors'][0]
   end
 
-  # TODO: test transfer sample to itself
-  # TODO: test sample is not on original project
+  test 'transferSamples mutation should fail when transfering to self' do
+    project1 = projects(:project1)
+
+    result = IridaSchema.execute(TRANSFER_SAMPLE_USING_PROJECT_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { projectId: project1.to_global_id.to_s,
+                                              newProjectId: project1.to_global_id.to_s,
+                                              sampleIds: [
+                                                project1.samples[0].to_global_id.to_s,
+                                                project1.samples[1].to_global_id.to_s
+                                              ] })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['transferSamples']
+
+    assert_not_empty data, 'transferSample should be populated when no authorization errors'
+    assert_not_empty data['errors']
+    assert_equal 'The samples already exist in the project. Please select a different project.',
+                 data['errors'][0]['message']
+  end
+
+  test 'transferSamples mutation should fail when sample is not on original project' do
+    project1 = projects(:project1)
+    project2 = projects(:project2)
+
+    result = IridaSchema.execute(TRANSFER_SAMPLE_USING_PROJECT_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { projectId: project2.to_global_id.to_s,
+                                              newProjectId: project1.to_global_id.to_s,
+                                              sampleIds: [
+                                                project1.samples[0].to_global_id.to_s,
+                                                project1.samples[1].to_global_id.to_s
+                                              ] })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['transferSamples']
+
+    assert_not_empty data, 'transferSample should be populated when no authorization errors'
+    assert_not_empty data['errors']
+    assert data['errors'][0]['message'].include?('Samples with the following sample ids could not be transferred as they were not found in the source project:') # rubocop:disable Layout/LineLength
+  end
   # TODO: test no samples given
-  # TODO: test transfer a sample from p1 to p2, then from p2 to p1, should work without error
+  test 'transferSamples mutation should fail when no samples given' do
+    project1 = projects(:project1)
+    project2 = projects(:project2)
+
+    result = IridaSchema.execute(TRANSFER_SAMPLE_USING_PROJECT_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { projectId: project1.to_global_id.to_s,
+                                              newProjectId: project2.to_global_id.to_s,
+                                              sampleIds: [] })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['transferSamples']
+
+    assert_not_empty data, 'transferSample should be populated when no authorization errors'
+    assert_not_empty data['errors']
+    assert_equal 'The sample ids are empty.', data['errors'][0]['message']
+  end
+
+  test 'transferSamples mutation should work when transfering a sample back and forth' do
+    project1 = projects(:project1)
+    project2 = projects(:project2)
+
+    p1_sample_count = project1.samples.count
+    p2_sample_count = project2.samples.count
+
+    result1 = IridaSchema.execute(TRANSFER_SAMPLE_USING_PROJECT_ID_MUTATION,
+                                  context: { current_user: @user, token: @api_scope_token },
+                                  variables: { projectId: project1.to_global_id.to_s,
+                                               newProjectId: project2.to_global_id.to_s,
+                                               sampleIds: [
+                                                 project1.samples[0].to_global_id.to_s
+                                               ] })
+
+    assert_nil result1['errors'], 'should work and have no errors.'
+
+    data1 = result1['data']['transferSamples']
+
+    assert_not_empty data1, 'transferSample should be populated when no authorization errors'
+    assert_empty data1['errors']
+    assert_not_empty data1['samples']
+
+    sample1 = IridaSchema.object_from_id(data1['samples'][0], { expected_type: Sample })
+    assert_equal project2.id, sample1.project.id
+
+    assert_equal p1_sample_count - 1, project1.samples.count
+    assert_equal p2_sample_count + 1, project2.samples.count
+
+    # Now transfer the sample back
+    result2 = IridaSchema.execute(TRANSFER_SAMPLE_USING_PROJECT_ID_MUTATION,
+                                  context: { current_user: @user, token: @api_scope_token },
+                                  variables: { projectId: project2.to_global_id.to_s,
+                                               newProjectId: project1.to_global_id.to_s,
+                                               sampleIds: [
+                                                 sample1.to_global_id.to_s
+                                               ] })
+
+    assert_nil result2['errors'], 'should work and have no errors.'
+
+    data2 = result2['data']['transferSamples']
+
+    assert_not_empty data2, 'transferSample should be populated when no authorization errors'
+    assert_empty data2['errors']
+    assert_not_empty data2['samples']
+
+    assert_equal project1.id, sample1.reload.project.id
+
+    assert_equal p1_sample_count, project1.samples.count
+    assert_equal p2_sample_count, project2.samples.count
+  end
 end
