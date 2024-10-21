@@ -340,7 +340,7 @@ class CloneSamplesMutationTest < ActiveSupport::TestCase
                  data['errors'][0]['message']
   end
 
-  test 'copySamples mutation should not work when sample is not on original project' do(
+  test 'copySamples mutation should not work when sample is not on original project' do
     project1 = projects(:project1)
     project2 = projects(:project2)
 
@@ -359,7 +359,7 @@ class CloneSamplesMutationTest < ActiveSupport::TestCase
 
     assert_not_empty data, 'copySample should be populated when no authorization errors'
     assert_not_empty data['errors']
-    assert data['errors'][0]['message'].include?('Samples with the following sample ids could not be copied as they were not found in the source project:')) # rubocop:disable Layout/LineLength
+    assert data['errors'][0]['message'].include?('Samples with the following sample ids could not be copied as they were not found in the source project:') # rubocop:disable Layout/LineLength
   end
 
   test 'copySamples mutation should not work with no samples given' do
@@ -397,6 +397,7 @@ class CloneSamplesMutationTest < ActiveSupport::TestCase
     assert_nil result1['errors'], 'should work and have no errors.'
     data1 = result1['data']['copySamples']
     s1 = data1['samples'][0][:copy]
+    sample1 = IridaSchema.object_from_id(s1, { expected_type: Sample })
 
     # now copy it back to p1
     result2 = IridaSchema.execute(CLONE_SAMPLE_USING_PROJECT_ID_MUTATION,
@@ -413,9 +414,7 @@ class CloneSamplesMutationTest < ActiveSupport::TestCase
     assert_not_empty data2, 'copySample should be populated when no authorization errors'
     assert_not_empty data2['errors']
 
-    sample1 = IridaSchema.object_from_id(s1, { expected_type: Sample })
-
-    assert_equal I18n.t(:'action_policy.policy.samples.clone.sample_named',
+    assert_equal I18n.t(:'services.samples.clone.sample_exists',
                         sample_name: sample1.name,
                         sample_puid: sample1.puid),
                  data2['errors'][0]['message']
