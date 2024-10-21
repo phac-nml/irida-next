@@ -57,4 +57,14 @@ class ProjectTest < ActiveSupport::TestCase
 
     assert project_namespace.reload.deleted?
   end
+
+  test 'samples_count for each project fixture should be correct' do
+    # If you've added samples to fixtures, update the sample_count to the corresponding project/groups
+    Project.find_each do |project|
+      current_samples_count = project.samples.size
+      Project.reset_counters(project.id, :samples)
+      expected_samples_count = project.reload.samples.size
+      assert_equal current_samples_count, expected_samples_count
+    end
+  end
 end

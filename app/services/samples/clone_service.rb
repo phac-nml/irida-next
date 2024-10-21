@@ -31,7 +31,7 @@ module Samples
       raise CloneError, I18n.t('services.samples.clone.same_project')
     end
 
-    def clone_samples(sample_ids)
+    def clone_samples(sample_ids) # rubocop:disable Metrics/AbcSize
       cloned_sample_ids = {}
       cloned_sample_puids = {}
 
@@ -42,7 +42,11 @@ module Samples
         cloned_sample_puids[sample.puid] = cloned_sample.puid unless cloned_sample.nil?
       end
 
-      create_activities(cloned_sample_ids, cloned_sample_puids) if cloned_sample_ids.count.positive?
+      if cloned_sample_ids.count.positive?
+        update_samples_count(cloned_sample_ids.count) if @new_project.parent.type == 'Group'
+
+        create_activities(cloned_sample_ids, cloned_sample_puids)
+      end
 
       cloned_sample_ids
     end
@@ -67,6 +71,10 @@ module Samples
     def clone_attachments(sample, clone)
       files = sample.attachments.map { |attachment| attachment.file.blob }
       Attachments::CreateService.new(current_user, clone, { files:, include_activity: false }).execute
+    end
+
+    def update_samples_count(cloned_samples_count)
+      @new_project.parent.update_samples_count_by_addition_services(cloned_samples_count)
     end
 
     def create_activities(cloned_sample_ids, cloned_sample_puids) # rubocop:disable Metrics/MethodLength

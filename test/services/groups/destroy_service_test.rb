@@ -7,6 +7,11 @@ module Groups
     def setup
       @user = users(:john_doe)
       @group = groups(:group_two)
+
+      @group12 = groups(:group_twelve)
+      @subgroup12a = groups(:subgroup_twelve_a)
+      @subgroup12b = groups(:subgroup_twelve_b)
+      @subgroup12aa = groups(:subgroup_twelve_a_a)
     end
 
     test 'delete group with correct permissions' do
@@ -42,11 +47,6 @@ module Groups
       # group12 < subgroup12b (project30 > sample 33)
       #    |
       #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
-      @group12 = groups(:group_twelve)
-      @subgroup12a = groups(:subgroup_twelve_a)
-      @subgroup12b = groups(:subgroup_twelve_b)
-      @subgroup12aa = groups(:subgroup_twelve_a_a)
-
       assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
       assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
       assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.metadata_summary)
@@ -59,6 +59,25 @@ module Groups
       assert(@subgroup12aa.reload.deleted?)
       assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12a.reload.metadata_summary)
       assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @group12.reload.metadata_summary)
+    end
+
+    test 'samples count updated after group deletion' do
+      # Reference group/projects descendants tree:
+      # group12 < subgroup12b (project30 > sample 33)
+      #    |
+      #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
+      assert_equal(2, @subgroup12aa.samples_count)
+      assert_equal(3, @subgroup12a.samples_count)
+      assert_equal(1, @subgroup12b.samples_count)
+      assert_equal(4, @group12.samples_count)
+
+      assert_no_changes -> { @subgroup12b.reload.samples_count } do
+        Groups::DestroyService.new(@subgroup12aa, @user).execute
+      end
+
+      assert(@subgroup12aa.reload.deleted?)
+      assert_equal(1, @subgroup12a.reload.samples_count)
+      assert_equal(2, @group12.reload.samples_count)
     end
   end
 end
