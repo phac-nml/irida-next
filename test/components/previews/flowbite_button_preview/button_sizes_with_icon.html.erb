@@ -1,21 +1,21 @@
 <div class="space-x-1">
-  <%= render Flowbite::Button.new(scheme: :primary, size: :extra_small) do |button| %>
+  <%= render Flowbite::Button.new(scheme: :primary, size: :extra_small, test_selector: "extra-small-button") do |button| %>
     <% button.with_leading_visual_icon icon_name: "envelope" %>
     Extra small
   <% end %>
-  <%= render Flowbite::Button.new(scheme: :primary, size: :small) do |button| %>
+  <%= render Flowbite::Button.new(scheme: :primary, size: :small, test_selector: "small-button") do |button| %>
     <% button.with_leading_visual_icon icon_name: "envelope" %>
     Small
   <% end %>
-  <%= render Flowbite::Button.new(scheme: :primary) do |button| %>
+  <%= render Flowbite::Button.new(scheme: :primary, test_selector: "default-button") do |button| %>
     <% button.with_leading_visual_icon icon_name: "envelope" %>
     Default
   <% end %>
-  <%= render Flowbite::Button.new(scheme: :primary, size: :large) do |button| %>
+  <%= render Flowbite::Button.new(scheme: :primary, size: :large, test_selector: "large-button") do |button| %>
     <% button.with_leading_visual_icon icon_name: "envelope" %>
     Large
   <% end %>
-  <%= render Flowbite::Button.new(scheme: :primary, size: :extra_large) do |button| %>
+  <%= render Flowbite::Button.new(scheme: :primary, size: :extra_large, test_selector: "extra-large-button") do |button| %>
     <% button.with_leading_visual_icon icon_name: "envelope" %>
     Extra large
   <% end %>

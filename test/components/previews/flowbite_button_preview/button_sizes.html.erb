@@ -1,17 +1,17 @@
 <div class="space-x-2">
-  <%= render Flowbite::Button.new(size: :extra_small) do %>
+  <%= render Flowbite::Button.new(size: :extra_small, test_selector: "extra-small-button") do %>
     Extra Small
   <% end %>
-  <%= render Flowbite::Button.new(size: :small) do %>
+  <%= render Flowbite::Button.new(size: :small, test_selector: "small-button") do %>
     Small
   <% end %>
-  <%= render Flowbite::Button.new do %>
+  <%= render Flowbite::Button.new(test_selector: "base-button") do %>
     Base
   <% end %>
-  <%= render Flowbite::Button.new(size: :large) do %>
+  <%= render Flowbite::Button.new(size: :large, test_selector: "large-button") do %>
     Large
   <% end %>
-  <%= render Flowbite::Button.new(size: :extra_large) do %>
+  <%= render Flowbite::Button.new(size: :extra_large, test_selector: "extra-large-button") do %>
     Extra Large
   <% end %>
 </div>

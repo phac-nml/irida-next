@@ -1,13 +1,13 @@
 <div class="flex flex-row gap-2">
-  <%= render Flowbite::Button.new do |button| %>
+  <%= render Flowbite::Button.new(test_selector: "leading-icon-button") do |button| %>
     <% button.with_leading_visual_icon icon_name: "envelope", type: :solid %>
     Leading icon
   <% end %>
-  <%= render Flowbite::Button.new do |button| %>
+  <%= render Flowbite::Button.new(test_selector: "trailing-icon-button") do |button| %>
     <% button.with_trailing_visual_icon icon_name: "envelope", type: :solid %>
     Trailing icon
   <% end %>
-  <%= render Flowbite::Button.new do |button| %>
+  <%= render Flowbite::Button.new(test_selector: "trailing-svg-button") do |button| %>
     <% button.with_trailing_visual_svg do %>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
         <path

@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 module Flowbite
-  # :nodoc:
+  # @private
+  # :nocov:
   module FetchOrFallbackHelper
     def fetch_or_fallback(allowed_values, given_value, fallback = nil, deprecated_values: nil)
       return given_value if allowed_values.include?(given_value)
