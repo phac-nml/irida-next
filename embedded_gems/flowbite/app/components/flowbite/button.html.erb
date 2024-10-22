@@ -1,3 +1,8 @@
 <%= render @base_button_class.new(**@system_arguments) do -%>
+  <% if leading_visual %>
+    <span class="Button-visual Button-leadingVisual">
+      <%= leading_visual %>
+    </span>
+  <% end %>
   <%= trimmed_content %>
 <% end %>

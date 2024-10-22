@@ -14,8 +14,9 @@ Gem::Specification.new do |spec|
   spec.files         = Dir['lib/**/*']
   spec.require_paths = ['lib']
   spec.required_ruby_version = Gem::Requirement.new('>= 3.2.0')
-  spec.add_dependency     'actionview', '>= 5.0.0'
-  spec.add_dependency     'activesupport', '>= 5.0.0'
-  spec.add_dependency     'view_component', ['>= 3.1', '< 4.0']
+  spec.add_dependency 'actionview', '>= 5.0.0'
+  spec.add_dependency 'activesupport', '>= 5.0.0'
+  spec.add_dependency 'heroicon-rails', '>= 0.2.9'
+  spec.add_dependency 'view_component', ['>= 3.1', '< 4.0']
   spec.metadata['rubygems_mfa_required'] = 'true'
 end

@@ -39,11 +39,34 @@ module Flowbite
     }.freeze
     ALIGN_CONTENT_OPTIONS = ALIGN_CONTENT_MAPPINGS.keys
 
+    ICON_SIZE_MAPPINGS = {
+      extra_small: 'w-3 h-3',
+      small: 'w-3 h-3',
+      default: 'w-3.5 h-3.5',
+      large: 'w-4 h-4',
+      extra_large: 'w-4 h-4'
+    }.freeze
+
+    renders_one :leading_visual, types: {
+      icon: lambda { |**args|
+        args[:class] = class_names(
+          args[:class],
+          ICON_SIZE_MAPPINGS[fetch_or_fallback(SIZE_OPTIONS, @size, DEFAULT_SIZE)],
+          'me-2'
+        )
+        Flowbite::Icon.new(**args)
+      },
+      svg: lambda { |**system_arguments|
+        Flowbite::BaseComponent.new(tag: :svg, width: '16', height: '16', **system_arguments)
+      }
+    }
+
     def initialize(base_button_class: Flowbite::BaseButton, scheme: DEFAULT_SCHEME, size: DEFAULT_SIZE,
                    align_content: DEFAULT_ALIGN_CONTENT, disabled: false, label_wrap: false, **system_arguments)
       @base_button_class = base_button_class
       @scheme = scheme
       @label_wrap = label_wrap
+      @size = size
 
       @system_arguments = system_arguments
       @system_arguments[:disabled] = disabled
@@ -55,6 +78,15 @@ module Flowbite
         SCHEME_MAPPINGS[fetch_or_fallback(SCHEME_OPTIONS, scheme, DEFAULT_SCHEME)],
         SIZE_MAPPINGS[fetch_or_fallback(SIZE_OPTIONS, size, DEFAULT_SIZE)],
         'rounded-lg font-medium focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed'
+      )
+    end
+
+    def before_render
+      return if leading_visual.blank?
+
+      @system_arguments[:classes] = class_names(
+        @system_arguments[:classes],
+        'text-center inline-flex items-center'
       )
     end
 
