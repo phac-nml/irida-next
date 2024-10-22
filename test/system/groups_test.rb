@@ -433,6 +433,8 @@ class GroupsTest < ApplicationSystemTestCase
         assert_text subgroup12b.name
         assert_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
       end
+
+      assert_no_text subgroup12aa.name
     end
 
     fill_in I18n.t(:'general.search.name_puid'), with: 'subgroup'
