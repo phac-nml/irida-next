@@ -24,12 +24,12 @@ module Flowbite
       }
     end
 
-    def self.icon_visual(args, margin_direction)
+    def icon_visual(args, margin_direction)
       args[:class] = class_names(args[:class], icon_classes(margin_direction))
       Flowbite::Icon.new(**args)
     end
 
-    def self.svg_visual(args, margin_direction)
+    def svg_visual(args, margin_direction)
       Flowbite::BaseComponent.new(
         tag: :span,
         classes: class_names(icon_classes(margin_direction)),
@@ -37,9 +37,12 @@ module Flowbite
       )
     end
 
-    def self.icon_classes(margin_direction)
+    private
+
+    def icon_classes(margin_direction)
       [
-        ICON_SIZE_MAPPINGS[fetch_or_fallback(SIZE_OPTIONS, @size, DEFAULT_SIZE)],
+        ICON_SIZE_MAPPINGS[fetch_or_fallback(Flowbite::ButtonSizes::SIZE_OPTIONS, @size,
+                                             Flowbite::ButtonSizes::DEFAULT_SIZE)],
         "#{margin_direction}-2",
         ('min-w-4' if margin_direction == :ms)
       ].compact
