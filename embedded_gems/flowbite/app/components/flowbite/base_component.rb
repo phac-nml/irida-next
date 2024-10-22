@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module Flowbite
+  # @private
+  # :nocov:
   class BaseComponent < Flowbite::Component
     SELF_CLOSING_TAGS = %i[area base br col embed hr img input link meta param source track
                            wbr].freeze
