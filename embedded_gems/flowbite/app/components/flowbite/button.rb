@@ -39,11 +39,10 @@ module Flowbite
     }.freeze
     ALIGN_CONTENT_OPTIONS = ALIGN_CONTENT_MAPPINGS.keys
 
-    def initialize(base_button_class: Flowbite::BaseButton, scheme: DEFAULT_SCHEME, size: DEFAULT_SIZE, block: false,
+    def initialize(base_button_class: Flowbite::BaseButton, scheme: DEFAULT_SCHEME, size: DEFAULT_SIZE,
                    align_content: DEFAULT_ALIGN_CONTENT, disabled: false, label_wrap: false, **system_arguments)
       @base_button_class = base_button_class
       @scheme = scheme
-      @block = block
       @label_wrap = label_wrap
 
       @system_arguments = system_arguments
