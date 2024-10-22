@@ -57,7 +57,29 @@ module Flowbite
         Flowbite::Icon.new(**args)
       },
       svg: lambda { |**system_arguments|
-        Flowbite::BaseComponent.new(tag: :svg, width: '16', height: '16', **system_arguments)
+        Flowbite::BaseComponent.new(tag: :span,
+                                    classes: class_names(
+                                      ICON_SIZE_MAPPINGS[fetch_or_fallback(SIZE_OPTIONS, @size, DEFAULT_SIZE)],
+                                      'me-2'
+                                    ),
+                                    **system_arguments)
+      }
+    }
+
+    renders_one :trailing_visual, types: {
+      icon: lambda { |**args|
+        args[:class] =
+          class_names(args[:class], ICON_SIZE_MAPPINGS[fetch_or_fallback(SIZE_OPTIONS, @size, DEFAULT_SIZE)],
+                      'ms-2 min-w-4')
+        Flowbite::Icon.new(**args)
+      },
+      svg: lambda { |**system_arguments|
+        Flowbite::BaseComponent.new(tag: :span,
+                                    classes: class_names(
+                                      ICON_SIZE_MAPPINGS[fetch_or_fallback(SIZE_OPTIONS, @size, DEFAULT_SIZE)],
+                                      'ms-2'
+                                    ),
+                                    **system_arguments)
       }
     }
 
@@ -82,7 +104,7 @@ module Flowbite
     end
 
     def before_render
-      return if leading_visual.blank?
+      return unless leading_visual.present? || trailing_visual.present?
 
       @system_arguments[:classes] = class_names(
         @system_arguments[:classes],

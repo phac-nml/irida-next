@@ -1,4 +1,10 @@
 <div class="space-x-1 space-y-2">
+  <%= render Flowbite::Button.new do %>
+    Default
+  <% end %>
+  <%= render Flowbite::Button.new(disabled: true) do %>
+    Disabled
+  <% end %><br>
   <%= render Flowbite::Button.new(scheme: :primary) do %>
     Primary
   <% end %>
