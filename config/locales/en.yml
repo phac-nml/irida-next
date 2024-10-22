@@ -792,6 +792,8 @@ en:
     show:
       create_project_button: New project
       create_subgroup_button: New subgroup
+      search:
+        placeholder: Filter by ID or name
       shared_namespaces:
         no_shared:
           description: Groups and projects can be shared with other groups through their members page.
