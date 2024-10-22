@@ -1,29 +1,56 @@
-<div class="space-x-1">
+<div class="space-x-1 space-y-2">
   <%= render Flowbite::Button.new(scheme: :primary) do %>
     Primary
   <% end %>
+  <%= render Flowbite::Button.new(scheme: :primary, disabled: true) do %>
+    Disabled
+  <% end %><br>
   <%= render Flowbite::Button.new(scheme: :blue) do %>
     Blue
   <% end %>
-  <%= render Flowbite::Button.new do %>
+  <%= render Flowbite::Button.new(scheme: :blue, disabled: true) do %>
+    Disabled
+  <% end %><br>
+  <%= render Flowbite::Button.new(scheme: :alternative) do %>
     Alternative
   <% end %>
+  <%= render Flowbite::Button.new(scheme: :alternative, disabled: true) do %>
+    Disabled
+  <% end %><br>
   <%= render Flowbite::Button.new(scheme: :dark) do %>
     Dark
   <% end %>
+  <%= render Flowbite::Button.new(scheme: :dark, disabled: true) do %>
+    Disabled
+  <% end %><br>
   <%= render Flowbite::Button.new(scheme: :light) do %>
     Light
   <% end %>
+  <%= render Flowbite::Button.new(scheme: :light, disabled: true) do %>
+    Disabled
+  <% end %><br>
   <%= render Flowbite::Button.new(scheme: :green) do %>
     Green
   <% end %>
+  <%= render Flowbite::Button.new(scheme: :green, disabled: true) do %>
+    Disabled
+  <% end %><br>
   <%= render Flowbite::Button.new(scheme: :red) do %>
     Red
   <% end %>
+  <%= render Flowbite::Button.new(scheme: :red, disabled: true) do %>
+    Disabled
+  <% end %><br>
   <%= render Flowbite::Button.new(scheme: :yellow) do %>
     Yellow
   <% end %>
+  <%= render Flowbite::Button.new(scheme: :yellow, disabled: true) do %>
+    Disabled
+  <% end %><br>
   <%= render Flowbite::Button.new(scheme: :purple) do %>
     Purple
+  <% end %>
+  <%= render Flowbite::Button.new(scheme: :purple, disabled: true) do %>
+    Disabled
   <% end %>
 </div>
