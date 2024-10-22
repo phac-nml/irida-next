@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 module Flowbite
+  # This file defines the Flowbite::Button component, which is a customizable button
+  # with various schemes, sizes, and styling options. It's part of the Flowbite
+  # component library and provides a flexible way to create buttons with consistent
+  # styling across the application.
+  #
   class Button < Flowbite::Component
     DEFAULT_SCHEME = :alternative
     SCHEME_MAPPINGS = {
@@ -56,6 +61,11 @@ module Flowbite
 
     private
 
+    # Trims the content by removing leading and trailing whitespace.
+    # If the content is blank, returns nil.
+    # If the content is marked as HTML safe, ensures the trimmed content remains HTML safe.
+    #
+    # @return [String, nil] The trimmed content, or nil if the content is blank.
     def trimmed_content
       return if content.blank?
 
