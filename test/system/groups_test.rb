@@ -413,4 +413,37 @@ class GroupsTest < ApplicationSystemTestCase
 
     assert_selector 'li.namespace-entry', count: 5
   end
+
+  test 'filtering renders flat list for subgroups and projects' do
+    group12 = groups(:group_twelve)
+    subgroup12a = groups(:subgroup_twelve_a)
+    subgroup12b = groups(:subgroup_twelve_b)
+    subgroup12aa = groups(:subgroup_twelve_a_a)
+
+    visit group_url(group12)
+
+    within('div.namespace-tree-container') do
+      assert_selector 'li', count: 2
+      within("#group_#{subgroup12a.id}") do
+        assert_text subgroup12a.name
+        assert_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+      end
+
+      within("#group_#{subgroup12b.id}") do
+        assert_text subgroup12b.name
+        assert_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+      end
+    end
+
+    fill_in I18n.t(:'general.search.name_puid'), with: 'subgroup'
+    find('input.t-search-component').native.send_keys(:return)
+
+    within('div.namespace-tree-container') do
+      assert_selector 'li', count: 3
+      assert_text subgroup12a.name
+      assert_text subgroup12b.name
+      assert_text subgroup12aa.name
+      assert_no_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+    end
+  end
 end

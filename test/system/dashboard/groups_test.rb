@@ -205,5 +205,33 @@ module Dashboard
       find('input.t-search-component').native.send_keys(:return)
       assert_text I18n.t(:'dashboard.groups.index.no_groups_description')
     end
+
+    test 'filtering renders flat list' do
+      group1 = groups(:group_one)
+      group3 = groups(:group_three)
+      login_as users(:john_doe)
+      visit dashboard_groups_url
+
+      within('#groups_tree') do
+        within("#group_#{group1.id}") do
+          assert_text group1.name
+          assert_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+        end
+
+        within("#group_#{group3.id}") do
+          assert_text group3.name
+          assert_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+        end
+      end
+
+      fill_in I18n.t(:'dashboard.groups.index.search.placeholder'), with: 'group'
+      find('input.t-search-component').native.send_keys(:return)
+
+      within('#groups_tree') do
+        assert_text group1.name
+        assert_text group3.name
+        assert_no_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+      end
+    end
   end
 end
