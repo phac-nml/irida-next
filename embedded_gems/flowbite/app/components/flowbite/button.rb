@@ -8,17 +8,39 @@ module Flowbite
   #
   class Button < Flowbite::Component
     DEFAULT_SCHEME = :light
-    SCHEME_MAPPINGS = {
-      primary: 'text-slate-50 bg-primary-700 focus:ring-primary-300 dark:bg-primary-800 dark:bg-primary-700 dark:focus:ring-primary-800 enabled:hover:bg-primary-800 enabled:dark:hover:bg-primary-700',
-      blue: 'text-white bg-blue-700 focus:ring-blue-300 dark:bg-blue-600 dark:focus:ring-blue-800 enabled:hover:bg-blue-800 enabled:dark:hover:bg-blue-700',
-      alternative: 'text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 enabled:hover:bg-gray-100 enabled:hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700',
-      dark: 'text-white bg-slate-700 focus:ring-slate-300 dark:bg-slate-700 dark:focus:ring-slate-700 dark:border-slate-700 enabled:hover:bg-slate-800 enabled:dark:hover:bg-slate-600',
-      light: 'text-slate-900 bg-white border border-slate-300 focus:outline-none enabled:hover:bg-slate-100 focus:ring-4 focus:ring-slate-100 dark:bg-slate-800 dark:text-white dark:border-slate-600 dark:hover:bg-slate-700 dark:hover:border-slate-600 dark:focus:ring-slate-700',
-      green: 'text-white bg-green-600 focus:ring-green-300 dark:bg-green-500 dark:focus:ring-green-800 enabled:hover:bg-green-700 enabled:dark:hover:bg-green-600 disabled:opacity-50',
-      red: 'text-white bg-red-600 focus:ring-red-300 dark:bg-red-500 dark:focus:ring-red-900 enabled:hover:bg-red-700 enabled:dark:hover:bg-red-600 disabled:opacity-50',
-      yellow: 'text-slate-900 bg-yellow-300 focus:ring-yellow-300 dark:focus:ring-yellow-900 enabled:hover:bg-yellow-400 enabled:dark:hover:bg-yellow-500 disabled:bg-yellow-200 disabled:text-slate-500',
-      purple: 'text-white bg-purple-600 focus:ring-purple-300 dark:bg-purple-500 dark:focus:ring-purple-900 enabled:hover:bg-purple-700 enabled:dark:hover:bg-purple-600'
-    }.freeze
+
+    def self.generate_scheme(color, text_color, bg_shade, focus_shade, dark_bg_shade, border = false)
+      classes = [
+        "text-#{text_color}",
+        "bg-#{color}-#{bg_shade}",
+        "focus:ring-#{color}-#{focus_shade}",
+        "dark:bg-#{color}-#{dark_bg_shade}",
+        "dark:focus:ring-#{color}-#{focus_shade}",
+        "enabled:hover:bg-#{color}-#{bg_shade.to_i + 100}",
+        "dark:enabled:hover:bg-#{color}-#{dark_bg_shade.to_i - 100}"
+      ]
+
+      classes << "border border-#{color}-#{bg_shade}" if border
+      classes << "dark:border-#{color}-600" if border
+
+      classes.join(' ')
+    end
+
+    def self.generate_scheme_mappings
+      {
+        primary: generate_scheme('primary', 'slate-50', '700', '300', '800'),
+        blue: generate_scheme('blue', 'white', '700', '300', '600'),
+        alternative: generate_scheme('gray', 'gray-900', 'white', '100', '800', true),
+        dark: generate_scheme('slate', 'white', '700', '300', '700'),
+        light: generate_scheme('slate', 'slate-900', 'white', '100', '800', true),
+        green: generate_scheme('green', 'white', '600', '300', '500'),
+        red: generate_scheme('red', 'white', '600', '300', '500'),
+        yellow: generate_scheme('yellow', 'slate-900', '300', '300', '300'),
+        purple: generate_scheme('purple', 'white', '600', '300', '500')
+      }.freeze
+    end
+
+    SCHEME_MAPPINGS = generate_scheme_mappings
     SCHEME_OPTIONS = SCHEME_MAPPINGS.keys
 
     DEFAULT_SIZE = :default
