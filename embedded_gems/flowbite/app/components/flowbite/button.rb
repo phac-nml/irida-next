@@ -9,6 +9,7 @@ module Flowbite
   class Button < Flowbite::Component
     include Flowbite::ButtonSchemes
     include Flowbite::ButtonVisuals
+    include Flowbite::ButtonSizes
 
     # rubocop:disable Metrics/ParameterLists
     def initialize(base_button_class: Flowbite::BaseButton, scheme: DEFAULT_SCHEME, size: DEFAULT_SIZE,

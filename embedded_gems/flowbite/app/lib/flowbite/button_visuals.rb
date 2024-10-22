@@ -1,20 +1,8 @@
 # frozen_string_literal: true
 
 module Flowbite
+  # Provides visual components (icons) and helpers for button styling in Flowbite
   module ButtonVisuals
-    # Default size for buttons
-    DEFAULT_SIZE = :default
-
-    # A hash of predefined button size mappings
-    SIZE_MAPPINGS = {
-      extra_small: 'px-3 py-2 text-xs',
-      small: 'px-3 py-2 text-sm',
-      default: 'px-5 py-2.5 text-sm',
-      large: 'px-5 py-3 text-base',
-      extra_large: 'px-6 py-3.5 text-base'
-    }.freeze
-    SIZE_OPTIONS = SIZE_MAPPINGS.keys
-
     # A hash of predefined icon size mappings
     ICON_SIZE_MAPPINGS = {
       extra_small: 'w-3 h-3',
@@ -25,43 +13,36 @@ module Flowbite
     }.freeze
 
     def self.included(base)
-      base.renders_one :leading_visual, types: {
-        icon: lambda { |**args|
-          args[:class] = class_names(
-            args[:class],
-            ICON_SIZE_MAPPINGS[fetch_or_fallback(SIZE_OPTIONS, @size, DEFAULT_SIZE)],
-            'me-2'
-          )
-          Flowbite::Icon.new(**args)
-        },
-        svg: lambda { |**system_arguments|
-          Flowbite::BaseComponent.new(tag: :span,
-                                      classes: class_names(
-                                        ICON_SIZE_MAPPINGS[fetch_or_fallback(SIZE_OPTIONS, @size,
-                                                                             DEFAULT_SIZE)],
-                                        'me-2'
-                                      ),
-                                      **system_arguments)
-        }
-      }
+      base.renders_one :leading_visual, types: visual_types(:me)
+      base.renders_one :trailing_visual, types: visual_types(:ms)
+    end
 
-      base.renders_one :trailing_visual, types: {
-        icon: lambda { |**args|
-          args[:class] =
-            class_names(args[:class], ICON_SIZE_MAPPINGS[fetch_or_fallback(SIZE_OPTIONS, @size, DEFAULT_SIZE)],
-                        'ms-2 min-w-4')
-          Flowbite::Icon.new(**args)
-        },
-        svg: lambda { |**system_arguments|
-          Flowbite::BaseComponent.new(tag: :span,
-                                      classes: class_names(
-                                        ICON_SIZE_MAPPINGS[fetch_or_fallback(SIZE_OPTIONS, @size,
-                                                                             DEFAULT_SIZE)],
-                                        'ms-2'
-                                      ),
-                                      **system_arguments)
-        }
+    def self.visual_types(margin_direction)
+      {
+        icon: ->(**args) { icon_visual(args, margin_direction) },
+        svg: ->(**args) { svg_visual(args, margin_direction) }
       }
+    end
+
+    def self.icon_visual(args, margin_direction)
+      args[:class] = class_names(args[:class], icon_classes(margin_direction))
+      Flowbite::Icon.new(**args)
+    end
+
+    def self.svg_visual(args, margin_direction)
+      Flowbite::BaseComponent.new(
+        tag: :span,
+        classes: class_names(icon_classes(margin_direction)),
+        **args
+      )
+    end
+
+    def self.icon_classes(margin_direction)
+      [
+        ICON_SIZE_MAPPINGS[fetch_or_fallback(SIZE_OPTIONS, @size, DEFAULT_SIZE)],
+        "#{margin_direction}-2",
+        ('min-w-4' if margin_direction == :ms)
+      ].compact
     end
   end
 end
