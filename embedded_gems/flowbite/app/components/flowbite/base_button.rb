@@ -23,8 +23,7 @@ module Flowbite
     attr_reader :disabled
     alias disabled? disabled
 
-    def initialize(tag: DEFAULT_TAG, type: DEFAULT_TYPE, disabled: false, inactive: false,
-                   **system_arguments)
+    def initialize(tag: DEFAULT_TAG, type: DEFAULT_TYPE, disabled: false, **system_arguments)
       @system_arguments = system_arguments
 
       # Set the tag and type
@@ -34,16 +33,11 @@ module Flowbite
           fetch_or_fallback(TYPE_OPTIONS, type, DEFAULT_TYPE)
       end
 
-      # Add CSS classes
-      @system_arguments[:classes] = class_names(
-        system_arguments[:classes],
-        'cursor-not-allowed' => disabled
-      )
-
       # Handle disabled state
       @disabled = disabled
       return unless @disabled
 
+      # Convert disabled anchors to buttons since a tags cannot be disabled
       @system_arguments[:tag] = :button
       @system_arguments[:disabled] = true
     end
