@@ -4,6 +4,7 @@ PATH
     flowbite_view_components (0.0.1)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
+      heroicon-rails (>= 0.2.9)
       view_component (>= 3.1, < 4.0)
 
 GEM
@@ -94,6 +95,9 @@ GEM
     erubi (1.13.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    heroicon-rails (0.2.9)
+      activesupport (>= 7.0.8)
+      nokogiri (>= 1.14.3)
     i18n (1.14.6)
       concurrent-ruby (~> 1.0)
     io-console (0.7.2)
