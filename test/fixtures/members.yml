@@ -113,12 +113,6 @@ project_one_member_user_bot_account:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   access_level: <%= Member::AccessLevel::UPLOADER %>
 
-project_two_member_user_bot_account:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:user_bot_account0, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::UPLOADER %>
-
 project1_member_project_automation_bot:
   user_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>

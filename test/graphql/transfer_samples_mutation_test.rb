@@ -346,7 +346,7 @@ class TransferSamplesMutationTest < ActiveSupport::TestCase
     assert_not_empty data['errors']
     assert data['errors'][0]['message'].include?('Samples with the following sample ids could not be transferred as they were not found in the source project:') # rubocop:disable Layout/LineLength
   end
-  # TODO: test no samples given
+
   test 'transferSamples mutation should fail when no samples given' do
     project1 = projects(:project1)
     project2 = projects(:project2)
