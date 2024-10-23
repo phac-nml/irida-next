@@ -6,52 +6,20 @@ module Flowbite
     # Default color scheme for buttons
     DEFAULT_SCHEME = :default
 
-    # Generates a CSS class string for a button scheme
-    #
-    # @param color [String] The base color name
-    # @param text_color [String] The text color
-    # @param bg_shade [String, Integer] The background shade
-    # @param focus_shade [String, Integer] The focus ring shade
-    # @param dark_bg_shade [String, Integer] The background shade for dark mode
-    # @param border [Boolean] Whether to include a border (default: false)
-    # @return [String] A space-separated string of CSS classes
-    # rubocop:disable Metrics/ParameterLists
-    def self.generate_scheme(color, text_color, bg_shade, focus_shade, dark_bg_shade, border: false)
-      classes = [
-        "text-#{text_color}",
-        "bg-#{color}-#{bg_shade}",
-        "focus:ring-#{color}-#{focus_shade}",
-        "dark:bg-#{color}-#{dark_bg_shade}",
-        "dark:focus:ring-#{color}-#{focus_shade}",
-        "enabled:hover:bg-#{color}-#{bg_shade.to_i + 100}",
-        "dark:enabled:hover:bg-#{color}-#{dark_bg_shade.to_i - 100}"
-      ]
-
-      classes << "border border-#{color}-#{bg_shade}" if border
-      classes << "dark:border-#{color}-600" if border
-
-      classes.join(' ')
-    end
-
-    # rubocop:enable Metrics/ParameterLists
+    # rubocop:disable Layout/LineLength
+    DEFAULT_CLASSES = 'rounded-lg font-medium focus:outline-none focus:ring-4 focus:z-10 disabled:opacity-70 disabled:cursor-not-allowed'
 
     # Generates a hash of button scheme mappings
     #
     # @return [Hash] A frozen hash of button scheme mappings
     def self.generate_scheme_mappings
       {
-        primary: generate_scheme('primary', 'slate-50', '700', '300', '800'),
-        blue: generate_scheme('blue', 'white', '700', '300', '600'),
-        alternative: generate_scheme('gray', 'gray-900', 'white', '100', '800', border: true),
-        dark: generate_scheme('slate', 'white', '700', '300', '700'),
-        light: generate_scheme('slate', 'slate-900', 'white', '100', '800', border: true),
-        default: generate_scheme('slate', 'slate-900', 'white', '100', '800', border: true),
-        green: generate_scheme('green', 'white', '600', '300', '500'),
-        red: generate_scheme('red', 'white', '600', '300', '500'),
-        yellow: generate_scheme('yellow', 'slate-900', '300', '300', '300'),
-        purple: generate_scheme('purple', 'white', '600', '300', '500')
+        primary: "#{DEFAULT_CLASSES} bg-primary-700 text-white enabled:hover:bg-primary-800 focus:ring-primary-300 dark:focus:ring-primary-600",
+        default: "#{DEFAULT_CLASSES} text-slate-900 bg-white border border-slate-200 enabled:hover:bg-slate-100 enabled:hover:text-primary-700 focus:ring-4 focus:ring-slate-100 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 enabled:dark:hover:text-white enabled:dark:hover:bg-slate-700",
+        danger: "#{DEFAULT_CLASSES} border border-red-100 bg-slate-50 text-red-500 enabled:hover:text-red-50 enabled:dark:hover:text-red-50 enabled:hover:bg-red-800 focus:ring-red-300 dark:border-red-800 dark:bg-slate-900 dark:text-red-500 dark:focus:ring-red-900"
       }.freeze
     end
+    # rubocop:enable Layout/LineLength
 
     # A hash of predefined button scheme mappings
     SCHEME_MAPPINGS = generate_scheme_mappings

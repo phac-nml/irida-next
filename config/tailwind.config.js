@@ -9,6 +9,7 @@ module.exports = {
     "./test/components/previews/**/*",
     "./test/components/viral/system/**/*",
     "./embedded_gems/**/app/components/**/*.rb",
+    "./embedded_gems/**/app/lib/**/*.rb",
   ],
   theme: {
     extend: {
