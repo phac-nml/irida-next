@@ -4,7 +4,7 @@ module Flowbite
   # This module contains methods for generating and managing button schemes.
   module ButtonSchemes
     # Default color scheme for buttons
-    DEFAULT_SCHEME = :light
+    DEFAULT_SCHEME = :default
 
     # Generates a CSS class string for a button scheme
     #
@@ -45,6 +45,7 @@ module Flowbite
         alternative: generate_scheme('gray', 'gray-900', 'white', '100', '800', border: true),
         dark: generate_scheme('slate', 'white', '700', '300', '700'),
         light: generate_scheme('slate', 'slate-900', 'white', '100', '800', border: true),
+        default: generate_scheme('slate', 'slate-900', 'white', '100', '800', border: true),
         green: generate_scheme('green', 'white', '600', '300', '500'),
         red: generate_scheme('red', 'white', '600', '300', '500'),
         yellow: generate_scheme('yellow', 'slate-900', '300', '300', '300'),

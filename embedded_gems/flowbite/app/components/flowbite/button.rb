@@ -12,12 +12,13 @@ module Flowbite
     include Flowbite::ButtonSizes
 
     # rubocop:disable Metrics/ParameterLists
-    def initialize(base_button_class: Flowbite::BaseButton, scheme: DEFAULT_SCHEME, size: DEFAULT_SIZE,
+    def initialize(base_button_class: Flowbite::BaseButton, scheme: DEFAULT_SCHEME, size: DEFAULT_SIZE, block: false,
                    disabled: false, label_wrap: false, **system_arguments)
       @base_button_class = base_button_class
       @scheme = scheme
       @label_wrap = label_wrap
       @size = size
+      @block = block
 
       @system_arguments = system_arguments
       @system_arguments[:disabled] = disabled
@@ -28,7 +29,8 @@ module Flowbite
         system_arguments[:classes],
         SCHEME_MAPPINGS[fetch_or_fallback(SCHEME_OPTIONS, scheme, DEFAULT_SCHEME)],
         SIZE_MAPPINGS[fetch_or_fallback(SIZE_OPTIONS, size, DEFAULT_SIZE)],
-        'rounded-lg font-medium focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed'
+        'rounded-lg font-medium focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed',
+        'block w-full' => block
       )
     end
 
