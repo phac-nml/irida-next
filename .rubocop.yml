@@ -48,6 +48,10 @@ Metrics/MethodLength:
 Metrics/AbcSize:
   Max: 20
 
+Metrics/LineLength:
+  Exclude:
+    - "**/test/**/*.rb"
+
 Style/RedundantConstantBase:
   Exclude:
     - "**/config/routes.rb"
