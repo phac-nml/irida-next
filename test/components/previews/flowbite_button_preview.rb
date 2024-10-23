@@ -59,4 +59,13 @@ class FlowbiteButtonPreview < ViewComponent::Preview
                            size:
                          })
   end
+
+  # @param scheme select { choices: [default,primary, danger] } "The color scheme of the button."
+  # @param size select { choices: [small, medium] } "The size of the button."
+  def leading_visual_svg(scheme: :primary, size: :medium)
+    render_with_template(locals: {
+                           scheme:,
+                           size:
+                         })
+  end
 end
