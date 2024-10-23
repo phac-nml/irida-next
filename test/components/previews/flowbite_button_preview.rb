@@ -34,7 +34,11 @@ class FlowbiteButtonPreview < ViewComponent::Preview
     end
   end
 
-  def button_sizes; end
-  def button_sizes_with_icon; end
-  def buttons_with_icons; end
+  def all_schemes; end
+
+  def full_width
+    render Flowbite::Button.new(block: true) do
+      'Button'
+    end
+  end
 end
