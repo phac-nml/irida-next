@@ -5,11 +5,8 @@ module Flowbite
   module ButtonVisuals
     # A hash of predefined icon size mappings
     ICON_SIZE_MAPPINGS = {
-      extra_small: 'w-3 h-3',
       small: 'w-3 h-3',
-      default: 'w-3.5 h-3.5',
-      large: 'w-4 h-4',
-      extra_large: 'w-4 h-4'
+      medium: 'w-3 h-3'
     }.freeze
 
     def self.included(base)
