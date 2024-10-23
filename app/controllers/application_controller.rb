@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
   add_flash_types :success, :info, :warning, :danger
   before_action :authenticate_user!
   before_action :pipelines_enabled?
+  before_action :update_automated_pipelines
   around_action :set_current_user
   around_action :use_logidze_responsible, only: %i[create destroy update transfer] # rubocop:disable Rails/LexicallyScopedActionFilter
   around_action :switch_locale
@@ -64,5 +65,18 @@ class ApplicationController < ActionController::Base
 
   def pipelines_enabled?
     @pipelines_enabled = Irida::Pipelines.instance.available_pipelines.any?
+  end
+
+  def update_automated_pipelines
+    Irida::Pipelines.instance.available_pipelines.each_value do |pipeline|
+      automated_workflows = AutomatedWorkflowExecution.where(
+        "metadata ->> 'workflow_name' = ? and metadata ->> 'workflow_version' = ?", pipeline.name, pipeline.version
+      )
+
+      automated_workflows.each do |automated_workflow|
+        automated_workflow.disabled = pipeline.executable && pipeline.automatable ? false : true
+        automated_workflow.save
+      end
+    end
   end
 end
