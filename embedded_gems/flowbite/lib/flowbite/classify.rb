@@ -119,9 +119,11 @@ module Flowbite
 
           # TODO: This needs to be reworked for our purposes
           if invalid_class_names.any?
-            raise ArgumentError, 'Use System Arguments (https://primer.style/view-components/system-arguments) ' \
-                                 "instead of Flowbite CSS class #{'name'.pluralize(invalid_class_names.length)} #{invalid_class_names.to_sentence}. " \
-                                 'This warning will not be raised in production. Set FLOWBITE_WARNINGS_DISABLED=1 to disable this warning.'
+            raise ArgumentError, "Invalid Flowbite CSS class #{'name'.pluralize(invalid_class_names.length)} " \
+                                 "detected: #{invalid_class_names.to_sentence}. " \
+                                 'Please use valid Flowbite classes. ' \
+                                 'This warning is not raised in production. ' \
+                                 'Set FLOWBITE_WARNINGS_DISABLED=1 to disable.'
           end
         end
 
