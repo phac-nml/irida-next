@@ -6,12 +6,12 @@ module Flowbite
     # A hash of predefined icon size mappings
     ICON_SIZE_MAPPINGS = {
       small: 'w-3 h-3',
-      medium: 'w-3 h-3'
+      medium: 'w-4 h-4'
     }.freeze
 
     def self.included(base)
-      base.renders_one :leading_visual, types: visual_types(:me)
-      base.renders_one :trailing_visual, types: visual_types(:ms)
+      base.renders_one :leading_visual, types: visual_types(:mr)
+      base.renders_one :trailing_visual, types: visual_types(:ml)
     end
 
     def self.visual_types(margin_direction)
@@ -40,8 +40,7 @@ module Flowbite
       [
         ICON_SIZE_MAPPINGS[fetch_or_fallback(Flowbite::ButtonSizes::SIZE_OPTIONS, @size,
                                              Flowbite::ButtonSizes::DEFAULT_SIZE)],
-        "#{margin_direction}-2",
-        ('min-w-4' if margin_direction == :ms)
+        "#{margin_direction}-#{@size == :small ? 1 : 2}"
       ].compact
     end
   end

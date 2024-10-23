@@ -10,8 +10,8 @@ module Flowbite
       <%= heroicon @icon_name, **@system_arguments %>
     ERB
 
-    def initialize(icon_name:, **system_arguments)
-      @icon_name = icon_name
+    def initialize(icon: nil, **system_arguments)
+      @icon_name = icon
       @system_arguments = system_arguments
     end
   end
