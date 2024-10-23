@@ -41,4 +41,13 @@ class FlowbiteButtonPreview < ViewComponent::Preview
       'Button'
     end
   end
+
+  # @param scheme select { choices: [default,primary, danger] } "The color scheme of the button."
+  # @param href text "The URL to link to."
+  # @param disabled toggle "The Boolean disabled attribute, when present, makes the element not mutable, focusable, or even submitted with the form. The user can neither edit nor focus on the control, nor its form control descendants."
+  def link_as_a_button(scheme: :default, href: '#', disabled: false)
+    render Flowbite::Button.new(scheme:, href:, tag: :a, disabled:) do
+      'Button'
+    end
+  end
 end
