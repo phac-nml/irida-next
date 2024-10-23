@@ -1,4 +1,4 @@
-# frozen_string_literal = true
+# frozen_string_literal: true
 
 module Flowbite
   # This file defines the Flowbite::Icon component, which is responsible for
