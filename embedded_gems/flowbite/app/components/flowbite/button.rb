@@ -7,8 +7,8 @@ module Flowbite
   # styling across the application.
   #
   class Button < Flowbite::Component
-    include Flowbite::ButtonVisuals
     include Flowbite::ButtonSizes
+    include Flowbite::ButtonVisuals
 
     SCHEME_OPTIONS = %i[primary default danger].freeze
     DEFAULT_SCHEME = :default
