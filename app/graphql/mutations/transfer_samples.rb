@@ -71,24 +71,26 @@ module Mutations
       ).execute(new_project_id, sample_ids)
 
       if samples.empty?
-        user_errors = project.errors.map do |error|
+        samples = nil
+      else
+        # add the prefix to sample_ids
+        samples.each { |sample_id| sample_id.prepend(SAMPLE_ID_PREFIX) }
+      end
+
+      user_errors = []
+      if project.errors.count.positive?
+        user_errors =  project.errors.map do |error|
           {
             path: ['samples', error.attribute.to_s.camelize(:lower)],
             message: error.message
           }
         end
-        {
-          samples: nil,
-          errors: user_errors
-        }
-      else
-        # add the prefix to sample_ids
-        samples.each { |sample_id| sample_id.prepend(SAMPLE_ID_PREFIX) }
-        {
-          samples:,
-          errors: []
-        }
       end
+
+      {
+        samples:,
+        errors: user_errors
+      }
     end
   end
 end
