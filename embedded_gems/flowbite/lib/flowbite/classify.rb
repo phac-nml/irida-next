@@ -117,7 +117,6 @@ module Flowbite
               memo << class_name if Flowbite::Classify::Validation.invalid?(class_name)
             end
 
-          # TODO: This needs to be reworked for our purposes
           if invalid_class_names.any?
             raise ArgumentError, "Invalid Flowbite CSS class #{'name'.pluralize(invalid_class_names.length)} " \
                                  "detected: #{invalid_class_names.to_sentence}. " \
