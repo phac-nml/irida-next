@@ -11,9 +11,6 @@ module Flowbite
     include Flowbite::ButtonVisuals
     include Flowbite::ButtonSizes
 
-    DEFAULT_CLASSES = 'rounded-lg font-medium focus:outline-none focus:ring-4 ' \
-                      'disabled:opacity-50 disabled:cursor-not-allowed'
-
     # rubocop:disable Metrics/ParameterLists
     def initialize(base_button_class: Flowbite::BaseButton, scheme: DEFAULT_SCHEME, size: DEFAULT_SIZE, block: false,
                    disabled: false, label_wrap: false, **system_arguments)
