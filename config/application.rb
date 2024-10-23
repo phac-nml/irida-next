@@ -15,7 +15,7 @@ module Irida
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.1
 
-    config.after_initialize do
+    initializer 'update_automated_pipeline_status', after: :finisher_hook do
       Irida::Pipelines.instance.available_pipelines.each_value do |pipeline|
         automated_workflows = AutomatedWorkflowExecution.where(
           "metadata ->> 'workflow_name' = ? and metadata ->> 'workflow_version' = ?", pipeline.name, pipeline.version
