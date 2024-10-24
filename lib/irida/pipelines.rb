@@ -30,6 +30,8 @@ module Irida
       @executable_pipelines = {}
 
       register_pipelines
+
+      update_automated_pipelines
     end
 
     # Registers the available pipelines. This method is called
@@ -50,6 +52,20 @@ module Irida
 
           @executable_pipelines["#{entry['name']}_#{version['name']}"] = pipeline
           @automatable_pipelines["#{entry['name']}_#{version['name']}"] = pipeline if version['automatable']
+        end
+      end
+    end
+
+    # enable/disable the automated pipelines after the pipelines are registered
+    def update_automated_pipelines
+      @available_pipelines.each_value do |pipeline|
+        automated_workflows = AutomatedWorkflowExecution.where(
+          "metadata ->> 'workflow_name' = ? and metadata ->> 'workflow_version' = ?", pipeline.name, pipeline.version
+        )
+
+        automated_workflows.each do |automated_workflow|
+          automated_workflow.disabled = pipeline.executable && pipeline.automatable ? false : true
+          automated_workflow.save
         end
       end
     end
