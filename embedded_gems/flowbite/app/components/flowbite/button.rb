@@ -30,7 +30,7 @@ module Flowbite
       @id = @system_arguments[:id]
 
       @system_arguments[:classes] = class_names(
-        system_arguments[:classes],
+        system_arguments[:class],
         generate_scheme_mapping(fetch_or_fallback(SCHEME_OPTIONS, scheme, DEFAULT_SCHEME)),
         SIZE_MAPPINGS[fetch_or_fallback(SIZE_OPTIONS, size, DEFAULT_SIZE)],
         DEFAULT_CLASSES,
@@ -76,7 +76,7 @@ module Flowbite
       # rubocop:disable Layout/LineLength
       case scheme
       when :primary
-        "bg-primary-700 text-white #{enabled_prefix}hover:bg-primary-800 focus:ring-primary-300 dark:focus:ring-primary-600"
+        "bg-primary-700 text-white #{enabled_prefix}hover:bg-primary-800 focus:ring-primary-100 dark:focus:ring-primary-600"
       when :default
         "text-slate-900 bg-white border border-slate-200 #{enabled_prefix}hover:bg-slate-100 #{enabled_prefix}hover:text-primary-700 focus:ring-4 focus:ring-slate-100 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 #{enabled_prefix}dark:hover:text-white #{enabled_prefix}dark:hover:bg-slate-700"
       when :danger
