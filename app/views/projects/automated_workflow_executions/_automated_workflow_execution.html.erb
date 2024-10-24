@@ -30,9 +30,9 @@
   </td>
   <td class="px-6 py-4 whitespace-nowrap">
     <% if automated_workflow_execution["disabled"] %>
-      <%= viral_pill(text: "DISABLED", color: "red") %>
+      <%= viral_pill(text: t(:".disabled"), color: "red") %>
     <% else %>
-      <%= viral_pill(text: "ENABLED", color: "green") %>
+      <%= viral_pill(text: t(:".enabled"), color: "green") %>
     <% end %>
   </td>
   <td
