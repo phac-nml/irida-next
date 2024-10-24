@@ -4,6 +4,7 @@ module Dashboard
   # Dashboard groups controller
   class GroupsController < ApplicationController
     before_action :current_page
+    before_action :render_flat_list, only: %i[index]
 
     def index
       @q = build_ransack_query
@@ -14,8 +15,8 @@ module Dashboard
 
     private
 
-    def flat_list_requested?
-      params.dig(:q, :name_or_puid_cont).present?
+    def render_flat_list
+      @render_flat_list = params.dig(:q, :name_or_puid_cont).present?
     end
 
     def build_ransack_query
@@ -53,7 +54,7 @@ module Dashboard
     end
 
     def authorized_groups
-      if flat_list_requested?
+      if @render_flat_list
         authorized_scope(Group, type: :relation)
       else
         authorized_scope(Group, type: :relation).without_descendants
