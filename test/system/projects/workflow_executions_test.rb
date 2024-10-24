@@ -9,6 +9,8 @@ module Projects
       login_as @user
       @namespace = groups(:group_one)
       @project = projects(:project1)
+      @workflow_execution1 = workflow_executions(:automated_example_completed)
+      @workflow_execution2 = workflow_executions(:automated_example_canceled)
 
       @id_col = '1'
       @name_col = '2'
@@ -30,8 +32,7 @@ module Projects
 
     test 'should sort a list of workflow executions' do
       workflow_execution1 = workflow_executions(:automated_workflow_execution)
-      workflow_execution2 = workflow_executions(:automated_example_canceling)
-      workflow_execution3 = workflow_executions(:automated_example_canceled)
+      workflow_execution3 = workflow_executions(:automated_example_canceling)
       workflow_execution4 = workflow_executions(:automated_workflow_execution_existing)
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
@@ -46,7 +47,7 @@ module Projects
         assert_selector 'tr', count: 10
         assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution4.run_id
         assert_selector "tr:nth-child(#{@run_id_col}) td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
-        assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution3.run_id
+        assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: @workflow_execution2.run_id
       end
 
       click_on 'Run ID'
@@ -54,8 +55,8 @@ module Projects
 
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 10
-        assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution3.run_id
-        assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: workflow_execution2.run_id
+        assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: @workflow_execution2.run_id
+        assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: workflow_execution3.run_id
         assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution4.run_id
       end
 
@@ -65,9 +66,9 @@ module Projects
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 10
         assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                        text: workflow_execution3.metadata['workflow_name']
+                        text: @workflow_execution2.metadata['workflow_name']
         assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
-                        text: workflow_execution2.metadata['workflow_name']
+                        text: workflow_execution3.metadata['workflow_name']
         assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
                         text: workflow_execution4.metadata['workflow_name']
       end
@@ -82,7 +83,7 @@ module Projects
         assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
                         text: workflow_execution1.metadata['workflow_name']
         assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
-                        text: workflow_execution3.metadata['workflow_name']
+                        text: @workflow_execution2.metadata['workflow_name']
       end
     end
 
@@ -152,18 +153,16 @@ module Projects
     end
 
     test 'should delete a completed workflow' do
-      workflow_execution = workflow_executions(:automated_example_completed)
-
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
       assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
-      tr = find('a', text: workflow_execution.id).ancestor('tr')
+      tr = find('a', text: @workflow_execution1.id).ancestor('tr')
 
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
-                        text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
+                        text: I18n.t(:"workflow_executions.state.#{@workflow_execution1.state}")
         assert_link 'Delete', count: 1
         click_link 'Delete'
       end
@@ -174,11 +173,11 @@ module Projects
       within %(div[data-controller='viral--flash']) do
         assert_text I18n.t(
           :'concerns.workflow_execution_actions.destroy.success',
-          workflow_name: workflow_execution.metadata['workflow_name']
+          workflow_name: @workflow_execution1.metadata['workflow_name']
         )
       end
 
-      assert_no_text workflow_execution.id
+      assert_no_text @workflow_execution1.id
     end
 
     test 'should delete an errored workflow' do
@@ -307,9 +306,7 @@ module Projects
     end
 
     test 'can remove workflow execution from workflow execution page' do
-      workflow_execution = workflow_executions(:automated_example_completed)
-
-      visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
+      visit namespace_project_workflow_execution_path(@namespace, @project, @workflow_execution1)
 
       click_link I18n.t(:'projects.workflow_executions.show.remove_button')
 
@@ -319,7 +316,56 @@ module Projects
 
       within %(#workflow-executions-table table tbody) do
         assert_selector 'tr', count: 9
-        assert_no_text workflow_execution.id
+        assert_no_text @workflow_execution1.id
+      end
+    end
+
+    test 'can filter by ID and name on projects workflow execution index page' do
+      visit namespace_project_workflow_executions_path(@namespace, @project)
+
+      assert_text 'Displaying 10 items'
+      assert_selector 'table tbody tr', count: 10
+
+      within('table tbody') do
+        assert_text @workflow_execution1.id
+        assert_text @workflow_execution1.name
+        assert_text @workflow_execution2.id
+        assert_text @workflow_execution2.name
+      end
+
+      fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
+              with: @workflow_execution1.id
+      find('input.t-search-component').native.send_keys(:return)
+
+      assert_text 'Displaying 1 item'
+      assert_selector 'table tbody tr', count: 1
+
+      within('table tbody') do
+        assert_text @workflow_execution1.id
+        assert_text @workflow_execution1.name
+        assert_no_text @workflow_execution2.id
+        assert_no_text @workflow_execution2.name
+      end
+
+      fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
+              with: ''
+      find('input.t-search-component').native.send_keys(:return)
+
+      assert_text 'Displaying 10 items'
+      assert_selector 'table tbody tr', count: 10
+
+      fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
+              with: @workflow_execution2.name
+      find('input.t-search-component').native.send_keys(:return)
+
+      assert_text 'Displaying 1 item'
+      assert_selector 'table tbody tr', count: 1
+
+      within('table tbody') do
+        assert_no_text @workflow_execution1.id
+        assert_no_text @workflow_execution1.name
+        assert_text @workflow_execution2.id
+        assert_text @workflow_execution2.name
       end
     end
   end
