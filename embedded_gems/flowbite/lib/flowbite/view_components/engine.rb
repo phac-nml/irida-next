@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails/engine'
 require 'view_component'
 require 'view_component/version'

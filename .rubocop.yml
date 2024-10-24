@@ -27,7 +27,7 @@ Metrics/BlockLength:
 # https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricsclasslength
 Metrics/ClassLength:
   Exclude:
-    - "**/config/environments/*.rb"
+    - "**/con ig/environments/*.rb"
     - "**/config/routes.rb"
     - "**/config/routes/**/*.rb"
     - "**/test/**/*.rb"
@@ -48,10 +48,6 @@ Metrics/MethodLength:
 Metrics/AbcSize:
   Max: 20
 
-Metrics/LineLength:
-  Exclude:
-    - "**/test/**/*.rb"
-
 Style/RedundantConstantBase:
   Exclude:
     - "**/config/routes.rb"
@@ -60,7 +56,6 @@ Style/RedundantConstantBase:
 Lint/MissingSuper:
   Exclude:
     - "app/components/**/*.rb"
-    - "embedded_gems/**/*.rb"
 
 Style/Documentation:
   Exclude:
