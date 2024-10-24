@@ -136,13 +136,13 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def namespaces_query
     if @tab == 'shared_namespaces'
-      if flat_list_requested?
+      if @render_flat_list
         shared_namespaces_descendants.ransack(params[:q])
       else
         @group.shared_namespaces.ransack(params[:q])
       end
 
-    elsif flat_list_requested?
+    elsif @render_flat_list
       namespace_descendants.ransack(params[:q])
     else
       namespace_children.ransack(params[:q])

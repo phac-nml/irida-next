@@ -867,4 +867,42 @@ class GroupsTest < ApplicationSystemTestCase
       assert_text @subgroup12b.samples_count
     end
   end
+
+  test 'filtering renders flat list for shared groups and projects' do
+    group6 = groups(:group_six)
+    subgroup2 = groups(:subgroup2)
+    visit group_url(group6)
+
+    click_on I18n.t(:'groups.show.tabs.shared_namespaces')
+
+    within('div.namespace-tree-container') do
+      assert_selector 'li', count: 1
+      within("#group_#{subgroup2.id}") do
+        assert_text subgroup2.name
+        assert_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+      end
+
+      subgroup_num = 3
+      8.times do
+        assert_no_text "Subgroup #{subgroup_num}"
+        subgroup_num += 1
+      end
+    end
+
+    fill_in I18n.t(:'groups.show.search.placeholder'), with: 'subgroup'
+    find('input.t-search-component').native.send_keys(:return)
+
+    within('div.namespace-tree-container') do
+      assert_selector 'li', count: 9
+      assert_text subgroup2.name
+
+      subgroup_num = 3
+      8.times do
+        assert_text "Subgroup #{subgroup_num}"
+        subgroup_num += 1
+      end
+
+      assert_no_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+    end
+  end
 end
