@@ -10,27 +10,12 @@ module Flowbite
     INVALID_ARIA_LABEL_TAGS = %i[div span p].freeze
 
     def check_denylist(denylist = [], **arguments)
-      if should_raise_error?
+      return arguments unless should_raise_error?
 
-        # Convert denylist from:
-        # { [:p, :pt] => "message" } to:
-        # { p: "message", pt: "message" }
-        unpacked_denylist =
-          denylist.each_with_object({}) do |(keys, value), memo|
-            keys.each { |key| memo[key] = value }
-          end
+      unpacked_denylist = unpack_denylist(denylist)
+      violations = find_violations(unpacked_denylist, arguments)
 
-        violations = unpacked_denylist.keys & arguments.keys
-
-        if violations.any?
-          message = "Found #{violations.count} #{'violation'.pluralize(violations)}:"
-          violations.each do |violation|
-            message += "\n The #{violation} argument is not allowed here. #{unpacked_denylist[violation]}"
-          end
-
-          raise(ArgumentError, message)
-        end
-      end
+      raise_violation_error(violations, unpacked_denylist) if violations.any?
 
       arguments
     end
@@ -72,6 +57,31 @@ module Flowbite
 
     def deny_aria_key(key, help_text, **arguments)
       raise ArgumentError, help_text if should_raise_aria_error? && aria(key, arguments)
+    end
+
+    private
+
+    def unpack_denylist(denylist)
+      denylist.each_with_object({}) do |(keys, value), memo|
+        keys.each { |key| memo[key] = value }
+      end
+    end
+
+    def find_violations(unpacked_denylist, arguments)
+      unpacked_denylist.keys & arguments.keys
+    end
+
+    def raise_violation_error(violations, unpacked_denylist)
+      message = build_violation_message(violations, unpacked_denylist)
+      raise(ArgumentError, message)
+    end
+
+    def build_violation_message(violations, unpacked_denylist)
+      message = "Found #{violations.count} #{'violation'.pluralize(violations)}:"
+      violations.each do |violation|
+        message += "\n The #{violation} argument is not allowed here. #{unpacked_denylist[violation]}"
+      end
+      message
     end
   end
 end

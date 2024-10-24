@@ -12,4 +12,4 @@ module Flowbite
   end
 end
 
-puts Flowbite::ViewComponents::Version::STRING if __FILE__ == $PROGRAM_NAME
+Rails.logger.debug Flowbite::ViewComponents::Version::STRING if __FILE__ == $PROGRAM_NAME
