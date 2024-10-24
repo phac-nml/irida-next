@@ -85,9 +85,5 @@ module Samples
       columns += %i[created_at updated_at attachments_updated_at]
       columns
     end
-
-    def trim_search_phrase(term)
-      term
-    end
   end
 end
