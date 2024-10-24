@@ -77,4 +77,4 @@ module Irida
 end
 
 require 'view_component'
-require 'flowbite/view_components'
+require 'pathogen/view_components'
