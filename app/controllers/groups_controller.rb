@@ -4,7 +4,7 @@
 class GroupsController < Groups::ApplicationController # rubocop:disable Metrics/ClassLength
   layout :resolve_layout
   before_action :parent_group, only: %i[new]
-  before_action :tab, only: %i[show]
+  before_action :tab, :render_flat_list, only: %i[show]
   before_action :group, only: %i[activity edit show destroy update transfer]
   before_action :authorized_namespaces, except: %i[index show destroy]
   before_action :current_page
@@ -113,8 +113,8 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     @q.sorts = 'created_at desc' if @q.sorts.empty?
   end
 
-  def flat_list_requested?
-    params.dig(:q, :name_or_puid_cont).present?
+  def render_flat_list
+    @render_flat_list = params.dig(:q, :name_or_puid_cont).present?
   end
 
   def parent_group
@@ -136,13 +136,13 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def namespaces_query
     if @tab == 'shared_namespaces'
-      if flat_list_requested?
+      if @render_flat_list
         shared_namespaces_descendants.ransack(params[:q])
       else
         @group.shared_namespaces.ransack(params[:q])
       end
 
-    elsif flat_list_requested?
+    elsif @render_flat_list
       namespace_descendants.ransack(params[:q])
     else
       namespace_children.ransack(params[:q])
