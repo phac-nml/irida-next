@@ -4,7 +4,7 @@
 class GroupsController < Groups::ApplicationController # rubocop:disable Metrics/ClassLength
   layout :resolve_layout
   before_action :parent_group, only: %i[new]
-  before_action :tab, only: %i[show]
+  before_action :tab, :render_flat_list, only: %i[show]
   before_action :group, only: %i[activity edit show destroy update transfer]
   before_action :authorized_namespaces, except: %i[index show destroy]
   before_action :current_page
@@ -16,11 +16,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   def show
     authorize! @group, to: :read?
 
-    @q = if flat_list_requested?
-           namespace_descendants.ransack(params[:q])
-         else
-           namespace_children.ransack(params[:q])
-         end
+    @q = namespaces_query
     set_default_sort
     @pagy, @namespaces = pagy(@q.result.include_route)
   end
@@ -117,8 +113,8 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     @q.sorts = 'created_at desc' if @q.sorts.empty?
   end
 
-  def flat_list_requested?
-    params.dig(:q, :name_or_puid_cont).present?
+  def render_flat_list
+    @render_flat_list = params.dig(:q, :name_or_puid_cont).present?
   end
 
   def parent_group
@@ -138,6 +134,21 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
                                               type: :relation, as: :manageable).where.not(type: Namespaces::UserNamespace.sti_name) # rubocop:disable Layout/LineLength
   end
 
+  def namespaces_query
+    if @tab == 'shared_namespaces'
+      if @render_flat_list
+        shared_namespaces_descendants.ransack(params[:q])
+      else
+        @group.shared_namespaces.ransack(params[:q])
+      end
+
+    elsif @render_flat_list
+      namespace_descendants.ransack(params[:q])
+    else
+      namespace_children.ransack(params[:q])
+    end
+  end
+
   def namespace_children
     @group.children_of_type(
       [
@@ -149,6 +160,11 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   def namespace_descendants
     @group.self_and_descendants_of_type([Namespaces::ProjectNamespace.sti_name,
                                          Group.sti_name])
+  end
+
+  def shared_namespaces_descendants
+    @group.shared_namespaces.self_and_descendants.where(type: [Namespaces::ProjectNamespace.sti_name,
+                                                               Group.sti_name])
   end
 
   def resolve_layout
