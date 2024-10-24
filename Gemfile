@@ -59,7 +59,7 @@ gem 'faraday-net_http_persistent', '~> 2.0'
 # gem "sassc-rails"
 
 # Tailwind CSS [https://tailwindcss.com]
-gem 'flowbite_view_components', path: './embedded_gems/flowbite'
+gem 'pathogen_view_components', path: './embedded_gems/pathogen'
 gem 'heroicon-rails', '>= 0.2.9'
 gem 'tailwindcss-rails', '~> 2.7'
 gem 'view_component', '~> 3.15'

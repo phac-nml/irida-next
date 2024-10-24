@@ -14,9 +14,9 @@ GIT
       nokogiri (~> 1, >= 1.10.8)
 
 PATH
-  remote: embedded_gems/flowbite
+  remote: embedded_gems/pathogen
   specs:
-    flowbite_view_components (0.0.1)
+    pathogen_view_components (0.0.1)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
       heroicon-rails (>= 0.2.9)
@@ -662,7 +662,6 @@ DEPENDENCIES
   faraday
   faraday-multipart
   faraday-net_http_persistent (~> 2.0)
-  flowbite_view_components!
   fx
   good_job (~> 4.1, >= 4.1.1)
   google-cloud-storage (~> 1.11)
@@ -684,6 +683,7 @@ DEPENDENCIES
   omniauth-saml
   pagy (~> 9.0.5)
   paranoia
+  pathogen_view_components!
   pg
   public_activity
   puma (~> 6.4)
