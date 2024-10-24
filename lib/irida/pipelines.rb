@@ -31,7 +31,7 @@ module Irida
 
       register_pipelines
 
-      update_automated_pipelines
+      update_automated_pipelines if defined?(::Rails::Server)
     end
 
     # Registers the available pipelines. This method is called
