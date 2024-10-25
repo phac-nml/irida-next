@@ -28,17 +28,18 @@
 
   <%= tabs.with_tab_content do %>
     <div class="mt-2">
+      <div class="flex flex-row-reverse mb-2">
+        <%= render SearchComponent.new(query: @q, url: group_path(@group), search_attribute: :name_or_puid_cont, placeholder: t(".search.placeholder")) do %>
+
+          <% if @tab == "shared_namespaces" %>
+            <input type="hidden" name="tab" value="shared_namespaces">
+          <% end %>
+        <% end %>
+      </div>
+
       <% if @tab == "shared_namespaces" %>
-        <div class="flex flex-row-reverse mb-2">
-            <%= render SearchComponent.new(query: @q, url: group_path(@group), search_attribute: :name_or_puid_cont, placeholder: t(".search.placeholder")) do %>
-              <input type="hidden" name="tab" value="shared_namespaces">
-            <% end %>
-        </div>
         <%= render "groups/shared_namespaces/index", locals: { namespaces: @namespaces } %>
       <% else %>
-        <div class="flex flex-row-reverse mb-2">
-            <%= render SearchComponent.new(query: @q, url: group_path(@group), search_attribute: :name_or_puid_cont, placeholder: t("general.search.name_puid")) %>
-        </div>
         <%= render "groups/subgroups/index", locals: { namespaces: @namespaces } %>
       <% end %>
     </div>
