@@ -868,6 +868,35 @@ class GroupsTest < ApplicationSystemTestCase
     end
   end
 
+  test 'filter shared groups and projects by puid' do
+    group6 = groups(:group_six)
+    subgroup2 = groups(:subgroup2)
+    subgroup3 = groups(:subgroup3)
+    visit group_url(group6)
+
+    click_on I18n.t(:'groups.show.tabs.shared_namespaces')
+
+    within('div.namespace-tree-container') do
+      assert_selector 'li', count: 1
+      within("#group_#{subgroup2.id}") do
+        assert_text subgroup2.name
+        assert_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+      end
+      assert_no_text subgroup3.name
+      assert_no_selector "li#group_#{subgroup3.id}"
+    end
+
+    input_field = find('input.t-search-component')
+    input_field.fill_in with: subgroup3.puid
+    input_field.native.send_keys(:return)
+
+    within('div.namespace-tree-container') do
+      assert_selector 'li', count: 1
+      assert_text subgroup3.name
+      assert_no_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+    end
+  end
+
   test 'filtering renders flat list for shared groups and projects' do
     group6 = groups(:group_six)
     subgroup2 = groups(:subgroup2)
@@ -889,8 +918,9 @@ class GroupsTest < ApplicationSystemTestCase
       end
     end
 
-    fill_in I18n.t('groups.show.search.placeholder'), with: 'subgroup'
-    find('input.t-search-component').native.send_keys(:return)
+    input_field = find('input.t-search-component')
+    input_field.fill_in with: 'subgroup'
+    input_field.native.send_keys(:return)
 
     within('div.namespace-tree-container') do
       assert_selector 'li', count: 9
