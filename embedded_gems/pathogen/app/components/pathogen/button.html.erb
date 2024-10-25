@@ -1,9 +1,18 @@
 <%= render @base_button_class.new(**@system_arguments) do -%>
   <% if leading_visual %>
-    <%= leading_visual %>
+    <span class="mr-2">
+      <%= leading_visual %>
+    </span>
   <% end %>
   <span><%= trimmed_content %></span>
   <% if trailing_visual %>
-    <%= trailing_visual %>
+    <span class="ml-2">
+      <% if @trailing_visual_counter %>
+        <span class="sr-only">(<%= trailing_visual %>)</span>
+        <%= trailing_visual %>
+      <% else %>
+        <%= trailing_visual %>
+      <% end %>
+    </span>
   <% end %>
 <% end %>

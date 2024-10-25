@@ -10,37 +10,38 @@ module Pathogen
     }.freeze
 
     def self.included(base)
-      base.renders_one :leading_visual, types: visual_types(margin_direction: :mr, name: :leading_visual)
-      base.renders_one :trailing_visual, types: visual_types(margin_direction: :ml, name: :trailing_visual)
+      base.renders_one :leading_visual, types: visual_types(name: :leading_visual)
+      base.renders_one :trailing_visual, types: visual_types(name: :trailing_visual)
     end
 
-    def self.visual_types(margin_direction:, name:)
+    def self.visual_types(name:)
       {
-        icon: ->(**args) { icon_visual(args, margin_direction, name) },
-        svg: ->(**args) { svg_visual(args, margin_direction, name) }
+        icon: ->(**args) { icon_visual(args, name) },
+        svg: ->(**args) { svg_visual(args, name) }
       }
     end
 
-    def icon_visual(args, margin_direction, name)
-      args[:class] = class_names(args[:class], icon_classes(margin_direction), "#{name}_icon")
+    def icon_visual(args, name)
+      args[:class] = class_names(args[:class], icon_classes, "#{name}_icon")
       Pathogen::Icon.new(**args)
     end
 
-    def svg_visual(args, margin_direction, name)
+    def svg_visual(args, name)
       Pathogen::BaseComponent.new(
-        tag: :span,
-        classes: class_names(icon_classes(margin_direction), "#{name}_svg"),
+        tag: :svg,
+        width: '16',
+        height: '16',
+        classes: "#{name}_svg fill-current",
         **args
       )
     end
 
     private
 
-    def icon_classes(margin_direction)
+    def icon_classes
       [
         ICON_SIZE_MAPPINGS[fetch_or_fallback(Pathogen::ButtonSizes::SIZE_OPTIONS, @size,
-                                             Pathogen::ButtonSizes::DEFAULT_SIZE)],
-        "#{margin_direction}-#{@size == :small ? 1 : 2}"
+                                             Pathogen::ButtonSizes::DEFAULT_SIZE)]
       ].compact
     end
   end
