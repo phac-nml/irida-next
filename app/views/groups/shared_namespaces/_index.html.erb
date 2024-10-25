@@ -13,8 +13,8 @@
     <%= render Viral::Pagy::FullComponent.new(@pagy, item: "Shared groups and projects") %>
   <% else %>
     <%= viral_empty(
-      title: t(:"groups.show.subgroups.no_subgroups.title"),
-      description: t(:"groups.show.subgroups.no_subgroups.description"),
+      title: t(:"groups.show.shared_namespaces.no_shared.title"),
+      description: t(:"groups.show.shared_namespaces.no_shared.description"),
       icon_name: :squares_2x2,
     ) %>
   <% end %>
