@@ -1,9 +1,11 @@
 {
-    "recommendations": [
-        "shopify.ruby-lsp",
-        "koichisasada.vscode-rdbg",
-        "connorshea.vscode-ruby-test-adapter",
-        "hbenl.vscode-test-explorer",
-        "elia.erb-formatter"
-    ]
+  "recommendations": [
+    "shopify.ruby-lsp",
+    "koichisasada.vscode-rdbg",
+    "connorshea.vscode-ruby-test-adapter",
+    "hbenl.vscode-test-explorer",
+    "elia.erb-formatter",
+    "esbenp.prettier-vscode",
+    "streetsidesoftware.code-spell-checker"
+  ]
 }
