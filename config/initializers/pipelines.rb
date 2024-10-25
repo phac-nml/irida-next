@@ -7,7 +7,8 @@ Rails.application.config.to_prepare do
 end
 
 Rails.application.config.after_initialize do
-  if ActiveRecord::Base.connection.table_exists?('automated_workflow_executions')
+  if defined?(Rails::Server) ||
+     (Rails.env.test? && ActiveRecord::Base.connection.table_exists?('automated_workflow_executions'))
     Irida::Pipelines.instance.available_pipelines.each_value do |pipeline|
       automated_workflows = AutomatedWorkflowExecution.where(
         "metadata ->> 'workflow_name' = ? and metadata ->> 'workflow_version' = ?", pipeline.name, pipeline.version
