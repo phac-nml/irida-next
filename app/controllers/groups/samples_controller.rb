@@ -76,8 +76,8 @@ module Groups
       @search_params = search_params
       set_metadata_fields
       query_parser = Irida::SearchSyntax::Ransack.new(text: :name_or_puid_cont, metadata_fields: @fields)
-      parsed_params = query_parser.parse(@search_params.fetch(:name_or_puid_cont, nil))
-      @q = authorized_samples.ransack(@search_params.except(:name_or_puid_cont).merge(parsed_params))
+      @parsed_params = query_parser.parse(@search_params.fetch(:name_or_puid_cont, nil))
+      @q = authorized_samples.ransack(@search_params.except(:name_or_puid_cont).merge(@parsed_params))
     end
 
     def search_params
