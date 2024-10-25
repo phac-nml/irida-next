@@ -580,8 +580,6 @@ fr:
         project: Create new project
     screen_reader:
       close: Close
-    search:
-      name_puid: Search by name or ID
   groups:
     activity:
       title: Group activity

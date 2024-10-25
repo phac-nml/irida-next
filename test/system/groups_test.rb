@@ -412,7 +412,7 @@ class GroupsTest < ApplicationSystemTestCase
     @group = groups(:group_one)
     visit group_url(@group)
     assert_text I18n.t(:'components.pagination.next')
-    fill_in I18n.t('general.search.name_puid'), with: 'project 2'
+    fill_in I18n.t('groups.show.search.placeholder'), with: 'project 2'
     find('input.t-search-component').native.send_keys(:return)
 
     assert_selector 'li.namespace-entry', count: 5
@@ -441,7 +441,7 @@ class GroupsTest < ApplicationSystemTestCase
       assert_no_text subgroup12aa.name
     end
 
-    fill_in I18n.t(:'general.search.name_puid'), with: 'subgroup'
+    fill_in I18n.t('groups.show.search.placeholder'), with: 'subgroup'
     find('input.t-search-component').native.send_keys(:return)
 
     within('div.namespace-tree-container') do
@@ -889,7 +889,7 @@ class GroupsTest < ApplicationSystemTestCase
       end
     end
 
-    fill_in I18n.t(:'groups.show.search.placeholder'), with: 'subgroup'
+    fill_in I18n.t('groups.show.search.placeholder'), with: 'subgroup'
     find('input.t-search-component').native.send_keys(:return)
 
     within('div.namespace-tree-container') do
