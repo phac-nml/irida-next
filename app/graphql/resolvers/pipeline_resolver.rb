@@ -8,6 +8,7 @@ module Resolvers
              description: 'Name of the Workflow'
     argument :workflow_type, GraphQL::Types::String,
              required: false,
+             default_value: 'executable',
              description: "Can specify `automatable` for automatable pipelines, or `available` for all pipelines. By default only 'executable' pipelines are returned." # rubocop:disable Layout/LineLength
     argument :workflow_version, GraphQL::Types::String,
              required: true,
@@ -15,7 +16,7 @@ module Resolvers
 
     type Types::PipelineType, null: true
 
-    def resolve(workflow_name:, workflow_version:, workflow_type: 'executable')
+    def resolve(workflow_name:, workflow_version:, workflow_type:)
       Irida::Pipelines.instance.find_pipeline_by(
         workflow_name,
         workflow_version,
