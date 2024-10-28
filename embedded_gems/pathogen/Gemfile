@@ -11,8 +11,6 @@ gem 'turbo-rails'
 # development dependencies
 group :development do
   gem 'annotate'
-  gem 'erb_lint'
-  gem 'erblint-github'
   gem 'rubocop'
   gem 'rubocop-performance'
   gem 'rubocop-rails'
