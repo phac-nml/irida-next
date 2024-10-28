@@ -10,7 +10,7 @@
       type: [Group.sti_name, Namespaces::ProjectNamespace.sti_name],
       render_flat_list: @render_flat_list,
     ) %>
-    <%= render Viral::Pagy::FullComponent.new(@pagy, item: "Shared groups and projects") %>
+    <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".pagy.item")) %>
   <% else %>
     <%= viral_empty(
       title: t(:"groups.show.shared_namespaces.no_shared.title"),
