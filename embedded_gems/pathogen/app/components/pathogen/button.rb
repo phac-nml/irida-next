@@ -72,21 +72,16 @@ module Pathogen
     # @param scheme [Symbol] The color scheme of the button (:primary, :default, or :danger).
     # @return [String] A string of CSS classes corresponding to the specified scheme.
     def generate_scheme_mapping(scheme)
-      enabled_prefix = enableable? ? 'enabled:' : ''
       # rubocop:disable Layout/LineLength
       case scheme
       when :primary
-        "bg-primary-700 text-white #{enabled_prefix}hover:bg-primary-800 focus:ring-primary-100 dark:focus:ring-primary-600"
+        'bg-primary-700 text-white enabled:hover:bg-primary-800 focus:ring-primary-100 dark:focus:ring-primary-600'
       when :default
-        "text-slate-900 bg-white border border-slate-200 #{enabled_prefix}hover:bg-slate-100 #{enabled_prefix}hover:text-primary-700 focus:ring-4 focus:ring-slate-100 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 #{enabled_prefix}dark:hover:text-white #{enabled_prefix}dark:hover:bg-slate-700"
+        'text-slate-900 bg-white border border-slate-200 enabled:hover:bg-slate-100 enabled:hover:text-primary-700 focus:ring-4 focus:ring-slate-100 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 enabled:dark:hover:text-white enabled:dark:hover:bg-slate-700'
       when :danger
-        "border border-red-100 bg-slate-50 text-red-500 #{enabled_prefix}hover:text-red-50 #{enabled_prefix}dark:hover:text-red-50 #{enabled_prefix}hover:bg-red-800 focus:ring-red-300 dark:border-red-800 dark:bg-slate-900 dark:text-red-500 dark:focus:ring-red-900"
+        'border border-red-100 bg-slate-50 text-red-500 enabled:hover:text-red-50 enabled:dark:hover:text-red-50 enabled:hover:bg-red-800 focus:ring-red-300 dark:border-red-800 dark:bg-slate-900 dark:text-red-500 dark:focus:ring-red-900'
       end
       # rubocop:enable Layout/LineLength
-    end
-
-    def enableable?
-      @system_arguments[:tag].present? && @system_arguments[:tag] == 'a'
     end
   end
 end
