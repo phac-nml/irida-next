@@ -72,16 +72,11 @@ module Pathogen
     # @param scheme [Symbol] The color scheme of the button (:primary, :default, or :danger).
     # @return [String] A string of CSS classes corresponding to the specified scheme.
     def generate_scheme_mapping(scheme)
-      # rubocop:disable Layout/LineLength
-      case scheme
-      when :primary
-        'bg-primary-700 text-white enabled:hover:bg-primary-800 focus:ring-primary-100 dark:focus:ring-primary-600'
-      when :default
-        'text-slate-900 bg-white border border-slate-200 enabled:hover:bg-slate-100 enabled:hover:text-primary-700 focus:ring-4 focus:ring-slate-100 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 enabled:dark:hover:text-white enabled:dark:hover:bg-slate-700'
-      when :danger
-        'border border-red-100 bg-slate-50 text-red-500 enabled:hover:text-red-50 enabled:dark:hover:text-red-50 enabled:hover:bg-red-800 focus:ring-red-300 dark:border-red-800 dark:bg-slate-900 dark:text-red-500 dark:focus:ring-red-900'
-      end
-      # rubocop:enable Layout/LineLength
+      {
+        primary: 'bg-primary-700 text-white enabled:hover:bg-primary-800 focus:ring-primary-100 dark:focus:ring-primary-600',
+        default: 'text-slate-900 bg-white border border-slate-200 enabled:hover:bg-slate-100 enabled:hover:text-primary-700 focus:ring-4 focus:ring-slate-100 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 enabled:dark:hover:text-white enabled:dark:hover:bg-slate-700',
+        danger: 'border border-red-100 bg-slate-50 text-red-500 enabled:hover:text-red-50 enabled:dark:hover:text-red-50 enabled:hover:bg-red-800 focus:ring-red-300 dark:border-red-800 dark:bg-slate-900 dark:text-red-500 dark:focus:ring-red-900'
+      }[scheme]
     end
   end
 end
