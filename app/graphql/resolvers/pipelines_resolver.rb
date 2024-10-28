@@ -5,7 +5,7 @@ module Resolvers
   class PipelinesResolver < BaseResolver
     type Types::PipelineType.connection_type, null: true
 
-    argument :workflow_type, GraphQL::Types::String,
+    argument :workflow_type, String,
              required: false,
              default_value: 'executable',
              description: 'Can specify `automatable` for automatable pipelines, or `available` for all pipelines. By default only `executable` pipelines are returned.' # rubocop:disable Layout/LineLength
