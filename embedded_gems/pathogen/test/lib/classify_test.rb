@@ -5,14 +5,15 @@ require 'test_helper'
 module Pathogen
   # Test cases for the Classify functionality
   class ClassifyTest < Minitest::Test
-    def test_margins
-      assert_generated_class('m-4',   { m: 4 })
-      assert_generated_class('mx-4',  { mx: 4 })
-      assert_generated_class('my-4',  { my: 4 })
-      assert_generated_class('mt-4',  { mt: 4 })
-      assert_generated_class('ml-4',  { ml: 4 })
-      assert_generated_class('mb-4',  { mb: 4 })
-      assert_generated_class('mr-4',  { mr: 4 })
+    def test_color
+      assert_generated_class('text-slate-900 dark:text-slate-100', { color: :default })
+      assert_generated_class('text-white dark:text-slate-100', { color: :primary })
+      assert_generated_class('text-slate-300 dark:text-slate-700', { color: :muted })
+    end
+
+    def test_background
+      assert_generated_class('bg-white dark:bg-slate-800', { bg: :default })
+      assert_generated_class('bg-primary-700 dark:bg-primary-600', { bg: :primary })
     end
 
     private

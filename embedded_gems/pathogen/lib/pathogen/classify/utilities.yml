@@ -1,39 +1,13 @@
 ---
 :color:
   :default:
-    - color-default
-:m:
-  0:
-    - m-0
-  1:
-    - m-1
-:mx:
-  0:
-    - mx-0
-  1:
-    - mx-1
-:my:
-  0:
-    - my-0
-  1:
-    - my-1
-:mt:
-  0:
-    - mt-0
-  1:
-    - mt-1
-:ml:
-  0:
-    - ml-0
-  1:
-    - mb-1
-:mr:
-  0:
-    - mr-0
-  1:
-    - mr-1
-:mb:
-  0:
-    - mb-0
-  1:
-    - mb-1
+    - text-slate-900 dark:text-slate-100
+  :muted:
+    - text-slate-300 dark:text-slate-700
+  :primary:
+    - text-white dark:text-slate-100
+:bg:
+  :default:
+    - bg-white dark:bg-slate-800
+  :primary:
+    - bg-primary-700 dark:bg-primary-600
