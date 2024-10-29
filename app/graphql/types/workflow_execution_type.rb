@@ -15,6 +15,12 @@ module Types
           description: 'Metadata for the sample',
           resolver: Resolvers::WorkflowExecutionMetadataResolver
     field :name, String, null: true, description: 'WorkflowExecution name'
+    field :namespace,
+          NamespaceType,
+          null: true,
+          description: 'Namespace ID of the workflow execution',
+          resolver: Resolvers::WorkflowExecutionNamespaceResolver
+    # field :namespace_id, String
     field :run_id, String, null: true, description: 'WorkflowExecution run id'
     field :samples,
           SampleType.connection_type,
@@ -40,7 +46,7 @@ module Types
       super &&
         allowed_to?(
           :read?,
-          object.submitter,
+          object,
           context: { user: context[:current_user] }
         )
     end
