@@ -1,138 +1,135 @@
 # frozen_string_literal: true
 
+require_relative 'classify/utilities'
+require_relative 'classify/validation'
+
 module Pathogen
   # :nodoc:
   class Classify
-    # LOOKUP is a constant that stores utility classes for the Pathogen framework.
-    # It's defined in the Pathogen::Classify::Utilities module and contains
-    # a hash of utility classes organized by their purpose (e.g., spacing, colors, etc.).
-    # This constant is used throughout the Classify class to process and validate
-    # class names passed to components.
+    FLEX_VALUES = [1, :auto].freeze
+
+    FLEX_WRAP_MAPPINGS = {
+      wrap: 'flex-wrap',
+      nowrap: 'flex-nowrap',
+      reverse: 'flex-wrap-reverse'
+    }.freeze
+
+    FLEX_ALIGN_SELF_VALUES = %i[auto start end center baseline stretch].freeze
+
+    FLEX_DIRECTION_VALUES = %i[column column_reverse row row_reverse].freeze
+
+    FLEX_JUSTIFY_CONTENT_VALUES = %i[flex_start flex_end center space_between space_around].freeze
+
+    FLEX_ALIGN_ITEMS_VALUES = %i[flex_start flex_end center baseline stretch].freeze
+
     LOOKUP = Pathogen::Classify::Utilities::UTILITIES
 
     class << self
-      # Processes the given arguments and returns a hash with class and style attributes
-      # @param args [Hash] The arguments to process
-      # @return [Hash] A hash containing :class and :style keys
+      # Utility for mapping component configuration into Pathogen CSS class names.
+      #
+      # **args can contain utility keys that mimic the interface used by
+      # https://github.com/Pathogen/components, as well as the special entries :classes
+      # and :style.
+      #
+      # Returns a hash containing two entries. The :classes entry is a string of
+      # Pathogen CSS class names, including any classes given in the :classes entry
+      # in **args. The :style entry is the value of the given :style entry given in
+      # **args.
+      #
+      #
+      # Example usage:
+      # extract_css_attrs({ mt: 4, py: 2 }) => { classes: "mt-4 py-2", style: nil }
+      # extract_css_attrs(classes: "d-flex", mt: 4, py: 2) => { classes: "d-flex mt-4 py-2", style: nil }
+      # extract_css_attrs(classes: "d-flex", style: "float: left", mt: 4, py: 2) => { classes: "d-flex mt-4 py-2", style: "float: left" }
+      #
       def call(args = {})
-        style, classes = process_arguments(args)
+        style = nil
+        classes = [].tap do |result|
+          args.each do |key, val|
+            case key
+            when :classes
+              # insert :classes first to avoid huge doc diffs
+              if (class_names = validated_class_names(val))
+                result.unshift(class_names)
+              end
+              next
+            when :style
+              style = val
+              next
+            end
 
+            next unless LOOKUP[key]
+
+            if val.is_a?(Array)
+              # A while loop is ~3.5x faster than Array#each.
+              brk = 0
+              while brk < val.size
+                item = val[brk]
+
+                if item.nil?
+                  brk += 1
+                  next
+                end
+
+                # Believe it or not, three calls to Hash#[] and an inline rescue
+                # are about 30% faster than Hash#dig. It also ensures validate is
+                # only called when necessary, i.e. when the class can't be found
+                # in the lookup table.
+                found = begin
+                  LOOKUP[key][item][brk]
+                rescue StandardError
+                  nil
+                end || validate(key, item, brk)
+                result << found if found
+                brk += 1
+              end
+            else
+              next if val.nil?
+
+              # rubocop:disable Style/RescueModifier
+              found = (LOOKUP[key][val][0] rescue nil) || validate(key, val, 0)
+              # rubocop:enable Style/RescueModifier
+              result << found if found
+            end
+          end
+        end.join(' ')
+
+        # This is much faster than Rails' presence method.
         {
-          class: classes.blank? ? nil : classes.join(' '),
-          style: style.presence
+          class: !classes || classes.empty? ? nil : classes,
+          style: !style || style.empty? ? nil : style
         }
       end
 
       private
 
-      # Processes the arguments and separates them into style and classes
-      # @param args [Hash] The arguments to process
-      # @return [Array] An array containing the style and classes
-      def process_arguments(args)
-        style = nil
-        classes = []
-
-        args.each do |key, val|
-          case key
-          when :classes
-            classes.unshift(validated_class_names(val)) if validated_class_names(val)
-          when :style
-            style = val
-          else
-            process_lookup(key, val, classes)
-          end
-        end
-
-        [style, classes]
-      end
-
-      # Processes a lookup key-value pair and adds appropriate classes
-      # @param key [Symbol] The lookup key
-      # @param val [Object] The value associated with the key
-      # @param classes [Array] The array to store the resulting classes
-      def process_lookup(key, val, classes)
-        return unless LOOKUP[key]
-
-        if val.is_a?(Array)
-          process_array_value(key, val, classes)
-        else
-          process_single_value(key, val, classes)
-        end
-      end
-
-      # Processes an array value for a given key and adds appropriate classes
-      # @param key [Symbol] The lookup key
-      # @param val [Array] The array value to process
-      # @param classes [Array] The array to store the resulting classes
-      def process_array_value(key, val, classes)
-        val.each_with_index do |item, index|
-          next if item.nil?
-
-          found = find_or_validate(key, item, index)
-          classes << found if found
-        end
-      end
-
-      # Processes a single value for a given key and adds the appropriate class
-      # @param key [Symbol] The lookup key
-      # @param val [Object] The value to process
-      # @param classes [Array] The array to store the resulting class
-      def process_single_value(key, val, classes)
-        return if val.nil?
-
-        found = find_or_validate(key, val, 0)
-        classes << found if found
-      end
-
-      # Finds a value in the LOOKUP or validates it
-      # @param key [Symbol] The lookup key
-      # @param item [Object] The item to find or validate
-      # @param index [Integer] The index in the breakpoints array
-      # @return [String, nil] The found or validated class, or nil if not found/valid
-      def find_or_validate(key, item, index)
-        LOOKUP.dig(key, item, index) || validate(key, item, index)
-      rescue StandardError
-        validate(key, item, index)
-      end
-
-      # Validates a value for a given key and breakpoint
-      # @param key [Symbol] The lookup key
-      # @param val [Object] The value to validate
-      # @param brk [Integer] The breakpoint index
-      # @return [String, nil] The validated class or nil if not valid
       def validate(key, val, brk)
         brk_str = Pathogen::Classify::Utilities::BREAKPOINTS[brk]
         Pathogen::Classify::Utilities.validate(key, val, brk_str)
       end
 
-      # Validates and returns the given class names
-      # @param classes [String] The class names to validate
-      # @return [String, nil] The validated class names or nil if blank
       def validated_class_names(classes)
         return if classes.blank?
 
-        if raise_on_invalid_options? && !ENV['PATHOGEN_WARNINGS_DISABLED']
+        if raise_on_invalid_options? && !ENV['Pathogen_WARNINGS_DISABLED']
           invalid_class_names =
             classes.split.each_with_object([]) do |class_name, memo|
               memo << class_name if Pathogen::Classify::Validation.invalid?(class_name)
             end
 
           if invalid_class_names.any?
-            raise ArgumentError, "Invalid Pathogen CSS class #{'name'.pluralize(invalid_class_names.length)} " \
-                                 "detected: #{invalid_class_names.to_sentence}. " \
-                                 'Please use valid Pathogen classes. ' \
-                                 'This warning is not raised in production. ' \
-                                 'Set PATHOGEN_WARNINGS_DISABLED=1 to disable.'
+            raise ArgumentError, 'Use System Arguments (https://pathogen.style/view-components/system-arguments) ' \
+                                 "instead of Pathogen CSS class #{'name'.pluralize(invalid_class_names.length)} #{invalid_class_names.to_sentence}. " \
+                                 'This warning will not be raised in production. Set Pathogen_WARNINGS_DISABLED=1 to disable this warning.'
           end
         end
 
         classes
       end
 
-      # Checks if the application is configured to raise on invalid options
-      # @return [Boolean] True if configured to raise on invalid options, false otherwise
       def raise_on_invalid_options?
-        Rails.application.config._view_components.raise_on_invalid_options
+        Rails.application.config.respond_to?(:pathogen_view_components) &&
+          Rails.application.config.pathogen_view_components&.raise_on_invalid_options
       end
     end
   end

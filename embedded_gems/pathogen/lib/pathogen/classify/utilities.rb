@@ -50,7 +50,7 @@ module Pathogen
         private
 
         def handle_invalid_key(key)
-          raise ArgumentError, "#{key} is not a valid Primer utility key" if validate_class_names?
+          raise ArgumentError, "#{key} is not a valid Pathogen utility key" if validate_class_names?
 
           ''
         end
