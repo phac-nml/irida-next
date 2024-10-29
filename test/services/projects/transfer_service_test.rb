@@ -8,6 +8,12 @@ module Projects
       @john_doe = users(:john_doe)
       @jane_doe = users(:jane_doe)
       @project = projects(:project1)
+
+      @project31 = projects(:project31)
+      @group12 = groups(:group_twelve)
+      @subgroup12a = groups(:subgroup_twelve_a)
+      @subgroup12b = groups(:subgroup_twelve_b)
+      @subgroup12aa = groups(:subgroup_twelve_a_a)
     end
 
     test 'transfer project with permission' do
@@ -149,12 +155,6 @@ module Projects
       # group12 < subgroup12b (project30 > sample 33)
       #    |
       #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
-      @project31 = projects(:project31)
-      @group12 = groups(:group_twelve)
-      @subgroup12a = groups(:subgroup_twelve_a)
-      @subgroup12b = groups(:subgroup_twelve_b)
-      @subgroup12aa = groups(:subgroup_twelve_a_a)
-
       assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project31.namespace.metadata_summary)
       assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
       assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
@@ -181,6 +181,74 @@ module Projects
 
       new_namespace.reload
       assert_equal({}, new_namespace.metadata_summary)
+    end
+
+    test 'samples count updates after project transfer' do
+      # Reference group/projects descendants tree:
+      # group12 < subgroup12b (project30 > sample 33)
+      #    |
+      #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
+      assert_equal(2, @subgroup12aa.samples_count)
+      assert_equal(3, @subgroup12a.samples_count)
+      assert_equal(1, @subgroup12b.samples_count)
+      assert_equal(4, @group12.samples_count)
+
+      assert_no_changes -> { @group12.reload.samples_count } do
+        assert_no_changes -> { @project31.reload.samples.size } do
+          Projects::TransferService.new(@project31, @john_doe).execute(@subgroup12b)
+        end
+      end
+
+      assert_equal(0, @subgroup12aa.reload.samples_count)
+      assert_equal(1, @subgroup12a.reload.samples_count)
+      assert_equal(3, @subgroup12b.reload.samples_count)
+    end
+
+    test 'samples count updates after a project transfer from a user namespace' do
+      # Reference group/projects descendants tree:
+      # group12 < subgroup12b (project30 > sample 33)
+      #    |
+      #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
+      john_doe_project = projects(:john_doe_project2)
+
+      assert_equal(2, @subgroup12aa.samples_count)
+      assert_equal(3, @subgroup12a.samples_count)
+      assert_equal(1, @subgroup12b.samples_count)
+      assert_equal(4, @group12.samples_count)
+
+      assert_no_changes -> { @subgroup12a.reload.samples_count } do
+        assert_no_changes -> { @subgroup12aa.reload.samples_count } do
+          assert_no_changes -> { john_doe_project.reload.samples.size } do
+            Projects::TransferService.new(john_doe_project, @john_doe).execute(@subgroup12b)
+          end
+        end
+      end
+
+      assert_equal(5, @group12.reload.samples_count)
+      assert_equal(2, @subgroup12b.reload.samples_count)
+    end
+
+    test 'samples count updates after a project transfer to a user namespace' do
+      # Reference group/projects descendants tree:
+      # group12 < subgroup12b (project30 > sample 33)
+      #    |
+      #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
+      john_doe_namespace = namespaces_user_namespaces(:john_doe_namespace)
+
+      assert_equal(2, @subgroup12aa.samples_count)
+      assert_equal(3, @subgroup12a.samples_count)
+      assert_equal(1, @subgroup12b.samples_count)
+      assert_equal(4, @group12.samples_count)
+
+      assert_no_changes -> { @subgroup12b.reload.samples_count } do
+        assert_no_changes -> { @project31.reload.samples.size } do
+          Projects::TransferService.new(@project31, @john_doe).execute(john_doe_namespace)
+        end
+      end
+
+      assert_equal(2, @group12.reload.samples_count)
+      assert_equal(1, @subgroup12a.reload.samples_count)
+      assert_equal(0, @subgroup12aa.reload.samples_count)
     end
   end
 end

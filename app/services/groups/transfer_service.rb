@@ -31,6 +31,8 @@ module Groups
 
       UpdateMembershipsJob.perform_later(new_namespace_member_ids)
 
+      update_samples_count(old_namespace, new_namespace)
+
       new_namespace.update_metadata_summary_by_namespace_transfer(@group, old_namespace)
 
       true
@@ -101,6 +103,17 @@ module Groups
                                  new_namespace: new_namespace.puid,
                                  action: 'group_namespace_transfer'
                                }
+      end
+    end
+
+    def update_samples_count(old_namespace, new_namespace)
+      transferred_samples_count = Project.joins(:namespace).where(namespace: { parent_id: @group.self_and_descendants })
+                                         .select(:samples_count).pluck(:samples_count).sum
+      if old_namespace
+        old_namespace.update_samples_count_by_transfer_service(new_namespace, transferred_samples_count,
+                                                               new_namespace.type)
+      elsif new_namespace.type == 'Group'
+        new_namespace.update_samples_count_by_addition_services(transferred_samples_count)
       end
     end
   end

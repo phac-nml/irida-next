@@ -13,6 +13,7 @@ group_one:
   metadata_summary: { "metadatafield1": 633, "metadatafield2": 106 }
   puid: INXT_GRP_AAAAAAAAAA
   attachments_updated_at: <%= 2.hours.ago %>
+  samples_count: 25
 
 subgroup1:
   <<: *DEFAULTS
@@ -21,6 +22,7 @@ subgroup1:
   description: Subgroup 1 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   puid: INXT_GRP_AAAAAAAAAB
+  samples_count: 2
 
 <% (Namespace::MAX_ANCESTORS-1).times do |n| %>
 subgroup<%= (n+2) %>:
@@ -30,6 +32,7 @@ subgroup<%= (n+2) %>:
   description: <%= "Subgroup #{n+2} description" %>
   parent_id: <%= ActiveRecord::FixtureSet.identify("subgroup#{n+1}", :uuid) %>
   puid: <%= "INXT_GRP_AAAAAA#{((n/26).round+66).chr}AA#{((n%26)+65).chr}" %>
+  samples_count: 0
 <% end %>
 
 group_two:
@@ -38,6 +41,7 @@ group_two:
   path: group-2
   description: Group 2 description
   puid: INXT_GRP_AAAAAAAAAC
+  samples_count: 0
 
 group_three:
   <<: *DEFAULTS
@@ -45,6 +49,7 @@ group_three:
   path: group-3
   description: Group 3 description
   puid: INXT_GRP_AAAAAAAAAD
+  samples_count: 1
 
 subgroup_one_group_three:
   <<: *DEFAULTS
@@ -53,6 +58,7 @@ subgroup_one_group_three:
   description: Subgroup 1 Group 3
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_three, :uuid) %>
   puid: INXT_GRP_AAAAAAAAAE
+  samples_count: 1
 
 david_doe_group_four:
   <<: *DEFAULTS
@@ -61,6 +67,7 @@ david_doe_group_four:
   description: David's first group
   puid: INXT_GRP_AAAAAAAAAF
   metadata_summary: { "unique_metadata_field": 1 }
+  samples_count: 1
 
 group_five:
   <<: *DEFAULTS
@@ -68,6 +75,7 @@ group_five:
   path: group-5
   description: Group 5 description
   puid: INXT_GRP_AAAAAAAAAG
+  samples_count: 0
 
 subgroup_one_group_five:
   <<: *DEFAULTS
@@ -76,6 +84,7 @@ subgroup_one_group_five:
   description: Subgroup 1 Group 5
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
   puid: INXT_GRP_AAAAAAAAAH
+  samples_count: 0
 
 group_six:
   <<: *DEFAULTS
@@ -83,6 +92,7 @@ group_six:
   path: group-6
   description: Group 6 description
   puid: INXT_GRP_AAAAAAAAAI
+  samples_count: 0
 
 subgroup_one_group_six:
   <<: *DEFAULTS
@@ -91,6 +101,7 @@ subgroup_one_group_six:
   description: Subgroup 1 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_six, :uuid) %>
   puid: INXT_GRP_AAAAAAAAAJ
+  samples_count: 0
 
 group_seven:
   <<: *DEFAULTS
@@ -98,6 +109,7 @@ group_seven:
   path: group-7
   description: Group 7 description
   puid: INXT_GRP_AAAAAAAAAK
+  samples_count: 0
 
 group_eight:
   <<: *DEFAULTS
@@ -105,6 +117,7 @@ group_eight:
   path: group-8
   description: Group 8 description
   puid: INXT_GRP_AAAAAAAAAL
+  samples_count: 0
 
 <% [*("a".."z")].each_with_index do |letter, index| %>
 group_<%= letter %>:
@@ -115,6 +128,7 @@ group_<%= letter %>:
   created_at: <%= (index + 1).days.ago %>
   updated_at: <%= (index + 1).days.ago %>
   puid: <%= "INXT_GRP_AAAAAAABA#{letter.capitalize}" %>
+  samples_count: 0
 <% end %>
 
 namespace_group_link_group_one:
@@ -123,6 +137,7 @@ namespace_group_link_group_one:
   path: group-one
   description: Group One description
   puid: INXT_GRP_AAAAAAAAAM
+  samples_count: 0
 
 namespace_group_link_group_two:
   <<: *DEFAULTS
@@ -130,6 +145,7 @@ namespace_group_link_group_two:
   path: group-two
   description: Group Two description
   puid: INXT_GRP_AAAAAAAAAN
+  samples_count: 0
 
 namespace_group_link_group_three:
   <<: *DEFAULTS
@@ -137,6 +153,7 @@ namespace_group_link_group_three:
   path: group-three
   description: Group Three description
   puid: INXT_GRP_AAAAAAAAAO
+  samples_count: 0
 
 group_nine:
   <<: *DEFAULTS
@@ -144,6 +161,7 @@ group_nine:
   path: group-9
   description: Group 9 description
   puid: INXT_GRP_AAAAAAAAAP
+  samples_count: 0
 
 subgroup_one_group_nine:
   <<: *DEFAULTS
@@ -152,6 +170,7 @@ subgroup_one_group_nine:
   description: Subgroup 1 Group 9 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_nine, :uuid) %>
   puid: INXT_GRP_AAAAAAAAAQ
+  samples_count: 0
 
 group_ten:
   <<: *DEFAULTS
@@ -160,6 +179,7 @@ group_ten:
   description: Group 10 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_nine, :uuid) %>
   puid: INXT_GRP_AAAAAAAAAR
+  samples_count: 0
 
 group_alpha:
   <<: *DEFAULTS
@@ -167,6 +187,7 @@ group_alpha:
   path: group-alpha
   description: Group Alpha description
   puid: INXT_GRP_AAAAAAAAAS
+  samples_count: 2
 
 group_bravo:
   <<: *DEFAULTS
@@ -174,6 +195,7 @@ group_bravo:
   path: group-bravo
   description: Group bravo description
   puid: INXT_GRP_AAAAAAAAAT
+  samples_count: 1
 
 group_charlie:
   <<: *DEFAULTS
@@ -181,6 +203,7 @@ group_charlie:
   path: group-charlie
   description: Group Charlie description
   puid: INXT_GRP_AAAAAAAAAU
+  samples_count: 1
 
 group_alpha_subgroup1:
   <<: *DEFAULTS
@@ -188,6 +211,7 @@ group_alpha_subgroup1:
   path: group-alpha/subgroup-1
   description: Subgroup 1 description
   puid: INXT_GRP_AAAAAAAAAV
+  samples_count: 1
 
 group_eleven:
   <<: *DEFAULTS
@@ -195,6 +219,7 @@ group_eleven:
   path: group-11
   description: Group 11 description
   puid: INXT_GRP_AAAAAAAAAW
+  samples_count: 0
 
 group_twelve:
   <<: *DEFAULTS
@@ -204,6 +229,7 @@ group_twelve:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 3, "metadatafield2": 3 }
   puid: INXT_GRP_AAAAAAAAAX
+  samples_count: 4
 
 subgroup_twelve_a:
   <<: *DEFAULTS
@@ -214,6 +240,7 @@ subgroup_twelve_a:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
   metadata_summary: { "metadatafield1": 2, "metadatafield2": 2 }
   puid: INXT_GRP_AAAAAAAAAY
+  samples_count: 3
 
 subgroup_twelve_b:
   <<: *DEFAULTS
@@ -224,6 +251,7 @@ subgroup_twelve_b:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   puid: INXT_GRP_AAAAAAAAAZ
+  samples_count: 1
 
 subgroup_twelve_a_a:
   <<: *DEFAULTS
@@ -234,6 +262,7 @@ subgroup_twelve_a_a:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_a, :uuid) %>
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   puid: INXT_GRP_AAAAAAAAA2
+  samples_count: 2
 
 group_delta:
   <<: *DEFAULTS
@@ -241,6 +270,7 @@ group_delta:
   path: group-delta
   description: Group Delta description
   puid: INXT_GRP_AAAAAAAAA3
+  samples_count: 0
 
 group_delta_subgroupA:
   <<: *DEFAULTS
@@ -249,6 +279,7 @@ group_delta_subgroupA:
   description: Subgroup A description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_delta, :uuid) %>
   puid: INXT_GRP_AAAAAAAAA4
+  samples_count: 0
 
 group_echo:
   <<: *DEFAULTS
@@ -256,6 +287,7 @@ group_echo:
   path: group-echo
   description: Group Echo description
   puid: INXT_GRP_AAAAAAAAA5
+  samples_count: 0
 
 group_echo_subgroupB:
   <<: *DEFAULTS
@@ -264,6 +296,7 @@ group_echo_subgroupB:
   description: Subgroup B description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_echo, :uuid) %>
   puid: INXT_GRP_AAAAAAAAA6
+  samples_count: 0
 
 group_foxtrot:
   <<: *DEFAULTS
@@ -271,6 +304,7 @@ group_foxtrot:
   path: group-foxtrot
   description: Group Foxtrot description
   puid: INXT_GRP_AAAAAAAAA7
+  samples_count: 0
 
 group_foxtrot_subgroupA:
   <<: *DEFAULTS
@@ -279,6 +313,7 @@ group_foxtrot_subgroupA:
   description: Subgroup A description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_foxtrot, :uuid) %>
   puid: INXT_GRP_AAAAAAAABA
+  samples_count: 0
 
 group_golf:
   <<: *DEFAULTS
@@ -286,6 +321,7 @@ group_golf:
   path: group-golf
   description: Group Golf description
   puid: INXT_GRP_AAAAAAAABB
+  samples_count: 0
 
 group_hotel:
   <<: *DEFAULTS
@@ -294,6 +330,7 @@ group_hotel:
   description: Group Hotel description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   puid: INXT_GRP_AAAAAAAABC
+  samples_count: 1
 
 group_thirteen:
   <<: *DEFAULTS
@@ -301,6 +338,7 @@ group_thirteen:
   path: group-13
   description: Group 13 description
   puid: INXT_GRP_AAAAAAAABD
+  samples_count: 0
 
 group_fourteen:
   <<: *DEFAULTS
@@ -308,6 +346,7 @@ group_fourteen:
   path: group-14
   description: Group 14 description
   puid: INXT_GRP_AAAAAAAABE
+  samples_count: 1
 
 group_fifteen:
   <<: *DEFAULTS
@@ -315,6 +354,7 @@ group_fifteen:
   path: group-15
   description: Group 15 description
   puid: INXT_GRP_AAAAAAAABF
+  samples_count: 3
 
 group_sixteen:
   <<: *DEFAULTS
@@ -323,6 +363,7 @@ group_sixteen:
   description: Group 16 description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   puid: INXT_GRP_AAAAAAAABG
+  samples_count: 3
 
 group_seventeen:
   <<: *DEFAULTS
@@ -331,6 +372,7 @@ group_seventeen:
   description: Group 17 description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   puid: INXT_GRP_AAAAAAAABI
+  samples_count: 200
 
 user30_group_one:
   <<: *DEFAULTS
@@ -339,6 +381,7 @@ user30_group_one:
   description: Group 1 description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user30, :uuid) %>
   puid: INXT_GRP_AAAAAAAABH
+  samples_count: 0
 
 janitor_doe_group:
   <<: *DEFAULTS
@@ -347,6 +390,7 @@ janitor_doe_group:
   description: Group 1 description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
   puid: INXT_GRP_ABAAAAAAAA
+  samples_count: 0
 
 empty_group:
   <<: *DEFAULTS
@@ -355,6 +399,7 @@ empty_group:
   description: Group without any Samples
   owner_id: <%= ActiveRecord::FixtureSet.identify(:empty_doe, :uuid) %>
   puid: INXT_GRP_AAAAAAAABHI
+  samples_count: 0
 
 group_jeff:
   <<: *DEFAULTS
@@ -363,3 +408,4 @@ group_jeff:
   description: Group Jeff description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   puid: INXT_GRP_AAAAAAJEFF
+  samples_count: 0
