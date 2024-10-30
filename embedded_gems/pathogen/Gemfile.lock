@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    _view_components (0.0.1)
+    pathogen_view_components (0.0.1)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
       heroicon-rails (>= 0.2.9)
@@ -89,13 +89,6 @@ GEM
       rake (>= 10.4, < 14.0)
     ast (2.4.2)
     base64 (0.2.0)
-    better_html (2.1.1)
-      actionview (>= 6.0)
-      activesupport (>= 6.0)
-      ast (~> 2.0)
-      erubi (~> 1.4)
-      parser (>= 2.4)
-      smart_properties
     bigdecimal (3.1.8)
     builder (3.3.0)
     concurrent-ruby (1.3.4)
@@ -103,14 +96,6 @@ GEM
     crass (1.0.6)
     date (3.3.4)
     drb (2.2.1)
-    erb_lint (0.7.0)
-      activesupport
-      better_html (>= 2.0.1)
-      parser (>= 2.7.1.4)
-      rainbow
-      rubocop (>= 1)
-      smart_properties
-    erblint-github (1.0.1)
     erubi (1.13.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
@@ -234,20 +219,14 @@ GEM
     rubocop-rails-accessibility (1.0.1)
       rubocop (>= 1.0.0)
     ruby-progressbar (1.13.0)
-    smart_properties (1.17.0)
-    stimulus-rails (1.3.4)
-      railties (>= 6.0.0)
     stringio (3.1.1)
     thor (1.3.2)
     timeout (0.4.1)
-    turbo-rails (2.0.11)
-      actionpack (>= 6.0.0)
-      railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.6.0)
-    view_component (3.18.0)
-      activesupport (>= 5.2.0, < 8.0)
+    view_component (3.19.0)
+      activesupport (>= 5.2.0, < 8.1)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
     webrick (1.8.2)
@@ -266,16 +245,12 @@ PLATFORMS
 
 DEPENDENCIES
   annotate
-  erb_lint
-  erblint-github
-  _view_components!
-  rails (~> 7.1.3.2)
+  pathogen_view_components!
+  rails (>= 7, < 8)
   rubocop
   rubocop-performance
   rubocop-rails
   rubocop-rails-accessibility (~> 1.0)
-  stimulus-rails
-  turbo-rails
 
 BUNDLED WITH
    2.5.21
