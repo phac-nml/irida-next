@@ -6,8 +6,7 @@ require 'pathogen/view_components/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'pathogen_view_components'
-  spec.authors       = ['Bioinformatics and Computational Biology Unit, Public Health Agency of Canada']
-  spec.email         = ['bioinformatics@phac-aspc.gc.ca']
+  spec.authors       = ['Bioinformatics, Public Health Agency of Canada']
   spec.version       = Pathogen::ViewComponents::Version::STRING
   spec.summary       = 'Pathogen View Components'
   spec.license       = 'MIT'
