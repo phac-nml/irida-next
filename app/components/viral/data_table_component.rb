@@ -13,6 +13,7 @@ module Viral
       has_data: false,
       pagy: nil,
       q: nil, # rubocop:disable Naming/MethodParameterName
+      namespace: nil,
       selection: false,
       row_actions: {},
       empty: {},
@@ -23,6 +24,7 @@ module Viral
       @has_data = has_data
       @pagy = pagy
       @q = q
+      @namespace = namespace
       @selection = selection
       @row_actions = row_actions
       @renders_row_actions = @row_actions.select { |_key, value| value }.count.positive?
