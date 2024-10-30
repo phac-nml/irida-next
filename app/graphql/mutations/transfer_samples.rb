@@ -62,24 +62,37 @@ module Mutations
 
     private
 
-    def transfer_samples(project, new_project_id, sample_ids) # rubocop:disable Metrics/MethodLength
+    def transfer_samples(project, new_project_id, sample_gids) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+      user_errors = []
       # remove prefix from sample_ids
-      sample_ids.each { |sample_id| sample_id.sub!(SAMPLE_ID_PREFIX, '') }
+      sample_ids = sample_gids.map do |sample_gid|
+        IridaSchema.parse_gid(sample_gid, { expected_type: Sample }).model_id
+      rescue GraphQL::CoercionError => e
+        user_errors.append(
+          {
+            path: ['transferSamples'],
+            message: e.message
+          }
+        )
+        next
+      end
 
       samples = Samples::TransferService.new(
         project, current_user
-      ).execute(new_project_id, sample_ids)
+      ).execute(new_project_id, sample_ids.compact)
 
-      if samples.empty?
+      if samples.empty? # rubocop:disable Style/ConditionalAssignment
         samples = nil
       else
         # add the prefix to sample_ids
-        samples.each { |sample_id| sample_id.prepend(SAMPLE_ID_PREFIX) }
+        samples = samples.map do |sample_id|
+          URI::GID.build(app: GlobalID.app, model_name: Sample.name, model_id: sample_id).to_s
+        end
       end
 
-      user_errors = []
+      project_user_errors = []
       if project.errors.count.positive?
-        user_errors =  project.errors.map do |error|
+        project_user_errors = project.errors.map do |error|
           {
             path: ['samples', error.attribute.to_s.camelize(:lower)],
             message: error.message
@@ -89,7 +102,7 @@ module Mutations
 
       {
         samples:,
-        errors: user_errors
+        errors: user_errors.concat(project_user_errors)
       }
     end
   end

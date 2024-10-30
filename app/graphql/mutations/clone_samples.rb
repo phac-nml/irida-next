@@ -62,26 +62,37 @@ module Mutations
 
     private
 
-    def clone_samples(project, new_project_id, sample_ids) # rubocop:disable Metrics/MethodLength
+    def clone_samples(project, new_project_id, sample_gids) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+      user_errors = []
       # remove prefix from sample_ids
-      sample_ids.each { |sample_id| sample_id.sub!(SAMPLE_ID_PREFIX, '') }
+      sample_ids = sample_gids.map do |sample_gid|
+        IridaSchema.parse_gid(sample_gid, { expected_type: Sample }).model_id
+      rescue GraphQL::CoercionError => e
+        user_errors.append(
+          {
+            path: ['copySamples'],
+            message: e.message
+          }
+        )
+        next
+      end
 
       samples = Samples::CloneService.new(
         project, current_user
-      ).execute(new_project_id, sample_ids)
+      ).execute(new_project_id, sample_ids.compact)
 
-      prepended_samples = nil
+      prepended_samples = []
       unless samples.empty?
         # add the prefix to sample_ids
         prepended_samples = samples.map do |key, value|
-          { original: "#{SAMPLE_ID_PREFIX}#{key}",
-            copy: "#{SAMPLE_ID_PREFIX}#{value}" }
+          { original: URI::GID.build(app: GlobalID.app, model_name: Sample.name, model_id: key).to_s,
+            copy: URI::GID.build(app: GlobalID.app, model_name: Sample.name, model_id: value).to_s }
         end
       end
 
-      user_errors = []
+      project_user_errors = []
       if project.errors.count.positive?
-        user_errors = project.errors.map do |error|
+        project_user_errors = project.errors.map do |error|
           {
             path: ['samples', error.attribute.to_s.camelize(:lower)],
             message: error.message
@@ -91,7 +102,7 @@ module Mutations
 
       {
         samples: prepended_samples,
-        errors: user_errors
+        errors: user_errors.concat(project_user_errors)
       }
     end
   end
