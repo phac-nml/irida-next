@@ -8,6 +8,8 @@ module Pathogen
       render_inline Pathogen::BaseButton.new
 
       assert_selector 'button[type="button"]'
+      assert_no_selector 'button[disabled]'
+      assert_no_selector 'button[data-test-selector]'
       assert_no_selector 'a'
       assert_no_selector 'button[disabled]'
     end
@@ -34,6 +36,18 @@ module Pathogen
       render_inline Pathogen::BaseButton.new(type: :reset)
 
       assert_selector 'button[type="reset"]'
+    end
+
+    test 'render a button with custom classes' do
+      render_inline Pathogen::BaseButton.new(classes: 'text-orange-500')
+
+      assert_selector 'button.text-orange-500'
+    end
+
+    test 'renders button with test selector' do
+      render_inline Pathogen::BaseButton.new(test_selector: 'test-selector')
+
+      assert_selector '[data-test-selector="test-selector"]'
     end
   end
 end
