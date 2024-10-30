@@ -61,6 +61,18 @@ projectA_automated_workflow_execution_three:
   email_notification: false
   update_samples: false
 
+projectA_automated_workflow_execution_four:
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+  metadata:
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.4",
+    }
+  workflow_params: { "assembler": "stub" }
+  email_notification: false
+  update_samples: false
+
 projectA_invalid_automated_workflow_execution:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>

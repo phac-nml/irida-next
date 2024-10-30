@@ -22,7 +22,7 @@ module AutomatedWorkflowExecutions
                                                             } do
         AutomatedWorkflowExecutions::LaunchJob.perform_now(@sample, @pe_attachment_pair)
       end
-      assert_equal 4, count
+      assert_equal 5, count
     end
 
     test 'doesn\'t call AutomatedWorkflowExecutions::LaunchService when no configured AutomatedWorkflowExecutions' do
