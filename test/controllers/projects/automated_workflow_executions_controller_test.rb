@@ -104,14 +104,14 @@ module Projects
     end
 
     test 'can destroy a automated workflow execution for a project' do
-      assert_equal 2, @project.namespace.automated_workflow_executions.count
+      assert_equal 3, @project.namespace.automated_workflow_executions.count
 
       automated_workflow_execution = automated_workflow_executions(:valid_automated_workflow_execution)
 
       delete namespace_project_automated_workflow_execution_path(@namespace, @project, automated_workflow_execution,
                                                                  format: :turbo_stream)
 
-      assert_equal 1, @project.namespace.automated_workflow_executions.count
+      assert_equal 2, @project.namespace.automated_workflow_executions.count
 
       assert_response :success
     end
@@ -141,22 +141,35 @@ module Projects
       assert_response :unauthorized
     end
 
-    test 'can get the edit page to update a automated workflow execution for a project' do
+    test 'can get the edit page to update an automated workflow execution for a project' do
       sign_in users(:john_doe)
 
       automated_workflow_execution = automated_workflow_executions(:valid_automated_workflow_execution)
 
-      get edit_namespace_project_automated_workflow_execution_path(@namespace, @project, automated_workflow_execution)
+      get edit_namespace_project_automated_workflow_execution_path(@namespace, @project, automated_workflow_execution,
+                                                                   params: { format: :turbo_stream })
 
       assert_response :success
     end
 
-    test 'cannot access the edit page to update a automated workflow execution with incorrect permissions' do
+    test 'cannot access the edit page to update a disabled automated workflow execution' do
+      sign_in users(:john_doe)
+
+      automated_workflow_execution = automated_workflow_executions(:disabled_automated_workflow_execution)
+
+      get edit_namespace_project_automated_workflow_execution_path(@namespace, @project, automated_workflow_execution,
+                                                                   params: { format: :turbo_stream })
+
+      assert_response :unprocessable_entity
+    end
+
+    test 'cannot access the edit page to update an automated workflow execution with incorrect permissions' do
       sign_in users(:ryan_doe)
 
       automated_workflow_execution = automated_workflow_executions(:valid_automated_workflow_execution)
 
-      get edit_namespace_project_automated_workflow_execution_path(@namespace, @project, automated_workflow_execution)
+      get edit_namespace_project_automated_workflow_execution_path(@namespace, @project, automated_workflow_execution,
+                                                                   params: { format: :turbo_stream })
 
       assert_response :unauthorized
     end

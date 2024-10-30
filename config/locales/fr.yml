@@ -1028,6 +1028,8 @@ fr:
       destroy:
         error: Could not delete automated pipeline for %{workflow_name}
         success: Automated pipeline for %{workflow_name} was successfully deleted
+      edit:
+        error: Cannot edit automated pipeline %{workflow_name}
       edit_dialog:
         title: 'Editing Automated Pipeline: %{workflow_name}'
       index:
