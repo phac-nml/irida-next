@@ -1,3 +1,6 @@
+<%= @data_exports.each do |d| %>
+  <%= d.name%>
+<% end %>
 <% if @has_data_exports %>
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <%= render Viral::BaseComponent.new(**system_arguments) do %>

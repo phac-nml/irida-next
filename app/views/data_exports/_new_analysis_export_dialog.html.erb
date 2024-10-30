@@ -3,8 +3,8 @@
   <%= dialog.with_section do %>
     <div
       data-controller="infinite-scroll"
-      data-infinite-scroll-selection-outlet='#workflow-executions-table'
-      data-infinite-scroll-paged-field-name-value="workflow_execution_ids[]"
+      data-infinite-scroll-selection-outlet='#workflow_executions_table'
+      data-infinite-scroll-paged-field-name-value="workflow_executions_ids[]"
       data-infinite-scroll-singular-description-value="<%= t(".description.singular") %>"
       data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
       data-infinite-scroll-non-zero-header-value="<%= t(".selection_count.non_zero") %>"
@@ -82,7 +82,7 @@
         <%= form_for(:data_export, url: data_exports_path, method: :post,
             data: {
               controller: "form--hidden-inputs",
-              "form--hidden-inputs-selection-outlet": '#workflow-executions-table',
+              "form--hidden-inputs-selection-outlet": '#workflow_executions_table',
               "form--hidden-inputs-field-name-value": "data_export[export_parameters][ids][]"
             }
           ) do |form| %>

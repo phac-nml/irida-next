@@ -878,7 +878,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t('workflow_executions.index.create_export_button')
 
-    within %(#workflow-executions-table) do
+    within %(#workflow_executions_table) do
       find("input[type='checkbox'][value='#{@workflow_execution1.id}']").click
       find("input[type='checkbox'][value='#{@workflow_execution2.id}']").click
     end
@@ -934,7 +934,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t('projects.workflow_executions.index.create_export_button')
 
-    within %(#workflow-executions-table) do
+    within %(#workflow_executions_table) do
       find("input[type='checkbox'][value='#{@workflow_execution4.id}']").click
     end
 
@@ -984,7 +984,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t('workflow_executions.index.create_export_button')
 
-    within %(#workflow-executions-table) do
+    within %(#workflow_executions_table) do
       find("input[type='checkbox'][value='#{@workflow_execution1.id}']").click
       find("input[type='checkbox'][value='#{@workflow_execution3.id}']").click
     end
@@ -1039,7 +1039,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t('projects.workflow_executions.index.create_export_button')
 
-    within %(#workflow-executions-table) do
+    within %(#workflow_executions_table) do
       find("input[type='checkbox'][value='#{@workflow_execution4.id}']").click
       find("input[type='checkbox'][value='#{@workflow_execution5.id}']").click
     end

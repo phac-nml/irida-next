@@ -15,10 +15,8 @@
   </div>
 </div>
 
-<%= render partial: "table",
-locals: {
-  has_data_exports: @has_data_exports,
-  data_exports: @data_exports,
-  pagy: @pagy,
-  q: @q,
-} %>
+
+<%= viral_data_table(data: @data_exports, pagy: @pagy, q: @q, has_data_exports: @has_data_exports) do |table| %>
+  <% table.with_column(title: "id") %>
+  <% table.with_column(title: "name") %>
+<% end %>

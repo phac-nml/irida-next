@@ -9,7 +9,7 @@ module ListActions
     if params[:list_class] == 'sample'
       @samples = Sample.where(id: params[:sample_ids])
     elsif params[:list_class] == 'workflow_execution'
-      @workflow_executions = WorkflowExecution.where(id: params[:workflow_execution_ids])
+      @workflow_executions = WorkflowExecution.where(id: params[:workflow_executions_ids])
     end
 
     respond_to do |format|

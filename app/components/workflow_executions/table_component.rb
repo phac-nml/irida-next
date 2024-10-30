@@ -36,7 +36,7 @@ module WorkflowExecutions
 
     def system_arguments
       { tag: 'div' }.deep_merge(@system_arguments).tap do |args|
-        args[:id] = 'workflow-executions-table'
+        args[:id] = 'workflow_executions_table'
         args[:classes] = class_names(args[:classes], 'relative', 'overflow-x-auto')
         if @abilities[:select_workflow_executions]
           args[:data] ||= {}

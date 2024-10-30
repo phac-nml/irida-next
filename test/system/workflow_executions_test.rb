@@ -27,7 +27,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+    assert_selector '#workflow_executions_table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
   end
 
   test 'should display pages of workflow executions' do
@@ -37,17 +37,17 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    assert_selector '#workflow-executions-table table tbody tr', count: 20
+    assert_selector '#workflow_executions_table table tbody tr', count: 20
 
     assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
     assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
     click_on I18n.t(:'components.pagination.next')
-    assert_selector '#workflow-executions-table table tbody tr', count: 5
+    assert_selector '#workflow_executions_table table tbody tr', count: 5
 
     assert_selector 'a', text: I18n.t(:'components.pagination.previous')
     assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
     click_on I18n.t(:'components.pagination.previous')
-    assert_selector '#workflow-executions-table table tbody tr', count: 20
+    assert_selector '#workflow_executions_table table tbody tr', count: 20
   end
 
   test 'should sort a list of workflow executions' do
@@ -63,9 +63,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
     click_on 'Run ID'
-    assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.icon-arrow_up"
+    assert_selector "#workflow_executions_table table thead th:nth-child(#{@run_id_col}) svg.icon-arrow_up"
 
-    within('#workflow-executions-table table tbody') do
+    within('#workflow_executions_table table tbody') do
       assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
       assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
       assert_selector "tr:nth-child(#{@run_id_col}) td:nth-child(#{@run_id_col})", text: workflow_execution12.run_id
@@ -73,9 +73,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     end
 
     click_on 'Run ID'
-    assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.icon-arrow_down"
+    assert_selector "#workflow_executions_table table thead th:nth-child(#{@run_id_col}) svg.icon-arrow_down"
 
-    within('#workflow-executions-table table tbody') do
+    within('#workflow_executions_table table tbody') do
       assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
       assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution.run_id
       assert_selector "tr:nth-child(3) td:nth-child(#{@run_id_col})", text: workflow_execution9.run_id
@@ -83,9 +83,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     end
 
     click_on 'Workflow Name'
-    assert_selector "#workflow-executions-table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_up"
+    assert_selector "#workflow_executions_table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_up"
 
-    within('#workflow-executions-table table tbody') do
+    within('#workflow_executions_table table tbody') do
       assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
       assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
                       text: workflow_execution9.metadata['workflow_name']
@@ -96,9 +96,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     end
 
     click_on 'Workflow Name'
-    assert_selector "#workflow-executions-table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_down"
+    assert_selector "#workflow_executions_table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_down"
 
-    within('#workflow-executions-table table tbody') do
+    within('#workflow_executions_table table tbody') do
       assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
       assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
                       text: workflow_execution1.metadata['workflow_name']
@@ -365,7 +365,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       click_button I18n.t(:'components.confirmation.confirm')
     end
 
-    within %(#workflow-executions-table table tbody) do
+    within %(#workflow_executions_table table tbody) do
       assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT - 1
       assert_no_text @workflow_execution1.id
     end

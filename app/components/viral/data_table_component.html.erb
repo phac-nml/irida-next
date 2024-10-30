@@ -1,0 +1,166 @@
+<% if @has_data %>
+  <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
+    <%= render Viral::BaseComponent.new(**system_arguments) do %>
+      <table
+        class="
+          w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+          whitespace-nowrap
+        "
+      >
+        <thead
+          class="
+            sticky top-0 z-10 text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
+            dark:text-slate-300
+          "
+        >
+          <tr>
+            <% columns.each_with_index do |column, index| %>
+              <%= render_cell(
+                **column.header_arguments
+              ) do %>
+                <% if column.metadata %>
+                <%= render Ransack::SortComponent.new(
+                  ransack_obj: @q,
+                  label: t(".#{@type}.header.#{column.title}"),
+                  url:
+                    helpers.sorting_url(
+                      @q,
+                      URI.encode_www_form_component("metadata_#{column.title}"),
+                    ),
+                  field: "metadata_#{column.title}",
+                  data: {
+                    turbo_action: "replace",
+                  },
+                ) %>
+              <% else %>
+                <%= render Ransack::SortComponent.new(
+                  ransack_obj: @q,
+                  label: t(".#{@type}.header.#{column.title}"),
+                  url: helpers.sorting_url(@q, column.title),
+                  field: column.title,
+                  data: {
+                    turbo_action: "replace",
+                  },
+                ) %>
+                <% end %>
+              <% end %>
+            <% end %>
+            <% if @renders_row_actions %>
+            <%= render_cell(
+              tag: 'th',
+              scope: 'col',
+              classes: class_names('px-3 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
+            ) do %>
+              <%= t(".action_header") %>
+            <% end %>
+          <% end %>
+          </tr>
+        </thead>
+        <tbody
+          class="
+            overflow-y-auto bg-white divide-y divide-slate-200 dark:bg-slate-800
+            dark:divide-slate-700
+          "
+        ><% @data.each do |row| %>
+            <%= render Viral::BaseComponent.new(**row_arguments(row)) do %>
+              <% columns.each_with_index do |column, index| %>
+                <%= render_cell(
+                  scope: ("row" if index.zero?),
+                  **column.system_arguments
+                ) do %>
+                  <% if index.zero? && @selection && abilities('select') %>
+                    <%= check_box_tag "#{@type}_ids[]",
+                      row.id,
+                      nil,
+                      id: dom_id(row),
+                      "aria-label": row.id,
+                      data: {
+                        action: "input->selection#toggle",
+                        selection_target: "rowSelection",
+                      },
+                      class:
+                        "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+                    <% end %>
+                  <% if column.show_link %>
+                    <%= link_to(
+                      row[column.title],
+                      individual_path(row),
+                      data: {
+                        turbo: false,
+                      },
+                      class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline",
+                    ) %>
+                  <% elsif column.pill %>
+                    <%= helpers.viral_pill(text: t(".#{@type}.#{row[column.title]}"), color: helpers.retrieve_pill_color(@type, row[column.title]), border: true) %>
+                  <% elsif column.time_ago %>
+                    <%= helpers.local_time_ago(row[column.title]) %>
+                  <% elsif column.time %>
+                    <%= helpers.local_time(row[column.title], :full_date) %>
+                  <% elsif column.metadata %>
+                    <%= row.metadata[column.title] %>
+                  <% else %>
+                    <%= row[column.title] %>
+                  <% end %>
+                <% end %>
+              <% end %>
+              <% if @renders_row_actions %>
+              <%= render_cell(
+                tag: 'td',
+                classes: class_names('px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2')
+              ) do %>
+                <% @row_actions.each do |action, _value| %>
+                  <% next unless verify_action_render(action, row)%>
+                  <%= render Viral::BaseComponent.new(**action_arguments(action, row)) do %>
+                    <%= t(".actions.#{action}") %>
+                  <% end %>
+                <% end %>
+              <% end %>
+            <% end %>
+            <% end %>
+
+          <% end %>
+        </tbody>
+        <% if @has_data && @selection && abilities('select') %>
+          <tfoot class="sticky bottom-0 z-10">
+            <tr class="border-t dark:border-slate-700 border-slate-200">
+              <td
+                class="
+                  sticky left-0 z-10 px-6 py-3 text-slate-700 dark:text-slate-300 bg-slate-50
+                  dark:bg-slate-700
+                "
+                colspan="3"
+              >
+                <span>
+                  <%= t(".counts.#{@type}") %>:
+                  <strong data-action="turbo:morph-element->selection#idempotentConnect"><%= @pagy.count %></strong>
+                </span>
+                <span>
+                  <%= t(".counts.selected") %>:
+                  <strong
+                    data-selection-target="selected"
+                    data-action="
+                      turbo:morph-element->selection#idempotentConnect
+                    "
+                  >0</strong>
+                </span>
+              </td>
+              <td colspan="100%" class="px-3 py-3 bg-slate-50 dark:bg-slate-700"></td>
+            </tr>
+          </tfoot>
+        <% end %>
+      </table>
+    <% end %>
+    <%= render Viral::Pagy::FullComponent.new(
+      @pagy,
+      item: t(".#{@type}.limit.item"),
+    ) %>
+  <% end %>
+<% else %>
+  <div class="empty_state_message">
+    <%= viral_empty(
+      title: t(".empty.#{@type}.title"),
+      description: t(".empty.#{@type}.description"),
+      icon_name: :document_text,
+    ) %>
+  </div>
+<% end %>

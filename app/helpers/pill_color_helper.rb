@@ -2,6 +2,24 @@
 
 # Route helper that converts Route object into context_crumbs
 module PillColorHelper
+  TABLE_CONTENT_COLORS = {
+    'workflow_executions' => {
+      'initial' => :slate,
+      'prepared' => :slate,
+      'submitted' => :blue,
+      'running' => :blue,
+      'completing' => :blue,
+      'completed' => :green,
+      'error' => :red,
+      'canceling' => :yellow,
+      'canceled' => :yellow
+    },
+    'data_exports' => {
+      'processing' => :slate,
+      'ready' => :green
+    }
+  }.freeze
+
   ATTACHMENT_COLORS = {
     format: {
       fasta: 'blue',
@@ -27,17 +45,7 @@ module PillColorHelper
     ATTACHMENT_COLORS[label_type.to_sym][attachment.metadata[label_type].to_sym]
   end
 
-  def find_pill_color_for_state(state)
-    pill_color = :blue
-    if %w[initial prepared].include?(state)
-      pill_color = :slate
-    elsif %w[canceling canceled].include?(state)
-      pill_color = :yellow
-    elsif state == 'error'
-      pill_color = :red
-    elsif state == 'completed'
-      pill_color = :green
-    end
-    pill_color
+  def retrieve_pill_color(data_type, pill_content)
+    TABLE_CONTENT_COLORS[data_type][pill_content]
   end
 end

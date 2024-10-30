@@ -27,7 +27,7 @@ module Projects
       assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
       assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
-      assert_selector '#workflow-executions-table table tbody tr', count: 10
+      assert_selector '#workflow_executions_table table tbody tr', count: 10
     end
 
     test 'should sort a list of workflow executions' do
@@ -41,9 +41,9 @@ module Projects
       assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       click_on 'Run ID'
-      assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.icon-arrow_up"
+      assert_selector "#workflow_executions_table table thead th:nth-child(#{@run_id_col}) svg.icon-arrow_up"
 
-      within('#workflow-executions-table table tbody') do
+      within('#workflow_executions_table table tbody') do
         assert_selector 'tr', count: 10
         assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution4.run_id
         assert_selector "tr:nth-child(#{@run_id_col}) td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
@@ -51,9 +51,9 @@ module Projects
       end
 
       click_on 'Run ID'
-      assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.icon-arrow_down"
+      assert_selector "#workflow_executions_table table thead th:nth-child(#{@run_id_col}) svg.icon-arrow_down"
 
-      within('#workflow-executions-table table tbody') do
+      within('#workflow_executions_table table tbody') do
         assert_selector 'tr', count: 10
         assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: @workflow_execution2.run_id
         assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: workflow_execution3.run_id
@@ -61,9 +61,9 @@ module Projects
       end
 
       click_on I18n.t(:'workflow_executions.table_component.workflow_name')
-      assert_selector "#workflow-executions-table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_up"
+      assert_selector "#workflow_executions_table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_up"
 
-      within('#workflow-executions-table table tbody') do
+      within('#workflow_executions_table table tbody') do
         assert_selector 'tr', count: 10
         assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
                         text: @workflow_execution2.metadata['workflow_name']
@@ -74,9 +74,9 @@ module Projects
       end
 
       click_on I18n.t(:'workflow_executions.table_component.workflow_name')
-      assert_selector "#workflow-executions-table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_down"
+      assert_selector "#workflow_executions_table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_down"
 
-      within('#workflow-executions-table table tbody') do
+      within('#workflow_executions_table table tbody') do
         assert_selector 'tr', count: 10
         assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
                         text: workflow_execution4.metadata['workflow_name']
@@ -314,7 +314,7 @@ module Projects
         click_button I18n.t(:'components.confirmation.confirm')
       end
 
-      within %(#workflow-executions-table table tbody) do
+      within %(#workflow_executions_table table tbody) do
         assert_selector 'tr', count: 9
         assert_no_text @workflow_execution1.id
       end

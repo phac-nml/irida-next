@@ -1673,6 +1673,43 @@ en:
       default: "%Y-%m-%d %H:%M:%S"
       full_date: "%B %d, %Y"
   viral:
+    data_table_component:
+      action_header: Actions
+      actions:
+        cancel: Cancel
+        destroy: Delete
+      counts:
+        selected: Selected
+        workflow_executions: Workflow Executions
+      empty:
+        workflow_executions:
+          description: There are no workflows associated with this submitter.
+          title: No workflows.
+      workflow_executions:
+        counts:
+          selected: Selected
+          workflow_executions: Workflow Executions
+        header:
+          created_at: Created
+          id: ID
+          name: Name
+          run_id: Run ID
+          state: State
+          workflow_name: Workflow Name
+          workflow_version: Workflow Version
+          updated_at: Last Updated
+        limit:
+          item: Workflow Executions
+        select_page: Select / Deselect visible samples
+        canceled: Canceled
+        canceling: Canceling
+        completed: Completed
+        completing: Completing
+        error: Error
+        initial: New
+        prepared: Prepared
+        running: Running
+        submitted: Submitted
     pagy:
       limit_component:
         items: "%{items} per page:"

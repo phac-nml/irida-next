@@ -83,7 +83,7 @@
                 classes: class_names('px-3 py-3', 'sticky left-0 bg-slate-50 dark:bg-slate-900': index.zero?)
               ) do %>
                 <% if index.zero? && @abilities[:select_workflow_executions] %>
-                  <%= check_box_tag "workflow_execution_ids[]",
+                  <%= check_box_tag "workflow_executions_ids[]",
                   workflow_execution.id,
                   nil,
                   id: dom_id(workflow_execution),
@@ -113,11 +113,7 @@
                     </span>
                   <% end %>
                 <% elsif column == :state %>
-                  <%= viral_pill(
-                    text: t(:"workflow_executions.state.#{workflow_execution[column]}"),
-                    color: helpers.find_pill_color_for_state(workflow_execution[column]),
-                    border: true,
-                  ) %>
+                  <%= t(:"workflow_executions.state.#{workflow_execution[column]}") %>
                 <% elsif column == :workflow_name || column == :workflow_version %>
                   <%= workflow_execution.metadata[column.to_s] %>
                 <% elsif column == :created_at %>
