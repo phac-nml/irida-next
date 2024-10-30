@@ -45,6 +45,26 @@
                 <% end %>
               <% end %>
             <% end %>
+            <% if system_arguments[:metadata_fields] %>
+              <% system_arguments[:metadata_fields].each do |field| %>
+                <%= render_cell(
+                tag: 'th',
+                scope: 'col',
+                classes: class_names('px-3 py-3')
+              ) do %>
+                  <%= render Ransack::SortComponent.new(
+                    ransack_obj: @q,
+                    label: field,
+                    url:
+                      helpers.sorting_url(@q, URI.encode_www_form_component("metadata_#{field}")),
+                    field: "metadata_#{field}",
+                    data: {
+                      turbo_action: "replace",
+                    },
+                  ) %>
+                <% end %>
+              <% end %>
+            <% end %>
             <% if @renders_row_actions %>
             <%= render_cell(
               tag: 'th',
@@ -61,15 +81,16 @@
             overflow-y-auto bg-white divide-y divide-slate-200 dark:bg-slate-800
             dark:divide-slate-700
           "
-        ><% @data.each do |row| %>
+        >
+          <% @data.each do |row| %>
             <%= render Viral::BaseComponent.new(**row_arguments(row)) do %>
               <% columns.each_with_index do |column, index| %>
                 <%= render_cell(
                   scope: ("row" if index.zero?),
                   **column.system_arguments
                 ) do %>
-                  <% if index.zero? && @selection && abilities('select') %>
-                    <%= check_box_tag "#{@type}_ids[]",
+                  <% if index.zero? && @abilities[:select] %>
+                    <%= check_box_tag "#{@type.delete_suffix('s')}_ids[]",
                       row.id,
                       nil,
                       id: dom_id(row),
@@ -93,7 +114,9 @@
                   <% elsif column.pill %>
                     <%= helpers.viral_pill(text: t(".#{@type}.#{row[column.title]}"), color: helpers.retrieve_pill_color(@type, row[column.title]), border: true) %>
                   <% elsif column.time_ago %>
-                    <%= helpers.local_time_ago(row[column.title]) %>
+                    <% if row[column.title].present? %>
+                      <%= helpers.local_time_ago(row[column.title]) %>
+                    <% end %>
                   <% elsif column.time %>
                     <%= helpers.local_time(row[column.title], :full_date) %>
                   <% elsif column.metadata %>
@@ -103,24 +126,34 @@
                   <% end %>
                 <% end %>
               <% end %>
+              <% if system_arguments[:metadata_fields] %>
+                <% system_arguments[:metadata_fields].each do |field| %>
+                  <%= render_cell(
+                  tag: 'td',
+                  classes: class_names('px-3 py-3')
+                ) do %>
+                    <%= row.metadata[field] %>
+                  <% end %>
+                <% end %>
+              <% end %>
               <% if @renders_row_actions %>
               <%= render_cell(
                 tag: 'td',
-                classes: class_names('px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2')
+                classes: class_names('px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 z-5 space-x-2')
               ) do %>
                 <% @row_actions.each do |action, _value| %>
-                  <% next unless verify_action_render(action, row)%>
+                  <% next if @type == 'workflow_executions' && !verify_action_render(action, row)%>
                   <%= render Viral::BaseComponent.new(**action_arguments(action, row)) do %>
                     <%= t(".actions.#{action}") %>
                   <% end %>
                 <% end %>
               <% end %>
             <% end %>
-            <% end %>
+          <% end %>
 
           <% end %>
         </tbody>
-        <% if @has_data && @selection && abilities('select') %>
+        <% if @has_data && @abilities[:select] %>
           <tfoot class="sticky bottom-0 z-10">
             <tr class="border-t dark:border-slate-700 border-slate-200">
               <td

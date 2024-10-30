@@ -3,7 +3,7 @@
   <%= dialog.with_section do %>
     <div
       data-controller="infinite-scroll"
-      data-infinite-scroll-selection-outlet='#samples-table'
+      data-infinite-scroll-selection-outlet='#samples_table'
       data-infinite-scroll-paged-field-name-value="sample_ids[]"
       data-infinite-scroll-singular-description-value="<%= t(".description.singular") %>"
       data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
@@ -41,7 +41,7 @@
         <%= form_for(:deletion, url: destroy_multiple_namespace_project_samples_deletion_path, method: :delete,
             data: {
               controller: "spinner form--hidden-inputs",
-              "form--hidden-inputs-selection-outlet": '#samples-table',
+              "form--hidden-inputs-selection-outlet": '#samples_table',
               "form--hidden-inputs-field-name-value": "multiple_deletion[sample_ids][]",
               action:"turbo:submit-start->spinner#submitStart turbo:submit-end->viral--dialog#close",
               turbo_frame: "_top"

@@ -4,7 +4,7 @@
     <%= turbo_frame_tag "transfer_samples_dialog_content" do %>
       <div
         data-controller="infinite-scroll viral--select2"
-        data-infinite-scroll-selection-outlet='#samples-table'
+        data-infinite-scroll-selection-outlet='#samples_table'
         data-infinite-scroll-paged-field-name-value="sample_ids[]"
         data-infinite-scroll-singular-description-value="<%= t(".description.singular") %>"
         data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
@@ -47,7 +47,7 @@
           <%= form_for(:transfer, url: namespace_project_samples_transfer_path, method: :post,
               data: {
                 controller: "spinner form--hidden-inputs",
-                "form--hidden-inputs-selection-outlet": '#samples-table',
+                "form--hidden-inputs-selection-outlet": '#samples_table',
                 "form--hidden-inputs-field-name-value": "transfer[sample_ids][]",
                 action: "turbo:submit-start->spinner#submitStart turbo:submit-end->spinner#submitEnd"
               }

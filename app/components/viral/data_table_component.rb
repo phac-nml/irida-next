@@ -13,8 +13,7 @@ module Viral
       has_data: false,
       pagy: nil,
       q: nil, # rubocop:disable Naming/MethodParameterName
-      namespace: nil,
-      selection: false,
+      abilities: {},
       row_actions: {},
       empty: {},
       **system_arguments
@@ -24,8 +23,7 @@ module Viral
       @has_data = has_data
       @pagy = pagy
       @q = q
-      @namespace = namespace
-      @selection = selection
+      @abilities = abilities
       @row_actions = row_actions
       @renders_row_actions = @row_actions.select { |_key, value| value }.count.positive?
       @empty = empty
@@ -38,7 +36,7 @@ module Viral
       { tag: 'div' }.deep_merge(@system_arguments).tap do |args|
         args[:id] = "#{@type}_table"
         args[:classes] = class_names(args[:classes], 'overflow-auto scrollbar')
-        if @selection && abilities('select')
+        if @abilities[:select]
           args[:data] ||= {}
           args[:data][:controller] = 'selection'
           args[:data][:'selection-total-value'] = @pagy.count
@@ -67,8 +65,6 @@ module Viral
     end
 
     def verify_action_render(action, data)
-      return unless @type == 'workflow_executions'
-
       return data.cancellable? if action == :cancel
 
       return unless action == :destroy
@@ -82,7 +78,11 @@ module Viral
         classes: class_names('font-medium', 'text-blue-600', 'underline', 'dark:text-blue-500', 'hover:no-underline',
                              'cursor-pointer')
       }
-      additional_args = workflow_execution_actions(action, data) if @type == 'workflow_executions'
+      additional_args = if @type == 'workflow_executions'
+                          workflow_execution_actions(action, data)
+                        elsif @type == 'samples'
+                          sample_actions(action, data)
+                        end
       default_args.merge(additional_args)
     end
 
@@ -103,13 +103,30 @@ module Viral
       args
     end
 
+    def sample_actions(action, data)
+      args = {}
+      args[:data] ||= {}
+
+      if action == :edit
+        args[:href] = edit_project_sample_path(data.project, data)
+        args[:data][:turbo] = false
+      elsif action == :destroy
+        args[:href] = new_namespace_project_samples_deletion_path(
+          sample_id: data.id,
+          deletion_type: 'single'
+        )
+        args[:data][:turbo_stream] = true
+      end
+      args
+    end
+
     def individual_path(data)
       return unless data.is_a?(WorkflowExecution)
 
-      if @namespace
+      if system_arguments[:namespace]
         namespace_project_workflow_execution_path(
-          @namespace.parent,
-          @namespace.project,
+          system_arguments[:namespace].parent,
+          system_arguments[:namespace].project,
           data
         )
       else
@@ -118,10 +135,10 @@ module Viral
     end
 
     def workflow_execution_cancel_path(workflow_execution)
-      if @namespace
+      if system_arguments[:namespace]
         cancel_namespace_project_workflow_execution_path(
-          @namespace.parent,
-          @namespace.project,
+          system_arguments[:namespace].parent,
+          system_arguments[:namespace].project,
           workflow_execution
         )
       else

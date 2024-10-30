@@ -26,7 +26,7 @@ module Projects
     test 'visiting the index' do
       visit namespace_project_samples_url(@namespace, @project)
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
-      assert_selector '#samples-table table tbody tr', count: 3
+      assert_selector '#samples_table table tbody tr', count: 3
       assert_text @sample1.name
       assert_text @sample2.name
     end
@@ -234,9 +234,9 @@ module Projects
       assert_text I18n.t('projects.samples.deletions.destroy.success', sample_name: @sample1.name,
                                                                        project_name: @project.namespace.human_name)
 
-      assert_no_selector '#samples-table table tbody tr', text: @sample1.name
+      assert_no_selector '#samples_table table tbody tr', text: @sample1.name
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
-      assert_selector '#samples-table table tbody tr', count: 2
+      assert_selector '#samples_table table tbody tr', count: 2
       within('tbody tr:first-child th') do
         assert_text @sample2.puid
       end
@@ -261,11 +261,11 @@ module Projects
       assert_text I18n.t('projects.samples.deletions.destroy.success', sample_name: @sample1.name,
                                                                        project_name: @project.namespace.human_name)
 
-      assert_no_selector '#samples-table table tbody tr', text: @sample1.puid
-      assert_no_selector '#samples-table table tbody tr', text: @sample1.name
+      assert_no_selector '#samples_table table tbody tr', text: @sample1.puid
+      assert_no_selector '#samples_table table tbody tr', text: @sample1.name
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
-      assert_selector '#samples-table table tbody tr', count: 2
-      within('#samples-table table tbody tr:first-child th') do
+      assert_selector '#samples_table table tbody tr', count: 2
+      within('#samples_table table tbody tr:first-child th') do
         assert_text @sample2.puid
       end
     end
@@ -275,7 +275,7 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
@@ -301,7 +301,7 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 3
         all('input[type="checkbox"]')[0].click
       end
@@ -322,7 +322,7 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
@@ -347,7 +347,7 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
+      assert_selector '#samples_table table tbody tr', count: 3
       check sample30.name
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
@@ -372,7 +372,7 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
@@ -404,7 +404,7 @@ module Projects
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
@@ -432,7 +432,7 @@ module Projects
       visit namespace_project_samples_url(namespace, project2)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 1
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
@@ -458,7 +458,7 @@ module Projects
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: user.locale))
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
@@ -534,7 +534,7 @@ module Projects
 
     test 'empty state of transfer sample project selection' do
       visit namespace_project_samples_url(@namespace, @project)
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
@@ -558,7 +558,7 @@ module Projects
       project = projects(:john_doe_project2)
       Project.reset_counters(project.id, :samples_count)
       visit namespace_project_samples_url(namespace, project)
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
       click_link I18n.t('projects.samples.index.clone_button'), match: :first
@@ -622,7 +622,7 @@ module Projects
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
+      assert_selector '#samples_table table tbody tr', count: 3
       within('tbody tr:first-child') do
         assert_selector 'a', text: 'Edit', count: 1
         assert_selector 'a', text: 'Remove', count: 0
@@ -641,7 +641,7 @@ module Projects
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
+      assert_selector '#samples_table table tbody tr', count: 3
       assert_selector 'a', text: 'Edit', count: 0
       assert_selector 'a', text: 'Remove', count: 0
       assert_text @sample1.name
@@ -654,7 +654,7 @@ module Projects
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
+      assert_selector '#samples_table table tbody tr', count: 3
       assert_text @sample1.name
       assert_text @sample2.name
 
@@ -663,7 +663,7 @@ module Projects
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 1
+      assert_selector '#samples_table table tbody tr', count: 1
       assert_selector 'mark', text: filter_text
       assert_no_text @sample2.name
       assert_no_text @sample3.name
@@ -673,7 +673,7 @@ module Projects
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 1
+      assert_selector '#samples_table table tbody tr', count: 1
       assert_selector 'mark', text: filter_text
       assert_no_text @sample2.name
       assert_no_text @sample3.name
@@ -685,7 +685,7 @@ module Projects
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
+      assert_selector '#samples_table table tbody tr', count: 3
       assert_text @sample1.name
       assert_text @sample2.name
       assert_text @sample3.name
@@ -695,8 +695,8 @@ module Projects
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
-      assert_selector '#samples-table table thead tr th', count: 8
+      assert_selector '#samples_table table tbody tr', count: 3
+      assert_selector '#samples_table table thead tr th', count: 8
       assert_selector 'div#limit-component button div span', text: '20'
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: filter_text
@@ -704,7 +704,7 @@ module Projects
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 1
+      assert_selector '#samples_table table tbody tr', count: 1
       assert_selector %(input.t-search-component) do |input|
         assert_equal filter_text, input['value']
       end
@@ -717,7 +717,7 @@ module Projects
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 1
+      assert_selector '#samples_table table tbody tr', count: 1
       assert_selector %(input.t-search-component) do |input|
         assert_equal filter_text, input['value']
       end
@@ -737,7 +737,7 @@ module Projects
       assert_selector 'div#limit-component button div span', text: '10'
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
+      assert_selector '#samples_table table tbody tr', count: 3
       assert_text @sample1.name
       assert_text @sample2.name
 
@@ -763,16 +763,16 @@ module Projects
       assert_selector 'div#limit-component button div span', text: '10'
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
-      assert_selector '#samples-table table thead tr th', count: 6
+      assert_selector '#samples_table table tbody tr', count: 3
+      assert_selector '#samples_table table thead tr th', count: 6
 
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
-      assert_selector '#samples-table table thead tr th', count: 8
+      assert_selector '#samples_table table tbody tr', count: 3
+      assert_selector '#samples_table table thead tr th', count: 8
       assert_selector 'div#limit-component button div span', text: '10'
     end
 
@@ -781,7 +781,7 @@ module Projects
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
+      assert_selector '#samples_table table tbody tr', count: 3
       within('tbody tr:first-child th') do
         assert_text @sample1.puid
       end
@@ -804,8 +804,8 @@ module Projects
       click_on 'Sample Name'
 
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
-      assert_selector '#samples-table table tbody tr', count: 3
-      within('#samples-table table tbody') do
+      assert_selector '#samples_table table tbody tr', count: 3
+      within('#samples_table table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
@@ -817,8 +817,8 @@ module Projects
       click_on 'Sample Name'
 
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
-      assert_selector '#samples-table table tbody tr', count: 3
-      within('#samples-table table tbody') do
+      assert_selector '#samples_table table tbody tr', count: 3
+      within('#samples_table table tbody') do
         assert_selector 'tr:first-child th', text: @sample3.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample3.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
@@ -830,7 +830,7 @@ module Projects
       click_on 'Created'
 
       assert_selector 'table thead th:nth-child(3) svg.icon-arrow_up'
-      within('#samples-table table tbody') do
+      within('#samples_table table tbody') do
         assert_selector 'tr:first-child th', text: @sample3.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample3.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
@@ -842,7 +842,7 @@ module Projects
       click_on 'Created'
 
       assert_selector 'table thead th:nth-child(3) svg.icon-arrow_down'
-      within('#samples-table table tbody') do
+      within('#samples_table table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
@@ -854,7 +854,7 @@ module Projects
       click_on 'Last Updated'
 
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
-      within('#samples-table table tbody') do
+      within('#samples_table table tbody') do
         assert_selector 'tr:first-child th', text: @sample3.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample3.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
@@ -866,7 +866,7 @@ module Projects
       click_on 'Last Updated'
 
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_down'
-      within('#samples-table table tbody') do
+      within('#samples_table table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
@@ -881,8 +881,8 @@ module Projects
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
-      within('#samples-table table tbody tr:first-child td:nth-child(2)') do
+      assert_selector '#samples_table table tbody tr', count: 3
+      within('#samples_table table tbody tr:first-child td:nth-child(2)') do
         assert_text @sample1.name
       end
 
@@ -891,7 +891,7 @@ module Projects
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 1
+      assert_selector '#samples_table table tbody tr', count: 1
       assert_text @sample1.puid
       assert_text @sample1.name
       assert_no_text @sample2.name
@@ -900,8 +900,8 @@ module Projects
       click_on 'Sample Name'
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
 
-      assert_selector '#samples-table table tbody tr', count: 1
-      within('#samples-table table tbody tr td:nth-child(2)') do
+      assert_selector '#samples_table table tbody tr', count: 1
+      within('#samples_table table tbody tr td:nth-child(2)') do
         assert_text @sample1.name
       end
     end
@@ -911,8 +911,8 @@ module Projects
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
-      within('#samples-table table tbody tr:first-child th') do
+      assert_selector '#samples_table table tbody tr', count: 3
+      within('#samples_table table tbody tr:first-child th') do
         assert_text @sample1.puid
       end
 
@@ -921,7 +921,7 @@ module Projects
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 1
+      assert_selector '#samples_table table tbody tr', count: 1
       assert_text @sample1.puid
       assert_text @sample1.name
       assert_no_text @sample2.name
@@ -930,14 +930,14 @@ module Projects
       click_on 'Sample ID'
       assert_selector 'table thead th:first-child svg.icon-arrow_up'
 
-      assert_selector '#samples-table table tbody tr', count: 1
-      within('#samples-table table tbody tr th') do
+      assert_selector '#samples_table table tbody tr', count: 1
+      within('#samples_table table tbody tr th') do
         assert_text @sample1.puid
       end
 
       visit namespace_project_samples_url(@namespace, @project)
 
-      assert_selector '#samples-table table tbody tr', count: 1
+      assert_selector '#samples_table table tbody tr', count: 1
       within('tbody tr th') do
         assert_text @sample1.puid
       end
@@ -948,8 +948,8 @@ module Projects
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
-      within('#samples-table table tbody tr:first-child td:nth-child(2)') do
+      assert_selector '#samples_table table tbody tr', count: 3
+      within('#samples_table table tbody tr:first-child td:nth-child(2)') do
         assert_text @sample1.name
       end
 
@@ -958,8 +958,8 @@ module Projects
       click_on 'Sample Name'
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
 
-      assert_selector '#samples-table table tbody tr', count: 3
-      within('#samples-table table tbody tr:first-child td:nth-child(2)') do
+      assert_selector '#samples_table table tbody tr', count: 3
+      within('#samples_table table tbody tr:first-child td:nth-child(2)') do
         assert_text @sample3.name
       end
 
@@ -968,7 +968,7 @@ module Projects
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 1
+      assert_selector '#samples_table table tbody tr', count: 1
       assert_text @sample1.puid
       assert_text @sample1.name
       assert_no_text @sample2.name
@@ -978,7 +978,7 @@ module Projects
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 1
+      assert_selector '#samples_table table tbody tr', count: 1
       assert_text @sample1.puid
       assert_text @sample1.name
       assert_no_text @sample2.name
@@ -990,8 +990,8 @@ module Projects
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
-      within('#samples-table table tbody tr:first-child th') do
+      assert_selector '#samples_table table tbody tr', count: 3
+      within('#samples_table table tbody tr:first-child th') do
         assert_text @sample1.puid
       end
 
@@ -1000,8 +1000,8 @@ module Projects
       click_on 'Sample Name'
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
 
-      assert_selector '#samples-table table tbody tr', count: 3
-      within('#samples-table table tbody tr:first-child th') do
+      assert_selector '#samples_table table tbody tr', count: 3
+      within('#samples_table table tbody tr:first-child th') do
         assert_text @sample3.puid
       end
 
@@ -1010,7 +1010,7 @@ module Projects
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 1
+      assert_selector '#samples_table table tbody tr', count: 1
       assert_text @sample1.puid
       assert_text @sample1.name
       assert_no_text @sample2.name
@@ -1501,7 +1501,7 @@ module Projects
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table thead tr th', count: 6
+      assert_selector '#samples_table table thead tr th', count: 6
 
       click_on 'Last Updated'
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
@@ -1509,22 +1509,22 @@ module Projects
       assert_selector 'label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
 
-      assert_selector '#samples-table table thead tr th', count: 8
-      within('#samples-table table tbody tr:first-child') do
+      assert_selector '#samples_table table thead tr th', count: 8
+      within('#samples_table table tbody tr:first-child') do
         assert_text @sample3.name
         assert_selector 'td:nth-child(6)', text: 'value1'
         assert_selector 'td:nth-child(7)', text: 'value2'
       end
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
-      assert_selector '#samples-table table thead tr th', count: 6
+      assert_selector '#samples_table table thead tr th', count: 6
     end
 
     test 'can sort samples by metadata column' do
       visit namespace_project_samples_url(@namespace, @project)
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
-      assert_selector '#samples-table table thead tr th', count: 6
+      assert_selector '#samples_table table thead tr th', count: 6
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
-      assert_selector '#samples-table table thead tr th', count: 8
+      assert_selector '#samples_table table thead tr th', count: 8
 
       within 'div.overflow-auto' do |div|
         div.scroll_to div.find('table thead th:nth-child(7)')
@@ -1533,7 +1533,7 @@ module Projects
       click_on 'metadatafield1'
 
       assert_selector 'table thead th:nth-child(6) svg.icon-arrow_up'
-      assert_selector '#samples-table table tbody tr', count: 3
+      assert_selector '#samples_table table tbody tr', count: 3
       within('tbody') do
         assert_selector 'tr:first-child th', text: @sample3.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample3.name
@@ -1545,10 +1545,10 @@ module Projects
 
       # toggling metadata again causes sort to be reset
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
-      assert_selector '#samples-table table thead tr th', count: 6
+      assert_selector '#samples_table table thead tr th', count: 6
 
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_down'
-      assert_selector '#samples-table table tbody tr', count: 3
+      assert_selector '#samples_table table tbody tr', count: 3
       within('tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
@@ -1597,7 +1597,7 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
 
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
-      assert_selector '#samples-table table thead tr th', count: 8
+      assert_selector '#samples_table table thead tr th', count: 8
 
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
 
@@ -1727,7 +1727,7 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
 
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
-      assert_selector '#samples-table table thead tr th', count: 8
+      assert_selector '#samples_table table thead tr th', count: 8
 
       click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
       within('div[data-metadata--file-import-loaded-value="true"]') do
@@ -1739,7 +1739,7 @@ module Projects
         assert_text I18n.t('shared.samples.metadata.file_imports.errors.description')
         click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
       end
-      assert_selector '#samples-table table thead tr th', count: 9
+      assert_selector '#samples_table table thead tr th', count: 9
     end
 
     test 'should not import metadata with analysis values' do
@@ -2215,7 +2215,7 @@ module Projects
     test 'should clone multiple samples' do
       project2 = projects(:project2)
       visit namespace_project_samples_url(@namespace, @project)
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
@@ -2241,7 +2241,7 @@ module Projects
     test 'should clone single sample' do
       project2 = projects(:project2)
       visit namespace_project_samples_url(@namespace, @project)
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 3
         all('input[type="checkbox"]')[0].click
       end
@@ -2261,7 +2261,7 @@ module Projects
     test 'should not clone samples with session storage cleared' do
       project2 = projects(:project2)
       visit namespace_project_samples_url(@namespace, @project)
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
@@ -2284,7 +2284,7 @@ module Projects
     test 'should not clone some samples' do
       project25 = projects(:project25)
       visit namespace_project_samples_url(@namespace, @project)
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
@@ -2311,7 +2311,7 @@ module Projects
 
     test 'empty state of clone sample project selection' do
       visit namespace_project_samples_url(@namespace, @project)
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
@@ -2335,7 +2335,7 @@ module Projects
       project = projects(:john_doe_project2)
       Project.reset_counters(project.id, :samples_count)
       visit namespace_project_samples_url(namespace, project)
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
       click_link I18n.t('projects.samples.index.clone_button'), match: :first
@@ -2346,7 +2346,7 @@ module Projects
 
     test 'filtering samples by list of sample puids' do
       visit namespace_project_samples_url(@namespace, @project)
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 3
         assert_selector 'tr th', text: @sample1.puid
         assert_selector 'tr th', text: @sample2.puid
@@ -2360,7 +2360,7 @@ module Projects
         find("input[name='q[name_or_puid_in][]']").text @sample2.puid
         click_button I18n.t(:'components.list_filter.apply')
       end
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 2
       end
       click_button I18n.t(:'components.list_filter.title')
@@ -2369,7 +2369,7 @@ module Projects
         click_button I18n.t(:'components.list_filter.clear')
         click_button I18n.t(:'components.list_filter.apply')
       end
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 3
       end
     end
@@ -2513,7 +2513,7 @@ module Projects
 
     def retrieve_puids
       puids = []
-      within('#samples-table table tbody') do
+      within('#samples_table table tbody') do
         (1..3).each do |n|
           puids << first("tr:nth-child(#{n}) th").text
         end
@@ -2523,7 +2523,7 @@ module Projects
 
     test 'delete multiple samples' do
       visit namespace_project_samples_url(@namespace, @project)
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 3
         assert_text @sample1.name
         assert_text @sample2.name
@@ -2588,7 +2588,7 @@ module Projects
 
     test 'delete single sample with remove link while all samples selected followed by multiple deletion' do
       visit namespace_project_samples_url(@namespace, @project)
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 3
         assert_text @sample1.name
         assert_text @sample2.name
@@ -2598,7 +2598,7 @@ module Projects
 
       assert find('input#select-page').checked?
 
-      within '#samples-table table tbody tr:first-child' do
+      within '#samples_table table tbody tr:first-child' do
         click_link I18n.t('projects.samples.index.remove_button')
       end
 
@@ -2606,7 +2606,7 @@ module Projects
         click_button I18n.t('projects.samples.deletions.new_deletion_dialog.submit_button')
       end
 
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 2
         assert_no_text @sample1.name
         assert all('input[type="checkbox"]')[0].checked?
@@ -2674,7 +2674,7 @@ module Projects
 
     test 'can filter by large list of sample names or ids' do
       visit namespace_project_samples_url(@namespace, @project)
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 3
         assert_selector 'tr th', text: @sample1.puid
         assert_selector 'tr th', text: @sample2.puid
@@ -2687,7 +2687,7 @@ module Projects
         dialog.scroll_to(dialog.find('button', text: I18n.t(:'components.list_filter.apply')), align: :bottom)
         click_button I18n.t(:'components.list_filter.apply')
       end
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 1
       end
       click_button I18n.t(:'components.list_filter.title')
@@ -2698,7 +2698,7 @@ module Projects
         click_button I18n.t(:'components.list_filter.clear')
         click_button I18n.t(:'components.list_filter.apply')
       end
-      within '#samples-table table tbody' do
+      within '#samples_table table tbody' do
         assert_selector 'tr', count: 3
       end
     end

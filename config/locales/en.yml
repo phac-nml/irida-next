@@ -1678,13 +1678,24 @@ en:
       actions:
         cancel: Cancel
         destroy: Delete
+        edit: Edit
       counts:
+        samples: Samples
         selected: Selected
         workflow_executions: Workflow Executions
       empty:
         workflow_executions:
           description: There are no workflows associated with this submitter.
           title: No workflows.
+      samples:
+        header:
+          created_at: Created
+          attachments_updated_at: Files Last Updated
+          puid: ID
+          name: Sample Name
+          updated_at: Last Updated
+        limit:
+          item: Samples
       workflow_executions:
         counts:
           selected: Selected

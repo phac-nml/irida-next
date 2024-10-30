@@ -7,7 +7,7 @@
         data-viral--sortable-lists--two-lists-selection-selected-list-value="<%= t(".selected") %>"
         data-viral--sortable-lists--two-lists-selection-available-list-value="<%= t(".available") %>"
         data-viral--sortable-lists--two-lists-selection-field-name-value="data_export[export_parameters][metadata_fields][]"
-        data-infinite-scroll-selection-outlet='#samples-table'
+        data-infinite-scroll-selection-outlet='#samples_table'
         data-infinite-scroll-paged-field-name-value="sample_ids[]"
         data-infinite-scroll-singular-description-value="<%= t(:"data_exports.new.sample_description.singular") %>"
         data-infinite-scroll-plural-description-value="<%= t(:"data_exports.new.sample_description.plural") %>"
@@ -98,7 +98,7 @@
           <%= form_for(:data_export, url: data_exports_path, method: :post,
               data: {
                 controller: "form--hidden-inputs",
-                "form--hidden-inputs-selection-outlet": '#samples-table',
+                "form--hidden-inputs-selection-outlet": '#samples_table',
                 "form--hidden-inputs-field-name-value": "data_export[export_parameters][ids][]"
               }
             ) do |form| %>

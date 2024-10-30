@@ -146,14 +146,14 @@ module Groups
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                            locale: @user.locale))
 
-      assert_selector '#samples-table table thead tr th', count: 9
+      assert_selector '#samples_table table thead tr th', count: 9
       assert_selector 'div#limit-component button div span', text: '20'
 
       fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: filter_text
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector '#samples-table table tbody tr', count: 1
-      assert_selector '#samples-table table thead tr th', count: 9
+      assert_selector '#samples_table table tbody tr', count: 1
+      assert_selector '#samples_table table thead tr th', count: 9
       assert_selector 'div#limit-component button div span', text: '20'
 
       assert_text @sample30.name
@@ -766,7 +766,7 @@ module Groups
       visit group_samples_url(@group)
 
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
-      assert_selector '#samples-table table thead tr th', count: 9
+      assert_selector '#samples_table table thead tr th', count: 9
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
       within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]',
@@ -778,7 +778,7 @@ module Groups
         assert_text I18n.t('shared.samples.metadata.file_imports.errors.description')
         click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
       end
-      assert_selector '#samples-table table thead tr th', count: 9
+      assert_selector '#samples_table table thead tr th', count: 9
     end
 
     test 'should not import metadata with analysis values' do

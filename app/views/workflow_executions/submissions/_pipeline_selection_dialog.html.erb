@@ -2,7 +2,7 @@
   <%= dialog.with_header(
     title: t(:"workflow_executions.submissions.pipeline_selection.title")
   ) %>
-  <%= dialog.with_section(data: { controller: "workflow-selection", "workflow-selection-selection-outlet": "#samples-table" }) do %>
+  <%= dialog.with_section(data: { controller: "workflow-selection", "workflow-selection-selection-outlet": "#samples_table" }) do %>
     <%= form_with url: workflow_executions_submissions_path, data: { turbo_stream: true, "workflow-selection-target": "form" } do |form| %>
       <%= form.hidden_field :workflow_name,
                         data: {

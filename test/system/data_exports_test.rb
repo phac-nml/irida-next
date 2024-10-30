@@ -269,7 +269,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
-    within %(#samples-table) do
+    within %(#samples_table) do
       find("input[type='checkbox'][value='#{@sample1.id}']").click
     end
 
@@ -326,7 +326,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
-    within %(#samples-table) do
+    within %(#samples_table) do
       find("input[type='checkbox'][value='#{@sample1.id}']").click
       find("input[type='checkbox'][value='#{@sample2.id}']").click
     end
@@ -382,7 +382,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
-    within %(#samples-table) do
+    within %(#samples_table) do
       find("input[type='checkbox'][value='#{sample32.id}']").click
     end
 
@@ -393,7 +393,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
-    within %(#samples-table) do
+    within %(#samples_table) do
       find("input[type='checkbox'][value='#{@sample1.id}']").click
     end
 
@@ -571,7 +571,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
-    within %(#samples-table) do
+    within %(#samples_table) do
       find("input[type='checkbox'][value='#{sample3.id}']").click
     end
 
@@ -591,7 +591,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
-    within %(#samples-table) do
+    within %(#samples_table) do
       find("input[type='checkbox'][value='#{sample43.id}']").click
     end
 
@@ -608,7 +608,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
-    within %(#samples-table) do
+    within %(#samples_table) do
       find("input[type='checkbox'][value='#{@sample30.id}']").click
     end
 
@@ -676,7 +676,7 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
-    within %(#samples-table) do
+    within %(#samples_table) do
       find("input[type='checkbox'][value='#{@sample30.id}']").click
     end
 
@@ -811,7 +811,7 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'add all, remove all and submit buttons in new_sample_export_dialog' do
     visit namespace_project_samples_url(@group1, @project1)
 
-    within %(#samples-table) do
+    within %(#samples_table) do
       find("input[type='checkbox'][value='#{@sample1.id}']").click
     end
 
