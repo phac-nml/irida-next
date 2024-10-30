@@ -9,15 +9,13 @@ end
 Rails.application.config.after_initialize do
   if defined?(Rails::Server) ||
      (Rails.env.test? && ActiveRecord::Base.connection.table_exists?('automated_workflow_executions'))
-    Irida::Pipelines.instance.available_pipelines.each_value do |pipeline|
-      automated_workflows = AutomatedWorkflowExecution.where(
-        "metadata ->> 'workflow_name' = ? and metadata ->> 'workflow_version' = ?", pipeline.name, pipeline.version
-      )
 
-      automated_workflows.each do |automated_workflow|
-        automated_workflow.disabled = pipeline.executable && pipeline.automatable ? false : true
-        automated_workflow.save
-      end
+    AutomatedWorkflowExecution.find_each do |automated_workflow_exectuion|
+      pipeline = Irida::Pipelines.instance.find_pipeline_by(automated_workflow_exectuion.metadata['workflow_name'],
+                                                            automated_workflow_exectuion.metadata['workflow_version'],
+                                                            'automatable')
+      automated_workflow_exectuion.disabled = pipeline ? !pipeline.executable : true
+      automated_workflow_exectuion.save
     end
   end
 end
