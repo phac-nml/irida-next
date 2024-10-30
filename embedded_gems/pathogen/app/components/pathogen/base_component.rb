@@ -11,12 +11,15 @@ module Pathogen
       @tag = tag
       @system_arguments = system_arguments
 
-      @result = Pathogen::Classify.call(**@system_arguments.merge(classes: classes))
+      @result = {
+        class: class_names(classes, @system_arguments[:class]),
+        style: @system_arguments[:style]
+      }
 
       @system_arguments[:'data-view-component'] = true
 
       # Add a test selector
-      @content_tag_args = add_test_selector(@system_arguments).except(*Pathogen::Classify::Utilities::UTILITIES.keys)
+      @content_tag_args = add_test_selector(@system_arguments)
     end
 
     def call
