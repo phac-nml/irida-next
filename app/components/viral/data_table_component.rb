@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 module Viral
-  # This component creates the individual lists for the sortable_lists_component.
+  # Table Component used to display data
   class DataTableComponent < Viral::Component # rubocop:disable Metrics/ClassLength
     renders_many :columns, Viral::DataTable::ColumnComponent
 
-    # If creating multiple lists to utilize the same list values, assign them the same group
     # rubocop:disable Metrics/ParameterLists
     def initialize(
       type: '',
