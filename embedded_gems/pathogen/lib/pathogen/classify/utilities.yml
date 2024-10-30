@@ -6,8 +6,13 @@
     - text-slate-300 dark:text-slate-700
   :primary:
     - text-white dark:text-slate-100
+  :danger:
+    - text-red-500
 :bg:
   :default:
     - bg-white dark:bg-slate-800
   :primary:
     - bg-primary-700 dark:bg-primary-600
+:font-size:
+  :sm:
+    - text-sm

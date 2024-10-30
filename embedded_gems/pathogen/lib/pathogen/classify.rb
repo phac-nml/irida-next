@@ -119,7 +119,7 @@ module Pathogen
 
           if invalid_class_names.any?
             raise ArgumentError, 'Use System Arguments (https://pathogen.style/view-components/system-arguments) ' \
-                                 "instead of Pathogen CSS class #{'name'.pluralize(invalid_class_names.length)} #{invalid_class_names.to_sentence}. " \
+                                 "instead of Tailwind CSS class #{'name'.pluralize(invalid_class_names.length)} #{invalid_class_names.to_sentence}. " \
                                  'This warning will not be raised in production. Set Pathogen_WARNINGS_DISABLED=1 to disable this warning.'
           end
         end
