@@ -1,6 +1,15 @@
 {
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "[erb]": {
     "editor.defaultFormatter": "elia.erb-formatter"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[ruby]": {
     "editor.defaultFormatter": "Shopify.ruby-lsp",
@@ -16,9 +25,7 @@
   },
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
-  "editor.rulers": [
-    120
-  ],
+  "editor.rulers": [120],
   "cSpell.words": [
     "micha",
     "irida",
@@ -32,6 +39,7 @@
     "keyfile",
     "flowbite",
     "checkin",
-    "activerecord"
+    "activerecord",
+    "rubocop"
   ]
 }

@@ -3,10 +3,10 @@
   "private": true,
   "devDependencies": {
     "axe-core": "^4.6.3",
-    "prettier": "^3.0.0",
-    "prettier-plugin-tailwindcss": "^0.3.0"
+    "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.8"
   },
   "dependencies": {
-    "flowbite": "^1.7.0"
+    "flowbite": "^2.5.2"
   }
 }
