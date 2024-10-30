@@ -66,8 +66,10 @@
 <%= viral_data_table(
   type: "workflow_executions",
   data: @workflow_executions,
-  selection: true,
   pagy: @pagy,
+  abilities: {
+      select: allowed_to?(:export_data?, @namespace)
+    },
   row_actions: {
     cancel: true,
     destroy: true

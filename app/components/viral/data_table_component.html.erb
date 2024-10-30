@@ -90,7 +90,7 @@
                   **column.system_arguments
                 ) do %>
                   <% if index.zero? && @abilities[:select] %>
-                    <%= check_box_tag "#{@type.delete_suffix('s')}_ids[]",
+                    <%= check_box_tag "#{@type}_ids[]",
                       row.id,
                       nil,
                       id: dom_id(row),

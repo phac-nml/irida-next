@@ -169,18 +169,7 @@
     </div>
   </div>
 
-  <%
-=begin%>
- <%= render partial: "table",
-  locals: {
-    project: @project,
-    samples: @samples,
-    pagy: @pagy,
-  } %>
-<%
-=end%>
-
- <%= viral_data_table(
+  <%= viral_data_table(
     type: "samples",
     data: @samples,
     has_data: @has_samples,

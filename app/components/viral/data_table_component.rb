@@ -145,15 +145,5 @@ module Viral
         cancel_workflow_execution_path(workflow_execution)
       end
     end
-
-    def abilities(action)
-      verify_select_abilities if action == 'select'
-    end
-
-    def verify_select_abilities
-      return unless @type == 'workflow_executions'
-
-      true
-    end
   end
 end
