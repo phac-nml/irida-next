@@ -6,7 +6,7 @@ module AutomatedWorkflowExecutions
     queue_as :default
 
     def perform(sample, pe_attachment_pair)
-      sample.project.namespace.automated_workflow_executions.each do |awe|
+      sample.project.namespace.automated_workflow_executions.where(disabled: false).find_each do |awe|
         AutomatedWorkflowExecutions::LaunchService.new(awe, sample, pe_attachment_pair,
                                                        sample.project.namespace.automation_bot).execute
       end
