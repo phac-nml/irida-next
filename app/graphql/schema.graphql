@@ -1562,6 +1562,131 @@ type PageInfo {
 }
 
 """
+A pipeline
+"""
+type Pipeline implements Node {
+  """
+  
+  """
+  automatable: Boolean
+
+  """
+  Datetime of creation.
+  """
+  createdAt: ISO8601DateTime!
+
+  """
+  
+  """
+  description: String
+
+  """
+  
+  """
+  engine: String
+
+  """
+  
+  """
+  engineVersion: String
+
+  """
+  
+  """
+  executable: Boolean
+
+  """
+  ID of the object.
+  """
+  id: ID!
+
+  """
+  
+  """
+  metadata: JSON
+
+  """
+  
+  """
+  name: String
+
+  """
+  
+  """
+  samplesheetHeaders: JSON!
+
+  """
+  
+  """
+  type: String
+
+  """
+  
+  """
+  typeVersion: String
+
+  """
+  Datetime of last update.
+  """
+  updatedAt: ISO8601DateTime!
+
+  """
+  URL of the pipeline GitHub repository
+  """
+  url: String!
+
+  """
+  
+  """
+  version: String
+
+  """
+  
+  """
+  workflowParams: JSON!
+}
+
+"""
+The connection type for Pipeline.
+"""
+type PipelineConnection {
+  """
+  A list of edges.
+  """
+  edges: [PipelineEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [Pipeline]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+An edge in a connection.
+"""
+type PipelineEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: Pipeline
+}
+
+"""
 A project
 """
 type Project implements Node {
@@ -2108,6 +2233,58 @@ type Query {
     """
     ids: [ID!]!
   ): [Node]!
+
+  """
+  Find Pipelines
+  """
+  pipeline(
+    """
+    Name of the Workflow
+    """
+    workflowName: String!
+
+    """
+    Can specify `automatable` for automatable pipelines, or `available` for all
+    pipelines. By default only 'executable' pipelines are returned.
+    """
+    workflowType: String = "executable"
+
+    """
+    Version of the Workflow
+    """
+    workflowVersion: String!
+  ): Pipeline
+
+  """
+  Find Pipelines
+  """
+  pipelines(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Can specify `automatable` for automatable pipelines, or `available` for all
+    pipelines. By default only `executable` pipelines are returned.
+    """
+    workflowType: String = "executable"
+  ): PipelineConnection
 
   """
   Find a project.

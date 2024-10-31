@@ -10,10 +10,9 @@ module Types
     field :description, String, null: true, description: ''
     field :engine, String, null: true, description: ''
     field :engine_version, String, null: true, description: ''
-    field :executable, String, null: true, description: ''
+    field :executable, GraphQL::Types::Boolean, null: true, description: ''
     field :metadata, GraphQL::Types::JSON, description: ''
     field :name, String, null: true, description: ''
-    # field :overrides, GraphQL::Types::JSON, description: ''
     field :samplesheet_headers, GraphQL::Types::JSON, null: false, description: ''
     field :type, String, null: true, description: ''
     field :type_version, String, null: true, description: ''
@@ -21,12 +20,8 @@ module Types
     field :version, String, null: true, description: ''
     field :workflow_params, GraphQL::Types::JSON, null: false, description: ''
 
-    # def self.authorized?(object, context)
-    #   super && allowed_to?(
-    #     :read?,
-    #     object,
-    #     context: { user: context[:current_user], token: context[:token] }
-    #   )
-    # end
+    def self.authorized?(object, context)
+      super && true # Pipelines are not hidden from any users
+    end
   end
 end
