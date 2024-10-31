@@ -129,8 +129,6 @@
           allowed_to?(:export_data?, @group),
       },
       q: @q,
-      namespace: @group,
-      project: @project,
       metadata_fields: @fields) do |table| %>
       <% table.with_column(title: 'puid', sticky: true, show_link: true) %>
       <% table.with_column(title: 'name', sticky: true, show_link: true) %>

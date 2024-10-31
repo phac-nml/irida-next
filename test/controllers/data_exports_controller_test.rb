@@ -296,7 +296,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
   test 'should list workflow executions' do
     post list_data_exports_path(format: :turbo_stream), params: {
       page: 1,
-      workflow_executions_ids: [@workflow1.id, @workflow2.id],
+      workflow_execution_ids: [@workflow1.id, @workflow2.id],
       list_class: 'workflow_execution'
     }
     assert_response :success

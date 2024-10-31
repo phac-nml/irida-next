@@ -14,7 +14,8 @@ module Viral
       q: nil, # rubocop:disable Naming/MethodParameterName
       abilities: {},
       row_actions: {},
-      empty: {},
+      namespace: nil,
+      metadata_fields: nil,
       **system_arguments
     )
       @type = type
@@ -24,8 +25,9 @@ module Viral
       @q = q
       @abilities = abilities
       @row_actions = row_actions
+      @namespace = namespace
+      @metadata_fields = metadata_fields
       @renders_row_actions = @row_actions.select { |_key, value| value }.count.positive?
-      @empty = empty
       @system_arguments = system_arguments
     end
 
@@ -120,24 +122,27 @@ module Viral
     end
 
     def individual_path(data)
-      return unless data.is_a?(WorkflowExecution)
+      if data.is_a?(WorkflowExecution)
 
-      if system_arguments[:namespace]
-        namespace_project_workflow_execution_path(
-          system_arguments[:namespace].parent,
-          system_arguments[:namespace].project,
-          data
-        )
-      else
-        workflow_execution_path(data)
+        if @namespace
+          namespace_project_workflow_execution_path(
+            @namespace.parent,
+            @namespace.project,
+            data
+          )
+        else
+          workflow_execution_path(data)
+        end
+      elsif data.is_a?(Sample)
+        project_sample_path(data.project, data)
       end
     end
 
     def workflow_execution_cancel_path(workflow_execution)
-      if system_arguments[:namespace]
+      if @namespace
         cancel_namespace_project_workflow_execution_path(
-          system_arguments[:namespace].parent,
-          system_arguments[:namespace].project,
+          @namespace.parent,
+          @namespace.project,
           workflow_execution
         )
       else

@@ -185,8 +185,6 @@
       destroy: allowed_to?(:destroy_sample?, @project),
     },
     q: @q,
-    namespace: @namespace,
-    project: @project,
     metadata_fields: @fields) do |table| %>
     <% table.with_column(title: 'puid', sticky: true, show_link: true) %>
     <% table.with_column(title: 'name', sticky: true, show_link: true) %>

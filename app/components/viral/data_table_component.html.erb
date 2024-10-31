@@ -45,8 +45,8 @@
                 <% end %>
               <% end %>
             <% end %>
-            <% if system_arguments[:metadata_fields] %>
-              <% system_arguments[:metadata_fields].each do |field| %>
+            <% if @metadata_fields %>
+              <% @metadata_fields.each do |field| %>
                 <%= render_cell(
                 tag: 'th',
                 scope: 'col',
@@ -86,11 +86,11 @@
             <%= render Viral::BaseComponent.new(**row_arguments(row)) do %>
               <% columns.each_with_index do |column, index| %>
                 <%= render_cell(
-                  scope: ("row" if index.zero?),
+                  scope: index.zero? ? 'row' : nil,
                   **column.system_arguments
                 ) do %>
                   <% if index.zero? && @abilities[:select] %>
-                    <%= check_box_tag "#{@type}_ids[]",
+                    <%= check_box_tag "#{@type[0...-1]}_ids[]",
                       row.id,
                       nil,
                       id: dom_id(row),
@@ -126,8 +126,8 @@
                   <% end %>
                 <% end %>
               <% end %>
-              <% if system_arguments[:metadata_fields] %>
-                <% system_arguments[:metadata_fields].each do |field| %>
+              <% if @metadata_fields %>
+                <% @metadata_fields.each do |field| %>
                   <%= render_cell(
                   tag: 'td',
                   classes: class_names('px-3 py-3')
