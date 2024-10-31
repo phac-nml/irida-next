@@ -1691,11 +1691,12 @@ en:
         header:
           created_at: Created
           attachments_updated_at: Files Last Updated
-          puid: ID
+          puid: Sample ID
           name: Sample Name
           updated_at: Last Updated
         limit:
           item: Samples
+        select_page: Select / Deselect visible samples
       workflow_executions:
         counts:
           selected: Selected
@@ -1711,7 +1712,7 @@ en:
           updated_at: Last Updated
         limit:
           item: Workflow Executions
-        select_page: Select / Deselect visible samples
+        select_page: Select / Deselect visible workflow executions
         canceled: Canceled
         canceling: Canceling
         completed: Completed

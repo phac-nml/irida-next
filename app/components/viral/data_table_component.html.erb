@@ -20,30 +20,52 @@
                 scope: 'col',
                 **column.system_arguments(@type, index)
               ) do %>
+                <% if index.zero? and @abilities[:select] %>
+                  <%= check_box_tag "select-page",
+                  title: t(".#{@type}.select_page"),
+                  "aria-label": t(".#{@type}.select_page"),
+                  data: {
+                    action: "input->selection#togglePage",
+                    controller: "filters",
+                    selection_target: "selectPage",
+                  },
+                  class:
+                    "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+                <% end %>
                 <% if column.metadata %>
-                <%= render Ransack::SortComponent.new(
-                  ransack_obj: @q,
-                  label: t(".#{@type}.header.#{column.title}"),
-                  url:
-                    helpers.sorting_url(
-                      @q,
-                      URI.encode_www_form_component("metadata_#{column.title}"),
-                    ),
-                  field: "metadata_#{column.title}",
-                  data: {
-                    turbo_action: "replace",
-                  },
-                ) %>
-              <% else %>
-                <%= render Ransack::SortComponent.new(
-                  ransack_obj: @q,
-                  label: t(".#{@type}.header.#{column.title}"),
-                  url: helpers.sorting_url(@q, column.title),
-                  field: column.title,
-                  data: {
-                    turbo_action: "replace",
-                  },
-                ) %>
+                  <%= render Ransack::SortComponent.new(
+                    ransack_obj: @q,
+                    label: t(".#{@type}.header.#{column.title}"),
+                    url:
+                      helpers.sorting_url(
+                        @q,
+                        URI.encode_www_form_component("metadata_#{column.title}"),
+                      ),
+                    field: "metadata_#{column.title}",
+                    data: {
+                      turbo_action: "replace",
+                    },
+                  ) %>
+                <% elsif column.title == 'attachments_updated_at' %>
+                  <%= render Ransack::SortComponent.new(
+                    ransack_obj: @q,
+                    label: t(".#{@type}.header.#{column.title}"),
+                    url: helpers.sorting_url(@q, "#{column.title}_nulls_last"),
+                    field: "#{column.title}_nulls_last",
+                    data: {
+                      turbo_action: "replace",
+                    },
+                  ) %>
+                <% else %>
+                  <%= render Ransack::SortComponent.new(
+                    ransack_obj: @q,
+                    label: t(".#{@type}.header.#{column.title}"),
+                    url: helpers.sorting_url(@q, column.title),
+                    field: column.title,
+                    data: {
+                      turbo_action: "replace",
+                    },
+                  ) %>
                 <% end %>
               <% end %>
             <% end %>

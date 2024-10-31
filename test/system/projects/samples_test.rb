@@ -250,7 +250,7 @@ module Projects
       table_row = find(:table_row, [@sample1.name])
 
       within table_row do
-        click_link 'Remove'
+        click_link I18n.t('viral.data_table_component.actions.destroy')
       end
 
       within('dialog') do
