@@ -28,13 +28,26 @@
       <div class="flex flex-wrap items-center mr-3 font-semibold title">
         <div class="flex items-center space-x-2">
           <% if @namespace.type == "Group" %>
-            <%= link_to @namespace.name, group_path(@namespace), data: { turbo: false } %>
+            <%= link_to group_path(@namespace), data: { turbo: false } do %>
+              <%= highlight(
+                @namespace.name,
+                defined?(@search_params[:name_or_puid_cont]) &&
+                  @search_params[:name_or_puid_cont],
+                highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+              ) %>
+            <% end %>
           <% else %>
-            <%= link_to @namespace.name,
-            project_path(@namespace.project),
+            <%= link_to project_path(@namespace.project),
             data: {
               turbo: false,
-            } %>
+            } do %>
+              <%= highlight(
+                @namespace.name,
+                defined?(@search_params[:name_or_puid_cont]) &&
+                  @search_params[:name_or_puid_cont],
+                highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+              ) %>
+            <% end %>
           <% end %>
           <%= render PuidComponent.new(puid: @namespace.puid) %>
           <%= viral_pill(

@@ -17,6 +17,8 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     authorize! @group, to: :read?
 
     @q = namespaces_query
+    @search_params = search_params
+
     set_default_sort
     @pagy, @namespaces = pagy(@q.result.include_route)
   end
@@ -224,6 +226,12 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
                     else
                       t(:'groups.sidebar.general')
                     end
+  end
+
+  def search_params
+    search_params = {}
+    search_params[:name_or_puid_cont] = params.dig(:q, :name_or_puid_cont)
+    search_params
   end
 
   protected
