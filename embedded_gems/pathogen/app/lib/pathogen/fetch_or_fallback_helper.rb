@@ -4,6 +4,10 @@ module Pathogen
   # @private
   # :nocov:
   module FetchOrFallbackHelper
+    mattr_accessor :fallback_raises, default: true
+
+    InvalidValueError = Class.new(StandardError)
+
     def fetch_or_fallback(allowed_values, given_value, fallback = nil, deprecated_values: nil)
       return given_value if allowed_values.include?(given_value)
 

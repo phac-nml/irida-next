@@ -49,5 +49,17 @@ module Pathogen
 
       assert_selector '[data-test-selector="test-selector"]'
     end
+
+    test 'raises error if passed incorrect tag' do
+      assert_raises Pathogen::FetchOrFallbackHelper::InvalidValueError do
+        render_inline Pathogen::BaseButton.new(tag: :div)
+      end
+    end
+
+    test 'raises error if passed incorrect type' do
+      assert_raises Pathogen::FetchOrFallbackHelper::InvalidValueError do
+        render_inline Pathogen::BaseButton.new(type: :invalid)
+      end
+    end
   end
 end
