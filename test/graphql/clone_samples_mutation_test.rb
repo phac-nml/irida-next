@@ -142,7 +142,7 @@ class CloneSamplesMutationTest < ActiveSupport::TestCase
 
     assert_not_empty data, 'copySample should be populated when no authorization errors'
     assert_not_empty data['errors']
-    assert_nil data['samples'], 'sample should not be populated as one was not created.'
+    assert_empty data['samples'], 'sample should not be populated as one was not created.'
 
     assert_equal %w[samples base], data['errors'][0]['path']
     assert_equal 'The source and destination projects are the same. Please select a different destination project.',
