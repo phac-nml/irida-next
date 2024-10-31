@@ -14,3 +14,11 @@
     ) %>
   </div>
 </div>
+
+<%= render partial: "table",
+locals: {
+  has_data_exports: @has_data_exports,
+  data_exports: @data_exports,
+  pagy: @pagy,
+  q: @q,
+} %>

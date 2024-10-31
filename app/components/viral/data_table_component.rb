@@ -14,6 +14,7 @@ module Viral
       q: nil, # rubocop:disable Naming/MethodParameterName
       abilities: {},
       row_actions: {},
+      search_params: nil,
       namespace: nil,
       metadata_fields: nil,
       **system_arguments
@@ -25,6 +26,7 @@ module Viral
       @q = q
       @abilities = abilities
       @row_actions = row_actions
+      @search_params = search_params
       @namespace = namespace
       @metadata_fields = metadata_fields
       @renders_row_actions = @row_actions.select { |_key, value| value }.count.positive?
@@ -148,6 +150,13 @@ module Viral
       else
         cancel_workflow_execution_path(workflow_execution)
       end
+    end
+
+    def search_params_defined
+      return unless @search_params
+      return unless @type == 'samples'
+
+      @search_params[:name_or_puid_cont]
     end
   end
 end

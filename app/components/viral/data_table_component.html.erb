@@ -16,7 +16,9 @@
           <tr>
             <% columns.each_with_index do |column, index| %>
               <%= render_cell(
-                **column.header_arguments
+                tag: 'th',
+                scope: 'col',
+                **column.system_arguments(@type, index)
               ) do %>
                 <% if column.metadata %>
                 <%= render Ransack::SortComponent.new(
@@ -86,8 +88,9 @@
             <%= render Viral::BaseComponent.new(**row_arguments(row)) do %>
               <% columns.each_with_index do |column, index| %>
                 <%= render_cell(
+                  tag: 'td',
                   scope: index.zero? ? 'row' : nil,
-                  **column.system_arguments
+                  **column.system_arguments(@type, index)
                 ) do %>
                   <% if index.zero? && @abilities[:select] %>
                     <%= check_box_tag "#{@type[0...-1]}_ids[]",
@@ -104,13 +107,20 @@
                     <% end %>
                   <% if column.show_link %>
                     <%= link_to(
-                      row[column.title],
                       individual_path(row),
                       data: {
                         turbo: false,
                       },
                       class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline",
-                    ) %>
+                    ) do %>
+                    <span class="font-semibold">
+                      <%= highlight(
+                        row[column.title],
+                        search_params_defined,
+                        highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+                      ) %>
+                    </span>
+                  <% end %>
                   <% elsif column.pill %>
                     <%= helpers.viral_pill(text: t(".#{@type}.#{row[column.title]}"), color: helpers.retrieve_pill_color(@type, row[column.title]), border: true) %>
                   <% elsif column.time_ago %>

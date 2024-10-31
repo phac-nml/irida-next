@@ -128,6 +128,7 @@
         select: allowed_to?(:submit_workflow?, @group) ||
           allowed_to?(:export_data?, @group),
       },
+      search_params: @search_params,
       q: @q,
       metadata_fields: @fields) do |table| %>
       <% table.with_column(title: 'puid', sticky: true, show_link: true) %>

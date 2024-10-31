@@ -24,23 +24,25 @@ module Viral
         @time_ago = time_ago
         @time = time
         @metadata = metadata
-        @block = block
         @system_arguments = system_arguments
       end
       # rubocop:enable Metrics/ParameterLists
 
-      def header_arguments
-        {
-          tag: 'th',
-          scope: 'col',
-          classes: class_names('px-3 py-3', @sticky && 'sticky left-0 bg-slate-50 dark:bg-slate-900')
-        }
-      end
-
-      def system_arguments
-        { tag: 'td' }.deep_merge(@system_arguments).tap do |args|
-          args[:classes] = class_names('px-3 py-3', @sticky && 'sticky left-0 bg-slate-50 dark:bg-slate-900')
+      def system_arguments(table_type, index)
+        if @sticky
+          sticky_classes = if table_type == 'samples'
+                             if index.zero?
+                               'sticky left-0 min-w-56 max-w-56 z-10 bg-slate-50 dark:bg-slate-900'
+                             else
+                               'sticky left-56 z-10 bg-slate-50 dark:bg-slate-900'
+                             end
+                           else
+                             'sticky left-0 bg-slate-50 dark:bg-slate-900'
+                           end
         end
+        {
+          classes: class_names('px-3 py-3', @sticky && sticky_classes)
+        }
       end
     end
   end

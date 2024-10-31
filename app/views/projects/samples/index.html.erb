@@ -184,6 +184,7 @@
       edit: allowed_to?(:update_sample?, @project),
       destroy: allowed_to?(:destroy_sample?, @project),
     },
+    search_params: @search_params,
     q: @q,
     metadata_fields: @fields) do |table| %>
     <% table.with_column(title: 'puid', sticky: true, show_link: true) %>
