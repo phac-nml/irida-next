@@ -482,4 +482,79 @@ class CloneSamplesMutationTest < ActiveSupport::TestCase
     assert_equal 'not a valid sample gid is not a valid IRIDA Next ID.', data['errors'][0]['message']
     assert_equal ['copySamples'], data['errors'][0]['path']
   end
+
+  test 'copySamples mutation should not work when sample gid is actually a group gid, partial success' do
+    project1 = projects(:project1)
+    project2 = projects(:project2)
+    group1 = groups(:group_one)
+
+    result = IridaSchema.execute(CLONE_SAMPLE_USING_PROJECT_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { projectId: project1.to_global_id.to_s,
+                                              newProjectId: project2.to_global_id.to_s,
+                                              sampleIds: [
+                                                project1.samples[0].to_global_id.to_s,
+                                                group1.to_global_id.to_s
+                                              ] })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['copySamples']
+
+    assert_not_empty data, 'copySample should be populated when no authorization errors'
+    assert_not_empty data['samples']
+    assert_equal 1, data['samples'].count
+
+    original_id = data['samples'][0][:original]
+    original_sample = IridaSchema.object_from_id(original_id, { expected_type: Sample })
+    copy_id = data['samples'][0][:copy]
+    copy_sample = IridaSchema.object_from_id(copy_id, { expected_type: Sample })
+
+    assert_equal project1.id, original_sample.project.id
+    assert_equal project2.id, copy_sample.project.id
+    assert_equal original_sample.name, copy_sample.name
+    assert_equal original_sample.description, copy_sample.description
+
+    assert_not_empty data['errors']
+    assert_equal 1, data['errors'].count
+    assert_equal "#{group1.to_global_id} is not a valid ID for Sample", data['errors'][0]['message']
+    assert_equal ['copySamples'], data['errors'][0]['path']
+  end
+
+  test 'copySamples mutation should not work when sample gid is actually a project gid, partial success' do
+    project1 = projects(:project1)
+    project2 = projects(:project2)
+
+    result = IridaSchema.execute(CLONE_SAMPLE_USING_PROJECT_ID_MUTATION,
+                                 context: { current_user: @user, token: @api_scope_token },
+                                 variables: { projectId: project1.to_global_id.to_s,
+                                              newProjectId: project2.to_global_id.to_s,
+                                              sampleIds: [
+                                                project1.samples[0].to_global_id.to_s,
+                                                project1.to_global_id.to_s
+                                              ] })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['copySamples']
+
+    assert_not_empty data, 'copySample should be populated when no authorization errors'
+    assert_not_empty data['samples']
+    assert_equal 1, data['samples'].count
+
+    original_id = data['samples'][0][:original]
+    original_sample = IridaSchema.object_from_id(original_id, { expected_type: Sample })
+    copy_id = data['samples'][0][:copy]
+    copy_sample = IridaSchema.object_from_id(copy_id, { expected_type: Sample })
+
+    assert_equal project1.id, original_sample.project.id
+    assert_equal project2.id, copy_sample.project.id
+    assert_equal original_sample.name, copy_sample.name
+    assert_equal original_sample.description, copy_sample.description
+
+    assert_not_empty data['errors']
+    assert_equal 1, data['errors'].count
+    assert_equal "#{project1.to_global_id} is not a valid ID for Sample", data['errors'][0]['message']
+    assert_equal ['copySamples'], data['errors'][0]['path']
+  end
 end
