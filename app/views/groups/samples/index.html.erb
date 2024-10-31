@@ -118,26 +118,25 @@
         <% end %>
       </div>
     </div>
-
-    <%= viral_data_table(
-      type: "samples",
-      data: @samples,
-      has_data: @has_samples,
-      pagy: @pagy,
-      abilities: {
-        select: allowed_to?(:submit_workflow?, @group) ||
-          allowed_to?(:export_data?, @group),
-      },
-      search_params: @search_params,
-      q: @q,
-      metadata_fields: @fields) do |table| %>
-      <% table.with_column(title: 'puid', sticky: true, link: 'show') %>
-      <% table.with_column(title: 'name', sticky: true, link: 'show') %>
-      <% table.with_column(title: 'project', link: 'project') %>
-      <% table.with_column(title: 'created_at', time: true) %>
-      <% table.with_column(title: 'updated_at', time_ago: true) %>
-      <% table.with_column(title: 'attachments_updated_at', time_ago: true) %>
-    <% end %>
+  <% end %>
+  <%= viral_data_table(
+    type: "samples",
+    data: @samples,
+    has_data: @has_samples,
+    pagy: @pagy,
+    abilities: {
+      select: allowed_to?(:submit_workflow?, @group) ||
+        allowed_to?(:export_data?, @group),
+    },
+    search_params: @search_params,
+    q: @q,
+    metadata_fields: @fields) do |table| %>
+    <% table.with_column(title: 'puid', sticky: true, link: 'show') %>
+    <% table.with_column(title: 'name', sticky: true, link: 'show') %>
+    <% table.with_column(title: 'project', link: 'project') %>
+    <% table.with_column(title: 'created_at', time: true) %>
+    <% table.with_column(title: 'updated_at', time_ago: true) %>
+    <% table.with_column(title: 'attachments_updated_at', time_ago: true) %>
   <% end %>
 
 </div>

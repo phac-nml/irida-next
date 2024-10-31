@@ -2597,9 +2597,8 @@ module Projects
       end
 
       assert find('input#select-page').checked?
-
       within '#samples_table table tbody tr:first-child' do
-        click_link I18n.t('projects.samples.index.remove_button')
+        click_link I18n.t('viral.data_table_component.actions.destroy')
       end
 
       within 'dialog' do
@@ -2629,8 +2628,8 @@ module Projects
       assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
 
       within 'div[role="alert"]' do
-        assert_text I18n.t('projects.samples.index.no_samples')
-        assert_text I18n.t('projects.samples.index.no_associated_samples')
+        assert_text I18n.t('viral.data_table_component.empty.samples.title')
+        assert_text I18n.t('viral.data_table_component.empty.samples.description')
       end
 
       assert_selector 'a.cursor-not-allowed.pointer-events-none', count: 4
