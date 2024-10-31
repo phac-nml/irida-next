@@ -427,7 +427,7 @@ en:
         no_groups_title: No groups found
         row_aria_label: See %{name} subgroups
         search:
-          placeholder: Filter by name or puid
+          placeholder: Filter by ID or name
         sorting:
           created_at_asc: Oldest created
           created_at_desc: Last created
@@ -444,7 +444,7 @@ en:
         row:
           samples: Samples
         search:
-          placeholder: Filter by name or puid
+          placeholder: Filter by ID or name
         sorting:
           created_at_asc: Oldest created
           created_at_desc: Last created
