@@ -60,7 +60,7 @@ module Projects
         assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution4.run_id
       end
 
-      click_on I18n.t(:'workflow_executions.table_component.workflow_name')
+      click_on 'Workflow Name'
       assert_selector "#workflow_executions_table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_up"
 
       within('#workflow_executions_table table tbody') do
@@ -73,7 +73,7 @@ module Projects
                         text: workflow_execution4.metadata['workflow_name']
       end
 
-      click_on I18n.t(:'workflow_executions.table_component.workflow_name')
+      click_on 'Workflow Name'
       assert_selector "#workflow_executions_table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_down"
 
       within('#workflow_executions_table table tbody') do

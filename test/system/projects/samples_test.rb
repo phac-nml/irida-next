@@ -224,7 +224,7 @@ module Projects
 
     test 'should destroy Sample from sample show page' do
       visit namespace_project_sample_url(@namespace, @project, @sample1)
-      assert_link text: I18n.t('projects.samples.index.remove_button'), count: 1
+      assert_link text: I18n.t('viral.data_table_component.actions.destroy'), count: 1
       click_link I18n.t(:'projects.samples.index.remove_button')
 
       within('#turbo-confirm[open]') do
@@ -2548,8 +2548,8 @@ module Projects
       assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
 
       within 'div[role="alert"]' do
-        assert_text I18n.t('projects.samples.index.no_samples')
-        assert_text I18n.t('projects.samples.index.no_associated_samples')
+        assert_text I18n.t('viral.data_table_component.empty.samples.title')
+        assert_text I18n.t('viral.data_table_component.empty.samples.description')
       end
     end
 
