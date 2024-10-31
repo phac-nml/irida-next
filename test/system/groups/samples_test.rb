@@ -796,5 +796,15 @@ module Groups
         click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
       end
     end
+
+    test 'group samples empty state' do
+      group = groups(:subgroup10)
+      visit group_samples_url(group)
+      assert_no_selector 'div#samples_table'
+      assert_no_selector 'table'
+
+      assert_text I18n.t('viral.data_table_component.empty.samples.title')
+      assert_text I18n.t('viral.data_table_component.empty.samples.description')
+    end
   end
 end
