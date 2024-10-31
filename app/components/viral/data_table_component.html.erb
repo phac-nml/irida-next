@@ -88,7 +88,7 @@
             <%= render Viral::BaseComponent.new(**row_arguments(row)) do %>
               <% columns.each_with_index do |column, index| %>
                 <%= render_cell(
-                  tag: 'td',
+                  tag: index.zero? ? 'th' :'td',
                   scope: index.zero? ? 'row' : nil,
                   **column.system_arguments(@type, index)
                 ) do %>
