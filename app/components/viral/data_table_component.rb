@@ -67,6 +67,7 @@ module Viral
       render(Viral::BaseComponent.new(**arguments), &)
     end
 
+    # specific to workflow executions as actions are dependent on current state
     def verify_action_render(action, data)
       return data.cancellable? if action == :cancel
 
@@ -75,6 +76,7 @@ module Viral
       data.deletable?
     end
 
+    # handles rendering all row actions and adds approprite data attributes and hrefs
     def action_arguments(action, data)
       default_args = {
         tag: 'a',
@@ -89,6 +91,7 @@ module Viral
       default_args.merge(additional_args)
     end
 
+    # cancel and destroy attributes for workflow executions
     def workflow_execution_actions(action, data) # rubocop:disable Metrics/AbcSize
       args = {}
       args[:data] ||= {}
@@ -106,6 +109,7 @@ module Viral
       args
     end
 
+    # edit and destroy attributes for samples
     def sample_actions(action, data)
       args = {}
       args[:data] ||= {}
@@ -123,6 +127,7 @@ module Viral
       args
     end
 
+    # returns expected path to direct user to the respective show page
     def individual_path(data)
       if data.is_a?(WorkflowExecution)
 
@@ -140,6 +145,7 @@ module Viral
       end
     end
 
+    # path to cancel workflow executions
     def workflow_execution_cancel_path(workflow_execution)
       if @namespace
         cancel_namespace_project_workflow_execution_path(
@@ -152,6 +158,7 @@ module Viral
       end
     end
 
+    # specifies which key the search params is under dependent on table type
     def search_params_defined
       return unless @search_params
       return unless @type == 'samples'
@@ -159,6 +166,7 @@ module Viral
       @search_params[:name_or_puid_cont]
     end
 
+    # specifies checkbox label dependent on table type
     def check_box_label(data)
       if @type == 'samples'
         data.name
