@@ -224,8 +224,8 @@ module Projects
 
     test 'should destroy Sample from sample show page' do
       visit namespace_project_sample_url(@namespace, @project, @sample1)
-      assert_link text: I18n.t('viral.data_table_component.actions.destroy'), count: 1
-      click_link I18n.t(:'projects.samples.index.remove_button')
+      assert_link text: I18n.t('projects.samples.show.remove_button'), count: 1
+      click_link I18n.t('projects.samples.show.remove_button')
 
       within('#turbo-confirm[open]') do
         click_button I18n.t(:'components.confirmation.confirm')
