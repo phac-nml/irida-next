@@ -97,13 +97,21 @@
                 <% end %>
                 <% if column == :id %>
                   <%= link_to(
-                    workflow_execution.id,
                     individual_path(workflow_execution),
                     data: {
                       turbo: false,
                     },
                     class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline",
-                  ) %>
+                  ) do %>
+                    <span class="font-semibold">
+                      <%= highlight(
+                        workflow_execution.id,
+                        defined?(@search_params[:name_or_id_cont]) &&
+                          @search_params[:name_or_id_cont],
+                        highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+                      ) %>
+                    </span>
+                  <% end %>
                 <% elsif column == :state %>
                   <%= viral_pill(
                     text: t(:"workflow_executions.state.#{workflow_execution[column]}"),
@@ -118,6 +126,15 @@
                   <% if workflow_execution[column].present? %>
                     <%= helpers.local_time_ago(workflow_execution[column]) %>
                   <% end %>
+                <% elsif column == :name %>
+                  <span class="font-semibold">
+                    <%= highlight(
+                      workflow_execution.name,
+                      defined?(@search_params[:name_or_id_cont]) &&
+                        @search_params[:name_or_id_cont],
+                      highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+                    ) %>
+                    </span>
                 <% else %>
                   <%= workflow_execution[column.to_sym] %>
                 <% end %>

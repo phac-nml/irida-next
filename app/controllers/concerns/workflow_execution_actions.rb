@@ -16,6 +16,8 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
 
     @q = load_workflows.ransack(params[:q])
+    @search_params = search_params
+
     set_default_sort
     @pagy, @workflow_executions = pagy_with_metadata_sort(@q.result)
   end
@@ -152,5 +154,11 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
       attachments[key] = { name: attachment.file.filename, puid: attachment.puid }
     end
     attachments
+  end
+
+  def search_params
+    search_params = {}
+    search_params[:name_or_id_cont] = params.dig(:q, :name_or_id_cont)
+    search_params
   end
 end

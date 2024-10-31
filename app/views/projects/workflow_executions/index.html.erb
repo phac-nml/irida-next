@@ -28,7 +28,7 @@
 <div class="flow-root">
   <div class="flex mb-2">
   <% if allowed_to?(:export_data?, @project.namespace) %>
-    <div class="inline-flex grow space-x-2 mb-4">
+    <div class="inline-flex grow space-x-2">
       <%= search_form_for(
                 @q,
                 url: select_namespace_project_workflow_executions_url(**request.query_parameters),
@@ -62,11 +62,10 @@
     </div>
   </div>
 </div>
-
 <%= render partial: "table",
 locals: {
   workflow_executions: @workflow_executions,
   pagy: @pagy,
   q: @q,
-  namespace: @namespace,
+  namespace: @namespace
 } %>
