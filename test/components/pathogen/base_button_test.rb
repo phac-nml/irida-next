@@ -53,17 +53,5 @@ module Pathogen
         render_inline Pathogen::BaseButton.new(type: :invalid)
       end
     end
-
-    test 'raises error if passed incorrect tag' do
-      assert_raises Pathogen::FetchOrFallbackHelper::InvalidValueError do
-        render_inline Pathogen::BaseButton.new(tag: :div)
-      end
-    end
-
-    test 'raises error if passed incorrect type' do
-      assert_raises Pathogen::FetchOrFallbackHelper::InvalidValueError do
-        render_inline Pathogen::BaseButton.new(type: :invalid)
-      end
-    end
   end
 end
