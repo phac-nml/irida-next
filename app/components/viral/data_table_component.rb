@@ -158,5 +158,13 @@ module Viral
 
       @search_params[:name_or_puid_cont]
     end
+
+    def check_box_label(data)
+      if @type == 'samples'
+        data.name
+      elsif @type == 'workflow_executions'
+        data.name || data.id
+      end
+    end
   end
 end

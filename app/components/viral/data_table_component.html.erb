@@ -119,7 +119,7 @@
                       row.id,
                       nil,
                       id: dom_id(row),
-                      "aria-label": row.id,
+                      "aria-label": check_box_label(row),
                       data: {
                         action: "input->selection#toggle",
                         selection_target: "rowSelection",
