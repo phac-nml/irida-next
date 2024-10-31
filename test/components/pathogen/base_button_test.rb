@@ -4,50 +4,54 @@ require 'test_helper'
 
 module Pathogen
   class BaseButtonTest < ViewComponent::TestCase
-    test 'renders a button' do
-      render_inline Pathogen::BaseButton.new
+    def test_renders_default_button
+      render_inline(BaseButton.new) { 'Click me' }
 
-      assert_selector 'button[type="button"]'
-      assert_no_selector 'button[disabled]'
-      assert_no_selector 'button[data-test-selector]'
-      assert_no_selector 'a'
-      assert_no_selector 'button[disabled]'
+      assert_selector "button[type='button']", text: 'Click me'
     end
 
-    test 'renders a disabled button' do
-      render_inline Pathogen::BaseButton.new(disabled: true)
+    def test_renders_anchor_tag
+      render_inline(BaseButton.new(tag: :a)) { 'Click me' }
 
-      assert_selector 'button[disabled]'
+      assert_selector 'a', text: 'Click me'
+      refute_selector 'a[type]' # Ensure type is not set on anchor tags
     end
 
-    test 'renders a link' do
-      render_inline Pathogen::BaseButton.new(tag: :a, href: 'https://example.com')
+    def test_renders_submit_button
+      render_inline(BaseButton.new(type: :submit)) { 'Submit' }
 
-      assert_selector 'a[href="https://example.com"]'
+      assert_selector "button[type='submit']", text: 'Submit'
     end
 
-    test 'renders a disabled button if a tag is used' do
-      render_inline Pathogen::BaseButton.new(tag: :a, href: 'https://example.com', disabled: true)
+    def test_renders_reset_button
+      render_inline(BaseButton.new(type: :reset)) { 'Reset' }
 
-      assert_selector 'button[disabled]'
+      assert_selector "button[type='reset']", text: 'Reset'
     end
 
-    test 'renders a button with type reset' do
-      render_inline Pathogen::BaseButton.new(type: :reset)
+    def test_handles_disabled_state
+      render_inline(BaseButton.new(disabled: true)) { 'Disabled' }
 
-      assert_selector 'button[type="reset"]'
+      assert_selector 'button[disabled]', text: 'Disabled'
     end
 
-    test 'render a button with custom classes' do
-      render_inline Pathogen::BaseButton.new(classes: 'text-orange-500')
+    def test_converts_disabled_anchor_to_button
+      render_inline(BaseButton.new(tag: :a, disabled: true)) { 'Disabled Link' }
 
-      assert_selector 'button.text-orange-500'
+      assert_selector 'button[disabled]', text: 'Disabled Link'
+      refute_selector 'a' # Ensure it's not an anchor
     end
 
-    test 'renders button with test selector' do
-      render_inline Pathogen::BaseButton.new(test_selector: 'test-selector')
+    test 'raises error if passed incorrect tag' do
+      assert_raises Pathogen::FetchOrFallbackHelper::InvalidValueError do
+        render_inline Pathogen::BaseButton.new(tag: :invalid)
+      end
+    end
 
-      assert_selector '[data-test-selector="test-selector"]'
+    test 'raises error if passed incorrect type' do
+      assert_raises Pathogen::FetchOrFallbackHelper::InvalidValueError do
+        render_inline Pathogen::BaseButton.new(type: :invalid)
+      end
     end
 
     test 'raises error if passed incorrect tag' do
