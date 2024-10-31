@@ -1344,12 +1344,10 @@ en:
           sample_export: Sample Export
         delete_samples_button: Delete Samples
         deselect_all_button: Deselect All
-        edit_button: Edit
         import_metadata_button: Import metadata
         new_button: New sample
         no_associated_samples: There are no samples associated with this project.
         no_samples: No Samples
-        remove_button: Remove
         search:
           placeholder: Filter by ID or name
         select_all_button: Select All
@@ -1529,21 +1527,6 @@ en:
         namespace_name_desc: Name, descending
         updated_at_asc: Oldest updated
         updated_at_desc: Updated At
-  samples:
-    table_component:
-      action: Action
-      attachments_updated_at: Files Last Updated
-      counts:
-        samples: Samples
-        selected: Selected
-      created_at: Created
-      limit:
-        item: Samples
-      name: Sample Name
-      project: Project
-      puid: Sample ID
-      select_page: Select / Deselect visible samples
-      updated_at: Last Updated
   services:
     attachments:
       concatenation:
@@ -1692,39 +1675,36 @@ en:
           title: No Workflows
       samples:
         header:
-          created_at: Created
           attachments_updated_at: Files Last Updated
+          created_at: Created
+          name: Sample Name
           project: Project
           puid: Sample ID
-          name: Sample Name
           updated_at: Last Updated
         limit:
           item: Samples
         select_page: Select / Deselect visible samples
       workflow_executions:
-        counts:
-          selected: Selected
-          workflow_executions: Workflow Executions
+        canceled: Canceled
+        canceling: Canceling
+        completed: Completed
+        completing: Completing
+        error: Error
         header:
           created_at: Created
           id: ID
           name: Name
           run_id: Run ID
           state: State
+          updated_at: Last Updated
           workflow_name: Workflow Name
           workflow_version: Workflow Version
-          updated_at: Last Updated
+        initial: New
         limit:
           item: Workflow Executions
-        select_page: Select / Deselect visible workflow executions
-        canceled: Canceled
-        canceling: Canceling
-        completed: Completed
-        completing: Completing
-        error: Error
-        initial: New
         prepared: Prepared
         running: Running
+        select_page: Select / Deselect visible workflow executions
         submitted: Submitted
     pagy:
       limit_component:
@@ -1750,9 +1730,7 @@ en:
         type: Type
     index:
       actions:
-        cancel_button: Cancel
         cancel_confirm: Are you sure you want to cancel this workflow execution?
-        delete_button: Delete
         delete_confirm: Are you sure you want to delete this workflow execution?
       create_export_button: Create Export
       deselect_all_button: Deselect All
@@ -1802,17 +1780,3 @@ en:
       empty:
         description: There are no workflows associated with this submitter.
         title: No workflows.
-    table_component:
-      actions: Actions
-      counts:
-        selected: Selected
-        workflow_executions: Workflow Executions
-      created_at: Created
-      id: ID
-      name: Name
-      run_id: Run ID
-      select_page: Select / Deselect visible samples
-      state: State
-      updated_at: Last Updated
-      workflow_name: Workflow Name
-      workflow_version: Workflow Version
