@@ -2,7 +2,7 @@
 
 # Route helper that converts Route object into context_crumbs
 module PillColorHelper
-  TABLE_CONTENT_COLORS = {
+  COLORS_BY_CONTENT = {
     'workflow_executions' => {
       'initial' => :slate,
       'prepared' => :slate,
@@ -46,6 +46,6 @@ module PillColorHelper
   end
 
   def retrieve_pill_color(data_type, pill_content)
-    TABLE_CONTENT_COLORS[data_type][pill_content]
+    COLORS_BY_CONTENT[data_type][pill_content]
   end
 end

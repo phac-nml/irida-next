@@ -67,7 +67,7 @@ module Viral
       render(Viral::BaseComponent.new(**arguments), &)
     end
 
-    # specific to workflow executions as actions are dependent on current state
+    # specific to workflow executions as actions are dependent on current workflow_execution.state
     def verify_action_render(action, data)
       return data.cancellable? if action == :cancel
 
@@ -91,7 +91,7 @@ module Viral
       default_args.merge(additional_args)
     end
 
-    # cancel and destroy attributes for workflow executions
+    # workflow executions cancel and destroy action attributes
     def workflow_execution_actions(action, data) # rubocop:disable Metrics/AbcSize
       args = {}
       args[:data] ||= {}
@@ -109,7 +109,7 @@ module Viral
       args
     end
 
-    # edit and destroy attributes for samples
+    # samples edit and destroy action attributes
     def sample_actions(action, data)
       args = {}
       args[:data] ||= {}
@@ -130,7 +130,6 @@ module Viral
     # returns expected path to direct user to the respective show page
     def individual_path(data)
       if data.is_a?(WorkflowExecution)
-
         if @namespace
           namespace_project_workflow_execution_path(
             @namespace.parent,
