@@ -4,12 +4,12 @@ module Viral
   module DataTable
     # Component responsible for specific column attributes of DataTableComponent
     class ColumnComponent < Viral::Component
-      attr_reader :title, :show_link, :sticky, :sorted, :sort_url, :pill, :time_ago, :time, :metadata
+      attr_reader :title, :link, :sticky, :sorted, :sort_url, :pill, :time_ago, :time, :metadata
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(
         title: '',
-        show_link: false,
+        link: nil,
         sticky: false,
         pill: false,
         time_ago: false,
@@ -18,7 +18,7 @@ module Viral
         **system_arguments
       )
         @title = title
-        @show_link = show_link
+        @link = link
         @sticky = sticky
         @pill = pill
         @time_ago = time_ago

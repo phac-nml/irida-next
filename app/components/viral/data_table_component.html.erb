@@ -127,7 +127,7 @@
                       class:
                         "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
                     <% end %>
-                  <% if column.show_link %>
+                  <% if column.link && column.link == 'show' %>
                     <%= link_to(
                       individual_path(row),
                       data: {
@@ -135,14 +135,21 @@
                       },
                       class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline",
                     ) do %>
-                    <span class="font-semibold">
-                      <%= highlight(
-                        row[column.title],
-                        search_params_defined,
-                        highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
-                      ) %>
-                    </span>
-                  <% end %>
+                      <span class="font-semibold">
+                        <%= highlight(
+                          row[column.title],
+                          search_params_defined,
+                          highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+                        ) %>
+                      </span>
+                    <% end %>
+                  <% elsif column.link && column.link == 'project' %>
+                    <%= link_to row.project.puid,
+                      project_samples_path(row.project),
+                      data: {
+                        turbo: false,
+                      },
+                      class: "font-semibold hover:underline" %>
                   <% elsif column.pill %>
                     <%= helpers.viral_pill(text: t(".#{@type}.#{row[column.title]}"), color: helpers.retrieve_pill_color(@type, row[column.title]), border: true) %>
                   <% elsif column.time_ago %>

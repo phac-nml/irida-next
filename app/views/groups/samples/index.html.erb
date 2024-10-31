@@ -131,8 +131,9 @@
       search_params: @search_params,
       q: @q,
       metadata_fields: @fields) do |table| %>
-      <% table.with_column(title: 'puid', sticky: true, show_link: true) %>
-      <% table.with_column(title: 'name', sticky: true, show_link: true) %>
+      <% table.with_column(title: 'puid', sticky: true, link: 'show') %>
+      <% table.with_column(title: 'name', sticky: true, link: 'show') %>
+      <% table.with_column(title: 'project', link: 'project') %>
       <% table.with_column(title: 'created_at', time: true) %>
       <% table.with_column(title: 'updated_at', time_ago: true) %>
       <% table.with_column(title: 'attachments_updated_at', time_ago: true) %>

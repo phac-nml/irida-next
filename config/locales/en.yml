@@ -1691,6 +1691,7 @@ en:
         header:
           created_at: Created
           attachments_updated_at: Files Last Updated
+          project: Project
           puid: Sample ID
           name: Sample Name
           updated_at: Last Updated

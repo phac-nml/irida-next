@@ -77,7 +77,7 @@
   q: @q,
   namespace: @namespace,
   has_data: @workflow_executions.count.positive?) do |table| %>
-  <% table.with_column(title: 'id', sticky: true, show_link: true) %>
+  <% table.with_column(title: 'id', sticky: true, link: 'show') %>
   <% table.with_column(title: 'name') %>
   <% table.with_column(title: 'state', pill: true) %>
   <% table.with_column(title: 'run_id') %>
