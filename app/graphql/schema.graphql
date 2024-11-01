@@ -3010,6 +3010,7 @@ type WorkflowExecution implements Node {
   WorkflowExecution name
   """
   name: String
+  namespace: Namespace
 
   """
   WorkflowExecution run id
