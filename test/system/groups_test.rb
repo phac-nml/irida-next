@@ -10,6 +10,8 @@ class GroupsTest < ApplicationSystemTestCase
     @subgroup12a = groups(:subgroup_twelve_a)
     @subgroup12aa = groups(:subgroup_twelve_a_a)
     @subgroup12b = groups(:subgroup_twelve_b)
+    @group6 = groups(:group_six)
+    @subgroup2 = groups(:subgroup2)
     login_as @user
   end
 
@@ -412,7 +414,7 @@ class GroupsTest < ApplicationSystemTestCase
     @group = groups(:group_one)
     visit group_url(@group)
     assert_text I18n.t(:'components.pagination.next')
-    fill_in I18n.t('general.search.name_puid'), with: 'project 2'
+    fill_in I18n.t('groups.show.search.placeholder'), with: 'project 2'
     find('input.t-search-component').native.send_keys(:return)
 
     assert_selector 'li.namespace-entry', count: 5
@@ -441,7 +443,7 @@ class GroupsTest < ApplicationSystemTestCase
       assert_no_text subgroup12aa.name
     end
 
-    fill_in I18n.t(:'general.search.name_puid'), with: 'subgroup'
+    fill_in I18n.t('groups.show.search.placeholder'), with: 'subgroup'
     find('input.t-search-component').native.send_keys(:return)
 
     within('div.namespace-tree-container') do
@@ -866,5 +868,102 @@ class GroupsTest < ApplicationSystemTestCase
     within("#group_#{@subgroup12b.id}-samples-count") do
       assert_text @subgroup12b.samples_count
     end
+  end
+
+  test 'filter shared groups and projects by puid' do
+    subgroup3 = groups(:subgroup3)
+    visit group_url(@group6)
+
+    click_on I18n.t(:'groups.show.tabs.shared_namespaces')
+
+    within('div.namespace-tree-container') do
+      assert_selector 'li', count: 1
+      within("#group_#{@subgroup2.id}") do
+        assert_text @subgroup2.name
+        assert_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+      end
+      assert_no_text subgroup3.name
+      assert_no_selector "li#group_#{subgroup3.id}"
+    end
+
+    input_field = find('input.t-search-component')
+    input_field.fill_in with: subgroup3.puid
+    input_field.native.send_keys(:return)
+
+    within('div.namespace-tree-container') do
+      assert_selector 'li', count: 1
+      assert_text subgroup3.name
+      assert_no_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+    end
+  end
+
+  test 'filtering renders flat list for shared groups and projects' do
+    visit group_url(@group6)
+
+    click_on I18n.t(:'groups.show.tabs.shared_namespaces')
+
+    within('div.namespace-tree-container') do
+      assert_selector 'li', count: 1
+      within("#group_#{@subgroup2.id}") do
+        assert_text @subgroup2.name
+        assert_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+      end
+
+      subgroup_num = 3
+      8.times do
+        assert_no_text "Subgroup #{subgroup_num}"
+        subgroup_num += 1
+      end
+    end
+
+    input_field = find('input.t-search-component')
+    input_field.fill_in with: 'subgroup'
+    input_field.native.send_keys(:return)
+
+    within('div.namespace-tree-container') do
+      assert_selector 'li', count: 9
+      assert_text @subgroup2.name
+
+      subgroup_num = 3
+      8.times do
+        assert_text "Subgroup #{subgroup_num}"
+        subgroup_num += 1
+      end
+
+      assert_no_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+    end
+  end
+
+  test 'displays empty state result after filtering subgroups and projects' do
+    visit group_url(@group6)
+
+    assert_no_text I18n.t('groups.show.subgroups.no_subgroups.title')
+    assert_no_text I18n.t('groups.show.subgroups.no_subgroups.description')
+
+    input_field = find('input.t-search-component')
+    input_field.fill_in with: 'invalid filter'
+    input_field.native.send_keys(:return)
+
+    assert_selector 'div.namespace-entry-contents', count: 0
+
+    assert_text I18n.t('groups.show.subgroups.no_subgroups.title')
+    assert_text I18n.t('groups.show.subgroups.no_subgroups.description')
+  end
+
+  test 'displays empty state result after filtering shared namespaces' do
+    visit group_url(@group6)
+
+    click_on I18n.t(:'groups.show.tabs.shared_namespaces')
+
+    assert_no_text I18n.t('groups.show.shared_namespaces.no_shared.title')
+    assert_no_text I18n.t('groups.show.shared_namespaces.no_shared.description')
+
+    input_field = find('input.t-search-component')
+    input_field.fill_in with: 'invalid filter'
+    input_field.native.send_keys(:return)
+
+    assert_selector 'div.namespace-entry-contents', count: 0
+    assert_text I18n.t('groups.show.shared_namespaces.no_shared.title')
+    assert_text I18n.t('groups.show.shared_namespaces.no_shared.description')
   end
 end

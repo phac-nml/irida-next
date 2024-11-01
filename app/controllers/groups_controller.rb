@@ -16,11 +16,9 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   def show
     authorize! @group, to: :read?
 
-    @q = if @render_flat_list
-           namespace_descendants.ransack(params[:q])
-         else
-           namespace_children.ransack(params[:q])
-         end
+    @q = namespaces_query
+    @search_params = search_params
+
     set_default_sort
     @pagy, @namespaces = pagy(@q.result.include_route)
   end
@@ -138,6 +136,21 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
                                               type: :relation, as: :manageable).where.not(type: Namespaces::UserNamespace.sti_name) # rubocop:disable Layout/LineLength
   end
 
+  def namespaces_query
+    if @tab == 'shared_namespaces'
+      if @render_flat_list
+        shared_namespaces_descendants.ransack(params[:q])
+      else
+        @group.shared_namespaces.ransack(params[:q])
+      end
+
+    elsif @render_flat_list
+      namespace_descendants.ransack(params[:q])
+    else
+      namespace_children.ransack(params[:q])
+    end
+  end
+
   def namespace_children
     @group.children_of_type(
       [
@@ -149,6 +162,11 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   def namespace_descendants
     @group.self_and_descendants_of_type([Namespaces::ProjectNamespace.sti_name,
                                          Group.sti_name])
+  end
+
+  def shared_namespaces_descendants
+    @group.shared_namespaces.self_and_descendants.where(type: [Namespaces::ProjectNamespace.sti_name,
+                                                               Group.sti_name])
   end
 
   def resolve_layout
@@ -208,6 +226,12 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
                     else
                       t(:'groups.sidebar.general')
                     end
+  end
+
+  def search_params
+    search_params = {}
+    search_params[:name_or_puid_cont] = params.dig(:q, :name_or_puid_cont)
+    search_params
   end
 
   protected

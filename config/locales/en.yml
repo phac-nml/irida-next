@@ -427,7 +427,7 @@ en:
         no_groups_title: No groups found
         row_aria_label: See %{name} subgroups
         search:
-          placeholder: Filter by name or puid
+          placeholder: Filter by ID or name
         sorting:
           created_at_asc: Oldest created
           created_at_desc: Last created
@@ -444,7 +444,7 @@ en:
         row:
           samples: Samples
         search:
-          placeholder: Filter by name or puid
+          placeholder: Filter by ID or name
         sorting:
           created_at_asc: Oldest created
           created_at_desc: Last created
@@ -580,8 +580,6 @@ en:
         project: Create new project
     screen_reader:
       close: Close
-    search:
-      name_puid: Search by name or ID
   groups:
     activity:
       title: Group activity
@@ -789,9 +787,15 @@ en:
       table:
         no_associated_samples: There are no samples associated with this group.
         no_samples: No Samples
+    shared_namespaces:
+      index:
+        pagy:
+          item: Shared groups and projects
     show:
       create_project_button: New project
       create_subgroup_button: New subgroup
+      search:
+        placeholder: Filter by ID or name
       shared_namespaces:
         no_shared:
           description: Groups and projects can be shared with other groups through their members page.
@@ -814,6 +818,10 @@ en:
       members: Members
       samples: Samples
       settings: Settings
+    subgroups:
+      index:
+        pagy:
+          item: Subgroups and projects
     table_component:
       action: Action
       expires_at: Expiration

@@ -155,17 +155,20 @@ module Dashboard
 
     test 'can expand parent groups to see their children' do
       login_as users(:john_doe)
+      group1 = groups(:group_one)
+      subgroup1 = groups(:subgroup1)
       visit dashboard_groups_url
 
-      within :xpath, "//li[contains(@class, 'namespace-entry')][.//*/a[text()='#{groups(:group_one).name}']]" do
-        assert_text groups(:group_one).name
+      within("li#group_#{group1.id}") do
+        assert_text group1.name
         assert_no_selector 'ul.groups-list.namespace-list-tree'
+        assert_no_text subgroup1.name
         find('a.folder-toggle-wrap').click
       end
 
-      within(:xpath, "//li[contains(@class, 'namespace-entry')][.//*/a[text()='#{groups(:group_one).name}']]") do
-        assert_text groups(:group_one).name
-        assert_text groups(:subgroup1).name
+      within("li#group_#{group1.id}") do
+        assert_text group1.name
+        assert_text subgroup1.name
       end
     end
 

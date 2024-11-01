@@ -1,4 +1,5 @@
-<%= turbo_stream.update "group_show_tab_content" do %>
+<div class="space-y-2">
+
   <% if @namespaces.length > 0 %>
     <%= render NamespaceTreeContainerComponent.new(
       namespaces: @namespaces,
@@ -7,12 +8,15 @@
         group_id: @group.full_path,
       },
       type: [Group.sti_name, Namespaces::ProjectNamespace.sti_name],
+      render_flat_list: @render_flat_list,
+      search_params: @search_params
     ) %>
+    <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".pagy.item")) %>
   <% else %>
     <%= viral_empty(
-      title: t(:"groups.show.subgroups.no_subgroups.title"),
-      description: t(:"groups.show.subgroups.no_subgroups.description"),
+      title: t(:"groups.show.shared_namespaces.no_shared.title"),
+      description: t(:"groups.show.shared_namespaces.no_shared.description"),
       icon_name: :squares_2x2,
     ) %>
   <% end %>
-<% end %>
+</div>

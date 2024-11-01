@@ -28,35 +28,18 @@
 
   <%= tabs.with_tab_content do %>
     <div class="mt-2">
-      <% if @tab == "shared_namespaces" %>
-        <%= turbo_frame_tag "group_show_tab_content", "data-turbo-temporary": true, src: group_shared_namespaces_path(@group, format: :turbo_stream) do %>
-          <table class="min-w-full table-fixed dark:divide-slate-600">
-            <tbody
-              class="
-                bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
-              "
-            >
-              <% 10.times do %>
-                <tr>
+      <div class="flex flex-row-reverse mb-2">
+        <%= render SearchComponent.new(query: @q, url: group_path(@group), search_attribute: :name_or_puid_cont, placeholder: t(".search.placeholder")) do %>
 
-                  <td class="p-4 animate-pulse">
-                    <div class="flex-1 py-1 space-y-6">
-                      <div class="space-y-3">
-                        <div class="w-48 h-2 rounded bg-slate-200"></div>
-                        <div class="w-32 h-2 rounded bg-slate-200"></div>
-                      </div>
-                    </div>
-                  </td>
-
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
+          <% if @tab == "shared_namespaces" %>
+            <input type="hidden" name="tab" value="shared_namespaces">
+          <% end %>
         <% end %>
+      </div>
+
+      <% if @tab == "shared_namespaces" %>
+        <%= render "groups/shared_namespaces/index", locals: { namespaces: @namespaces } %>
       <% else %>
-        <div class="flex flex-row-reverse mb-2">
-            <%= render SearchComponent.new(query: @q, url: group_path(@group), search_attribute: :name_or_puid_cont, placeholder: t("general.search.name_puid")) %>
-        </div>
         <%= render "groups/subgroups/index", locals: { namespaces: @namespaces } %>
       <% end %>
     </div>
