@@ -14,6 +14,7 @@ module WorkflowExecutions
       q,
       namespace: nil,
       row_actions: false,
+      search_params: nil,
       abilities: {},
       empty: {},
       **system_arguments
@@ -23,6 +24,7 @@ module WorkflowExecutions
       @q = q
       @namespace = namespace
       @abilities = abilities
+      @search_params = search_params
       @row_actions = row_actions
       @empty = empty
       @renders_row_actions = @row_actions.select { |_key, value| value }.count.positive?

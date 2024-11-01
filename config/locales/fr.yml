@@ -1496,6 +1496,8 @@ fr:
       index:
         create_export_button: Create Export
         deselect_all_button: Deselect All
+        search:
+          placeholder: Filter by ID or name
         select_all_button: Select All
         subtitle: These are the workflow executions that have been automatically launched for this project
         title: Workflow Executions
@@ -1701,6 +1703,8 @@ fr:
         delete_confirm: Are you sure you want to delete this workflow execution?
       create_export_button: Create Export
       deselect_all_button: Deselect All
+      search:
+        placeholder: Filter by ID or name
       select_all_button: Select All
       title: Workflow Executions
     samples:

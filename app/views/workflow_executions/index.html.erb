@@ -22,33 +22,43 @@
   <% end %>
 <% end %>
 <div class="flow-root">
-  <div class="float-left inline-flex space-x-2 mb-4">
-    <%= search_form_for(
-              @q,
-              url: select_workflow_executions_url(**request.query_parameters),
-              html: { id: "select-all-form" },
-              class: "filters align-middle"
-            ) do |f| %>
-      <input type="hidden" name="format" value="turbo_stream"/>
-      <input type="hidden" name="select" value="on"/>
-      <%= f.submit t(".select_all_button"),
-                class: "button button--state-default button--size-default" %>
-    <% end %>
-    <%= search_form_for(
-              @q,
-              url: select_workflow_executions_url(**request.query_parameters),
-              html: { id: "deselect-all-form" },
-              class: "filters align-middle"
-            ) do |f| %>
-      <input type="hidden" name="format" value="turbo_stream"/>
-      <%= f.submit t(".deselect_all_button"),
-                class: "button button--state-default button--size-default" %>
-    <% end %>
+  <div class="flex mb-2">
+    <div class="inline-flex grow space-x-2">
+      <%= search_form_for(
+                @q,
+                url: select_workflow_executions_url(**request.query_parameters),
+                html: { id: "select-all-form" },
+                class: "filters align-middle"
+              ) do |f| %>
+        <input type="hidden" name="format" value="turbo_stream"/>
+        <input type="hidden" name="select" value="on"/>
+        <%= f.submit t(".select_all_button"),
+                  class: "button button--state-default button--size-default" %>
+      <% end %>
+      <%= search_form_for(
+                @q,
+                url: select_workflow_executions_url(**request.query_parameters),
+                html: { id: "deselect-all-form" },
+                class: "filters align-middle"
+              ) do |f| %>
+        <input type="hidden" name="format" value="turbo_stream"/>
+        <%= f.submit t(".deselect_all_button"),
+                  class: "button button--state-default button--size-default" %>
+      <% end %>
+    </div>
+    <div class="grow-0">
+        <%= render SearchComponent.new(
+          query: @q,
+          url: workflow_executions_path,
+          search_attribute: :name_or_id_cont,
+          placeholder: t('.search.placeholder')
+        ) %>
+    </div>
   </div>
 </div>
 <%= render partial: "table",
 locals: {
   workflow_executions: @workflow_executions,
   pagy: @pagy,
-  q: @q,
+  q: @q
 } %>

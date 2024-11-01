@@ -144,6 +144,7 @@ irida_next_example_completed_2_files:
   run_id: "my_run_id_6"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  name: 'irida_next_example_completed_2_files'
   state: "completed"
   blob_run_directory: "not a run dir"
   cleaned: true
@@ -479,6 +480,7 @@ irida_next_example_completed_with_output:
   run_id: "my_run_id_13"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
+  name: "irida_next_example_completed_with_output"
   state: "completed"
   blob_run_directory: "not a run dir"
   cleaned: false
@@ -602,6 +604,7 @@ automated_example_completed:
   run_id: "my_run_id_6"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  name: "automated_example_completed"
   state: "completed"
   blob_run_directory: "not a run dir"
   cleaned: true
@@ -663,6 +666,7 @@ automated_example_canceled:
   run_id: "my_run_id_9"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  name: "automated_example_canceled"
   state: "canceled"
   cleaned: true
 

@@ -4,6 +4,7 @@
   pagy,
   q,
   namespace: namespace,
+  search_params: @search_params,
   abilities: {
     select_workflow_executions: allowed_to?(:export_data?, namespace)
   },
