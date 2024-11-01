@@ -604,7 +604,7 @@ automated_example_completed:
   run_id: "my_run_id_6"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  name: "autmoated_example_completed"
+  name: "automated_example_completed"
   state: "completed"
   blob_run_directory: "not a run dir"
   cleaned: true
