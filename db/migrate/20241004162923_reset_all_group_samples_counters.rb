@@ -6,7 +6,7 @@ class ResetAllGroupSamplesCounters < ActiveRecord::Migration[7.2]
   def up
     Group.all.each do |group|
       group.samples_count = Project.joins(:namespace).where(namespace: { parent_id: group.self_and_descendants })
-                                   .select(:samples_count).pluck(:samples_count).sum
+                                   .select(:samples_count).pluck(:samples_count).sum(&:to_i)
       group.save!
     end
   end
