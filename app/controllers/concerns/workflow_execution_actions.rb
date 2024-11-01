@@ -14,8 +14,10 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
   def index
     authorize! @namespace, to: :view_workflow_executions? unless @namespace.nil?
+    all_workflows = load_workflows
+    @has_workflow_executions = all_workflows.count.positive?
 
-    @q = load_workflows.ransack(params[:q])
+    @q = all_workflows.ransack(params[:q])
     @search_params = search_params
 
     set_default_sort

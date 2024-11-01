@@ -1662,7 +1662,7 @@ en:
           description: There are no associated samples.
           title: No Samples
         workflow_executions:
-          description: There are no workflows associated with this submitter.
+          description: There are no associated workflows.
           title: No Workflows
       samples:
         header:

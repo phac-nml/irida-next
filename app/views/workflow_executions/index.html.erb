@@ -60,7 +60,7 @@
 <%= viral_data_table(
   type: "workflow_executions",
   data: @workflow_executions,
-  has_data: @workflow_executions.count.positive?,
+  has_data: @has_workflow_executions,
   pagy: @pagy,
   q: @q,
   abilities: {
