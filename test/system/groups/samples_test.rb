@@ -778,7 +778,7 @@ module Groups
         assert_text I18n.t('shared.samples.metadata.file_imports.errors.description')
         click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
       end
-      assert_selector '#samples_table table thead tr th', count: 10
+      assert_selector '#samples_table table thead tr th', count: 9
     end
 
     test 'should not import metadata with analysis values' do
