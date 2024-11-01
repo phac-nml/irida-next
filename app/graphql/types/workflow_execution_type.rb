@@ -8,6 +8,7 @@ module Types
 
     field :blob_run_directory, String, null: true, description: 'WorkflowExecution blob run directory'
     field :cleaned, Boolean, null: false, description: 'WorkflowExecution cleaned status'
+    field :group, GroupType, null: true, description: 'Group, if the workflow belongs to a group namespace'
     field :http_error_code, Integer, null: true, description: 'WorkflowExecution http error code'
     field :metadata,
           GraphQL::Types::JSON,
@@ -15,9 +16,7 @@ module Types
           description: 'Metadata for the sample',
           resolver: Resolvers::WorkflowExecutionMetadataResolver
     field :name, String, null: true, description: 'WorkflowExecution name'
-    field :namespace, # rubocop:disable GraphQL/FieldDescription
-          NamespaceType,
-          null: true
+    field :project, ProjectType, null: true, description: 'Project, if the workflow belongs to a project namespace'
     field :run_id, String, null: true, description: 'WorkflowExecution run id'
     field :samples,
           SampleType.connection_type,
@@ -38,6 +37,18 @@ module Types
     field :workflow_type, String, null: true, description: 'WorkflowExecution type'
     field :workflow_type_version, String, null: true, description: 'WorkflowExecution type version'
     field :workflow_url, String, null: true, description: 'WorkflowExecution url' # rubocop:disable GraphQL/ExtractType
+
+    def project
+      return object.namespace.project if object.namespace.is_a? Namespaces::ProjectNamespace
+
+      nil
+    end
+
+    def group
+      return object.namespace if object.namespace.is_a? Group
+
+      nil
+    end
 
     def self.authorized?(object, context)
       super &&
