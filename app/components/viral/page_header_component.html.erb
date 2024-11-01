@@ -12,7 +12,11 @@
               inline text-2xl font-medium leading-tight text-slate-900 dark:text-white
             "
           ><%= title %></h1>
-          <%= render PuidComponent.new(puid: id) %>
+          <% if @id_color %>
+            <%= viral_pill(text: id, color: @id_color, border: true) %>
+          <% else %>
+            <%= render PuidComponent.new(puid: id) %>
+          <% end %>
         </div>
       <% else %>
         <h1
