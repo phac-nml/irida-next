@@ -3045,6 +3045,7 @@ type WorkflowExecution implements Node {
   WorkflowExecution name
   """
   name: String
+  namespace: Namespace
 
   """
   Project, if the workflow belongs to a project namespace
