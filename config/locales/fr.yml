@@ -1593,6 +1593,7 @@ fr:
         empty_sample_ids: The sample ids are empty.
         same_project: The source and destination projects are the same. Please select a different destination project.
         sample_exists: 'Sample %{sample_puid}: Conflicts with sample named ''%{sample_name}'' in the target project'
+        samples_not_found: 'Samples with the following sample ids could not be copied as they were not found in the source project: %{sample_ids}'
       metadata:
         empty_metadata: No metadata was received to update sample '%{sample_name}'
         fields:

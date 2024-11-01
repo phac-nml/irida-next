@@ -31,15 +31,25 @@ module Samples
       raise CloneError, I18n.t('services.samples.clone.same_project')
     end
 
-    def clone_samples(sample_ids) # rubocop:disable Metrics/AbcSize
+    def clone_samples(sample_ids) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
       cloned_sample_ids = {}
       cloned_sample_puids = {}
+      not_found_sample_ids = []
 
       sample_ids.each do |sample_id|
         sample = Sample.find_by(id: sample_id, project_id: @project.id)
         cloned_sample = clone_sample(sample)
         cloned_sample_ids[sample_id] = cloned_sample.id unless cloned_sample.nil?
         cloned_sample_puids[sample.puid] = cloned_sample.puid unless cloned_sample.nil?
+      rescue StandardError
+        not_found_sample_ids << sample_id unless sample
+        next
+      end
+
+      unless not_found_sample_ids.empty?
+        @project.errors.add(:samples,
+                            I18n.t('services.samples.clone.samples_not_found',
+                                   sample_ids: not_found_sample_ids.join(', ')))
       end
 
       if cloned_sample_ids.count.positive?
