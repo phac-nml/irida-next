@@ -28,8 +28,16 @@ class WorkflowExecutionsQueryTest < ActiveSupport::TestCase
           id
           blobRunDirectory
           cleaned
+          group{
+            id
+            name
+          }
           httpErrorCode
           metadata
+          project{
+            id
+            name
+          }
           runId
           state
           submitter {
