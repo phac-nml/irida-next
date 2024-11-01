@@ -28,16 +28,25 @@ module Projects
                   end
     end
 
-    def edit
+    def edit # rubocop:disable Metrics/MethodLength
       authorize! @namespace, to: :update_automated_workflow_executions?
       @workflow = Irida::Pipelines.instance.find_pipeline_by(@automated_workflow_execution.metadata['workflow_name'],
                                                              @automated_workflow_execution.metadata['workflow_version'],
                                                              'available')
-      render turbo_stream: turbo_stream.update('automated_workflow_execution_modal',
-                                               partial: 'edit_dialog',
-                                               locals: {
-                                                 open: true
-                                               }), status: :ok
+
+      respond_to do |format|
+        format.turbo_stream do
+          if @automated_workflow_execution.disabled
+            render status: :unprocessable_entity,
+                   locals: {
+                     type: 'alert', message: t('.error',
+                                               workflow_name: @automated_workflow_execution.id)
+                   }
+          else
+            render status: :ok
+          end
+        end
+      end
     end
 
     def create # rubocop:disable Metrics/MethodLength

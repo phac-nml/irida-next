@@ -1,0 +1,13 @@
+<% if @automated_workflow_execution.disabled %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type:, data: message) %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.update(
+    "automated_workflow_execution_modal",
+    partial: "edit_dialog",
+    locals: {
+      open: true,
+    },
+  ) %>
+<% end %>

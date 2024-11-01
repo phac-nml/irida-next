@@ -19,7 +19,7 @@ module Projects
       assert_selector 'h1', text: I18n.t(:'projects.automated_workflow_executions.index.title')
       assert_selector 'p', text: I18n.t(:'projects.automated_workflow_executions.index.subtitle')
 
-      assert_selector 'tr', count: 2 + header_row_count
+      assert_selector 'tr', count: 3 + header_row_count
     end
 
     test 'can see an empty state for table listing of automated workflow executions for a project' do

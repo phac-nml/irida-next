@@ -28,6 +28,13 @@
   <td class="px-6 py-4 whitespace-nowrap">
     <%= local_time_ago(automated_workflow_execution["updated_at"]) %>
   </td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <% if automated_workflow_execution["disabled"] %>
+      <%= viral_pill(text: t(:".disabled"), color: "red") %>
+    <% else %>
+      <%= viral_pill(text: t(:".enabled"), color: "green") %>
+    <% end %>
+  </td>
   <td
     class="
       px-6 py-4 space-x-2 whitespace-nowrap sticky right-0 bg-white dark:bg-slate-800
@@ -48,17 +55,20 @@
       class:
         "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
     ) %>
-    <%= link_to t(:"projects.automated_workflow_executions.actions.edit_button"),
-    edit_namespace_project_automated_workflow_execution_path(
-      @project.parent,
-      @project,
-      automated_workflow_execution,
-    ),
-    data: {
-      turbo_stream: true,
-    },
-    class:
-      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer" %>
-
+    <% unless automated_workflow_execution.disabled %>
+      <%= link_to(
+        t(:"projects.automated_workflow_executions.actions.edit_button"),
+        edit_namespace_project_automated_workflow_execution_path(
+          @project.parent,
+          @project,
+          automated_workflow_execution,
+        ),
+        data: {
+          turbo_stream: true,
+        },
+        class:
+          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+      ) %>
+    <% end %>
   </td>
 </tr>
