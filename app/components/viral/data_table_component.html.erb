@@ -141,7 +141,7 @@
                   <% elsif column.metadata %>
                     <%= row.metadata[column.title] %>
                   <% elsif @search_params && @search_params.any? {|k, _v| k.to_s.include?(column.title)} %>
-                    <span>
+                    <span class="font-semibold">
                       <%= highlight(
                         row[column.title],
                         search_params_defined,
