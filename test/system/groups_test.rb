@@ -12,6 +12,9 @@ class GroupsTest < ApplicationSystemTestCase
     @subgroup12b = groups(:subgroup_twelve_b)
     @group6 = groups(:group_six)
     @subgroup2 = groups(:subgroup2)
+    @project31 = projects(:project31)
+    @project30 = projects(:project30)
+    @sample34 = samples(:sample34)
     login_as @user
   end
 
@@ -665,12 +668,20 @@ class GroupsTest < ApplicationSystemTestCase
   end
 
   test 'should update samples count after a sample deletion' do
+    project29 = projects(:project29)
+    sample32 = samples(:sample32)
+
     visit group_url(@group12)
 
     assert_selector 'h1', text: @group12.name
 
+    within("li#group_#{@subgroup12a.id}") do
+      find('a.folder-toggle-wrap').click
+    end
+
     assert_equal 3, @subgroup12a.samples_count
     assert_equal 1, @subgroup12b.samples_count
+    assert_equal 1, project29.samples.size
 
     within("#group_#{@subgroup12a.id}-samples-count") do
       assert_text @subgroup12a.samples_count
@@ -680,8 +691,10 @@ class GroupsTest < ApplicationSystemTestCase
       assert_text @subgroup12b.samples_count
     end
 
-    project29 = projects(:project29)
-    sample32 = samples(:sample32)
+    within("#project_#{project29.id}-samples-count") do
+      assert_text project29.samples.size
+    end
+
     visit namespace_project_sample_url(@subgroup12a, project29, sample32)
     click_link I18n.t('projects.samples.show.remove_button')
 
@@ -697,6 +710,7 @@ class GroupsTest < ApplicationSystemTestCase
     assert_equal 2, @subgroup12a.reload.samples_count
     assert_equal 2, @subgroup12aa.reload.samples_count
     assert_equal 1, @subgroup12b.reload.samples_count
+    assert_equal 0, project29.reload.samples.size
 
     within("#group_#{@subgroup12a.id}-samples-count") do
       assert_text @subgroup12a.samples_count
@@ -708,6 +722,10 @@ class GroupsTest < ApplicationSystemTestCase
 
     within("#group_#{@subgroup12b.id}-samples-count") do
       assert_text @subgroup12b.samples_count
+    end
+
+    within("#project_#{project29.id}-samples-count") do
+      assert_text project29.samples.size
     end
   end
 
@@ -716,8 +734,17 @@ class GroupsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: @group12.name
 
+    within("li#group_#{@subgroup12a.id}") do
+      find('a.folder-toggle-wrap').click
+    end
+
+    within("li#group_#{@subgroup12aa.id}") do
+      find('a.folder-toggle-wrap').click
+    end
+
     assert_equal 3, @subgroup12a.samples_count
     assert_equal 1, @subgroup12b.samples_count
+    assert_equal 2, @project31.samples.size
 
     within("#group_#{@subgroup12a.id}-samples-count") do
       assert_text @subgroup12a.samples_count
@@ -727,8 +754,11 @@ class GroupsTest < ApplicationSystemTestCase
       assert_text @subgroup12b.samples_count
     end
 
-    project31 = projects(:project31)
-    visit namespace_project_samples_url(@subgroup12aa, project31)
+    within("#project_#{@project31.id}-samples-count") do
+      assert_text @project31.samples.size
+    end
+
+    visit namespace_project_samples_url(@subgroup12aa, @project31)
 
     click_link I18n.t('projects.samples.index.new_button')
 
@@ -736,13 +766,19 @@ class GroupsTest < ApplicationSystemTestCase
     click_button I18n.t('projects.samples.new.submit_button')
 
     visit group_url(@group12)
+
     within("li#group_#{@subgroup12a.id}") do
+      find('a.folder-toggle-wrap').click
+    end
+
+    within("li#group_#{@subgroup12aa.id}") do
       find('a.folder-toggle-wrap').click
     end
 
     assert_equal 4, @subgroup12a.reload.samples_count
     assert_equal 3, @subgroup12aa.reload.samples_count
     assert_equal 1, @subgroup12b.reload.samples_count
+    assert_equal 3, @project31.reload.samples.size
 
     within("#group_#{@subgroup12a.id}-samples-count") do
       assert_text @subgroup12a.samples_count
@@ -754,6 +790,10 @@ class GroupsTest < ApplicationSystemTestCase
 
     within("#group_#{@subgroup12b.id}-samples-count") do
       assert_text @subgroup12b.samples_count
+    end
+
+    within("#project_#{@project31.id}-samples-count") do
+      assert_text @project31.samples.size
     end
   end
 
@@ -762,8 +802,24 @@ class GroupsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: @group12.name
 
+    within("li#group_#{@subgroup12a.id}") do
+      find('a.folder-toggle-wrap').click
+    end
+
+    within("li#group_#{@subgroup12aa.id}") do
+      find('a.folder-toggle-wrap').click
+    end
+
+    assert_no_selector "#project_#{@project30.id}-samples-count"
+
+    within("li#group_#{@subgroup12b.id}") do
+      find('a.folder-toggle-wrap').click
+    end
+
     assert_equal 3, @subgroup12a.samples_count
     assert_equal 1, @subgroup12b.samples_count
+    assert_equal 2, @project31.samples.size
+    assert_equal 1, @project30.samples.size
 
     within("#group_#{@subgroup12a.id}-samples-count") do
       assert_text @subgroup12a.samples_count
@@ -773,21 +829,26 @@ class GroupsTest < ApplicationSystemTestCase
       assert_text @subgroup12b.samples_count
     end
 
-    project31 = projects(:project31)
-    project30 = projects(:project30)
-    sample34 = samples(:sample34)
-    visit namespace_project_samples_url(@subgroup12aa, project31)
+    within("#project_#{@project31.id}-samples-count") do
+      assert_text @project31.samples.size
+    end
 
-    find("input[type='checkbox'][id='sample_#{sample34.id}']").click
+    within("#project_#{@project30.id}-samples-count") do
+      assert_text @project30.samples.size
+    end
+
+    visit namespace_project_samples_url(@subgroup12aa, @project31)
+
+    find("input[type='checkbox'][id='sample_#{@sample34.id}']").click
     click_link I18n.t('projects.samples.index.transfer_button')
 
     within('span[data-controller-connected="true"] dialog') do
       assert_text I18n.t('projects.samples.transfers.dialog.description.singular')
       within %(turbo-frame[id="list_selections"]) do
-        assert_text sample34.name
+        assert_text @sample34.name
       end
       find('input#select2-input').click
-      find("button[data-viral--select2-primary-param='#{project30.full_path}']").click
+      find("button[data-viral--select2-primary-param='#{@project30.full_path}']").click
       click_on I18n.t('projects.samples.transfers.dialog.submit_button')
     end
 
@@ -796,9 +857,21 @@ class GroupsTest < ApplicationSystemTestCase
       find('a.folder-toggle-wrap').click
     end
 
+    within("li#group_#{@subgroup12aa.id}") do
+      find('a.folder-toggle-wrap').click
+    end
+
+    assert_no_selector "#project_#{@project30.id}-samples-count"
+
+    within("li#group_#{@subgroup12b.id}") do
+      find('a.folder-toggle-wrap').click
+    end
+
     assert_equal 2, @subgroup12a.reload.samples_count
     assert_equal 1, @subgroup12aa.reload.samples_count
     assert_equal 2, @subgroup12b.reload.samples_count
+    assert_equal 1, @project31.reload.samples.size
+    assert_equal 2, @project30.reload.samples.size
 
     within("#group_#{@subgroup12a.id}-samples-count") do
       assert_text @subgroup12a.samples_count
@@ -810,6 +883,14 @@ class GroupsTest < ApplicationSystemTestCase
 
     within("#group_#{@subgroup12b.id}-samples-count") do
       assert_text @subgroup12b.samples_count
+    end
+
+    within("#project_#{@project31.id}-samples-count") do
+      assert_text @project31.samples.size
+    end
+
+    within("#project_#{@project30.id}-samples-count") do
+      assert_text @project30.samples.size
     end
   end
 
@@ -818,8 +899,24 @@ class GroupsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: @group12.name
 
+    within("li#group_#{@subgroup12a.id}") do
+      find('a.folder-toggle-wrap').click
+    end
+
+    within("li#group_#{@subgroup12aa.id}") do
+      find('a.folder-toggle-wrap').click
+    end
+
+    assert_no_selector "#project_#{@project30.id}-samples-count"
+
+    within("li#group_#{@subgroup12b.id}") do
+      find('a.folder-toggle-wrap').click
+    end
+
     assert_equal 3, @subgroup12a.samples_count
     assert_equal 1, @subgroup12b.samples_count
+    assert_equal 2, @project31.samples.size
+    assert_equal 1, @project30.samples.size
 
     within("#group_#{@subgroup12a.id}-samples-count") do
       assert_text @subgroup12a.samples_count
@@ -829,33 +926,51 @@ class GroupsTest < ApplicationSystemTestCase
       assert_text @subgroup12b.samples_count
     end
 
-    project31 = projects(:project31)
-    project30 = projects(:project30)
-    sample34 = samples(:sample34)
-    visit namespace_project_samples_url(@subgroup12aa, project31)
+    within("#project_#{@project31.id}-samples-count") do
+      assert_text @project31.samples.size
+    end
 
-    find("input[type='checkbox'][id='sample_#{sample34.id}']").click
+    within("#project_#{@project30.id}-samples-count") do
+      assert_text @project30.samples.size
+    end
+
+    visit namespace_project_samples_url(@subgroup12aa, @project31)
+
+    find("input[type='checkbox'][id='sample_#{@sample34.id}']").click
     click_link I18n.t('projects.samples.index.clone_button')
 
     within('span[data-controller-connected="true"] dialog') do
       assert_text I18n.t('projects.samples.clones.dialog.description.singular')
       within %(turbo-frame[id="list_selections"]) do
-        assert_text sample34.name
+        assert_text @sample34.name
       end
       find('input#select2-input').click
-      find("button[data-viral--select2-primary-param='#{project30.full_path}']").click
+      find("button[data-viral--select2-primary-param='#{@project30.full_path}']").click
       click_on I18n.t('projects.samples.clones.dialog.submit_button')
     end
     assert_text I18n.t('projects.samples.clones.create.success')
 
     visit group_url(@group12)
+
     within("li#group_#{@subgroup12a.id}") do
+      find('a.folder-toggle-wrap').click
+    end
+
+    within("li#group_#{@subgroup12aa.id}") do
+      find('a.folder-toggle-wrap').click
+    end
+
+    assert_no_selector "#project_#{@project30.id}-samples-count"
+
+    within("li#group_#{@subgroup12b.id}") do
       find('a.folder-toggle-wrap').click
     end
 
     assert_equal 3, @subgroup12a.reload.samples_count
     assert_equal 2, @subgroup12aa.reload.samples_count
     assert_equal 2, @subgroup12b.reload.samples_count
+    assert_equal 2, @project31.reload.samples.size
+    assert_equal 2, @project30.reload.samples.size
 
     within("#group_#{@subgroup12a.id}-samples-count") do
       assert_text @subgroup12a.samples_count
@@ -867,6 +982,14 @@ class GroupsTest < ApplicationSystemTestCase
 
     within("#group_#{@subgroup12b.id}-samples-count") do
       assert_text @subgroup12b.samples_count
+    end
+
+    within("#project_#{@project31.id}-samples-count") do
+      assert_text @project31.samples.size
+    end
+
+    within("#project_#{@project30.id}-samples-count") do
+      assert_text @project30.samples.size
     end
   end
 
