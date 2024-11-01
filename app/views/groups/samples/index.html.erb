@@ -129,14 +129,18 @@
         allowed_to?(:export_data?, @group),
     },
     search_params: @search_params,
-    q: @q,
-    metadata_fields: @fields) do |table| %>
+    q: @q) do |table| %>
     <% table.with_column(title: 'puid', sticky: true, link: 'show') %>
     <% table.with_column(title: 'name', sticky: true, link: 'show') %>
     <% table.with_column(title: 'project', link: 'project') %>
     <% table.with_column(title: 'created_at', time: true) %>
     <% table.with_column(title: 'updated_at', time_ago: true) %>
     <% table.with_column(title: 'attachments_updated_at', time_ago: true) %>
+    <% if @fields %>
+      <% @fields.each do |field| %>
+        <% table.with_column(title: field, metadata: true) %>
+      <% end %>
+    <% end %>
   <% end %>
 
 </div>

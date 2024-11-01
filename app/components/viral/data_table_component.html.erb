@@ -35,7 +35,7 @@
                 <% if column.metadata %>
                   <%= render Ransack::SortComponent.new(
                     ransack_obj: @q,
-                    label: t(".#{@type}.header.#{column.title}"),
+                    label: t(".#{@type}.header.#{column.title}", default: column.title),
                     url:
                       helpers.sorting_url(
                         @q,
@@ -62,26 +62,6 @@
                     label: t(".#{@type}.header.#{column.title}"),
                     url: helpers.sorting_url(@q, column.title),
                     field: column.title,
-                    data: {
-                      turbo_action: "replace",
-                    },
-                  ) %>
-                <% end %>
-              <% end %>
-            <% end %>
-            <% if @metadata_fields %>
-              <% @metadata_fields.each do |field| %>
-                <%= render_cell(
-                tag: 'th',
-                scope: 'col',
-                classes: class_names('px-3 py-3')
-              ) do %>
-                  <%= render Ransack::SortComponent.new(
-                    ransack_obj: @q,
-                    label: field,
-                    url:
-                      helpers.sorting_url(@q, URI.encode_www_form_component("metadata_#{field}")),
-                    field: "metadata_#{field}",
                     data: {
                       turbo_action: "replace",
                     },
@@ -162,16 +142,6 @@
                     <%= row.metadata[column.title] %>
                   <% else %>
                     <%= row[column.title] %>
-                  <% end %>
-                <% end %>
-              <% end %>
-              <% if @metadata_fields %>
-                <% @metadata_fields.each do |field| %>
-                  <%= render_cell(
-                  tag: 'td',
-                  classes: class_names('px-3 py-3')
-                ) do %>
-                    <%= row.metadata[field] %>
                   <% end %>
                 <% end %>
               <% end %>

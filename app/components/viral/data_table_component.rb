@@ -16,7 +16,6 @@ module Viral
       row_actions: {},
       search_params: nil,
       namespace: nil,
-      metadata_fields: nil,
       **system_arguments
     )
       @type = type
@@ -28,7 +27,6 @@ module Viral
       @row_actions = row_actions
       @search_params = search_params
       @namespace = namespace
-      @metadata_fields = metadata_fields
       @renders_row_actions = @row_actions.select { |_key, value| value }.count.positive?
       @system_arguments = system_arguments
     end
