@@ -323,7 +323,7 @@ module Projects
     test 'can filter by ID and name on projects workflow execution index page' do
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_text 'Displaying 10 items'
+      assert_text 'Displaying 1-10 of 10 items'
       assert_selector 'table tbody tr', count: 10
 
       within('table tbody') do
@@ -351,7 +351,7 @@ module Projects
               with: ''
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_text 'Displaying 10 items'
+      assert_text 'Displaying 1-10 of 10 items'
       assert_selector 'table tbody tr', count: 10
 
       fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
@@ -367,6 +367,34 @@ module Projects
         assert_text @workflow_execution2.id
         assert_text @workflow_execution2.name
       end
+    end
+
+    test 'empty state' do
+      project = projects(:project2)
+      visit namespace_project_workflow_executions_path(@namespace, project)
+
+      assert_no_selector 'div#workflow_executions_table'
+      assert_no_selector 'table'
+
+      assert_text I18n.t('viral.data_table_component.empty.workflow_executions.title')
+      assert_text I18n.t('viral.data_table_component.empty.workflow_executions.description')
+    end
+
+    test 'empty filter state' do
+      visit namespace_project_workflow_executions_path(@namespace, @project)
+
+      assert_text 'Displaying 1-10 of 10 items'
+      assert_selector 'table tbody tr', count: 10
+
+      assert_selector 'div#workflow_executions_table'
+      assert_selector 'table'
+
+      fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
+              with: 'search that results in no entries'
+      find('input.t-search-component').native.send_keys(:return)
+
+      assert_text I18n.t('components.viral.pagy.empty_state.title')
+      assert_text I18n.t('components.viral.pagy.empty_state.description')
     end
   end
 end

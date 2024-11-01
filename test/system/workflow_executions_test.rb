@@ -374,7 +374,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   test 'can filter by ID and name on workflow execution index page' do
     visit workflow_executions_path
 
-    assert_text 'Displaying 19 items'
+    assert_text 'Displaying 1-19 of 19 items'
     assert_selector 'table tbody tr', count: 19
 
     within('table tbody') do
@@ -402,7 +402,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
             with: ''
     find('input.t-search-component').native.send_keys(:return)
 
-    assert_text 'Displaying 19 items'
+    assert_text 'Displaying 1-19 of 19 items'
     assert_selector 'table tbody tr', count: 19
 
     fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
@@ -418,5 +418,33 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       assert_text @workflow_execution3.id
       assert_text @workflow_execution3.name
     end
+  end
+
+  test 'empty state' do
+    login_as users(:empty_doe)
+    visit workflow_executions_path
+
+    assert_no_selector 'div#workflow_executions_table'
+    assert_no_selector 'table'
+
+    assert_text I18n.t('viral.data_table_component.empty.workflow_executions.title')
+    assert_text I18n.t('viral.data_table_component.empty.workflow_executions.description')
+  end
+
+  test 'empty filter state' do
+    visit workflow_executions_path
+
+    assert_text 'Displaying 1-19 of 19 items'
+    assert_selector 'table tbody tr', count: 19
+
+    assert_selector 'div#workflow_executions_table'
+    assert_selector 'table'
+
+    fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
+            with: 'search that results in no entries'
+    find('input.t-search-component').native.send_keys(:return)
+
+    assert_text I18n.t('components.viral.pagy.empty_state.title')
+    assert_text I18n.t('components.viral.pagy.empty_state.description')
   end
 end

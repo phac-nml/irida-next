@@ -514,7 +514,8 @@ module Projects
       end
 
       # Check samples selected are [] and has the proper number of samples
-      assert_text I18n.t(:'projects.samples.index.no_samples')
+      assert_text I18n.t('viral.data_table_component.empty.samples.title')
+      assert_text I18n.t('viral.data_table_component.empty.samples.description')
 
       Project.reset_counters(project2.id, :samples_count)
       visit namespace_project_samples_url(namespace1, project2)
