@@ -55,18 +55,20 @@
       class:
         "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
     ) %>
-    <%= link_to_if !automated_workflow_execution.disabled,
-    t(:"projects.automated_workflow_executions.actions.edit_button"),
-    edit_namespace_project_automated_workflow_execution_path(
-      @project.parent,
-      @project,
-      automated_workflow_execution,
-    ),
-    data: {
-      turbo_stream: true,
-    },
-    class:
-      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer" %>
-
+    <% unless automated_workflow_execution.disabled %>
+      <%= link_to(
+        t(:"projects.automated_workflow_executions.actions.edit_button"),
+        edit_namespace_project_automated_workflow_execution_path(
+          @project.parent,
+          @project,
+          automated_workflow_execution,
+        ),
+        data: {
+          turbo_stream: true,
+        },
+        class:
+          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+      ) %>
+    <% end %>
   </td>
 </tr>
