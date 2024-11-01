@@ -1504,6 +1504,7 @@ en:
         created_at: Created
         name: Name
         run_id: Run ID
+        state: State
         updated_at: Last Updated
         workflow_name: Workflow Name
         workflow_version: Workflow Version
@@ -1764,6 +1765,7 @@ en:
       created_at: Created
       name: Name
       run_id: Run ID
+      state: State
       updated_at: Last Updated
       workflow_name: Workflow Name
       workflow_version: Workflow Version

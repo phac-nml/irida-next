@@ -20,6 +20,10 @@
       </div>
     <% end %>
     <div class="flex flex-col py-3">
+      <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".state") %></dt>
+      <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= viral_pill(text: t("workflow_executions.state.#{@workflow_execution.state}"), color: retrieve_pill_color('workflow_executions', @workflow_execution.state), border: true) %></dd>
+    </div>
+    <div class="flex flex-col py-3">
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".workflow_name") %></dt>
       <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @workflow_execution.metadata["workflow_name"] %></dd>
     </div>
