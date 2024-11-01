@@ -15,12 +15,9 @@ module Types
           description: 'Metadata for the sample',
           resolver: Resolvers::WorkflowExecutionMetadataResolver
     field :name, String, null: true, description: 'WorkflowExecution name'
-    field :namespace,
+    field :namespace, # rubocop:disable GraphQL/FieldDescription
           NamespaceType,
-          null: true,
-          description: 'Namespace ID of the workflow execution',
-          resolver: Resolvers::WorkflowExecutionNamespaceResolver
-    # field :namespace_id, String
+          null: true
     field :run_id, String, null: true, description: 'WorkflowExecution run id'
     field :samples,
           SampleType.connection_type,
@@ -47,7 +44,7 @@ module Types
         allowed_to?(
           :read?,
           object,
-          context: { user: context[:current_user] }
+          context: { user: context[:current_user], token: context[:token] }
         )
     end
   end
