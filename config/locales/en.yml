@@ -784,9 +784,6 @@ en:
         title: Samples
         workflows:
           button_sr: Launch workflow
-      table:
-        no_associated_samples: There are no samples associated with this group.
-        no_samples: No Samples
     shared_namespaces:
       index:
         pagy:
@@ -1346,8 +1343,6 @@ en:
         deselect_all_button: Deselect All
         import_metadata_button: Import metadata
         new_button: New sample
-        no_associated_samples: There are no samples associated with this project.
-        no_samples: No Samples
         search:
           placeholder: Filter by ID or name
         select_all_button: Select All
@@ -1512,10 +1507,6 @@ en:
         updated_at: Last Updated
         workflow_name: Workflow Name
         workflow_version: Workflow Version
-      table:
-        empty:
-          description: There are no automated pipelines associated with this project.
-          title: No automated pipelines.
   ransack:
     sort_dropdown_component:
       sorting:
@@ -1776,7 +1767,3 @@ en:
       updated_at: Last Updated
       workflow_name: Workflow Name
       workflow_version: Workflow Version
-    table:
-      empty:
-        description: There are no workflows associated with this submitter.
-        title: No workflows.
