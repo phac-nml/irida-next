@@ -81,7 +81,7 @@ class WorkflowExecutionsQueryTest < ActiveSupport::TestCase
     assert_not_empty data['nodes']
   end
 
-  test 'workflow executions nodes query should work' do
+  test 'workflow executions nodes query should work with projects' do
     prelim_query = IridaSchema.execute(
       WORKFLOW_EXECUTIONS_QUERY,
       context: { current_user: @user },
@@ -99,6 +99,9 @@ class WorkflowExecutionsQueryTest < ActiveSupport::TestCase
     data = result['data']['node']
     assert_not_empty data, 'workflow execution type should work'
     assert_equal workflow_execution_run_id, data['runId'], 'workflow execution run id should match'
+    project_id = projects(:project1).to_global_id.to_s
+    assert_equal project_id, data['project']['id'], 'project id should match'
+    assert_nil data['group']
   end
 
   test 'workflow executions nodes query for samples should work' do
@@ -154,5 +157,27 @@ class WorkflowExecutionsQueryTest < ActiveSupport::TestCase
 
     # We should have a string translated from the enum, not an integer
     assert_equal 'initial', data['state']
+  end
+
+  test 'workflow executions nodes query should on groups' do
+    user = users(:james_doe)
+    prelim_query = IridaSchema.execute(
+      WORKFLOW_EXECUTIONS_QUERY,
+      context: { current_user: user },
+      variables: { first: 1 }
+    )['data']
+
+    workflow_execution_id = prelim_query['workflowExecutions']['nodes'][0]['id']
+
+    result = IridaSchema.execute(WORKFLOW_EXECUTIONS_NODE_QUERY, context: { current_user: user },
+                                                                 variables: { workflow_execution_id: })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['node']
+    assert_not_empty data, 'workflow execution type should work'
+    group_id = groups(:group_one).to_global_id.to_s
+    assert_equal group_id, data['group']['id'], 'group id should match'
+    assert_nil data['project']
   end
 end
