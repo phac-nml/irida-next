@@ -8,7 +8,10 @@ gem 'rails', '>= 7', '< 8'
 
 # development dependencies
 group :development do
+  gem 'actioncable'
   gem 'annotate'
+  gem 'listen'
+  gem 'lookbook', '>= 2.3.4'
   gem 'rubocop'
   gem 'rubocop-performance'
   gem 'rubocop-rails'
