@@ -69,7 +69,8 @@
   row_actions: {
     cancel: true,
     destroy: true
-  }) do |table| %>
+  },
+  search_params: @search_params) do |table| %>
   <% table.with_column(title: 'id', sticky: true, link: 'show') %>
   <% table.with_column(title: 'name') %>
   <% table.with_column(title: 'state', pill: true) %>

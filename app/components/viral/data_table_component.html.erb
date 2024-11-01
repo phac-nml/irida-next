@@ -140,7 +140,15 @@
                     <%= helpers.local_time(row[column.title], :full_date) %>
                   <% elsif column.metadata %>
                     <%= row.metadata[column.title] %>
-                  <% else %>
+                  <% elsif @search_params && @search_params.any? {|k, _v| k.to_s.include?(column.title)} %>
+                    <span>
+                      <%= highlight(
+                        row[column.title],
+                        search_params_defined,
+                        highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+                      ) %>
+                    </span>
+                  <% else%>
                     <%= row[column.title] %>
                   <% end %>
                 <% end %>

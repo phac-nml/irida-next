@@ -158,9 +158,12 @@ module Viral
     # specifies which key the search params is under dependent on table type
     def search_params_defined
       return unless @search_params
-      return unless @type == 'samples'
 
-      @search_params[:name_or_puid_cont]
+      if @type == 'samples'
+        @search_params[:name_or_puid_cont]
+      elsif @type == 'workflow_executions'
+        @search_params[:name_or_id_cont]
+      end
     end
 
     # specifies checkbox label dependent on table type

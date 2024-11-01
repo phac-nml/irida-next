@@ -76,6 +76,7 @@
     cancel: allowed_to?(:update?, @namespace),
     destroy: allowed_to?(:update?, @namespace),
   },
+  search_params: @search_params,
   namespace: @namespace) do |table| %>
   <% table.with_column(title: 'id', sticky: true, link: 'show') %>
   <% table.with_column(title: 'name') %>
