@@ -66,17 +66,17 @@
 <%= viral_data_table(
   type: "workflow_executions",
   data: @workflow_executions,
+  has_data: @workflow_executions.count.positive?,
   pagy: @pagy,
+  q: @q,
   abilities: {
       select: allowed_to?(:export_data?, @namespace)
     },
   row_actions: {
-    cancel: true,
-    destroy: true
+    cancel: allowed_to?(:update?, @namespace),
+    destroy: allowed_to?(:update?, @namespace),
   },
-  q: @q,
-  namespace: @namespace,
-  has_data: @workflow_executions.count.positive?) do |table| %>
+  namespace: @namespace) do |table| %>
   <% table.with_column(title: 'id', sticky: true, link: 'show') %>
   <% table.with_column(title: 'name') %>
   <% table.with_column(title: 'state', pill: true) %>

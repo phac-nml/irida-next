@@ -70,13 +70,13 @@
               <% end %>
             <% end %>
             <% if @renders_row_actions %>
-            <%= render_cell(
-              tag: 'th',
-              scope: 'col',
-              classes: class_names('px-3 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
-            ) do %>
-              <%= t(".action_header") %>
-            <% end %>
+              <%= render_cell(
+                tag: 'th',
+                scope: 'col',
+                classes: class_names('px-3 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
+              ) do %>
+                <%= t(".action_header") %>
+              <% end %>
           <% end %>
           </tr>
         </thead>
@@ -146,20 +146,19 @@
                 <% end %>
               <% end %>
               <% if @renders_row_actions %>
-              <%= render_cell(
-                tag: 'td',
-                classes: class_names('px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 z-5 space-x-2')
-              ) do %>
-                <% @row_actions.each do |action, _value| %>
-                  <% next if @type == 'workflow_executions' && !verify_action_render(action, row)%>
-                  <%= render Viral::BaseComponent.new(**action_arguments(action, row)) do %>
-                    <%= t(".actions.#{action}") %>
+                <%= render_cell(
+                  tag: 'td',
+                  classes: class_names('px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 z-5 space-x-2')
+                ) do %>
+                  <% @row_actions.each do |action, _value| %>
+                    <% next if @type == 'workflow_executions' && !verify_action_render(action, row)%>
+                    <%= render Viral::BaseComponent.new(**action_arguments(action, row)) do %>
+                      <%= t(".actions.#{action}") %>
+                    <% end %>
                   <% end %>
                 <% end %>
               <% end %>
             <% end %>
-          <% end %>
-
           <% end %>
         </tbody>
         <% if @has_data && @abilities[:select] %>

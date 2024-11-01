@@ -124,12 +124,12 @@
     data: @samples,
     has_data: @has_samples,
     pagy: @pagy,
+    q: @q,
     abilities: {
       select: allowed_to?(:submit_workflow?, @group) ||
         allowed_to?(:export_data?, @group),
     },
-    search_params: @search_params,
-    q: @q) do |table| %>
+    search_params: @search_params) do |table| %>
     <% table.with_column(title: 'puid', sticky: true, link: 'show') %>
     <% table.with_column(title: 'name', sticky: true, link: 'show') %>
     <% table.with_column(title: 'project', link: 'project') %>

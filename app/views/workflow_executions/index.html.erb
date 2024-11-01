@@ -60,17 +60,16 @@
 <%= viral_data_table(
   type: "workflow_executions",
   data: @workflow_executions,
-  selection: true,
+  has_data: @workflow_executions.count.positive?,
   pagy: @pagy,
+  q: @q,
   abilities: {
     select: true
   },
   row_actions: {
     cancel: true,
     destroy: true
-  },
-  q: @q,
-  has_data: @workflow_executions.count.positive?) do |table| %>
+  }) do |table| %>
   <% table.with_column(title: 'id', sticky: true, link: 'show') %>
   <% table.with_column(title: 'name') %>
   <% table.with_column(title: 'state', pill: true) %>
