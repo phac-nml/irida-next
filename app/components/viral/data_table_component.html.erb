@@ -1,0 +1,49 @@
+  <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
+    <%= render Viral::BaseComponent.new(**system_arguments) do %>
+      <table
+        class="
+          w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+          whitespace-nowrap
+        "
+      >
+        <thead
+          class="
+            sticky top-0 z-10 text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
+            dark:text-slate-300
+          "
+        >
+          <tr>
+            <% columns.each_with_index do |column, index| %>
+              <%= render_cell(
+                tag: 'th',
+                scope: 'col',
+                 **column.system_arguments
+              ) do %>
+                <%= column.title %>
+              <% end %>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody
+          class="
+            overflow-y-auto bg-white divide-y divide-slate-200 dark:bg-slate-800
+            dark:divide-slate-700
+          "
+        >
+          <% @data.each do |row| %>
+            <%= render Viral::BaseComponent.new(**row_arguments(row)) do %>
+              <% columns.each_with_index do |column, index| %>
+                <%= render_cell(
+                  tag: index.zero? ? 'th' :'td',
+                  scope: index.zero? ? 'row' : nil,
+                  **column.system_arguments
+                ) do %>
+                  <%= column.call(row) %>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  <% end %>
