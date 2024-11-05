@@ -9,19 +9,19 @@ module Viral
     }
     def initialize(
       data,
-      row_actions: {},
+      id: '',
       **system_arguments
     )
       @data = data
-      @row_actions = row_actions
-      @render_row_actions = @row_actions.select { |_key, value| value }.count.positive?
+      @id = id
       @system_arguments = system_arguments
     end
 
     def system_arguments
       { tag: 'div' }.deep_merge(@system_arguments).tap do |args|
-        args[:id] = "#{@type}_table"
+        args[:id] = @id
         args[:classes] = class_names(args[:classes], 'overflow-auto scrollbar')
+        # possibly to be used once implemented into tables with selection
         # if @abilities[:select]
         #   args[:data] ||= {}
         #   args[:data][:controller] = 'selection'

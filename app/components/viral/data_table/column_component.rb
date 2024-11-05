@@ -2,7 +2,7 @@
 
 module Viral
   module DataTable
-    # Component responsible for specific column attributes of DataTableComponent
+    # Component responsible for specific column data of DataTableComponent
     class ColumnComponent < Viral::Component
       attr_reader :title
 
