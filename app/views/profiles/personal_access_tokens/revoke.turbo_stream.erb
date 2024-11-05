@@ -1,7 +1,11 @@
-<%= turbo_stream.update "personal-access-tokens-header",
-                         t(
-                           :"profiles.personal_access_tokens.index.active_personal_access_tokens",
-                           count: @active_access_tokens.count
-                         ) %>
+<%= turbo_stream.append "flashes" do %>
+  <%= viral_flash(type: :success, data: message) %>
+<% end %>
 
-<%= turbo_stream.remove dom_id(@personal_access_token) %>
+<%= turbo_stream.replace "access-token-section" %>
+<%= turbo_stream.update "personal-access-tokens-header",
+                    t(
+                      :"profiles.personal_access_tokens.index.active_personal_access_tokens",
+                      count: @active_access_tokens.count,
+                    ) %>
+<%= turbo_stream.replace "personal_access_tokens", partial: "table" %>

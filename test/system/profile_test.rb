@@ -79,6 +79,21 @@ class ProfileTest < ApplicationSystemTestCase
     assert_text 'my new token'
     assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',
                        count: @active_token_count + 1)
+    assert_text I18n.t('profiles.personal_access_tokens.create.success', name: 'my new token')
+  end
+
+  test 'cannot create personal access token without scope selection' do
+    visit profile_path
+    click_link I18n.t(:'profiles.sidebar.access_tokens')
+
+    within %(form[action="/-/profile/personal_access_tokens"]) do
+      fill_in 'Token name', with: 'my new token'
+      click_button I18n.t(:'profiles.personal_access_tokens.create.submit')
+    end
+    assert_no_text 'my new token'
+    assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',
+                       count: @active_token_count)
+    assert_text I18n.t('services.personal_access_tokens.create.required.scopes')
   end
 
   test 'can revoke personal access tokens' do
@@ -91,7 +106,7 @@ class ProfileTest < ApplicationSystemTestCase
                        count: @active_token_count)
     assert_text token_to_revoke.name
 
-    within %(tr[id=personal_access_token_#{token_to_revoke.id}]) do
+    within %(tr[id=#{token_to_revoke.id}]) do
       click_link I18n.t(:'profiles.personal_access_tokens.personal_access_token.revoke_button')
     end
 

@@ -9,9 +9,12 @@ module Viral
     }
     def initialize(
       data,
+      row_actions: {},
       **system_arguments
     )
       @data = data
+      @row_actions = row_actions
+      @render_row_actions = @row_actions.select { |_key, value| value }.count.positive?
       @system_arguments = system_arguments
     end
 

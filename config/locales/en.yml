@@ -962,14 +962,20 @@ en:
       create:
         submit: Create personal access token
         subtitle: Enter the name of your application, and we'll return a unique personal access token.
+        success: Personal access token "%{name}" was successfully created.
         title: Add a personal access token
       index:
-        action: Action
         active_personal_access_tokens: Active Personal Access Tokens (%{count})
-        expires_at: Expires
         subtitle: You can generate a personal access token for each application you use that needs access to the IRIDA Next API.
         title: Personal Access Tokens
-      personal_access_token:
+      revoke:
+        success: Personal access token "%{name}" was successfully revoked.
+      table:
+        action: Action
+        empty_state:
+          description: You cuurently have no active personal access tokens.
+          title: No Active Personal Access Tokens
+        expires_at: Expires
         never: Never
         revoke_button: Revoke
         revoke_confirm: Are you sure you want to revoke this personal access token? This action cannot be undone.

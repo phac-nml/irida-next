@@ -23,10 +23,6 @@ module Viral
       end
 
       def call(row)
-        puts 'hihihi'
-        puts row
-        puts 'byby'
-        puts @block
         @block.call(row)
       end
     end

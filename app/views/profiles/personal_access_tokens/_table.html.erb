@@ -1,0 +1,52 @@
+<%= turbo_frame_tag "personal_access_tokens" do %>
+<% if @active_access_tokens.count.positive? %>
+<%= viral_data_table(@active_access_tokens) do |table| %>
+    <% table.with_column(t("activerecord.attributes.personal_access_token.name")) do |row| %>
+      <%= row[:name] %>
+  <% end %>
+  <% table.with_column(t("activerecord.attributes.personal_access_token.scopes")) do |row| %>
+      <%= row[:scopes].join(", ") %>
+  <% end %>
+  <% table.with_column(t("activerecord.attributes.personal_access_token.created_at")) do |row| %>
+    <%= local_time(row[:created_at], :full_date) %>
+  <% end %>
+  <% table.with_column(t("activerecord.attributes.personal_access_token.last_used_at")) do |row| %>
+    <% if row[:last_used_at].present? %>
+      <%= local_time(row[:last_used_at], :full_date) %>
+    <% else %>
+      <%= t(".never") %>
+    <% end %>
+  <% end %>
+  <% table.with_column(t(".expires_at")) do |row| %>
+    <% if row[:expires_at].present? %>
+      <%= local_time(row[:expires_at], :full_date) %>
+    <% else %>
+      <%= t(".never") %>
+    <% end %>
+  <% end %>
+  <% table.with_column(t(".action")) do |row| %>
+    <%= link_to(
+      t(".revoke_button"),
+      revoke_profile_personal_access_token_path(id: row.id),
+      data: {
+        turbo_frame: "personal-access-tokens",
+        turbo_method: :delete,
+        turbo_confirm: t(".revoke_confirm")
+      },
+      class:
+        "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
+    ) %>
+  <% end %>
+
+<% end %>
+
+<% else %>
+<div class="empty_state_message">
+    <%= viral_empty(
+      title: t(".empty_state.title"),
+      description: t(".empty_state.description"),
+      icon_name: :document_text
+    ) %>
+  </div>
+<% end %>
+<% end %>

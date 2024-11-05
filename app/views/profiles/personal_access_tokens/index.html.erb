@@ -18,29 +18,6 @@
   ), title_id: "personal-access-tokens-header") do %>
     <%= turbo_frame_tag("personal-access-token-revoke-errors") %>
 
-    <%= viral_data_table(@active_access_tokens) do |table| %>
-        <% table.with_column(t("activerecord.attributes.personal_access_token.name")) do |row| %>
-          <%= row[:name] %>
-      <% end %>
-      <% table.with_column(t("activerecord.attributes.personal_access_token.scopes")) do |row| %>
-          <%= row[:scopes] %>
-      <% end %>
-      <% table.with_column(t("activerecord.attributes.personal_access_token.created_at")) do |row| %>
-        <%= local_time(row[:created_at]) %>
-      <% end %>
-      <% table.with_column(t("activerecord.attributes.personal_access_token.last_used_at")) do |row| %>
-        <% if row[:last_used_at].present? %>
-          <%= local_time(row[:last_used_at]) %>
-          <% end %>
-        <% end %>
-      <% table.with_column(t(".expires_at")) do |row| %>
-        <% if row[:expires_at].present? %>
-          <%= local_time_ago(row[:expires_at]) %>
-        <% end %>
-      <% end %>
-      <% table.with_column(t(".action")) do |row| %>
-        <%= row[:action] %>
-      <% end %>
-    <% end %>
+    <%= render partial: 'table' %>
   <% end %>
 </div>

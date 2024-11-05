@@ -11,7 +11,7 @@ module Profiles
       @personal_access_token = PersonalAccessToken.new(scopes: [])
     end
 
-    def create
+    def create # rubocop:disable Metrics/MethodLength
       @personal_access_token = PersonalAccessTokens::CreateService.new(current_user,
                                                                        personal_access_token_params).execute
 
@@ -24,7 +24,8 @@ module Profiles
         else
           format.turbo_stream do
             render status: :unprocessable_entity, locals: { personal_access_token: @personal_access_token,
-                                                            new_personal_access_token: nil }
+                                                            new_personal_access_token: nil,
+                                                            message: @personal_access_token.errors.full_messages.first }
           end
         end
       end
@@ -36,7 +37,9 @@ module Profiles
 
       @personal_access_token.revoke!
       respond_to do |format|
-        format.turbo_stream
+        format.turbo_stream do
+          render locals: { message: t('.success', name: @personal_access_token.name) }
+        end
       end
     end
 
