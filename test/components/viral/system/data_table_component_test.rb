@@ -24,14 +24,16 @@ module System
         assert_selector 'tr:first-child th:first-child', text: '1'
         assert_selector 'tr:first-child td:nth-child(2)', text: 'data one'
         assert_selector 'tr:first-child td:nth-child(3)', text: 'this pill is green'
-        assert_selector 'tr:first-child td:nth-child(4)', text: 'December 31, 2023'
+        assert_selector 'tr:first-child td:nth-child(4)',
+                        text: I18n.l(DateTime.new(2024, 1, 1).localtime, format: :full_date)
         assert_selector 'tr:first-child td:nth-child(5)', text: 'a minute ago'
         assert_selector 'tr:first-child td:nth-child(6)', text: 'data one Action1 data one Action2'
 
         assert_selector 'tr:nth-child(2) th:first-child', text: '2'
         assert_selector 'tr:nth-child(2) td:nth-child(2)', text: 'data two'
         assert_selector 'tr:nth-child(2) td:nth-child(3)', text: 'this pill is blue'
-        assert_selector 'tr:nth-child(2) td:nth-child(4)', text: 'July 14, 2022'
+        assert_selector 'tr:nth-child(2) td:nth-child(4)',
+                        text: I18n.l(DateTime.new(2022, 7, 15).localtime, format: :full_date)
         assert_selector 'tr:nth-child(2) td:nth-child(5)', text: 'an hour ago'
         assert_selector 'tr:nth-child(2) td:nth-child(6)', text: 'data two Action1 data two Action2'
 
