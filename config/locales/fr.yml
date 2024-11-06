@@ -971,7 +971,6 @@ fr:
       revoke:
         success: Personal access token "%{name}" was successfully revoked.
       table:
-        action: Action
         empty_state:
           description: You cuurently have no active personal access tokens.
           title: No Active Personal Access Tokens
@@ -1679,6 +1678,9 @@ fr:
       default: "%Y-%m-%d %H:%M:%S"
       full_date: "%B %d, %Y"
   viral:
+    data_table_component:
+      header:
+        action: Action
     pagy:
       limit_component:
         items: "%{items} per page:"

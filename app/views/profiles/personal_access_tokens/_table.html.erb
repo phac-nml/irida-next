@@ -24,7 +24,7 @@
           <%= t(".never") %>
         <% end %>
       <% end %>
-      <% table.with_column(t(".action")) do |row| %>
+      <% table.with_column(t("viral.data_table_component.header.action")) do |row| %>
         <%= link_to(
           t(".revoke_button"),
           revoke_profile_personal_access_token_path(id: row.id),
