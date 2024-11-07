@@ -3,7 +3,6 @@
 module Viral
   # Table Component used to display data
   class DataTableComponent < Viral::Component
-    # renders_many :columns, Viral::DataTable::ColumnComponent
     renders_many :columns, lambda { |title, **system_arguments, &block|
       Viral::DataTable::ColumnComponent.new(title, **system_arguments, &block)
     }
