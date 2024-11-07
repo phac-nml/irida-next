@@ -1,0 +1,16 @@
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+
+gemspec
+
+gem 'rails', '>= 7', '< 8'
+
+# development dependencies
+group :development do
+  gem 'annotate'
+  gem 'rubocop'
+  gem 'rubocop-performance'
+  gem 'rubocop-rails'
+  gem 'rubocop-rails-accessibility', '~> 1.0'
+end
