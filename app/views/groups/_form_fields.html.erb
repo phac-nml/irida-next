@@ -32,7 +32,7 @@
           >
             <%= root_url %>
           </div>
-          <%= viral_select2(form:, name: :name, placeholder: t(:"groups.new_subgroup.select_group")) do |select| %>
+          <%= viral_select2(form:, name: :parent_id, placeholder: t(:"groups.new_subgroup.select_group")) do |select| %>
             <% authorized_namespaces.each do |namespace| %>
               <% select.with_option(
                 primary: namespace.full_path,
