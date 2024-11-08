@@ -25,7 +25,7 @@
       >
         <%= root_url %>
       </div>
-      <%= viral_select2(form: builder, name: :name, placeholder: t(:"projects.new.select_namespace")) do |select| %>
+      <%= viral_select2(form: builder, name: :parent_id, placeholder: t(:"projects.new.select_namespace")) do |select| %>
         <% authorized_namespaces.each do |namespace| %>
           <% select.with_option(
             primary: namespace.full_path,
