@@ -2,15 +2,14 @@
 
 module Mutations
   # Base Mutation
-  class SubmitWorkflowExecution < BaseMutation
+  class SubmitWorkflowExecution < BaseMutation # rubocop:disable Metrics/ClassLength
     null true
     description 'Create a new workflow execution..'
 
     argument :email_notification, Boolean,
              description: 'Set to true to enable email notifications from this workflow execution'
     argument :name, String, description: 'Name for the new workflow.'
-    # TODO: figure out if this is workflow schema dependant
-    argument :samples_files_info_list, [GraphQL::Types::JSON], description: 'List of hashes containing a `sample_id` (String), and `files` (Hash) containing pairs of `file_type` (String) and `file_id` (String).' # rubocop:disable GraphQL/ExtractInputType,Layout/LineLength
+    argument :samples_files_info_list, [GraphQL::Types::JSON], description: 'List of hashes containing a `sample_id` (String), and `files` (Hash) containing pairs of `file_type` (String) (e.g. `fastq_1`) and `file_id` (String) (e.g. `gid://irida/Attachment/1234`).' # rubocop:disable GraphQL/ExtractInputType,Layout/LineLength
     argument :update_samples, Boolean, description: 'Set true for samples to be updated from this workflow execution' # rubocop:disable GraphQL/ExtractInputType
     argument :workflow_engine, String, description: '' # rubocop:disable GraphQL/ExtractInputType
     argument :workflow_engine_parameters, [GraphQL::Types::JSON], description: 'List of Hashes containing `key` and `value` to be passed to the workflow engine.' # rubocop:disable GraphQL/ExtractInputType,Layout/LineLength
@@ -50,15 +49,9 @@ module Mutations
       update_samples = args[:update_samples] ? '1' : '0'
       email_notification = args[:email_notification] ? '1' : '0'
 
-      # TODO: handle these errors
       namespace_id = namespace(args[:project_id], args[:group_id])
 
       samples_workflow_executions_attributes = build_samples_workflow_executions_attributes(args[:samples_files_info_list]) # rubocop:disable Layout/LineLength
-      if samples_workflow_executions_attributes[:result].nil?
-        # TODO: handle these errors
-      else
-        samples_workflow_executions_attributes = samples_workflow_executions_attributes[:result]
-      end
 
       workflow_execution_params = {
         name: args[:name],
@@ -87,17 +80,15 @@ module Mutations
           errors: []
         }
       else
-        # TODO
-        # user_errors = project.errors.map do |error|
-        #   {
-        #     path: ['workflow_execution', error.attribute.to_s.camelize(:lower)],
-        #     message: error.message
-        #   }
-        # end
+        user_errors = workflow_execution.errors.map do |error|
+          {
+            path: ['workflow_execution', error.attribute.to_s.camelize(:lower)],
+            message: error.message
+          }
+        end
         {
           workflow_execution: nil,
-          # errors: user_errors
-          errors: nil
+          errors: user_errors
         }
       end
     end
@@ -120,26 +111,13 @@ module Mutations
       result
     end
 
-    def build_samples_workflow_executions_attributes(sample_info_list) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    def build_samples_workflow_executions_attributes(sample_info_list)
       result = {}
-      errors = []
       sample_info_list.each_with_index do |sample_info, index|
-        # Check that the sample is the actual sample
-        begin
-          sample = IridaSchema.object_from_id(sample_info['sample_id'], { expected_type: Sample })
-        rescue GraphQL::CoercionError => e
-          errors.append(
-            {
-              path: %w[submitWorkflowExecution sample],
-              message: e.message
-            }
-          )
-          next
-        end
+        sample = IridaSchema.object_from_id(sample_info['sample_id'], { expected_type: Sample })
 
         samplesheet_params = { 'sample' => sample.puid }
         sample_info['files'].each do |file_info|
-          # TODO: verify that these are validated by the WorkflowExecution, otherwise verify them here
           samplesheet_params[file_info['file_type']] = file_info['file_id']
         end
 
@@ -150,16 +128,7 @@ module Mutations
         }
       end
 
-      if errors.count.positive?
-        result = nil
-      else
-        errors = nil
-      end
-
-      {
-        result:,
-        errors:
-      }
+      result
     end
   end
 end
