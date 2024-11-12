@@ -32,18 +32,20 @@
           >
             <%= root_url %>
           </div>
-          <%= viral_select2(form:, name: :parent_id, placeholder: t(:"groups.new_subgroup.select_group")) do |select| %>
-            <% authorized_namespaces.each do |namespace| %>
-              <% select.with_option(
-                primary: namespace.full_path,
-                secondary: namespace.puid,
-                value: namespace.id,
-              ) %>
+          <div class="flex-1">
+            <%= viral_select2(form:, name: :parent_id, placeholder: t(:"groups.new_subgroup.select_group")) do |select| %>
+              <% authorized_namespaces.each do |namespace| %>
+                <% select.with_option(
+                  primary: namespace.full_path,
+                  secondary: namespace.puid,
+                  value: namespace.id,
+                ) %>
+              <% end %>
+              <%= select.with_empty_state do %>
+                <%= t(:"groups.new_subgroup.empty_state") %>
+              <% end %>
             <% end %>
-            <%= select.with_empty_state do %>
-              <%= t(:"groups.new_subgroup.empty_state") %>
-            <% end %>
-          <% end %>
+          </div>
           <div class="ml-4 dark:text-slate-200">/</div>
         </div>
       </div>
