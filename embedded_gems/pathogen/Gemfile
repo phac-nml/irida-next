@@ -16,6 +16,7 @@ group :development do
   gem 'annotate'
   gem 'listen'
   gem 'lookbook', '>= 2.3.4'
+  gem 'overmind'
   gem 'rubocop'
   gem 'rubocop-performance'
   gem 'rubocop-rails'

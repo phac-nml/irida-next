@@ -175,6 +175,12 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.7-x86_64-linux)
       racc (~> 1.4)
+    overmind (2.5.1)
+    overmind (2.5.1-aarch64-linux)
+    overmind (2.5.1-arm-linux)
+    overmind (2.5.1-arm64-darwin)
+    overmind (2.5.1-x86-linux)
+    overmind (2.5.1-x86_64-darwin)
     parallel (1.26.3)
     parser (3.3.5.0)
       ast (~> 2.4.1)
@@ -295,6 +301,7 @@ DEPENDENCIES
   heroicons-rails (~> 1.2)
   listen
   lookbook (>= 2.3.4)
+  overmind
   pathogen_view_components!
   rails (>= 7, < 8)
   rubocop
