@@ -1,0 +1,52 @@
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+
+ruby '3.3.1'
+
+# Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
+gem 'rails', '~> 7.2.0'
+
+gem 'rack-cors'
+gem 'rake', '~> 13.2'
+gem 'sprockets'
+gem 'sprockets-rails'
+
+gem 'actioncable'
+gem 'actionview'
+gem 'activemodel'
+gem 'activerecord'
+gem 'activesupport'
+gem 'railties'
+
+# Use Puma as the app server
+gem 'puma', '~> 6.4.2'
+
+# Reduces boot times through caching; required in config/boot.rb
+gem 'bootsnap', '>= 1.4.2', require: false
+
+gem 'lookbook', '~> 2.3.2'
+gem 'pathogen_view_components', path: '../'
+gem 'view_component', '>= 3.11.0'
+
+gem 'cssbundling-rails', '~> 1.4'
+gem 'vite_rails', '~> 3.0'
+
+group :development do
+  gem 'hotwire-livereload', '~> 1.4'
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring', '~> 4.2'
+  gem 'spring-watcher-listen', '~> 2.1'
+  # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
+  gem 'importmap-rails'
+
+  # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
+  gem 'turbo-rails'
+
+  # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
+  gem 'stimulus-rails'
+
+  gem 'foreman'
+
+  gem 'listen'
+end

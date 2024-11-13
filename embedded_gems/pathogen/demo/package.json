@@ -1,0 +1,14 @@
+{
+  "name": "pathogen-demo",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "@rails/actioncable": "^7.2.200",
+    "turbolinks": "^5.2.0",
+    "webpack-dev-server": "^5.0.4"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10",
+    "vite-plugin-ruby": "^5.1.0"
+  }
+}

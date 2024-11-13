@@ -1,0 +1,51 @@
+{
+  "name": "@pathogen/view-components",
+  "version": "0.0.1",
+  "description": "Pathogen view components",
+  "main": "index.js",
+  "scripts": {
+    "clean": "git clean -fdX -- app/",
+    "prepare": "script/build-assets",
+    "lint": "npm run lint:stylelint && npm run lint:eslint",
+    "lint:stylelint": "stylelint 'app/components/**/*.pcss'",
+    "lint:stylelint:fix": "stylelint 'app/components/**/*.pcss' --fix",
+    "lint:eslint": "eslint 'app/components/**/*.ts'",
+    "lint:eslint:fix": "eslint 'app/components/**/*.ts' --fix",
+    "changeset:version": "changeset version && script/version",
+    "build": "script/build-assets",
+    "build:js": "script/build-assets js",
+    "build:css": "script/build-assets css"
+  },
+  "files": [
+    "static/*.json",
+    "app/assets/**/*",
+    "app/components/pathogen/**/*.js",
+    "app/components/pathogen/**/*.css",
+    "app/components/pathogen/**/*.css.json",
+    "app/components/pathogen/**/*.d.ts",
+    "app/lib/pathogen/forms/**/*.js",
+    "app/lib/pathogen/forms/**/*.d.ts"
+  ],
+  "dependencies": {
+    "flowbite": "^2.5.2"
+  },
+  "devDependencies": {
+    "@github/axe-github": "^0.7.0",
+    "@github/browserslist-config": "^1.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.1",
+    "@typescript-eslint/parser": "^7.0.1",
+    "eslint": "^8.23.1",
+    "eslint-plugin-github": "^5.0.1",
+    "eslint-plugin-prettier": "^5.0.0",
+    "mocha": "^10.0.0",
+    "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.8",
+    "stylelint": "^16.1.0",
+    "stylelint-config-standard": "^36.0.0",
+    "tailwindcss": "^3.4.14",
+    "tslib": "^2.4.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.4.3",
+    "vite-plugin-ruby": "^5.1.0"
+  }
+}
