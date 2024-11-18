@@ -56,12 +56,12 @@ module System
                             'very very very very very very very very very very very very very long name'
 
       within('thead') do
-        assert_selector 'th[class="px-3 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0"]',
+        assert_selector 'th[class="px-3 py-3 sticky right-0 bg-slate-50 dark:bg-slate-700 z-10"]',
                         text: I18n.t('viral.data_table_component.header.action').upcase
       end
 
       within('tbody') do
-        assert_selector 'td[class="px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2"]',
+        assert_selector 'td[class="px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 space-x-2 z-10"]',
                         count: 2
       end
     end

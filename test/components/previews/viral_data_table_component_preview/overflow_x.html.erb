@@ -22,7 +22,7 @@
   <% table.with_column("time ago") do |row| %>
     <%= local_time_ago(row[:time_ago_date]) %>
   <% end %>
-  <% table.with_column(I18n.t('viral.data_table_component.header.action')) do |row| %>
+  <% table.with_column(I18n.t('viral.data_table_component.header.action'), sticky_key: :right) do |row| %>
     <%= link_to(
       "Action 1",
       "",
