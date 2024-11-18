@@ -17,7 +17,7 @@
               <%= render_cell(
                 tag: 'th',
                 scope: 'col',
-                 **column.system_arguments(column.title, true)
+                 **column.system_arguments(is_header: true)
               ) do %>
                 <%= column.title %>
               <% end %>
@@ -36,7 +36,7 @@
                 <%= render_cell(
                   tag: index.zero? ? 'th' :'td',
                   scope: index.zero? ? 'row' : nil,
-                  **column.system_arguments(column.title, false)
+                  **column.system_arguments(is_header: false)
                 ) do %>
                   <%= column.call(row) %>
                 <% end %>
