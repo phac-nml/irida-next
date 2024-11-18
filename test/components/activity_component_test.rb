@@ -19,7 +19,7 @@ class ActivityComponentTest < ViewComponentTestCase
     assert_equal 2, @project2_activities.length
 
     assert_equal(1, @activities.count { |activity| activity[:key].include?('project_namespace.create') })
-    assert_equal(1, @activities.count { |activity| activity[:key].include?('project_namespace.sample.create') })
+    assert_equal(1, @activities.count { |activity| activity[:key].include?('project_namespace.samples.create') })
     assert_equal(2, @activities.count { |activity| activity[:key].include?('member.create') })
     assert_equal(1, @activities.count { |activity| activity[:key].include?('project_namespace.samples.clone') })
     assert_equal(1, @activities.count { |activity| activity[:key].include?('project_namespace.samples.transfer') })

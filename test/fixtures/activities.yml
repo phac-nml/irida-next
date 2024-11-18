@@ -31,7 +31,7 @@ project1_namespace_member_ryan_doe_create:
 project1_namespace_sample_create:
   trackable_type: "Namespace"
   trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  key: "namespaces_project_namespace.sample.create"
+  key: "namespaces_project_namespace.samples.create"
   parameters:
     {
       sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1,
