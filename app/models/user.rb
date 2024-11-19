@@ -60,8 +60,8 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
       user = from_developer(user, auth)
     when 'saml'
       user = from_saml(user, auth)
-    when 'azure_activedirectory_v2'
-      user = from_azure_activedirectory_v2(user, auth)
+    when 'entra_id'
+      user = from_entra_id(user, auth)
     end
 
     user.save
@@ -80,7 +80,7 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
     user
   end
 
-  def self.from_azure_activedirectory_v2(user, auth)
+  def self.from_entra_id(user, auth)
     user.first_name = auth.info.first_name
     user.last_name = auth.info.last_name
     user

@@ -305,9 +305,9 @@ Devise.setup do |config| # rubocop:disable Metrics/BlockLength
       config.omniauth :saml, saml_options
     end
 
-    if Rails.configuration.auth_config['omniauth_providers'].include? 'azure_activedirectory_v2'
+    if Rails.configuration.auth_config['omniauth_providers'].include? 'entra_id'
       # expected keys are: [:client_id, :client_secret, :tenant_id]
-      config.omniauth :azure_activedirectory_v2, Rails.application.credentials.azure
+      config.omniauth :entra_id, Rails.application.credentials.entra_id
     end
   end
 

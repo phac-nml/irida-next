@@ -4,21 +4,21 @@ development:
   # developer_icon:
   # saml_text:
   # saml_icon:
-  # azure_activedirectory_v2_text:
-  # azure_activedirectory_v2_icon:
+  # entra_id_text:
+  # entra_id_icon:
 
 test:
-  omniauth_providers: [developer, saml, azure_activedirectory_v2]
+  omniauth_providers: [developer, saml, entra_id]
   # developer_text:
   # developer_icon:
   # saml_text:
   # saml_icon:
-  # azure_activedirectory_v2_text:
-  # azure_activedirectory_v2_icon:
+  # entra_id_text:
+  # entra_id_icon:
 
 production:
   omniauth_providers: []
   # saml_text:
   # saml_icon:
-  # azure_activedirectory_v2_text:
-  # azure_activedirectory_v2_icon:
+  # entra_id_text:
+  # entra_id_icon:

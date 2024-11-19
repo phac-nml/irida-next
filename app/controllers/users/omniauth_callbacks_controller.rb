@@ -21,7 +21,7 @@ module Users
 
     alias developer all
     alias saml all
-    alias azure_activedirectory_v2 all
+    alias entra_id all
 
     def failure
       if @user.respond_to?(:errors) && @user.errors.present? && @user.errors.full_messages.present?
