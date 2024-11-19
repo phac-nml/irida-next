@@ -19,33 +19,33 @@ development:
   # developer_icon:
   # saml_text:
   # saml_icon:
-  # azure_activedirectory_v2_text:
-  # azure_activedirectory_v2_icon:
+  # entra_id_text:
+  # entra_id_icon:
 
 test:
-  omniauth_providers: [developer, saml, azure_activedirectory_v2]
+  omniauth_providers: [developer, saml, entra_id]
   # developer_text:
   # developer_icon:
   # saml_text:
   # saml_icon:
-  # azure_activedirectory_v2_text:
-  # azure_activedirectory_v2_icon:
+  # entra_id_text:
+  # entra_id_icon:
 
-# production:
-  # omniauth_providers:
+production:
+  omniauth_providers: []
   # saml_text:
   # saml_icon:
-  # azure_activedirectory_v2_text:
-  # azure_activedirectory_v2_icon:
+  # entra_id_text:
+  # entra_id_icon:
 ```
 
 For your production environment, uncomment and edit the relevant `production` lines.
 
-For Azure
+For Entra ID, formerly Azure Active Directory
 
 ```yml
 production:
-  omniauth_providers: [azure_activedirectory_v2]
+  omniauth_providers: [entra_id]
 ```
 
 For SAML
@@ -65,15 +65,15 @@ You can edit this file with the following command.
 EDITOR="vim --nofork" bin/rails credentials:edit
 ```
 
-#### Azure Active Directory V2
+#### Entra ID (formerly Azure Active Directory V2)
 
-For Azure, you will need the following lines
+For Entra, you will need the following lines
 
 ```yml
-azure:
-  client_id: YOUR_AZURE_CLIENT_ID
-  client_secret: YOUR_AZURE_CLIENT_SECRET
-  tenant_id: YOUR_AZURE_TENANT_ID
+entra_id:
+  client_id: YOUR_CLIENT_ID
+  client_secret: YOUR_CLIENT_SECRET
+  tenant_id: YOUR_TENANT_ID
 ```
 
 #### SAML
@@ -91,7 +91,7 @@ saml:
 
 You can change the display name and icon to match your organization.
 
-In the `config/authentication/auth_config.yml` file, edit `_text` and `_icon` fields appropriate for your Azure or SAML setup.
+In the `config/authentication/auth_config.yml` file, edit `_text` and `_icon` fields appropriate for your Entra or SAML setup.
 
 Put your organizations name in the `_text` field.
 
@@ -101,9 +101,9 @@ Example:
 
 ```yml
 production:
-  omniauth_providers: [azure_activedirectory_v2]
+  omniauth_providers: [entra_id]
   # saml_text:
   # saml_icon:
-  azure_activedirectory_v2_text: Tyrell Corporation
-  azure_activedirectory_v2_icon: tyrell.svg
+  entra_id_text: Tyrell Corporation
+  entra_id_icon: tyrell.svg
 ```
