@@ -35,12 +35,19 @@ module Viral
         @block = block
       end
 
-      def system_arguments(is_header: nil)
-        cell_type_key = is_header ? :header : :body
+      def header_cell_arguments
         {
           classes:
           class_names('px-3 py-3',
-                      @system_arguments[:sticky_key] && STICKY_CLASSES[@system_arguments[:sticky_key]][cell_type_key])
+                      @system_arguments[:sticky_key] && STICKY_CLASSES[@system_arguments[:sticky_key]][:header])
+        }
+      end
+
+      def body_cell_arguments
+        {
+          classes:
+          class_names('px-3 py-3',
+                      @system_arguments[:sticky_key] && STICKY_CLASSES[@system_arguments[:sticky_key]][:body])
         }
       end
 
