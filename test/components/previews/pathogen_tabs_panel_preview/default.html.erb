@@ -1,4 +1,5 @@
-<%= render Pathogen::TabsPanel.new(label: "label") do |tabs| %>
-<%= tabs.with_tab(selected: true, href: "#", text: "test") %>
-<%= tabs.with_tab(selected: true, href: "#", text: "test2") %>
+<%= render Pathogen::TabsPanel.new(id: "default-tabs-panel-id", label: "default tabs panel") do |tabs| %>
+<%= tabs.with_tab(selected: true, href: "#", text: "Tab 1") %>
+<%= tabs.with_tab(selected: false, href: "#", text: "Tab 2") %>
+<%= tabs.with_tab(selected: false, href: "#", text: "Tab 3") %>
 <% end %>

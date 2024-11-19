@@ -1,2 +1,5 @@
-<%= link_to "#", class: 'inline-block p-4 border-b-2 rounded-t-lg', role: "tab", aria: { controls: @controls, selected: @selected } do %>hi <%= @text %>
+<%= render Pathogen::BaseComponent.new(**@wrapper_arguments) do %>
+<%= render Pathogen::BaseComponent.new(**@system_arguments) do %>
+<%= @text %>
+<% end %>
 <% end %>

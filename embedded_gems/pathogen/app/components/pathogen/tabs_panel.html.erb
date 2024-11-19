@@ -1,12 +1,8 @@
-<div id="hi" class="
-    flex text-sm font-medium text-center border-b text-slate-500 border-slate-200
-    dark:text-slate-400 dark:border-slate-700
-  ">
-  <ul class="flex flex-wrap -mb-px" role="tablist" aria-orientation="horizontal" aria-label="label">
-    <% tabs.each do |tab| %>
-    <li class="mr-2" role="presentation">
-      <%= tab %>
-    </li>
-    <% end %>
-  </ul>
-</div>
+<%= render Pathogen::BaseComponent.new(**@system_arguments) do %>
+<%= render Pathogen::BaseComponent.new(**@body_arguments) do %>
+
+<% tabs.each do |tab| %>
+<%= tab %>
+<% end %>
+<% end %>
+<% end %>
