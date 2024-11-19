@@ -11,13 +11,13 @@ module Viral
           header: 'sticky left-0 bg-slate-50 dark:bg-slate-700 z-10 ',
           body: 'sticky left-0 bg-slate-50 dark:bg-slate-800 z-10'
         },
-        sample_left_id: {
+        left_fixed_index_zero: {
           header: 'sticky left-0 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-700 z-10',
-          body: 'sticky left-0 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-800'
+          body: 'sticky left-0 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-800 z-10'
         },
-        sample_left_name: {
-          header: 'sticky left-56 bg-slate-50 dark:bg-slate-700 z-10 z-10',
-          body: 'sticky left-56 bg-slate-50 dark:bg-slate-800'
+        left_fixed_index_one: {
+          header: 'sticky left-56 bg-slate-50 dark:bg-slate-700 z-10',
+          body: 'sticky left-56 bg-slate-50 dark:bg-slate-800 z-10'
         },
         right: {
           header: 'sticky right-0 bg-slate-50 dark:bg-slate-700 z-10',
