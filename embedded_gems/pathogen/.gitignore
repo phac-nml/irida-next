@@ -1,0 +1,71 @@
+# Ruby specific
+*.gem
+*.rbc
+/.config
+/coverage/
+/InstalledFiles
+/pkg/
+/spec/reports/
+/spec/examples.txt
+/test/tmp/
+/test/version_tmp/
+/tmp/
+.dat*
+.repl_history
+build/
+*.bridgesupport
+build-iPhoneOS/
+build-iPhoneSimulator/
+
+# Bundler specific
+/.bundle/
+/vendor/bundle
+/lib/bundler/man/
+
+# Environment normalization
+/.bundle/
+/vendor/bundle
+.env
+.env.*
+
+# Documentation cache and generated files
+/.yardoc/
+/_yardoc/
+/doc/
+/rdoc/
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Log files
+*.log
+log/*.log
+
+# Demo app specific
+/demo/tmp/
+/demo/log/
+/demo/public/assets/
+/demo/storage/
+/demo/.sass-cache/
+
+# Testing artifacts
+/coverage/
+.rspec_status
+
+# Ruby version managers
+.ruby-version
+.ruby-gemset
+.rvmrc
