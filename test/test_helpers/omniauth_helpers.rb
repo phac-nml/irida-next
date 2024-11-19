@@ -27,7 +27,7 @@ end
 
 module OmniauthAzureHelper
   RESPONSE = {
-    provider: 'azure_activedirectory_v2',
+    provider: 'entra_id',
     uid: '12345678-90-abcd-ef12-34567890abcd',
     info: {
       email: 'jeff@irida.ca',
@@ -49,14 +49,14 @@ module OmniauthAzureHelper
 
   def valid_azure_login_setup
     OmniAuth.config.test_mode = true
-    OmniAuth.config.mock_auth[:azure_activedirectory_v2] = OmniAuth::AuthHash.new(RESPONSE)
-    Rails.application.env_config['omniauth.auth'] = OmniAuth.config.mock_auth[:azure_activedirectory_v2]
+    OmniAuth.config.mock_auth[:entra_id] = OmniAuth::AuthHash.new(RESPONSE)
+    Rails.application.env_config['omniauth.auth'] = OmniAuth.config.mock_auth[:entra_id]
   end
 
   def invalid_azure_login_setup
     OmniAuth.config.test_mode = true
-    OmniAuth.config.mock_auth[:azure_activedirectory_v2] = :invalid_credentials
-    Rails.application.env_config['omniauth.auth'] = OmniAuth.config.mock_auth[:azure_activedirectory_v2]
+    OmniAuth.config.mock_auth[:entra_id] = :invalid_credentials
+    Rails.application.env_config['omniauth.auth'] = OmniAuth.config.mock_auth[:entra_id]
   end
 end
 
