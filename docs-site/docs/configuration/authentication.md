@@ -31,8 +31,8 @@ test:
   # entra_id_text:
   # entra_id_icon:
 
-production:
-  omniauth_providers: []
+# production:
+  # omniauth_providers: []
   # saml_text:
   # saml_icon:
   # entra_id_text:
