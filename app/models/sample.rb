@@ -6,8 +6,14 @@ class Sample < ApplicationRecord
   include HasPuid
   include History
 
+  extend Pagy::Searchkick
+
   has_logidze
   acts_as_paranoid
+
+  searchkick \
+    deep_paging: true,
+    text_middle: %i[name puid]
 
   belongs_to :project, counter_cache: true
 
@@ -78,5 +84,21 @@ class Sample < ApplicationRecord
     end
 
     { singles:, pe_forward:, pe_reverse: }
+  end
+
+  def search_data
+    {
+      name: name,
+      puid: puid,
+      project_id: project_id,
+      metadata: metadata.as_json,
+      created_at: created_at,
+      updated_at: updated_at,
+      attachments_updated_at: attachments_updated_at
+    }
+  end
+
+  def should_index?
+    !deleted?
   end
 end
