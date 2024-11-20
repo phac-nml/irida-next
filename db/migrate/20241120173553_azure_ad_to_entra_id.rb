@@ -6,7 +6,7 @@ class AzureAdToEntraId < ActiveRecord::Migration[7.2]
     azure_user_list = User.where(provider: 'azure_activedirectory_v2').all
 
     # If there are no AD users in the database, exit early.
-    if azure_user_list.count.positive?
+    unless azure_user_list.count.positive?
       Rails.logger.info 'No Azure AD users in database. No Migration needed.'
       return
     end
@@ -23,13 +23,13 @@ class AzureAdToEntraId < ActiveRecord::Migration[7.2]
     rescue NoMethodError
       error_msg = 'Could not find credentials for Entra ID'
       Rails.logger.error error_msg
-      raise StandardError error_msg
+      raise StandardError, error_msg
     end
 
     unless tenant_id
       error_msg = 'tenant_id for entra_id is not specified'
       Rails.logger.error error_msg
-      raise StandardError error_msg
+      raise StandardError, error_msg
     end
 
     tenant_id
