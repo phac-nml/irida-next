@@ -5,18 +5,20 @@ module Pathogen
     TAG_DEFAULT = :a
 
     WRAPPER_CLASSES = 'inline-flex items-center justify-center mr-2'
-
+    COUNT_CLASSES = 'ml-1 text-sm text-slate-600 dark:text-slate-400 rounded-full bg-slate-100 dark:bg-slate-900 inline-block p-0.5'
     attr_reader :selected
 
-    def initialize(controls:, selected: false, icon_classes: '', text: '',
-                   wrapper_arguments: {}, **system_arguments)
+    def initialize(controls:, count: nil, selected: false, icon_classes: '', text: '',
+                   count_arguments: {}, wrapper_arguments: {}, **system_arguments)
       @controls = controls
+      @count = count
       @selected = selected
       @icon_classes = icon_classes
       @text = text
 
       @system_arguments = system_arguments
       @wrapper_arguments = wrapper_arguments
+      @count_arguments = count_arguments
 
       @system_arguments[:tag] = TAG_DEFAULT
 
@@ -26,6 +28,9 @@ module Pathogen
       @system_arguments[:'aria-current'] = @selected ? 'page' : 'false'
       @system_arguments[:classes] = generate_link_classes
       @system_arguments[:'aria-controls'] = @controls
+
+      @count_arguments[:tag] = :span
+      @count_arguments[:classes] = COUNT_CLASSES
     end
 
     def generate_link_classes

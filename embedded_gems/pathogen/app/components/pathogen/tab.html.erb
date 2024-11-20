@@ -1,5 +1,12 @@
 <%= render Pathogen::BaseComponent.new(**@wrapper_arguments) do %>
 <%= render Pathogen::BaseComponent.new(**@system_arguments) do %>
-<%= @text %>
+<span>
+  <%= @text %>
+</span>
+<% if @count %>
+<%= render Pathogen::BaseComponent.new(**@count_arguments) do %>
+<%= @count %>
+<% end %>
+<% end %>
 <% end %>
 <% end %>

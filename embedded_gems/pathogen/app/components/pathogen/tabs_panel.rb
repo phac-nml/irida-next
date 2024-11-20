@@ -13,11 +13,12 @@ module Pathogen
     BODY_TAG_DEFAULT = :ul
     BODY_DEFAULT_CLASSES = 'flex flex-wrap -mb-px'
 
-    renders_many :tabs, lambda { |selected: false, **system_arguments|
+    renders_many :tabs, lambda { |count: nil, selected: false, **system_arguments|
       # system_arguments[:classes] = tab_nav_tab_classes(system_arguments[:classes])
       Pathogen::Tab.new(
         selected: selected,
         controls: @id,
+        count: count,
         **system_arguments
       )
     }
