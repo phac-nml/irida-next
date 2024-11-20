@@ -29,7 +29,7 @@
                 },
                 class:
                   "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
               ) %>
             <% else %>
               <% dropdown.with_item(
@@ -100,7 +100,9 @@
                              "t-search-component block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
                            placeholder: t(".search.placeholder") %>
             <div
-              class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none "
+              class="
+                absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
+              "
             >
               <%= viral_icon(
                 name: "magnifying_glass",
@@ -110,7 +112,6 @@
           </div>
           <input type="hidden" name="format" value="turbo_stream"/>
           <input type="hidden" name="limit" value="<%=@pagy.limit%>"/>
-
           <%= render ListFilterComponent.new(
             form: f,
             filters: @search_params[:name_or_puid_in],
