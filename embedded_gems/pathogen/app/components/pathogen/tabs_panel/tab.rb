@@ -7,13 +7,14 @@ module Pathogen
       TAG_DEFAULT = :a
 
       WRAPPER_CLASSES = 'inline-flex items-center justify-center mr-2'
+      # rubocop:disable Layout/LineLength
       COUNT_CLASSES = 'ml-1 text-sm text-slate-600 dark:text-slate-400 rounded-full bg-slate-100 dark:bg-slate-900 inline-block p-0.5'
-      attr_reader :selected
+      # rubocop:enable Layout/LineLength
 
       renders_one :count, Pathogen::TabsPanel::Count
-
       renders_one :icon, Pathogen::Icon
 
+      # rubocop: disable Metrics/ParameterLists
       def initialize(controls:, selected: false, icon_classes: '', text: '',
                      wrapper_arguments: {}, **system_arguments)
         @controls = controls
@@ -33,6 +34,7 @@ module Pathogen
         @system_arguments[:classes] = generate_link_classes
         @system_arguments[:'aria-controls'] = @controls
       end
+      # rubocop: enable Metrics/ParameterLists
 
       def generate_link_classes
         if @selected
