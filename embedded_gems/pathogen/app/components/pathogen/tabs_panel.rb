@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module Pathogen
+  # This file defines the Pathogen::TabsPanel component, which is used to render sets of tabs
+  # as well as any inline 'right-side' components (buttons, filter, etc.)
   class TabsPanel < Pathogen::Component
     TAG_DEFAULT = :nav
     TAG_OPTIONS = [TAG_DEFAULT, :div].freeze
@@ -14,8 +16,7 @@ module Pathogen
     BODY_DEFAULT_CLASSES = 'flex flex-wrap -mb-px'
 
     renders_many :tabs, lambda { |count: nil, selected: false, **system_arguments|
-      # system_arguments[:classes] = tab_nav_tab_classes(system_arguments[:classes])
-      Pathogen::Tab.new(
+      Pathogen::TabsPanel::Tab.new(
         selected: selected,
         controls: @id,
         count: count,
@@ -36,12 +37,5 @@ module Pathogen
       @body_arguments[:role] = 'tablist'
       @body_arguments[:'aria-label'] = label
     end
-
-    # def before_render
-    #   # Eagerly evaluate content to avoid https://github.com/primer/view_components/issues/1790
-    #   content
-
-    #   super
-    # end
   end
 end
