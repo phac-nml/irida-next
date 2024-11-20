@@ -157,5 +157,12 @@ module Projects
       end
       updated_params
     end
+
+    def sort
+      sort = @search_params[:s]
+      key, direction = sort.split
+      key = key.gsub('metadata_', 'metadata.') if key.match?(/metadata_/)
+      { "#{key}": direction }
+    end
   end
 end
