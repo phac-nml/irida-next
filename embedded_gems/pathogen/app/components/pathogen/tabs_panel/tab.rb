@@ -14,12 +14,9 @@ module Pathogen
       renders_one :count, Pathogen::TabsPanel::Count
       renders_one :icon, Pathogen::Icon
 
-      # rubocop: disable Metrics/ParameterLists
-      def initialize(controls:, selected: false, icon_classes: '', text: '',
-                     wrapper_arguments: {}, **system_arguments)
+      def initialize(controls:, selected: false, text: '', wrapper_arguments: {}, **system_arguments)
         @controls = controls
         @selected = selected
-        @icon_classes = icon_classes
         @text = text
 
         @system_arguments = system_arguments
@@ -34,7 +31,6 @@ module Pathogen
         @system_arguments[:classes] = generate_link_classes
         @system_arguments[:'aria-controls'] = @controls
       end
-      # rubocop: enable Metrics/ParameterLists
 
       def generate_link_classes
         if @selected
