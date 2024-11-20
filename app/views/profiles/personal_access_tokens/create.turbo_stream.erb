@@ -2,21 +2,31 @@
   <%= turbo_stream.replace "access-token-section",
                        partial: "access_token_section",
                        locals: {
-                         token: new_personal_access_token.token
+                         token: new_personal_access_token.token,
                        } %>
   <%= turbo_stream.update "personal-access-tokens-header",
                       t(
                         :"profiles.personal_access_tokens.index.active_personal_access_tokens",
-                        count: @active_access_tokens.count
+                        count: @active_access_tokens.count,
                       ) %>
-  <%= turbo_stream.append "access-tokens-table-body",
-                      partial: "personal_access_token",
-                      locals: {
-                        personal_access_token: new_personal_access_token
-                      } %>
+  <%= turbo_stream.replace "personal_access_tokens",
+                       partial: "table",
+                       locals: {
+                         personal_access_token: new_personal_access_token,
+                       } %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(
+      type: :success,
+      data: t(".success", name: new_personal_access_token.name),
+    ) %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type: :error, data: message) %>
+  <% end %>
 <% end %>
 <%= turbo_stream.replace "personal_access_token_form",
                      partial: "form",
                      locals: {
-                       personal_access_token: personal_access_token
+                       personal_access_token: personal_access_token,
                      } %>
