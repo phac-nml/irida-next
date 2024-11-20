@@ -2,7 +2,7 @@
 
 module Pathogen
   module ViewComponents
-    module Version
+    module VERSION
       MAJOR = 0
       MINOR = 0
       PATCH = 1
@@ -12,4 +12,4 @@ module Pathogen
   end
 end
 
-Rails.logger.debug Pathogen::ViewComponents::Version::STRING if __FILE__ == $PROGRAM_NAME
+Rails.logger.debug Pathogen::ViewComponents::VERSION::STRING if __FILE__ == $PROGRAM_NAME
