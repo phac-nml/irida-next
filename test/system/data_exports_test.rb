@@ -27,7 +27,14 @@ class DataExportsTest < ApplicationSystemTestCase
 
     Project.reset_counters(@project1.id, :samples_count)
 
+    Sample.reindex
+    Searchkick.enable_callbacks
+
     login_as @user
+  end
+
+  def end
+    Searchkick.disable_callbacks
   end
 
   test 'can view data exports' do

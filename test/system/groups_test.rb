@@ -16,6 +16,13 @@ class GroupsTest < ApplicationSystemTestCase
     @project30 = projects(:project30)
     @sample34 = samples(:sample34)
     login_as @user
+
+    Sample.reindex
+    Searchkick.enable_callbacks
+  end
+
+  def teardown
+    Searchkick.disable_callbacks
   end
 
   test 'can create a group' do

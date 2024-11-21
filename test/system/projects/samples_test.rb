@@ -16,6 +16,13 @@ module Projects
       @namespace = groups(:group_one)
 
       Project.reset_counters(@project.id, :samples_count)
+
+      Sample.reindex
+      Searchkick.enable_callbacks
+    end
+
+    teardown do
+      Searchkick.disable_callbacks
     end
 
     test 'visiting the index' do
@@ -88,6 +95,7 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
       table_row = find(:table_row, [@sample1.name])
+      puts @sample1.id
 
       within table_row do
         click_link 'Remove'
@@ -324,6 +332,8 @@ module Projects
       samples = [samples(:bulk_sample1), samples(:bulk_sample2)]
 
       Project.reset_counters(project38.id, :samples_count)
+      Project.reset_counters(project2.id, :samples_count)
+
       visit namespace_project_samples_url(namespace17, project38)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 200,
                                                                            locale: @user.locale))
@@ -353,10 +363,11 @@ module Projects
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
 
+      assert_text I18n.t('projects.samples.transfers.create.success')
+
       # Check samples selected are [] and has the proper number of samples
       assert_text I18n.t(:'projects.samples.index.no_samples')
 
-      Project.reset_counters(project2.id, :samples_count)
       visit namespace_project_samples_url(namespace1, project2)
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 220,
