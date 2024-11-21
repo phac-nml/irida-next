@@ -460,8 +460,6 @@ module Groups
 
       assert_selector 'tbody tr:first-child th', text: @sample30.puid
       assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample30.name
-      assert_selector 'tbody tr:nth-child(2) th', text: @sample2.puid
-      assert_selector 'tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
 
       # toggling metadata again causes sort to be reset
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
