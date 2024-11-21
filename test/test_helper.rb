@@ -70,12 +70,5 @@ module ActiveSupport
     include ActionMailer::TestHelper
 
     PublicActivity.enabled = true
-
-    setup do
-      @@once ||= begin
-        Sample.reindex
-        true
-      end
-    end
   end
 end
