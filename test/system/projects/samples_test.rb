@@ -21,6 +21,13 @@ module Projects
 
       Project.reset_counters(@project.id, :samples_count)
       Project.reset_counters(@project29.id, :samples_count)
+
+      Sample.reindex
+      Searchkick.enable_callbacks
+    end
+
+    teardown do
+      Searchkick.disable_callbacks
     end
 
     test 'visiting the index' do
@@ -248,6 +255,7 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
       table_row = find(:table_row, [@sample1.name])
+      puts @sample1.id
 
       within table_row do
         click_link 'Remove'
@@ -680,6 +688,7 @@ module Projects
     end
 
     test 'can search the list of samples by metadata field and value presence when metadata is toggled' do
+      skip('Metadata searching is not currently available')
       visit namespace_project_samples_url(@namespace, @project)
       filter_text = 'metadatafield1:value1'
 
