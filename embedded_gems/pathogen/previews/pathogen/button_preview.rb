@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-module Primer
+module Pathogen
   # Preview class for Primer::Button component
   class ButtonPreview < ViewComponent::Preview
     # @label Default
     def default
-      render Primer::Button.new do
+      render Pathogen::Button.new do
         'Shit'
       end
     end
