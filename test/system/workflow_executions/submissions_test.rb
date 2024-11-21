@@ -13,6 +13,13 @@ module WorkflowExecutions
       @namespace = groups(:group_sixteen)
 
       Project.reset_counters(@project.id, :samples_count)
+
+      Sample.reindex
+      Searchkick.enable_callbacks
+    end
+
+    teardown do
+      Searchkick.disable_callbacks
     end
 
     test 'should display a pipeline selection modal for project samples as owner' do
