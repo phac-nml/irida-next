@@ -1,59 +1,68 @@
-<div class="table-container relative overflow-x-auto" data-turbo-temporary>
-  <table
-    id="automated_workflow_executions"
-    class="
-      w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-      dark:divide-slate-600 whitespace-nowrap
-    "
-  >
-    <thead
-      class="
-        text-slate-700 uppercase bg-slate-50 dark:bg-slate-700 dark:text-slate-400
-        whitespace-nowrap
-      "
-    >
-      <tr>
-        <th
-          scope="col"
-          class="
-            px-6 py-3 whitespace-nowrap text-left sticky left-0 bg-slate-50
-            dark:bg-slate-700
-          "
-        >
-          <%= t(:".headers.id") %>
-        </th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          <%= t(:".headers.name") %>
-        </th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          <%= t(:".headers.workflow_name") %>
-        </th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          <%= t(:".headers.workflow_version") %>
-        </th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          <%= t(:".headers.created_at") %>
-        </th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          <%= t(:".headers.updated_at") %>
-        </th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left">
-          <%= t(:".headers.status") %>
-        </th>
-        <th scope="col" class="px-6 py-3 whitespace-nowrap text-left sticky right-0">
-          <%= t(:".headers.actions") %>
-        </th>
-      </tr>
-    </thead>
-    <tbody
-      class="
-        bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
-      "
-    >
-      <%= render partial: "automated_workflow_execution",
-      collection: @automated_workflow_executions %>
-    </tbody>
-  </table>
+<% if @automated_workflow_executions.count.positive? %>
+  <%= viral_data_table(@automated_workflow_executions, id: "automated_workflow_executions") do |table| %>
+    <% table.with_column(t(".headers.id"),
+      sticky_key: :left
+    ) do |row| %>
+      <%= row[:id] %>
+    <% end %>
+    <% table.with_column(t(".headers.name")) do |row| %>
+      <%= row[:name] %>
+    <% end %>
+    <% table.with_column(t(".headers.workflow_name")) do |row| %>
+      <%= row.metadata["workflow_name"] %>
+    <% end %>
+    <% table.with_column(t(".headers.workflow_version")) do |row| %>
+      <%= row.metadata["workflow_version"] %>
+    <% end %>
+    <% table.with_column(t(".headers.created_at")) do |row| %>
+      <%= local_time(row[:created_at], :full_date) %>
+    <% end %>
+    <% table.with_column(t(".headers.updated_at")) do |row| %>
+      <%= local_time_ago(row[:updated_at]) %>
+    <% end %>
+    <% table.with_column(t(".headers.status")) do |row| %>
+      <% if row[:disabled] %>
+        <%= viral_pill(text: t(".disabled"), color: "red") %>
+      <% else %>
+        <%= viral_pill(text: t(".enabled"), color: "green") %>
+      <% end %>
+    <% end %>
+    <% table.with_column(t(".headers.actions"),
+        sticky_key: :right
+      ) do |row| %>
+      <% unless row.disabled %>
+        <%= link_to(
+          t(:"projects.automated_workflow_executions.actions.edit_button"),
+          edit_namespace_project_automated_workflow_execution_path(
+            @project.parent,
+            @project,
+            row,
+          ),
+          data: {
+            turbo_stream: true,
+          },
+          class:
+            "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+        ) %>
+      <% end %>
+      <%= link_to(
+        t(:"projects.automated_workflow_executions.actions.delete_button"),
+        namespace_project_automated_workflow_execution_path(
+          @project.parent,
+          @project,
+          row,
+        ),
+        data: {
+          turbo_method: :delete,
+          turbo_confirm:
+            t(:"projects.automated_workflow_executions.actions.delete_confirm"),
+        },
+        class:
+          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+      ) %>
+    <% end %>
+  <% end %>
+<% else %>
   <div class="empty_state_message">
     <%= viral_empty(
       title: t(:".empty.title"),
@@ -61,4 +70,4 @@
       icon_name: :document_text,
     ) %>
   </div>
-</div>
+<% end %>
