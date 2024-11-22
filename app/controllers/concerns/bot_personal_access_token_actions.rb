@@ -9,6 +9,7 @@ module BotPersonalAccessTokenActions
     before_action proc { bot_account }
     before_action proc { personal_access_tokens }, only: %i[index]
     before_action proc { personal_access_token }, only: %i[revoke]
+    before_action proc { bot_accounts }
   end
 
   def index
@@ -83,5 +84,9 @@ module BotPersonalAccessTokenActions
 
   def personal_access_token
     @personal_access_token = @bot_account.user.personal_access_tokens.find_by(id: params[:id]) || not_found
+  end
+
+  def bot_accounts
+    @bot_accounts = @namespace.namespace_bots.includes(:user)
   end
 end
