@@ -1,8 +1,8 @@
 <%= render Pathogen::BaseComponent.new(**@system_arguments) do %>
-<%= render Pathogen::BaseComponent.new(**@body_arguments) do %>
+  <%= render Pathogen::BaseComponent.new(**@body_arguments) do %>
 
-<% tabs.each do |tab| %>
-<%= tab %>
-<% end %>
-<% end %>
+    <% tabs.each do |tab| %>
+      <%= tab %>
+    <% end %>
+  <% end %>
 <% end %>
