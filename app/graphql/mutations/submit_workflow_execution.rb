@@ -116,10 +116,12 @@ module Mutations
       sample_info_list.each_with_index do |sample_info, index|
         sample = IridaSchema.object_from_id(sample_info['sample_id'], { expected_type: Sample })
 
-        samplesheet_params = { 'sample' => sample.puid }
-        sample_info['files'].each do |file_info|
-          samplesheet_params[file_info['file_type']] = file_info['file_id']
-        end
+        # pass samplesheet params as a flat json structure
+        #
+        # samplesheet_params = { 'sample' => sample.puid }
+        # sample_info['files'].each do |file_info|
+        #   samplesheet_params[file_info['file_type']] = file_info['file_id']
+        # end
 
         # We expect results to have numbered entries as strings starting with "0", so we use the index
         result[index.to_s] = {
