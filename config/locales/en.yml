@@ -1032,9 +1032,6 @@ en:
         delete_button: Delete
         delete_confirm: Are you sure that you want to delete this automated pipeline?
         edit_button: Edit
-      automated_workflow_execution:
-        disabled: DISABLED
-        enabled: ENABLED
       create:
         error: Could not create an automated pipeline for %{workflow_name}
         success: Automated pipeline for %{workflow_name} was successfully created
