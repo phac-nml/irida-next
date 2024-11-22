@@ -7,11 +7,13 @@ module Pathogen
       TAG_DEFAULT = :a
 
       WRAPPER_CLASSES = 'inline-flex items-center justify-center mr-2'
-      # rubocop:disable Layout/LineLength
-      COUNT_CLASSES = 'ml-1 text-sm text-slate-600 dark:text-slate-400 rounded-full bg-slate-100 dark:bg-slate-900 inline-block p-0.5'
-      # rubocop:enable Layout/LineLength
 
-      renders_one :count, Pathogen::TabsPanel::Count
+      renders_one :count, lambda { |**system_arguments|
+        Pathogen::TabsPanel::Count.new(
+          selected: @selected,
+          **system_arguments
+        )
+      }
       renders_one :icon, Pathogen::Icon
 
       def initialize(controls:, selected: false, text: '', wrapper_arguments: {}, **system_arguments)
@@ -34,11 +36,10 @@ module Pathogen
 
       def generate_link_classes
         if @selected
-          'inline-block p-4 border-b-2 rounded-t-lg text-primary-700
-        border-primary-700 active dark:text-primary-500 dark:border-primary-500'
+          'inline-block p-4 text-primary-600 bg-slate-100 rounded-t-lg active dark:bg-slate-800 dark:text-primary-500'
         else
-          'inline-block p-4 border-b-2 rounded-t-lg border-transparent
-        hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300'
+          'inline-block p-4 rounded-t-lg hover:text-slate-600
+          hover:bg-slate-50 dark:hover:bg-slate-800 dark:hover:text-slate-300'
         end
       end
     end

@@ -7,14 +7,10 @@ module Pathogen
     TAG_DEFAULT = :nav
     TAG_OPTIONS = [TAG_DEFAULT, :div].freeze
 
-    WRAPPER_DEFAULT_CLASSES = '
-      flex text-sm font-medium text-center border-b text-slate-500 border-slate-200
-      dark:text-slate-400 dark:border-slate-700
-    '
-
     BODY_TAG_DEFAULT = :ul
-    BODY_DEFAULT_CLASSES = 'flex flex-wrap -mb-px'
-
+    # rubocop:disable Layout/LineLength
+    BODY_DEFAULT_CLASSES = 'flex flex-wrap text-sm font-medium text-center text-slate-500 border-b border-slate-200 dark:border-slate-700 dark:text-slate-400'
+    # rubocop:enable Layout/LineLength
     renders_many :tabs, lambda { |count: nil, selected: false, **system_arguments|
       Pathogen::TabsPanel::Tab.new(
         selected: selected,
@@ -30,7 +26,6 @@ module Pathogen
       @body_arguments = body_arguments
 
       @system_arguments[:tag] = fetch_or_fallback(TAG_OPTIONS, tag, TAG_DEFAULT)
-      @system_arguments[:classes] = class_names(WRAPPER_DEFAULT_CLASSES)
       @system_arguments[:id] = @id
       @body_arguments[:tag] = BODY_TAG_DEFAULT
       @body_arguments[:classes] = class_names(BODY_DEFAULT_CLASSES)

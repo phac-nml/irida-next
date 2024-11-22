@@ -6,16 +6,23 @@ module Pathogen
     class Count < Pathogen::Component
       TAG_DEFAULT = :span
 
-      # rubocop:disable Layout/LineLength
-      COUNT_CLASSES = 'ml-1 text-sm text-slate-600 dark:text-slate-400 rounded-full bg-slate-100 dark:bg-slate-900 inline-block p-0.5'
-      # rubocop:enable Layout/LineLength
-
-      def initialize(count: nil, **system_arguments)
+      def initialize(count: nil, selected: false, **system_arguments)
         @count = count
+        @selected = selected
         @system_arguments = system_arguments
 
         @system_arguments[:tag] = TAG_DEFAULT
-        @system_arguments[:classes] = COUNT_CLASSES
+        @system_arguments[:classes] = generate_count_classes
+      end
+
+      def generate_count_classes
+        if @selected
+          'bg-slate-300 text-slate-800 text-xs font-medium ms-2 px-2 py-1
+          rounded-full dark:bg-slate-500 dark:text-slate-300'
+        else
+          'bg-slate-100 text-slate-800 text-xs font-medium ms-2 px-2 py-1
+          rounded-full dark:bg-slate-700 dark:text-slate-300'
+        end
       end
     end
   end
