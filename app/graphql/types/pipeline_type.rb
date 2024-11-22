@@ -2,8 +2,7 @@
 
 module Types
   # User Type
-  class PipelineType < Types::BaseType
-    implements GraphQL::Types::Relay::Node
+  class PipelineType < Types::BaseObject
     description 'A pipeline'
 
     field :automatable, GraphQL::Types::Boolean, null: true, description: ''
@@ -13,7 +12,6 @@ module Types
     field :executable, GraphQL::Types::Boolean, null: true, description: ''
     field :metadata, GraphQL::Types::JSON, description: ''
     field :name, String, null: true, description: ''
-    field :samplesheet_headers, GraphQL::Types::JSON, null: false, description: ''
     field :type, String, null: true, description: ''
     field :type_version, String, null: true, description: ''
     field :url, String, null: false, description: 'URL of the pipeline GitHub repository'

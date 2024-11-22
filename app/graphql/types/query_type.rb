@@ -44,8 +44,8 @@ module Types
     field :pipeline, Types::PipelineType, null: true, resolver: Resolvers::PipelineResolver,
                                           description: 'Find Pipelines'
 
-    field :pipelines, Types::PipelineType.connection_type, null: true, resolver: Resolvers::PipelinesResolver,
-                                                           description: 'Find Pipelines'
+    field :pipelines, [Types::PipelineType], null: true, resolver: Resolvers::PipelinesResolver,
+                                             description: 'Find Pipelines'
 
     def current_user
       context[:current_user]

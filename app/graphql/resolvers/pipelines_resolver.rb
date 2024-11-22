@@ -3,8 +3,6 @@
 module Resolvers
   # Project Resolver
   class PipelinesResolver < BaseResolver
-    type Types::PipelineType.connection_type, null: true
-
     argument :workflow_type, String,
              required: false,
              default_value: 'executable',
