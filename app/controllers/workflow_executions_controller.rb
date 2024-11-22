@@ -54,7 +54,7 @@ class WorkflowExecutionsController < ApplicationController
 
   def samples_workflow_execution_params_attributes
     [
-      :id,
+      :id, # index, increment for each one, not necissary for functionality
       :sample_id,
       { samplesheet_params: {} }
     ]
