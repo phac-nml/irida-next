@@ -2,8 +2,4 @@
 
 <%= turbo_stream.remove dom_id(personal_access_token) %>
 
-<%= turbo_stream.replace dom_id(@bot_account),
-                     partial: "projects/bots/bot",
-                     locals: {
-                       bot_account: @bot_account
-                     } %>
+<%= turbo_stream.replace "bots", partial: "projects/bots/bot_listing" %>

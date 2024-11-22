@@ -1,29 +1,3 @@
-<% if @pagy.count.positive? %>
-  <%= render PaginationComponent.new(
-    info: pagy_info(@pagy),
-    prev_url:
-      (
-        if @pagy.prev
-          namespace_project_bots_url(
-            @namespace.parent,
-            @namespace.project,
-            page: @pagy.prev
-          )
-        else
-          nil
-        end
-      ),
-    next_url:
-      (
-        if @pagy.next
-          namespace_project_bots_url(
-            @namespace.parent,
-            @namespace.project,
-            page: @pagy.next
-          )
-        else
-          nil
-        end
-      )
-  ) %>
+<%= turbo_frame_tag "bots_pagination" do %>
+  <%= render Viral::Pagy::FullComponent.new(@pagy, item: "test") %>
 <% end %>
