@@ -1,0 +1,9 @@
+<%= render Pathogen::BaseComponent.new(**@wrapper_arguments) do %>
+  <%= render Pathogen::BaseComponent.new(**@system_arguments) do %>
+    <%= icon %>
+    <span>
+      <%= @text %>
+    </span>
+    <%= count %>
+  <% end %>
+<% end %>
