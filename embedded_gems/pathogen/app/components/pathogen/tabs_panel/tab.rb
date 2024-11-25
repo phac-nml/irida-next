@@ -14,12 +14,15 @@ module Pathogen
           **system_arguments
         )
       }
+
       renders_one :icon, Pathogen::Icon
 
-      def initialize(controls:, selected: false, text: '', wrapper_arguments: {}, **system_arguments)
+      # rubocop:disable Metrics/ParameterLists
+      def initialize(controls:, type:, selected: false, text: '', wrapper_arguments: {}, **system_arguments)
         @controls = controls
         @selected = selected
         @text = text
+        @type = type
 
         @system_arguments = system_arguments
         @wrapper_arguments = wrapper_arguments
@@ -30,16 +33,25 @@ module Pathogen
         @wrapper_arguments[:classes] = WRAPPER_CLASSES
 
         @system_arguments[:'aria-current'] = @selected ? 'page' : 'false'
-        @system_arguments[:classes] = generate_link_classes
+        @system_arguments[:classes] = generate_tab_classes
         @system_arguments[:'aria-controls'] = @controls
       end
+      # rubocop:enable Metrics/ParameterLists
 
-      def generate_link_classes
-        if @selected
-          'inline-block p-4 text-primary-600 bg-slate-100 rounded-t-lg active dark:bg-slate-800 dark:text-primary-500'
-        else
-          'inline-block p-4 rounded-t-lg hover:text-slate-600
+      def generate_tab_classes
+        if @type == 'default'
+          if @selected
+            'inline-block p-4 text-primary-600 bg-slate-100 rounded-t-lg active dark:bg-slate-800 dark:text-primary-500'
+          else
+            'inline-block p-4 rounded-t-lg hover:text-slate-600
           hover:bg-slate-50 dark:hover:bg-slate-800 dark:hover:text-slate-300'
+          end
+        elsif @type == 'underline'
+          if @selected
+            'inline-block p-4 text-primary-600 border-b-2 border-primary-600 rounded-t-lg active dark:text-primary-500 dark:border-primary-500'
+          else
+            'inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300'
+          end
         end
       end
     end
