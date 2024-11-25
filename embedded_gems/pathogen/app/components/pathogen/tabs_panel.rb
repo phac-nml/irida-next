@@ -11,9 +11,9 @@ module Pathogen
     TYPE_OPTIONS = [TYPE_DEFAULT, 'underline'].freeze
 
     BODY_TAG_DEFAULT = :ul
-    # rubocop:disable Layout/LineLength
-    BODY_DEFAULT_CLASSES = 'flex flex-wrap text-sm font-medium text-center text-slate-500 border-b border-slate-200 dark:border-slate-700 dark:text-slate-400'
-    # rubocop:enable Layout/LineLength
+    BODY_DEFAULT_CLASSES = 'flex flex-wrap text-sm font-medium text-center ' \
+                           'text-slate-500 border-b border-slate-200 ' \
+                           'dark:border-slate-700 dark:text-slate-400'
     renders_many :tabs, lambda { |count: nil, selected: false, **system_arguments|
       Pathogen::TabsPanel::Tab.new(
         selected: selected,
