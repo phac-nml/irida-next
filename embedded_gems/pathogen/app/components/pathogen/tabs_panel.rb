@@ -17,7 +17,7 @@ module Pathogen
     renders_many :tabs, lambda { |count: nil, selected: false, **system_arguments|
       Pathogen::TabsPanel::Tab.new(
         selected: selected,
-        type: @type,
+        tab_type: @type,
         controls: @id,
         count: count,
         **system_arguments
