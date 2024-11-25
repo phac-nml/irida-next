@@ -27,7 +27,7 @@ module Projects
                                         end
                                       )),
                                       order: sort,
-                                      includes: [:project])
+                                      includes: [project: { namespace: [{ parent: :route }, :route] }])
       @pagy, @samples = pagy_searchkick(collection, limit: params[:limit] || 20)
       @has_samples = @project.samples.size.positive?
     end
