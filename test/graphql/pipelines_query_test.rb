@@ -6,21 +6,18 @@ class PipelinesQueryTest < ActiveSupport::TestCase
   PIPELINES_QUERY = <<~GRAPHQL
     query($workflow_type: String!) {
       pipelines(workflowType: $workflow_type) {
-        nodes{
-          automatable
-          description
-          engine
-          engineVersion
-          executable
-          metadata
-          name
-          samplesheetHeaders
-          type
-          typeVersion
-          url
-          version
-          workflowParams
-        }
+        automatable
+        description
+        engine
+        engineVersion
+        executable
+        metadata
+        name
+        type
+        typeVersion
+        url
+        version
+        workflowParams
       }
     }
   GRAPHQL
@@ -37,7 +34,7 @@ class PipelinesQueryTest < ActiveSupport::TestCase
 
     assert_nil result['errors'], 'should work and have no errors.'
 
-    data = result['data']['pipelines']['nodes']
+    data = result['data']['pipelines']
 
     assert_not_empty data, 'sample type should work'
     assert_equal 3, data.count
@@ -54,7 +51,7 @@ class PipelinesQueryTest < ActiveSupport::TestCase
 
     assert_nil result['errors'], 'should work and have no errors.'
 
-    data = result['data']['pipelines']['nodes']
+    data = result['data']['pipelines']
 
     assert_not_empty data, 'sample type should work'
     assert_equal 1, data.count
@@ -71,7 +68,7 @@ class PipelinesQueryTest < ActiveSupport::TestCase
 
     assert_nil result['errors'], 'should work and have no errors.'
 
-    data = result['data']['pipelines']['nodes']
+    data = result['data']['pipelines']
 
     assert_not_empty data, 'sample type should work'
 

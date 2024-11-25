@@ -13,7 +13,6 @@ class PipelineQueryTest < ActiveSupport::TestCase
         executable
         metadata
         name
-        samplesheetHeaders
         type
         typeVersion
         url
