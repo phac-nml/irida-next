@@ -11,6 +11,7 @@
 
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "pathogen_view_components", "data-turbo-track": "reload" %>
 
     <%= hotwire_livereload_tags if Rails.env.development? %>
 
@@ -20,7 +21,7 @@
   </head>
 
   <body>
-    <div id="component-preview">
+    <div id="component-preview" class="w-screen h-screen p-4">
       <% if params.dig(:lookbook, :display, :theme) == "all" || params.dig(:theme) == "all" %>
         <div class="theme-wrap">
           <% color_themes.each do |theme| %>

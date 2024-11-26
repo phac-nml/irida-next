@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.version       = Pathogen::ViewComponents::VERSION::STRING
   spec.summary       = 'Pathogen View Components'
   spec.license       = 'MIT'
-  spec.files         = Dir['lib/**/*']
+  spec.files         = Dir['lib/**/*', 'app/**/*', 'previews/**/*']
   spec.require_paths = ['lib']
   spec.required_ruby_version = Gem::Requirement.new('>= 3.2.0')
   spec.add_dependency 'actionview', '>= 5.0.0'
