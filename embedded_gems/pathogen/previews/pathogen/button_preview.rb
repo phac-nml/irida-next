@@ -4,10 +4,6 @@ module Pathogen
   # Preview class for Primer::Button component
   class ButtonPreview < ViewComponent::Preview
     # @label Default
-    def default
-      render Pathogen::Button.new do
-        'Shit'
-      end
-    end
+    def default; end
   end
 end
