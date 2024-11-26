@@ -18,10 +18,10 @@ module Types
     field :name, String, null: true, description: 'WorkflowExecution name'
     field :project, ProjectType, null: true, description: 'Project, if the workflow belongs to a project namespace'
     field :run_id, String, null: true, description: 'WorkflowExecution run id'
-    field :samples,
-          SampleType.connection_type,
+    field :samples_workflow_executions,
+          [SamplesWorkflowExecutionType],
           null: true,
-          description: 'Samples on the workflow execution',
+          description: 'SamplesWorkflowExecutions on the workflow execution',
           complexity: 5,
           resolver: Resolvers::SamplesWorkflowExecutionsResolver
     field :state, String, null: true, description: 'WorkflowExecution state'
