@@ -13,7 +13,7 @@ module Pathogen
     SCHEME_OPTIONS = %i[primary default danger].freeze
     DEFAULT_SCHEME = :default
     # rubocop:disable Layout/LineLength
-    DEFAULT_CLASSES = 'relative pointer select-none transition ease-in-out delay-150 duration-300 rounded-lg font-medium focus:outline-none focus:ring-4 focus:z-10 disabled:opacity-70 disabled:cursor-not-allowed'
+    DEFAULT_CLASSES = 'relative pointer select-none rounded-lg font-medium focus:outline-none focus:ring-4 focus:z-10 disabled:opacity-70 disabled:cursor-not-allowed'
     # rubocop:enable Layout/LineLength
 
     # rubocop:disable Metrics/ParameterLists
@@ -74,9 +74,9 @@ module Pathogen
     def generate_scheme_mapping(scheme)
       # rubocop:disable Layout/LineLength
       {
-        primary: 'bg-primary-700 text-white enabled:hover:bg-primary-800 focus:ring-primary-100 dark:focus:ring-primary-600',
-        default: 'text-slate-900 bg-white border border-slate-200 enabled:hover:bg-slate-100 enabled:hover:text-primary-700 focus:ring-4 focus:ring-slate-100 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 enabled:dark:hover:text-white enabled:dark:hover:bg-slate-700',
-        danger: 'border border-red-100 bg-slate-50 text-red-500 enabled:hover:text-red-50 enabled:dark:hover:text-red-50 enabled:hover:bg-red-800 focus:ring-red-300 dark:border-red-800 dark:bg-slate-900 dark:text-red-500 dark:focus:ring-red-900'
+        primary: 'bg-brand-primary text-brand-onprimary enabled:hover:bg-brand-primary-hover focus:ring-brand-primary-100 dark:focus:ring-brand-primary-600',
+        default: 'text-neutral-primary bg-neutral-secondary border border-neutral-primary enabled:hover:bg-neutral-secondary-hover enabled:hover:text-brand-onsecondary focus:ring-4 focus:ring-neutral-primary dark:focus:ring-neutral-primary dark:bg-neutral-primary dark:text-neutral-secondary dark:border-neutral-primary enabled:dark:hover:text-brand-onprimary enabled:dark:hover:bg-neutral-primary dark:enabled:hover:bg-neutral-primary-hover',
+        danger: 'border border-danger-primary bg-danger-secondary text-danger-onsecondary enabled:hover:text-danger-onsecondary enabled:dark:hover:text-danger-onsecondary enabled:hover:bg-danger-secondary-hover focus:ring-danger-primary-100 dark:border-danger-primary dark:bg-danger-secondary dark:text-danger-onsecondary dark:focus:ring-danger-primary-900'
       }[scheme]
       # rubocop:enable Layout/LineLength
     end

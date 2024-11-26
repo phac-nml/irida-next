@@ -60,3 +60,4 @@ end
 gem "hotwire-livereload", "~> 1.4", :group => :development
 
 gem "tailwindcss-rails", "~> 3.0"
+gem "heroicon-rails", "~> 0.2.9"
