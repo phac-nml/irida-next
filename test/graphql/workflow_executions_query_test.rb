@@ -9,11 +9,9 @@ class WorkflowExecutionsQueryTest < ActiveSupport::TestCase
         nodes {
           id
           runId
-          samples {
-            edges {
-              node {
-                id
-              }
+          samplesWorkflowExecutions {
+            sample {
+              id
             }
           }
         }
@@ -53,11 +51,9 @@ class WorkflowExecutionsQueryTest < ActiveSupport::TestCase
           workflowType
           workflowTypeVersion
           workflowUrl
-          samples {
-            edges {
-              node {
-                id
-              }
+          samplesWorkflowExecutions {
+            sample {
+              id
             }
           }
         }
@@ -112,15 +108,15 @@ class WorkflowExecutionsQueryTest < ActiveSupport::TestCase
     )['data']
 
     workflow_execution_id = prelim_query['workflowExecutions']['nodes'][0]['id']
-    sample_id = prelim_query['workflowExecutions']['nodes'][0]['samples']['edges'][0]['node']['id']
+    sample_id = prelim_query['workflowExecutions']['nodes'][0]['samplesWorkflowExecutions'][0]['sample']['id']
 
     result = IridaSchema.execute(WORKFLOW_EXECUTIONS_NODE_QUERY, context: { current_user: @user },
                                                                  variables: { workflow_execution_id: })
 
     data = result['data']['node']
 
-    assert_not_empty data['samples']['edges'], 'workflow execution samples resolver should work'
-    assert_equal sample_id, data['samples']['edges'][0]['node']['id'], 'sample id should match'
+    assert_not_empty data['samplesWorkflowExecutions'], 'workflow execution samples resolver should work'
+    assert_equal sample_id, data['samplesWorkflowExecutions'][0]['sample']['id'], 'sample id should match'
   end
 
   test 'workflow executions nodes query for metadata though resolver should work' do
