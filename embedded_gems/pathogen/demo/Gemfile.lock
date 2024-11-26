@@ -376,6 +376,7 @@ DEPENDENCIES
   brakeman
   capybara
   debug
+  heroicon-rails (~> 0.2.9)
   hotwire-livereload (~> 1.4)
   importmap-rails
   jbuilder
