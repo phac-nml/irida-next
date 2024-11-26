@@ -624,24 +624,29 @@ video {
   border-width: 1px;
 }
 
-.border-red-100 {
+.border-neutral-primary {
   --tw-border-opacity: 1;
-  border-color: rgb(254 226 226 / var(--tw-border-opacity, 1));
+  border-color: rgb(146 205 184 / var(--tw-border-opacity, 1));
 }
 
-.border-slate-200 {
+.border-danger-primary {
   --tw-border-opacity: 1;
-  border-color: rgb(226 232 240 / var(--tw-border-opacity, 1));
+  border-color: rgb(248 113 113 / var(--tw-border-opacity, 1));
 }
 
-.bg-slate-50 {
+.bg-brand-primary {
+  --tw-bg-opacity: 1;
+  background-color: rgb(58 132 108 / var(--tw-bg-opacity, 1));
+}
+
+.bg-neutral-secondary {
   --tw-bg-opacity: 1;
   background-color: rgb(248 250 252 / var(--tw-bg-opacity, 1));
 }
 
-.bg-white {
+.bg-danger-secondary {
   --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+  background-color: rgb(254 226 226 / var(--tw-bg-opacity, 1));
 }
 
 .fill-current {
@@ -676,39 +681,19 @@ video {
   font-weight: 500;
 }
 
-.text-red-500 {
-  --tw-text-opacity: 1;
-  color: rgb(239 68 68 / var(--tw-text-opacity, 1));
-}
-
-.text-slate-900 {
-  --tw-text-opacity: 1;
-  color: rgb(15 23 42 / var(--tw-text-opacity, 1));
-}
-
-.text-white {
+.text-brand-onprimary {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
 }
 
-.transition {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
+.text-neutral-primary {
+  --tw-text-opacity: 1;
+  color: rgb(30 41 59 / var(--tw-text-opacity, 1));
 }
 
-.delay-150 {
-  transition-delay: 150ms;
-}
-
-.duration-300 {
-  transition-duration: 300ms;
-}
-
-.ease-in-out {
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+.text-danger-onsecondary {
+  --tw-text-opacity: 1;
+  color: rgb(153 27 27 / var(--tw-text-opacity, 1));
 }
 
 .focus\:z-10:focus {
@@ -726,29 +711,29 @@ video {
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
 }
 
-.focus\:ring-red-300:focus {
+.focus\:ring-error-100:focus {
   --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(252 165 165 / var(--tw-ring-opacity, 1));
+  --tw-ring-color: rgb(254 226 226 / var(--tw-ring-opacity, 1));
 }
 
-.focus\:ring-slate-100:focus {
-  --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(241 245 249 / var(--tw-ring-opacity, 1));
-}
-
-.enabled\:hover\:bg-red-800:hover:enabled {
+.enabled\:hover\:bg-brand-primary-hover:hover:enabled {
   --tw-bg-opacity: 1;
-  background-color: rgb(153 27 27 / var(--tw-bg-opacity, 1));
+  background-color: rgb(71 161 131 / var(--tw-bg-opacity, 1));
 }
 
-.enabled\:hover\:bg-slate-100:hover:enabled {
+.enabled\:hover\:bg-danger-secondary-hover:hover:enabled {
   --tw-bg-opacity: 1;
-  background-color: rgb(241 245 249 / var(--tw-bg-opacity, 1));
+  background-color: rgb(254 202 202 / var(--tw-bg-opacity, 1));
 }
 
-.enabled\:hover\:text-red-50:hover:enabled {
+.enabled\:hover\:text-brand-onsecondary:hover:enabled {
   --tw-text-opacity: 1;
-  color: rgb(254 242 242 / var(--tw-text-opacity, 1));
+  color: rgb(45 85 72 / var(--tw-text-opacity, 1));
+}
+
+.enabled\:hover\:text-danger-onsecondary:hover:enabled {
+  --tw-text-opacity: 1;
+  color: rgb(153 27 27 / var(--tw-text-opacity, 1));
 }
 
 .disabled\:cursor-not-allowed:disabled {
@@ -760,58 +745,53 @@ video {
 }
 
 @media (prefers-color-scheme: dark) {
-  .dark\:border-red-800 {
+  .dark\:border-neutral-primary {
     --tw-border-opacity: 1;
-    border-color: rgb(153 27 27 / var(--tw-border-opacity, 1));
+    border-color: rgb(146 205 184 / var(--tw-border-opacity, 1));
   }
 
-  .dark\:border-slate-600 {
+  .dark\:border-danger-primary {
     --tw-border-opacity: 1;
-    border-color: rgb(71 85 105 / var(--tw-border-opacity, 1));
+    border-color: rgb(248 113 113 / var(--tw-border-opacity, 1));
   }
 
-  .dark\:bg-slate-800 {
+  .dark\:bg-neutral-primary {
     --tw-bg-opacity: 1;
-    background-color: rgb(30 41 59 / var(--tw-bg-opacity, 1));
+    background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
   }
 
-  .dark\:bg-slate-900 {
+  .dark\:bg-danger-secondary {
     --tw-bg-opacity: 1;
-    background-color: rgb(15 23 42 / var(--tw-bg-opacity, 1));
+    background-color: rgb(254 226 226 / var(--tw-bg-opacity, 1));
   }
 
-  .dark\:text-red-500 {
+  .dark\:text-neutral-secondary {
     --tw-text-opacity: 1;
-    color: rgb(239 68 68 / var(--tw-text-opacity, 1));
+    color: rgb(100 116 139 / var(--tw-text-opacity, 1));
   }
 
-  .dark\:text-slate-400 {
+  .dark\:text-danger-onsecondary {
     --tw-text-opacity: 1;
-    color: rgb(148 163 184 / var(--tw-text-opacity, 1));
+    color: rgb(153 27 27 / var(--tw-text-opacity, 1));
   }
 
-  .dark\:focus\:ring-red-900:focus {
+  .dark\:focus\:ring-error-900:focus {
     --tw-ring-opacity: 1;
     --tw-ring-color: rgb(127 29 29 / var(--tw-ring-opacity, 1));
   }
 
-  .dark\:focus\:ring-slate-700:focus {
-    --tw-ring-opacity: 1;
-    --tw-ring-color: rgb(51 65 85 / var(--tw-ring-opacity, 1));
-  }
-
-  .enabled\:dark\:hover\:bg-slate-700:hover:enabled {
+  .enabled\:dark\:hover\:bg-neutral-primary:hover:enabled {
     --tw-bg-opacity: 1;
-    background-color: rgb(51 65 85 / var(--tw-bg-opacity, 1));
+    background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
   }
 
-  .enabled\:dark\:hover\:text-red-50:hover:enabled {
-    --tw-text-opacity: 1;
-    color: rgb(254 242 242 / var(--tw-text-opacity, 1));
-  }
-
-  .enabled\:dark\:hover\:text-white:hover:enabled {
+  .enabled\:dark\:hover\:text-brand-onprimary:hover:enabled {
     --tw-text-opacity: 1;
     color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+  }
+
+  .enabled\:dark\:hover\:text-danger-onsecondary:hover:enabled {
+    --tw-text-opacity: 1;
+    color: rgb(153 27 27 / var(--tw-text-opacity, 1));
   }
 }
