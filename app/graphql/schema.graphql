@@ -1562,6 +1562,71 @@ type PageInfo {
 }
 
 """
+A pipeline
+"""
+type Pipeline {
+  """
+  
+  """
+  automatable: Boolean
+
+  """
+  
+  """
+  description: String
+
+  """
+  
+  """
+  engine: String
+
+  """
+  
+  """
+  engineVersion: String
+
+  """
+  
+  """
+  executable: Boolean
+
+  """
+  
+  """
+  metadata: JSON
+
+  """
+  
+  """
+  name: String
+
+  """
+  
+  """
+  type: String
+
+  """
+  
+  """
+  typeVersion: String
+
+  """
+  URL of the pipeline GitHub repository
+  """
+  url: String!
+
+  """
+  
+  """
+  version: String
+
+  """
+  
+  """
+  workflowParams: JSON!
+}
+
+"""
 A project
 """
 type Project implements Node {
@@ -2108,6 +2173,38 @@ type Query {
     """
     ids: [ID!]!
   ): [Node]!
+
+  """
+  Find Pipelines
+  """
+  pipeline(
+    """
+    Name of the Workflow
+    """
+    workflowName: String!
+
+    """
+    Can specify `automatable` for automatable pipelines, or `available` for all
+    pipelines. By default only 'executable' pipelines are returned.
+    """
+    workflowType: String = "executable"
+
+    """
+    Version of the Workflow
+    """
+    workflowVersion: String!
+  ): Pipeline
+
+  """
+  Find Pipelines
+  """
+  pipelines(
+    """
+    Can specify `automatable` for automatable pipelines, or `available` for all
+    pipelines. By default only `executable` pipelines are returned.
+    """
+    workflowType: String = "executable"
+  ): [Pipeline!]
 
   """
   Find a project.
