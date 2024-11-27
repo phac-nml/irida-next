@@ -3,21 +3,20 @@
                     locals: {
                       open: @new_bot_account[:bot_user_account].errors.any?,
                       new_bot_account: @new_bot_account[:bot_user_account],
-                      bot_params: defined?(bot_params) ? bot_params : nil
+                      bot_params: defined?(bot_params) ? bot_params : nil,
                     } %>
 <%= turbo_stream.update "new_bot_account-error-alert", viral_alert(type:, message:) %>
 <% if @new_bot_account[:bot_user_account].persisted? %>
   <%= turbo_stream.append "flashes" do %>
     <%= viral_flash(type:, data: message) %>
   <% end %>
-  <%= turbo_stream.replace "bots" do %>
-    <%= turbo_frame_tag "bots", src: namespace_project_bots_path(format: :turbo_stream) %>
-  <% end %>
   <%= turbo_stream.replace "access-token-section",
                        partial: "access_token_section",
                        locals: {
                          bot_account_name:
                            @new_bot_account[:bot_user_account].email,
-                         token: personal_access_token.token
+                         token: personal_access_token.token,
                        } %>
+
+  <turbo-stream action="refresh"></turbo-stream>
 <% end %>

@@ -41,5 +41,9 @@ module Projects
     def bot_type
       @bot_type = User.user_types[:project_bot]
     end
+
+    def redirect_path
+      namespace_project_bots_path
+    end
   end
 end
