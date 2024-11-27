@@ -99,6 +99,7 @@ module Dashboard
 
       fill_in I18n.t(:'dashboard.projects.index.search.placeholder'), with: @project.puid
       find('input.t-search-component').native.send_keys(:return)
+      assert_text 'Displaying 1 item'
       assert_selector 'tr', count: 1
     end
 
