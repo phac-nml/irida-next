@@ -35,7 +35,7 @@ module Pathogen
 
     DEFAULT_SCHEME_CLASSES = [
       'bg-light-neutral-primary',
-      'text-light-neutral-primary',
+      'text-light-neutral-onprimary',
       'border',
       'border-light-neutral-primary',
       'enabled:hover:bg-light-neutral-primary-hover',
@@ -44,7 +44,7 @@ module Pathogen
 
     DEFAULT_DARK_SCHEME_CLASSES = [
       'dark:bg-dark-neutral-primary',
-      'dark:text-dark-neutral-primary',
+      'dark:text-dark-neutral-onprimary',
       'dark:enabled:hover:bg-dark-neutral-primary-hover',
       'dark:focus:ring-dark-neutral-primary'
     ].freeze
