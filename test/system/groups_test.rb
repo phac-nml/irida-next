@@ -1075,6 +1075,8 @@ class GroupsTest < ApplicationSystemTestCase
     assert_no_text I18n.t('groups.show.subgroups.no_subgroups.title')
     assert_no_text I18n.t('groups.show.subgroups.no_subgroups.description')
 
+    assert @subgroup2.puid
+
     input_field = find('input.t-search-component')
     input_field.fill_in with: 'invalid filter'
     input_field.native.send_keys(:return)
@@ -1092,6 +1094,8 @@ class GroupsTest < ApplicationSystemTestCase
 
     assert_no_text I18n.t('groups.show.shared_namespaces.no_shared.title')
     assert_no_text I18n.t('groups.show.shared_namespaces.no_shared.description')
+
+    assert @subgroup2.puid
 
     assert_selector 'input.t-search-component'
     input_field = find('input.t-search-component')
