@@ -16,6 +16,64 @@ module Pathogen
     DEFAULT_CLASSES = 'relative pointer select-none rounded-lg font-medium focus:outline-none focus:ring-4 focus:z-10 disabled:opacity-70 disabled:cursor-not-allowed'
     # rubocop:enable Layout/LineLength
 
+    # CSS classes for different button schemes
+    PRIMARY_SCHEME_CLASSES = [
+      'bg-brand-primary',
+      'text-brand-onprimary',
+      'enabled:hover:bg-brand-primary-hover',
+      'focus:ring-brand-primary-100'
+    ].freeze
+
+    PRIMARY_DARK_SCHEME_CLASSES = [
+      'dark:focus:ring-brand-primary-600',
+      'dark:focus:ring-neutral-primary',
+      'dark:bg-neutral-primary',
+      'dark:text-neutral-secondary',
+      'dark:border-neutral-primary',
+      'enabled:dark:hover:text-brand-onprimary',
+      'enabled:dark:hover:bg-neutral-primary',
+      'dark:enabled:hover:bg-neutral-primary-hover'
+    ].freeze
+
+    DEFAULT_SCHEME_CLASSES = [
+      'text-neutral-primary',
+      'bg-neutral-secondary',
+      'border',
+      'border-neutral-primary',
+      'enabled:hover:bg-neutral-primary-hover',
+      'enabled:hover:text-brand-onsecondary',
+      'focus:ring-4',
+      'focus:ring-neutral-primary'
+    ].freeze
+
+    DEFAULT_DARK_SCHEME_CLASSES = [
+      'dark:focus:ring-neutral-primary',
+      'dark:bg-neutral-primary',
+      'dark:text-neutral-secondary',
+      'dark:border-neutral-primary',
+      'enabled:dark:hover:text-brand-onprimary',
+      'enabled:dark:hover:bg-neutral-primary',
+      'dark:enabled:hover:bg-neutral-primary-hover'
+    ].freeze
+
+    DANGER_SCHEME_CLASSES = [
+      'border',
+      'border-danger-primary',
+      'bg-danger-secondary',
+      'text-danger-onprimary',
+      'enabled:hover:text-danger-onprimary-hover',
+      'enabled:hover:bg-danger-primary-hover',
+      'focus:ring-danger-primary-100'
+    ].freeze
+
+    DANGER_DARK_SCHEME_CLASSES = [
+      'dark:border-danger-primary',
+      'dark:bg-danger-secondary',
+      'dark:text-danger-onsecondary',
+      'dark:focus:ring-danger-primary-900',
+      'enabled:dark:hover:text-danger-onsecondary'
+    ].freeze
+
     # rubocop:disable Metrics/ParameterLists
     def initialize(base_button_class: Pathogen::BaseButton, scheme: DEFAULT_SCHEME, size: DEFAULT_SIZE, block: false,
                    disabled: false, **system_arguments)
@@ -72,13 +130,17 @@ module Pathogen
     # @param scheme [Symbol] The color scheme of the button (:primary, :default, or :danger).
     # @return [String] A string of CSS classes corresponding to the specified scheme.
     def generate_scheme_mapping(scheme)
-      # rubocop:disable Layout/LineLength
-      {
-        primary: 'bg-brand-primary text-brand-onprimary enabled:hover:bg-brand-primary-hover focus:ring-brand-primary-100 dark:focus:ring-brand-primary-600',
-        default: 'text-neutral-primary bg-neutral-secondary border border-neutral-primary enabled:hover:bg-neutral-secondary-hover enabled:hover:text-brand-onsecondary focus:ring-4 focus:ring-neutral-primary dark:focus:ring-neutral-primary dark:bg-neutral-primary dark:text-neutral-secondary dark:border-neutral-primary enabled:dark:hover:text-brand-onprimary enabled:dark:hover:bg-neutral-primary dark:enabled:hover:bg-neutral-primary-hover',
-        danger: 'border border-danger-primary bg-danger-secondary text-danger-onsecondary enabled:hover:text-danger-onsecondary enabled:dark:hover:text-danger-onsecondary enabled:hover:bg-danger-secondary-hover focus:ring-danger-primary-100 dark:border-danger-primary dark:bg-danger-secondary dark:text-danger-onsecondary dark:focus:ring-danger-primary-900'
-      }[scheme]
-      # rubocop:enable Layout/LineLength
+      case scheme
+      when :primary
+        (PRIMARY_SCHEME_CLASSES + PRIMARY_DARK_SCHEME_CLASSES).join(' ')
+      when :default
+        (DEFAULT_SCHEME_CLASSES + DEFAULT_DARK_SCHEME_CLASSES).join(' ')
+      when :danger
+        (DANGER_SCHEME_CLASSES + DANGER_DARK_SCHEME_CLASSES).join(' ')
+      else
+        # Default case for other schemes or fallback
+        ''
+      end
     end
   end
 end
