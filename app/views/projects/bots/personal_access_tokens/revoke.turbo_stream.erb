@@ -2,4 +2,4 @@
 
 <%= turbo_stream.remove dom_id(personal_access_token) %>
 
-<%= turbo_stream.replace "bots", partial: "projects/bots/bot_listing" %>
+<turbo-stream action="refresh"></turbo-stream>
