@@ -18,60 +18,51 @@ module Pathogen
 
     # CSS classes for different button schemes
     PRIMARY_SCHEME_CLASSES = [
-      'bg-brand-primary',
-      'text-brand-onprimary',
-      'enabled:hover:bg-brand-primary-hover',
-      'focus:ring-brand-primary-100'
+      'bg-light-brand-primary',
+      'text-light-brand-onprimary',
+      'border',
+      'border-light-brand-primary',
+      'enabled:hover:bg-light-brand-primary-hover',
+      'focus:ring-light-brand-primary'
     ].freeze
 
     PRIMARY_DARK_SCHEME_CLASSES = [
-      'dark:focus:ring-brand-primary-600',
-      'dark:focus:ring-neutral-primary',
-      'dark:bg-neutral-primary',
-      'dark:text-neutral-secondary',
-      'dark:border-neutral-primary',
-      'enabled:dark:hover:text-brand-onprimary',
-      'enabled:dark:hover:bg-neutral-primary',
-      'dark:enabled:hover:bg-neutral-primary-hover'
+      'dark:bg-dark-brand-primary',
+      'dark:text-dark-brand-onprimary',
+      'dark:enabled:hover:bg-dark-brand-primary-hover',
+      'dark:focus:ring-dark-brand-primary'
     ].freeze
 
     DEFAULT_SCHEME_CLASSES = [
-      'text-neutral-primary',
-      'bg-neutral-secondary',
+      'bg-light-neutral-primary',
+      'text-light-neutral-primary',
       'border',
-      'border-neutral-primary',
-      'enabled:hover:bg-neutral-primary-hover',
-      'enabled:hover:text-brand-onsecondary',
-      'focus:ring-4',
-      'focus:ring-neutral-primary'
+      'border-light-neutral-primary',
+      'enabled:hover:bg-light-neutral-primary-hover',
+      'focus:ring-light-neutral-primary'
     ].freeze
 
     DEFAULT_DARK_SCHEME_CLASSES = [
-      'dark:focus:ring-neutral-primary',
-      'dark:bg-neutral-primary',
-      'dark:text-neutral-secondary',
-      'dark:border-neutral-primary',
-      'enabled:dark:hover:text-brand-onprimary',
-      'enabled:dark:hover:bg-neutral-primary',
-      'dark:enabled:hover:bg-neutral-primary-hover'
+      'dark:bg-dark-neutral-primary',
+      'dark:text-dark-neutral-primary',
+      'dark:enabled:hover:bg-dark-neutral-primary-hover',
+      'dark:focus:ring-dark-neutral-primary'
     ].freeze
 
     DANGER_SCHEME_CLASSES = [
+      'bg-light-danger-primary',
+      'text-light-danger-onprimary',
       'border',
-      'border-danger-primary',
-      'bg-danger-secondary',
-      'text-danger-onprimary',
-      'enabled:hover:text-danger-onprimary-hover',
-      'enabled:hover:bg-danger-primary-hover',
-      'focus:ring-danger-primary-100'
+      'border-light-danger-primary',
+      'enabled:hover:bg-light-danger-primary-hover',
+      'focus:ring-light-danger-primary'
     ].freeze
 
     DANGER_DARK_SCHEME_CLASSES = [
-      'dark:border-danger-primary',
-      'dark:bg-danger-secondary',
-      'dark:text-danger-onsecondary',
-      'dark:focus:ring-danger-primary-900',
-      'enabled:dark:hover:text-danger-onsecondary'
+      'dark:bg-dark-danger-primary',
+      'dark:text-dark-danger-onprimary',
+      'dark:enabled:hover:bg-dark-danger-primary-hover',
+      'dark:focus:ring-dark-danger-primary'
     ].freeze
 
     # rubocop:disable Metrics/ParameterLists
