@@ -50,5 +50,8 @@ module Demo
 
     config.lookbook.project_name = "Pathogen ViewComponents v#{Pathogen::ViewComponents::VERSION::STRING}"
     config.lookbook.component_paths = [Pathogen::ViewComponents::Engine.root.join("app", "components")]
+    config.lookbook.preview_display_options = {
+      theme: ["light", "dark"], # dynamic 'theme' display option
+    }
   end
 end
