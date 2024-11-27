@@ -10,6 +10,7 @@ const globalColors = {
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: "class",
   content: [
     "./app/components/**/*.erb",
     "./app/components/**/*.html",
