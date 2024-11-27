@@ -487,10 +487,12 @@ class GroupsTest < ApplicationSystemTestCase
     assert_button I18n.t('components.confirmation.confirm')
     click_button I18n.t('components.confirmation.confirm')
 
-    visit group_url(@group12)
+    assert_selector 'h1', text: I18n.t('dashboard.groups.index.title')
 
     assert_equal 1, @subgroup12a.reload.samples_count
     assert_equal 1, @subgroup12b.reload.samples_count
+
+    visit group_url(@group12)
 
     within("#group_#{@subgroup12a.id}-samples-count") do
       assert_text @subgroup12a.samples_count
@@ -737,10 +739,12 @@ class GroupsTest < ApplicationSystemTestCase
     within("li#group_#{@subgroup12a.id}") do
       find('a.folder-toggle-wrap').click
     end
+    assert_text @subgroup12aa.puid
 
     within("li#group_#{@subgroup12aa.id}") do
       find('a.folder-toggle-wrap').click
     end
+    assert_text @project31.puid
 
     assert_equal 3, @subgroup12a.samples_count
     assert_equal 1, @subgroup12b.samples_count
@@ -770,10 +774,12 @@ class GroupsTest < ApplicationSystemTestCase
     within("li#group_#{@subgroup12a.id}") do
       find('a.folder-toggle-wrap').click
     end
+    assert_text @subgroup12aa.puid
 
     within("li#group_#{@subgroup12aa.id}") do
       find('a.folder-toggle-wrap').click
     end
+    assert_text @project31.puid
 
     assert_equal 4, @subgroup12a.reload.samples_count
     assert_equal 3, @subgroup12aa.reload.samples_count
@@ -805,16 +811,17 @@ class GroupsTest < ApplicationSystemTestCase
     within("li#group_#{@subgroup12a.id}") do
       find('a.folder-toggle-wrap').click
     end
+    assert_text @subgroup12aa.puid
 
     within("li#group_#{@subgroup12aa.id}") do
       find('a.folder-toggle-wrap').click
     end
-
-    assert_no_selector "#project_#{@project30.id}-samples-count"
+    assert_text @project31.puid
 
     within("li#group_#{@subgroup12b.id}") do
       find('a.folder-toggle-wrap').click
     end
+    assert_text @project30.puid
 
     assert_equal 3, @subgroup12a.samples_count
     assert_equal 1, @subgroup12b.samples_count
@@ -856,16 +863,17 @@ class GroupsTest < ApplicationSystemTestCase
     within("li#group_#{@subgroup12a.id}") do
       find('a.folder-toggle-wrap').click
     end
+    assert_text @subgroup12aa.puid
 
     within("li#group_#{@subgroup12aa.id}") do
       find('a.folder-toggle-wrap').click
     end
-
-    assert_no_selector "#project_#{@project30.id}-samples-count"
+    assert_text @project31.puid
 
     within("li#group_#{@subgroup12b.id}") do
       find('a.folder-toggle-wrap').click
     end
+    assert_text @project30.puid
 
     assert_equal 2, @subgroup12a.reload.samples_count
     assert_equal 1, @subgroup12aa.reload.samples_count
@@ -902,16 +910,17 @@ class GroupsTest < ApplicationSystemTestCase
     within("li#group_#{@subgroup12a.id}") do
       find('a.folder-toggle-wrap').click
     end
+    assert_text @subgroup12aa.puid
 
     within("li#group_#{@subgroup12aa.id}") do
       find('a.folder-toggle-wrap').click
     end
-
-    assert_no_selector "#project_#{@project30.id}-samples-count"
+    assert_text @project31.puid
 
     within("li#group_#{@subgroup12b.id}") do
       find('a.folder-toggle-wrap').click
     end
+    assert_text @project30.puid
 
     assert_equal 3, @subgroup12a.samples_count
     assert_equal 1, @subgroup12b.samples_count
@@ -955,16 +964,19 @@ class GroupsTest < ApplicationSystemTestCase
     within("li#group_#{@subgroup12a.id}") do
       find('a.folder-toggle-wrap').click
     end
+    assert_text @subgroup12aa.puid
 
     within("li#group_#{@subgroup12aa.id}") do
       find('a.folder-toggle-wrap').click
     end
+    assert_text @project31.puid
 
     assert_no_selector "#project_#{@project30.id}-samples-count"
 
     within("li#group_#{@subgroup12b.id}") do
       find('a.folder-toggle-wrap').click
     end
+    assert_text @project30.puid
 
     assert_equal 3, @subgroup12a.reload.samples_count
     assert_equal 2, @subgroup12aa.reload.samples_count
@@ -1081,6 +1093,9 @@ class GroupsTest < ApplicationSystemTestCase
     assert_no_text I18n.t('groups.show.shared_namespaces.no_shared.title')
     assert_no_text I18n.t('groups.show.shared_namespaces.no_shared.description')
 
+    assert_text @subgroup2.puid
+
+    assert_selector 'input.t-search-component'
     input_field = find('input.t-search-component')
     input_field.fill_in with: 'invalid filter'
     input_field.native.send_keys(:return)

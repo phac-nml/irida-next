@@ -37,7 +37,7 @@ module Projects
       click_on I18n.t('projects.attachments.index.upload_files')
 
       within('dialog') do
-        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
+        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/data_export_1.zip')
         # check that button goes from being enabled to disabled when clicked
         assert_selector '#t-upload-button:not(:disabled)'
         click_on I18n.t('attachments.dialogs.new_attachment_component.upload')
@@ -46,7 +46,7 @@ module Projects
 
       assert_selector '#attachments-table table tbody tr', count: 3
       within('tbody') do
-        assert_text 'test_file_2.fastq.gz'
+        assert_text 'data_export_1.zip'
       end
     end
 

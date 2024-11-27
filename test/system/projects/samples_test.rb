@@ -94,18 +94,18 @@ module Projects
       click_on I18n.t('projects.samples.show.upload_files')
 
       within('dialog') do
-        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
+        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/data_export_1.zip')
         # check that button goes from being enabled to disabled when clicked
         assert_selector 'input[type=submit]:not(:disabled)'
         click_on I18n.t('projects.samples.show.upload')
         assert_selector 'input[type=submit]:disabled'
       end
 
-      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'test_file_2.fastq.gz')
+      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'data_export_1.zip')
       within('#table-listing') do
         assert_no_text I18n.t('projects.samples.show.no_files')
         assert_no_text I18n.t('projects.samples.show.no_associated_files')
-        assert_text 'test_file_2.fastq.gz'
+        assert_text 'data_export_1.zip'
       end
     end
 
@@ -563,7 +563,7 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.clone_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        assert "input[placeholder='#{I18n.t('projects.samples.transfers.dialog.no_available_projects')}']"
+        assert_selector "input[placeholder='#{I18n.t('projects.samples.transfers.dialog.no_available_projects')}']"
       end
     end
 
