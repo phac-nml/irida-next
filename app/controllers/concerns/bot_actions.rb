@@ -55,17 +55,13 @@ module BotActions
 
   def destroy
     Bots::DestroyService.new(@bot_account, current_user).execute
-
     respond_to do |format|
-      if @bot_account.deleted?
-        format.any(:html, :turbo_stream) do
+      format.turbo_stream do
+        if @bot_account.deleted?
+          flash[:success] = t('concerns.bot_actions.destroy.success')
           redirect_to namespace_project_bots_path
-        end
-        # data_exports_path
-        # namespace_project_bots_path
-      else
+        else
 
-        format.turbo_stream do
           render status: :unprocessable_entity,
                  locals: {
                    type: 'alert',
