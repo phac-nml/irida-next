@@ -955,16 +955,19 @@ class GroupsTest < ApplicationSystemTestCase
     within("li#group_#{@subgroup12a.id}") do
       find('a.folder-toggle-wrap').click
     end
+    assert_text @subgroup12aa.puid
 
     within("li#group_#{@subgroup12aa.id}") do
       find('a.folder-toggle-wrap').click
     end
+    assert_text @project31.puid
 
     assert_no_selector "#project_#{@project30.id}-samples-count"
 
     within("li#group_#{@subgroup12b.id}") do
       find('a.folder-toggle-wrap').click
     end
+    assert_text @project30.puid
 
     assert_equal 3, @subgroup12a.reload.samples_count
     assert_equal 2, @subgroup12aa.reload.samples_count
