@@ -563,7 +563,7 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.clone_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
-        assert "input[placeholder='#{I18n.t('projects.samples.transfers.dialog.no_available_projects')}']"
+        assert_selector "input[placeholder='#{I18n.t('projects.samples.transfers.dialog.no_available_projects')}']"
       end
     end
 
