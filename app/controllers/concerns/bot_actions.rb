@@ -59,7 +59,7 @@ module BotActions
       format.turbo_stream do
         if @bot_account.deleted?
           flash[:success] = t('concerns.bot_actions.destroy.success')
-          redirect_to namespace_project_bots_path
+          redirect_to redirect_path
         else
           render status: :unprocessable_entity,
                  locals: {

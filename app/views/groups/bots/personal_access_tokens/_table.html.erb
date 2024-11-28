@@ -1,0 +1,70 @@
+<%= turbo_frame_tag "personal_access_tokens" do %>
+  <% if personal_access_tokens.count.positive? %>
+    <%= viral_data_table(personal_access_tokens, id: "access-tokens-table-body") do |table| %>
+      <% table.with_column(t("activerecord.attributes.personal_access_token.name")) do |row| %>
+        <%= row[:name] %>
+      <% end %>
+      <% table.with_column(t("activerecord.attributes.personal_access_token.scopes")) do |row| %>
+        <%= row[:scopes].join(", ") %>
+      <% end %>
+      <% table.with_column(t("activerecord.attributes.personal_access_token.created_at")) do |row| %>
+        <%= local_time(row[:created_at], :full_date) %>
+      <% end %>
+      <% table.with_column(t("activerecord.attributes.personal_access_token.last_used_at")) do |row| %>
+        <% if row[:last_used_at].present? %>
+          <%= local_time(row[:last_used_at], :full_date) %>
+        <% else %>
+          <%= t(
+            "groups.bots.index.personal_access_tokens_listing_modal.personal_access_token.never",
+          ) %>
+        <% end %>
+      <% end %>
+      <% table.with_column(t("activerecord.attributes.personal_access_token.expires_at")) do |row| %>
+        <% if row[:expires_at].present? %>
+          <%= local_time(row[:expires_at], :full_date) %>
+        <% else %>
+          <%= t(
+            "groups.bots.index.personal_access_tokens_listing_modal.personal_access_token.never",
+          ) %>
+        <% end %>
+      <% end %>
+      <% table.with_column(t("viral.data_table_component.header.action"),
+        sticky_key: :right
+      ) do |row| %>
+        <%= link_to(
+          t(
+            "groups.bots.index.personal_access_tokens_listing_modal.personal_access_token.revoke",
+          ),
+          revoke_group_bot_personal_access_token_path(
+            bot_id: @bot_account.id,
+            id: row.id,
+          ),
+          data: {
+            turbo_method: :delete,
+            turbo_confirm:
+              t(
+                "groups.bots.index.personal_access_tokens_listing_modal.personal_access_token.revoke_confirmation",
+              ),
+          },
+          class:
+            "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+        ) %>
+      <% end %>
+    <% end %>
+  <% else %>
+    <div class="empty_state_message">
+      <%= viral_empty(
+        title:
+          t(
+            "groups.bots.index.personal_access_tokens_listing_modal.personal_access_token.empty.title",
+          ),
+        description:
+          t(
+            "groups.bots.index.personal_access_tokens_listing_modal.personal_access_token.empty.description",
+            bot_name: @bot_account.user.email,
+          ),
+        icon_name: :bug_ant,
+      ) %>
+    </div>
+  <% end %>
+<% end %>
