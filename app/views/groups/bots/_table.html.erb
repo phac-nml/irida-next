@@ -65,6 +65,7 @@
       <% end %>
     <% end %>
   <% end %>
+  <%= render Viral::Pagy::FullComponent.new(@pagy, item: t("groups.bots.index.title")) %>
 <% else %>
   <div class="empty_state_message">
     <%= viral_empty(
