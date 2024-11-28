@@ -1118,6 +1118,9 @@ en:
           actions: Actions
           description: Viewing a list of active personal access tokens for %{bot_account}
           personal_access_token:
+            empty:
+              title: No personal access tokens
+              description: Bot %{bot_name} has no personal access tokens.
             never: Never
             revoke: Revoke
             revoke_confirmation: Are you sure you want to revoke this personal access token?
