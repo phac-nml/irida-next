@@ -2,7 +2,7 @@ const colors = require("tailwindcss/colors");
 
 /*
 Colors naming convention: [light|dark]-[role]-[primary|secondary]-[interaction]
-e.g. hover:dark-brand-primary-hover
+e.g. hover:bg-dark-brand-primary-hover
 */
 
 const globalColors = {
