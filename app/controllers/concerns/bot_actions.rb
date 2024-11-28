@@ -61,7 +61,6 @@ module BotActions
           flash[:success] = t('concerns.bot_actions.destroy.success')
           redirect_to namespace_project_bots_path
         else
-
           render status: :unprocessable_entity,
                  locals: {
                    type: 'alert',

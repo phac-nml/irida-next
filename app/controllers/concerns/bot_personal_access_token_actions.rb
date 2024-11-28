@@ -7,7 +7,7 @@ module BotPersonalAccessTokenActions
   included do
     before_action proc { namespace }
     before_action proc { bot_account }
-    before_action proc { personal_access_tokens }, only: %i[index]
+    before_action proc { personal_access_tokens }, only: %i[index revoke]
     before_action proc { personal_access_token }, only: %i[revoke]
     before_action proc { bot_accounts }
   end
