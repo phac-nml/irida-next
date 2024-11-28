@@ -109,6 +109,9 @@ const config = {
         theme: themes.github,
         darkTheme: themes.vsDark,
       },
+      future: {
+        experimental_faster: true,
+      },
     }),
 };
 
