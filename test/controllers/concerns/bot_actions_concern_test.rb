@@ -68,7 +68,7 @@ class BotActionsConcernTest < ActionDispatch::IntegrationTest
 
     delete namespace_project_bot_path(namespace, project, id: namespace_bot.id, format: :turbo_stream)
 
-    assert_response :success
+    assert_response :redirect
   end
 
   test 'project bot account destroy error' do
@@ -87,7 +87,7 @@ class BotActionsConcernTest < ActionDispatch::IntegrationTest
 
     namespace = groups(:group_one)
 
-    get group_bots_path(namespace, format: :turbo_stream)
+    get group_bots_path(namespace)
 
     assert_response :success
   end
@@ -140,7 +140,7 @@ class BotActionsConcernTest < ActionDispatch::IntegrationTest
 
     delete group_bot_path(namespace, id: namespace_bot.id, format: :turbo_stream)
 
-    assert_response :success
+    assert_response :redirect
   end
 
   test 'group bot account destroy error' do
