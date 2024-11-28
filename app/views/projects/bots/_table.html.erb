@@ -47,7 +47,7 @@
       ) %>
       <%= link_to(
         t("projects.bots.index.bot.remove"),
-        namespace_project_bot_path(id: row.id, redirect: true),
+        namespace_project_bot_path(id: row.id),
         data: {
           turbo_method: :delete,
           turbo_confirm: t("projects.bots.index.bot.remove_confirmation"),
