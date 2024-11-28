@@ -47,6 +47,7 @@ module Demo
     config.view_component.show_previews = true
     config.view_component.preview_controller = "PreviewController"
     config.view_component.preview_paths << Rails.root.join("..", "previews")
+    config.lookbook.ui_theme = "zinc"
 
     config.lookbook.project_name = "Pathogen ViewComponents v#{Pathogen::ViewComponents::VERSION::STRING}"
     config.lookbook.component_paths = [Pathogen::ViewComponents::Engine.root.join("app", "components")]
