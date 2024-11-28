@@ -4,7 +4,7 @@
 
 <%= turbo_frame_tag "export_dialog" %>
 
-<%= render Viral::PageHeaderComponent.new(title: @workflow_execution.id, id: t("workflow_executions.state.#{@workflow_execution.state}"), id_color: find_pill_color_for_state(@workflow_execution.state)) do |component| %>
+<%= render Viral::PageHeaderComponent.new(title: @workflow_execution.name || @workflow_execution.metadata["workflow_name"], id: @workflow_execution.id, id_color: find_pill_color_for_state(@workflow_execution.state)) do |component| %>
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
     <div class="flex flex-row">
@@ -59,7 +59,6 @@
     </div>
   <% end %>
 <% end %>
-
 <%= viral_tabs(id: "workflow-execution-tabs", label: "Tabs") do |tabs| %>
   <%= tabs.with_tab(url: workflow_execution_path(@workflow_execution, tab: "summary"), selected: @tab == "summary" || @tab == nil, controls: "workflow-execution-tabs") do %>
     <%= t(:"workflow_executions.show.tabs.summary") %>
