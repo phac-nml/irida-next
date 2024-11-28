@@ -11,7 +11,7 @@ class BotActionsConcernTest < ActionDispatch::IntegrationTest
     namespace = groups(:group_one)
     project = projects(:project1)
 
-    get namespace_project_bots_path(namespace, project, format: :turbo_stream)
+    get namespace_project_bots_path(namespace, project)
 
     assert_response :success
   end
