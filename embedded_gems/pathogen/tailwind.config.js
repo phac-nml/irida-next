@@ -69,22 +69,23 @@ module.exports = {
         // Light mode
         "light-brand-onprimary": colors.white,
         "light-brand-onsecondary": globalColors.brand[800],
-        "light-neutral-primary": globalColors.neutral[800],
-        "light-neutral-secondary": globalColors.neutral[500],
-        "light-neutral-emphasis": globalColors.neutral[900],
+        "light-brand-onneutral": globalColors.brand[600],
         "light-danger-onprimary": colors.white,
         "light-danger-onprimary-hover": globalColors.neutral[50],
         "light-danger-onsecondary": globalColors.danger[800],
+        "light-neutral-onprimary": globalColors.neutral[800],
+        "light-neutral-onsecondary": globalColors.neutral[800],
+        "light-neutral-onneutral": globalColors.neutral[900],
 
         // Dark mode
         "dark-brand-onprimary": colors.white,
         "dark-brand-onsecondary": globalColors.brand[200],
-        "dark-neutral-primary": globalColors.neutral[300],
-        "dark-neutral-secondary": globalColors.neutral[400],
-        "dark-neutral-emphasis": globalColors.neutral[100],
+        "dark-brand-onneutral": globalColors.brand[500],
         "dark-danger-onprimary": colors.white,
         "dark-danger-onprimary-hover": globalColors.neutral[900],
         "dark-danger-onsecondary": globalColors.danger[200],
+        "dark-neutral-onprimary": globalColors.neutral[200],
+        "dark-neutral-onsecondary": globalColors.neutral[200],
       },
       ringColor: {
         // Light mode

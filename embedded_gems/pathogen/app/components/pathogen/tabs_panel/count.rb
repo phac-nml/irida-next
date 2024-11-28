@@ -17,11 +17,11 @@ module Pathogen
 
       def generate_count_classes
         if @selected
-          'bg-slate-300 text-slate-800 text-xs font-medium ms-2 px-2 py-1
-          rounded-full dark:bg-slate-500 dark:text-slate-300'
+          'bg-dark-neutral-primary text-dark-neutral-onneutral text-xs font-medium ms-2 px-2 py-1
+          rounded-full dark:bg-dark-neutral-primary dark:text-dark-neutral-onneutral'
         else
-          'bg-slate-100 text-slate-800 text-xs font-medium ms-2 px-2 py-1
-          rounded-full dark:bg-slate-700 dark:text-slate-300'
+          'bg-light-neutral-primary text-light-neutral-onneutral text-xs font-medium ms-2 px-2 py-1
+          rounded-full dark:bg-dark-neutral-primary dark:text-dark-neutral-onneutral'
         end
       end
     end
