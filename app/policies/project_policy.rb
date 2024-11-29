@@ -2,112 +2,140 @@
 
 # Policy for projects authorization
 class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
+  attr_reader :access_level
+
+  def initialize(record = nil, **params) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+    super
+
+    return unless record.instance_of?(Project)
+
+    if record&.namespace&.parent&.user_namespace? && record&.namespace&.parent&.owner == user
+      @access_level = Member::AccessLevel::OWNER
+    end
+    @access_level ||= Member.effective_access_level(record&.namespace, user)
+  end
+
   def activity?
-    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_view?(user, record.namespace) == true
+    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    # return true if Member.can_view?(user, record.namespace) == true
+    return true if access_level > Member::AccessLevel::NO_ACCESS
 
     details[:name] = record.name
     false
   end
 
   def view_history?
-    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_view?(user, record.namespace) == true
+    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    # return true if Member.can_view?(user, record.namespace) == true
+    return true if access_level > Member::AccessLevel::NO_ACCESS
 
     details[:name] = record.name
     false
   end
 
   def destroy?
-    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_destroy?(user, record.namespace) == true
+    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    # return true if Member.can_destroy?(user, record.namespace) == true
+    return true if access_level == Member::AccessLevel::OWNER
 
     details[:name] = record.name
     false
   end
 
   def edit?
-    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_modify?(user, record.namespace) == true
+    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    # return true if Member.can_modify?(user, record.namespace) == true
+    return true if Member::AccessLevel.manageable.include?(access_level)
 
     details[:name] = record.name
     false
   end
 
   def new?
-    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_create?(user, record.namespace) == true
+    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    # return true if Member.can_create?(user, record.namespace) == true
+    return true if Member::AccessLevel.manageable.include?(access_level)
 
     details[:name] = record.namespace.parent.name
+
     false
   end
 
   def read?
-    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_view?(user, record.namespace) == true
+    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    # return true if Member.can_view?(user, record.namespace) == true
+    return true if access_level > Member::AccessLevel::NO_ACCESS
 
     details[:name] = record.name
     false
   end
 
   def transfer?
-    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_transfer?(user, record.namespace)
+    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    # return true if Member.can_transfer?(user, record.namespace)
+    return true if access_level == Member::AccessLevel::OWNER
 
     details[:name] = record.name
     false
   end
 
   def update?
-    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_modify?(user, record.namespace) == true
+    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    # return true if Member.can_modify?(user, record.namespace) == true
+    return true if Member::AccessLevel.manageable.include?(access_level)
 
     details[:name] = record.name
     false
   end
 
   def sample_listing?
-    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_view?(user, record.namespace) == true
+    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    # return true if Member.can_view?(user, record.namespace) == true
+    return true if access_level > Member::AccessLevel::NO_ACCESS
 
     details[:name] = record.name
     false
   end
 
   def create_sample?
-    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_create_sample?(user, record.namespace) == true
+    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    # return true if Member.can_create_sample?(user, record.namespace) == true
+    return true if Member::AccessLevel.manageable.include?(access_level)
 
     details[:name] = record.name
     false
   end
 
   def destroy_sample?
-    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.namespace_owners_include_user?(user, record.namespace) == true
+    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    # return true if Member.namespace_owners_include_user?(user, record.namespace) == true
+    return true if access_level == Member::AccessLevel::OWNER
 
     details[:name] = record.name
     false
   end
 
   def read_sample?
-    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_view?(user, record.namespace) == true
+    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    # return true if Member.can_view?(user, record.namespace) == true
+    return true if access_level > Member::AccessLevel::NO_ACCESS
 
     details[:name] = record.name
     false
   end
 
   def update_sample?
-    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_modify_sample?(user, record.namespace) == true
+    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    # return true if Member.can_modify_sample?(user, record.namespace) == true
+    return true if Member::AccessLevel.manageable.include?(access_level)
 
     details[:name] = record.name
     false
   end
 
   def transfer_sample?
-    return true if Member.can_transfer_sample?(user, record.namespace) == true
+    # return true if Member.can_transfer_sample?(user, record.namespace) == true
+    return true if Member::AccessLevel.manageable.include?(access_level)
 
     details[:name] = record.name
     false
@@ -119,57 +147,65 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     return true if Member.can_transfer_sample_to_project?(user, record.namespace) == true
 
     details[:name] = record.name
+
     false
   end
 
   def clone_sample?
-    return true if Member.can_clone_sample?(user, record.namespace) == true
+    # return true if Member.can_clone_sample?(user, record.namespace) == true
+    return true if Member::AccessLevel.manageable.include?(access_level)
 
     details[:name] = record.name
     false
   end
 
   def clone_sample_into_project?
-    return true if Member.can_clone_sample_to_project?(user, record.namespace) == true
+    # return true if Member.can_clone_sample_to_project?(user, record.namespace) == true
+    return true if Member::AccessLevel.manageable.include?(access_level)
 
     details[:name] = record.name
     false
   end
 
   def export_data?
-    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_export_data?(user, record.namespace) == true
+    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    # return true if Member.can_export_data?(user, record.namespace) == true
+    return true if access_level >= Member::AccessLevel::ANALYST
 
     details[:name] = record.name
     false
   end
 
   def submit_workflow?
-    return true if Member.can_submit_workflow?(user, record.namespace) == true
+    # return true if Member.can_submit_workflow?(user, record.namespace) == true
+    return true if access_level >= Member::AccessLevel::ANALYST
 
     details[:name] = record.name
     false
   end
 
   def view_attachments?
-    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_view_attachments?(user, record.namespace) == true
+    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    # return true if Member.can_view_attachments?(user, record.namespace) == true
+    return true if access_level >= Member::AccessLevel::ANALYST
 
     details[:name] = record.name
     false
   end
 
   def create_attachment?
-    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_create_attachment?(user, record.namespace) == true
+    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    # return true if Member.can_create_attachment?(user, record.namespace) == true
+    return true if Member::AccessLevel.manageable.include?(access_level)
 
     details[:name] = record.name
     false
   end
 
   def destroy_attachment?
-    return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    return true if Member.can_destroy_attachment?(user, record.namespace) == true
+    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
+    # return true if Member.can_destroy_attachment?(user, record.namespace) == true
+    return true if Member::AccessLevel.manageable.include?(access_level)
 
     details[:name] = record.name
     false
