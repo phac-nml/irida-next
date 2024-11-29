@@ -19,7 +19,7 @@ module Pathogen
     # CSS classes for different button schemes
     PRIMARY_SCHEME_CLASSES = [
       'bg-light-brand-primary',
-      'text-light-brand-onprimary',
+      'text-light-onbrand-primary',
       'border',
       'border-light-brand-primary',
       'enabled:hover:bg-light-brand-primary-hover',
@@ -28,7 +28,7 @@ module Pathogen
 
     PRIMARY_DARK_SCHEME_CLASSES = [
       'dark:bg-dark-brand-primary',
-      'dark:text-dark-brand-onprimary',
+      'dark:text-dark-onbrand-primary',
       'dark:border-dark-brand-primary',
       'dark:enabled:hover:bg-dark-brand-primary-hover',
       'dark:focus:ring-dark-brand-primary'
@@ -36,7 +36,7 @@ module Pathogen
 
     DEFAULT_SCHEME_CLASSES = [
       'bg-light-neutral-primary',
-      'text-light-neutral-onprimary',
+      'text-light-onneutral-primary',
       'border',
       'border-light-neutral-primary',
       'enabled:hover:bg-light-neutral-primary-hover',
@@ -45,14 +45,14 @@ module Pathogen
 
     DEFAULT_DARK_SCHEME_CLASSES = [
       'dark:bg-dark-neutral-primary',
-      'dark:text-dark-neutral-onprimary',
+      'dark:text-dark-onneutral-primary',
       'dark:enabled:hover:bg-dark-neutral-primary-hover',
       'dark:focus:ring-dark-neutral-primary'
     ].freeze
 
     DANGER_SCHEME_CLASSES = [
       'bg-light-danger-primary',
-      'text-light-danger-onprimary',
+      'text-light-ondanger-primary',
       'border',
       'border-light-danger-primary',
       'enabled:hover:bg-light-danger-primary-hover',
@@ -61,7 +61,7 @@ module Pathogen
 
     DANGER_DARK_SCHEME_CLASSES = [
       'dark:bg-dark-danger-primary',
-      'dark:text-dark-danger-onprimary',
+      'dark:text-dark-ondanger-primary',
       'dark:enabled:hover:bg-dark-danger-primary-hover',
       'dark:focus:ring-dark-danger-primary'
     ].freeze
