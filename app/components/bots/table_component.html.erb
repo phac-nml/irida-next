@@ -1,9 +1,9 @@
 <% if @bot_accounts.count.positive? %>
   <%= viral_data_table(@bot_accounts, id: "bots-table") do |table| %>
-    <% table.with_column(t("projects.bots.index.bot_listing.username")) do |row| %>
+    <% table.with_column(t("bots.index.table.header.username")) do |row| %>
       <%= row.user.email %>
     <% end %>
-    <% table.with_column(t("projects.bots.index.bot_listing.active_tokens")) do |row| %>
+    <% table.with_column(t("bots.index.table.header.active_tokens")) do |row| %>
       <% if row.user.personal_access_tokens.active.count.positive? %>
         <%= link_to row.user.personal_access_tokens.active.count,
         bot_tokens_path(row),
@@ -15,33 +15,33 @@
         0
       <% end %>
     <% end %>
-    <% table.with_column(t("projects.bots.index.bot_listing.created")) do |row| %>
+    <% table.with_column(t("bots.index.table.header.created")) do |row| %>
       <%= helpers.local_time_ago(row.user.created_at) %>
     <% end %>
-    <% table.with_column(t("projects.bots.index.bot_listing.access_level")) do |row| %>
+    <% table.with_column(t("bots.index.table.header.access_level")) do |row| %>
       <% unless row.membership.nil? %>
-        <%= t(:"projects.bots.index.access_level.level_#{row.membership.access_level}") %>
+        <%= t(:"bots.index.table.access_level.level_#{row.membership.access_level}") %>
       <% end %>
     <% end %>
-    <% table.with_column(t("projects.bots.index.bot_listing.expiration")) do |row| %>
+    <% table.with_column(t("bots.index.table.header.expiration")) do |row| %>
       <% if !row.membership&.expires_at.nil? %>
         <%= helpers.local_time(row.membership.expires_at, :full_date) %>
       <% else %>
-        <%= t("projects.bots.index.bot.never") %>
+        <%= t("bots.index.table.never") %>
       <% end %>
     <% end %>
-    <% table.with_column(t("projects.bots.index.bot_listing.actions"),
+    <% table.with_column(t("bots.index.table.header.actions"),
         sticky_key: :right
       ) do |row| %>
       <% if @abilities[:generate_token] %>
         <%= link_to(
-          t("projects.bots.index.bot.generate_new_token"),
+          t("bots.index.table.actions.generate_new_token"),
           new_token_path(row),
           data: {
             turbo_stream: true,
           },
           aria: {
-            label: t("projects.bots.index.bot.generate_new_token_aria_label"),
+            label: t("bots.index.table.actions.generate_new_token_aria_label"),
           },
           class:
             "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
@@ -49,15 +49,15 @@
       <% end %>
       <% if @abilities[:destroy_bot] %>
         <%= link_to(
-          t("projects.bots.index.bot.remove"),
+          t("bots.index.table.actions.remove"),
           destroy_path(row),
           data: {
             turbo_method: :delete,
-            turbo_confirm: t("projects.bots.index.bot.remove_confirmation"),
+            turbo_confirm: t("bots.index.table.actions.remove_confirmation"),
             turbo_frame: "_top",
           },
           aria: {
-            label: t("projects.bots.index.bot.remove_aria_label"),
+            label: t("bots.index.table.actions.remove_aria_label"),
           },
           class:
             "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
@@ -65,15 +65,12 @@
       <% end %>
     <% end %>
   <% end %>
-  <%= render Viral::Pagy::FullComponent.new(
-    @pagy,
-    item: t("projects.bots.index.title"),
-  ) %>
+  <%= render Viral::Pagy::FullComponent.new(@pagy, item: t("bots.index.pagy_item")) %>
 <% else %>
   <div class="empty_state_message">
     <%= viral_empty(
-      title: t("projects.bots.index.bot_listing.empty_state.title"),
-      description: t("projects.bots.index.bot_listing.empty_state.description"),
+      title: t("bots.index.table.empty_state.title"),
+      description: t("bots.index.table.empty_state.description"),
       icon_name: :bug_ant,
     ) %>
   </div>
