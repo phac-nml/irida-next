@@ -14,7 +14,8 @@ module Projects
 
     def index
       @timestamp = DateTime.current
-      @pagy, @samples = pagy_with_metadata_sort(@q.result)
+      @pagy, @samples = pagy_with_metadata_sort(@q.result.includes({ project: { namespace: [{ parent: :route },
+                                                                                            :route] } }))
       @has_samples = @project.samples.size.positive?
     end
 
