@@ -148,7 +148,11 @@
                   <% if @row_actions[:edit] %>
                     <%= link_to(
                       t(:"projects.samples.index.edit_button"),
-                      edit_project_sample_path(sample.project, sample),
+                      edit_namespace_project_sample_path(
+                        sample.project.namespace.parent,
+                        sample.project,
+                        sample,
+                      ),
                       data: {
                         turbo: false,
                       },
