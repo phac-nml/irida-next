@@ -654,6 +654,10 @@ en:
             token_name: Token Name
         personal_access_tokens_listing_modal:
           description: Viewing a list of active personal access tokens for %{bot_account}
+          personal_access_token:
+            empty:
+              description: Bot %{bot_name} has no active personal access tokens.
+              title: No personal access tokens
           title: Personal access tokens
         subtitle: Setup bot accounts to be able to perform actions through the API that cannot be attributed to an individual user.
         title: Bot Accounts

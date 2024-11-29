@@ -47,8 +47,8 @@ module Projects
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
 
       within('div.empty_state_message') do
-        assert_text I18n.t(:'projects.bots.index.bot_listing.empty_state.title')
-        assert_text I18n.t(:'projects.bots.index.bot_listing.empty_state.description')
+        assert_text I18n.t(:'bots.index.table.empty_state.title')
+        assert_text I18n.t(:'bots.index.table.empty_state.description')
       end
     end
 
@@ -64,8 +64,8 @@ module Projects
       assert_selector 'tr', count: 0
 
       within('div.empty_state_message') do
-        assert_text I18n.t(:'projects.bots.index.bot_listing.empty_state.title')
-        assert_text I18n.t(:'projects.bots.index.bot_listing.empty_state.description')
+        assert_text I18n.t(:'bots.index.table.empty_state.title')
+        assert_text I18n.t(:'bots.index.table.empty_state.description')
       end
 
       click_link I18n.t(:'projects.bots.index.add_new_bot')
@@ -107,8 +107,8 @@ module Projects
       assert_selector 'tr', count: 0
 
       within('div.empty_state_message') do
-        assert_text I18n.t(:'projects.bots.index.bot_listing.empty_state.title')
-        assert_text I18n.t(:'projects.bots.index.bot_listing.empty_state.description')
+        assert_text I18n.t(:'bots.index.table.empty_state.title')
+        assert_text I18n.t(:'bots.index.table.empty_state.description')
       end
 
       click_link I18n.t(:'projects.bots.index.add_new_bot')
@@ -138,7 +138,7 @@ module Projects
 
       within('table') do
         within('table tbody tr:first-child td:last-child') do
-          click_link I18n.t(:'projects.bots.index.bot.remove')
+          click_link I18n.t(:'bots.index.table.actions.remove')
         end
       end
 
