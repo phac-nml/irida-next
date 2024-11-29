@@ -29,6 +29,7 @@ module Pathogen
     PRIMARY_DARK_SCHEME_CLASSES = [
       'dark:bg-dark-brand-primary',
       'dark:text-dark-brand-onprimary',
+      'dark:border-dark-brand-primary',
       'dark:enabled:hover:bg-dark-brand-primary-hover',
       'dark:focus:ring-dark-brand-primary'
     ].freeze
