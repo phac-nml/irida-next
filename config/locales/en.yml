@@ -937,6 +937,18 @@ en:
     name:
       helper: A custom name will make it easier to search for this in the future.
       label: Name (Optional)
+  personal_access_tokens:
+    table:
+      header:
+        action: Action
+        created_at: Created
+        expires_at: Expiration Date
+        last_used_at: Last Used
+        name: Token name
+        scopes: Scopes
+      never: Never
+      revoke: Revoke
+      revoke_confirmation: Are you sure you want to revoke this personal access token?
   profiles:
     accounts:
       delete:
@@ -1092,9 +1104,6 @@ en:
             empty:
               description: Bot %{bot_name} has no active personal access tokens.
               title: No personal access tokens
-            never: Never
-            revoke: Revoke
-            revoke_confirmation: Are you sure you want to revoke this personal access token?
           title: Personal access tokens
         subtitle: Setup bot accounts to be able to perform actions through the API that cannot be attributed to an individual user.
         title: Bot Accounts
@@ -1652,9 +1661,6 @@ en:
       default: "%Y-%m-%d %H:%M:%S"
       full_date: "%B %d, %Y"
   viral:
-    data_table_component:
-      header:
-        action: Action
     pagy:
       limit_component:
         items: "%{items} per page:"
