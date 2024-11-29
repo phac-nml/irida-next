@@ -1,77 +1,10 @@
-<% if @bot_accounts.count.positive? %>
-  <%= viral_data_table(@bot_accounts, id: "bots-table") do |table| %>
-    <% table.with_column(t("groups.bots.index.bot_listing.username")) do |row| %>
-      <%= row.user.email %>
-    <% end %>
-    <% table.with_column(t("groups.bots.index.bot_listing.active_tokens")) do |row| %>
-      <% if row.user.personal_access_tokens.active.count.positive? %>
-        <%= link_to row.user.personal_access_tokens.active.count,
-        group_bot_personal_access_tokens_path(bot_id: row.id),
-        data: {
-          turbo_stream: true,
-        },
-        class: "font-semibold text-slate-800 dark:text-slate-300 hover:underline" %>
-      <% else %>
-        0
-      <% end %>
-    <% end %>
-    <% table.with_column(t("groups.bots.index.bot_listing.created")) do |row| %>
-      <%= local_time_ago(row.user.created_at) %>
-    <% end %>
-    <% table.with_column(t("groups.bots.index.bot_listing.access_level")) do |row| %>
-      <% unless row.membership.nil? %>
-        <%= t("groups.bots.index.access_level.level_#{row.membership.access_level}") %>
-      <% end %>
-    <% end %>
-    <% table.with_column(t("groups.bots.index.bot_listing.expiration")) do |row| %>
-      <% if !row.membership&.expires_at.nil? %>
-        <%= local_time(row.membership.expires_at, :full_date) %>
-      <% else %>
-        <%= t("groups.bots.index.bot.never") %>
-      <% end %>
-    <% end %>
-    <% table.with_column(t("groups.bots.index.bot_listing.actions"),
-        sticky_key: :right
-      ) do |row| %>
-      <% if allowed_to?(:generate_bot_personal_access_token?, @namespace) %>
-        <%= link_to(
-          t("groups.bots.index.bot.generate_new_token"),
-          new_group_bot_personal_access_token_path(bot_id: row.id),
-          data: {
-            turbo_stream: true,
-          },
-          aria: {
-            label: t("groups.bots.index.bot.generate_new_token_aria_label"),
-          },
-          class:
-            "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-        ) %>
-      <% end %>
-      <% if allowed_to?(:destroy_bot_accounts?, @namespace) %>
-        <%= link_to(
-          t("groups.bots.index.bot.remove"),
-          group_bot_path(id: row.id),
-          data: {
-            turbo_method: :delete,
-            turbo_confirm: t("groups.bots.index.bot.remove_confirmation"),
-            turbo_frame: "_top",
-          },
-          aria: {
-            label: t("groups.bots.index.bot.remove_aria_label"),
-          },
-          class:
-            "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-        ) %>
-      <% end %>
-    <% end %>
-  <% end %>
-  <%= render Viral::Pagy::FullComponent.new(@pagy, item: t("groups.bots.index.title")) %>
-<% else %>
-  <div class="empty_state_message">
-    <%= viral_empty(
-      title: t("groups.bots.index.bot_listing.empty_state.title"),
-      description: t("groups.bots.index.bot_listing.empty_state.description"),
-      icon_name: :bug_ant,
-    ) %>
-  </div>
-<% end %>
+<%= render Bots::TableComponent.new(
+  @bot_accounts,
+  @namespace,
+  @pagy,
+  abilities: {
+    generate_token:
+      allowed_to?(:generate_bot_personal_access_token?, @namespace),
+    destroy_bot: allowed_to?(:destroy_bot_accounts?, @namespace),
+  },
+) %>
