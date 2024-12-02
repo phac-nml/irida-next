@@ -9,7 +9,7 @@ e.g. bg-light-brand-primary instead of bg-bg-brand-600
 */
 
 const globalColors = {
-  brand: colors.emerald,
+  brand: colors.green,
   neutral: colors.slate,
   danger: colors.rose,
   success: colors.green,
@@ -70,7 +70,7 @@ module.exports = {
         // Light mode
         "light-default": globalColors.neutral[900],
         "light-onbrand-primary": colors.neutral[100],
-        "light-onbrand-secondary": globalColors.brand[800],
+        "light-onbrand-secondary": globalColors.neutral[900],
         "light-onneutral-primary": globalColors.neutral[700],
         "light-ondanger-primary": colors.neutral[100],
 
