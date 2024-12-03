@@ -51,20 +51,23 @@ module Pathogen
 
       def default_tab_classes
         if @selected
-          'inline-block p-4 text-light-brand-onneutral bg-light-neutral-primary rounded-t-lg active dark:bg-dark-neutral-primary dark:text-dark-brand-onneutral'
+          'inline-block p-4 text-light-brand-onneutral bg-light-neutral-primary ' \
+            'rounded-t-lg active dark:bg-dark-neutral-primary dark:text-dark-brand-onneutral'
         else
-          'inline-block p-4 rounded-t-lg hover:text-light-neutral-emphasis
-        hover:bg-slate-50 dark:hover:bg-slate-800 dark:hover:text-slate-300'
+          'inline-block p-4 rounded-t-lg hover:text-light-neutral-emphasis ' \
+            'hover:bg-slate-50 dark:hover:bg-slate-800 dark:hover:text-slate-300'
         end
       end
 
       def underline_tab_classes
         if @selected
-          'inline-block p-4 text-light-brand-onneutral border-b-2 border-light-brand-primary
-          rounded-t-lg active dark:text-dark-brand-onneutral dark:border-dark-brand-primary'
+          'inline-block p-4 text-light-brand-onneutral border-b-2 ' \
+            'border-light-brand-primary rounded-t-lg active ' \
+            'dark:text-dark-brand-onneutral dark:border-dark-brand-primary'
         else
-          'inline-block p-4 border-b-2 border-transparent rounded-t-lg
-          hover:text-  hover:border-light-neutral-primary dark:hover:text-dark-neutral-onneutral dark:hover:border-dark-neutral-primary'
+          'inline-block p-4 border-b-2 border-transparent rounded-t-lg ' \
+            'hover:text-neutral-emphasis hover:border-light-neutral-primary ' \
+            'dark:hover:text-dark-neutral-onneutral dark:hover:border-dark-neutral-primary'
         end
       end
     end
