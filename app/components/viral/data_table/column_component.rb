@@ -9,7 +9,7 @@ module Viral
       STICKY_CLASSES = {
         left: {
           header: 'sticky left-0 bg-slate-50 dark:bg-slate-700 z-10 ',
-          body: 'sticky left-0 bg-slate-50 dark:bg-slate-800 z-10'
+          body: 'sticky left-0 bg-slate-50 dark:bg-slate-900 z-10'
         },
         left_fixed_index_zero: {
           header: 'sticky left-0 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-700 z-10',

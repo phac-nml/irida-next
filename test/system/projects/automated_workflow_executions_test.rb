@@ -116,5 +116,19 @@ module Projects
         assert_text 'Updated Name'
       end
     end
+
+    test 'hidden edit button when automated workflow execution is disabled' do
+      disabled_automated_pipeline = automated_workflow_executions(:disabled_automated_workflow_execution)
+      visit namespace_project_automated_workflow_executions_path(@namespace, @project)
+      within('tbody') do
+        assert_selector "tr[id='#{disabled_automated_pipeline.id}'] th:first-child",
+                        text: disabled_automated_pipeline.id
+
+        within("tr[id='#{disabled_automated_pipeline.id}'] td:last-child") do
+          assert_text I18n.t('projects.automated_workflow_executions.actions.delete_button')
+          assert_no_text I18n.t('projects.automated_workflow_executions.actions.edit_button')
+        end
+      end
+    end
   end
 end
