@@ -25,7 +25,7 @@ module ApplicationHelper
 
   def tag_attributes(hash)
     parts = hash.map do |key, value|
-      safe_join([key, "=", value])
+      safe_join([ key, "=", value ])
     end
 
     safe_join(parts, " ")
