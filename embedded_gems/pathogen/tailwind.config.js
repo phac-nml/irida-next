@@ -9,7 +9,7 @@ e.g. bg-light-brand-primary instead of bg-bg-brand-600
 */
 
 const globalColors = {
-  brand: colors.teal,
+  brand: colors.lime,
   neutral: colors.slate,
   danger: colors.rose,
   success: colors.green,
