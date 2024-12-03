@@ -140,7 +140,7 @@ module Groups
         end
       end
 
-      within('#turbo-confirm[open]') do
+      within('dialog') do
         click_button 'Confirm'
       end
 
@@ -259,11 +259,8 @@ module Groups
         end
       end
 
-      within('#turbo-confirm[open]') do
-        click_button 'Confirm'
-      end
-
       within('dialog') do
+        click_button 'Confirm'
         within('#personal-access-token-alert') do
           assert_text I18n.t('concerns.bot_personal_access_token_actions.revoke.success', pat_name: token.name)
         end

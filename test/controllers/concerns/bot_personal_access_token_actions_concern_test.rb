@@ -244,4 +244,54 @@ class BotPersonalAcessTokenActionsConcernTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
   end
+
+  test 'can open new revoke in group' do
+    sign_in users(:john_doe)
+
+    namespace = groups(:group_one)
+
+    namespace_bot = namespace_bots(:group1_bot0)
+    token = personal_access_tokens(:user_group_bot_account0_valid_pat)
+    get new_revoke_group_bot_personal_access_token_path(
+      namespace,
+      bot_id: namespace_bot.id,
+      id: token.id
+    )
+
+    assert_response :success
+  end
+
+  test 'cannot open new revoke in group due to permissions' do
+    sign_in users(:micha_doe)
+
+    namespace = groups(:group_one)
+    namespace_bot = namespace_bots(:group1_bot0)
+    token = personal_access_tokens(:user_group_bot_account0_valid_pat)
+
+    get new_revoke_group_bot_personal_access_token_path(
+      namespace,
+      bot_id: namespace_bot.id,
+      id: token.id
+    )
+
+    assert_response :unauthorized
+  end
+
+  test 'can open new revoke in project' do
+    sign_in users(:john_doe)
+
+    namespace = groups(:group_one)
+    project = projects(:project1)
+
+    namespace_bot = namespace_bots(:project1_bot0)
+    token = personal_access_tokens(:user_bot_account0_valid_pat)
+
+    get new_revoke_namespace_project_bot_personal_access_token_path(
+      namespace,
+      project,
+      bot_id: namespace_bot.id,
+      id: token.id
+    )
+    assert_response :success
+  end
 end
