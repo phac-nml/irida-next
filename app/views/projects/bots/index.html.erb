@@ -1,4 +1,5 @@
 <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+<%= turbo_frame_tag "token_dialog" %>
 <%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t('.subtitle')) do |component| %>
   <%= component.with_icon(name: "users", classes: "h-14 w-14 text-primary-700") %>
   <% if allowed_to?(:create_bot_accounts?, @namespace) %>
@@ -11,28 +12,28 @@
       },
       class:
         "
-                                                                                                            inline-flex
-                                                                                                            items-center
-                                                                                                            justify-center
-                                                                                                            text-sm
-                                                                                                            border
-                                                                                                            rounded-md
-                                                                                                            cursor-pointer
-                                                                                                            sm:w-auto focus:z-10
-                                                                                                            focus:outline-none
-                                                                                                            text-white
-                                                                                                            bg-primary-700
-                                                                                                            hover:bg-primary-800
-                                                                                                            focus:ring-0
-                                                                                                            rounded-md
-                                                                                                            px-5
-                                                                                                            py-3
-                                                                                                            dark:text-white
-                                                                                                            dark:bg-primary-600
-                                                                                                            dark:hover:bg-primary-700
-                                                                                                            dark:border-primary-900
-                                                                                                            dark:hover:bg-primary-700
-                                                                                                            " %>
+                                                                                                                              inline-flex
+                                                                                                                              items-center
+                                                                                                                              justify-center
+                                                                                                                              text-sm
+                                                                                                                              border
+                                                                                                                              rounded-md
+                                                                                                                              cursor-pointer
+                                                                                                                              sm:w-auto focus:z-10
+                                                                                                                              focus:outline-none
+                                                                                                                              text-white
+                                                                                                                              bg-primary-700
+                                                                                                                              hover:bg-primary-800
+                                                                                                                              focus:ring-0
+                                                                                                                              rounded-md
+                                                                                                                              px-5
+                                                                                                                              py-3
+                                                                                                                              dark:text-white
+                                                                                                                              dark:bg-primary-600
+                                                                                                                              dark:hover:bg-primary-700
+                                                                                                                              dark:border-primary-900
+                                                                                                                              dark:hover:bg-primary-700
+                                                                                                                              " %>
     <% end %>
   <% end %>
 <% end %>
