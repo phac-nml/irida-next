@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+def system!(*args)
+    system(*args) || abort("\n== Command #{args} failed ==")
+end
+
+require "fileutils"
+
+puts "== Installing dependencies =="
+system! "gem install bundler --conservative"
+system("bundle check") || system!("bundle install")
+
+puts "\n== Installing Frontend dependencies =="
+system! "pnpm install"
+
+# Install dependencies in /demo
+Dir.chdir "demo" do
+    system! "gem install bundler --conservative"
+    system("bundle check") || system!("bundle install")
+    system! "pnpm install"
+end
