@@ -152,4 +152,28 @@ class BotActionsConcernTest < ActionDispatch::IntegrationTest
 
     assert_response :not_found
   end
+
+  test 'new_destroy in group' do
+    sign_in users(:john_doe)
+
+    namespace = groups(:group_one)
+    namespace_bot = namespace_bots(:group1_bot0)
+
+    get group_bot_new_destroy_path(namespace, bot_id: namespace_bot.id)
+
+    assert_response :success
+  end
+
+  test 'new_destroy in project' do
+    sign_in users(:john_doe)
+
+    namespace_bot = namespace_bots(:project1_bot0)
+
+    namespace = groups(:group_one)
+    project = projects(:project1)
+
+    get namespace_project_bot_new_destroy_path(namespace, project, bot_id: namespace_bot.id)
+
+    assert_response :success
+  end
 end

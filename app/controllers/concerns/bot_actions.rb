@@ -7,7 +7,7 @@ module BotActions
   included do
     before_action proc { namespace }
     before_action proc { access_levels }
-    before_action proc { bot_account }, only: %i[destroy]
+    before_action proc { bot_account }, only: %i[destroy new_destroy]
     before_action proc { bot_type }, only: %i[create]
     before_action proc { bot_accounts }
   end
@@ -53,6 +53,15 @@ module BotActions
     end
   end
 
+  def new_destroy
+    render turbo_stream: turbo_stream.update('bot_modal',
+                                             partial: 'new_destroy_modal',
+                                             locals: {
+                                               open: true,
+                                               bot_account: @bot_account
+                                             }), status: :ok
+  end
+
   def destroy
     Bots::DestroyService.new(@bot_account, current_user).execute
     respond_to do |format|
@@ -74,7 +83,8 @@ module BotActions
   private
 
   def bot_account
-    @bot_account = @namespace.namespace_bots.find_by(id: params[:id]) || not_found
+    id = params[:bot_id] || params[:id]
+    @bot_account = @namespace.namespace_bots.find_by(id:) || not_found
   end
 
   def access_levels

@@ -142,7 +142,7 @@ module Projects
         end
       end
 
-      within('#turbo-confirm[open]') do
+      within('dialog') do
         click_button 'Confirm'
       end
 
@@ -261,7 +261,7 @@ module Projects
         end
       end
 
-      within('#turbo-confirm[open]') do
+      within('dialog') do
         click_button 'Confirm'
       end
 
