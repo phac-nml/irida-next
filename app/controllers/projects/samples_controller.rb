@@ -10,11 +10,25 @@ module Projects
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
     before_action :process_samples, only: %i[index search select]
-    include Sortable
 
     def index
       @timestamp = DateTime.current
-      @pagy, @samples = pagy_with_metadata_sort(@q.result)
+      # @pagy, @samples = pagy_with_metadata_sort(@q.result)
+      collection = Sample.pagy_search(@search_params.fetch(:name_or_puid_cont, '*'),
+                                      fields: [{ name: :text_middle }, { puid: :text_middle }],
+                                      misspellings: false,
+                                      where: { project_id: project.id }.merge((
+                                        if @search_params.fetch(:name_or_puid_in,
+                                                                nil).present?
+                                          { _or: [{ name: @search_params[:name_or_puid_in] },
+                                                  { puid: @search_params[:name_or_puid_in] }] }
+                                        else
+                                          {}
+                                        end
+                                      )),
+                                      order: sort,
+                                      includes: [project: { namespace: [{ parent: :route }, :route] }])
+      @pagy, @samples = pagy_searchkick(collection, limit: params[:limit] || 20)
       @has_samples = @project.samples.size.positive?
     end
 
@@ -79,12 +93,24 @@ module Projects
 
     def select
       authorize! @project, to: :sample_listing?
-      @samples = []
+      @selected_sample_ids = []
 
       respond_to do |format|
         format.turbo_stream do
           if params[:select].present?
-            @samples = @q.result.where(updated_at: ..params[:timestamp].to_datetime).select(:id)
+            @selected_sample_ids = Sample.search(@search_params.fetch(:name_or_puid_cont, '*'),
+                                                 fields: [{ name: :text_middle }, { puid: :text_middle }],
+                                                 misspellings: false,
+                                                 where: { project_id: project.id,
+                                                          updated_at: { lte: params[:timestamp].to_datetime } }.merge((
+                                                   if @search_params.fetch(:name_or_puid_in,
+                                                                           nil).present?
+                                                     { _or: [{ name: @search_params[:name_or_puid_in] },
+                                                             { puid: @search_params[:name_or_puid_in] }] }
+                                                   else
+                                                     {}
+                                                   end
+                                                 ))).pluck(:id)
           end
         end
       end
@@ -144,19 +170,27 @@ module Projects
       @search_params = search_params
 
       set_metadata_fields
-      query_parser = Irida::SearchSyntax::Ransack.new(text: :name_or_puid_cont, metadata_fields: @fields)
-      @parsed_params = query_parser.parse(@search_params.fetch(:name_or_puid_cont, nil))
-      @q = load_samples.ransack(@search_params.except(:name_or_puid_cont).merge(@parsed_params))
+      # query_parser = Irida::SearchSyntax::Ransack.new(text: :name_or_puid_cont, metadata_fields: @fields)
+      # @parsed_params = query_parser.parse(@search_params.fetch(:name_or_puid_cont, nil))
+      # @q = load_samples.ransack(@search_params.except(:name_or_puid_cont).merge(@parsed_params))
     end
 
     def search_params
       updated_params = update_store(search_key, params[:q].present? ? params[:q].to_unsafe_h : {})
 
-      if updated_params[:metadata].to_i.zero? && updated_params[:s].present? && updated_params[:s].match?(/metadata_/)
-        updated_params[:s] = default_sort
+      if !updated_params.key?(:s) || (updated_params.fetch(:metadata,
+                                                           0).to_i.zero? && updated_params[:s].match?(/metadata_/))
+        updated_params[:s] = 'updated_at desc'
         update_store(search_key, updated_params)
       end
       updated_params
+    end
+
+    def sort
+      sort = @search_params[:s]
+      key, direction = sort.split
+      key = key.gsub('metadata_', 'metadata.') if key.match?(/metadata_/)
+      { "#{key}": direction }
     end
   end
 end

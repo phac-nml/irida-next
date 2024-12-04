@@ -37,6 +37,14 @@ module ActiveSupport
     parallelize_setup do |worker|
       SimpleCov.command_name "#{SimpleCov.command_name}-#{worker}"
       ActiveStorage::Blob.service.root = "#{ActiveStorage::Blob.service.root}-#{worker}"
+
+      Searchkick.index_suffix = worker
+
+      # reindex models
+      Sample.reindex
+
+      # and disable callbacks
+      # Searchkick.disable_callbacks
     end
 
     parallelize_teardown do |_worker|
