@@ -31,7 +31,7 @@
           },
           class: "button button--size-default button--state-default action-link" %>
         <% end %>
-        <% if allowed_to?(:transfer_sample?, @project) %>
+        <% if allowed_to?(:transfer_sample?, @project, context: { include_group_links: false }) %>
           <%= link_to t("projects.samples.index.transfer_button"),
           new_namespace_project_samples_transfer_path,
           data: {

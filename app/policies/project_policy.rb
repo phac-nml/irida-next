@@ -4,7 +4,7 @@
 class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   attr_reader :access_level
 
-  def initialize(record = nil, **params) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+  def initialize(record = nil, **params) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity,Metrics/AbcSize
     super
 
     return unless record.instance_of?(Project)
@@ -12,13 +12,24 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     if record&.namespace&.parent&.user_namespace? && record&.namespace&.parent&.owner == user
       @access_level = Member::AccessLevel::OWNER
     end
-    @access_level ||= Member.effective_access_level(record&.namespace, user)
+
+    @access_level = if params.key?(:include_group_links)
+                      Member.effective_access_level(record&.namespace, user, false)
+                    else
+                      Member.effective_access_level(record&.namespace, user)
+                    end
+
+    return unless @access_level == Member::AccessLevel::UPLOADER
+
+    @token_active = false if Current.token&.nil?
+
+    @token_active = Current.token.active?
   end
 
   def activity?
     # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     # return true if Member.can_view?(user, record.namespace) == true
-    return true if access_level > Member::AccessLevel::NO_ACCESS
+    return true if access_level > Member::AccessLevel::NO_ACCESS && access_level != Member::AccessLevel::UPLOADER
 
     details[:name] = record.name
     false
@@ -27,7 +38,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   def view_history?
     # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     # return true if Member.can_view?(user, record.namespace) == true
-    return true if access_level > Member::AccessLevel::NO_ACCESS
+    return true if access_level > Member::AccessLevel::NO_ACCESS && access_level != Member::AccessLevel::UPLOADER
 
     details[:name] = record.name
     false
@@ -64,7 +75,8 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   def read?
     # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     # return true if Member.can_view?(user, record.namespace) == true
-    return true if access_level > Member::AccessLevel::NO_ACCESS
+    return true if (defined? @token_active) && @token_active == true
+    return true if (access_level > Member::AccessLevel::NO_ACCESS) && access_level != Member::AccessLevel::UPLOADER
 
     details[:name] = record.name
     false
@@ -91,7 +103,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   def sample_listing?
     # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     # return true if Member.can_view?(user, record.namespace) == true
-    return true if access_level > Member::AccessLevel::NO_ACCESS
+    return true if access_level > Member::AccessLevel::NO_ACCESS && access_level != Member::AccessLevel::UPLOADER
 
     details[:name] = record.name
     false
@@ -100,6 +112,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   def create_sample?
     # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     # return true if Member.can_create_sample?(user, record.namespace) == true
+    return true if (defined? @token_active) && @token_active == true
     return true if Member::AccessLevel.manageable.include?(access_level)
 
     details[:name] = record.name
@@ -118,7 +131,8 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   def read_sample?
     # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     # return true if Member.can_view?(user, record.namespace) == true
-    return true if access_level > Member::AccessLevel::NO_ACCESS
+    return true if (defined? @token_active) && @token_active == true
+    return true if access_level > Member::AccessLevel::NO_ACCESS && access_level != Member::AccessLevel::UPLOADER
 
     details[:name] = record.name
     false
@@ -127,6 +141,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   def update_sample?
     # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     # return true if Member.can_modify_sample?(user, record.namespace) == true
+    return true if (defined? @token_active) && @token_active == true
     return true if Member::AccessLevel.manageable.include?(access_level)
 
     details[:name] = record.name
@@ -196,6 +211,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   def create_attachment?
     # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     # return true if Member.can_create_attachment?(user, record.namespace) == true
+    return true if (defined? @token_active) && @token_active == true
     return true if Member::AccessLevel.manageable.include?(access_level)
 
     details[:name] = record.name
