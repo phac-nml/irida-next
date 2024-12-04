@@ -7,14 +7,13 @@
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 require 'rails/test_help'
-
-# This module provides support for parallelizing test cases and setting up fixtures.
-#
-# ActiveSupport::TestCase:
-# - parallelize(workers: :number_of_processors): Runs tests in parallel using the number of processors available.
-# - fixtures :all: Loads all fixtures in the test/fixtures/*.yml directory for all tests in alphabetical order.
-# - Additional helper methods can be added to be used by all tests.
 module ActiveSupport
+  # This module provides support for parallelizing test cases and setting up fixtures.
+  #
+  # ActiveSupport::TestCase:
+  # - parallelize(workers: :number_of_processors): Runs tests in parallel using the number of processors available.
+  # - fixtures :all: Loads all fixtures in the test/fixtures/*.yml directory for all tests in alphabetical order.
+  # - Additional helper methods can be added to be used by all tests.
   class TestCase
     # Run tests in parallel with specified workers
     parallelize(workers: :number_of_processors)
