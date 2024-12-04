@@ -56,6 +56,7 @@ bundle && pnpm install
 ```
 
 Generate credentials:
+
 ```bash
 EDITOR=nano bin/rails credentials:edit
 ```
@@ -96,6 +97,15 @@ Start postgresql service:
 
 ```bash
 sudo systemctl start postgresql.service
+```
+
+## OpenSearch Setup
+
+Install [OpenSearch](https://opensearch.org/downloads.html). For [Homebrew](https://brew.sh/), use:
+
+```sh
+brew install opensearch
+brew services start opensearch
 ```
 
 ## Serve
