@@ -340,7 +340,7 @@ fr:
           username: Username
         never: Never
     new_destroy:
-      description: Are you sure you want to delete bot %{bot_name}?
+      description: This action will permanently delete the bot account and will remove any existing memberships for the bot account. Are you sure you want to permanently delete bot account %{bot_name}?
       submit_button: Confirm
       title: Delete Bot
   components:

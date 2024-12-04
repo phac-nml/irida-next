@@ -263,13 +263,83 @@ module Projects
 
       within('dialog') do
         click_button 'Confirm'
-      end
-
-      within('dialog') do
         within('#personal-access-token-alert') do
           assert_text I18n.t('concerns.bot_personal_access_token_actions.revoke.success', pat_name: token.name)
         end
       end
+    end
+
+    test 'PAT panel removed after personal access token revoke' do
+      namespace_bot = namespace_bots(:project1_bot0)
+      active_personal_tokens = namespace_bot.user.personal_access_tokens.active
+      token = nil
+
+      visit namespace_project_bots_path(@namespace, @project)
+
+      assert_no_selector '#access-token-section div'
+
+      click_link I18n.t(:'projects.bots.index.add_new_bot')
+
+      within('dialog') do
+        fill_in 'Token Name', with: 'Uploader'
+        find('#bot_access_level').find('option',
+                                       text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
+
+        all('input[type=checkbox]').each(&:click)
+
+        click_button I18n.t(:'projects.bots.index.bot_listing.new_bot_modal.submit')
+      end
+
+      assert_selector '#access-token-section div'
+
+      within "tr[id='#{namespace_bot.id}']" do
+        click_link active_personal_tokens.count.to_s
+      end
+
+      within('dialog table') do
+        assert_selector 'tr', count: 2
+        token = active_personal_tokens.first
+
+        within "tr[id='#{token.id}']" do
+          click_link 'Revoke'
+        end
+      end
+
+      within('dialog') do
+        click_button 'Confirm'
+      end
+
+      assert_no_selector '#access-token-section div'
+    end
+
+    test 'PAT panel removed after bot destroy' do
+      visit namespace_project_bots_path(@namespace, @project)
+
+      assert_no_selector '#access-token-section div'
+
+      click_link I18n.t(:'projects.bots.index.add_new_bot')
+
+      within('dialog') do
+        fill_in 'Token Name', with: 'Uploader'
+        find('#bot_access_level').find('option',
+                                       text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
+
+        all('input[type=checkbox]').each(&:click)
+
+        click_button I18n.t(:'projects.bots.index.bot_listing.new_bot_modal.submit')
+      end
+
+      assert_selector '#access-token-section div'
+
+      within('table tbody tr:first-child td:last-child') do
+        click_link I18n.t(:'bots.index.table.actions.remove')
+      end
+
+      within('#dialog') do
+        click_button 'Confirm'
+      end
+
+      assert_no_selector '#access-token-section div'
     end
   end
 end

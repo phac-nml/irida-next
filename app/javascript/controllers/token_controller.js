@@ -38,9 +38,7 @@ export default class extends Controller {
 
   removeTokenPanel() {
     let panel = document.getElementById("access-token-section");
-    console.log(panel);
     if (panel) {
-      console.log("hi");
       panel.remove();
     }
   }
