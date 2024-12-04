@@ -8,7 +8,7 @@ module Projects
       before_action :projects
 
       def new
-        authorize! @project, to: :transfer_sample?
+        authorize! @project, to: :transfer_sample?, context: { include_group_links: false }
 
         respond_to do |format|
           format.turbo_stream do
