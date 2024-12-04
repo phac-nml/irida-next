@@ -2,7 +2,7 @@
                     partial: "generate_personal_access_token_modal",
                     locals: {
                       open: @personal_access_token.errors.any?,
-                      personal_access_token: @personal_access_token
+                      personal_access_token: @personal_access_token,
                     } %>
 
 <%= turbo_stream.update "personal-access-token-error-alert",
@@ -11,17 +11,12 @@
   <%= turbo_stream.append "flashes" do %>
     <%= viral_flash(type:, data: message) %>
   <% end %>
-
-  <%= turbo_stream.replace dom_id(@bot_account),
-                       partial: "projects/bots/bot",
-                       locals: {
-                         bot_account: @bot_account
-                       } %>
-
   <%= turbo_stream.replace "access-token-section",
                        partial: "projects/bots/access_token_section",
                        locals: {
                          bot_account_name: @bot_account.user.email,
-                         token: personal_access_token.token
+                         token: personal_access_token.token,
                        } %>
+
+  <turbo-stream action="refresh"></turbo-stream>
 <% end %>
