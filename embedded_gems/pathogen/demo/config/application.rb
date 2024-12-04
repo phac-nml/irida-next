@@ -20,6 +20,7 @@ require 'lookbook'
 Bundler.require(*Rails.groups)
 
 module Demo
+  # :nodoc:
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.2
