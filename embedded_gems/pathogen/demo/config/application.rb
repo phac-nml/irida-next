@@ -1,17 +1,19 @@
-require_relative "boot"
+# frozen_string_literal: true
 
-require "rails"
+require_relative 'boot'
+
+require 'rails'
 # Pick the frameworks you want:
-require "active_model/railtie"
-require "active_job/railtie"
-require "active_record/railtie"
-require "action_controller/railtie"
-require "action_view/railtie"
-require "rails/test_unit/railtie"
-require "pathogen/view_components"
-require "pathogen/view_components/engine"
-require "view_component"
-require "lookbook"
+require 'active_model/railtie'
+require 'active_job/railtie'
+require 'active_record/railtie'
+require 'action_controller/railtie'
+require 'action_view/railtie'
+require 'rails/test_unit/railtie'
+require 'pathogen/view_components'
+require 'pathogen/view_components/engine'
+require 'view_component'
+require 'lookbook'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -37,25 +39,25 @@ module Demo
     #
     config.hotwire_livereload.disable_default_listeners = true
     config.hotwire_livereload.listen_paths = [
-      Rails.root.join("app/assets/stylesheets"),
-      Rails.root.join("app/javascript"),
-      Rails.root.join("test/components")
+      Rails.root.join('app/assets/stylesheets'),
+      Rails.root.join('app/javascript'),
+      Rails.root.join('test/components')
     ]
 
     # Initialize configuration defaults for originally generated Rails version.
-    config.view_component.default_preview_layout = "component_preview"
+    config.view_component.default_preview_layout = 'component_preview'
     config.view_component.show_previews = true
-    config.view_component.preview_controller = "PreviewController"
-    config.view_component.preview_paths << Rails.root.join("..", "previews")
-    config.lookbook.ui_theme = "zinc"
+    config.view_component.preview_controller = 'PreviewController'
+    config.view_component.preview_paths << Rails.root.join('../previews')
+    config.lookbook.ui_theme = 'zinc'
 
     config.lookbook.project_name = "Pathogen ViewComponents v#{Pathogen::ViewComponents::VERSION::STRING}"
     config.lookbook.component_paths = [
-      Pathogen::ViewComponents::Engine.root.join("app", "components")
+      Pathogen::ViewComponents::Engine.root.join('app', 'components')
     ]
     config.lookbook.preview_display_options = {
-      theme: [ "light", "dark" ]
+      theme: %w[light dark]
     }
-    config.lookbook.page_paths = [ Pathogen::ViewComponents::Engine.root.join("docs", "pages") ]
+    config.lookbook.page_paths = [Pathogen::ViewComponents::Engine.root.join('docs', 'pages')]
   end
 end
