@@ -399,7 +399,7 @@ GEM
       hashie (>= 3.4.6)
       rack (>= 2.2.3)
       rack-protection
-    omniauth-azure-activedirectory-v2 (2.3.0)
+    omniauth-entra-id (3.0.0)
       omniauth-oauth2 (~> 1.8)
     omniauth-oauth2 (1.8.0)
       oauth2 (>= 1.4, < 3)
@@ -679,7 +679,7 @@ DEPENDENCIES
   lookbook (~> 2.1, >= 2.1.1)
   minitest (= 5.24.1)
   omniauth
-  omniauth-azure-activedirectory-v2
+  omniauth-entra-id
   omniauth-rails_csrf_protection
   omniauth-saml
   pagy (~> 9.0.5)

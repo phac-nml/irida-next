@@ -30,7 +30,7 @@ class OmniauthCallbacksAzureTest < OmniauthIntegrationTestCase
   test 'get first user or create' do
     valid_azure_login_setup
     assert_difference 'User.count' do
-      get '/users/auth/azure_activedirectory_v2/callback'
+      get '/users/auth/entra_id/callback'
     end
 
     assert session.key? 'warden.user.user.key'
@@ -41,7 +41,7 @@ class OmniauthCallbacksAzureTest < OmniauthIntegrationTestCase
   test 'invalid get first user or create' do
     invalid_azure_login_setup
     assert_no_changes 'User.count' do
-      get '/users/auth/azure_activedirectory_v2/callback'
+      get '/users/auth/entra_id/callback'
     end
 
     assert_equal :invalid_credentials, request.env['omniauth.error.type']
