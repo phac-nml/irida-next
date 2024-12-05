@@ -91,6 +91,18 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
     metadata_fields
   end
 
+  def total_samples_count
+    total_samples_count = samples_count
+    shared_groups.each do |shared_group|
+      total_samples_count += shared_group.samples_count
+    end
+
+    shared_project_namespaces.each do |shared_project_namespace|
+      total_samples_count += shared_project_namespace.project.samples.size
+    end
+    total_samples_count
+  end
+
   def retrieve_group_activity
     PublicActivity::Activity.where(
       trackable_id: id,
