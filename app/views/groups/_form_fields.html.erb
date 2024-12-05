@@ -23,29 +23,18 @@
       <div class="form-field">
         <%= form.label :parent_id %>
         <div class="flex items-center whitespace-nowrap">
-          <div
-            class="
-              inline-flex items-center px-3 py-2.5 text-sm text-slate-600 bg-slate-200 border
-              border-r-0 border-slate-300 rounded-l-lg dark:bg-slate-600 dark:text-slate-400
-              dark:border-slate-600
-            "
-          >
-            <%= root_url %>
-          </div>
-          <div class="flex-1">
-            <%= viral_select2(form:, name: :parent_id, placeholder: t(:"groups.new_subgroup.select_group")) do |select| %>
-              <% authorized_namespaces.each do |namespace| %>
-                <% select.with_option(
-                  primary: namespace.full_path,
-                  secondary: namespace.puid,
-                  value: namespace.id,
-                ) %>
-              <% end %>
-              <%= select.with_empty_state do %>
-                <%= t(:"groups.new_subgroup.empty_state") %>
-              <% end %>
+          <%= viral_prefixed_select2(form:, name: :parent_id, selected_value: group.parent, placeholder: t(:"groups.new_subgroup.select_group")) do |select| %>
+            <% authorized_namespaces.each do |namespace| %>
+              <% select.with_option(
+                primary: namespace.full_path,
+                secondary: namespace.puid,
+                value: namespace.id,
+              ) %>
             <% end %>
-          </div>
+            <%= select.with_empty_state do %>
+              <%= t(:"groups.new_subgroup.empty_state") %>
+            <% end %>
+          <% end %>
           <div class="ml-4 dark:text-slate-200">/</div>
         </div>
       </div>
