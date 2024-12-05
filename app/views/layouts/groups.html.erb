@@ -8,7 +8,7 @@
           <%= render section.with_item(
             url: group_path(@group),
             icon: "squares_2x2",
-            label: @group.name,
+            label: t("groups.sidebar.details"),
             selected: @current_page == t(:"groups.sidebar.details"),
           ) %>
           <%= render section.with_item(
