@@ -1,0 +1,20 @@
+<%= form_with(url: "", data: {controller: "viral--select2"}) do |form| %>
+  <%= viral_prefixed_select2(form:, name: :user) do |select| %>
+    <% (1..50).each do |num| %>
+      <% select.with_option(
+        primary: "User #{num}",
+        secondary: "Another fact goes here",
+        value: num,
+      ) %>
+      <%= select.with_empty_state do %>
+        No users found
+      <% end %>
+    <% end %>
+  <% end %>
+  <%= form.submit "Submit",
+              class: "button button--size-default button--state-primary",
+              disabled: true,
+              data: {
+                "viral--select2-target": "submitButton",
+              } %>
+<% end %>
