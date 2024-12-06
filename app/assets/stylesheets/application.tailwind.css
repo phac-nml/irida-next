@@ -9,7 +9,7 @@ body {
 
 @layer components {
   kbd {
-    @apply rounded-lg border border-slate-200 bg-slate-100 px-2 py-1.5 text-sm font-semibold text-slate-800 dark:border-slate-500 dark:bg-slate-600 dark:text-slate-100;
+    @apply px-2 py-1.5 text-sm font-semibold text-slate-800 bg-slate-100 border border-slate-200 rounded-lg dark:bg-slate-600 dark:text-slate-100 dark:border-slate-500;
   }
 
   dt {
@@ -28,7 +28,7 @@ body {
     display: grid;
     grid-template-columns: 280px 1fr;
     grid-template-rows: 1fr;
-    @apply h-screen w-screen transition-all;
+    @apply w-screen h-screen transition-all;
   }
 
   .layout-body.collapsed {
@@ -43,7 +43,7 @@ body {
 
   .navbar-button,
   button.navbar-button.Viral-Dropdown--icon {
-    @apply rounded-md p-1 text-sm text-slate-500 hover:bg-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+    @apply p-1 text-sm rounded-md text-slate-500 hover:bg-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
   }
 
   .link {
@@ -51,7 +51,7 @@ body {
   }
 
   .card {
-    @apply rounded-md border border-slate-200 bg-slate-50 p-4 shadow-sm sm:p-6 dark:border-slate-700 dark:bg-slate-800;
+    @apply p-4 border rounded-md shadow-sm bg-slate-50 border-slate-200 dark:border-slate-700 sm:p-6 dark:bg-slate-800;
   }
 
   p link {
@@ -59,7 +59,7 @@ body {
   }
 
   .form-field label {
-    @apply mb-1 block text-sm font-medium text-slate-900 dark:text-white;
+    @apply block mb-1 text-sm font-medium text-slate-900 dark:text-white;
   }
 
   .form-field div.field_with_errors {
@@ -70,7 +70,7 @@ body {
   .form-field input[type="search"],
   .form-field input[type="password"],
   .form-field input[type="email"] {
-    @apply focus:ring-primary-600 focus:border-primary-600 block w-full rounded-md border border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply border border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500;
   }
 
   .form-field input[type="text"].prefixed,
@@ -81,7 +81,7 @@ body {
   }
 
   .form-field.datepicker input[type="text"] {
-    @apply focus:ring-primary-700 focus:border-primary-700 block w-full rounded-md border border-slate-300 p-2.5 pl-10 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-blue-500 dark:focus:ring-blue-500;
+    @apply border border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-700 focus:border-primary-700 block w-full pl-10 p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
   }
 
   .form-field .select2 input[type="text"] {
@@ -96,7 +96,7 @@ body {
 
   .form-field select,
   .form-field select option {
-    @apply focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-md border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
+    @apply border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500;
   }
 
   .form-field select:has(option[value=""]:checked) {
@@ -104,7 +104,7 @@ body {
   }
 
   .form-field select.error {
-    @apply block w-full rounded-md border-red-500 p-2.5 text-slate-900 focus:border-red-500 focus:ring-red-500 sm:text-sm dark:border-red-400 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-red-500 dark:focus:ring-red-500;
+    @apply border-red-500 text-slate-900 sm:text-sm rounded-md focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-slate-800 dark:border-red-400 dark:placeholder-slate-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500;
   }
 
   .form-field select.prefixed {
@@ -118,7 +118,7 @@ body {
     line-height: inherit;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
-    @apply dark:shadow-sm-light block w-full rounded-r-md border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-green-500 focus:ring-green-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply rounded-r-md border p-2.5 block w-full bg-white border-slate-300 text-sm text-slate-900 focus:border-green-500 focus:ring-green-500 dark:placeholder-slate-400 dark:shadow-sm-light dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 
   .form-field.invalid label {
@@ -126,23 +126,23 @@ body {
   }
 
   .form-field.invalid input[type="text"] {
-    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
+    @apply placeholder-red-700 border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500 dark:placeholder-red-300 dark:border-red-400 dark:bg-red-800;
   }
 
   .form-field.invalid input[type="file"] {
-    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
+    @apply placeholder-red-700 border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500 dark:placeholder-red-300 dark:border-red-400 dark:bg-red-800;
   }
 
   .form-field.invalid textarea {
-    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
+    @apply placeholder-red-700 border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500 dark:placeholder-red-300 dark:border-red-400 dark:bg-red-800;
   }
 
   .form-field textarea {
-    @apply block w-full rounded-md border border-slate-300 p-2.5 text-sm text-slate-900 focus:border-green-500 focus:ring-green-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply block w-full rounded-md border border-slate-300 text-sm text-slate-900 p-2.5 focus:border-green-500 focus:ring-green-500 dark:placeholder-slate-400 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 
   input[type="checkbox"] {
-    @apply focus:ring-primary-300 dark:focus:ring-primary-600 h-4 w-4 rounded border border-slate-300 bg-slate-50 focus:ring-4 dark:border-slate-600 dark:bg-slate-800 dark:ring-offset-slate-800;
+    @apply w-4 h-4 border rounded border-slate-300 bg-slate-50 focus:ring-primary-300 focus:ring-4 dark:border-slate-600 dark:bg-slate-800 dark:ring-offset-slate-800 dark:focus:ring-primary-600;
   }
 
   .field-hint {
@@ -162,7 +162,7 @@ body {
   }
 
   .row-btn svg {
-    @apply h-5 w-5;
+    @apply w-5 h-5;
   }
 
   .Viral-Icon {
@@ -206,20 +206,24 @@ body {
     @apply text-primary-500;
   }
 
+  .Viral-Dropdown--button {
+    @apply flex items-center py-2.5 px-5 text-sm font-medium text-slate-900 focus:outline-none bg-white rounded-md border border-slate-200 hover:bg-slate-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-slate-200 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700;
+  }
+
   .Viral-Dropdown--icon {
-    @apply rounded-md p-2.5 text-sm text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+    @apply rounded-md text-sm text-slate-500 p-2.5 hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
   }
 
   .button {
-    @apply inline-flex w-1/2 cursor-pointer items-center justify-center rounded-md border text-sm focus:z-10 sm:w-auto;
+    @apply inline-flex items-center justify-center w-1/2 text-sm border rounded-md cursor-pointer sm:w-auto focus:z-10;
   }
 
   .button:disabled {
-    @apply cursor-not-allowed opacity-50;
+    @apply opacity-50 cursor-not-allowed;
   }
 
   .button--size-default {
-    @apply px-5 py-2.5 text-sm;
+    @apply text-sm px-5 py-2.5;
   }
 
   .button--size-small {
@@ -227,32 +231,32 @@ body {
   }
 
   .button--size-large {
-    @apply px-7 py-3 text-lg;
+    @apply py-3 text-lg px-7;
   }
 
   .button--state-default {
-    @apply border-slate-200 bg-white text-slate-900 hover:bg-slate-100 hover:text-slate-950 focus:outline-none focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700;
+    @apply bg-white text-slate-900 border-slate-200 focus:outline-none hover:bg-slate-100 hover:text-slate-950 focus:ring-slate-200 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700;
   }
 
   .button--state-destructive {
-    @apply border-red-800 bg-red-700 text-white hover:bg-red-800 focus:outline-none focus:ring-red-300 dark:border-red-600 dark:bg-red-600 dark:text-white dark:hover:bg-red-700 dark:focus:ring-red-700;
+    @apply text-white bg-red-700 border-red-800 focus:outline-none hover:bg-red-800 focus:ring-red-300 dark:focus:ring-red-700 dark:bg-red-600 dark:text-white dark:border-red-600 dark:hover:bg-red-700;
   }
 
   .button--state-primary {
-    @apply border-primary-800 bg-primary-700 hover:bg-primary-800 focus:ring-primary-300 dark:focus:ring-primary-700 dark:bg-primary-800 dark:border-primary-900 dark:hover:bg-primary-700 text-white focus:outline-none dark:text-white;
+    @apply text-white border-primary-800 bg-primary-700 focus:outline-none hover:bg-primary-800 focus:ring-primary-300 dark:focus:ring-primary-700 dark:bg-primary-800 dark:text-white dark:border-primary-900 dark:hover:bg-primary-700;
   }
 
   /* VIRAL DIALOG */
   dialog {
-    @apply max-h-full w-full max-w-2xl rounded-lg bg-white p-0 shadow focus:outline-none dark:bg-slate-800;
+    @apply w-full max-w-2xl max-h-full p-0 bg-white rounded-lg shadow dark:bg-slate-800 focus:outline-none;
   }
 
   dialog::backdrop {
-    @apply bg-slate-400/30 backdrop-blur-sm dark:bg-slate-900/40;
+    @apply bg-slate-400/30 dark:bg-slate-900/40 backdrop-blur-sm;
   }
 
   .dialog--size {
-    @apply relative max-h-full w-full;
+    @apply relative w-full max-h-full;
   }
 
   .dialog--size-sm {
@@ -272,7 +276,7 @@ body {
   }
 
   .dialog--header {
-    @apply flex items-start justify-between rounded-t border-b p-5 dark:border-slate-600;
+    @apply flex items-start justify-between p-5 border-b rounded-t dark:border-slate-600;
   }
 
   .dialog--title {
@@ -280,7 +284,7 @@ body {
   }
 
   .dialog--close {
-    @apply ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-slate-400 hover:bg-slate-200 hover:text-slate-900 focus:outline-none focus:ring-4 focus:ring-slate-200 dark:hover:bg-slate-600 dark:hover:text-white dark:focus:ring-slate-700;
+    @apply text-slate-400 bg-transparent hover:bg-slate-200 hover:text-slate-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-slate-600 dark:hover:text-white focus:outline-none focus:ring-4 focus:ring-slate-200 dark:focus:ring-slate-700;
   }
 
   .dialog--section {
@@ -288,7 +292,7 @@ body {
   }
 
   .avatar {
-    @apply relative inline-flex flex-none items-center justify-center overflow-hidden rounded-md text-slate-800 dark:text-slate-300;
+    @apply relative inline-flex items-center justify-center flex-none overflow-hidden rounded-md text-slate-800 dark:text-slate-300;
     --tw-avatar-bg-lightness: 35%;
     --tw-avatar-border-lightness: 35%;
     --tw-avatar-bg-alpha: 0.3;
@@ -389,7 +393,7 @@ body {
   .namespace-list-tree
     .namespace-entry.has-children
     > .namespace-entry-contents:hover {
-    @apply cursor-pointer border-slate-50 bg-slate-50 dark:border-slate-600 dark:bg-slate-600;
+    @apply cursor-pointer border-slate-50 dark:border-slate-600 bg-slate-50 dark:bg-slate-600;
   }
 
   .namespace-list-tree .namespace-entry-contents .namespace-text-container,
@@ -444,32 +448,32 @@ body {
 }
 
 .pagy-nav.pagination {
-  @apply isolate inline-flex -space-x-px rounded-md shadow-sm;
+  @apply inline-flex -space-x-px rounded-md shadow-sm isolate;
 }
 
 .page.next a {
-  @apply flex h-full items-center justify-center rounded-r-lg border border-slate-300 bg-white px-3 py-1.5 leading-tight text-slate-500 hover:bg-slate-100 hover:text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white;
+  @apply flex items-center justify-center h-full py-1.5 px-3 leading-tight text-slate-500 bg-white rounded-r-lg border border-slate-300 hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white;
 }
 
 .page.prev a {
-  @apply ml-0 flex h-full items-center justify-center rounded-l-lg border border-slate-300 bg-white px-3 py-1.5 text-slate-500 hover:bg-slate-100 hover:text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white;
+  @apply flex items-center justify-center h-full py-1.5 px-3 ml-0 text-slate-500 bg-white rounded-l-lg border border-slate-300 hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white;
 }
 
 .page.next.disabled {
-  @apply ml-0 flex h-full cursor-not-allowed items-center justify-center rounded-r-lg border border-slate-300 bg-slate-50 px-3 py-1.5 text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400;
+  @apply flex items-center justify-center h-full py-1.5 px-3 ml-0 text-slate-500 bg-slate-50 rounded-r-lg border border-slate-300 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-400 cursor-not-allowed;
 }
 
 .page.prev.disabled {
-  @apply ml-0 flex h-full cursor-not-allowed items-center justify-center rounded-l-lg border border-slate-300 bg-slate-50 px-3 py-1.5 text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400;
+  @apply flex items-center justify-center h-full py-1.5 px-3 ml-0 text-slate-500 bg-slate-50 rounded-l-lg border border-slate-300 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-400 cursor-not-allowed;
 }
 
 .page a,
 .page.gap {
-  @apply hover:text-primary-700 relative inline-flex items-center border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-100 focus:z-10 focus:outline-none focus:ring-4 focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700;
+  @apply relative inline-flex items-center px-4 py-2 text-sm font-medium bg-white border text-slate-900 border-slate-200 focus:outline-none hover:bg-slate-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-slate-200 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700;
 }
 
 .page.active {
-  @apply text-primary-600 bg-primary-50 border-primary-300 hover:bg-primary-100 hover:text-primary-700 z-10 flex items-center justify-center border px-3 py-2 text-sm leading-tight dark:border-slate-700 dark:bg-slate-800 dark:text-white;
+  @apply z-10 flex items-center justify-center px-3 py-2 text-sm leading-tight border text-primary-600 bg-primary-50 border-primary-300 hover:bg-primary-100 hover:text-primary-700 dark:border-slate-700 dark:bg-slate-800 dark:text-white;
 }
 
 .pagy-info {
@@ -477,7 +481,7 @@ body {
 }
 
 div.field_with_errors > :is(select) {
-  @apply border-red-700 text-red-900 placeholder-red-300;
+  @apply text-red-900 placeholder-red-300 border-red-700;
 }
 
 .table-container table:not(:has(tbody td)) {

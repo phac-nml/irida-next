@@ -46,7 +46,7 @@ module Viral
       end
       args.merge({
                    id: "dd-#{SecureRandom.hex(10)}",
-                   data: data,
+                   data:,
                    tag: :button,
                    type: :button
                  })
@@ -55,13 +55,8 @@ module Viral
     def system_arguments_for_button
       {
         classes: class_names(
-          system_arguments[:classes],
-          'flex items-center py-2.5 px-5 text-sm font-medium text-slate-900 ' \
-          'focus:outline-none bg-white rounded-md border border-slate-200 ' \
-          'hover:bg-slate-100 hover:text-primary-700 focus:z-10 focus:ring-4 ' \
-          'focus:ring-primary-200 dark:focus:ring-primary-700 dark:bg-slate-800 ' \
-          'dark:text-slate-400 dark:border-slate-600 dark:hover:text-white ' \
-          'dark:hover:bg-slate-700'
+          'Viral-Dropdown--button',
+          system_arguments[:classes]
         )
       }
     end
