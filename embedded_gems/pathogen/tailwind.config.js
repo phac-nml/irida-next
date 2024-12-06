@@ -59,6 +59,7 @@ module.exports = {
         // Light mode
         "light-brand-primary": globalColors.brand[600],
         "light-neutral-primary": globalColors.neutral[400],
+        "light-neutral-secondary": globalColors.neutral[200],
         "light-danger-primary": globalColors.danger[400],
 
         // Dark mode
