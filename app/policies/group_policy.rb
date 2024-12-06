@@ -6,7 +6,7 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     return unless record.instance_of?(Group)
 
     @access_level ||= Member.effective_access_level(record, user)
-    access_level
+    @access_level
   end
 
   def token_active(access_level)
@@ -19,7 +19,8 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   def activity?
     # return true if Member.can_view?(user, record) == true
-    if effective_access_level > Member::AccessLevel::NO_ACCESS && effective_access_level != Member::AccessLevel::UPLOADER
+    if effective_access_level > Member::AccessLevel::NO_ACCESS &&
+       effective_access_level != Member::AccessLevel::UPLOADER
       return true
     end
 
@@ -45,7 +46,8 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   def view_history?
     # return true if Member.can_view?(user, record) == true
-    if effective_access_level > Member::AccessLevel::NO_ACCESS && effective_access_level != Member::AccessLevel::UPLOADER
+    if effective_access_level > Member::AccessLevel::NO_ACCESS &&
+       effective_access_level != Member::AccessLevel::UPLOADER
       return true
     end
 
@@ -79,7 +81,8 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   def read?
     # return true if Member.can_view?(user, record) == true
-    if effective_access_level > Member::AccessLevel::NO_ACCESS && effective_access_level != Member::AccessLevel::UPLOADER
+    if effective_access_level > Member::AccessLevel::NO_ACCESS &&
+       effective_access_level != Member::AccessLevel::UPLOADER
       return true
     end
     return true if token_active(effective_access_level) == true
@@ -114,7 +117,8 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   def member_listing?
     # return true if Member.can_view?(user, record) == true
-    if effective_access_level > Member::AccessLevel::NO_ACCESS && effective_access_level != Member::AccessLevel::UPLOADER
+    if effective_access_level > Member::AccessLevel::NO_ACCESS &&
+       effective_access_level != Member::AccessLevel::UPLOADER
       return true
     end
 
@@ -148,7 +152,8 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
   def sample_listing?
     # return true if Member.can_view?(user, record) == true
-    if effective_access_level > Member::AccessLevel::NO_ACCESS && effective_access_level != Member::AccessLevel::UPLOADER
+    if effective_access_level > Member::AccessLevel::NO_ACCESS &&
+       effective_access_level != Member::AccessLevel::UPLOADER
       return true
     end
 

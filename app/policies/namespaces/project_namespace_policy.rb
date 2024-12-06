@@ -23,7 +23,8 @@ module Namespaces
     def member_listing?
       # return true if record.parent.user_namespace? && record.parent.owner == user
       # return true if Member.can_view?(user, record) == true
-      if effective_access_level > Member::AccessLevel::NO_ACCESS && effective_access_level != Member::AccessLevel::UPLOADER
+      if effective_access_level > Member::AccessLevel::NO_ACCESS &&
+         effective_access_level != Member::AccessLevel::UPLOADER
         return true
       end
 
