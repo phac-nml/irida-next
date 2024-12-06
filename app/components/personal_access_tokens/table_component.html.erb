@@ -1,0 +1,49 @@
+<% if @personal_access_tokens.count.positive? %>
+  <%= viral_data_table(@personal_access_tokens, id: "access-tokens-table") do |table| %>
+    <% table.with_column(t("personal_access_tokens.table.header.name")) do |row| %>
+      <%= row[:name] %>
+    <% end %>
+    <% table.with_column(t("personal_access_tokens.table.header.scopes")) do |row| %>
+      <%= row[:scopes].join(", ") %>
+    <% end %>
+    <% table.with_column(t("personal_access_tokens.table.header.created_at")) do |row| %>
+      <%= helpers.local_time(row[:created_at], :full_date) %>
+    <% end %>
+    <% table.with_column(t("personal_access_tokens.table.header.last_used_at")) do |row| %>
+      <% if row[:last_used_at].present? %>
+        <%= helpers.local_time(row[:last_used_at], :full_date) %>
+      <% else %>
+        <%= t("personal_access_tokens.table.never") %>
+      <% end %>
+    <% end %>
+    <% table.with_column(t("personal_access_tokens.table.header.expires_at")) do |row| %>
+      <% if row[:expires_at].present? %>
+        <%= helpers.local_time(row[:expires_at], :full_date) %>
+      <% else %>
+        <%= t("personal_access_tokens.table.never") %>
+      <% end %>
+    <% end %>
+    <% table.with_column(t("personal_access_tokens.table.header.action"),
+        sticky_key: :right
+      ) do |row| %>
+      <%= link_to(
+        t("personal_access_tokens.table.revoke"),
+        revoke_path(row),
+        data: {
+          turbo_method: :delete,
+          turbo_confirm: t("personal_access_tokens.table.revoke_confirmation"),
+        },
+        class:
+          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+      ) %>
+    <% end %>
+  <% end %>
+<% else %>
+  <div class="empty_state_message">
+    <%= viral_empty(
+      title: @empty[:title],
+      description: @empty[:description],
+      icon_name: :bug_ant,
+    ) %>
+  </div>
+<% end %>

@@ -9,12 +9,13 @@ module BotActions
     before_action proc { access_levels }
     before_action proc { bot_account }, only: %i[destroy]
     before_action proc { bot_type }, only: %i[create]
+    before_action proc { bot_accounts }
   end
 
   def index
     authorize! @namespace, to: :view_bot_accounts?
 
-    @pagy, @bot_accounts = pagy(load_bot_accounts)
+    @pagy, @bot_accounts = pagy(@bot_accounts)
   end
 
   def new
@@ -52,16 +53,13 @@ module BotActions
     end
   end
 
-  def destroy # rubocop:disable Metrics/MethodLength
+  def destroy
     Bots::DestroyService.new(@bot_account, current_user).execute
-
     respond_to do |format|
       format.turbo_stream do
         if @bot_account.deleted?
-          render status: :ok, locals: {
-            type: 'success',
-            message: t('concerns.bot_actions.destroy.success')
-          }
+          flash[:success] = t('concerns.bot_actions.destroy.success')
+          redirect_to redirect_path
         else
           render status: :unprocessable_entity,
                  locals: {
@@ -83,7 +81,7 @@ module BotActions
     @access_levels = Member::AccessLevel.access_level_options_for_user(@namespace, current_user)
   end
 
-  def load_bot_accounts
-    @namespace.namespace_bots.includes(:user)
+  def bot_accounts
+    @bot_accounts = @namespace.namespace_bots.includes(:user)
   end
 end
