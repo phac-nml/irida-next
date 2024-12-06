@@ -9,7 +9,7 @@ module Samples
       validate(new_project_id, sample_ids)
 
       # Authorize if user can transfer samples from the current project
-      authorize! @project, to: :transfer_sample?, context: { include_group_links: false }
+      authorize! @project, to: :transfer_sample?
 
       # Authorize if user can transfer samples to the new project
       @new_project = Project.find_by(id: new_project_id)
