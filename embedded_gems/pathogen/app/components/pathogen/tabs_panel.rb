@@ -12,8 +12,8 @@ module Pathogen
 
     BODY_TAG_DEFAULT = :ul
     BODY_DEFAULT_CLASSES = 'flex flex-wrap text-sm font-medium text-center ' \
-                           'text-slate-500 border-b border-slate-200 ' \
-                           'dark:border-slate-700 dark:text-slate-400'
+                           'text-light-default border-b border-light-neutral-secondary ' \
+                           'dark:border-dark-neutral-primary dark:text-dark-default'
     renders_many :tabs, lambda { |count: nil, selected: false, **system_arguments|
       Pathogen::TabsPanel::Tab.new(
         selected: selected,

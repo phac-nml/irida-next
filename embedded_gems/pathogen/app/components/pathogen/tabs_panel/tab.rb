@@ -36,6 +36,7 @@ module Pathogen
         @system_arguments[:'aria-current'] = @selected ? 'page' : 'false'
         @system_arguments[:classes] = generate_tab_classes
         @system_arguments[:'aria-controls'] = @controls
+        @system_arguments[:'aria-selected'] = @selected
       end
       # rubocop:enable Metrics/ParameterLists
 
@@ -55,7 +56,7 @@ module Pathogen
             'rounded-t-lg active dark:bg-dark-neutral-primary dark:text-dark-brand-onneutral'
         else
           'inline-block p-4 rounded-t-lg hover:text-light-neutral-emphasis ' \
-            'hover:bg-slate-50 dark:hover:bg-slate-800 dark:hover:text-slate-300'
+            'hover:bg-light-default dark:hover:bg-dark-neutral-primary-hover dark:hover:text-dark-onneutral-primary'
         end
       end
 

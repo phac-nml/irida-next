@@ -19,7 +19,12 @@ module Pathogen
         c.with_leading_visual_icon(icon: 'arrow-right')
       end
       render_inline(component) { 'Button' }
-      assert_selector 'button[data-test-selector="playground"]:not([disabled])', count: 1, visible: true, text: 'Button'
+      assert_selector(
+        'button[data-test-selector="playground"]:not([disabled])',
+        count: 1,
+        visible: true,
+        text: 'Button'
+      )
       assert_selector 'button svg.leading_visual_icon', count: 1
     end
 
@@ -28,7 +33,12 @@ module Pathogen
         c.with_trailing_visual_icon(icon: 'arrow-right')
       end
       render_inline(component) { 'Button' }
-      assert_selector 'button[data-test-selector="playground"]:not([disabled])', count: 1, visible: true, text: 'Button'
+      assert_selector(
+        'button[data-test-selector="playground"]:not([disabled])',
+        count: 1,
+        visible: true,
+        text: 'Button'
+      )
       assert_selector 'button svg.trailing_visual_icon', count: 1
     end
 
@@ -38,13 +48,24 @@ module Pathogen
     end
 
     test 'button with aria attributes' do
-      render_inline(Pathogen::Button.new(test_selector: 'playground', aria: { label: 'Custom Label', expanded: true })) { 'Button' }
-      assert_selector 'button[data-test-selector="playground"][aria-label="Custom Label"][aria-expanded="true"]', count: 1, visible: true, text: 'Button'
+      render_inline(
+        Pathogen::Button.new(
+          test_selector: 'playground',
+          aria: { label: 'Custom Label', expanded: true }
+        )
+      ) { 'Button' }
+      assert_selector(
+        'button[data-test-selector="playground"][aria-label="Custom Label"][aria-expanded="true"]',
+        count: 1,
+        visible: true,
+        text: 'Button'
+      )
     end
 
     test 'button as a link' do
       render_inline(Pathogen::Button.new(test_selector: 'playground', tag: :a, href: '/example')) { 'Link Button' }
-      assert_selector 'a[data-test-selector="playground"][href="/example"]', count: 1, visible: true, text: 'Link Button'
+      assert_selector 'a[data-test-selector="playground"][href="/example"]', count: 1, visible: true,
+                                                                             text: 'Link Button'
     end
   end
 end
