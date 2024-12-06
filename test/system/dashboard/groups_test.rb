@@ -638,5 +638,19 @@ module Dashboard
         assert_text @subgroup12b.samples_count
       end
     end
+
+    test 'should display a samples count that includes samples from shared groups and projects' do
+      login_as users(:john_doe)
+      visit dashboard_groups_url
+      group = groups(:group_three)
+
+      assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
+
+      assert_equal 3, group.total_samples_count
+
+      within("#group_#{group.id}-samples-count") do
+        assert_text group.total_samples_count
+      end
+    end
   end
 end
