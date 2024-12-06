@@ -2,17 +2,7 @@
 
 # Policy for projects authorization
 class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
-  # attr_reader :access_level
-
-  # def initialize(record = nil, **params)
-  #   super
-
-  #   return unless record.instance_of?(Project)
-
-  #   @access_level = {}
-  # end
-
-  def effective_access_level(include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
+  def effective_access_level(include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize
     return unless record.instance_of?(Project)
 
     @access_level ||= {}
@@ -42,7 +32,8 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   def activity?
     # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     # return true if Member.can_view?(user, record.namespace) == true
-    if effective_access_level > Member::AccessLevel::NO_ACCESS && effective_access_level != Member::AccessLevel::UPLOADER
+    if effective_access_level > Member::AccessLevel::NO_ACCESS &&
+       effective_access_level != Member::AccessLevel::UPLOADER
       return true
     end
 
@@ -53,7 +44,8 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   def view_history?
     # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     # return true if Member.can_view?(user, record.namespace) == true
-    if effective_access_level > Member::AccessLevel::NO_ACCESS && effective_access_level != Member::AccessLevel::UPLOADER
+    if effective_access_level > Member::AccessLevel::NO_ACCESS &&
+       effective_access_level != Member::AccessLevel::UPLOADER
       return true
     end
 
@@ -92,7 +84,8 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   def read?
     # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     # return true if Member.can_view?(user, record.namespace) == true
-    if (effective_access_level > Member::AccessLevel::NO_ACCESS) && effective_access_level != Member::AccessLevel::UPLOADER
+    if (effective_access_level > Member::AccessLevel::NO_ACCESS) &&
+       effective_access_level != Member::AccessLevel::UPLOADER
       return true
     end
     return true if token_active(effective_access_level) == true
@@ -122,7 +115,8 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   def sample_listing?
     # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     # return true if Member.can_view?(user, record.namespace) == true
-    if effective_access_level > Member::AccessLevel::NO_ACCESS && effective_access_level != Member::AccessLevel::UPLOADER
+    if effective_access_level > Member::AccessLevel::NO_ACCESS &&
+       effective_access_level != Member::AccessLevel::UPLOADER
       return true
     end
 
@@ -152,7 +146,8 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   def read_sample?
     # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
     # return true if Member.can_view?(user, record.namespace) == true
-    if effective_access_level > Member::AccessLevel::NO_ACCESS && effective_access_level != Member::AccessLevel::UPLOADER
+    if effective_access_level > Member::AccessLevel::NO_ACCESS &&
+       effective_access_level != Member::AccessLevel::UPLOADER
       return true
     end
     return true if token_active(effective_access_level) == true
