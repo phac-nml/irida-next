@@ -3,15 +3,11 @@
 module Layout
   # Sidebar component to for navigation
   class SidebarComponent < Component
-    attr_reader :label, :tooltip
-
     renders_one :header, Sidebar::HeaderComponent
     renders_many :sections, Sidebar::SectionComponent
     renders_many :items, Sidebar::ItemComponent
 
-    def initialize(label:, pipelines_enabled: true, **system_arguments)
-      @label = label
-      @tooltip = label
+    def initialize(pipelines_enabled: true, **system_arguments)
       @pipelines_enabled = pipelines_enabled
       @system_arguments = system_arguments
     end

@@ -7,6 +7,7 @@ module Viral
 
     SIZE_DEFAULT = :medium
     SIZE_MAPPINGS = {
+      xs: 'w-6 h-6',
       small: 'w-8 h-8',
       medium: 'w-12 h-12',
       large: 'w-16 h-16'
@@ -18,7 +19,7 @@ module Viral
       @colours = generate_hsla_colour(colour_string || name)
       @size = size
       @url = url
-      @font_styles = if size == :small
+      @font_styles = if %i[xs small].include?(size)
                        'text-sm'
                      else
                        size == :medium ? 'text-2xl font-semibold' : 'text-4xl font-bold'
