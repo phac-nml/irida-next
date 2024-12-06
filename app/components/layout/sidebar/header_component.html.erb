@@ -1,14 +1,14 @@
-      <div class="pl-4 mb-2 space-y-2">
-        <p class="pt-2 ml-1 text-base font-semibold text-gray-900 dark:text-white"><%= label %>
-        </p>
-        <% if item.present? %>
-          <div class="flex items-center">
-            <%= viral_avatar(
-              name: item.name,
-              colour_string: "#{item.name}-#{item.id}",
-              size: :xs,
-            ) %>
-            <p class="pl-2 text-sm text-gray-600 dark:text-gray-400"><%= item.name %></p>
-          </div>
-        <% end %>
-      </div>
+<div class="pl-4 mb-2 space-y-2">
+  <p class="pt-2 ml-1 text-base font-semibold text-gray-900 dark:text-white"><%= label %>
+  </p>
+  <% if item.present? %>
+    <div class="flex items-center">
+      <%= viral_avatar(
+        name: item.name,
+        colour_string: "#{item.name}-#{item.id}",
+        size: :xs,
+      ) %>
+      <p class="pl-2 text-sm text-gray-600 dark:text-gray-400"><%= item.name %></p>
+    </div>
+  <% end %>
+</div>
