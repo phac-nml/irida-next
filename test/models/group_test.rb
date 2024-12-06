@@ -210,6 +210,10 @@ class GroupTest < ActiveSupport::TestCase
     assert_equal %w[metadatafield1 metadatafield2], groups(:group_alpha).metadata_fields
   end
 
+  test 'total samples count should not include shared projects that are children of groups in shared groups' do
+    assert_equal 2, groups(:group_five).total_samples_count
+  end
+
   test 'update samples_count by sample transfer' do
     project = projects(:project22)
     assert_difference -> { @group_three.reload.samples_count } => -1,

@@ -1129,4 +1129,20 @@ class GroupsTest < ApplicationSystemTestCase
     assert_text I18n.t('groups.show.shared_namespaces.no_shared.title')
     assert_text I18n.t('groups.show.shared_namespaces.no_shared.description')
   end
+
+  test 'should display a samples count that includes samples from shared groups and projects' do
+    group_three = groups(:group_three)
+    subgroup1 = groups(:subgroup1)
+    visit group_url(group_three)
+
+    assert_selector 'h1', text: group_three.name
+
+    click_on I18n.t(:'groups.show.tabs.shared_namespaces')
+
+    assert_equal 3, subgroup1.total_samples_count
+
+    within("#group_#{subgroup1.id}-samples-count") do
+      assert_text subgroup1.total_samples_count
+    end
+  end
 end
