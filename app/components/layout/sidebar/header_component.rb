@@ -4,12 +4,11 @@ module Layout
   module Sidebar
     # Sidebar header component to indicate the current page
     class HeaderComponent < Component
-      attr_reader :label, :icon, :url
+      attr_reader :label, :item
 
-      def initialize(label:, icon:, url:)
+      def initialize(label:, item: nil)
         @label = label
-        @icon = icon
-        @url = url
+        @item = item
       end
     end
   end

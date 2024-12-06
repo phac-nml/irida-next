@@ -4,6 +4,7 @@
   <body class="bg-white dark:bg-slate-900">
     <%= render LayoutComponent.new(user: current_user, fixed: true) do |layout| %>
       <% layout.with_sidebar(label: t(:'profiles.sidebar.header'), icon_name: "user_circle", pipelines_enabled: @pipelines_enabled) do |navigation| %>
+        <%= navigation.with_header(label: t(:'profiles.sidebar.header')) %>
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
             url: profile_path,

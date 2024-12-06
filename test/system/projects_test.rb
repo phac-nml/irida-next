@@ -120,7 +120,7 @@ class ProjectsTest < ApplicationSystemTestCase
     assert_field I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
     assert_field I18n.t(:'activerecord.attributes.namespaces/project_namespace.description'), with: project_description
 
-    within '#sidebar_project_name' do
+    within 'aside#sidebar' do
       assert_text project_name
     end
 

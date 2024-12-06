@@ -5,9 +5,8 @@ require 'test_helper'
 module Layout
   class SidebarComponentTest < ViewComponent::TestCase
     test 'should render the sidebar with a header and a section' do
-      render_inline Layout::SidebarComponent.new(label: I18n.t(:'general.default_sidebar.projects'),
-                                                 icon_name: 'folder') do |sidebar|
-        sidebar.with_header(label: 'My Sidebar', url: '/', icon: 'home')
+      render_inline Layout::SidebarComponent.new do |sidebar|
+        sidebar.with_header(label: 'My Sidebar')
         sidebar.with_section(title: 'My Work') do |section|
           section.with_item(label: 'Projects', url: '/-/projects', icon: 'rectangle_stack')
           section.with_item(label: 'Groups', url: '/-/groups', icon: 'squares_2x2')
@@ -26,9 +25,8 @@ module Layout
     end
 
     test 'should render the sidebar with a header and items' do
-      render_inline Layout::SidebarComponent.new(label: I18n.t(:'general.default_sidebar.projects'),
-                                                 icon_name: 'folder') do |sidebar|
-        sidebar.with_header(label: 'My Sidebar', url: '/', icon: 'home')
+      render_inline Layout::SidebarComponent.new do |sidebar|
+        sidebar.with_header(label: 'My Sidebar')
         sidebar.with_item(label: 'Projects', url: '/-/projects', icon: 'rectangle_stack')
         sidebar.with_item(label: 'Groups', url: '/-/groups', icon: 'squares_2x2')
       end
@@ -44,8 +42,7 @@ module Layout
     end
 
     test 'sidebar should render without a header' do
-      render_inline Layout::SidebarComponent.new(label: I18n.t(:'general.default_sidebar.projects'),
-                                                 icon_name: 'folder') do |sidebar|
+      render_inline Layout::SidebarComponent.new do |sidebar|
         sidebar.with_item(label: 'Projects', url: '/-/projects', icon: 'rectangle_stack')
         sidebar.with_item(label: 'Groups', url: '/-/groups', icon: 'squares_2x2')
       end

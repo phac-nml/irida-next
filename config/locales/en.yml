@@ -561,6 +561,7 @@ en:
   general:
     default_sidebar:
       data_exports: Data Exports
+      goto: Go to
       groups: Groups
       projects: Projects
       title: Your work
@@ -815,6 +816,7 @@ en:
       files: Files
       general: General
       history: History
+      label: Group
       members: Members
       samples: Samples
       settings: Settings
@@ -1480,6 +1482,7 @@ en:
       files: Files
       general: General
       history: History
+      label: Project
       members: Members
       samples: Samples
       settings: Settings
