@@ -5,6 +5,7 @@ require 'application_system_test_case'
 module Projects
   class SamplesTest < ApplicationSystemTestCase
     include ActionView::Helpers::SanitizeHelper
+    include ApplicationHelper
 
     setup do
       @user = users(:john_doe)
@@ -28,13 +29,108 @@ module Projects
       Project.reset_counters(@project29.id, :samples_count)
     end
 
-    test 'visiting the index' do
+    test 'verify samples index page assets with role >= Maintainer' do
+      freeze_time
       visit namespace_project_samples_url(@namespace, @project)
 
+      # verifies navigation to page
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
-      assert_selector '#samples-table table tbody tr', count: 3
-      assert_text @sample1.name
-      assert_text @sample2.name
+
+      # samples table
+      within('#samples-table table') do
+        within('thead tr:first-child') do
+          assert_selector 'th:first-child', text: I18n.t('samples.table_component.puid').upcase
+          assert_selector 'th:nth-child(2)', text: I18n.t('samples.table_component.name').upcase
+          assert_selector 'th:nth-child(3)', text: I18n.t('samples.table_component.created_at').upcase
+          assert_selector 'th:nth-child(4)', text: I18n.t('samples.table_component.updated_at').upcase
+          assert_selector 'th:nth-child(5)', text: I18n.t('samples.table_component.attachments_updated_at').upcase
+          assert_selector 'th:last-child', text: I18n.t('samples.table_component.action').upcase
+        end
+        within('tbody') do
+          assert_selector '#samples-table table tbody tr', count: 3
+          within("tr[id='#{@sample1.id}']") do
+            assert_selector 'th:first-child', text: @sample1.puid
+            assert_selector 'td:nth-child(2)', text: @sample1.name
+            # assert_selector 'td:nth-child(3)',
+            #                 text: Rails.application.helpers.local_time(@sample1.created_at, :full_date)
+          end
+        end
+      end
+
+      # sample row actions
+      within('#samples-table table tbody tr:first-child') do
+        assert_selector 'a', text: I18n.t('projects.samples.index.edit_button')
+        assert_selector 'a', text: I18n.t('projects.samples.index.remove_button')
+      end
+
+      # select and deselect all
+      assert_selector 'form#select-all-form'
+      assert_selector 'form#deselect-all-form'
+
+      # checkboxes
+      assert_selector 'input#select-page'
+      assert_selector "input#sample_#{@sample1.id}"
+
+      # header buttons
+      assert_selector 'span[class="sr-only"]', text: I18n.t('projects.samples.index.workflows.button_sr')
+      assert_selector 'a', text: I18n.t('projects.samples.index.clone_button')
+      assert_selector 'a', text: I18n.t('projects.samples.index.transfer_button')
+      assert_selector 'button', text: I18n.t('projects.samples.index.create_export_button.label')
+      assert_selector 'a', text: I18n.t('projects.samples.index.import_metadata_button')
+      assert_selector 'a', text: I18n.t('projects.samples.index.new_button')
+      assert_selector 'a', text: I18n.t('projects.samples.index.delete_samples_button')
+    end
+
+    test 'verify samples index page assets with role < Maintainer' do
+      login_as users(:ryan_doe)
+      visit namespace_project_samples_url(@namespace, @project)
+
+      # verifies navigation to page
+      assert_selector 'h1', text: I18n.t('projects.samples.index.title')
+
+      # samples table
+      within('#samples-table table') do
+        within('thead tr:first-child') do
+          assert_selector 'th:first-child', text: I18n.t('samples.table_component.puid').upcase
+          assert_selector 'th:nth-child(2)', text: I18n.t('samples.table_component.name').upcase
+          assert_selector 'th:nth-child(3)', text: I18n.t('samples.table_component.created_at').upcase
+          assert_selector 'th:nth-child(4)', text: I18n.t('samples.table_component.updated_at').upcase
+          assert_selector 'th:nth-child(5)', text: I18n.t('samples.table_component.attachments_updated_at').upcase
+          assert_no_selector 'th:last-child', text: I18n.t('samples.table_component.action').upcase
+        end
+        within('tbody') do
+          assert_selector '#samples-table table tbody tr', count: 3
+          within("tr[id='#{@sample1.id}']") do
+            assert_selector 'th:first-child', text: @sample1.puid
+            assert_selector 'td:nth-child(2)', text: @sample1.name
+            # assert_selector 'td:nth-child(3)',
+            #                 text: Rails.application.helpers.local_time(@sample1.created_at, :full_date)
+          end
+        end
+      end
+
+      # sample row actions
+      within('#samples-table table tbody tr:first-child') do
+        assert_no_selector 'a', text: I18n.t('projects.samples.index.edit_button')
+        assert_no_selector 'a', text: I18n.t('projects.samples.index.remove_button')
+      end
+
+      # select and deselect all
+      assert_no_selector 'form#select-all-form'
+      assert_no_selector 'form#deselect-all-form'
+
+      # checkboxes
+      assert_no_selector 'input#select-page'
+      assert_no_selector "input#sample_#{@sample1.id}"
+
+      # header buttons
+      assert_no_selector 'span[class="sr-only"]', text: I18n.t('projects.samples.index.workflows.button_sr')
+      assert_no_selector 'a', text: I18n.t('projects.samples.index.clone_button')
+      assert_no_selector 'a', text: I18n.t('projects.samples.index.transfer_button')
+      assert_no_selector 'button', text: I18n.t('projects.samples.index.create_export_button.label')
+      assert_no_selector 'a', text: I18n.t('projects.samples.index.import_metadata_button')
+      assert_no_selector 'a', text: I18n.t('projects.samples.index.new_button')
+      assert_no_selector 'a', text: I18n.t('projects.samples.index.delete_samples_button')
     end
 
     test 'cannot access project samples' do
@@ -46,45 +142,57 @@ module Projects
     end
 
     test 'should create sample' do
-      # setup start
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
-      assert_selector 'a', text: I18n.t('projects.samples.index.new_button'), count: 1
-      # setup end
+      ### setup end ###
 
-      # actions start
+      ### actions start ###
+      # launch dialog
       click_on I18n.t('projects.samples.index.new_button')
 
-      fill_in I18n.t('activerecord.attributes.sample.description'), with: @sample1.description
+      # fill new sample fields
+      fill_in I18n.t('activerecord.attributes.sample.description'), with: 'A sample description'
       fill_in I18n.t('activerecord.attributes.sample.name'), with: 'New Name'
       click_on I18n.t('projects.samples.new.submit_button')
-      # actions end
+      ### actions end ###
 
-      # results start
+      ### results start ###
+      # verify flash msg
       assert_text I18n.t('projects.samples.create.success')
-      assert_text 'New Name'
-      assert_text @sample1.description
-      # results end
+
+      # verify sample exists in table
+      within('#samples-table table tbody') do
+        assert_text 'New Name'
+        assert_text 'A sample description'
+      end
+      ### results end ###
     end
 
     test 'should update Sample' do
-      # setup start
+      ### setup start ###
       visit namespace_project_sample_url(@namespace, @project, @sample1)
-      assert_selector 'a', text: I18n.t('projects.samples.show.edit_button'), count: 1
-      # setup end
+      ### setup end ###
 
-      # actions start
-      click_on I18n.t('projects.samples.show.edit_button'), match: :first
+      ### actions start ###
+      # nav to edit sample page
+      click_on I18n.t('projects.samples.show.edit_button')
 
-      fill_in 'Description', with: @sample1.description
+      # change current sample properties with new ones
+      fill_in 'Description', with: 'A new description'
       fill_in 'Name', with: 'New Sample Name'
       click_on I18n.t('projects.samples.edit.submit_button')
-      # actions end
+      ### actions end ###
 
-      # results start
+      ### results start ###
+      # verify flash msg
       assert_text I18n.t('projects.samples.update.success')
-      assert_text 'New Sample Name'
-      assert_text @sample1.description
-      # results end
+
+      # verify sample exists in table in new state
+      within('#samples-table table tbody') do
+        assert_text 'New Sample Name'
+        assert_text 'A new description'
+      end
+      ### results end ###
     end
 
     test 'user with role >= Maintainer should be able to see upload, concatenate and delete files buttons' do
@@ -103,7 +211,7 @@ module Projects
     end
 
     test 'user with role >= Maintainer should be able to attach a file to a Sample' do
-      # setup start
+      ### setup start ###
       visit namespace_project_sample_url(@namespace, @project, @sample2)
       assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
       within('#table-listing') do
@@ -111,9 +219,9 @@ module Projects
         assert_text I18n.t('projects.samples.show.no_associated_files')
         assert_no_text 'test_file_2.fastq.gz'
       end
-      # setup end
+      ### setup end ###
 
-      # actions start
+      ### actions start ###
       click_on I18n.t('projects.samples.show.upload_files')
 
       within('#dialog') do
@@ -123,24 +231,24 @@ module Projects
         click_on I18n.t('projects.samples.show.upload')
         assert_selector 'input[type=submit]:disabled'
       end
-      # actions end
+      ### actions end ###
 
-      # results start
+      ### results start ###
       assert_text I18n.t('projects.samples.attachments.create.success', filename: 'data_export_1.zip')
       within('#table-listing') do
         assert_no_text I18n.t('projects.samples.show.no_files')
         assert_no_text I18n.t('projects.samples.show.no_associated_files')
         assert_text 'data_export_1.zip'
       end
-      # results end
+      ### results end ###
     end
 
     test 'user with role >= Maintainer should not be able to attach a duplicate file to a Sample' do
-      # setup start
+      ### setup start ###
       visit namespace_project_sample_url(@namespace, @project, @sample1)
-      # setup end
+      ### setup end ###
 
-      # actions start
+      ### actions start ###
       click_on I18n.t('projects.samples.show.upload_files')
 
       within('#dialog') do
@@ -153,7 +261,7 @@ module Projects
         attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
         click_on I18n.t('projects.samples.show.upload')
       end
-      # actions end
+      ### actions end ###
 
       # verify start
       assert_text I18n.t('activerecord.errors.models.attachment.attributes.file.checksum_uniqueness')
@@ -161,11 +269,11 @@ module Projects
     end
 
     test 'user with role >= Maintainer can upload paired end files and not uncompressed files to a Sample' do
-      # setup start
+      ### setup start ###
       visit namespace_project_sample_url(@namespace, @project, @sample1)
-      # setup end
+      ### setup end ###
 
-      # actions start
+      ### actions start ###
       click_on I18n.t('projects.samples.show.upload_files')
 
       within('#dialog') do
@@ -177,9 +285,9 @@ module Projects
 
         click_on I18n.t('projects.samples.show.upload')
       end
-      # actions end
+      ### actions end ###
 
-      # results start
+      ### results start ###
       assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R1_001.fastq.gz')
       assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R2_001.fastq.gz')
       assert_no_text I18n.t('projects.samples.attachments.create.success', filename: 'test_file.fastq')
@@ -189,14 +297,14 @@ module Projects
         assert_text 'TestSample_S1_L001_R1_001.fastq.gz'
         assert_text 'TestSample_S1_L001_R2_001.fastq.gz'
       end
-      # results end
+      ### results end ###
     end
 
     test 'paired end files should appear in a single row with only one set of attributes' do
-      # setup start
+      ### setup start ###
       login_as users(:jeff_doe)
       visit namespace_project_sample_url(@jeff_doe_namespace, @projectA, @sampleB)
-      # setup end
+      ### setup end ###
 
       within('#attachments-table-body') do
         assert_selector 'tr:first-child td:nth-child(2)', text: @attachmentFwd1.puid, count: 1
@@ -212,11 +320,11 @@ module Projects
     end
 
     test 'user with role >= Maintainer should be able to delete a file from a Sample' do
-      # setup start
+      ### setup start ###
       visit namespace_project_sample_url(@namespace, @project, @sample1)
-      # setup end
+      ### setup end ###
       within('#attachments-table-body') do
-        # actions start
+        ### actions start ###
         click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
       end
 
@@ -225,23 +333,23 @@ module Projects
         assert_text I18n.t('projects.samples.attachments.delete_attachment_modal.description')
         click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
       end
-      # actions end
+      ### actions end ###
 
-      # results start
+      ### results start ###
       assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file_A.fastq')
       within('#attachments-table-body') do
         assert_no_text 'test_file_A.fastq'
       end
-      # results end
+      ### results end ###
     end
 
     test 'user with role >= Maintainer should be able to delete paired end attachments with single delete click' do
-      # setup start
+      ### setup start ###
       login_as users(:jeff_doe)
       visit namespace_project_sample_url(@jeff_doe_namespace, @projectA, @sampleB)
-      # setup end
+      ### setup end ###
 
-      # actions start
+      ### actions start ###
       within('#attachments-table-body tr:first-child td:last-child') do
         click_on I18n.t('projects.samples.attachments.attachment.delete')
       end
@@ -249,9 +357,9 @@ module Projects
       within('#dialog') do
         click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
       end
-      # actions end
+      ### actions end ###
 
-      # results start
+      ### results start ###
       assert_text I18n.t('projects.samples.attachments.destroy.success',
                          filename: @attachmentFwd1.file.filename.to_s)
       assert_text I18n.t('projects.samples.attachments.destroy.success',
@@ -260,7 +368,7 @@ module Projects
         assert_no_text @attachmentFwd1.file.filename.to_s
         assert_no_text @attachmentRev1.file.filename.to_s
       end
-      # results end
+      ### results end ###
     end
 
     test 'user with role < Maintainer should not be able to view attachment delete links' do
@@ -274,7 +382,7 @@ module Projects
     end
 
     test 'should destroy Sample from sample show page' do
-      # setup start
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       assert_selector '#samples-table table tbody tr:first-child td:nth-child(2)', text: @sample1.name
 
