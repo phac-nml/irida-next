@@ -5,7 +5,6 @@ require 'application_system_test_case'
 module Projects
   class SamplesTest < ApplicationSystemTestCase
     include ActionView::Helpers::SanitizeHelper
-    include ApplicationHelper
 
     setup do
       @user = users(:john_doe)
@@ -15,13 +14,14 @@ module Projects
       @sample3 = samples(:sample30)
       @sample32 = samples(:sample32)
       @project = projects(:project1)
-      @projectA = projects(:projectA)
+      @project2 = projects(:project2)
+      @project_A = projects(:projectA)
       @project29 = projects(:project29)
       @namespace = groups(:group_one)
       @group12a = groups(:subgroup_twelve_a)
 
       @jeff_doe_namespace = namespaces_user_namespaces(:jeff_doe_namespace)
-      @sampleB = samples(:sampleB)
+      @sample_B = samples(:sampleB)
       @attachmentFwd1 = attachments(:attachmentPEFWD1)
       @attachmentRev1 = attachments(:attachmentPEREV1)
 
@@ -29,7 +29,7 @@ module Projects
       Project.reset_counters(@project29.id, :samples_count)
     end
 
-    test 'verify samples index page assets with role >= Maintainer' do
+    test 'samples index table' do
       freeze_time
       visit namespace_project_samples_url(@namespace, @project)
 
@@ -38,6 +38,7 @@ module Projects
 
       # samples table
       within('#samples-table table') do
+        # headers
         within('thead tr:first-child') do
           assert_selector 'th:first-child', text: I18n.t('samples.table_component.puid').upcase
           assert_selector 'th:nth-child(2)', text: I18n.t('samples.table_component.name').upcase
@@ -47,89 +48,152 @@ module Projects
           assert_selector 'th:last-child', text: I18n.t('samples.table_component.action').upcase
         end
         within('tbody') do
+          # rows
           assert_selector '#samples-table table tbody tr', count: 3
+          # row contents
           within("tr[id='#{@sample1.id}']") do
             assert_selector 'th:first-child', text: @sample1.puid
             assert_selector 'td:nth-child(2)', text: @sample1.name
-            # assert_selector 'td:nth-child(3)',
-            #                 text: Rails.application.helpers.local_time(@sample1.created_at, :full_date)
+            assert_selector 'td:nth-child(3)', text: I18n.l(@sample1.created_at.localtime, format: :full_date)
+            # assert_selector 'td:nth-child(4)', text: "yesterday at #{Time.now.strftime('%-I:%M%P')}"
+            assert_selector 'td:nth-child(5)', text: '2 hours ago'
+            # actions tested by role in separate test
           end
         end
       end
 
-      # sample row actions
-      within('#samples-table table tbody tr:first-child') do
+      # pagy
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+    end
+
+    test 'edit and delete row actions render for user with role == Owner in samples table' do
+      visit namespace_project_samples_url(@namespace, @project)
+
+      within("tr[id='#{@sample1.id}'] td:last-child") do
         assert_selector 'a', text: I18n.t('projects.samples.index.edit_button')
         assert_selector 'a', text: I18n.t('projects.samples.index.remove_button')
       end
-
-      # select and deselect all
-      assert_selector 'form#select-all-form'
-      assert_selector 'form#deselect-all-form'
-
-      # checkboxes
-      assert_selector 'input#select-page'
-      assert_selector "input#sample_#{@sample1.id}"
-
-      # header buttons
-      assert_selector 'span[class="sr-only"]', text: I18n.t('projects.samples.index.workflows.button_sr')
-      assert_selector 'a', text: I18n.t('projects.samples.index.clone_button')
-      assert_selector 'a', text: I18n.t('projects.samples.index.transfer_button')
-      assert_selector 'button', text: I18n.t('projects.samples.index.create_export_button.label')
-      assert_selector 'a', text: I18n.t('projects.samples.index.import_metadata_button')
-      assert_selector 'a', text: I18n.t('projects.samples.index.new_button')
-      assert_selector 'a', text: I18n.t('projects.samples.index.delete_samples_button')
     end
 
-    test 'verify samples index page assets with role < Maintainer' do
-      login_as users(:ryan_doe)
+    test 'edit row action render for user with role == Maintainer in samples table' do
+      login_as users(:joan_doe)
       visit namespace_project_samples_url(@namespace, @project)
 
-      # verifies navigation to page
-      assert_selector 'h1', text: I18n.t('projects.samples.index.title')
-
-      # samples table
-      within('#samples-table table') do
-        within('thead tr:first-child') do
-          assert_selector 'th:first-child', text: I18n.t('samples.table_component.puid').upcase
-          assert_selector 'th:nth-child(2)', text: I18n.t('samples.table_component.name').upcase
-          assert_selector 'th:nth-child(3)', text: I18n.t('samples.table_component.created_at').upcase
-          assert_selector 'th:nth-child(4)', text: I18n.t('samples.table_component.updated_at').upcase
-          assert_selector 'th:nth-child(5)', text: I18n.t('samples.table_component.attachments_updated_at').upcase
-          assert_no_selector 'th:last-child', text: I18n.t('samples.table_component.action').upcase
-        end
-        within('tbody') do
-          assert_selector '#samples-table table tbody tr', count: 3
-          within("tr[id='#{@sample1.id}']") do
-            assert_selector 'th:first-child', text: @sample1.puid
-            assert_selector 'td:nth-child(2)', text: @sample1.name
-            # assert_selector 'td:nth-child(3)',
-            #                 text: Rails.application.helpers.local_time(@sample1.created_at, :full_date)
-          end
-        end
+      within("tr[id='#{@sample1.id}'] td:last-child") do
+        assert_selector 'a', text: I18n.t('projects.samples.index.edit_button')
+        assert_no_selector 'a', text: I18n.t('projects.samples.index.remove_button')
       end
+    end
 
-      # sample row actions
-      within('#samples-table table tbody tr:first-child') do
+    test 'no row actions for user with role < Maintainer in samples table' do
+      login_as users(:ryan_doe)
+      visit namespace_project_samples_url(@namespace, @project)
+      within('#samples-table table thead tr:first-child') do
+        # attachments updated at is the last column, action column does not exist
+        assert_selector 'th:last-child', text: I18n.t('samples.table_component.attachments_updated_at').upcase
+        assert_no_selector 'th:last-child', text: I18n.t('samples.table_component.action').upcase
+      end
+      within("tr[id='#{@sample1.id}'] td:last-child") do
         assert_no_selector 'a', text: I18n.t('projects.samples.index.edit_button')
         assert_no_selector 'a', text: I18n.t('projects.samples.index.remove_button')
       end
+    end
 
-      # select and deselect all
+    test 'User with role >= Maintainer sees select and deselect buttons for samples table' do
+      visit namespace_project_samples_url(@namespace, @project)
+
+      assert_selector 'form#select-all-form'
+      assert_selector 'form#deselect-all-form'
+    end
+
+    test 'User with role < Maintainer does not see select and deselect buttons for samples table' do
+      login_as users(:ryan_doe)
+      visit namespace_project_samples_url(@namespace, @project)
+
       assert_no_selector 'form#select-all-form'
       assert_no_selector 'form#deselect-all-form'
+    end
 
-      # checkboxes
+    test 'User with role >= Maintainer sees sample table checkboxes' do
+      visit namespace_project_samples_url(@namespace, @project)
+
+      assert_selector 'input#select-page'
+      assert_selector "input#sample_#{@sample1.id}"
+    end
+
+    test 'User with role < Maintainer does not see sample table checkboxes' do
+      login_as users(:ryan_doe)
+      visit namespace_project_samples_url(@namespace, @project)
+
       assert_no_selector 'input#select-page'
       assert_no_selector "input#sample_#{@sample1.id}"
+    end
 
-      # header buttons
+    test 'User with role >= Analyst sees workflow execution link in samples index' do
+      login_as users(:james_doe)
+      visit namespace_project_samples_url(@namespace, @project)
+
+      assert_selector 'span[class="sr-only"]', text: I18n.t('projects.samples.index.workflows.button_sr')
+    end
+
+    test 'User with role < Analyst does not see workflow execution link in samples index' do
+      login_as users(:ryan_doe)
+      visit namespace_project_samples_url(@namespace, @project)
+
       assert_no_selector 'span[class="sr-only"]', text: I18n.t('projects.samples.index.workflows.button_sr')
-      assert_no_selector 'a', text: I18n.t('projects.samples.index.clone_button')
-      assert_no_selector 'a', text: I18n.t('projects.samples.index.transfer_button')
+    end
+
+    test 'User with role >= Analyst sees create export button in samples index' do
+      login_as users(:james_doe)
+      visit namespace_project_samples_url(@namespace, @project)
+
+      assert_selector 'button', text: I18n.t('projects.samples.index.create_export_button.label')
+    end
+
+    test 'User with role < Analyst does not see create export button in samples index' do
+      login_as users(:ryan_doe)
+      visit namespace_project_samples_url(@namespace, @project)
+
       assert_no_selector 'button', text: I18n.t('projects.samples.index.create_export_button.label')
+    end
+
+    test 'User with role >= Maintainer sees import metadata link in samples index' do
+      visit namespace_project_samples_url(@namespace, @project)
+
+      assert_selector 'a', text: I18n.t('projects.samples.index.import_metadata_button')
+    end
+
+    test 'User with role < Maintainer does not see import metadata link in samples index' do
+      login_as users(:ryan_doe)
+      visit namespace_project_samples_url(@namespace, @project)
+
       assert_no_selector 'a', text: I18n.t('projects.samples.index.import_metadata_button')
+    end
+
+    test 'User with role >= Maintainer sees new sample button in samples index' do
+      visit namespace_project_samples_url(@namespace, @project)
+
+      assert_selector 'a', text: I18n.t('projects.samples.index.new_button')
+    end
+
+    test 'User with role < Maintainer does not see new sample button in samples index' do
+      login_as users(:ryan_doe)
+      visit namespace_project_samples_url(@namespace, @project)
+
       assert_no_selector 'a', text: I18n.t('projects.samples.index.new_button')
+    end
+
+    test 'User with role >= Maintainer sees delete samples button in samples index' do
+      visit namespace_project_samples_url(@namespace, @project)
+
+      assert_selector 'a', text: I18n.t('projects.samples.index.delete_samples_button')
+    end
+
+    test 'User with role < Maintainer does not see delete samples button in samples index' do
+      login_as users(:ryan_doe)
+      visit namespace_project_samples_url(@namespace, @project)
+
       assert_no_selector 'a', text: I18n.t('projects.samples.index.delete_samples_button')
     end
 
@@ -157,13 +221,14 @@ module Projects
       ### actions end ###
 
       ### results start ###
-      # verify flash msg
+      # flash msg
       assert_text I18n.t('projects.samples.create.success')
-
+      # verify redirect to sample show page after successful sample creation
+      assert_selector 'h1', text: 'New Name'
       # verify sample exists in table
+      visit namespace_project_samples_url(@namespace, @project)
       within('#samples-table table tbody') do
         assert_text 'New Name'
-        assert_text 'A sample description'
       end
       ### results end ###
     end
@@ -184,30 +249,28 @@ module Projects
       ### actions end ###
 
       ### results start ###
-      # verify flash msg
+      # flash msg
       assert_text I18n.t('projects.samples.update.success')
 
-      # verify sample exists in table in new state
-      within('#samples-table table tbody') do
-        assert_text 'New Sample Name'
-        assert_text 'A new description'
-      end
+      # verify redirect to sample show page and updated sample state
+      assert_selector 'h1', text: 'New Sample Name'
+      assert_text 'A new description'
       ### results end ###
     end
 
     test 'user with role >= Maintainer should be able to see upload, concatenate and delete files buttons' do
       visit namespace_project_sample_url(@namespace, @project, @sample2)
-      assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
-      assert_selector 'a', text: I18n.t('projects.samples.show.concatenate_button'), count: 1
-      assert_selector 'a', text: I18n.t('projects.samples.show.delete_files_button'), count: 1
+      assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button')
+      assert_selector 'a', text: I18n.t('projects.samples.show.concatenate_button')
+      assert_selector 'a', text: I18n.t('projects.samples.show.delete_files_button')
     end
 
     test 'user with role < Maintainer should not be able to see upload, concatenate and delete files buttons' do
       login_as users(:ryan_doe)
       visit namespace_project_sample_url(@namespace, @project, @sample2)
-      assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 0
-      assert_selector 'a', text: I18n.t('projects.samples.show.concatenate_button'), count: 0
-      assert_selector 'a', text: I18n.t('projects.samples.show.delete_files_button'), count: 0
+      assert_no_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button')
+      assert_no_selector 'a', text: I18n.t('projects.samples.show.concatenate_button')
+      assert_no_selector 'a', text: I18n.t('projects.samples.show.delete_files_button')
     end
 
     test 'user with role >= Maintainer should be able to attach a file to a Sample' do
@@ -274,14 +337,18 @@ module Projects
       ### setup end ###
 
       ### actions start ###
+      # open dialog
       click_on I18n.t('projects.samples.show.upload_files')
 
       within('#dialog') do
         attach_file 'attachment[files][]', [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq.gz'),
                                             Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq.gz'),
                                             Rails.root.join('test/fixtures/files/test_file.fastq')]
-        assert_text I18n.t('projects.samples.show.files_ignored')
-        assert_text 'test_file.fastq'
+        # warning uncompressed files will be ignored
+        within('div[data-file-upload-target="alert"]') do
+          assert_text I18n.t('projects.samples.show.files_ignored')
+          assert_text 'test_file.fastq'
+        end
 
         click_on I18n.t('projects.samples.show.upload')
       end
@@ -293,7 +360,7 @@ module Projects
       assert_no_text I18n.t('projects.samples.attachments.create.success', filename: 'test_file.fastq')
 
       # Verifies paired end attachment names are within a single table row
-      within('#attachments-table-body tr:first-child td:nth-child(3)') do
+      within('#attachments-table-body tr:nth-child(3) td:nth-child(3)') do
         assert_text 'TestSample_S1_L001_R1_001.fastq.gz'
         assert_text 'TestSample_S1_L001_R2_001.fastq.gz'
       end
@@ -303,7 +370,7 @@ module Projects
     test 'paired end files should appear in a single row with only one set of attributes' do
       ### setup start ###
       login_as users(:jeff_doe)
-      visit namespace_project_sample_url(@jeff_doe_namespace, @projectA, @sampleB)
+      visit namespace_project_sample_url(@jeff_doe_namespace, @project_A, @sample_B)
       ### setup end ###
 
       within('#attachments-table-body') do
@@ -336,7 +403,9 @@ module Projects
       ### actions end ###
 
       ### results start ###
+      # verify flash msg
       assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file_A.fastq')
+      # verify attachment no longer exists in table
       within('#attachments-table-body') do
         assert_no_text 'test_file_A.fastq'
       end
@@ -346,7 +415,7 @@ module Projects
     test 'user with role >= Maintainer should be able to delete paired end attachments with single delete click' do
       ### setup start ###
       login_as users(:jeff_doe)
-      visit namespace_project_sample_url(@jeff_doe_namespace, @projectA, @sampleB)
+      visit namespace_project_sample_url(@jeff_doe_namespace, @project_A, @sample_B)
       ### setup end ###
 
       ### actions start ###
@@ -360,10 +429,12 @@ module Projects
       ### actions end ###
 
       ### results start ###
+      # verify flash msgs
       assert_text I18n.t('projects.samples.attachments.destroy.success',
                          filename: @attachmentFwd1.file.filename.to_s)
       assert_text I18n.t('projects.samples.attachments.destroy.success',
                          filename: @attachmentRev1.file.filename.to_s)
+      # attachments no longer exist in table
       within('#attachments-table-body') do
         assert_no_text @attachmentFwd1.file.filename.to_s
         assert_no_text @attachmentRev1.file.filename.to_s
@@ -383,105 +454,140 @@ module Projects
 
     test 'should destroy Sample from sample show page' do
       ### setup start ###
+      # nav to samples index and verify sample exists within table
       visit namespace_project_samples_url(@namespace, @project)
-      assert_selector '#samples-table table tbody tr:first-child td:nth-child(2)', text: @sample1.name
+      assert_selector "#samples-table table tbody tr[id='#{@sample1.id}']"
+      assert_selector '#samples-table table tbody tr', count: 3
 
+      # nav to sample show
       visit namespace_project_sample_url(@namespace, @project, @sample1)
-      assert_link text: I18n.t('projects.samples.index.remove_button'), count: 1
+      ### setup end ###
+
+      ### actions start ##
       click_link I18n.t(:'projects.samples.index.remove_button')
 
       within('#turbo-confirm[open]') do
         click_button I18n.t(:'components.confirmation.confirm')
       end
+      ### actions end ###
 
+      ### verify start ###
+      # flash msg
       assert_text I18n.t('projects.samples.deletions.destroy.success', sample_name: @sample1.name,
                                                                        project_name: @project.namespace.human_name)
-
-      assert_no_selector '#samples-table table tbody tr', text: @sample1.name
+      # deleted sample row no longer exists
+      assert_no_selector "#samples-table table tbody tr[id='#{@sample1.id}']"
+      # redirected to samples index
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
+      # remaining samples still appear on table
       assert_selector '#samples-table table tbody tr', count: 2
-      within('tbody tr:first-child th') do
-        assert_text @sample2.puid
-      end
+      ### verify end ###
     end
 
     test 'should destroy Sample from sample listing page' do
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      table_row = find(:table_row, [@sample1.name])
-
-      within table_row do
-        click_link 'Remove'
+      ### setup end ###
+      within("tr[id='#{@sample1.id}']") do
+        click_link I18n.t('projects.samples.index.remove_button')
       end
 
       within('#dialog') do
         assert_text I18n.t('projects.samples.deletions.new_deletion_dialog.description', sample_name: @sample1.name)
         click_button I18n.t('projects.samples.deletions.new_deletion_dialog.submit_button')
       end
+      ### setup end ###
 
+      ### verify start ###
+      # flash msg
       assert_text I18n.t('projects.samples.deletions.destroy.success', sample_name: @sample1.name,
                                                                        project_name: @project.namespace.human_name)
-
-      assert_no_selector '#samples-table table tbody tr', text: @sample1.puid
-      assert_no_selector '#samples-table table tbody tr', text: @sample1.name
+      # sample no longer exists
+      assert_no_selector "tr[id='#{@sample1.id}']"
+      # still on samples index page
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
+      # remaining samples still in table
       assert_selector '#samples-table table tbody tr', count: 2
-      within('#samples-table table tbody tr:first-child th') do
-        assert_text @sample2.puid
-      end
+      ### verify end ###
     end
 
-    test 'should transfer multiple samples' do
-      project2 = projects(:project2)
-      visit namespace_project_samples_url(@namespace, @project)
+    test 'should transfer samples' do
+      ### setup start ###
+      # show destination project has 20 samples prior to transfer
+      visit namespace_project_samples_url(@namespace, @project2)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
+                                                                           locale: @user.locale))
+      # originating project has 3 samples prior to transfer
+      visit namespace_project_samples_url(
+        @namespace, @project
+      )
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      within '#samples-table table tbody' do
-        assert_selector 'tr', count: 3
+      ### setup end ###
+
+      ### actions start ###
+      samples = @project.samples.pluck(:puid, :name)
+      within('#samples-table table tbody') do
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
-      click_link I18n.t('projects.samples.index.transfer_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
+      click_link I18n.t('projects.samples.index.transfer_button')
+      within('#dialog') do
+        # verify 'plural' form of description renders
         assert_text I18n.t('projects.samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER',
                                                                                          '3')
+        # verify sample puid and name are listed in dialog list
         within %(turbo-frame[id="list_selections"]) do
-          samples = @project.samples.pluck(:puid, :name)
           samples.each do |sample|
             assert_text sample[0]
             assert_text sample[1]
           end
         end
+        # select destination project
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{project2.full_path}']").click
+        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
+      ### actions end ###
+
+      ### verify start ###
+      # flash msg
+      assert_text I18n.t('projects.samples.transfers.create.success')
+      # originating project no longer has samples
+      assert_text I18n.t('projects.samples.index.no_samples')
+
+      visit namespace_project_samples_url(@namespace, @project2)
+      within '#samples-table table tbody' do
+        samples.each do |sample|
+          assert_text sample[0]
+          assert_text sample[1]
+        end
+      end
+      ### verify end ###
     end
 
-    test 'should transfer a single sample' do
-      project2 = projects(:project2)
+    test 'transfer dialog with single sample' do
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
+      ### setup end ###
+
+      ### actions start ###
       within '#samples-table table tbody' do
-        assert_selector 'tr', count: 3
         all('input[type="checkbox"]')[0].click
       end
-      click_link I18n.t('projects.samples.index.transfer_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
+      click_link I18n.t('projects.samples.index.transfer_button')
+      ### actions end ###
+
+      ### verify start ###
+      within('#dialog') do
         assert_text I18n.t('projects.samples.transfers.dialog.description.singular')
-        within %(turbo-frame[id="list_selections"]) do
-          assert_text @sample1.name
-        end
-        find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{project2.full_path}']").click
-        click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
+      ### verify end ###
     end
 
     test 'should not transfer samples with session storage cleared' do
-      project2 = projects(:project2)
       visit namespace_project_samples_url(@namespace, @project)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
@@ -493,7 +599,7 @@ module Projects
       click_link I18n.t('projects.samples.index.transfer_button'), match: :first
       within('span[data-controller-connected="true"] dialog') do
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{project2.full_path}']").click
+        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       within %(turbo-frame[id="samples_dialog"]) do
@@ -504,266 +610,143 @@ module Projects
       end
     end
 
-    test 'should not transfer samples' do
+    test 'should not transfer sample to project that already has sample with same name' do
+      ### setup start ###
       project26 = projects(:project26)
       sample30 = samples(:sample30)
       visit namespace_project_samples_url(@namespace, @project)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
+      ### setup end ###
+
+      ### actions start ###
       check sample30.name
-      click_link I18n.t('projects.samples.index.transfer_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
-        within %(turbo-frame[id="list_selections"]) do
-          assert_text sample30.name
-          assert_text sample30.puid
-        end
+      click_link I18n.t('projects.samples.index.transfer_button')
+      within('#dialog') do
         find('input#select2-input').click
         find("button[data-viral--select2-primary-param='#{project26.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
-      within %(turbo-frame[id="samples_dialog"]) do
+      ### actions end ###
+
+      ### verify start ###
+      within('#dialog') do
+        # error state should not contain sample listing
         assert_no_selector "turbo-frame[id='list_selections']"
+        # error messages in dialog
         assert_text I18n.t('projects.samples.transfers.create.error')
-        errors = @project.errors.full_messages_for(:samples)
-        errors.each { |error| assert_text error }
+        # colon is removed from translation in UI
+        assert_text I18n.t('services.samples.transfer.sample_exists', sample_puid: sample30.puid,
+                                                                      sample_name: sample30.name).gsub(':', '')
       end
+
+      # verify sample was not transferred and still exists
+      assert_selector "tr[id='#{sample30.id}']"
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      ### verify end
     end
 
-    test 'should transfer some samples' do
+    test 'transfer samples with and without same name in destination project' do
+      # only samples without a matching name will transfer
+
+      ### setup start ###
+      namespace = groups(:subgroup1)
       project25 = projects(:project25)
+      sample30 = samples(:sample30)
+      visit namespace_project_samples_url(namespace, project25)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
+                                                                           locale: @user.locale))
       visit namespace_project_samples_url(@namespace, @project)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
+      ### setup end ###
+
+      ### actions start ###
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 3
-        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
-      end
-      click_link I18n.t('projects.samples.index.transfer_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
-        within %(turbo-frame[id="list_selections"]) do
-          samples = @project.samples.pluck(:puid, :name)
-          samples.each do |sample|
-            assert_text sample[0]
-            assert_text sample[1]
-          end
+        all('input[type=checkbox]').each do |checkbox|
+          checkbox.click unless checkbox.checked?
         end
+      end
+      click_link I18n.t('projects.samples.index.transfer_button')
+      within('#dialog') do
         find('input#select2-input').click
         find("button[data-viral--select2-primary-param='#{project25.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_no_selector "turbo-frame[id='list_selections']"
-        assert_text I18n.t('projects.samples.transfers.create.error')
-        errors = @project.errors.full_messages_for(:samples)
-        errors.each { |error| assert_text error }
-      end
-    end
+      ### actions end ###
 
-    test 'should transfer samples for maintainer within hierarchy' do
-      user = users(:joan_doe)
-      login_as user
-      project2 = projects(:project2)
-      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+      ### verify start ###
+      within('#dialog') do
+        # error messages in dialog
+        assert_text I18n.t('projects.samples.transfers.create.error')
+        # colon is removed from translation in UI
+        assert_text I18n.t('services.samples.transfer.sample_exists', sample_puid: sample30.puid,
+                                                                      sample_name: sample30.name).gsub(':', '')
+      end
+
+      # verify sample1 and 2 transferred, sample 30 did not
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 1, locale: @user.locale))
+      assert_no_selector "tr[id='#{@sample1.id}']"
+      assert_no_selector "tr[id='#{@sample2.id}']"
+      assert_selector "tr[id='#{sample30.id}']"
+
+      # destination project
+      visit namespace_project_samples_url(namespace, project25)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 4, count: 4,
                                                                            locale: @user.locale))
-      within '#samples-table table tbody' do
-        assert_selector 'tr', count: 3
-        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
-      end
-      click_link I18n.t('projects.samples.index.transfer_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
-        within %(turbo-frame[id="list_selections"]) do
-          samples = @project.samples.pluck(:puid, :name)
-          samples.each do |sample|
-            assert_text sample[0]
-            assert_text sample[1]
-          end
-        end
-        find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{project2.full_path}']").click
-        click_on I18n.t('projects.samples.transfers.dialog.submit_button')
-      end
+      assert_selector "tr[id='#{@sample1.id}']"
+      assert_selector "tr[id='#{@sample2.id}']"
+      assert_no_selector "tr[id='#{sample30.id}']"
+      ### verify end ###
     end
 
     test 'sample transfer project listing should be empty for maintainer if no other projects in hierarchy' do
-      user = users(:user28)
-      login_as user
+      ### setup start ###
+      login_as users(:user28)
       namespace = groups(:group_hotel)
-      project2 = projects(:projectHotel)
-      Project.reset_counters(project2.id, :samples_count)
-      visit namespace_project_samples_url(namespace, project2)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
-                                                                           locale: @user.locale))
+      project = projects(:projectHotel)
+      visit namespace_project_samples_url(namespace, project)
+      ### setup end ###
+
+      ### actions start ###
       within '#samples-table table tbody' do
-        assert_selector 'tr', count: 1
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
-      click_link I18n.t('projects.samples.index.transfer_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
-        within %(turbo-frame[id="list_selections"]) do
-          samples = project2.samples.pluck(:puid, :name)
-          samples.each do |sample|
-            assert_text sample[0]
-            assert_text sample[1]
-          end
-        end
-        assert_no_selector 'option'
+      click_link I18n.t('projects.samples.index.transfer_button')
+      ### actions end ###
+
+      ### verify start ###
+      within('#dialog') do
+        # no available destination projects
+        assert_selector "input[placeholder='#{I18n.t('projects.samples.transfers.dialog.no_available_projects')}']"
       end
-    end
-
-    test 'should not transfer samples for maintainer outside of hierarchy' do
-      user = users(:joan_doe)
-      login_as user
-
-      # Project is a part of Group 8 and not a part of the current project hierarchy
-      project32 = projects(:project32)
-      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: user.locale))
-      within '#samples-table table tbody' do
-        assert_selector 'tr', count: 3
-        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
-      end
-      click_link I18n.t('projects.samples.index.transfer_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
-        within %(turbo-frame[id="list_selections"]) do
-          samples = @project.samples.pluck(:puid, :name)
-          samples.each do |sample|
-            assert_text sample[0]
-            assert_text sample[1]
-          end
-        end
-        find('input#select2-input').click
-        assert_no_selector "button[data-viral--select2-primary-param='#{project32.full_path}']"
-      end
-    end
-
-    test 'should update pagination & selection during transfer samples' do
-      namespace1 = groups(:group_one)
-      namespace17 = groups(:group_seventeen)
-      project38 = projects(:project38)
-      project2 = projects(:project2)
-      samples = [samples(:bulk_sample1), samples(:bulk_sample2)]
-
-      Project.reset_counters(project38.id, :samples_count)
-      visit namespace_project_samples_url(namespace17, project38)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 200,
-                                                                           locale: @user.locale))
-
-      click_button I18n.t(:'projects.samples.index.select_all_button')
-
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 200'
-        assert_selector 'strong[data-selection-target="selected"]', text: '200'
-      end
-
-      click_link I18n.t('projects.samples.index.transfer_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
-        assert_text I18n.t('projects.samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER', '200')
-        within %(turbo-frame[id="list_selections"]) do
-          samples.pluck(:puid, :name).each do |sample|
-            assert_text sample[0]
-            assert_text sample[1]
-          end
-        end
-
-        find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{project2.full_path}']").click
-        click_on I18n.t('projects.samples.transfers.dialog.submit_button')
-      end
-
-      # Check samples selected are [] and has the proper number of samples
-      assert_text I18n.t(:'projects.samples.index.no_samples')
-
-      Project.reset_counters(project2.id, :samples_count)
-      visit namespace_project_samples_url(namespace1, project2)
-
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 220,
-                                                                           locale: @user.locale))
-
-      click_button I18n.t(:'projects.samples.index.select_all_button')
-
-      within 'tfoot' do
-        sample_counts = all('strong')
-        total_samples = sample_counts[0].text.to_i
-        selected_samples = sample_counts[1].text.to_i
-        assert selected_samples <= total_samples
-      end
+      ### verify end ###
     end
 
     test 'empty state of transfer sample project selection' do
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
+      ### setup end ###
+
+      ### actions start ###
       within '#samples-table table tbody' do
-        assert_selector 'tr', count: 3
+        # check samples
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
-      click_link I18n.t('projects.samples.index.clone_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
-        within %(turbo-frame[id="list_selections"]) do
-          samples = @project.samples.pluck(:puid, :name)
-          samples.each do |sample|
-            assert_text sample[0]
-            assert_text sample[1]
-          end
-        end
+
+      # launch dialog
+      click_link I18n.t('projects.samples.index.transfer_button')
+      within('#dialog') do
+        # fill destination input
         find('input#select2-input').fill_in with: 'invalid project name or puid'
+        ### actions end ###
+
+        ### verify start ###
         assert_text I18n.t('projects.samples.transfers.dialog.empty_state')
+        ### verify end ###
       end
-    end
-
-    test 'no available destination projects to transfer samples' do
-      sign_in users(:jean_doe)
-      namespace = namespaces_user_namespaces(:john_doe_namespace)
-      project = projects(:john_doe_project2)
-      Project.reset_counters(project.id, :samples_count)
-      visit namespace_project_samples_url(namespace, project)
-      within '#samples-table table tbody' do
-        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
-      end
-      click_link I18n.t('projects.samples.index.clone_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
-        assert_selector "input[placeholder='#{I18n.t('projects.samples.transfers.dialog.no_available_projects')}']"
-      end
-    end
-
-    test 'user with maintainer access should be able to see the transfer samples button' do
-      user = users(:joan_doe)
-      login_as user
-
-      visit namespace_project_samples_url(@namespace, @project)
-
-      assert_selector 'a', text: I18n.t('projects.samples.index.transfer_button'), count: 1
-    end
-
-    test 'user with guest access should not be able to see the transfer samples button' do
-      user = users(:ryan_doe)
-      login_as user
-
-      visit namespace_project_samples_url(@namespace, @project)
-
-      assert_selector 'a', text: I18n.t('projects.samples.index.transfer_button'), count: 0
-    end
-
-    test 'user should not be able to see the edit button for the sample' do
-      user = users(:ryan_doe)
-      login_as user
-
-      visit namespace_project_sample_url(@namespace, @project, @sample1)
-
-      assert_selector 'a', text: I18n.t('projects.samples.show.edit_button'), count: 0
-    end
-
-    test 'user should not be able to see the remove button for the sample' do
-      user = users(:ryan_doe)
-      login_as user
-
-      visit namespace_project_sample_url(@namespace, @project, @sample1)
-
-      assert_selector 'a', text: I18n.t('projects.samples.index.remove_button'), count: 0
     end
 
     test 'user should not be able to see the upload file button for the sample' do
@@ -773,42 +756,6 @@ module Projects
       visit namespace_project_sample_url(@namespace, @project, @sample1)
 
       assert_selector 'a', text: I18n.t('projects.samples.index.upload_file'), count: 0
-    end
-
-    test 'visiting the index should  not allow the current user only edit action' do
-      user = users(:joan_doe)
-      login_as user
-
-      visit namespace_project_samples_url(@namespace, @project)
-
-      assert_selector 'a', text: I18n.t('projects.samples.index.new_button'), count: 1
-      assert_selector 'h1', text: I18n.t('projects.samples.index.title')
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
-      within('tbody tr:first-child') do
-        assert_selector 'a', text: 'Edit', count: 1
-        assert_selector 'a', text: 'Remove', count: 0
-      end
-      assert_text @sample1.name
-      assert_text @sample2.name
-    end
-
-    test 'visiting the index should not allow the current user any modification actions' do
-      user = users(:ryan_doe)
-      login_as user
-
-      visit namespace_project_samples_url(@namespace, @project)
-
-      assert_selector 'a', text: I18n.t('projects.samples.index.new_button'), count: 0
-      assert_selector 'h1', text: I18n.t('projects.samples.index.title')
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
-      assert_selector 'a', text: 'Edit', count: 0
-      assert_selector 'a', text: 'Remove', count: 0
-      assert_text @sample1.name
-      assert_text @sample2.name
     end
 
     test 'can search the list of samples by name' do
@@ -2654,18 +2601,6 @@ module Projects
 
       visit namespace_project_samples_url(namespace_id: groups(:empty_group).path,
                                           project_id: projects(:empty_project).path)
-
-      assert_no_button I18n.t(:'projects.samples.index.clone_button')
-      assert_no_button I18n.t(:'projects.samples.index.transfer_button')
-      assert_text I18n.t('projects.samples.index.create_export_button.label')
-      assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                      text: I18n.t('projects.samples.index.create_export_button.label')
-    end
-
-    test 'action links are disabled when a group does not contain any projects with samples' do
-      login_as users(:empty_doe)
-
-      visit group_samples_url(groups(:empty_group))
 
       assert_no_button I18n.t(:'projects.samples.index.clone_button')
       assert_no_button I18n.t(:'projects.samples.index.transfer_button')
