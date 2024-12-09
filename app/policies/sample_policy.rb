@@ -14,8 +14,6 @@ class SamplePolicy < ApplicationPolicy
   end
 
   def destroy_attachment?
-    # return true if record.project.namespace.parent.user_namespace? && record.project.namespace.parent.owner == user
-    # return true if Member.namespace_owners_include_user?(user, record.project.namespace) == true
     return true if effective_access_level == Member::AccessLevel::OWNER
 
     details[:name] = record.name

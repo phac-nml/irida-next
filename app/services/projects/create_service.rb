@@ -35,8 +35,7 @@ module Projects
         create_activities
       end
 
-      return unless !Member.namespace_owners_include_user?(current_user,
-                                                           namespace) &&
+      return unless (Member.effective_access_level(namespace, current_user) != Member::AccessLevel::OWNER) &&
                     Member.user_has_namespace_maintainer_access?(current_user,
                                                                  namespace)
 

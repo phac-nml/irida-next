@@ -25,7 +25,10 @@ module Members
                                         namespace_type: namespace.class.model_name.human)
       end
 
-      has_previous_access = Member.can_view?(member.user, namespace) if member.valid?
+      if member.valid?
+        has_previous_access = Member.effective_access_level(namespace,
+                                                            member.user) > Member::AccessLevel::NO_ACCESS
+      end
       if member.save
         send_emails if @email_notification && !has_previous_access
         member.create_activity key: 'member.create', owner: current_user if @member.user != current_user
