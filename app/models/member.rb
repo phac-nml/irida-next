@@ -38,10 +38,6 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
                                   }
 
   class << self
-    DEFAULT_CAN_OPTIONS = {
-      include_group_links: true
-    }.freeze
-
     def access_levels(member)
       case member.access_level
       when AccessLevel::OWNER
@@ -64,119 +60,8 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       access_level.nil? ? AccessLevel::NO_ACCESS : access_level
     end
 
-    def can_modify?(user, object_namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
-      Member::AccessLevel.manageable.include?(
-        effective_access_level(object_namespace, user, include_group_links)
-      )
-    end
-
-    def can_create?(user, object_namespace)
-      Member::AccessLevel.manageable.include?(
-        effective_access_level(object_namespace, user)
-      )
-    end
-
-    def can_view?(user, object_namespace, **options)
-      options = DEFAULT_CAN_OPTIONS.merge(options)
-      effective_access_level = effective_access_level(object_namespace, user, options[:include_group_links])
-      if effective_access_level == Member::AccessLevel::UPLOADER &&
-         !Current.token&.active?
-        return false
-      end
-
-      effective_access_level > Member::AccessLevel::NO_ACCESS
-    end
-
-    def can_destroy?(user, object_namespace)
-      namespace_owners_include_user?(user, object_namespace)
-    end
-
-    def can_transfer?(user, object_namespace)
-      namespace_owners_include_user?(user, object_namespace)
-    end
-
-    def can_transfer_into_namespace?(user, object_namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
-      Member::AccessLevel.manageable.include?(
-        effective_access_level(object_namespace, user, include_group_links)
-      )
-    end
-
-    def can_transfer_sample?(user, object_namespace)
-      Member::AccessLevel.manageable.include?(
-        effective_access_level(object_namespace, user, false)
-      )
-    end
-
-    def can_transfer_sample_to_project?(user, object_namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
-      can_transfer_into_namespace?(user, object_namespace, include_group_links)
-    end
-
-    def can_clone_sample?(user, object_namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
-      Member::AccessLevel.manageable.include?(
-        effective_access_level(object_namespace, user, include_group_links)
-      )
-    end
-
-    def can_clone_sample_to_project?(user, object_namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
-      Member::AccessLevel.manageable.include?(
-        effective_access_level(object_namespace, user, include_group_links)
-      )
-    end
-
-    def can_export_data?(user, object_namespace)
-      effective_access_level(object_namespace, user) >= Member::AccessLevel::ANALYST
-    end
-
-    def can_link_namespace_to_group?(user, object_namespace)
-      can_modify?(user, object_namespace)
-    end
-
-    def can_unlink_namespace_from_group?(user, object_namespace)
-      can_modify?(user, object_namespace)
-    end
-
-    def can_update_namespace_with_group_link?(user, object_namespace)
-      can_modify?(user, object_namespace)
-    end
-
-    def can_view_workflows?(user, object_namespace)
-      effective_access_level(object_namespace, user) >= Member::AccessLevel::ANALYST
-    end
-
-    def can_submit_workflow?(user, object_namespace)
-      effective_access_level(object_namespace, user) >= Member::AccessLevel::ANALYST
-    end
-
-    def namespace_owners_include_user?(user, namespace)
-      effective_access_level(namespace, user) == Member::AccessLevel::OWNER
-    end
-
     def user_has_namespace_maintainer_access?(user, namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
       effective_access_level(namespace, user, include_group_links) == Member::AccessLevel::MAINTAINER
-    end
-
-    def can_create_export?(user, object_namespace)
-      effective_access_level(object_namespace, user) >= Member::AccessLevel::ANALYST
-    end
-
-    def can_create_sample?(user, object_namespace)
-      effective_access_level = effective_access_level(object_namespace, user)
-
-      return true if (effective_access_level == Member::AccessLevel::UPLOADER) && Current.token&.active?
-
-      Member::AccessLevel.manageable.include?(
-        effective_access_level
-      )
-    end
-
-    def can_modify_sample?(user, object_namespace)
-      effective_access_level = effective_access_level(object_namespace, user)
-
-      return true if (effective_access_level == Member::AccessLevel::UPLOADER) && Current.token&.active?
-
-      Member::AccessLevel.manageable.include?(
-        effective_access_level
-      )
     end
 
     def access_level_in_namespace_group_links(user, namespace)
@@ -214,28 +99,6 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       end
 
       manager_emails
-    end
-
-    def can_view_attachments?(user, object_namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
-      effective_access_level(object_namespace, user, include_group_links) >= Member::AccessLevel::ANALYST
-    end
-
-    def can_create_attachment?(user, object_namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
-      effective_access_level = effective_access_level(object_namespace, user, include_group_links)
-      return true if (effective_access_level == Member::AccessLevel::UPLOADER) && Current.token&.active?
-
-      Member::AccessLevel.manageable.include?(
-        effective_access_level
-      )
-    end
-
-    def can_destroy_attachment?(user, object_namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
-      effective_access_level = effective_access_level(object_namespace, user, include_group_links)
-      return true if (effective_access_level == Member::AccessLevel::UPLOADER) && Current.token&.active?
-
-      Member::AccessLevel.manageable.include?(
-        effective_access_level
-      )
     end
 
     def ransackable_attributes(_auth_object = nil)

@@ -19,13 +19,11 @@ class WorkflowExecutionPolicy < ApplicationPolicy
 
   def destroy? # rubocop:disable Metrics/AbcSize
     return true if record.submitter.id == user.id
-    # return true if Member.can_modify?(user, record.namespace) == true
     return true if Member::AccessLevel.manageable.include?(effective_access_level)
 
     if (record.namespace.type == Namespaces::ProjectNamespace.sti_name) &&
        (record.submitter.id == record.namespace.automation_bot.id) &&
        (record.namespace.automation_bot.id == user.id) &&
-       # (Member.can_modify?(record.namespace.automation_bot, record.namespace) == true)
        Member::AccessLevel.manageable.include?(effective_access_level(record.namespace.automation_bot))
       return true
     end
@@ -39,7 +37,6 @@ class WorkflowExecutionPolicy < ApplicationPolicy
     return true if record.submitter.id == user.id
     if (record.namespace.type == Namespaces::ProjectNamespace.sti_name) &&
        (record.submitter.id == record.namespace.automation_bot.id) &&
-       # (Member.can_view?(record.namespace.automation_bot, record.namespace) == true)
        (effective_access_level(record.namespace.automation_bot) > Member::AccessLevel::NO_ACCESS)
       return true
     end
@@ -58,13 +55,11 @@ class WorkflowExecutionPolicy < ApplicationPolicy
 
   def cancel? # rubocop:disable Metrics/AbcSize
     return true if record.submitter.id == user.id
-    # return true if Member.can_modify?(user, record.namespace) == true
     return true if Member::AccessLevel.manageable.include?(effective_access_level)
 
     if (record.namespace.type == Namespaces::ProjectNamespace.sti_name) &&
        (record.submitter.id == record.namespace.automation_bot.id) &&
        (record.namespace.automation_bot.id == user.id) &&
-       # (Member.can_modify?(record.namespace.automation_bot, record.namespace) == true)
        Member::AccessLevel.manageable.include?(effective_access_level(record.namespace.automation_bot))
       return true
     end

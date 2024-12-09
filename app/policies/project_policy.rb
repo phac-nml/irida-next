@@ -30,8 +30,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def activity?
-    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    # return true if Member.can_view?(user, record.namespace) == true
     if effective_access_level > Member::AccessLevel::NO_ACCESS &&
        effective_access_level != Member::AccessLevel::UPLOADER
       return true
@@ -42,8 +40,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def view_history?
-    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    # return true if Member.can_view?(user, record.namespace) == true
     if effective_access_level > Member::AccessLevel::NO_ACCESS &&
        effective_access_level != Member::AccessLevel::UPLOADER
       return true
@@ -54,8 +50,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def destroy?
-    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    # return true if Member.can_destroy?(user, record.namespace) == true
     return true if effective_access_level == Member::AccessLevel::OWNER
 
     details[:name] = record.name
@@ -63,8 +57,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def edit?
-    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    # return true if Member.can_modify?(user, record.namespace) == true
     return true if Member::AccessLevel.manageable.include?(effective_access_level)
 
     details[:name] = record.name
@@ -72,8 +64,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def new?
-    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    # return true if Member.can_create?(user, record.namespace) == true
     return true if Member::AccessLevel.manageable.include?(effective_access_level)
 
     details[:name] = record.namespace.parent.name
@@ -82,8 +72,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def read?
-    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    # return true if Member.can_view?(user, record.namespace) == true
     if (effective_access_level > Member::AccessLevel::NO_ACCESS) &&
        effective_access_level != Member::AccessLevel::UPLOADER
       return true
@@ -95,8 +83,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def transfer?
-    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    # return true if Member.can_transfer?(user, record.namespace)
     return true if effective_access_level == Member::AccessLevel::OWNER
 
     details[:name] = record.name
@@ -104,8 +90,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def update?
-    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    # return true if Member.can_modify?(user, record.namespace) == true
     return true if Member::AccessLevel.manageable.include?(effective_access_level)
 
     details[:name] = record.name
@@ -113,8 +97,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def sample_listing?
-    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    # return true if Member.can_view?(user, record.namespace) == true
     if effective_access_level > Member::AccessLevel::NO_ACCESS &&
        effective_access_level != Member::AccessLevel::UPLOADER
       return true
@@ -125,8 +107,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def create_sample?
-    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    # return true if Member.can_create_sample?(user, record.namespace) == true
     return true if Member::AccessLevel.manageable.include?(effective_access_level)
     return true if token_active(effective_access_level) == true
 
@@ -135,8 +115,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def destroy_sample?
-    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    # return true if Member.namespace_owners_include_user?(user, record.namespace) == true
     return true if effective_access_level == Member::AccessLevel::OWNER
 
     details[:name] = record.name
@@ -144,8 +122,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def read_sample?
-    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    # return true if Member.can_view?(user, record.namespace) == true
     if effective_access_level > Member::AccessLevel::NO_ACCESS &&
        effective_access_level != Member::AccessLevel::UPLOADER
       return true
@@ -157,8 +133,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def update_sample?
-    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    # return true if Member.can_modify_sample?(user, record.namespace) == true
     return true if Member::AccessLevel.manageable.include?(effective_access_level)
     return true if token_active(effective_access_level) == true
 
@@ -167,7 +141,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def transfer_sample?
-    # return true if Member.can_transfer_sample?(user, record.namespace) == true
     return true if Member::AccessLevel.manageable.include?(effective_access_level(false))
 
     details[:name] = record.name
@@ -175,10 +148,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def transfer_sample_into_project?
-    # return true if Member.user_has_namespace_maintainer_access?(user, record.namespace, false) &&
-    #                Member.can_transfer_sample_to_project?(user, record.namespace, false) == true
-    # return true if Member.can_transfer_sample_to_project?(user, record.namespace) == true
-
     return true if effective_access_level(false) == Member::AccessLevel::MAINTAINER &&
                    Member::AccessLevel.manageable.include?(
                      effective_access_level(false)
@@ -192,7 +161,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def clone_sample?
-    # return true if Member.can_clone_sample?(user, record.namespace) == true
     return true if Member::AccessLevel.manageable.include?(effective_access_level)
 
     details[:name] = record.name
@@ -200,7 +168,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def clone_sample_into_project?
-    # return true if Member.can_clone_sample_to_project?(user, record.namespace) == true
     return true if Member::AccessLevel.manageable.include?(effective_access_level)
 
     details[:name] = record.name
@@ -208,8 +175,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def export_data?
-    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    # return true if Member.can_export_data?(user, record.namespace) == true
     return true if effective_access_level >= Member::AccessLevel::ANALYST
 
     details[:name] = record.name
@@ -217,7 +182,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def submit_workflow?
-    # return true if Member.can_submit_workflow?(user, record.namespace) == true
     return true if effective_access_level >= Member::AccessLevel::ANALYST
 
     details[:name] = record.name
@@ -225,8 +189,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def view_attachments?
-    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    # return true if Member.can_view_attachments?(user, record.namespace) == true
     return true if effective_access_level >= Member::AccessLevel::ANALYST
 
     details[:name] = record.name
@@ -234,8 +196,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def create_attachment?
-    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    # return true if Member.can_create_attachment?(user, record.namespace) == true
     return true if Member::AccessLevel.manageable.include?(effective_access_level)
     return true if token_active(effective_access_level) == true
 
@@ -244,8 +204,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def destroy_attachment?
-    # return true if record.namespace.parent.user_namespace? && record.namespace.parent.owner == user
-    # return true if Member.can_destroy_attachment?(user, record.namespace) == true
     return true if Member::AccessLevel.manageable.include?(effective_access_level)
 
     details[:name] = record.name
