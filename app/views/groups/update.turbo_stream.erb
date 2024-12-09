@@ -5,8 +5,11 @@
 <% end %>
 
 <% if @updated %>
-  <%= turbo_stream.update "sidebar_group_name" do %>
-    <%= @group.name %>
+  <%= turbo_stream.update "sidebar-header" do %>
+    <%= render Layout::Sidebar::HeaderComponent.new(
+      label: t(:"groups.sidebar.label"),
+      item: @group,
+    ) %>
   <% end %>
 
   <%= turbo_stream.update "breadcrumb" do %>
@@ -18,11 +21,11 @@
                     partial: "edit_name_and_description_form",
                     locals: {
                       group: @group,
-                      authorized_namespaces: @authorized_namespaces
+                      authorized_namespaces: @authorized_namespaces,
                     } %>
 
 <%= turbo_stream.update "group_path_form",
                     partial: "edit_advanced_path",
                     locals: {
-                      group: @group
+                      group: @group,
                     } %>
