@@ -175,9 +175,16 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def transfer_sample_into_project?
-    return true if Member.user_has_namespace_maintainer_access?(user, record.namespace, false) &&
-                   Member.can_transfer_sample_to_project?(user, record.namespace, false) == true
-    return true if Member.can_transfer_sample_to_project?(user, record.namespace) == true
+    # return true if Member.user_has_namespace_maintainer_access?(user, record.namespace, false) &&
+    #                Member.can_transfer_sample_to_project?(user, record.namespace, false) == true
+    # return true if Member.can_transfer_sample_to_project?(user, record.namespace) == true
+
+    return true if effective_access_level(false) == Member::AccessLevel::MAINTAINER &&
+                   Member::AccessLevel.manageable.include?(
+                     effective_access_level(false)
+                   )
+
+    return true if Member::AccessLevel.manageable.include?(effective_access_level)
 
     details[:name] = record.name
 
