@@ -1,0 +1,9 @@
+<%= render Bots::TableComponent.new(
+  @bot_accounts,
+  @namespace,
+  @pagy,
+  abilities: {
+    generate_token: true,
+    destroy_bot: true,
+  },
+) %>
