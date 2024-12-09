@@ -22,7 +22,7 @@ module Pathogen
       'text-light-onbrand-primary',
       'border',
       'border-light-brand-primary',
-      'enabled:hover:bg-light-brand-primary-hover',
+      'disabled:hover:bg-light-brand-primary hover:bg-light-brand-primary-hover',
       'focus:ring-light-brand-primary'
     ].freeze
 
@@ -30,7 +30,7 @@ module Pathogen
       'dark:bg-dark-brand-primary',
       'dark:text-dark-onbrand-primary',
       'dark:border-dark-brand-primary',
-      'dark:enabled:hover:bg-dark-brand-primary-hover',
+      'dark:disabled:hover:bg-dark-brand-primary dark:hover:bg-dark-brand-primary-hover',
       'dark:focus:ring-dark-brand-primary'
     ].freeze
 
@@ -39,14 +39,15 @@ module Pathogen
       'text-light-onneutral-primary',
       'border',
       'border-light-neutral-primary',
-      'enabled:hover:bg-light-neutral-primary-hover',
+      'disabled:hover:bg-light-neutral-primary hover:bg-light-neutral-primary-hover',
       'focus:ring-light-neutral-primary'
     ].freeze
 
     DEFAULT_DARK_SCHEME_CLASSES = [
       'dark:bg-dark-neutral-primary',
       'dark:text-dark-onneutral-primary',
-      'dark:enabled:hover:bg-dark-neutral-primary-hover',
+      'dark:border-dark-neutral-primary',
+      'dark:disabled:hover:bg-dark-neutral-primary dark:hover:bg-dark-neutral-primary-hover',
       'dark:focus:ring-dark-neutral-primary'
     ].freeze
 
@@ -55,14 +56,15 @@ module Pathogen
       'text-light-ondanger-primary',
       'border',
       'border-light-danger-primary',
-      'enabled:hover:bg-light-danger-primary-hover',
+      'disabled:hover:bg-light-danger-primary hover:bg-light-danger-primary-hover',
       'focus:ring-light-danger-primary'
     ].freeze
 
     DANGER_DARK_SCHEME_CLASSES = [
       'dark:bg-dark-danger-primary',
       'dark:text-dark-ondanger-primary',
-      'dark:enabled:hover:bg-dark-danger-primary-hover',
+      'dark:border-dark-danger-primary',
+      'dark:disabled:hover:bg-dark-danger-primary dark:hover:bg-dark-danger-primary-hover',
       'dark:focus:ring-dark-danger-primary'
     ].freeze
 
