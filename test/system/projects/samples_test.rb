@@ -14,10 +14,15 @@ module Projects
       @sample3 = samples(:sample30)
       @sample32 = samples(:sample32)
       @project = projects(:project1)
-      @project2 = projects(:projectA)
+      @projectA = projects(:projectA)
       @project29 = projects(:project29)
       @namespace = groups(:group_one)
       @group12a = groups(:subgroup_twelve_a)
+
+      @jeff_doe_namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+      @sampleB = samples(:sampleB)
+      @attachmentFwd1 = attachments(:attachmentPEFWD1)
+      @attachmentRev1 = attachments(:attachmentPEREV1)
 
       Project.reset_counters(@project.id, :samples_count)
       Project.reset_counters(@project29.id, :samples_count)
@@ -25,6 +30,7 @@ module Projects
 
     test 'visiting the index' do
       visit namespace_project_samples_url(@namespace, @project)
+
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
       assert_selector '#samples-table table tbody tr', count: 3
       assert_text @sample1.name
@@ -40,31 +46,45 @@ module Projects
     end
 
     test 'should create sample' do
+      # setup start
       visit namespace_project_samples_url(@namespace, @project)
       assert_selector 'a', text: I18n.t('projects.samples.index.new_button'), count: 1
+      # setup end
+
+      # actions start
       click_on I18n.t('projects.samples.index.new_button')
 
       fill_in I18n.t('activerecord.attributes.sample.description'), with: @sample1.description
       fill_in I18n.t('activerecord.attributes.sample.name'), with: 'New Name'
       click_on I18n.t('projects.samples.new.submit_button')
+      # actions end
 
+      # results start
       assert_text I18n.t('projects.samples.create.success')
       assert_text 'New Name'
       assert_text @sample1.description
+      # results end
     end
 
     test 'should update Sample' do
+      # setup start
       visit namespace_project_sample_url(@namespace, @project, @sample1)
       assert_selector 'a', text: I18n.t('projects.samples.show.edit_button'), count: 1
+      # setup end
+
+      # actions start
       click_on I18n.t('projects.samples.show.edit_button'), match: :first
 
       fill_in 'Description', with: @sample1.description
       fill_in 'Name', with: 'New Sample Name'
       click_on I18n.t('projects.samples.edit.submit_button')
+      # actions end
 
+      # results start
       assert_text I18n.t('projects.samples.update.success')
       assert_text 'New Sample Name'
       assert_text @sample1.description
+      # results end
     end
 
     test 'user with role >= Maintainer should be able to see upload, concatenate and delete files buttons' do
@@ -75,8 +95,7 @@ module Projects
     end
 
     test 'user with role < Maintainer should not be able to see upload, concatenate and delete files buttons' do
-      user = users(:ryan_doe)
-      login_as user
+      login_as users(:ryan_doe)
       visit namespace_project_sample_url(@namespace, @project, @sample2)
       assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 0
       assert_selector 'a', text: I18n.t('projects.samples.show.concatenate_button'), count: 0
@@ -84,6 +103,7 @@ module Projects
     end
 
     test 'user with role >= Maintainer should be able to attach a file to a Sample' do
+      # setup start
       visit namespace_project_sample_url(@namespace, @project, @sample2)
       assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
       within('#table-listing') do
@@ -91,49 +111,64 @@ module Projects
         assert_text I18n.t('projects.samples.show.no_associated_files')
         assert_no_text 'test_file_2.fastq.gz'
       end
+      # setup end
+
+      # actions start
       click_on I18n.t('projects.samples.show.upload_files')
 
-      within('dialog') do
+      within('#dialog') do
         attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/data_export_1.zip')
         # check that button goes from being enabled to disabled when clicked
         assert_selector 'input[type=submit]:not(:disabled)'
         click_on I18n.t('projects.samples.show.upload')
         assert_selector 'input[type=submit]:disabled'
       end
+      # actions end
 
+      # results start
       assert_text I18n.t('projects.samples.attachments.create.success', filename: 'data_export_1.zip')
       within('#table-listing') do
         assert_no_text I18n.t('projects.samples.show.no_files')
         assert_no_text I18n.t('projects.samples.show.no_associated_files')
         assert_text 'data_export_1.zip'
       end
+      # results end
     end
 
     test 'user with role >= Maintainer should not be able to attach a duplicate file to a Sample' do
+      # setup start
       visit namespace_project_sample_url(@namespace, @project, @sample1)
-      assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
+      # setup end
+
+      # actions start
       click_on I18n.t('projects.samples.show.upload_files')
 
-      within('dialog') do
+      within('#dialog') do
         attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
         click_on I18n.t('projects.samples.show.upload')
       end
       click_on I18n.t('projects.samples.show.upload_files')
 
-      within('dialog') do
+      within('#dialog') do
         attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
         click_on I18n.t('projects.samples.show.upload')
       end
+      # actions end
 
-      assert_text 'checksum matches existing file'
+      # verify start
+      assert_text I18n.t('activerecord.errors.models.attachment.attributes.file.checksum_uniqueness')
+      # verify end
     end
 
-    test 'user with role >= Maintainer not be able to upload uncompressed files to a Sample' do
+    test 'user with role >= Maintainer can upload paired end files and not uncompressed files to a Sample' do
+      # setup start
       visit namespace_project_sample_url(@namespace, @project, @sample1)
-      assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
+      # setup end
+
+      # actions start
       click_on I18n.t('projects.samples.show.upload_files')
 
-      within('dialog') do
+      within('#dialog') do
         attach_file 'attachment[files][]', [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq.gz'),
                                             Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq.gz'),
                                             Rails.root.join('test/fixtures/files/test_file.fastq')]
@@ -142,87 +177,107 @@ module Projects
 
         click_on I18n.t('projects.samples.show.upload')
       end
+      # actions end
 
+      # results start
       assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R1_001.fastq.gz')
       assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R2_001.fastq.gz')
       assert_no_text I18n.t('projects.samples.attachments.create.success', filename: 'test_file.fastq')
 
-      # View paired files
-      within('#table-listing') do
+      # Verifies paired end attachment names are within a single table row
+      within('#attachments-table-body tr:first-child td:nth-child(3)') do
         assert_text 'TestSample_S1_L001_R1_001.fastq.gz'
         assert_text 'TestSample_S1_L001_R2_001.fastq.gz'
+      end
+      # results end
+    end
+
+    test 'paired end files should appear in a single row with only one set of attributes' do
+      # setup start
+      login_as users(:jeff_doe)
+      visit namespace_project_sample_url(@jeff_doe_namespace, @projectA, @sampleB)
+      # setup end
+
+      within('#attachments-table-body') do
+        assert_selector 'tr:first-child td:nth-child(2)', text: @attachmentFwd1.puid, count: 1
+        within('tr:first-child td:nth-child(3)') do
+          assert_text @attachmentFwd1.file.filename.to_s
+          assert_text @attachmentRev1.file.filename.to_s
+        end
+        assert_selector 'tr:first-child td:nth-child(4)', text: @attachmentRev1.metadata['format'], count: 1
+        assert_selector 'tr:first-child td:nth-child(5)', text: @attachmentRev1.metadata['type'], count: 1
+        assert_selector 'tr:first-child td:last-child', text: I18n.t('projects.samples.attachments.attachment.delete'),
+                                                        count: 1
       end
     end
 
     test 'user with role >= Maintainer should be able to delete a file from a Sample' do
+      # setup start
       visit namespace_project_sample_url(@namespace, @project, @sample1)
-
+      # setup end
       within('#attachments-table-body') do
-        assert_link text: I18n.t('projects.samples.attachments.attachment.delete'), count: 2
+        # actions start
         click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
       end
 
-      within('dialog') do
+      within('#dialog') do
         assert_accessible
         assert_text I18n.t('projects.samples.attachments.delete_attachment_modal.description')
         click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
       end
+      # actions end
 
+      # results start
       assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file_A.fastq')
-      within('#table-listing') do
+      within('#attachments-table-body') do
         assert_no_text 'test_file_A.fastq'
       end
+      # results end
     end
 
-    test 'user with role >= Maintainer should be able to attach, view, and destroy paired files to a Sample' do
-      visit namespace_project_sample_url(@namespace, @project, @sample2)
-      # Initial View
-      assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
-      within('#table-listing') do
-        assert_text I18n.t('projects.samples.show.no_files')
-        assert_text I18n.t('projects.samples.show.no_associated_files')
-        assert_selector 'button', text: I18n.t('projects.samples.attachments.attachment.delete'), count: 0
-      end
-      click_on I18n.t('projects.samples.show.upload_files')
+    test 'user with role >= Maintainer should be able to delete paired end attachments with single delete click' do
+      # setup start
+      login_as users(:jeff_doe)
+      visit namespace_project_sample_url(@jeff_doe_namespace, @projectA, @sampleB)
+      # setup end
 
-      # Attach paired files
-      within('dialog') do
-        attach_file 'attachment[files][]',
-                    [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq.gz'),
-                     Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq.gz')]
-        click_on I18n.t('projects.samples.show.upload')
+      # actions start
+      within('#attachments-table-body tr:first-child td:last-child') do
+        click_on I18n.t('projects.samples.attachments.attachment.delete')
       end
 
-      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R1_001.fastq.gz')
-      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R2_001.fastq.gz')
-
-      # View paired files
-      within('#table-listing') do
-        assert_text 'TestSample_S1_L001_R1_001.fastq.gz'
-        assert_text 'TestSample_S1_L001_R2_001.fastq.gz'
-        assert_link text: I18n.t('projects.samples.attachments.attachment.delete'), count: 1
-      end
-
-      # Destroy paired files
-      within('#attachments-table-body') do
-        click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
-      end
-
-      within('dialog') do
+      within('#dialog') do
         click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
       end
+      # actions end
 
-      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'TestSample_S1_L001_R1_001.fastq.gz')
-      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'TestSample_S1_L001_R2_001.fastq.gz')
-      within('#table-listing') do
-        assert_no_text 'TestSample_S1_L001_R1_001.fastq.gz'
-        assert_no_text 'TestSample_S1_L001_R2_001.fastq.gz'
-        assert_text I18n.t('projects.samples.show.no_files')
-        assert_text I18n.t('projects.samples.show.no_associated_files')
+      # results start
+      assert_text I18n.t('projects.samples.attachments.destroy.success',
+                         filename: @attachmentFwd1.file.filename.to_s)
+      assert_text I18n.t('projects.samples.attachments.destroy.success',
+                         filename: @attachmentRev1.file.filename.to_s)
+      within('#attachments-table-body') do
+        assert_no_text @attachmentFwd1.file.filename.to_s
+        assert_no_text @attachmentRev1.file.filename.to_s
+      end
+      # results end
+    end
+
+    test 'user with role < Maintainer should not be able to view attachment delete links' do
+      login_as users(:ryan_doe)
+      visit namespace_project_sample_url(@namespace, @project, @sample1)
+
+      within('#attachments-table-body') do
+        assert_selector 'tr', count: 2
+        assert_no_text I18n.t('projects.samples.attachments.attachment.delete')
       end
     end
 
     test 'should destroy Sample from sample show page' do
+      # setup start
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_selector '#samples-table table tbody tr:first-child td:nth-child(2)', text: @sample1.name
+
       visit namespace_project_sample_url(@namespace, @project, @sample1)
       assert_link text: I18n.t('projects.samples.index.remove_button'), count: 1
       click_link I18n.t(:'projects.samples.index.remove_button')
@@ -253,7 +308,7 @@ module Projects
         click_link 'Remove'
       end
 
-      within('dialog') do
+      within('#dialog') do
         assert_text I18n.t('projects.samples.deletions.new_deletion_dialog.description', sample_name: @sample1.name)
         click_button I18n.t('projects.samples.deletions.new_deletion_dialog.submit_button')
       end
@@ -2602,7 +2657,7 @@ module Projects
         click_link I18n.t('projects.samples.index.remove_button')
       end
 
-      within 'dialog' do
+      within '#dialog' do
         click_button I18n.t('projects.samples.deletions.new_deletion_dialog.submit_button')
       end
 
@@ -2646,7 +2701,7 @@ module Projects
         click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
       end
 
-      within('dialog') do
+      within('#dialog') do
         assert_text I18n.t('projects.samples.attachments.delete_attachment_modal.description')
         click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
       end
@@ -2659,7 +2714,7 @@ module Projects
 
       click_link I18n.t('projects.samples.show.delete_files_button'), match: :first
 
-      within('dialog') do
+      within('#dialog') do
         assert_text 'test_file_B.fastq'
         assert_no_text 'test_file_A.fastq'
         click_button I18n.t('projects.samples.attachments.deletions.modal.submit_button')
