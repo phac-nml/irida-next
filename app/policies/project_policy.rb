@@ -348,4 +348,29 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
         )
       )
   end
+
+  scope_for :relation, :shared_groups_and_projects do |relation, options|
+    group = options[:group]
+    minimum_access_level = if options.key?(:minimum_access_level)
+                             options[:minimum_access_level]
+                           else
+                             Member::AccessLevel::GUEST
+                           end
+
+    next relation.none unless Member.effective_access_level(group, user) >= minimum_access_level
+
+    relation
+      .with(
+        linked_group_project_namespaces: Namespace.where(
+          id: NamespaceGroupLink
+                  .not_expired
+                  .where(group_id: group.self_and_descendant_ids, group_access_level: minimum_access_level..)
+                  .select(:namespace_id)
+        ).self_and_descendants.where(type: 'Project').select(:id)
+      ).where(
+        Arel.sql(
+          'namespace_id in (select id from linked_group_project_namespaces)'
+        )
+      )
+  end
 end
