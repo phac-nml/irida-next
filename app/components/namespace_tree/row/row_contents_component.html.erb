@@ -76,7 +76,7 @@
         id="<%= "#{dom_id(@namespace)}-samples-count" %>"
         class="flex items-center text-sm samples-count"
       >
-        <%= viral_icon(name: :beaker, color: :subdued, classes: "h-5 w-5") %><%= @namespace.aggregated_samples_count %>
+        <%= viral_icon(name: :beaker, color: :subdued, classes: "h-5 w-5") %><%= @namespace.aggregated_samples_count(current_user) %>
       </span>
     <% end %>
     <%= viral_tooltip(title: t(:'.stats.projects')) do %>

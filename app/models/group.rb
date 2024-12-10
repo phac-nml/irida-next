@@ -91,14 +91,17 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
     metadata_fields
   end
 
-  def aggregated_samples_count
+  def aggregated_samples_count(current_user)
     aggregated_samples_count = samples_count
-    shared_groups.each do |shared_group|
-      aggregated_samples_count += shared_group.samples_count
-    end
 
-    shared_project_namespaces.each do |shared_project_namespace|
-      aggregated_samples_count += shared_project_namespace.project.samples.size
+    return aggregated_samples_count unless shared_groups.any? || shared_project_namespaces.any?
+
+    policy = ProjectPolicy.new(self, user: current_user)
+    scoped_projects = policy.apply_scope(Project, type: :relation, name: :shared_groups_and_projects,
+                                              scope_options: { group: self })
+
+    scoped_projects.each do |project|
+      aggregated_samples_count += project.samples.size
     end
     aggregated_samples_count
   end
