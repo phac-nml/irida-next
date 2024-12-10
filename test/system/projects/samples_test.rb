@@ -11,17 +11,17 @@ module Projects
       login_as @user
       @sample1 = samples(:sample1)
       @sample2 = samples(:sample2)
-      @sample3 = samples(:sample30)
+      @sample30 = samples(:sample30)
       @sample32 = samples(:sample32)
       @project = projects(:project1)
       @project2 = projects(:project2)
-      @project_A = projects(:projectA)
+      @project_a = projects(:projectA)
       @project29 = projects(:project29)
       @namespace = groups(:group_one)
       @group12a = groups(:subgroup_twelve_a)
 
       @jeff_doe_namespace = namespaces_user_namespaces(:jeff_doe_namespace)
-      @sample_B = samples(:sampleB)
+      @sample_b = samples(:sampleB)
       @attachmentFwd1 = attachments(:attachmentPEFWD1)
       @attachmentRev1 = attachments(:attachmentPEREV1)
 
@@ -258,200 +258,6 @@ module Projects
       ### results end ###
     end
 
-    test 'user with role >= Maintainer should be able to see upload, concatenate and delete files buttons' do
-      visit namespace_project_sample_url(@namespace, @project, @sample2)
-      assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button')
-      assert_selector 'a', text: I18n.t('projects.samples.show.concatenate_button')
-      assert_selector 'a', text: I18n.t('projects.samples.show.delete_files_button')
-    end
-
-    test 'user with role < Maintainer should not be able to see upload, concatenate and delete files buttons' do
-      login_as users(:ryan_doe)
-      visit namespace_project_sample_url(@namespace, @project, @sample2)
-      assert_no_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button')
-      assert_no_selector 'a', text: I18n.t('projects.samples.show.concatenate_button')
-      assert_no_selector 'a', text: I18n.t('projects.samples.show.delete_files_button')
-    end
-
-    test 'user with role >= Maintainer should be able to attach a file to a Sample' do
-      ### setup start ###
-      visit namespace_project_sample_url(@namespace, @project, @sample2)
-      assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
-      within('#table-listing') do
-        assert_text I18n.t('projects.samples.show.no_files')
-        assert_text I18n.t('projects.samples.show.no_associated_files')
-        assert_no_text 'test_file_2.fastq.gz'
-      end
-      ### setup end ###
-
-      ### actions start ###
-      click_on I18n.t('projects.samples.show.upload_files')
-
-      within('#dialog') do
-        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/data_export_1.zip')
-        # check that button goes from being enabled to disabled when clicked
-        assert_selector 'input[type=submit]:not(:disabled)'
-        click_on I18n.t('projects.samples.show.upload')
-        assert_selector 'input[type=submit]:disabled'
-      end
-      ### actions end ###
-
-      ### results start ###
-      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'data_export_1.zip')
-      within('#table-listing') do
-        assert_no_text I18n.t('projects.samples.show.no_files')
-        assert_no_text I18n.t('projects.samples.show.no_associated_files')
-        assert_text 'data_export_1.zip'
-      end
-      ### results end ###
-    end
-
-    test 'user with role >= Maintainer should not be able to attach a duplicate file to a Sample' do
-      ### setup start ###
-      visit namespace_project_sample_url(@namespace, @project, @sample1)
-      ### setup end ###
-
-      ### actions start ###
-      click_on I18n.t('projects.samples.show.upload_files')
-
-      within('#dialog') do
-        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
-        click_on I18n.t('projects.samples.show.upload')
-      end
-      click_on I18n.t('projects.samples.show.upload_files')
-
-      within('#dialog') do
-        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
-        click_on I18n.t('projects.samples.show.upload')
-      end
-      ### actions end ###
-
-      # verify start
-      assert_text I18n.t('activerecord.errors.models.attachment.attributes.file.checksum_uniqueness')
-      # verify end
-    end
-
-    test 'user with role >= Maintainer can upload paired end files and not uncompressed files to a Sample' do
-      ### setup start ###
-      visit namespace_project_sample_url(@namespace, @project, @sample1)
-      ### setup end ###
-
-      ### actions start ###
-      # open dialog
-      click_on I18n.t('projects.samples.show.upload_files')
-
-      within('#dialog') do
-        attach_file 'attachment[files][]', [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq.gz'),
-                                            Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq.gz'),
-                                            Rails.root.join('test/fixtures/files/test_file.fastq')]
-        # warning uncompressed files will be ignored
-        within('div[data-file-upload-target="alert"]') do
-          assert_text I18n.t('projects.samples.show.files_ignored')
-          assert_text 'test_file.fastq'
-        end
-
-        click_on I18n.t('projects.samples.show.upload')
-      end
-      ### actions end ###
-
-      ### results start ###
-      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R1_001.fastq.gz')
-      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R2_001.fastq.gz')
-      assert_no_text I18n.t('projects.samples.attachments.create.success', filename: 'test_file.fastq')
-
-      # Verifies paired end attachment names are within a single table row
-      within('#attachments-table-body tr:nth-child(3) td:nth-child(3)') do
-        assert_text 'TestSample_S1_L001_R1_001.fastq.gz'
-        assert_text 'TestSample_S1_L001_R2_001.fastq.gz'
-      end
-      ### results end ###
-    end
-
-    test 'paired end files should appear in a single row with only one set of attributes' do
-      ### setup start ###
-      login_as users(:jeff_doe)
-      visit namespace_project_sample_url(@jeff_doe_namespace, @project_A, @sample_B)
-      ### setup end ###
-
-      within('#attachments-table-body') do
-        assert_selector 'tr:first-child td:nth-child(2)', text: @attachmentFwd1.puid, count: 1
-        within('tr:first-child td:nth-child(3)') do
-          assert_text @attachmentFwd1.file.filename.to_s
-          assert_text @attachmentRev1.file.filename.to_s
-        end
-        assert_selector 'tr:first-child td:nth-child(4)', text: @attachmentRev1.metadata['format'], count: 1
-        assert_selector 'tr:first-child td:nth-child(5)', text: @attachmentRev1.metadata['type'], count: 1
-        assert_selector 'tr:first-child td:last-child', text: I18n.t('projects.samples.attachments.attachment.delete'),
-                                                        count: 1
-      end
-    end
-
-    test 'user with role >= Maintainer should be able to delete a file from a Sample' do
-      ### setup start ###
-      visit namespace_project_sample_url(@namespace, @project, @sample1)
-      ### setup end ###
-      within('#attachments-table-body') do
-        ### actions start ###
-        click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
-      end
-
-      within('#dialog') do
-        assert_accessible
-        assert_text I18n.t('projects.samples.attachments.delete_attachment_modal.description')
-        click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
-      end
-      ### actions end ###
-
-      ### results start ###
-      # verify flash msg
-      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file_A.fastq')
-      # verify attachment no longer exists in table
-      within('#attachments-table-body') do
-        assert_no_text 'test_file_A.fastq'
-      end
-      ### results end ###
-    end
-
-    test 'user with role >= Maintainer should be able to delete paired end attachments with single delete click' do
-      ### setup start ###
-      login_as users(:jeff_doe)
-      visit namespace_project_sample_url(@jeff_doe_namespace, @project_A, @sample_B)
-      ### setup end ###
-
-      ### actions start ###
-      within('#attachments-table-body tr:first-child td:last-child') do
-        click_on I18n.t('projects.samples.attachments.attachment.delete')
-      end
-
-      within('#dialog') do
-        click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
-      end
-      ### actions end ###
-
-      ### results start ###
-      # verify flash msgs
-      assert_text I18n.t('projects.samples.attachments.destroy.success',
-                         filename: @attachmentFwd1.file.filename.to_s)
-      assert_text I18n.t('projects.samples.attachments.destroy.success',
-                         filename: @attachmentRev1.file.filename.to_s)
-      # attachments no longer exist in table
-      within('#attachments-table-body') do
-        assert_no_text @attachmentFwd1.file.filename.to_s
-        assert_no_text @attachmentRev1.file.filename.to_s
-      end
-      ### results end ###
-    end
-
-    test 'user with role < Maintainer should not be able to view attachment delete links' do
-      login_as users(:ryan_doe)
-      visit namespace_project_sample_url(@namespace, @project, @sample1)
-
-      within('#attachments-table-body') do
-        assert_selector 'tr', count: 2
-        assert_no_text I18n.t('projects.samples.attachments.attachment.delete')
-      end
-    end
-
     test 'should destroy Sample from sample show page' do
       ### setup start ###
       # nav to samples index and verify sample exists within table
@@ -588,42 +394,46 @@ module Projects
     end
 
     test 'should not transfer samples with session storage cleared' do
-      visit namespace_project_samples_url(@namespace, @project)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
-      within '#samples-table table tbody' do
-        assert_selector 'tr', count: 3
-        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
-      end
-      Capybara.execute_script 'sessionStorage.clear()'
-      click_link I18n.t('projects.samples.index.transfer_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
-        find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
-        click_on I18n.t('projects.samples.transfers.dialog.submit_button')
-      end
-      within %(turbo-frame[id="samples_dialog"]) do
-        assert_no_selector "turbo-frame[id='list_selections']"
-        assert_text I18n.t('projects.samples.transfers.create.no_samples_transferred_error')
-        errors = @project.errors.full_messages_for(:samples)
-        errors.each { |error| assert_text error }
-      end
-    end
-
-    test 'should not transfer sample to project that already has sample with same name' do
       ### setup start ###
-      project26 = projects(:project26)
-      sample30 = samples(:sample30)
       visit namespace_project_samples_url(@namespace, @project)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
       ### setup end ###
 
       ### actions start ###
-      check sample30.name
+      within '#samples-table table tbody' do
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
+      Capybara.execute_script 'sessionStorage.clear()'
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
         find('input#select2-input').click
+        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        click_on I18n.t('projects.samples.transfers.dialog.submit_button')
+        ### actions end ###
+
+        ### verify start ###
+        # samples listing should no longer appear in dialog
+        assert_no_selector '#list_selections'
+        # error msg displayed in dialog
+        assert_text I18n.t('projects.samples.transfers.create.no_samples_transferred_error')
+      end
+      ### verify end ###
+    end
+
+    test 'should not transfer sample to project that already has sample with same name' do
+      ### setup start ###
+      project26 = projects(:project26)
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      ### setup end ###
+
+      ### actions start ###
+      check @sample30.name
+      click_link I18n.t('projects.samples.index.transfer_button')
+      within('#dialog') do
+        find('input#select2-input').fill_in with: 'project-26'
         find("button[data-viral--select2-primary-param='#{project26.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
@@ -636,12 +446,12 @@ module Projects
         # error messages in dialog
         assert_text I18n.t('projects.samples.transfers.create.error')
         # colon is removed from translation in UI
-        assert_text I18n.t('services.samples.transfer.sample_exists', sample_puid: sample30.puid,
-                                                                      sample_name: sample30.name).gsub(':', '')
+        assert_text I18n.t('services.samples.transfer.sample_exists', sample_puid: @sample30.puid,
+                                                                      sample_name: @sample30.name).gsub(':', '')
       end
 
       # verify sample was not transferred and still exists
-      assert_selector "tr[id='#{sample30.id}']"
+      assert_selector "tr[id='#{@sample30.id}']"
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
       ### verify end
@@ -653,7 +463,8 @@ module Projects
       ### setup start ###
       namespace = groups(:subgroup1)
       project25 = projects(:project25)
-      sample30 = samples(:sample30)
+
+      # verify only 2 samples exist in destination project
       visit namespace_project_samples_url(namespace, project25)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
                                                                            locale: @user.locale))
@@ -664,7 +475,6 @@ module Projects
 
       ### actions start ###
       within '#samples-table table tbody' do
-        assert_selector 'tr', count: 3
         all('input[type=checkbox]').each do |checkbox|
           checkbox.click unless checkbox.checked?
         end
@@ -682,15 +492,15 @@ module Projects
         # error messages in dialog
         assert_text I18n.t('projects.samples.transfers.create.error')
         # colon is removed from translation in UI
-        assert_text I18n.t('services.samples.transfer.sample_exists', sample_puid: sample30.puid,
-                                                                      sample_name: sample30.name).gsub(':', '')
+        assert_text I18n.t('services.samples.transfer.sample_exists', sample_puid: @sample30.puid,
+                                                                      sample_name: @sample30.name).gsub(':', '')
       end
 
       # verify sample1 and 2 transferred, sample 30 did not
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 1, locale: @user.locale))
       assert_no_selector "tr[id='#{@sample1.id}']"
       assert_no_selector "tr[id='#{@sample2.id}']"
-      assert_selector "tr[id='#{sample30.id}']"
+      assert_selector "tr[id='#{@sample30.id}']"
 
       # destination project
       visit namespace_project_samples_url(namespace, project25)
@@ -698,7 +508,7 @@ module Projects
                                                                            locale: @user.locale))
       assert_selector "tr[id='#{@sample1.id}']"
       assert_selector "tr[id='#{@sample2.id}']"
-      assert_no_selector "tr[id='#{sample30.id}']"
+      assert_no_selector "tr[id='#{@sample30.id}']"
       ### verify end ###
     end
 
@@ -749,382 +559,544 @@ module Projects
       end
     end
 
-    test 'user should not be able to see the upload file button for the sample' do
-      user = users(:ryan_doe)
-      login_as user
-
-      visit namespace_project_sample_url(@namespace, @project, @sample1)
-
-      assert_selector 'a', text: I18n.t('projects.samples.index.upload_file'), count: 0
-    end
-
     test 'can search the list of samples by name' do
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
-      filter_text = samples(:sample1).name[-3..-1]
+      # partial name search
+      filter_text = @sample1.name[-3..-1]
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 3
-      assert_text @sample1.name
-      assert_text @sample2.name
+      assert_selector "tr[id='#{@sample1.id}']"
+      assert_selector "tr[id='#{@sample2.id}']"
+      assert_selector "tr[id='#{@sample30.id}']"
+      ### setup end ###
 
+      ### actions start ###
+      # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: filter_text
       find('input.t-search-component').native.send_keys(:return)
+      ### actions end ###
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
-                                                                           locale: @user.locale))
+      ### verify start ###
+      # verify table only contains sample1
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 1, locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 1
-      assert_selector 'mark', text: filter_text
-      assert_no_text @sample2.name
-      assert_no_text @sample3.name
-
-      # Refresh the page to ensure the search is still active
-      visit namespace_project_samples_url(@namespace, @project)
-
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
-                                                                           locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 1
-      assert_selector 'mark', text: filter_text
-      assert_no_text @sample2.name
-      assert_no_text @sample3.name
+      assert_selector "tr[id='#{@sample1.id}']"
+      assert_no_selector "tr[id='#{@sample2.id}']"
+      assert_no_selector "tr[id='#{@sample30.id}']"
+      ### verify end ###
     end
 
     test 'can search the list of samples by metadata field and value presence when metadata is toggled' do
+      # also tests that metadata toggle persist through other actions (filter) and page refresh
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       filter_text = 'metadatafield1:value1'
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 3
-      assert_text @sample1.name
-      assert_text @sample2.name
-      assert_text @sample3.name
+      assert_selector "tr[id='#{@sample1.id}']"
+      assert_selector "tr[id='#{@sample2.id}']"
+      assert_selector "tr[id='#{@sample30.id}']"
+      ### setup end ###
 
-      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
+      ### actions and verify start ###
+      # toggle metadata on
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
-
+      # verify all 3 samples are still in table
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 3
+      # verify metadata fields are now present
       assert_selector '#samples-table table thead tr th', count: 8
-      assert_selector 'div#limit-component button div span', text: '20'
 
+      # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: filter_text
       find('input.t-search-component').native.send_keys(:return)
 
+      # verify table only has sample30
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 1
+      assert_no_selector "tr[id='#{@sample1.id}']"
+      assert_no_selector "tr[id='#{@sample2.id}']"
+      assert_selector "tr[id='#{@sample30.id}']"
+
+      # verify filter input persists
       assert_selector %(input.t-search-component) do |input|
         assert_equal filter_text, input['value']
       end
-      assert_no_text @sample1.name
-      assert_no_text @sample2.name
-      assert_text @sample3.name
-
-      # Refresh the page to ensure the search is still active
-      visit namespace_project_samples_url(@namespace, @project)
-
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
-                                                                           locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 1
-      assert_selector %(input.t-search-component) do |input|
-        assert_equal filter_text, input['value']
-      end
-      assert_no_text @sample1.name
-      assert_no_text @sample2.name
-      assert_text @sample3.name
+      ### actions and verify end ###
     end
 
-    test 'can change pagination and then filter by name' do
-      visit namespace_project_samples_url(@namespace, @project)
+    test 'can change limit/pagination and then filter by id' do
+      # tests limit change and that it persists through other actions (filter)
+      ### setup start ###
+      sample3 = samples(:sample3)
+      visit namespace_project_samples_url(@namespace, @project2)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
+                                                                           locale: @user.locale))
+      ### setup end ###
 
+      ### actions and verify start ###
       within('div#limit-component') do
+        # set table limit to 10
         find('button').click
         click_link '10'
       end
 
+      # verify limit is set to 10
       assert_selector 'div#limit-component button div span', text: '10'
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 10, count: 20,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
-      assert_text @sample1.name
-      assert_text @sample2.name
+      # verify table consists of 10 samples per page
+      assert_selector '#samples-table table tbody tr', count: 10
 
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.name
+      # apply filter
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: sample3.puid
       find('input.t-search-component').native.send_keys(:return)
 
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 1, locale: @user.locale))
+      assert_selector '#samples-table table tbody tr', count: 1
+      assert_selector "tr[id='#{sample3.id}']"
+      ### actions and verify end ###
+    end
+
+    test 'filter highlighting for sample name' do
+      ### setup start ###
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      ### setup end ###
+
+      ### actions start ###
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: 'sample'
+      find('input.t-search-component').native.send_keys(:return)
+      ### actions end ###
+
+      ### verify start ###
+      # verify table only contains sample1
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      # checks highlighting
+      assert_selector 'mark', text: 'Sample', count: 3
+    end
+
+    test 'filter highlighting for sample puid' do
+      ### setup start ###
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      ### setup end ###
+
+      ### actions start ###
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
+      find('input.t-search-component').native.send_keys(:return)
+      ### actions end ###
+
+      ### verify start ###
+      # verify table only contains sample1
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
-      assert_selector 'table tbody tr', count: 1
-      assert_text @sample1.name
-      assert_no_text @sample2.name
-      assert_selector 'div#limit-component button div span', text: '10'
+      # checks highlighting
+      assert_selector 'mark', text: @sample1.puid
     end
 
-    test 'can change pagination and then toggle metadata' do
-      visit namespace_project_samples_url(@namespace, @project)
-
-      within('div#limit-component') do
-        find('button').click
-        click_link '10'
-      end
-
-      assert_selector 'div#limit-component button div span', text: '10'
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
-      assert_selector '#samples-table table thead tr th', count: 6
-
-      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
-      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
-
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
-      assert_selector '#samples-table table thead tr th', count: 8
-      assert_selector 'div#limit-component button div span', text: '10'
-    end
-
-    test 'can sort samples by column' do
+    test 'can sort samples' do
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
+      ### setup end ###
+
+      ### action and verify start ###
       within('tbody tr:first-child th') do
         assert_text @sample1.puid
       end
-
-      click_on 'Sample ID'
-
-      assert_selector 'table thead th:first-child svg.icon-arrow_up'
-      puids = retrieve_puids
-      (puids.length - 1).times do |n|
-        assert puids[n] < puids[n + 1]
-      end
-
-      click_on 'Sample ID'
-      assert_selector 'table thead th:first-child svg.icon-arrow_down'
-      puids = retrieve_puids
-      (puids.length - 1).times do |n|
-        assert puids[n] > puids[n + 1]
-      end
-
-      click_on 'Sample Name'
+      click_on I18n.t('samples.table_component.name')
 
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
-      assert_selector '#samples-table table tbody tr', count: 3
       within('#samples-table table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
         assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-        assert_selector 'tr:last-child th', text: @sample3.puid
-        assert_selector 'tr:last-child td:nth-child(2)', text: @sample3.name
+        assert_selector 'tr:last-child th', text: @sample30.puid
+        assert_selector 'tr:last-child td:nth-child(2)', text: @sample30.name
       end
 
-      click_on 'Sample Name'
+      click_on I18n.t('samples.table_component.name')
 
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
-      assert_selector '#samples-table table tbody tr', count: 3
       within('#samples-table table tbody') do
-        assert_selector 'tr:first-child th', text: @sample3.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample3.name
+        assert_selector 'tr:first-child th', text: @sample30.puid
+        assert_selector 'tr:first-child td:nth-child(2)', text: @sample30.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
         assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
         assert_selector 'tr:last-child th', text: @sample1.puid
         assert_selector 'tr:last-child td:nth-child(2)', text: @sample1.name
       end
+      ### action and verify end ###
+    end
 
-      click_on 'Created'
+    test 'sort samples attachments_updated_at_nulls_last' do
+      ### setup start ###
+      visit namespace_project_samples_url(@namespace, @project)
 
-      assert_selector 'table thead th:nth-child(3) svg.icon-arrow_up'
-      within('#samples-table table tbody') do
-        assert_selector 'tr:first-child th', text: @sample3.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample3.name
-        assert_selector 'tr:nth-child(2) th', text: @sample2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-        assert_selector 'tr:last-child th', text: @sample1.puid
-        assert_selector 'tr:last-child td:nth-child(2)', text: @sample1.name
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      ### setup end ###
+
+      ### action and verify start ###
+      within('tbody tr:first-child th') do
+        assert_text @sample1.puid
       end
+      click_on I18n.t('samples.table_component.attachments_updated_at')
 
-      click_on 'Created'
-
-      assert_selector 'table thead th:nth-child(3) svg.icon-arrow_down'
+      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
       within('#samples-table table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
         assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-        assert_selector 'tr:last-child th', text: @sample3.puid
-        assert_selector 'tr:last-child td:nth-child(2)', text: @sample3.name
+        assert_selector 'tr:last-child th', text: @sample30.puid
+        assert_selector 'tr:last-child td:nth-child(2)', text: @sample30.name
       end
 
-      click_on 'Last Updated'
+      click_on I18n.t('samples.table_component.attachments_updated_at')
 
-      assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
+      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_down'
       within('#samples-table table tbody') do
-        assert_selector 'tr:first-child th', text: @sample3.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample3.name
-        assert_selector 'tr:nth-child(2) th', text: @sample2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-        assert_selector 'tr:last-child th', text: @sample1.puid
-        assert_selector 'tr:last-child td:nth-child(2)', text: @sample1.name
-      end
-
-      click_on 'Last Updated'
-
-      assert_selector 'table thead th:nth-child(4) svg.icon-arrow_down'
-      within('#samples-table table tbody') do
+        # order does not change as sample1 is the only sample with attachments_updated_at
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
         assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-        assert_selector 'tr:last-child th', text: @sample3.puid
-        assert_selector 'tr:last-child td:nth-child(2)', text: @sample3.name
+        assert_selector 'tr:last-child th', text: @sample30.puid
+        assert_selector 'tr:last-child td:nth-child(2)', text: @sample30.name
       end
+      ### action and verify end ###
     end
 
     test 'can filter and then sort the list of samples by name' do
+      # tests that filter persists through other actions (sort)
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
+      assert_selector "tr[id='#{@sample1.id}']"
+      assert_selector "tr[id='#{@sample2.id}']"
+      assert_selector "tr[id='#{@sample30.id}']"
+      ### setup end ###
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
-      within('#samples-table table tbody tr:first-child td:nth-child(2)') do
-        assert_text @sample1.name
-      end
-
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
+      ### actions start ###
+      # apply filter
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
-                                                                           locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 1
-      assert_text @sample1.puid
-      assert_text @sample1.name
-      assert_no_text @sample2.name
-      assert_no_text @sample3.name
+      assert_selector "tr[id='#{@sample1.id}']"
+      assert_no_selector "tr[id='#{@sample2.id}']"
+      assert_no_selector "tr[id='#{@sample30.id}']"
 
-      click_on 'Sample Name'
+      # apply sort
+      click_on I18n.t('samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      ### actions end ###
 
-      assert_selector '#samples-table table tbody tr', count: 1
-      within('#samples-table table tbody tr td:nth-child(2)') do
-        assert_text @sample1.name
+      ### verify start ###
+      # verify table still only contains sample1
+      assert_selector "tr[id='#{@sample1.id}']"
+      assert_no_selector "tr[id='#{@sample2.id}']"
+      assert_no_selector "tr[id='#{@sample30.id}']"
+
+      # verify filter text is still in filter input
+      assert_selector %(input.t-search-component) do |input|
+        assert_equal @sample1.name, input['value']
       end
-    end
-
-    test 'can filter and then sort the list of samples by puid' do
-      visit namespace_project_samples_url(@namespace, @project)
-
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
-      within('#samples-table table tbody tr:first-child th') do
-        assert_text @sample1.puid
-      end
-
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
-      find('input.t-search-component').native.send_keys(:return)
-
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
-                                                                           locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 1
-      assert_text @sample1.puid
-      assert_text @sample1.name
-      assert_no_text @sample2.name
-      assert_no_text @sample3.name
-
-      click_on 'Sample ID'
-      assert_selector 'table thead th:first-child svg.icon-arrow_up'
-
-      assert_selector '#samples-table table tbody tr', count: 1
-      within('#samples-table table tbody tr th') do
-        assert_text @sample1.puid
-      end
-
-      visit namespace_project_samples_url(@namespace, @project)
-
-      assert_selector '#samples-table table tbody tr', count: 1
-      within('tbody tr th') do
-        assert_text @sample1.puid
-      end
-    end
-
-    test 'can sort and then filter the list of samples by name' do
-      visit namespace_project_samples_url(@namespace, @project)
-
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
-      within('#samples-table table tbody tr:first-child td:nth-child(2)') do
-        assert_text @sample1.name
-      end
-
-      click_on 'Sample Name'
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
-      click_on 'Sample Name'
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
-
-      assert_selector '#samples-table table tbody tr', count: 3
-      within('#samples-table table tbody tr:first-child td:nth-child(2)') do
-        assert_text @sample3.name
-      end
-
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
-      find('input.t-search-component').native.send_keys(:return)
-
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
-                                                                           locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 1
-      assert_text @sample1.puid
-      assert_text @sample1.name
-      assert_no_text @sample2.name
-      assert_no_text @sample3.name
-
-      visit namespace_project_samples_url(@namespace, @project)
-
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
-                                                                           locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 1
-      assert_text @sample1.puid
-      assert_text @sample1.name
-      assert_no_text @sample2.name
-      assert_no_text @sample3.name
+      ### verify end ###
     end
 
     test 'can sort and then filter the list of samples by puid' do
+      # tests that sort persists through other actions (filter)
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
+      assert_selector "tr[id='#{@sample1.id}']"
+      assert_selector "tr[id='#{@sample2.id}']"
+      assert_selector "tr[id='#{@sample30.id}']"
+      ### setup end ###
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
-      within('#samples-table table tbody tr:first-child th') do
-        assert_text @sample1.puid
-      end
-
-      click_on 'Sample Name'
+      ### actions start ###
+      # apply sort
+      click_on I18n.t('samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
-      click_on 'Sample Name'
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
 
-      assert_selector '#samples-table table tbody tr', count: 3
-      within('#samples-table table tbody tr:first-child th') do
-        assert_text @sample3.puid
-      end
-
+      # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
       find('input.t-search-component').native.send_keys(:return)
+      ### actions end ###
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
-                                                                           locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 1
-      assert_text @sample1.puid
-      assert_text @sample1.name
-      assert_no_text @sample2.name
-      assert_no_text @sample3.name
+      ### verify start ###
+      # verify sort is still applied
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      # verify table only contains sample1
+      assert_selector "tr[id='#{@sample1.id}']"
+      assert_no_selector "tr[id='#{@sample2.id}']"
+      assert_no_selector "tr[id='#{@sample30.id}']"
+      ### verify end ###
+    end
+
+    test 'filter persists through page refresh' do
+      ### setup start ###
+      visit namespace_project_samples_url(@namespace, @project)
+      filter_text = @sample1.name
+      ### setup end ###
+
+      ### actions start ###
+      # apply filter
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: filter_text
+      find('input.t-search-component').native.send_keys(:return)
+      ### actions end ###
+
+      ### verify start ###
+      assert_selector "tr[id='#{@sample1.id}']"
+      assert_no_selector "tr[id='#{@sample2.id}']"
+      assert_no_selector "tr[id='#{@sample30.id}']"
+
+      # refresh
+      visit namespace_project_samples_url(@namespace, @project)
+
+      # verify filter is still in input field
+      assert_selector %(input.t-search-component) do |input|
+        assert_equal filter_text, input['value']
+      end
+      assert_selector "tr[id='#{@sample1.id}']"
+      assert_no_selector "tr[id='#{@sample2.id}']"
+      assert_no_selector "tr[id='#{@sample30.id}']"
+      ### verify end ###
+    end
+
+    test 'sort persists through page refresh' do
+      ### setup start ###
+      visit namespace_project_samples_url(@namespace, @project)
+      ### setup end ###
+
+      ### actions start ###
+      # apply sort
+      click_on I18n.t('samples.table_component.name')
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      assert_selector '#samples-table table tbody th:first-child', text: @sample1.puid
+      # change sort order from default sorting
+      click_on I18n.t('samples.table_component.name')
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
+      assert_selector '#samples-table table tbody th:first-child', text: @sample30.puid
+      ### actions end ###
+
+      ### verify start ###
+
+      # refresh
+      visit namespace_project_samples_url(@namespace, @project)
+
+      # verify sort is still enabled
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
+      # verify table ordering is still in changed/sorted state
+      assert_selector '#samples-table table tbody th:first-child', text: @sample30.puid
+      ### verify end ###
+    end
+
+    test 'user with role >= Maintainer should be able to see upload, concatenate and delete files buttons' do
+      visit namespace_project_sample_url(@namespace, @project, @sample2)
+      assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button')
+      assert_selector 'a', text: I18n.t('projects.samples.show.concatenate_button')
+      assert_selector 'a', text: I18n.t('projects.samples.show.delete_files_button')
+    end
+
+    test 'user with role < Maintainer should not be able to see upload, concatenate and delete files buttons' do
+      login_as users(:ryan_doe)
+      visit namespace_project_sample_url(@namespace, @project, @sample2)
+      assert_no_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button')
+      assert_no_selector 'a', text: I18n.t('projects.samples.show.concatenate_button')
+      assert_no_selector 'a', text: I18n.t('projects.samples.show.delete_files_button')
+    end
+
+    test 'user with role >= Maintainer should be able to attach a file to a Sample' do
+      ### setup start ###
+      visit namespace_project_sample_url(@namespace, @project, @sample2)
+      assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
+      within('#table-listing') do
+        assert_text I18n.t('projects.samples.show.no_files')
+        assert_text I18n.t('projects.samples.show.no_associated_files')
+        assert_no_text 'test_file_2.fastq.gz'
+      end
+      ### setup end ###
+
+      ### actions start ###
+      click_on I18n.t('projects.samples.show.upload_files')
+
+      within('#dialog') do
+        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/data_export_1.zip')
+        # check that button goes from being enabled to disabled when clicked
+        assert_selector 'input[type=submit]:not(:disabled)'
+        click_on I18n.t('projects.samples.show.upload')
+        assert_selector 'input[type=submit]:disabled'
+      end
+      ### actions end ###
+
+      ### results start ###
+      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'data_export_1.zip')
+      within('#table-listing') do
+        assert_no_text I18n.t('projects.samples.show.no_files')
+        assert_no_text I18n.t('projects.samples.show.no_associated_files')
+        assert_text 'data_export_1.zip'
+      end
+      ### results end ###
+    end
+
+    test 'user with role >= Maintainer should not be able to attach a duplicate file to a Sample' do
+      ### setup start ###
+      visit namespace_project_sample_url(@namespace, @project, @sample1)
+      ### setup end ###
+
+      ### actions start ###
+      click_on I18n.t('projects.samples.show.upload_files')
+
+      within('#dialog') do
+        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
+        click_on I18n.t('projects.samples.show.upload')
+      end
+      click_on I18n.t('projects.samples.show.upload_files')
+
+      within('#dialog') do
+        attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
+        click_on I18n.t('projects.samples.show.upload')
+      end
+      ### actions end ###
+
+      # verify start
+      assert_text I18n.t('activerecord.errors.models.attachment.attributes.file.checksum_uniqueness')
+      # verify end
+    end
+
+    test 'user with role >= Maintainer can upload paired end files and not uncompressed files to a Sample' do
+      ### setup start ###
+      visit namespace_project_sample_url(@namespace, @project, @sample1)
+      ### setup end ###
+
+      ### actions start ###
+      # open dialog
+      click_on I18n.t('projects.samples.show.upload_files')
+
+      within('#dialog') do
+        attach_file 'attachment[files][]', [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq.gz'),
+                                            Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq.gz'),
+                                            Rails.root.join('test/fixtures/files/test_file.fastq')]
+        # warning uncompressed files will be ignored
+        within('div[data-file-upload-target="alert"]') do
+          assert_text I18n.t('projects.samples.show.files_ignored')
+          assert_text 'test_file.fastq'
+        end
+
+        click_on I18n.t('projects.samples.show.upload')
+      end
+      ### actions end ###
+
+      ### results start ###
+      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R1_001.fastq.gz')
+      assert_text I18n.t('projects.samples.attachments.create.success', filename: 'TestSample_S1_L001_R2_001.fastq.gz')
+      assert_no_text I18n.t('projects.samples.attachments.create.success', filename: 'test_file.fastq')
+
+      # Verifies paired end attachment names are within a single table row
+      within('#attachments-table-body tr:nth-child(3) td:nth-child(3)') do
+        assert_text 'TestSample_S1_L001_R1_001.fastq.gz'
+        assert_text 'TestSample_S1_L001_R2_001.fastq.gz'
+      end
+      ### results end ###
+    end
+
+    test 'paired end files should appear in a single row with only one set of attributes' do
+      ### setup start ###
+      login_as users(:jeff_doe)
+      visit namespace_project_sample_url(@jeff_doe_namespace, @project_a, @sample_b)
+      ### setup end ###
+
+      within('#attachments-table-body') do
+        assert_selector 'tr:first-child td:nth-child(2)', text: @attachmentFwd1.puid, count: 1
+        within('tr:first-child td:nth-child(3)') do
+          assert_text @attachmentFwd1.file.filename.to_s
+          assert_text @attachmentRev1.file.filename.to_s
+        end
+        assert_selector 'tr:first-child td:nth-child(4)', text: @attachmentRev1.metadata['format'], count: 1
+        assert_selector 'tr:first-child td:nth-child(5)', text: @attachmentRev1.metadata['type'], count: 1
+        assert_selector 'tr:first-child td:last-child', text: I18n.t('projects.samples.attachments.attachment.delete'),
+                                                        count: 1
+      end
+    end
+
+    test 'user with role >= Maintainer should be able to delete a file from a Sample' do
+      ### setup start ###
+      visit namespace_project_sample_url(@namespace, @project, @sample1)
+      ### setup end ###
+      within('#attachments-table-body') do
+        ### actions start ###
+        click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
+      end
+
+      within('#dialog') do
+        assert_accessible
+        assert_text I18n.t('projects.samples.attachments.delete_attachment_modal.description')
+        click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
+      end
+      ### actions end ###
+
+      ### results start ###
+      # verify flash msg
+      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file_A.fastq')
+      # verify attachment no longer exists in table
+      within('#attachments-table-body') do
+        assert_no_text 'test_file_A.fastq'
+      end
+      ### results end ###
+    end
+
+    test 'user with role >= Maintainer should be able to delete paired end attachments with single delete click' do
+      ### setup start ###
+      login_as users(:jeff_doe)
+      visit namespace_project_sample_url(@jeff_doe_namespace, @project_a, @sample_b)
+      ### setup end ###
+
+      ### actions start ###
+      within('#attachments-table-body tr:first-child td:last-child') do
+        click_on I18n.t('projects.samples.attachments.attachment.delete')
+      end
+
+      within('#dialog') do
+        click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
+      end
+      ### actions end ###
+
+      ### results start ###
+      # verify flash msgs
+      assert_text I18n.t('projects.samples.attachments.destroy.success',
+                         filename: @attachmentFwd1.file.filename.to_s)
+      assert_text I18n.t('projects.samples.attachments.destroy.success',
+                         filename: @attachmentRev1.file.filename.to_s)
+      # attachments no longer exist in table
+      within('#attachments-table-body') do
+        assert_no_text @attachmentFwd1.file.filename.to_s
+        assert_no_text @attachmentRev1.file.filename.to_s
+      end
+      ### results end ###
+    end
+
+    test 'user with role < Maintainer should not be able to view attachment delete links' do
+      login_as users(:ryan_doe)
+      visit namespace_project_sample_url(@namespace, @project, @sample1)
+
+      within('#attachments-table-body') do
+        assert_selector 'tr', count: 2
+        assert_no_text I18n.t('projects.samples.attachments.attachment.delete')
+      end
     end
 
     test 'should concatenate single end attachment files and keep originals' do
@@ -1591,9 +1563,9 @@ module Projects
     test 'user cannot update metadata added by an analysis' do
       @subgroup12aa = groups(:subgroup_twelve_a_a)
       @project31 = projects(:project31)
-      @sample34 = samples(:sample34)
+      @sample304 = samples(:sample34)
 
-      visit namespace_project_sample_url(@subgroup12aa, @project31, @sample34)
+      visit namespace_project_sample_url(@subgroup12aa, @project31, @sample304)
 
       click_on I18n.t('projects.samples.show.tabs.metadata')
 
@@ -1621,7 +1593,7 @@ module Projects
 
       assert_selector '#samples-table table thead tr th', count: 8
       within('#samples-table table tbody tr:first-child') do
-        assert_text @sample3.name
+        assert_text @sample30.name
         assert_selector 'td:nth-child(6)', text: 'value1'
         assert_selector 'td:nth-child(7)', text: 'value2'
       end
@@ -1645,8 +1617,8 @@ module Projects
       assert_selector 'table thead th:nth-child(6) svg.icon-arrow_up'
       assert_selector '#samples-table table tbody tr', count: 3
       within('tbody') do
-        assert_selector 'tr:first-child th', text: @sample3.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample3.name
+        assert_selector 'tr:first-child th', text: @sample30.puid
+        assert_selector 'tr:first-child td:nth-child(2)', text: @sample30.name
         assert_selector 'tr:nth-child(2) th', text: @sample1.puid
         assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample1.name
         assert_selector 'tr:last-child th', text: @sample2.puid
@@ -1664,8 +1636,8 @@ module Projects
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
         assert_selector 'tr:nth-child(2) th', text: @sample2.puid
         assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-        assert_selector 'tr:last-child th', text: @sample3.puid
-        assert_selector 'tr:last-child td:nth-child(2)', text: @sample3.name
+        assert_selector 'tr:last-child th', text: @sample30.puid
+        assert_selector 'tr:last-child td:nth-child(2)', text: @sample30.name
       end
     end
 
@@ -2169,9 +2141,9 @@ module Projects
     test 'delete metadata key added by anaylsis' do
       @subgroup12aa = groups(:subgroup_twelve_a_a)
       @project31 = projects(:project31)
-      @sample34 = samples(:sample34)
+      @sample304 = samples(:sample34)
 
-      visit namespace_project_sample_url(@subgroup12aa, @project31, @sample34)
+      visit namespace_project_sample_url(@subgroup12aa, @project31, @sample304)
 
       click_on I18n.t('projects.samples.show.tabs.metadata')
 
@@ -2625,7 +2597,7 @@ module Projects
         assert_selector 'tr', count: 3
         assert_text @sample1.name
         assert_text @sample2.name
-        assert_text @sample3.name
+        assert_text @sample30.name
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
       click_link I18n.t('projects.samples.index.delete_samples_button'), match: :first
@@ -2638,8 +2610,8 @@ module Projects
         assert_text @sample1.puid
         assert_text @sample2.name
         assert_text @sample2.puid
-        assert_text @sample3.name
-        assert_text @sample3.puid
+        assert_text @sample30.name
+        assert_text @sample30.puid
 
         click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
@@ -2657,7 +2629,7 @@ module Projects
         assert_selector 'tr', count: 3
         assert_text @sample1.name
         assert_text @sample2.name
-        assert_text @sample3.name
+        assert_text @sample30.name
         within 'tr:first-child' do
           all('input[type="checkbox"]')[0].click
         end
@@ -2680,7 +2652,7 @@ module Projects
         assert_selector 'tr', count: 2
         assert_no_text @sample1.name
         assert_text @sample2.name
-        assert_text @sample3.name
+        assert_text @sample30.name
       end
     end
 
@@ -2690,7 +2662,7 @@ module Projects
         assert_selector 'tr', count: 3
         assert_text @sample1.name
         assert_text @sample2.name
-        assert_text @sample3.name
+        assert_text @sample30.name
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
 
@@ -2720,7 +2692,7 @@ module Projects
           'projects.samples.deletions.new_multiple_deletions_dialog.description.plural'
         ).gsub! 'COUNT_PLACEHOLDER', '2'
         assert_text @sample2.name
-        assert_text @sample3.name
+        assert_text @sample30.name
         assert_no_text @sample1.name
         click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
