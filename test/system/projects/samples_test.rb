@@ -421,42 +421,6 @@ module Projects
       ### verify end ###
     end
 
-    test 'should not transfer sample to project that already has sample with same name' do
-      ### setup start ###
-      project26 = projects(:project26)
-      visit namespace_project_samples_url(@namespace, @project)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
-      ### setup end ###
-
-      ### actions start ###
-      check @sample30.name
-      click_link I18n.t('projects.samples.index.transfer_button')
-      within('#dialog') do
-        find('input#select2-input').fill_in with: 'project-26'
-        find("button[data-viral--select2-primary-param='#{project26.full_path}']").click
-        click_on I18n.t('projects.samples.transfers.dialog.submit_button')
-      end
-      ### actions end ###
-
-      ### verify start ###
-      within('#dialog') do
-        # error state should not contain sample listing
-        assert_no_selector "turbo-frame[id='list_selections']"
-        # error messages in dialog
-        assert_text I18n.t('projects.samples.transfers.create.error')
-        # colon is removed from translation in UI
-        assert_text I18n.t('services.samples.transfer.sample_exists', sample_puid: @sample30.puid,
-                                                                      sample_name: @sample30.name).gsub(':', '')
-      end
-
-      # verify sample was not transferred and still exists
-      assert_selector "tr[id='#{@sample30.id}']"
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
-      ### verify end
-    end
-
     test 'transfer samples with and without same name in destination project' do
       # only samples without a matching name will transfer
 
