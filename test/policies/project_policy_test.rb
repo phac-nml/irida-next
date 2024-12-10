@@ -318,4 +318,18 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     assert scoped_projects.include?(projects(:projectBravo))
     assert scoped_projects.include?(projects(:projectCharlie))
   end
+
+  test 'shared_groups_and_projects scope returns only linked projects and projects from linked groups' do
+    user = users(:private_ryan)
+    group = groups(:group_alpha)
+    policy = ProjectPolicy.new(group, user:)
+
+    scoped_projects = policy.apply_scope(Project, type: :relation, name: :shared_groups_and_projects,
+                                                  scope_options: { group: })
+
+    assert_equal 2, scoped_projects.count
+
+    assert scoped_projects.include?(projects(:projectBravo))
+    assert scoped_projects.include?(projects(:projectCharlie))
+  end
 end
