@@ -2,14 +2,14 @@
 
 module Mutations
   # Base Mutation
-  class SubmitWorkflowExecution < BaseMutation # rubocop:disable Metrics/ClassLength
+  class SubmitWorkflowExecution < BaseMutation
     null true
     description 'Create a new workflow execution..'
 
     argument :email_notification, Boolean,
              description: 'Set to true to enable email notifications from this workflow execution'
     argument :name, String, description: 'Name for the new workflow.'
-    argument :samples_files_info_list, [GraphQL::Types::JSON], description: 'List of hashes containing a `sample_id` (String), and `files` (Hash) containing pairs of `file_type` (String) (e.g. `fastq_1`) and `file_id` (String) (e.g. `gid://irida/Attachment/1234`).' # rubocop:disable GraphQL/ExtractInputType,Layout/LineLength
+    argument :samples_workflow_executions_attributes, [GraphQL::Types::JSON], description: "A list of hashes containing a 'sample_id', and a hash of `samplesheet_params`." # rubocop:disable GraphQL/ExtractInputType,Layout/LineLength
     argument :update_samples, Boolean, description: 'Set true for samples to be updated from this workflow execution' # rubocop:disable GraphQL/ExtractInputType
     argument :workflow_engine, String, description: '' # rubocop:disable GraphQL/ExtractInputType
     argument :workflow_engine_parameters, [GraphQL::Types::JSON], description: 'List of Hashes containing `key` and `value` to be passed to the workflow engine.' # rubocop:disable GraphQL/ExtractInputType,Layout/LineLength
@@ -51,7 +51,7 @@ module Mutations
 
       namespace_id = namespace(args[:project_id], args[:group_id])
 
-      samples_workflow_executions_attributes = build_samples_workflow_executions_attributes(args[:samples_files_info_list]) # rubocop:disable Layout/LineLength
+      samples_workflow_executions_attributes = build_samples_workflow_executions_attributes(args[:samples_workflow_executions_attributes]) # rubocop:disable Layout/LineLength
 
       workflow_execution_params = {
         name: args[:name],
@@ -111,22 +111,13 @@ module Mutations
       result
     end
 
-    def build_samples_workflow_executions_attributes(sample_info_list)
+    def build_samples_workflow_executions_attributes(samples_workflow_executions_attributes)
       result = {}
-      sample_info_list.each_with_index do |sample_info, index|
-        sample = IridaSchema.object_from_id(sample_info['sample_id'], { expected_type: Sample })
-
-        # pass samplesheet params as a flat json structure
-        #
-        # samplesheet_params = { 'sample' => sample.puid }
-        # sample_info['files'].each do |file_info|
-        #   samplesheet_params[file_info['file_type']] = file_info['file_id']
-        # end
-
-        # We expect results to have numbered entries as strings starting with "0", so we use the index
+      samples_workflow_executions_attributes.each_with_index do |data, index|
+        sample_id = IridaSchema.object_from_id(data['sample_id'], { expected_type: Sample }).id
         result[index.to_s] = {
-          'sample_id' => sample.id,
-          'samplesheet_params' => samplesheet_params
+          'sample_id' => sample_id,
+          'samplesheet_params' => data['samplesheet_params']
         }
       end
 
