@@ -211,7 +211,7 @@ class GroupTest < ActiveSupport::TestCase
   end
 
   test 'total samples count should not include shared projects that are children of groups in shared groups' do
-    assert_equal 2, groups(:group_five).aggregated_samples_count
+    assert_equal 2, groups(:group_five).aggregated_samples_count(@user)
   end
 
   test 'update samples_count by sample transfer' do
