@@ -85,9 +85,10 @@ module Samples
                     end
 
       if @namespace.type == 'Group'
-        group_samples_url(@namespace, q: { sort: sort_string })
+        group_samples_url(@namespace, q: { sort: sort_string }, limit: @pagy.limit)
       else
-        namespace_project_samples_url(@namespace.parent, @namespace.project, q: { sort: sort_string })
+        namespace_project_samples_url(@namespace.parent, @namespace.project, q: { sort: sort_string },
+                                                                             limit: @pagy.limit)
       end
     end
 
