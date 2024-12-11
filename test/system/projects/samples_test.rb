@@ -2261,6 +2261,16 @@ module Projects
       ### VERIFY END ###
     end
 
+    test 'can edit a sample field' do
+      visit namespace_project_samples_url(@namespace, @project)
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+
+      within 'tbody' do
+        assert_text @sample1.metadata[@field]
+        click_link I18n.t('projects.samples.show.edit_field_button', field: @field)
+      end
+    end
+
     def long_filter_text
       text = (1..500).map { |n| "sample#{n}" }.join(', ')
       "#{text}, #{@sample1.name}" # Need to comma to force the tag to be created
