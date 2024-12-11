@@ -113,3 +113,9 @@ namespace_group_link19:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
   group_access_level: <%= Member::AccessLevel::ANALYST %>
   namespace_type: "Group"
+
+namespace_group_link20:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid) %>
+  group_access_level: <%= Member::AccessLevel::ANALYST %>
+  namespace_type: "Project"
