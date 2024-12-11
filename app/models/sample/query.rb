@@ -44,7 +44,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
   def sort_samples(scope = Sample.where(project_id: project_ids))
     if column.starts_with? 'metadata_'
       field = column.gsub('metadata_', '')
-      scope.order(Sample.metadata_sort(field, dir))
+      scope.order(Sample.metadata_sort(field, direction))
     else
       scope.order("#{column} #{direction}")
     end
