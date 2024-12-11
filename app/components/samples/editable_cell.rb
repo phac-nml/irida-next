@@ -12,7 +12,7 @@ module Samples
           <%= form.hidden_field :field, value: @field %>
           <%= form.hidden_field :value, value: @value %>
           <%= form.hidden_field :format, value: "turbo_stream" %>
-          <%= form.submit @value, class: "cursor-pointer p-4 hover:bg-primary-50 w-full text-left" %>
+          <%= form.submit @value, class: "cursor-pointer p-4 hover:bg-slate-50 dark:hover:bg-slate-600 w-full text-left" %>
         <% end %>
       </td>
     ERB
