@@ -7,12 +7,11 @@ module Samples
   class TableComponent < Component
     include Ransack::Helpers::FormHelper
 
-    # rubocop:disable Naming/MethodParameterName,Metrics/ParameterLists
+    # rubocop:disable Metrics/ParameterLists
     def initialize(
       samples,
       namespace,
       pagy,
-      q,
       has_samples: true,
       abilities: {},
       metadata_fields: [],
@@ -24,7 +23,6 @@ module Samples
       @samples = samples
       @namespace = namespace
       @pagy = pagy
-      @q = q
       @has_samples = has_samples
       @abilities = abilities
       @metadata_fields = metadata_fields
@@ -34,9 +32,11 @@ module Samples
       @renders_row_actions = @row_actions.select { |_key, value| value }.count.positive?
       @system_arguments = system_arguments
 
+      @sort_key, @sort_direction = search_params[:sort].split
+
       @columns = columns
     end
-    # rubocop:enable Naming/MethodParameterName,Metrics/ParameterLists
+    # rubocop:enable Metrics/ParameterLists
 
     def system_arguments
       { tag: 'div' }.deep_merge(@system_arguments).tap do |args|
@@ -77,11 +77,25 @@ module Samples
       end
     end
 
+    def sort_url(field)
+      sort_string = if field.to_s == @sort_key && @sort_direction == 'asc'
+                      "#{field} desc"
+                    else
+                      "#{field} asc"
+                    end
+
+      if @namespace.type == 'Group'
+        group_samples_url(@namespace, q: { sort: sort_string })
+      else
+        namespace_project_samples_url(@namespace.parent, @namespace.project, q: { sort: sort_string })
+      end
+    end
+
     private
 
     def columns
       columns = %i[puid name]
-      columns << :project if @namespace.type == 'Group'
+      columns << :project_id if @namespace.type == 'Group'
       columns += %i[created_at updated_at attachments_updated_at]
       columns
     end

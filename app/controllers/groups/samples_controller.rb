@@ -7,12 +7,11 @@ module Groups
     include Storable
 
     before_action :group, :current_page
-    before_action :process_samples, only: %i[index search select]
-    include Sortable
+    before_action :query, only: %i[index search select]
 
     def index
       @timestamp = DateTime.current
-      @pagy, @samples = pagy_with_metadata_sort(@q.result)
+      @pagy, @samples = pagy(@query.results)
       @has_samples = authorized_samples.count.positive?
     end
 
@@ -27,7 +26,7 @@ module Groups
       respond_to do |format|
         format.turbo_stream do
           if params[:select].present?
-            @selected_sample_ids = @q.result.where(updated_at: ..params[:timestamp].to_datetime).select(:id).pluck(:id)
+            @selected_sample_ids = @query.results.where(updated_at: ..params[:timestamp].to_datetime).select(:id).pluck(:id)
           end
         end
       end
@@ -37,6 +36,10 @@ module Groups
 
     def group
       @group = Group.find_by_full_path(params[:group_id]) # rubocop:disable Rails/DynamicFindBy
+    end
+
+    def authorized_projects
+      authorized_scope(Project, type: :relation, as: :group_projects, scope_options: { group: @group })
     end
 
     def authorized_samples
@@ -71,20 +74,21 @@ module Groups
       fields_for_namespace(namespace: @group, show_fields: @search_params && @search_params[:metadata].to_i == 1)
     end
 
-    def process_samples
+    def query
       authorize! @group, to: :sample_listing?
+
       @search_params = search_params
       set_metadata_fields
-      query_parser = Irida::SearchSyntax::Ransack.new(text: :name_or_puid_cont, metadata_fields: @fields)
-      @parsed_params = query_parser.parse(@search_params.fetch(:name_or_puid_cont, nil))
-      @q = authorized_samples.ransack(@search_params.except(:name_or_puid_cont).merge(@parsed_params))
+
+      @query = Sample::Query.new(@search_params.except(:metadata).merge({ project_ids: authorized_projects.select(:id) }))
     end
 
     def search_params
       updated_params = update_store(search_key, params[:q].present? ? params[:q].to_unsafe_h : {})
 
-      if updated_params[:metadata].to_i.zero? && updated_params[:s].present? && updated_params[:s].match?(/metadata_/)
-        updated_params[:s] = default_sort
+      if !updated_params.key?(:sort) ||
+         (updated_params[:metadata].to_i.zero? && updated_params[:sort]&.match?(/metadata_/))
+        updated_params[:sort] = 'updated_at desc'
         update_store(search_key, updated_params)
       end
       updated_params

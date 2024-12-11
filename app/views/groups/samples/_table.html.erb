@@ -3,7 +3,6 @@
   samples,
   group,
   pagy,
-  @q,
   has_samples: @has_samples,
   abilities: {
     select_samples:
@@ -11,7 +10,7 @@
         allowed_to?(:export_data?, group),
   },
   metadata_fields: @fields,
-  search_params: @parsed_params,
+  search_params: @search_params,
   empty: {
     title: t(:"groups.samples.table.no_samples"),
     description: t(:"groups.samples.table.no_associated_samples"),
