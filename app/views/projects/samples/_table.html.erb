@@ -3,7 +3,6 @@
   samples,
   project.namespace,
   pagy,
-  @q,
   has_samples: @has_samples,
   abilities: {
     select_samples:
@@ -13,7 +12,7 @@
         allowed_to?(:export_data?, project),
   },
   metadata_fields: @fields,
-  search_params: @parsed_params,
+  search_params: @search_params,
   row_actions: {
     destroy: allowed_to?(:destroy_sample?, project),
     edit: allowed_to?(:update_sample?, project),

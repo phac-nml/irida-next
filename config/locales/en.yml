@@ -1547,7 +1547,7 @@ en:
       limit:
         item: Samples
       name: Sample Name
-      project: Project
+      project_id: Project
       puid: Sample ID
       select_page: Select / Deselect visible samples
       updated_at: Last Updated

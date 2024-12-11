@@ -33,27 +33,15 @@
                     "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
                 <% end %>
 
-                <% if column == :attachments_updated_at %>
-                  <%= render Ransack::SortComponent.new(
-                    ransack_obj: @q,
-                    label: t(".#{column}"),
-                    url: helpers.sorting_url(@q, :attachments_updated_at_nulls_last),
-                    field: :attachments_updated_at_nulls_last,
-                    data: {
-                      turbo_action: "replace",
-                    },
-                  ) %>
-                <% else %>
-                  <%= render Ransack::SortComponent.new(
-                    ransack_obj: @q,
-                    label: t(".#{column}"),
-                    url: helpers.sorting_url(@q, column),
-                    field: column,
-                    data: {
-                      turbo_action: "replace",
-                    },
-                  ) %>
-                <% end %>
+                <%= render SortComponent.new(
+                  sort: @search_params[:sort],
+                  label: t(".#{column}"),
+                  url: sort_url(column),
+                  field: column,
+                  data: {
+                    turbo_action: "replace",
+                  },
+                ) %>
               <% end %>
             <% end %>
             <% @metadata_fields.each do |field| %>
@@ -62,11 +50,10 @@
               scope: 'col',
               classes: class_names('px-3 py-3')
             ) do %>
-                <%= render Ransack::SortComponent.new(
-                  ransack_obj: @q,
+                <%= render SortComponent.new(
+                  sort: @search_params[:sort],
                   label: field,
-                  url:
-                    helpers.sorting_url(@q, URI.encode_www_form_component("metadata_#{field}")),
+                  url: sort_url("metadata_#{field}"),
                   field: "metadata_#{field}",
                   data: {
                     turbo_action: "replace",
@@ -127,7 +114,7 @@
                         ) %>
                       </span>
                     <% end %>
-                  <% elsif column == :project %>
+                  <% elsif column == :project_id %>
                     <%= link_to sample.project.puid,
                     project_samples_path(sample.project),
                     data: {
