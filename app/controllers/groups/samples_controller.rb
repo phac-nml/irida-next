@@ -21,12 +21,12 @@ module Groups
 
     def select
       authorize! @group, to: :sample_listing?
-      @selected_sample_ids = []
+      @sample_ids = []
 
       respond_to do |format|
         format.turbo_stream do
           if params[:select].present?
-            @selected_sample_ids = @query.results.where(updated_at: ..params[:timestamp].to_datetime).select(:id).pluck(:id)
+            @sample_ids = @query.results.where(updated_at: ..params[:timestamp].to_datetime).select(:id).pluck(:id)
           end
         end
       end

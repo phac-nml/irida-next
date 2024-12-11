@@ -78,12 +78,12 @@ module Projects
 
     def select
       authorize! @project, to: :sample_listing?
-      @samples = []
+      @sample_ids = []
 
       respond_to do |format|
         format.turbo_stream do
           if params[:select].present?
-            @samples = @query.results.where(updated_at: ..params[:timestamp].to_datetime).select(:id)
+            @sample_ids = @query.results.where(updated_at: ..params[:timestamp].to_datetime).select(:id).pluck(:id)
           end
         end
       end
