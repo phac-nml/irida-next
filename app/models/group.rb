@@ -102,7 +102,7 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
       shared_projects_ids.push(shared_project_namespace.id)
     end
 
-    shared_project_namespaces.each do |shared_project_namespace|
+    shared_project_namespaces.where.not(id: self_and_descendants_of_type([Namespaces::ProjectNamespace.sti_name]).ids).each do |shared_project_namespace|
       aggregated_samples_count += shared_project_namespace.project.samples.size if not shared_projects_ids.include?(shared_project_namespace.id)
     end
     aggregated_samples_count
