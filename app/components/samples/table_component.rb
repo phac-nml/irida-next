@@ -19,6 +19,7 @@ module Samples
       search_params: {},
       row_actions: {},
       empty: {},
+      check_editable_url: nil,
       **system_arguments
     )
       @samples = samples
@@ -31,6 +32,7 @@ module Samples
       @search_params = search_params
       @row_actions = row_actions
       @empty = empty
+      @check_editable_url = check_editable_url
       @renders_row_actions = @row_actions.select { |_key, value| value }.count.positive?
       @system_arguments = system_arguments
 

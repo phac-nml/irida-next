@@ -79,4 +79,8 @@ class Sample < ApplicationRecord
 
     { singles:, pe_forward:, pe_reverse: }
   end
+
+  def field_editable?(field)
+    metadata_provenance.key?(field) && metadata_provenance[field]['source'] == 'user'
+  end
 end
