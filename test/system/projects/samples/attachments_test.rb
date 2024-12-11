@@ -568,6 +568,41 @@ module Projects
           assert_not all('input[type="checkbox"]')[5].checked?
         end
       end
+
+      test 'delete single attachment with remove link while all attachments selected followed by multiple deletion' do
+        visit namespace_project_sample_url(@namespace, @project, @sample1)
+
+        within('#attachments-table-body') do
+          assert_link text: I18n.t('projects.samples.attachments.attachment.delete'), count: 2
+          all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+          click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
+        end
+
+        within('#dialog') do
+          assert_text I18n.t('projects.samples.attachments.delete_attachment_modal.description')
+          click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
+        end
+
+        assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file_A.fastq')
+        within('#table-listing') do
+          assert_no_text 'test_file_A.fastq'
+          assert_text 'test_file_B.fastq'
+        end
+
+        click_link I18n.t('projects.samples.show.delete_files_button'), match: :first
+
+        within('#dialog') do
+          assert_text 'test_file_B.fastq'
+          assert_no_text 'test_file_A.fastq'
+          click_button I18n.t('projects.samples.attachments.deletions.modal.submit_button')
+        end
+
+        assert_text I18n.t('projects.samples.attachments.deletions.destroy.success')
+        assert_no_text 'test_file_A.fastq'
+        assert_no_text 'test_file_B.fastq'
+        assert_text I18n.t('projects.samples.show.no_files')
+        assert_selector 'a.cursor-not-allowed.pointer-events-none', count: 2
+      end
     end
   end
 end

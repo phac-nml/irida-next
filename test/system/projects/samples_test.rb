@@ -1277,136 +1277,186 @@ module Projects
       end
     end
 
-    test 'should clone multiple samples' do
-      project2 = projects(:project2)
-      visit namespace_project_samples_url(@namespace, @project)
-      within '#samples-table table tbody' do
-        assert_selector 'tr', count: 3
-        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+    test 'should clone samples' do
+      ### setup start ###
+      visit namespace_project_samples_url(@namespace, @project2)
+      # samples 1 and 2 do not exist in project2
+      within('#samples-table table tbody') do
+        assert_no_text @sample1.name
+        assert_no_text @sample2.name
       end
-      click_link I18n.t('projects.samples.index.clone_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
+
+      visit namespace_project_samples_url(@namespace, @project)
+      ### setup end ###
+
+      ### actions start ###
+      # select samples 1 and 2 for cloning
+      within '#samples-table table tbody' do
+        find("input#sample_#{@sample1.id}").click
+        find("input#sample_#{@sample2.id}").click
+      end
+      click_link I18n.t('projects.samples.index.clone_button')
+      within('#dialog') do
+        # plural dialog description since > 1 sample selected
         assert_text I18n.t(
           'projects.samples.clones.dialog.description.plural'
-        ).gsub! 'COUNT_PLACEHOLDER', '3'
-        within %(turbo-frame[id="list_selections"]) do
-          samples = @project.samples.pluck(:puid, :name)
-          samples.each do |sample|
-            assert_text sample[0]
-            assert_text sample[1]
-          end
+        ).gsub! 'COUNT_PLACEHOLDER', '2'
+        within('#list_selections') do
+          assert_text @sample1.puid
+          assert_text @sample1.name
+          assert_text @sample2.puid
+          assert_text @sample2.name
         end
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{project2.full_path}']").click
+        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
+      ### actions end ###
+
+      ### verify start ###
+      # flash msg
       assert_text I18n.t('projects.samples.clones.create.success')
+      # samples still exist within samples table of originating project
+      within('#samples-table table tbody') do
+        assert_text @sample1.name
+        assert_text @sample2.name
+      end
+
+      # samples now exist in project2 samples table
+      visit namespace_project_samples_url(@namespace, @project2)
+      within('#samples-table table tbody') do
+        assert_text @sample1.name
+        assert_text @sample2.name
+      end
+      ### verify end ###
     end
 
-    test 'should clone single sample' do
-      project2 = projects(:project2)
+    test 'singular dialog description' do
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
+      ### setup end ###
+
+      ### actions start ###
       within '#samples-table table tbody' do
-        assert_selector 'tr', count: 3
         all('input[type="checkbox"]')[0].click
       end
-      click_link I18n.t('projects.samples.index.clone_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
+      click_link I18n.t('projects.samples.index.clone_button')
+      ### actions end ###
+
+      ### verify start ###
+      within('#dialog') do
         assert_text I18n.t('projects.samples.clones.dialog.description.singular')
-        within %(turbo-frame[id="list_selections"]) do
-          assert_text @sample1.name
-        end
-        find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{project2.full_path}']").click
-        click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
-      assert_text I18n.t('projects.samples.clones.create.success')
+      ### verify end ###
     end
 
     test 'should not clone samples with session storage cleared' do
-      project2 = projects(:project2)
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
+      ### setup end ###
+
+      ### actions start ###
       within '#samples-table table tbody' do
-        assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
       Capybara.execute_script 'sessionStorage.clear()'
-      click_link I18n.t('projects.samples.index.clone_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
+      click_link I18n.t('projects.samples.index.clone_button')
+      within('#dialog') do
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{project2.full_path}']").click
+        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
-      end
-      within %(turbo-frame[id="samples_dialog"]) do
+        ### actions end ###
+
+        ### verify start ###
         assert_no_selector "turbo-frame[id='list_selections']"
         assert_text I18n.t('projects.samples.clones.create.no_samples_cloned_error')
-        errors = project2.errors.full_messages_for(:base)
-        errors.each { |error| assert_text error }
-        click_on I18n.t('projects.samples.shared.errors.ok_button')
+        assert_text I18n.t('services.samples.clone.empty_sample_ids')
+        ### verify end ###
       end
     end
 
     test 'should not clone some samples' do
+      namespace = groups(:subgroup1)
       project25 = projects(:project25)
+      ### setup start ###
+      visit namespace_project_samples_url(namespace, project25)
+      # samples 1 and 2 do not exist in project25 samples table
+      within('#samples-table table tbody') do
+        assert_no_text @sample1.name
+        assert_no_text @sample2.name
+      end
       visit namespace_project_samples_url(@namespace, @project)
+      ### setup end ###
+
+      ### actions start ###
       within '#samples-table table tbody' do
-        assert_selector 'tr', count: 3
+        # check all samples. sample30 will error due to name collision in project25
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
-      click_link I18n.t('projects.samples.index.clone_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
-        within %(turbo-frame[id="list_selections"]) do
-          samples = @project.samples.pluck(:puid, :name)
-          samples.each do |sample|
-            assert_text sample[0]
-            assert_text sample[1]
-          end
-        end
+      click_link I18n.t('projects.samples.index.clone_button')
+      within('#dialog') do
         find('input#select2-input').click
         find("button[data-viral--select2-primary-param='#{project25.full_path}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
+      ### actions end ###
+
+      ### verify start ###
       within %(turbo-frame[id="samples_dialog"]) do
+        # errors that a sample with the same name as sample30 already exists in project25
         assert_text I18n.t('projects.samples.clones.create.error')
-        errors = @project.errors.full_messages_for(:samples)
-        errors.each { |error| assert_text error }
+        assert_text I18n.t('services.samples.clone.sample_exists', sample_puid: @sample30.puid,
+                                                                   sample_name: @sample30.name).gsub(':', '')
         click_on I18n.t('projects.samples.shared.errors.ok_button')
       end
+
+      visit namespace_project_samples_url(namespace, project25)
+      # samples 1 and 2 still successfully clone
+      within('#samples-table table tbody') do
+        assert_text @sample1.name
+        assert_text @sample2.name
+      end
+      ### verify end ###
     end
 
-    test 'empty state of clone sample project selection' do
+    test 'empty state of destination project selection for sample cloning' do
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
+      ### setup end ###
+
+      ### actions start ####
       within '#samples-table table tbody' do
-        assert_selector 'tr', count: 3
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
-      click_link I18n.t('projects.samples.index.clone_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
-        within %(turbo-frame[id="list_selections"]) do
-          samples = @project.samples.pluck(:puid, :name)
-          samples.each do |sample|
-            assert_text sample[0]
-            assert_text sample[1]
-          end
-        end
+      click_link I18n.t('projects.samples.index.clone_button')
+      within('#dialog') do
         find('input#select2-input').fill_in with: 'invalid project name or puid'
+        ### actions end ###
+
+        ### verify start ###
         assert_text I18n.t('projects.samples.clones.dialog.empty_state')
+        ### verify end ###
       end
     end
 
     test 'no available destination projects to clone samples' do
+      ### setup start ###
       sign_in users(:jean_doe)
-      namespace = namespaces_user_namespaces(:john_doe_namespace)
-      project = projects(:john_doe_project2)
-      Project.reset_counters(project.id, :samples_count)
-      visit namespace_project_samples_url(namespace, project)
+      visit namespace_project_samples_url(namespaces_user_namespaces(:john_doe_namespace), projects(:john_doe_project2))
+      ### setup end ###
+
+      ### actions start ###
       within '#samples-table table tbody' do
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
-      click_link I18n.t('projects.samples.index.clone_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
+      click_link I18n.t('projects.samples.index.clone_button')
+      ### actions end ###
+
+      ### verify start ###
+      within('#dialog') do
         assert "input[placeholder='#{I18n.t('projects.samples.clones.dialog.no_available_projects')}']"
       end
+      ### verify end ###
     end
 
     test 'filtering samples by list of sample puids' do
@@ -1678,41 +1728,6 @@ module Projects
 
       assert_selector 'a.cursor-not-allowed.pointer-events-none', count: 4
       assert_selector 'button.cursor-not-allowed.pointer-events-none', count: 1
-    end
-
-    test 'delete single attachment with remove link while all attachments selected followed by multiple deletion' do
-      visit namespace_project_sample_url(@namespace, @project, @sample1)
-
-      within('#attachments-table-body') do
-        assert_link text: I18n.t('projects.samples.attachments.attachment.delete'), count: 2
-        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
-        click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
-      end
-
-      within('#dialog') do
-        assert_text I18n.t('projects.samples.attachments.delete_attachment_modal.description')
-        click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
-      end
-
-      assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file_A.fastq')
-      within('#table-listing') do
-        assert_no_text 'test_file_A.fastq'
-        assert_text 'test_file_B.fastq'
-      end
-
-      click_link I18n.t('projects.samples.show.delete_files_button'), match: :first
-
-      within('#dialog') do
-        assert_text 'test_file_B.fastq'
-        assert_no_text 'test_file_A.fastq'
-        click_button I18n.t('projects.samples.attachments.deletions.modal.submit_button')
-      end
-
-      assert_text I18n.t('projects.samples.attachments.deletions.destroy.success')
-      assert_no_text 'test_file_A.fastq'
-      assert_no_text 'test_file_B.fastq'
-      assert_text I18n.t('projects.samples.show.no_files')
-      assert_selector 'a.cursor-not-allowed.pointer-events-none', count: 2
     end
 
     test 'can filter by large list of sample names or ids' do
