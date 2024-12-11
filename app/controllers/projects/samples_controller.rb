@@ -113,7 +113,17 @@ module Projects
       @value = params[:value]
       @original_value = params[:original_value]
 
-      @sample.update(metadata: { @field => @value }) if @value != @original_value
+      updated_fields = ::Samples::Metadata::Fields::UpdateService.new(@project, @sample, current_user,
+                                                                      {
+                                                                        'update_field' => {
+                                                                          'key' => {
+                                                                            @field => @field
+                                                                          },
+                                                                          'value' => {
+                                                                            @original_value => @value
+                                                                          }
+                                                                        }
+                                                                      }).execute
 
       render turbo_stream: turbo_stream.replace(
         helpers.dom_id(@sample, @field),
