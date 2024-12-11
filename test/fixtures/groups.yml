@@ -75,7 +75,7 @@ group_five:
   path: group-5
   description: Group 5 description
   puid: INXT_GRP_AAAAAAAAAG
-  samples_count: 0
+  samples_count: 2
 
 subgroup_one_group_five:
   <<: *DEFAULTS

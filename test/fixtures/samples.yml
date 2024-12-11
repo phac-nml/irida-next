@@ -364,3 +364,21 @@ bulk_sample<%= (n) %>:
   created_at: <%= n.weeks.ago %>
   updated_at: <%= n.days.ago %>
 <% end %>
+
+sample47:
+  name: Sample 47
+  description: Sample 47 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project22, :uuid) %>
+  puid: INXT_SAM_AAAAAAAABW
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
+
+sample48:
+  name: Sample 48
+  description: Sample 48 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:project22, :uuid) %>
+  puid: INXT_SAM_AAAAAAAABX
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
