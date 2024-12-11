@@ -142,8 +142,9 @@
                   <%= form_with(url: @check_editable_url, method: :get) do |form| %>
                     <%= form.hidden_field :id, value: sample.id %>
                     <%= form.hidden_field :field, value: field %>
+                    <%= form.hidden_field :value, value: sample.metadata[field] %>
+                    <%= form.hidden_field :format, value: "turbo_stream" %>
                     <%= form.submit sample.metadata[field], class: "cursor-pointer p-4" %>
-                    <input type="hidden" name="format" value="turbo_stream"/>
                   <% end %>
                 <% end %>
               <% end %>
