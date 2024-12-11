@@ -135,9 +135,16 @@
               <% @metadata_fields.each do |field| %>
                 <%= render_cell(
                 tag: 'td',
-                classes: class_names('px-3 py-3')
+                id: dom_id(sample, field),
+
+
               ) do %>
-                  <%= sample.metadata[field] %>
+                  <%= form_with(url: @check_editable_url, method: :get) do |form| %>
+                    <%= form.hidden_field :id, value: sample.id %>
+                    <%= form.hidden_field :field, value: field %>
+                    <%= form.submit sample.metadata[field], class: "cursor-pointer p-4" %>
+                    <input type="hidden" name="format" value="turbo_stream"/>
+                  <% end %>
                 <% end %>
               <% end %>
               <% if @renders_row_actions %>
@@ -199,7 +206,7 @@
                   >0</strong>
                 </span>
               </td>
-              <td colspan="100%" class="px-3 py-3 bg-slate-50 dark:bg-slate-700"></td>
+              <td colspan="100%" class="p-3 bg-slate-50 dark:bg-slate-700"></td>
             </tr>
           </tfoot>
         <% end %>
