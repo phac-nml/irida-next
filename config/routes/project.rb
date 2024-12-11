@@ -61,6 +61,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
           get :select
           post :list
           post :search
+          get :check_editable
         end
         resources :attachments, module: :samples, only: %i[new create destroy] do
           scope module: :attachments, as: :attachments do
