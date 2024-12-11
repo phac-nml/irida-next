@@ -89,6 +89,23 @@ module Projects
       end
     end
 
+    def check_editable
+      @sample = Sample.find(params[:id])
+      @field = params[:field]
+
+      if @sample.field_editable?(@field)
+        render turbo_stream: turbo_stream.replace(
+          helpers.dom_id(@sample, @field),
+          partial: 'samples/edit_field_form',
+          locals: { sample: @sample, field: @field }
+        )
+      else
+        render turbo_stream: turbo_stream.append('flash',
+                                                 partial: 'shared/alert',
+                                                 locals: { message: 'This field is not editable' })
+      end
+    end
+
     private
 
     def sample
