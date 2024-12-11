@@ -107,3 +107,9 @@ namespace_group_link18:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   group_access_level: <%= Member::AccessLevel::ANALYST %>
   namespace_type: "Project"
+
+namespace_group_link19:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
+  group_access_level: <%= Member::AccessLevel::ANALYST %>
+  namespace_type: "Group"
