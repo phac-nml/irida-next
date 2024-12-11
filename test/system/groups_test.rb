@@ -592,11 +592,10 @@ class GroupsTest < ApplicationSystemTestCase
 
     click_on I18n.t(:'groups.show.tabs.shared_namespaces')
 
-    aggregated_samples_count = subgroup1.aggregated_samples_count(@user)
-    assert_equal 3, aggregated_samples_count
+    assert_equal 3, subgroup1.aggregated_samples_count
 
     within("#group_#{subgroup1.id}-samples-count") do
-      assert_text aggregated_samples_count
+      assert_text subgroup1.aggregated_samples_count
     end
   end
 end
