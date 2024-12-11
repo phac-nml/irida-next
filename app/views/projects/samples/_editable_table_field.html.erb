@@ -1,0 +1,9 @@
+<%= render Samples::EditableCell.new(
+  field: @field,
+  sample: @sample,
+  check_editable_url:
+    check_editable_namespace_project_samples_path(
+      @sample.project.namespace.parent,
+      @sample.project,
+    ),
+) %>

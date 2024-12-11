@@ -114,6 +114,12 @@ module Projects
       @original_value = params[:original_value]
 
       @sample.update(metadata: { @field => @value }) if @value != @original_value
+
+      render turbo_stream: turbo_stream.replace(
+        helpers.dom_id(@sample, @field),
+        partial: 'editable_table_field',
+        locals: { sample: @sample, field: @field, value: @value }
+      )
     end
 
     private
