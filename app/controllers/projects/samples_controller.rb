@@ -108,51 +108,23 @@ module Projects
     end
 
     def update_field
-      set_field_variables
-      update_sample_field
-
-      if @sample.errors.any?
-        render_error_response
-      else
-        render_success_response
-      end
-    end
-
-    private
-
-    def set_field_variables
       @sample = Sample.find(params[:id])
       @field = params[:field]
       @value = params[:value]
       @original_value = params[:original_value]
-    end
 
-    def update_sample_field
-      ::Samples::Metadata::Fields::UpdateService.new(
-        @project,
-        @sample,
-        current_user,
-        update_field_params
-      ).execute
-    end
+      updated_fields = ::Samples::Metadata::Fields::UpdateService.new(@project, @sample, current_user,
+                                                                      {
+                                                                        'update_field' => {
+                                                                          'key' => {
+                                                                            @field => @field
+                                                                          },
+                                                                          'value' => {
+                                                                            @original_value => @value
+                                                                          }
+                                                                        }
+                                                                      }).execute
 
-    def update_field_params
-      {
-        'update_field' => {
-          'key' => { @field => @field },
-          'value' => { @original_value => @value }
-        }
-      }
-    end
-
-    def render_error_response
-      render status: :unprocessable_entity, locals: {
-        type: 'error',
-        message: @sample.errors.full_messages.first
-      }
-    end
-
-    def render_success_response
       render turbo_stream: turbo_stream.replace(
         helpers.dom_id(@sample, @field),
         partial: 'editable_table_field',
