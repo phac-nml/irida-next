@@ -255,11 +255,10 @@ module Dashboard
 
       assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
 
-      aggregated_samples_count = subgroup1.aggregated_samples_count(@user)
-      assert_equal 3, aggregated_samples_count
+      assert_equal 3, group.aggregated_samples_count
 
       within("#group_#{group.id}-samples-count") do
-        assert_text aggregated_samples_count
+        assert_text group.aggregated_samples_count
       end
     end
   end
