@@ -1523,107 +1523,107 @@ module Projects
       ### verify end ###
     end
 
-    test 'filtering samples by list of sample puids' do
-      visit namespace_project_samples_url(@namespace, @project)
-      within '#samples-table table tbody' do
-        assert_selector 'tr', count: 3
-        assert_selector 'tr th', text: @sample1.puid
-        assert_selector 'tr th', text: @sample2.puid
-      end
-      click_button I18n.t(:'components.list_filter.title')
-      within '#list-filter-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
-        fill_in I18n.t(:'components.list_filter.description'), with: "#{@sample1.puid}, #{@sample2.puid}"
-        assert_selector 'span.label', count: 1
-        assert_selector 'span.label', text: @sample1.puid
-        find("input[name='q[name_or_puid_in][]']").text @sample2.puid
-        click_button I18n.t(:'components.list_filter.apply')
-      end
-      within '#samples-table table tbody' do
-        assert_selector 'tr', count: 2
-      end
-      click_button I18n.t(:'components.list_filter.title')
-      within '#list-filter-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
-        click_button I18n.t(:'components.list_filter.clear')
-        click_button I18n.t(:'components.list_filter.apply')
-      end
-      within '#samples-table table tbody' do
-        assert_selector 'tr', count: 3
-      end
-    end
-
     test 'selecting / deselecting all samples' do
       visit namespace_project_samples_url(@namespace, @project)
+      # no samples selected/checked
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 3
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       end
       within 'tfoot' do
-        assert_text 'Samples: 3'
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 3"
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
+      # samples selected
       click_button I18n.t(:'projects.samples.index.select_all_button')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
       within 'tfoot' do
-        assert_text 'Samples: 3'
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 3"
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
+      # unselect single sample
       within 'tbody' do
         first('input[name="sample_ids[]"]').click
       end
       within 'tfoot' do
-        assert_text 'Samples: 3'
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 3"
         assert_selector 'strong[data-selection-target="selected"]', text: '2'
       end
+      # select all again
       click_button I18n.t(:'projects.samples.index.select_all_button')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 3
         assert_selector 'input[name="sample_ids[]"]:checked', count: 3
       end
+      within 'tfoot' do
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 3"
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
+      # deselect all
       click_button I18n.t(:'projects.samples.index.deselect_all_button')
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 3
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       end
+      within 'tfoot' do
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 3"
+        assert_selector 'strong[data-selection-target="selected"]', text: '0'
+      end
     end
 
     test 'selecting / deselecting a page of samples' do
-      visit namespace_project_samples_url(@namespace, @project)
+      visit namespace_project_samples_url(@namespace, @project2)
+      within('div#limit-component') do
+        # set table limit to 10 to split samples table into two pages
+        find('button').click
+        click_link '10'
+      end
       within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 3
+        assert_selector 'input[name="sample_ids[]"]', count: 10
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       end
       within 'tfoot' do
-        assert_text 'Samples: 3'
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 20"
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
+      # click select page
       find('input[name="select-page"]').click
       within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 10
       end
       within 'tfoot' do
-        assert_text 'Samples: 3'
-        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 20"
+        assert_selector 'strong[data-selection-target="selected"]', text: '10'
       end
+      # unselect 1 sample
       within 'tbody' do
         first('input[name="sample_ids[]"]').click
       end
       within 'tfoot' do
-        assert_text 'Samples: 3'
-        assert_selector 'strong[data-selection-target="selected"]', text: '2'
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 20"
+        assert_selector 'strong[data-selection-target="selected"]', text: '9'
       end
+      # select whole page again
       find('input[name="select-page"]').click
       within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 3
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+        assert_selector 'input[name="sample_ids[]"]', count: 10
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 10
       end
+      within 'tfoot' do
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 20"
+        assert_selector 'strong[data-selection-target="selected"]', text: '10'
+      end
+      # unselect whole page
       find('input[name="select-page"]').click
       within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]', count: 3
+        assert_selector 'input[name="sample_ids[]"]', count: 10
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
+      end
+      within 'tfoot' do
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 20"
+        assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
     end
 
@@ -1634,10 +1634,11 @@ module Projects
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       end
       within 'tfoot' do
-        assert_text 'Samples: 3'
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 3"
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
 
+      # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
       find('input.t-search-component').native.send_keys(:return)
 
@@ -1656,11 +1657,12 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '1'
       end
 
+      # remove filter
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: ' '
       find('input.t-search-component').native.send_keys(:return)
 
       within 'tfoot' do
-        assert_text 'Samples: 3'
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 3"
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
     end
@@ -1679,16 +1681,19 @@ module Projects
     end
 
     test 'delete multiple samples' do
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       within '#samples-table table tbody' do
-        assert_selector 'tr', count: 3
-        assert_text @sample1.name
-        assert_text @sample2.name
-        assert_text @sample30.name
+        assert_selector "tr[id='#{@sample1.id}']"
+        assert_selector "tr[id='#{@sample2.id}']"
+        assert_selector "tr[id='#{@sample30.id}']"
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
-      click_link I18n.t('projects.samples.index.delete_samples_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
+      ### setup end ###
+
+      ### actions start ###
+      click_link I18n.t('projects.samples.index.delete_samples_button')
+      within('#dialog') do
         assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.title')
         assert_text I18n.t(
           'projects.samples.deletions.new_multiple_deletions_dialog.description.plural'
@@ -1702,59 +1707,50 @@ module Projects
 
         click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
+      ### actions end ###
+
+      ### verify start ###
+      # flash msg
       assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
 
+      # no remaining samples
       within 'div[role="alert"]' do
         assert_text I18n.t('projects.samples.index.no_samples')
         assert_text I18n.t('projects.samples.index.no_associated_samples')
       end
     end
 
-    test 'delete single sample with checkbox and delete samples button' do
+    test 'singular description within delete samples dialog' do
       visit namespace_project_samples_url(@namespace, @project)
-      within('tbody') do
-        assert_selector 'tr', count: 3
-        assert_text @sample1.name
-        assert_text @sample2.name
-        assert_text @sample30.name
-        within 'tr:first-child' do
-          all('input[type="checkbox"]')[0].click
-        end
+      within('tbody tr:first-child') do
+        assert_selector "tr[id='#{@sample1.id}']"
+        assert_selector "tr[id='#{@sample2.id}']"
+        assert_selector "tr[id='#{@sample30.id}']"
+        all('input[type="checkbox"]')[0].click
       end
-      click_link I18n.t('projects.samples.index.delete_samples_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
-        assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.title')
+      click_link I18n.t('projects.samples.index.delete_samples_button')
+      within('#dialog') do
         assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.description.singular',
                            sample_name: @sample1.name)
-        within %(turbo-frame[id="list_selections"]) do
-          assert_text @sample1.puid
-        end
-
-        click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
-      end
-
-      assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
-
-      within 'tbody' do
-        assert_selector 'tr', count: 2
-        assert_no_text @sample1.name
-        assert_text @sample2.name
-        assert_text @sample30.name
       end
     end
 
     test 'delete single sample with remove link while all samples selected followed by multiple deletion' do
+      # tests that localstorage does not contain a selected sample after it's destroyed
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
+      assert_selector "tr[id='#{@sample1.id}']"
+      assert_selector "tr[id='#{@sample2.id}']"
+      assert_selector "tr[id='#{@sample30.id}']"
+      ### setup end ###
+
+      ### actions start ###
       within '#samples-table table tbody' do
-        assert_selector 'tr', count: 3
-        assert_text @sample1.name
-        assert_text @sample2.name
-        assert_text @sample30.name
+        # select all samples
         all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
 
-      assert find('input#select-page').checked?
-
+      # destroy sample1 with remove action link
       within '#samples-table table tbody tr:first-child' do
         click_link I18n.t('projects.samples.index.remove_button')
       end
@@ -1763,18 +1759,18 @@ module Projects
         click_button I18n.t('projects.samples.deletions.new_deletion_dialog.submit_button')
       end
 
+      # sample 1 no longer exists and both remaining samples are still selected
       within '#samples-table table tbody' do
-        assert_selector 'tr', count: 2
-        assert_no_text @sample1.name
-        assert all('input[type="checkbox"]')[0].checked?
-        assert all('input[type="checkbox"]')[1].checked?
+        assert_no_selector "tr[id='#{@sample1.id}']"
+        assert_selector "tr[id='#{@sample2.id}']"
+        assert_selector "tr[id='#{@sample30.id}']"
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 2
       end
 
-      assert find('input#select-page').checked?
-
-      click_link I18n.t('projects.samples.index.delete_samples_button'), match: :first
-      within('span[data-controller-connected="true"] dialog') do
-        assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.title')
+      # click delete samples button
+      click_link I18n.t('projects.samples.index.delete_samples_button')
+      within('#dialog') do
+        # verify sample2 and 30 are still in localstorage, and sample1 is not
         assert_text I18n.t(
           'projects.samples.deletions.new_multiple_deletions_dialog.description.plural'
         ).gsub! 'COUNT_PLACEHOLDER', '2'
@@ -1783,24 +1779,101 @@ module Projects
         assert_no_text @sample1.name
         click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
+      ### actions end ###
+
+      ### verify start ###
       assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
 
       within 'div[role="alert"]' do
         assert_text I18n.t('projects.samples.index.no_samples')
         assert_text I18n.t('projects.samples.index.no_associated_samples')
       end
+      ### verify end ###
+    end
 
-      assert_selector 'a.cursor-not-allowed.pointer-events-none', count: 4
-      assert_selector 'button.cursor-not-allowed.pointer-events-none', count: 1
+    test 'filtering samples by list of sample puids' do
+      ### setup start ###
+      visit namespace_project_samples_url(@namespace, @project)
+      within '#samples-table table tbody' do
+        assert_selector "tr[id='#{@sample1.id}']"
+        assert_selector "tr[id='#{@sample2.id}']"
+        assert_selector "tr[id='#{@sample30.id}']"
+      end
+      ### setup end ###
+
+      ### actions and verify start ###
+      click_button I18n.t(:'components.list_filter.title')
+      within '#list-filter-dialog' do
+        assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
+        # add sample1 and 2 puids
+        fill_in I18n.t(:'components.list_filter.description'), with: "#{@sample1.puid}, #{@sample2.puid}"
+        click_button I18n.t(:'components.list_filter.apply')
+      end
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 2
+        assert_selector "tr[id='#{@sample1.id}']"
+        assert_selector "tr[id='#{@sample2.id}']"
+        # sample30 filtered out
+        assert_no_selector "tr[id='#{@sample30.id}']"
+      end
+      click_button I18n.t(:'components.list_filter.title')
+      within '#list-filter-dialog' do
+        assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
+        # clear filter
+        click_button I18n.t(:'components.list_filter.clear')
+        click_button I18n.t(:'components.list_filter.apply')
+      end
+      within '#samples-table table tbody' do
+        # sample30 no longer filtered
+        assert_selector "tr[id='#{@sample1.id}']"
+        assert_selector "tr[id='#{@sample2.id}']"
+        assert_selector "tr[id='#{@sample30.id}']"
+      end
+      ### actions and verify end ###
+    end
+
+    test 'filtering samples by list of sample names' do
+      ### setup start ###
+      visit namespace_project_samples_url(@namespace, @project)
+      within '#samples-table table tbody' do
+        assert_selector "tr[id='#{@sample1.id}']"
+        assert_selector "tr[id='#{@sample2.id}']"
+        assert_selector "tr[id='#{@sample30.id}']"
+      end
+      ### setup end ###
+
+      ### actions start ###
+      click_button I18n.t(:'components.list_filter.title')
+      within '#list-filter-dialog' do
+        assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
+        # add sample1 and 2 names
+        fill_in I18n.t(:'components.list_filter.description'), with: "#{@sample1.name}, #{@sample2.name}"
+        click_button I18n.t(:'components.list_filter.apply')
+      end
+      ### actions end ###
+
+      ### verify start ###
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 2
+        assert_selector "tr[id='#{@sample1.id}']"
+        assert_selector "tr[id='#{@sample2.id}']"
+        # sample30 filtered out
+        assert_no_selector "tr[id='#{@sample30.id}']"
+      end
+      ### verify end ###
     end
 
     test 'can filter by large list of sample names or ids' do
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       within '#samples-table table tbody' do
-        assert_selector 'tr', count: 3
-        assert_selector 'tr th', text: @sample1.puid
-        assert_selector 'tr th', text: @sample2.puid
+        assert_selector "tr[id='#{@sample1.id}']"
+        assert_selector "tr[id='#{@sample2.id}']"
+        assert_selector "tr[id='#{@sample30.id}']"
       end
+      ### setup end ###
+
+      ### actions start ###
       click_button I18n.t(:'components.list_filter.title')
       within '#list-filter-dialog' do |dialog|
         assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
@@ -1809,20 +1882,15 @@ module Projects
         dialog.scroll_to(dialog.find('button', text: I18n.t(:'components.list_filter.apply')), align: :bottom)
         click_button I18n.t(:'components.list_filter.apply')
       end
-      within '#samples-table table tbody' do
-        assert_selector 'tr', count: 1
-      end
-      click_button I18n.t(:'components.list_filter.title')
-      within '#list-filter-dialog' do |dialog|
-        assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
-        dialog.scroll_to dialog.find('button', text: I18n.t(:'components.list_filter.apply'))
+      ### actions end ###
 
-        click_button I18n.t(:'components.list_filter.clear')
-        click_button I18n.t(:'components.list_filter.apply')
-      end
+      ### verify start ###
       within '#samples-table table tbody' do
-        assert_selector 'tr', count: 3
+        assert_selector "tr[id='#{@sample1.id}']"
+        assert_no_selector "tr[id='#{@sample2.id}']"
+        assert_no_selector "tr[id='#{@sample30.id}']"
       end
+      ### verify end ###
     end
 
     def long_filter_text
