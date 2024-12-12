@@ -5,6 +5,8 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
   include ActiveModel::Model
   include ActiveModel::Attributes
 
+  ResultTypeError = Class.new(StandardError)
+
   attribute :column, :string
   attribute :direction, :string
   attribute :name_or_puid_cont, :string
@@ -27,6 +29,21 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
     assign_attributes(column:, direction:)
   end
 
+  def results(type = :ransack)
+    case type
+    when :ransack
+      ransack_results
+    when :searchkick
+      searchkick_results
+    when :searchkick_pagy
+      searchkick_pagy_results
+    else
+      raise ResultTypeError, "Unrecognized type: #{type}"
+    end
+  end
+
+  private
+
   def ransack_results
     return Sample.none unless valid?
 
@@ -44,8 +61,6 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
 
     Sample.search(name_or_puid_cont.presence || '*', **searchkick_kwargs)
   end
-
-  private
 
   def searchkick_kwargs
     { fields: [{ name: :text_middle }, { puid: :text_middle }],
