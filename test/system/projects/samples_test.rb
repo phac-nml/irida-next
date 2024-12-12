@@ -713,13 +713,12 @@ module Projects
 
       assert_selector 'table thead th:nth-child(5) svg.icon-arrow_down'
       within('#samples-table table tbody') do
-        # order does not change as sample1 is the only sample with attachments_updated_at
-        assert_selector 'tr:first-child th', text: @sample1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
-        assert_selector 'tr:nth-child(2) th', text: @sample2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-        assert_selector 'tr:last-child th', text: @sample30.puid
-        assert_selector 'tr:last-child td:nth-child(2)', text: @sample30.name
+        assert_selector 'tr:first-child th', text: @sample2.puid
+        assert_selector 'tr:first-child td:nth-child(2)', text: @sample2.name
+        assert_selector 'tr:nth-child(2) th', text: @sample3.puid
+        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample3.name
+        assert_selector 'tr:last-child th', text: @sample1.puid
+        assert_selector 'tr:last-child td:nth-child(2)', text: @sample1.name
       end
       ### action and verify end ###
     end
@@ -1742,18 +1741,24 @@ module Projects
     end
 
     test 'singular description within delete samples dialog' do
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
+      ### setup end ###
+
+      ### actions start ###
       within('tbody tr:first-child') do
-        assert_selector "tr[id='#{@sample1.id}']"
-        assert_selector "tr[id='#{@sample2.id}']"
-        assert_selector "tr[id='#{@sample30.id}']"
+        # select sample1
         all('input[type="checkbox"]')[0].click
       end
       click_link I18n.t('projects.samples.index.delete_samples_button')
+      ### actions end ###
+
+      ### verify start ###
       within('#dialog') do
         assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.description.singular',
                            sample_name: @sample1.name)
       end
+      ### verify end ###
     end
 
     test 'delete single sample with remove link while all samples selected followed by multiple deletion' do
