@@ -46,7 +46,7 @@ module Projects
             assert_selector 'th:first-child', text: @sample1.puid
             assert_selector 'td:nth-child(2)', text: @sample1.name
             assert_selector 'td:nth-child(3)', text: I18n.l(@sample1.created_at.localtime, format: :full_date)
-            # assert_selector 'td:nth-child(4)', text: "yesterday at #{Time.now.strftime('%-I:%M%P')}"
+            assert_selector 'td:nth-child(4)', text: '3 hours ago'
             assert_selector 'td:nth-child(5)', text: '2 hours ago'
             # actions tested by role in separate test
           end
@@ -595,6 +595,7 @@ module Projects
       within('tbody tr:first-child th') do
         assert_text @sample1.puid
       end
+      # sort by name
       click_on I18n.t('samples.table_component.name')
 
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
@@ -607,6 +608,7 @@ module Projects
         assert_selector 'tr:last-child td:nth-child(2)', text: @sample30.name
       end
 
+      # change name sort direction
       click_on I18n.t('samples.table_component.name')
 
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
@@ -622,6 +624,7 @@ module Projects
     end
 
     test 'sort samples attachments_updated_at_nulls_last' do
+      # attachments_updated_at_nulls_last sorts null data together
       ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
 
@@ -633,6 +636,7 @@ module Projects
       within('tbody tr:first-child th') do
         assert_text @sample1.puid
       end
+      # sort by attachments_updated_at
       click_on I18n.t('samples.table_component.attachments_updated_at')
 
       assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
@@ -645,14 +649,15 @@ module Projects
         assert_selector 'tr:last-child td:nth-child(2)', text: @sample30.name
       end
 
+      # change sort direction
       click_on I18n.t('samples.table_component.attachments_updated_at')
 
       assert_selector 'table thead th:nth-child(5) svg.icon-arrow_down'
       within('#samples-table table tbody') do
         assert_selector 'tr:first-child th', text: @sample2.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample2.name
-        assert_selector 'tr:nth-child(2) th', text: @sample3.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample3.name
+        assert_selector 'tr:nth-child(2) th', text: @sample30.puid
+        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample30.name
         assert_selector 'tr:last-child th', text: @sample1.puid
         assert_selector 'tr:last-child td:nth-child(2)', text: @sample1.name
       end
