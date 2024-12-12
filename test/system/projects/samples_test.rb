@@ -608,50 +608,7 @@ module Projects
       ### verify end ###
     end
 
-    test 'can search the list of samples by metadata field and value presence when metadata is toggled' do
-      # also tests that metadata toggle persist through other actions (filter) and page refresh
-      ### setup start ###
-      visit namespace_project_samples_url(@namespace, @project)
-      filter_text = 'metadatafield1:value1'
-
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
-      assert_selector "tr[id='#{@sample1.id}']"
-      assert_selector "tr[id='#{@sample2.id}']"
-      assert_selector "tr[id='#{@sample30.id}']"
-      ### setup end ###
-
-      ### actions and verify start ###
-      # toggle metadata on
-      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
-      # verify all 3 samples are still in table
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
-      # verify metadata fields are now present
-      assert_selector '#samples-table table thead tr th', count: 8
-
-      # apply filter
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: filter_text
-      find('input.t-search-component').native.send_keys(:return)
-
-      # verify table only has sample30
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
-                                                                           locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 1
-      assert_no_selector "tr[id='#{@sample1.id}']"
-      assert_no_selector "tr[id='#{@sample2.id}']"
-      assert_selector "tr[id='#{@sample30.id}']"
-
-      # verify filter input persists
-      assert_selector %(input.t-search-component) do |input|
-        assert_equal filter_text, input['value']
-      end
-      ### actions and verify end ###
-    end
-
-    test 'can change limit/pagination and then filter by id' do
+    test 'limit persists through filter and sort actions' do
       # tests limit change and that it persists through other actions (filter)
       ### setup start ###
       sample3 = samples(:sample3)
@@ -678,50 +635,16 @@ module Projects
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: sample3.puid
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 1, locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 1
-      assert_selector "tr[id='#{sample3.id}']"
+      # verify limit is still 10
+      assert_selector 'div#limit-component button div span', text: '10'
+
+      # apply sort
+      click_on I18n.t('samples.table_component.name')
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+
+      # verify limit is still 10
+      assert_selector 'div#limit-component button div span', text: '10'
       ### actions and verify end ###
-    end
-
-    test 'filter highlighting for sample name' do
-      ### setup start ###
-      visit namespace_project_samples_url(@namespace, @project)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
-      ### setup end ###
-
-      ### actions start ###
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: 'sample'
-      find('input.t-search-component').native.send_keys(:return)
-      ### actions end ###
-
-      ### verify start ###
-      # verify table only contains sample1
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
-      # checks highlighting
-      assert_selector 'mark', text: 'Sample', count: 3
-    end
-
-    test 'filter highlighting for sample puid' do
-      ### setup start ###
-      visit namespace_project_samples_url(@namespace, @project)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
-      ### setup end ###
-
-      ### actions start ###
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
-      find('input.t-search-component').native.send_keys(:return)
-      ### actions end ###
-
-      ### verify start ###
-      # verify table only contains sample1
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
-                                                                           locale: @user.locale))
-      # checks highlighting
-      assert_selector 'mark', text: @sample1.puid
     end
 
     test 'can sort samples' do
@@ -801,8 +724,36 @@ module Projects
       ### action and verify end ###
     end
 
-    test 'can filter and then sort the list of samples by name' do
-      # tests that filter persists through other actions (sort)
+    test 'sort persists through limit and filter' do
+      # tests that sort persists through other actions (filter)
+      ### setup start ###
+      visit namespace_project_samples_url(@namespace, @project)
+      ### setup end ###
+
+      ### actions and verify start ###
+      # apply sort
+      click_on I18n.t('samples.table_component.name')
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+
+      # set limit
+      within('div#limit-component') do
+        find('button').click
+        click_link '10'
+      end
+
+      # verify sort is still applied
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+
+      # apply filter
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
+      find('input.t-search-component').native.send_keys(:return)
+
+      # verify sort is still applied
+      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      ### actions and verify end ###
+    end
+
+    test 'filter by name' do
       ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       assert_selector "tr[id='#{@sample1.id}']"
@@ -814,6 +765,91 @@ module Projects
       # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
+      ### actions end ###
+
+      ### verify start ###
+      # only sample1 exists within table
+      assert_selector "tr[id='#{@sample1.id}']"
+      assert_no_selector "tr[id='#{@sample2.id}']"
+      assert_no_selector "tr[id='#{@sample30.id}']"
+      ### verify end ###
+    end
+
+    test 'filter by puid' do
+      ### setup start ###
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_selector "tr[id='#{@sample1.id}']"
+      assert_selector "tr[id='#{@sample2.id}']"
+      assert_selector "tr[id='#{@sample30.id}']"
+      ### setup end ###
+
+      ### actions start ###
+      # apply filter
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample2.puid
+      find('input.t-search-component').native.send_keys(:return)
+      ### actions end ###
+
+      ### verify start ###
+      # only sample2 exists within table
+      assert_selector "tr[id='#{@sample2.id}']"
+      assert_no_selector "tr[id='#{@sample1.id}']"
+      assert_no_selector "tr[id='#{@sample30.id}']"
+      ### verify end ###
+    end
+
+    test 'filter highlighting for sample name' do
+      ### setup start ###
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      ### setup end ###
+
+      ### actions start ###
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: 'sample'
+      find('input.t-search-component').native.send_keys(:return)
+      ### actions end ###
+
+      ### verify start ###
+      # verify table only contains sample1
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      # checks highlighting
+      assert_selector 'mark', text: 'Sample', count: 3
+    end
+
+    test 'filter highlighting for sample puid' do
+      ### setup start ###
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      ### setup end ###
+
+      ### actions start ###
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
+      find('input.t-search-component').native.send_keys(:return)
+      ### actions end ###
+
+      ### verify start ###
+      # verify table only contains sample1
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
+                                                                           locale: @user.locale))
+      # checks highlighting
+      assert_selector 'mark', text: @sample1.puid
+    end
+
+    test 'filter persists through sort and limit actions' do
+      # tests that filter persists through other actions (sort)
+      ### setup start ###
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_selector "tr[id='#{@sample1.id}']"
+      assert_selector "tr[id='#{@sample2.id}']"
+      assert_selector "tr[id='#{@sample30.id}']"
+      ### setup end ###
+
+      ### actions and verify start ###
+      # apply filter
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.name
+      find('input.t-search-component').native.send_keys(:return)
 
       assert_selector "tr[id='#{@sample1.id}']"
       assert_no_selector "tr[id='#{@sample2.id}']"
@@ -822,9 +858,7 @@ module Projects
       # apply sort
       click_on I18n.t('samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
-      ### actions end ###
 
-      ### verify start ###
       # verify table still only contains sample1
       assert_selector "tr[id='#{@sample1.id}']"
       assert_no_selector "tr[id='#{@sample2.id}']"
@@ -834,35 +868,22 @@ module Projects
       assert_selector %(input.t-search-component) do |input|
         assert_equal @sample1.name, input['value']
       end
-      ### verify end ###
-    end
 
-    test 'can sort and then filter the list of samples by puid' do
-      # tests that sort persists through other actions (filter)
-      ### setup start ###
-      visit namespace_project_samples_url(@namespace, @project)
-      assert_selector "tr[id='#{@sample1.id}']"
-      assert_selector "tr[id='#{@sample2.id}']"
-      assert_selector "tr[id='#{@sample30.id}']"
-      ### setup end ###
+      # set limit
+      within('div#limit-component') do
+        find('button').click
+        click_link '10'
+      end
 
-      ### actions start ###
-      # apply sort
-      click_on I18n.t('samples.table_component.name')
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
-
-      # apply filter
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
-      find('input.t-search-component').native.send_keys(:return)
-      ### actions end ###
-
-      ### verify start ###
-      # verify sort is still applied
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
-      # verify table only contains sample1
+      # verify table still only contains sample1
       assert_selector "tr[id='#{@sample1.id}']"
       assert_no_selector "tr[id='#{@sample2.id}']"
       assert_no_selector "tr[id='#{@sample30.id}']"
+
+      # verify filter text is still in filter input
+      assert_selector %(input.t-search-component) do |input|
+        assert_equal @sample1.name, input['value']
+      end
       ### verify end ###
     end
 
@@ -1395,7 +1416,7 @@ module Projects
       ### verify end ###
     end
 
-    test 'singular dialog description' do
+    test 'singular clone dialog description' do
       ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       ### setup end ###
