@@ -29,7 +29,7 @@ class ProjectShareActionsConcernTest < ActionDispatch::IntegrationTest
                                             }, format: :turbo_stream })
 
     assert_response :success
-    assert_equal 1,
+    assert_equal 2,
                  project_namespace.shared_with_group_links.of_ancestors_and_self.count
   end
 
