@@ -32,6 +32,50 @@ module Groups
       end
     end
 
+    def check_editable
+      @sample = Sample.find(params[:id])
+      @field = params[:field]
+      @value = params[:value]
+
+      if @sample.field_editable?(@field)
+        render turbo_stream: turbo_stream.replace(
+          helpers.dom_id(@sample, @field),
+          partial: 'edit_field_form',
+          locals: { sample: @sample, field: @field, value: @value }
+        )
+      else
+        render turbo_stream: turbo_stream.append('flash',
+                                                 partial: 'shared/alert',
+                                                 locals: { message: 'This field is not editable' })
+      end
+    end
+
+    def update_field
+      @sample = Sample.find(params[:id])
+      @project = Project.find(params[:project_id])
+      @field = params[:field]
+      @value = params[:value]
+      @original_value = params[:original_value]
+
+      updated_fields = ::Samples::Metadata::Fields::UpdateService.new(@project, @sample, current_user,
+                                                                      {
+                                                                        'update_field' => {
+                                                                          'key' => {
+                                                                            @field => @field
+                                                                          },
+                                                                          'value' => {
+                                                                            @original_value => @value
+                                                                          }
+                                                                        }
+                                                                      }).execute
+
+      render turbo_stream: turbo_stream.replace(
+        helpers.dom_id(@sample, @field),
+        partial: 'editable_table_field',
+        locals: { sample: @sample, field: @field, value: @value }
+      )
+    end
+
     private
 
     def group

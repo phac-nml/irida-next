@@ -132,14 +132,11 @@
                   <% end %>
                 <% end %>
               <% end %>
-              <% @metadata_fields.each do |field| %>
-                <%= render_cell(
-                tag: 'td',
-                classes: class_names('px-3 py-3')
-              ) do %>
-                  <%= sample.metadata[field] %>
-                <% end %>
-              <% end %>
+              <%= render Samples::EditableCell.with_collection(
+                @metadata_fields,
+                sample: sample,
+                check_editable_url: @check_editable_url,
+              ) %>
               <% if @renders_row_actions %>
                 <%= render_cell(
                 tag: 'td',
@@ -199,7 +196,7 @@
                   >0</strong>
                 </span>
               </td>
-              <td colspan="100%" class="px-3 py-3 bg-slate-50 dark:bg-slate-700"></td>
+              <td colspan="100%" class="p-3 bg-slate-50 dark:bg-slate-700"></td>
             </tr>
           </tfoot>
         <% end %>
