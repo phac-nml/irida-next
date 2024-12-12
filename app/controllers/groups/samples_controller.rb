@@ -40,10 +40,6 @@ module Groups
       @group = Group.find_by_full_path(params[:group_id]) # rubocop:disable Rails/DynamicFindBy
     end
 
-    def authorized_projects
-      authorized_scope(Project, type: :relation, as: :group_projects, scope_options: { group: @group })
-    end
-
     def authorized_samples
       authorized_scope(Sample, type: :relation, as: :namespace_samples,
                                scope_options: { namespace: @group }).includes(project: { namespace: [{ parent: :route },
@@ -82,7 +78,10 @@ module Groups
       @search_params = search_params
       set_metadata_fields
 
-      @query = Sample::Query.new(@search_params.except(:metadata).merge({ project_ids: authorized_projects.select(:id).pluck(:id) }))
+      project_ids =
+        authorized_scope(Project, type: :relation, as: :group_projects, scope_options: { group: @group }).pluck(:id)
+
+      @query = Sample::Query.new(@search_params.except(:metadata).merge({ project_ids: project_ids }))
     end
 
     def search_params
