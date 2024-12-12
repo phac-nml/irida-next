@@ -44,7 +44,7 @@ module ActiveSupport
       Sample.reindex
 
       # and disable callbacks
-      # Searchkick.disable_callbacks
+      Searchkick.disable_callbacks
     end
 
     parallelize_teardown do |_worker|
