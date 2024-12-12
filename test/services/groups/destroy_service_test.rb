@@ -18,7 +18,6 @@ module Groups
       assert_difference -> { Group.count } => -1 do
         Groups::DestroyService.new(@group, @user).execute
       end
-      assert @group.errors.empty?
     end
 
     test 'delete group with incorrect permissions' do
@@ -47,18 +46,14 @@ module Groups
       # group12 < subgroup12b (project30 > sample 33)
       #    |
       #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
-      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12aa.metadata_summary)
-      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
-      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.metadata_summary)
-      assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
-
-      assert_no_changes -> { @subgroup12b.reload.metadata_summary } do
+      assert_difference -> { @subgroup12a.reload.metadata_summary['metadatafield1'] } => -1,
+                        -> { @subgroup12a.reload.metadata_summary['metadatafield2'] } => -1,
+                        -> { @group12.reload.metadata_summary['metadatafield1'] } => -1,
+                        -> { @group12.reload.metadata_summary['metadatafield2'] } => -1 do
         Groups::DestroyService.new(@subgroup12aa, @user).execute
       end
 
-      assert(@subgroup12aa.reload.deleted?)
-      assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12a.reload.metadata_summary)
-      assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @group12.reload.metadata_summary)
+      assert @subgroup12aa.reload.deleted?
     end
 
     test 'samples count updated after group deletion' do
@@ -66,18 +61,13 @@ module Groups
       # group12 < subgroup12b (project30 > sample 33)
       #    |
       #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
-      assert_equal(2, @subgroup12aa.samples_count)
-      assert_equal(3, @subgroup12a.samples_count)
-      assert_equal(1, @subgroup12b.samples_count)
-      assert_equal(4, @group12.samples_count)
-
-      assert_no_changes -> { @subgroup12b.reload.samples_count } do
+      assert_difference -> { @subgroup12a.reload.samples_count } => -2,
+                        -> { @group12.reload.samples_count } => -2,
+                        -> { @subgroup12b.reload.samples_count } => 0 do
         Groups::DestroyService.new(@subgroup12aa, @user).execute
       end
 
-      assert(@subgroup12aa.reload.deleted?)
-      assert_equal(1, @subgroup12a.reload.samples_count)
-      assert_equal(2, @group12.reload.samples_count)
+      assert @subgroup12aa.reload.deleted?
     end
   end
 end

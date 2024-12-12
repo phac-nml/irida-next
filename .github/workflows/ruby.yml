@@ -48,6 +48,10 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
+      - name: Set up OpenSearch
+        uses: ankane/setup-opensearch@v1
+        with:
+          opensearch-version: 2
       - name: Precompile assets
         run: |
           bin/rails assets:precompile

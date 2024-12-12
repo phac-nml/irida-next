@@ -5,6 +5,8 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
   include ActiveModel::Model
   include ActiveModel::Attributes
 
+  ResultTypeError = Class.new(StandardError)
+
   attribute :column, :string
   attribute :direction, :string
   attribute :name_or_puid_cont, :string
@@ -23,16 +25,57 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
   def sort=(value)
     super
     column, direction = sort.split
+    column = column.gsub('metadata_', 'metadata.') if column.match?(/metadata_/)
     assign_attributes(column:, direction:)
   end
 
-  def results
+  def results(type = :ransack)
+    case type
+    when :ransack
+      ransack_results
+    when :searchkick
+      searchkick_results
+    when :searchkick_pagy
+      searchkick_pagy_results
+    else
+      raise ResultTypeError, "Unrecognized type: #{type}"
+    end
+  end
+
+  private
+
+  def ransack_results
     return Sample.none unless valid?
 
     sort_samples.ransack(ransack_params).result
   end
 
-  private
+  def searchkick_pagy_results
+    return Sample.pagy_search('') unless valid?
+
+    Sample.pagy_search(name_or_puid_cont.presence || '*', **searchkick_kwargs)
+  end
+
+  def searchkick_results
+    return Sample.search('') unless valid?
+
+    Sample.search(name_or_puid_cont.presence || '*', **searchkick_kwargs)
+  end
+
+  def searchkick_kwargs
+    { fields: [{ name: :text_middle }, { puid: :text_middle }],
+      misspellings: false,
+      where: { project_id: project_ids }.merge((
+       if name_or_puid_in.present?
+         { _or: [{ name: name_or_puid_in },
+                 { puid: name_or_puid_in }] }
+       else
+         {}
+       end
+     )),
+      order: { "#{column}": { order: direction, unmapped_type: 'long' } },
+      includes: [project: { namespace: [{ parent: :route }, :route] }] }
+  end
 
   def ransack_params
     {
@@ -42,8 +85,8 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
   end
 
   def sort_samples(scope = Sample.where(project_id: project_ids))
-    if column.starts_with? 'metadata_'
-      field = column.gsub('metadata_', '')
+    if column.starts_with? 'metadata.'
+      field = column.gsub('metadata.', '')
       scope.order(Sample.metadata_sort(field, direction))
     else
       scope.order("#{column} #{direction}")

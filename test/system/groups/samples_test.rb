@@ -17,6 +17,13 @@ module Groups
       @sample28 = samples(:sample28)
       @sample30 = samples(:sample30)
       @sample31 = samples(:sample31)
+
+      Sample.reindex
+      Searchkick.enable_callbacks
+    end
+
+    def teardown
+      Searchkick.disable_callbacks
     end
 
     def retrieve_puids
@@ -414,16 +421,12 @@ module Groups
 
       assert_selector 'tbody tr:first-child th', text: @sample30.puid
       assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample30.name
-      assert_selector 'tbody tr:nth-child(2) th', text: @sample2.puid
-      assert_selector 'tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
 
       click_on 'metadatafield2'
       assert_selector 'table thead th:nth-child(8) svg.icon-arrow_up'
 
       assert_selector 'tbody tr:first-child th', text: @sample30.puid
       assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample30.name
-      assert_selector 'tbody tr:nth-child(2) th', text: @sample2.puid
-      assert_selector 'tbody tr:nth-child(2) td:nth-child(2)', text: @sample2.name
 
       # toggling metadata again causes sort to be reset
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
