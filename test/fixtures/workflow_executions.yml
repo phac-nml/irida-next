@@ -853,3 +853,13 @@ irida_next_example_canceled_unclean_DELETE:
   blob_run_directory: "not a run dir"
   state: "canceled"
   cleaned: false
+
+workflow_execution_valid_on_group:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "wn1", "workflow_version": "wv1" }
+  workflow_params: { "key_a": "value_a" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "my_group_run_id_1"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
