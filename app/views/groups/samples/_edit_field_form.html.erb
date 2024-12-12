@@ -1,5 +1,6 @@
 <td id="<%= dom_id(@sample, @field) %>">
-  <%= form_with(url: update_field_group_samples_path(@group), method: :patch, data: { controller: "inline-edit" }) do |f| %>
+  <%= form_with(url: update_field_group_samples_path(@group), method: :patch,
+  data: { controller: "inline-edit", "inline-edit-original-value": @value  }) do |f| %>
     <%= f.hidden_field :id, value: @sample.id %>
     <%= f.hidden_field :project_id, value: @sample.project.id %>
     <%= f.hidden_field :field, value: @field %>
@@ -11,7 +12,7 @@
                    "w-full m-0 border-slate-300 text-slate-900 text-sm focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
                  data: {
                    "inline-edit-target": "input",
-                   action: "blur->inline-edit#submit",
+                   action: "blur->inline-edit#submit keydown->inline-edit#cancel",
                  } %>
   <% end %>
 </td>
