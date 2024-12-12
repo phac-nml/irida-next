@@ -73,7 +73,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
          {}
        end
      )),
-      order: { "#{column}": direction },
+      order: { "#{column}": { order: direction, unmapped_type: 'long' } },
       includes: [project: { namespace: [{ parent: :route }, :route] }] }
   end
 
