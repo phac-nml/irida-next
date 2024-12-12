@@ -2266,8 +2266,9 @@ module Projects
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
 
       within 'tbody' do
-        assert_text @sample1.metadata[@field]
-        click_link I18n.t('projects.samples.show.edit_field_button', field: @field)
+        assert_text 'value1'
+        click_button 'value1'
+        assert_field 'value1'
       end
     end
 
