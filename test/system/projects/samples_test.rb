@@ -827,8 +827,8 @@ module Projects
       assert_selector '#samples-table table thead tr th', count: 8
       within('#samples-table table tbody tr:first-child') do
         assert_text @sample3.name
-        assert_selector 'td:nth-child(6)', text: 'value1'
-        assert_selector 'td:nth-child(7)', text: 'value2'
+        assert_selector 'td:nth-child(6) button', text: 'value1'
+        assert_selector 'td:nth-child(7) button', text: 'value2'
       end
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
       assert_selector '#samples-table table thead tr th', count: 6
