@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # entity class for Sample
-class Sample < ApplicationRecord
+class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include MetadataSortable
   include HasPuid
   include History
@@ -12,6 +12,51 @@ class Sample < ApplicationRecord
   acts_as_paranoid
 
   searchkick \
+    merge_mappings: true,
+    mappings: {
+      dynamic_templates: [
+        {
+          string_template: {
+            match: '*',
+            match_mapping_type: 'string',
+            mapping: {
+              fields: {
+                analyzed: {
+                  analyzer: 'searchkick_index',
+                  index: true,
+                  type: 'text'
+                }
+              },
+              ignore_above: 30_000,
+              type: 'keyword'
+            }
+          }
+        },
+        {
+          metadata_dates: {
+            path_match: 'metadata.*_date',
+            mapping: {
+              type: 'date',
+              ignore_malformed: true
+            }
+          }
+        }, {
+          metadata_non_dates: {
+            path_match: 'metadata.*',
+            path_unmatch: 'metadata.*_date',
+            mapping: {
+              type: 'text',
+              fields: {
+                numeric: {
+                  type: 'double',
+                  ignore_malformed: true
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
     deep_paging: true,
     text_middle: %i[name puid]
 
@@ -91,11 +136,11 @@ class Sample < ApplicationRecord
       name: name,
       puid: puid,
       project_id: project_id,
-      metadata: metadata.as_json,
+      metadata: metadata.transform_keys { |k| k.gsub('.', '___') },
       created_at: created_at,
       updated_at: updated_at,
       attachments_updated_at: attachments_updated_at
-    }
+    }.compact
   end
 
   def should_index?
