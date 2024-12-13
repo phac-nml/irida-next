@@ -60,9 +60,13 @@ module Projects
           end
         end
       end
+
+      # pagy
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
     end
 
-    test 'edit and delete row actions render for user with Owner role' do
+    test 'edit and delete row actions render for user with role == Owner in samples table' do
       visit namespace_project_samples_url(@namespace, @project)
 
       within("tr[id='#{@sample1.id}'] td:last-child") do
@@ -71,7 +75,7 @@ module Projects
       end
     end
 
-    test 'edit row action render for user with Maintainer role' do
+    test 'edit row action render for user with role == Maintainer in samples table' do
       login_as users(:joan_doe)
       visit namespace_project_samples_url(@namespace, @project)
 
@@ -81,11 +85,11 @@ module Projects
       end
     end
 
-    test 'no row actions for user with role < Maintainer' do
+    test 'no row actions for user with role < Maintainer in samples table' do
       login_as users(:ryan_doe)
       visit namespace_project_samples_url(@namespace, @project)
       within('#samples-table table thead tr:first-child') do
-        # attachments_updated_at is the last column, action column does not exist
+        # attachments updated at is the last column, action column does not exist
         assert_selector 'th:last-child', text: I18n.t('samples.table_component.attachments_updated_at').upcase
         assert_no_selector 'th:last-child', text: I18n.t('samples.table_component.action').upcase
       end
@@ -125,67 +129,67 @@ module Projects
       assert_no_selector "input#sample_#{@sample1.id}"
     end
 
-    test 'User with role >= Analyst sees workflow execution link' do
+    test 'User with role >= Analyst sees workflow execution link in samples index' do
       login_as users(:james_doe)
       visit namespace_project_samples_url(@namespace, @project)
 
       assert_selector 'span[class="sr-only"]', text: I18n.t('projects.samples.index.workflows.button_sr')
     end
 
-    test 'User with role < Analyst does not see workflow execution link' do
+    test 'User with role < Analyst does not see workflow execution link in samples index' do
       login_as users(:ryan_doe)
       visit namespace_project_samples_url(@namespace, @project)
 
       assert_no_selector 'span[class="sr-only"]', text: I18n.t('projects.samples.index.workflows.button_sr')
     end
 
-    test 'User with role >= Analyst sees create export button' do
+    test 'User with role >= Analyst sees create export button in samples index' do
       login_as users(:james_doe)
       visit namespace_project_samples_url(@namespace, @project)
 
       assert_selector 'button', text: I18n.t('projects.samples.index.create_export_button.label')
     end
 
-    test 'User with role < Analyst does not see create export button' do
+    test 'User with role < Analyst does not see create export button in samples index' do
       login_as users(:ryan_doe)
       visit namespace_project_samples_url(@namespace, @project)
 
       assert_no_selector 'button', text: I18n.t('projects.samples.index.create_export_button.label')
     end
 
-    test 'User with role >= Maintainer sees import metadata button' do
+    test 'User with role >= Maintainer sees import metadata link in samples index' do
       visit namespace_project_samples_url(@namespace, @project)
 
       assert_selector 'a', text: I18n.t('projects.samples.index.import_metadata_button')
     end
 
-    test 'User with role < Maintainer does not see import metadata button' do
+    test 'User with role < Maintainer does not see import metadata link in samples index' do
       login_as users(:ryan_doe)
       visit namespace_project_samples_url(@namespace, @project)
 
       assert_no_selector 'a', text: I18n.t('projects.samples.index.import_metadata_button')
     end
 
-    test 'User with role >= Maintainer sees new sample button' do
+    test 'User with role >= Maintainer sees new sample button in samples index' do
       visit namespace_project_samples_url(@namespace, @project)
 
       assert_selector 'a', text: I18n.t('projects.samples.index.new_button')
     end
 
-    test 'User with role < Maintainer does not see new sample button' do
+    test 'User with role < Maintainer does not see new sample button in samples index' do
       login_as users(:ryan_doe)
       visit namespace_project_samples_url(@namespace, @project)
 
       assert_no_selector 'a', text: I18n.t('projects.samples.index.new_button')
     end
 
-    test 'User with role >= Maintainer sees delete samples button' do
+    test 'User with role >= Maintainer sees delete samples button in samples index' do
       visit namespace_project_samples_url(@namespace, @project)
 
       assert_selector 'a', text: I18n.t('projects.samples.index.delete_samples_button')
     end
 
-    test 'User with role < Maintainer does not see delete samples button' do
+    test 'User with role < Maintainer does not see delete samples button in samples index' do
       login_as users(:ryan_doe)
       visit namespace_project_samples_url(@namespace, @project)
 
@@ -200,16 +204,12 @@ module Projects
       assert_text I18n.t(:'action_policy.policy.project.sample_listing?', name: @project.name)
     end
 
-    test 'create sample' do
-      ### SETUP START ###
+    test 'should create sample' do
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
-      within('#samples-table table tbody') do
-        # sample does not currently exist
-        assert_no_text 'New Name'
-      end
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
+      ### actions start ###
       # launch dialog
       click_on I18n.t('projects.samples.index.new_button')
 
@@ -217,7 +217,7 @@ module Projects
       fill_in I18n.t('activerecord.attributes.sample.description'), with: 'A sample description'
       fill_in I18n.t('activerecord.attributes.sample.name'), with: 'New Name'
       click_on I18n.t('projects.samples.new.submit_button')
-      ### ACTIONS END ###
+      ### actions end ###
 
       ### results start ###
       # flash msg
@@ -232,12 +232,12 @@ module Projects
       ### results end ###
     end
 
-    test 'edit sample' do
-      ### SETUP START ###
+    test 'should update Sample' do
+      ### setup start ###
       visit namespace_project_sample_url(@namespace, @project, @sample1)
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
+      ### actions start ###
       # nav to edit sample page
       click_on I18n.t('projects.samples.show.edit_button')
 
@@ -245,7 +245,7 @@ module Projects
       fill_in 'Description', with: 'A new description'
       fill_in 'Name', with: 'New Sample Name'
       click_on I18n.t('projects.samples.edit.submit_button')
-      ### ACTIONS END ###
+      ### actions end ###
 
       ### results start ###
       # flash msg
@@ -257,8 +257,8 @@ module Projects
       ### results end ###
     end
 
-    test 'destroy sample from sample show page' do
-      ### SETUP START ###
+    test 'should destroy Sample from sample show page' do
+      ### setup start ###
       # nav to samples index and verify sample exists within table
       visit namespace_project_samples_url(@namespace, @project)
       assert_selector "#samples-table table tbody tr[id='#{@sample1.id}']"
@@ -266,40 +266,37 @@ module Projects
 
       # nav to sample show
       visit namespace_project_sample_url(@namespace, @project, @sample1)
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ##
+      ### actions start ##
       click_link I18n.t(:'projects.samples.index.remove_button')
 
       within('#turbo-confirm[open]') do
         click_button I18n.t(:'components.confirmation.confirm')
       end
-      ### ACTIONS END ###
+      ### actions end ###
 
-      ### VERIFY START ###
+      ### verify start ###
       # flash msg
       assert_text I18n.t('projects.samples.deletions.destroy.success', sample_name: @sample1.name,
                                                                        project_name: @project.namespace.human_name)
-      # redirected to samples index
-      assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
       # deleted sample row no longer exists
       assert_no_selector "#samples-table table tbody tr[id='#{@sample1.id}']"
+      # redirected to samples index
+      assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
       # remaining samples still appear on table
       assert_selector '#samples-table table tbody tr', count: 2
-      ### VERIFY END ###
+      ### verify end ###
     end
 
-    test 'should destroy Sample from samples table' do
-      ### SETUP START ###
+    test 'should destroy Sample from sample listing page' do
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      ### SETUP END ###
-
-      ### ACTIONS START ###
+      ### setup end ###
       within("tr[id='#{@sample1.id}']") do
-        # click remove action
         click_link I18n.t('projects.samples.index.remove_button')
       end
 
@@ -307,9 +304,9 @@ module Projects
         assert_text I18n.t('projects.samples.deletions.new_deletion_dialog.description', sample_name: @sample1.name)
         click_button I18n.t('projects.samples.deletions.new_deletion_dialog.submit_button')
       end
-      ### ACTIONS END ###
+      ### setup end ###
 
-      ### VERIFY START ###
+      ### verify start ###
       # flash msg
       assert_text I18n.t('projects.samples.deletions.destroy.success', sample_name: @sample1.name,
                                                                        project_name: @project.namespace.human_name)
@@ -319,69 +316,11 @@ module Projects
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
       # remaining samples still in table
       assert_selector '#samples-table table tbody tr', count: 2
-      ### VERIFY END ###
+      ### verify end ###
     end
 
-    test 'transfer dialog sample listing' do
-      ### SETUP START ###
-      samples = @project.samples.pluck(:puid, :name)
-      visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
-      click_link I18n.t('projects.samples.index.transfer_button')
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      within('#list_selections') do
-        samples.each do |sample|
-          assert_text sample[0]
-          assert_text sample[1]
-        end
-      end
-      ### VERIFY END ###
-    end
-
-    test 'transfer dialog with plural description' do
-      ### SETUP START ###
-      visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
-      click_link I18n.t('projects.samples.index.transfer_button')
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      within('#dialog') do
-        assert_text I18n.t('projects.samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER',
-                                                                                         '3')
-      end
-      ### VERIFY END ###
-    end
-
-    test 'transfer dialog with singular description' do
-      ### SETUP START ###
-      visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      within '#samples-table table tbody' do
-        all('input[type="checkbox"]')[0].click
-      end
-      click_link I18n.t('projects.samples.index.transfer_button')
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      within('#dialog') do
-        assert_text I18n.t('projects.samples.transfers.dialog.description.singular')
-      end
-      ### VERIFY END ###
-    end
-
-    test 'transfer samples' do
-      ### SETUP START ###
+    test 'should transfer samples' do
+      ### setup start ###
       # show destination project has 20 samples prior to transfer
       visit namespace_project_samples_url(@namespace, @project2)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
@@ -392,28 +331,38 @@ module Projects
       )
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
+      ### actions start ###
       samples = @project.samples.pluck(:puid, :name)
-      # select all 3 samples
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      within('#samples-table table tbody') do
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
+        # verify 'plural' form of description renders
+        assert_text I18n.t('projects.samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER',
+                                                                                         '3')
+        # verify sample puid and name are listed in dialog list
+        within %(turbo-frame[id="list_selections"]) do
+          samples.each do |sample|
+            assert_text sample[0]
+            assert_text sample[1]
+          end
+        end
         # select destination project
         find('input#select2-input').click
         find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
-      ### ACTIONS END ###
+      ### actions end ###
 
-      ### VERIFY START ###
+      ### verify start ###
       # flash msg
       assert_text I18n.t('projects.samples.transfers.create.success')
       # originating project no longer has samples
       assert_text I18n.t('projects.samples.index.no_samples')
 
-      # destination project received transferred samples
       visit namespace_project_samples_url(@namespace, @project2)
       within '#samples-table table tbody' do
         samples.each do |sample|
@@ -421,42 +370,60 @@ module Projects
           assert_text sample[1]
         end
       end
-      ### VERIFY END ###
+      ### verify end ###
+    end
+
+    test 'transfer dialog with single sample' do
+      ### setup start ###
+      visit namespace_project_samples_url(@namespace, @project)
+      ### setup end ###
+
+      ### actions start ###
+      within '#samples-table table tbody' do
+        all('input[type="checkbox"]')[0].click
+      end
+      click_link I18n.t('projects.samples.index.transfer_button')
+      ### actions end ###
+
+      ### verify start ###
+      within('#dialog') do
+        assert_text I18n.t('projects.samples.transfers.dialog.description.singular')
+      end
+      ### verify end ###
     end
 
     test 'should not transfer samples with session storage cleared' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
-      # select samples
-      click_button I18n.t(:'projects.samples.index.select_all_button')
-      # clear localstorage
+      ### actions start ###
+      within '#samples-table table tbody' do
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
       Capybara.execute_script 'sessionStorage.clear()'
-      # launch transfer dialog
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
         find('input#select2-input').click
         find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
-        ### ACTIONS END ###
+        ### actions end ###
 
-        ### VERIFY START ###
+        ### verify start ###
         # samples listing should no longer appear in dialog
         assert_no_selector '#list_selections'
         # error msg displayed in dialog
         assert_text I18n.t('projects.samples.transfers.create.no_samples_transferred_error')
       end
-      ### VERIFY END ###
+      ### verify end ###
     end
 
     test 'transfer samples with and without same name in destination project' do
-      # only samples without a matching name to samples in destination project will transfer
+      # only samples without a matching name will transfer
 
-      ### SETUP START ###
+      ### setup start ###
       namespace = groups(:subgroup1)
       project25 = projects(:project25)
 
@@ -464,23 +431,26 @@ module Projects
       visit namespace_project_samples_url(namespace, project25)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
                                                                            locale: @user.locale))
-      # 3 samples in originating project
       visit namespace_project_samples_url(@namespace, @project)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      ### actions start ###
+      within '#samples-table table tbody' do
+        all('input[type=checkbox]').each do |checkbox|
+          checkbox.click unless checkbox.checked?
+        end
+      end
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
         find('input#select2-input').click
         find("button[data-viral--select2-primary-param='#{project25.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
-      ### ACTIONS END ###
+      ### actions end ###
 
-      ### VERIFY START ###
+      ### verify start ###
       within('#dialog') do
         # error messages in dialog
         assert_text I18n.t('projects.samples.transfers.create.error')
@@ -502,114 +472,117 @@ module Projects
       assert_selector "tr[id='#{@sample1.id}']"
       assert_selector "tr[id='#{@sample2.id}']"
       assert_no_selector "tr[id='#{@sample30.id}']"
-      ### VERIFY END ###
+      ### verify end ###
     end
 
     test 'sample transfer project listing should be empty for maintainer if no other projects in hierarchy' do
-      ### SETUP START ###
+      ### setup start ###
       login_as users(:user28)
       namespace = groups(:group_hotel)
       project = projects(:projectHotel)
       visit namespace_project_samples_url(namespace, project)
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      ### actions start ###
+      within '#samples-table table tbody' do
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
       click_link I18n.t('projects.samples.index.transfer_button')
-      ### ACTIONS END ###
+      ### actions end ###
 
-      ### VERIFY START ###
+      ### verify start ###
       within('#dialog') do
         # no available destination projects
         assert_selector "input[placeholder='#{I18n.t('projects.samples.transfers.dialog.no_available_projects')}']"
       end
-      ### VERIFY END ###
+      ### verify end ###
     end
 
-    test 'updating sample selection during transfer samples' do
-      ### SETUP START ###
-      visit namespace_project_samples_url(@namespace, @project2)
+    test 'should update pagination & selection during transfer samples' do
+      namespace1 = groups(:group_one)
+      namespace17 = groups(:group_seventeen)
+      project38 = projects(:project38)
+      project2 = projects(:project2)
+      samples = [samples(:bulk_sample1), samples(:bulk_sample2)]
 
-      # verify no samples currently selected in destination project
+      Project.reset_counters(project38.id, :samples_count)
+      visit namespace_project_samples_url(namespace17, project38)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 200,
+                                                                           locale: @user.locale))
+
+      click_button I18n.t(:'projects.samples.index.select_all_button')
+
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
+      end
       within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 20"
-        assert_selector 'strong[data-selection-target="selected"]', text: '0'
-      end
-      visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      # select 1 sample to transfer
-      within '#samples-table table tbody' do
-        all('input[type="checkbox"]')[0].click
+        assert_text 'Samples: 200'
+        assert_selector 'strong[data-selection-target="selected"]', text: '200'
       end
 
-      # verify 1 sample selected in originating project
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 3"
-        assert_selector 'strong[data-selection-target="selected"]', text: '1'
-      end
+      click_link I18n.t('projects.samples.index.transfer_button'), match: :first
+      within('span[data-controller-connected="true"] dialog') do
+        assert_text I18n.t('projects.samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER', '200')
+        within %(turbo-frame[id="list_selections"]) do
+          samples.pluck(:puid, :name).each do |sample|
+            assert_text sample[0]
+            assert_text sample[1]
+          end
+        end
 
-      # transfer sample
-      click_link I18n.t('projects.samples.index.transfer_button')
-      within('#dialog') do
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        find("button[data-viral--select2-primary-param='#{project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
-      ### ACTIONS END ###
 
-      ### VERIFY START ###
-      # verify no samples selected anymore
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 2"
-        assert_selector 'strong[data-selection-target="selected"]', text: '0'
-      end
+      # Check samples selected are [] and has the proper number of samples
+      assert_text I18n.t(:'projects.samples.index.no_samples')
 
-      # verify destination project still has no selected samples and one additional sample
-      visit namespace_project_samples_url(@namespace, @project2)
+      Project.reset_counters(project2.id, :samples_count)
+      visit namespace_project_samples_url(namespace1, project2)
 
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 21"
-        assert_selector 'strong[data-selection-target="selected"]', text: '0'
-      end
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 220,
+                                                                           locale: @user.locale))
 
       click_button I18n.t(:'projects.samples.index.select_all_button')
 
       within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 21"
-        assert_selector 'strong[data-selection-target="selected"]', text: '21'
+        sample_counts = all('strong')
+        total_samples = sample_counts[0].text.to_i
+        selected_samples = sample_counts[1].text.to_i
+        assert selected_samples <= total_samples
       end
-      ### VERIFY END
     end
 
     test 'empty state of transfer sample project selection' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
-      # select samples
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      ### actions start ###
+      within '#samples-table table tbody' do
+        # check samples
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
 
       # launch dialog
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
         # fill destination input
         find('input#select2-input').fill_in with: 'invalid project name or puid'
-        ### ACTIONS END ###
+        ### actions end ###
 
-        ### VERIFY START ###
+        ### verify start ###
         assert_text I18n.t('projects.samples.transfers.dialog.empty_state')
-        ### VERIFY END ###
+        ### verify end ###
       end
     end
 
     test 'can search the list of samples by name' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       # partial name search
-      filter_text = @sample1.name[-3..]
+      filter_text = @sample1.name[-3..-1]
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
@@ -617,34 +590,34 @@ module Projects
       assert_selector "tr[id='#{@sample1.id}']"
       assert_selector "tr[id='#{@sample2.id}']"
       assert_selector "tr[id='#{@sample30.id}']"
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
+      ### actions start ###
       # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: filter_text
       find('input.t-search-component').native.send_keys(:return)
-      ### ACTIONS END ###
+      ### actions end ###
 
-      ### VERIFY START ###
+      ### verify start ###
       # verify table only contains sample1
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 1, locale: @user.locale))
       assert_selector '#samples-table table tbody tr', count: 1
       assert_selector "tr[id='#{@sample1.id}']"
       assert_no_selector "tr[id='#{@sample2.id}']"
       assert_no_selector "tr[id='#{@sample30.id}']"
-      ### VERIFY END ###
+      ### verify end ###
     end
 
     test 'limit persists through filter and sort actions' do
       # tests limit change and that it persists through other actions (filter)
-      ### SETUP START ###
+      ### setup start ###
       sample3 = samples(:sample3)
       visit namespace_project_samples_url(@namespace, @project2)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
                                                                            locale: @user.locale))
-      ### SETUP END ###
+      ### setup end ###
 
-      ### actions and VERIFY START ###
+      ### actions and verify start ###
       within('div#limit-component') do
         # set table limit to 10
         find('button').click
@@ -671,15 +644,18 @@ module Projects
 
       # verify limit is still 10
       assert_selector 'div#limit-component button div span', text: '10'
-      ### actions and VERIFY END ###
+      ### actions and verify end ###
     end
 
     test 'can sort samples' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
 
-      ### ACTION and VERIFY START ###
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      ### setup end ###
+
+      ### action and verify start ###
       within('tbody tr:first-child th') do
         assert_text @sample1.puid
       end
@@ -708,19 +684,19 @@ module Projects
         assert_selector 'tr:last-child th', text: @sample1.puid
         assert_selector 'tr:last-child td:nth-child(2)', text: @sample1.name
       end
-      ### ACTION and VERIFY END ###
+      ### action and verify end ###
     end
 
     test 'sort samples attachments_updated_at_nulls_last' do
       # attachments_updated_at_nulls_last sorts null data together
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      ### SETUP END ###
+      ### setup end ###
 
-      ### action and VERIFY START ###
+      ### action and verify start ###
       within('tbody tr:first-child th') do
         assert_text @sample1.puid
       end
@@ -749,15 +725,16 @@ module Projects
         assert_selector 'tr:last-child th', text: @sample1.puid
         assert_selector 'tr:last-child td:nth-child(2)', text: @sample1.name
       end
-      ### action and VERIFY END ###
+      ### action and verify end ###
     end
 
     test 'sort persists through limit and filter' do
-      ### SETUP START ###
+      # tests that sort persists through other actions (filter)
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
+      ### setup end ###
 
-      ### actions and VERIFY START ###
+      ### actions and verify start ###
       # apply sort
       click_on I18n.t('samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
@@ -777,107 +754,105 @@ module Projects
 
       # verify sort is still applied
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
-      ### actions and VERIFY END ###
+      ### actions and verify end ###
     end
 
     test 'filter by name' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       assert_selector "tr[id='#{@sample1.id}']"
       assert_selector "tr[id='#{@sample2.id}']"
       assert_selector "tr[id='#{@sample30.id}']"
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
+      ### actions start ###
       # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
-      ### ACTIONS END ###
+      ### actions end ###
 
-      ### VERIFY START ###
+      ### verify start ###
       # only sample1 exists within table
       assert_selector "tr[id='#{@sample1.id}']"
       assert_no_selector "tr[id='#{@sample2.id}']"
       assert_no_selector "tr[id='#{@sample30.id}']"
-      ### VERIFY END ###
+      ### verify end ###
     end
 
     test 'filter by puid' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       assert_selector "tr[id='#{@sample1.id}']"
       assert_selector "tr[id='#{@sample2.id}']"
       assert_selector "tr[id='#{@sample30.id}']"
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
+      ### actions start ###
       # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample2.puid
       find('input.t-search-component').native.send_keys(:return)
-      ### ACTIONS END ###
+      ### actions end ###
 
-      ### VERIFY START ###
+      ### verify start ###
       # only sample2 exists within table
       assert_selector "tr[id='#{@sample2.id}']"
       assert_no_selector "tr[id='#{@sample1.id}']"
       assert_no_selector "tr[id='#{@sample30.id}']"
-      ### VERIFY END ###
+      ### verify end ###
     end
 
     test 'filter highlighting for sample name' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
+      ### actions start ###
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: 'sample'
       find('input.t-search-component').native.send_keys(:return)
-      ### ACTIONS END ###
+      ### actions end ###
 
-      ### VERIFY START ###
-      # verify table still contains all samples
+      ### verify start ###
+      # verify table only contains sample1
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
       # checks highlighting
       assert_selector 'mark', text: 'Sample', count: 3
-      ### VERIFY END ###
     end
 
     test 'filter highlighting for sample puid' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
+      ### actions start ###
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
       find('input.t-search-component').native.send_keys(:return)
-      ### ACTIONS END ###
+      ### actions end ###
 
-      ### VERIFY START ###
+      ### verify start ###
       # verify table only contains sample1
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
       # checks highlighting
       assert_selector 'mark', text: @sample1.puid
-      ### VERIFY END ###
     end
 
     test 'filter persists through sort and limit actions' do
-      ### SETUP START ###
-      filter_text = @sample1.name
+      # tests that filter persists through other actions (sort)
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       assert_selector "tr[id='#{@sample1.id}']"
       assert_selector "tr[id='#{@sample2.id}']"
       assert_selector "tr[id='#{@sample30.id}']"
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS and VERIFY START ###
+      ### actions and verify start ###
       # apply filter
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: filter_text
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
 
       assert_selector "tr[id='#{@sample1.id}']"
@@ -895,7 +870,7 @@ module Projects
 
       # verify filter text is still in filter input
       assert_selector %(input.t-search-component) do |input|
-        assert_equal filter_text, input['value']
+        assert_equal @sample1.name, input['value']
       end
 
       # set limit
@@ -911,24 +886,24 @@ module Projects
 
       # verify filter text is still in filter input
       assert_selector %(input.t-search-component) do |input|
-        assert_equal filter_text, input['value']
+        assert_equal @sample1.name, input['value']
       end
-      ### VERIFY END ###
+      ### verify end ###
     end
 
     test 'filter persists through page refresh' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       filter_text = @sample1.name
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
+      ### actions start ###
       # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: filter_text
       find('input.t-search-component').native.send_keys(:return)
-      ### ACTIONS END ###
+      ### actions end ###
 
-      ### VERIFY START ###
+      ### verify start ###
       assert_selector "tr[id='#{@sample1.id}']"
       assert_no_selector "tr[id='#{@sample2.id}']"
       assert_no_selector "tr[id='#{@sample30.id}']"
@@ -943,15 +918,15 @@ module Projects
       assert_selector "tr[id='#{@sample1.id}']"
       assert_no_selector "tr[id='#{@sample2.id}']"
       assert_no_selector "tr[id='#{@sample30.id}']"
-      ### VERIFY END ###
+      ### verify end ###
     end
 
     test 'sort persists through page refresh' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
+      ### actions start ###
       # apply sort
       click_on I18n.t('samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
@@ -960,21 +935,22 @@ module Projects
       click_on I18n.t('samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
       assert_selector '#samples-table table tbody th:first-child', text: @sample30.puid
-      ### ACTIONS END ###
+      ### actions end ###
 
-      ### VERIFY START ###
+      ### verify start ###
+
       # refresh
       visit namespace_project_samples_url(@namespace, @project)
 
       # verify sort is still enabled
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
-      # verify table ordering is still in sorted state
+      # verify table ordering is still in changed/sorted state
       assert_selector '#samples-table table tbody th:first-child', text: @sample30.puid
-      ### VERIFY END ###
+      ### verify end ###
     end
 
     test 'should import metadata via csv' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       # toggle metadata on for samples table
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
@@ -996,19 +972,17 @@ module Projects
           assert_selector 'td:nth-child(7)', text: ''
         end
       end
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
-      # start import
+      ### actions start ###
       click_link I18n.t('projects.samples.index.import_metadata_button')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        ### ACTIONS END ###
+        ### actions end ###
 
-        ### VERIFY START ###
-        # success msg
+        ### verify start ###
         assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
         click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
       end
@@ -1019,7 +993,7 @@ module Projects
         within('thead') do
           assert_text 'METADATAFIELD3'
         end
-        # sample 1 and 2 metadata is updated
+        # sample 1 and 2 have no value current for metadatafield 1 and 2
         within("tr[id='#{@sample1.id}']") do
           assert_selector 'td:nth-child(6)', text: '10'
           assert_selector 'td:nth-child(7)', text: '20'
@@ -1031,11 +1005,11 @@ module Projects
           assert_selector 'td:nth-child(8)', text: '35'
         end
       end
-      ### VERIFY END ###
+      ### verify end ###
     end
 
     test 'should import metadata via xls' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       # toggle metadata on for samples table
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
@@ -1056,18 +1030,17 @@ module Projects
           assert_selector 'td:nth-child(7)', text: ''
         end
       end
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
-      # start import
+      ### actions start ###
       click_link I18n.t('projects.samples.index.import_metadata_button')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xls')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        ### ACTIONS END ###
+        ### actions end ###
 
-        ### VERIFY START ###
+        ### verify start ###
         assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
         click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
       end
@@ -1093,11 +1066,11 @@ module Projects
           assert_selector 'td:nth-child(9)', text: 'Another Test'
         end
       end
-      ### VERIFY END ###
+      ### verify end ###
     end
 
     test 'should import metadata via xlsx' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       # toggle metadata on for samples table
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
@@ -1118,17 +1091,17 @@ module Projects
           assert_selector 'td:nth-child(7)', text: ''
         end
       end
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
+      ### actions start ###
       click_link I18n.t('projects.samples.index.import_metadata_button')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xlsx')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        ### ACTIONS END ###
+        ### actions end ###
 
-        ### VERIFY START ###
+        ### verify start ###
         assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
         click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
       end
@@ -1154,54 +1127,51 @@ module Projects
           assert_selector 'td:nth-child(9)', text: 'Another Test'
         end
       end
-      ### VERIFY END ###
+      ### verify end ###
     end
 
     test 'should not import metadata via invalid file type' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
+      ### actions start ###
       click_link I18n.t('projects.samples.index.import_metadata_button')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
-      ### ACTIONS END ###
+      ### actions end ###
 
-      ### VERIFY START ###
+      ### verify start ###
       within('#dialog') do
-        # error msg
         assert_text I18n.t('services.samples.metadata.import_file.invalid_file_extension')
       end
-      ### VERIFY END ###
+      ### verify end ###
     end
 
     test 'should import metadata with ignore empty values' do
-      # enabled ignore empty values will leave sample metadata values unchanged
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@subgroup12a, @project29)
       # toggle metadata on for samples table
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
       within("tr[id='#{@sample32.id}']") do
-        # value for metadatafield1, which is blank on the csv to import and will be left unchanged after import
+        # value for metadatafield1, which is blank on the csv to import
         assert_selector 'td:nth-child(6)', text: 'value1'
       end
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
+      ### actions start ###
       click_link I18n.t('projects.samples.index.import_metadata_button')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_empty_values.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
-        # enable ignore empty values
         find('input#file_import_ignore_empty_values').click
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        ### ACTIONS END ###
+        ### actions end ###
 
-        ### VERIFY START ###
+        ### verify start ###
         assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
         click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
       end
@@ -1210,32 +1180,30 @@ module Projects
         # unchanged value
         assert_selector 'td:nth-child(6)', text: 'value1'
       end
-      ### VERIFY END ###
+      ### verify end ###
     end
 
     test 'should import metadata without ignore empty values' do
-      # disabled ignore empty values will delete any metadata values that are empty on the import
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@subgroup12a, @project29)
       # toggle metadata on for samples table
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
       within("tr[id='#{@sample32.id}']") do
-        # value for metadatafield1, which is blank on the csv to import and will be deleted by the import
+        # value for metadatafield1, which is blank on the csv to import
         assert_selector 'td:nth-child(6)', text: 'value1'
       end
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
+      ### actions start ###
       click_link I18n.t('projects.samples.index.import_metadata_button')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_empty_values.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
-        # leave ignore empty values disabled
         assert_not find('input#file_import_ignore_empty_values').checked?
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        ### ACTIONS END ###
+        ### actions end ###
 
-        ### VERIFY START ###
+        ### verify start ###
         assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
         click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
       end
@@ -1243,71 +1211,70 @@ module Projects
         # value is deleted for metadatafield1
         assert_selector 'td:nth-child(6)', text: ''
       end
-      ### VERIFY END ###
     end
 
     test 'should not import metadata with duplicate header errors' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
+      ### actions start ###
       click_link I18n.t('projects.samples.index.import_metadata_button')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/duplicate_headers.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        ### ACTIONS END ###
+        ### actions end ###
 
-        ### VERIFY START ###
+        ### verify start ###
         # error msg
         assert_text I18n.t('services.samples.metadata.import_file.duplicate_column_names')
-        ### VERIFY END ###
+        ### verify end ###
       end
     end
 
     test 'should not import metadata with missing metadata row errors' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
+      ### actions start ###
       click_link I18n.t('projects.samples.index.import_metadata_button')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_rows.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        ### ACTIONS END ###
+        ### actions end ###
 
-        ### VERIFY START ###
+        ### verify start ###
         # error msg
         assert_text I18n.t('services.samples.metadata.import_file.missing_metadata_row')
-        ### VERIFY END ###
+        ### verify end ###
       end
     end
 
     test 'should not import metadata with missing metadata column errors' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
+      ### actions start ###
       click_link I18n.t('projects.samples.index.import_metadata_button')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        ### ACTIONS END ###
+        ### actions end ###
 
-        ### VERIFY START ###
+        ### verify start ###
         # error msg
         assert_text I18n.t('services.samples.metadata.import_file.missing_metadata_column')
-        ### VERIFY END ###
+        ### verify end ###
       end
     end
 
     test 'should partially import metadata with missing sample errors' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       # toggle metadata on for samples table
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
@@ -1325,18 +1292,17 @@ module Projects
           assert_selector 'td:nth-child(7)', text: ''
         end
       end
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
-      click_link I18n.t('projects.samples.index.import_metadata_button')
+      ### actions start ###
+      click_link I18n.t('projects.samples.index.import_metadata_button'), match: :first
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/mixed_project_samples.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        ### ACTIONS END ###
+        ### actions end ###
 
-        ### VERIFY START ###
-        # sample 3 does not exist in current project
+        ### verify start ###
         assert_text I18n.t('services.samples.metadata.import_file.sample_not_found_within_project',
                            sample_puid: 'Project 2 Sample 3')
         click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
@@ -1355,33 +1321,33 @@ module Projects
           assert_selector 'td:nth-child(8)', text: '30'
         end
       end
-      ### VERIFY END ###
+      ### verify end ###
     end
 
     test 'should not import metadata with analysis values' do
-      ### SETUP START ###
+      ### setup start ###
       subgroup12aa = groups(:subgroup_twelve_a_a)
       project31 = projects(:project31)
       sample34 = samples(:sample34)
       visit namespace_project_samples_url(subgroup12aa, project31)
       # toggle metadata on for samples table
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
-      # metadata that does not overwriting analysis values will still be added
+      # metadata not overwriting analysis values will still be added
       assert_selector '#samples-table table thead tr th', count: 8
       within('#samples-table table thead') do
         assert_no_text 'METADATAFIELD3'
       end
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
+      ### actions start ###
       click_link I18n.t('projects.samples.index.import_metadata_button')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_analysis_values.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        ### ACTIONS END ###
+        ### actions end ###
 
-        ### VERIFY START ###
+        ### verify start ###
         assert_text I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
                            sample_name: sample34.name, metadata_fields: 'metadatafield1')
         click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
@@ -1392,86 +1358,27 @@ module Projects
         within('thead') do
           assert_text 'METADATAFIELD3'
         end
-        # new metadata value
+        # new metadata values for sample 1 and 2
         within("tr[id='#{sample34.id}']") do
           assert_selector 'td:nth-child(8)', text: '20'
         end
-        ### VERIFY END ###
+        ### verify end ###
       end
-    end
-
-    test 'clone dialog sample listing' do
-      ### SETUP START ###
-      samples = @project.samples.pluck(:puid, :name)
-      visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
-      click_link I18n.t('projects.samples.index.clone_button')
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      within('#list_selections') do
-        samples.each do |sample|
-          assert_text sample[0]
-          assert_text sample[1]
-        end
-      end
-      ### VERIFY END ###
-    end
-
-    test 'singular clone dialog description' do
-      ### SETUP START ###
-      visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      within '#samples-table table tbody' do
-        all('input[type="checkbox"]')[0].click
-      end
-      click_link I18n.t('projects.samples.index.clone_button')
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      within('#dialog') do
-        assert_text I18n.t('projects.samples.clones.dialog.description.singular')
-      end
-      ### VERIFY END ###
-    end
-
-    test 'plural clone dialog description' do
-      ### SETUP START ###
-      visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
-      click_link I18n.t('projects.samples.index.clone_button')
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      within('#dialog') do
-        assert_text I18n.t(
-          'projects.samples.clones.dialog.description.plural'
-        ).gsub! 'COUNT_PLACEHOLDER', '2'
-      end
-      ### VERIFY END ###
     end
 
     test 'should clone samples' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project2)
-      # verify samples 1 and 2 do not exist in project2
+      # samples 1 and 2 do not exist in project2
       within('#samples-table table tbody') do
         assert_no_text @sample1.name
         assert_no_text @sample2.name
       end
 
       visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
+      ### actions start ###
       # select samples 1 and 2 for cloning
       within '#samples-table table tbody' do
         find("input#sample_#{@sample1.id}").click
@@ -1479,13 +1386,23 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
+        # plural dialog description since > 1 sample selected
+        assert_text I18n.t(
+          'projects.samples.clones.dialog.description.plural'
+        ).gsub! 'COUNT_PLACEHOLDER', '2'
+        within('#list_selections') do
+          assert_text @sample1.puid
+          assert_text @sample1.name
+          assert_text @sample2.puid
+          assert_text @sample2.name
+        end
         find('input#select2-input').click
         find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
-      ### ACTIONS END ###
+      ### actions end ###
 
-      ### VERIFY START ###
+      ### verify start ###
       # flash msg
       assert_text I18n.t('projects.samples.clones.create.success')
       # samples still exist within samples table of originating project
@@ -1500,60 +1417,81 @@ module Projects
         assert_text @sample1.name
         assert_text @sample2.name
       end
-      ### VERIFY END ###
+      ### verify end ###
+    end
+
+    test 'singular clone dialog description' do
+      ### setup start ###
+      visit namespace_project_samples_url(@namespace, @project)
+      ### setup end ###
+
+      ### actions start ###
+      within '#samples-table table tbody' do
+        all('input[type="checkbox"]')[0].click
+      end
+      click_link I18n.t('projects.samples.index.clone_button')
+      ### actions end ###
+
+      ### verify start ###
+      within('#dialog') do
+        assert_text I18n.t('projects.samples.clones.dialog.description.singular')
+      end
+      ### verify end ###
     end
 
     test 'should not clone samples with session storage cleared' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
-      # clear localstorage
+      ### actions start ###
+      within '#samples-table table tbody' do
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
       Capybara.execute_script 'sessionStorage.clear()'
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
         find('input#select2-input').click
         find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
-        ### ACTIONS END ###
+        ### actions end ###
 
-        ### VERIFY START ###
-        # sample listing should not be in error dialog
-        assert_no_selector '#list_selections'
-        # error msg
+        ### verify start ###
+        assert_no_selector "turbo-frame[id='list_selections']"
         assert_text I18n.t('projects.samples.clones.create.no_samples_cloned_error')
         assert_text I18n.t('services.samples.clone.empty_sample_ids')
-        ### VERIFY END ###
+        ### verify end ###
       end
     end
 
     test 'should not clone some samples' do
       namespace = groups(:subgroup1)
       project25 = projects(:project25)
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(namespace, project25)
-      # sample30's name already exists in project25 samples table, samples1 and 2 do not
+      # samples 1 and 2 do not exist in project25 samples table
       within('#samples-table table tbody') do
         assert_no_text @sample1.name
         assert_no_text @sample2.name
-        assert_text @sample30.name
       end
       visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      ### actions start ###
+      within '#samples-table table tbody' do
+        # check all samples. sample30 will error due to name collision in project25
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
         find('input#select2-input').click
         find("button[data-viral--select2-primary-param='#{project25.full_path}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
+      end
+      ### actions end ###
 
-        ### ACTIONS END ###
-
-        ### VERIFY START ###
+      ### verify start ###
+      within %(turbo-frame[id="samples_dialog"]) do
         # errors that a sample with the same name as sample30 already exists in project25
         assert_text I18n.t('projects.samples.clones.create.error')
         assert_text I18n.t('services.samples.clone.sample_exists', sample_puid: @sample30.puid,
@@ -1567,100 +1505,47 @@ module Projects
         assert_text @sample1.name
         assert_text @sample2.name
       end
-      ### VERIFY END ###
+      ### verify end ###
     end
 
     test 'empty state of destination project selection for sample cloning' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ####
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      ### actions start ####
+      within '#samples-table table tbody' do
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
         find('input#select2-input').fill_in with: 'invalid project name or puid'
-        ### ACTIONS END ###
+        ### actions end ###
 
-        ### VERIFY START ###
+        ### verify start ###
         assert_text I18n.t('projects.samples.clones.dialog.empty_state')
-        ### VERIFY END ###
+        ### verify end ###
       end
     end
 
     test 'no available destination projects to clone samples' do
-      ### SETUP START ###
+      ### setup start ###
       sign_in users(:jean_doe)
       visit namespace_project_samples_url(namespaces_user_namespaces(:john_doe_namespace), projects(:john_doe_project2))
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      ### actions start ###
+      within '#samples-table table tbody' do
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
       click_link I18n.t('projects.samples.index.clone_button')
-      ### ACTIONS END ###
+      ### actions end ###
 
-      ### VERIFY START ###
+      ### verify start ###
       within('#dialog') do
         assert "input[placeholder='#{I18n.t('projects.samples.clones.dialog.no_available_projects')}']"
       end
-      ### VERIFY END ###
-    end
-
-    test 'updating sample selection during sample cloning' do
-      ### SETUP START ###
-      visit namespace_project_samples_url(@namespace, @project2)
-      # verify no samples currently selected in destination project
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 20"
-        assert_selector 'strong[data-selection-target="selected"]', text: '0'
-      end
-      visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      # select 1 sample to clone
-      within '#samples-table table tbody' do
-        all('input[type="checkbox"]')[0].click
-      end
-
-      # verify 1 sample selected in originating project
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 3"
-        assert_selector 'strong[data-selection-target="selected"]', text: '1'
-      end
-
-      # clone sample
-      click_link I18n.t('projects.samples.index.clone_button')
-      within('#dialog') do
-        fill_in placeholder: I18n.t('projects.samples.clones.dialog.select_project'), with: @project2.full_path
-        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
-        click_on I18n.t('projects.samples.clones.dialog.submit_button')
-      end
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      # verify no samples selected anymore
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 3"
-        assert_selector 'strong[data-selection-target="selected"]', text: '0'
-      end
-
-      # verify destination project still has no selected samples and one additional sample
-      Project.reset_counters(@project2.id, :samples_count)
-      visit namespace_project_samples_url(@namespace, @project2)
-
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 21"
-        assert_selector 'strong[data-selection-target="selected"]', text: '0'
-      end
-
-      click_button I18n.t(:'projects.samples.index.select_all_button')
-
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 21"
-        assert_selector 'strong[data-selection-target="selected"]', text: '21'
-      end
-      ### VERIFY END
+      ### verify end ###
     end
 
     test 'selecting / deselecting all samples' do
@@ -1820,66 +1705,18 @@ module Projects
                       text: I18n.t('projects.samples.index.create_export_button.label')
     end
 
-    test 'singular description within delete samples dialog' do
-      ### SETUP START ###
-      visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      within('tbody tr:first-child') do
-        # select sample1
-        all('input[type="checkbox"]')[0].click
-      end
-      click_link I18n.t('projects.samples.index.delete_samples_button')
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      within('#dialog') do
-        assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.description.singular',
-                           sample_name: @sample1.name)
-      end
-      ### VERIFY END ###
-    end
-
-    test 'plural description within delete samples dialog' do
-      ### SETUP START ###
-      samples = @project.samples.pluck(:puid, :name)
-      visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
-      click_link I18n.t('projects.samples.index.delete_samples_button')
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      within('#dialog') do
-        assert_text I18n.t(
-          'projects.samples.deletions.new_multiple_deletions_dialog.description.plural'
-        ).gsub! 'COUNT_PLACEHOLDER', '3'
-
-        within('#list_selections') do
-          samples.each do |sample|
-            assert_text sample[0]
-            assert_text sample[1]
-          end
-        end
-      end
-      ### VERIFY END ###
-    end
-
     test 'delete multiple samples' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       within '#samples-table table tbody' do
         assert_selector "tr[id='#{@sample1.id}']"
         assert_selector "tr[id='#{@sample2.id}']"
         assert_selector "tr[id='#{@sample30.id}']"
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
       end
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      ### actions start ###
       click_link I18n.t('projects.samples.index.delete_samples_button')
       within('#dialog') do
         assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.title')
@@ -1895,9 +1732,9 @@ module Projects
 
         click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
-      ### ACTIONS END ###
+      ### actions end ###
 
-      ### VERIFY START ###
+      ### verify start ###
       # flash msg
       assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
 
@@ -1908,17 +1745,41 @@ module Projects
       end
     end
 
+    test 'singular description within delete samples dialog' do
+      ### setup start ###
+      visit namespace_project_samples_url(@namespace, @project)
+      ### setup end ###
+
+      ### actions start ###
+      within('tbody tr:first-child') do
+        # select sample1
+        all('input[type="checkbox"]')[0].click
+      end
+      click_link I18n.t('projects.samples.index.delete_samples_button')
+      ### actions end ###
+
+      ### verify start ###
+      within('#dialog') do
+        assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.description.singular',
+                           sample_name: @sample1.name)
+      end
+      ### verify end ###
+    end
+
     test 'delete single sample with remove link while all samples selected followed by multiple deletion' do
       # tests that localstorage does not contain a selected sample after it's destroyed
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       assert_selector "tr[id='#{@sample1.id}']"
       assert_selector "tr[id='#{@sample2.id}']"
       assert_selector "tr[id='#{@sample30.id}']"
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
+      ### actions start ###
+      within '#samples-table table tbody' do
+        # select all samples
+        all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
+      end
 
       # destroy sample1 with remove action link
       within '#samples-table table tbody tr:first-child' do
@@ -1949,29 +1810,29 @@ module Projects
         assert_no_text @sample1.name
         click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
-      ### ACTIONS END ###
+      ### actions end ###
 
-      ### VERIFY START ###
+      ### verify start ###
       assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
 
       within 'div[role="alert"]' do
         assert_text I18n.t('projects.samples.index.no_samples')
         assert_text I18n.t('projects.samples.index.no_associated_samples')
       end
-      ### VERIFY END ###
+      ### verify end ###
     end
 
     test 'filtering samples by list of sample puids' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       within '#samples-table table tbody' do
         assert_selector "tr[id='#{@sample1.id}']"
         assert_selector "tr[id='#{@sample2.id}']"
         assert_selector "tr[id='#{@sample30.id}']"
       end
-      ### SETUP END ###
+      ### setup end ###
 
-      ### actions and VERIFY START ###
+      ### actions and verify start ###
       click_button I18n.t(:'components.list_filter.title')
       within '#list-filter-dialog' do
         assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
@@ -1999,20 +1860,20 @@ module Projects
         assert_selector "tr[id='#{@sample2.id}']"
         assert_selector "tr[id='#{@sample30.id}']"
       end
-      ### actions and VERIFY END ###
+      ### actions and verify end ###
     end
 
     test 'filtering samples by list of sample names' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       within '#samples-table table tbody' do
         assert_selector "tr[id='#{@sample1.id}']"
         assert_selector "tr[id='#{@sample2.id}']"
         assert_selector "tr[id='#{@sample30.id}']"
       end
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
+      ### actions start ###
       click_button I18n.t(:'components.list_filter.title')
       within '#list-filter-dialog' do
         assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
@@ -2020,9 +1881,9 @@ module Projects
         fill_in I18n.t(:'components.list_filter.description'), with: "#{@sample1.name}, #{@sample2.name}"
         click_button I18n.t(:'components.list_filter.apply')
       end
-      ### ACTIONS END ###
+      ### actions end ###
 
-      ### VERIFY START ###
+      ### verify start ###
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 2
         assert_selector "tr[id='#{@sample1.id}']"
@@ -2030,20 +1891,20 @@ module Projects
         # sample30 filtered out
         assert_no_selector "tr[id='#{@sample30.id}']"
       end
-      ### VERIFY END ###
+      ### verify end ###
     end
 
     test 'can filter by large list of sample names or ids' do
-      ### SETUP START ###
+      ### setup start ###
       visit namespace_project_samples_url(@namespace, @project)
       within '#samples-table table tbody' do
         assert_selector "tr[id='#{@sample1.id}']"
         assert_selector "tr[id='#{@sample2.id}']"
         assert_selector "tr[id='#{@sample30.id}']"
       end
-      ### SETUP END ###
+      ### setup end ###
 
-      ### ACTIONS START ###
+      ### actions start ###
       click_button I18n.t(:'components.list_filter.title')
       within '#list-filter-dialog' do |dialog|
         assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
@@ -2052,15 +1913,15 @@ module Projects
         dialog.scroll_to(dialog.find('button', text: I18n.t(:'components.list_filter.apply')), align: :bottom)
         click_button I18n.t(:'components.list_filter.apply')
       end
-      ### ACTIONS END ###
+      ### actions end ###
 
-      ### VERIFY START ###
+      ### verify start ###
       within '#samples-table table tbody' do
         assert_selector "tr[id='#{@sample1.id}']"
         assert_no_selector "tr[id='#{@sample2.id}']"
         assert_no_selector "tr[id='#{@sample30.id}']"
       end
-      ### VERIFY END ###
+      ### verify end ###
     end
 
     def long_filter_text
