@@ -7,7 +7,6 @@ module Viral
       <li class="w-full">
           <button
             type="button"
-            id="select2_<%= @primary %>"
             data-viral--select2-target="item"
             data-viral--select2-primary-param="<%= @primary %>"
             data-viral--select2-secondary-param="<%= @secondary %>"
