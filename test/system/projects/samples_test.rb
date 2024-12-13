@@ -2261,14 +2261,17 @@ module Projects
       ### VERIFY END ###
     end
 
-    test 'can edit a sample field' do
+    test 'can inline edit a sample metadata field' do
       visit namespace_project_samples_url(@namespace, @project)
+
+      assert_selector 'label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
 
-      within 'tbody' do
-        assert_text 'value1'
-        click_button 'value1'
-        assert_field 'value1'
+      assert_selector '#samples-table table thead tr th', count: 8
+      within('#samples-table table tbody tr:first-child') do
+        assert_text @sample3.name
+        assert_selector 'td:nth-child(6)', text: 'value1'
+        assert_selector 'td:nth-child(7)', text: 'value2'
       end
     end
 
