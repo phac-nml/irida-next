@@ -144,6 +144,10 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
     }.compact
   end
 
+  def field_editable?(field)
+    metadata_provenance.key?(field) && metadata_provenance[field]['source'] == 'user'
+  end
+
   def should_index?
     !deleted?
   end
