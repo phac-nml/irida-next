@@ -144,7 +144,7 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
     }.compact
   end
 
-  def field_editable?(field)
+  def can_update_field?(field)
     metadata_provenance.key?(field) && metadata_provenance[field]['source'] == 'user'
   end
 

@@ -132,11 +132,7 @@
                   <% end %>
                 <% end %>
               <% end %>
-              <%= render Samples::EditableCell.with_collection(
-                @metadata_fields,
-                sample: sample,
-                check_editable_url: @check_editable_url,
-              ) %>
+              <%= render Samples::EditableCell.with_collection(@metadata_fields, sample: sample) %>
               <% if @renders_row_actions %>
                 <%= render_cell(
                 tag: 'td',

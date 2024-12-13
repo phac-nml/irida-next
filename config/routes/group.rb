@@ -40,8 +40,6 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
       collection do
         get :select
         post :search
-        get :check_editable
-        patch :update_field
       end
     end
     resources :subgroups, only: %i[index]

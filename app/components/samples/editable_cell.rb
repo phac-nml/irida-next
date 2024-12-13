@@ -7,21 +7,17 @@ module Samples
 
     erb_template <<~ERB
       <td id="<%= dom_id(@sample, @field) %>">
-        <%= form_with(url: @check_editable_url, method: :get) do |form| %>
-          <%= form.hidden_field :id, value: @sample.id %>
+        <%= form_with(url: editable_namespace_project_sample_metadata_field_path(@sample.project.namespace.parent, @sample.project, @sample), method: :get) do |form| %>
           <%= form.hidden_field :field, value: @field %>
-          <%= form.hidden_field :value, value: @value %>
           <%= form.hidden_field :format, value: "turbo_stream" %>
-          <%= form.submit @value, class: "cursor-pointer p-4 hover:bg-slate-50 dark:hover:bg-slate-600 w-full text-left" %>
+          <%= form.submit @sample.metadata[@field], class: "cursor-pointer p-4 hover:bg-slate-50 dark:hover:bg-slate-600 w-full text-left" %>
         <% end %>
       </td>
     ERB
 
-    def initialize(field:, sample:, check_editable_url:)
+    def initialize(field:, sample:)
       @sample = sample
       @field = field
-      @value = sample.metadata[field]
-      @check_editable_url = check_editable_url
     end
   end
 end
