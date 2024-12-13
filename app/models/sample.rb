@@ -13,31 +13,50 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   searchkick \
     merge_mappings: true,
-    mappings: { dynamic_templates: [
-      {
-        metadata_dates: {
-          path_match: 'metadata.*_date',
-          mapping: {
-            type: 'date',
-            ignore_malformed: true
+    mappings: {
+      dynamic_templates: [
+        {
+          string_template: {
+            match: '*',
+            match_mapping_type: 'string',
+            mapping: {
+              fields: {
+                analyzed: {
+                  analyzer: 'searchkick_index',
+                  index: true,
+                  type: 'text'
+                }
+              },
+              ignore_above: 30_000,
+              type: 'keyword'
+            }
           }
-        }
-      }, {
-        metadata_non_dates: {
-          path_match: 'metadata.*',
-          path_unmatch: 'metadata.*_date',
-          mapping: {
-            type: 'text',
-            fields: {
-              numeric: {
-                type: 'double',
-                ignore_malformed: true
+        },
+        {
+          metadata_dates: {
+            path_match: 'metadata.*_date',
+            mapping: {
+              type: 'date',
+              ignore_malformed: true
+            }
+          }
+        }, {
+          metadata_non_dates: {
+            path_match: 'metadata.*',
+            path_unmatch: 'metadata.*_date',
+            mapping: {
+              type: 'text',
+              fields: {
+                numeric: {
+                  type: 'double',
+                  ignore_malformed: true
+                }
               }
             }
           }
         }
-      }
-    ] },
+      ]
+    },
     settings: {
       number_of_shards: 1
     },
