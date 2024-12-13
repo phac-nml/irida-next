@@ -803,4 +803,7 @@ if Rails.env.development?
   DataExport.suppressing_turbo_broadcasts do
     seed_exports
   end
+
+  # index samples using searchkick
+  Sample.reindex
 end

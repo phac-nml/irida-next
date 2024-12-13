@@ -10,6 +10,13 @@ module Dashboard
       @subgroup12a = groups(:subgroup_twelve_a)
       @subgroup12aa = groups(:subgroup_twelve_a_a)
       @subgroup12b = groups(:subgroup_twelve_b)
+
+      Sample.reindex
+      Searchkick.enable_callbacks
+    end
+
+    def teardown
+      Searchkick.disable_callbacks
     end
 
     test 'can see the list of groups' do

@@ -101,7 +101,7 @@
                   <% end %>
                   <% if column == :puid || column == :name %>
                     <%= link_to(
-                    project_sample_path(sample.project, sample),
+                    namespace_project_sample_path(sample.project.namespace.parent, sample.project, sample),
                     data: { turbo: false },
                     class: "text-slate-700 dark:text-slate-300 font-semibold hover:underline"
                   ) do %>
@@ -116,7 +116,7 @@
                     <% end %>
                   <% elsif column == :project_id %>
                     <%= link_to sample.project.puid,
-                    project_samples_path(sample.project),
+                    namespace_project_samples_path(sample.project.namespace.parent, sample.project),
                     data: {
                       turbo: false,
                     },

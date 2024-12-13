@@ -11,7 +11,7 @@ module Groups
 
     def index
       @timestamp = DateTime.current
-      @pagy, @samples = pagy(@query.results, limit: params[:limit] || 20)
+      @pagy, @samples = pagy_searchkick(@query.results(:searchkick_pagy), limit: params[:limit] || 20)
       @has_samples = authorized_samples.count.positive?
     end
 
@@ -26,7 +26,9 @@ module Groups
       respond_to do |format|
         format.turbo_stream do
           if params[:select].present?
-            @sample_ids = @query.results.where(updated_at: ..params[:timestamp].to_datetime).select(:id).pluck(:id)
+            @sample_ids = @query.results(:searchkick)
+                                .where(updated_at: ..params[:timestamp].to_datetime)
+                                .select(:id).pluck(:id)
           end
         end
       end
@@ -36,10 +38,6 @@ module Groups
 
     def group
       @group = Group.find_by_full_path(params[:group_id]) # rubocop:disable Rails/DynamicFindBy
-    end
-
-    def authorized_projects
-      authorized_scope(Project, type: :relation, as: :group_projects, scope_options: { group: @group })
     end
 
     def authorized_samples
@@ -80,7 +78,10 @@ module Groups
       @search_params = search_params
       set_metadata_fields
 
-      @query = Sample::Query.new(@search_params.except(:metadata).merge({ project_ids: authorized_projects.select(:id) }))
+      project_ids =
+        authorized_scope(Project, type: :relation, as: :group_projects, scope_options: { group: @group }).pluck(:id)
+
+      @query = Sample::Query.new(@search_params.except(:metadata).merge({ project_ids: project_ids }))
     end
 
     def search_params
