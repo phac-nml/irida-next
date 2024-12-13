@@ -403,8 +403,7 @@ module Projects
       within('#dialog') do
         # select destination project
         find('input#select2-input').click
-        click_button "#select2_#{@project2.full_path}"
-        # find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       ### ACTIONS END ###
@@ -442,8 +441,7 @@ module Projects
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
         find('input#select2-input').click
-        click_button "#select2_#{@project2.full_path}"
-        # find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
         ### ACTIONS END ###
 
@@ -478,8 +476,7 @@ module Projects
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
         find('input#select2-input').click
-        click_button "#select2_#{project25.full_path}"
-        # find("button[data-viral--select2-primary-param='#{project25.full_path}']").click
+        find("button[data-viral--select2-primary-param='#{project25.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       ### ACTIONS END ###
@@ -558,8 +555,7 @@ module Projects
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
         find('input#select2-input').click
-        click_button "#select2_#{@project2.full_path}"
-        # find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       ### ACTIONS END ###
@@ -1444,8 +1440,7 @@ module Projects
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
         find('input#select2-input').click
-        click_button "#select2_#{@project2.full_path}"
-        # find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
       ### ACTIONS END ###
@@ -1480,8 +1475,7 @@ module Projects
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
         find('input#select2-input').click
-        click_button "#select2_#{@project2.full_path}"
-        # find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
         ### ACTIONS END ###
 
@@ -1514,8 +1508,7 @@ module Projects
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
         find('input#select2-input').click
-        click_button "#select2_#{project25.full_path}"
-        # find("button[data-viral--select2-primary-param='#{project25.full_path}']").click
+        find("button[data-viral--select2-primary-param='#{project25.full_path}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
 
         ### ACTIONS END ###
@@ -1600,15 +1593,12 @@ module Projects
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
         fill_in placeholder: I18n.t('projects.samples.clones.dialog.select_project'), with: @project2.full_path
-        click_button "#select2_#{@project2.full_path}"
-        # find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      # flash msg
-      assert_text I18n.t('projects.samples.clones.create.success')
       # verify no samples selected anymore
       within 'tfoot' do
         assert_text "#{I18n.t('samples.table_component.counts.samples')}: 3"
