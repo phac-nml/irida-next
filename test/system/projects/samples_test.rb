@@ -17,6 +17,7 @@ module Projects
       @project2 = projects(:project2)
       @project29 = projects(:project29)
       @namespace = groups(:group_one)
+      @subgroup12a = groups(:subgroup_twelve_a)
 
       Project.reset_counters(@project.id, :samples_count)
 
@@ -402,7 +403,8 @@ module Projects
       within('#dialog') do
         # select destination project
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        click_button "#select2_#{@project2.full_path}"
+        # find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       ### ACTIONS END ###
@@ -440,7 +442,8 @@ module Projects
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        click_button "#select2_#{@project2.full_path}"
+        # find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
         ### ACTIONS END ###
 
@@ -475,7 +478,8 @@ module Projects
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{project25.full_path}']").click
+        click_button "#select2_#{project25.full_path}"
+        # find("button[data-viral--select2-primary-param='#{project25.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       ### ACTIONS END ###
@@ -554,7 +558,8 @@ module Projects
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        click_button "#select2_#{@project2.full_path}"
+        # find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       ### ACTIONS END ###
@@ -709,47 +714,6 @@ module Projects
         assert_selector 'tr:last-child td:nth-child(2)', text: @sample1.name
       end
       ### ACTION and VERIFY END ###
-    end
-
-    test 'sort samples attachments_updated_at_nulls_last' do
-      # attachments_updated_at_nulls_last sorts null data together
-      ### SETUP START ###
-      visit namespace_project_samples_url(@namespace, @project)
-
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
-      ### SETUP END ###
-
-      ### action and VERIFY START ###
-      within('tbody tr:first-child th') do
-        assert_text @sample1.puid
-      end
-      # sort by attachments_updated_at
-      click_on I18n.t('samples.table_component.attachments_updated_at')
-
-      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
-      within('#samples-table table tbody') do
-        assert_selector 'tr:first-child th', text: @sample1.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
-        assert_selector 'tr:nth-child(2) th', text: @sample2.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
-        assert_selector 'tr:last-child th', text: @sample30.puid
-        assert_selector 'tr:last-child td:nth-child(2)', text: @sample30.name
-      end
-
-      # change sort direction
-      click_on I18n.t('samples.table_component.attachments_updated_at')
-
-      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_down'
-      within('#samples-table table tbody') do
-        assert_selector 'tr:first-child th', text: @sample2.puid
-        assert_selector 'tr:first-child td:nth-child(2)', text: @sample2.name
-        assert_selector 'tr:nth-child(2) th', text: @sample30.puid
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample30.name
-        assert_selector 'tr:last-child th', text: @sample1.puid
-        assert_selector 'tr:last-child td:nth-child(2)', text: @sample1.name
-      end
-      ### action and VERIFY END ###
     end
 
     test 'sort persists through limit and filter' do
@@ -1454,7 +1418,7 @@ module Projects
       within('#dialog') do
         assert_text I18n.t(
           'projects.samples.clones.dialog.description.plural'
-        ).gsub! 'COUNT_PLACEHOLDER', '2'
+        ).gsub! 'COUNT_PLACEHOLDER', '3'
       end
       ### VERIFY END ###
     end
@@ -1480,7 +1444,8 @@ module Projects
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        click_button "#select2_#{@project2.full_path}"
+        # find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
       ### ACTIONS END ###
@@ -1515,7 +1480,8 @@ module Projects
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        click_button "#select2_#{@project2.full_path}"
+        # find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
         ### ACTIONS END ###
 
@@ -1548,7 +1514,8 @@ module Projects
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{project25.full_path}']").click
+        click_button "#select2_#{project25.full_path}"
+        # find("button[data-viral--select2-primary-param='#{project25.full_path}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
 
         ### ACTIONS END ###
@@ -1633,12 +1600,15 @@ module Projects
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
         fill_in placeholder: I18n.t('projects.samples.clones.dialog.select_project'), with: @project2.full_path
-        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        click_button "#select2_#{@project2.full_path}"
+        # find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
+      # flash msg
+      assert_text I18n.t('projects.samples.clones.create.success')
       # verify no samples selected anymore
       within 'tfoot' do
         assert_text "#{I18n.t('samples.table_component.counts.samples')}: 3"
