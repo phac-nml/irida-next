@@ -11,14 +11,18 @@ export default class extends Controller {
     this.inputTarget.select();
   }
 
-  submit(event) {
-    this.element.requestSubmit();
+  submit() {
+    if (!this.submitted) {
+      this.element.requestSubmit();
+    }
   }
 
   cancel(event) {
     if (event.key === "Escape") {
       this.inputTarget.value = this.originalValue;
       this.inputTarget.blur();
+    } else if (event.key === "Enter") {
+      this.submitted = true;
     }
   }
 }
