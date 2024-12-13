@@ -42,6 +42,60 @@ module Projects
           end
         end
 
+        def editable
+          authorize! @project, to: :update_sample?
+          @field = params[:field]
+          @value = @sample.metadata[@field]
+          if @sample.can_update_field?(params[:field])
+            render turbo_stream: turbo_stream.replace(
+              helpers.dom_id(@sample, @field),
+              partial: 'shared/samples/metadata/fields/editing_field_cell', # TODO: Move this partial to the component
+              locals: { sample: @sample, field: @field, value: @value }
+            )
+          else
+            render turbo_stream: turbo_stream.append('flashes', partial: 'shared/flash',
+                                                                locals: { type: 'error', message: 'This field is not editable' })
+          end
+        end
+
+        def update_value
+          authorize! @project, to: :update_sample?
+
+          @field = params[:field]
+          value = params[:value]
+          original_value = params[:original_value]
+
+          if value == original_value
+            render turbo_stream: turbo_stream.replace(
+              helpers.dom_id(@sample, @field),
+              partial: 'shared/samples/metadata/fields/editable_field_cell',
+              locals: { sample: @sample, field: @field }
+            )
+          else
+            ::Samples::Metadata::Fields::UpdateService.new(@project, @sample, current_user,
+                                                           {
+                                                             'update_field' => {
+                                                               'key' => {
+                                                                 @field => @field
+                                                               },
+                                                               'value' => {
+                                                                 original_value => value
+                                                               }
+                                                             }
+                                                           }).execute
+            if @sample.errors.any?
+              render status: :unprocessable_entity,
+                     locals: { type: 'error', message: @sample.errors.full_messages.first }
+            else
+              render turbo_stream: turbo_stream.replace(
+                helpers.dom_id(@sample, @field),
+                partial: 'shared/samples/metadata/fields/editable_field_cell',
+                locals: { sample: @sample, field: @field }
+              )
+            end
+          end
+        end
+
         private
 
         def create_field_params

@@ -59,8 +59,6 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
           get :select
           post :list
           post :search
-          get :check_editable
-          patch :update_field
         end
         resources :attachments, module: :samples, only: %i[new create destroy] do
           scope module: :attachments, as: :attachments do
@@ -76,7 +74,10 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
         resource :metadata, module: :samples, only: %i[new edit destroy] do
           scope module: :metadata, as: :metadata do
             collection do
-              resource :field, only: %i[update create]
+              resource :field, only: %i[update create] do
+                get :editable
+                patch :update_value
+              end
             end
             collection do
               resource :deletion, only: %i[new destroy]
