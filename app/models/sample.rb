@@ -57,9 +57,6 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
         }
       ]
     },
-    settings: {
-      number_of_shards: 1
-    },
     deep_paging: true,
     text_middle: %i[name puid]
 
