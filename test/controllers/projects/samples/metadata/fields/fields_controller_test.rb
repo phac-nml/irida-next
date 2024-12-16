@@ -164,7 +164,20 @@ module Projects
               'field' => 'metadatafield1',
               'format' => :turbo_stream
             }
-            assert_response :ok
+            assert_response :partial_content
+          end
+
+          test 'checking to see if a field can be edited fails if it belongs to an analysis' do
+            sample34 = samples(:sample34)
+            project31 = projects(:project31)
+            namespace = groups(:subgroup_twelve_a_a)
+            get editable_namespace_project_sample_metadata_field_path(
+              namespace, project31, sample34
+            ), params: {
+              'field' => 'metadatafield1',
+              'format' => :turbo_stream
+            }
+            assert_response :unprocessable_entity
           end
 
           test 'renders unchanged field when value does not change' do
