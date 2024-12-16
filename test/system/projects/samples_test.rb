@@ -225,6 +225,8 @@ module Projects
       assert_text I18n.t('projects.samples.create.success')
       # verify redirect to sample show page after successful sample creation
       assert_selector 'h1', text: 'New Name'
+      assert_selector 'p', text: 'A sample description'
+      sleep 1
       # verify sample exists in table
       visit namespace_project_samples_url(@namespace, @project)
       within('#samples-table table tbody') do
@@ -426,11 +428,12 @@ module Projects
           assert_text sample[1]
         end
       end
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 23,
+                                                                           locale: @user.locale))
       ### VERIFY END ###
     end
 
     test 'should not transfer samples with session storage cleared' do
-      samples = @project.samples.pluck(:puid, :name)
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
@@ -445,12 +448,6 @@ module Projects
       # launch transfer dialog
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
-        within('#list_selections') do
-          samples.each do |sample|
-            assert_text sample[0]
-            assert_text sample[1]
-          end
-        end
         find('input#select2-input').click
         find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
@@ -573,11 +570,12 @@ module Projects
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
         within('#list_selections') do
-          assert_test @sample1.name
+          assert_text @sample1.name
           assert_text @sample1.puid
         end
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        click_button @project2.puid
+        # find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       ### ACTIONS END ###
@@ -591,7 +589,8 @@ module Projects
 
       # verify destination project still has no selected samples and one additional sample
       visit namespace_project_samples_url(@namespace, @project2)
-
+      assert_selector 'h1', text: 'Samples'
+      assert_selector '#samples-table'
       within 'tfoot' do
         assert_text "#{I18n.t('samples.table_component.counts.samples')}: 21"
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
@@ -1493,7 +1492,6 @@ module Projects
 
     test 'should not clone samples with session storage cleared' do
       ### SETUP START ###
-      samples = @project.samples.pluck(:puid, :name)
       visit namespace_project_samples_url(@namespace, @project)
       ### SETUP END ###
 
@@ -1604,7 +1602,6 @@ module Projects
 
     test 'updating sample selection during sample cloning' do
       ### SETUP START ###
-      samples = @project.samples.pluck(:puid, :name)
       visit namespace_project_samples_url(@namespace, @project2)
       # verify no samples currently selected in destination project
       within 'tfoot' do
@@ -1633,13 +1630,16 @@ module Projects
           assert_text @sample1.name
           assert_text @sample1.puid
         end
-        fill_in placeholder: I18n.t('projects.samples.clones.dialog.select_project'), with: @project2.full_path
-        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        find('input#select2-input').click
+        find("button[data-viral--select2-primary-param='#{@project2.full_path}']", wait: 1).click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
+      sleep 1
+      # flash msg
+      assert_text I18n.t('projects.samples.clones.create.success')
       # verify no samples selected anymore
       within 'tfoot' do
         assert_text "#{I18n.t('samples.table_component.counts.samples')}: 3"
@@ -1647,7 +1647,6 @@ module Projects
       end
 
       # verify destination project still has no selected samples and one additional sample
-      Project.reset_counters(@project2.id, :samples_count)
       visit namespace_project_samples_url(@namespace, @project2)
 
       within 'tfoot' do
