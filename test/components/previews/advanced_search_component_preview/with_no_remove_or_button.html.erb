@@ -1,0 +1,34 @@
+<%= form_with do |form| %>
+  <%= render AdvancedSearchComponent.new(form:, filters: []) do |advanced_search| %>
+    <% advanced_search.with_add_condition_button do %>
+      <button
+        type="button"
+        class="
+          inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white
+          border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700
+          focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800
+          dark:border-gray-700 dark:text-white dark:hover:text-white
+          dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white
+        "
+      >
+        <%= viral_icon(name: "plus", classes: "mr-2 w-4 h-4") %>
+        <span>And condition</span>
+      </button>
+    <% end %>
+    <% advanced_search.with_add_group_button do %>
+      <button
+        type="button"
+        class="
+          inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white
+          border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700
+          focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800
+          dark:border-gray-700 dark:text-white dark:hover:text-white
+          dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white
+        "
+      >
+        <%= viral_icon(name: "plus", classes: "mr-2 w-4 h-4") %>
+        <span>Or condition</span>
+      </button>
+    <% end %>
+  <% end %>
+<% end %>
