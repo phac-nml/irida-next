@@ -221,6 +221,7 @@ module Projects
       ### ACTIONS END ###
 
       ### results start ###
+      sleep 1
       # flash msg
       assert_text I18n.t('projects.samples.create.success')
       # verify redirect to sample show page after successful sample creation
@@ -408,7 +409,7 @@ module Projects
         end
         # select destination project
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       ### ACTIONS END ###
@@ -449,7 +450,7 @@ module Projects
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
         ### ACTIONS END ###
 
@@ -491,7 +492,7 @@ module Projects
           end
         end
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{project25.full_path}']").click
+        find("button[data-viral--select2-value-param='#{project25.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       ### ACTIONS END ###
@@ -575,8 +576,7 @@ module Projects
           assert_text @sample1.puid
         end
         find('input#select2-input').click
-        click_button @project2.puid
-        # find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
       end
       ### ACTIONS END ###
@@ -1469,7 +1469,7 @@ module Projects
           assert_text @sample2.name
         end
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
       ### ACTIONS END ###
@@ -1505,7 +1505,7 @@ module Projects
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
         ### ACTIONS END ###
 
@@ -1545,7 +1545,7 @@ module Projects
           end
         end
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{project25.full_path}']").click
+        find("button[data-viral--select2-value-param='#{project25.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
 
         ### ACTIONS END ###
@@ -1635,7 +1635,7 @@ module Projects
           assert_text @sample1.puid
         end
         find('input#select2-input').click
-        find("button[data-viral--select2-primary-param='#{@project2.full_path}']", wait: 1).click
+        find("button[data-viral--select2-value-param='#{@project2.id}']", wait: 1).click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
       ### ACTIONS END ###
