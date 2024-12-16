@@ -221,7 +221,6 @@ module Projects
       ### ACTIONS END ###
 
       ### results start ###
-      sleep 1
       # flash msg
       assert_text I18n.t('projects.samples.create.success')
       # verify redirect to sample show page after successful sample creation
@@ -415,7 +414,6 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      sleep 1
       # flash msg
       assert_text I18n.t('projects.samples.transfers.create.success')
       # originating project no longer has samples
@@ -506,7 +504,6 @@ module Projects
                                                                       sample_name: @sample30.name).gsub(':', '')
       end
 
-      sleep 1
       # verify sample1 and 2 transferred, sample 30 did not
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 1, locale: @user.locale))
       assert_no_selector "tr[id='#{@sample1.id}']"
@@ -515,6 +512,10 @@ module Projects
 
       # destination project
       visit namespace_project_samples_url(namespace, project25)
+      assert_selector 'h1', text: 'Samples'
+      assert_selector '#samples-table'
+      assert_selector 'tfoot'
+      assert_selector 'table'
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 4, count: 4,
                                                                            locale: @user.locale))
       assert_selector "tr[id='#{@sample1.id}']"
@@ -582,7 +583,6 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      sleep 1
       # verify no samples selected anymore
       within 'tfoot' do
         assert_text "#{I18n.t('samples.table_component.counts.samples')}: 2"
@@ -591,6 +591,10 @@ module Projects
 
       # verify destination project still has no selected samples and one additional sample
       visit namespace_project_samples_url(@namespace, @project2)
+      assert_selector 'h1', text: 'Samples'
+      assert_selector '#samples-table'
+      assert_selector 'tfoot'
+      assert_selector 'table'
       assert_selector 'h1', text: 'Samples'
       assert_selector '#samples-table'
       within 'tfoot' do
@@ -1475,7 +1479,6 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      sleep 1
       # flash msg
       assert_text I18n.t('projects.samples.clones.create.success')
       # samples still exist within samples table of originating project
@@ -1486,6 +1489,10 @@ module Projects
 
       # samples now exist in project2 samples table
       visit namespace_project_samples_url(@namespace, @project2)
+      assert_selector 'h1', text: 'Samples'
+      assert_selector '#samples-table'
+      assert_selector 'tfoot'
+      assert_selector 'table'
       within('#samples-table table tbody') do
         assert_text @sample1.name
         assert_text @sample2.name
@@ -1557,9 +1564,11 @@ module Projects
                                                                    sample_name: @sample30.name).gsub(':', '')
         click_on I18n.t('projects.samples.shared.errors.ok_button')
       end
-
-      sleep 1
       visit namespace_project_samples_url(namespace, project25)
+      assert_selector 'h1', text: 'Samples'
+      assert_selector '#samples-table'
+      assert_selector 'tfoot'
+      assert_selector 'table'
       # samples 1 and 2 still successfully clone
       within('#samples-table table tbody') do
         assert_text @sample1.name
@@ -1635,13 +1644,12 @@ module Projects
           assert_text @sample1.puid
         end
         find('input#select2-input').click
-        find("button[data-viral--select2-value-param='#{@project2.id}']", wait: 1).click
+        find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      sleep 1
       # flash msg
       assert_text I18n.t('projects.samples.clones.create.success')
       # verify no samples selected anymore
@@ -1652,6 +1660,10 @@ module Projects
 
       # verify destination project still has no selected samples and one additional sample
       visit namespace_project_samples_url(@namespace, @project2)
+      assert_selector 'h1', text: 'Samples'
+      assert_selector '#samples-table'
+      assert_selector 'tfoot'
+      assert_selector 'table'
 
       within 'tfoot' do
         assert_text "#{I18n.t('samples.table_component.counts.samples')}: 21"
