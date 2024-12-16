@@ -1,5 +1,6 @@
 <%= form_with do |form| %>
-  <%= render AdvancedSearchComponent.new(form:, filters: []) do |advanced_search| %>
+  <%= render AdvancedSearchComponent.new(fields: %w[name puid created_at updated_at], operations: %w[= != <= >= < >]) do
+  |advanced_search| %>
     <% advanced_search.with_add_condition_button do %>
       <button
         type="button"
