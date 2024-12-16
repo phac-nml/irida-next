@@ -226,7 +226,6 @@ module Projects
       # verify redirect to sample show page after successful sample creation
       assert_selector 'h1', text: 'New Name'
       assert_selector 'p', text: 'A sample description'
-      sleep 1
       # verify sample exists in table
       visit namespace_project_samples_url(@namespace, @project)
       within('#samples-table table tbody') do
@@ -415,6 +414,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
+      sleep 1
       # flash msg
       assert_text I18n.t('projects.samples.transfers.create.success')
       # originating project no longer has samples
@@ -505,6 +505,7 @@ module Projects
                                                                       sample_name: @sample30.name).gsub(':', '')
       end
 
+      sleep 1
       # verify sample1 and 2 transferred, sample 30 did not
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 1, locale: @user.locale))
       assert_no_selector "tr[id='#{@sample1.id}']"
@@ -581,6 +582,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
+      sleep 1
       # verify no samples selected anymore
       within 'tfoot' do
         assert_text "#{I18n.t('samples.table_component.counts.samples')}: 2"
@@ -1473,6 +1475,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
+      sleep 1
       # flash msg
       assert_text I18n.t('projects.samples.clones.create.success')
       # samples still exist within samples table of originating project
@@ -1555,6 +1558,7 @@ module Projects
         click_on I18n.t('projects.samples.shared.errors.ok_button')
       end
 
+      sleep 1
       visit namespace_project_samples_url(namespace, project25)
       # samples 1 and 2 still successfully clone
       within('#samples-table table tbody') do
