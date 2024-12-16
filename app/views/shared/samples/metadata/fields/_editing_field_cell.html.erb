@@ -1,7 +1,6 @@
 <td id="<%= dom_id(@sample, @field) %>">
   <%= form_with(url: update_value_namespace_project_sample_metadata_field_path(sample_id: @sample.id), method: :patch,
   data: { controller: "inline-edit", "inline-edit-original-value": @value  }) do |f| %>
-    <%= f.hidden_field :id, value: @sample.id %>
     <%= f.hidden_field :field, value: @field %>
     <%= f.hidden_field :original_value, value: @value %>
     <%= f.hidden_field :format, value: "turbo_stream" %>
