@@ -221,6 +221,7 @@ module Projects
       ### ACTIONS END ###
 
       ### results start ###
+      Sample.search_index.refresh
       # flash msg
       assert_text I18n.t('projects.samples.create.success')
       # verify redirect to sample show page after successful sample creation
@@ -497,6 +498,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
+      Sample.search_index.refresh
       within('#dialog') do
         # error messages in dialog
         assert_text I18n.t('projects.samples.transfers.create.error')
@@ -512,7 +514,6 @@ module Projects
       assert_selector "tr[id='#{@sample30.id}']"
 
       # destination project
-      Sample.search_index.refresh
       visit namespace_project_samples_url(namespace, project25)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 4, count: 4,
                                                                            locale: @user.locale))
@@ -570,6 +571,10 @@ module Projects
       # transfer sample
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
+        within('#list_selections') do
+          assert_text @sample1.name
+          assert_text @sample1.puid
+        end
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
@@ -1455,6 +1460,12 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
+        within('#list_selections') do
+          assert_text @sample1.name
+          assert_text @sample1.puid
+          assert_text @sample2.name
+          assert_text @sample2.puid
+        end
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
@@ -1544,8 +1555,9 @@ module Projects
                                                                    sample_name: @sample30.name).gsub(':', '')
         click_on I18n.t('projects.samples.shared.errors.ok_button')
       end
-      visit namespace_project_samples_url(namespace, project25)
+
       Sample.search_index.refresh
+      visit namespace_project_samples_url(namespace, project25)
       # samples 1 and 2 still successfully clone
       within('#samples-table table tbody') do
         assert_text @sample1.name
@@ -1616,6 +1628,10 @@ module Projects
       # clone sample
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
+        within('#list_selections') do
+          assert_text @sample1.name
+          assert_text @sample1.puid
+        end
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
