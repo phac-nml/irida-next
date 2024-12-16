@@ -40,109 +40,105 @@ rough changes to demonstrate a mockup. -->
         </p>
         <div>
           <div class="bg-slate-100 border border-gray-300 rounded-lg">
-            <div class="flex space-x-2 items-center ">
-              <div class="flex space-x-2 p-4">
-                <select
-                  class="
-                    bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-                    focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700
-                    dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
-                    dark:focus:ring-blue-500 dark:focus:border-blue-500
-                  "
-                >
-                  <option selected>Field</option>
-                  <% @metadata_fields.each do |metadata_field| %>
-                    <option value="<%=metadata_field%>"><%= metadata_field %></option>
-                  <% end %>
-                </select>
-                <select
-                  class="
-                    bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-                    focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700
-                    dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
-                    dark:focus:ring-blue-500 dark:focus:border-blue-500
-                  "
-                >
-                  <option selected>Operation</option>
-                  <% @operations.each do |operation| %>
-                    <option value="<%=operation%>"><%= operation %></option>
-                  <% end %>
-                </select>
-                <input
-                  type="text"
-                  name="field[1][]"
-                  class="
-                    keyInput block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0
-                    border-b-2 border-slate-300 appearance-none dark:text-white
-                    dark:border-slate-600 dark:focus:border-primary-500 focus:outline-none
-                    focus:ring-0 focus:border-primary-500 peer
-                  "
-                />
-                <button
-                  type="button"
-                  class="
-                    ml-auto bg-slate-100 text-slate-400 hover:text-slate-900 rounded-lg focus:ring-2
-                    focus:ring-slate-300 p-1.5 inline-flex items-center justify-center h-8 w-8
-                    dark:text-slate-500 dark:hover:text-white dark:bg-slate-800
-                    dark:hover:bg-slate-700
-                  "
-                  aria-label="remove field"
-                >
-                  <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>
-                </button>
-              </div>
+            <div class="flex space-x-2 p-4">
+              <select
+                class="
+                  bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+                  focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700
+                  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
+                  dark:focus:ring-blue-500 dark:focus:border-blue-500
+                "
+              >
+                <option selected>Field</option>
+                <% @metadata_fields.each do |metadata_field| %>
+                  <option value="<%=metadata_field%>"><%= metadata_field %></option>
+                <% end %>
+              </select>
+              <select
+                class="
+                  bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+                  focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700
+                  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
+                  dark:focus:ring-blue-500 dark:focus:border-blue-500
+                "
+              >
+                <option selected>Operation</option>
+                <% @operations.each do |operation| %>
+                  <option value="<%=operation%>"><%= operation %></option>
+                <% end %>
+              </select>
+              <input
+                type="text"
+                name="field[1][]"
+                class="
+                  keyInput block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0
+                  border-b-2 border-slate-300 appearance-none dark:text-white
+                  dark:border-slate-600 dark:focus:border-primary-500 focus:outline-none
+                  focus:ring-0 focus:border-primary-500 peer
+                "
+              />
+              <button
+                type="button"
+                class="
+                  ml-auto bg-slate-100 text-slate-400 hover:text-slate-900 rounded-lg focus:ring-2
+                  focus:ring-slate-300 p-1.5 inline-flex items-center justify-center h-8 w-8
+                  dark:text-slate-500 dark:hover:text-white dark:bg-slate-800
+                  dark:hover:bg-slate-700
+                "
+                aria-label="remove field"
+              >
+                <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>
+              </button>
             </div>
-            <div class="flex space-x-2 items-center">
-              <div class="flex space-x-2 p-4 ">
-                <select
-                  class="
-                    bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-                    focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700
-                    dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
-                    dark:focus:ring-blue-500 dark:focus:border-blue-500
-                  "
-                >
-                  <option selected>Field</option>
-                  <% @metadata_fields.each do |metadata_field| %>
-                    <option value="<%=metadata_field%>"><%= metadata_field %></option>
-                  <% end %>
-                </select>
-                <select
-                  class="
-                    bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-                    focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700
-                    dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
-                    dark:focus:ring-blue-500 dark:focus:border-blue-500
-                  "
-                >
-                  <option selected>Operation</option>
-                  <% @operations.each do |operation| %>
-                    <option value="<%=operation%>"><%= operation %></option>
-                  <% end %>
-                </select>
-                <input
-                  type="text"
-                  name="field[2][]"
-                  class="
-                    keyInput block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0
-                    border-b-2 border-slate-300 appearance-none dark:text-white
-                    dark:border-slate-600 dark:focus:border-primary-500 focus:outline-none
-                    focus:ring-0 focus:border-primary-500 peer
-                  "
-                />
-                <button
-                  type="button"
-                  class="
-                    ml-auto bg-slate-100 text-slate-400 hover:text-slate-900 rounded-lg focus:ring-2
-                    focus:ring-slate-300 p-1.5 inline-flex items-center justify-center h-8 w-8
-                    dark:text-slate-500 dark:hover:text-white dark:bg-slate-800
-                    dark:hover:bg-slate-700
-                  "
-                  aria-label="remove field"
-                >
-                  <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>
-                </button>
-              </div>
+            <div class="flex space-x-2 p-4">
+              <select
+                class="
+                  bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+                  focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700
+                  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
+                  dark:focus:ring-blue-500 dark:focus:border-blue-500
+                "
+              >
+                <option selected>Field</option>
+                <% @metadata_fields.each do |metadata_field| %>
+                  <option value="<%=metadata_field%>"><%= metadata_field %></option>
+                <% end %>
+              </select>
+              <select
+                class="
+                  bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+                  focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700
+                  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
+                  dark:focus:ring-blue-500 dark:focus:border-blue-500
+                "
+              >
+                <option selected>Operation</option>
+                <% @operations.each do |operation| %>
+                  <option value="<%=operation%>"><%= operation %></option>
+                <% end %>
+              </select>
+              <input
+                type="text"
+                name="field[2][]"
+                class="
+                  keyInput block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0
+                  border-b-2 border-slate-300 appearance-none dark:text-white
+                  dark:border-slate-600 dark:focus:border-primary-500 focus:outline-none
+                  focus:ring-0 focus:border-primary-500 peer
+                "
+              />
+              <button
+                type="button"
+                class="
+                  ml-auto bg-slate-100 text-slate-400 hover:text-slate-900 rounded-lg focus:ring-2
+                  focus:ring-slate-300 p-1.5 inline-flex items-center justify-center h-8 w-8
+                  dark:text-slate-500 dark:hover:text-white dark:bg-slate-800
+                  dark:hover:bg-slate-700
+                "
+                aria-label="remove field"
+              >
+                <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>
+              </button>
             </div>
             <div class="flex justify-end space-x-2 p-4">
               <%= add_condition_button %>
