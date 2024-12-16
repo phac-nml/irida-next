@@ -47,14 +47,14 @@ module Projects
           @field = params[:field]
           @value = @sample.metadata[@field]
           if @sample.can_update_field?(params[:field])
-            render turbo_stream: turbo_stream.replace(
+            render status: :partial_content, turbo_stream: turbo_stream.replace(
               helpers.dom_id(@sample, @field),
-              partial: 'shared/samples/metadata/fields/editing_field_cell', # TODO: Move this partial to the component
+              partial: 'shared/samples/metadata/fields/editing_field_cell',
               locals: { sample: @sample, field: @field, value: @value }
             )
           else
-            render turbo_stream: turbo_stream.append('flashes', partial: 'shared/flash',
-                                                                locals: { type: 'error', message: 'This field is not editable' })
+            render status: :unprocessable_entity, turbo_stream: turbo_stream.append('flashes', partial: 'shared/flash',
+                                                                                               locals: { type: 'error', message: 'This field is not editable' })
           end
         end
 
