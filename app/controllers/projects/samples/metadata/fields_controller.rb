@@ -66,33 +66,9 @@ module Projects
           original_value = params[:original_value]
 
           if value == original_value
-            render turbo_stream: turbo_stream.replace(
-              helpers.dom_id(@sample, @field),
-              partial: 'shared/samples/metadata/fields/editable_field_cell',
-              locals: { sample: @sample, field: @field }
-            )
+            render_unchanged_field
           else
-            ::Samples::Metadata::Fields::UpdateService.new(@project, @sample, current_user,
-                                                           {
-                                                             'update_field' => {
-                                                               'key' => {
-                                                                 @field => @field
-                                                               },
-                                                               'value' => {
-                                                                 original_value => value
-                                                               }
-                                                             }
-                                                           }).execute
-            if @sample.errors.any?
-              render status: :unprocessable_entity,
-                     locals: { type: 'error', message: @sample.errors.full_messages.first }
-            else
-              render turbo_stream: turbo_stream.replace(
-                helpers.dom_id(@sample, @field),
-                partial: 'shared/samples/metadata/fields/editable_field_cell',
-                locals: { sample: @sample, field: @field }
-              )
-            end
+            update_field_value(original_value, value)
           end
         end
 
@@ -152,6 +128,55 @@ module Projects
             update_render_params[:message] = { type: 'error', message: @sample.errors.full_messages.first }
           end
           update_render_params
+        end
+
+        def render_unchanged_field
+          render turbo_stream: turbo_stream.replace(
+            helpers.dom_id(@sample, @field),
+            partial: 'shared/samples/metadata/fields/editable_field_cell',
+            locals: { sample: @sample, field: @field }
+          )
+        end
+
+        def update_field_value(original_value, new_value)
+          perform_field_update(original_value, new_value)
+
+          if @sample.errors.any?
+            render_update_error
+          else
+            render_update_success
+          end
+        end
+
+        def perform_field_update(original_value, new_value)
+          ::Samples::Metadata::Fields::UpdateService.new(
+            @project,
+            @sample,
+            current_user,
+            build_update_params(original_value, new_value)
+          ).execute
+        end
+
+        def build_update_params(original_value, new_value)
+          {
+            'update_field' => {
+              'key' => { @field => @field },
+              'value' => { original_value => new_value }
+            }
+          }
+        end
+
+        def render_update_error
+          render status: :unprocessable_entity,
+                 locals: { type: 'error', message: @sample.errors.full_messages.first }
+        end
+
+        def render_update_success
+          render turbo_stream: turbo_stream.replace(
+            helpers.dom_id(@sample, @field),
+            partial: 'shared/samples/metadata/fields/editable_field_cell',
+            locals: { sample: @sample, field: @field }
+          )
         end
       end
     end
