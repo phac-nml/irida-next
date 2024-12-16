@@ -383,24 +383,28 @@ module Projects
 
     test 'transfer samples' do
       ### SETUP START ###
+      samples = @project.samples.pluck(:puid, :name)
       # show destination project has 20 samples prior to transfer
       visit namespace_project_samples_url(@namespace, @project2)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
                                                                            locale: @user.locale))
       # originating project has 3 samples prior to transfer
-      visit namespace_project_samples_url(
-        @namespace, @project
-      )
+      visit namespace_project_samples_url(@namespace, @project)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
-      samples = @project.samples.pluck(:puid, :name)
       # select all 3 samples
       click_button I18n.t(:'projects.samples.index.select_all_button')
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
+        within('#list_selections') do
+          samples.each do |sample|
+            assert_text sample[0]
+            assert_text sample[1]
+          end
+        end
         # select destination project
         find('input#select2-input').click
         find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
@@ -426,6 +430,7 @@ module Projects
     end
 
     test 'should not transfer samples with session storage cleared' do
+      samples = @project.samples.pluck(:puid, :name)
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
@@ -440,6 +445,12 @@ module Projects
       # launch transfer dialog
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
+        within('#list_selections') do
+          samples.each do |sample|
+            assert_text sample[0]
+            assert_text sample[1]
+          end
+        end
         find('input#select2-input').click
         find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
@@ -458,6 +469,7 @@ module Projects
       # only samples without a matching name to samples in destination project will transfer
 
       ### SETUP START ###
+      samples = @project.samples.pluck(:puid, :name)
       namespace = groups(:subgroup1)
       project25 = projects(:project25)
 
@@ -475,6 +487,12 @@ module Projects
       click_button I18n.t(:'projects.samples.index.select_all_button')
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
+        within('#list_selections') do
+          samples.each do |sample|
+            assert_text sample[0]
+            assert_text sample[1]
+          end
+        end
         find('input#select2-input').click
         find("button[data-viral--select2-primary-param='#{project25.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
@@ -554,6 +572,10 @@ module Projects
       # transfer sample
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
+        within('#list_selections') do
+          assert_test @sample1.name
+          assert_text @sample1.puid
+        end
         find('input#select2-input').click
         find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
@@ -1439,6 +1461,12 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
+        within('#list_selections') do
+          assert_text @sample1.puid
+          assert_text @sample1.name
+          assert_text @sample2.puid
+          assert_text @sample2.name
+        end
         find('input#select2-input').click
         find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
@@ -1465,6 +1493,7 @@ module Projects
 
     test 'should not clone samples with session storage cleared' do
       ### SETUP START ###
+      samples = @project.samples.pluck(:puid, :name)
       visit namespace_project_samples_url(@namespace, @project)
       ### SETUP END ###
 
@@ -1490,9 +1519,10 @@ module Projects
     end
 
     test 'should not clone some samples' do
+      ### SETUP START ###
       namespace = groups(:subgroup1)
       project25 = projects(:project25)
-      ### SETUP START ###
+      samples = @project.samples.pluck(:puid, :name)
       visit namespace_project_samples_url(namespace, project25)
       # sample30's name already exists in project25 samples table, samples1 and 2 do not
       within('#samples-table table tbody') do
@@ -1507,6 +1537,12 @@ module Projects
       click_button I18n.t(:'projects.samples.index.select_all_button')
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
+        within('#list_selections') do
+          samples.each do |sample|
+            assert_text sample[0]
+            assert_text sample[1]
+          end
+        end
         find('input#select2-input').click
         find("button[data-viral--select2-primary-param='#{project25.full_path}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
@@ -1568,6 +1604,7 @@ module Projects
 
     test 'updating sample selection during sample cloning' do
       ### SETUP START ###
+      samples = @project.samples.pluck(:puid, :name)
       visit namespace_project_samples_url(@namespace, @project2)
       # verify no samples currently selected in destination project
       within 'tfoot' do
@@ -1592,6 +1629,10 @@ module Projects
       # clone sample
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
+        within('#list_selections') do
+          assert_text @sample1.name
+          assert_text @sample1.puid
+        end
         fill_in placeholder: I18n.t('projects.samples.clones.dialog.select_project'), with: @project2.full_path
         find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
