@@ -180,6 +180,21 @@ module Projects
             assert_response :unprocessable_entity
           end
 
+          test 'builds correct update params for updating a value' do
+            controller = FieldsController.new
+            controller.instance_variable_set(:@field, @field)
+
+            expected_params = {
+              'update_field' => {
+                'key' => { @field => @field },
+                'value' => { 'old_value' => 'new_value' }
+              }
+            }
+
+            assert_equal expected_params,
+                         controller.send(:build_update_params, 'old_value', 'new_value')
+          end
+
           test 'renders unchanged field when value does not change' do
             patch update_value_namespace_project_sample_metadata_field_path(
               @namespace, @project29, @sample32
