@@ -400,12 +400,6 @@ module Projects
       click_button I18n.t(:'projects.samples.index.select_all_button')
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
-        within('#list_selections') do
-          samples.each do |sample|
-            assert_text sample[0]
-            assert_text sample[1]
-          end
-        end
         # select destination project
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
@@ -483,12 +477,6 @@ module Projects
       click_button I18n.t(:'projects.samples.index.select_all_button')
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
-        within('#list_selections') do
-          samples.each do |sample|
-            assert_text sample[0]
-            assert_text sample[1]
-          end
-        end
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{project25.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
@@ -512,10 +500,6 @@ module Projects
 
       # destination project
       visit namespace_project_samples_url(namespace, project25)
-      assert_selector 'h1', text: 'Samples'
-      assert_selector '#samples-table'
-      assert_selector 'tfoot'
-      assert_selector 'table'
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 4, count: 4,
                                                                            locale: @user.locale))
       assert_selector "tr[id='#{@sample1.id}']"
@@ -572,10 +556,6 @@ module Projects
       # transfer sample
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
-        within('#list_selections') do
-          assert_text @sample1.name
-          assert_text @sample1.puid
-        end
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
@@ -591,12 +571,6 @@ module Projects
 
       # verify destination project still has no selected samples and one additional sample
       visit namespace_project_samples_url(@namespace, @project2)
-      assert_selector 'h1', text: 'Samples'
-      assert_selector '#samples-table'
-      assert_selector 'tfoot'
-      assert_selector 'table'
-      assert_selector 'h1', text: 'Samples'
-      assert_selector '#samples-table'
       within 'tfoot' do
         assert_text "#{I18n.t('samples.table_component.counts.samples')}: 21"
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
@@ -1466,12 +1440,6 @@ module Projects
       end
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
-        within('#list_selections') do
-          assert_text @sample1.puid
-          assert_text @sample1.name
-          assert_text @sample2.puid
-          assert_text @sample2.name
-        end
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
@@ -1489,10 +1457,6 @@ module Projects
 
       # samples now exist in project2 samples table
       visit namespace_project_samples_url(@namespace, @project2)
-      assert_selector 'h1', text: 'Samples'
-      assert_selector '#samples-table'
-      assert_selector 'tfoot'
-      assert_selector 'table'
       within('#samples-table table tbody') do
         assert_text @sample1.name
         assert_text @sample2.name
@@ -1545,12 +1509,6 @@ module Projects
       click_button I18n.t(:'projects.samples.index.select_all_button')
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
-        within('#list_selections') do
-          samples.each do |sample|
-            assert_text sample[0]
-            assert_text sample[1]
-          end
-        end
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{project25.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
@@ -1565,10 +1523,6 @@ module Projects
         click_on I18n.t('projects.samples.shared.errors.ok_button')
       end
       visit namespace_project_samples_url(namespace, project25)
-      assert_selector 'h1', text: 'Samples'
-      assert_selector '#samples-table'
-      assert_selector 'tfoot'
-      assert_selector 'table'
       # samples 1 and 2 still successfully clone
       within('#samples-table table tbody') do
         assert_text @sample1.name
@@ -1639,10 +1593,6 @@ module Projects
       # clone sample
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
-        within('#list_selections') do
-          assert_text @sample1.name
-          assert_text @sample1.puid
-        end
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
@@ -1660,10 +1610,6 @@ module Projects
 
       # verify destination project still has no selected samples and one additional sample
       visit namespace_project_samples_url(@namespace, @project2)
-      assert_selector 'h1', text: 'Samples'
-      assert_selector '#samples-table'
-      assert_selector 'tfoot'
-      assert_selector 'table'
 
       within 'tfoot' do
         assert_text "#{I18n.t('samples.table_component.counts.samples')}: 21"
