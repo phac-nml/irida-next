@@ -156,6 +156,28 @@ module Projects
                   } }, format: :turbo_stream }
             assert_response :unprocessable_entity
           end
+
+          test 'renders unchanged field when value does not change' do
+            patch namespace_project_sample_metadata_field_path(@namespace, @project29, @sample32),
+                  params: { 'sample' => { 'update_field' => {
+                    'key' => { 'metadatafield1' => 'metadatafield1' },
+                    'value' => { 'value1' => 'value1' }
+                  } }, format: :turbo_stream }
+            assert_response :unprocessable_entity
+          end
+
+          test 'updates sample metadata with new value' do
+            patch update_value_namespace_project_sample_metadata_field_path(
+              @namespace, @project29, @sample32
+            ),
+                  params: {
+                    'field' => 'metadatafield1',
+                    'value' => 'new_value',
+                    'original_value' => 'old_value',
+                    'format' => :turbo_stream
+                  }
+            assert_response :ok
+          end
         end
       end
     end
