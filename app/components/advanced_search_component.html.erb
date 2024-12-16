@@ -1,11 +1,7 @@
 <!-- Note: This is a quick copy and paste of the list_filter_component with
 rough changes to demonstrate a mockup. -->
-<div
-  data-controller="list-filter"
-  data-list-filter-selection-outlet="#samples-table"
-  data-list-filter-filters-value="<%= filters.present? ? filters.to_s : '[]' %>"
->
-  <%= viral_dialog(id: 'list-filter-dialog') do |dialog| %>
+<div data-controller="advanced-search">
+  <%= viral_dialog(id: 'advanced-search-dialog') do |dialog| %>
     <%= dialog.with_trigger do %>
       <button
         type="button"
@@ -15,18 +11,10 @@ rough changes to demonstrate a mockup. -->
           text-sm px-5 py-2.5 dark:bg-slate-800 dark:text-white dark:border-slate-600
           dark:hover:bg-slate-700 dark:hover:border-slate-600 dark:focus:ring-slate-700
         "
-        data-action="list-filter#idempotentConnect viral--dialog#open"
+        data-action="advanced-search#idempotentConnect viral--dialog#open"
         aria-label="Advanced Search"
         title="Advanced Search"
       >
-        <span
-          data-list-filter-target="count"
-          class="
-            absolute items-center justify-center hidden h-6 px-2 text-xs font-bold
-            text-white bg-red-800 border-2 border-white rounded-full -top-2 -end-2
-            dark:border-slate-900
-          "
-        >8</span>
         <%= viral_icon(name: "document_magnifying_glass", classes: "size-5") %>
       </button>
     <% end %>
@@ -50,8 +38,8 @@ rough changes to demonstrate a mockup. -->
                 "
               >
                 <option selected>Field</option>
-                <% @metadata_fields.each do |metadata_field| %>
-                  <option value="<%=metadata_field%>"><%= metadata_field %></option>
+                <% @fields.each do |field| %>
+                  <option value="<%=field%>"><%= field %></option>
                 <% end %>
               </select>
               <select
@@ -100,8 +88,8 @@ rough changes to demonstrate a mockup. -->
                 "
               >
                 <option selected>Field</option>
-                <% @metadata_fields.each do |metadata_field| %>
-                  <option value="<%=metadata_field%>"><%= metadata_field %></option>
+                <% @fields.each do |field| %>
+                  <option value="<%=field%>"><%= field %></option>
                 <% end %>
               </select>
               <select
@@ -152,7 +140,7 @@ rough changes to demonstrate a mockup. -->
       </div>
     <% end %>
     <%= dialog.with_primary_action(
-      "data-action": "list-filter#afterSubmit filters#submit viral--dialog#close",
-    ) { t(:"components.list_filter.apply") } %>
+      "data-action": "advanced-search#submit viral--dialog#close",
+    ) { "Apply filter" } %>
   <% end %>
 </div>
