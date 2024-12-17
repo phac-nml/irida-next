@@ -1,5 +1,5 @@
 <%= form_with do |form| %>
-  <%= render AdvancedSearchComponent.new(fields: %w[name puid created_at updated_at], operations: %w[= != <= >= < >]) do |advanced_search| %>
+  <%= render AdvancedSearchComponent.new(fields: fields, operations: operations) do |advanced_search| %>
     <% advanced_search.with_add_condition_button do %>
       <button
         type="button"
@@ -10,6 +10,7 @@
           dark:border-gray-700 dark:text-white dark:hover:text-white
           dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white
         "
+        data-action="advanced-search#addCondition"
       >
         <%= viral_icon(name: "plus", classes: "mr-2 w-4 h-4") %>
         <span>And condition</span>
@@ -25,6 +26,7 @@
           dark:border-gray-700 dark:text-white dark:hover:text-white
           dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white
         "
+        data-action="advanced-search#addGroup"
       >
         <%= viral_icon(name: "plus", classes: "mr-2 w-4 h-4") %>
         <span>Or condition</span>
@@ -40,9 +42,10 @@
           dark:border-gray-700 dark:text-white dark:hover:text-white
           dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white
         "
+        data-action="advanced-search#removeGroup"
       >
         <%= viral_icon(name: "minus", classes: "mr-2 w-4 h-4") %>
-        <span>Or condition</span>
+        <span>Remove Group</span>
       </button>
     <% end %>
   <% end %>

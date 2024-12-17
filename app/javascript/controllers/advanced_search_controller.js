@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = [
-    "conditionsContainer", //many
+    "conditionsContainer",
     "conditionTemplate",
     "groupsContainer",
     "groupTemplate",
@@ -10,7 +10,6 @@ export default class extends Controller {
 
   connect() {
     this.addGroup();
-    this.addCondition();
   }
 
   idempotentConnect() {}
@@ -20,23 +19,10 @@ export default class extends Controller {
   }
 
   addCondition(event) {
-    console.log("add condition");
-    // console.log(this.conditionTemplateTargets.length);
-    if (event) {
-      console.log(event.currentTarget.parentElement);
-      console.log(
-        event.currentTarget.parentElement.parentElement.closest("template"),
-      );
-      event.currentTarget.parentElement.previousElementSibling.insertAdjacentHTML(
-        "beforeend",
-        this.conditionTemplateTarget.innerHTML,
-      );
-    } else {
-      this.conditionsContainerTarget.insertAdjacentHTML(
-        "beforeend",
-        this.conditionTemplateTarget.innerHTML,
-      );
-    }
+    event.currentTarget.parentElement.previousElementSibling.insertAdjacentHTML(
+      "beforeend",
+      this.conditionTemplateTarget.innerHTML,
+    );
   }
 
   removeCondition(event) {
@@ -47,6 +33,18 @@ export default class extends Controller {
     this.groupsContainerTarget.insertAdjacentHTML(
       "beforeend",
       this.groupTemplateTarget.innerHTML,
+    );
+    this.#addConditionToGroup(this.groupsContainerTarget.childElementCount - 1);
+  }
+
+  removeGroup(event) {
+    event.currentTarget.parentElement.parentElement.remove();
+  }
+
+  #addConditionToGroup(groupIndex) {
+    this.conditionsContainerTargets[groupIndex].insertAdjacentHTML(
+      "beforeend",
+      this.conditionTemplateTarget.innerHTML,
     );
   }
 }

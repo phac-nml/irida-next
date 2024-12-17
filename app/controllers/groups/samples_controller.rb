@@ -38,10 +38,6 @@ module Groups
       @group = Group.find_by_full_path(params[:group_id]) # rubocop:disable Rails/DynamicFindBy
     end
 
-    def authorized_projects
-      authorized_scope(Project, type: :relation, as: :group_projects, scope_options: { group: @group })
-    end
-
     def authorized_samples
       authorized_scope(Sample, type: :relation, as: :namespace_samples,
                                scope_options: { namespace: @group }).includes(project: { namespace: [{ parent: :route },
@@ -99,13 +95,6 @@ module Groups
 
     def search_key
       :"#{controller_name}_#{group.id}_search_params"
-    end
-
-    def sort
-      sort = @search_params[:s]
-      key, direction = sort.split
-      key = key.gsub('metadata_', 'metadata.') if key.match?(/metadata_/)
-      { "#{key}": direction }
     end
   end
 end
