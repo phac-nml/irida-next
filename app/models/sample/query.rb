@@ -13,6 +13,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
   attribute :name_or_puid_in, default: -> { [] }
   attribute :project_ids, default: -> { [] }
   attribute :sort, :string, default: 'updated_at desc'
+  attribute :advanced_query, :boolean, default: false
 
   validates :direction, inclusion: { in: %w[asc desc] }
   validates :project_ids, length: { minimum: 1 }
@@ -20,6 +21,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
   def initialize(...)
     super
     self.sort = sort
+    self.advanced_query = advanced_query?
   end
 
   def sort=(value)
@@ -29,9 +31,9 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
     assign_attributes(column:, direction:)
   end
 
-  def advanced_query?(params)
+  def advanced_query?
     # simplified version, will be further implemented when we have the definition of an advanced query
-    params[:advanced_query].present?
+     false
   end
 
   def results(type = :ransack)

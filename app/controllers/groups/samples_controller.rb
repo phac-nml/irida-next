@@ -11,7 +11,7 @@ module Groups
 
     def index
       @timestamp = DateTime.current
-      @pagy, @samples = pagy_searchkick(@query.results(:searchkick_pagy), limit: params[:limit] || 20)
+      @pagy, @samples = query_results
       @has_samples = authorized_samples.count.positive?
     end
 
@@ -97,6 +97,15 @@ module Groups
 
     def search_key
       :"#{controller_name}_#{group.id}_search_params"
+    end
+
+    def query_results
+      limit = params[:limit] || 20
+      if @query.advanced_query
+        pagy_searchkick(@query.results(:searchkick_pagy), limit:)
+      else
+        pagy(@query.results(:ransack), limit:)
+      end
     end
   end
 end

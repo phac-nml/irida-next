@@ -13,12 +13,7 @@ module Projects
 
     def index
       @timestamp = DateTime.current
-      limit = params[:limit] || 20
-      @pagy, @samples = if @query.advanced_query?(@search_params)
-                          pagy_searchkick(@query.results(:searchkick_pagy), limit:)
-                        else
-                          pagy(@query.results(:ransack), limit:)
-                        end
+      @pagy, @samples = query_results
       @has_samples = @project.samples.size.positive?
     end
 
@@ -163,6 +158,15 @@ module Projects
         update_store(search_key, updated_params)
       end
       updated_params
+    end
+
+    def query_results
+      limit = params[:limit] || 20
+      if @query.advanced_query
+        pagy_searchkick(@query.results(:searchkick_pagy), limit:)
+      else
+        pagy(@query.results(:ransack), limit:)
+      end
     end
   end
 end
