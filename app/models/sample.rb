@@ -19,6 +19,7 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
           string_template: {
             match: '*',
             match_mapping_type: 'string',
+            path_unmatch: 'metadata.*',
             mapping: {
               fields: {
                 analyzed: {
@@ -45,7 +46,7 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
             path_match: 'metadata.*',
             path_unmatch: 'metadata.*_date',
             mapping: {
-              type: 'text',
+              type: 'keyword',
               fields: {
                 numeric: {
                   type: 'double',
