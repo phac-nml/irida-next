@@ -95,7 +95,6 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
       table_row = find(:table_row, [@sample1.name])
-      puts @sample1.id
 
       within table_row do
         click_link 'Remove'
