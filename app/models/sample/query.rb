@@ -29,6 +29,11 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
     assign_attributes(column:, direction:)
   end
 
+  def advanced_query?(params)
+    # simplified version, will be further implemented when we have the definition of an advanced query
+    params[:advanced_query].present?
+  end
+
   def results(type = :ransack)
     case type
     when :ransack

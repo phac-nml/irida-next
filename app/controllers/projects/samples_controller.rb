@@ -13,7 +13,12 @@ module Projects
 
     def index
       @timestamp = DateTime.current
-      @pagy, @samples = pagy_searchkick(@query.results(:searchkick_pagy), limit: params[:limit] || 20)
+      limit = params[:limit] || 20
+      @pagy, @samples = if @query.advanced_query?(@search_params)
+                          pagy_searchkick(@query.results(:searchkick_pagy), limit:)
+                        else
+                          pagy(@query.results(:ransack), limit:)
+                        end
       @has_samples = @project.samples.size.positive?
     end
 
