@@ -46,7 +46,7 @@ module Projects
           authorize! @project, to: :update_sample?
           @field = params[:field]
           @value = @sample.metadata[@field]
-          if @sample.can_update_field?(params[:field])
+          if !@sample.field?(@field) || @sample.updatable_field?(params[:field])
             render status: :partial_content, turbo_stream: turbo_stream.replace(
               helpers.dom_id(@sample, @field),
               partial: 'shared/samples/metadata/fields/editing_field_cell',
@@ -67,6 +67,8 @@ module Projects
 
           if value == original_value
             render_unchanged_field
+          elsif original_value.blank?
+            create_metadata_field(@field, value)
           else
             update_field_value(original_value, value)
           end
@@ -136,6 +138,16 @@ module Projects
             partial: 'shared/samples/metadata/fields/editable_field_cell',
             locals: { sample: @sample, field: @field }
           )
+        end
+
+        def create_metadata_field(field, value)
+          ::Samples::Metadata::Fields::CreateService.new(@project, @sample, current_user, { field => value }).execute
+
+          if @sample.errors.any?
+            render_update_error
+          else
+            render_update_success
+          end
         end
 
         def update_field_value(original_value, new_value)
