@@ -796,5 +796,28 @@ module Groups
         assert_selector 'input[value="value2"]'
       end
     end
+
+    test 'should not update metadata value that is from an analysis' do
+      visit group_samples_url(@group)
+      assert_selector 'table thead tr th', count: 6
+
+      click_on 'Last Updated'
+      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
+
+      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+
+      within 'div.overflow-auto.scrollbar' do |div|
+        div.scroll_to div.find('table thead th:nth-child(7)')
+      end
+
+      assert_selector 'table thead tr th', count: 9
+      within('table tbody tr:nth-child(3) td:nth-child(7)') do
+        within('form[method="get"]') do
+          find("input[type='submit']").click
+        end
+        assert_no_selector "form[data-controller='inline-edit']"
+      end
+    end
   end
 end
