@@ -109,7 +109,7 @@ gem 'azure-storage-blob', github: 'honeyankit/azure-storage-ruby', branch: 'mast
 gem 'google-cloud-storage', '~> 1.11', require: false
 
 # job queueing
-gem 'good_job', '~> 4.1', '>= 4.1.1'
+gem 'good_job', '~> 4.6.0'
 
 # spreadsheet parser [https://github.com/roo-rb/roo]
 gem 'roo', '~> 2.10.0'
