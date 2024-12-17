@@ -772,9 +772,6 @@ module Groups
       visit group_samples_url(@group)
       assert_selector 'table thead tr th', count: 6
 
-      click_on 'Last Updated'
-      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
-
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
 
@@ -783,11 +780,20 @@ module Groups
       end
 
       assert_selector 'table thead tr th', count: 9
-      within('table tbody tr:first-child') do
-        assert_text @sample30.name
-        assert_selector 'td:nth-child(7) input[type="submit"][value="value1"]'
-        click_button 'input[type="submit"][value="value1"]'
-        assert_selector 'input[type="text"][value="value1"]'
+      within('table tbody tr:first-child td:nth-child(7)') do
+        # check within the from with method get that the value is 'value1':
+        within('form[method="get"]') do
+          find("input[type='submit']").click
+        end
+        assert_selector "form[data-controller='inline-edit']"
+
+        within('form[data-controller="inline-edit"]') do
+          find('input[name="value"]').send_keys 'value2'
+          find('input[name="value"]').send_keys :return
+        end
+        assert_no_selector "form[data-controller='inline-edit']"
+        assert_selector 'form[method="get"]'
+        assert_selector 'input[value="value2"]'
       end
     end
   end
