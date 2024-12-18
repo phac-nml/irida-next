@@ -403,6 +403,7 @@ module Projects
       within('#dialog') do
         within('#list_selections') do
           samples.each do |sample|
+            # additional asserts to help prevent select2 actions below from flaking
             assert_text sample[0]
             assert_text sample[1]
           end
@@ -487,6 +488,7 @@ module Projects
       within('#dialog') do
         within('#list_selections') do
           samples.each do |sample|
+            # additional asserts to help prevent select2 actions below from flaking
             assert_text sample[0]
             assert_text sample[1]
           end
@@ -572,6 +574,7 @@ module Projects
       click_link I18n.t('projects.samples.index.transfer_button')
       within('#dialog') do
         within('#list_selections') do
+          # additional asserts to help prevent select2 actions below from flaking
           assert_text @sample1.name
           assert_text @sample1.puid
         end
@@ -1381,27 +1384,6 @@ module Projects
       end
     end
 
-    test 'clone dialog sample listing' do
-      ### SETUP START ###
-      samples = @project.samples.pluck(:puid, :name)
-      visit namespace_project_samples_url(@namespace, @project)
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      click_button I18n.t(:'projects.samples.index.select_all_button')
-      click_link I18n.t('projects.samples.index.clone_button')
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      within('#list_selections') do
-        samples.each do |sample|
-          assert_text sample[0]
-          assert_text sample[1]
-        end
-      end
-      ### VERIFY END ###
-    end
-
     test 'singular clone dialog description' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
@@ -1461,6 +1443,7 @@ module Projects
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
         within('#list_selections') do
+          # additional asserts to help prevent select2 actions below from flaking
           assert_text @sample1.name
           assert_text @sample1.puid
           assert_text @sample2.name
@@ -1538,6 +1521,7 @@ module Projects
       within('#dialog') do
         within('#list_selections') do
           samples.each do |sample|
+            # additional asserts to help prevent select2 actions below from flaking
             assert_text sample[0]
             assert_text sample[1]
           end
@@ -1629,6 +1613,7 @@ module Projects
       click_link I18n.t('projects.samples.index.clone_button')
       within('#dialog') do
         within('#list_selections') do
+          # additional asserts to help prevent select2 actions below from flaking
           assert_text @sample1.name
           assert_text @sample1.puid
         end
@@ -1845,7 +1830,6 @@ module Projects
 
     test 'plural description within delete samples dialog' do
       ### SETUP START ###
-      samples = @project.samples.pluck(:puid, :name)
       visit namespace_project_samples_url(@namespace, @project)
       ### SETUP END ###
 
@@ -1859,12 +1843,26 @@ module Projects
         assert_text I18n.t(
           'projects.samples.deletions.new_multiple_deletions_dialog.description.plural'
         ).gsub! 'COUNT_PLACEHOLDER', '3'
+      end
+      ### VERIFY END ###
+    end
 
-        within('#list_selections') do
-          samples.each do |sample|
-            assert_text sample[0]
-            assert_text sample[1]
-          end
+    test 'samples listing within delete samples dialog' do
+      ### SETUP START ###
+      samples = @project.samples.pluck(:puid, :name)
+      visit namespace_project_samples_url(@namespace, @project)
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_link I18n.t('projects.samples.index.delete_samples_button')
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      within('#dialog #list_selections') do
+        samples.each do |sample|
+          assert_text sample[0]
+          assert_text sample[1]
         end
       end
       ### VERIFY END ###
@@ -1884,17 +1882,6 @@ module Projects
       click_button I18n.t(:'projects.samples.index.select_all_button')
       click_link I18n.t('projects.samples.index.delete_samples_button')
       within('#dialog') do
-        assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.title')
-        assert_text I18n.t(
-          'projects.samples.deletions.new_multiple_deletions_dialog.description.plural'
-        ).gsub! 'COUNT_PLACEHOLDER', '3'
-        assert_text @sample1.name
-        assert_text @sample1.puid
-        assert_text @sample2.name
-        assert_text @sample2.puid
-        assert_text @sample30.name
-        assert_text @sample30.puid
-
         click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
       ### ACTIONS END ###
@@ -1920,6 +1907,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
+      # select all samples
       click_button I18n.t(:'projects.samples.index.select_all_button')
 
       # destroy sample1 with remove action link
@@ -1946,9 +1934,11 @@ module Projects
         assert_text I18n.t(
           'projects.samples.deletions.new_multiple_deletions_dialog.description.plural'
         ).gsub! 'COUNT_PLACEHOLDER', '2'
-        assert_text @sample2.name
-        assert_text @sample30.name
-        assert_no_text @sample1.name
+        within('#list_selections') do
+          assert_text @sample2.name
+          assert_text @sample30.name
+          assert_no_text @sample1.name
+        end
         click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
       ### ACTIONS END ###
