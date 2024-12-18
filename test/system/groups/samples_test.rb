@@ -391,16 +391,16 @@ module Groups
       assert_selector 'table thead tr th', count: 9
       within('table tbody tr:first-child') do
         assert_text @sample30.name
-        assert_selector 'td:nth-child(7) input[value="value1"]'
-        assert_selector 'td:nth-child(8) input[value="value2"]'
-        assert_selector 'td:nth-child(9) input[type="submit"]'
+        assert_selector 'td:nth-child(7) button', text: 'value1'
+        assert_selector 'td:nth-child(8) button', text: 'value2'
+        assert_selector 'td:nth-child(9) button', text: ''
       end
 
       within('table tbody tr:nth-child(3)') do
         assert_text @sample28.name
-        assert_selector 'td:nth-child(7) input[type="submit"]'
-        assert_selector 'td:nth-child(8) input[type="submit"]'
-        assert_selector 'td:nth-child(9) input[value="unique_value"]'
+        assert_selector 'td:nth-child(7) button', text: ''
+        assert_selector 'td:nth-child(8) button', text: ''
+        assert_selector 'td:nth-child(9) button', text: 'unique_value'
       end
 
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
