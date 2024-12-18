@@ -504,3 +504,61 @@ empty_project_namespace:
   description: Project that does not contain any samples
   parent_id: <%= ActiveRecord::FixtureSet.identify(:empty_group, :uuid) %>
   puid: INXT_PRJ_AAAAAAACBE
+
+projectIndia_namespace:
+  <<: *DEFAULTS
+  name: Project India
+  path: project-india
+  description: Project India description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_india, :uuid) %>
+  puid: INXT_PRJ_AAAAAAAABT
+
+projectIndia1_namespace:
+  <<: *DEFAULTS
+  name: Project India 1
+  path: project-india-1
+  description: Project India 1 description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_india_subgroup1, :uuid) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  puid: INXT_PRJ_AAAAAAAABU
+
+projectJuliett_namespace:
+  <<: *DEFAULTS
+  name: Project Juliett
+  path: project-juliett
+  description: Project Juliett description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_juliett, :uuid) %>
+  puid: INXT_PRJ_AAAAAAAABV
+
+projectJuliett1_namespace:
+  <<: *DEFAULTS
+  name: Project Juliett 1
+  path: project-juliett-1
+  description: Project Juliett 1 description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_juliett_subgroup1, :uuid) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  puid: INXT_PRJ_AAAAAAAABW
+
+projectMike_namespace:
+  <<: *DEFAULTS
+  name: Project Mike
+  path: project-mike
+  description: Project Mike description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_mike, :uuid) %>
+  puid: INXT_PRJ_AAAAAAAABX
+
+projectMikeA_namespace:
+  <<: *DEFAULTS
+  name: Project Mike A
+  path: project-mike-a
+  description: Project Mike A description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_mike_a, :uuid) %>
+  puid: INXT_PRJ_AAAAAAAABY
+
+projectMikeB_namespace:
+  <<: *DEFAULTS
+  name: Project Mike B
+  path: project-mike-b
+  description: Project Mike B description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_mike_b, :uuid) %>
+  puid: INXT_PRJ_AAAAAAAABZ
