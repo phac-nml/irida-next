@@ -1,5 +1,5 @@
 <%= form_with do |form| %>
-  <%= render AdvancedSearchComponent.new(fields: fields, operations: operations) do
+  <%= render AdvancedSearchComponent.new(form:, fields:, operations:) do
   |advanced_search| %>
     <% advanced_search.with_add_condition_button do %>
       <button

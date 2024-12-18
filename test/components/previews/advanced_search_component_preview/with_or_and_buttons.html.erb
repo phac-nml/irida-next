@@ -1,5 +1,5 @@
 <%= form_with do |form| %>
-  <%= render AdvancedSearchComponent.new(fields: fields, operations: operations) do |advanced_search| %>
+  <%= render AdvancedSearchComponent.new(form:, fields:, operations:) do |advanced_search| %>
     <% advanced_search.with_add_condition_button do %>
       <button
         type="button"
@@ -45,7 +45,7 @@
         data-action="advanced-search#removeGroup"
       >
         <%= viral_icon(name: "minus", classes: "mr-2 w-4 h-4") %>
-        <span>Remove Group</span>
+        <span>Or Condition</span>
       </button>
     <% end %>
   <% end %>

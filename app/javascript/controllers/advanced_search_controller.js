@@ -38,7 +38,9 @@ export default class extends Controller {
   }
 
   removeGroup(event) {
-    event.currentTarget.parentElement.parentElement.remove();
+    if (this.groupsContainerTarget.childElementCount > 1) {
+      event.currentTarget.parentElement.parentElement.remove();
+    }
   }
 
   #addConditionToGroup(groupIndex) {
