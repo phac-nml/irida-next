@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
-# Determines which pagy method to use when loading samples table
+# Queries for samples table
 module SamplesQuery
   extend ActiveSupport::Concern
 
+  # Determines which pagy method to use when loading the samples table based on @query
   def pagy_for_samples_query
     limit = params[:limit] || 20
     if @query.advanced_query
