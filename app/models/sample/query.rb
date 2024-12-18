@@ -44,7 +44,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
     when 'select'
       advanced_query ? searchkick_results : ransack_results
     else
-      raise ResultTypeError, "Unrecognized type: #{type}"
+      raise ResultTypeError, "Unrecognized type: #{params[:action]}"
     end
   end
 
