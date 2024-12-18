@@ -110,18 +110,13 @@ module Samples
       project31 = projects(:project31)
       valid_params = { name: 'sample36', description: 'new sample for project31' }
 
-      assert_equal(2, subgroup12aa.samples_count)
-      assert_equal(3, subgroup12a.samples_count)
-      assert_equal(1, subgroup12b.samples_count)
-      assert_equal(4, group12.samples_count)
-
-      assert_no_changes -> { subgroup12b.reload.samples_count } do
+      assert_difference -> { project31.reload.samples.size } => 1,
+                        -> { subgroup12aa.reload.samples_count } => 1,
+                        -> { subgroup12a.reload.samples_count } => 1,
+                        -> { subgroup12b.reload.samples_count } => 0,
+                        -> { group12.reload.samples_count } => 1 do
         Samples::CreateService.new(@user, project31, valid_params).execute
       end
-
-      assert_equal(3, subgroup12aa.reload.samples_count)
-      assert_equal(4, subgroup12a.reload.samples_count)
-      assert_equal(5, group12.reload.samples_count)
     end
   end
 end
