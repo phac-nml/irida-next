@@ -15,6 +15,7 @@ module SamplesQuery
   end
 
   def select_query
-    @query.results(:ransack).where(updated_at: ..params[:timestamp].to_datetime).select(:id).pluck(:id)
+    @query.results(@query.advanced_query ? :searchkick : :ransack)
+          .where(updated_at: ..params[:timestamp].to_datetime).select(:id).pluck(:id)
   end
 end
