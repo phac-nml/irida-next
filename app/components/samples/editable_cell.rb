@@ -24,7 +24,7 @@ module Samples
 
           <button type="submit"
                   class="w-full p-4 text-left cursor-pointer hover:bg-slate-50 focus:ring-4 focus:outline-none focus:ring-primary-200 dark:hover:bg-slate-600 dark:focus:ring-primary-700"
-                  aria-label="Edit <%= @field %> value"
+                  aria-label="<%= t(:".aria_label", value: @sample.metadata[@field]) %> value"
                   <%= "autofocus" if @autofocus %>>
             <span class="block truncate">
               <%= @sample.metadata[@field] || "" %>
