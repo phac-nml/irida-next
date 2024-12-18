@@ -36,6 +36,7 @@ module Pathogen
         @system_arguments[:'aria-current'] = @selected ? 'page' : 'false'
         @system_arguments[:classes] = generate_tab_classes
         @system_arguments[:'aria-controls'] = @controls
+        @system_arguments[:'aria-selected'] = @selected
       end
       # rubocop:enable Metrics/ParameterLists
 
@@ -51,20 +52,23 @@ module Pathogen
 
       def default_tab_classes
         if @selected
-          'inline-block p-4 text-primary-600 bg-slate-100 rounded-t-lg active dark:bg-slate-800 dark:text-primary-500'
+          'inline-block p-4 text-light-brand-onneutral bg-light-neutral-primary ' \
+            'rounded-t-lg active dark:bg-dark-neutral-primary dark:text-dark-brand-onneutral'
         else
-          'inline-block p-4 rounded-t-lg hover:text-slate-600
-        hover:bg-slate-50 dark:hover:bg-slate-800 dark:hover:text-slate-300'
+          'inline-block p-4 rounded-t-lg hover:text-light-neutral-emphasis ' \
+            'hover:bg-light-default dark:hover:bg-dark-neutral-primary-hover dark:hover:text-dark-onneutral-primary'
         end
       end
 
       def underline_tab_classes
         if @selected
-          'inline-block p-4 text-primary-600 border-b-2 border-primary-600
-          rounded-t-lg active dark:text-primary-500 dark:border-primary-500'
+          'inline-block p-4 text-light-brand-onneutral border-b-2 ' \
+            'border-light-brand-primary rounded-t-lg active ' \
+            'dark:text-dark-brand-onneutral dark:border-dark-brand-primary'
         else
-          'inline-block p-4 border-b-2 border-transparent rounded-t-lg
-          hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300'
+          'inline-block p-4 border-b-2 border-transparent rounded-t-lg ' \
+            'hover:text-neutral-emphasis hover:border-light-neutral-primary ' \
+            'dark:hover:text-dark-neutral-onneutral dark:hover:border-dark-neutral-primary'
         end
       end
     end
