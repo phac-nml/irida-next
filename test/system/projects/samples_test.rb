@@ -2305,7 +2305,7 @@ module Projects
       end
 
       assert_selector 'table thead tr th', count: 8
-      within('table tbody tr:nth-child(1) td:nth-child(5)') do
+      within('table tbody tr:nth-child(1) td:nth-child(6)') do
         within('form[method="get"]') do
           find("input[type='submit']").click
         end
