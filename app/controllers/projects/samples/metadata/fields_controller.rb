@@ -46,15 +46,11 @@ module Projects
           authorize! @project, to: :update_sample?
           @field = params[:field]
           @value = @sample.metadata[@field]
-          if !@sample.field?(@field) || @sample.updatable_field?(params[:field])
-            render status: :partial_content, turbo_stream: turbo_stream.replace(
-              helpers.dom_id(@sample, @field),
-              partial: 'shared/samples/metadata/fields/editing_field_cell',
-              locals: { sample: @sample, field: @field, value: @value }
-            )
+
+          if @sample.updatable_field?(@field)
+            render_editable_field
           else
-            render status: :unprocessable_entity, turbo_stream: turbo_stream.append('flashes', partial: 'shared/flash',
-                                                                                               locals: { type: 'error', message: 'This field is not editable' })
+            render_non_editable_error
           end
         end
 
@@ -67,8 +63,6 @@ module Projects
 
           if value == original_value
             render_unchanged_field
-          elsif original_value.blank?
-            create_metadata_field(@field, value)
           else
             update_field_value(original_value, value)
           end
@@ -92,6 +86,22 @@ module Projects
           else
             :ok
           end
+        end
+
+        def render_editable_field
+          render status: :partial_content, turbo_stream: turbo_stream.replace(
+            helpers.dom_id(@sample, @field),
+            partial: 'shared/samples/metadata/fields/editing_field_cell',
+            locals: { sample: @sample, field: @field, value: @value }
+          )
+        end
+
+        def render_non_editable_error
+          render status: :unprocessable_entity, turbo_stream: turbo_stream.append(
+            'flashes',
+            partial: 'shared/flash',
+            locals: { type: 'error', message: 'This field is not editable' }
+          )
         end
 
         def get_create_messages(added_keys, existing_keys) # rubocop:disable Metrics/MethodLength
@@ -140,16 +150,6 @@ module Projects
           )
         end
 
-        def create_metadata_field(field, value)
-          ::Samples::Metadata::Fields::CreateService.new(@project, @sample, current_user, { field => value }).execute
-
-          if @sample.errors.any?
-            render_update_error
-          else
-            render_update_success
-          end
-        end
-
         def update_field_value(original_value, new_value)
           perform_field_update(original_value, new_value)
 
@@ -184,13 +184,11 @@ module Projects
         end
 
         def render_update_success
-          render turbo_stream: [turbo_stream.replace(
+          render turbo_stream: turbo_stream.replace(
             helpers.dom_id(@sample, @field),
             partial: 'shared/samples/metadata/fields/editable_field_cell',
             locals: { sample: @sample, field: @field }
-          ),
-                                turbo_stream.append('flashes', partial: 'shared/flash',
-                                                               locals: { type: 'success', message: 'Field updated' })]
+          )
         end
       end
     end
