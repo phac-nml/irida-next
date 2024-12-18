@@ -6,7 +6,7 @@ sample1:
   project_id: <%= ActiveRecord::FixtureSet.identify(:project1, :uuid) %>
   puid: INXT_SAM_AAAAAAAAAA
   created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
+  updated_at: <%= 3.hours.ago %>
   attachments_updated_at: <%= 2.hours.ago %>
 
 sample2:
