@@ -1,5 +1,6 @@
-<%= form_with do |form| %>
-  <%= render AdvancedSearchComponent.new(fields: fields, operations: operations) do |advanced_search| %>
+<% condition = Condition.new(field: "puid", operator: "!=", value: "test me") %>
+<%= form_with model: condition, url: "" do |form| %>
+  <%= render AdvancedSearchComponent.new(form:, fields: , operations:) do |advanced_search| %>
     <% advanced_search.with_add_condition_button do %>
       <button
         type="button"
