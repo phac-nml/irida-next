@@ -215,10 +215,6 @@ module Samples
     end
 
     test 'samples count updates after a sample transfer between projects in the same user namespace' do
-      # Reference group/projects descendants tree:
-      # group12 < subgroup12b (project30 > sample 33)
-      #    |
-      #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
       john_doe_project3 = projects(:john_doe_project3)
       sample24 = samples(:sample24)
 
