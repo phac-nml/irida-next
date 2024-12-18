@@ -83,11 +83,7 @@ module Projects
 
       respond_to do |format|
         format.turbo_stream do
-          if params[:select].present?
-            @sample_ids = @query.results(:ransack)
-                                .where(updated_at: ..params[:timestamp].to_datetime)
-                                .select(:id).pluck(:id)
-          end
+          @sample_ids = select_query if params[:select].present?
         end
       end
     end
