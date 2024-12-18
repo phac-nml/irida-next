@@ -184,11 +184,13 @@ module Projects
         end
 
         def render_update_success
-          render turbo_stream: turbo_stream.replace(
+          render turbo_stream: [turbo_stream.replace(
             helpers.dom_id(@sample, @field),
             partial: 'shared/samples/metadata/fields/editable_field_cell',
             locals: { sample: @sample, field: @field }
-          )
+          ),
+                                turbo_stream.append('flashes', partial: 'shared/flash',
+                                                               locals: { type: 'success', message: 'Field updated' })]
         end
       end
     end
