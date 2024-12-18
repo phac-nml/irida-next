@@ -6,7 +6,6 @@ module Projects
     include Metadata
     include ListActions
     include Storable
-    include SamplesQuery
 
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
@@ -14,7 +13,7 @@ module Projects
 
     def index
       @timestamp = DateTime.current
-      @pagy, @samples = pagy_for_samples_query
+      @pagy, @samples = @query.results(action: 'index', limit: params[:limit] || 20, page: params[:page] || 1)
       @has_samples = @project.samples.size.positive?
     end
 
@@ -83,7 +82,10 @@ module Projects
 
       respond_to do |format|
         format.turbo_stream do
-          @sample_ids = select_query if params[:select].present?
+          if params[:select].present?
+            @sample_ids = @query.results(action: 'select')
+                                .where(updated_at: ..params[:timestamp].to_datetime).select(:id).pluck(:id)
+          end
         end
       end
     end
