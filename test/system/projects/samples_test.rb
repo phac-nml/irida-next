@@ -220,8 +220,7 @@ module Projects
       click_on I18n.t('projects.samples.new.submit_button')
       ### ACTIONS END ###
 
-      ### results start ###
-      Sample.search_index.refresh
+      ### VERIFY START ###
       # flash msg
       assert_text I18n.t('projects.samples.create.success')
       # verify redirect to sample show page after successful sample creation
@@ -232,7 +231,7 @@ module Projects
       within('#samples-table table tbody') do
         assert_text 'New Name'
       end
-      ### results end ###
+      ### VERIFY END ###
     end
 
     test 'edit sample' do
@@ -422,7 +421,6 @@ module Projects
       assert_text I18n.t('projects.samples.index.no_samples')
 
       # destination project received transferred samples
-      Sample.search_index.refresh
       visit namespace_project_samples_url(@namespace, @project2)
       within '#samples-table table tbody' do
         samples.each do |sample|
@@ -500,7 +498,6 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      Sample.search_index.refresh
       within('#dialog') do
         # error messages in dialog
         assert_text I18n.t('projects.samples.transfers.create.error')
@@ -592,18 +589,11 @@ module Projects
       end
 
       # verify destination project still has no selected samples and one additional sample
-      Sample.search_index.refresh
       visit namespace_project_samples_url(@namespace, @project2)
+      assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       within 'tfoot' do
         assert_text "#{I18n.t('samples.table_component.counts.samples')}: 21"
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
-      end
-
-      click_button I18n.t(:'projects.samples.index.select_all_button')
-
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 21"
-        assert_selector 'strong[data-selection-target="selected"]', text: '21'
       end
       ### VERIFY END
     end
@@ -1465,7 +1455,6 @@ module Projects
       end
 
       # samples now exist in project2 samples table
-      # Sample.search_index.refresh
       visit namespace_project_samples_url(@namespace, @project2)
       within('#samples-table table tbody') do
         assert_text @sample1.name
@@ -1540,7 +1529,6 @@ module Projects
         click_on I18n.t('projects.samples.shared.errors.ok_button')
       end
 
-      Sample.search_index.refresh
       visit namespace_project_samples_url(namespace, project25)
       # samples 1 and 2 still successfully clone
       within('#samples-table table tbody') do
@@ -1633,19 +1621,12 @@ module Projects
       end
 
       # verify destination project still has no selected samples and one additional sample
-      Sample.search_index.refresh
       visit namespace_project_samples_url(@namespace, @project2)
 
+      assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       within 'tfoot' do
         assert_text "#{I18n.t('samples.table_component.counts.samples')}: 21"
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
-      end
-
-      click_button I18n.t(:'projects.samples.index.select_all_button')
-
-      within 'tfoot' do
-        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 21"
-        assert_selector 'strong[data-selection-target="selected"]', text: '21'
       end
       ### VERIFY END
     end
