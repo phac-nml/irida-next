@@ -4,6 +4,7 @@
 class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
   include ActiveModel::Model
   include ActiveModel::Attributes
+  include Pagy::Backend
 
   ResultTypeError = Class.new(StandardError)
 
@@ -13,6 +14,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
   attribute :name_or_puid_in, default: -> { [] }
   attribute :project_ids, default: -> { [] }
   attribute :sort, :string, default: 'updated_at desc'
+  attribute :advanced_query, :boolean, default: false
 
   validates :direction, inclusion: { in: %w[asc desc] }
   validates :project_ids, length: { minimum: 1 }
@@ -20,6 +22,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
   def initialize(...)
     super
     self.sort = sort
+    self.advanced_query = advanced_query?
   end
 
   def sort=(value)
@@ -29,20 +32,31 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
     assign_attributes(column:, direction:)
   end
 
-  def results(type = :ransack)
-    case type
-    when :ransack
-      ransack_results
-    when :searchkick
-      searchkick_results
-    when :searchkick_pagy
-      searchkick_pagy_results
+  def advanced_query?
+    # simplified version, will be further implemented when we have the definition of an advanced query
+    false
+  end
+
+  def results(params)
+    case params[:action]
+    when 'query'
+      pagy_results(params[:limit] || 20, params[:page] || 1)
+    when 'select'
+      advanced_query ? searchkick_results : ransack_results
     else
-      raise ResultTypeError, "Unrecognized type: #{type}"
+      raise ResultTypeError, "Unrecognized type: #{params[:action]}"
     end
   end
 
   private
+
+  def pagy_results(limit, page)
+    if advanced_query
+      pagy_searchkick(searchkick_pagy_results, limit:, page:)
+    else
+      pagy(ransack_results, limit:, page:)
+    end
+  end
 
   def ransack_results
     return Sample.none unless valid?
