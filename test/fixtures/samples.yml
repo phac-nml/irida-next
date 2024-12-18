@@ -382,3 +382,111 @@ sample48:
   created_at: <%= 1.week.ago %>
   updated_at: <%= 1.day.ago %>
   attachments_updated_at: <%= 2.hours.ago %>
+
+sample49:
+  name: Sample 49
+  description: Sample 49 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectIndia, :uuid) %>
+  puid: INXT_SAM_AAAAAAAABY
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
+
+sample50:
+  name: Sample 50
+  description: Sample 50 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectIndia, :uuid) %>
+  puid: INXT_SAM_AAAAAAAABZ
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
+
+sample51:
+  name: Sample 51
+  description: Sample 51 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectIndia1, :uuid) %>
+  puid: INXT_SAM_AAAAAAAADA
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
+
+sample52:
+  name: Sample 52
+  description: Sample 52 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectJuliett, :uuid) %>
+  puid: INXT_SAM_AAAAAAAADB
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
+
+sample53:
+  name: Sample 53
+  description: Sample 53 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectJuliett, :uuid) %>
+  puid: INXT_SAM_AAAAAAAADC
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
+
+sample54:
+  name: Sample 54
+  description: Sample 54 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectJuliett1, :uuid) %>
+  puid: INXT_SAM_AAAAAAAADD
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
+
+sample55:
+  name: Sample 55
+  description: Sample 55 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectMike, :uuid) %>
+  puid: INXT_SAM_AAAAAAAADE
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
+
+sample56:
+  name: Sample 56
+  description: Sample 56 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectMike, :uuid) %>
+  puid: INXT_SAM_AAAAAAAADF
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
+
+sample57:
+  name: Sample 57
+  description: Sample 57 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectMikeA, :uuid) %>
+  puid: INXT_SAM_AAAAAAAADG
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
+
+sample58:
+  name: Sample 58
+  description: Sample 58 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectMikeA, :uuid) %>
+  puid: INXT_SAM_AAAAAAAADH
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
+
+sample59:
+  name: Sample 59
+  description: Sample 59 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectMikeB, :uuid) %>
+  puid: INXT_SAM_AAAAAAAADI
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
+
+sample60:
+  name: Sample 60
+  description: Sample 60 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectMikeB, :uuid) %>
+  puid: INXT_SAM_AAAAAAAADJ
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  attachments_updated_at: <%= 2.hours.ago %>
