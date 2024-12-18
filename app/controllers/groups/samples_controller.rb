@@ -5,6 +5,7 @@ module Groups
   class SamplesController < Groups::ApplicationController
     include Metadata
     include Storable
+    include SamplesQuery
 
     before_action :group, :current_page
     before_action :query, only: %i[index search select]
