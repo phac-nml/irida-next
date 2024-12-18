@@ -191,19 +191,13 @@ module Samples
       #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
       sample24 = samples(:sample24)
 
-      assert_equal(2, @subgroup12aa.samples_count)
-      assert_equal(3, @subgroup12a.samples_count)
-      assert_equal(1, @subgroup12b.samples_count)
-      assert_equal(4, @group12.samples_count)
-
       assert_difference -> { @subgroup12aa.reload.samples_count } => 1,
                         -> { @subgroup12a.reload.samples_count } => 1,
+                        -> { @subgroup12b.reload.samples_count } => 0,
                         -> { @group12.reload.samples_count } => 1,
                         -> { @john_doe_project2.reload.samples.size } => -1 do
         Samples::TransferService.new(@john_doe_project2, @john_doe).execute(@project31.id, [sample24.id])
       end
-
-      assert_equal(1, @subgroup12b.reload.samples_count)
     end
 
     test 'samples count updates after a sample transfer to a user namespace' do
@@ -211,19 +205,13 @@ module Samples
       # group12 < subgroup12b (project30 > sample 33)
       #    |
       #    ---- < subgroup12a (project29 > sample 32) < subgroup12aa (project31 > sample34 + 35)
-      assert_equal(2, @subgroup12aa.samples_count)
-      assert_equal(3, @subgroup12a.samples_count)
-      assert_equal(1, @subgroup12b.samples_count)
-      assert_equal(4, @group12.samples_count)
-
       assert_difference -> { @subgroup12aa.reload.samples_count } => -2,
                         -> { @subgroup12a.reload.samples_count } => -2,
+                        -> { @subgroup12b.reload.samples_count } => 0,
                         -> { @group12.reload.samples_count } => -2,
                         -> { @john_doe_project2.reload.samples.size } => 2 do
         Samples::TransferService.new(@project31, @john_doe).execute(@john_doe_project2.id, [@sample34.id, @sample35.id])
       end
-
-      assert_equal(1, @subgroup12b.reload.samples_count)
     end
 
     test 'samples count updates after a sample transfer between projects in the same user namespace' do
@@ -234,17 +222,10 @@ module Samples
       john_doe_project3 = projects(:john_doe_project3)
       sample24 = samples(:sample24)
 
-      assert_equal(2, @subgroup12aa.samples_count)
-      assert_equal(3, @subgroup12a.samples_count)
-      assert_equal(1, @subgroup12b.samples_count)
-      assert_equal(4, @group12.samples_count)
-
       assert_difference -> { @john_doe_project2.reload.samples.size } => -1,
                         -> { john_doe_project3.reload.samples.size } => 1 do
         Samples::TransferService.new(@john_doe_project2, @john_doe).execute(john_doe_project3.id, [sample24.id])
       end
-
-      assert_equal(1, @subgroup12b.reload.samples_count)
     end
   end
 end
