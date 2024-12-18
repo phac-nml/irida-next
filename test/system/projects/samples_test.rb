@@ -1412,6 +1412,27 @@ module Projects
       ### VERIFY END ###
     end
 
+    test 'clone dialog sample listing' do
+      ### SETUP START ###
+      samples = @project.samples.pluck(:puid, :name)
+      visit namespace_project_samples_url(@namespace, @project)
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_link I18n.t('projects.samples.index.clone_button')
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      within('#list_selections') do
+        samples.each do |sample|
+          assert_text sample[0]
+          assert_text sample[1]
+        end
+      end
+      ### VERIFY END ###
+    end
+
     test 'should clone samples' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project2)
