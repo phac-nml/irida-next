@@ -772,6 +772,8 @@ module Groups
       visit group_samples_url(@group)
       assert_selector 'table thead tr th', count: 6
 
+      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: 'Sample 1'
+
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
 
@@ -781,9 +783,8 @@ module Groups
 
       assert_selector 'table thead tr th', count: 9
       within('table tbody tr:first-child td:nth-child(7)') do
-        # check within the from with method get that the value is 'value1':
         within('form[method="get"]') do
-          find("input[type='submit']").click
+          find('button').click
         end
         assert_selector "form[data-controller='inline-edit']"
 

@@ -47,7 +47,7 @@ module Projects
           @field = params[:field]
           @value = @sample.metadata[@field]
 
-          if @sample.updatable_field?(@field)
+          if !@sample.field?(@field) || @sample.updatable_field?(@field)
             render_editable_field
           else
             render_non_editable_error
@@ -63,6 +63,8 @@ module Projects
 
           if value == original_value
             render_unchanged_field
+          elsif !@sample.field?(@field)
+            create_metadata_field(@field, value)
           else
             update_field_value(original_value, value)
           end
@@ -100,7 +102,7 @@ module Projects
           render status: :unprocessable_entity, turbo_stream: turbo_stream.append(
             'flashes',
             partial: 'shared/flash',
-            locals: { type: 'error', message: @sample.errors.full_messages.first }
+            locals: { type: 'error', message: t('samples.editable_cell.not_editable', field: @field) }
           )
         end
 
@@ -140,6 +142,17 @@ module Projects
             update_render_params[:message] = { type: 'error', message: @sample.errors.full_messages.first }
           end
           update_render_params
+        end
+
+        def create_metadata_field(field, value)
+          create_params = { field => value }
+          ::Samples::Metadata::Fields::CreateService.new(@project, @sample, current_user, create_params).execute
+
+          if @sample.errors.any?
+            render_update_error
+          else
+            render_update_success
+          end
         end
 
         def render_unchanged_field
