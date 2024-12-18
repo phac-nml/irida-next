@@ -772,7 +772,8 @@ module Groups
       visit group_samples_url(@group)
       assert_selector 'table thead tr th', count: 6
 
-      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: 'Sample 1'
+      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: @sample1.name
+      find('input.t-search-component').native.send_keys(:return)
 
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
@@ -794,7 +795,7 @@ module Groups
         end
         assert_no_selector "form[data-controller='inline-edit']"
         assert_selector 'form[method="get"]'
-        assert_selector 'input[value="value2"]'
+        assert_selector 'button', text: 'value2'
       end
     end
 
@@ -802,8 +803,8 @@ module Groups
       visit group_samples_url(@group)
       assert_selector 'table thead tr th', count: 6
 
-      click_on 'Last Updated'
-      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
+      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: @sample28.name
+      find('input.t-search-component').native.send_keys(:return)
 
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
@@ -813,9 +814,9 @@ module Groups
       end
 
       assert_selector 'table thead tr th', count: 9
-      within('table tbody tr:nth-child(3) td:nth-child(7)') do
+      within('table tbody tr:nth-child(1) td:nth-child(7)') do
         within('form[method="get"]') do
-          find("input[type='submit']").click
+          find('button').click
         end
         assert_no_selector "form[data-controller='inline-edit']"
       end
