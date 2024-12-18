@@ -40,7 +40,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
   def results(params)
     case params[:action]
     when 'index'
-      pagy_results(params[:limit], params[:page])
+      pagy_results(params[:limit] || 20, params[:page] || 1)
     when 'select'
       advanced_query ? searchkick_results : ransack_results
     else
@@ -61,9 +61,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
   def ransack_results
     return Sample.none unless valid?
 
-    samples = sort_samples
-    samples.ransack(ransack_params).result
-    # sort_samples.ransack(ransack_params).result
+    sort_samples.ransack(ransack_params).result
   end
 
   def searchkick_pagy_results

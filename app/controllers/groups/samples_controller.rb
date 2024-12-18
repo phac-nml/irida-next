@@ -11,7 +11,7 @@ module Groups
 
     def index
       @timestamp = DateTime.current
-      @pagy, @samples = @query.results(action: 'index', limit: params[:limit] || 20, page: params[:page] || 1)
+      @pagy, @samples = @query.results(action: 'index', limit: params[:limit], page: params[:page])
       @has_samples = authorized_samples.count.positive?
     end
 
