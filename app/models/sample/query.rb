@@ -39,7 +39,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
 
   def results(params)
     case params[:action]
-    when 'pagy_query'
+    when 'query'
       pagy_results(params[:limit] || 20, params[:page] || 1)
     when 'select'
       advanced_query ? searchkick_results : ransack_results

@@ -13,7 +13,7 @@ module Projects
 
     def index
       @timestamp = DateTime.current
-      @pagy, @samples = @query.results(action: 'pagy_query', limit: params[:limit], page: params[:page])
+      @pagy, @samples = @query.results(action: 'query', limit: params[:limit], page: params[:page])
       @has_samples = @project.samples.size.positive?
     end
 
