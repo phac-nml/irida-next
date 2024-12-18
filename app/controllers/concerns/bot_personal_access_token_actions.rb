@@ -7,8 +7,9 @@ module BotPersonalAccessTokenActions
   included do
     before_action proc { namespace }
     before_action proc { bot_account }
-    before_action proc { personal_access_tokens }, only: %i[index]
-    before_action proc { personal_access_token }, only: %i[revoke]
+    before_action proc { personal_access_tokens }, only: %i[index revoke]
+    before_action proc { personal_access_token }, only: %i[revoke new_revoke]
+    before_action proc { bot_accounts }
   end
 
   def index
@@ -53,9 +54,18 @@ module BotPersonalAccessTokenActions
     end
   end
 
-  def revoke
+  def new_revoke
     authorize! @namespace, to: :revoke_bot_personal_access_token?
+    render turbo_stream: turbo_stream.update('token_dialog',
+                                             partial: 'new_revoke_modal',
+                                             locals: {
+                                               open: true,
+                                               personal_access_token: @personal_access_token,
+                                               bot_account: @bot_account
+                                             }), status: :ok
+  end
 
+  def revoke
     respond_to do |format|
       format.turbo_stream do
         if @personal_access_token.revoke!
@@ -83,5 +93,9 @@ module BotPersonalAccessTokenActions
 
   def personal_access_token
     @personal_access_token = @bot_account.user.personal_access_tokens.find_by(id: params[:id]) || not_found
+  end
+
+  def bot_accounts
+    @bot_accounts = @namespace.namespace_bots.includes(:user)
   end
 end
