@@ -210,8 +210,80 @@ class GroupTest < ActiveSupport::TestCase
     assert_equal %w[metadatafield1 metadatafield2], groups(:group_alpha).metadata_fields
   end
 
-  test 'total samples count should not include shared projects that are children of groups in shared groups' do
+  test 'group with no samples should have aggregated_samples_count equal to shared groups samples_count' do
+    group = groups(:group_kilo)
+    shared_group = groups(:group_twelve)
+
+    assert_equal 0, group.samples_count
+    assert_equal 4, shared_group.samples_count
+    assert_equal shared_group.samples_count, group.aggregated_samples_count
+  end
+
+  test 'group with nothing being shared to, aggregated_samples_count should equal samples_count' do
+    group12 = groups(:group_twelve)
+
+    assert_equal 4, group12.samples_count
+    assert_equal group12.samples_count, group12.aggregated_samples_count
+  end
+
+  test 'aggregated_samples_count should equal samples_count plus samples_counts of groups and projects shared to' do
+    group_alpha = groups(:group_alpha)
+    shared_group = groups(:group_charlie)
+    shared_project = projects(:projectBravo)
+    group_alpha_samples_count = group_alpha.samples_count
+    shared_group_samples_count = shared_group.samples_count
+    shared_project_samples_count = shared_project.samples.size
+    aggregated_samples_count = group_alpha_samples_count + shared_group_samples_count + shared_project_samples_count
+
+    assert_equal 2, group_alpha_samples_count
+    assert_equal 1, shared_group_samples_count
+    assert_equal 1, shared_project_samples_count
+    assert_equal aggregated_samples_count, group_alpha.aggregated_samples_count
+  end
+
+  test 'group with a subproject as a shared project should not include subproject twice in aggregated_samples_count' do
+    group = groups(:group_india)
+
+    assert_equal 3, group.samples_count
+    assert_equal group.samples_count, group.aggregated_samples_count
+  end
+
+  test 'group with a subgroup as a shared group should not include subgroup twice in aggregated_samples_count' do
+    group = groups(:group_juliett)
+
+    assert_equal 3, group.samples_count
+    assert_equal group.samples_count, group.aggregated_samples_count
+  end
+
+  test 'aggregated_samples_count should not include shared projects that are descendants of groups in shared groups' do
     assert_equal 8, groups(:group_five).aggregated_samples_count
+  end
+
+  test 'aggregated_samples_count should not include shared groups that are descendants of groups in shared groups' do
+    group = groups(:group_lima)
+    shared_group = groups(:group_twelve)
+
+    assert_equal 0, group.samples_count
+    assert_equal 4, shared_group.samples_count
+    assert_equal shared_group.samples_count, group.aggregated_samples_count
+  end
+
+  test 'shared group is an ancestor, aggregated_samples_count should not include ones own samples_count twice' do
+    group = groups(:subgroup_mike_a)
+    shared_group = groups(:group_mike)
+
+    assert_equal 2, group.samples_count
+    assert_equal 6, shared_group.samples_count
+    assert_equal shared_group.samples_count, group.aggregated_samples_count
+  end
+
+  test 'shared project is in an ancestor group, should include it in aggregated_samples_count' do
+    group = groups(:subgroup_mike_a_a)
+    shared_project = projects(:projectMike)
+
+    assert_equal 0, group.samples_count
+    assert_equal 2, shared_project.samples.size
+    assert_equal shared_project.samples.size, group.aggregated_samples_count
   end
 
   test 'update samples_count by sample transfer' do
