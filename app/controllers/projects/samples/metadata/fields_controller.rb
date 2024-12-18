@@ -100,7 +100,7 @@ module Projects
           render status: :unprocessable_entity, turbo_stream: turbo_stream.append(
             'flashes',
             partial: 'shared/flash',
-            locals: { type: 'error', message: 'This field is not editable' }
+            locals: { type: 'error', message: @sample.errors.full_messages.first }
           )
         end
 
