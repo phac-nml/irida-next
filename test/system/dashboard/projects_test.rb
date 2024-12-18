@@ -205,6 +205,8 @@ module Dashboard
 
       within %(div[data-controller="slugify"][data-controller-connected="true"]) do
         fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
+        fill_in I18n.t('projects.new.select_namespace'), with: 'USR'
+        click_on 'INXT_USR_AAAAAAAAAA'
         assert_equal 'new-project',
                      find_field(I18n.t(:'activerecord.attributes.namespaces/project_namespace.path')).value
         fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.description'), with: project_description
