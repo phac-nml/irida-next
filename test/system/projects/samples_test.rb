@@ -2265,6 +2265,9 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
       assert_selector 'table thead tr th', count: 6
 
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.name
+      find('input.t-search-component').native.send_keys(:return)
+
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
 
@@ -2276,7 +2279,7 @@ module Projects
       within('table tbody tr:first-child td:nth-child(7)') do
         # check within the from with method get that the value is 'value1':
         within('form[method="get"]') do
-          find("input[type='submit']").click
+          find('button').click
         end
         assert_selector "form[data-controller='inline-edit']"
 
@@ -2286,13 +2289,17 @@ module Projects
         end
         assert_no_selector "form[data-controller='inline-edit']"
         assert_selector 'form[method="get"]'
-        assert_selector 'input[value="value2"]'
+        assert_selector 'button', text: 'value2'
       end
+      assert_text I18n.t('samples.editable_cell.update_success')
     end
 
     test 'should not update metadata value that is from an analysis' do
       visit namespace_project_samples_url(@namespace, @project)
       assert_selector 'table thead tr th', count: 6
+
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample3.name
+      find('input.t-search-component').native.send_keys(:return)
 
       click_on I18n.t('projects.samples.show.table_header.last_updated')
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
@@ -2307,7 +2314,7 @@ module Projects
       assert_selector 'table thead tr th', count: 8
       within('table tbody tr:nth-child(1) td:nth-child(6)') do
         within('form[method="get"]') do
-          find("input[type='submit']").click
+          find('button').click
         end
         assert_no_selector "form[data-controller='inline-edit']"
       end
