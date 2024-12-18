@@ -6,7 +6,6 @@ module Types
     implements GraphQL::Types::Relay::Node
     description 'A workflow execution'
 
-    field :blob_run_directory, String, null: true, description: 'WorkflowExecution blob run directory'
     field :cleaned, Boolean, null: false, description: 'WorkflowExecution cleaned status'
     field :group, GroupType, null: true, description: 'Group, if the workflow belongs to a group namespace'
     field :http_error_code, Integer, null: true, description: 'WorkflowExecution http error code'

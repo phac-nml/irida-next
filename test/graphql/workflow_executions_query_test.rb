@@ -24,7 +24,6 @@ class WorkflowExecutionsQueryTest < ActiveSupport::TestCase
       node(id: $workflow_execution_id) {
         ... on WorkflowExecution {
           id
-          blobRunDirectory
           cleaned
           group{
             id
