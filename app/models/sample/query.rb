@@ -33,7 +33,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
 
   def advanced_query?
     # simplified version, will be further implemented when we have the definition of an advanced query
-     false
+    false
   end
 
   def results(type = :ransack)

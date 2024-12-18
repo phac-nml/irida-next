@@ -11,7 +11,7 @@ module Groups
 
     def index
       @timestamp = DateTime.current
-      @pagy, @samples = query_results
+      @pagy, @samples = pagy_for_samples_query
       @has_samples = authorized_samples.count.positive?
     end
 
@@ -26,7 +26,7 @@ module Groups
       respond_to do |format|
         format.turbo_stream do
           if params[:select].present?
-            @sample_ids = @query.results(:searchkick)
+            @sample_ids = @query.results(:ransack)
                                 .where(updated_at: ..params[:timestamp].to_datetime)
                                 .select(:id).pluck(:id)
           end
@@ -97,15 +97,6 @@ module Groups
 
     def search_key
       :"#{controller_name}_#{group.id}_search_params"
-    end
-
-    def query_results
-      limit = params[:limit] || 20
-      if @query.advanced_query
-        pagy_searchkick(@query.results(:searchkick_pagy), limit:)
-      else
-        pagy(@query.results(:ransack), limit:)
-      end
     end
   end
 end
