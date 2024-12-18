@@ -119,3 +119,45 @@ namespace_group_link20:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid) %>
   group_access_level: <%= Member::AccessLevel::ANALYST %>
   namespace_type: "Project"
+
+namespace_group_link21:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_india, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectIndia1_namespace, :uuid) %>
+  group_access_level: <%= Member::AccessLevel::ANALYST %>
+  namespace_type: "Project"
+
+namespace_group_link22:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_juliett, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_juliett_subgroup1, :uuid) %>
+  group_access_level: <%= Member::AccessLevel::ANALYST %>
+  namespace_type: "Group"
+
+namespace_group_link23:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_kilo, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
+  group_access_level: <%= Member::AccessLevel::ANALYST %>
+  namespace_type: "Group"
+
+namespace_group_link24:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_lima, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
+  group_access_level: <%= Member::AccessLevel::ANALYST %>
+  namespace_type: "Group"
+
+namespace_group_link25:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:group_lima, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_a, :uuid) %>
+  group_access_level: <%= Member::AccessLevel::ANALYST %>
+  namespace_type: "Group"
+
+namespace_group_link26:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_mike_a, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_mike, :uuid) %>
+  group_access_level: <%= Member::AccessLevel::ANALYST %>
+  namespace_type: "Group"
+
+namespace_group_link27:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_mike_a_a, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectMike_namespace, :uuid) %>
+  group_access_level: <%= Member::AccessLevel::ANALYST %>
+  namespace_type: "Project"
