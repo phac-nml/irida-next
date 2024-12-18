@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Executes basic metadata logic for controllers
+# Determines which pagy method to use when loading samples table
 module SamplesQuery
   extend ActiveSupport::Concern
 
