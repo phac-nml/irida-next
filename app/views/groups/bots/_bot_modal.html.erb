@@ -78,7 +78,11 @@
             <% Irida::Auth.all_available_scopes.each do |scope| %>
               <div class="flex">
                 <div class="flex items-center h-5">
-                  <%= check_box_tag "bot[scopes][]", scope, id: "bot_scopes_#{scope}" %>
+                  <%= check_box_tag "bot[scopes][]",
+                  scope,
+                  id: "bot_scopes_#{scope}",
+                  class:
+                    "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
                 </div>
                 <div class="ml-2 text-sm">
                   <%= label_tag "bot_scopes_#{scope}",
@@ -101,18 +105,7 @@
       <div class="mt-4">
         <%= form.submit t("groups.bots.index.bot_listing.new_bot_modal.submit"),
                     class:
-                      "focus:outline-none
-                                                                                                                                                                                  text-sm
-                                                                                                                                                                                  text-white
-                                                                                                                                                                                  bg-primary-700
-                                                                                                                                                                                  hover:bg-primary-800
-                                                                                                                                                                                  focus:ring-0
-                                                                                                                                                                                  rounded-md
-                                                                                                                                                                                  p-2
-                                                                                                                                                                                  dark:text-white
-                                                                                                                                                                                  dark:bg-primary-600
-                                                                                                                                                                                  dark:hover:bg-primary-700
-                                                                                                                                                                                  cursor-pointer" %>
+                      "focus:outline-none text-sm text-white bg-primary-700 hover:bg-primary-800 focus:ring-0 rounded-md p-2 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 cursor-pointer" %>
         <button
           type="button"
           class="

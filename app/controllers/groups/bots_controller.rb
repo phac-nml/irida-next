@@ -40,5 +40,9 @@ module Groups
     def bot_type
       @bot_type = User.user_types[:group_bot]
     end
+
+    def redirect_path
+      group_bots_path
+    end
   end
 end

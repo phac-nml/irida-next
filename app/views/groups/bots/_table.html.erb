@@ -1,0 +1,10 @@
+<%= render Bots::TableComponent.new(
+  @bot_accounts,
+  @namespace,
+  @pagy,
+  abilities: {
+    generate_token:
+      allowed_to?(:generate_bot_personal_access_token?, @namespace),
+    destroy_bot: allowed_to?(:destroy_bot_accounts?, @namespace),
+  },
+) %>

@@ -12,7 +12,7 @@ module Projects
       namespace = groups(:group_one)
       project = projects(:project1)
 
-      get namespace_project_bots_path(namespace, project, format: :turbo_stream)
+      get namespace_project_bots_path(namespace, project)
 
       assert_response :success
     end
@@ -23,7 +23,7 @@ module Projects
       namespace = groups(:group_one)
       project = projects(:project1)
 
-      get namespace_project_bots_path(namespace, project, format: :turbo_stream)
+      get namespace_project_bots_path(namespace, project)
 
       assert_response :unauthorized
     end
@@ -92,7 +92,7 @@ module Projects
 
       delete namespace_project_bot_path(namespace, project, id: namespace_bot.id, format: :turbo_stream)
 
-      assert_response :success
+      assert_response :redirect
     end
 
     test 'should not destroy a bot account for a bot account that does not belong to the project' do

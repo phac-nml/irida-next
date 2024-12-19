@@ -104,17 +104,17 @@ class ProfileTest < ApplicationSystemTestCase
 
     assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',
                        count: @active_token_count)
-    within('#personal-access-tokens-table') do
+    within('#access-tokens-table') do
       assert_text token_to_revoke.name
     end
     within %(tr[id=#{token_to_revoke.id}]) do
-      click_link I18n.t(:'profiles.personal_access_tokens.table.revoke_button')
+      click_link I18n.t(:'personal_access_tokens.table.revoke')
     end
 
     within('#turbo-confirm[open]') do
       click_button I18n.t(:'components.confirmation.confirm')
     end
-    within('#personal-access-tokens-table') do
+    within('#access-tokens-table') do
       assert_no_text token_to_revoke.name
     end
     assert_text I18n.t(:'profiles.personal_access_tokens.index.active_personal_access_tokens',

@@ -311,6 +311,34 @@ fr:
       api: Grants complete read/write access to the API.
       label: Scopes
       read_api: Grants read access to the API.
+  bots:
+    index:
+      pagy_item: Bot Accounts
+      table:
+        access_level:
+          level_0: No Access
+          level_10: Guest
+          level_20: Uploader
+          level_30: Analyst
+          level_40: Maintainer
+          level_50: Owner
+        actions:
+          destroy: Delete
+          destroy_aria_label: Delete bot account
+          destroy_confirmation: This action will permanently delete the bot account and will remove any existing memberships for the bot account. Are you sure you want to permanently delete this bot account?
+          generate_new_token: Generate new token
+          generate_new_token_aria_label: Generate a new personal access token for bot account
+        empty_state:
+          description: There are no associated bot accounts.
+          title: No bot accounts
+        header:
+          access_level: Access Level
+          actions: Actions
+          active_tokens: Active Tokens
+          created: Created
+          expiration: Expiration
+          username: Username
+        never: Never
   components:
     activity:
       load_more: Load more
@@ -380,9 +408,9 @@ fr:
         error: 'File %{filename} was not removed due to the following errors: %{errors}'
     bot_actions:
       create:
-        success: Bot account was successfully added to the group
+        success: Bot account was successfully added
       destroy:
-        success: Bot account was successfully removed from the group
+        success: Bot account was successfully removed
     bot_personal_access_token_actions:
       create:
         success: Successfully generated new personal access token for bot
@@ -602,34 +630,12 @@ fr:
           title: No Files
     bots:
       index:
-        access_level:
-          level_0: No Access
-          level_10: Guest
-          level_20: Uploader
-          level_30: Analyst
-          level_40: Maintainer
-          level_50: Owner
         access_token_section:
           aria_label: Personal access token, copy to clipboard
           description: Make sure you save it - you won't be able to access it again.
           label: New personal access token for %{bot_name}
         add_new_bot: New bot account
-        bot:
-          generate_new_token: Generate new token
-          generate_new_token_aria_label: Generate a new personal access token for bot account
-          never: Never
-          remove: Delete bot
-          remove_aria_label: Delete bot account
-          remove_confirmation: This action will permanently delete the bot account from the group and will remove any existing memberships for the bot account. Are you sure you want to permanently delete this bot account from the group?
         bot_listing:
-          access_level: Access Level
-          actions: Actions
-          active_tokens: Active Tokens
-          created: Created
-          empty_state:
-            description: There are no bot accounts attributed to this group
-            title: No bot accounts
-          expiration: Expiration
           generate_personal_access_token_modal:
             cancel: Cancel
             description: Generating a new personal access token for %{bot_account}
@@ -647,14 +653,12 @@ fr:
             title: New Bot Account
             token_details: Token details
             token_name: Token Name
-          username: Username
         personal_access_tokens_listing_modal:
-          actions: Actions
           description: Viewing a list of active personal access tokens for %{bot_account}
           personal_access_token:
-            never: Never
-            revoke: Revoke
-            revoke_confirmation: Are you sure you want to revoke this personal access token?
+            empty:
+              description: Bot %{bot_name} has no active personal access tokens.
+              title: No personal access tokens
           title: Personal access tokens
         subtitle: Setup bot accounts to be able to perform actions through the API that cannot be attributed to an individual user.
         title: Bot Accounts
@@ -939,6 +943,18 @@ fr:
     name:
       helper: A custom name will make it easier to search for this in the future.
       label: Name (Optional)
+  personal_access_tokens:
+    table:
+      header:
+        action: Action
+        created_at: Created
+        expires_at: Expiration Date
+        last_used_at: Last Used
+        name: Token name
+        scopes: Scopes
+      never: Never
+      revoke: Revoke
+      revoke_confirmation: Are you sure you want to revoke this personal access token?
   profiles:
     accounts:
       delete:
@@ -974,12 +990,8 @@ fr:
         success: Personal access token "%{name}" was successfully revoked.
       table:
         empty_state:
-          description: You cuurently have no active personal access tokens.
+          description: You currently have no active personal access tokens.
           title: No Active Personal Access Tokens
-        expires_at: Expires
-        never: Never
-        revoke_button: Revoke
-        revoke_confirm: Are you sure you want to revoke this personal access token? This action cannot be undone.
     preferences:
       locale_form:
         en: English
@@ -1069,34 +1081,12 @@ fr:
           workflow_version: Workflow Version
     bots:
       index:
-        access_level:
-          level_0: No Access
-          level_10: Guest
-          level_20: Uploader
-          level_30: Analyst
-          level_40: Maintainer
-          level_50: Owner
         access_token_section:
           aria_label: Personal access token, copy to clipboard
           description: Make sure you save it - you won't be able to access it again.
           label: New personal access token for %{bot_name}
         add_new_bot: New bot account
-        bot:
-          generate_new_token: Generate new token
-          generate_new_token_aria_label: Generate a new personal access token for bot account
-          never: Never
-          remove: Delete bot
-          remove_aria_label: Delete bot account
-          remove_confirmation: This action will permanently delete the bot account from the project and will remove any existing membership for the bot account. Are you sure you want to permanently delete this bot account from the project?
         bot_listing:
-          access_level: Access Level
-          actions: Actions
-          active_tokens: Active Tokens
-          created: Created
-          empty_state:
-            description: There are no bot accounts attributed to this project
-            title: No bot accounts
-          expiration: Expiration
           generate_personal_access_token_modal:
             cancel: Cancel
             description: Generating a new personal access token for %{bot_account}
@@ -1114,14 +1104,12 @@ fr:
             title: New Bot Account
             token_details: Token details
             token_name: Token Name
-          username: Username
         personal_access_tokens_listing_modal:
-          actions: Actions
           description: Viewing a list of active personal access tokens for %{bot_account}
           personal_access_token:
-            never: Never
-            revoke: Revoke
-            revoke_confirmation: Are you sure you want to revoke this personal access token?
+            empty:
+              description: Bot %{bot_name} has no active personal access tokens.
+              title: No personal access tokens
           title: Personal access tokens
         subtitle: Setup bot accounts to be able to perform actions through the API that cannot be attributed to an individual user.
         title: Bot Accounts
@@ -1680,9 +1668,6 @@ fr:
       default: "%Y-%m-%d %H:%M:%S"
       full_date: "%B %d, %Y"
   viral:
-    data_table_component:
-      header:
-        action: Action
     pagy:
       limit_component:
         items: "%{items} per page:"

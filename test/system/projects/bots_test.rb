@@ -47,8 +47,8 @@ module Projects
       assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
 
       within('div.empty_state_message') do
-        assert_text I18n.t(:'projects.bots.index.bot_listing.empty_state.title')
-        assert_text I18n.t(:'projects.bots.index.bot_listing.empty_state.description')
+        assert_text I18n.t(:'bots.index.table.empty_state.title')
+        assert_text I18n.t(:'bots.index.table.empty_state.description')
       end
     end
 
@@ -64,8 +64,8 @@ module Projects
       assert_selector 'tr', count: 0
 
       within('div.empty_state_message') do
-        assert_text I18n.t(:'projects.bots.index.bot_listing.empty_state.title')
-        assert_text I18n.t(:'projects.bots.index.bot_listing.empty_state.description')
+        assert_text I18n.t(:'bots.index.table.empty_state.title')
+        assert_text I18n.t(:'bots.index.table.empty_state.description')
       end
 
       click_link I18n.t(:'projects.bots.index.add_new_bot')
@@ -107,8 +107,8 @@ module Projects
       assert_selector 'tr', count: 0
 
       within('div.empty_state_message') do
-        assert_text I18n.t(:'projects.bots.index.bot_listing.empty_state.title')
-        assert_text I18n.t(:'projects.bots.index.bot_listing.empty_state.description')
+        assert_text I18n.t(:'bots.index.table.empty_state.title')
+        assert_text I18n.t(:'bots.index.table.empty_state.description')
       end
 
       click_link I18n.t(:'projects.bots.index.add_new_bot')
@@ -138,7 +138,7 @@ module Projects
 
       within('table') do
         within('table tbody tr:first-child td:last-child') do
-          click_link I18n.t(:'projects.bots.index.bot.remove')
+          click_link I18n.t(:'bots.index.table.actions.destroy')
         end
       end
 
@@ -160,9 +160,7 @@ module Projects
       assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
       assert_selector 'p', text: I18n.t(:'projects.bots.index.subtitle')
 
-      table_row = find(:table_row, { 'Username' => namespace_bot.user.email })
-
-      within table_row do
+      within "tr[id='#{namespace_bot.id}']" do
         click_link active_personal_tokens.count.to_s
       end
 
@@ -178,9 +176,7 @@ module Projects
           assert_selector 'tr', count: 2
           token = active_personal_tokens.first
 
-          table_row = find(:table_row, { 'Token name' => token.name })
-
-          within table_row do
+          within "tr[id='#{token.id}']" do
             assert_equal 'Valid PAT0', token.name
             assert_equal 'read_api, api', token.scopes.join(', ')
 
@@ -207,9 +203,7 @@ module Projects
       assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
       assert_selector 'p', text: I18n.t(:'projects.bots.index.subtitle')
 
-      table_row = find(:table_row, { 'Username' => namespace_bot.user.email })
-
-      within table_row do
+      within "tr[id='#{namespace_bot.id}']" do
         click_link 'Generate new token'
       end
 
@@ -245,9 +239,7 @@ module Projects
       assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
       assert_selector 'p', text: I18n.t(:'projects.bots.index.subtitle')
 
-      table_row = find(:table_row, { 'Username' => namespace_bot.user.email })
-
-      within table_row do
+      within "tr[id='#{namespace_bot.id}']" do
         click_link active_personal_tokens.count.to_s
       end
 
@@ -263,9 +255,7 @@ module Projects
           assert_selector 'tr', count: 2
           token = active_personal_tokens.first
 
-          table_row = find(:table_row, { 'Token name' => token.name })
-
-          within table_row do
+          within "tr[id='#{token.id}']" do
             click_link 'Revoke'
           end
         end

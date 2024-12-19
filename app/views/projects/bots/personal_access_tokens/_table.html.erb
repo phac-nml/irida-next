@@ -1,0 +1,18 @@
+<%= turbo_frame_tag "personal_access_tokens" do %>
+  <%= render PersonalAccessTokens::TableComponent.new(
+    personal_access_tokens,
+    namespace: @namespace,
+    bot_account: @bot_account,
+    empty: {
+      title:
+        t(
+          "projects.bots.index.personal_access_tokens_listing_modal.personal_access_token.empty.title",
+        ),
+      description:
+        t(
+          "projects.bots.index.personal_access_tokens_listing_modal.personal_access_token.empty.description",
+          bot_name: @bot_account.user.email,
+        ),
+    },
+  ) %>
+<% end %>
