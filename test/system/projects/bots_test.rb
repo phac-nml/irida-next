@@ -277,36 +277,51 @@ module Projects
       visit namespace_project_bots_path(@namespace, @project)
       # PAT panel is not present
       assert_no_selector '#access-token-section div'
-      # create new bot to render PAT panel
-      click_link I18n.t(:'projects.bots.index.add_new_bot')
+      # create new PAT to render PAT panel
+      within "tr[id='#{namespace_bot.id}']" do
+        click_link I18n.t('bots.index.table.actions.generate_new_token')
+      end
 
       within('#dialog') do
-        fill_in I18n.t('projects.bots.index.bot_listing.new_bot_modal.token_name'), with: 'Uploader'
-        find('#bot_access_level').find('option',
-                                        text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
+        assert_text I18n.t(
+          'projects.bots.index.bot_listing.generate_personal_access_token_modal.title'
+        )
+
+        assert_text I18n.t('projects.bots.index.bot_listing.generate_personal_access_token_modal.description',
+                           bot_account: namespace_bot.user.email)
+
+        fill_in I18n.t('projects.bots.index.bot_listing.new_bot_modal.token_name'), with: 'Newest token'
 
         all('input[type=checkbox]').each(&:click)
 
-        click_button I18n.t(:'projects.bots.index.bot_listing.new_bot_modal.submit')
+        click_button I18n.t('projects.bots.index.bot_listing.generate_personal_access_token_modal.submit')
       end
 
       # PAT panel now present
+      # additional asserts to prevent flakes
       assert_selector '#access-token-section div'
+      within('#access-token-section') do
+        assert_text I18n.t('projects.bots.index.access_token_section.label', bot_name: namespace_bot.user.email)
+        assert_text I18n.t('projects.bots.index.access_token_section.description')
+      end
       ### SETUP END ###
 
       ### ACTIONS START ###
+      # additional asserts to prevent flakes
+      assert_selector '#bots-table'
+      assert_selector '#bots-table table tbody tr', count: 20
       within "tr[id='#{namespace_bot.id}']" do
         # click active tokens number
         click_link active_personal_tokens.count.to_s
       end
 
       # bot's current PATs dialog
-      within("#dialog table tbody tr[id='#{active_personal_tokens.first.id}']") do
-        # revoke a PAT
-        click_link I18n.t('personal_access_tokens.table.revoke')
-      end
-
       within('#dialog') do
+        # revoke a PAT
+        within("table tbody tr[id='#{active_personal_tokens.first.id}']") do
+          click_link I18n.t('personal_access_tokens.table.revoke')
+        end
+
         click_button I18n.t('personal_access_tokens.new_revoke.submit_button')
       end
       ### ACTIONS END ###
@@ -318,36 +333,53 @@ module Projects
     end
 
     test 'PAT panel removed after bot destroy' do
+      namespace_bot = namespace_bots(:project1_bot0)
       ### SETUP START ###
       visit namespace_project_bots_path(@namespace, @project)
       # PAT panel is not present
       assert_no_selector '#access-token-section div'
-      # create new bot to render PAT panel
-      click_link I18n.t(:'projects.bots.index.add_new_bot')
+      # create new PAT to render PAT panel
+      within "tr[id='#{namespace_bot.id}']" do
+        click_link I18n.t('bots.index.table.actions.generate_new_token')
+      end
 
-      within('dialog') do
-        fill_in I18n.t('projects.bots.index.bot_listing.new_bot_modal.token_name'), with: 'Uploader'
-        find('#bot_access_level').find('option',
-                                        text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
+      within('#dialog') do
+        assert_text I18n.t(
+          'projects.bots.index.bot_listing.generate_personal_access_token_modal.title'
+        )
+
+        assert_text I18n.t('projects.bots.index.bot_listing.generate_personal_access_token_modal.description',
+                           bot_account: namespace_bot.user.email)
+
+        fill_in I18n.t('projects.bots.index.bot_listing.new_bot_modal.token_name'), with: 'Newest token'
 
         all('input[type=checkbox]').each(&:click)
 
-        click_button I18n.t(:'projects.bots.index.bot_listing.new_bot_modal.submit')
+        click_button I18n.t('projects.bots.index.bot_listing.generate_personal_access_token_modal.submit')
       end
+
       # PAT panel now present
       assert_selector '#access-token-section div'
+      # additional asserts to prevent flakes
+      within('#access-token-section') do
+        assert_text I18n.t('projects.bots.index.access_token_section.label', bot_name: namespace_bot.user.email)
+        assert_text I18n.t('projects.bots.index.access_token_section.description')
+      end
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within('table tbody tr:first-child td:last-child') do
+      # additional asserts to prevent flakes
+      assert_selector '#bots-table'
+      assert_selector '#bots-table table tbody tr', count: 20
+      within('#bots-table table tbody tr:first-child td:last-child') do
         # destroy bot
         click_link I18n.t(:'bots.index.table.actions.destroy')
       end
 
-      within('#dialog') do
+      # within('#dialog') do
         # confirm destroy bot
         click_button I18n.t('bots.new_destroy.submit_button')
-      end
+      # end
       ### ACTIONS END ###
 
       ### VERIFY START ###
