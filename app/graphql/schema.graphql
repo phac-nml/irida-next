@@ -2897,11 +2897,9 @@ input SubmitWorkflowExecutionInput {
   projectId: ID
 
   """
-  List of hashes containing a `sample_id` (String), and `files` (Hash)
-  containing pairs of `file_type` (String) (e.g. `fastq_1`) and `file_id`
-  (String) (e.g. `gid://irida/Attachment/1234`).
+  A list of hashes containing a 'sample_id', and a hash of `samplesheet_params`.
   """
-  samplesFilesInfoList: [JSON!]!
+  samplesWorkflowExecutionsAttributes: [JSON!]!
 
   """
   Set true for samples to be updated from this workflow execution
