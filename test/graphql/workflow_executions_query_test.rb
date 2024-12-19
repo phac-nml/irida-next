@@ -14,6 +14,8 @@ class WorkflowExecutionsQueryTest < ActiveSupport::TestCase
               id
             }
           }
+        }
+      }
     }
   GRAPHQL
 
