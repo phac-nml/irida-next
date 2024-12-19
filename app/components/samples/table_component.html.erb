@@ -84,7 +84,7 @@
                 <%= render_cell(
                 tag: index.zero? ? 'th' :'td',
                 scope: index.zero? ? 'row' : nil,
-                classes: class_names('px-3 py-3', 'sticky left-0 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-700': index.zero?, 'sticky left-56 bg-slate-50 dark:bg-slate-700': index == 1)
+                classes: class_names('px-3 py-3', 'sticky left-0 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-700': index.zero?, 'z-10': index.zero?, 'sticky z-10 left-56 bg-slate-50 dark:bg-slate-700': index == 1)
               ) do %>
                   <% if index.zero? && @abilities[:select_samples] %>
                     <%= check_box_tag "sample_ids[]",
@@ -132,14 +132,7 @@
                   <% end %>
                 <% end %>
               <% end %>
-              <% @metadata_fields.each do |field| %>
-                <%= render_cell(
-                tag: 'td',
-                classes: class_names('px-3 py-3')
-              ) do %>
-                  <%= sample.metadata[field] %>
-                <% end %>
-              <% end %>
+              <%= render Samples::EditableCell.with_collection(@metadata_fields, sample: sample) %>
               <% if @renders_row_actions %>
                 <%= render_cell(
                 tag: 'td',
@@ -199,7 +192,7 @@
                   >0</strong>
                 </span>
               </td>
-              <td colspan="100%" class="px-3 py-3 bg-slate-50 dark:bg-slate-700"></td>
+              <td colspan="100%" class="p-3 bg-slate-50 dark:bg-slate-700"></td>
             </tr>
           </tfoot>
         <% end %>

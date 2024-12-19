@@ -1,0 +1,16 @@
+<td id="<%= dom_id(@sample, @field) %>">
+  <%= form_with(url: update_value_namespace_project_sample_metadata_field_path(sample_id: @sample.id), method: :patch,
+  data: { controller: "inline-edit", "inline-edit-original-value": @value  }) do |f| %>
+    <%= f.hidden_field :field, value: @field %>
+    <%= f.hidden_field :original_value, value: @value %>
+    <%= f.hidden_field :format, value: "turbo_stream" %>
+    <%= f.text_field :value,
+                 value: @value,
+                 class:
+                   "w-full m-0 border-slate-300 text-slate-900 text-sm focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
+                 data: {
+                   "inline-edit-target": "input",
+                   action: "blur->inline-edit#submit keydown->inline-edit#cancel",
+                 } %>
+  <% end %>
+</td>

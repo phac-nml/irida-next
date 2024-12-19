@@ -391,16 +391,16 @@ module Groups
       assert_selector 'table thead tr th', count: 9
       within('table tbody tr:first-child') do
         assert_text @sample30.name
-        assert_selector 'td:nth-child(7)', text: 'value1'
-        assert_selector 'td:nth-child(8)', text: 'value2'
-        assert_selector 'td:nth-child(9)', text: ''
+        assert_selector 'td:nth-child(7) button', text: 'value1'
+        assert_selector 'td:nth-child(8) button', text: 'value2'
+        assert_selector 'td:nth-child(9) button', text: ''
       end
 
       within('table tbody tr:nth-child(3)') do
         assert_text @sample28.name
-        assert_selector 'td:nth-child(7)', text: ''
-        assert_selector 'td:nth-child(8)', text: ''
-        assert_selector 'td:nth-child(9)', text: 'unique_value'
+        assert_selector 'td:nth-child(7) button', text: ''
+        assert_selector 'td:nth-child(8) button', text: ''
+        assert_selector 'td:nth-child(9) button', text: 'unique_value'
       end
 
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
@@ -765,6 +765,60 @@ module Groups
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('shared.samples.metadata.file_imports.errors.description')
         click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
+      end
+    end
+
+    test 'can update metadata value that is not from an analysis' do
+      visit group_samples_url(@group)
+      assert_selector 'table thead tr th', count: 6
+
+      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: @sample1.name
+      find('input.t-search-component').native.send_keys(:return)
+
+      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+
+      within 'div.overflow-auto.scrollbar' do |div|
+        div.scroll_to div.find('table thead th:nth-child(7)')
+      end
+
+      assert_selector 'table thead tr th', count: 9
+      within('table tbody tr:first-child td:nth-child(7)') do
+        within('form[method="get"]') do
+          find('button').click
+        end
+        assert_selector "form[data-controller='inline-edit']"
+
+        within('form[data-controller="inline-edit"]') do
+          find('input[name="value"]').send_keys 'value2'
+          find('input[name="value"]').send_keys :return
+        end
+        assert_no_selector "form[data-controller='inline-edit']"
+        assert_selector 'form[method="get"]'
+        assert_selector 'button', text: 'value2'
+      end
+    end
+
+    test 'should not update metadata value that is from an analysis' do
+      visit group_samples_url(@group)
+      assert_selector 'table thead tr th', count: 6
+
+      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: @sample28.name
+      find('input.t-search-component').native.send_keys(:return)
+
+      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+
+      within 'div.overflow-auto.scrollbar' do |div|
+        div.scroll_to div.find('table thead th:nth-child(7)')
+      end
+
+      assert_selector 'table thead tr th', count: 9
+      within('table tbody tr:nth-child(1) td:nth-child(7)') do
+        within('form[method="get"]') do
+          find('button').click
+        end
+        assert_no_selector "form[data-controller='inline-edit']"
       end
     end
   end

@@ -827,8 +827,8 @@ module Projects
       assert_selector '#samples-table table thead tr th', count: 8
       within('#samples-table table tbody tr:first-child') do
         assert_text @sample3.name
-        assert_selector 'td:nth-child(6)', text: 'value1'
-        assert_selector 'td:nth-child(7)', text: 'value2'
+        assert_selector 'td button', text: 'value1'
+        assert_selector 'td button', text: 'value2'
       end
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
       assert_selector '#samples-table table thead tr th', count: 6
@@ -1545,6 +1545,65 @@ module Projects
       end
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 3
+      end
+    end
+
+    test 'can update metadata value that is not from an analysis' do
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_selector 'table thead tr th', count: 6
+
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.name
+      find('input.t-search-component').native.send_keys(:return)
+
+      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+
+      within 'div.overflow-auto.scrollbar' do |div|
+        div.scroll_to div.find('table thead th:nth-child(7)')
+      end
+
+      assert_selector 'table thead tr th', count: 8
+      within('table tbody tr:first-child td:nth-child(7)') do
+        # check within the from with method get that the value is 'value1':
+        within('form[method="get"]') do
+          find('button').click
+        end
+        assert_selector "form[data-controller='inline-edit']"
+
+        within('form[data-controller="inline-edit"]') do
+          find('input[name="value"]').send_keys 'value2'
+          find('input[name="value"]').send_keys :return
+        end
+        assert_no_selector "form[data-controller='inline-edit']"
+        assert_selector 'form[method="get"]'
+        assert_selector 'button', text: 'value2'
+      end
+      assert_text I18n.t('samples.editable_cell.update_success')
+    end
+
+    test 'should not update metadata value that is from an analysis' do
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_selector 'table thead tr th', count: 6
+
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample3.name
+      find('input.t-search-component').native.send_keys(:return)
+
+      click_on I18n.t('projects.samples.show.table_header.last_updated')
+      assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
+
+      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+
+      within 'div.overflow-auto.scrollbar' do |div|
+        div.scroll_to div.find('table thead th:nth-child(8)')
+      end
+
+      assert_selector 'table thead tr th', count: 8
+      within('table tbody tr:nth-child(1) td:nth-child(6)') do
+        within('form[method="get"]') do
+          find('button').click
+        end
+        assert_no_selector "form[data-controller='inline-edit']"
       end
     end
 
