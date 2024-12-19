@@ -3007,11 +3007,6 @@ A workflow execution
 """
 type WorkflowExecution implements Node {
   """
-  WorkflowExecution blob run directory
-  """
-  blobRunDirectory: String
-
-  """
   WorkflowExecution cleaned status
   """
   cleaned: Boolean!
