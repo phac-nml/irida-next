@@ -1,0 +1,3 @@
+web: bin/rails s -p 3001
+css: bin/rails tailwindcss:watch
+js: bin/rails webpack:watch

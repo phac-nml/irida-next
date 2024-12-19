@@ -1,0 +1,53 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "fileutils"
+
+class Setup
+  COLORS = {
+    green: "\e[32m",
+    red: "\e[31m",
+    reset: "\e[0m"
+  }.freeze
+
+  def initialize
+    @step = 1
+  end
+
+  def system!(*args)
+    system(*args) || abort("#{COLORS[:red]}\n== Command #{args} failed ==#{COLORS[:reset]}")
+  end
+
+  def step(message)
+    puts "\n#{COLORS[:green]}== Step #{@step}: #{message} ==#{COLORS[:reset]}"
+    @step += 1
+    yield if block_given?
+  end
+
+  def install_dependencies(path = ".")
+    Dir.chdir(path) do
+      system! "gem install bundler --conservative"
+      # Use parallel installation for better performance
+      system("bundle check") || system!("bundle install --jobs=$(nproc)")
+      system! "pnpm install --frozen-lockfile"
+    end
+  end
+
+  def run
+    step "Checking environment" do
+      abort "Ruby version >= 3.0.0 required" unless RUBY_VERSION.to_f >= 3.0
+      abort "Node.js required" unless system("which node > /dev/null")
+      abort "pnpm required" unless system("which pnpm > /dev/null")
+    end
+
+    step "Installing main dependencies" do
+      install_dependencies
+    end
+
+    step "Installing demo dependencies" do
+      install_dependencies("demo")
+    end
+  end
+end
+
+Setup.new.run

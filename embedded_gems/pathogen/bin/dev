@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Colors for output
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
+# Help text
+show_help() {
+    cat << EOF
+Usage: ./dev [options]
+
+Starts the development environment using foreman.
+
+Options:
+    -h, --help     Show this help message
+    -v, --version  Show foreman version
+EOF
+}
+
+# Check if running from correct directory
+if [ ! -f "Procfile" ]; then
+    echo -e "${RED}Error: Procfile not found in current directory${NC}"
+    exit 1
+fi
+
+# Parse arguments
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -h|--help) show_help; exit 0 ;;
+        -v|--version) foreman --version; exit 0 ;;
+        *) break ;;
+    esac
+    shift
+done
+
+# Check for minimum foreman version
+MIN_FOREMAN_VERSION="0.87.2"
+install_or_upgrade_foreman() {
+    echo -e "${GREEN}Installing/upgrading foreman...${NC}"
+    gem install foreman -v ">= $MIN_FOREMAN_VERSION"
+}
+
+if ! command -v foreman >/dev/null 2>&1; then
+    install_or_upgrade_foreman
+else
+    CURRENT_VERSION=$(foreman --version | cut -d' ' -f2)
+    if [ "$(printf '%s\n' "$MIN_FOREMAN_VERSION" "$CURRENT_VERSION" | sort -V | head -n1)" = "$MIN_FOREMAN_VERSION" ]; then
+        install_or_upgrade_foreman
+    fi
+fi
+
+# Run foreman with Procfile
+echo -e "${GREEN}Starting development environment...${NC}"
+exec foreman start -f Procfile "$@"
