@@ -6,7 +6,8 @@ class AdvancedSearchComponent < Component
   renders_one :add_group_button
   renders_one :remove_group_button
 
-  def initialize(form:, fields: [], operations: [])
+  def initialize(form:, search:, fields: [], operations: [])
+    @search = search
     @form = form
     @fields = fields
     @operations = operations

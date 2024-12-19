@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
 # model to represent sample search condition
-class Condition
+class Sample::Condition # rubocop:disable Style/ClassAndModuleChildren
   include ActiveModel::Model
   include ActiveModel::Attributes
-
-  # attr_accessor :field, :operator, :value
 
   attribute :field, :string
   attribute :operator, :string
