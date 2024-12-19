@@ -91,6 +91,26 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
     metadata_fields
   end
 
+  def aggregated_samples_count # rubocop:disable Metrics/AbcSize
+    aggregated_samples_count = samples_count
+
+    return aggregated_samples_count unless shared_namespaces.any?
+
+    projects_ids = []
+    shared_groups.self_and_descendants.where(type: [Namespaces::ProjectNamespace.sti_name])
+                 .where.not(id: self_and_descendants_of_type([Namespaces::ProjectNamespace.sti_name]).ids)
+                 .find_each do |project_namespace|
+      aggregated_samples_count += project_namespace.project.samples.size
+      projects_ids.push(project_namespace.id)
+    end
+
+    shared_project_namespaces.where.not(id: self_and_descendants_of_type([Namespaces::ProjectNamespace.sti_name]).ids)
+                             .find_each do |project_namespace|
+      aggregated_samples_count += project_namespace.project.samples.size if projects_ids.exclude?(project_namespace.id)
+    end
+    aggregated_samples_count
+  end
+
   def retrieve_group_activity
     PublicActivity::Activity.where(
       trackable_id: id,
