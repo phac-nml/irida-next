@@ -299,7 +299,7 @@ module Groups
       end
 
       # bot's current PATs dialog
-      within("#dialog tr[id='#{active_personal_tokens.first.id}']") do
+      within("#dialog table tbody tr[id='#{active_personal_tokens.first.id}']") do
         # revoke a PAT
         click_link I18n.t('personal_access_tokens.table.revoke')
       end
