@@ -1,4 +1,5 @@
 <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+<%= turbo_frame_tag "token_dialog" %>
 <%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t('.subtitle')) do |component| %>
   <%= component.with_icon(name: "users", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>

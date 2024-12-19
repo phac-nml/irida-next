@@ -142,7 +142,7 @@ module Projects
         end
       end
 
-      within('#turbo-confirm[open]') do
+      within('dialog') do
         click_button 'Confirm'
       end
 
@@ -261,15 +261,99 @@ module Projects
         end
       end
 
-      within('#turbo-confirm[open]') do
-        click_button 'Confirm'
-      end
-
       within('dialog') do
+        click_button 'Confirm'
         within('#personal-access-token-alert') do
           assert_text I18n.t('concerns.bot_personal_access_token_actions.revoke.success', pat_name: token.name)
         end
       end
+    end
+
+    test 'PAT panel removed after personal access token revoke' do
+      ### SETUP START ###
+      namespace_bot = namespace_bots(:project1_bot0)
+      active_personal_tokens = namespace_bot.user.personal_access_tokens.active
+
+      visit namespace_project_bots_path(@namespace, @project)
+      # PAT panel is not present
+      assert_no_selector '#access-token-section div'
+      # create new bot to render PAT panel
+      click_link I18n.t(:'projects.bots.index.add_new_bot')
+
+      within('#dialog') do
+        fill_in I18n.t('projects.bots.index.bot_listing.new_bot_modal.token_name'), with: 'Uploader'
+        find('#bot_access_level').find('option',
+                                        text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
+
+        all('input[type=checkbox]').each(&:click)
+
+        click_button I18n.t(:'projects.bots.index.bot_listing.new_bot_modal.submit')
+      end
+
+      # PAT panel now present
+      assert_selector '#access-token-section div'
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within "tr[id='#{namespace_bot.id}']" do
+        # click active tokens number
+        click_link active_personal_tokens.count.to_s
+      end
+
+      # bot's current PATs dialog
+      within("#dialog table tbody tr[id='#{active_personal_tokens.first.id}']") do
+        # revoke a PAT
+        click_link I18n.t('personal_access_tokens.table.revoke')
+      end
+
+      within('#dialog') do
+        click_button I18n.t('personal_access_tokens.new_revoke.submit_button')
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      # PAT panel no longer present
+      assert_no_selector '#access-token-section div'
+      ### VERIFY END ###
+    end
+
+    test 'PAT panel removed after bot destroy' do
+      ### SETUP START ###
+      visit namespace_project_bots_path(@namespace, @project)
+      # PAT panel is not present
+      assert_no_selector '#access-token-section div'
+      # create new bot to render PAT panel
+      click_link I18n.t(:'projects.bots.index.add_new_bot')
+
+      within('dialog') do
+        fill_in I18n.t('projects.bots.index.bot_listing.new_bot_modal.token_name'), with: 'Uploader'
+        find('#bot_access_level').find('option',
+                                        text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
+
+        all('input[type=checkbox]').each(&:click)
+
+        click_button I18n.t(:'projects.bots.index.bot_listing.new_bot_modal.submit')
+      end
+      # PAT panel now present
+      assert_selector '#access-token-section div'
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within('table tbody tr:first-child td:last-child') do
+        # destroy bot
+        click_link I18n.t(:'bots.index.table.actions.destroy')
+      end
+
+      within('#dialog') do
+        # confirm destroy bot
+        click_button I18n.t('bots.new_destroy.submit_button')
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      # PAT panel no longer present
+      assert_no_selector '#access-token-section div'
+      ### VERIFY END ###
     end
   end
 end
