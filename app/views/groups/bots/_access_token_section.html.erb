@@ -1,17 +1,9 @@
 <%= turbo_frame_tag "access-token-section" do %>
   <div
-    data-turbo-temporary
+    data-turbo-permanent
     class="
-      p-4
-      bg-white
-      border
-      border-slate-200
-      rounded-lg
-      shadow-sm
-      2xl:col-span-2
-      dark:border-slate-700
-      sm:p-6
-      dark:bg-slate-800
+      p-4 bg-white border border-slate-200 rounded-lg shadow-sm 2xl:col-span-2
+      dark:border-slate-700 sm:p-6 dark:bg-slate-800 mb-4
     "
   >
     <h2 class="text-xl font-semibold leading-tight text-slate-900 dark:text-white">
@@ -20,7 +12,7 @@
     <%= render TokenComponent.new(
       value: token,
       aria_label: t("groups.bots.index.access_token_section.aria_label"),
-      classes: "my-2"
+      classes: "my-2",
     ) %>
     <p class="text-slate-500 dark:text-slate-400"><%= t("groups.bots.index.access_token_section.description") %></p>
   </div>
