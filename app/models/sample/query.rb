@@ -37,14 +37,11 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
     false
   end
 
-  def results(params)
-    case params[:action]
-    when 'query'
-      pagy_results(params[:limit] || 20, params[:page] || 1)
-    when 'select'
-      advanced_query ? searchkick_results : ransack_results
+  def results(**results_arguments)
+    if results_arguments[:limit] || results_arguments[:page]
+      pagy_results(results_arguments[:limit], results_arguments[:page])
     else
-      raise ResultTypeError, "Unrecognized type: #{params[:action]}"
+      advanced_query ? searchkick_results : ransack_results
     end
   end
 

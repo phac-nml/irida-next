@@ -11,7 +11,7 @@ module Groups
 
     def index
       @timestamp = DateTime.current
-      @pagy, @samples = @query.results(action: 'query', limit: params[:limit], page: params[:page])
+      @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
       @has_samples = authorized_samples.count.positive?
     end
 
@@ -26,8 +26,7 @@ module Groups
       respond_to do |format|
         format.turbo_stream do
           if params[:select].present?
-            @sample_ids = @query.results(action: 'select')
-                                .where(updated_at: ..params[:timestamp].to_datetime).select(:id).pluck(:id)
+            @sample_ids = @query.results.where(updated_at: ..params[:timestamp].to_datetime).select(:id).pluck(:id)
           end
         end
       end
