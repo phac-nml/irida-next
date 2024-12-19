@@ -23,7 +23,7 @@ class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
   end
 
   # Union and Interface Resolution
-  def self.resolve_type(_type, object, _ctx)
+  def self.resolve_type(_type, object, _ctx) # rubocop:disable Metrics/MethodLength
     case object
     when Group
       Types::GroupType
@@ -35,6 +35,8 @@ class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
       Types::AttachmentType
     when User
       Types::UserType
+    when WorkflowExecution
+      Types::WorkflowExecutionType
     else
       raise(GraphQL::RequiredImplementationMissingError)
     end
