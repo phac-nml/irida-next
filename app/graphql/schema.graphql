@@ -3017,16 +3017,6 @@ type WorkflowExecution implements Node {
   group: Group
 
   """
-  WorkflowExecution cleaned status
-  """
-  cleaned: Boolean!
-
-  """
-  Group, if the workflow belongs to a group namespace
-  """
-  group: Group
-
-  """
   WorkflowExecution http error code
   """
   httpErrorCode: Int
@@ -3050,11 +3040,6 @@ type WorkflowExecution implements Node {
   WorkflowExecution name
   """
   name: String
-
-  """
-  Project, if the workflow belongs to a project namespace
-  """
-  project: Project
 
   """
   Project, if the workflow belongs to a project namespace
