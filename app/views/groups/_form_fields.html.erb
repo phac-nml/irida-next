@@ -23,7 +23,7 @@
       <div class="form-field">
         <%= form.label :parent_id %>
         <div class="flex items-center whitespace-nowrap">
-          <%= viral_prefixed_select2(form:, name: :parent_id, selected_value: group.parent, placeholder: t(:"groups.new_subgroup.select_group")) do |select| %>
+          <%= viral_prefixed_select2(form:, name: :parent_id, selected_value: group.parent.id, placeholder: t(:"groups.new_subgroup.select_group")) do |select| %>
             <% authorized_namespaces.each do |namespace| %>
               <% select.with_option(
                 primary: namespace.full_path,
