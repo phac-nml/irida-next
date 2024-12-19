@@ -1,6 +1,38 @@
-<% condition = Condition.new(field: "puid", operator: "!=", value: "test me") %>
-<%= form_with model: condition, url: "" do |form| %>
-  <%= render AdvancedSearchComponent.new(form:, fields: , operations:) do |advanced_search| %>
+<% search =
+  Sample::Search.new(
+    groups: [
+      Sample::Group.new(
+        conditions: [
+          Sample::Condition.new(
+            field: "puid",
+            operator: "!=",
+            value: "test me",
+          ),
+          Sample::Condition.new(
+            field: "name",
+            operator: "=",
+            value: "test me again",
+          ),
+        ],
+      ),
+      Sample::Group.new(
+        conditions: [
+          Sample::Condition.new(
+            field: "puid",
+            operator: "!=",
+            value: "test me",
+          ),
+          Sample::Condition.new(
+            field: "name",
+            operator: "=",
+            value: "test me again",
+          ),
+        ],
+      ),
+    ],
+  ) %>
+<%= form_with model: search, url: "" do |form| %>
+  <%= render AdvancedSearchComponent.new(search:, form:, fields:, operations:) do |advanced_search| %>
     <% advanced_search.with_add_condition_button do %>
       <button
         type="button"
