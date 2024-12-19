@@ -376,10 +376,8 @@ module Projects
         click_link I18n.t(:'bots.index.table.actions.destroy')
       end
 
-      # within('#dialog') do
-        # confirm destroy bot
-        click_button I18n.t('bots.new_destroy.submit_button')
-      # end
+      # confirm destroy bot
+      click_button I18n.t('bots.new_destroy.submit_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
