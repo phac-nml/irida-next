@@ -2,7 +2,6 @@
 
 module Types
   # WorkflowExecutions Type
-  # rubocop:disable convention:GraphQL/ExtractType
   class WorkflowExecutionType < Types::BaseObject
     implements GraphQL::Types::Relay::Node
     description 'A workflow execution'
