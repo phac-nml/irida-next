@@ -325,7 +325,6 @@ fr:
         actions:
           destroy: Delete
           destroy_aria_label: Delete bot account
-          destroy_confirmation: This action will permanently delete the bot account and will remove any existing memberships for the bot account. Are you sure you want to permanently delete this bot account?
           generate_new_token: Generate new token
           generate_new_token_aria_label: Generate a new personal access token for bot account
         empty_state:

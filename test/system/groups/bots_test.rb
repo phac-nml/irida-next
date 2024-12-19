@@ -330,7 +330,7 @@ module Groups
       assert_selector '#access-token-section div'
 
       within('table tbody tr:first-child td:last-child') do
-        click_link I18n.t(:'bots.index.table.actions.remove')
+        click_link I18n.t(:'bots.index.table.actions.destroy')
       end
 
       within('#dialog') do
