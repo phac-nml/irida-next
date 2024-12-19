@@ -280,7 +280,7 @@ module Projects
       # create new bot to render PAT panel
       click_link I18n.t(:'projects.bots.index.add_new_bot')
 
-      within('dialog') do
+      within('#dialog') do
         fill_in I18n.t('projects.bots.index.bot_listing.new_bot_modal.token_name'), with: 'Uploader'
         find('#bot_access_level').find('option',
                                         text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
@@ -301,15 +301,20 @@ module Projects
       end
 
       # bot's current PATs dialog
-      within('#dialog table') do
-        assert_selector 'tr', count: 2
-        token = active_personal_tokens.first
-
-        within "tr[id='#{token.id}']" do
-          # revoke a PAT
-          click_link I18n.t('personal_access_tokens.table.revoke')
-        end
+      within("#dialog tr[id='#{active_personal_tokens.first.id}']") do
+        # revoke a PAT
+        click_link I18n.t('personal_access_tokens.table.revoke')
       end
+
+      within('#dialog') do
+        click_button I18n.t('personal_access_tokens.new_revoke.submit_button')
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      # PAT panel no longer present
+      assert_no_selector '#access-token-section div'
+      ### VERIFY END ###
     end
 
     test 'PAT panel removed after bot destroy' do
