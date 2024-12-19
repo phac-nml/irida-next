@@ -101,6 +101,8 @@ class GroupsTest < ApplicationSystemTestCase
 
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
       fill_in I18n.t('activerecord.attributes.group.name'), with: 'New sub-group'
+      fill_in I18n.t('groups.new_subgroup.select_group'), with: '1'
+      click_on 'INXT_GRP_AAAAAAAAAA'
       fill_in 'Description', with: 'New sub-group description'
       click_on I18n.t('groups.new_subgroup.submit')
     end
@@ -118,6 +120,8 @@ class GroupsTest < ApplicationSystemTestCase
 
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
       fill_in I18n.t('activerecord.attributes.group.name'), with: subgroup1.name
+      fill_in I18n.t('groups.new_subgroup.select_group'), with: '1'
+      click_on 'INXT_GRP_AAAAAAAAAA'
       click_on I18n.t('groups.new_subgroup.submit')
     end
 
@@ -134,6 +138,8 @@ class GroupsTest < ApplicationSystemTestCase
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
       fill_in I18n.t('activerecord.attributes.group.name'), with: 'New group'
       fill_in I18n.t('activerecord.attributes.group.path'), with: subgroup1.path
+      fill_in I18n.t('groups.new_subgroup.select_group'), with: '1'
+      click_on 'INXT_GRP_AAAAAAAAAA'
       click_on I18n.t('groups.new_subgroup.submit')
     end
 
