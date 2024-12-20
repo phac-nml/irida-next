@@ -7,7 +7,7 @@ class WorkflowExecutionPolicy < ApplicationPolicy
 
     @access_level ||= {}
 
-    user_type = if current_user.user_type == User.user_types[:project_automation_bot]
+    user_type = if project_automation_bot?(current_user)
                   :project_automation_bot
                 else
                   :human_user
@@ -17,9 +17,15 @@ class WorkflowExecutionPolicy < ApplicationPolicy
     @access_level[user_type]
   end
 
-  def destroy? # rubocop:disable Metrics/AbcSize
-    return true if record.submitter.id == user.id
-    return true if Member::AccessLevel.manageable.include?(effective_access_level)
+  def project_automation_bot?(user)
+    User.user_types[user.user_type] == User.user_types[:project_automation_bot]
+  end
+
+  def destroy? # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+    unless project_automation_bot?(user)
+      return true if record.submitter.id == user.id
+      return true if Member::AccessLevel.manageable.include?(effective_access_level)
+    end
 
     if (record.namespace.type == Namespaces::ProjectNamespace.sti_name) &&
        (record.submitter.id == record.namespace.automation_bot.id) &&
@@ -33,10 +39,15 @@ class WorkflowExecutionPolicy < ApplicationPolicy
     false
   end
 
-  def read? # rubocop:disable Metrics/AbcSize
-    return true if record.submitter.id == user.id
+  def read? # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+    unless project_automation_bot?(user)
+      return true if record.submitter.id == user.id
+      return true if effective_access_level(user) > Member::AccessLevel::NO_ACCESS
+    end
+
     if (record.namespace.type == Namespaces::ProjectNamespace.sti_name) &&
        (record.submitter.id == record.namespace.automation_bot.id) &&
+       (record.namespace.automation_bot.id == user.id) &&
        (effective_access_level(record.namespace.automation_bot) > Member::AccessLevel::NO_ACCESS)
       return true
     end
@@ -53,9 +64,11 @@ class WorkflowExecutionPolicy < ApplicationPolicy
     false
   end
 
-  def cancel? # rubocop:disable Metrics/AbcSize
-    return true if record.submitter.id == user.id
-    return true if Member::AccessLevel.manageable.include?(effective_access_level)
+  def cancel? # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+    unless project_automation_bot?(user)
+      return true if record.submitter.id == user.id
+      return true if Member::AccessLevel.manageable.include?(effective_access_level)
+    end
 
     if (record.namespace.type == Namespaces::ProjectNamespace.sti_name) &&
        (record.submitter.id == record.namespace.automation_bot.id) &&

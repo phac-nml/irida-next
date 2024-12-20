@@ -5,23 +5,45 @@ require 'test_helper'
 class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
   def setup
     @user = users(:john_doe)
+    @automation_bot_user = users(:project1_automation_bot)
     @workflow_execution = workflow_executions(:irida_next_example_prepared)
     @policy = WorkflowExecutionPolicy.new(@workflow_execution, user: @user)
+
     @details = {}
   end
 
   test '#read?' do
     assert @policy.read?
 
+    user = users(:ryan_doe)
+    policy = WorkflowExecutionPolicy.new(@workflow_execution, user:)
+
+    assert policy.read?
+
     user = users(:project1_automation_bot)
+    user_incorrect_permissions = users(:micha_doe)
     workflow_execution = workflow_executions(:automated_workflow_execution)
     policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
 
     assert policy.read?
+
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user: @user)
+
+    assert policy.read?
+
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user: user_incorrect_permissions)
+
+    assert_not policy.read?
   end
 
   test '#create?' do
     assert @policy.create?
+
+    user_incorrect_permissions = users(:ryan_doe)
+    workflow_execution = workflow_executions(:automated_workflow_execution)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user: user_incorrect_permissions)
+
+    assert_not policy.create?
   end
 
   test '#cancel?' do
@@ -32,16 +54,35 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
     policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
 
     assert policy.cancel?
+
+    automated_workflow_execution = workflow_executions(:automated_workflow_execution)
+    policy = WorkflowExecutionPolicy.new(automated_workflow_execution, user: @user)
+
+    assert policy.cancel?
+
+    user_incorrect_permissions = users(:ryan_doe)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user: user_incorrect_permissions)
+
+    assert_not policy.cancel?
   end
 
   test '#destroy?' do
     assert @policy.destroy?
 
     user = users(:project1_automation_bot)
+    user_incorrect_permissions = users(:ryan_doe)
     workflow_execution = workflow_executions(:automated_workflow_execution)
     policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
 
     assert policy.destroy?
+
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user: @user)
+
+    assert policy.destroy?
+
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user: user_incorrect_permissions)
+
+    assert_not policy.destroy?
   end
 
   test 'automated scope' do
