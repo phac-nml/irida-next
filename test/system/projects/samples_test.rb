@@ -2262,6 +2262,7 @@ module Projects
     end
 
     test 'can update metadata value that is not from an analysis' do
+      ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       assert_selector 'table thead tr th', count: 6
 
@@ -2276,7 +2277,10 @@ module Projects
       end
 
       assert_selector 'table thead tr th', count: 8
+      ### SETUP END ###
+
       within('table tbody tr:first-child td:nth-child(7)') do
+        ### ACTIONS START ###
         # check within the from with method get that the value is 'value1':
         within('form[method="get"]') do
           find('button').click
@@ -2287,14 +2291,19 @@ module Projects
           find('input[name="value"]').send_keys 'value2'
           find('input[name="value"]').send_keys :return
         end
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
         assert_no_selector "form[data-controller='inline-edit']"
         assert_selector 'form[method="get"]'
         assert_selector 'button', text: 'value2'
       end
       assert_text I18n.t('samples.editable_cell.update_success')
+      ### VERIFY END ###
     end
 
     test 'should not update metadata value that is from an analysis' do
+      ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       assert_selector 'table thead tr th', count: 6
 
@@ -2312,11 +2321,18 @@ module Projects
       end
 
       assert_selector 'table thead tr th', count: 8
+      ### SETUP END ###
+
       within('table tbody tr:nth-child(1) td:nth-child(6)') do
+        ### ACTIONS START ###
         within('form[method="get"]') do
           find('button').click
         end
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
         assert_no_selector "form[data-controller='inline-edit']"
+        ### VERIFY END ###
       end
     end
 
