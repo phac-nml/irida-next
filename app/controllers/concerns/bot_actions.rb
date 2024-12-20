@@ -54,6 +54,7 @@ module BotActions
   end
 
   def new_destroy
+    authorize! @namespace, to: :destroy_bot_accounts?
     render turbo_stream: turbo_stream.update('bot_modal',
                                              partial: 'new_destroy_modal',
                                              locals: {
