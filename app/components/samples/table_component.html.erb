@@ -84,7 +84,7 @@
                 <%= render_cell(
                 tag: index.zero? ? 'th' :'td',
                 scope: index.zero? ? 'row' : nil,
-                classes: class_names('px-3 py-3', 'sticky left-0 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-700': index.zero?, 'sticky left-56 bg-slate-50 dark:bg-slate-700': index == 1)
+                classes: class_names('px-3 py-3', 'sticky left-0 z-5 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-700': index.zero?, 'sticky z-5 left-56 bg-slate-50 dark:bg-slate-700': index == 1)
               ) do %>
                   <% if index.zero? && @abilities[:select_samples] %>
                     <%= check_box_tag "sample_ids[]",
