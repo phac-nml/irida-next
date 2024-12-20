@@ -105,30 +105,30 @@ class BotActionsConcernTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
-  test 'new_destroy in group' do
-    get group_bot_new_destroy_path(@namespace, bot_id: @group_bot.id)
+  test 'destroy_confirmation in group' do
+    get group_bot_destroy_confirmation_path(@namespace, bot_id: @group_bot.id)
 
     assert_response :success
   end
 
-  test 'unauthorized new_destroy in group' do
+  test 'unauthorized destroy_confirmation in group' do
     sign_in users(:ryan_doe)
 
-    get group_bot_new_destroy_path(@namespace, bot_id: @group_bot.id)
+    get group_bot_destroy_confirmation_path(@namespace, bot_id: @group_bot.id)
 
     assert_response :unauthorized
   end
 
-  test 'new_destroy in project' do
-    get namespace_project_bot_new_destroy_path(@namespace, @project, bot_id: @project_bot.id)
+  test 'destroy_confirmation in project' do
+    get namespace_project_bot_destroy_confirmation_path(@namespace, @project, bot_id: @project_bot.id)
 
     assert_response :success
   end
 
-  test 'unauthorized new_destroy in project' do
+  test 'unauthorized destroy_confirmation in project' do
     sign_in users(:ryan_doe)
 
-    get namespace_project_bot_new_destroy_path(@namespace, @project, bot_id: @project_bot.id)
+    get namespace_project_bot_destroy_confirmation_path(@namespace, @project, bot_id: @project_bot.id)
 
     assert_response :unauthorized
   end

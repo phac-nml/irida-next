@@ -7,7 +7,7 @@ module BotActions
   included do
     before_action proc { namespace }
     before_action proc { access_levels }
-    before_action proc { bot_account }, only: %i[destroy new_destroy]
+    before_action proc { bot_account }, only: %i[destroy destroy_confirmation]
     before_action proc { bot_type }, only: %i[create]
     before_action proc { bot_accounts }
   end
@@ -53,10 +53,10 @@ module BotActions
     end
   end
 
-  def new_destroy
+  def destroy_confirmation
     authorize! @namespace, to: :destroy_bot_accounts?
     render turbo_stream: turbo_stream.update('bot_modal',
-                                             partial: 'new_destroy_modal',
+                                             partial: 'destroy_confirmation_modal',
                                              locals: {
                                                open: true,
                                                bot_account: @bot_account

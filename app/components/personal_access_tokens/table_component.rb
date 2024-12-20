@@ -25,12 +25,12 @@ module PersonalAccessTokens
 
     def revoke_path(token)
       if @namespace.is_a?(Group)
-        new_revoke_group_bot_personal_access_token_path(
+        revoke_confirmation_group_bot_personal_access_token_path(
           bot_id: @bot_account.id,
           id: token.id
         )
       elsif @namespace.is_a?(Namespaces::ProjectNamespace)
-        new_revoke_namespace_project_bot_personal_access_token_path(
+        revoke_confirmation_namespace_project_bot_personal_access_token_path(
           bot_id: @bot_account.id,
           id: token.id
         )

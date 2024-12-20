@@ -45,9 +45,9 @@ module Bots
 
     def destroy_path(bot)
       if @namespace.is_a?(Group)
-        group_bot_new_destroy_path(bot_id: bot.id)
+        group_bot_destroy_confirmation_path(bot_id: bot.id)
       elsif @namespace.is_a?(Namespaces::ProjectNamespace)
-        namespace_project_bot_new_destroy_path(bot_id: bot.id)
+        namespace_project_bot_destroy_confirmation_path(bot_id: bot.id)
       end
     end
   end

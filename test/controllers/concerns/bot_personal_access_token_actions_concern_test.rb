@@ -252,7 +252,7 @@ class BotPersonalAcessTokenActionsConcernTest < ActionDispatch::IntegrationTest
 
     namespace_bot = namespace_bots(:group1_bot0)
     token = personal_access_tokens(:user_group_bot_account0_valid_pat)
-    get new_revoke_group_bot_personal_access_token_path(
+    get revoke_confirmation_group_bot_personal_access_token_path(
       namespace,
       bot_id: namespace_bot.id,
       id: token.id
@@ -268,7 +268,7 @@ class BotPersonalAcessTokenActionsConcernTest < ActionDispatch::IntegrationTest
     namespace_bot = namespace_bots(:group1_bot0)
     token = personal_access_tokens(:user_group_bot_account0_valid_pat)
 
-    get new_revoke_group_bot_personal_access_token_path(
+    get revoke_confirmation_group_bot_personal_access_token_path(
       namespace,
       bot_id: namespace_bot.id,
       id: token.id
@@ -286,7 +286,7 @@ class BotPersonalAcessTokenActionsConcernTest < ActionDispatch::IntegrationTest
     namespace_bot = namespace_bots(:project1_bot0)
     token = personal_access_tokens(:user_bot_account0_valid_pat)
 
-    get new_revoke_namespace_project_bot_personal_access_token_path(
+    get revoke_confirmation_namespace_project_bot_personal_access_token_path(
       namespace,
       project,
       bot_id: namespace_bot.id,

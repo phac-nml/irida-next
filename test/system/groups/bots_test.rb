@@ -142,7 +142,7 @@ module Groups
       end
 
       within('dialog') do
-        click_button I18n.t('bots.new_destroy.submit_button')
+        click_button I18n.t('bots.destroy_confirmation.submit_button')
       end
 
       assert_text I18n.t(:'concerns.bot_actions.destroy.success')
@@ -252,7 +252,7 @@ module Groups
       end
 
       within('dialog') do
-        click_button I18n.t('personal_access_tokens.new_revoke.submit_button')
+        click_button I18n.t('personal_access_tokens.revoke_confirmation.submit_button')
         within('#personal-access-token-alert') do
           assert_text I18n.t('concerns.bot_personal_access_token_actions.revoke.success', pat_name: token.name)
         end
@@ -310,7 +310,7 @@ module Groups
           click_link I18n.t('personal_access_tokens.table.revoke')
         end
 
-        click_button I18n.t('personal_access_tokens.new_revoke.submit_button')
+        click_button I18n.t('personal_access_tokens.revoke_confirmation.submit_button')
       end
       ### ACTIONS END ###
 
@@ -364,7 +364,7 @@ module Groups
       end
 
       # confirm destroy bot
-      click_button I18n.t('bots.new_destroy.submit_button')
+      click_button I18n.t('bots.destroy_confirmation.submit_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
