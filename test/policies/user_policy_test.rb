@@ -9,34 +9,34 @@ class UserPolicyTest < ActiveSupport::TestCase
   end
 
   test '#update?' do
-    assert @policy.update?
+    assert @policy.apply(:update?)
   end
 
   test '#edit?' do
-    assert @policy.edit?
+    assert @policy.apply(:edit?)
   end
 
   test '#destroy?' do
-    assert @policy.destroy?
+    assert @policy.apply(:destroy?)
   end
 
   test '#revoke?' do
-    assert @policy.revoke?
+    assert @policy.apply(:revoke?)
   end
 
   test '#read?' do
-    assert @policy.read?
+    assert @policy.apply(:read?)
   end
 
   test '#index?' do
-    assert @policy.index?
+    assert @policy.apply(:index?)
   end
 
   test '#new?' do
-    assert @policy.new?
+    assert @policy.apply(:new?)
   end
 
   test '#create?' do
-    assert @policy.create?
+    assert @policy.apply(:create?)
   end
 end

@@ -17,11 +17,4 @@ class ApplicationPolicy < ActionPolicy::Base
   #    record.user_id == user.id
   #  end
   #
-
-  # attr_accessor :details
-
-  # def initialize(record = nil, **params)
-  #   super
-  #   @details ||= {}
-  # end
 end
