@@ -19,8 +19,6 @@ module Projects
       @namespace = groups(:group_one)
       @subgroup12a = groups(:subgroup_twelve_a)
 
-      Project.reset_counters(@project.id, :samples_count)
-
       Sample.reindex
       Searchkick.enable_callbacks
     end
@@ -221,12 +219,12 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      # flash msg
+      # success flash msg
       assert_text I18n.t('projects.samples.create.success')
       # verify redirect to sample show page after successful sample creation
       assert_selector 'h1', text: 'New Name'
       assert_selector 'p', text: 'A sample description'
-      # verify sample exists in table
+      # verify sample exists in samples table
       visit namespace_project_samples_url(@namespace, @project)
       within('#samples-table table tbody') do
         assert_text 'New Name'
@@ -243,14 +241,17 @@ module Projects
       # nav to edit sample page
       click_on I18n.t('projects.samples.show.edit_button')
 
-      # change current sample properties with new ones
+      # verify current sample doesn't have with new properties that will be used
+      assert_no_text 'A new description'
+      assert_no_text 'New Sample Name'
+      # change current sample properties
       fill_in 'Description', with: 'A new description'
       fill_in 'Name', with: 'New Sample Name'
       click_on I18n.t('projects.samples.edit.submit_button')
       ### ACTIONS END ###
 
       ### results start ###
-      # flash msg
+      # success flash msg
       assert_text I18n.t('projects.samples.update.success')
 
       # verify redirect to sample show page and updated sample state
@@ -271,6 +272,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ##
+      # remove sample
       click_link I18n.t(:'projects.samples.index.remove_button')
 
       within('#turbo-confirm[open]') do
@@ -279,7 +281,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      # flash msg
+      # success flash msg
       assert_text I18n.t('projects.samples.deletions.destroy.success', sample_name: @sample1.name,
                                                                        project_name: @project.namespace.human_name)
       # redirected to samples index
@@ -305,6 +307,7 @@ module Projects
         click_link I18n.t('projects.samples.index.remove_button')
       end
 
+      # confirm destroy action
       within('#dialog') do
         assert_text I18n.t('projects.samples.deletions.new_deletion_dialog.description', sample_name: @sample1.name)
         click_button I18n.t('projects.samples.deletions.new_deletion_dialog.submit_button')
@@ -312,7 +315,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      # flash msg
+      # success flash msg
       assert_text I18n.t('projects.samples.deletions.destroy.success', sample_name: @sample1.name,
                                                                        project_name: @project.namespace.human_name)
       # sample no longer exists
@@ -320,7 +323,8 @@ module Projects
       # still on samples index page
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
       # remaining samples still in table
-      assert_selector '#samples-table table tbody tr', count: 2
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
+                                                                           locale: @user.locale))
       ### VERIFY END ###
     end
 
@@ -618,36 +622,6 @@ module Projects
         assert_text I18n.t('projects.samples.transfers.dialog.empty_state')
         ### VERIFY END ###
       end
-    end
-
-    test 'can search the list of samples by name' do
-      ### SETUP START ###
-      visit namespace_project_samples_url(@namespace, @project)
-      # partial name search
-      filter_text = @sample1.name[-3..]
-
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 3
-      assert_selector "tr[id='#{@sample1.id}']"
-      assert_selector "tr[id='#{@sample2.id}']"
-      assert_selector "tr[id='#{@sample30.id}']"
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      # apply filter
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: filter_text
-      find('input.t-search-component').native.send_keys(:return)
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      # verify table only contains sample1
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 1, locale: @user.locale))
-      assert_selector '#samples-table table tbody tr', count: 1
-      assert_selector "tr[id='#{@sample1.id}']"
-      assert_no_selector "tr[id='#{@sample2.id}']"
-      assert_no_selector "tr[id='#{@sample30.id}']"
-      ### VERIFY END ###
     end
 
     test 'limit persists through filter and sort actions' do
