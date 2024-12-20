@@ -769,6 +769,7 @@ module Groups
     end
 
     test 'can update metadata value that is not from an analysis' do
+      ### SETUP START ###
       visit group_samples_url(@group)
       assert_selector 'table thead tr th', count: 6
 
@@ -783,6 +784,9 @@ module Groups
       end
 
       assert_selector 'table thead tr th', count: 9
+      ### SETUP END ###
+
+      ### ACTIONS START ###
       within('table tbody tr:first-child td:nth-child(7)') do
         within('form[method="get"]') do
           find('button').click
@@ -793,13 +797,18 @@ module Groups
           find('input[name="value"]').send_keys 'value2'
           find('input[name="value"]').send_keys :return
         end
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
         assert_no_selector "form[data-controller='inline-edit']"
         assert_selector 'form[method="get"]'
         assert_selector 'button', text: 'value2'
+        ### VERIFY END ###
       end
     end
 
     test 'should not update metadata value that is from an analysis' do
+      ### SETUP START ###
       visit group_samples_url(@group)
       assert_selector 'table thead tr th', count: 6
 
@@ -814,11 +823,18 @@ module Groups
       end
 
       assert_selector 'table thead tr th', count: 9
+      ### SETUP END ###
+
       within('table tbody tr:nth-child(1) td:nth-child(7)') do
+        ### ACTIONS START ###
         within('form[method="get"]') do
           find('button').click
         end
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
         assert_no_selector "form[data-controller='inline-edit']"
+        ### VERIFY END ###
       end
     end
   end
