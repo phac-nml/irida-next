@@ -92,9 +92,9 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
   end
 
   def aggregated_samples_count # rubocop:disable Metrics/AbcSize
-    aggregated_samples_count = samples_count
+    return samples_count unless shared_namespaces.any?
 
-    return aggregated_samples_count unless shared_namespaces.any?
+    aggregated_samples_count = samples_count
 
     projects_ids = []
     shared_groups.self_and_descendants.where(type: [Namespaces::ProjectNamespace.sti_name])
