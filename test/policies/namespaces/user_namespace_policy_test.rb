@@ -11,11 +11,11 @@ module Namespaces
     end
 
     test '#create?' do
-      assert @policy.create?
+      assert @policy.apply(:create?)
     end
 
     test '#transfer_into_namespace?' do
-      assert @policy.transfer_into_namespace?
+      assert @policy.apply(:transfer_into_namespace?)
     end
   end
 end
