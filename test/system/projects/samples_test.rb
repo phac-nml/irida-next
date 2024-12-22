@@ -2336,6 +2336,29 @@ module Projects
       end
     end
 
+    test 'project analysts should not be able to edit samples' do
+      ### SETUP START ###
+      login_as users(:james_doe)
+      visit namespace_project_samples_url(@namespace, @project)
+
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample3.name
+      find('input.t-search-component').native.send_keys(:return)
+
+      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within('table tbody tr:first-child td:nth-child(7)') do
+        find('button').click
+      end
+      ### ACTIONS END ###
+      within('table tbody tr:first-child td:nth-child(7)') do
+        assert_no_selector "form[data-controller='inline-edit']"
+      end
+    end
+
     def long_filter_text
       text = (1..500).map { |n| "sample#{n}" }.join(', ')
       "#{text}, #{@sample1.name}" # Need to comma to force the tag to be created
