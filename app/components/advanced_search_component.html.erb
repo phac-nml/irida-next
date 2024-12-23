@@ -38,7 +38,7 @@
                   <%= groups_form.fields_for :conditions, condition do |conditions_form| %>
                     <%= conditions_form.select :field,
                                            @fields,
-                                           { include_blank: "Field" },
+                                           { required: true, include_blank: "Field" },
                                            {
                                              "aria-label": "field",
                                              class:
@@ -46,7 +46,7 @@
                                            } %>
                     <%= conditions_form.select :operator,
                                            @operations,
-                                           { include_blank: "Operator" },
+                                           { required: true, include_blank: "Operator" },
                                            {
                                              "aria-label": "operator",
                                              class:
