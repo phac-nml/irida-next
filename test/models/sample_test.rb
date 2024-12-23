@@ -157,17 +157,70 @@ class SampleTest < ActiveSupport::TestCase
   test 'sorted_files with files including pe' do
     sample_b = samples(:sampleB)
 
-    files = sample_b.sorted_files
+    files = sample_b.sort_files
 
     assert_equal 3, files[:singles].count
     assert_equal 3, files[:pe_forward].count
     assert_equal 3, files[:pe_reverse].count
   end
 
+  test 'ordering by sort_files' do
+    sample_b = samples(:sampleB)
+    attachmentPEFWD1 = attachments(:attachmentPEFWD1)
+    attachmentPEREV1 = attachments(:attachmentPEREV1)
+    attachmentPEFWD2 = attachments(:attachmentPEFWD2)
+    attachmentPEREV2 = attachments(:attachmentPEREV2)
+    attachmentPEFWD3 = attachments(:attachmentPEFWD3)
+    attachmentPEREV3 = attachments(:attachmentPEREV3)
+    attachmentD = attachments(:attachmentD)
+    attachmentE = attachments(:attachmentE)
+    attachmentF = attachments(:attachmentF)
+
+    # ["#{attachment.file.filename} (#{attachment.created_at.localtime.strftime('%Y-%m-%d %l:%M%P')})",
+    #  attachment.to_global_id,
+    #  { 'data-puid': attachment.puid }]
+
+    files = sample_b.sort_files
+    expected_singles_files =
+    [["#{attachmentD.file.filename} (#{attachmentD.created_at.localtime.strftime('%Y-%m-%d %l:%M%P')})",
+      attachmentD.to_global_id,
+      { 'data-puid': attachmentD.puid }],
+    ["#{attachmentE.file.filename} (#{attachmentE.created_at.localtime.strftime('%Y-%m-%d %l:%M%P')})",
+      attachmentE.to_global_id,
+      { 'data-puid': attachmentE.puid }],
+    ["#{attachmentF.file.filename} (#{attachmentF.created_at.localtime.strftime('%Y-%m-%d %l:%M%P')})",
+      attachmentF.to_global_id,
+      { 'data-puid': attachmentF.puid }]]
+    expected_forward_files =
+      [["#{attachmentPEFWD2.file.filename} (#{attachmentPEFWD2.created_at.localtime.strftime('%Y-%m-%d %l:%M%P')})",
+        attachmentPEFWD2.to_global_id,
+      { 'data-puid': attachmentPEFWD2.puid }],
+      ["#{attachmentPEFWD3.file.filename} (#{attachmentPEFWD3.created_at.localtime.strftime('%Y-%m-%d %l:%M%P')})",
+      attachmentPEFWD3.to_global_id,
+        { 'data-puid': attachmentPEFWD3.puid }],
+      ["#{attachmentPEFWD1.file.filename} (#{attachmentPEFWD1.created_at.localtime.strftime('%Y-%m-%d %l:%M%P')})",
+      attachmentPEFWD1.to_global_id,
+        { 'data-puid': attachmentPEFWD1.puid }]]
+    expected_reverse_files =
+      [["#{attachmentPEREV2.file.filename} (#{attachmentPEREV2.created_at.localtime.strftime('%Y-%m-%d %l:%M%P')})",
+        attachmentPEREV2.to_global_id,
+        { 'data-puid': attachmentPEREV2.puid }],
+      ["#{attachmentPEREV3.file.filename} (#{attachmentPEREV3.created_at.localtime.strftime('%Y-%m-%d %l:%M%P')})",
+      attachmentPEREV3.to_global_id,
+        { 'data-puid': attachmentPEREV3.puid }],
+      ["#{attachmentPEREV1.file.filename} (#{attachmentPEREV1.created_at.localtime.strftime('%Y-%m-%d %l:%M%P')})",
+      attachmentPEREV1.to_global_id,
+        { 'data-puid': attachmentPEREV1.puid }]]
+
+    assert_equal expected_singles_files, files[:singles]
+    assert_equal expected_forward_files, files[:pe_forward]
+    assert_equal expected_reverse_files, files[:pe_reverse]
+  end
+
   test 'sorted_files with no attachments' do
     sample2 = samples(:sample2)
 
-    files = sample2.sorted_files
+    files = sample2.sort_files
 
     assert files.empty?
   end
