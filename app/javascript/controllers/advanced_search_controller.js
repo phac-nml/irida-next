@@ -8,9 +8,7 @@ export default class extends Controller {
     "groupTemplate",
   ];
 
-  connect() {
-    // this.addGroup();
-  }
+  connect() {}
 
   idempotentConnect() {}
 
@@ -19,34 +17,70 @@ export default class extends Controller {
   }
 
   addCondition(event) {
-    event.currentTarget.parentElement.previousElementSibling.insertAdjacentHTML(
-      "beforeend",
-      this.conditionTemplateTarget.innerHTML,
+    let groupContainer = event.currentTarget.parentElement.closest(
+      "div[data-advanced-search-target='groupsContainer']",
+    );
+    let group_index = this.groupsContainerTargets.indexOf(groupContainer);
+    let condition_index = groupContainer.querySelectorAll(
+      "div[data-advanced-search-target='conditionsContainer']",
+    ).length;
+    let newCondition = this.conditionTemplateTarget.innerHTML
+      .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
+      .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
+    event.currentTarget.parentElement.insertAdjacentHTML(
+      "beforebegin",
+      newCondition,
     );
   }
 
   removeCondition(event) {
+    let groupContainer = event.currentTarget.parentElement.closest(
+      "div[data-advanced-search-target='groupsContainer']",
+    );
     event.currentTarget.parentElement.remove();
+    //re-index all the form fields within a group
+    let conditionContainers = groupContainer.querySelectorAll(
+      "div[data-advanced-search-target='conditionsContainer']",
+    );
+    conditionContainers.forEach((conditionContainer, index) => {
+      let inputFields = conditionContainer.querySelectorAll("[name]");
+      inputFields.forEach((inputField) => {
+        let updatedInputFieldName = inputField.name.replace(
+          /(\[conditions_attributes\]\[)\d+?(\])/,
+          "$1" + index + "$2",
+        );
+        inputField.name = updatedInputFieldName;
+      });
+    });
   }
 
-  addGroup() {
-    this.groupsContainerTarget.insertAdjacentHTML(
-      "beforeend",
+  addGroup(event) {
+    let group_index = this.groupsContainerTargets.length;
+    event.currentTarget.parentElement.insertAdjacentHTML(
+      "beforebegin",
       this.groupTemplateTarget.innerHTML,
     );
-    this.#addConditionToGroup(this.groupsContainerTarget.childElementCount - 1);
+    let newCondition = this.conditionTemplateTarget.innerHTML
+      .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
+      .replace(/CONDITION_INDEX_PLACEHOLDER/g, 0);
+    let groupContainer = this.groupsContainerTargets[group_index];
+    groupContainer.insertAdjacentHTML("afterbegin", newCondition);
   }
 
   removeGroup(event) {
     if (this.groupsContainerTarget.childElementCount > 1) {
       event.currentTarget.parentElement.parentElement.remove();
     }
-  }
-
-  #addConditionToGroup(groupIndex) {
-    this.conditionsContainerTargets[groupIndex].insertAdjacentHTML(
-      "beforeend",
-      this.conditionTemplateTarget.innerHTML,
-    );
+    //re-index all the form fields within all the groups
+    this.groupsContainerTargets.forEach((groupContainer, index) => {
+      let inputFields = groupContainer.querySelectorAll("[name]");
+      inputFields.forEach((inputField) => {
+        let updatedInputFieldName = inputField.name.replace(
+          /(\[groups_attributes\]\[)\d+?(\])/,
+          "$1" + index + "$2",
+        );
+        inputField.name = updatedInputFieldName;
+      });
+    });
   }
 }

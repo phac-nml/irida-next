@@ -24,67 +24,63 @@
           <br/>
           Add and/or conditions to define the search criteria.
         </p>
-        <div>
-          <%# <template data-advanced-search-target="groupTemplate"> %>
-          <% @search.groups.each do |group| %>
-            <div class="bg-slate-100 border border-gray-300 rounded-lg">
-              <%= @form.fields_for :groups, group do |groups_form| %>
-                <%# <template data-advanced-search-target="conditionTemplate"> %>
-                <% group.conditions.each do |condition| %>
-                  <div class="flex space-x-2 p-4">
-                    <%= groups_form.fields_for :conditions, condition do |conditions_form| %>
-                      <%= conditions_form.select :field,
-                                             @fields,
-                                             { include_blank: "Field" },
-                                             {
-                                               id: "field",
-                                               "aria-label": "field",
-                                               class:
-                                                 "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
-                                             } %>
-                      <%= conditions_form.select :operator,
-                                             @operations,
-                                             { include_blank: "Operator" },
-                                             {
-                                               id: "operator",
-                                               "aria-label": "operator",
-                                               class:
-                                                 "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
-                                             } %>
-                      <%= conditions_form.text_field(
-                        :value,
-                        class:
-                          "keyInput block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0 border-b-2 border-slate-300 appearance-none dark:text-white dark:border-slate-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer",
-                        required: true,
-                      ) %>
-                    <% end %>
-                    <button
-                      type="button"
-                      class="
-                        ml-auto bg-slate-100 text-slate-400 hover:text-slate-900 rounded-lg focus:ring-2
-                        focus:ring-slate-300 p-1.5 inline-flex items-center justify-center h-8 w-8
-                        dark:text-slate-500 dark:hover:text-white dark:bg-slate-800
-                        dark:hover:bg-slate-700
-                      "
-                      aria-label="remove condition"
-                      data-action="advanced-search#removeCondition"
-                    >
-                      <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>
-                    </button>
-                  </div>
-                <% end %>
-                <%# </template> %>
+        <% @search.groups.each do |group| %>
+          <div
+            data-advanced-search-target="groupsContainer"
+            class="bg-slate-100 border border-gray-300 rounded-lg"
+          >
+            <%= @form.fields_for :groups, group do |groups_form| %>
+              <% group.conditions.each do |condition| %>
+                <div
+                  data-advanced-search-target="conditionsContainer"
+                  class="flex space-x-2 p-4"
+                >
+                  <%= groups_form.fields_for :conditions, condition do |conditions_form| %>
+                    <%= conditions_form.select :field,
+                                           @fields,
+                                           { include_blank: "Field" },
+                                           {
+                                             "aria-label": "field",
+                                             class:
+                                               "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                                           } %>
+                    <%= conditions_form.select :operator,
+                                           @operations,
+                                           { include_blank: "Operator" },
+                                           {
+                                             "aria-label": "operator",
+                                             class:
+                                               "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+                                           } %>
+                    <%= conditions_form.text_field(
+                      :value,
+                      class:
+                        "keyInput block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0 border-b-2 border-slate-300 appearance-none dark:text-white dark:border-slate-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer",
+                      required: true,
+                    ) %>
+                  <% end %>
+                  <button
+                    type="button"
+                    class="
+                      ml-auto bg-slate-100 text-slate-400 hover:text-slate-900 rounded-lg focus:ring-2
+                      focus:ring-slate-300 p-1.5 inline-flex items-center justify-center h-8 w-8
+                      dark:text-slate-500 dark:hover:text-white dark:bg-slate-800
+                      dark:hover:bg-slate-700
+                    "
+                    aria-label="remove condition"
+                    data-action="advanced-search#removeCondition"
+                  >
+                    <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>
+                  </button>
+                </div>
               <% end %>
-              <div data-advanced-search-target="conditionsContainer"></div>
-              <div class="flex justify-end space-x-2 p-4">
-                <%= add_condition_button %>
-                <%= remove_group_button %>
-              </div>
+            <% end %>
+            <div class="flex justify-end space-x-2 p-4">
+              <%= add_condition_button %>
+              <%= remove_group_button %>
             </div>
-          <% end %>
-          <%# </template> %>
-          <div class="space-y-4" data-advanced-search-target="groupsContainer"></div>
-        </div>
+          </div>
+        <% end %>
         <div class="flex justify-end space-x-2">
           <%= add_group_button %>
         </div>
@@ -94,4 +90,73 @@
       "data-action": "advanced-search#submit viral--dialog#close",
     ) { "Apply filter" } %>
   <% end %>
+  <template data-advanced-search-target="conditionTemplate">
+    <div
+      data-advanced-search-target="conditionsContainer"
+      class="flex space-x-2 p-4"
+    >
+      <select
+        class="
+          bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+          focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700
+          dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
+          dark:focus:ring-blue-500 dark:focus:border-blue-500
+        "
+        name="sample_search[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][field]"
+      >
+        <option selected>Field</option>
+        <% @fields.each do |field| %>
+          <option value="<%=field%>"><%= field %></option>
+        <% end %>
+      </select>
+      <select
+        class="
+          bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+          focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700
+          dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
+          dark:focus:ring-blue-500 dark:focus:border-blue-500
+        "
+        name="sample_search[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][operator]"
+      >
+        <option selected>Operation</option>
+        <% @operations.each do |operation| %>
+          <option value="<%=operation%>"><%= operation %></option>
+        <% end %>
+      </select>
+      <input
+        type="text"
+        name="sample_search[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][value]"
+        class="
+          keyInput block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0
+          border-b-2 border-slate-300 appearance-none dark:text-white
+          dark:border-slate-600 dark:focus:border-primary-500 focus:outline-none
+          focus:ring-0 focus:border-primary-500 peer
+        "
+      />
+      <button
+        type="button"
+        class="
+          ml-auto bg-slate-100 text-slate-400 hover:text-slate-900 rounded-lg focus:ring-2
+          focus:ring-slate-300 p-1.5 inline-flex items-center justify-center h-8 w-8
+          dark:text-slate-500 dark:hover:text-white dark:bg-slate-800
+          dark:hover:bg-slate-700
+        "
+        aria-label="remove condition"
+        data-action="advanced-search#removeCondition"
+      >
+        <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>
+      </button>
+    </div>
+  </template>
+  <template data-advanced-search-target="groupTemplate">
+    <div
+      data-advanced-search-target="groupsContainer"
+      class="bg-slate-100 border border-gray-300 rounded-lg"
+    >
+      <div class="flex justify-end space-x-2 p-4">
+        <%= add_condition_button %>
+        <%= remove_group_button %>
+      </div>
+    </div>
+  </template>
 </div>
