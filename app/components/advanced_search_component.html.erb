@@ -87,7 +87,7 @@
       </div>
     <% end %>
     <%= dialog.with_primary_action(
-      "data-action": "advanced-search#submit viral--dialog#close",
+      "data-action": "filters#submit viral--dialog#close",
     ) { "Apply filter" } %>
   <% end %>
   <template data-advanced-search-target="conditionTemplate">
@@ -102,7 +102,7 @@
           dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
           dark:focus:ring-blue-500 dark:focus:border-blue-500
         "
-        name="sample_search[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][field]"
+        name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions][CONDITION_INDEX_PLACEHOLDER][field]"
       >
         <option selected>Field</option>
         <% @fields.each do |field| %>
@@ -116,7 +116,7 @@
           dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
           dark:focus:ring-blue-500 dark:focus:border-blue-500
         "
-        name="sample_search[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][operator]"
+        name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions][CONDITION_INDEX_PLACEHOLDER][operator]"
       >
         <option selected>Operation</option>
         <% @operations.each do |operation| %>
@@ -125,7 +125,7 @@
       </select>
       <input
         type="text"
-        name="sample_search[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][value]"
+        name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions][CONDITION_INDEX_PLACEHOLDER][value]"
         class="
           keyInput block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0
           border-b-2 border-slate-300 appearance-none dark:text-white

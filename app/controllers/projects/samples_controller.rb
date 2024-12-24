@@ -133,6 +133,13 @@ module Projects
       )
     end
 
+    def set_advanced_search_fields
+      sample_fields = %w[name puid created_at updated_at attachments_updated_at]
+      metadata_fields = @fields.dup
+      metadata_fields.map! { |field| "metadata.#{field}" }
+      @advanced_search_fields = sample_fields.concat(metadata_fields)
+    end
+
     def search_key
       :"#{controller_name}_#{@project.id}_search_params"
     end
@@ -142,6 +149,7 @@ module Projects
 
       @search_params = search_params
       set_metadata_fields
+      set_advanced_search_fields
 
       @query = Sample::Query.new(@search_params.except(:metadata).merge({ project_ids: [@project.id] }))
     end

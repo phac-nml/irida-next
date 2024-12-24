@@ -12,10 +12,6 @@ export default class extends Controller {
 
   idempotentConnect() {}
 
-  submit() {
-    this.element.requestSubmit();
-  }
-
   addCondition(event) {
     let groupContainer = event.currentTarget.parentElement.closest(
       "div[data-advanced-search-target='groupsContainer']",
@@ -38,7 +34,7 @@ export default class extends Controller {
       "div[data-advanced-search-target='groupsContainer']",
     );
     event.currentTarget.parentElement.remove();
-    //re-index all the form fields within a group
+    //re-index all the form fields within the group
     let conditionContainers = groupContainer.querySelectorAll(
       "div[data-advanced-search-target='conditionsContainer']",
     );
