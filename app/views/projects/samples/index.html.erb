@@ -168,6 +168,7 @@
           form: f,
           fields:  @advanced_search_fields,
           operations: %w[= !=],
+          scope: :q,
         )do |advanced_search| %>
           <% advanced_search.with_add_condition_button do %>
             <button
