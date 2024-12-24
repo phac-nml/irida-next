@@ -132,10 +132,10 @@
                   <% end %>
                 <% end %>
               <% end %>
-              <% if @abilities[:update_sample] %>
-                <%= render Samples::EditableCell.with_collection(@metadata_fields, sample: sample) %>
-              <% else %>
-                <% @metadata_fields.each do |field| %>
+              <% @metadata_fields.each do |field| %>
+                <% if @row_actions[:edit] %>
+                  <%= render Samples::EditableCell.new(field: field, sample: sample) %>
+                <% else %>
                   <%= render_cell(
                 tag: 'td',
                 classes: class_names('px-3 py-3')
@@ -144,6 +144,7 @@
                   <% end %>
                 <% end %>
               <% end %>
+
               <% if @renders_row_actions %>
                 <%= render_cell(
                 tag: 'td',
