@@ -5,7 +5,6 @@
   pagy,
   has_samples: @has_samples,
   abilities: {
-    update_sample: allowed_to?(:update_sample?, project),
     select_samples:
       allowed_to?(:submit_workflow?, project) ||
         allowed_to?(:clone_sample?, project) ||
