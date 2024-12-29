@@ -837,5 +837,25 @@ module Groups
         ### VERIFY END ###
       end
     end
+
+    test 'project analysts should not be able to edit samples' do
+      ### SETUP START ###
+      login_as users(:ryan_doe)
+      visit group_samples_url(@group)
+
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample28.name
+      find('input.t-search-component').native.send_keys(:return)
+
+      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+
+      ### SETUP END ###
+
+      ### VERIFY START ###
+      within('table tbody tr:first-child td:nth-child(7)') do
+        assert_no_selector "form[method='get']"
+      end
+      ### VERIFY END ###
+    end
   end
 end
