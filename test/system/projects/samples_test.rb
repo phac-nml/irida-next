@@ -2338,7 +2338,7 @@ module Projects
 
     test 'project analysts should not be able to edit samples' do
       ### SETUP START ###
-      login_as users(:james_doe)
+      login_as users(:ryan_doe)
       visit namespace_project_samples_url(@namespace, @project)
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample3.name
@@ -2349,14 +2349,11 @@ module Projects
 
       ### SETUP END ###
 
-      ### ACTIONS START ###
+      ### VERIFY START ###
       within('table tbody tr:first-child td:nth-child(7)') do
-        find('button').click
+        assert_no_selector "form[method='get']"
       end
-      ### ACTIONS END ###
-      within('table tbody tr:first-child td:nth-child(7)') do
-        assert_no_selector "form[data-controller='inline-edit']"
-      end
+      ### VERIFY END ###
     end
 
     def long_filter_text
