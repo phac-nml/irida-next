@@ -4,19 +4,12 @@ module Nextflow
     class FileCellComponent < Component
       attr_reader :name, :values, :selected, :fields, :required, :data
 
-      def initialize(sample, namespace_id, name, values, selected, fields, required, data = {}) # rubocop:disable Metrics/ParameterLists
+      def initialize(sample, name, selected, index, required)
         @sample = sample
-        @namespace_id = namespace_id
         @name = name
-        @values = values
         @selected = selected
-        @fields = fields
+        @index = index
         @required = required
-        @data = data
-        puts 'hihihihii'
-        puts @namespace
-        puts @selected
-        puts @selected.nil?
       end
     end
   end

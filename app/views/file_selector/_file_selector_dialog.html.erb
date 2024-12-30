@@ -3,15 +3,63 @@
   <%= dialog.with_section do %>
     <%= form_with url: file_selector_index_path(attachable: @attachable.id), method: :post do |form| %>
       <input type="hidden" name="format" value="turbo_stream"/>
-      <input type="hidden" name="test" value="this_value"/>
-      <% @attachable.attachments.each do |attachment| %>
-        <div class="overflow-y-auto">
-          <div>
-            <%= attachment.filename.to_s %>
-          </div>
-        </div>
-      <% end %>
-      <%= form.submit "submit", data: { turbo_frame: "_top" } %>
+      <input type="hidden" name="index" value="<%= @index %>"/>
+      <table
+        class='
+          w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+          whitespace-nowrap
+        '
+      >
+        <thead
+          class='
+            text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700
+            dark:text-slate-400
+          '
+        >
+          <tr>
+            <th>
+            </th>
+            <th>
+              name
+            </th>
+            <th>
+              size
+            </th>
+            <th>
+              created
+            </th>
+          </tr>
+        </thead>
+        <tbody
+          class='
+            bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
+          '
+        >
+          <% @attachable.attachments.each do |attachment| %>
+            <tr class=" bg-white border-b dark:bg-slate-800 dark:border-slate-700 ">
+              <td>
+                <%= form.radio_button "attachment_id",
+                                  attachment.id,
+                                  checked: @selected_id && @selected_id == attachment.id,
+                                  class:
+                                    "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-400" %>
+
+              </td>
+              <th class="px-3 py-3">
+                <%= attachment.filename.to_s %>
+              </th>
+              <td class="px-3 py-3">
+                <%= number_to_human_size(attachment.file.blob.byte_size) %>
+              </td>
+              <td class="px-3 py-3">
+                <%= local_time_ago(attachment.created_at) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <%= form.submit "submit" %>
     <% end %>
   <% end %>
 <% end %>
