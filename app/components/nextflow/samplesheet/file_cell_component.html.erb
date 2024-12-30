@@ -6,9 +6,20 @@
     text-sm dark:focus:ring-primary-500 dark:focus:border-primary-500 cursor-pointer
   "
 >
-  <%= fields.hidden_field :hi, value: "bye" %>
+  <% unless @selected.nil? %>
+    <input
+    type="hidden"
+      name="workflow_execution[samples_workflow_executions_attributes][<%= @index%>][samplesheet_params][<%= @name %>]"
+      value= <%= @selected[:global_id]%>
+    >
+  <% end %>
   <%= link_to @selected.nil? ? "Select" : @selected[:filename],
-  new_file_selector_path(attachable: @sample, namespace_id: @namespace_id),
+  new_file_selector_path(
+    attachable: @sample,
+    namespace_id: @namespace_id,
+    index: @index,
+    selected_id: @selected.nil? ? nil : @selected[:id]
+  ),
   data: {
     turbo_stream: "true",
   } %>

@@ -41,7 +41,7 @@ module Nextflow
         direction = get_fastq_direction(property)
         files = get_fastq_files(entry, sample, direction, pe_only: property['pe_only'].present?)
         data = get_fastq_data(files, direction, index, property)
-        render_file_cell(sample, namespace_id, property, entry, fields, files, @required, data, files&.first)
+        render_file_cell(sample, namespace_id, property, entry, index, files, @required, data, files&.first)
       end
 
       private
@@ -102,7 +102,7 @@ module Nextflow
       end
 
       # rubocop:disable Metrics/ParameterLists
-      def render_file_cell(sample, namespace_id, property, entry, fields, files, is_required, data, selected)
+      def render_file_cell(sample, namespace_id, property, entry, index, files, is_required, data, selected)
         selected_item = if selected.present?
                           files[0]
                         else
@@ -110,13 +110,10 @@ module Nextflow
                         end
         render(Samplesheet::FileCellComponent.new(
           sample,
-          namespace_id,
                  property,
-                 files,
                  selected_item,
-                 fields,
+                 index,
                  is_required,
-                 data
                ))
       end
 

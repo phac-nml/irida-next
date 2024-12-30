@@ -120,7 +120,7 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
     attachments.order('created_at DESC').each do |attachment|
       item = { filename: attachment.file.filename.to_s,
                global_id: attachment.to_global_id,
-               puid: attachment.puid }
+               id: attachment.id }
       case attachment.metadata['direction']
       when nil
         singles << item
