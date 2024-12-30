@@ -1,0 +1,15 @@
+<div
+  id="<%="#{@sample.id}_#{@name}" %>"
+  class="
+    w-full focus:ring-primary-500 focus:border-primary-500 p-2.5 dark:bg-inherit
+    bg-inherit border-none dark:border-none dark:placeholder-slate-400 text-inherit
+    text-sm dark:focus:ring-primary-500 dark:focus:border-primary-500 cursor-pointer
+  "
+>
+  <%= fields.hidden_field :hi, value: "bye" %>
+  <%= link_to @selected.nil? ? "Select" : @selected[:filename],
+  new_file_selector_path(attachable: @sample, namespace_id: @namespace_id),
+  data: {
+    turbo_stream: "true",
+  } %>
+</div>

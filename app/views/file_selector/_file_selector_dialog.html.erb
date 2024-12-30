@@ -1,0 +1,17 @@
+<%= viral_dialog(open: open, classes: ["overflow-visible"]) do |dialog| %>
+  <%= dialog.with_header(title: "File Selector") %>
+  <%= dialog.with_section do %>
+    <%= form_with url: file_selector_index_path(attachable: @attachable.id), method: :post do |form| %>
+      <input type="hidden" name="format" value="turbo_stream"/>
+      <input type="hidden" name="test" value="this_value"/>
+      <% @attachable.attachments.each do |attachment| %>
+        <div class="overflow-y-auto">
+          <div>
+            <%= attachment.filename.to_s %>
+          </div>
+        </div>
+      <% end %>
+      <%= form.submit "submit", data: { turbo_frame: "_top" } %>
+    <% end %>
+  <% end %>
+<% end %>
