@@ -106,12 +106,6 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
     sample_metadata
   end
 
-  def sorted_files
-    return {} if attachments.empty?
-
-    @sorted_files || sort_files
-  end
-
   def sort_files
     return {} if attachments.empty?
 
@@ -120,9 +114,11 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
     pe_reverse = []
 
     attachments.order('created_at DESC').each do |attachment|
-      item = ["#{attachment.file.filename} (#{attachment.created_at.localtime.strftime('%Y-%m-%d %l:%M%P')})",
-              attachment.to_global_id,
-              { 'data-puid': attachment.puid }]
+      item = {
+        name: attachment.file.filename.to_s,
+        global_id: attachment.to_global_id,
+        created_at: attachment.created_at
+      }
       case attachment.metadata['direction']
       when nil
         singles << item

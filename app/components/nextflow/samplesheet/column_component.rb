@@ -51,12 +51,12 @@ module Nextflow
       end
 
       def get_fastq_files(entry, sample, direction, pe_only: false)
-        singles = filter_files_by_pattern(sample.sorted_files[:singles] || [],
+        singles = filter_files_by_pattern(sample.sort_files[:singles] || [],
                                           entry['pattern'] || "/^\S+.f(ast)?q(.gz)?$/")
 
         files = []
-        if sample.sorted_files[direction].present?
-          files = sample.sorted_files[direction] || []
+        if sample.sort_files[direction].present?
+          files = sample.sort_files[direction] || []
           files.concat(singles) unless pe_only
         else
           files = singles
@@ -77,16 +77,17 @@ module Nextflow
 
       def render_other_file_cell(sample, property, entry, fields)
         files = if entry['pattern']
-                  filter_files_by_pattern(sample.sorted_files[:singles] || [], entry['pattern'])
+                  filter_files_by_pattern(sample.sort_files[:singles] || [], entry['pattern'])
                 else
-                  sample.sorted_files[:singles] || []
+                  sample.sort_files[:singles] || []
                 end
         render_file_cell(property, entry, fields,
                          files, @required, {}, nil)
       end
 
       def filter_files_by_pattern(files, pattern)
-        files.select { |file| file.first[Regexp.new(pattern)] }
+        puts files
+        files.select { |file| file[:name][Regexp.new(pattern)] }
       end
 
       def render_sample_cell(sample, fields)
@@ -108,8 +109,7 @@ module Nextflow
                         else
                           entry['autopopulate'] && files.present? ? files[0] : nil
                         end
-
-        render(Samplesheet::DropdownCellComponent.new(
+        render(Samplesheet::FileCellComponent.new(
                  property,
                  files,
                  selected_item,
