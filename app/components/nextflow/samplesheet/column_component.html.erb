@@ -1,9 +1,15 @@
 <div
-  class="table-column flex-grow text-sm text-left  whitespace-nowrap bg-slate-50 text-slate-500 dark:text-white"
+  class="
+    table-column flex-grow text-sm text-left whitespace-nowrap bg-slate-50
+    text-slate-500 dark:text-white
+  "
 >
   <% if property["cell_type"] == "metadata_cell" %>
     <div
-      class="sticky top-0 z-10 border  table-header dark:border-slate-600 border-slate-100 dark:bg-slate-700 bg-slate-50"
+      class="
+        sticky top-0 z-10 border table-header dark:border-slate-600 border-slate-100
+        dark:bg-slate-700 bg-slate-50
+      "
     >
       <%= form_with url: fields_workflow_executions_metadata_path do |f| %>
         <%= f.hidden_field :format, value: "turbo_stream", id: "field_#{header}_turbo" %>
@@ -61,7 +67,7 @@
             <%= s.hidden_field :sample_id, value: sample.id %>
           <% end %>
           <%= s.fields_for "samplesheet_params" do |fields| %>
-            <%= render_cell_type(header, property, sample, fields, index) %>
+            <%= render_cell_type(header, property, sample, namespace_id, fields, index) %>
           <% end %>
         <% end %>
       </div>

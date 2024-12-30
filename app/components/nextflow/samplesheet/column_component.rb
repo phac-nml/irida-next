@@ -18,14 +18,14 @@ module Nextflow
 
       # rubocop:enable Metrics/ParameterLists
 
-      def render_cell_type(property, entry, sample, fields, index) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
+      def render_cell_type(property, entry, sample, namespace_id, fields, index) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
         case entry['cell_type']
         when 'sample_cell'
           render_sample_cell(sample, fields)
         when 'sample_name_cell'
           render_sample_name_cell(sample, fields)
         when 'fastq_cell'
-          render_fastq_cell(sample, property, entry, fields, index)
+          render_fastq_cell(sample, namespace_id, property, entry, fields, index)
         when 'file_cell'
           render_other_file_cell(sample, property, entry, fields)
         when 'metadata_cell'
@@ -37,11 +37,11 @@ module Nextflow
         end
       end
 
-      def render_fastq_cell(sample, property, entry, fields, index)
+      def render_fastq_cell(sample, namespace_id, property, entry, fields, index)
         direction = get_fastq_direction(property)
         files = get_fastq_files(entry, sample, direction, pe_only: property['pe_only'].present?)
         data = get_fastq_data(files, direction, index, property)
-        render_file_cell(property, entry, fields, files, @required, data, files&.first)
+        render_file_cell(sample, namespace_id, property, entry, fields, files, @required, data, files&.first)
       end
 
       private
@@ -86,7 +86,7 @@ module Nextflow
       end
 
       def filter_files_by_pattern(files, pattern)
-        files.select { |file| file.first[Regexp.new(pattern)] }
+        files.select { |file| file[:filename].first[Regexp.new(pattern)] }
       end
 
       def render_sample_cell(sample, fields)
@@ -102,14 +102,15 @@ module Nextflow
       end
 
       # rubocop:disable Metrics/ParameterLists
-      def render_file_cell(property, entry, fields, files, is_required, data, selected)
+      def render_file_cell(sample, namespace_id, property, entry, fields, files, is_required, data, selected)
         selected_item = if selected.present?
-                          selected
+                          files[0]
                         else
                           entry['autopopulate'] && files.present? ? files[0] : nil
                         end
-
-        render(Samplesheet::DropdownCellComponent.new(
+        render(Samplesheet::FileCellComponent.new(
+          sample,
+          namespace_id,
                  property,
                  files,
                  selected_item,

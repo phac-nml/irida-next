@@ -117,8 +117,10 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
     pe_forward = []
     pe_reverse = []
 
-    attachments.each do |attachment|
-      item = [attachment.file.filename.to_s, attachment.to_global_id, { 'data-puid': attachment.puid }]
+    attachments.order('created_at DESC').each do |attachment|
+      item = { filename: attachment.file.filename.to_s,
+               global_id: attachment.to_global_id,
+               puid: attachment.puid }
       case attachment.metadata['direction']
       when nil
         singles << item
