@@ -11,59 +11,59 @@ module Namespaces
     end
 
     test '#update?' do
-      assert @policy.update?
+      assert @policy.apply(:update?)
     end
 
     test '#create_member?' do
-      assert @policy.create_member?
+      assert @policy.apply(:create_member?)
     end
 
     test '#update_member?' do
-      assert @policy.update_member?
+      assert @policy.apply(:update_member?)
     end
 
     test '#destroy_member?' do
-      assert @policy.destroy_member?
+      assert @policy.apply(:destroy_member?)
     end
 
     test '#member_listing?' do
-      assert @policy.member_listing?
+      assert @policy.apply(:member_listing?)
     end
 
     test '#link_namespace_with_group?' do
-      assert @policy.link_namespace_with_group?
+      assert @policy.apply(:link_namespace_with_group?)
     end
 
     test '#unlink_namespace_with_group?' do
-      assert @policy.unlink_namespace_with_group?
+      assert @policy.apply(:unlink_namespace_with_group?)
     end
 
     test '#update_namespace_with_group_link?' do
-      assert @policy.update_namespace_with_group_link?
+      assert @policy.apply(:update_namespace_with_group_link?)
     end
 
     test '#create_automated_workflow_executions?' do
-      assert @policy.create_automated_workflow_executions?
+      assert @policy.apply(:create_automated_workflow_executions?)
     end
 
     test '#destroy_automated_workflow_executions?' do
-      assert @policy.destroy_automated_workflow_executions?
+      assert @policy.apply(:destroy_automated_workflow_executions?)
     end
 
     test '#update_automated_workflow_executions?' do
-      assert @policy.update_automated_workflow_executions?
+      assert @policy.apply(:update_automated_workflow_executions?)
     end
 
     test '#view_automated_workflow_executions?' do
-      assert @policy.view_automated_workflow_executions?
+      assert @policy.apply(:view_automated_workflow_executions?)
     end
 
     test '#view_workflow_executions?' do
-      assert @policy.view_automated_workflow_executions?
+      assert @policy.apply(:view_automated_workflow_executions?)
     end
 
     test '#update_sample_metadata?' do
-      assert @policy.update_sample_metadata?
+      assert @policy.apply(:update_sample_metadata?)
     end
   end
 end

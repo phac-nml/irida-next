@@ -11,86 +11,86 @@ class ProjectPolicyTest < ActiveSupport::TestCase
   end
 
   test '#read?' do
-    assert @policy.read?
+    assert @policy.apply(:read?)
   end
 
   test '#edit?' do
-    assert @policy.edit?
+    assert @policy.apply(:edit?)
   end
 
   test '#new?' do
-    assert @policy.new?
+    assert @policy.apply(:new?)
   end
 
   test '#update?' do
-    assert @policy.update?
+    assert @policy.apply(:update?)
   end
 
   test '#activity?' do
-    assert @policy.activity?
+    assert @policy.apply(:activity?)
   end
 
   test '#destroy?' do
-    assert @policy.destroy?
+    assert @policy.apply(:destroy?)
   end
 
   test '#transfer?' do
-    assert @policy.transfer?
+    assert @policy.apply(:transfer?)
   end
 
   test '#sample_listing?' do
-    assert @policy.sample_listing?
+    assert @policy.apply(:sample_listing?)
   end
 
   test '#create_sample?' do
-    assert @policy.create_sample?
+    assert @policy.apply(:create_sample?)
   end
 
   test '#update_sample?' do
-    assert @policy.update_sample?
+    assert @policy.apply(:update_sample?)
   end
 
   test '#transfer_sample?' do
-    assert @policy.transfer_sample?
+    assert @policy.apply(:transfer_sample?)
   end
 
   test '#destroy_sample?' do
-    assert @policy.destroy_sample?
+    assert @policy.apply(:destroy_sample?)
   end
 
   test '#read_sample?' do
-    assert @policy.destroy_sample?
+    assert @policy.apply(:read_sample?)
   end
 
   test '#transfer_sample_into_project?' do
-    assert @policy.transfer_sample_into_project?
+    assert @policy.apply(:transfer_sample_into_project?)
   end
 
   test '#clone_sample?' do
-    assert @policy.clone_sample?
+    assert @policy.apply(:clone_sample?)
   end
 
   test '#clone_sample_into_project?' do
-    assert @policy.clone_sample_into_project?
+    assert @policy.apply(:clone_sample_into_project?)
   end
   test '#export_data?' do
-    assert @policy.export_data?
+    assert @policy.apply(:export_data?)
   end
 
   test '#submit_workflow?' do
-    assert @policy.submit_workflow?
+    assert @policy.apply(:submit_workflow?)
   end
 
   test '#view_attachments?' do
-    assert @policy.view_attachments?
+    assert @policy.apply(:view_attachments?)
   end
 
   test '#create_attachment?' do
-    assert @policy.create_attachment?
+    assert @policy.apply(:create_attachment?)
   end
 
   test '#destroy_attachment?' do
-    assert @policy.destroy_attachment?
+    assert @policy.apply(:destroy_attachment?)
   end
 
   test 'scope' do
