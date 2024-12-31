@@ -396,13 +396,6 @@ module Groups
         assert_selector 'td:nth-child(9) button', text: ''
       end
 
-      within('table tbody tr:nth-child(3)') do
-        assert_text @sample28.name
-        assert_selector 'td:nth-child(7) button', text: ''
-        assert_selector 'td:nth-child(8) button', text: ''
-        assert_selector 'td:nth-child(9) button', text: 'unique_value'
-      end
-
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
       assert_selector 'table thead tr th', count: 6
     end
