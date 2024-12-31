@@ -60,7 +60,7 @@ module Azure::Storage::Blob
 
     # Default User Agent header string
     # TODO: This is broken??
-    USER_AGENT = "Azure-Storage/#{Azure::Storage::Blob::Version.to_uas}-#{Azure::Storage::Common::Version.to_uas} (Ruby #{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}; #{Azure::Storage::Common::Default.os})".freeze
+    USER_AGENT = "Azure-Storage/#{AzureBlob::Version.to_uas}-#{Azure::Storage::Common::Version.to_uas} (Ruby #{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}; #{Azure::Storage::Common::Default.os})".freeze
   end
 
   # Defines constants for use with blob operations.

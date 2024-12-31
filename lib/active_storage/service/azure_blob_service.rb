@@ -2,10 +2,6 @@
 
 gem 'azure-blob'
 
-# require 'active_support/core_ext/numeric/bytes'
-# require 'azure/storage/blob'
-# require 'azure/storage/common/core/auth/shared_access_signature'
-
 # Copyright (c) David Heinemeier Hansson, 37signals LLC
 
 # Permission is hereby granted, free of charge, to any person obtaining

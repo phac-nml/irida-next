@@ -10,7 +10,7 @@ AllCops:
     - "**/bin/**/**"
     - "**/db/schema.rb"
     - "**/db/jobs_schema.rb"
-    - "**/lib/active_storage/service/azure_storage_service.rb"
+    - "**/lib/active_storage/service/azure_blob_service.rb"
     - "**/lib/azure/storage/blob/default.rb"
     - "**/lib/azure/storage/common/default.rb"
   TargetRubyVersion: "3.2"
