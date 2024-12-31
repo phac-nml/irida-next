@@ -59,7 +59,7 @@ module Azure::Storage::Blob
     CONTENT_TYPE_VALUE = 'application/octet-stream'
 
     # Default User Agent header string
-    USER_AGENT = "Azure-Storage/#{Azure::Storage::Blob::Version.to_uas}-#{Azure::Storage::Common::Version.to_uas} (Ruby #{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}; #{Azure::Storage::Common::Default.os})".freeze
+    USER_AGENT = "Azure-Storage/#{AzureBlob::Version.to_uas}-#{Azure::Storage::Common::Version.to_uas} (Ruby #{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}; #{Azure::Storage::Common::Default.os})".freeze
   end
 
   # Defines constants for use with blob operations.
