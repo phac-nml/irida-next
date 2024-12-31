@@ -111,6 +111,18 @@ class GroupsTest < ApplicationSystemTestCase
     assert_selector 'h1', text: 'New sub-group'
   end
 
+  test 'should have Group URL filled with parent group, when creating new sub-group' do
+    group1 = groups(:group_one)
+    visit group_url(group1)
+    click_link I18n.t('groups.show.create_subgroup_button')
+
+    within %(div[data-controller="slugify"][data-controller-connected="true"]) do
+      assert_selector %(input[data-viral--select2-target="input"]) do |input|
+        assert_equal group1.path, input['value']
+      end
+    end
+  end
+
   test 'show error when creating a sub-group with a same name' do
     visit group_url(groups(:group_one))
     assert_link text: I18n.t('groups.show.create_subgroup_button'), count: 1

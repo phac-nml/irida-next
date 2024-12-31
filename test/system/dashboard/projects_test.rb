@@ -218,6 +218,18 @@ module Dashboard
       assert_selector 'h1', text: new_project.name
     end
 
+    test 'should have Group URL filled with user namespace, when creating a new project from the dashboard' do
+      visit dashboard_projects_url
+
+      click_on I18n.t(:'dashboard.projects.index.create_project_button')
+
+      within %(div[data-controller="slugify"][data-controller-connected="true"]) do
+        assert_selector %(input[data-viral--select2-target="input"]) do |input|
+          assert_equal @user.namespace.full_path, input['value']
+        end
+      end
+    end
+
     test 'can see projects that the user has been added to as a member' do
       login_as users(:jean_doe)
 
