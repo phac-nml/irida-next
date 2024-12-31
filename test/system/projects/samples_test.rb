@@ -496,14 +496,14 @@ module Projects
 
       # destination project received transferred samples
       visit namespace_project_samples_url(@namespace, @project2)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 23,
+                                                                           locale: @user.locale))
       within '#samples-table table tbody' do
         samples.each do |sample|
           assert_text sample[0]
           assert_text sample[1]
         end
       end
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 23,
-                                                                           locale: @user.locale))
       ### VERIFY END ###
     end
 
