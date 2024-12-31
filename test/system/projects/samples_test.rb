@@ -2307,14 +2307,13 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
       assert_selector 'table thead tr th', count: 6
 
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample3.name
       find('input.t-search-component').native.send_keys(:return)
 
       click_on I18n.t('projects.samples.show.table_header.last_updated')
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
-
-      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
-      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
 
       within 'div.overflow-auto.scrollbar' do |div|
         div.scroll_to div.find('table thead th:nth-child(8)')

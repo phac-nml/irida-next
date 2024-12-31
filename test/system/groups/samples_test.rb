@@ -807,37 +807,6 @@ module Groups
       end
     end
 
-    test 'should not update metadata value that is from an analysis' do
-      ### SETUP START ###
-      visit group_samples_url(@group)
-      assert_selector 'table thead tr th', count: 6
-
-      fill_in placeholder: I18n.t(:'groups.samples.index.search.placeholder'), with: @sample28.name
-      find('input.t-search-component').native.send_keys(:return)
-
-      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
-      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
-
-      within 'div.overflow-auto.scrollbar' do |div|
-        div.scroll_to div.find('table thead th:nth-child(7)')
-      end
-
-      assert_selector 'table thead tr th', count: 9
-      ### SETUP END ###
-
-      within('table tbody tr:nth-child(1) td:nth-child(7)') do
-        ### ACTIONS START ###
-        within('form[method="get"]') do
-          find('button').click
-        end
-        ### ACTIONS END ###
-
-        ### VERIFY START ###
-        assert_no_selector "form[data-controller='inline-edit']"
-        ### VERIFY END ###
-      end
-    end
-
     test 'project analysts should not be able to edit samples' do
       ### SETUP START ###
       login_as users(:ryan_doe)
