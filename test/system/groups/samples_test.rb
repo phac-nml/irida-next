@@ -843,11 +843,10 @@ module Groups
       login_as users(:ryan_doe)
       visit group_samples_url(@group)
 
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample28.name
       find('input.t-search-component').native.send_keys(:return)
-
-      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
-      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
 
       ### SETUP END ###
 
