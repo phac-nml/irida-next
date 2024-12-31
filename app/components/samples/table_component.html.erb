@@ -2,16 +2,10 @@
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
       <table
-        class='
-          w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-          whitespace-nowrap
-        '
+        class='w-full text-sm text-left  rtl:text-right text-slate-500 dark:text-slate-400 whitespace-nowrap'
       >
         <thead
-          class='
-            sticky top-0 z-10 text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
-            dark:text-slate-300
-          '
+          class='sticky top-0 z-10 text-xs uppercase  text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-300'
         >
           <tr>
             <% @columns.each_with_index do |column, index| %>
@@ -73,10 +67,7 @@
           </tr>
         </thead>
         <tbody
-          class='
-            overflow-y-auto bg-white divide-y divide-slate-200 dark:bg-slate-800
-            dark:divide-slate-700
-          '
+          class='overflow-y-auto bg-white divide-y  divide-slate-200 dark:bg-slate-800 dark:divide-slate-700'
         >
           <% @samples.each do |sample| %>
             <%= render Viral::BaseComponent.new(**row_arguments(sample)) do %>
@@ -133,7 +124,7 @@
                 <% end %>
               <% end %>
               <% @metadata_fields.each do |field| %>
-                <% if @row_actions[:edit] %>
+                <% if helpers.allowed_to?(:update_sample?, sample.project) %>
                   <%= render Samples::EditableCell.new(field: field, sample: sample) %>
                 <% else %>
                   <%= render_cell(
@@ -184,10 +175,7 @@
           <tfoot class="sticky bottom-0 z-10">
             <tr class="border-t dark:border-slate-700 border-slate-200">
               <td
-                class="
-                  sticky left-0 z-10 px-6 py-3 text-slate-700 dark:text-slate-300 bg-slate-50
-                  dark:bg-slate-700
-                "
+                class="sticky left-0 z-10 px-6 py-3  text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-700"
                 colspan="3"
               >
                 <span>
