@@ -30,7 +30,9 @@ module Projects
     test 'samples index table' do
       freeze_time
       visit namespace_project_samples_url(@namespace, @project)
-
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       # verifies navigation to page
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
 
@@ -63,6 +65,9 @@ module Projects
 
     test 'edit and delete row actions render for user with Owner role' do
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
 
       within("tr[id='#{@sample1.id}'] td:last-child") do
         assert_selector 'a', text: I18n.t('projects.samples.index.edit_button')
@@ -73,6 +78,9 @@ module Projects
     test 'edit row action render for user with Maintainer role' do
       login_as users(:joan_doe)
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
 
       within("tr[id='#{@sample1.id}'] td:last-child") do
         assert_selector 'a', text: I18n.t('projects.samples.index.edit_button')
@@ -83,6 +91,9 @@ module Projects
     test 'no row actions for user with role < Maintainer' do
       login_as users(:ryan_doe)
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       within('#samples-table table thead tr:first-child') do
         # attachments_updated_at is the last column, action column does not exist
         assert_selector 'th:last-child', text: I18n.t('samples.table_component.attachments_updated_at').upcase
@@ -94,31 +105,43 @@ module Projects
       end
     end
 
-    test 'User with role >= Maintainer sees select and deselect buttons for samples table' do
+    test 'User with role >= Analyst sees select and deselect buttons for samples table' do
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
 
       assert_selector 'form#select-all-form'
       assert_selector 'form#deselect-all-form'
     end
 
-    test 'User with role < Maintainer does not see select and deselect buttons for samples table' do
+    test 'User with role < Analyst does not see select and deselect buttons for samples table' do
       login_as users(:ryan_doe)
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
 
       assert_no_selector 'form#select-all-form'
       assert_no_selector 'form#deselect-all-form'
     end
 
-    test 'User with role >= Maintainer sees sample table checkboxes' do
+    test 'User with role >= Analyst sees sample table checkboxes' do
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
 
       assert_selector 'input#select-page'
       assert_selector "input#sample_#{@sample1.id}"
     end
 
-    test 'User with role < Maintainer does not see sample table checkboxes' do
+    test 'User with role < Analyst does not see sample table checkboxes' do
       login_as users(:ryan_doe)
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
 
       assert_no_selector 'input#select-page'
       assert_no_selector "input#sample_#{@sample1.id}"
@@ -127,6 +150,9 @@ module Projects
     test 'User with role >= Analyst sees workflow execution link' do
       login_as users(:james_doe)
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
 
       assert_selector 'span[class="sr-only"]', text: I18n.t('projects.samples.index.workflows.button_sr')
     end
@@ -134,6 +160,9 @@ module Projects
     test 'User with role < Analyst does not see workflow execution link' do
       login_as users(:ryan_doe)
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
 
       assert_no_selector 'span[class="sr-only"]', text: I18n.t('projects.samples.index.workflows.button_sr')
     end
@@ -141,6 +170,9 @@ module Projects
     test 'User with role >= Analyst sees create export button' do
       login_as users(:james_doe)
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
 
       assert_selector 'button', text: I18n.t('projects.samples.index.create_export_button.label')
     end
@@ -148,12 +180,18 @@ module Projects
     test 'User with role < Analyst does not see create export button' do
       login_as users(:ryan_doe)
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
 
       assert_no_selector 'button', text: I18n.t('projects.samples.index.create_export_button.label')
     end
 
     test 'User with role >= Maintainer sees import metadata button' do
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
 
       assert_selector 'a', text: I18n.t('projects.samples.index.import_metadata_button')
     end
@@ -161,12 +199,18 @@ module Projects
     test 'User with role < Maintainer does not see import metadata button' do
       login_as users(:ryan_doe)
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
 
       assert_no_selector 'a', text: I18n.t('projects.samples.index.import_metadata_button')
     end
 
     test 'User with role >= Maintainer sees new sample button' do
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
 
       assert_selector 'a', text: I18n.t('projects.samples.index.new_button')
     end
@@ -174,12 +218,18 @@ module Projects
     test 'User with role < Maintainer does not see new sample button' do
       login_as users(:ryan_doe)
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
 
       assert_no_selector 'a', text: I18n.t('projects.samples.index.new_button')
     end
 
     test 'User with role >= Maintainer sees delete samples button' do
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
 
       assert_selector 'a', text: I18n.t('projects.samples.index.delete_samples_button')
     end
@@ -187,6 +237,9 @@ module Projects
     test 'User with role < Maintainer does not see delete samples button' do
       login_as users(:ryan_doe)
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
 
       assert_no_selector 'a', text: I18n.t('projects.samples.index.delete_samples_button')
     end
@@ -202,6 +255,9 @@ module Projects
     test 'create sample' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       within('#samples-table table tbody') do
         # sample does not currently exist
         assert_no_text 'New Name'
@@ -226,6 +282,9 @@ module Projects
       assert_selector 'p', text: 'A sample description'
       # verify sample exists in samples table
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 4, count: 4,
+                                                                           locale: @user.locale))
       within('#samples-table table tbody') do
         assert_text 'New Name'
       end
@@ -235,6 +294,8 @@ module Projects
     test 'edit sample' do
       ### SETUP START ###
       visit namespace_project_sample_url(@namespace, @project, @sample1)
+      # verify header has loaded to prevent flakes
+      assert_selector 'h1', text: @sample1.name
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -286,10 +347,10 @@ module Projects
                                                                        project_name: @project.namespace.human_name)
       # redirected to samples index
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
-      # deleted sample row no longer exists
-      assert_no_selector "#samples-table table tbody tr[id='#{@sample1.id}']"
       # remaining samples still appear on table
       assert_selector '#samples-table table tbody tr', count: 2
+      # deleted sample row no longer exists
+      assert_no_selector "#samples-table table tbody tr[id='#{@sample1.id}']"
       ### VERIFY END ###
     end
 
@@ -318,13 +379,13 @@ module Projects
       # success flash msg
       assert_text I18n.t('projects.samples.deletions.destroy.success', sample_name: @sample1.name,
                                                                        project_name: @project.namespace.human_name)
-      # sample no longer exists
-      assert_no_selector "tr[id='#{@sample1.id}']"
       # still on samples index page
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
       # remaining samples still in table
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
                                                                            locale: @user.locale))
+      # sample no longer exists
+      assert_no_selector "tr[id='#{@sample1.id}']"
       ### VERIFY END ###
     end
 
@@ -332,6 +393,9 @@ module Projects
       ### SETUP START ###
       samples = @project.samples.pluck(:puid, :name)
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -352,6 +416,9 @@ module Projects
     test 'transfer dialog with plural description' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -370,6 +437,9 @@ module Projects
     test 'transfer dialog with singular description' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -532,6 +602,9 @@ module Projects
       namespace = groups(:group_hotel)
       project = projects(:projectHotel)
       visit namespace_project_samples_url(namespace, project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 1,
+                                                                               locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -557,6 +630,9 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -605,6 +681,9 @@ module Projects
     test 'empty state of transfer sample project selection' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -666,6 +745,9 @@ module Projects
     test 'can sort samples' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTION and VERIFY START ###
@@ -703,6 +785,9 @@ module Projects
     test 'sort persists through limit and filter' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### actions and VERIFY START ###
@@ -866,8 +951,11 @@ module Projects
 
     test 'filter persists through page refresh' do
       ### SETUP START ###
-      visit namespace_project_samples_url(@namespace, @project)
       filter_text = @sample1.name
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -883,7 +971,9 @@ module Projects
 
       # refresh
       visit namespace_project_samples_url(@namespace, @project)
-
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 1,
+                                                                               locale: @user.locale))
       # verify filter is still in input field
       assert_selector %(input.t-search-component) do |input|
         assert_equal filter_text, input['value']
@@ -897,6 +987,9 @@ module Projects
     test 'sort persists through page refresh' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -913,7 +1006,9 @@ module Projects
       ### VERIFY START ###
       # refresh
       visit namespace_project_samples_url(@namespace, @project)
-
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       # verify sort is still enabled
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
       # verify table ordering is still in sorted state
@@ -924,6 +1019,9 @@ module Projects
     test 'should import metadata via csv' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       # toggle metadata on for samples table
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
       assert_selector '#samples-table table thead tr th', count: 8
@@ -985,6 +1083,9 @@ module Projects
     test 'should import metadata via xls' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       # toggle metadata on for samples table
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
       assert_selector '#samples-table table thead tr th', count: 8
@@ -1047,6 +1148,9 @@ module Projects
     test 'should import metadata via xlsx' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       # toggle metadata on for samples table
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
       assert_selector '#samples-table table thead tr th', count: 8
@@ -1108,6 +1212,9 @@ module Projects
     test 'should not import metadata via invalid file type' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -1131,6 +1238,9 @@ module Projects
       # enabled ignore empty values will leave sample metadata values unchanged
       ### SETUP START ###
       visit namespace_project_samples_url(@subgroup12a, @project29)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 1,
+                                                                               locale: @user.locale))
       # toggle metadata on for samples table
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
       within("tr[id='#{@sample32.id}']") do
@@ -1165,6 +1275,9 @@ module Projects
       # disabled ignore empty values will delete any metadata values that are empty on the import
       ### SETUP START ###
       visit namespace_project_samples_url(@subgroup12a, @project29)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 1,
+                                                                               locale: @user.locale))
       # toggle metadata on for samples table
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
       within("tr[id='#{@sample32.id}']") do
@@ -1197,6 +1310,9 @@ module Projects
     test 'should not import metadata with duplicate header errors' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -1217,6 +1333,9 @@ module Projects
     test 'should not import metadata with missing metadata row errors' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -1237,6 +1356,9 @@ module Projects
     test 'should not import metadata with missing metadata column errors' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -1257,6 +1379,9 @@ module Projects
     test 'should partially import metadata with missing sample errors' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       # toggle metadata on for samples table
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
       assert_selector '#samples-table table thead tr th', count: 8
@@ -1312,6 +1437,9 @@ module Projects
       project31 = projects(:project31)
       sample34 = samples(:sample34)
       visit namespace_project_samples_url(subgroup12aa, project31)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
+                                                                           locale: @user.locale))
       # toggle metadata on for samples table
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
       # metadata that does not overwriting analysis values will still be added
@@ -1351,6 +1479,9 @@ module Projects
     test 'singular clone dialog description' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -1370,6 +1501,9 @@ module Projects
     test 'plural clone dialog description' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -1390,6 +1524,9 @@ module Projects
       ### SETUP START ###
       samples = @project.samples.pluck(:puid, :name)
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -1410,6 +1547,9 @@ module Projects
     test 'should clone samples' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project2)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
+                                                                           locale: @user.locale))
       # verify samples 1 and 2 do not exist in project2
       within('#samples-table table tbody') do
         assert_no_text @sample1.name
@@ -1461,6 +1601,9 @@ module Projects
     test 'should not clone samples with session storage cleared' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -1490,6 +1633,9 @@ module Projects
       project25 = projects(:project25)
       samples = @project.samples.pluck(:puid, :name)
       visit namespace_project_samples_url(namespace, project25)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
+                                                                           locale: @user.locale))
       # sample30's name already exists in project25 samples table, samples1 and 2 do not
       within('#samples-table table tbody') do
         assert_no_text @sample1.name
@@ -1497,6 +1643,9 @@ module Projects
         assert_text @sample30.name
       end
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -1525,6 +1674,9 @@ module Projects
       end
 
       visit namespace_project_samples_url(namespace, project25)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 4, count: 4,
+                                                                           locale: @user.locale))
       # samples 1 and 2 still successfully clone
       within('#samples-table table tbody') do
         assert_text @sample1.name
@@ -1536,6 +1688,9 @@ module Projects
     test 'empty state of destination project selection for sample cloning' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ####
@@ -1555,6 +1710,9 @@ module Projects
       ### SETUP START ###
       sign_in users(:jean_doe)
       visit namespace_project_samples_url(namespaces_user_namespaces(:john_doe_namespace), projects(:john_doe_project2))
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 1,
+                                                                               locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -1572,12 +1730,18 @@ module Projects
     test 'updating sample selection during sample cloning' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project2)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
+                                                                           locale: @user.locale))
       # verify no samples currently selected in destination project
       within 'tfoot' do
         assert_text "#{I18n.t('samples.table_component.counts.samples')}: 20"
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -1618,16 +1782,20 @@ module Projects
       # verify destination project still has no selected samples and one additional sample
       visit namespace_project_samples_url(@namespace, @project2)
 
-      assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       within 'tfoot' do
         assert_text "#{I18n.t('samples.table_component.counts.samples')}: 21"
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
+
+      assert_selector 'input[name="sample_ids[]"]:checked', count: 0
       ### VERIFY END
     end
 
     test 'selecting / deselecting all samples' do
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       # no samples selected/checked
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 3
@@ -1678,6 +1846,9 @@ module Projects
 
     test 'selecting / deselecting a page of samples' do
       visit namespace_project_samples_url(@namespace, @project2)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
+                                                                           locale: @user.locale))
       within('div#limit-component') do
         # set table limit to 10 to split samples table into two pages
         find('button').click
@@ -1732,6 +1903,9 @@ module Projects
 
     test 'selecting samples while filtering' do
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 3
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
@@ -1775,7 +1949,8 @@ module Projects
 
       visit namespace_project_samples_url(namespace_id: groups(:empty_group).path,
                                           project_id: projects(:empty_project).path)
-
+      assert_text I18n.t('projects.samples.index.no_associated_samples')
+      assert_text I18n.t('projects.samples.index.no_samples')
       assert_no_button I18n.t(:'projects.samples.index.clone_button')
       assert_no_button I18n.t(:'projects.samples.index.transfer_button')
       assert_text I18n.t('projects.samples.index.create_export_button.label')
@@ -1786,6 +1961,9 @@ module Projects
     test 'singular description within delete samples dialog' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -1807,6 +1985,9 @@ module Projects
     test 'plural description within delete samples dialog' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -1827,6 +2008,9 @@ module Projects
       ### SETUP START ###
       samples = @project.samples.pluck(:puid, :name)
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -1847,6 +2031,9 @@ module Projects
     test 'delete multiple samples' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       within '#samples-table table tbody' do
         assert_selector "tr[id='#{@sample1.id}']"
         assert_selector "tr[id='#{@sample2.id}']"
@@ -1877,6 +2064,9 @@ module Projects
       # tests that localstorage does not contain a selected sample after it's destroyed
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       assert_selector "tr[id='#{@sample1.id}']"
       assert_selector "tr[id='#{@sample2.id}']"
       assert_selector "tr[id='#{@sample30.id}']"
@@ -1932,6 +2122,9 @@ module Projects
     test 'filtering samples by list of sample puids' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       within '#samples-table table tbody' do
         assert_selector "tr[id='#{@sample1.id}']"
         assert_selector "tr[id='#{@sample2.id}']"
@@ -1973,6 +2166,9 @@ module Projects
     test 'filtering samples by list of sample names' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       within '#samples-table table tbody' do
         assert_selector "tr[id='#{@sample1.id}']"
         assert_selector "tr[id='#{@sample2.id}']"
@@ -2004,6 +2200,9 @@ module Projects
     test 'can filter by large list of sample names or ids' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       within '#samples-table table tbody' do
         assert_selector "tr[id='#{@sample1.id}']"
         assert_selector "tr[id='#{@sample2.id}']"
