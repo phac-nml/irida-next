@@ -7,9 +7,10 @@ module Groups
     header_row_count = 1
 
     def setup
-      @user = users(:john_doe)
-      login_as @user
+      login_as users(:john_doe)
       @namespace = groups(:group_one)
+      @group_bot = namespace_bots(:group1_bot0)
+      @group_bot_active_tokens = @group_bot.user.personal_access_tokens.active
     end
 
     test 'can see a table listing of group bot accounts' do
@@ -72,7 +73,7 @@ module Groups
         assert_selector 'h1', text: I18n.t(:'groups.bots.index.bot_listing.new_bot_modal.title')
         assert_selector 'p', text: I18n.t(:'groups.bots.index.bot_listing.new_bot_modal.description')
 
-        fill_in 'Token Name', with: 'Uploader'
+        fill_in I18n.t('groups.bots.index.bot_listing.new_bot_modal.token_name'), with: 'Uploader'
         find('#bot_access_level').find('option',
                                        text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
 
@@ -115,7 +116,7 @@ module Groups
         assert_selector 'h1', text: I18n.t(:'groups.bots.index.bot_listing.new_bot_modal.title')
         assert_selector 'p', text: I18n.t(:'groups.bots.index.bot_listing.new_bot_modal.description')
 
-        fill_in 'Token Name', with: 'Uploader'
+        fill_in I18n.t('groups.bots.index.bot_listing.new_bot_modal.token_name'), with: 'Uploader'
         find('#bot_access_level').find('option',
                                        text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
 
@@ -140,8 +141,8 @@ module Groups
         end
       end
 
-      within('#turbo-confirm[open]') do
-        click_button 'Confirm'
+      within('dialog') do
+        click_button I18n.t('bots.destroy_confirmation.submit_button')
       end
 
       assert_text I18n.t(:'concerns.bot_actions.destroy.success')
@@ -151,15 +152,12 @@ module Groups
     end
 
     test 'can view personal access tokens for bot account' do
-      namespace_bot = namespace_bots(:group1_bot0)
-      active_personal_tokens = namespace_bot.user.personal_access_tokens.active
-
       visit group_bots_path(@namespace)
       assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
       assert_selector 'p', text: I18n.t(:'groups.bots.index.subtitle')
 
-      within "tr[id='#{namespace_bot.id}']" do
-        click_link active_personal_tokens.count.to_s
+      within "tr[id='#{@group_bot.id}']" do
+        click_link @group_bot_active_tokens.count.to_s
       end
 
       within('dialog') do
@@ -167,12 +165,12 @@ module Groups
         assert_selector 'p',
                         text: I18n.t(
                           'groups.bots.index.personal_access_tokens_listing_modal.description',
-                          bot_account: namespace_bot.user.email
+                          bot_account: @group_bot.user.email
                         )
 
         within('table') do
           assert_selector 'tr', count: 2
-          token = active_personal_tokens.first
+          token = @group_bot_active_tokens.first
 
           within "tr[id='#{token.id}']" do
             assert_equal 'Valid PAT0', token.name
@@ -195,13 +193,11 @@ module Groups
     end
 
     test 'can generate a new personal access token for bot account' do
-      namespace_bot = namespace_bots(:group1_bot0)
-
       visit group_bots_path(@namespace)
       assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
       assert_selector 'p', text: I18n.t(:'groups.bots.index.subtitle')
 
-      within "tr[id='#{namespace_bot.id}']" do
+      within "tr[id='#{@group_bot.id}']" do
         click_link 'Generate new token'
       end
 
@@ -211,9 +207,9 @@ module Groups
         )
 
         assert_text I18n.t('groups.bots.index.bot_listing.generate_personal_access_token_modal.description',
-                           bot_account: namespace_bot.user.email)
+                           bot_account: @group_bot.user.email)
 
-        fill_in 'Token Name', with: 'Newest token'
+        fill_in I18n.t('groups.bots.index.bot_listing.new_bot_modal.token_name'), with: 'Newest token'
 
         all('input[type=checkbox]').each(&:click)
 
@@ -221,24 +217,21 @@ module Groups
       end
 
       within('#access-token-section') do
-        bot_account_name = namespace_bot.user.email
-        assert_selector 'h2', text: I18n.t('groups.bots.index.access_token_section.label', bot_name: bot_account_name)
+        assert_selector 'h2', text: I18n.t('groups.bots.index.access_token_section.label',
+                                           bot_name: @group_bot.user.email)
         assert_selector 'p', text: I18n.t('groups.bots.index.access_token_section.description')
         assert_selector 'button', text: I18n.t('components.token.copy')
       end
     end
 
     test 'can revoke a personal access token' do
-      namespace_bot = namespace_bots(:group1_bot0)
-      active_personal_tokens = namespace_bot.user.personal_access_tokens.active
-      token = nil
-
+      token = @group_bot_active_tokens.first
       visit group_bots_path(@namespace)
       assert_selector 'h1', text: I18n.t(:'groups.bots.index.title')
       assert_selector 'p', text: I18n.t(:'groups.bots.index.subtitle')
 
-      within "tr[id='#{namespace_bot.id}']" do
-        click_link active_personal_tokens.count.to_s
+      within "tr[id='#{@group_bot.id}']" do
+        click_link @group_bot_active_tokens.count.to_s
       end
 
       within('dialog') do
@@ -246,28 +239,138 @@ module Groups
         assert_selector 'p',
                         text: I18n.t(
                           'groups.bots.index.personal_access_tokens_listing_modal.description',
-                          bot_account: namespace_bot.user.email
+                          bot_account: @group_bot.user.email
                         )
 
         within('table') do
           assert_selector 'tr', count: 2
-          token = active_personal_tokens.first
 
           within "tr[id='#{token.id}']" do
-            click_link 'Revoke'
+            click_link I18n.t('personal_access_tokens.table.revoke')
           end
         end
       end
 
-      within('#turbo-confirm[open]') do
-        click_button 'Confirm'
-      end
-
       within('dialog') do
+        click_button I18n.t('personal_access_tokens.revoke_confirmation.submit_button')
         within('#personal-access-token-alert') do
           assert_text I18n.t('concerns.bot_personal_access_token_actions.revoke.success', pat_name: token.name)
         end
       end
+    end
+
+    test 'PAT panel removed after personal access token revoke' do
+      ### SETUP START ###
+
+      visit group_bots_path(@namespace)
+      # PAT panel is not present
+      assert_no_selector '#access-token-section div'
+      # create new PAT to render PAT panel
+      within "tr[id='#{@group_bot.id}']" do
+        click_link I18n.t('bots.index.table.actions.generate_new_token')
+      end
+
+      within('#dialog') do
+        assert_text I18n.t(
+          'groups.bots.index.bot_listing.generate_personal_access_token_modal.title'
+        )
+
+        assert_text I18n.t('groups.bots.index.bot_listing.generate_personal_access_token_modal.description',
+                           bot_account: @group_bot.user.email)
+
+        fill_in I18n.t('groups.bots.index.bot_listing.new_bot_modal.token_name'), with: 'Newest token'
+
+        all('input[type=checkbox]').each(&:click)
+
+        click_button I18n.t('groups.bots.index.bot_listing.generate_personal_access_token_modal.submit')
+      end
+
+      # PAT panel now present
+      assert_selector '#access-token-section div'
+      # additional asserts to prevent flakes
+      within('#access-token-section') do
+        assert_text I18n.t('groups.bots.index.access_token_section.label', bot_name: @group_bot.user.email)
+        assert_text I18n.t('groups.bots.index.access_token_section.description')
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # additional asserts to prevent flakes
+      assert_selector '#bots-table'
+      assert_selector '#bots-table table tbody tr', count: 20
+      within "tr[id='#{@group_bot.id}']" do
+        # click active tokens number
+        click_link @group_bot_active_tokens.count.to_s
+      end
+
+      # bot's current PATs dialog
+      within('#dialog') do
+        # revoke a PAT
+        within("table tbody tr[id='#{@group_bot_active_tokens.first.id}']") do
+          click_link I18n.t('personal_access_tokens.table.revoke')
+        end
+
+        click_button I18n.t('personal_access_tokens.revoke_confirmation.submit_button')
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      # PAT panel no longer present
+      assert_no_selector '#access-token-section div'
+      ### VERIFY END ###
+    end
+
+    test 'PAT panel removed after bot destroy' do
+      ### SETUP START ###
+      visit group_bots_path(@namespace)
+      # PAT panel is not present
+      assert_no_selector '#access-token-section div'
+      # create new PAT to render PAT panel
+      within "tr[id='#{@group_bot.id}']" do
+        click_link I18n.t('bots.index.table.actions.generate_new_token')
+      end
+
+      within('#dialog') do
+        assert_text I18n.t(
+          'groups.bots.index.bot_listing.generate_personal_access_token_modal.title'
+        )
+
+        assert_text I18n.t('groups.bots.index.bot_listing.generate_personal_access_token_modal.description',
+                           bot_account: @group_bot.user.email)
+
+        fill_in I18n.t('groups.bots.index.bot_listing.new_bot_modal.token_name'), with: 'Newest token'
+
+        all('input[type=checkbox]').each(&:click)
+
+        click_button I18n.t('groups.bots.index.bot_listing.generate_personal_access_token_modal.submit')
+      end
+
+      # PAT panel now present
+      assert_selector '#access-token-section div'
+      # additional asserts to prevent flakes
+      within('#access-token-section') do
+        assert_text I18n.t('groups.bots.index.access_token_section.label', bot_name: @group_bot.user.email)
+        assert_text I18n.t('groups.bots.index.access_token_section.description')
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # additional asserts to prevent flakes
+      assert_selector '#bots-table'
+      assert_selector '#bots-table table tbody tr', count: 20
+      within('#bots-table table tbody tr:first-child td:last-child') do
+        # destroy bot
+        click_link I18n.t(:'bots.index.table.actions.destroy')
+      end
+
+      # confirm destroy bot
+      click_button I18n.t('bots.destroy_confirmation.submit_button')
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      # PAT panel no longer present
+      assert_no_selector '#access-token-section div'
+      ### VERIFY END ###
     end
   end
 end

@@ -312,6 +312,10 @@ en:
       label: Scopes
       read_api: Grants read access to the API.
   bots:
+    destroy_confirmation:
+      description: This action will permanently delete the bot account and will remove any existing memberships for the bot account. Are you sure you want to permanently delete bot account %{bot_name}?
+      submit_button: Confirm
+      title: Delete Bot
     index:
       pagy_item: Bot Accounts
       table:
@@ -325,7 +329,6 @@ en:
         actions:
           destroy: Delete
           destroy_aria_label: Delete bot account
-          destroy_confirmation: This action will permanently delete the bot account and will remove any existing memberships for the bot account. Are you sure you want to permanently delete this bot account?
           generate_new_token: Generate new token
           generate_new_token_aria_label: Generate a new personal access token for bot account
         empty_state:
@@ -944,6 +947,10 @@ en:
       helper: A custom name will make it easier to search for this in the future.
       label: Name (Optional)
   personal_access_tokens:
+    revoke_confirmation:
+      description: Are you sure you'd like to remove access token '%{token_name}' from bot %{bot_name}?
+      submit_button: Confirm
+      title: Revoke personal access token
     table:
       header:
         action: Action

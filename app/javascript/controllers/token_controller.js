@@ -26,7 +26,7 @@ export default class extends Controller {
       this.viewTarget.classList.add("hidden");
       this.inputTarget.value = Array.prototype.join.call(
         { length: this.itemValue.length },
-        "*"
+        "*",
       );
     } else {
       this.hideTarget.classList.add("hidden");
@@ -34,5 +34,12 @@ export default class extends Controller {
       this.inputTarget.value = this.itemValue;
     }
     this.visible = !this.visible;
+  }
+
+  removeTokenPanel() {
+    let panel = document.getElementById("access-token-section");
+    if (panel) {
+      panel.remove();
+    }
   }
 }
