@@ -103,8 +103,8 @@ export default class extends Controller {
 
     if (newIndex < visible.length) {
       visible[newIndex].focus();
+      this.currentIndex = newIndex;
     }
-    this.currentIndex = newIndex;
   }
 
   #filterItems() {
