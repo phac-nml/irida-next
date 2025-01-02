@@ -10,7 +10,6 @@ AllCops:
     - "**/bin/**/**"
     - "**/db/schema.rb"
     - "**/db/jobs_schema.rb"
-    - "**/lib/active_storage/service/azure_blob_service.rb"
   TargetRubyVersion: "3.2"
   NewCops: enable
 
