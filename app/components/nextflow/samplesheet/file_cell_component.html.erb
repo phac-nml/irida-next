@@ -21,7 +21,7 @@
     "file_selector[selected_id]": @selected.nil? ? nil : @selected[:id],
     "file_selector[name]": @name,
     "file_selector[required]": @required,
-    "file_selector[files]": @files
+    "file_selector[file_filter_params]": @file_filter_params
   ),
   data: {
     turbo_stream: "true",
