@@ -194,8 +194,8 @@ GEM
       multipart-post (~> 2)
     faraday-net_http (3.1.1)
       net-http
-    faraday-net_http_persistent (2.0.1)
-      faraday-net_http
+    faraday-net_http_persistent (2.1.0)
+      faraday (~> 2.5)
       net-http-persistent (~> 4.0)
     ferrum (0.15)
       addressable (~> 2.5)
@@ -655,10 +655,10 @@ DEPENDENCIES
   devise (~> 4.9.4)
   erb-formatter (~> 0.7.2)
   faker
-  faraday (~> 2.0)
+  faraday (~> 2.5)
   faraday-follow_redirects
   faraday-multipart
-  faraday-net_http_persistent (~> 2.0)
+  faraday-net_http_persistent (~> 2.1)
   fx
   good_job (~> 4.6.0)
   google-cloud-storage (~> 1.11)
