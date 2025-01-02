@@ -98,9 +98,32 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
        else
          {}
        end
-     )),
+     )).merge(advanced_search_params),
       order: { "#{column}": { order: direction, unmapped_type: 'long' } },
       includes: [project: { namespace: [{ parent: :route }, :route] }] }
+  end
+
+  def advanced_search_params # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
+    hash = {}
+    @groups.first.conditions.map do |condition|
+      case condition.operator
+      when '='
+        hash[condition.field] = condition.value
+      when '!='
+        hash[condition.field] = { not: condition.value }
+      when '<='
+        hash[condition.field] = { lte: condition.value }
+      when '>='
+        hash[condition.field] = { gte: condition.value }
+      when '<'
+        hash[condition.field] = { lt: condition.value }
+      when '>'
+        hash[condition.field] = { gt: condition.value }
+      when 'contains'
+        hash[condition.field] = { like: condition.value }
+      end
+    end
+    hash
   end
 
   def ransack_params
