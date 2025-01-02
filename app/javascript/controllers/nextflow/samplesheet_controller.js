@@ -1,13 +1,21 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["selectForward", "selectReverse", "table", "loading", "submit"];
+  static targets = [
+    "selectForward",
+    "selectReverse",
+    "table",
+    "loading",
+    "submit",
+  ];
 
   connect() {
     this.element.addEventListener("turbo:submit-start", (event) => {
       this.submitTarget.disabled = true;
       if (this.hasTableTarget) {
-        this.tableTarget.appendChild(this.loadingTarget.content.cloneNode(true));
+        this.tableTarget.appendChild(
+          this.loadingTarget.content.cloneNode(true),
+        );
       }
     });
 
@@ -35,7 +43,6 @@ export default class extends Controller {
     const index = [...updateSelect.options].findIndex(
       (options) => options.dataset.puid === puid,
     );
-
     if (index > -1) {
       updateSelect.options[index].selected = true;
     }
