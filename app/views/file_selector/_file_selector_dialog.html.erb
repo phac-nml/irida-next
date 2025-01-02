@@ -34,12 +34,14 @@
             bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
           '
         >
-          <% @attachable.attachments.each do |attachment| %>
+          <% @listing_attachments.each do |attachment| %>
             <tr class=" bg-white border-b dark:bg-slate-800 dark:border-slate-700 ">
               <td>
                 <%= form.radio_button "attachment_id",
                                   attachment.id,
-                                  checked: @selected_id && @selected_id == attachment.id,
+                                  checked:
+                                    file_selector_params["selected_id"] &&
+                                      file_selector_params["selected_id"] == attachment.id,
                                   class:
                                     "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-400" %>
 
@@ -59,7 +61,7 @@
             <td>
               <%= form.radio_button "attachment_id",
                                 "no_attachment",
-                                checked: @selected_id.nil?,
+                                checked: file_selector_params["selected_id"].nil?,
                                 class:
                                   "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-400" %>
 

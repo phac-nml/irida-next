@@ -86,7 +86,7 @@ module Nextflow
       end
 
       def filter_files_by_pattern(files, pattern)
-        files.select { |file| file[:filename].first[Regexp.new(pattern)] }
+        files.select { |file| file[:filename] =~ Regexp.new(pattern) }
       end
 
       def render_sample_cell(sample, fields)
@@ -114,6 +114,7 @@ module Nextflow
                  selected_item,
                  index,
                  is_required,
+                 files
                ))
       end
 
