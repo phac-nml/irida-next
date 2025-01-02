@@ -106,6 +106,7 @@ gem 'activerecord_json_validator', '~> 3.0.0'
 gem 'active_storage_validations'
 gem 'aws-sdk-s3', require: false
 gem 'azure-blob', require: false
+gem 'azure-storage-common', '~> 2.0.4'
 gem 'google-cloud-storage', '~> 1.11', require: false
 
 # job queueing
