@@ -5,7 +5,10 @@
                       file_selector_params:,
                     } %>
 
-<turbo-stream action="replace" target=<%= "#{@attachable.id}_#{@name}"%>>
+<turbo-stream
+  action="replace"
+  target="<%= "#{@attachable.id}_#{file_selector_params["name"]}"%>"
+>
   <template>
     <%= render Nextflow::Samplesheet::FileCellComponent.new(
       @attachable,
@@ -13,12 +16,14 @@
       @attachment_params,
       file_selector_params["index"],
       file_selector_params["required"],
+      file_selector_params["files"],
     ) %>
   </template>
 </turbo-stream>
 
 <% if @associated_attachment_params %>
-  <% associated_name = @name == "fastq_1" ? "fastq_2" : "fastq_1" %>
+  <% associated_name =
+    file_selector_params["name"] == "fastq_1" ? "fastq_2" : "fastq_1" %>
   <turbo-stream
     action="replace"
     target="<%= "#{@attachable.id}_#{associated_name}"%>"
@@ -28,8 +33,9 @@
         @attachable,
         associated_name,
         @associated_attachment_params,
-        @index,
-        true,
+        file_selector_params["index"],
+        file_selector_params["required"],
+        file_selector_params["files"],
       ) %>
     </template>
   </turbo-stream>
