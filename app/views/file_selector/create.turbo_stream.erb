@@ -16,26 +16,24 @@
       @attachment_params,
       file_selector_params["index"],
       file_selector_params["required"],
-      file_selector_params["files"],
+      file_selector_params["file_filter_params"],
     ) %>
   </template>
 </turbo-stream>
 
 <% if @associated_attachment_params %>
-  <% associated_name =
-    file_selector_params["name"] == "fastq_1" ? "fastq_2" : "fastq_1" %>
   <turbo-stream
     action="replace"
-    target="<%= "#{@attachable.id}_#{associated_name}"%>"
+    target="<%= "#{@attachable.id}_#{@associated_attachment_params[:name]}"%>"
   >
     <template>
       <%= render Nextflow::Samplesheet::FileCellComponent.new(
         @attachable,
-        associated_name,
-        @associated_attachment_params,
+        @associated_attachment_params[:name],
+        @associated_attachment_params[:file],
         file_selector_params["index"],
         file_selector_params["required"],
-        file_selector_params["files"],
+        @associated_attachment_params[:file_filter_params],
       ) %>
     </template>
   </turbo-stream>

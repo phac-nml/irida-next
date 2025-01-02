@@ -39,9 +39,9 @@ module Nextflow
 
       def render_fastq_cell(sample, namespace_id, property, entry, fields, index)
         direction = get_fastq_direction(property)
-        files = get_fastq_files(entry, sample, direction, pe_only: property['pe_only'].present?)
-        data = get_fastq_data(files, direction, index, property)
-        render_file_cell(sample, namespace_id, property, entry, index, files, @required, data, files&.first)
+        file_filter_params = {pattern: entry['pattern'], direction:, pe_only: property['pe_only'].present?}
+        selected_file = sample.fastq_files(file_filter_params[:pattern], file_filter_params[:direction], file_filter_params[:pe_only]).first
+        render_file_cell(sample, property, entry, index, @required, selected_file, file_filter_params)
       end
 
       private
@@ -62,17 +62,6 @@ module Nextflow
           files = singles
         end
         files
-      end
-
-      def get_fastq_data(files, direction, index, property)
-        return {} if files.empty? && property == 'fastq_2'
-
-        {
-          'data-action' => 'change->nextflow--samplesheet#file_selected',
-          'data-nextflow--samplesheet-target' => "select#{direction.to_s.sub!('pe_', '').capitalize}",
-          'data-direction' => direction.to_s,
-          'data-index' => index
-        }
       end
 
       def render_other_file_cell(sample, property, entry, fields)
@@ -102,19 +91,20 @@ module Nextflow
       end
 
       # rubocop:disable Metrics/ParameterLists
-      def render_file_cell(sample, namespace_id, property, entry, index, files, is_required, data, selected)
-        selected_item = if selected.present?
-                          files[0]
-                        else
-                          entry['autopopulate'] && files.present? ? files[0] : {}
-                        end
+
+      def render_file_cell(sample,  property, entry, index, is_required, selected, file_filter_params)
+        # selected_item = if selected.present?
+        #                   files[0]
+        #                 else
+        #                   entry['autopopulate'] && files.present? ? files[0] : {}
+        #                 end
         render(Samplesheet::FileCellComponent.new(
           sample,
                  property,
-                 selected_item,
+                 selected,
                  index,
                  is_required,
-                 files
+                 file_filter_params
                ))
       end
 

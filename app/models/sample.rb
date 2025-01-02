@@ -134,6 +134,25 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
     { singles:, pe_forward:, pe_reverse: }
   end
 
+  def fastq_files(pattern, direction, pe_only)
+    singles = filter_files_by_pattern(sorted_files[:singles] || [],
+                                        pattern || "/^\S+.f(ast)?q(.gz)?$/")
+    puts pattern
+    puts 'patterndsfadfasdf'
+      files = []
+      if sorted_files[direction].present?
+        files = sorted_files[direction] || []
+        files.concat(singles) unless pe_only
+      else
+        files = singles
+      end
+      files
+  end
+
+  def filter_files_by_pattern(files, pattern)
+    files.select { |file| file[:filename] =~ Regexp.new(pattern) }
+  end
+
   def search_data
     {
       name: name,
