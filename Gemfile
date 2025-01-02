@@ -51,7 +51,8 @@ gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-saml'
 
 # API Integrations
-gem 'faraday'
+gem 'faraday', '~> 2.0'
+gem 'faraday-follow_redirects'
 gem 'faraday-multipart'
 gem 'faraday-net_http_persistent', '~> 2.0'
 
@@ -106,7 +107,6 @@ gem 'activerecord_json_validator', '~> 3.0.0'
 gem 'active_storage_validations'
 gem 'aws-sdk-s3', require: false
 gem 'azure-blob', require: false
-gem 'azure-storage-common', '~> 2.0.4'
 gem 'google-cloud-storage', '~> 1.11', require: false
 
 # job queueing
