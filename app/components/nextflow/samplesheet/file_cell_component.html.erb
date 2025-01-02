@@ -6,14 +6,14 @@
     text-sm dark:focus:ring-primary-500 dark:focus:border-primary-500 cursor-pointer
   "
 >
-  <% unless @selected.nil? %>
+  <% unless @selected.empty? %>
     <input
     type="hidden"
-      name="workflow_execution[samples_workflow_executions_attributes][<%= @index %>][samplesheet_params][<%= @name %>]"
+      name="workflow_execution[samples_workflow_executions_attributes][<%= @index%>][samplesheet_params][<%= @name %>]"
       value= <%= @selected[:global_id]%>
     >
   <% end %>
-  <%= link_to @selected.nil? ? "Select" : @selected[:filename],
+  <%= link_to @selected.empty? ? "Select" : @selected[:filename],
   new_file_selector_path(
     "file_selector[attachable]": @sample,
     "file_selector[index]": @index,

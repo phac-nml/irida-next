@@ -45,6 +45,8 @@ class FileSelectorController < ApplicationController
   end
 
   def attachments
+    @attachment_params = {}
+    return if params[:attachment_id] == 'no_attachment'
     attachment = Attachment.find(params[:attachment_id])
     @attachment_params = {filename: attachment.filename.to_s, global_id: attachment.to_global_id, id: attachment.id}
 

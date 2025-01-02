@@ -106,7 +106,7 @@ module Nextflow
         selected_item = if selected.present?
                           files[0]
                         else
-                          entry['autopopulate'] && files.present? ? files[0] : nil
+                          entry['autopopulate'] && files.present? ? files[0] : {}
                         end
         render(Samplesheet::FileCellComponent.new(
           sample,

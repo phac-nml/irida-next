@@ -55,6 +55,19 @@
               </td>
             </tr>
           <% end %>
+          <tr>
+            <td>
+              <%= form.radio_button "attachment_id",
+                                "no_attachment",
+                                checked: @selected_id.nil?,
+                                class:
+                                  "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-400" %>
+
+            </td>
+            <th class="px-3 py-3">
+              No attachment
+            </th>
+          </tr>
         </tbody>
       </table>
 
