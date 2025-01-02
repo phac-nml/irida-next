@@ -1,9 +1,8 @@
 <%= viral_dialog(open: open, classes: ["overflow-visible"]) do |dialog| %>
   <%= dialog.with_header(title: "File Selector") %>
   <%= dialog.with_section do %>
-    <%= form_with url: file_selector_index_path(attachable: @attachable.id), method: :post do |form| %>
+    <%= form_with url: file_selector_index_path(file_selector: file_selector_params), method: :post do |form| %>
       <input type="hidden" name="format" value="turbo_stream"/>
-      <input type="hidden" name="index" value="<%= @index %>"/>
       <table
         class='
           w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
@@ -59,7 +58,9 @@
         </tbody>
       </table>
 
-      <%= form.submit "submit" %>
+      <%= form.submit "submit",
+                  class:
+                    "inline-flex items-center justify-center text-sm border rounded-md cursor-pointer sm:w-auto focus:z-10 focus:outline-none text-white bg-primary-700 hover:bg-primary-800 focus:ring-0 rounded-md px-5 py-3 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 dark:border-primary-900 dark:hover:bg-primary-700" %>
     <% end %>
   <% end %>
 <% end %>

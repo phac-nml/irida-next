@@ -9,16 +9,17 @@
   <% unless @selected.nil? %>
     <input
     type="hidden"
-      name="workflow_execution[samples_workflow_executions_attributes][<%= @index%>][samplesheet_params][<%= @name %>]"
+      name="workflow_execution[samples_workflow_executions_attributes][<%= @index %>][samplesheet_params][<%= @name %>]"
       value= <%= @selected[:global_id]%>
     >
   <% end %>
   <%= link_to @selected.nil? ? "Select" : @selected[:filename],
   new_file_selector_path(
-    attachable: @sample,
-    namespace_id: @namespace_id,
-    index: @index,
-    selected_id: @selected.nil? ? nil : @selected[:id]
+    "file_selector[attachable]": @sample,
+    "file_selector[index]": @index,
+    "file_selector[selected_id]": @selected.nil? ? nil : @selected[:id],
+    "file_selector[name]": @name,
+    "file_selector[required]": @required
   ),
   data: {
     turbo_stream: "true",
