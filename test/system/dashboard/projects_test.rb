@@ -218,7 +218,7 @@ module Dashboard
       assert_selector 'h1', text: new_project.name
     end
 
-    test 'should have Group URL filled with user namespace, when creating a new project from the dashboard' do
+    test 'should have Project URL filled with user namespace, when creating a new project from the dashboard' do
       visit dashboard_projects_url
 
       click_on I18n.t(:'dashboard.projects.index.create_project_button')

@@ -27,7 +27,7 @@ class ProjectsTest < ApplicationSystemTestCase
     assert_current_path(namespace_project_path(new_project.parent, new_project))
   end
 
-  test 'should have Group URL filled with user namespace, when creating a new project using the nav bar' do
+  test 'should have Project URL filled with user namespace, when creating a new project using the nav bar' do
     visit dashboard_projects_url
 
     click_button I18n.t('general.navbar.new_dropdown.aria_label')
@@ -40,7 +40,7 @@ class ProjectsTest < ApplicationSystemTestCase
     end
   end
 
-  test 'should have Group URL filled with the parent group, when creating a new project from within a group' do
+  test 'should have Project URL filled with the parent group, when creating a new project from within a group' do
     group1 = groups(:group_one)
     visit group_url(group1)
     click_link I18n.t('groups.show.create_project_button')
