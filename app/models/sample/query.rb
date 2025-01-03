@@ -104,44 +104,49 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
   end
 
   def advanced_search_params # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
-    hash = {}
-    @groups.first.conditions.map do |condition|
-      case condition.operator
-      when '='
-        hash[condition.field] = condition.value.split(/,\s|,/)
-      when '!='
-        hash[condition.field] = { not: condition.value.split(/,\s|,/) }
-      when '<='
-        between_advanced_search_params(hash, condition, :lte)
-      when '>='
-        between_advanced_search_params(hash, condition, :gte)
-      when 'between'
-        if condition.field.end_with?('_date')
-          hash[condition.field] = Range.new(condition.value, 1.day.ago)
-        else
-          hash["#{condition.field}.numeric"] = Range.new(1, condition.value.to_i)
+    or_conditions = []
+    @groups.each do |group|
+      and_conditions = {}
+      group.conditions.map do |condition|
+        case condition.operator
+        when '='
+          and_conditions[condition.field] = condition.value.split(/,\s|,/)
+        when '!='
+          and_conditions[condition.field] = { not: condition.value.split(/,\s|,/) }
+        when '<='
+          between_advanced_search_params(and_conditions, condition, :lte)
+        when '>='
+          between_advanced_search_params(and_conditions, condition, :gte)
+        when 'between'
+          between_values = condition.value.split(/,\s|,/)
+          if condition.field.end_with?('_date')
+            and_conditions[condition.field] = Range.new(between_values[0], between_values[1])
+          else
+            and_conditions["#{condition.field}.numeric"] = Range.new(between_values[0].to_i, between_values[1].to_i)
+          end
+        when 'contains'
+          and_conditions[condition.field] = { ilike: "%#{condition.value}%" }
         end
-      when 'contains'
-        hash[condition.field] = { ilike: "%#{condition.value}%" }
       end
+      or_conditions << and_conditions
     end
-    hash
+    { _or: or_conditions }
   end
 
-  def between_advanced_search_params(hash, condition, operation) # rubocop:disable Metrics/AbcSize
+  def between_advanced_search_params(and_conditions, condition, operation) # rubocop:disable Metrics/AbcSize
     if condition.field.end_with?('_date')
-      hash[condition.field] = if hash[condition.field].nil?
-                                { operation => condition.value }
-                              else
-                                hash[condition.field].merge({ operation => condition.value })
-                              end
+      and_conditions[condition.field] = if and_conditions[condition.field].nil?
+                                          { operation => condition.value }
+                                        else
+                                          and_conditions[condition.field].merge({ operation => condition.value })
+                                        end
     else
-      hash["#{condition.field}.numeric"] = if hash["#{condition.field}.numeric"].nil?
-                                             { operation => condition.value.to_i }
-                                           else
-                                             hash["#{condition.field}.numeric"]
-                                               .merge({ operation => condition.value.to_i })
-                                           end
+      and_conditions["#{condition.field}.numeric"] = if and_conditions["#{condition.field}.numeric"].nil?
+                                                       { operation => condition.value.to_i }
+                                                     else
+                                                       and_conditions["#{condition.field}.numeric"]
+                                                         .merge({ operation => condition.value.to_i })
+                                                     end
     end
   end
 
