@@ -12,7 +12,7 @@ module Groups
     def index
       @timestamp = DateTime.current
       @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
-      @has_samples = authorized_samples.count.positive?
+      @has_samples = @group.aggregated_samples_count.positive?
     end
 
     def search
