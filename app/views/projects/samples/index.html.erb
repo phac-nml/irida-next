@@ -167,7 +167,7 @@
           search: Sample::Search.new(groups:[Sample::Group.new(conditions: [Sample::Condition.new(field: "", operator: "", value: "")])]),
           form: f,
           fields:  @advanced_search_fields,
-          operations: %w[= !=],
+          operations: %w[= != <= >= contains],
           scope: :q,
         )do |advanced_search| %>
           <% advanced_search.with_add_condition_button do %>
