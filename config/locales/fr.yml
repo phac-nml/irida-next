@@ -774,6 +774,8 @@ fr:
         title: Add New Member
     new_subgroup:
       cancel: Cancel
+      empty_state: No namespaces are associated with that name or ID
+      select_group: Select Group
       submit: Create subgroup
       subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects
       title: Create subgroup
@@ -1249,8 +1251,10 @@ fr:
         title: Add New Member
     new:
       description: Project description, not required
+      empty_state: No namespaces are associated with that name or ID
       help: The path is used in URLs and must be at least 3 characters and can only contain letters, numbers, dashes and underscores
       placeholder: Awesome project name
+      select_namespace: Select Namespace
       submit: Create project
       subtitle: Projects are where you can store and analyze your data
       title: Create project

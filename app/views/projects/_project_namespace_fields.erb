@@ -16,23 +16,21 @@
   <div class="form-field">
     <%= builder.label :parent_id %>
     <div class="flex items-center whitespace-nowrap">
-      <div
-        class="
-          inline-flex items-center px-3 py-2.5 text-sm text-slate-600 bg-slate-200 border
-          border-r-0 border-slate-300 rounded-l-lg dark:bg-slate-600 dark:text-slate-400
-          dark:border-slate-600
-        "
-      >
-        <%= root_url %>
-      </div>
-      <%= builder.collection_select(
-        :parent_id,
-        authorized_namespaces,
-        :id,
-        :full_path,
-        { selected: params[:group_id] || @project.namespace.parent.id },
-        { class: "prefixed" },
-      ) %>
+      <% params.has_key?(:group_id) ?
+        selected_value = params[:group_id] :
+        selected_value = current_user.namespace.id %>
+      <%= viral_prefixed_select2(form: builder, name: :parent_id, selected_value: , placeholder: t(:"projects.new.select_namespace")) do |select| %>
+        <% authorized_namespaces.each do |namespace| %>
+          <% select.with_option(
+            primary: namespace.full_path,
+            secondary: namespace.puid,
+            value: namespace.id,
+          ) %>
+        <% end %>
+        <%= select.with_empty_state do %>
+          <%= t(:"projects.new.empty_state") %>
+        <% end %>
+      <% end %>
       <div class="ml-4 dark:text-slate-200">/</div>
     </div>
   </div>

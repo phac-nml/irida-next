@@ -205,6 +205,8 @@ module Dashboard
 
       within %(div[data-controller="slugify"][data-controller-connected="true"]) do
         fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
+        fill_in I18n.t('projects.new.select_namespace'), with: 'USR'
+        click_on 'INXT_USR_AAAAAAAAAA'
         assert_equal 'new-project',
                      find_field(I18n.t(:'activerecord.attributes.namespaces/project_namespace.path')).value
         fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.description'), with: project_description
@@ -214,6 +216,18 @@ module Dashboard
       new_project = @user.namespace.project_namespaces.find_by(name: project_name).project
       assert_current_path(namespace_project_path(new_project.parent, new_project))
       assert_selector 'h1', text: new_project.name
+    end
+
+    test 'should have Project URL filled with user namespace, when creating a new project from the dashboard' do
+      visit dashboard_projects_url
+
+      click_on I18n.t(:'dashboard.projects.index.create_project_button')
+
+      within %(div[data-controller="slugify"][data-controller-connected="true"]) do
+        assert_selector %(input[data-viral--select2-target="input"]) do |input|
+          assert_equal @user.namespace.full_path, input['value']
+        end
+      end
     end
 
     test 'can see projects that the user has been added to as a member' do

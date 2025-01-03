@@ -29,6 +29,7 @@ export default class extends Controller {
       },
     });
 
+    this.#setDefault();
     this.element.setAttribute("data-controller-connected", "true");
     this.currentIndex = -1; // Initialize the index for navigation
   }
@@ -102,8 +103,8 @@ export default class extends Controller {
 
     if (newIndex < visible.length) {
       visible[newIndex].focus();
+      this.currentIndex = newIndex;
     }
-    this.currentIndex = newIndex;
   }
 
   #filterItems() {
@@ -142,6 +143,22 @@ export default class extends Controller {
       return this.currentIndex;
     } else {
       return this.currentIndex + direction;
+    }
+  }
+
+  #setDefault() {
+    if (this.inputTarget.value) {
+      const query = this.inputTarget.value.toLowerCase();
+
+      this.itemTargets.forEach((item) => {
+        const value = item.dataset;
+        if (value["viral-Select2ValueParam"].toLowerCase() === query) {
+          this.#found = true;
+          this.inputTarget.value = value["viral-Select2PrimaryParam"];
+          this.#storedInputvalue = value["viral-Select2PrimaryParam"];
+          this.hiddenTarget.value = value["viral-Select2ValueParam"];
+        }
+      });
     }
   }
 }

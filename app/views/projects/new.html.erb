@@ -1,20 +1,21 @@
 <%= render Viral::PageHeaderComponent.new(title: t(:".title"), subtitle: t(:".subtitle")) do |component| %>
   <%= component.with_icon(
     name: "rectangle_stack",
-    classes: "h-14 w-14 text-primary-700"
+    classes: "h-14 w-14 text-primary-700",
   ) %>
 <% end %>
 
 <div class="p-4">
   <div class="mb-4 card" data-controller="slugify">
-    <%= form_with(model: @project, url: projects_path(namespace_id: params[:group_id]), method: :post) do |form| %>
+    <%= form_with(model: @project, url: projects_path(namespace_id: params[:group_id]), method: :post,
+    data: { controller: "viral--select2" }) do |form| %>
       <%= turbo_frame_tag "project_form" do %>
         <div class="grid gap-4">
           <%= form.fields_for :namespace do |builder| %>
             <%= render partial: "projects/project_namespace_fields",
             locals: {
               builder: builder,
-              authorized_namespaces: @authorized_namespaces
+              authorized_namespaces: @authorized_namespaces,
             } %>
 
           <% end %>
