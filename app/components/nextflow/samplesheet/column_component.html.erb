@@ -67,7 +67,7 @@
             <%= s.hidden_field :sample_id, value: sample.id %>
           <% end %>
           <%= s.fields_for "samplesheet_params" do |fields| %>
-            <%= render_cell_type(header, property, sample, namespace_id, fields, index) %>
+            <%= render_cell_type(header, property, sample, fields, index, workflow_params) %>
           <% end %>
         <% end %>
       </div>

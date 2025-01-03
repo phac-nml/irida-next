@@ -4,28 +4,28 @@ module Nextflow
   module Samplesheet
     # Renders a column in the sample sheet table
     class ColumnComponent < Component
-      attr_reader :namespace_id, :header, :property, :samples
+      attr_reader :header, :property, :samples, :workflow_params
 
       # rubocop:disable Metrics/ParameterLists
-      def initialize(namespace_id:, header:, property:, samples:, metadata_fields:, required:)
-        @namespace_id = namespace_id
+      def initialize(header:, property:, samples:, metadata_fields:, required:, workflow_params:)
         @header = header
         @property = property
         @samples = samples
         @metadata_fields = metadata_fields
         @required = required
+        @workflow_params = workflow_params
       end
 
       # rubocop:enable Metrics/ParameterLists
 
-      def render_cell_type(property, entry, sample, namespace_id, fields, index) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
+      def render_cell_type(property, entry, sample, fields, index, workflow_params) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
         case entry['cell_type']
         when 'sample_cell'
           render_sample_cell(sample, fields)
         when 'sample_name_cell'
           render_sample_name_cell(sample, fields)
         when 'fastq_cell'
-          render_fastq_cell(sample, namespace_id, property, entry, fields, index)
+          render_fastq_cell(sample, property, entry, fields, index, workflow_params)
         when 'file_cell'
           render_other_file_cell(sample, property, entry, fields)
         when 'metadata_cell'
@@ -37,10 +37,11 @@ module Nextflow
         end
       end
 
-      def render_fastq_cell(sample, namespace_id, property, entry, fields, index)
+      def render_fastq_cell(sample, property, entry, fields, index, workflow_params)
         direction = get_fastq_direction(property)
-        file_filter_params = {pattern: entry['pattern'], direction:, pe_only: property['pe_only'].present?}
-        selected_file = sample.fastq_files(file_filter_params[:pattern], file_filter_params[:direction], file_filter_params[:pe_only]).first
+        file_filter_params = { name: property, workflow_params:, direction:, pe_only: property['pe_only'].present? }
+        selected_file = sample.filtered_fastq_files(file_filter_params[:name],
+                                                    file_filter_params[:workflow_params], file_filter_params[:direction], file_filter_params[:pe_only]).first
         render_file_cell(sample, property, entry, index, @required, selected_file, file_filter_params)
       end
 
@@ -92,14 +93,14 @@ module Nextflow
 
       # rubocop:disable Metrics/ParameterLists
 
-      def render_file_cell(sample,  property, entry, index, is_required, selected, file_filter_params)
+      def render_file_cell(sample, property, entry, index, is_required, selected, file_filter_params)
         # selected_item = if selected.present?
         #                   files[0]
         #                 else
         #                   entry['autopopulate'] && files.present? ? files[0] : {}
         #                 end
         render(Samplesheet::FileCellComponent.new(
-          sample,
+                 sample,
                  property,
                  selected,
                  index,
