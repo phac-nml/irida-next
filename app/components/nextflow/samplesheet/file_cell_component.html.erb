@@ -1,5 +1,5 @@
 <div
-  id="<%="#{@sample.id}_#{@name}" %>"
+  id="<%="#{@sample.id}_#{@property}" %>"
   class="
     w-full focus:ring-primary-500 focus:border-primary-500 p-2.5 dark:bg-inherit
     bg-inherit border-none dark:border-none dark:placeholder-slate-400 text-inherit
@@ -9,7 +9,7 @@
   <% unless @selected.empty? %>
     <input
     type="hidden"
-      name="workflow_execution[samples_workflow_executions_attributes][<%= @index%>][samplesheet_params][<%= @name %>]"
+      name="workflow_execution[samples_workflow_executions_attributes][<%= @index%>][samplesheet_params][<%= @property %>]"
       value= <%= @selected[:global_id]%>
     >
   <% end %>
@@ -18,9 +18,9 @@
     "file_selector[attachable]": @sample,
     "file_selector[index]": @index,
     "file_selector[selected_id]": @selected.nil? ? nil : @selected[:id],
-    "file_selector[name]": @name,
-    "file_selector[required]": @required,
-    "file_selector[file_filter_params]": @file_filter_params
+    "file_selector[property]": @property,
+    "file_selector[required_properties]": @required_properties,
+    "file_selector[workflow_params]": @workflow_params
   ),
   data: {
     turbo_stream: "true",

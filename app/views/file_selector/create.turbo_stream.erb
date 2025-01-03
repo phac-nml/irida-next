@@ -7,16 +7,16 @@
 
 <turbo-stream
   action="replace"
-  target="<%= "#{@attachable.id}_#{file_selector_params["file_filter_params"]["name"]}"%>"
+  target="<%= "#{@attachable.id}_#{file_selector_params["property"]}"%>"
 >
   <template>
     <%= render Nextflow::Samplesheet::FileCellComponent.new(
       @attachable,
-      file_selector_params["file_filter_params"]["name"],
+      file_selector_params["property"],
       @attachment_params,
       file_selector_params["index"],
-      file_selector_params["required"],
-      file_selector_params["file_filter_params"],
+      file_selector_params["required_properties"],
+      file_selector_params["workflow_params"],
     ) %>
   </template>
 </turbo-stream>
@@ -24,16 +24,16 @@
 <% if @associated_attachment_params %>
   <turbo-stream
     action="replace"
-    target="<%= "#{@attachable.id}_#{@associated_attachment_params[:file_filter_params][:name]}"%>"
+    target="<%= "#{@attachable.id}_#{@associated_attachment_params[:property]}"%>"
   >
     <template>
       <%= render Nextflow::Samplesheet::FileCellComponent.new(
         @attachable,
-        @associated_attachment_params[:file_filter_params][:name],
+        @associated_attachment_params[:property],
         @associated_attachment_params[:file],
         file_selector_params["index"],
-        file_selector_params["required"],
-        @associated_attachment_params[:file_filter_params],
+        file_selector_params["required_properties"],
+        @associated_attachment_params[:workflow_params],
       ) %>
     </template>
   </turbo-stream>
