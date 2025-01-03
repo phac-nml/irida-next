@@ -20,20 +20,24 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
 
   has_many :shared_group_links, # rubocop:disable Rails/InverseOf
            lambda {
-             where(namespace_type: Group.sti_name)
+             where(namespace_type: Group.sti_name).not_expired
            },
            foreign_key: :group_id, class_name: 'NamespaceGroupLink', dependent: :destroy
   has_many :shared_project_namespace_links, # rubocop:disable Rails/InverseOf
            lambda {
-             where(namespace_type: Namespaces::ProjectNamespace.sti_name)
+             where(namespace_type: Namespaces::ProjectNamespace.sti_name).not_expired
            },
            foreign_key: :group_id, class_name: 'NamespaceGroupLink', dependent: :destroy
 
-  has_many :shared_namespace_links, class_name: 'NamespaceGroupLink', dependent: :destroy
+  has_many :shared_namespace_links, # rubocop:disable Rails/InverseOf
+           lambda {
+             not_expired
+           },
+           class_name: 'NamespaceGroupLink', dependent: :destroy
 
   has_many :shared_with_group_links, # rubocop:disable Rails/InverseOf
            lambda {
-             where(namespace_type: Group.sti_name)
+             where(namespace_type: Group.sti_name).not_expired
            },
            foreign_key: :namespace_id, class_name: 'NamespaceGroupLink',
            dependent: :destroy do
