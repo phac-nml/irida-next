@@ -1,17 +1,16 @@
 <div
   class="
-    table-column
-    flex-grow
-    text-left
-    whitespace-nowrap
-    bg-slate-50
-    text-sm
-    text-slate-500
-    dark:text-white
+    table-column flex-grow text-left whitespace-nowrap bg-slate-50 text-sm
+    text-slate-500 dark:text-white
   "
 >
   <% if property["cell_type"] == "metadata_cell" %>
-    <div class="table-header dark:border-slate-600 border border-slate-100 sticky top-0 dark:bg-slate-700 bg-slate-50  z-10">
+    <div
+      class="
+        table-header dark:border-slate-600 border border-slate-100 sticky top-0
+        dark:bg-slate-700 bg-slate-50 z-10
+      "
+    >
       <%= form_with url: fields_workflow_executions_metadata_path do |f| %>
         <%= f.hidden_field :format, value: "turbo_stream", id: "field_#{header}_turbo" %>
         <%= f.hidden_field :namespace_id, value: namespace_id, id: "namespace_#{header}" %>
@@ -34,21 +33,15 @@
                    "aria-label": header,
                    class:
                      "bg-slate-50 text-slate-900 text-sm border-none focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-700 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 font-semibold tracking-wider uppercase",
-                   onchange: "Turbo.navigator.submitForm(this.form)"
+                   onchange: "Turbo.navigator.submitForm(this.form)",
                  } %>
       <% end %>
     </div>
   <% else %>
     <div
       class="
-        table-header
-        p-2.5
-        font-semibold
-        tracking-wider
-        dark:border-slate-600
-        border
-        border-slate-100 sticky top-0
-        dark:bg-slate-700 bg-slate-50 z-10
+        table-header p-2.5 font-semibold tracking-wider dark:border-slate-600 border
+        border-slate-100 sticky top-0 dark:bg-slate-700 bg-slate-50 z-10
       "
     >
       <div class="flex items-center space-x-2 uppercase">
@@ -60,7 +53,10 @@
     </div>
   <% end %>
 
-  <div id="<%= "metadata-#{header}-column" %>" class="dark:bg-slate-700 bg-slate-50">
+  <div
+    id="<%= "metadata-#{header}-column" %>"
+    class="dark:bg-slate-700 bg-slate-50"
+  >
     <% samples.each_with_index do |sample, index| %>
       <div class="table-td dark:border-slate-600 border border-slate-100">
         <%= fields_for "workflow_execution[samples_workflow_executions_attributes][#{index}]" do |s| %>
@@ -68,7 +64,7 @@
             <%= s.hidden_field :sample_id, value: sample.id %>
           <% end %>
           <%= s.fields_for "samplesheet_params" do |fields| %>
-            <%= render_cell_type(header, property, sample, fields, index) %>
+            <%= render_cell_type(header, property, sample, fields, index, workflow_params) %>
           <% end %>
         <% end %>
       </div>

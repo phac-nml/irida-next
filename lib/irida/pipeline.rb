@@ -49,6 +49,11 @@ module Irida
       sample_sheet['items']['properties'].keys
     end
 
+    def property_pattern(property_name)
+      sample_sheet = process_samplesheet_schema
+      sample_sheet['items']['properties'][property_name]['pattern']
+    end
+
     private
 
     def process_section(key, properties, required)

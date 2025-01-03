@@ -4,30 +4,30 @@ module Nextflow
   module Samplesheet
     # Renders a column in the sample sheet table
     class ColumnComponent < Component
-      attr_reader :namespace_id, :header, :property, :samples
+      attr_reader :header, :property, :samples, :workflow_params
 
       # rubocop:disable Metrics/ParameterLists
-      def initialize(namespace_id:, header:, property:, samples:, metadata_fields:, required:)
-        @namespace_id = namespace_id
+      def initialize(header:, property:, samples:, metadata_fields:, required_properties:, workflow_params:)
         @header = header
         @property = property
         @samples = samples
         @metadata_fields = metadata_fields
-        @required = required
+        @required_properties = required_properties
+        @workflow_params = workflow_params
       end
 
       # rubocop:enable Metrics/ParameterLists
 
-      def render_cell_type(property, entry, sample, fields, index) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
+      def render_cell_type(property, entry, sample, fields, index, workflow_params) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
         case entry['cell_type']
         when 'sample_cell'
           render_sample_cell(sample, fields)
         when 'sample_name_cell'
           render_sample_name_cell(sample, fields)
         when 'fastq_cell'
-          render_fastq_cell(sample, property, entry, fields, index)
+          render_fastq_cell(sample, property, index, workflow_params)
         when 'file_cell'
-          render_other_file_cell(sample, property, entry, fields)
+          render_other_file_cell(sample, property, index)
         when 'metadata_cell'
           render_metadata_cell(sample, property, fields)
         when 'dropdown_cell'
@@ -37,56 +37,27 @@ module Nextflow
         end
       end
 
-      def render_fastq_cell(sample, property, entry, fields, index)
-        direction = get_fastq_direction(property)
-        files = get_fastq_files(entry, sample, direction, pe_only: property['pe_only'].present?)
-        data = get_fastq_data(files, direction, index, property)
-        render_file_cell(property, entry, fields, files, @required, data, files&.first)
+      def render_fastq_cell(sample, property, index, workflow_params)
+        selected_file = sample.samplesheet_latest_fastq_file(property, workflow_params)
+        render_file_cell(sample, property, index, selected_file, 'fastq', workflow_params)
       end
 
       private
 
-      def get_fastq_direction(property)
-        property.match(/fastq_(\d+)/)[1].to_i == 1 ? :pe_forward : :pe_reverse
-      end
-
-      def get_fastq_files(entry, sample, direction, pe_only: false)
-        singles = filter_files_by_pattern(sample.sorted_files[:singles] || [],
-                                          entry['pattern'] || "/^\S+.f(ast)?q(.gz)?$/")
-
-        files = []
-        if sample.sorted_files[direction].present?
-          files = sample.sorted_files[direction] || []
-          files.concat(singles) unless pe_only
-        else
-          files = singles
+      def render_other_file_cell(sample, property, index)
+        if entry['autopopulate']
+          files = if entry['pattern']
+                    filter_files_by_pattern(sample.sorted_files[:singles] || [], entry['pattern'])
+                  else
+                    sample.sorted_files[:singles] || []
+                  end
+          selected_file = files.present? ? files[0] : {}
         end
-        files
-      end
-
-      def get_fastq_data(files, direction, index, property)
-        return {} if files.empty? && property == 'fastq_2'
-
-        {
-          'data-action' => 'change->nextflow--samplesheet#file_selected',
-          'data-nextflow--samplesheet-target' => "select#{direction.to_s.sub!('pe_', '').capitalize}",
-          'data-direction' => direction.to_s,
-          'data-index' => index
-        }
-      end
-
-      def render_other_file_cell(sample, property, entry, fields)
-        files = if entry['pattern']
-                  filter_files_by_pattern(sample.sorted_files[:singles] || [], entry['pattern'])
-                else
-                  sample.sorted_files[:singles] || []
-                end
-        render_file_cell(property, entry, fields,
-                         files, @required, {}, nil)
+        render_file_cell(sample, property, index, selected_file, 'other', entry['pattern'])
       end
 
       def filter_files_by_pattern(files, pattern)
-        files.select { |file| file.first[Regexp.new(pattern)] }
+        files.select { |file| file[:filename] =~ Regexp.new(pattern) }
       end
 
       def render_sample_cell(sample, fields)
@@ -98,24 +69,20 @@ module Nextflow
       end
 
       def render_metadata_cell(sample, name, fields)
-        render(Samplesheet::MetadataCellComponent.new(sample:, name:, form: fields, required: @required))
+        render(Samplesheet::MetadataCellComponent.new(sample:, name:, form: fields, required: required?))
       end
 
       # rubocop:disable Metrics/ParameterLists
-      def render_file_cell(property, entry, fields, files, is_required, data, selected)
-        selected_item = if selected.present?
-                          selected
-                        else
-                          entry['autopopulate'] && files.present? ? files[0] : nil
-                        end
 
-        render(Samplesheet::DropdownCellComponent.new(
+      def render_file_cell(sample, property, index, selected, file_type, additional_params)
+        render(Samplesheet::FileCellComponent.new(
+                 sample,
                  property,
-                 files,
-                 selected_item,
-                 fields,
-                 is_required,
-                 data
+                 selected,
+                 index,
+                 @required_properties,
+                 file_type,
+                 additional_params
                ))
       end
 
@@ -127,7 +94,7 @@ module Nextflow
                  entry['enum'],
                  nil,
                  fields,
-                 @required
+                 required?
                ))
       end
 
@@ -135,7 +102,7 @@ module Nextflow
         render(Samplesheet::TextCellComponent.new(
                  property,
                  fields:,
-                 required: @required
+                 required: required?
                ))
       end
 
@@ -143,6 +110,10 @@ module Nextflow
         options = @metadata_fields.include?(field) ? @metadata_fields : @metadata_fields.unshift(field)
         label = t('.default', label: field)
         options.map { |f| [f.eql?(field) ? label : f, f] }
+      end
+
+      def required?
+        @required_properties.include?(@header)
       end
     end
   end

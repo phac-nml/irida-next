@@ -118,7 +118,12 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
     pe_reverse = []
 
     attachments.each do |attachment|
-      item = [attachment.file.filename.to_s, attachment.to_global_id, { 'data-puid': attachment.puid }]
+        item = { filename: attachment.file.filename.to_s,
+                global_id: attachment.to_global_id,
+                id: attachment.id,
+                byte_size: attachment.byte_size,
+                created_at: attachment.created_at
+              }
       case attachment.metadata['direction']
       when nil
         singles << item
@@ -130,6 +135,38 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
 
     { singles:, pe_forward:, pe_reverse: }
+  end
+
+  def samplesheet_fastq_files(property, workflow_params)
+    direction = get_fastq_direction(property)
+    pattern = Irida::Pipelines.instance.find_pipeline_by(workflow_params[:name], workflow_params[:version])
+    .property_pattern(property)
+    singles = filter_files_by_pattern(sorted_files[:singles] || [],
+                                        pattern || "/^\S+.f(ast)?q(.gz)?$/")
+    files = []
+    if sorted_files[direction].present?
+      files = sorted_files[direction] || []
+      files.concat(singles) unless pe_only?(property)
+    else
+      files = singles
+    end
+    (files.sort_by! {|file| file[:created_at]}).reverse
+  end
+
+  # separate function from samplesheet_fastq_files since this function would prefer selection of latest paired_end
+  # attachments, where as samplesheet_fastq_files will return the overall latest attachment (ie: possibly a single)
+  def samplesheet_latest_fastq_file(property, workflow_params)
+    direction = get_fastq_direction(property)
+
+    if sorted_files[direction].present?
+      sorted_files[direction].last
+    else
+      pattern = Irida::Pipelines.instance.find_pipeline_by(workflow_params[:name], workflow_params[:version])
+    .property_pattern(property)
+      last_single = filter_files_by_pattern(sorted_files[:singles] || [],
+                                        pattern || "/^\S+.f(ast)?q(.gz)?$/").last
+      last_single.nil? ? {} : last_single
+    end
   end
 
   def search_data
@@ -146,5 +183,19 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def should_index?
     !deleted?
+  end
+
+  def filter_files_by_pattern(files, pattern)
+    files.select { |file| file[:filename] =~ Regexp.new(pattern) }
+  end
+
+  private
+
+  def get_fastq_direction(property)
+    property.match(/fastq_(\d+)/)[1].to_i == 1 ? :pe_forward : :pe_reverse
+  end
+
+  def pe_only?(property)
+    property['pe_only'].present?
   end
 end
