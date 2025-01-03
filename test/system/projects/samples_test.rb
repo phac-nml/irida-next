@@ -2309,7 +2309,7 @@ module Projects
 
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
 
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample3.name
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample2.name
       find('input.t-search-component').native.send_keys(:return)
 
       click_on I18n.t('projects.samples.show.table_header.last_updated')
@@ -2342,7 +2342,7 @@ module Projects
 
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
 
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample3.name
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample2.name
       find('input.t-search-component').native.send_keys(:return)
 
       ### SETUP END ###
