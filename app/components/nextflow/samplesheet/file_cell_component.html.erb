@@ -1,0 +1,20 @@
+<div data-controller="viral--select2">
+  <%= viral_select2(form: fields, name: @name, placeholder: @selected[:name] || "select Attachment", default: @selected.nil? || {
+    input: @selected[:name],
+    value: @selected[:global_id]
+    }) do |select| %>
+    <% @values.each do |file| %>
+      <% select.with_option(
+        primary: file[:name],
+        # split and pop remove the <time> tags
+        secondary:
+          helpers.local_time(file[:created_at]).split(">").pop.split("</")[0],
+        value: file[:global_id],
+      ) %>
+    <% end %>
+    <%= select.with_empty_state do %>
+      <%= "empty" %>
+    <% end %>
+  <% end %>
+</div>
+<%# <%= fields.submit "hi" %>
