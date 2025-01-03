@@ -20,7 +20,7 @@ class AdvancedSearchComponentPreview < ViewComponent::Preview
     )
     fields = %w[name puid created_at updated_at attachments_updated_at metadata.country metadata.collection_date
                 metadata.subject_type metadata.outbreak_code]
-    operations = %w[= != <= >= contains]
+    operations = %w[= != <= >= between contains]
 
     render_with_template(locals: {
                            search: search,
@@ -48,7 +48,7 @@ class AdvancedSearchComponentPreview < ViewComponent::Preview
     )
     fields = %w[name puid created_at updated_at attachments_updated_at metadata.country metadata.collection_date
                 metadata.subject_type metadata.outbreak_code]
-    operations = %w[= != <= >= contains]
+    operations = %w[= != <= >= between contains]
 
     render_with_template(locals: {
                            search: search,
@@ -76,7 +76,7 @@ class AdvancedSearchComponentPreview < ViewComponent::Preview
     )
     fields = %w[name puid created_at updated_at attachments_updated_at metadata.country metadata.collection_date
                 metadata.subject_type metadata.outbreak_code]
-    operations = %w[= != <= >= contains]
+    operations = %w[= != <= >= between contains]
 
     render_with_template(locals: {
                            search: search,
