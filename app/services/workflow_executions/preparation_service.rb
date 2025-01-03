@@ -115,7 +115,7 @@ module WorkflowExecutions
 
     def blob_key_to_service_path(blob_key, directory: false)
       path = case @storage_service.class.to_s
-             when 'ActiveStorage::Service::AzureStorageService'
+             when 'ActiveStorage::Service::AzureBlobService'
                format('az://%<container>s/%<key>s', container: @storage_service.container, key: blob_key)
              when 'ActiveStorage::Service::S3Service'
                format('s3://%<bucket>s/%<key>s', bucket: @storage_service.bucket, key: blob_key)

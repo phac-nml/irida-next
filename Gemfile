@@ -51,9 +51,10 @@ gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-saml'
 
 # API Integrations
-gem 'faraday'
+gem 'faraday', '~> 2.5'
+gem 'faraday-follow_redirects'
 gem 'faraday-multipart'
-gem 'faraday-net_http_persistent', '~> 2.0'
+gem 'faraday-net_http_persistent', '~> 2.1'
 
 # Use Sass to process CSS
 # gem "sassc-rails"
@@ -105,7 +106,7 @@ gem 'activerecord_json_validator', '~> 3.0.0'
 # ActiveStorage
 gem 'active_storage_validations'
 gem 'aws-sdk-s3', require: false
-gem 'azure-storage-blob', github: 'honeyankit/azure-storage-ruby', branch: 'master', require: false
+gem 'azure-blob', require: false
 gem 'google-cloud-storage', '~> 1.11', require: false
 
 # job queueing

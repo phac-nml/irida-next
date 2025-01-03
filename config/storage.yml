@@ -7,7 +7,7 @@ local:
   root: <%= Rails.root.join("storage") %>
 
 azurite:
-  service: AzureStorage
+  service: AzureBlob
   storage_account_name: devstoreaccount1
   storage_access_key: Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==
   container: irida-next
@@ -30,7 +30,7 @@ google:
 
 # Use bin/rails credentials:edit to set the Azure Storage secret (as azure_storage:storage_access_key)
 microsoft:
-  service: AzureStorage
+  service: AzureBlob
   storage_account_name: <%= ENV.fetch('AZURE_STORAGE_ACCOUNT_NAME', 'your_account_name') %>
   storage_access_key: <%= Rails.application.credentials.dig(:azure_storage, :storage_access_key) %>
   container: <%= ENV.fetch('AZURE_STORAGE_CONTAINER_NAME', "your_container_name-#{Rails.env}") %>
