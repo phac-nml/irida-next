@@ -114,14 +114,14 @@ module Samples
 
       def get_metadata_change_status(key, value) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
         if value.blank?
-          :deleted if @sample.metadata.key?(key)
+          :deleted if @sample.field?(key)
         elsif @sample.metadata_provenance.key?(key) && @analysis_id.nil? &&
               @sample.metadata_provenance[key]['source'] == 'analysis'
           :not_updated
-        elsif @sample.metadata.key?(key) && @sample.metadata[key] == value
+        elsif @sample.field?(key) && @sample.metadata[key] == value
           :unchanged
         else
-          @sample.metadata.key?(key) ? :updated : :added
+          @sample.field?(key) ? :updated : :added
         end
       end
 
