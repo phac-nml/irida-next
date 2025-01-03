@@ -2266,11 +2266,10 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
       assert_selector 'table thead tr th', count: 6
 
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
-
-      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
-      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
 
       within 'div.overflow-auto.scrollbar' do |div|
         div.scroll_to div.find('table thead th:nth-child(7)')
