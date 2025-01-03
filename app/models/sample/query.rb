@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # model to represent sample search form
-class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
+class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/ClassLength
   include ActiveModel::Model
   include ActiveModel::Attributes
   include Pagy::Backend
@@ -112,13 +112,17 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
       when '!='
         hash[condition.field] = { not: condition.value }
       when '<='
-        hash[condition.field] = { lte: condition.value }
+        if condition.field.end_with?('_date')
+          hash[condition.field] = { lte: condition.value }
+        else
+          hash["#{condition.field}.numeric"] = { lte: condition.value.to_i }
+        end
       when '>='
-        hash[condition.field] = { gte: condition.value }
-      when '<'
-        hash[condition.field] = { lt: condition.value }
-      when '>'
-        hash[condition.field] = { gt: condition.value }
+        if condition.field.end_with?('_date')
+          hash[condition.field] = { gte: condition.value }
+        else
+          hash["#{condition.field}.numeric"] = { gte: condition.value.to_i }
+        end
       when 'contains'
         hash[condition.field] = { like: condition.value }
       end
