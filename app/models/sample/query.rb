@@ -103,7 +103,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
       includes: [project: { namespace: [{ parent: :route }, :route] }] }
   end
 
-  def advanced_search_params # rubocop:disable Metrics/MethodLength
+  def advanced_search_params # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
     hash = {}
     @groups.first.conditions.map do |condition|
       case condition.operator
@@ -115,6 +115,12 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
         between_advanced_search_params(hash, condition, :lte)
       when '>='
         between_advanced_search_params(hash, condition, :gte)
+      when 'between'
+        if condition.field.end_with?('_date')
+          hash[condition.field] = Range.new(condition.value, 1.day.ago)
+        else
+          hash["#{condition.field}.numeric"] = Range.new(1, condition.value.to_i)
+        end
       when 'contains'
         hash[condition.field] = { ilike: "%#{condition.value}%" }
       end
