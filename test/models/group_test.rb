@@ -286,6 +286,15 @@ class GroupTest < ActiveSupport::TestCase
     assert_equal shared_project.samples.size, group.aggregated_samples_count
   end
 
+  test 'group with expired links should not include those samples to aggregated_samples_count' do
+    group = groups(:subgroup_mike_b)
+    shared_group = groups(:group_twelve)
+
+    assert_equal 2, group.samples_count
+    assert_equal 4, shared_group.samples_count
+    assert_equal group.samples_count, group.aggregated_samples_count
+  end
+
   test 'update samples_count by sample transfer' do
     project = projects(:project22)
     assert_difference -> { @group_three.reload.samples_count } => -1,

@@ -161,3 +161,10 @@ namespace_group_link27:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectMike_namespace, :uuid) %>
   group_access_level: <%= Member::AccessLevel::ANALYST %>
   namespace_type: "Project"
+
+namespace_group_link28:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_mike_b, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
+  group_access_level: <%= Member::AccessLevel::ANALYST %>
+  namespace_type: "Group"
+  expires_at: "2025-01-01"
