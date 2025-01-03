@@ -20,7 +20,8 @@
     "file_selector[selected_id]": @selected.nil? ? nil : @selected[:id],
     "file_selector[property]": @property,
     "file_selector[required_properties]": @required_properties,
-    "file_selector[workflow_params]": @workflow_params
+    "file_selector[file_type]": @file_type,
+    "file_selector[additional_params]": @additional_params
   ),
   data: {
     turbo_stream: "true",

@@ -195,11 +195,11 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
     !deleted?
   end
 
-  private
-
   def filter_files_by_pattern(files, pattern)
     files.select { |file| file[:filename] =~ Regexp.new(pattern) }
   end
+
+  private
 
   def get_fastq_direction(property)
     property.match(/fastq_(\d+)/)[1].to_i == 1 ? :pe_forward : :pe_reverse

@@ -24,12 +24,20 @@ class FileSelectorController < ApplicationController
 
   def file_selector_params
     params.require(:file_selector).permit(
-      :attachable, :index, :property, :selected_id, required_properties: [], workflow_params: [:name, :version]
+      :attachable, :index, :property, :selected_id, :file_type, required_properties: [], additional_params: [:pattern, workflow_params: [:name, :version]]
     )
   end
 
   def listing_attachments
+    if file_selector_params['file_type'] == 'fastq'
     @listing_attachments = @attachable.samplesheet_fastq_files(file_selector_params["property"], file_selector_params["workflow_params"])
+    elsif file_selector_params['file_type'] == 'other'
+      @listing_attachments = if file_selector_params['additional_params']['pattern']
+        @attachable.filter_files_by_pattern(@attachable.sorted_files[:singles] || [], file_selector_params['additional_params']['pattern'])
+      else
+        sample.sorted_files[:singles] || []
+      end
+    end
   end
 
   def attachable
@@ -40,7 +48,12 @@ class FileSelectorController < ApplicationController
     @attachment_params = {}
     return if params[:attachment_id] == 'no_attachment'
     attachment = Attachment.find(params[:attachment_id])
-    @attachment_params = {filename: attachment.filename.to_s, global_id: attachment.to_global_id, id: attachment.id}
+    @attachment_params = { filename: attachment.file.filename.to_s,
+    global_id: attachment.to_global_id,
+    id: attachment.id,
+    byte_size: attachment.byte_size,
+    created_at: attachment.created_at
+  }
     return unless attachment.associated_attachment && (file_selector_params["property"] == 'fastq_1' || file_selector_params["property"] == 'fastq_2')
 
     @associated_attachment_params = {}
@@ -48,7 +61,6 @@ class FileSelectorController < ApplicationController
 
     @associated_attachment_params[:file] = {filename: associated_attachment.filename.to_s, global_id: associated_attachment.to_global_id, id: associated_attachment.id}
     @associated_attachment_params[:property] = file_selector_params[:property] == "fastq_1" ? "fastq_2" : "fastq_1"
-    @associated_attachment_params[:workflow_params]  = file_selector_params[:workflow_params]
-
+    @associated_attachment_params[:additional_params][:workflow_params]  = file_selector_params[:additional_params][:workflow_params]
   end
 end

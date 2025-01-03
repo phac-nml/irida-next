@@ -27,7 +27,7 @@ module Nextflow
         when 'fastq_cell'
           render_fastq_cell(sample, property, index, workflow_params)
         when 'file_cell'
-          render_other_file_cell(sample, property, entry, fields)
+          render_other_file_cell(sample, property, index)
         when 'metadata_cell'
           render_metadata_cell(sample, property, fields)
         when 'dropdown_cell'
@@ -39,19 +39,21 @@ module Nextflow
 
       def render_fastq_cell(sample, property, index, workflow_params)
         selected_file = sample.samplesheet_latest_fastq_file(property, workflow_params)
-        render_file_cell(sample, property, index, selected_file, workflow_params)
+        render_file_cell(sample, property, index, selected_file, 'fastq', workflow_params)
       end
 
       private
 
-      def render_other_file_cell(sample, property, entry, fields)
-        files = if entry['pattern']
-                  filter_files_by_pattern(sample.sorted_files[:singles] || [], entry['pattern'])
-                else
-                  sample.sorted_files[:singles] || []
-                end
-        render_file_cell(property, entry, fields,
-                         files, {}, nil)
+      def render_other_file_cell(sample, property, index)
+        if entry['autopopulate']
+          files = if entry['pattern']
+                    filter_files_by_pattern(sample.sorted_files[:singles] || [], entry['pattern'])
+                  else
+                    sample.sorted_files[:singles] || []
+                  end
+          selected_file = files.present? ? files[0] : {}
+        end
+        render_file_cell(sample, property, index, selected_file, 'other', entry['pattern'])
       end
 
       def filter_files_by_pattern(files, pattern)
@@ -72,19 +74,15 @@ module Nextflow
 
       # rubocop:disable Metrics/ParameterLists
 
-      def render_file_cell(sample, property, index, selected, workflow_params)
-        # selected_item = if selected.present?
-        #                   files[0]
-        #                 else
-        #                   entry['autopopulate'] && files.present? ? files[0] : {}
-        #                 end
+      def render_file_cell(sample, property, index, selected, file_type, additional_params)
         render(Samplesheet::FileCellComponent.new(
                  sample,
                  property,
                  selected,
                  index,
                  @required_properties,
-                 workflow_params
+                 file_type,
+                 additional_params
                ))
       end
 
