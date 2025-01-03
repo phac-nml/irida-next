@@ -103,31 +103,40 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
       includes: [project: { namespace: [{ parent: :route }, :route] }] }
   end
 
-  def advanced_search_params # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
+  def advanced_search_params # rubocop:disable Metrics/MethodLength
     hash = {}
     @groups.first.conditions.map do |condition|
       case condition.operator
       when '='
-        hash[condition.field] = condition.value
+        hash[condition.field] = condition.value.split(/,\s|,/)
       when '!='
-        hash[condition.field] = { not: condition.value }
+        hash[condition.field] = { not: condition.value.split(/,\s|,/) }
       when '<='
-        if condition.field.end_with?('_date')
-          hash[condition.field] = { lte: condition.value }
-        else
-          hash["#{condition.field}.numeric"] = { lte: condition.value.to_i }
-        end
+        between_advanced_search_params(hash, condition, :lte)
       when '>='
-        if condition.field.end_with?('_date')
-          hash[condition.field] = { gte: condition.value }
-        else
-          hash["#{condition.field}.numeric"] = { gte: condition.value.to_i }
-        end
+        between_advanced_search_params(hash, condition, :gte)
       when 'contains'
-        hash[condition.field] = { like: condition.value }
+        hash[condition.field] = { ilike: "%#{condition.value}%" }
       end
     end
     hash
+  end
+
+  def between_advanced_search_params(hash, condition, operation) # rubocop:disable Metrics/AbcSize
+    if condition.field.end_with?('_date')
+      hash[condition.field] = if hash[condition.field].nil?
+                                { operation => condition.value }
+                              else
+                                hash[condition.field].merge({ operation => condition.value })
+                              end
+    else
+      hash["#{condition.field}.numeric"] = if hash["#{condition.field}.numeric"].nil?
+                                             { operation => condition.value.to_i }
+                                           else
+                                             hash["#{condition.field}.numeric"]
+                                               .merge({ operation => condition.value.to_i })
+                                           end
+    end
   end
 
   def ransack_params
