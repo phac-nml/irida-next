@@ -16,7 +16,8 @@
       @attachment_params,
       file_selector_params["index"],
       file_selector_params["required_properties"],
-      file_selector_params["workflow_params"],
+      file_selector_params["file_type"],
+      file_selector_params["additional_params"],
     ) %>
   </template>
 </turbo-stream>
@@ -33,7 +34,8 @@
         @associated_attachment_params[:file],
         file_selector_params["index"],
         file_selector_params["required_properties"],
-        @associated_attachment_params[:workflow_params],
+        file_selector_params["file_type"],
+        file_selector_params["additional_params"],
       ) %>
     </template>
   </turbo-stream>
