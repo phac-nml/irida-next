@@ -134,19 +134,19 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
     { singles:, pe_forward:, pe_reverse: }
   end
 
-  def fastq_files(pattern, direction, pe_only)
+  def filtered_fastq_files(name, workflow_params, direction, pe_only)
+    pipeline = Irida::Pipelines.instance.find_pipeline_by(workflow_params[:name], workflow_params[:version])
+    pattern = pipeline.property_pattern(name)
     singles = filter_files_by_pattern(sorted_files[:singles] || [],
                                         pattern || "/^\S+.f(ast)?q(.gz)?$/")
-    puts pattern
-    puts 'patterndsfadfasdf'
-      files = []
-      if sorted_files[direction].present?
-        files = sorted_files[direction] || []
-        files.concat(singles) unless pe_only
-      else
-        files = singles
-      end
-      files
+    files = []
+    if sorted_files[direction].present?
+      files = sorted_files[direction] || []
+      files.concat(singles) unless pe_only
+    else
+      files = singles
+    end
+    files
   end
 
   def filter_files_by_pattern(files, pattern)

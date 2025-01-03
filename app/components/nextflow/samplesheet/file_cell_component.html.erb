@@ -7,7 +7,6 @@
   "
 >
   <% unless @selected.empty? %>
-    <p><%= @selected[:filename]%></p>
     <input
     type="hidden"
       name="workflow_execution[samples_workflow_executions_attributes][<%= @index%>][samplesheet_params][<%= @name %>]"

@@ -5,40 +5,26 @@
   <div
     data-nextflow--samplesheet-target="table"
     class="
-      samplesheet-table
-      flex
-      border
-      dark:border-slate-600
-      border-slate-100
-      max-h-72
-      overflow-y-auto
-      relative
+      samplesheet-table flex border dark:border-slate-600 border-slate-100 max-h-72
+      overflow-y-auto relative
     "
   >
     <% properties.each do |header, property| %>
       <%= render Nextflow::Samplesheet::ColumnComponent.new(
-        namespace_id:,
         header:,
         property:,
         samples: @samples,
         metadata_fields:,
-        required: required_properties.include?(header)
+        required: required_properties.include?(header),
+        workflow_params:,
       ) %>
     <% end %>
     <template data-nextflow--samplesheet-target="loading">
       <div
         role="status"
         class="
-          absolute
-          h-full
-          w-full
-          text-black
-          dark:text-white
-          backdrop-blur-sm
-          flex
-          items-center
-          justify-center
-          z-20
+          absolute h-full w-full text-black dark:text-white backdrop-blur-sm flex
+          items-center justify-center z-20
         "
       >
         <span class="flex items-center p-4 space-x-4">
