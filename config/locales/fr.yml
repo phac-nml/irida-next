@@ -955,6 +955,7 @@ fr:
         default: "%{label} (default)"
         required: Required
     samplesheet_component:
+      attachments_error: The highlighted file cells below require a selection.
       label: Samples
       loading: Loading ...
   nextflow_component:

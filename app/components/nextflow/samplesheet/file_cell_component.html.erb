@@ -5,6 +5,7 @@
     bg-inherit border-none dark:border-none dark:placeholder-slate-400 text-inherit
     text-sm dark:focus:ring-primary-500 dark:focus:border-primary-500 cursor-pointer
   "
+  data-file-cell-required="<%= @required_properties.include?(@property) ? "true" : "false" %>"
 >
   <% unless @selected.empty? %>
     <input

@@ -957,6 +957,7 @@ en:
       file_cell_component:
         select_attachment: Select Attachment
     samplesheet_component:
+      attachments_error: The highlighted file cells below require a selection.
       label: Samples
       loading: Loading ...
   nextflow_component:
