@@ -13,7 +13,7 @@
       value= <%= @selected[:global_id]%>
     >
   <% end %>
-  <%= link_to @selected.empty? ? "Select" : @selected[:filename],
+  <%= link_to @selected.empty? ? t(".select_attachment") : @selected[:filename],
   new_file_selector_path(
     "file_selector[attachable]": @sample,
     "file_selector[index]": @index,
