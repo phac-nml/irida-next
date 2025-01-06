@@ -49,7 +49,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
   end
 
   def advanced_query?
-    return !groups.empty? if groups
+    return !groups.all?(&:empty?) if groups
 
     false
   end

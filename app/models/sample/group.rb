@@ -17,4 +17,8 @@ class Sample::Group # rubocop:disable Style/ClassAndModuleChildren
       @conditions.push(Sample::Condition.new(condition_params))
     end
   end
+
+  def empty?
+    conditions.all?(&:empty?)
+  end
 end

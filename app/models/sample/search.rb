@@ -13,4 +13,8 @@ class Sample::Search # rubocop:disable Style/ClassAndModuleChildren
       @groups.push(Sample::Group.new(group_params))
     end
   end
+
+  def empty?
+    groups.all?(&:empty?)
+  end
 end
