@@ -163,7 +163,7 @@
           search: @query,
           form: f,
           fields:  @advanced_search_fields,
-          operations: %w[= != <= >= between contains],
+          operations: %w[= != <= >= contains],
         )do |advanced_search| %>
           <% advanced_search.with_add_condition_button do %>
             <button

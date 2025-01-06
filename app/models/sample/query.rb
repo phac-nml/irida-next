@@ -119,13 +119,6 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
           between_advanced_search_params(and_conditions, condition, :lte)
         when '>='
           between_advanced_search_params(and_conditions, condition, :gte)
-        when 'between'
-          between_values = condition.value.split(/,\s|,/)
-          if condition.field.end_with?('_date')
-            and_conditions[condition.field] = Range.new(between_values[0], between_values[1])
-          else
-            and_conditions["#{condition.field}.numeric"] = Range.new(between_values[0].to_i, between_values[1].to_i)
-          end
         when 'contains'
           and_conditions[condition.field] = { ilike: "%#{condition.value}%" }
         end

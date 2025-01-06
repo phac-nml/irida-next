@@ -9,7 +9,7 @@ class Sample::Condition # rubocop:disable Style/ClassAndModuleChildren
   attribute :operator, :string
   attribute :value, :string
 
-  validates :operator, inclusion: { in: %w[= != <= >= between contains] }
+  validates :operator, inclusion: { in: %w[= != <= >= contains] }
 
   def empty?
     field.empty? && operator.empty? && value.empty?
