@@ -72,7 +72,6 @@ module Irida
       filename = "#{type}.json"
       uri = URI.parse(entry['url'])
       pipeline_schema_files_path = File.join(@pipeline_schema_file_dir, uri.path, version['name'])
-
       schema_file_url = if type == 'nextflow_schema'
                           "https://raw.githubusercontent.com#{uri.path}/#{version['name']}/#{filename}"
                         else

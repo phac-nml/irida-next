@@ -27,7 +27,7 @@ module Nextflow
         when 'fastq_cell'
           render_fastq_cell(sample, property, index, workflow_params)
         when 'file_cell'
-          render_other_file_cell(sample, property, index)
+          render_other_file_cell(sample, property, index, entry)
         when 'metadata_cell'
           render_metadata_cell(sample, property, fields)
         when 'dropdown_cell'
@@ -38,22 +38,15 @@ module Nextflow
       end
 
       def render_fastq_cell(sample, property, index, workflow_params)
-        selected_file = sample.samplesheet_latest_fastq_file(property, workflow_params)
-        render_file_cell(sample, property, index, selected_file, 'fastq', workflow_params)
+        selected_file = sample.most_recent_file('fastq', property:, workflow_params:)
+        render_file_cell(sample, property, index, selected_file, 'fastq', workflow_params:)
       end
 
       private
 
-      def render_other_file_cell(sample, property, index)
-        if entry['autopopulate']
-          files = if entry['pattern']
-                    filter_files_by_pattern(sample.sorted_files[:singles] || [], entry['pattern'])
-                  else
-                    sample.sorted_files[:singles] || []
-                  end
-          selected_file = files.present? ? files[0] : {}
-        end
-        render_file_cell(sample, property, index, selected_file, 'other', entry['pattern'])
+      def render_other_file_cell(sample, property, index, entry)
+        selected_file = sample.most_recent_file('other', autopopulate: entry['autopopulate'], pattern: entry['pattern'])
+        render_file_cell(sample, property, index, selected_file, 'other', pattern: entry['pattern'])
       end
 
       def filter_files_by_pattern(files, pattern)
@@ -74,7 +67,7 @@ module Nextflow
 
       # rubocop:disable Metrics/ParameterLists
 
-      def render_file_cell(sample, property, index, selected, file_type, additional_params)
+      def render_file_cell(sample, property, index, selected, file_type, **file_selector_arguments)
         render(Samplesheet::FileCellComponent.new(
                  sample,
                  property,
@@ -82,7 +75,7 @@ module Nextflow
                  index,
                  @required_properties,
                  file_type,
-                 additional_params
+                 **file_selector_arguments
                ))
       end
 

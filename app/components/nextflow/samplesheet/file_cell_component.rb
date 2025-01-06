@@ -4,13 +4,14 @@ module Nextflow
     class FileCellComponent < Component
       attr_reader :name, :values, :selected, :fields, :required_properties, :data
 
-      def initialize(sample, property, selected, index, required_properties, additional_params)
+      def initialize(sample, property, selected, index, required_properties, file_type, **file_selector_arguments)
         @sample = sample
         @property = property
         @selected = selected
         @index = index
         @required_properties = required_properties
-        @additional_params = additional_params
+        @file_type = file_type
+        @file_selector_arguments = file_selector_arguments
       end
     end
   end

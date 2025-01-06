@@ -150,23 +150,42 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
     else
       files = singles
     end
-    (files.sort_by! {|file| file[:created_at]}).reverse
+    files = order_files(files)
+    files
+  end
+
+  def most_recent_file(file_type, **system_arguments)
+    if file_type == 'fastq'
+      most_recent_fastq_file(system_arguments[:property], system_arguments[:workflow_params])
+    elsif file_type == 'other'
+      most_recent_other_file(system_arguments[:autopopulate], system_arguments[:pattern])
+    end
   end
 
   # separate function from samplesheet_fastq_files since this function would prefer selection of latest paired_end
   # attachments, where as samplesheet_fastq_files will return the overall latest attachment (ie: possibly a single)
-  def samplesheet_latest_fastq_file(property, workflow_params)
+  def most_recent_fastq_file(property, workflow_params)
     direction = get_fastq_direction(property)
 
     if sorted_files[direction].present?
       sorted_files[direction].last
     else
-      pattern = Irida::Pipelines.instance.find_pipeline_by(workflow_params[:name], workflow_params[:version])
-    .property_pattern(property)
+      pattern = Irida::Pipelines.instance.find_pipeline_by(workflow_params[:name], workflow_params[:version]).property_pattern(property)
       last_single = filter_files_by_pattern(sorted_files[:singles] || [],
                                         pattern || "/^\S+.f(ast)?q(.gz)?$/").last
       last_single.nil? ? {} : last_single
     end
+  end
+
+  def most_recent_other_file(autopopulate, pattern)
+    return {} unless autopopulate
+      files = if pattern
+                filter_files_by_pattern(sorted_files[:singles] || [], pattern)
+              else
+                sorted_files[:singles] || []
+              end
+      files = order_files(files)
+      files.present? ? files.last : {}
   end
 
   def search_data
@@ -207,5 +226,10 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def pe_only?(property)
     property['pe_only'].present?
+  end
+
+  def order_files(files)
+    (files.sort_by! {|file| file[:created_at]}).reverse
+    files
   end
 end

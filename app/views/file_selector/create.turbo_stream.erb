@@ -17,7 +17,7 @@
       file_selector_params["index"],
       file_selector_params["required_properties"],
       file_selector_params["file_type"],
-      file_selector_params["additional_params"],
+      **file_selector_params["file_selector_arguments"],
     ) %>
   </template>
 </turbo-stream>
@@ -35,7 +35,7 @@
         file_selector_params["index"],
         file_selector_params["required_properties"],
         file_selector_params["file_type"],
-        file_selector_params["additional_params"],
+        **file_selector_params["file_selector_arguments"],
       ) %>
     </template>
   </turbo-stream>
