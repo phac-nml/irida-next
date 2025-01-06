@@ -13,26 +13,26 @@ class GraphqlPolicyTest < ActiveSupport::TestCase
   end
 
   test '#query? when token has api scope' do
-    assert @policy_with_api_scope_token.query?
+    assert @policy_with_api_scope_token.apply(:query?)
   end
 
   test '#mutate? when token has api scope' do
-    assert @policy_with_api_scope_token.mutate?
+    assert @policy_with_api_scope_token.apply(:mutate?)
   end
 
   test '#query? when token has read api scope' do
-    assert @policy_with_read_api_scope_token.query?
+    assert @policy_with_read_api_scope_token.apply(:query?)
   end
 
   test '#mutate? when token has read api scope' do
-    assert_not @policy_with_read_api_scope_token.mutate?
+    assert_not @policy_with_read_api_scope_token.apply(:mutate?)
   end
 
   test '#query? when nil token' do
-    assert @policy_without_token.query?
+    assert @policy_without_token.apply(:query?)
   end
 
   test '#mutate? when nil token' do
-    assert @policy_without_token.mutate?
+    assert @policy_without_token.apply(:mutate?)
   end
 end

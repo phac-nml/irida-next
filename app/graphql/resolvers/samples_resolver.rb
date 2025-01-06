@@ -42,7 +42,7 @@ module Resolvers
 
     def samples_by_group_scope(group_id:)
       group = IridaSchema.object_from_id(group_id, { expected_type: Group })
-      authorize!(group, to: :sample_listing?, with: GroupPolicy)
+      authorize!(group, to: :sample_listing?, with: GroupPolicy, context: { token: context[:token] })
       authorized_scope(Sample, type: :relation, as: :namespace_samples, scope_options: { namespace: group })
     end
   end

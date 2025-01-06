@@ -10,7 +10,7 @@ class SamplePolicyTest < ActiveSupport::TestCase
   end
 
   test '#destroy_attachment?' do
-    assert @policy.destroy_attachment?
+    assert @policy.apply(:destroy_attachment?)
   end
 
   test 'scope' do

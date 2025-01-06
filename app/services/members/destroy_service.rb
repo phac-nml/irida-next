@@ -16,10 +16,9 @@ module Members
       if current_user != member.user
         authorize! @namespace, to: :destroy_member?
 
-        unless Member.namespace_owners_include_user?(current_user, namespace) ||
-               (Member.user_has_namespace_maintainer_access?(current_user,
-                                                             namespace) &&
-                                                             member.access_level <= Member::AccessLevel::MAINTAINER)
+        unless (Member.effective_access_level(namespace, current_user) == Member::AccessLevel::OWNER) ||
+               (Member.effective_access_level(namespace, current_user) == Member::AccessLevel::MAINTAINER &&
+                                                             (member.access_level <= Member::AccessLevel::MAINTAINER))
           raise MemberDestroyError,
                 I18n.t('services.members.destroy.role_not_allowed')
         end
@@ -39,7 +38,8 @@ module Members
     private
 
     def send_emails
-      return if Member.can_view?(member.user, namespace)
+      return if Member.effective_access_level(namespace,
+                                              member.user) > Member::AccessLevel::NO_ACCESS
 
       MemberMailer.access_revoked_user_email(member, namespace).deliver_later
     end

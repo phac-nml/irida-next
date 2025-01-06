@@ -2,9 +2,19 @@
 
 # Policy samples authorization
 class SamplePolicy < ApplicationPolicy
-  def destroy_attachment? # rubocop:disable Metrics/AbcSize
-    return true if record.project.namespace.parent.user_namespace? && record.project.namespace.parent.owner == user
-    return true if Member.namespace_owners_include_user?(user, record.project.namespace) == true
+  def effective_access_level # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize
+    return unless record.instance_of?(Sample)
+
+    if record.project&.namespace&.parent&.user_namespace? && record.project&.namespace&.parent&.owner == user
+      @access_level = Member::AccessLevel::OWNER
+    end
+
+    @access_level ||= Member.effective_access_level(record.project.namespace, user)
+    @access_level
+  end
+
+  def destroy_attachment?
+    return true if effective_access_level == Member::AccessLevel::OWNER
 
     details[:name] = record.name
     false

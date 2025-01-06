@@ -107,6 +107,40 @@ class SamplesQueryTest < ActiveSupport::TestCase
     assert_not_empty data['nodes']
   end
 
+  test 'group samples query should work for uploader with valid token' do
+    user = users(:user_group_bot_account0)
+    token = personal_access_tokens(:user_group_bot_account0_valid_pat)
+
+    result = IridaSchema.execute(GROUP_SAMPLES_QUERY, context: { current_user: user, token: },
+                                                      variables:
+                                                      { group_id: groups(:group_one).to_global_id.to_s })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['samples']
+
+    assert_not_empty data, 'samples type should work'
+    assert_not_empty data['nodes']
+  end
+
+  test 'group samples query should not work for uploader with expired token' do
+    user = users(:user_group_bot_account0)
+    token = personal_access_tokens(:user_group_bot_account0_expired_pat)
+
+    result = IridaSchema.execute(GROUP_SAMPLES_QUERY, context: { current_user: user, token: },
+                                                      variables:
+                                                      { group_id: groups(:group_one).to_global_id.to_s })
+
+    assert_not_nil result['errors'], 'should not work and have authorization errors.'
+
+    assert_equal 'You are not authorized to perform this action',
+                  result['errors'].first['message']
+
+    data = result['data']['samples']
+
+    assert_nil data
+  end
+
   test 'group samples query should throw authorization error' do
     result = IridaSchema.execute(GROUP_SAMPLES_QUERY, context: { current_user: @user },
                                                       variables:

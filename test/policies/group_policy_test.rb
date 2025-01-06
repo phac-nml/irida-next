@@ -10,91 +10,91 @@ class GroupPolicyTest < ActiveSupport::TestCase
   end
 
   test '#read?' do
-    assert @policy.read?
+    assert @policy.apply(:read?)
   end
 
   test '#new?' do
-    assert @policy.new?
+    assert @policy.apply(:new?)
   end
 
   test '#edit?' do
-    assert @policy.edit?
+    assert @policy.apply(:edit?)
   end
 
   test '#create?' do
-    assert @policy.create?
+    assert @policy.apply(:create?)
   end
 
   test '#update?' do
-    assert @policy.update?
+    assert @policy.apply(:update?)
   end
 
   test '#destroy?' do
-    assert @policy.destroy?
+    assert @policy.apply(:destroy?)
   end
 
   test '#create_subgroup?' do
-    assert @policy.create_subgroup?
+    assert @policy.apply(:create_subgroup?)
   end
 
   test '#transfer?' do
-    assert @policy.transfer?
+    assert @policy.apply(:transfer?)
   end
 
   test '#transfer_into_namespace?' do
-    assert @policy.transfer_into_namespace?
+    assert @policy.apply(:transfer_into_namespace?)
   end
 
   test '#create_member?' do
-    assert @policy.create_member?
+    assert @policy.apply(:create_member?)
   end
 
   test '#update_member?' do
-    assert @policy.update_member?
+    assert @policy.apply(:update_member?)
   end
 
   test '#destroy_member?' do
-    assert @policy.destroy_member?
+    assert @policy.apply(:destroy_member?)
   end
 
   test '#member_listing?' do
-    assert @policy.member_listing?
+    assert @policy.apply(:member_listing?)
   end
 
   test '#sample_listing?' do
-    assert @policy.sample_listing?
+    assert @policy.apply(:sample_listing?)
   end
 
   test '#link_namespace_with_group?' do
-    assert @policy.link_namespace_with_group?
+    assert @policy.apply(:link_namespace_with_group?)
   end
 
   test '#unlink_namespace_with_group?' do
-    assert @policy.unlink_namespace_with_group?
+    assert @policy.apply(:unlink_namespace_with_group?)
   end
 
   test '#update_namespace_with_group_link?' do
-    assert @policy.update_namespace_with_group_link?
+    assert @policy.apply(:update_namespace_with_group_link?)
   end
 
   test '#submit_workflow?' do
-    assert @policy.submit_workflow?
+    assert @policy.apply(:submit_workflow?)
   end
 
   test '#update_sample_metadata?' do
-    assert @policy.update_sample_metadata?
+    assert @policy.apply(:update_sample_metadata?)
   end
 
   test '#view_attachments?' do
-    assert @policy.view_attachments?
+    assert @policy.apply(:view_attachments?)
   end
 
   test '#create_attachment?' do
-    assert @policy.create_attachment?
+    assert @policy.apply(:create_attachment?)
   end
 
   test '#destroy_attachment?' do
-    assert @policy.destroy_attachment?
+    assert @policy.apply(:destroy_attachment?)
   end
 
   test 'scope' do

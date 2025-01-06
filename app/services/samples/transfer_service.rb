@@ -15,8 +15,9 @@ module Samples
       @new_project = Project.find_by(id: new_project_id)
       authorize! @new_project, to: :transfer_sample_into_project?
 
-      validate_maintainer_sample_transfer if Member.user_has_namespace_maintainer_access?(current_user,
-                                                                                          @project.namespace, false)
+      if Member.effective_access_level(@project.namespace, current_user) == Member::AccessLevel::MAINTAINER
+        validate_maintainer_sample_transfer
+      end
 
       transfer(new_project_id, sample_ids)
     rescue Samples::TransferService::TransferError => e

@@ -17,15 +17,17 @@ module Members
       authorize! @namespace, to: :create_member? unless namespace.parent.nil? && namespace.owner == current_user
 
       if member.namespace.owner != current_user &&
-         (Member.user_has_namespace_maintainer_access?(current_user,
-                                                       namespace) &&
+         (Member.effective_access_level(namespace, current_user) == Member::AccessLevel::MAINTAINER &&
             (member.access_level > Member::AccessLevel::MAINTAINER))
         raise MemberCreateError, I18n.t('services.members.create.role_not_allowed',
                                         namespace_name: namespace.name,
                                         namespace_type: namespace.class.model_name.human)
       end
 
-      has_previous_access = Member.can_view?(member.user, namespace) if member.valid?
+      if member.valid?
+        has_previous_access = Member.effective_access_level(namespace,
+                                                            member.user) > Member::AccessLevel::NO_ACCESS
+      end
       if member.save
         send_emails if @email_notification && !has_previous_access
         member.create_activity key: 'member.create', owner: current_user if @member.user != current_user
