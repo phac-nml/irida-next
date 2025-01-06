@@ -3,9 +3,9 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = ["table", "loading", "submit", "attachmentsError", "form"];
 
-  #error_state = ["border-2", "border-red-300", "dark:border-red-800"];
+  #error_state = ["border-red-300", "dark:border-red-800"];
 
-  #default_state = ["border-none", "dark:border-none"];
+  #default_state = ["border-transparent"];
 
   connect() {
     this.element.addEventListener("turbo:submit-start", (event) => {
