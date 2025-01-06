@@ -33,21 +33,26 @@ export default class extends Controller {
     let groupContainer = event.currentTarget.parentElement.closest(
       "div[data-advanced-search-target='groupsContainer']",
     );
-    event.currentTarget.parentElement.remove();
-    //re-index all the form fields within the group
     let conditionContainers = groupContainer.querySelectorAll(
       "div[data-advanced-search-target='conditionsContainer']",
     );
-    conditionContainers.forEach((conditionContainer, index) => {
-      let inputFields = conditionContainer.querySelectorAll("[name]");
-      inputFields.forEach((inputField) => {
-        let updatedInputFieldName = inputField.name.replace(
-          /(\[conditions_attributes\]\[)\d+?(\])/,
-          "$1" + index + "$2",
-        );
-        inputField.name = updatedInputFieldName;
+    if (conditionContainers.length > 1) {
+      event.currentTarget.parentElement.remove();
+      conditionContainers = groupContainer.querySelectorAll(
+        "div[data-advanced-search-target='conditionsContainer']",
+      );
+      //re-index all the form fields within the group
+      conditionContainers.forEach((conditionContainer, index) => {
+        let inputFields = conditionContainer.querySelectorAll("[name]");
+        inputFields.forEach((inputField) => {
+          let updatedInputFieldName = inputField.name.replace(
+            /(\[conditions_attributes\]\[)\d+?(\])/,
+            "$1" + index + "$2",
+          );
+          inputField.name = updatedInputFieldName;
+        });
       });
-    });
+    }
   }
 
   addGroup(event) {
@@ -64,7 +69,7 @@ export default class extends Controller {
   }
 
   removeGroup(event) {
-    if (this.groupsContainerTarget.childElementCount > 1) {
+    if (this.groupsContainerTargets.length > 1) {
       event.currentTarget.parentElement.parentElement.remove();
     }
     //re-index all the form fields within all the groups
