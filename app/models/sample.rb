@@ -179,13 +179,14 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def most_recent_other_file(autopopulate, pattern)
     return {} unless autopopulate
-      files = if pattern
-                filter_files_by_pattern(sorted_files[:singles] || [], pattern)
-              else
-                sorted_files[:singles] || []
-              end
-      files = order_files(files)
-      files.present? ? files.last : {}
+
+    files = if pattern
+              filter_files_by_pattern(sorted_files[:singles] || [], pattern)
+            else
+              sorted_files[:singles] || []
+            end
+    files = order_files(files)
+    files.present? ? files.last : {}
   end
 
   def search_data

@@ -34,6 +34,7 @@ export default class extends Controller {
     requiredFileCells.forEach((fileCell) => {
       const firstChild = fileCell.firstElementChild;
       if (
+        !firstChild ||
         firstChild.type != "hidden" ||
         !firstChild.value ||
         !firstChild.value.startsWith("gid://")

@@ -1,21 +1,5 @@
-<div
-  id="<%="#{@sample.id}_#{@property}" %>"
-  class="
-    w-full focus:ring-primary-500 focus:border-primary-500 p-2.5 dark:bg-inherit
-    bg-inherit border-none dark:border-none dark:placeholder-slate-400 text-inherit
-    text-sm dark:focus:ring-primary-500 dark:focus:border-primary-500 cursor-pointer
-  "
-  data-file-cell-required="<%= @required_properties.include?(@property) ? "true" : "false" %>"
->
-  <% unless @selected.empty? %>
-    <input
-    type="hidden"
-      name="workflow_execution[samples_workflow_executions_attributes][<%= @index%>][samplesheet_params][<%= @property %>]"
-      value= <%= @selected[:global_id]%>
-    >
-  <% end %>
-  <%= link_to @selected.empty? ? t(".select_attachment") : @selected[:filename],
-  new_file_selector_path(
+
+  <%= link_to new_file_selector_path(
     "file_selector[attachable]": @sample,
     "file_selector[index]": @index,
     "file_selector[selected_id]": @selected.empty? ? nil : @selected[:id],
@@ -26,5 +10,24 @@
   ),
   data: {
     turbo_stream: "true",
-  } %>
+  } do %>
+  <div
+  id="<%="#{@sample.id}_#{@property}" %>"
+  class="
+    w-full focus:ring-primary-500 focus:border-primary-500 p-2.5 dark:bg-inherit
+    bg-inherit dark:placeholder-slate-400 text-inherit
+    text-sm dark:focus:ring-primary-500 dark:focus:border-primary-500 cursor-pointer
+    hover:border-slate-300 border-transparent border-2
+  "
+  data-file-cell-required="<%= @required_properties.include?(@property) ? "true" : "false" %>"
+>
+  <% unless @selected.empty? %>
+    <input
+    type="hidden"
+      name="workflow_execution[samples_workflow_executions_attributes][<%= @index%>][samplesheet_params][<%= @property %>]"
+      value= <%= @selected[:global_id]%>
+    >
+  <% end %>
+  <%= @selected.empty? ? t(".select_attachment") : @selected[:filename] %>
 </div>
+<% end %>
