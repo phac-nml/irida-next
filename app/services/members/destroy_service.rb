@@ -17,9 +17,8 @@ module Members
         authorize! @namespace, to: :destroy_member?
 
         unless (Member.effective_access_level(namespace, current_user) == Member::AccessLevel::OWNER) ||
-               (Member.user_has_namespace_maintainer_access?(current_user,
-                                                             namespace) &&
-                                                             member.access_level <= Member::AccessLevel::MAINTAINER)
+               (Member.effective_access_level(namespace, current_user) == Member::AccessLevel::MAINTAINER &&
+                                                             (member.access_level <= Member::AccessLevel::MAINTAINER))
           raise MemberDestroyError,
                 I18n.t('services.members.destroy.role_not_allowed')
         end

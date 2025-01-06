@@ -2,23 +2,15 @@
 
 # Policy for projects authorization
 class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
-  def effective_access_level(include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize
+  def effective_access_level # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     return unless record.instance_of?(Project)
 
-    @access_level ||= {}
-
-    group_links_inclusion = if include_group_links
-                              :with_group_links
-                            else
-                              :without_group_links
-                            end
-
     if record&.namespace&.parent&.user_namespace? && record&.namespace&.parent&.owner == user
-      @access_level[group_links_inclusion] = Member::AccessLevel::OWNER
+      @access_level = Member::AccessLevel::OWNER
     end
 
-    @access_level[group_links_inclusion] ||= Member.effective_access_level(record.namespace, user, include_group_links)
-    @access_level[group_links_inclusion]
+    @access_level ||= Member.effective_access_level(record.namespace, user)
+    @access_level
   end
 
   def token_active(access_level)
@@ -141,16 +133,16 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def transfer_sample?
-    return true if Member::AccessLevel.manageable.include?(effective_access_level(false))
+    return true if Member::AccessLevel.manageable.include?(effective_access_level)
 
     details[:name] = record.name
     false
   end
 
   def transfer_sample_into_project?
-    return true if effective_access_level(false) == Member::AccessLevel::MAINTAINER &&
+    return true if effective_access_level == Member::AccessLevel::MAINTAINER &&
                    Member::AccessLevel.manageable.include?(
-                     effective_access_level(false)
+                     effective_access_level
                    )
 
     return true if Member::AccessLevel.manageable.include?(effective_access_level)
@@ -241,7 +233,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   scope_for :relation, :project_samples_transferable do |relation, options|
-    if Member.user_has_namespace_maintainer_access?(user, options[:project].namespace, false)
+    if Member.effective_access_level(options[:project].namespace, user) == Member::AccessLevel::MAINTAINER
       top_level_ancestor = options[:project].parent.self_and_ancestors.find_by(type: Group.sti_name, parent: nil)
       group_and_subgroup_ids = top_level_ancestor.self_and_descendant_ids
 

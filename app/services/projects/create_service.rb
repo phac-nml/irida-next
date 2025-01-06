@@ -23,7 +23,7 @@ module Projects
       project
     end
 
-    def create_associations(project) # rubocop:disable Metrics/AbcSize
+    def create_associations(project)
       project.build_namespace(namespace_params.merge(owner: current_user))
       # We want to authorize that the user can create a project in the parent namespace
       authorize! project.namespace.parent, to: :create?
@@ -35,9 +35,9 @@ module Projects
         create_activities
       end
 
-      return unless (Member.effective_access_level(namespace, current_user) != Member::AccessLevel::OWNER) &&
-                    Member.user_has_namespace_maintainer_access?(current_user,
-                                                                 namespace)
+      access_level = Member.effective_access_level(namespace, current_user)
+      return unless (access_level != Member::AccessLevel::OWNER) &&
+                    access_level == Member::AccessLevel::MAINTAINER
 
       Members::CreateService.new(current_user, project.namespace, {
                                    user: current_user,

@@ -60,10 +60,6 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
       access_level.nil? ? AccessLevel::NO_ACCESS : access_level
     end
 
-    def user_has_namespace_maintainer_access?(user, namespace, include_group_links = true) # rubocop:disable Style/OptionalBooleanParameter
-      effective_access_level(namespace, user, include_group_links) == Member::AccessLevel::MAINTAINER
-    end
-
     def access_level_in_namespace_group_links(user, namespace)
       effective_namespace_group_link = NamespaceGroupLink.for_namespace_and_ancestors(namespace)
                                                          .where(group: user.groups.self_and_descendants)

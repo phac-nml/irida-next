@@ -17,8 +17,7 @@ module Members
       authorize! @namespace, to: :create_member? unless namespace.parent.nil? && namespace.owner == current_user
 
       if member.namespace.owner != current_user &&
-         (Member.user_has_namespace_maintainer_access?(current_user,
-                                                       namespace) &&
+         (Member.effective_access_level(namespace, current_user) == Member::AccessLevel::MAINTAINER &&
             (member.access_level > Member::AccessLevel::MAINTAINER))
         raise MemberCreateError, I18n.t('services.members.create.role_not_allowed',
                                         namespace_name: namespace.name,
