@@ -24,7 +24,8 @@ class FileSelectorController < ApplicationController
 
   def file_selector_params
     params.require(:file_selector).permit(
-      :attachable, :index, :property, :selected_id, :file_type, required_properties: [], file_selector_arguments: [:pattern, workflow_params: [:name, :version]]
+      :attachable, :index, :property, :selected_id, :file_type, required_properties: [],
+      file_selector_arguments: [:pattern, workflow_params: [:name, :version]]
     )
   end
 
@@ -49,6 +50,7 @@ class FileSelectorController < ApplicationController
   def attachments
     @attachment_params = {}
     return if params[:attachment_id] == 'no_attachment'
+
     attachment = Attachment.find(params[:attachment_id])
     @attachment_params = { filename: attachment.file.filename.to_s,
     global_id: attachment.to_global_id,
@@ -56,7 +58,8 @@ class FileSelectorController < ApplicationController
     byte_size: attachment.byte_size,
     created_at: attachment.created_at
   }
-    return unless attachment.associated_attachment && (file_selector_params["property"] == 'fastq_1' || file_selector_params["property"] == 'fastq_2')
+    return unless attachment.associated_attachment &&
+    (file_selector_params["property"] == 'fastq_1' || file_selector_params["property"] == 'fastq_2')
 
     assign_associated_attachment_params(attachment)
   end

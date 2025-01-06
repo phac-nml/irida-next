@@ -2,10 +2,14 @@
   schema:
     JSON.parse(
       File.read(
-        Rails.root.join("test", "fixtures", "files", "nextflow", schema_file)
-      )
+        Rails.root.join("test", "fixtures", "files", "nextflow", schema_file),
+      ),
     ),
   samples:,
   fields:,
-  namespace_id: "SDFSDFSDF"
+  namespace_id: "SDFSDFSDF",
+  workflow_params: {
+    name: "workflow-name",
+    version: "workflow-version",
+  },
 ) %>

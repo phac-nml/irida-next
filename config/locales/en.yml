@@ -955,7 +955,7 @@ en:
         default: "%{label} (default)"
         required: Required
       file_cell_component:
-        select_attachment: Select Attachment
+        select_file: Select File
     samplesheet_component:
       attachments_error: The highlighted file cells below require a selection.
       label: Samples

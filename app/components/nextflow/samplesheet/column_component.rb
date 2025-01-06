@@ -4,10 +4,12 @@ module Nextflow
   module Samplesheet
     # Renders a column in the sample sheet table
     class ColumnComponent < Component
-      attr_reader :header, :property, :samples, :workflow_params
+      attr_reader :namespace_id, :header, :property, :samples, :workflow_params
 
       # rubocop:disable Metrics/ParameterLists
-      def initialize(header:, property:, samples:, metadata_fields:, required_properties:, workflow_params:)
+      def initialize(namespace_id:, header:, property:, samples:, metadata_fields:, required_properties:,
+                     workflow_params:)
+        @namespace_id = namespace_id
         @header = header
         @property = property
         @samples = samples

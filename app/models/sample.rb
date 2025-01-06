@@ -139,8 +139,7 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def samplesheet_fastq_files(property, workflow_params)
     direction = get_fastq_direction(property)
-    pattern = Irida::Pipelines.instance.find_pipeline_by(workflow_params[:name], workflow_params[:version])
-    .property_pattern(property)
+    pattern = Irida::Pipelines.instance.find_pipeline_by(workflow_params[:name], workflow_params[:version]).property_pattern(property)
     singles = filter_files_by_pattern(sorted_files[:singles] || [],
                                         pattern || "/^\S+.f(ast)?q(.gz)?$/")
     files = []

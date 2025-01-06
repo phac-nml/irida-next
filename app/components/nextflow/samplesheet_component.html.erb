@@ -25,6 +25,7 @@
   >
     <% properties.each do |header, property| %>
       <%= render Nextflow::Samplesheet::ColumnComponent.new(
+        namespace_id:,
         header:,
         property:,
         samples: @samples,
