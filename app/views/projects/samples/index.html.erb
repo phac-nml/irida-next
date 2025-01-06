@@ -159,12 +159,8 @@
         </div>
         <input type="hidden" name="format" value="turbo_stream"/>
         <input type="hidden" name="limit" value="<%=@pagy.limit%>"/>
-        <%= render ListFilterComponent.new(
-          form: f,
-          filters: @search_params[:name_or_puid_in],
-        ) %>
         <%= render AdvancedSearchComponent.new(
-          search: Sample::Search.new(groups:[Sample::Group.new(conditions: [Sample::Condition.new(field: "", operator: "", value: "")])]),
+          search: @query,
           form: f,
           fields:  @advanced_search_fields,
           operations: %w[= != <= >= between contains],

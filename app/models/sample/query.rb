@@ -24,10 +24,11 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
     super
     self.sort = sort
     self.advanced_query = advanced_query?
+    self.groups = groups
   end
 
   def groups_attributes=(attributes)
-    @groups ||= []
+    groups ||= []
     attributes.each_value do |group_attributes|
       conditions ||= []
       group_attributes.each_value do |conditions_attributes|
@@ -35,8 +36,9 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
           conditions.push(Sample::Condition.new(condition_params))
         end
       end
-      @groups.push(Sample::Group.new(conditions:))
+      groups.push(Sample::Group.new(conditions:))
     end
+    assign_attributes(groups:)
   end
 
   def sort=(value)
@@ -47,7 +49,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
   end
 
   def advanced_query?
-    return !@groups.empty? if @groups
+    return !groups.empty? if groups
 
     false
   end
@@ -105,7 +107,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
 
   def advanced_search_params # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
     or_conditions = []
-    @groups.each do |group|
+    groups.each do |group|
       and_conditions = {}
       group.conditions.map do |condition|
         case condition.operator
