@@ -140,6 +140,7 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
        effective_access_level != Member::AccessLevel::UPLOADER
       return true
     end
+    return true if token_active(effective_access_level) == true
 
     details[:name] = record.name
     false
