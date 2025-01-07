@@ -174,6 +174,10 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
     )
   end
 
+  def has_samples?
+    return samples_count.positive? || aggregated_samples_count.positive?
+  end
+
   def add_to_samples_count(namespaces, addition_amount)
     namespaces.each do |namespace|
       namespace.samples_count += addition_amount
