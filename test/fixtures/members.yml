@@ -417,6 +417,18 @@ group_mike_member_private_ryan:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_mike, :uuid) %>
   access_level: <%= Member::AccessLevel::OWNER %>
 
+group_oscar_member_private_ryan:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_oscar, :uuid) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+group_papa_member_private_ryan:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_papa, :uuid) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
 group_eleven_member_user_26:
   user_id: <%= ActiveRecord::FixtureSet.identify(:user26, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:user26, :uuid) %>

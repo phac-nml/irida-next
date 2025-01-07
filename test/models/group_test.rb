@@ -240,7 +240,7 @@ class GroupTest < ActiveSupport::TestCase
     assert_equal group12.samples_count, group12.aggregated_samples_count
   end
 
-  test 'aggregated_samples_count should equal samples_count plus samples_counts of groups and projects shared to' do
+  test 'aggregated_samples_count should equal samples_count plus samples_counts of groups and projects shared to it' do
     group_alpha = groups(:group_alpha)
     shared_group = groups(:group_charlie)
     shared_project = projects(:projectBravo)
@@ -298,6 +298,29 @@ class GroupTest < ActiveSupport::TestCase
     assert_equal 0, group.samples_count
     assert_equal 2, shared_project.samples.size
     assert_equal shared_project.samples.size, group.aggregated_samples_count
+  end
+
+  test 'aggregated_samples_count should include projects and groups shared with descendants' do
+    group = groups(:group_oscar)
+    subgroup = groups(:subgroup_oscar_a)
+
+    assert_equal 0, group.samples_count
+    assert_equal 0, subgroup.samples_count
+    assert_equal 3, subgroup.aggregated_samples_count
+    assert_equal subgroup.aggregated_samples_count, group.aggregated_samples_count
+  end
+
+  test 'aggregated_samples_count should not include shared projects/groups of shared groups' do
+    group = groups(:group_papa)
+    subgroup = groups(:subgroup_papa_a)
+    shared_group = groups(:group_lima)
+
+    assert_equal 0, group.samples_count
+    assert_equal 0, shared_group.samples_count
+    assert_equal 4, shared_group.aggregated_samples_count
+    assert_equal 0, subgroup.samples_count
+    assert_equal 0, subgroup.aggregated_samples_count
+    assert_equal subgroup.aggregated_samples_count, group.aggregated_samples_count
   end
 
   test 'group with expired links should not include those samples to aggregated_samples_count' do

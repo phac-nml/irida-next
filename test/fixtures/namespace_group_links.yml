@@ -168,3 +168,21 @@ namespace_group_link28:
   group_access_level: <%= Member::AccessLevel::ANALYST %>
   namespace_type: "Group"
   expires_at: "2025-01-01"
+
+namespace_group_link29:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_oscar_a, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_a_a, :uuid) %>
+  group_access_level: <%= Member::AccessLevel::ANALYST %>
+  namespace_type: "Group"
+
+namespace_group_link30:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_oscar_a, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project30_namespace, :uuid) %>
+  group_access_level: <%= Member::AccessLevel::ANALYST %>
+  namespace_type: "Project"
+
+namespace_group_link31:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_papa_a, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_lima, :uuid) %>
+  group_access_level: <%= Member::AccessLevel::ANALYST %>
+  namespace_type: "Group"

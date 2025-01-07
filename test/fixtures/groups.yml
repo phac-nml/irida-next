@@ -493,5 +493,39 @@ subgroup_mike_a_a:
   path: subgroup-mike-a-a
   description: Subgroup Mike A A description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_mike_a, :uuid) %>
-  puid: INXT_GRP_AAAAAAAACj
+  puid: INXT_GRP_AAAAAAAACJ
+  samples_count: 0
+
+group_oscar:
+  <<: *DEFAULTS
+  name: Group Oscar
+  path: group-oscar
+  description: Group Oscar description
+  puid: INXT_GRP_AAAAAAAACK
+  samples_count: 0
+
+subgroup_oscar_a:
+  <<: *DEFAULTS
+  name: Subgroup Oscar A
+  path: subgroup-oscar-a
+  description: Subgroup Oscar A description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_oscar, :uuid) %>
+  puid: INXT_GRP_AAAAAAAACL
+  samples_count: 0
+
+group_papa:
+  <<: *DEFAULTS
+  name: Group Papa
+  path: group-papa
+  description: Group Papa description
+  puid: INXT_GRP_AAAAAAAACM
+  samples_count: 0
+
+subgroup_papa_a:
+  <<: *DEFAULTS
+  name: Subgroup Papa A
+  path: subgroup-papa-a
+  description: Subgroup Papa A description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_papa, :uuid) %>
+  puid: INXT_GRP_AAAAAAAACN
   samples_count: 0

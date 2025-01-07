@@ -583,3 +583,23 @@ subgroup_mike_a_a_route:
   name: Group Mike / Subgroup Mike A / Subgroup Mike AA
   path: group-mike/subgroup-mike-a/subgroup-mike-a-a
   source: subgroup_mike_a_a (Namespace)
+
+group_oscar_route:
+  name: Group Oscar
+  path: group-oscar
+  source: group_oscar (Namespace)
+
+subgroup_oscar_a_route:
+  name: Group Oscar / Subgroup Oscar A
+  path: group-oscar/subgroup-oscar-a
+  source: subgroup_oscar_a (Namespace)
+
+group_papa_route:
+  name: Group Papa
+  path: group-papa
+  source: group_papa (Namespace)
+
+subgroup_papa_a_route:
+  name: Group Papa / Subgroup Papa A
+  path: group-papa/subgroup-papa-a
+  source: subgroup_papa_a (Namespace)
