@@ -7,7 +7,7 @@ class MetadataTemplateTest < ActiveSupport::TestCase
     @namespace = namespaces_user_namespaces(:john_doe_namespace)
     @user = users(:john_doe)
     @valid_metadata_template = metadata_templates(:valid_metadata_template)
-    @invalid_metadata_template = metadata_templates(:invalid_metadata_template)
+    @invalid_metadata_template = nil
   end
 
   # Validation Tests
@@ -16,9 +16,16 @@ class MetadataTemplateTest < ActiveSupport::TestCase
     assert_not_nil @valid_metadata_template.name
   end
 
+  test 'invalid without namespace' do
+    @valid_metadata_template.namespace = nil
+    assert_not @valid_metadata_template.valid?
+    assert_not_nil metadata_template.errors[:namespace]
+  end
+
   test 'invalid without name' do
-    assert_not @invalid_metadata_template.valid?
-    # assert_not_nil @invalid_metadata_template.errors[:name]
+    @valid_metadata_template.name = nil
+    assert_not @valid_metadata_template.valid?
+    assert_not_nil @valid_metadata_template.errors[:name]
   end
 
   test 'invalid with duplicate name in same namespace' do
@@ -85,9 +92,11 @@ class MetadataTemplateTest < ActiveSupport::TestCase
   # Logidze Tests
   test 'tracks history changes' do
     original_name = @valid_metadata_template.name
-    assert_difference '@valid_metadata_template.log_size' do
-      @valid_metadata_template.update!(name: 'Updated Name')
+    travel 1.minute do
+      assert_difference -> { @valid_metadata_template.reload.log_size } do
+        @valid_metadata_template.update!(name: 'Updated Name')
+      end
     end
-    assert_equal original_name, @valid_metadata_template.log_data.versions.first['changes']['name']
+    assert_equal original_name, @valid_metadata_template.reload.log_data.versions.first['changes']['name']
   end
 end

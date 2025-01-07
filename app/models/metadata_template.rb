@@ -8,6 +8,9 @@ class MetadataTemplate < ApplicationRecord
   acts_as_paranoid
   broadcasts_refreshes
 
+  # Validations
+  validates :name, presence: true
+
   # Associations
   belongs_to :namespace
   belongs_to :created_by, class_name: 'User'
