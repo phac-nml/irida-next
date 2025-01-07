@@ -4,7 +4,7 @@ module Projects
   module Samples
     module Metadata
       # Controller actions for Project Samples Metadata Fields Controller
-      class FieldsController < Projects::Samples::ApplicationController
+      class FieldsController < Projects::Samples::ApplicationController # rubocop:disable Metrics/ClassLength
         respond_to :turbo_stream
 
         # Param received as:
