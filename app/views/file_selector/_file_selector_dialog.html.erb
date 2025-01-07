@@ -1,18 +1,18 @@
 <%= viral_dialog(open: open, classes: ["overflow-visible"]) do |dialog| %>
   <%= dialog.with_header(title: t(".select_file")) %>
   <%= dialog.with_section do %>
-    <%= form_with url: file_selector_index_path(file_selector: file_selector_params), method: :post do |form| %>
-      <input type="hidden" name="format" value="turbo_stream"/>
-      <% if @listing_attachments.empty? %>
-        <div class="empty_state_message mb-2">
-          <%= viral_empty(
-            title: t(".empty.title"),
-            description: t(".empty.description"),
-            icon_name: :document_text,
-          ) %>
-        </div>
-        <%= form.hidden_field "attachment_id", value: "no_attachment" %>
-      <% else %>
+    <% if @listing_attachments.empty? %>
+      <div class="empty_state_message mb-2">
+        <%= viral_empty(
+          title: t(".empty.title"),
+          description: t(".empty.description"),
+          icon_name: :document_text,
+        ) %>
+      </div>
+    <% else %>
+      <%= form_with id: 'file_selector_form', url: file_selector_index_path(file_selector: file_selector_params), method: :post do |form| %>
+        <input type="hidden" name="format" value="turbo_stream"/>
+
         <table
           class='
             w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
@@ -89,16 +89,12 @@
                 </th>
               </tr>
             <% end %>
-
           </tbody>
-
         </table>
-
+        <%= form.submit t(".submit_button"),
+                    class:
+                      "inline-flex items-center justify-center text-sm border rounded-md cursor-pointer sm:w-auto focus:z-10 focus:outline-none text-white bg-primary-700 hover:bg-primary-800 focus:ring-0 rounded-md px-5 py-3 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 dark:border-primary-900 dark:hover:bg-primary-700" %>
       <% end %>
-      <%= form.submit t(".submit_button"),
-                  class:
-                    "inline-flex items-center justify-center text-sm border rounded-md cursor-pointer sm:w-auto focus:z-10 focus:outline-none text-white bg-primary-700 hover:bg-primary-800 focus:ring-0 rounded-md px-5 py-3 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 dark:border-primary-900 dark:hover:bg-primary-700" %>
     <% end %>
-
   <% end %>
 <% end %>

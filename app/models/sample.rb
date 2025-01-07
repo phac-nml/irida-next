@@ -139,8 +139,8 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def samplesheet_fastq_files(property, workflow_params)
-    direction = get_fastq_direction(property)
-    pattern = Irida::Pipelines.instance.find_pipeline_by(workflow_params[:name], workflow_params[:version]).property_pattern(property)
+    direction = fastq_direction(property)
+    pattern = retrieve_pattern(property, workflow_params)
     singles = filter_files_by_pattern(sorted_files[:singles] || [], pattern || "/^\S+.f(ast)?q(.gz)?$/")
     files = []
     if sorted_files[direction].present?
@@ -163,12 +163,12 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # separate function from samplesheet_fastq_files since this function would prefer selection of latest paired_end
   # attachments, where as samplesheet_fastq_files will return the overall latest attachment (ie: possibly a single)
   def most_recent_fastq_file(property, workflow_params)
-    direction = get_fastq_direction(property)
+    direction = fastq_direction(property)
 
     if sorted_files[direction].present?
       sorted_files[direction].last
     else
-      pattern = Irida::Pipelines.instance.find_pipeline_by(workflow_params[:name], workflow_params[:version]).property_pattern(property)
+      pattern = retrieve_pattern(property, workflow_params)
       last_single = filter_files_by_pattern(sorted_files[:singles] || [],
                                         pattern || "/^\S+.f(ast)?q(.gz)?$/").last
       last_single.nil? ? {} : last_single
@@ -218,7 +218,7 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   private
 
-  def get_fastq_direction(property)
+  def fastq_direction(property)
     property.match(/fastq_(\d+)/)[1].to_i == 1 ? :pe_forward : :pe_reverse
   end
 
@@ -226,8 +226,11 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
     property['pe_only'].present?
   end
 
-  def order_files(files)
 
-    files
+  def retrieve_pattern(property, workflow_params)
+    pipeline = Irida::Pipelines.instance.find_pipeline_by(workflow_params[:name], workflow_params[:version])
+    return nil unless pipeline
+
+    pipeline.property_pattern(property)
   end
 end
