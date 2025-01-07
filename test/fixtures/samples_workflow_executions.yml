@@ -343,3 +343,30 @@ sample_canceled_unclean_DELETE:
     "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment_canceled_unclean_DELETE, :uuid)}" %>,
     "fastq_2": ""
   }
+
+samples_workflow_execution_invalid_metadata:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_invalid_metadata, :uuid) %>
+  samplesheet_params:
+    {
+      "sample": INXT_SAM_AAAAAAAABQ,
+      "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>
+    }
+
+samples_irida_next_example_completing_a:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_a, :uuid) %>
+  samplesheet_params:
+    {
+      "sample": INXT_SAM_AAAAAAAABQ,
+      "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>
+    }
+
+samples_automated_example_prepared:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:automated_example_prepared, :uuid) %>
+  samplesheet_params:
+    {
+      "sample": INXT_SAM_AAAAAAAABQ,
+      "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>
+    }

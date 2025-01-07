@@ -11,6 +11,8 @@ class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator
         sample_workflow_execution.samplesheet_params.each do |key, value|
           next if key == 'sample' # We only care about the attachments
 
+          next if value == ''
+
           begin
             # Attempt to parse an object from the id provided
             IridaSchema.object_from_id(value, { expected_type: Attachment })

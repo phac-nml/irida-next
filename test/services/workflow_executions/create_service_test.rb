@@ -9,6 +9,15 @@ module WorkflowExecutions
     def setup
       @user = users(:john_doe)
       @project = projects(:project1)
+      @sample = samples(:sample1)
+      @samples_workflow_executions_attributes = {
+        '0': {
+          sample_id: @sample.id,
+          samplesheet_params: {
+            sample: @sample.puid
+          }
+        }
+      }
     end
 
     test 'test create new workflow execution' do
@@ -27,7 +36,8 @@ module WorkflowExecutions
         workflow_engine_parameters: { '-r': 'dev' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
         submitter_id: @user.id,
-        namespace_id: @project.namespace.id
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: @samples_workflow_executions_attributes
       }
 
       workflow_params2 = {
@@ -45,7 +55,8 @@ module WorkflowExecutions
         workflow_engine_parameters: { '-r': 'dev' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew2',
         submitter_id: @user.id,
-        namespace_id: @project.namespace.id
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: @samples_workflow_executions_attributes
       }
 
       stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs')
@@ -137,7 +148,8 @@ module WorkflowExecutions
         workflow_engine_parameters: { '-r': 'dev' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
         submitter_id: @user.id,
-        namespace_id: @project.namespace.id
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: @samples_workflow_executions_attributes
       }
 
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
@@ -164,7 +176,8 @@ module WorkflowExecutions
         workflow_engine_parameters: { '-r': 'dev' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
         submitter_id: @user.id,
-        namespace_id: @project.namespace.id
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: @samples_workflow_executions_attributes
       }
 
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
@@ -190,7 +203,8 @@ module WorkflowExecutions
         workflow_engine_parameters: { '-r': 'dev' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
         submitter_id: @user.id,
-        namespace_id: @project.namespace.id
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: @samples_workflow_executions_attributes
       }
 
       stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "create_run_4" }',
@@ -231,7 +245,8 @@ module WorkflowExecutions
         workflow_engine_parameters: { '-r': 'dev' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
         submitter_id: @user.id,
-        namespace_id: @project.namespace.id
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: @samples_workflow_executions_attributes
       }
 
       stub_request(:post, 'http://www.example.com/ga4gh/wes/v1/runs').to_return(body: '{ "run_id": "create_run_5" }',
@@ -274,7 +289,8 @@ module WorkflowExecutions
         workflow_engine_parameters: { engine: 'nextflow', execute_loc: 'azure' },
         workflow_url: 'https://github.com/phac-nml/iridanextexample',
         submitter_id: @user.id,
-        namespace_id: @project.namespace.id
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: @samples_workflow_executions_attributes
       }
 
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
@@ -305,7 +321,8 @@ module WorkflowExecutions
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
-        name: test_name
+        name: test_name,
+        samples_workflow_executions_attributes: @samples_workflow_executions_attributes
       }
 
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
@@ -340,7 +357,8 @@ module WorkflowExecutions
         workflow_engine_version: '23.10.0',
         workflow_engine_parameters: { '-r': 'dev' },
         workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
-        submitter_id: user.id
+        submitter_id: user.id,
+        samples_workflow_executions_attributes: @samples_workflow_executions_attributes
       }
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
