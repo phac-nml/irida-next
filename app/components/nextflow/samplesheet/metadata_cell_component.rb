@@ -15,7 +15,7 @@ module Nextflow
       end
 
       def metadata_value(name)
-        sample.field?(name) ? sample.metadata[name] : ''
+        sample.metadata.fetch(name, '')
       end
     end
   end
