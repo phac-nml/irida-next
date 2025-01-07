@@ -74,7 +74,7 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
              where(namespace_type: Group.sti_name).not_expired
            },
            foreign_key: :namespace_id, class_name: 'NamespaceGroupLink',
-           dependent: :destroy
+           dependent: :destroy do
     def of_ancestors
       group = proxy_association.owner
 
@@ -90,6 +90,7 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
 
       NamespaceGroupLink.where(namespace_id: source_ids)
     end
+  end
 
   has_many :shared_groups, through: :shared_group_links, source: :namespace
   has_many :shared_project_namespaces, through: :shared_project_namespace_links,
