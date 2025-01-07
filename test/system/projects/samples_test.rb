@@ -2304,13 +2304,13 @@ module Projects
 
     test 'should not update metadata value that is from an analysis' do
       ### SETUP START ###
-      visit namespace_project_samples_url(@namespace, @project)
+      subgroup12aa = groups(:subgroup_twelve_a_a)
+      project31 = projects(:project31)
+      visit namespace_project_samples_url(subgroup12aa, project31)
       assert_selector 'table thead tr th', count: 6
 
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
-
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample2.name
-      find('input.t-search-component').native.send_keys(:return)
+      assert_selector 'table thead tr th', count: 8
 
       click_on I18n.t('projects.samples.show.table_header.last_updated')
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
@@ -2319,7 +2319,6 @@ module Projects
         div.scroll_to div.find('table thead th:nth-child(8)')
       end
 
-      assert_selector 'table thead tr th', count: 8
       ### SETUP END ###
 
       within('table tbody tr:nth-child(1) td:nth-child(6)') do
