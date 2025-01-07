@@ -171,4 +171,31 @@ class SampleTest < ActiveSupport::TestCase
 
     assert files.empty?
   end
+
+  test 'field? returns true when metadata has field' do
+    @sample.metadata = { test_field: 'value' }
+    assert @sample.field?('test_field')
+  end
+
+  test 'field? returns false when metadata does not have field' do
+    @sample.metadata = { other_field: 'value' }
+    assert_not @sample.field?('test_field')
+  end
+
+  test 'updatable_field? returns true when field not in metadata_provenance' do
+    @sample.metadata = { test_field: 'value' }
+    assert @sample.updatable_field?('test_field')
+  end
+
+  test 'updatable_field? returns true when field source is user' do
+    @sample.metadata = { test_field: 'value' }
+    @sample.metadata_provenance = { test_field: { source: 'user' } }
+    assert @sample.updatable_field?('test_field')
+  end
+
+  test 'updatable_field? returns false when field source is not user' do
+    @sample.metadata = { test_field: 'value' }
+    @sample.metadata_provenance = { test_field: { source: 'analysis' } }
+    assert_not @sample.updatable_field?('test_field')
+  end
 end
