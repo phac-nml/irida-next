@@ -14,6 +14,8 @@ class ApplicationController < ActionController::Base
   around_action :use_logidze_responsible, only: %i[create destroy update transfer] # rubocop:disable Rails/LexicallyScopedActionFilter
   around_action :switch_locale
 
+  helper_method :error_message
+
   def set_current_user
     Current.user = current_user
     yield
@@ -64,5 +66,9 @@ class ApplicationController < ActionController::Base
 
   def pipelines_enabled?
     @pipelines_enabled = Irida::Pipelines.instance.available_pipelines.any?
+  end
+
+  def error_message(object)
+    object.errors.full_messages.first
   end
 end

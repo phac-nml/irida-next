@@ -89,7 +89,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
       flash[:success] = t('.success', group_name: @group.name)
       redirect_to dashboard_groups_path(format: :html)
     else
-      flash[:error] = @group.errors.full_messages.first
+      flash[:error] = error_message(@group)
       redirect_to group_path(@group)
     end
   end

@@ -25,7 +25,7 @@ module Profiles
           format.turbo_stream do
             render status: :unprocessable_entity, locals: { personal_access_token: @personal_access_token,
                                                             new_personal_access_token: nil,
-                                                            message: @personal_access_token.errors.full_messages.first }
+                                                            message: error_message(@personal_access_token) }
           end
         end
       end

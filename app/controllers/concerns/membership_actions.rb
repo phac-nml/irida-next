@@ -50,7 +50,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
       respond_to do |format|
         format.turbo_stream do
           render status: :unprocessable_entity, locals: { member: @new_member, type: 'alert',
-                                                          message: @new_member.errors.full_messages.first }
+                                                          message: error_message(@new_member) }
         end
       end
     end
@@ -81,7 +81,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
                   I18n.t('activerecord.errors.models.member.destroy.last_member_self',
                          namespace_type: @namespace.class.model_name.human)
                 else
-                  @member.errors.full_messages.first
+                  error_message(@member)
                 end
 
       respond_to do |format|
@@ -106,7 +106,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
         format.turbo_stream do
           render status: :bad_request,
                  locals: { member: @member, type: 'alert',
-                           message: @member.errors.full_messages.first }
+                           message: error_message(@member) }
         end
       end
     end

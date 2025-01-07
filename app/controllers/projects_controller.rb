@@ -98,7 +98,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
       flash[:success] = t('.success', project_name: @project.name)
       redirect_to dashboard_projects_path(format: :html)
     else
-      flash[:error] = @project.errors.full_messages.first
+      flash[:error] = error_message(@project)
       redirect_to project_path(@project)
     end
   end
