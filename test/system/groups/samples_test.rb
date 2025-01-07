@@ -806,6 +806,7 @@ module Groups
       visit group_samples_url(@group)
 
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      assert_selector 'table thead tr th', count: 9
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample28.name
       find('input.t-search-component').native.send_keys(:return)
