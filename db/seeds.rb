@@ -204,38 +204,40 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
 end
 
 def seed_exports # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  current_year = Time.zone.now.year
+
   export_params = [
     {
       user: User.find_by(email: 'admin@email.com'),
-      sample: Sample.find_by(name: 'Bacillus anthracis/Outbreak 2022 Sample 10')
+      sample: Sample.find_by(name: "Bacillus anthracis/Outbreak #{current_year - 2} Sample 10")
     },
     {
       user: User.find_by(email: 'user1@email.com'),
-      sample: Sample.find_by(name: 'Bartonella henselae/Outbreak 2022 Sample 10')
+      sample: Sample.find_by(name: "Bartonella henselae/Outbreak #{current_year - 2} Sample 10")
     },
     {
       user: User.find_by(email: 'user2@email.com'),
-      sample: Sample.find_by(name: 'Bordetella pertussis/Outbreak 2022 Sample 10')
+      sample: Sample.find_by(name: "Bordetella pertussis/Outbreak #{current_year - 2} Sample 10")
     },
     {
       user: User.find_by(email: 'user3@email.com'),
-      sample: Sample.find_by(name: 'Borrelia burgdorferi/Outbreak 2022 Sample 10')
+      sample: Sample.find_by(name: "Borrelia burgdorferi/Outbreak #{current_year - 2} Sample 10")
     },
     {
       user: User.find_by(email: 'user4@email.com'),
-      sample: Sample.find_by(name: 'Brucella abortus/Outbreak 2022 Sample 10')
+      sample: Sample.find_by(name: "Brucella abortus/Outbreak #{current_year - 2} Sample 10")
     },
     {
       user: User.find_by(email: 'user5@email.com'),
-      sample: Sample.find_by(name: 'Campylobacter jejuni/Outbreak 2022 Sample 10')
+      sample: Sample.find_by(name: "Campylobacter jejuni/Outbreak #{current_year - 2} Sample 10")
     },
     {
       user: User.find_by(email: 'user6@email.com'),
-      sample: Sample.find_by(name: 'Yersinia pestis/Outbreak 2022 Sample 10')
+      sample: Sample.find_by(name: "Yersinia pestis/Outbreak #{current_year - 2} Sample 10")
     },
     {
       user: User.find_by(email: 'user7@email.com'),
-      sample: Sample.find_by(name: 'Vibrio cholerae/Outbreak 2023 Sample 10')
+      sample: Sample.find_by(name: "Vibrio cholerae/Outbreak #{current_year - 1} Sample 10")
     }
   ]
   export_params.each_with_index do |export_param, index| # rubocop:disable Metrics/BlockLength
