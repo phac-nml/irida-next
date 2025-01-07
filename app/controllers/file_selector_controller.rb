@@ -9,13 +9,13 @@ class FileSelectorController < ApplicationController
   def new
     render turbo_stream: turbo_stream.update('file_selector_dialog',
                                                partial: 'file_selector/file_selector_dialog',
-                                               locals: {file_selector_params:, open: true}), status: :ok
+                                               locals: { file_selector_params:, open: true }), status: :ok
   end
 
   def create
     respond_to do |format|
       format.turbo_stream do
-        render status: :ok, locals: {file_selector_params:}
+        render status: :ok, locals: { file_selector_params: }
       end
     end
   end

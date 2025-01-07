@@ -20,7 +20,7 @@ module Nextflow
 
       # rubocop:enable Metrics/ParameterLists
 
-      def render_cell_type(property, entry, sample, fields, index, workflow_params) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
+      def render_cell_type(property, entry, sample, fields, index, workflow_params) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/ParameterLists
         case entry['cell_type']
         when 'sample_cell'
           render_sample_cell(sample, fields)

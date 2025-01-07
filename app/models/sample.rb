@@ -134,14 +134,14 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
       end
     end
 
-    { singles:, pe_forward:, pe_reverse: }
+    @sorted_files = { singles:, pe_forward:, pe_reverse: }
+    @sorted_files
   end
 
   def samplesheet_fastq_files(property, workflow_params)
     direction = get_fastq_direction(property)
     pattern = Irida::Pipelines.instance.find_pipeline_by(workflow_params[:name], workflow_params[:version]).property_pattern(property)
-    singles = filter_files_by_pattern(sorted_files[:singles] || [],
-                                        pattern || "/^\S+.f(ast)?q(.gz)?$/")
+    singles = filter_files_by_pattern(sorted_files[:singles] || [], pattern || "/^\S+.f(ast)?q(.gz)?$/")
     files = []
     if sorted_files[direction].present?
       files = sorted_files[direction] || []
@@ -149,8 +149,7 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
     else
       files = singles
     end
-    files = order_files(files)
-    files
+    (files.sort_by! {|file| file[:created_at]}).reverse
   end
 
   def most_recent_file(file_type, **system_arguments)
@@ -184,7 +183,6 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
             else
               sorted_files[:singles] || []
             end
-    files = order_files(files)
     files.present? ? files.last : {}
   end
 
@@ -229,7 +227,7 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def order_files(files)
-    (files.sort_by! {|file| file[:created_at]}).reverse
+
     files
   end
 end

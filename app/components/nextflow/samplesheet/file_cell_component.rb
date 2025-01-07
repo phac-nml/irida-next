@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 module Nextflow
   module Samplesheet
-    # Render a single cell of a Nextflow samplesheet for a property that requires a dropdown
+    # Render a single cell of a Nextflow samplesheet for a property that requires a file
     class FileCellComponent < Component
       attr_reader :name, :values, :selected, :fields, :required_properties, :data
 
+      # rubocop: disable Metrics/ParameterLists
       def initialize(sample, property, selected, index, required_properties, file_type, **file_selector_arguments)
         @sample = sample
         @property = property
@@ -13,6 +16,7 @@ module Nextflow
         @file_type = file_type
         @file_selector_arguments = file_selector_arguments
       end
+      # rubocop: enable Metrics/ParameterLists
     end
   end
 end

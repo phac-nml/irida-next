@@ -955,7 +955,7 @@ fr:
         default: "%{label} (default)"
         required: Required
       file_cell_component:
-        select_file: Select File
+        no_selected_file: No selected file
     samplesheet_component:
       attachments_error: The highlighted file cells below require a selection.
       label: Samples
