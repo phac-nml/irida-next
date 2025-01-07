@@ -2340,6 +2340,7 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
 
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      assert_selector 'table thead tr th', count: 7
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample2.name
       find('input.t-search-component').native.send_keys(:return)
