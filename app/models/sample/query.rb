@@ -13,7 +13,9 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
   attribute :name_or_puid_cont, :string
   attribute :name_or_puid_in, default: -> { [] }
   attribute :project_ids, default: -> { [] }
-  attribute :groups, default: -> { [] }
+  attribute :groups, default: lambda {
+    [Sample::Group.new(conditions: [Sample::Condition.new(field: '', operator: '', value: '')])]
+  }
   attribute :sort, :string, default: 'updated_at desc'
   attribute :advanced_query, :boolean, default: false
 
@@ -105,20 +107,20 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
       includes: [project: { namespace: [{ parent: :route }, :route] }] }
   end
 
-  def advanced_search_params # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
+  def advanced_search_params # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
     or_conditions = []
     groups.each do |group|
       and_conditions = {}
       group.conditions.map do |condition|
         case condition.operator
         when '='
-          and_conditions[condition.field] = condition.value.split(/,\s|,/)
+          equal_condition(and_conditions, condition)
         when '!='
-          and_conditions[condition.field] = { not: condition.value.split(/,\s|,/) }
+          not_equal_condition(and_conditions, condition)
         when '<='
-          between_advanced_search_params(and_conditions, condition, :lte)
+          between_condition(and_conditions, condition, :lte)
         when '>='
-          between_advanced_search_params(and_conditions, condition, :gte)
+          between_condition(and_conditions, condition, :gte)
         when 'contains'
           and_conditions[condition.field] = { ilike: "%#{condition.value}%" }
         end
@@ -128,7 +130,23 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
     { _or: or_conditions }
   end
 
-  def between_advanced_search_params(and_conditions, condition, operation) # rubocop:disable Metrics/AbcSize
+  def equal_condition(and_conditions, condition)
+    and_conditions[condition.field] = if and_conditions[condition.field].nil?
+                                        [condition.value]
+                                      else
+                                        and_conditions[condition.field] << condition.value
+                                      end
+  end
+
+  def not_equal_condition(and_conditions, condition)
+    and_conditions[condition.field] = if and_conditions[condition.field].nil?
+                                        { not: [condition.value] }
+                                      else
+                                        { not: and_conditions[condition.field][:not] << condition.value }
+                                      end
+  end
+
+  def between_condition(and_conditions, condition, operation) # rubocop:disable Metrics/AbcSize
     if condition.field.end_with?('_date')
       and_conditions[condition.field] = if and_conditions[condition.field].nil?
                                           { operation => condition.value }

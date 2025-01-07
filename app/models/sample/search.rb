@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # model to represent sample search
+# TODO: Change to active record in future enhancement
 class Sample::Search # rubocop:disable Style/ClassAndModuleChildren
   include ActiveModel::Model
   include ActiveModel::Attributes
