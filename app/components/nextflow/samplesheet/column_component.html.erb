@@ -27,7 +27,7 @@
         <% end %>
         <%= f.select :field,
                  options_for_select(metadata_fields_for_field(header), header),
-                 { include_blank: !@required },
+                 { include_blank: !@required_properties.include?(header) },
                  {
                    id: "field-#{header}",
                    "aria-label": header,
@@ -46,7 +46,7 @@
     >
       <div class="flex items-center space-x-2 uppercase">
         <%= header %>
-        <% if @required %>
+        <% if @required_properties.include?(header) %>
           <span class="ml-1 text-red-600 dark:text-red-300">(<%= t(".required") %>)</span>
         <% end %>
       </div>

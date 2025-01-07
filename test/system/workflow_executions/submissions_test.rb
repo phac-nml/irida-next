@@ -25,7 +25,6 @@ module WorkflowExecutions
       @attachment_rev3 = attachments(:attachmentPEREV3)
       @attachment_fwd43 = attachments(:attachmentPEFWD43)
       @attachment_rev43 = attachments(:attachmentPEREV43)
-      Project.reset_counters(@project.id, :samples_count)
 
       Sample.reindex
       Searchkick.enable_callbacks
@@ -376,11 +375,11 @@ module WorkflowExecutions
       end
 
       # verify file selector rendered
-      assert_selector 'h1', text: I18n.t('file_selector.file_selector_dialog.select_file')
+      assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
       within('#file_selector_form') do
         # select new attachment
         find("#attachment_id_#{@attachment_fwd2.id}").click
-        click_button I18n.t('file_selector.file_selector_dialog.submit_button')
+        click_button I18n.t('workflow_executions.file_selector.file_selector_dialog.submit_button')
       end
       ### ACTIONS END ###
 
@@ -430,11 +429,11 @@ module WorkflowExecutions
       end
 
       # verify file selector rendered
-      assert_selector 'h1', text: I18n.t('file_selector.file_selector_dialog.select_file')
+      assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
       within('#file_selector_form') do
         # select new attachment
         find("#attachment_id_#{attachment_b.id}").click
-        click_button I18n.t('file_selector.file_selector_dialog.submit_button')
+        click_button I18n.t('workflow_executions.file_selector.file_selector_dialog.submit_button')
       end
       ### ACTIONS END ###
 
@@ -486,7 +485,7 @@ module WorkflowExecutions
 
       ### VERIFY START ###
       # verify file selector rendered
-      assert_selector 'h1', text: I18n.t('file_selector.file_selector_dialog.select_file')
+      assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
       within('#file_selector_form') do
         # verify other attachments loaded
         assert_selector "#attachment_id_#{attachment_b.id}"
@@ -530,12 +529,12 @@ module WorkflowExecutions
 
       ### VERIFY START ###
       # verify file selector rendered
-      assert_selector 'h1', text: I18n.t('file_selector.file_selector_dialog.select_file')
+      assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
       within('#file_selector_form') do
         # verify no file option exists in non-required field
         assert_selector '#attachment_id_no_attachment'
         find('#attachment_id_no_attachment').click
-        click_button I18n.t('file_selector.file_selector_dialog.submit_button')
+        click_button I18n.t('workflow_executions.file_selector.file_selector_dialog.submit_button')
       end
       within '#dialog' do
         # sample_b fastq2 selection is now no file selected
@@ -582,10 +581,10 @@ module WorkflowExecutions
 
       ### VERIFY START ###
       # verify file selector rendered
-      assert_selector 'h1', text: I18n.t('file_selector.file_selector_dialog.select_file')
+      assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
       assert_no_selector '#file_selector_form'
-      assert_text I18n.t('file_selector.file_selector_dialog.empty.title')
-      assert_text I18n.t('file_selector.file_selector_dialog.empty.description')
+      assert_text I18n.t('workflow_executions.file_selector.file_selector_dialog.empty.title')
+      assert_text I18n.t('workflow_executions.file_selector.file_selector_dialog.empty.description')
       ### VERIFY END ###
     end
 

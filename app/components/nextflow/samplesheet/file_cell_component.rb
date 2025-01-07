@@ -4,11 +4,11 @@ module Nextflow
   module Samplesheet
     # Render a single cell of a Nextflow samplesheet for a property that requires a file
     class FileCellComponent < Component
-      attr_reader :name, :values, :selected, :fields, :required_properties, :data
+      attr_reader :attachable, :property, :selected, :index, :required_properties, :file_type, :file_selector_arguments
 
       # rubocop: disable Metrics/ParameterLists
-      def initialize(sample, property, selected, index, required_properties, file_type, **file_selector_arguments)
-        @sample = sample
+      def initialize(attachable, property, selected, index, required_properties, file_type, **file_selector_arguments)
+        @attachable = attachable
         @property = property
         @selected = selected
         @index = index

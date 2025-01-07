@@ -21,7 +21,6 @@ Rails.application.routes.draw do
     resources :groups, only: %i[index new create]
     resources :projects, only: %i[index new create]
     draw :workflow_executions unless Irida::Pipelines.instance.available_pipelines.empty?
-    resources :file_selector, only: %i[new create]
     resources :data_exports, only: %i[index new create destroy show] do
       member do
         get :redirect

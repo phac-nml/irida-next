@@ -12,7 +12,7 @@ resources :workflow_executions, only: %i[index create show destroy edit update] 
           get :pipeline_selection, as: :pipeline_selection
         end
       end
-
+      resources :file_selector, only: %i[new create]
       resources :metadata, only: [] do
         collection do
           post :fields
