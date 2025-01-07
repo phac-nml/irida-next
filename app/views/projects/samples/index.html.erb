@@ -160,8 +160,8 @@
         <input type="hidden" name="format" value="turbo_stream"/>
         <input type="hidden" name="limit" value="<%=@pagy.limit%>"/>
         <%= render AdvancedSearchComponent.new(
-          search: @query,
           form: f,
+          search: @query,
           fields:  @advanced_search_fields,
           operations: %w[= != <= >= contains],
         )do |advanced_search| %>

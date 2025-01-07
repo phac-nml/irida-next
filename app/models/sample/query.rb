@@ -21,6 +21,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
 
   validates :direction, inclusion: { in: %w[asc desc] }
   validates :project_ids, length: { minimum: 1 }
+  validates_with AdvancedSearchGroupValidator
 
   def initialize(...)
     super

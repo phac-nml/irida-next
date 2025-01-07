@@ -29,6 +29,13 @@
             data-advanced-search-target="groupsContainer"
             class="bg-slate-100 border border-gray-300 rounded-lg"
           >
+            <% if group.errors.any? %>
+              <ul>
+                <% group.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            <% end %>
             <%= @form.fields_for :groups, group do |groups_form| %>
               <% group.conditions.each do |condition| %>
                 <div

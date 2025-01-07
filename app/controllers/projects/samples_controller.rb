@@ -135,7 +135,7 @@ module Projects
 
     def set_advanced_search_fields
       sample_fields = %w[name puid created_at updated_at attachments_updated_at]
-      metadata_fields = @fields.dup
+      metadata_fields = @project.namespace.metadata_fields
       metadata_fields.map! { |field| "metadata.#{field}" }
       @advanced_search_fields = sample_fields.concat(metadata_fields)
     end
