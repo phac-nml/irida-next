@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_06_153442) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_07_194839) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -140,6 +140,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_06_153442) do
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "log_data"
     t.index ["created_by_id"], name: "index_metadata_templates_on_created_by_id"
     t.index ["namespace_id", "name"], name: "index_template_name_with_namespace", unique: true, where: "(deleted_at IS NULL)"
     t.index ["namespace_id"], name: "index_metadata_templates_on_namespace_id"
@@ -759,5 +760,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_06_153442) do
   SQL
   create_trigger :logidze_on_automated_workflow_executions, sql_definition: <<-SQL
       CREATE TRIGGER logidze_on_automated_workflow_executions BEFORE INSERT OR UPDATE ON public.automated_workflow_executions FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
+  create_trigger :logidze_on_metadata_templates, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_metadata_templates BEFORE INSERT OR UPDATE ON public.metadata_templates FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
   SQL
 end

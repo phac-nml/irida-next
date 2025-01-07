@@ -74,13 +74,19 @@ class MetadataTemplateTest < ActiveSupport::TestCase
   #   end
   # end
 
-  # test 'tracks history changes' do
-  #   original_name = @valid_metadata_template.name
-  #   travel 1.minute do
-  #     assert_difference -> { @valid_metadata_template.reload.log_size } do
-  #       @valid_metadata_template.update!(name: 'Updated Name')
-  #     end
-  #   end
-  #   assert_equal original_name, @valid_metadata_template.reload.log_data.versions.first['changes']['name']
-  # end
+  test 'tracks history changes' do
+    @valid_metadata_template.create_logidze_snapshot!
+
+    assert_equal 1, @valid_metadata_template.log_data.version
+    assert_equal 1, @valid_metadata_template.log_data.size
+
+    assert_changes -> { @valid_metadata_template.name }, to: 'Updated Name' do
+      @valid_metadata_template.update(name: 'Updated Name')
+    end
+
+    @valid_metadata_template.create_logidze_snapshot!
+
+    assert_equal 2, @valid_metadata_template.log_data.version
+    assert_equal 2, @valid_metadata_template.log_data.size
+  end
 end
