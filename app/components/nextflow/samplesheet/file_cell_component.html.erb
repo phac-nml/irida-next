@@ -1,4 +1,3 @@
-<div>
 <%= link_to new_workflow_executions_file_selector_path(
   "file_selector[attachable_id]": @attachable.id,
   "file_selector[attachable_type]": @attachable.class.to_s,
@@ -32,4 +31,3 @@ data: {
     <%= @selected.empty? ? t(".no_selected_file") : @selected[:filename] %>
   </div>
 <% end %>
-</div>

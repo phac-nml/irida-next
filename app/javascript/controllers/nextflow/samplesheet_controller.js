@@ -33,7 +33,7 @@ export default class extends Controller {
     });
   }
 
-  validateAttachments(event) {
+  validateForm(event) {
     event.preventDefault();
     let readyToSubmit = true;
     const requiredFileCells = document.querySelectorAll(
