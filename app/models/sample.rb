@@ -118,12 +118,13 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
     pe_reverse = []
 
     attachments.each do |attachment|
-        item = { filename: attachment.file.filename.to_s,
-                global_id: attachment.to_global_id,
-                id: attachment.id,
-                byte_size: attachment.byte_size,
-                created_at: attachment.created_at
-              }
+        item = {
+          filename: attachment.file.filename.to_s,
+          global_id: attachment.to_global_id,
+          id: attachment.id,
+          byte_size: attachment.byte_size,
+          created_at: attachment.created_at
+        }
       case attachment.metadata['direction']
       when nil
         singles << item
@@ -149,7 +150,7 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
     else
       files = singles
     end
-    (files.sort_by! {|file| file[:created_at]}).reverse
+    (files.sort_by! { |file| file[:created_at] }).reverse
   end
 
   def most_recent_file(file_type, **system_arguments)
@@ -169,8 +170,7 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
       sorted_files[direction].last
     else
       pattern = retrieve_pattern(property, workflow_params)
-      last_single = filter_files_by_pattern(sorted_files[:singles] || [],
-                                        pattern || "/^\S+.f(ast)?q(.gz)?$/").last
+      last_single = filter_files_by_pattern(sorted_files[:singles] || [], pattern || "/^\S+.f(ast)?q(.gz)?$/").last
       last_single.nil? ? {} : last_single
     end
   end

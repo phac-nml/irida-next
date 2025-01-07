@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Controller actions for Projects
+# Controller actions for FileSelector
 class FileSelectorController < ApplicationController
   before_action :attachable, only: %i[new create]
   before_action :attachments, only: %i[create]
@@ -31,10 +31,14 @@ class FileSelectorController < ApplicationController
 
   def listing_attachments
     if file_selector_params['file_type'] == 'fastq'
-    @listing_attachments = @attachable.samplesheet_fastq_files(file_selector_params["property"], file_selector_params['file_selector_arguments']["workflow_params"])
+    @listing_attachments = @attachable.samplesheet_fastq_files(
+      file_selector_params["property"], file_selector_params['file_selector_arguments']["workflow_params"]
+    )
     elsif file_selector_params['file_type'] == 'other'
       @listing_attachments = if file_selector_params['file_selector_arguments']['pattern']
-        @attachable.filter_files_by_pattern(@attachable.sorted_files[:singles] || [], file_selector_params['file_selector_arguments']['pattern'])
+        @attachable.filter_files_by_pattern(
+          @attachable.sorted_files[:singles] || [], file_selector_params['file_selector_arguments']['pattern']
+        )
       else
         sample.sorted_files[:singles] || []
       end
@@ -68,7 +72,11 @@ class FileSelectorController < ApplicationController
     @associated_attachment_params = {}
     associated_attachment = attachment.associated_attachment
 
-    @associated_attachment_params[:file] = {filename: associated_attachment.filename.to_s, global_id: associated_attachment.to_global_id, id: associated_attachment.id}
+    @associated_attachment_params[:file] = {
+      filename: associated_attachment.filename.to_s,
+      global_id: associated_attachment.to_global_id,
+      id: associated_attachment.id
+    }
     @associated_attachment_params[:property] = file_selector_params[:property] == "fastq_1" ? "fastq_2" : "fastq_1"
     @associated_attachment_params[:file_selector_arguments] = {}
     @associated_attachment_params[:file_selector_arguments][:workflow_params] = file_selector_params['file_selector_arguments']["workflow_params"]
