@@ -112,19 +112,19 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
     @sorted_files || sort_files
   end
 
-  def sort_files
+  def sort_files # rubocop:disable Metrics/MethodLength
     singles = []
     pe_forward = []
     pe_reverse = []
 
     attachments.each do |attachment|
-        item = {
-          filename: attachment.file.filename.to_s,
-          global_id: attachment.to_global_id,
-          id: attachment.id,
-          byte_size: attachment.byte_size,
-          created_at: attachment.created_at
-        }
+      item = {
+        filename: attachment.file.filename.to_s,
+        global_id: attachment.to_global_id,
+        id: attachment.id,
+        byte_size: attachment.byte_size,
+        created_at: attachment.created_at
+      }
       case attachment.metadata['direction']
       when nil
         singles << item
@@ -225,7 +225,6 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def pe_only?(property)
     property['pe_only'].present?
   end
-
 
   def retrieve_pattern(property, workflow_params)
     pipeline = Irida::Pipelines.instance.find_pipeline_by(workflow_params[:name], workflow_params[:version])

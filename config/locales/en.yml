@@ -945,10 +945,10 @@ en:
       file_cell_component:
         no_selected_file: No selected file
     samplesheet_component:
-      attachments_error: The highlighted file cells below require a selection.
       label: Samples
       loading: Loading ...
   nextflow_component:
+    attachments_error: The highlighted file cells below require a selection.
     name:
       helper: A custom name will make it easier to search for this in the future.
       label: Name (Optional)

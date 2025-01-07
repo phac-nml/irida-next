@@ -1,7 +1,15 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["table", "loading", "submit", "attachmentsError", "form"];
+  static targets = [
+    "table",
+    "loading",
+    "submit",
+    "error",
+    "errorMessage",
+    "form",
+  ];
+  static values = { attachmentsError: { type: String } };
 
   #error_state = ["border-red-300", "dark:border-red-800"];
 
@@ -49,7 +57,8 @@ export default class extends Controller {
     });
 
     if (!readyToSubmit) {
-      this.attachmentsErrorTarget.classList.remove("hidden");
+      this.errorTarget.classList.remove("hidden");
+      this.errorMessageTarget.innerHTML = this.attachmentsErrorValue;
     } else {
       this.formTarget.requestSubmit();
     }

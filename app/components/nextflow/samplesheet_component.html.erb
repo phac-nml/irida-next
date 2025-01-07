@@ -7,13 +7,13 @@
       hidden flex items-center p-4 border-l-4 text-red-800 border-red-300 bg-red-50
       dark:text-red-400 dark:bg-slate-800 dark:border-red-800 mb-2
     "
-    data-nextflow--samplesheet-target="attachmentsError"
+    data-nextflow--samplesheet-target="error"
   >
     <span class="flex-shrink-0 inline">
       <%= viral_icon(name: "exclamation_circle", classes: "w-5 h-5 mr-3 stroke-2") %>
     </span>
     <div>
-      <div class="font-medium"><%= t(".attachments_error") %></div>
+      <div class="font-medium" data-nextflow--samplesheet-target="errorMessage"></div>
     </div>
   </div>
   <div
