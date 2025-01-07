@@ -132,14 +132,16 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_06_153442) do
   end
 
   create_table "metadata_templates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "namespace_id", null: false
+    t.uuid "namespace_id"
     t.uuid "created_by_id", null: false
     t.string "name"
     t.string "description"
     t.jsonb "fields", default: [], null: false
+    t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["created_by_id"], name: "index_metadata_templates_on_created_by_id"
+    t.index ["namespace_id", "name"], name: "index_template_name_with_namespace", unique: true, where: "(deleted_at IS NULL)"
     t.index ["namespace_id"], name: "index_metadata_templates_on_namespace_id"
   end
 

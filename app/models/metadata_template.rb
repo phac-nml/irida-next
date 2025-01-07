@@ -8,12 +8,15 @@ class MetadataTemplate < ApplicationRecord
   acts_as_paranoid
   broadcasts_refreshes
 
-  # Validations
-  validates :name, presence: true
-
   # Associations
   belongs_to :namespace
   belongs_to :created_by, class_name: 'User'
 
-  has_many :metadata_fields, dependent: :destroy
+  # Validations
+  validates :name, presence: true, uniqueness: { scope: [:namespace_id] }
+  validates :description, length: { maximum: 1000 }
+  # validates :namespace_type,
+  #           inclusion: {
+  #             in: [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
+  #           }
 end
