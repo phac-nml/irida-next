@@ -22,7 +22,7 @@
       <%= "autofocus" if @autofocus %>
     >
       <span class="block truncate">
-        <%= @sample.metadata[@field] || "" %>
+        <%= @sample.metadata.fetch(@field, "") %>
       </span>
     </button>
   <% end %>
