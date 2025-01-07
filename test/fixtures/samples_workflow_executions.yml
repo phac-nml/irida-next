@@ -5,7 +5,8 @@ samples_workflow_executions_valid:
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_valid, :uuid) %>
   samplesheet_params:
     {
-      key_c: 'value_c'
+      "sample": INXT_SAM_AAAAAAAABQ,
+      "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>
     }
 
 samples_workflow_executions_invalid_no_sample:
@@ -13,7 +14,8 @@ samples_workflow_executions_invalid_no_sample:
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_valid, :uuid) %>
   samplesheet_params:
     {
-      key_c: 'value_c'
+      "sample": INXT_SAM_AAAAAAAABQ,
+      "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>
     }
 
 samples_workflow_executions_invalid_no_workflow_execution:
@@ -21,7 +23,8 @@ samples_workflow_executions_invalid_no_workflow_execution:
   workflow_execution_id: null
   samplesheet_params:
     {
-      key_c: 'value_c'
+      "sample": INXT_SAM_AAAAAAAABQ,
+      "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>
     }
 
 sample1_irida_next_example:
