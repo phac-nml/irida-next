@@ -47,7 +47,7 @@ module Projects
           @field = params[:field]
           @value = @sample.metadata[@field]
 
-          if !@sample.field?(@field) || @sample.updatable_field?(@field)
+          if @sample.updatable_field?(@field)
             render_editable_field
           else
             render_non_editable_error
