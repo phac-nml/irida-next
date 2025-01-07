@@ -210,6 +210,20 @@ class GroupTest < ActiveSupport::TestCase
     assert_equal %w[metadatafield1 metadatafield2], groups(:group_alpha).metadata_fields
   end
 
+  test '#has_samples' do
+    assert @group.has_samples?
+  end
+
+  test 'has_samples should return true for a group with only samples shared from other groups' do
+    group = groups(:group_kilo)
+    assert group.has_samples?
+  end
+
+  test 'has_samples should return false for a group with no direct or shared samples' do
+    group = groups(:group_two)
+    assert_not group.has_samples?
+  end
+
   test 'group with no samples should have aggregated_samples_count equal to shared groups samples_count' do
     group = groups(:group_kilo)
     shared_group = groups(:group_twelve)
