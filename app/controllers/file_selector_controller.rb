@@ -53,11 +53,11 @@ class FileSelectorController < ApplicationController
 
     attachment = Attachment.find(params[:attachment_id])
     @attachment_params = { filename: attachment.file.filename.to_s,
-    global_id: attachment.to_global_id,
-    id: attachment.id,
-    byte_size: attachment.byte_size,
-    created_at: attachment.created_at
-  }
+      global_id: attachment.to_global_id,
+      id: attachment.id,
+      byte_size: attachment.byte_size,
+      created_at: attachment.created_at
+    }
     return unless attachment.associated_attachment &&
     (file_selector_params["property"] == 'fastq_1' || file_selector_params["property"] == 'fastq_2')
 
