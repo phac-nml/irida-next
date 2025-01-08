@@ -54,57 +54,12 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
     end
   end
 
-  has_many :active_shared_group_links, # rubocop:disable Rails/InverseOf
-           lambda {
-             where(namespace_type: Group.sti_name).not_expired
-           },
-           foreign_key: :group_id, class_name: 'NamespaceGroupLink', dependent: :destroy
-  has_many :active_shared_project_namespace_links, # rubocop:disable Rails/InverseOf
-           lambda {
-             where(namespace_type: Namespaces::ProjectNamespace.sti_name).not_expired
-           },
-           foreign_key: :group_id, class_name: 'NamespaceGroupLink', dependent: :destroy
-  has_many :active_shared_namespace_links, # rubocop:disable Rails/InverseOf
-           lambda {
-             not_expired
-           },
-           class_name: 'NamespaceGroupLink', dependent: :destroy
-  has_many :active_shared_with_group_links, # rubocop:disable Rails/InverseOf
-           lambda {
-             where(namespace_type: Group.sti_name).not_expired
-           },
-           foreign_key: :namespace_id, class_name: 'NamespaceGroupLink',
-           dependent: :destroy do
-    def of_ancestors
-      group = proxy_association.owner
-
-      return NamespaceGroupLink.none unless group.has_parent?
-
-      NamespaceGroupLink.where(namespace_id: group.ancestor_ids)
-    end
-
-    def of_ancestors_and_self
-      group = proxy_association.owner
-
-      source_ids = group.self_and_ancestor_ids
-
-      NamespaceGroupLink.where(namespace_id: source_ids)
-    end
-  end
-
   has_many :shared_groups, through: :shared_group_links, source: :namespace
   has_many :shared_project_namespaces, through: :shared_project_namespace_links,
                                        class_name: 'Namespaces::ProjectNamespace', source: :namespace
   has_many :shared_namespaces, through: :shared_namespace_links, source: :namespace
   has_many :shared_projects, through: :shared_project_namespaces, class_name: 'Project', source: :project
   has_many :shared_with_groups, through: :shared_with_group_links, source: :group
-
-  has_many :active_shared_groups, through: :active_shared_group_links, source: :namespace
-  has_many :active_shared_project_namespaces, through: :active_shared_project_namespace_links,
-                                              class_name: 'Namespaces::ProjectNamespace', source: :namespace
-  has_many :active_shared_namespaces, through: :active_shared_namespace_links, source: :namespace
-  has_many :active_shared_projects, through: :active_shared_project_namespaces, class_name: 'Project', source: :project
-  has_many :active_shared_with_groups, through: :active_shared_with_group_links, source: :group
 
   def self.sti_name
     'Group'
