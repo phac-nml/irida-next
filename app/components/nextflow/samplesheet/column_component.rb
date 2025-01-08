@@ -108,7 +108,7 @@ module Nextflow
       end
 
       def required?
-        @required_properties.present? && @required_properties.include?(@header)
+        @required_properties.include?(@header)
       end
     end
   end

@@ -11,7 +11,7 @@ module Nextflow
       @samples = samples
       @namespace_id = namespace_id
       @metadata_fields = fields
-      @required_properties = schema['items']['required']
+      @required_properties = schema['items']['required'] || []
       @workflow_params = workflow_params
       extract_properties(schema)
     end
