@@ -3,7 +3,7 @@
 # Validator for Workflow Execution Samplesheet Params
 # This will cause the validation to fail if any of the attachment ids cannot be resolved
 class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator
-  def validate(record)
+  def validate(record) # rubocop:disable Metrics/MethodLength
     if record.samples_workflow_executions.empty?
       record.errors.add :base, 'Missing samplesheet params'
     else
