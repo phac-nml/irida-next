@@ -207,7 +207,9 @@ module Projects
                                   partial: 'shared/flash',
                                   locals: { type: 'success',
                                             message: t('samples.editable_cell.update_success') }
-                                )]
+                                ),
+                                turbo_stream.replace('timestamp', partial: 'shared/samples/timestamp_input',
+                                                                  locals: { timestamp: DateTime.current })]
         end
       end
     end
