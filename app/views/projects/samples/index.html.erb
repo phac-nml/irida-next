@@ -139,81 +139,8 @@
         <% end %>
       <% end %>
     </div>
-    <div class="flex grow-0">
-      <%= form_with model: @query, scope: :q, url: search_namespace_project_samples_url, method: :post, data: { controller: "filters selection metadata-toggle", "metadata-toggle-page-value": @pagy.page, "filters-selection-outlet": "#samples-table" }, class: "filters inline-flex items-center space-x-2" do |f| %>
-        <%= f.label :name_or_puid_cont, t(".search.placeholder"), class: "sr-only" %>
-        <div class="relative">
-          <%= f.search_field :name_or_puid_cont,
-                         "data-action": "selection#clear",
-                         class:
-                           "t-search-component block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                         placeholder: t(".search.placeholder") %>
-          <div
-            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none "
-          >
-            <%= viral_icon(
-              name: "magnifying_glass",
-              classes: "w-4 h-4 text-slate-500 dark:text-slate-400",
-            ) %>
-          </div>
-        </div>
-        <input type="hidden" name="format" value="turbo_stream"/>
-        <input type="hidden" name="limit" value="<%=@pagy.limit%>"/>
-        <%= render AdvancedSearchComponent.new(
-          form: f,
-          search: @query,
-          fields:  @advanced_search_fields,
-          operations: %w[= != <= >= contains],
-        )do |advanced_search| %>
-          <% advanced_search.with_add_condition_button do %>
-            <button
-              type="button"
-              class="
-                inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white
-                border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700
-                focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800
-                dark:border-gray-700 dark:text-white dark:hover:text-white
-                dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white
-              "
-              data-action="advanced-search#addCondition"
-            >
-              <span>Add Condition</span>
-            </button>
-          <% end %>
-          <% advanced_search.with_add_group_button do %>
-            <button
-              type="button"
-              class="
-                inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white
-                border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700
-                focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800
-                dark:border-gray-700 dark:text-white dark:hover:text-white
-                dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white
-              "
-              data-action="advanced-search#addGroup"
-            >
-              <span>Add Group</span>
-            </button>
-          <% end %>
-          <% advanced_search.with_remove_group_button do %>
-            <button
-              type="button"
-              class="
-                inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white
-                border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700
-                focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800
-                dark:border-gray-700 dark:text-white dark:hover:text-white
-                dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white
-              "
-              data-action="advanced-search#removeGroup"
-            >
-              <span>Remove Group</span>
-            </button>
-          <% end %>
-        <% end %>
-        <%= render partial: "projects/samples/shared/metadata_toggle", locals: { form: f } %>
-        <%= f.submit hidden: true %>
-      <% end %>
+    <div id="table-filter" class="flex grow-0">
+      <%= render partial: "table_filter" %>
     </div>
   </div>
 

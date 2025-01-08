@@ -1363,8 +1363,6 @@ en:
         no_associated_samples: There are no samples associated with this project.
         no_samples: No Samples
         remove_button: Remove
-        search:
-          placeholder: Filter by ID or name
         select_all_button: Select All
         title: Samples
         transfer_button: Transfer samples
@@ -1463,6 +1461,9 @@ en:
         upload: Upload
         upload_files: Upload Files
         uploading: Uploading
+      table_filter:
+        search:
+          placeholder: Filter by ID or name
       transfers:
         create:
           error: 'The following list of samples failed to transfer:'

@@ -21,8 +21,11 @@ module Projects
 
         respond_to do |format|
           if @sample.deleted?
-            format.any(:html, :turbo_stream) do
-              flash[:success] = t('.success', sample_name: @sample.name, project_name: @project.namespace.human_name)
+            flash[:success] = t('.success', sample_name: @sample.name, project_name: @project.namespace.human_name)
+            format.html do
+              redirect_to namespace_project_samples_path(format: :html)
+            end
+            format.turbo_stream do
               redirect_to namespace_project_samples_path
             end
           else

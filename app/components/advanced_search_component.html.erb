@@ -1,5 +1,5 @@
 <div data-controller="advanced-search">
-  <%= viral_dialog(id: 'advanced-search-dialog') do |dialog| %>
+  <%= viral_dialog(id: 'advanced-search-dialog', open: @open) do |dialog| %>
     <%= dialog.with_trigger do %>
       <button
         type="button"
@@ -24,18 +24,12 @@
           <br/>
           Add and/or conditions to define the search criteria.
         </p>
-        <% @search.groups.each do |group| %>
+        <% @search.groups.each_with_index do |group, group_index| %>
           <div
             data-advanced-search-target="groupsContainer"
             class="bg-slate-100 border border-gray-300 rounded-lg"
           >
-            <% if group.errors.any? %>
-              <ul>
-                <% group.errors.full_messages.each do |message| %>
-                  <li><%= message %></li>
-                <% end %>
-              </ul>
-            <% end %>
+            <div id="group-error-messages-<%= group_index %>"></div>
             <%= @form.fields_for :groups, group do |groups_form| %>
               <% group.conditions.each do |condition| %>
                 <div
@@ -92,9 +86,7 @@
         </div>
       </div>
     <% end %>
-    <%= dialog.with_primary_action(
-      "data-action": "filters#submit viral--dialog#close",
-    ) { "Apply filter" } %>
+    <%= dialog.with_primary_action("data-action": "filters#submit") { "Apply filter" } %>
   <% end %>
   <template data-advanced-search-target="conditionTemplate">
     <div

@@ -756,7 +756,7 @@ module Projects
       assert_selector '#samples-table table tbody tr', count: 10
 
       # apply filter
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: sample3.puid
+      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: sample3.puid
       find('input.t-search-component').native.send_keys(:return)
 
       # verify limit is still 10
@@ -834,7 +834,7 @@ module Projects
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
 
       # apply filter
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
+      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.puid
       find('input.t-search-component').native.send_keys(:return)
 
       # verify sort is still applied
@@ -855,7 +855,7 @@ module Projects
 
       ### ACTIONS START ###
       # apply filter
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.name
+      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
       ### ACTIONS END ###
 
@@ -880,7 +880,7 @@ module Projects
 
       ### ACTIONS START ###
       # apply filter
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample2.puid
+      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample2.puid
       find('input.t-search-component').native.send_keys(:return)
       ### ACTIONS END ###
 
@@ -900,7 +900,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: 'sample'
+      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: 'sample'
       find('input.t-search-component').native.send_keys(:return)
       ### ACTIONS END ###
 
@@ -921,7 +921,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.puid
+      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.puid
       find('input.t-search-component').native.send_keys(:return)
       ### ACTIONS END ###
 
@@ -948,7 +948,7 @@ module Projects
 
       ### ACTIONS and VERIFY START ###
       # apply filter
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: filter_text
+      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: filter_text
       find('input.t-search-component').native.send_keys(:return)
 
       assert_selector "tr[id='#{@sample1.id}']"
@@ -998,7 +998,7 @@ module Projects
 
       ### ACTIONS START ###
       # apply filter
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: filter_text
+      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: filter_text
       find('input.t-search-component').native.send_keys(:return)
       ### ACTIONS END ###
 
@@ -1977,7 +1977,7 @@ module Projects
       end
 
       # apply filter
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: samples(:sample1).name
+      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: samples(:sample1).name
       find('input.t-search-component').native.send_keys(:return)
 
       within 'tbody' do
@@ -1996,7 +1996,7 @@ module Projects
       end
 
       # remove filter
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: ' '
+      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: ' '
       find('input.t-search-component').native.send_keys(:return)
 
       within 'tfoot' do
@@ -2302,7 +2302,7 @@ module Projects
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
       assert_selector 'table thead tr th', count: 8
 
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.name
+      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
 
       within 'div.overflow-auto.scrollbar' do |div|
@@ -2375,7 +2375,7 @@ module Projects
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
       assert_selector 'table thead tr th', count: 7
 
-      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample2.name
+      fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample2.name
       find('input.t-search-component').native.send_keys(:return)
 
       ### SETUP END ###
