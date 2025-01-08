@@ -1,10 +1,10 @@
 <% if @query.errors.any? %>
   <% @query.groups.each_with_index do |group, group_index| %>
-    <% group.errors.each do |error| %>
-      <%= turbo_stream.append "group-error-messages-#{group_index}" do %>
-        <%= error.full_message %>
-      <% end %>
-    <% end %>
+    <%= turbo_stream.replace "group-error-messages-#{group_index}",
+                         partial: "projects/samples/search/errors",
+                         locals: {
+                           errors: group.errors,
+                         } %>
   <% end %>
 <% else %>
   <%= turbo_stream.replace "table-filter",
