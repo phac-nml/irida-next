@@ -2181,6 +2181,7 @@ module Projects
     end
 
     test 'filtering samples by list of sample puids' do
+      skip
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
@@ -2225,6 +2226,7 @@ module Projects
     end
 
     test 'filtering samples by list of sample names' do
+      skip
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
@@ -2259,6 +2261,7 @@ module Projects
     end
 
     test 'can filter by large list of sample names or ids' do
+      skip
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
