@@ -10,7 +10,8 @@
                    "w-full m-0 border-slate-300 text-slate-900 text-sm focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
                  data: {
                    "inline-edit-target": "input",
-                   action: "blur->inline-edit#submit keydown->inline-edit#cancel",
+                   action:
+                     "blur->inline-edit#reset keydown->inline-edit#inputKeydown",
                  } %>
   <% end %>
 </td>
