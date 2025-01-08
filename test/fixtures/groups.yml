@@ -75,7 +75,7 @@ group_five:
   path: group-5
   description: Group 5 description
   puid: INXT_GRP_AAAAAAAAAG
-  samples_count: 0
+  samples_count: 2
 
 subgroup_one_group_five:
   <<: *DEFAULTS
@@ -210,6 +210,7 @@ group_alpha_subgroup1:
   name: Subgroup 1
   path: group-alpha/subgroup-1
   description: Subgroup 1 description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha, :uuid) %>
   puid: INXT_GRP_AAAAAAAAAV
   samples_count: 1
 
@@ -408,4 +409,123 @@ group_jeff:
   description: Group Jeff description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   puid: INXT_GRP_AAAAAAJEFF
+  samples_count: 0
+
+group_india:
+  <<: *DEFAULTS
+  name: Group India
+  path: group-india
+  description: Group India description
+  puid: INXT_GRP_AAAAAAAACA
+  samples_count: 3
+
+group_india_subgroup1:
+  <<: *DEFAULTS
+  name: Subgroup 1
+  path: group-india/subgroup-1
+  description: Subgroup 1 description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_india, :uuid) %>
+  puid: INXT_GRP_AAAAAAAACB
+  samples_count: 1
+
+group_juliett:
+  <<: *DEFAULTS
+  name: Group Juliett
+  path: group-juliett
+  description: Group Juliett description
+  puid: INXT_GRP_AAAAAAAACC
+  samples_count: 3
+
+group_juliett_subgroup1:
+  <<: *DEFAULTS
+  name: Subgroup 1
+  path: group-juliett/subgroup-1
+  description: Subgroup 1 description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_juliett, :uuid) %>
+  puid: INXT_GRP_AAAAAAAACD
+  samples_count: 1
+
+group_kilo:
+  <<: *DEFAULTS
+  name: Group Kilo
+  path: group-kilo
+  description: Group Kilo description
+  puid: INXT_GRP_AAAAAAAACE
+  samples_count: 0
+
+group_lima:
+  <<: *DEFAULTS
+  name: Group Lima
+  path: group-lima
+  description: Group Lima description
+  puid: INXT_GRP_AAAAAAAACF
+  samples_count: 0
+
+group_mike:
+  <<: *DEFAULTS
+  name: Group Mike
+  path: group-mike
+  description: Group Mike description
+  puid: INXT_GRP_AAAAAAAACG
+  samples_count: 6
+
+subgroup_mike_a:
+  <<: *DEFAULTS
+  name: Subgroup Mike A
+  path: subgroup-mike-a
+  description: Subgroup Mike A description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_mike, :uuid) %>
+  puid: INXT_GRP_AAAAAAAACH
+  samples_count: 2
+
+subgroup_mike_b:
+  <<: *DEFAULTS
+  name: Subgroup Mike B
+  path: subgroup-mike-b
+  description: Subgroup Mike B description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_mike, :uuid) %>
+  puid: INXT_GRP_AAAAAAAACI
+  samples_count: 2
+
+subgroup_mike_a_a:
+  <<: *DEFAULTS
+  name: Subgroup Mike A A
+  path: subgroup-mike-a-a
+  description: Subgroup Mike A A description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_mike_a, :uuid) %>
+  puid: INXT_GRP_AAAAAAAACJ
+  samples_count: 0
+
+group_oscar:
+  <<: *DEFAULTS
+  name: Group Oscar
+  path: group-oscar
+  description: Group Oscar description
+  puid: INXT_GRP_AAAAAAAACK
+  samples_count: 0
+
+subgroup_oscar_a:
+  <<: *DEFAULTS
+  name: Subgroup Oscar A
+  path: subgroup-oscar-a
+  description: Subgroup Oscar A description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_oscar, :uuid) %>
+  puid: INXT_GRP_AAAAAAAACL
+  samples_count: 0
+
+group_papa:
+  <<: *DEFAULTS
+  name: Group Papa
+  path: group-papa
+  description: Group Papa description
+  puid: INXT_GRP_AAAAAAAACM
+  samples_count: 0
+
+subgroup_papa_a:
+  <<: *DEFAULTS
+  name: Subgroup Papa A
+  path: subgroup-papa-a
+  description: Subgroup Papa A description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_papa, :uuid) %>
+  puid: INXT_GRP_AAAAAAAACN
   samples_count: 0

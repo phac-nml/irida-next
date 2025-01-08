@@ -387,6 +387,48 @@ group_alpha_member_private_ryan:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha, :uuid) %>
   access_level: <%= Member::AccessLevel::OWNER %>
 
+group_india_member_private_ryan:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_india, :uuid) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+group_juliett_member_private_ryan:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_juliett, :uuid) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+group_kilo_member_private_ryan:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_kilo, :uuid) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+group_lima_member_private_ryan:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_lima, :uuid) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+group_mike_member_private_ryan:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_mike, :uuid) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+group_oscar_member_private_ryan:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_oscar, :uuid) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+group_papa_member_private_ryan:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_papa, :uuid) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
 group_eleven_member_user_26:
   user_id: <%= ActiveRecord::FixtureSet.identify(:user26, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:user26, :uuid) %>

@@ -498,3 +498,108 @@ empty_project_namespace_route:
   name: Empty Group / Empty Project
   path: empty-group/empty-project
   source: empty_project_namespace (Namespace)
+
+group_india_route:
+  name: Group India
+  path: group-india
+  source: group_india (Namespace)
+
+project_india_namespace_route:
+  name: Group India / Project India
+  path: group-india/project-india
+  source: projectIndia_namespace (Namespace)
+
+subgroup_one_group_india_route:
+  name: Group India / Subgroup 1
+  path: group-india/subgroup-1
+  source: group_india_subgroup1 (Namespace)
+
+project_india_1_namespace_route:
+  name: Group India / Subgroup 1 / Project India 1
+  path: group-india/subgroup-1/project-india-1
+  source: projectIndia1_namespace (Namespace)
+
+group_juliett_route:
+  name: Group Juliett
+  path: group-juliett
+  source: group_juliett (Namespace)
+
+project_juliett_namespace_route:
+  name: Group Juliett / Project Juliett
+  path: group-juliett/project-juliett
+  source: projectJuliett_namespace (Namespace)
+
+subgroup_one_group_juliett_route:
+  name: Group Juliett / Subgroup 1
+  path: group-juliett/subgroup-1
+  source: group_juliett_subgroup1 (Namespace)
+
+project_juliett_1_namespace_route:
+  name: Group Juliett / Subgroup 1 / Project Juliett 1
+  path: group-juliett/subgroup-1/project-juliett-1
+  source: projectJuliett1_namespace (Namespace)
+
+group_kilo_route:
+  name: Group Kilo
+  path: group-kilo
+  source: group_kilo (Namespace)
+
+group_lima_route:
+  name: Group Lima
+  path: group-lima
+  source: group_lima (Namespace)
+
+group_mike_route:
+  name: Group Mike
+  path: group-mike
+  source: group_mike (Namespace)
+
+projectMike_namespace_route:
+  name: Group Mike / Project Mike
+  path: group-mike/project-mike
+  source: projectMike_namespace (Namespace)
+
+subgroup_mike_a_route:
+  name: Group Mike / Subgroup Mike A
+  path: group-mike/subgroup-mike-a
+  source: subgroup_mike_a (Namespace)
+
+projectMikeA_namespace_route:
+  name: Group Mike / Subgroup Mike A / Project Mike A
+  path: group-mike/subgroup-mike-a/project-mike-a
+  source: projectMikeA_namespace (Namespace)
+
+subgroup_mike_b_route:
+  name: Group Mike / Subgroup Mike B
+  path: group-mike/subgroup-mike-b
+  source: subgroup_mike_b (Namespace)
+
+projectMikeB_namespace_route:
+  name: Group Mike / Subgroup Mike B / Project Mike B
+  path: group-mike/subgroup-mike-b/project-mike-b
+  source: projectMikeB_namespace (Namespace)
+
+subgroup_mike_a_a_route:
+  name: Group Mike / Subgroup Mike A / Subgroup Mike AA
+  path: group-mike/subgroup-mike-a/subgroup-mike-a-a
+  source: subgroup_mike_a_a (Namespace)
+
+group_oscar_route:
+  name: Group Oscar
+  path: group-oscar
+  source: group_oscar (Namespace)
+
+subgroup_oscar_a_route:
+  name: Group Oscar / Subgroup Oscar A
+  path: group-oscar/subgroup-oscar-a
+  source: subgroup_oscar_a (Namespace)
+
+group_papa_route:
+  name: Group Papa
+  path: group-papa
+  source: group_papa (Namespace)
+
+subgroup_papa_a_route:
+  name: Group Papa / Subgroup Papa A
+  path: group-papa/subgroup-papa-a
+  source: subgroup_papa_a (Namespace)
