@@ -26,7 +26,7 @@ module WorkflowExecutions
         'index' => 1,
         'selected_id' => attachments(:attachment2).id,
         'property' => 'input',
-        'required_properties' => [],
+        'required_properties' => nil,
         'file_type' => 'other',
         'file_selector_arguments' => { pattern: nil }
       }
