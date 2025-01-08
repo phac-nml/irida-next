@@ -197,6 +197,9 @@ module Projects
         end
 
         def render_update_success
+          # When the timestamp is rendered to the form, it only renders down to the second, this was causing timing
+          # issues for selecting current samples.  To fix this, we are adding a second to the timestamp so that the
+          # timestamp is always greater than the current time.
           @timestamp = DateTime.current + 1.second
           render turbo_stream: [turbo_stream.replace(
             helpers.dom_id(@sample, @field),
