@@ -25,21 +25,26 @@ module WorkflowExecutions
 
     def file_selector_params
       params.require(:file_selector).permit(
-        :attachable_id, :attachable_type, :index, :property, :selected_id, :file_type, required_properties: [],
-                                                                                       file_selector_arguments: [
-                                                                                         :pattern, { workflow_params: %i[
-                                                                                           name version
-                                                                                         ] }
-                                                                                       ]
+        :attachable_id,
+        :attachable_type,
+        :index,
+        :property,
+        :selected_id,
+        :file_type,
+        required_properties: [],
+        file_selector_arguments: [
+          :pattern, { workflow_params: %i[name version] }
+        ]
       )
     end
 
-    def listing_attachments
-      if file_selector_params['file_type'] == 'fastq'
+    def listing_attachments # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      case file_selector_params['file_type']
+      when 'fastq'
         @listing_attachments = @attachable.samplesheet_fastq_files(
           file_selector_params['property'], file_selector_params['file_selector_arguments']['workflow_params']
         )
-      elsif file_selector_params['file_type'] == 'other'
+      when 'other'
         @listing_attachments = if file_selector_params['file_selector_arguments']['pattern']
                                  @attachable.filter_files_by_pattern(
                                    @attachable.sorted_files[:singles] || [],
@@ -54,12 +59,12 @@ module WorkflowExecutions
     end
 
     def attachable
-      id = file_selector_params[:attachable_id]
+      attachable_id = file_selector_params[:attachable_id]
       case file_selector_params[:attachable_type]
       when Sample.sti_name
-        @attachable = Sample.find(id)
+        @attachable = Sample.find(attachable_id)
       when Namespaces::ProjectNamespace.sti_name
-        @attachable = Namespace.find(id)
+        @attachable = Namespace.find(attachable_id)
       end
     end
 

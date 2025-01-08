@@ -949,6 +949,7 @@ fr:
       label: Samples
       loading: Loading ...
   nextflow_component:
+    attachments_error: The highlighted file cells below require a selection.
     name:
       helper: A custom name will make it easier to search for this in the future.
       label: Name (Optional)

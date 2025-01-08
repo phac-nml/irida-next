@@ -12,7 +12,6 @@
     <% else %>
       <%= form_with id: 'file_selector_form', url: workflow_executions_file_selector_index_path(file_selector: file_selector_params), method: :post do |form| %>
         <input type="hidden" name="format" value="turbo_stream"/>
-
         <table
           class='
             w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
@@ -74,7 +73,7 @@
                 </td>
               </tr>
             <% end %>
-            <% unless file_selector_params["required_properties"].include?(file_selector_params["property"]) %>
+            <% unless file_selector_params["required_properties"] && file_selector_params["required_properties"].include?(file_selector_params["property"]) %>
               <tr>
                 <td>
                   <%= form.radio_button "attachment_id",
