@@ -232,6 +232,6 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
 
     put workflow_execution_path(workflow_execution, format: :turbo_stream), params: update_params
 
-    assert_response :unprocessable_entity
+    assert_response :not_found
   end
 end
