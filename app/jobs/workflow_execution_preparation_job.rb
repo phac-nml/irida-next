@@ -10,7 +10,7 @@ class WorkflowExecutionPreparationJob < ApplicationJob
     result = WorkflowExecutions::PreparationService.new(workflow_execution).execute
 
     if result
-      WorkflowExecutionSubmissionJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
+      WorkflowExecutionSubmissionJob.perform_later(workflow_execution)
     else
       @workflow_execution.state = :error
       @workflow_execution.cleaned = true

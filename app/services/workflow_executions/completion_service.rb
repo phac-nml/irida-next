@@ -45,7 +45,7 @@ module WorkflowExecutions
 
       @workflow_execution.save
 
-      WorkflowExecutionCleanupJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution)
+      WorkflowExecutionCleanupJob.perform_later(@workflow_execution)
 
       @workflow_execution
     end
