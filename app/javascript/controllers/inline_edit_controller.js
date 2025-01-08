@@ -23,6 +23,9 @@ export default class extends Controller {
   inputKeydown(event) {
     if(event.key === "Escape") {
       this.reset();
+    } else if(event.key === "Tab") {
+      event.preventDefault();
+      this.submit();
     }
   }
 }
