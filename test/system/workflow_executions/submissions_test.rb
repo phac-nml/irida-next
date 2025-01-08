@@ -634,7 +634,7 @@ module WorkflowExecutions
 
         ### VERIFY START ###
         # verify error msg rendered
-        assert_text I18n.t('nextflow.samplesheet_component.attachments_error')
+        assert_text I18n.t('nextflow_component.attachments_error')
         # verify error borders rendered (error msg and one attachment)
         assert_selector 'div.border-red-300', count: 2
         ### VERIFY END ###
