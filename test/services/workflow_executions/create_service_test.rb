@@ -310,6 +310,12 @@ module WorkflowExecutions
 
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
 
+      @workflow_execution.create_logidze_snapshot!
+
+      assert 'initial', @workflow_execution.state
+      assert_equal 1, @workflow_execution.log_data.version
+      assert_equal 1, @workflow_execution.log_data.size
+
       assert_equal test_name, @workflow_execution.name
       expected_tags = { 'createdBy' => @user.email }
       assert_equal expected_tags, @workflow_execution.tags

@@ -10,7 +10,7 @@ class AddLogidzeToWorkflowExecutions < ActiveRecord::Migration[7.2]
         create_trigger :logidze_on_workflow_executions, on: :workflow_executions
 
         execute <<~SQL.squish
-          UPDATE "workflow_executions" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"cleaned","http_error_code","metadata","workflow_params","workflow_type","workflow_type_version","workflow_engine","workflow_engine_version","workflow_engine_parameters","workflow_url","namespace_id","tags","blob_run_directory","id","submitter_id","email_notification","update_samples"}');
+          UPDATE "workflow_executions" as t SET log_data = logidze_snapshot(to_jsonb(t), 'created_at', '{"cleaned","http_error_code","metadata","workflow_params","workflow_type","workflow_type_version","workflow_engine","workflow_engine_version","workflow_engine_parameters","workflow_url","namespace_id","tags","blob_run_directory","id","submitter_id","email_notification","update_samples","attachments_updated_at","updated_at","created_at"}');
         SQL
       end
 

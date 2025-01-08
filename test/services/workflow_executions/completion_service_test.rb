@@ -252,7 +252,12 @@ module WorkflowExecutions
     test 'sample outputs on samples_workflow_executions' do
       workflow_execution = @workflow_execution_with_samples
 
+      workflow_execution.create_logidze_snapshot!
+
       assert 'completing', workflow_execution.state
+
+      assert_equal 1, workflow_execution.log_data.version
+      assert_equal 1, workflow_execution.log_data.size
 
       assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
 
@@ -298,7 +303,12 @@ module WorkflowExecutions
       assert_equal @normal2_output_analysis3_file_blob.filename, output3.filename
       assert_equal @normal2_output_analysis3_file_blob.checksum, output3.file.checksum
 
+      workflow_execution.create_logidze_snapshot!
+
       assert_equal 'completed', workflow_execution.state
+
+      assert_equal 4, workflow_execution.log_data.version
+      assert_equal 4, workflow_execution.log_data.size
 
       assert_no_enqueued_emails
 
