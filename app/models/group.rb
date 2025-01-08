@@ -141,13 +141,13 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
     minimum_access_level = Member::AccessLevel::GUEST
 
     active_shared_namespaces = Namespace
-      .where(
-        id: NamespaceGroupLink
-                .not_expired
-                .where(group_id: self_and_descendant_ids, group_access_level: minimum_access_level..)
-                .select(:namespace_id)
-      ).self_and_descendants.where(type: [Namespaces::ProjectNamespace.sti_name])
-       .where.not(id: self_and_descendants_of_type([Namespaces::ProjectNamespace.sti_name]).ids)
+                               .where(
+                                 id: NamespaceGroupLink
+                                   .not_expired
+                                   .where(group_id: self_and_descendant_ids, group_access_level: minimum_access_level..)
+                                   .select(:namespace_id)
+                               ).self_and_descendants.where(type: [Namespaces::ProjectNamespace.sti_name])
+                               .where.not(id: self_and_descendants_of_type([Namespaces::ProjectNamespace.sti_name]).ids)
 
     return samples_count unless active_shared_namespaces.any?
 
@@ -176,8 +176,8 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
     )
   end
 
-  def has_samples?
-    return samples_count.positive? || aggregated_samples_count.positive?
+  def has_samples? # rubocop:disable Naming/PredicateName
+    samples_count.positive? || aggregated_samples_count.positive?
   end
 
   def add_to_samples_count(namespaces, addition_amount)
