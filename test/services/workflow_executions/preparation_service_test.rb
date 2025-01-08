@@ -50,7 +50,6 @@ module WorkflowExecutions
       @workflow_execution.create_logidze_snapshot!
       assert_equal 2, @workflow_execution.log_data.version
       assert_equal 2, @workflow_execution.log_data.size
-
     end
 
     test 'should return false since chosen pipeline is not executable' do
