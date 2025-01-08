@@ -38,7 +38,7 @@ module WorkflowExecutions
       )
     end
 
-    def listing_attachments # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def listing_attachments # rubocop:disable Metrics/AbcSize
       case file_selector_params['file_type']
       when 'fastq'
         @listing_attachments = @attachable.samplesheet_fastq_files(
@@ -54,8 +54,6 @@ module WorkflowExecutions
                                  sample.sorted_files[:singles] || []
                                end
       end
-
-      @listing_attachments = @listing_attachments.sort_by { |file| file[:created_at] }.reverse
     end
 
     def attachable
