@@ -307,8 +307,8 @@ module WorkflowExecutions
 
       assert_equal 'completed', workflow_execution.state
 
-      assert_equal 4, workflow_execution.log_data.version
-      assert_equal 4, workflow_execution.log_data.size
+      assert_equal 2, workflow_execution.log_data.version
+      assert_equal 2, workflow_execution.log_data.size
 
       assert_no_enqueued_emails
 
