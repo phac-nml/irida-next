@@ -4,7 +4,6 @@ require 'test_helper'
 
 class MetadataTemplateTest < ActiveSupport::TestCase
   setup do
-    @namespace = namespaces_user_namespaces(:john_doe_namespace)
     @user = users(:john_doe)
     @valid_metadata_template = metadata_templates(:valid_metadata_template)
   end
@@ -28,7 +27,7 @@ class MetadataTemplateTest < ActiveSupport::TestCase
 
   test 'valid with same name in different namespace' do
     duplicate = @valid_metadata_template.dup
-    duplicate.namespace = namespaces_user_namespaces(:jane_doe_namespace)
+    duplicate.namespace = groups(:subgroup_one_group_three)
     assert duplicate.valid?
   end
 
@@ -66,7 +65,7 @@ class MetadataTemplateTest < ActiveSupport::TestCase
     skip 'TrackActivity concern is not yet implemented'
     template = MetadataTemplate.new(
       name: 'Activity Test',
-      namespace: @namespace,
+      namespace: project_namespace(:project1),
       created_by: @user
     )
     assert_difference 'Activity.count' do
