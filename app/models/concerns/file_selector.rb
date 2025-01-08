@@ -44,7 +44,7 @@ module FileSelector
     files = []
     if sorted_files[direction].present?
       files = sorted_files[direction] || []
-      files.concat(singles) unless pe_only?(property)
+      files.concat(singles) if property['pe_only'].blank?
     else
       files = singles
     end
@@ -92,10 +92,6 @@ module FileSelector
 
   def fastq_direction(property)
     property.match(/fastq_(\d+)/)[1].to_i == 1 ? :pe_forward : :pe_reverse
-  end
-
-  def pe_only?(property)
-    property['pe_only'].present?
   end
 
   def retrieve_pattern(property, workflow_params)
