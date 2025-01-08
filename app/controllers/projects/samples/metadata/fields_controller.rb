@@ -197,6 +197,7 @@ module Projects
         end
 
         def render_update_success
+          @timestamp = DateTime.current + 1.second
           render turbo_stream: [turbo_stream.replace(
             helpers.dom_id(@sample, @field),
             partial: 'shared/samples/metadata/fields/editable_field_cell',
@@ -208,8 +209,7 @@ module Projects
                                   locals: { type: 'success',
                                             message: t('samples.editable_cell.update_success') }
                                 ),
-                                turbo_stream.replace('timestamp', partial: 'shared/samples/timestamp_input',
-                                                                  locals: { timestamp: DateTime.current })]
+                                turbo_stream.replace('timestamp', partial: 'shared/samples/timestamp_input')]
         end
       end
     end
