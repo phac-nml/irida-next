@@ -7,7 +7,7 @@ module WorkflowExecutions
       super
     end
 
-    def execute # rubocop:disable Metrics/AbcSize
+    def execute
       return false if params.empty?
 
       @workflow_execution = WorkflowExecution.new(params)
@@ -24,7 +24,7 @@ module WorkflowExecutions
 
       if @workflow_execution.save
         create_activities
-        WorkflowExecutionPreparationJob.set(wait_until: 30.seconds.from_now).perform_later(@workflow_execution)
+        WorkflowExecutionPreparationJob.perform_later(@workflow_execution)
       end
 
       @workflow_execution
