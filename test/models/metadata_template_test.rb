@@ -7,7 +7,6 @@ class MetadataTemplateTest < ActiveSupport::TestCase
     @namespace = namespaces_user_namespaces(:john_doe_namespace)
     @user = users(:john_doe)
     @valid_metadata_template = metadata_templates(:valid_metadata_template)
-    @invalid_metadata_template = metadata_templates(:invalid_metadata_template)
   end
 
   test 'valid metadata template' do

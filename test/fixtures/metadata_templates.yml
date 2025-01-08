@@ -7,10 +7,3 @@ valid_metadata_template:
   created_at: <%= 3.hours.ago %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-
-invalid_metadata_template:
-  description: "This is an invalid template."
-  fields: ["field_1", "field_2", "field_3"]
-  created_at: <%= 3.hours.ago %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
