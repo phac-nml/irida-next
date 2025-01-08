@@ -21,8 +21,7 @@ module WorkflowExecutions
       valid_params = { name: 'New Name' }
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
-        WorkflowExecutions::UpdateService.new(@workflow_execution, users(:michelle_doe),
-                                                       valid_params).execute
+        WorkflowExecutions::UpdateService.new(@workflow_execution, users(:michelle_doe), valid_params).execute
       end
 
       assert_equal WorkflowExecutionPolicy, exception.policy
@@ -47,8 +46,7 @@ module WorkflowExecutions
       valid_params = { name: 'New Name' }
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
-        WorkflowExecutions::UpdateService.new(workflow_execution, users(:ryan_doe),
-                                                       valid_params).execute
+        WorkflowExecutions::UpdateService.new(workflow_execution, users(:ryan_doe), valid_params).execute
       end
 
       assert_equal WorkflowExecutionPolicy, exception.policy
