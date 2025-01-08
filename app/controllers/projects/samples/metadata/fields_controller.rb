@@ -4,7 +4,7 @@ module Projects
   module Samples
     module Metadata
       # Controller actions for Project Samples Metadata Fields Controller
-      class FieldsController < Projects::Samples::ApplicationController
+      class FieldsController < Projects::Samples::ApplicationController # rubocop:disable Metrics/ClassLength
         respond_to :turbo_stream
 
         # Param received as:
@@ -42,6 +42,34 @@ module Projects
           end
         end
 
+        def editable
+          authorize! @project, to: :update_sample?
+          @field = params[:field]
+          @value = @sample.metadata[@field]
+
+          if @sample.updatable_field?(@field)
+            render_editable_field
+          else
+            render_non_editable_error
+          end
+        end
+
+        def update_value
+          authorize! @project, to: :update_sample?
+
+          @field = params[:field]
+          value = params[:value]
+          original_value = params[:original_value]
+
+          if value == original_value
+            render_unchanged_field
+          elsif !@sample.field?(@field)
+            create_metadata_field(@field, value)
+          else
+            update_field_value(original_value, value)
+          end
+        end
+
         private
 
         def create_field_params
@@ -60,6 +88,22 @@ module Projects
           else
             :ok
           end
+        end
+
+        def render_editable_field
+          render status: :partial_content, turbo_stream: turbo_stream.replace(
+            helpers.dom_id(@sample, @field),
+            partial: 'shared/samples/metadata/fields/editing_field_cell',
+            locals: { sample: @sample, field: @field, value: @value }
+          )
+        end
+
+        def render_non_editable_error
+          render status: :unprocessable_entity, turbo_stream: turbo_stream.append(
+            'flashes',
+            partial: 'shared/flash',
+            locals: { type: 'error', message: t('samples.editable_cell.not_editable', field: @field) }
+          )
         end
 
         def get_create_messages(added_keys, existing_keys) # rubocop:disable Metrics/MethodLength
@@ -98,6 +142,77 @@ module Projects
             update_render_params[:message] = { type: 'error', message: @sample.errors.full_messages.first }
           end
           update_render_params
+        end
+
+        def create_metadata_field(field, value)
+          create_params = { field => value }
+          ::Samples::Metadata::Fields::CreateService.new(@project, @sample, current_user, create_params).execute
+
+          if @sample.errors.any?
+            render_update_error
+          else
+            render_update_success
+          end
+        end
+
+        def render_unchanged_field
+          render turbo_stream: turbo_stream.replace(
+            helpers.dom_id(@sample, @field),
+            partial: 'shared/samples/metadata/fields/editable_field_cell',
+            locals: { sample: @sample, field: @field }
+          )
+        end
+
+        def update_field_value(original_value, new_value)
+          perform_field_update(original_value, new_value)
+
+          if @sample.errors.any?
+            render_update_error
+          else
+            render_update_success
+          end
+        end
+
+        def perform_field_update(original_value, new_value)
+          ::Samples::Metadata::Fields::UpdateService.new(
+            @project,
+            @sample,
+            current_user,
+            build_update_params(original_value, new_value)
+          ).execute
+        end
+
+        def build_update_params(original_value, new_value)
+          {
+            'update_field' => {
+              'key' => { @field => @field },
+              'value' => { original_value => new_value }
+            }
+          }
+        end
+
+        def render_update_error
+          render status: :unprocessable_entity,
+                 locals: { type: 'error', message: @sample.errors.full_messages.first }
+        end
+
+        def render_update_success
+          # When the timestamp is rendered to the form, it only renders down to the second, this was causing timing
+          # issues for selecting current samples.  To fix this, we are adding a second to the timestamp so that the
+          # timestamp is always greater than the current time.
+          @timestamp = @sample.updated_at + 1.second
+          render turbo_stream: [turbo_stream.replace(
+            helpers.dom_id(@sample, @field),
+            partial: 'shared/samples/metadata/fields/editable_field_cell',
+            locals: { sample: @sample, field: @field }
+          ),
+                                turbo_stream.append(
+                                  'flashes',
+                                  partial: 'shared/flash',
+                                  locals: { type: 'success',
+                                            message: t('samples.editable_cell.update_success') }
+                                ),
+                                turbo_stream.replace('timestamp', partial: 'shared/samples/timestamp_input')]
         end
       end
     end

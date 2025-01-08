@@ -2261,6 +2261,99 @@ module Projects
       ### VERIFY END ###
     end
 
+    test 'can update metadata value that is not from an analysis' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_selector 'table thead tr th', count: 6
+
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      assert_selector 'table thead tr th', count: 8
+
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.name
+      find('input.t-search-component').native.send_keys(:return)
+
+      within 'div.overflow-auto.scrollbar' do |div|
+        div.scroll_to div.find('table thead th:nth-child(7)')
+      end
+
+      assert_selector 'table thead tr th', count: 8
+      ### SETUP END ###
+
+      within('table tbody tr:first-child td:nth-child(7)') do
+        ### ACTIONS START ###
+        # check within the from with method get that the value is 'value1':
+        within('form[method="get"]') do
+          find('button').click
+        end
+        assert_selector "form[data-controller='inline-edit']"
+
+        within('form[data-controller="inline-edit"]') do
+          find('input[name="value"]').send_keys 'value2'
+          find('input[name="value"]').send_keys :return
+        end
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
+        assert_no_selector "form[data-controller='inline-edit']"
+        assert_selector 'form[method="get"]'
+        assert_selector 'button', text: 'value2'
+      end
+      assert_text I18n.t('samples.editable_cell.update_success')
+      ### VERIFY END ###
+    end
+
+    test 'should not update metadata value that is from an analysis' do
+      ### SETUP START ###
+      subgroup12aa = groups(:subgroup_twelve_a_a)
+      project31 = projects(:project31)
+      visit namespace_project_samples_url(subgroup12aa, project31)
+      assert_selector 'table thead tr th', count: 6
+
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      assert_selector 'table thead tr th', count: 8
+
+      click_on I18n.t('projects.samples.show.table_header.last_updated')
+      assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
+
+      within 'div.overflow-auto.scrollbar' do |div|
+        div.scroll_to div.find('table thead th:nth-child(8)')
+      end
+
+      ### SETUP END ###
+
+      within('table tbody tr:nth-child(1) td:nth-child(6)') do
+        ### ACTIONS START ###
+        within('form[method="get"]') do
+          find('button').click
+        end
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
+        assert_no_selector "form[data-controller='inline-edit']"
+        ### VERIFY END ###
+      end
+    end
+
+    test 'project analysts should not be able to edit samples' do
+      ### SETUP START ###
+      login_as users(:ryan_doe)
+      visit namespace_project_samples_url(@namespace, @project)
+
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      assert_selector 'table thead tr th', count: 7
+
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample2.name
+      find('input.t-search-component').native.send_keys(:return)
+
+      ### SETUP END ###
+
+      ### VERIFY START ###
+      within('table tbody tr:first-child td:nth-child(7)') do
+        assert_no_selector "form[method='get']"
+      end
+      ### VERIFY END ###
+    end
+
     def long_filter_text
       text = (1..500).map { |n| "sample#{n}" }.join(', ')
       "#{text}, #{@sample1.name}" # Need to comma to force the tag to be created
