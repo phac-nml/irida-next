@@ -212,4 +212,26 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to workflow_executions_path
   end
+
+  test 'Submitter can update workflow execution name post launch' do
+    workflow_execution = workflow_executions(:irida_next_example_new)
+
+    update_params = { workflow_execution: { name: 'New Name' } }
+
+    put workflow_execution_path(workflow_execution, format: :turbo_stream), params: update_params
+
+    assert_response :success
+  end
+
+  test 'Cannot update another user\'s personal workflow execution name' do
+    sign_in users(:ryan_doe)
+
+    workflow_execution = workflow_executions(:irida_next_example_new)
+
+    update_params = { workflow_execution: { name: 'New Name' } }
+
+    put workflow_execution_path(workflow_execution, format: :turbo_stream), params: update_params
+
+    assert_response :unprocessable_entity
+  end
 end

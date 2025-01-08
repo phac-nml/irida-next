@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-resources :workflow_executions, only: %i[index create show destroy] do
+resources :workflow_executions, only: %i[index create show destroy edit update] do
   member do
     put :cancel
   end

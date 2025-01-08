@@ -7,7 +7,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   included do
     before_action :set_default_tab, only: :show
     before_action :current_page, only: %i[show index]
-    before_action :workflow_execution, only: %i[show cancel destroy]
+    before_action :workflow_execution, only: %i[show cancel destroy update edit]
   end
 
   TABS = %w[summary params samplesheet files].freeze
@@ -20,6 +20,24 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
     set_default_sort
     @pagy, @workflow_executions = pagy_with_metadata_sort(@q.result)
+  end
+
+  def edit
+    authorize! @namespace
+  end
+
+  def update
+    respond_to do |format|
+      format.turbo_stream do
+        @updated = WorkflowExecutions::UpdateService.new(@workflow_execution, current_user,
+                                                         workflow_execution_update_params).execute
+        if @updated
+          render status: :ok
+        else
+          render status: :unprocessable_entity
+        end
+      end
+    end
   end
 
   def show
