@@ -62,16 +62,17 @@ class MetadataTemplateTest < ActiveSupport::TestCase
   end
 
   # Activity Tracking Tests
-  # test 'tracks activity on create' do
-  #   template = MetadataTemplate.new(
-  #     name: 'Activity Test',
-  #     namespace: @namespace,
-  #     created_by: @user
-  #   )
-  #   assert_difference 'Activity.count' do
-  #     template.save
-  #   end
-  # end
+  test 'tracks activity on create' do
+    skip 'TrackActivity concern is not yet implemented'
+    template = MetadataTemplate.new(
+      name: 'Activity Test',
+      namespace: @namespace,
+      created_by: @user
+    )
+    assert_difference 'Activity.count' do
+      template.save
+    end
+  end
 
   test 'tracks history changes' do
     @valid_metadata_template.create_logidze_snapshot!

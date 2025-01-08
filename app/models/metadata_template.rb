@@ -6,17 +6,27 @@ class MetadataTemplate < ApplicationRecord
 
   has_logidze
   acts_as_paranoid
-  broadcasts_refreshes
 
   # Associations
-  belongs_to :namespace
   belongs_to :created_by, class_name: 'User'
 
   # Validations
   validates :name, presence: true, uniqueness: { scope: [:namespace_id] }
   validates :description, length: { maximum: 1000 }
-  # validates :namespace_type,
-  #           inclusion: {
-  #             in: [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
-  #           }
+
+  belongs_to :namespace, autosave: true
+
+  belongs_to :group, optional: true, foreign_key: :namespace_id # rubocop:disable Rails/InverseOf
+  belongs_to :project_namespace, optional: true, foreign_key: :namespace_id, class_name: 'Namespaces::ProjectNamespace' # rubocop:disable Rails/InverseOf
+
+  validate :validate_namespace
+
+  private
+
+  def validate_namespace
+    # Only Groups and Projects should have metadata templates
+    return if %w[Group Project].include?(namespace.type)
+
+    errors.add(namespace.type, 'namespace cannot have metadata templates')
+  end
 end
