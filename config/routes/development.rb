@@ -7,5 +7,7 @@ if Rails.env.development?
   get '/rails/info/routes'     => 'rails/info#routes'
   get '/rails/info'            => 'rails/info#index'
 
+  get '/console', to: 'console#show'
+
   mount Lookbook::Engine, at: '/rails/lookbook'
 end

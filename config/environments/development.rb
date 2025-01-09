@@ -102,6 +102,8 @@ Rails.application.configure do
     ]
   }
 
+  config.enable_web_console = false
+
   # Create a new production log file [daily, weekly, monthly,..]
   # if ENV['RAILS_DAILY_LOG_ROTATION'].present?
   #   logger           = ActiveSupport::Logger.new(config.default_log_file, 'daily')
