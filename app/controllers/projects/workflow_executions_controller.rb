@@ -19,6 +19,10 @@ module Projects
       @workflow_execution = WorkflowExecution.find_by!(id: params[:id], submitter: @project.namespace.automation_bot)
     end
 
+    def workflow_execution_update_params
+      params.require(:workflow_execution).permit(:name)
+    end
+
     def load_workflows
       authorized_scope(WorkflowExecution, type: :relation, as: :automated, scope_options: { project: @project })
     end
