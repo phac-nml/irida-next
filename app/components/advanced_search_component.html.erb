@@ -31,100 +31,18 @@
           Add and/or conditions to define the search criteria.
         </p>
         <% @search.groups.each_with_index do |group, group_index| %>
-          <div id="group-error-messages-<%= group_index %>"></div>
-          <div
-            data-advanced-search-target="groupsContainer"
-            class="bg-slate-100 border border-gray-300 rounded-lg"
-          >
-            <%= @form.fields_for :groups, group do |groups_form| %>
-              <% group.conditions.each do |condition| %>
-                <div
-                  data-advanced-search-target="conditionsContainer"
-                  class="flex space-x-2 p-4"
-                >
-                  <%= groups_form.fields_for :conditions, condition do |conditions_form| %>
-                    <%= conditions_form.select :field,
-                                           @fields,
-                                           { include_blank: "Field" },
-                                           {
-                                             "aria-label": "field",
-                                             class:
-                                               "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
-                                           } %>
-                    <%= conditions_form.select :operator,
-                                           @operations,
-                                           { include_blank: "Operator" },
-                                           {
-                                             "aria-label": "operator",
-                                             class:
-                                               "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
-                                           } %>
-                    <%= conditions_form.text_field(
-                      :value,
-                      class:
-                        "keyInput block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0 border-b-2 border-slate-300 appearance-none dark:text-white dark:border-slate-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer",
-                    ) %>
-                  <% end %>
-                  <button
-                    type="button"
-                    class="
-                      ml-auto bg-slate-100 text-slate-400 hover:text-slate-900 rounded-lg focus:ring-2
-                      focus:ring-slate-300 p-1.5 inline-flex items-center justify-center h-8 w-8
-                      dark:text-slate-500 dark:hover:text-white dark:bg-slate-800
-                      dark:hover:bg-slate-700
-                    "
-                    aria-label="remove condition"
-                    data-action="advanced-search#removeCondition"
-                  >
-                    <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>
-                  </button>
-                </div>
-              <% end %>
-            <% end %>
-            <div class="flex justify-end space-x-2 p-4">
-              <button
-                type="button"
-                class="
-                  inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white
-                  border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700
-                  focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800
-                  dark:border-gray-700 dark:text-white dark:hover:text-white
-                  dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white
-                "
-                data-action="advanced-search#addCondition"
-              >
-                <span>Add Condition</span>
-              </button>
-              <button
-                type="button"
-                class="
-                  inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white
-                  border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700
-                  focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800
-                  dark:border-gray-700 dark:text-white dark:hover:text-white
-                  dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white
-                "
-                data-action="advanced-search#removeGroup"
-              >
-                <span>Remove Group</span>
-              </button>
-            </div>
-          </div>
+          <%= render AdvancedSearch::Group.new(
+            form: @form,
+            group: group,
+            group_index: group_index,
+            fields: @fields,
+            operations: @operations,
+          ) %>
         <% end %>
         <div class="flex justify-end space-x-2">
-          <button
-            type="button"
-            class="
-              inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white
-              border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700
-              focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800
-              dark:border-gray-700 dark:text-white dark:hover:text-white
-              dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white
-            "
-            data-action="advanced-search#addGroup"
-          >
-            <span>Add Group</span>
-          </button>
+          <%= viral_button(data: { action: "advanced-search#addGroup" }) do %>
+            Add Group
+          <% end %>
         </div>
       </div>
     <% end %>
@@ -143,9 +61,9 @@
       <select
         class="
           bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-          focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700
+          focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-gray-700
           dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
-          dark:focus:ring-blue-500 dark:focus:border-blue-500
+          dark:focus:ring-primary-500 dark:focus:border-primary-500
         "
         name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions][CONDITION_INDEX_PLACEHOLDER][field]"
       >
@@ -157,9 +75,9 @@
       <select
         class="
           bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-          focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700
+          focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-gray-700
           dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
-          dark:focus:ring-blue-500 dark:focus:border-blue-500
+          dark:focus:ring-primary-500 dark:focus:border-primary-500
         "
         name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions][CONDITION_INDEX_PLACEHOLDER][operator]"
       >
@@ -171,6 +89,7 @@
       <input
         type="text"
         name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions][CONDITION_INDEX_PLACEHOLDER][value]"
+        placeholder="Value"
         class="
           keyInput block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0
           border-b-2 border-slate-300 appearance-none dark:text-white
@@ -199,32 +118,12 @@
       class="bg-slate-100 border border-gray-300 rounded-lg"
     >
       <div class="flex justify-end space-x-2 p-4">
-        <button
-          type="button"
-          class="
-            inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white
-            border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700
-            focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800
-            dark:border-gray-700 dark:text-white dark:hover:text-white
-            dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white
-          "
-          data-action="advanced-search#addCondition"
-        >
-          <span>Add Condition</span>
-        </button>
-        <button
-          type="button"
-          class="
-            inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white
-            border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700
-            focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800
-            dark:border-gray-700 dark:text-white dark:hover:text-white
-            dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white
-          "
-          data-action="advanced-search#removeGroup"
-        >
-          <span>Remove Group</span>
-        </button>
+        <%= viral_button(data: { action: "advanced-search#addCondition" }) do %>
+          Add Condition
+        <% end %>
+        <%= viral_button(data: { action: "advanced-search#removeGroup" }) do %>
+          Remove Group
+        <% end %>
       </div>
     </div>
   </template>
