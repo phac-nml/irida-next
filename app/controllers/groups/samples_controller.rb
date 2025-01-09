@@ -70,11 +70,19 @@ module Groups
       fields_for_namespace(namespace: @group, show_fields: @search_params && @search_params[:metadata].to_i == 1)
     end
 
+    def set_advanced_search_fields
+      sample_fields = %w[name puid created_at updated_at attachments_updated_at]
+      metadata_fields = @group.metadata_fields
+      metadata_fields.map! { |field| "metadata.#{field}" }
+      @advanced_search_fields = sample_fields.concat(metadata_fields)
+    end
+
     def query
       authorize! @group, to: :sample_listing?
 
       @search_params = search_params
       set_metadata_fields
+      set_advanced_search_fields
 
       project_ids =
         authorized_scope(Project, type: :relation, as: :group_projects, scope_options: { group: @group }).pluck(:id)

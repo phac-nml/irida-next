@@ -792,8 +792,6 @@ en:
           sample_export: Sample Export
         deselect_all_button: Deselect All
         import_metadata_button: Import metadata
-        search:
-          placeholder: Filter by ID or name
         select_all_button: Select All
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
         title: Samples
@@ -802,6 +800,9 @@ en:
       table:
         no_associated_samples: There are no samples associated with this group.
         no_samples: No Samples
+      table_filter:
+        search:
+          placeholder: Filter by ID or name
     shared_namespaces:
       index:
         pagy:
