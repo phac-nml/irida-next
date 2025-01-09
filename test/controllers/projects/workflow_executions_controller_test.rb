@@ -219,7 +219,7 @@ module Projects
       update_params = { workflow_execution: { name: 'New Name' } }
 
       put namespace_project_workflow_execution_path(@namespace, @project, @workflow_execution, format: :turbo_stream),
-                                                    params: update_params
+          params: update_params
 
       assert_response :success
     end
@@ -230,7 +230,7 @@ module Projects
       update_params = { workflow_execution: { name: 'New Name' } }
 
       put namespace_project_workflow_execution_path(@namespace, @project, @workflow_execution, format: :turbo_stream),
-                                                    params: update_params
+          params: update_params
 
       assert_response :unauthorized
     end
