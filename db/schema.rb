@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_08_194807) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_09_162252) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -754,7 +754,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_08_194807) do
       CREATE TRIGGER logidze_on_attachments BEFORE INSERT OR UPDATE ON public.attachments FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
   SQL
   create_trigger :logidze_on_workflow_executions, sql_definition: <<-SQL
-      CREATE TRIGGER logidze_on_workflow_executions BEFORE INSERT OR UPDATE ON public.workflow_executions FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at', '{created_at,updated_at,cleaned,http_error_code,metadata,workflow_params,workflow_type,workflow_type_version,workflow_engine,workflow_engine_version,workflow_engine_parameters,workflow_url,namespace_id,tags,blob_run_directory,id,submitter_id,email_notification,update_samples,cleaned,attachments_updated_at}')
+      CREATE TRIGGER logidze_on_workflow_executions BEFORE INSERT OR UPDATE ON public.workflow_executions FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at', '{run_id,name,state}', 'true')
   SQL
   create_trigger :logidze_on_data_exports, sql_definition: <<-SQL
       CREATE TRIGGER logidze_on_data_exports BEFORE INSERT OR UPDATE ON public.data_exports FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
