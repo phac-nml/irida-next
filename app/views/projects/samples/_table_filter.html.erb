@@ -24,7 +24,8 @@
           search: @query,
           fields:  @advanced_search_fields,
           operations: %w[= != <= >= contains],
-          open: @open
+          open: @open,
+          status: @query.advanced_query?
         )do |advanced_search| %>
     <% advanced_search.with_add_condition_button do %>
       <button

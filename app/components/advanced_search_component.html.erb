@@ -13,6 +13,12 @@
         aria-label="Advanced Search"
         title="Advanced Search"
       >
+        <span
+          class="
+            absolute items-center justify-center -top-2 -end-2 w-4 h-4 me-3 bg-green-500
+            rounded-full <%= class_names(hidden: !@status) %>
+          "
+        ></span>
         <%= viral_icon(name: "document_magnifying_glass", classes: "size-5") %>
       </button>
     <% end %>
