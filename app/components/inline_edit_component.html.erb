@@ -1,0 +1,9 @@
+<%= form_with(
+              url: url,
+              method: :get,
+              class: "w-full"
+            ) do |form| %>
+
+  <%= form.text_field input_name.to_sym, value: value, class: "form-control" %>
+  <%= form.hidden_field :format, value: "turbo_stream" %>
+<% end %>

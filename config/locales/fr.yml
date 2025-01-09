@@ -95,6 +95,7 @@ fr:
         cancel?: You are not authorized to cancel workflow executions for %{namespace_type} %{name}
         create?: You are not authorized to submit workflow executions for %{namespace_type} %{name}
         destroy?: You are not authorized to destroy workflow executions for %{namespace_type} %{name}
+        edit?: You are not authorized to edit workflow execution %{id}
         index?: You are not authorized to view workflow executions for %{namespace_type} %{name}
         read?: You are not authorized to view workflow execution %{id}
         update?: You are not authorized to update workflow execution %{id}
@@ -451,6 +452,9 @@ fr:
       destroy:
         error: Could not delete workflow %{workflow_name}
         success: Workflow %{workflow_name} was successfully deleted
+      update:
+        error: Could not update workflow %{workflow_name}
+        success: Workflow %{workflow_name} was successfully updated
   dashboard:
     groups:
       index:
@@ -1495,6 +1499,12 @@ fr:
     update:
       success: Project %{project_name} was successfully updated
     workflow_executions:
+      edit_dialog:
+        cancel_button: Cancel
+        description: You are editing automated workflow execution '%{workflow_execution_id}'
+        name_placeholder: Enter workflow execution name (optional)
+        submit_button: Submit
+        title: Edit automated workflow execution
       files:
         table_header:
           created_at: Created At
@@ -1515,6 +1525,7 @@ fr:
         cancel_button: Cancel
         cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
         create_export_button: Create Export
+        edit_button: Edit
         remove_button: Remove
         remove_button_confirmation: Are you sure that you want to remove this workflow execution?
       summary:
@@ -1715,6 +1726,12 @@ fr:
         no_file: No file
         select_file: Select File
         submit_button: Submit
+    edit_dialog:
+      cancel_button: Cancel
+      description: You are editing workflow execution '%{workflow_execution_id}'
+      name_placeholder: Enter workflow execution name (optional)
+      submit_button: Submit
+      title: Edit workflow execution
     files:
       table_header:
         created_at: Created At
@@ -1741,6 +1758,7 @@ fr:
       cancel_button: Cancel
       cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
       create_export_button: Create Export
+      edit_button: Edit
       remove_button: Remove
       remove_button_confirmation: Are you sure that you want to remove this workflow execution?
       tabs:
