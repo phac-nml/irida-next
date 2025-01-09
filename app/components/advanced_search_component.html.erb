@@ -10,8 +10,8 @@
           dark:hover:bg-slate-700 dark:hover:border-slate-600 dark:focus:ring-slate-700
         "
         data-action="advanced-search#idempotentConnect viral--dialog#open"
-        aria-label="Advanced Search"
-        title="Advanced Search"
+        aria-label="<%= t(".title") %>"
+        title="<%= t(".title") %>"
       >
         <span
           class="
@@ -22,13 +22,11 @@
         <%= viral_icon(name: "document_magnifying_glass", classes: "size-5") %>
       </button>
     <% end %>
-    <%= dialog.with_header(title: "Advanced Search") %>
+    <%= dialog.with_header(title: t(".title")) %>
     <%= dialog.with_section do %>
       <div class="space-y-4">
         <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
-          This advanced search uses fields and operators to filter samples.
-          <br/>
-          Add and/or conditions to define the search criteria.
+          <%= t(".description") %>
         </p>
         <% @search.groups.each_with_index do |group, group_index| %>
           <%= render AdvancedSearch::Group.new(
@@ -41,15 +39,17 @@
         <% end %>
         <div class="flex justify-end space-x-2">
           <%= viral_button(data: { action: "advanced-search#addGroup" }) do %>
-            Add Group
+            <%= t(".add_group_button") %>
           <% end %>
         </div>
       </div>
     <% end %>
-    <%= dialog.with_primary_action("data-action": "filters#submit") { "Apply filter" } %>
+    <%= dialog.with_primary_action("data-action": "filters#submit") do
+      t(".apply_filter_button")
+    end %>
     <% dialog.with_secondary_action do %>
       <%= viral_button(data: { action: "advanced-search#clearForm filters#submit" }) do %>
-        Clear filter
+        <%= t(".clear_filter_button") %>
       <% end %>
     <% end %>
   <% end %>
@@ -65,9 +65,10 @@
           dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
           dark:focus:ring-primary-500 dark:focus:border-primary-500
         "
+        aria-label="<%= t(".field") %>"
         name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions][CONDITION_INDEX_PLACEHOLDER][field]"
       >
-        <option selected>Field</option>
+        <option selected><%= t(".field") %></option>
         <% @fields.each do |field| %>
           <option value="<%=field%>"><%= field %></option>
         <% end %>
@@ -79,9 +80,10 @@
           dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
           dark:focus:ring-primary-500 dark:focus:border-primary-500
         "
+        aria-label="<%= t(".operator") %>"
         name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions][CONDITION_INDEX_PLACEHOLDER][operator]"
       >
-        <option selected>Operation</option>
+        <option selected><%= t(".operator") %></option>
         <% @operations.each do |operation| %>
           <option value="<%=operation%>"><%= operation %></option>
         <% end %>
@@ -89,8 +91,8 @@
       <input
         type="text"
         name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions][CONDITION_INDEX_PLACEHOLDER][value]"
-        placeholder="Value"
-        aria-label="Value"
+        placeholder="<%= t(".value") %>"
+        aria-label="<%= t(".value") %>"
         class="
           keyInput block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0
           border-b-2 border-slate-300 appearance-none dark:text-white
@@ -106,7 +108,7 @@
           dark:text-slate-500 dark:hover:text-white dark:bg-slate-800
           dark:hover:bg-slate-700
         "
-        aria-label="remove condition"
+        aria-label="<%= t(".remove_condition_aria_label") %>"
         data-action="advanced-search#removeCondition"
       >
         <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>
@@ -120,10 +122,10 @@
     >
       <div class="flex justify-end space-x-2 p-4">
         <%= viral_button(data: { action: "advanced-search#addCondition" }) do %>
-          Add Condition
+          <%= t(".add_condition_button") %>
         <% end %>
         <%= viral_button(data: { action: "advanced-search#removeGroup" }) do %>
-          Remove Group
+          <%= t(".remove_group_button") %>
         <% end %>
       </div>
     </div>

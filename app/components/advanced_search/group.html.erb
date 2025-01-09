@@ -15,10 +15,10 @@
   <% end %>
   <div class="flex justify-end space-x-2 p-4">
     <%= viral_button(data: { action: "advanced-search#addCondition" }) do %>
-      Add Condition
+      <%= t("advanced_search_component.add_condition_button") %>
     <% end %>
     <%= viral_button(data: { action: "advanced-search#removeGroup" }) do %>
-      Remove Group
+      <%= t("advanced_search_component.remove_group_button") %>
     <% end %>
   </div>
 </div>
