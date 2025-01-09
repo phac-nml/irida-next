@@ -5,10 +5,8 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
   def validate(record)
     groups_valid = true
     record.groups.each_with_index do |group, group_index|
-      unique_fields = group.conditions.map(&:field).uniq
-      unique_fields.each do |unique_field|
-        validate_unique_field(record, group, group_index, unique_field)
-      end
+      validate_blank_fields(record, group, group_index)
+      validate_unique_fields(record, group, group_index)
       groups_valid = false if record.groups[group_index].errors.any?
     end
     return if groups_valid
@@ -17,6 +15,31 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
   end
 
   private
+
+  def validate_blank_fields(record, group, group_index)
+    if group.conditions.count == 1
+      validate_blank_fields_for_condition(record, group, group_index)
+    elsif group.conditions.any? do |condition|
+      condition.field.blank? || condition.operator.blank? || condition.value.blank?
+    end
+      record.groups[group_index].errors.add :base, 'Fields, operators, and values cannot be blank.'
+    end
+  end
+
+  def validate_blank_fields_for_condition(record, group, group_index)
+    condition = group.conditions.first
+    unless (condition.field.blank? && condition.operator.blank? && condition.value.blank?) ||
+           (condition.field.present? && condition.operator.present? && condition.value.present?)
+      record.groups[group_index].errors.add :base, 'Fields, operators, and values cannot be blank.'
+    end
+  end
+
+  def validate_unique_fields(record, group, group_index)
+    unique_fields = group.conditions.map(&:field).uniq
+    unique_fields.each do |unique_field|
+      validate_unique_field(record, group, group_index, unique_field)
+    end
+  end
 
   def validate_unique_field(record, group, group_index, unique_field)
     unique_field_conditions = group.conditions.find_all { |condition| condition.field == unique_field }
