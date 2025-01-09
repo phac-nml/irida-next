@@ -1,0 +1,3 @@
+<%= form_with model: search, url: "#" do |form| %>
+  <%= render AdvancedSearchComponent.new(search:, form:, fields:, operations:) %>
+<% end %>

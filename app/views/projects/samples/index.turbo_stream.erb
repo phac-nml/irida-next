@@ -1,3 +1,10 @@
+<%= turbo_stream.update "table-filter",
+                    partial: "table_filter",
+                    locals: {
+                      open: @query.errors.any?,
+                      status: @query.advanced_query?,
+                    } %>
+
 <% if @query.errors.any? %>
   <% @query.groups.each_with_index do |group, group_index| %>
     <%= turbo_stream.update "group-error-messages-#{group_index}",
@@ -6,11 +13,6 @@
                           errors: group.errors,
                         } %>
   <% end %>
-<% else %>
-  <%= turbo_stream.update "table-filter",
-                      partial: "table_filter",
-                      locals: {
-                        open: false,
-                      } %>
 <% end %>
+
 <turbo-stream action="refresh"></turbo-stream>

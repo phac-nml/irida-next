@@ -82,13 +82,49 @@
               <% end %>
             <% end %>
             <div class="flex justify-end space-x-2 p-4">
-              <%= add_condition_button %>
-              <%= remove_group_button %>
+              <button
+                type="button"
+                class="
+                  inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white
+                  border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700
+                  focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800
+                  dark:border-gray-700 dark:text-white dark:hover:text-white
+                  dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white
+                "
+                data-action="advanced-search#addCondition"
+              >
+                <span>Add Condition</span>
+              </button>
+              <button
+                type="button"
+                class="
+                  inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white
+                  border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700
+                  focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800
+                  dark:border-gray-700 dark:text-white dark:hover:text-white
+                  dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white
+                "
+                data-action="advanced-search#removeGroup"
+              >
+                <span>Remove Group</span>
+              </button>
             </div>
           </div>
         <% end %>
         <div class="flex justify-end space-x-2">
-          <%= add_group_button %>
+          <button
+            type="button"
+            class="
+              inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white
+              border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700
+              focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800
+              dark:border-gray-700 dark:text-white dark:hover:text-white
+              dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white
+            "
+            data-action="advanced-search#addGroup"
+          >
+            <span>Add Group</span>
+          </button>
         </div>
       </div>
     <% end %>
@@ -163,8 +199,32 @@
       class="bg-slate-100 border border-gray-300 rounded-lg"
     >
       <div class="flex justify-end space-x-2 p-4">
-        <%= add_condition_button %>
-        <%= remove_group_button %>
+        <button
+          type="button"
+          class="
+            inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white
+            border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700
+            focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800
+            dark:border-gray-700 dark:text-white dark:hover:text-white
+            dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white
+          "
+          data-action="advanced-search#addCondition"
+        >
+          <span>Add Condition</span>
+        </button>
+        <button
+          type="button"
+          class="
+            inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white
+            border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700
+            focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800
+            dark:border-gray-700 dark:text-white dark:hover:text-white
+            dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white
+          "
+          data-action="advanced-search#removeGroup"
+        >
+          <span>Remove Group</span>
+        </button>
       </div>
     </div>
   </template>
