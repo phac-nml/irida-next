@@ -13,11 +13,11 @@ export default class extends Controller {
   idempotentConnect() {}
 
   addCondition(event) {
-    let groupContainer = event.currentTarget.parentElement.closest(
+    let group = event.currentTarget.parentElement.closest(
       "div[data-advanced-search-target='groupsContainer']",
     );
-    let group_index = this.groupsContainerTargets.indexOf(groupContainer);
-    let condition_index = groupContainer.querySelectorAll(
+    let group_index = this.groupsContainerTargets.indexOf(group);
+    let condition_index = group.querySelectorAll(
       "div[data-advanced-search-target='conditionsContainer']",
     ).length;
     let newCondition = this.conditionTemplateTarget.innerHTML
@@ -33,17 +33,17 @@ export default class extends Controller {
     let groupContainer = event.currentTarget.parentElement.closest(
       "div[data-advanced-search-target='groupsContainer']",
     );
-    let conditionContainers = groupContainer.querySelectorAll(
+    let conditions = groupContainer.querySelectorAll(
       "div[data-advanced-search-target='conditionsContainer']",
     );
-    if (conditionContainers.length > 1) {
+    if (conditions.length > 1) {
       event.currentTarget.parentElement.remove();
-      conditionContainers = groupContainer.querySelectorAll(
+      conditions = groupContainer.querySelectorAll(
         "div[data-advanced-search-target='conditionsContainer']",
       );
       //re-index all the form fields within the group
-      conditionContainers.forEach((conditionContainer, index) => {
-        let inputFields = conditionContainer.querySelectorAll("[name]");
+      conditions.forEach((condition, index) => {
+        let inputFields = condition.querySelectorAll("[name]");
         inputFields.forEach((inputField) => {
           let updatedInputFieldName = inputField.name.replace(
             /(\[conditions_attributes\]\[)\d+?(\])/,
@@ -64,8 +64,8 @@ export default class extends Controller {
     let newCondition = this.conditionTemplateTarget.innerHTML
       .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
       .replace(/CONDITION_INDEX_PLACEHOLDER/g, 0);
-    let groupContainer = this.groupsContainerTargets[group_index];
-    groupContainer.insertAdjacentHTML("afterbegin", newCondition);
+    let group = this.groupsContainerTargets[group_index];
+    group.insertAdjacentHTML("afterbegin", newCondition);
   }
 
   removeGroup(event) {
@@ -73,8 +73,8 @@ export default class extends Controller {
       event.currentTarget.parentElement.parentElement.remove();
     }
     //re-index all the form fields within all the groups
-    this.groupsContainerTargets.forEach((groupContainer, index) => {
-      let inputFields = groupContainer.querySelectorAll("[name]");
+    this.groupsContainerTargets.forEach((group, index) => {
+      let inputFields = group.querySelectorAll("[name]");
       inputFields.forEach((inputField) => {
         let updatedInputFieldName = inputField.name.replace(
           /(\[groups_attributes\]\[)\d+?(\])/,
@@ -82,6 +82,30 @@ export default class extends Controller {
         );
         inputField.name = updatedInputFieldName;
       });
+    });
+  }
+
+  clearForm() {
+    this.groupsContainerTargets.forEach((group, group_index) => {
+      if (group_index > 0) {
+        group.remove();
+      } else {
+        let conditions = group.querySelectorAll(
+          "div[data-advanced-search-target='conditionsContainer']",
+        );
+        conditions.forEach((condition, condition_index) => {
+          if (condition_index > 0) {
+            condition.remove();
+          } else {
+            let input = condition.querySelector("input");
+            input.value = "";
+            let selects = condition.querySelectorAll("select");
+            selects.forEach((select) => {
+              select.value = "";
+            });
+          }
+        });
+      }
     });
   }
 }

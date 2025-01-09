@@ -16,7 +16,7 @@ module Projects
                                                  }), status: :ok
       end
 
-      def destroy
+      def destroy # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         ::Samples::DestroyService.new(@project, current_user, { sample: @sample }).execute
 
         respond_to do |format|

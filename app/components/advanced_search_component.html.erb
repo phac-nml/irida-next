@@ -87,6 +87,11 @@
       </div>
     <% end %>
     <%= dialog.with_primary_action("data-action": "filters#submit") { "Apply filter" } %>
+    <% dialog.with_secondary_action do %>
+      <%= viral_button(data: { action: "advanced-search#clearForm filters#submit" }) do %>
+        Clear filter
+      <% end %>
+    <% end %>
   <% end %>
   <template data-advanced-search-target="conditionTemplate">
     <div
