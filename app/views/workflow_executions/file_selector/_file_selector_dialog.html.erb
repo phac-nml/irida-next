@@ -1,4 +1,4 @@
-<%= viral_dialog(open: open, size: :large) do |dialog| %>
+<%= viral_dialog(open: open, id: "file_selector_dialog", size: :large) do |dialog| %>
   <%= dialog.with_header(title: t(".select_file")) %>
   <%= dialog.with_section do %>
     <% if @listing_attachments.empty? %>
@@ -10,14 +10,14 @@
         ) %>
       </div>
     <% else %>
-      <%= form_with id: 'file_selector_form', url: workflow_executions_file_selector_index_path(file_selector: file_selector_params), method: :post do |form| %>
+      <%= form_with id: 'file_selector_form', url: workflow_executions_file_selector_index_path(file_selector: file_selector_params), method: :post, data: {"viral--dialog-target": 'dialogForm'} do |form| %>
         <input type="hidden" name="format" value="turbo_stream"/>
-        <div class="table-container flex flex-col shrink min-h-0 mb-2">
+        <div class="table-container flex flex-col shrink min-h-0">
           <div class="overflow-auto scrollbar">
             <table
               class='
                 w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-                whitespace-nowrap mb-2
+                whitespace-nowrap
               '
             >
               <thead
@@ -27,7 +27,12 @@
                 '
               >
                 <tr>
-                  <th class="px-3 py-3" aria-hidden="true">
+                  <th
+                    class="
+                      sticky left-0 bg-slate-50 dark:bg-slate-700 px-3 py-3
+                    "
+                    aria-hidden="true"
+                  >
                   </th>
                   <th class="px-3 py-3">
                     <%= t(".headers.filename") %>
@@ -48,8 +53,8 @@
                 '
               >
                 <% @listing_attachments.each do |attachment| %>
-                  <tr class=" bg-white border-b dark:bg-slate-800 dark:border-slate-700 ">
-                    <td>
+                  <tr class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
+                    <td class="px-3 py-3 sticky left-0 bg-white dark:bg-slate-800">
                       <%= form.radio_button "attachment_id",
                                         attachment[:id],
                                         checked:
@@ -89,10 +94,13 @@
             </table>
           </div>
         </div>
-        <%= form.submit t(".submit_button"),
-                    class:
-                      "inline-flex items-center justify-center text-sm border rounded-md cursor-pointer sm:w-auto focus:z-10 focus:outline-none text-white bg-primary-700 hover:bg-primary-800 focus:ring-0 rounded-md px-5 py-3 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 dark:border-primary-900 dark:hover:bg-primary-700" %>
       <% end %>
     <% end %>
+  <% end %>
+
+  <% unless @listing_attachments.empty? %>
+    <%= dialog.with_primary_action("data-action": "click->viral--dialog#submit") do
+      t(".submit_button")
+    end %>
   <% end %>
 <% end %>
