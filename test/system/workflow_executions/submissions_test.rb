@@ -375,10 +375,13 @@ module WorkflowExecutions
       end
 
       # verify file selector rendered
-      assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
-      within('#file_selector_form') do
-        # select new attachment
-        find("#attachment_id_#{@attachment_fwd2.id}").click
+      assert_selector '#file_selector_form_dialog'
+      within('#file_selector_form_dialog') do
+        assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+        within('#file_selector_form') do
+          # select new attachment
+          find("#attachment_id_#{@attachment_fwd2.id}").click
+        end
         click_button I18n.t('workflow_executions.file_selector.file_selector_dialog.submit_button')
       end
       ### ACTIONS END ###
@@ -429,10 +432,13 @@ module WorkflowExecutions
       end
 
       # verify file selector rendered
-      assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
-      within('#file_selector_form') do
-        # select new attachment
-        find("#attachment_id_#{attachment_b.id}").click
+      assert_selector '#file_selector_form_dialog'
+      within('#file_selector_form_dialog') do
+        assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+        within('#file_selector_form') do
+          # select new attachment
+          find("#attachment_id_#{attachment_b.id}").click
+        end
         click_button I18n.t('workflow_executions.file_selector.file_selector_dialog.submit_button')
       end
       ### ACTIONS END ###
@@ -485,12 +491,15 @@ module WorkflowExecutions
 
       ### VERIFY START ###
       # verify file selector rendered
-      assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
-      within('#file_selector_form') do
-        # verify other attachments loaded
-        assert_selector "#attachment_id_#{attachment_b.id}"
-        # verify no file option does not exist in required field
-        assert_no_selector '#attachment_id_no_attachment'
+      assert_selector '#file_selector_form_dialog'
+      within('#file_selector_form_dialog') do
+        assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+        within('#file_selector_form') do
+          # verify other attachments loaded
+          assert_selector "#attachment_id_#{attachment_b.id}"
+          # verify no file option does not exist in required field
+          assert_no_selector '#attachment_id_no_attachment'
+        end
       end
       ### VERIFY END ###
     end
@@ -529,14 +538,17 @@ module WorkflowExecutions
 
       ### VERIFY START ###
       # verify file selector rendered
-      assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
-      within('#file_selector_form') do
-        # verify no file option exists in non-required field
-        assert_selector '#attachment_id_no_attachment'
-        find('#attachment_id_no_attachment').click
+      assert_selector '#file_selector_form_dialog'
+      within('#file_selector_form_dialog') do
+        assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+        within('#file_selector_form') do
+          # verify no file option exists in non-required field
+          assert_selector '#attachment_id_no_attachment'
+          find('#attachment_id_no_attachment').click
+        end
         click_button I18n.t('workflow_executions.file_selector.file_selector_dialog.submit_button')
       end
-      within '#dialog' do
+      within('#dialog') do
         # sample_b fastq2 selection is now no file selected
         assert_selector "div[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
         assert_selector "div[id='#{@sample_b.id}_fastq_2']",
@@ -581,10 +593,14 @@ module WorkflowExecutions
 
       ### VERIFY START ###
       # verify file selector rendered
-      assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
-      assert_no_selector '#file_selector_form'
-      assert_text I18n.t('workflow_executions.file_selector.file_selector_dialog.empty.title')
-      assert_text I18n.t('workflow_executions.file_selector.file_selector_dialog.empty.description')
+      assert_selector '#file_selector_form_dialog'
+      within('#file_selector_form_dialog') do
+        assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+        # verify empty state
+        assert_no_selector '#file_selector_form'
+        assert_text I18n.t('workflow_executions.file_selector.file_selector_dialog.empty.title')
+        assert_text I18n.t('workflow_executions.file_selector.file_selector_dialog.empty.description')
+      end
       ### VERIFY END ###
     end
 
@@ -606,6 +622,7 @@ module WorkflowExecutions
       # launch workflow execution dialog
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
+      assert_selector '#dialog'
       within %(turbo-frame[id="samples_dialog"]) do
         assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
         assert_button text: 'phac-nml/iridanextexample', count: 3
