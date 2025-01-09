@@ -25,6 +25,7 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
                workflow_engine_parameters: { '-r': 'dev' },
                workflow_url: 'https://github.com/phac-nml/iridanextexample',
                email_notification: true,
+               shared_with_namespace: true,
                namespace_id: projects(:project1).namespace.id,
                samples_workflow_executions_attributes: [
                  {
@@ -49,6 +50,7 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, created_workflow_execution.samples_workflow_executions.count
     assert_equal @sample1, created_workflow_execution.samples_workflow_executions.first.sample
     assert_equal true, created_workflow_execution.email_notification
+    assert_equal true, created_workflow_execution.shared_with_namespace
   end
 
   test 'should cancel a new workflow with valid params' do
