@@ -30,6 +30,10 @@ class WorkflowExecutionsController < ApplicationController
     params.require(:workflow_execution).permit(workflow_execution_params_attributes)
   end
 
+  def workflow_execution_update_params
+    params.require(:workflow_execution).permit(:name)
+  end
+
   def workflow_execution_params_attributes
     [
       :name,

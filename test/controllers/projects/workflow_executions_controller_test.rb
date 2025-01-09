@@ -214,5 +214,25 @@ module Projects
 
       assert_redirected_to namespace_project_workflow_executions_path(@namespace, @project)
     end
+
+    test 'analyst or higher access level can update workflow execution name post launch' do
+      update_params = { workflow_execution: { name: 'New Name' } }
+
+      put namespace_project_workflow_execution_path(@namespace, @project, @workflow_execution, format: :turbo_stream),
+          params: update_params
+
+      assert_response :success
+    end
+
+    test 'access level less than analyst cannot update workflow execution name post launch for an automated workflow' do
+      sign_in users(:ryan_doe)
+
+      update_params = { workflow_execution: { name: 'New Name' } }
+
+      put namespace_project_workflow_execution_path(@namespace, @project, @workflow_execution, format: :turbo_stream),
+          params: update_params
+
+      assert_response :unauthorized
+    end
   end
 end

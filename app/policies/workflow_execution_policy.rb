@@ -82,6 +82,14 @@ class WorkflowExecutionPolicy < ApplicationPolicy
     false
   end
 
+  def update?
+    return true if record.submitter.id == user.id
+    return true if effective_access_level >= Member::AccessLevel::ANALYST
+
+    details[:id] = record.id
+    false
+  end
+
   scope_for :relation, :automated do |relation, options|
     project = options[:project]
 

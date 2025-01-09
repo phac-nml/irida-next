@@ -97,6 +97,7 @@ en:
         destroy?: You are not authorized to destroy workflow executions for %{namespace_type} %{name}
         index?: You are not authorized to view workflow executions for %{namespace_type} %{name}
         read?: You are not authorized to view workflow execution %{id}
+        update?: You are not authorized to update workflow execution %{id}
     unauthorized: You are not authorized to perform this action
   activerecord:
     attributes:
