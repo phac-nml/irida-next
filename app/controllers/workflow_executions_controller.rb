@@ -34,12 +34,13 @@ class WorkflowExecutionsController < ApplicationController
     params.require(:workflow_execution).permit(:name)
   end
 
-  def workflow_execution_params_attributes
+  def workflow_execution_params_attributes # rubocop:disable Metrics/MethodLength
     [
       :name,
       :namespace_id,
       :update_samples,
       :email_notification,
+      :shared_with_namespace,
       { metadata: {},
         workflow_params: {},
         samples_workflow_executions_attributes: samples_workflow_execution_params_attributes }
