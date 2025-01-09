@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_12_164410) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_07_194839) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -129,6 +129,21 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_12_164410) do
     t.index ["namespace_id"], name: "index_members_on_namespace_id"
     t.index ["user_id", "namespace_id"], name: "index_member_user_with_namespace", unique: true, where: "(deleted_at IS NULL)"
     t.index ["user_id"], name: "index_members_on_user_id"
+  end
+
+  create_table "metadata_templates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "namespace_id"
+    t.uuid "created_by_id", null: false
+    t.string "name"
+    t.string "description"
+    t.jsonb "fields", default: [], null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.jsonb "log_data"
+    t.index ["created_by_id"], name: "index_metadata_templates_on_created_by_id"
+    t.index ["namespace_id", "name"], name: "index_template_name_with_namespace", unique: true, where: "(deleted_at IS NULL)"
+    t.index ["namespace_id"], name: "index_metadata_templates_on_namespace_id"
   end
 
   create_table "namespace_bots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -332,6 +347,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_12_164410) do
   add_foreign_key "data_exports", "users"
   add_foreign_key "members", "namespaces"
   add_foreign_key "members", "users"
+  add_foreign_key "metadata_templates", "namespaces"
+  add_foreign_key "metadata_templates", "users", column: "created_by_id"
   add_foreign_key "namespace_group_links", "namespaces"
   add_foreign_key "namespaces", "users", column: "owner_id"
   add_foreign_key "personal_access_tokens", "users"
@@ -714,34 +731,37 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_12_164410) do
   SQL
 
 
-  create_trigger :logidze_on_attachments, sql_definition: <<-SQL
-      CREATE TRIGGER logidze_on_attachments BEFORE INSERT OR UPDATE ON public.attachments FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
-  SQL
-  create_trigger :logidze_on_automated_workflow_executions, sql_definition: <<-SQL
-      CREATE TRIGGER logidze_on_automated_workflow_executions BEFORE INSERT OR UPDATE ON public.automated_workflow_executions FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
-  SQL
-  create_trigger :logidze_on_data_exports, sql_definition: <<-SQL
-      CREATE TRIGGER logidze_on_data_exports BEFORE INSERT OR UPDATE ON public.data_exports FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
-  SQL
-  create_trigger :logidze_on_members, sql_definition: <<-SQL
-      CREATE TRIGGER logidze_on_members BEFORE INSERT OR UPDATE ON public.members FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
-  SQL
-  create_trigger :logidze_on_namespace_bots, sql_definition: <<-SQL
-      CREATE TRIGGER logidze_on_namespace_bots BEFORE INSERT OR UPDATE ON public.namespace_bots FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
-  SQL
-  create_trigger :logidze_on_namespace_group_links, sql_definition: <<-SQL
-      CREATE TRIGGER logidze_on_namespace_group_links BEFORE INSERT OR UPDATE ON public.namespace_group_links FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  create_trigger :logidze_on_users, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_users BEFORE INSERT OR UPDATE ON public.users FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
   SQL
   create_trigger :logidze_on_namespaces, sql_definition: <<-SQL
       CREATE TRIGGER logidze_on_namespaces BEFORE INSERT OR UPDATE ON public.namespaces FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at', '{created_at,metadata_summary,updated_at,attachments_updated_at}')
   SQL
-  create_trigger :logidze_on_personal_access_tokens, sql_definition: <<-SQL
-      CREATE TRIGGER logidze_on_personal_access_tokens BEFORE INSERT OR UPDATE ON public.personal_access_tokens FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at', '{last_used_at}')
+  create_trigger :logidze_on_members, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_members BEFORE INSERT OR UPDATE ON public.members FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
   SQL
   create_trigger :logidze_on_samples, sql_definition: <<-SQL
       CREATE TRIGGER logidze_on_samples BEFORE INSERT OR UPDATE ON public.samples FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at', '{created_at,metadata_provenance,updated_at,attachments_updated_at}')
   SQL
-  create_trigger :logidze_on_users, sql_definition: <<-SQL
-      CREATE TRIGGER logidze_on_users BEFORE INSERT OR UPDATE ON public.users FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  create_trigger :logidze_on_personal_access_tokens, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_personal_access_tokens BEFORE INSERT OR UPDATE ON public.personal_access_tokens FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at', '{last_used_at}')
+  SQL
+  create_trigger :logidze_on_namespace_group_links, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_namespace_group_links BEFORE INSERT OR UPDATE ON public.namespace_group_links FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
+  create_trigger :logidze_on_attachments, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_attachments BEFORE INSERT OR UPDATE ON public.attachments FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
+  create_trigger :logidze_on_data_exports, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_data_exports BEFORE INSERT OR UPDATE ON public.data_exports FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
+  create_trigger :logidze_on_namespace_bots, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_namespace_bots BEFORE INSERT OR UPDATE ON public.namespace_bots FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
+  create_trigger :logidze_on_automated_workflow_executions, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_automated_workflow_executions BEFORE INSERT OR UPDATE ON public.automated_workflow_executions FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
+  create_trigger :logidze_on_metadata_templates, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_metadata_templates BEFORE INSERT OR UPDATE ON public.metadata_templates FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
   SQL
 end
