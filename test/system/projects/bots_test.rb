@@ -4,10 +4,12 @@ require 'application_system_test_case'
 
 module Projects
   class BotsTest < ApplicationSystemTestCase
+    include ActionView::Helpers::SanitizeHelper
     header_row_count = 1
 
     def setup
-      login_as users(:john_doe)
+      @user = users(:john_doe)
+      login_as @user
       @namespace = groups(:group_one)
       @project = projects(:project1)
       @project2 = projects(:project2)
@@ -231,28 +233,31 @@ module Projects
 
       assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
       assert_selector 'p', text: I18n.t(:'projects.bots.index.subtitle')
-
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
+                                                                           locale: @user.locale))
       within "tr[id='#{@project_bot.id}']" do
         click_link @project_bot_active_tokens.count.to_s
       end
 
-      within('dialog') do
-        assert_selector 'h1', text: I18n.t('projects.bots.index.personal_access_tokens_listing_modal.title')
-        assert_selector 'p',
-                        text: I18n.t(
-                          'projects.bots.index.personal_access_tokens_listing_modal.description',
-                          bot_account: @project_bot.user.email
-                        )
-
-        within('table') do
-          assert_selector 'tr', count: 2
-          within "tr[id='#{token.id}']" do
-            click_link 'Revoke'
-          end
+      assert_selector '#bot_tokens_dialog'
+      within('#bot_tokens_dialog') do
+        assert_selector '#personal_access_tokens'
+        within('table tbody') do
+          assert_selector 'tr', count: 1
+        end
+        # revoke a PAT
+        within("table tbody tr[id='#{@project_bot_active_tokens.first.id}']") do
+          click_link I18n.t('personal_access_tokens.table.revoke')
         end
       end
 
-      click_button I18n.t('personal_access_tokens.revoke_confirmation.submit_button')
+      assert_selector '#revoke_confirmation_dialog'
+      within('#revoke_confirmation_dialog') do
+        assert_text I18n.t('personal_access_tokens.revoke_confirmation.title')
+        click_button I18n.t('personal_access_tokens.revoke_confirmation.submit_button')
+      end
+
+      assert_selector '#personal-access-token-alert'
       within('#personal-access-token-alert') do
         assert_text I18n.t('concerns.bot_personal_access_token_actions.revoke.success', pat_name: token.name)
       end
@@ -261,6 +266,8 @@ module Projects
     test 'PAT panel removed after personal access token revoke' do
       ### SETUP START ###
       visit namespace_project_bots_path(@namespace, @project)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
+                                                                           locale: @user.locale))
       # PAT panel is not present
       assert_no_selector '#access-token-section div'
       # create new PAT to render PAT panel
@@ -269,10 +276,7 @@ module Projects
       end
 
       within('#dialog') do
-        assert_text I18n.t(
-          'projects.bots.index.bot_listing.generate_personal_access_token_modal.title'
-        )
-
+        assert_text I18n.t('projects.bots.index.bot_listing.generate_personal_access_token_modal.title')
         assert_text I18n.t('projects.bots.index.bot_listing.generate_personal_access_token_modal.description',
                            bot_account: @project_bot.user.email)
 
@@ -302,12 +306,21 @@ module Projects
       end
 
       # bot's current PATs dialog
-      within('#dialog') do
+      assert_selector '#bot_tokens_dialog'
+      within('#bot_tokens_dialog') do
+        assert_selector '#personal_access_tokens'
+        within('table tbody') do
+          assert_selector 'tr', count: 2
+        end
         # revoke a PAT
         within("table tbody tr[id='#{@project_bot_active_tokens.first.id}']") do
           click_link I18n.t('personal_access_tokens.table.revoke')
         end
+      end
 
+      assert_selector '#revoke_confirmation_dialog'
+      within('#revoke_confirmation_dialog') do
+        assert_text I18n.t('personal_access_tokens.revoke_confirmation.title')
         click_button I18n.t('personal_access_tokens.revoke_confirmation.submit_button')
       end
       ### ACTIONS END ###
@@ -321,6 +334,8 @@ module Projects
     test 'PAT panel removed after bot destroy' do
       ### SETUP START ###
       visit namespace_project_bots_path(@namespace, @project)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 21,
+                                                                           locale: @user.locale))
       # PAT panel is not present
       assert_no_selector '#access-token-section div'
       # create new PAT to render PAT panel
@@ -362,10 +377,16 @@ module Projects
       end
 
       # confirm destroy bot
-      click_button I18n.t('bots.destroy_confirmation.submit_button')
+      within('#dialog') do
+        assert_text I18n.t('bots.destroy_confirmation.description', bot_name: @project_bot.user.email)
+        click_button I18n.t('bots.destroy_confirmation.submit_button')
+      end
       ### ACTIONS END ###
 
       ### VERIFY START ###
+      # confirm bot destroyed
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
+                                                                           locale: @user.locale))
       # PAT panel no longer present
       assert_no_selector '#access-token-section div'
       ### VERIFY END ###
