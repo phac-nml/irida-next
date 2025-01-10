@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Migration to add Logidze to WorkflowExecutions table
 class AddLogidzeToWorkflowExecutions < ActiveRecord::Migration[7.2]
   def change
     add_column :workflow_executions, :log_data, :jsonb
