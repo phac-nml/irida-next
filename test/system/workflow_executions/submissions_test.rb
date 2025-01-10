@@ -397,6 +397,62 @@ module WorkflowExecutions
       ### VERIFY END ###
     end
 
+    test 'associated attachment autopopulates to no file when selection changes from PE to non-PE' do
+      attachment_d = attachments(:attachmentD)
+      ### SETUP START ###
+      visit namespace_project_samples_url(@jeff_doe_namespace, @project_a)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      # select samples
+      within 'table' do
+        find("input[type='checkbox'][value='#{@sample_a.id}']").click
+        find("input[type='checkbox'][value='#{@sample_b.id}']").click
+      end
+      # click workflow exectuions btn
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      # select workflow
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within '#dialog' do
+        # verify samples samplesheet loaded
+        assert_selector 'div.sample-sheet'
+        # verify auto selected attachments
+        assert_selector "div[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
+        assert_selector "div[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev3.file.filename.to_s
+        find("div[id='#{@sample_b.id}_fastq_1']").click
+      end
+
+      # verify file selector rendered
+      assert_selector '#file_selector_form_dialog'
+      within('#file_selector_form_dialog') do
+        assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+        within('#file_selector_form') do
+          # select new attachment
+          find("#attachment_id_#{attachment_d.id}").click
+        end
+        click_button I18n.t('workflow_executions.file_selector.file_selector_dialog.submit_button')
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      within '#dialog' do
+        # fastq_1 field changed to single-end fastq file, fastq_2 autopopulates to no selected file
+        assert_selector "div[id='#{@sample_b.id}_fastq_1']", text: attachment_d.file.filename.to_s
+        assert_selector "div[id='#{@sample_b.id}_fastq_2']",
+                        text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
+        assert_no_text @attachment_fwd3.file.filename.to_s
+        assert_no_text @attachment_rev3.file.filename.to_s
+      end
+      ### VERIFY END ###
+    end
+
     test 'associated attachment does not autopopulate after selecting non-pe attachment' do
       ### SETUP START ###
       attachment_b = attachments(:attachmentB)

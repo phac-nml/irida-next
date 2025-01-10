@@ -1709,7 +1709,9 @@ fr:
         headers:
           created_at: Uploaded
           filename: Filename
+          format: Format
           size: Size
+          type: Type
         no_file: No file
         select_file: Select File
         submit_button: Submit

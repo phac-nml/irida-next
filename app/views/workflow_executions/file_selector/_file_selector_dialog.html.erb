@@ -1,4 +1,4 @@
-<%= viral_dialog(open: open, id: "file_selector_form_dialog", size: :large) do |dialog| %>
+<%= viral_dialog(open: open, id: "file_selector_form_dialog", size: :extra_large) do |dialog| %>
   <%= dialog.with_header(title: t(".select_file")) %>
   <%= dialog.with_section do %>
     <% if @listing_attachments.empty? %>
@@ -38,6 +38,12 @@
                     <%= t(".headers.filename") %>
                   </th>
                   <th class="px-3 py-3">
+                    <%= t(".headers.format") %>
+                  </th>
+                  <th class="px-3 py-3">
+                    <%= t(".headers.type") %>
+                  </th>
+                  <th class="px-3 py-3">
                     <%= t(".headers.size") %>
                   </th>
                   <th class="px-3 py-3">
@@ -64,9 +70,17 @@
                                           "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-400" %>
 
                     </td>
-                    <th class="px-3 py-3">
+                    <td class="px-3 py-3">
                       <%= attachment[:filename] %>
-                    </th>
+                    </td>
+                    <td class="px-3 py-3"><%= viral_pill(
+                        text: attachment[:metadata]["format"],
+                        color: find_pill_color_for_attachment(attachment, "format"),
+                      ) %></td>
+                    <td class="px-3 py-3"><%= viral_pill(
+                        text: attachment[:metadata]["type"],
+                        color: find_pill_color_for_attachment(attachment, "type"),
+                      ) %></td>
                     <td class="px-3 py-3">
                       <%= number_to_human_size(attachment[:byte_size]) %>
                     </td>
@@ -85,9 +99,9 @@
                                           "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-400" %>
 
                     </td>
-                    <th class="px-3 py-3">
+                    <td class="px-3 py-3">
                       <%= t(".no_file") %>
-                    </th>
+                    </td>
                   </tr>
                 <% end %>
               </tbody>

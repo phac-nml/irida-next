@@ -21,7 +21,8 @@ module FileSelector
         global_id: attachment.to_global_id,
         id: attachment.id,
         byte_size: attachment.byte_size,
-        created_at: attachment.created_at
+        created_at: attachment.created_at,
+        metadata: attachment.metadata
       }
       case attachment.metadata['direction']
       when nil

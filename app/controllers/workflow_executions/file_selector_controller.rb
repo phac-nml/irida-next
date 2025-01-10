@@ -75,26 +75,34 @@ module WorkflowExecutions
                              global_id: attachment.to_global_id,
                              id: attachment.id,
                              byte_size: attachment.byte_size,
-                             created_at: attachment.created_at }
-      return unless attachment.associated_attachment &&
-                    (file_selector_params['property'] == 'fastq_1' || file_selector_params['property'] == 'fastq_2')
+                             created_at: attachment.created_at,
+                             metadata: attachment.metadata }
+      return unless file_selector_params['property'] == 'fastq_1' || file_selector_params['property'] == 'fastq_2'
 
       assign_associated_attachment_params(attachment)
     end
 
-    def assign_associated_attachment_params(attachment)
+    def assign_associated_attachment_params(attachment) # rubocop:disable Metrics/MethodLength
       @associated_attachment_params = {}
-      associated_attachment = attachment.associated_attachment
 
-      @associated_attachment_params[:file] = {
-        filename: associated_attachment.filename.to_s,
-        global_id: associated_attachment.to_global_id,
-        id: associated_attachment.id
-      }
       @associated_attachment_params[:property] = file_selector_params[:property] == 'fastq_1' ? 'fastq_2' : 'fastq_1'
-      @associated_attachment_params[:file_selector_arguments] = {}
-      @associated_attachment_params[:file_selector_arguments][:workflow_params] =
-        file_selector_params['file_selector_arguments']['workflow_params']
+      @associated_attachment_params[:file_selector_arguments] = {
+        workflow_params: file_selector_params['file_selector_arguments']['workflow_params']
+      }
+
+      if attachment.associated_attachment
+        associated_attachment = attachment.associated_attachment
+        @associated_attachment_params[:file] = {
+          filename: associated_attachment.filename.to_s,
+          global_id: associated_attachment.to_global_id,
+          id: associated_attachment.id,
+          byte_size: associated_attachment.byte_size,
+          created_at: associated_attachment.created_at,
+          metadata: associated_attachment.metadata
+        }
+      else
+        @associated_attachment_params[:file] = {}
+      end
     end
   end
 end
