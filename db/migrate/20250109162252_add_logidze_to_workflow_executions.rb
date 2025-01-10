@@ -15,7 +15,7 @@ class AddLogidzeToWorkflowExecutions < ActiveRecord::Migration[7.2]
       end
 
       dir.down do
-        execute <<~SQL
+        execute <<~SQL.squish
           DROP TRIGGER IF EXISTS "logidze_on_workflow_executions" on "workflow_executions";
         SQL
       end
