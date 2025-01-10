@@ -28,6 +28,9 @@
         <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
           <%= t(".description") %>
         </p>
+        <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+          <%= t(".rules") %>
+        </p>
         <% @search.groups.each_with_index do |group, group_index| %>
           <%= render AdvancedSearch::Group.new(
             form: @form,

@@ -1,8 +1,8 @@
-<div id="group-error-messages-<%= @group_index %>"></div>
 <div
   data-advanced-search-target="groupsContainer"
   class="bg-slate-100 border border-gray-300 rounded-lg"
 >
+  <div id="group-error-messages-<%= @group_index %>"></div>
   <%= @form.fields_for :groups, @group do |groups_form| %>
     <% @group.conditions.each do |condition| %>
       <%= render AdvancedSearch::Condition.new(

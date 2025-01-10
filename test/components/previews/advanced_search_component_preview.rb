@@ -6,7 +6,7 @@ class AdvancedSearchComponentPreview < ViewComponent::Preview
       groups: [
         Sample::Group.new(
           conditions: [
-            Sample::Condition.new(field: ' metadata.country', operator: '=', value: 'Canada'),
+            Sample::Condition.new(field: 'metadata.country', operator: '=', value: 'Canada'),
             Sample::Condition.new(field: 'metadata.collection_date', operator: '>=', value: '2024-01-01'),
             Sample::Condition.new(field: 'metadata.collection_date', operator: '<=', value: '2024-12-01')
           ]

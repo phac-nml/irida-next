@@ -277,11 +277,12 @@ fr:
     add_group_button: Add Group
     apply_filter_button: Apply filter
     clear_filter_button: Clear filter
-    description: This advanced search uses fields and operators to filter samples. Add and/or conditions to define the search criteria. To filter by date range, the metadata field should end with '_date'.
+    description: This advanced search uses fields, operators and values to filter samples. Add groups with conditions to define the search criteria.
     field: Field
     operator: Operator
     remove_condition_aria_label: Remove condition
     remove_group_button: Remove group
+    rules: Operators cannot be used on the same field within a group more than once, except for '=' and '!='. To filter by date range, the metadata field should end with '_date'.
     title: Advanced search
     value: Value
   application:
@@ -1723,6 +1724,14 @@ fr:
       abbreviated: "%a %b%e %Y %H:%M"
       default: "%Y-%m-%d %H:%M:%S"
       full_date: "%B %d, %Y"
+  validators:
+    advanced_search_group_validator:
+      base_error: There are group errors.
+      between_error: "'%{unique_field}' can use '<=' and '>=' only once."
+      blank_error: Fields, operators, and values cannot be blank.
+      contains_error: "'%{unique_field}' can use 'contains' only once."
+      equals_error: "'%{unique_field}' cannot use '=' with other operators."
+      not_equals_error: "'%{unique_field}' cannot use '!=' with other operators."
   viral:
     pagy:
       limit_component:
