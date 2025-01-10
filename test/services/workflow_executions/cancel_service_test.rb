@@ -50,7 +50,11 @@ module WorkflowExecutions
     test 'cancel initial workflow_execution' do
       @workflow_execution = workflow_executions(:irida_next_example_new)
 
+      @workflow_execution.create_logidze_snapshot!
+
       assert 'initial', @workflow_execution.state
+      assert_equal 1, @workflow_execution.log_data.version
+      assert_equal 1, @workflow_execution.log_data.size
 
       assert WorkflowExecutions::CancelService.new(@workflow_execution, @user).execute
 
@@ -58,6 +62,11 @@ module WorkflowExecutions
 
       assert_equal 'canceled', @workflow_execution.reload.state
       assert @workflow_execution.cleaned?
+
+      @workflow_execution.create_logidze_snapshot!
+      assert 'canceled', @workflow_execution.state
+      assert_equal 2, @workflow_execution.log_data.version
+      assert_equal 2, @workflow_execution.log_data.size
     end
   end
 end

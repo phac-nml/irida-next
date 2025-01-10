@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_07_194839) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_09_162252) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -334,6 +334,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_07_194839) do
     t.string "name"
     t.uuid "namespace_id"
     t.boolean "cleaned", default: false, null: false
+    t.jsonb "log_data"
     t.index ["created_at"], name: "index_workflow_executions_on_created_at"
     t.index ["namespace_id"], name: "index_workflow_executions_on_namespace_id"
     t.index ["state"], name: "index_workflow_executions_on_state"
@@ -751,6 +752,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_07_194839) do
   SQL
   create_trigger :logidze_on_attachments, sql_definition: <<-SQL
       CREATE TRIGGER logidze_on_attachments BEFORE INSERT OR UPDATE ON public.attachments FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
+  create_trigger :logidze_on_workflow_executions, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_workflow_executions BEFORE INSERT OR UPDATE ON public.workflow_executions FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at', '{run_id,name,state,deleted_at}', 'true')
   SQL
   create_trigger :logidze_on_data_exports, sql_definition: <<-SQL
       CREATE TRIGGER logidze_on_data_exports BEFORE INSERT OR UPDATE ON public.data_exports FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')

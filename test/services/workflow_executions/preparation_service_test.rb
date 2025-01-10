@@ -14,6 +14,10 @@ module WorkflowExecutions
     test 'prepare workflow_execution with valid params' do
       assert @workflow_execution.initial?
 
+      @workflow_execution.create_logidze_snapshot!
+      assert_equal 1, @workflow_execution.log_data.version
+      assert_equal 1, @workflow_execution.log_data.size
+
       assert_difference -> { ActiveStorage::Attachment.count } => 2 do
         WorkflowExecutions::PreparationService.new(@workflow_execution, @user, {}).execute
       end
@@ -42,6 +46,10 @@ module WorkflowExecutions
       assert_equal sample1_row, samplesheet_csv[1]
 
       assert_equal 'prepared', @workflow_execution.state
+
+      @workflow_execution.create_logidze_snapshot!
+      assert_equal 2, @workflow_execution.log_data.version
+      assert_equal 2, @workflow_execution.log_data.size
     end
 
     test 'should return false since chosen pipeline is not executable' do
