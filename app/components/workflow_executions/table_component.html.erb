@@ -140,7 +140,7 @@
                 <% end %>
               <% end %>
             <% end %>
-            <% if @renders_row_actions %>
+            <% if @renders_row_actions && !workflow_execution.shared_with_namespace %>
               <%= render_cell(
                 tag: 'td',
                 classes: class_names('px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2')

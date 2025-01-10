@@ -24,7 +24,8 @@ module Projects
     end
 
     def load_workflows
-      authorized_scope(WorkflowExecution, type: :relation, as: :automated, scope_options: { project: @project })
+      authorized_scope(WorkflowExecution, type: :relation, as: :automated_and_shared,
+                                          scope_options: { project: @project })
     end
 
     def current_page
