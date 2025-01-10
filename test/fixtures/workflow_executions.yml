@@ -863,3 +863,14 @@ workflow_execution_valid_on_group:
   run_id: "my_group_run_id_1"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+
+workflow_execution_shared:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "wn1", "workflow_version": "wv1" }
+  workflow_params: { "key_a": "value_a" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "my_run_id_1"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  shared_with_namespace: true

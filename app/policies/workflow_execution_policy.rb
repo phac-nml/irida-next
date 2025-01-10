@@ -109,4 +109,11 @@ class WorkflowExecutionPolicy < ApplicationPolicy
 
     relation.where(submitter_id: user.id)
   end
+
+  scope_for :relation, :automated_and_shared do |relation, options|
+    project = options[:project]
+
+    relation.where(submitter: project.namespace.automation_bot)
+            .or(relation.where(namespace_id: project.namespace.id, shared_with_namespace: true))
+  end
 end
