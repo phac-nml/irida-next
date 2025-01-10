@@ -189,7 +189,6 @@ module Groups
     end
 
     test 'can filter by name and then sort the list of samples' do
-      skip
       visit group_samples_url(@group)
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
@@ -199,7 +198,7 @@ module Groups
         assert_text @sample1.puid
       end
 
-      fill_in placeholder: I18n.t(:'groups.samples.index.table_filter.placeholder'), with: 'Sample 1'
+      fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: 'Sample 1'
       find('input.t-search-component').native.send_keys(:return)
 
       assert_text 'Samples: 13'
@@ -435,43 +434,55 @@ module Groups
       end
     end
 
-    test 'filtering samples by list of sample puids' do
-      skip
+    test 'filter samples with advanced search' do
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                            locale: @user.locale))
-      within 'tbody' do
-        assert_selector 'tr', count: 20
-        assert_selector 'tr th', text: @sample1.puid
-        assert_selector 'tr th', text: @sample2.puid
-        assert_selector 'tr th', text: @sample9.puid
+
+      within '#samples-table table tbody' do
+        assert_selector "tr[id='#{@sample1.id}']"
+        assert_selector "tr[id='#{@sample2.id}']"
+        assert_selector "tr[id='#{@sample9.id}']"
       end
 
-      find("button[aria-label='#{I18n.t(:'components.list_filter.title')}").click
-      within 'dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
-        find("input[name='q[name_or_puid_in][]']").send_keys "#{@sample1.puid}, #{@sample2.puid}"
-        assert_selector 'span.label', count: 1
-        assert_selector 'span.label', text: @sample1.puid
-        find("input[name='q[name_or_puid_in][]']").text @sample2.puid
-        click_button I18n.t(:'components.list_filter.apply')
+      click_button I18n.t(:'advanced_search_component.title')
+      within '#advanced-search-dialog' do
+        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        within all("div[data-advanced-search-target='groupsContainer']")[0] do
+          within all("div[data-advanced-search-target='conditionsContainer']")[0] do
+            find("select[name$='[field]']").find("option[value='puid']").select_option
+            find("select[name$='[operator]']").find("option[value='=']").select_option
+            find("input[name$='[value]']").fill_in with: @sample1.puid
+          end
+          click_button I18n.t(:'advanced_search_component.add_condition_button')
+          assert_selector "div[data-advanced-search-target='conditionsContainer']", count: 2
+          within all("div[data-advanced-search-target='conditionsContainer']")[1] do
+            find("select[name$='[field]']").find("option[value='puid']").select_option
+            find("select[name$='[operator]']").find("option[value='=']").select_option
+            find("input[name$='[value]']").fill_in with: @sample2.puid
+          end
+        end
+        click_button I18n.t(:'advanced_search_component.apply_filter_button')
       end
 
-      within 'tbody' do
+      within '#samples-table table tbody' do
         assert_selector 'tr', count: 2
-        assert_selector 'tr th', text: @sample1.puid
-        assert_selector 'tr th', text: @sample2.puid
-        assert_no_selector 'tr th', text: @sample9.puid
+        # sample1 & sample2 found
+        assert_selector "tr[id='#{@sample1.id}']"
+        assert_selector "tr[id='#{@sample2.id}']"
+        assert_no_selector "tr[id='#{@sample9.id}']"
       end
 
-      find("button[aria-label='#{I18n.t(:'components.list_filter.title')}").click
-      within 'dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
-        click_button I18n.t(:'components.list_filter.clear')
-        click_button I18n.t(:'components.list_filter.apply')
+      click_button I18n.t(:'advanced_search_component.title')
+      within '#advanced-search-dialog' do
+        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        click_button I18n.t(:'advanced_search_component.clear_filter_button')
       end
-      within 'tbody' do
-        assert_selector 'tr', count: 20
+
+      within '#samples-table table tbody' do
+        assert_selector "tr[id='#{@sample1.id}']"
+        assert_selector "tr[id='#{@sample2.id}']"
+        assert_selector "tr[id='#{@sample9.id}']"
       end
     end
 

@@ -2180,8 +2180,7 @@ module Projects
       ### VERIFY END ###
     end
 
-    test 'filtering samples by list of sample puids' do
-      skip
+    test 'filter samples with advanced search' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
@@ -2195,29 +2194,35 @@ module Projects
       ### SETUP END ###
 
       ### actions and VERIFY START ###
-      click_button I18n.t(:'components.list_filter.title')
-      within '#list-filter-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
-        # add sample1 and 2 puids
-        fill_in I18n.t(:'components.list_filter.description'), with: "#{@sample1.puid}, #{@sample2.puid}"
-        click_button I18n.t(:'components.list_filter.apply')
+      click_button I18n.t(:'advanced_search_component.title')
+      within '#advanced-search-dialog' do
+        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        within all("div[data-advanced-search-target='groupsContainer']")[0] do
+          within all("div[data-advanced-search-target='conditionsContainer']")[0] do
+            find("select[name$='[field]']").find("option[value='metadata.metadatafield1']").select_option
+            find("select[name$='[operator]']").find("option[value='=']").select_option
+            find("input[name$='[value]']").fill_in with: @sample30.metadata['metadatafield1']
+          end
+        end
+        click_button I18n.t(:'advanced_search_component.apply_filter_button')
       end
+
       within '#samples-table table tbody' do
-        assert_selector 'tr', count: 2
-        assert_selector "tr[id='#{@sample1.id}']"
-        assert_selector "tr[id='#{@sample2.id}']"
-        # sample30 filtered out
-        assert_no_selector "tr[id='#{@sample30.id}']"
+        assert_selector 'tr', count: 1
+        assert_no_selector "tr[id='#{@sample1.id}']"
+        assert_no_selector "tr[id='#{@sample2.id}']"
+        # sample30 found
+        assert_selector "tr[id='#{@sample30.id}']"
       end
-      click_button I18n.t(:'components.list_filter.title')
-      within '#list-filter-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
-        # clear filter
-        click_button I18n.t(:'components.list_filter.clear')
-        click_button I18n.t(:'components.list_filter.apply')
+
+      click_button I18n.t(:'advanced_search_component.title')
+      within '#advanced-search-dialog' do
+        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        click_button I18n.t(:'advanced_search_component.clear_filter_button')
       end
+
       within '#samples-table table tbody' do
-        # sample30 no longer filtered
+        assert_selector 'tr', count: 3
         assert_selector "tr[id='#{@sample1.id}']"
         assert_selector "tr[id='#{@sample2.id}']"
         assert_selector "tr[id='#{@sample30.id}']"
@@ -2225,8 +2230,7 @@ module Projects
       ### actions and VERIFY END ###
     end
 
-    test 'filtering samples by list of sample names' do
-      skip
+    test 'filter samples with advanced search using multiple conditions' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
@@ -2239,29 +2243,51 @@ module Projects
       end
       ### SETUP END ###
 
-      ### ACTIONS START ###
-      click_button I18n.t(:'components.list_filter.title')
-      within '#list-filter-dialog' do
-        assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
-        # add sample1 and 2 names
-        fill_in I18n.t(:'components.list_filter.description'), with: "#{@sample1.name}, #{@sample2.name}"
-        click_button I18n.t(:'components.list_filter.apply')
+      ### actions and VERIFY START ###
+      click_button I18n.t(:'advanced_search_component.title')
+      within '#advanced-search-dialog' do
+        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        within all("div[data-advanced-search-target='groupsContainer']")[0] do
+          within all("div[data-advanced-search-target='conditionsContainer']")[0] do
+            find("select[name$='[field]']").find("option[value='metadata.metadatafield1']").select_option
+            find("select[name$='[operator]']").find("option[value='=']").select_option
+            find("input[name$='[value]']").fill_in with: @sample30.metadata['metadatafield1']
+          end
+          click_button I18n.t(:'advanced_search_component.add_condition_button')
+          assert_selector "div[data-advanced-search-target='conditionsContainer']", count: 2
+          within all("div[data-advanced-search-target='conditionsContainer']")[1] do
+            find("select[name$='[field]']").find("option[value='metadata.metadatafield2']").select_option
+            find("select[name$='[operator]']").find("option[value='=']").select_option
+            find("input[name$='[value]']").fill_in with: @sample30.metadata['metadatafield2']
+          end
+        end
+        click_button I18n.t(:'advanced_search_component.apply_filter_button')
       end
-      ### ACTIONS END ###
 
-      ### VERIFY START ###
       within '#samples-table table tbody' do
-        assert_selector 'tr', count: 2
+        assert_selector 'tr', count: 1
+        assert_no_selector "tr[id='#{@sample1.id}']"
+        assert_no_selector "tr[id='#{@sample2.id}']"
+        # sample30 found
+        assert_selector "tr[id='#{@sample30.id}']"
+      end
+
+      click_button I18n.t(:'advanced_search_component.title')
+      within '#advanced-search-dialog' do
+        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        click_button I18n.t(:'advanced_search_component.clear_filter_button')
+      end
+
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 3
         assert_selector "tr[id='#{@sample1.id}']"
         assert_selector "tr[id='#{@sample2.id}']"
-        # sample30 filtered out
-        assert_no_selector "tr[id='#{@sample30.id}']"
+        assert_selector "tr[id='#{@sample30.id}']"
       end
-      ### VERIFY END ###
+      ### actions and VERIFY END ###
     end
 
-    test 'can filter by large list of sample names or ids' do
-      skip
+    test 'filter samples with advanced search using multiple conditions that fail validation' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
@@ -2274,24 +2300,95 @@ module Projects
       end
       ### SETUP END ###
 
-      ### ACTIONS START ###
-      click_button I18n.t(:'components.list_filter.title')
-      within '#list-filter-dialog' do |dialog|
-        assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
-        fill_in I18n.t(:'components.list_filter.description'), with: long_filter_text
-        assert_selector 'span.label', count: 500
-        dialog.scroll_to(dialog.find('button', text: I18n.t(:'components.list_filter.apply')), align: :bottom)
-        click_button I18n.t(:'components.list_filter.apply')
+      ### actions and VERIFY START ###
+      click_button I18n.t(:'advanced_search_component.title')
+      within '#advanced-search-dialog' do
+        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        within all("div[data-advanced-search-target='groupsContainer']")[0] do
+          within all("div[data-advanced-search-target='conditionsContainer']")[0] do
+            find("select[name$='[field]']").find("option[value='metadata.metadatafield1']").select_option
+            find("select[name$='[operator]']").find("option[value='contains']").select_option
+            find("input[name$='[value]']").fill_in with: @sample30.metadata['metadatafield1']
+          end
+          click_button I18n.t(:'advanced_search_component.add_condition_button')
+          assert_selector "div[data-advanced-search-target='conditionsContainer']", count: 2
+          within all("div[data-advanced-search-target='conditionsContainer']")[1] do
+            find("select[name$='[field]']").find("option[value='metadata.metadatafield1']").select_option
+            find("select[name$='[operator]']").find("option[value='contains']").select_option
+            find("input[name$='[value]']").fill_in with: @sample30.metadata['metadatafield1']
+          end
+        end
+        click_button I18n.t(:'advanced_search_component.apply_filter_button')
+        assert_text I18n.t(:'validators.advanced_search_group_validator.contains_error',
+                           unique_field: 'metadata.metadatafield1')
       end
-      ### ACTIONS END ###
 
-      ### VERIFY START ###
+      # close dialog
+      within('dialog') do
+        first('button').click
+      end
+
+      assert_text I18n.t(:'components.viral.pagy.empty_state.description')
+      ### actions and VERIFY END ###
+    end
+
+    test 'filter samples with advanced search using multiple groups' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
       within '#samples-table table tbody' do
         assert_selector "tr[id='#{@sample1.id}']"
-        assert_no_selector "tr[id='#{@sample2.id}']"
+        assert_selector "tr[id='#{@sample2.id}']"
+        assert_selector "tr[id='#{@sample30.id}']"
+      end
+      ### SETUP END ###
+
+      ### actions and VERIFY START ###
+      click_button I18n.t(:'advanced_search_component.title')
+      within '#advanced-search-dialog' do
+        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        within all("div[data-advanced-search-target='groupsContainer']")[0] do
+          within all("div[data-advanced-search-target='conditionsContainer']")[0] do
+            find("select[name$='[field]']").find("option[value='name").select_option
+            find("select[name$='[operator]']").find("option[value='=']").select_option
+            find("input[name$='[value]']").fill_in with: @sample1.name
+          end
+        end
+        click_button I18n.t(:'advanced_search_component.add_group_button')
+        assert_selector "div[data-advanced-search-target='groupsContainer']", count: 2
+        within all("div[data-advanced-search-target='groupsContainer']")[1] do
+          within all("div[data-advanced-search-target='conditionsContainer']")[0] do
+            find("select[name$='[field]']").find("option[value='name").select_option
+            find("select[name$='[operator]']").find("option[value='=']").select_option
+            find("input[name$='[value]']").fill_in with: @sample2.name
+          end
+        end
+        click_button I18n.t(:'advanced_search_component.apply_filter_button')
+      end
+
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 2
+        # sample1 & sample2 found
+        assert_selector "tr[id='#{@sample1.id}']"
+        assert_selector "tr[id='#{@sample2.id}']"
         assert_no_selector "tr[id='#{@sample30.id}']"
       end
-      ### VERIFY END ###
+
+      click_button I18n.t(:'advanced_search_component.title')
+      within '#advanced-search-dialog' do
+        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        click_button I18n.t(:'advanced_search_component.clear_filter_button')
+      end
+
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 3
+        assert_selector "tr[id='#{@sample1.id}']"
+        assert_selector "tr[id='#{@sample2.id}']"
+        assert_selector "tr[id='#{@sample30.id}']"
+      end
+      ### actions and VERIFY END ###
     end
 
     test 'can update metadata value that is not from an analysis' do
