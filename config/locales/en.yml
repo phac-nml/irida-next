@@ -1539,6 +1539,8 @@ en:
         empty:
           description: There are no automated pipelines associated with this project.
           title: No automated pipelines.
+      workflow_execution_name:
+        name: Name
   ransack:
     sort_dropdown_component:
       sorting:
@@ -1810,3 +1812,5 @@ en:
       updated_at: Last Updated
       workflow_name: Workflow Name
       workflow_version: Workflow Version
+    workflow_execution_name:
+      name: Name
