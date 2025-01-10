@@ -4,11 +4,14 @@
 class AdvancedSearchGroupValidator < ActiveModel::Validator
   def validate(record)
     groups_valid = true
+    return if empty_search?(record)
+
     record.groups.each_with_index do |group, group_index|
       validate_blank_fields(record, group, group_index)
       validate_unique_fields(record, group, group_index)
       groups_valid = false if record.groups[group_index].errors.any?
     end
+
     return if groups_valid
 
     record.errors.add :base, I18n.t('validators.advanced_search_group_validator.base_error')
@@ -16,20 +19,20 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
 
   private
 
-  def validate_blank_fields(record, group, group_index)
-    if group.conditions.count == 1
-      validate_blank_fields_for_condition(record, group, group_index)
-    elsif group.conditions.any? do |condition|
-      condition.field.blank? || condition.operator.blank? || condition.value.blank?
+  def empty_search?(record) # rubocop:disable Metrics/AbcSize
+    if record.groups.length == 1 && record.groups[0].conditions.length == 1 &&
+       record.groups[0].conditions[0].field.blank? && record.groups[0].conditions[0].operator.blank? &&
+       record.groups[0].conditions[0].value.blank?
+      return true
     end
-      record.groups[group_index].errors.add :base, I18n.t('validators.advanced_search_group_validator.blank_error')
-    end
+
+    false
   end
 
-  def validate_blank_fields_for_condition(record, group, group_index)
-    condition = group.conditions.first
-    unless (condition.field.blank? && condition.operator.blank? && condition.value.blank?) ||
-           (condition.field.present? && condition.operator.present? && condition.value.present?)
+  def validate_blank_fields(record, group, group_index)
+    if group.conditions.any? do |condition|
+      condition.field.blank? || condition.operator.blank? || condition.value.blank?
+    end
       record.groups[group_index].errors.add :base, I18n.t('validators.advanced_search_group_validator.blank_error')
     end
   end
