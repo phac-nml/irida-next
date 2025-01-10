@@ -754,7 +754,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_09_162252) do
       CREATE TRIGGER logidze_on_attachments BEFORE INSERT OR UPDATE ON public.attachments FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
   SQL
   create_trigger :logidze_on_workflow_executions, sql_definition: <<-SQL
-      CREATE TRIGGER logidze_on_workflow_executions BEFORE INSERT OR UPDATE ON public.workflow_executions FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at', '{run_id,name,state}', 'true')
+      CREATE TRIGGER logidze_on_workflow_executions BEFORE INSERT OR UPDATE ON public.workflow_executions FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at', '{run_id,name,state,deleted_at}', 'true')
   SQL
   create_trigger :logidze_on_data_exports, sql_definition: <<-SQL
       CREATE TRIGGER logidze_on_data_exports BEFORE INSERT OR UPDATE ON public.data_exports FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
@@ -764,5 +764,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_09_162252) do
   SQL
   create_trigger :logidze_on_automated_workflow_executions, sql_definition: <<-SQL
       CREATE TRIGGER logidze_on_automated_workflow_executions BEFORE INSERT OR UPDATE ON public.automated_workflow_executions FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
+  create_trigger :logidze_on_metadata_templates, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_metadata_templates BEFORE INSERT OR UPDATE ON public.metadata_templates FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
   SQL
 end
