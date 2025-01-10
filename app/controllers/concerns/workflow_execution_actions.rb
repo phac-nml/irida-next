@@ -42,6 +42,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
                  locals: { type: 'success',
                            message: t('concerns.workflow_execution_actions.update.success',
                                       workflow_name: @workflow_execution.metadata['workflow_name']) }
+
         else
           render status: :unprocessable_entity, locals: {
             type: 'alert', message: t('concerns.workflow_execution_actions.update.error',

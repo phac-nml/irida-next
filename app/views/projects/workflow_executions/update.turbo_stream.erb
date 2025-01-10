@@ -12,8 +12,8 @@
                         workflow_execution: @workflow_execution,
                       } %>
 
-  <%= turbo_stream.update "we_name" do %>
-    <%= render partial: "workflow_execution_name" %>
+  <%= turbo_stream.replace "workflow_execution_summary" do %>
+    <%= render partial: "summary" %>
   <% end %>
 <% else %>
   <%= turbo_stream.update "edit_workflow_execution_error_alert",

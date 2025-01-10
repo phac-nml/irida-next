@@ -12,11 +12,11 @@
                         workflow_execution: @workflow_execution,
                       } %>
 
-  <%= turbo_stream.update "we_name" do %>
-    <%= render partial: "workflow_execution_name" %>
+  <%= turbo_stream.replace "workflow_execution_summary" do %>
+    <%= render partial: "summary" %>
   <% end %>
 
-  <%= turbo_stream.replace "we_name_header" do %>
+  <%= turbo_stream.update "we_name_header" do %>
     <% if @workflow_execution.name.blank? %>
       <%= @workflow_execution.metadata["workflow_name"] %>
     <% else %>
