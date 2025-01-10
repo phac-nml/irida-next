@@ -16,7 +16,41 @@ module Nextflow
       extract_properties(schema)
     end
 
+    def samples_workflow_executions_attributes
+      samples.each_with_index.to_h do |sample, index|
+        [index, samples_workflow_execution_attributes(sample)]
+      end
+    end
+
     private
+
+    def samples_workflow_execution_attributes(sample)
+      {
+        sample_id: sample.id,
+        samplesheet_params: sample_samplesheet_params(sample)
+      }
+    end
+
+    def sample_samplesheet_params(sample) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength
+      @properties.to_h do |name, property|
+        case property['cell_type']
+        when 'sample_cell'
+          [name, sample.puid]
+        when 'sample_name_cell'
+          [name, sample.name]
+        when 'fastq_cell'
+          [name, ''] # TODO: set value to attachment id
+        when 'file_cell'
+          [name, ''] # TODO: set value to attachment id of file that matches regex
+        when 'metadata_cell'
+          [name, sample.metadata.fetch(name, '')]
+        when 'dropdown_cell'
+          [name, ''] # TODO: set to correct value
+        when 'input_cell'
+          [name, '']
+        end
+      end
+    end
 
     def extract_properties(schema)
       @properties = schema['items']['properties']
