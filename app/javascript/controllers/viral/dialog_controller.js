@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["dialog", "dialogForm"];
+  static targets = ["dialog"];
 
   static values = { open: Boolean };
 
@@ -24,9 +24,5 @@ export default class extends Controller {
 
   handleEsc(event) {
     event.preventDefault();
-  }
-
-  submit() {
-    this.dialogFormTarget.requestSubmit();
   }
 }

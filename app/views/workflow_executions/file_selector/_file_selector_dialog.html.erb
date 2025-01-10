@@ -10,7 +10,7 @@
         ) %>
       </div>
     <% else %>
-      <%= form_with id: 'file_selector_form', url: workflow_executions_file_selector_index_path(file_selector: file_selector_params), method: :post, data: {"viral--dialog-target": 'dialogForm'} do |form| %>
+      <%= form_with id: 'file_selector_form', url: workflow_executions_file_selector_index_path(file_selector: file_selector_params), method: :post do |form| %>
         <input type="hidden" name="format" value="turbo_stream"/>
         <div class="table-container flex flex-col shrink min-h-0">
           <div class="overflow-auto scrollbar">
@@ -108,13 +108,13 @@
             </table>
           </div>
         </div>
+        <% unless @listing_attachments.empty? %>
+          <%= form.submit t(".submit_button"),
+                      class:
+                        "inline-flex items-center justify-center text-sm border rounded-md cursor-pointer sm:w-auto focus:z-10 focus:outline-none text-white bg-primary-700 hover:bg-primary-800 focus:ring-0 rounded-md px-5 py-3 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 dark:border-primary-900 dark:hover:bg-primary-700" %>
+
+        <% end %>
       <% end %>
     <% end %>
-  <% end %>
-
-  <% unless @listing_attachments.empty? %>
-    <%= dialog.with_primary_action("data-action": "click->viral--dialog#submit") do
-      t(".submit_button")
-    end %>
   <% end %>
 <% end %>
