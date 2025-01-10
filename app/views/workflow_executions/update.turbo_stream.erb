@@ -13,11 +13,15 @@
                       } %>
 
   <%= turbo_stream.update "we_name" do %>
-    <%= @workflow_execution.name %>
+    <%= render partial: "workflow_execution_name" %>
   <% end %>
 
-  <%= turbo_stream.update "we_name_header" do %>
-    <%= @workflow_execution.name %>
+  <%= turbo_stream.replace "we_name_header" do %>
+    <% if @workflow_execution.name.blank? %>
+      <%= @workflow_execution.metadata["workflow_name"] %>
+    <% else %>
+      <%= @workflow_execution.name %>
+    <% end %>
   <% end %>
 <% else %>
   <%= turbo_stream.update "edit_workflow_execution_error_alert",

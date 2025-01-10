@@ -1,11 +1,7 @@
 <div class="px-4 py-4">
   <dl
     class="
-      max-w-md
-      text-slate-900
-      divide-y
-      divide-slate-200
-      dark:text-white
+      max-w-md text-slate-900 divide-y divide-slate-200 dark:text-white
       dark:divide-slate-700
     "
   >
@@ -13,14 +9,8 @@
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".run_id") %></dt>
       <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @workflow_execution.run_id %></dd>
     </div>
-    <% unless @workflow_execution.name.blank? %>
-      <div class="flex flex-col pb-3">
-        <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".name") %></dt>
-        <dd class="text-lg font-semibold text-slate-900 dark:text-white">
-          <%= turbo_frame_tag('we_name') do %>
-            <%= @workflow_execution.name %></dd>
-          <% end %>
-      </div>
+    <%= turbo_frame_tag('we_name') do %>
+      <%= render partial: "workflow_execution_name" %>
     <% end %>
     <div class="flex flex-col py-3">
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".workflow_name") %></dt>
