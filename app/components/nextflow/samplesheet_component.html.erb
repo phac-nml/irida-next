@@ -1,18 +1,26 @@
 <div class="sample-sheet">
 
   <label class="block mb-2 text-sm font-medium text-slate-900 dark:text-white"><%= t(".label") %></label>
-
+  <div
+    role="alert"
+    class="
+      hidden flex items-center p-4 border-l-4 text-red-800 border-red-300 bg-red-50
+      dark:text-red-400 dark:bg-slate-800 dark:border-red-800 mb-2
+    "
+    data-nextflow--samplesheet-target="error"
+  >
+    <span class="flex-shrink-0 inline">
+      <%= viral_icon(name: "exclamation_circle", classes: "w-5 h-5 mr-3 stroke-2") %>
+    </span>
+    <div>
+      <div class="font-medium" data-nextflow--samplesheet-target="errorMessage"></div>
+    </div>
+  </div>
   <div
     data-nextflow--samplesheet-target="table"
     class="
-      samplesheet-table
-      flex
-      border
-      dark:border-slate-600
-      border-slate-100
-      max-h-72
-      overflow-y-auto
-      relative
+      samplesheet-table flex border dark:border-slate-600 border-slate-100 max-h-72
+      overflow-y-auto relative
     "
   >
     <% properties.each do |header, property| %>
@@ -22,23 +30,16 @@
         property:,
         samples: @samples,
         metadata_fields:,
-        required: required_properties.include?(header)
+        required_properties:,
+        workflow_params:,
       ) %>
     <% end %>
     <template data-nextflow--samplesheet-target="loading">
       <div
         role="status"
         class="
-          absolute
-          h-full
-          w-full
-          text-black
-          dark:text-white
-          backdrop-blur-sm
-          flex
-          items-center
-          justify-center
-          z-20
+          absolute h-full w-full text-black dark:text-white backdrop-blur-sm flex
+          items-center justify-center z-20
         "
       >
         <span class="flex items-center p-4 space-x-4">

@@ -1,13 +1,27 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["selectForward", "selectReverse", "table", "loading", "submit"];
+  static targets = [
+    "table",
+    "loading",
+    "submit",
+    "error",
+    "errorMessage",
+    "form",
+  ];
+  static values = { attachmentsError: { type: String } };
+
+  #error_state = ["border-red-300", "dark:border-red-800"];
+
+  #default_state = ["border-transparent"];
 
   connect() {
     this.element.addEventListener("turbo:submit-start", (event) => {
       this.submitTarget.disabled = true;
       if (this.hasTableTarget) {
-        this.tableTarget.appendChild(this.loadingTarget.content.cloneNode(true));
+        this.tableTarget.appendChild(
+          this.loadingTarget.content.cloneNode(true),
+        );
       }
     });
 
@@ -19,25 +33,34 @@ export default class extends Controller {
     });
   }
 
-  file_selected(event) {
-    // find the selected option from the event target select
-    const { index, direction } = event.target.dataset;
-    const { puid } = event.target.options[event.target.selectedIndex].dataset;
-    const selectToUpdate =
-      direction === "pe_forward"
-        ? this.selectReverseTargets[index]
-        : this.selectForwardTargets[index];
-
-    this.#updateMatchingSelect(selectToUpdate, puid);
-  }
-
-  #updateMatchingSelect(updateSelect, puid) {
-    const index = [...updateSelect.options].findIndex(
-      (options) => options.dataset.puid === puid,
+  validateForm(event) {
+    event.preventDefault();
+    let readyToSubmit = true;
+    const requiredFileCells = document.querySelectorAll(
+      "[data-file-cell-required='true']",
     );
+    requiredFileCells.forEach((fileCell) => {
+      const firstChild = fileCell.firstElementChild;
+      if (
+        !firstChild ||
+        firstChild.type != "hidden" ||
+        !firstChild.value ||
+        !firstChild.value.startsWith("gid://")
+      ) {
+        fileCell.classList.remove(...this.#default_state);
+        fileCell.classList.add(...this.#error_state);
+        readyToSubmit = false;
+      } else {
+        fileCell.classList.remove(...this.#error_state);
+        fileCell.classList.add(...this.#default_state);
+      }
+    });
 
-    if (index > -1) {
-      updateSelect.options[index].selected = true;
+    if (!readyToSubmit) {
+      this.errorTarget.classList.remove("hidden");
+      this.errorMessageTarget.innerHTML = this.attachmentsErrorValue;
+    } else {
+      this.formTarget.requestSubmit();
     }
   }
 }

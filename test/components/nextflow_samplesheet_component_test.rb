@@ -30,7 +30,8 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
       table.assert_selector '.table-column:last-of-type .table-header', text: 'REFERENCE_ASSEMBLY'
       table.assert_selector '.table-column:first-of-type .table-td', count: 2
       table.assert_selector '.table-column:first-of-type .table-td:first-of-type', text: sample1.puid
-      table.assert_selector '.table-column:last-of-type .table-td:first-of-type select option', count: 1
+      table.assert_selector '.table-column:last-of-type .table-td:first-of-type a',
+                            text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
     end
   end
 

@@ -12,7 +12,19 @@ module WorkflowExecutions
       @project = projects(:project37)
       @namespace = groups(:group_sixteen)
 
-      Project.reset_counters(@project.id, :samples_count)
+      @user = users(:jeff_doe)
+      login_as @user
+      @jeff_doe_namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+      @project_a = projects(:projectA)
+      @sample_a = samples(:sampleA)
+      @sample_b = samples(:sampleB)
+      @attachment_c = attachments(:attachmentC)
+      @attachment_fwd2 = attachments(:attachmentPEFWD2)
+      @attachment_rev2 = attachments(:attachmentPEREV2)
+      @attachment_fwd3 = attachments(:attachmentPEFWD3)
+      @attachment_rev3 = attachments(:attachmentPEREV3)
+      @attachment_fwd43 = attachments(:attachmentPEFWD43)
+      @attachment_rev43 = attachments(:attachmentPEREV43)
 
       Sample.reindex
       Searchkick.enable_callbacks
@@ -294,6 +306,412 @@ module WorkflowExecutions
       visit group_samples_url(groups(:empty_group))
 
       assert_no_button I18n.t(:'projects.samples.index.workflows.button_sr')
+    end
+
+    test 'default attachment selections' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@jeff_doe_namespace, @project_a)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      # select samples
+      within 'table' do
+        find("input[type='checkbox'][value='#{@sample_a.id}']").click
+        find("input[type='checkbox'][value='#{@sample_b.id}']").click
+      end
+      # click workflow exectuions btn
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      # select workflow
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+      ### SETUP END ###
+
+      ### VERIFY START ###
+      within '#dialog' do
+        # verify samples samplesheet loaded
+        assert_selector 'div.sample-sheet'
+        # verify auto selected attachments
+        assert_selector "div[id='#{@sample_a.id}_fastq_1']", text: @attachment_c.file.filename.to_s
+        assert_selector "div[id='#{@sample_a.id}_fastq_2']",
+                        text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
+        assert_selector "div[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
+        assert_selector "div[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev3.file.filename.to_s
+      end
+      ### VERIFY END ###
+    end
+
+    test 'associated attachment autopopulated after selecting paired end attachment' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@jeff_doe_namespace, @project_a)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      # select samples
+      within 'table' do
+        find("input[type='checkbox'][value='#{@sample_a.id}']").click
+        find("input[type='checkbox'][value='#{@sample_b.id}']").click
+      end
+      # click workflow exectuions btn
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      # select workflow
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within '#dialog' do
+        # verify samples samplesheet loaded
+        assert_selector 'div.sample-sheet'
+        # verify auto selected attachments
+        assert_selector "div[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
+        assert_selector "div[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev3.file.filename.to_s
+        find("div[id='#{@sample_b.id}_fastq_1']").click
+      end
+
+      # verify file selector rendered
+      assert_selector '#file_selector_form_dialog'
+      within('#file_selector_form_dialog') do
+        assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+        within('#file_selector_form') do
+          # select new attachment
+          find("#attachment_id_#{@attachment_fwd2.id}").click
+        end
+        click_button I18n.t('workflow_executions.file_selector.file_selector_dialog.submit_button')
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      within '#dialog' do
+        # both attachment fwd and rev3 were replaced with fwd and rev2
+        assert_selector "div[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd2.file.filename.to_s
+        assert_selector "div[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev2.file.filename.to_s
+        assert_no_text @attachment_fwd3.file.filename.to_s
+        assert_no_text @attachment_rev3.file.filename.to_s
+      end
+      ### VERIFY END ###
+    end
+
+    test 'associated attachment autopopulates to no file when selection changes from PE to non-PE' do
+      attachment_d = attachments(:attachmentD)
+      ### SETUP START ###
+      visit namespace_project_samples_url(@jeff_doe_namespace, @project_a)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      # select samples
+      within 'table' do
+        find("input[type='checkbox'][value='#{@sample_a.id}']").click
+        find("input[type='checkbox'][value='#{@sample_b.id}']").click
+      end
+      # click workflow exectuions btn
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      # select workflow
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within '#dialog' do
+        # verify samples samplesheet loaded
+        assert_selector 'div.sample-sheet'
+        # verify auto selected attachments
+        assert_selector "div[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
+        assert_selector "div[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev3.file.filename.to_s
+        find("div[id='#{@sample_b.id}_fastq_1']").click
+      end
+
+      # verify file selector rendered
+      assert_selector '#file_selector_form_dialog'
+      within('#file_selector_form_dialog') do
+        assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+        within('#file_selector_form') do
+          # select new attachment
+          find("#attachment_id_#{attachment_d.id}").click
+        end
+        click_button I18n.t('workflow_executions.file_selector.file_selector_dialog.submit_button')
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      within '#dialog' do
+        # fastq_1 field changed to single-end fastq file, fastq_2 autopopulates to no selected file
+        assert_selector "div[id='#{@sample_b.id}_fastq_1']", text: attachment_d.file.filename.to_s
+        assert_selector "div[id='#{@sample_b.id}_fastq_2']",
+                        text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
+        assert_no_text @attachment_fwd3.file.filename.to_s
+        assert_no_text @attachment_rev3.file.filename.to_s
+      end
+      ### VERIFY END ###
+    end
+
+    test 'associated attachment does not autopopulate after selecting non-pe attachment' do
+      ### SETUP START ###
+      attachment_b = attachments(:attachmentB)
+      visit namespace_project_samples_url(@jeff_doe_namespace, @project_a)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      # select samples
+      within 'table' do
+        find("input[type='checkbox'][value='#{@sample_a.id}']").click
+        find("input[type='checkbox'][value='#{@sample_b.id}']").click
+      end
+      # click workflow exectuions btn
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      # select workflow
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within '#dialog' do
+        # verify samples samplesheet loaded
+        assert_selector 'div.sample-sheet'
+        # verify auto selected attachments
+        assert_selector "div[id='#{@sample_a.id}_fastq_1']", text: @attachment_c.file.filename.to_s
+        assert_selector "div[id='#{@sample_a.id}_fastq_2']",
+                        text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
+        # launch file selector
+        find("div[id='#{@sample_a.id}_fastq_1']").click
+      end
+
+      # verify file selector rendered
+      assert_selector '#file_selector_form_dialog'
+      within('#file_selector_form_dialog') do
+        assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+        within('#file_selector_form') do
+          # select new attachment
+          find("#attachment_id_#{attachment_b.id}").click
+        end
+        click_button I18n.t('workflow_executions.file_selector.file_selector_dialog.submit_button')
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      within '#dialog' do
+        # only fastq_1 field was changed, fastq_2 remains empty
+        assert_selector "div[id='#{@sample_a.id}_fastq_1']", text: attachment_b.file.filename.to_s
+        assert_selector "div[id='#{@sample_a.id}_fastq_2']",
+                        text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
+        assert_no_text @attachment_c.file.filename.to_s
+      end
+      ### VERIFY END ###
+    end
+
+    test 'no file option not available for required attachment fields' do
+      ### SETUP START ###
+      attachment_b = attachments(:attachmentB)
+      visit namespace_project_samples_url(@jeff_doe_namespace, @project_a)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      # select samples
+      within 'table' do
+        find("input[type='checkbox'][value='#{@sample_a.id}']").click
+        find("input[type='checkbox'][value='#{@sample_b.id}']").click
+      end
+      # click workflow exectuions btn
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      # select workflow
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within '#dialog' do
+        # verify samples samplesheet loaded
+        assert_selector 'div.sample-sheet'
+        # verify auto selected attachments
+        assert_selector "div[id='#{@sample_a.id}_fastq_1']", text: @attachment_c.file.filename.to_s
+        assert_selector "div[id='#{@sample_a.id}_fastq_2']",
+                        text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
+        # launch file selector
+        find("div[id='#{@sample_a.id}_fastq_1']").click
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      # verify file selector rendered
+      assert_selector '#file_selector_form_dialog'
+      within('#file_selector_form_dialog') do
+        assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+        within('#file_selector_form') do
+          # verify other attachments loaded
+          assert_selector "#attachment_id_#{attachment_b.id}"
+          # verify no file option does not exist in required field
+          assert_no_selector '#attachment_id_no_attachment'
+        end
+      end
+      ### VERIFY END ###
+    end
+
+    test 'no file option for non-required attachment fields' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@jeff_doe_namespace, @project_a)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      # select samples
+      within 'table' do
+        find("input[type='checkbox'][value='#{@sample_a.id}']").click
+        find("input[type='checkbox'][value='#{@sample_b.id}']").click
+      end
+      # click workflow exectuions btn
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      # select workflow
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within '#dialog' do
+        # verify samples samplesheet loaded
+        assert_selector 'div.sample-sheet'
+        # verify auto selected attachments
+        assert_selector "div[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
+        assert_selector "div[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev3.file.filename.to_s
+        find("div[id='#{@sample_b.id}_fastq_2']").click
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      # verify file selector rendered
+      assert_selector '#file_selector_form_dialog'
+      within('#file_selector_form_dialog') do
+        assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+        within('#file_selector_form') do
+          # verify no file option exists in non-required field
+          assert_selector '#attachment_id_no_attachment'
+          find('#attachment_id_no_attachment').click
+        end
+        click_button I18n.t('workflow_executions.file_selector.file_selector_dialog.submit_button')
+      end
+      within('#dialog') do
+        # sample_b fastq2 selection is now no file selected
+        assert_selector "div[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
+        assert_selector "div[id='#{@sample_b.id}_fastq_2']",
+                        text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
+        assert_no_text @attachment_rev3.file.filename.to_s
+      end
+      ### VERIFY END ###
+    end
+
+    test 'empty state of file selection' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@jeff_doe_namespace, @project_a)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      # select samples
+      within 'table' do
+        find("input[type='checkbox'][value='#{@sample_a.id}']").click
+        find("input[type='checkbox'][value='#{@sample_b.id}']").click
+      end
+      # click workflow exectuions btn
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      # select workflow
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within '#dialog' do
+        # verify samples samplesheet loaded
+        assert_selector 'div.sample-sheet'
+        # verify auto selected attachments
+        assert_selector "div[id='#{@sample_a.id}_fastq_1']", text: @attachment_c.file.filename.to_s
+        assert_selector "div[id='#{@sample_a.id}_fastq_2']",
+                        text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
+        find("div[id='#{@sample_a.id}_fastq_2']").click
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      # verify file selector rendered
+      assert_selector '#file_selector_form_dialog'
+      within('#file_selector_form_dialog') do
+        assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+        # verify empty state
+        assert_no_selector '#file_selector_form'
+        assert_text I18n.t('workflow_executions.file_selector.file_selector_dialog.empty.title')
+        assert_text I18n.t('workflow_executions.file_selector.file_selector_dialog.empty.description')
+      end
+      ### VERIFY END ###
+    end
+
+    test 'required attachments samplesheet validation' do
+      ### SETUP START ###
+      user = users(:john_doe)
+      login_as user
+      fwd_attachment = attachments(:attachmentPEFWD43)
+      rev_attachment = attachments(:attachmentPEREV43)
+      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: user.locale))
+      # select samples
+      within 'table' do
+        find("input[type='checkbox'][value='#{@sample43.id}']").click
+        find("input[type='checkbox'][value='#{@sample44.id}']").click
+      end
+      # launch workflow execution dialog
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      assert_selector '#dialog'
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_button text: 'phac-nml/iridanextexample', count: 3
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within '#dialog' do
+        # verify samples samplesheet loaded
+        assert_selector 'div.sample-sheet'
+        # verify auto selected attachments
+        assert_selector "div[id='#{@sample43.id}_fastq_1']",
+                        text: fwd_attachment.file.filename.to_s
+        assert_selector "div[id='#{@sample43.id}_fastq_2']", text: rev_attachment.file.filename.to_s
+
+        assert_selector "div[id='#{@sample44.id}_fastq_1']",
+                        text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
+        assert_selector "div[id='#{@sample44.id}_fastq_2']",
+                        text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
+        # verify error msg has not rendered
+        assert_no_text I18n.t('nextflow.samplesheet_component.attachments_error')
+        assert_no_selector 'div.border-red-300'
+        click_button I18n.t('workflow_executions.submissions.create.submit')
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
+        # verify error msg rendered
+        assert_text I18n.t('nextflow_component.attachments_error')
+        # verify error borders rendered (error msg and one attachment)
+        assert_selector 'div.border-red-300', count: 2
+        ### VERIFY END ###
+      end
     end
   end
 end

@@ -942,10 +942,13 @@ en:
       column_component:
         default: "%{label} (default)"
         required: Required
+      file_cell_component:
+        no_selected_file: No selected file
     samplesheet_component:
       label: Samples
       loading: Loading ...
   nextflow_component:
+    attachments_error: The highlighted file cells below require a selection.
     name:
       helper: A custom name will make it easier to search for this in the future.
       label: Name (Optional)
@@ -1698,6 +1701,20 @@ en:
       add_all: Add all
       remove_all: Remove all
   workflow_executions:
+    file_selector:
+      file_selector_dialog:
+        empty:
+          description: No attachments match the criteria for this selection.
+          title: No available attachments
+        headers:
+          created_at: Uploaded
+          filename: Filename
+          format: Format
+          size: Size
+          type: Type
+        no_file: No file
+        select_file: Select File
+        submit_button: Submit
     files:
       table_header:
         created_at: Created At

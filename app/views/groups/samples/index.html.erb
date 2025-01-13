@@ -3,6 +3,7 @@
 <%= turbo_frame_tag "samples_dialog" %>
 <%= turbo_frame_tag "samples_alert" %>
 <%= turbo_frame_tag "selected" %>
+<%= turbo_frame_tag "file_selector_dialog" %>
 
 <div class="fixed-table-component">
   <%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @group.class.model_name.human, namespace_name: @group.name)) do |component| %>
@@ -28,7 +29,7 @@
                 },
                 class:
                   "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
               ) %>
             <% else %>
               <% dropdown.with_item(

@@ -1,9 +1,15 @@
 <div
-  class="table-column flex-grow text-sm text-left  whitespace-nowrap bg-slate-50 text-slate-500 dark:text-white"
+  class="
+    table-column flex-grow text-sm text-left whitespace-nowrap bg-slate-50
+    text-slate-500 dark:text-white
+  "
 >
   <% if property["cell_type"] == "metadata_cell" %>
     <div
-      class="sticky top-0 z-10 border  table-header dark:border-slate-600 border-slate-100 dark:bg-slate-700 bg-slate-50"
+      class="
+        sticky top-0 z-10 border table-header dark:border-slate-600 border-slate-100
+        dark:bg-slate-700 bg-slate-50
+      "
     >
       <%= form_with url: fields_workflow_executions_metadata_path do |f| %>
         <%= f.hidden_field :format, value: "turbo_stream", id: "field_#{header}_turbo" %>
@@ -21,7 +27,7 @@
         <% end %>
         <%= f.select :field,
                  options_for_select(metadata_fields_for_field(header), header),
-                 { include_blank: !@required },
+                 { include_blank: !@required_properties.include?(header) },
                  {
                    id: "field-#{header}",
                    "aria-label": header,
@@ -40,7 +46,7 @@
     >
       <div class="flex items-center space-x-2 uppercase">
         <%= header %>
-        <% if @required %>
+        <% if @required_properties.include?(header) %>
           <span class="ml-1 text-red-600 dark:text-red-300">(<%= t(".required") %>)</span>
         <% end %>
       </div>
@@ -61,7 +67,7 @@
             <%= s.hidden_field :sample_id, value: sample.id %>
           <% end %>
           <%= s.fields_for "samplesheet_params" do |fields| %>
-            <%= render_cell_type(header, property, sample, fields, index) %>
+            <%= render_cell_type(header, property, sample, fields, index, workflow_params) %>
           <% end %>
         <% end %>
       </div>
