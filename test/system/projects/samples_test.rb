@@ -481,6 +481,7 @@ module Projects
       # select all 3 samples
       click_button I18n.t(:'projects.samples.index.select_all_button')
       click_link I18n.t('projects.samples.index.transfer_button')
+      assert_selector '#dialog'
       within('#dialog') do
         within('#list_selections') do
           samples.each do |sample|
@@ -529,7 +530,10 @@ module Projects
       Capybara.execute_script 'sessionStorage.clear()'
       # launch transfer dialog
       click_link I18n.t('projects.samples.index.transfer_button')
+
+      assert_selector '#dialog'
       within('#dialog') do
+        assert_text I18n.t('projects.samples.transfers.dialog.title')
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
@@ -565,6 +569,8 @@ module Projects
       ### ACTIONS START ###
       click_button I18n.t(:'projects.samples.index.select_all_button')
       click_link I18n.t('projects.samples.index.transfer_button')
+
+      assert_selector '#dialog'
       within('#dialog') do
         within('#list_selections') do
           samples.each do |sample|
@@ -657,6 +663,8 @@ module Projects
 
       # transfer sample
       click_link I18n.t('projects.samples.index.transfer_button')
+
+      assert_selector '#dialog'
       within('#dialog') do
         within('#list_selections') do
           # additional asserts to help prevent select2 actions below from flaking
@@ -703,6 +711,7 @@ module Projects
 
       # launch dialog
       click_link I18n.t('projects.samples.index.transfer_button')
+      assert_selector '#dialog'
       within('#dialog') do
         # fill destination input
         find('input#select2-input').fill_in with: 'invalid project name or puid'
@@ -1589,6 +1598,7 @@ module Projects
         find("input#sample_#{@sample2.id}").click
       end
       click_link I18n.t('projects.samples.index.clone_button')
+      assert_selector '#dialog'
       within('#dialog') do
         within('#list_selections') do
           # additional asserts to help prevent select2 actions below from flaking
@@ -1639,7 +1649,10 @@ module Projects
       # clear localstorage
       Capybara.execute_script 'sessionStorage.clear()'
       click_link I18n.t('projects.samples.index.clone_button')
+
+      assert_selector '#dialog'
       within('#dialog') do
+        assert_text I18n.t('projects.samples.clones.dialog.title')
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
@@ -1679,6 +1692,7 @@ module Projects
       ### ACTIONS START ###
       click_button I18n.t(:'projects.samples.index.select_all_button')
       click_link I18n.t('projects.samples.index.clone_button')
+      assert_selector '#dialog'
       within('#dialog') do
         within('#list_selections') do
           samples.each do |sample|
@@ -1724,6 +1738,7 @@ module Projects
       ### ACTIONS START ####
       click_button I18n.t(:'projects.samples.index.select_all_button')
       click_link I18n.t('projects.samples.index.clone_button')
+      assert_selector '#dialog'
       within('#dialog') do
         find('input#select2-input').fill_in with: 'invalid project name or puid'
         ### ACTIONS END ###
@@ -1786,6 +1801,8 @@ module Projects
 
       # clone sample
       click_link I18n.t('projects.samples.index.clone_button')
+
+      assert_selector '#dialog'
       within('#dialog') do
         within('#list_selections') do
           # additional asserts to help prevent select2 actions below from flaking
