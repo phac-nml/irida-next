@@ -66,6 +66,15 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
                                                  unique_field:)
   end
 
+  def validate_less_than_equals(record, group_index, unique_field, unique_field_conditions)
+    unless unique_field_conditions.count == 1 ||
+           (unique_field_conditions.count == 2 && unique_field_conditions[1].operator == '>=')
+      record.groups[group_index].errors.add :base,
+                                            I18n.t('validators.advanced_search_group_validator.between_error',
+                                                   unique_field:)
+    end
+  end
+
   def validate_greater_than_equals(record, group_index, unique_field, unique_field_conditions)
     unless unique_field_conditions.count == 1 ||
            (unique_field_conditions.count == 2 && unique_field_conditions[1].operator == '<=')
