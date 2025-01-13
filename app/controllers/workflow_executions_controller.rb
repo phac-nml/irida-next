@@ -23,7 +23,17 @@ class WorkflowExecutionsController < ApplicationController
   end
 
   def load_workflows
-    authorized_scope(WorkflowExecution, type: :relation, as: :user, scope_options: { user: current_user })
+    workflow_executions = authorized_scope(WorkflowExecution, type: :relation, as: :user_and_shared,
+                                                              scope_options: { user: current_user })
+
+    shared_workflow_executions = []
+    workflow_executions.where(shared_with_namespace: true).find_each do |workflow_execution|
+      shared_workflow_executions.append(workflow_execution) if authorize! workflow_execution.namespace,
+                                                                          to: :view_workflow_executions?
+    end
+
+    workflow_executions.where(shared_with_namespace: false)
+                       .or(workflow_executions.where(id: shared_workflow_executions.map(&:id)))
   end
 
   def workflow_execution_params
