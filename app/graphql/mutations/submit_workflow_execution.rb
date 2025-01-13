@@ -2,15 +2,22 @@
 
 module Mutations
   # Base Mutation
-  class SubmitWorkflowExecution < BaseMutation
+  class SubmitWorkflowExecution < BaseMutation # rubocop:disable Metrics/ClassLength
     null true
     description 'Create a new workflow execution..'
 
-    argument :email_notification, Boolean,
+    argument :email_notification,
+             Boolean,
+             required: false,
+             default_value: false,
              description: 'Set to true to enable email notifications from this workflow execution'
-    argument :name, String, description: 'Name for the new workflow.'
+    argument :name, String, required: false, description: 'Name for the new workflow.'
     argument :samples_workflow_executions_attributes, [GraphQL::Types::JSON], description: "A list of hashes containing a 'sample_id', and a hash of `samplesheet_params`." # rubocop:disable GraphQL/ExtractInputType,Layout/LineLength
-    argument :update_samples, Boolean, description: 'Set true for samples to be updated from this workflow execution' # rubocop:disable GraphQL/ExtractInputType
+    argument :update_samples, # rubocop:disable GraphQL/ExtractInputType
+             Boolean,
+             required: false,
+             default_value: false,
+             description: 'Set true for samples to be updated from this workflow execution'
     argument :workflow_engine, String, description: '' # rubocop:disable GraphQL/ExtractInputType
     argument :workflow_engine_parameters, [GraphQL::Types::JSON], description: 'List of Hashes containing `key` and `value` to be passed to the workflow engine.' # rubocop:disable GraphQL/ExtractInputType,Layout/LineLength
     argument :workflow_engine_version, String, description: 'Workflow Engine Version' # rubocop:disable GraphQL/ExtractInputType

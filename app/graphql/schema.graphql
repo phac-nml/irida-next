@@ -2879,7 +2879,7 @@ input SubmitWorkflowExecutionInput {
   """
   Set to true to enable email notifications from this workflow execution
   """
-  emailNotification: Boolean!
+  emailNotification: Boolean = false
 
   """
   The Node ID of the group to run workflow in. For example, `gid://irida/Group/a84cd757-dedb-4c64-8b01-097020163077`.
@@ -2889,7 +2889,7 @@ input SubmitWorkflowExecutionInput {
   """
   Name for the new workflow.
   """
-  name: String!
+  name: String
 
   """
   The Node ID of the project to run workflow in. For example, `gid://irida/Project/a84cd757-dedb-4c64-8b01-097020163077`.
@@ -2904,7 +2904,7 @@ input SubmitWorkflowExecutionInput {
   """
   Set true for samples to be updated from this workflow execution
   """
-  updateSamples: Boolean!
+  updateSamples: Boolean = false
 
   """
   
