@@ -14,7 +14,6 @@ pin 'escape-string-regexp' # @5.0.0
 pin '@rails/activestorage', to: '@rails--activestorage.js' # @7.2.201
 pin_all_from 'app/javascript/controllers', under: 'controllers'
 pin 'xlsx' # @0.18.5
-pin 'validator', to: 'https://ga.jspm.io/npm:validator@13.11.0/index.js'
 pin_all_from 'app/javascript/utilities', under: 'utilities'
 pin 'sortablejs' # @1.15.2
 pin 'local-time' # @3.0.2
