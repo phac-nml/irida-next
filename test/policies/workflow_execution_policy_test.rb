@@ -129,7 +129,7 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
     scoped_user_workflow_executions = @policy.apply_scope(WorkflowExecution, type: :relation, name: :user,
                                                                              scope_options: { user: @user })
 
-    assert_equal 19, scoped_user_workflow_executions.count
+    assert_equal 20, scoped_user_workflow_executions.count
   end
 
   test 'automated and shared scope' do
@@ -138,6 +138,14 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
     workflow_executions = @policy.apply_scope(WorkflowExecution, type: :relation, name: :automated_and_shared,
                                                                  scope_options: { project: })
 
-    assert_equal 11, workflow_executions.count
+    assert_equal 12, workflow_executions.count
+  end
+
+  test 'user and shared scope' do
+    workflow_executions = @policy.apply_scope(WorkflowExecution, type: :relation, name: :user_and_shared,
+                                                                 scope_options: { user: @user })
+
+    assert_equal 22, workflow_executions.count
+    assert workflow_executions.exists?(run_id: 'my_run_id_shared_2')
   end
 end
