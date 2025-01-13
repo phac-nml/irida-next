@@ -282,7 +282,7 @@ en:
     operator: Operator
     remove_condition_aria_label: Remove condition
     remove_group_button: Remove group
-    rules: Operators cannot be used on the same field within a group more than once, except for '=' and '!='. To filter by date range, the metadata field should end with '_date'.
+    rules: Operators cannot be used on the same field within a group more than once, except for '>=' and '<='. To filter by date range, the metadata field should end with '_date'.
     title: Advanced search
     value: Value
   application:
@@ -1729,9 +1729,7 @@ en:
       base_error: There are group errors.
       between_error: "'%{unique_field}' can use '>=' and '<=' only once."
       blank_error: Fields, operators, and values cannot be blank.
-      contains_error: "'%{unique_field}' can use 'contains' only once."
-      equals_error: "'%{unique_field}' cannot use '=' with other operators."
-      not_equals_error: "'%{unique_field}' cannot use '!=' with other operators."
+      uniqueness_error: "'%{unique_field}' must have unique operators."
   viral:
     pagy:
       limit_component:

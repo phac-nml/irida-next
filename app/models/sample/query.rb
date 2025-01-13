@@ -108,43 +108,31 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
       includes: [project: { namespace: [{ parent: :route }, :route] }] }
   end
 
-  def advanced_search_params # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
+  def advanced_search_params # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/AbcSize
     or_conditions = []
     groups.each do |group|
       and_conditions = {}
       group.conditions.map do |condition|
         case condition.operator
         when '='
-          equal_condition(and_conditions, condition)
+          and_conditions[condition.field] = condition.value
         when '!='
-          not_equal_condition(and_conditions, condition)
+          and_conditions[condition.field] = { not: condition.value }
         when '<='
           between_condition(and_conditions, condition, :lte)
         when '>='
           between_condition(and_conditions, condition, :gte)
         when 'contains'
           and_conditions[condition.field] = { ilike: "%#{condition.value}%" }
+        when 'in'
+          and_conditions[condition.field] = condition.value.split(/,\s|,/)
+        when 'not_in'
+          and_conditions[condition.field] = { not: condition.value.split(/,\s|,/) }
         end
       end
       or_conditions << and_conditions
     end
     { _or: or_conditions }
-  end
-
-  def equal_condition(and_conditions, condition)
-    and_conditions[condition.field] = if and_conditions[condition.field].nil?
-                                        [condition.value]
-                                      else
-                                        and_conditions[condition.field] << condition.value
-                                      end
-  end
-
-  def not_equal_condition(and_conditions, condition)
-    and_conditions[condition.field] = if and_conditions[condition.field].nil?
-                                        { not: [condition.value] }
-                                      else
-                                        { not: and_conditions[condition.field][:not] << condition.value }
-                                      end
   end
 
   def between_condition(and_conditions, condition, operation) # rubocop:disable Metrics/AbcSize

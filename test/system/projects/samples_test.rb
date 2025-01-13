@@ -2319,7 +2319,7 @@ module Projects
           end
         end
         click_button I18n.t(:'advanced_search_component.apply_filter_button')
-        assert_text I18n.t(:'validators.advanced_search_group_validator.contains_error',
+        assert_text I18n.t(:'validators.advanced_search_group_validator.uniqueness_error',
                            unique_field: 'metadata.metadatafield1')
       end
 

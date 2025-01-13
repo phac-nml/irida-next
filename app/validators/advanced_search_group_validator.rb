@@ -49,48 +49,21 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
     unique_field_condition = unique_field_conditions.first
 
     case unique_field_condition.operator
-    when 'contains'
-      validate_contains(record, group_index, unique_field, unique_field_conditions)
-    when '='
-      validate_equals(record, group_index, unique_field, unique_field_conditions)
-    when '!='
-      validate_not_equals(record, group_index, unique_field, unique_field_conditions)
     when '<='
       validate_less_than_equals(record, group_index, unique_field, unique_field_conditions)
     when '>='
       validate_greater_than_equals(record, group_index, unique_field, unique_field_conditions)
+    else
+      validate_uniqueness(record, group_index, unique_field, unique_field_conditions)
     end
   end
 
-  def validate_contains(record, group_index, unique_field, unique_field_conditions)
+  def validate_uniqueness(record, group_index, unique_field, unique_field_conditions)
     return if unique_field_conditions.count == 1
 
     record.groups[group_index].errors.add :base,
-                                          I18n.t('validators.advanced_search_group_validator.contains_error',
+                                          I18n.t('validators.advanced_search_group_validator.uniqueness_error',
                                                  unique_field:)
-  end
-
-  def validate_equals(record, group_index, unique_field, unique_field_conditions)
-    return if unique_field_conditions.all? { |condition| condition.operator == '=' }
-
-    record.groups[group_index].errors.add :base, I18n.t('validators.advanced_search_group_validator.equals_error',
-                                                        unique_field:)
-  end
-
-  def validate_not_equals(record, group_index, unique_field, unique_field_conditions)
-    return if unique_field_conditions.all? { |condition| condition.operator == '!=' }
-
-    record.groups[group_index].errors.add :base, I18n.t('validators.advanced_search_group_validator.not_equals_error',
-                                                        unique_field:)
-  end
-
-  def validate_less_than_equals(record, group_index, unique_field, unique_field_conditions)
-    unless unique_field_conditions.count == 1 ||
-           (unique_field_conditions.count == 2 && unique_field_conditions[1].operator == '>=')
-      record.groups[group_index].errors.add :base,
-                                            I18n.t('validators.advanced_search_group_validator.between_error',
-                                                   unique_field:)
-    end
   end
 
   def validate_greater_than_equals(record, group_index, unique_field, unique_field_conditions)
