@@ -1712,6 +1712,12 @@ en:
       add_all: Add all
       remove_all: Remove all
   workflow_executions:
+    edit_dialog:
+      cancel_button: Cancel
+      description: You are editing workflow execution '%{workflow_execution_id}'
+      name_placeholder: Enter workflow execution name (optional)
+      submit_button: Submit
+      title: Edit workflow execution
     file_selector:
       file_selector_dialog:
         empty:
@@ -1726,12 +1732,6 @@ en:
         no_file: No file
         select_file: Select File
         submit_button: Submit
-    edit_dialog:
-      cancel_button: Cancel
-      description: You are editing workflow execution '%{workflow_execution_id}'
-      name_placeholder: Enter workflow execution name (optional)
-      submit_button: Submit
-      title: Edit workflow execution
     files:
       table_header:
         created_at: Created At
