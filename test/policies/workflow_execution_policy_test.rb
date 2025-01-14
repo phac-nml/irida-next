@@ -45,6 +45,38 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
     assert_not policy.apply(:create?)
   end
 
+  test 'update?' do
+    assert @policy.apply(:update?)
+
+    user = users(:james_doe)
+    workflow_execution = workflow_executions(:automated_workflow_execution)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user: user)
+
+    assert policy.apply(:update?)
+
+    user = users(:ryan_doe)
+    workflow_execution = workflow_executions(:automated_workflow_execution)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user: user)
+
+    assert_not policy.apply(:update?)
+  end
+
+  test 'edit?' do
+    assert @policy.apply(:edit?)
+
+    user = users(:james_doe)
+    workflow_execution = workflow_executions(:automated_workflow_execution)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user: user)
+
+    assert policy.apply(:edit?)
+
+    user = users(:ryan_doe)
+    workflow_execution = workflow_executions(:automated_workflow_execution)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user: user)
+
+    assert_not policy.apply(:edit?)
+  end
+
   test '#cancel?' do
     assert @policy.apply(:cancel?)
 
