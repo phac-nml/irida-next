@@ -27,13 +27,15 @@ module Projects
       assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
       assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
-      assert_selector '#workflow-executions-table table tbody tr', count: 10
+      assert_selector '#workflow-executions-table table tbody tr', count: 12
     end
 
     test 'should sort a list of workflow executions' do
       workflow_execution1 = workflow_executions(:automated_workflow_execution)
       workflow_execution3 = workflow_executions(:automated_example_canceling)
       workflow_execution4 = workflow_executions(:automated_workflow_execution_existing)
+      workflow_execution_shared1 = workflow_executions(:workflow_execution_shared1)
+      workflow_execution_shared2 = workflow_executions(:workflow_execution_shared2)
 
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
@@ -44,19 +46,19 @@ module Projects
       assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.icon-arrow_up"
 
       within('#workflow-executions-table table tbody') do
-        assert_selector 'tr', count: 10
+        assert_selector 'tr', count: 12
         assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution4.run_id
         assert_selector "tr:nth-child(#{@run_id_col}) td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
-        assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: @workflow_execution2.run_id
+        assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution_shared2.run_id
       end
 
       click_on 'Run ID'
       assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.icon-arrow_down"
 
       within('#workflow-executions-table table tbody') do
-        assert_selector 'tr', count: 10
-        assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: @workflow_execution2.run_id
-        assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: workflow_execution3.run_id
+        assert_selector 'tr', count: 12
+        assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution_shared2.run_id
+        assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: workflow_execution_shared1.run_id
         assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution4.run_id
       end
 
@@ -64,24 +66,24 @@ module Projects
       assert_selector "#workflow-executions-table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_up"
 
       within('#workflow-executions-table table tbody') do
-        assert_selector 'tr', count: 10
+        assert_selector 'tr', count: 12
         assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
                         text: @workflow_execution2.metadata['workflow_name']
         assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
                         text: workflow_execution3.metadata['workflow_name']
         assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
-                        text: workflow_execution4.metadata['workflow_name']
+                        text: workflow_execution_shared2.metadata['workflow_name']
       end
 
       click_on I18n.t(:'workflow_executions.table_component.workflow_name')
       assert_selector "#workflow-executions-table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_down"
 
       within('#workflow-executions-table table tbody') do
-        assert_selector 'tr', count: 10
+        assert_selector 'tr', count: 12
         assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                        text: workflow_execution4.metadata['workflow_name']
+                        text: workflow_execution_shared1.metadata['workflow_name']
         assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
-                        text: workflow_execution1.metadata['workflow_name']
+                        text: workflow_execution_shared2.metadata['workflow_name']
         assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
                         text: @workflow_execution2.metadata['workflow_name']
       end
@@ -315,7 +317,7 @@ module Projects
       end
 
       within %(#workflow-executions-table table tbody) do
-        assert_selector 'tr', count: 9
+        assert_selector 'tr', count: 11
         assert_no_text @workflow_execution1.id
       end
     end
@@ -323,8 +325,8 @@ module Projects
     test 'can filter by ID and name on projects workflow execution index page' do
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_text 'Displaying 10 items'
-      assert_selector 'table tbody tr', count: 10
+      assert_text 'Displaying 12 items'
+      assert_selector 'table tbody tr', count: 12
 
       within('table tbody') do
         assert_text @workflow_execution1.id
@@ -351,8 +353,8 @@ module Projects
               with: ''
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_text 'Displaying 10 items'
-      assert_selector 'table tbody tr', count: 10
+      assert_text 'Displaying 12 items'
+      assert_selector 'table tbody tr', count: 12
 
       fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
               with: @workflow_execution2.name
