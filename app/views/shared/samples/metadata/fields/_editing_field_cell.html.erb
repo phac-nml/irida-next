@@ -11,7 +11,10 @@
                  data: {
                    "inline-edit-target": "input",
                    action:
-                     "blur->inline-edit#reset keydown->inline-edit#inputKeydown",
+                     "blur->inline-edit#handleBlurEvent keydown->inline-edit#inputKeydown",
                  } %>
+  <%= render ConfirmationComponent.new  do %>
+    HELLO, PLEASE HELP ME
+  <% end %>
   <% end %>
 </td>

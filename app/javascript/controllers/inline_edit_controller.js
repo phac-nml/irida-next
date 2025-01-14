@@ -21,11 +21,25 @@ export default class extends Controller {
   }
 
   inputKeydown(event) {
-    if(event.key === "Escape") {
+    if (event.key === "Escape") {
       this.reset();
-    } else if(event.key === "Tab") {
+    } else if (event.key === "Tab") {
       event.preventDefault();
       this.submit();
+    }
+  }
+
+  handleBlurEvent(event) {
+    // Use a dialog to confirm the change
+    if (this.inputTarget.value !== this.originalValue) {
+      event.preventDefault();
+      if (confirm("Are you sure?")) {
+        console.log("confirmed");
+      } else {
+        console.log("canceled");
+      }
+    } else {
+      this.submit(); // Resets the to non-input state
     }
   }
 }
