@@ -73,5 +73,9 @@
         <% end %>
       <% end %>
     <% end %>
+
+    <% if Rails.env.development? and Rails.configuration.enable_web_console == true %>
+      <%= console %>
+    <% end %>
   </body>
 </html>

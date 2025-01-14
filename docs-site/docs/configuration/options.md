@@ -34,3 +34,4 @@ Primary ENV Variable which sets what type of environment to run
 | `SEED_ATTACHMENT_PER_SAMPLE` | Set number of attachments per sample when seeding the database with test data                            | `2`                        |
 | `ENABLE_CRON`                | Enables built in cron cleanup jobs for samples, attachments, and data exports.                           | `true`                     |
 | `CRON_CLEANUP_AFTER_DAYS`    | Set the number of days old a deleted sample/attachment must be before it is cleaned.                     | `7`                        |
+| `RAILS_ENABLE_WEB_CONSOLE`    | Development mode only: When set, a rails console will be present on every webpage.                      | `nil`                        |

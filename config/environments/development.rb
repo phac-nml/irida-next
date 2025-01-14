@@ -102,7 +102,7 @@ Rails.application.configure do
     ]
   }
 
-  config.enable_web_console = false
+  config.enable_web_console = ENV['RAILS_ENABLE_WEB_CONSOLE'].present?
 
   # Create a new production log file [daily, weekly, monthly,..]
   # if ENV['RAILS_DAILY_LOG_ROTATION'].present?
