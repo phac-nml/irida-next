@@ -17,17 +17,18 @@ module Nextflow
     end
 
     def samples_workflow_executions_attributes
-      samples.each_with_index.to_h do |sample, index|
+      test = samples.each_with_index.to_h do |sample, index|
         [index, samples_workflow_execution_attributes(sample)]
       end
+      test.to_json
     end
 
     private
 
     def samples_workflow_execution_attributes(sample)
       {
-        sample_id: sample.id,
-        samplesheet_params: sample_samplesheet_params(sample)
+        'sample_id' => sample.id,
+        'samplesheet_params' => sample_samplesheet_params(sample)
       }
     end
 
@@ -39,9 +40,10 @@ module Nextflow
         when 'sample_name_cell'
           [name, sample.name]
         when 'fastq_cell'
-          [name, ''] # TODO: set value to attachment id
+          [name, sample.attachments.empty? ? '' : sample.most_recent_fastq_file(name, @workflow_params)[:global_id]]
         when 'file_cell'
-          [name, ''] # TODO: set value to attachment id of file that matches regex
+          [name, '']
+          # [name, sample.most_recent_other_file(property['autopopulate'], property['pattern'])[:id]]
         when 'metadata_cell'
           [name, sample.metadata.fetch(name, '')]
         when 'dropdown_cell'

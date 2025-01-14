@@ -7,6 +7,8 @@ class WorkflowExecutionsController < ApplicationController
   include WorkflowExecutionActions
 
   def create
+    puts params
+    puts hi
     @workflow_execution = WorkflowExecutions::CreateService.new(current_user, workflow_execution_params).execute
 
     if @workflow_execution.persisted?
