@@ -15,19 +15,12 @@ data: {
     id="<%="#{@attachable.id}_#{@property}" %>"
     class="
       w-full focus:ring-primary-500 focus:border-primary-500 p-2 dark:bg-inherit
-      bg-inherit dark:placeholder-slate-400 text-inherit
-      text-sm dark:focus:ring-primary-500 dark:focus:border-primary-500 cursor-pointer
+      bg-inherit dark:placeholder-slate-400 text-inherit text-sm
+      dark:focus:ring-primary-500 dark:focus:border-primary-500 cursor-pointer
       hover:border-slate-300 border-transparent border-2
     "
     data-file-cell-required="<%= @required_properties.present? && @required_properties.include?(@property) ? "true" : "false" %>"
   >
-    <% unless @selected.empty? %>
-      <input
-      type="hidden"
-        name="workflow_execution[samples_workflow_executions_attributes][<%= @index%>][samplesheet_params][<%= @property %>]"
-        value= <%= @selected[:global_id]%>
-      >
-    <% end %>
     <%= @selected.empty? ? t(".no_selected_file") : @selected[:filename] %>
   </div>
 <% end %>
