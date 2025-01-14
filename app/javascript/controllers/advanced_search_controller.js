@@ -37,14 +37,15 @@ export default class extends Controller {
   }
 
   removeCondition(event) {
-    let groupContainer = event.currentTarget.parentElement.closest(
+    let condition = event.currentTarget.parentElement;
+    let groupContainer = condition.closest(
       "div[data-advanced-search-target='groupsContainer']",
     );
     let conditions = groupContainer.querySelectorAll(
       "div[data-advanced-search-target='conditionsContainer']",
     );
     if (conditions.length > 1) {
-      event.currentTarget.parentElement.remove();
+      condition.remove();
       conditions = groupContainer.querySelectorAll(
         "div[data-advanced-search-target='conditionsContainer']",
       );
@@ -59,6 +60,8 @@ export default class extends Controller {
           inputField.name = updatedInputFieldName;
         });
       });
+    } else {
+      this.#clearCondition(condition);
     }
   }
 
@@ -104,12 +107,7 @@ export default class extends Controller {
           if (condition_index > 0) {
             condition.remove();
           } else {
-            let input = condition.querySelector("input");
-            input.value = "";
-            let selects = condition.querySelectorAll("select");
-            selects.forEach((select) => {
-              select.value = "";
-            });
+            this.#clearCondition(condition);
           }
         });
       }
@@ -135,6 +133,18 @@ export default class extends Controller {
       value.outerHTML = this.valueTemplateTarget.innerHTML
         .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
         .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
+    }
+  }
+
+  #clearCondition(condition) {
+    let input = condition.querySelector("input");
+    input.value = "";
+    let selects = condition.querySelectorAll("select");
+    selects.forEach((select) => {
+      select.value = "";
+    });
+    if (this.hasListFilterOutlet) {
+      this.listFilterOutlet.clear();
     }
   }
 }
