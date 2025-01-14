@@ -1,4 +1,4 @@
-<% if %w[in not_in].any? { |operator| @condition.operator == operator } %>
+<% if %w[in not_in].include?(@condition.operator) %>
   <div
     data-controller="list-filter"
     data-list-filter-selection-outlet="#samples-table"

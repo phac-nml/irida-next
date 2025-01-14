@@ -132,7 +132,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
   end
 
   def between_condition(and_conditions, condition, operation) # rubocop:disable Metrics/AbcSize
-    if condition.field.end_with?('_date')
+    if %w[created_at updated_at attachments_updated_at].include?(condition.field) || condition.field.end_with?('_date')
       and_conditions[condition.field] = if and_conditions[condition.field].nil?
                                           { operation => condition.value }
                                         else
