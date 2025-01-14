@@ -4,10 +4,12 @@
 >
   <div id="group-error-messages-<%= @group_index %>"></div>
   <%= @form.fields_for :groups, @group do |groups_form| %>
-    <% @group.conditions.each do |condition| %>
+    <% @group.conditions.each_with_index do |condition, condition_index| %>
       <%= render AdvancedSearch::Condition.new(
         groups_form: groups_form,
+        group_index: @group_index,
         condition: condition,
+        condition_index: condition_index,
         fields: @fields,
         operations: @operations,
       ) %>

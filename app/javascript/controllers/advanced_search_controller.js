@@ -6,11 +6,18 @@ export default class extends Controller {
     "conditionTemplate",
     "groupsContainer",
     "groupTemplate",
+    "valueTemplate",
+    "listValueTemplate",
   ];
+  static outlets = ["list-filter"];
 
   connect() {}
 
-  idempotentConnect() {}
+  idempotentConnect() {
+    this.listFilterOutlets.forEach((outlet) => {
+      outlet.idempotentConnect();
+    });
+  }
 
   addCondition(event) {
     let group = event.currentTarget.parentElement.closest(
@@ -107,5 +114,27 @@ export default class extends Controller {
         });
       }
     });
+  }
+
+  handleOperatorChange(event) {
+    let operator = event.target.value;
+    let condition = event.target.parentElement;
+    let value = condition.querySelector(".value");
+    let group = condition.parentElement;
+    let group_index = this.groupsContainerTargets.indexOf(group);
+    let condition_index =
+      group.querySelectorAll(
+        "div[data-advanced-search-target='conditionsContainer']",
+      ).length - 1;
+
+    if (["in", "not_in"].includes(operator)) {
+      value.outerHTML = this.listValueTemplateTarget.innerHTML
+        .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
+        .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
+    } else {
+      value.outerHTML = this.valueTemplateTarget.innerHTML
+        .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
+        .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
+    }
   }
 }

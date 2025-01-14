@@ -9,7 +9,7 @@
                            {
                              "aria-label": t("advanced_search_component.field"),
                              class:
-                               "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
+                               "h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
                            } %>
     <%= conditions_form.select :operator,
                            @operations,
@@ -18,15 +18,15 @@
                            },
                            {
                              "aria-label": t("advanced_search_component.operator"),
+                             "data-action": "advanced-search#handleOperatorChange",
                              class:
-                               "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
+                               "h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
                            } %>
-    <%= conditions_form.text_field(
-      :value,
-      placeholder: t("advanced_search_component.value"),
-      "aria-label": t("advanced_search_component.value"),
-      class:
-        "keyInput block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0 border-b-2 border-slate-300 appearance-none dark:text-white dark:border-slate-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer",
+    <%= render AdvancedSearch::Value.new(
+      conditions_form: conditions_form,
+      group_index: @group_index,
+      condition: @condition,
+      condition_index: @condition_index,
     ) %>
   <% end %>
   <button

@@ -108,15 +108,15 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
       includes: [project: { namespace: [{ parent: :route }, :route] }] }
   end
 
-  def advanced_search_params # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/AbcSize
+  def advanced_search_params # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
     or_conditions = []
     groups.each do |group|
       and_conditions = {}
       group.conditions.map do |condition|
         case condition.operator
-        when '='
+        when '=', 'in'
           and_conditions[condition.field] = condition.value
-        when '!='
+        when '!=', 'not_in'
           and_conditions[condition.field] = { not: condition.value }
         when '<='
           between_condition(and_conditions, condition, :lte)
@@ -124,10 +124,6 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
           between_condition(and_conditions, condition, :gte)
         when 'contains'
           and_conditions[condition.field] = { ilike: "%#{condition.value}%" }
-        when 'in'
-          and_conditions[condition.field] = condition.value.split(/,\s|,/)
-        when 'not_in'
-          and_conditions[condition.field] = { not: condition.value.split(/,\s|,/) }
         end
       end
       or_conditions << and_conditions

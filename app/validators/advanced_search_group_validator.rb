@@ -19,10 +19,11 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
 
   private
 
-  def empty_search?(record) # rubocop:disable Metrics/AbcSize
+  def empty_search?(record) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
     if record.groups.length == 1 && record.groups[0].conditions.length == 1 &&
        record.groups[0].conditions[0].field.blank? && record.groups[0].conditions[0].operator.blank? &&
-       record.groups[0].conditions[0].value.blank?
+       ((record.groups[0].conditions[0].value.is_a?(Array) && record.groups[0].conditions[0].value.compact!.blank?) ||
+       record.groups[0].conditions[0].value.blank?)
       return true
     end
 

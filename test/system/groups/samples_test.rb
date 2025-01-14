@@ -452,7 +452,7 @@ module Groups
           within all("div[data-advanced-search-target='conditionsContainer']")[0] do
             find("select[name$='[field]']").find("option[value='puid']").select_option
             find("select[name$='[operator]']").find("option[value='in']").select_option
-            find("input[name$='[value]']").fill_in with: "#{@sample1.puid}, #{@sample2.puid}"
+            find("input[name$='[value][]']").fill_in with: "#{@sample1.puid}, #{@sample2.puid}"
           end
         end
         click_button I18n.t(:'advanced_search_component.apply_filter_button')
