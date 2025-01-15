@@ -119,26 +119,17 @@
           <option value="<%=operation%>"><%= operation %></option>
         <% end %>
       </select>
-      <input
-        type="text"
-        name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][value]"
-        placeholder="<%= t(".value") %>"
-        aria-label="<%= t(".value") %>"
-        class="
-          keyInput block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0
-          border-b-2 border-slate-300 appearance-none dark:text-white
-          dark:border-slate-600 dark:focus:border-primary-500 focus:outline-none
-          focus:ring-0 focus:border-primary-500 peer value
-        "
-      />
+      <div class="form-field w-full value">
+        <input
+          type="text"
+          name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][value]"
+          placeholder="<%= t(".value") %>"
+          aria-label="<%= t(".value") %>"
+        />
+      </div>
       <button
         type="button"
-        class="
-          ml-auto bg-slate-100 text-slate-400 hover:text-slate-900 rounded-lg focus:ring-2
-          focus:ring-slate-300 p-1.5 inline-flex items-center justify-center h-8 w-8
-          dark:text-slate-500 dark:hover:text-white dark:bg-slate-800
-          dark:hover:bg-slate-700
-        "
+        class="text-slate-400 hover:text-slate-900 dark:hover:text-white"
         aria-label="<%= t(".remove_condition_aria_label") %>"
         data-action="advanced-search#removeCondition"
       >
@@ -149,7 +140,7 @@
   <template data-advanced-search-target="groupTemplate">
     <div
       data-advanced-search-target="groupsContainer"
-      class="bg-slate-100 border border-gray-300 rounded-lg"
+      class="border border-gray-300 rounded-lg"
     >
       <div class="flex justify-end space-x-2 p-4">
         <%= viral_button(data: { action: "advanced-search#addCondition" }) do %>
