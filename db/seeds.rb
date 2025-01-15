@@ -169,11 +169,11 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
     submitter: User.find_by(email: 'user1@email.com'),
     samples_workflow_executions_attributes: {
       '0': {
-          sample_id: Sample.first.id,
-          samplesheet_params: {
-            sample: Sample.first.puid
-          }
+        sample_id: Sample.first.id,
+        samplesheet_params: {
+          sample: Sample.first.puid
         }
+      }
     }
   )
 
@@ -199,11 +199,11 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
     state: :completed,
     samples_workflow_executions_attributes: {
       '0': {
-          sample_id: Sample.first.id,
-          samplesheet_params: {
-            sample: Sample.first.puid
-          }
+        sample_id: Sample.first.id,
+        samplesheet_params: {
+          sample: Sample.first.puid
         }
+      }
     }
   )
 
