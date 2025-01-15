@@ -1,0 +1,5 @@
+<h1>Rails Console</h1>
+<!-- We don't want to double render the console -->
+<% if Rails.configuration.enable_web_console == false %>
+  <%= console %>
+<% end %>
