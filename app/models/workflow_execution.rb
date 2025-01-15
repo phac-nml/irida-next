@@ -26,7 +26,6 @@ class WorkflowExecution < ApplicationRecord
 
   validates :metadata, presence: true, json: { message: ->(errors) { errors }, schema: METADATA_JSON_SCHEMA }
   validate :validate_namespace
-  validates_with WorkflowExecutionSamplesheetParamsValidator
 
   enum :state, %i[initial prepared submitted running completing completed error canceling canceled]
 
