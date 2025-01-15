@@ -15,7 +15,7 @@ module Attachments
       @include_activity = params.key?(:include_activity) ? params[:include_activity] : true
 
       return unless params.key?(:files)
-
+ 
       params[:files].each do |file|
         @attachments << Attachment.new(attachable:, file:) if file.present?
       end
