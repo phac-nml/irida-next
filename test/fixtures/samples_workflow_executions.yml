@@ -349,7 +349,7 @@ samples_workflow_execution_invalid_metadata:
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_invalid_metadata, :uuid) %>
   samplesheet_params:
     {
-      "sample": INXT_SAM_AAAAAAAABQ,
+      "sample": INXT_SAM_AAAAAAAAAA,
       "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>
     }
 
@@ -358,7 +358,7 @@ samples_irida_next_example_completing_a:
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_a, :uuid) %>
   samplesheet_params:
     {
-      "sample": INXT_SAM_AAAAAAAABQ,
+      "sample": "INXT_SAM_AAAAAAAAAA",
       "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>
     }
 
@@ -367,7 +367,7 @@ samples_automated_example_prepared:
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:automated_example_prepared, :uuid) %>
   samplesheet_params:
     {
-      "sample": INXT_SAM_AAAAAAAABQ,
+      "sample": INXT_SAM_AAAAAAAAAA,
       "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>
     }
 
@@ -376,6 +376,6 @@ samples_automated_workflow_execution:
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:automated_workflow_execution, :uuid) %>
   samplesheet_params:
     {
-      "sample": INXT_SAM_AAAAAAAABQ,
+      "sample": INXT_SAM_AAAAAAAAAA,
       "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>
     }

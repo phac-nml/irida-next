@@ -371,5 +371,78 @@ module WorkflowExecutions
       assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.submit_workflow?', name: @project.name),
                    exception.result.message
     end
+
+    test 'create new workflow execution with non matching sample puid in sample sheet' do
+      samples_workflow_executions_attributes = {
+        '0': {
+          sample_id: samples(:sample1).id,
+          samplesheet_params: {
+            sample: samples(:sample2).puid
+          }
+        }
+      }
+
+      workflow_params = {
+        metadata:
+          { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
+        workflow_params:
+        {
+          input: '/blah/samplesheet.csv',
+          outdir: '/blah/output'
+        },
+        workflow_type: 'NFL',
+        workflow_type_version: 'DSL2',
+        workflow_engine: 'nextflow',
+        workflow_engine_version: '23.10.0',
+        workflow_engine_parameters: { '-r': 'dev' },
+        workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
+        submitter_id: @user.id,
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: samples_workflow_executions_attributes
+      }
+
+      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
+
+      assert @workflow_execution.errors.full_messages
+                                .include?('Sample Provided Sample PUID does not match SampleWorkflowExecution Sample PUID') # rubocop:disable Layout/LineLength
+      assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
+    end
+
+    test 'create new workflow execution with non matching attachments to sample' do
+      samples_workflow_executions_attributes = {
+        '0': {
+          sample_id: samples(:sample2).id,
+          samplesheet_params: {
+            sample: samples(:sample2).puid,
+            fastq_1: attachments(:attachment1).to_global_id # belongs to :sample1 # rubocop:disable Naming/VariableNumber
+          }
+        }
+      }
+
+      workflow_params = {
+        metadata:
+          { workflow_name: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
+        workflow_params:
+        {
+          input: '/blah/samplesheet.csv',
+          outdir: '/blah/output'
+        },
+        workflow_type: 'NFL',
+        workflow_type_version: 'DSL2',
+        workflow_engine: 'nextflow',
+        workflow_engine_version: '23.10.0',
+        workflow_engine_parameters: { '-r': 'dev' },
+        workflow_url: 'https://github.com/phac-nml/iridanextexamplenew',
+        submitter_id: @user.id,
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: samples_workflow_executions_attributes
+      }
+
+      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
+
+      assert @workflow_execution.errors.full_messages
+                                .include?('Attachment Attachment does not belong to Sample.')
+      assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
+    end
   end
 end
