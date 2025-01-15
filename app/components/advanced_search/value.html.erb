@@ -3,7 +3,7 @@
     data-controller="list-filter"
     data-list-filter-selection-outlet="#samples-table"
     data-list-filter-filters-value="<%= @condition.value.present? ? @condition.value.to_s : '[]' %>"
-    class="w-full list-filter value"
+    class="grow list-filter value"
   >
     <%= render ListInputComponent.new(
       list_input_form_name:
@@ -13,7 +13,7 @@
   </div>
 <% else %>
 
-  <div class="form-field w-full value">
+  <div class="form-field grow value">
     <%= @conditions_form.text_field :value,
                                 placeholder: t("advanced_search_component.value"),
                                 "aria-label": t("advanced_search_component.value") %>

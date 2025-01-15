@@ -116,7 +116,9 @@ export default class extends Controller {
 
   handleOperatorChange(event) {
     let operator = event.target.value;
-    let condition = event.target.parentElement;
+    let condition = event.target.parentElement.closest(
+      "div[data-advanced-search-target='conditionsContainer']",
+    );
     let value = condition.querySelector(".value");
     let group = condition.parentElement;
     let group_index = this.groupsContainerTargets.indexOf(group);

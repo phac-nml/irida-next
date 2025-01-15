@@ -64,7 +64,7 @@
       data-controller="list-filter"
       data-list-filter-selection-outlet="#samples-table"
       data-list-filter-filters-value="'[]'"
-      class="w-full list-filter value"
+      class="grow list-filter value"
     >
       <%= render ListInputComponent.new(
         list_input_form_name:
@@ -74,7 +74,7 @@
     </div>
   </template>
   <template data-advanced-search-target="valueTemplate">
-    <div class="form-field w-full value">
+    <div class="form-field grow value">
       <input
         type="text"
         name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][value]"
@@ -88,38 +88,30 @@
       data-advanced-search-target="conditionsContainer"
       class="flex space-x-2 p-4"
     >
-      <select
-        class="
-          h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-          focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-gray-700
-          dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
-          dark:focus:ring-primary-500 dark:focus:border-primary-500
-        "
-        aria-label="<%= t(".field") %>"
-        name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][field]"
-      >
-        <option selected><%= t(".field") %></option>
-        <% @fields.each do |field| %>
-          <option value="<%=field%>"><%= field %></option>
-        <% end %>
-      </select>
-      <select
-        class="
-          h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-          focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-gray-700
-          dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
-          dark:focus:ring-primary-500 dark:focus:border-primary-500
-        "
-        aria-label="<%= t(".operator") %>"
-        data-action="advanced-search#handleOperatorChange"
-        name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][operator]"
-      >
-        <option selected><%= t(".operator") %></option>
-        <% @operations.each do |operation| %>
-          <option value="<%=operation%>"><%= operation %></option>
-        <% end %>
-      </select>
-      <div class="form-field w-full value">
+      <div class="form-field">
+        <select
+          aria-label="<%= t(".field") %>"
+          name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][field]"
+        >
+          <option value="" selected><%= t(".field") %></option>
+          <% @fields.each do |field| %>
+            <option value="<%=field%>"><%= field %></option>
+          <% end %>
+        </select>
+      </div>
+      <div class="form-field">
+        <select
+          aria-label="<%= t(".operator") %>"
+          data-action="advanced-search#handleOperatorChange"
+          name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][operator]"
+        >
+          <option value="" selected><%= t(".operator") %></option>
+          <% @operations.each do |operation| %>
+            <option value="<%=operation%>"><%= operation %></option>
+          <% end %>
+        </select>
+      </div>
+      <div class="form-field grow value">
         <input
           type="text"
           name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][value]"

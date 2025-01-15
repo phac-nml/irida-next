@@ -3,25 +3,23 @@
   class="flex space-x-2 p-4"
 >
   <%= @groups_form.fields_for :conditions, @condition do |conditions_form| %>
-    <%= conditions_form.select :field,
-                           @fields,
-                           { include_blank: t("advanced_search_component.field") },
-                           {
-                             "aria-label": t("advanced_search_component.field"),
-                             class:
-                               "h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                           } %>
-    <%= conditions_form.select :operator,
-                           @operations,
-                           {
-                             include_blank: t("advanced_search_component.operator"),
-                           },
-                           {
-                             "aria-label": t("advanced_search_component.operator"),
-                             "data-action": "advanced-search#handleOperatorChange",
-                             class:
-                               "h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-                           } %>
+    <div class="form-field">
+      <%= conditions_form.select :field,
+                             @fields,
+                             { include_blank: t("advanced_search_component.field") },
+                             { "aria-label": t("advanced_search_component.field") } %>
+    </div>
+    <div class="form-field">
+      <%= conditions_form.select :operator,
+                             @operations,
+                             {
+                               include_blank: t("advanced_search_component.operator"),
+                             },
+                             {
+                               "aria-label": t("advanced_search_component.operator"),
+                               "data-action": "advanced-search#handleOperatorChange",
+                             } %>
+    </div>
     <%= render AdvancedSearch::Value.new(
       conditions_form: conditions_form,
       group_index: @group_index,
