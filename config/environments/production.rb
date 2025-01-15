@@ -110,7 +110,12 @@ Rails.application.configure do
 
   # Create a new production log file [daily, weekly, monthly,..]
   if ENV['RAILS_DAILY_LOG_ROTATION'].present?
-    config.logger = ActiveSupport::Logger.new(config.default_log_file, 'daily')
+    log_file = if ENV['WEBSITE_INSTANCE_ID'].present?
+                 Rails.root.join('log', "production.#{ENV['WEBSITE_INSTANCE_ID']}.log")
+               else
+                 config.default_log_file
+               end
+    config.logger = ActiveSupport::Logger.new(log_file, 'daily')
                                          .tap { |logger| logger.formatter = config.log_formatter }
                                          .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
   end
