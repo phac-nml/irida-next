@@ -12,11 +12,10 @@
     ) %>
   </div>
 <% else %>
-  <%= @conditions_form.text_field(
-    :value,
-    placeholder: t("advanced_search_component.value"),
-    "aria-label": t("advanced_search_component.value"),
-    class:
-      "keyInput block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0 border-b-2 border-slate-300 appearance-none dark:text-white dark:border-slate-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer value",
-  ) %>
+
+  <div class="form-field w-full value">
+    <%= @conditions_form.text_field :value,
+                                placeholder: t("advanced_search_component.value"),
+                                "aria-label": t("advanced_search_component.value") %>
+  </div>
 <% end %>

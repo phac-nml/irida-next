@@ -74,18 +74,14 @@
     </div>
   </template>
   <template data-advanced-search-target="valueTemplate">
-    <input
-      type="text"
-      name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][value]"
-      placeholder="<%= t(".value") %>"
-      aria-label="<%= t(".value") %>"
-      class="
-        keyInput block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0
-        border-b-2 border-slate-300 appearance-none dark:text-white
-        dark:border-slate-600 dark:focus:border-primary-500 focus:outline-none
-        focus:ring-0 focus:border-primary-500 peer value
-      "
-    />
+    <div class="form-field w-full value">
+      <input
+        type="text"
+        name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][value]"
+        placeholder="<%= t(".value") %>"
+        aria-label="<%= t(".value") %>"
+      />
+    </div>
   </template>
   <template data-advanced-search-target="conditionTemplate">
     <div
