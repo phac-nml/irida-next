@@ -404,7 +404,7 @@ module WorkflowExecutions
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
 
       assert @workflow_execution.errors.full_messages
-                                .include?('Sample Provided Sample PUID does not match SampleWorkflowExecution Sample PUID') # rubocop:disable Layout/LineLength
+                                .include?('Sample Provided Sample PUID INXT_SAM_AAAAAAAAAB does not match SampleWorkflowExecution Sample PUID INXT_SAM_AAAAAAAAAA') # rubocop:disable Layout/LineLength
       assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
     end
 
@@ -441,7 +441,7 @@ module WorkflowExecutions
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
 
       assert @workflow_execution.errors.full_messages
-                                .include?('Attachment Attachment does not belong to Sample.')
+                                .include?('Attachment Attachment does not belong to Sample INXT_SAM_AAAAAAAAAB.')
       assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
     end
   end
