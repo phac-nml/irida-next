@@ -5,26 +5,44 @@ samples_workflow_executions_valid:
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_valid, :uuid) %>
   samplesheet_params:
     {
-      "sample": INXT_SAM_AAAAAAAABQ,
+      "sample": INXT_SAM_AAAAAAAAAA,
       "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>
     }
 
-samples_workflow_executions_invalid_no_sample:
-  sample_id: null
+samples_workflow_executions_invalid_no_sample_puid:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_valid, :uuid) %>
   samplesheet_params:
     {
-      "sample": INXT_SAM_AAAAAAAABQ,
+      "sample": '',
       "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>
     }
 
-samples_workflow_executions_invalid_no_workflow_execution:
+samples_workflow_executions_invalid_mismatch_sample_puid:
   sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: null
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_valid, :uuid) %>
   samplesheet_params:
     {
-      "sample": INXT_SAM_AAAAAAAABQ,
+      "sample": INXT_SAM_AAAAAAAAAB,
       "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>
+    }
+
+samples_workflow_executions_invalid_file_id:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_valid, :uuid) %>
+  samplesheet_params:
+    {
+      "sample": INXT_SAM_AAAAAAAAAA,
+      "fastq_1": 12345
+    }
+
+samples_workflow_executions_mismatch_file_id:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_valid, :uuid) %>
+  samplesheet_params:
+    {
+      "sample": INXT_SAM_AAAAAAAAAA,
+      "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachmentA, :uuid)}" %>
     }
 
 sample1_irida_next_example:

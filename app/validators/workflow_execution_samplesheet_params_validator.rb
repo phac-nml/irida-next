@@ -3,26 +3,35 @@
 # Validator for Workflow Execution Samplesheet Params
 # This will cause the validation to fail if any of the attachment ids cannot be resolved
 class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator
-  def validate(record) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
-    record.samplesheet_params.each do |key, value|
-      next if value == ''
-
+  def validate(record) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+    record.samplesheet_params.each do |key, value| # rubocop:disable Metrics/BlockLength
       if key == 'sample'
-        unless value == (record.sample.puid)
-          record.workflow_execution.errors.add :sample,
-                                               'Provided Sample PUID does not match SampleWorkflowExecution Sample PUID'
+        if value.nil?
+          error_message = 'No Sample PUID provided'
+          record.errors.add :sample, error_message
+          record.workflow_execution.errors.add :sample, error_message
+        elsif value != (record.sample.puid)
+          error_message = 'Provided Sample PUID does not match SampleWorkflowExecution Sample PUID'
+          record.errors.add :sample, error_message
+          record.workflow_execution.errors.add :sample, error_message
         end
         next
       end
+
+      next if value == ''
 
       begin
         # Attempt to parse an object from the id provided
         attachment = IridaSchema.object_from_id(value, { expected_type: Attachment })
         unless attachment.attachable == record.sample
-          record.workflow_execution.errors.add :attachment, 'Attachment does not belong to Sample.'
+          error_message = 'Attachment does not belong to Sample.'
+          record.errors.add :attachment, error_message
+          record.workflow_execution.errors.add :attachment, error_message
         end
       rescue StandardError => e
-        record.workflow_execution.errors.add :attachment, e.message
+        error_message = e.message
+        record.errors.add :attachment, error_message
+        record.workflow_execution.errors.add :attachment, error_message
         next
       end
     end

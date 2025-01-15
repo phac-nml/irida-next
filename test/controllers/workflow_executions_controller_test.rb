@@ -30,7 +30,7 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
                  {
                    sample_id: @sample1.id,
                    samplesheet_params: {
-                     sample: "Sample_#{@sample1.id}",
+                     sample: @sample1.puid,
                      'fastq_1' => @attachment1.to_global_id,
                      'fastq_2' => ''
                    }
