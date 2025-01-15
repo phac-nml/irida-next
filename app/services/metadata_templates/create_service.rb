@@ -5,17 +5,28 @@ module MetadataTemplates
   class CreateService < BaseService
     attr_accessor :namespace
 
-    def initialize(user = nil, namespace = nil, params = {})
+    def initialize(user, namespace, fields = [], params = {})
       super(user, params)
       @namespace = namespace
-      @member = Member.new(params.merge(created_by: current_user, namespace:))
+      @metadata_template = MetadataTemplate.new(params.merge(
+                                                  created_by: current_user,
+                                                  namespace: namespace,
+                                                  fields: fields
+                                                ))
     end
 
-    def execute(metadata_template)
-      # TODO: This authorization is not defined anywhere in the codebase
-      # authorize! @namespace, to: :create_metadata_template?
+    def execute
+      return error('Unauthorized') unless can_create_template?
 
-      metadata_template.save!
+      error(@metadata_template.errors.full_messages) unless @metadata_template.valid?
+    end
+
+    private
+
+    def can_create_template?
+      # Define authorization logic here
+      # Example: current_user.can?(:create_metadata_template, namespace)
+      true # Replace with actual authorization check
     end
   end
 end
