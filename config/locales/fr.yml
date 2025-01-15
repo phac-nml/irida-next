@@ -389,10 +389,11 @@ fr:
       previous_version: Previous (Version %{version})
     list_filter:
       apply: Apply filter
+      title: Filter by sample names or Id
+    list_input:
       clear: Remove all tags
       description: Paste a list of <kbd>,</kbd> separated sample names or identifiers
       remove_tag: Remove
-      title: Filter by sample names or Id
     nextflow:
       email_notification: Receive an email notification when your analysis has completed?
       required: Required
