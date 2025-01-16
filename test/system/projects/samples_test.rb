@@ -2402,13 +2402,15 @@ module Projects
       find('body').click
 
       assert_selector 'dialog[open]'
-      assert_selector 'dialog button', text: I18n.t('shared.confirmation.confirm')
-      assert_selector 'dialog button', text: I18n.t('shared.confirmation.cancel')
+      assert_selector 'dialog button', text: I18n.t('shared.samples.metadata.editing_field_cell.dialog.confirm_button')
+      assert_selector 'dialog button', text: I18n.t('shared.samples.metadata.editing_field_cell.dialog.discard_button')
 
-      click_button I18n.t('shared.confirmation.confirm')
+      click_button I18n.t('shared.samples.metadata.editing_field_cell.dialog.confirm_button')
 
       assert_no_selector 'dialog[open]'
-      assert_selector '.editable-field', text: 'New Value'
+      within('table tbody tr:first-child td:nth-child(7)') do
+        assert_selector 'button', text: 'New Value'
+      end
     end
 
     def long_filter_text
