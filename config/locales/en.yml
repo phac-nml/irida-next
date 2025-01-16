@@ -1700,7 +1700,7 @@ en:
             confirm_button: Save
             discard_button: Discard
             title: Confirmation required
-            description: Click `Save` to update the value to <span class='font-bold' data-new-value>[VALUE]</span>, or `Discard` to cancel and return to the previous value of <span class='font-bold'>%{value}</span>.
+            description: Click `Save` to update the value to <span class='font-bold' data-inline-edit-target="newValue"></span>, or `Discard` to cancel and return to the previous value of <span class='font-bold'>%{value}</span>.
   time:
     formats:
       abbreviated: "%a %b%e %Y %H:%M"

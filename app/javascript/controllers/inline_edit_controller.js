@@ -5,7 +5,7 @@ import { Controller } from "@hotwired/stimulus";
  * @extends Controller
  */
 export default class extends Controller {
-  static targets = ["input"];
+  static targets = ["input", "newValue"];
   static values = {
     original: String,
   };
@@ -84,12 +84,12 @@ export default class extends Controller {
       return;
     }
 
-    this.#cleanup(); // Cleanup any existing listeners
+    this.#cleanup();
     this.#abortController = new AbortController();
     const signal = this.#abortController.signal;
-    const newValueNode = dialog.querySelector("[data-new-value]");
-    if (newValueNode) {
-      newValueNode.textContent = this.inputTarget.value;
+
+    if (this.hasNewValueTarget) {
+      this.newValueTarget.textContent = this.inputTarget.value;
     }
 
     try {
