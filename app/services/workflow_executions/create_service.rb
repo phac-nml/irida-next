@@ -11,10 +11,11 @@ module WorkflowExecutions
                                                              params[:metadata][:workflow_version])
     end
 
-    def execute
+    def execute # rubocop:disable Metrics/AbcSize
       return false if params.empty?
 
-      @workflow_execution = WorkflowExecution.new(autoset_params)
+      autoset_params if @workflow
+      @workflow_execution = WorkflowExecution.new(params)
 
       authorize! @workflow_execution.namespace, to: :submit_workflow?
 
