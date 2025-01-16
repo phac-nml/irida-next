@@ -2385,6 +2385,7 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
+      ### SETUP END ###
 
       within('table tbody tr:first-child td:nth-child(7)') do
         ### ACTIONS START ###
@@ -2397,7 +2398,6 @@ module Projects
         within('form[data-controller="inline-edit"]') do
           find('input[name="value"]').send_keys 'New Value'
         end
-        ### ACTIONS END ###
       end
       find('body').click
 
@@ -2406,11 +2406,55 @@ module Projects
       assert_selector 'dialog button', text: I18n.t('shared.samples.metadata.editing_field_cell.dialog.discard_button')
 
       click_button I18n.t('shared.samples.metadata.editing_field_cell.dialog.confirm_button')
+        ### ACTIONS END ###
 
+      ### VERIFY START ###
       assert_no_selector 'dialog[open]'
       within('table tbody tr:first-child td:nth-child(7)') do
         assert_selector 'button', text: 'New Value'
       end
+      ### VERIFY END ###
+    end
+
+    test 'shows confirmation dialog can be cancelled resetting the value' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_selector 'table thead tr th', count: 6
+
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      assert_selector 'table thead tr th', count: 8
+
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.name
+      find('input.t-search-component').native.send_keys(:return)
+      ### SETUP END ###
+
+      within('table tbody tr:first-child td:nth-child(7)') do
+        ### ACTIONS START ###
+        # check within the from with method get that the value is 'value1':
+        within('form[method="get"]') do
+          find('button').click
+        end
+        assert_selector "form[data-controller='inline-edit']"
+
+        within('form[data-controller="inline-edit"]') do
+          find('input[name="value"]').send_keys 'New Value'
+        end
+      end
+      find('body').click
+
+      assert_selector 'dialog[open]'
+      assert_selector 'dialog button', text: I18n.t('shared.samples.metadata.editing_field_cell.dialog.confirm_button')
+      assert_selector 'dialog button', text: I18n.t('shared.samples.metadata.editing_field_cell.dialog.discard_button')
+
+      click_button I18n.t('shared.samples.metadata.editing_field_cell.dialog.discard_button')
+        ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_no_selector 'dialog[open]'
+      within('table tbody tr:first-child td:nth-child(7)') do
+        assert_selector 'button', text: ''
+      end
+      ### VERIFY END ###
     end
 
     def long_filter_text
