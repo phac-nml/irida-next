@@ -166,7 +166,15 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
     workflow_engine_version: '23.10.0',
     workflow_engine_parameters: { '-r': 'dev' },
     workflow_url: 'https://github.com/phac-nml/iridanextexample',
-    submitter: User.find_by(email: 'user1@email.com')
+    submitter: User.find_by(email: 'user1@email.com'),
+    samples_workflow_executions_attributes: {
+      '0': {
+        sample_id: Sample.first.id,
+        samplesheet_params: {
+          sample: Sample.first.puid
+        }
+      }
+    }
   )
 
   SamplesWorkflowExecution.create(
@@ -188,7 +196,15 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
     workflow_url: 'https://github.com/phac-nml/iridanextexample',
     submitter: User.find_by(email: 'user1@email.com'),
     blob_run_directory: 'this should be a generated key',
-    state: :completed
+    state: :completed,
+    samples_workflow_executions_attributes: {
+      '0': {
+        sample_id: Sample.first.id,
+        samplesheet_params: {
+          sample: Sample.first.puid
+        }
+      }
+    }
   )
 
   filename = 'summary.txt'
@@ -197,7 +213,6 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
   attachment.save!
 
   SamplesWorkflowExecution.create(
-    samplesheet_params: { my_key1: 'my_value_2', my_key2: 'my_value_3' },
     sample: Sample.first,
     workflow_execution: workflow_execution_completed
   )

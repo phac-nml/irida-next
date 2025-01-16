@@ -13,6 +13,7 @@ module Types
     field :create_group, mutation: Mutations::CreateGroup # rubocop:disable GraphQL/FieldDescription
     field :create_project, mutation: Mutations::CreateProject # rubocop:disable GraphQL/FieldDescription
     field :create_sample, mutation: Mutations::CreateSample # rubocop:disable GraphQL/FieldDescription,GraphQL/ExtractType
+    field :submit_workflow_execution, mutation: Mutations::SubmitWorkflowExecution # rubocop:disable GraphQL/FieldDescription
     field :transfer_samples, mutation: Mutations::TransferSamples # rubocop:disable GraphQL/FieldDescription
     field :update_sample_metadata, mutation: Mutations::UpdateSampleMetadata # rubocop:disable GraphQL/FieldDescription
   end
