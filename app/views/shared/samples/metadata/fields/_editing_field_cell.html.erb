@@ -5,25 +5,34 @@
     <%= f.hidden_field :original_value, value: @value %>
     <%= f.hidden_field :format, value: "turbo_stream" %>
     <%= f.text_field :value,
-                 value: @value,
+                 placeholder: @value,
                  class:
                    "w-full m-0 border-slate-300 text-slate-900 text-sm focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
                  data: {
+                   "test-selector": "field-input",
                    "inline-edit-target": "input",
                    action:
                      "blur->inline-edit#handleBlurEvent keydown->inline-edit#inputKeydown",
                  } %>
     <%= viral_dialog(open: false) do |dialog| %>
-      <%= dialog.with_header(title: "Confirmation required") %>
+      <%= dialog.with_header(
+        title: t("shared.samples.metadata.editing_field_cell.dialog.title"),
+      ) %>
       <%= dialog.with_section do %>
-        <p class="text-base text-slate-900 dark:text-white text-wrap">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        <p class="text-base text-slate-900 dark:text-white text-wrap" data-description>
+          <%= raw t(
+            "shared.samples.metadata.editing_field_cell.dialog.description",
+            value: @value,
+          ) %>
         </p>
       <% end %>
       <% dialog.with_secondary_action do %>
-        <%= viral_button(value: "confirm", state: :primary) { "Update" } %>
-        <%= viral_button(value: "cancel", state: :default) { "Discard" } %>
+        <%= viral_button(value: "confirm", state: :primary) do
+          t("shared.samples.metadata.editing_field_cell.dialog.confirm_button")
+        end %>
+        <%= viral_button(value: "cancel", state: :default) do
+          t("shared.samples.metadata.editing_field_cell.dialog.discard_button")
+        end %>
       <% end %>
     <% end %>
   <% end %>

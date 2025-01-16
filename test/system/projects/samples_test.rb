@@ -2376,16 +2376,29 @@ module Projects
     end
 
     test 'shows confirmation dialog when editing metadata field with changes' do
-      login_as users(:john_doe)
+      ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
+      assert_selector 'table thead tr th', count: 6
+
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
-      assert_selector 'table thead tr th', count: 7
+      assert_selector 'table thead tr th', count: 8
+
+      fill_in placeholder: I18n.t(:'projects.samples.index.search.placeholder'), with: @sample1.name
+      find('input.t-search-component').native.send_keys(:return)
 
       within('table tbody tr:first-child td:nth-child(7)') do
-        find('.editable-field').click
-      end
+        ### ACTIONS START ###
+        # check within the from with method get that the value is 'value1':
+        within('form[method="get"]') do
+          find('button').click
+        end
+        assert_selector "form[data-controller='inline-edit']"
 
-      fill_in 'metadata_field', with: 'New Value'
+        within('form[data-controller="inline-edit"]') do
+          find('input[name="value"]').send_keys 'New Value'
+        end
+        ### ACTIONS END ###
+      end
       find('body').click
 
       assert_selector 'dialog[open]'

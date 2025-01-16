@@ -16,7 +16,6 @@ export default class extends Controller {
   connect() {
     try {
       this.inputTarget.focus();
-      this.inputTarget.select();
     } catch (error) {
       console.error("Failed to focus/select input:", error);
     }
@@ -88,6 +87,10 @@ export default class extends Controller {
     this.#cleanup(); // Cleanup any existing listeners
     this.#abortController = new AbortController();
     const signal = this.#abortController.signal;
+    const newValueNode = dialog.querySelector("[data-new-value]");
+    if (newValueNode) {
+      newValueNode.textContent = this.inputTarget.value;
+    }
 
     try {
       await this.#showDialog(dialog, signal);
