@@ -88,9 +88,7 @@ export default class extends Controller {
     this.#abortController = new AbortController();
     const signal = this.#abortController.signal;
 
-    if (this.hasNewValueTarget) {
-      this.newValueTarget.textContent = this.inputTarget.value;
-    }
+    this.#updateNewValueTarget();
 
     try {
       await this.#showDialog(dialog, signal);
@@ -98,6 +96,16 @@ export default class extends Controller {
       if (error.name === "AbortError") return;
       console.error("Dialog operation failed:", error);
       this.reset();
+    }
+  }
+
+  /**
+   * Updates the new value target
+   * @private
+   */
+  #updateNewValueTarget() {
+    if (this.hasNewValueTarget) {
+      this.newValueTarget.textContent = this.inputTarget.value;
     }
   }
 
