@@ -21,17 +21,6 @@ class SubmitWorkflowExecutionMutationTest < ActiveSupport::TestCase
           random_seed: 1,
           project_name: "assembly"
         }
-        workflowType: "NFL"
-        workflowTypeVersion:"DSL2"
-        workflowEngine:"nextflow"
-        workflowEngineVersion: "23.10.0"
-        workflowEngineParameters: [
-          {
-            key:"-r",
-            value:"1.0.3"
-          }
-        ]
-        workflowUrl: "https://github.com/phac-nml/iridanextexample"
         samplesWorkflowExecutionsAttributes: $samples_workflow_executions_attributes
         }) {
         workflowExecution{
