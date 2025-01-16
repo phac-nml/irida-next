@@ -10,6 +10,14 @@
         <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".run_id") %></dt>
         <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @workflow_execution.run_id %></dd>
       </div>
+      <div class="flex flex-col pb-3">
+        <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".state") %></dt>
+        <dd class="text-lg font-semibold text-slate-900 dark:text-white">
+          <%= render Viral::PillComponent.new(color: find_pill_color_for_state(@workflow_execution.state)) do %>
+            <%= t("workflow_executions.state.#{@workflow_execution.state}") %>
+          <% end %>
+        </dd>
+      </div>
       <% unless @workflow_execution.name.blank? %>
         <div class="flex flex-col pb-3">
           <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".name") %></dt>
