@@ -116,7 +116,6 @@ export default class extends Controller {
 
     const handleClick = (event) => {
       const button = event.target;
-      console.log(event);
       if (button.value === "confirm") {
         this.submit();
       } else {
