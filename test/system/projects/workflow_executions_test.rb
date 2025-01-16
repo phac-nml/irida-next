@@ -379,7 +379,7 @@ module Projects
       ### SETUP END ###
 
       ### VERIFY START ###
-      assert_selector 'h1', text: workflow_execution.id
+      assert_selector 'h1', text: workflow_execution.name
 
       assert_no_selector 'dt', exact_text: dt_value
       ### VERIFY END ###
@@ -401,7 +401,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_selector 'h1', text: workflow_execution.id
+      assert_selector 'h1', text: workflow_execution.name
       assert_selector 'dt', text: dt_value
       assert_selector 'dd', text: new_we_name
       ### VERIFY END ###
