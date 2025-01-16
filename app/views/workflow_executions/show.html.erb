@@ -4,7 +4,10 @@
 
 <%= turbo_frame_tag "export_dialog" %>
 
-<%= render Viral::PageHeaderComponent.new(title: @workflow_execution.name.blank? ? @workflow_execution.metadata["workflow_name"] : @workflow_execution.name, id: @workflow_execution.id, id_color: find_pill_color_for_state(@workflow_execution.state)) do |component| %>
+<%= turbo_frame_tag "edit_dialog" %>
+
+<%= render Viral::PageHeaderComponent.new(title: turbo_frame_tag('we_name_header') do @workflow_execution.name.blank? ? @workflow_execution.metadata["workflow_name"] :
+   @workflow_execution.name end, id: @workflow_execution.id, id_color: find_pill_color_for_state(@workflow_execution.state)) do |component| %>
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
     <div class="flex flex-row">
@@ -44,6 +47,16 @@
               },
               class: "button button--state-default button--size-default mr-1"
             ) %>
+      <% end %>
+      <% if allowed_to?(:update?, @workflow_execution) %>
+        <%= link_to(
+                t("workflow_executions.show.edit_button"),
+                edit_workflow_execution_path(id: @workflow_execution.id),
+                data: {
+                  turbo_stream: true
+                },
+                class: "button button--state-default button--size-default mr-1"
+              ) %>
       <% end %>
       <% if @workflow_execution.deletable? %>
         <%= link_to(

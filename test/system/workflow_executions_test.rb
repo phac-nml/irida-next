@@ -419,4 +419,40 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       assert_text @workflow_execution3.name
     end
   end
+
+  test 'submitter can edit workflow execution post launch from workflow execution page' do
+    ### SETUP START ###
+    workflow_execution = workflow_executions(:irida_next_example_new)
+    visit workflow_execution_path(workflow_execution)
+    dt_value = 'Name'
+    new_we_name = 'New Name'
+    ### SETUP END ###
+
+    ### VERIFY START ###
+    assert_selector 'h1', text: workflow_execution.metadata['workflow_name']
+    assert_no_selector 'dt', exact_text: dt_value
+    ### VERIFY END ###
+
+    ### ACTIONS START ###
+    assert_selector 'a', text: I18n.t(:'workflow_executions.show.edit_button'), count: 1
+    click_link I18n.t(:'workflow_executions.show.edit_button')
+
+    within('dialog') do
+      assert_selector 'h1', text: I18n.t('workflow_executions.edit_dialog.title')
+      assert_selector 'p', text: I18n.t('workflow_executions.edit_dialog.description',
+                                        workflow_execution_id: workflow_execution.id)
+      assert_selector 'label', text: dt_value
+      fill_in placeholder: I18n.t('workflow_executions.edit_dialog.name_placeholder'),
+              with: new_we_name
+
+      click_button I18n.t(:'workflow_executions.edit_dialog.submit_button')
+    end
+    ### ACTIONS END ###
+
+    ### VERIFY START ###
+    assert_selector 'h1', text: new_we_name
+    assert_selector 'dt', text: dt_value
+    assert_selector 'dd', text: new_we_name
+    ### VERIFY END ###
+  end
 end

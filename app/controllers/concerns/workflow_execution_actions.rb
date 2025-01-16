@@ -23,18 +23,31 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def edit
-    authorize! @namespace
+    authorize! @workflow_execution
+
+    respond_to do |format|
+      format.turbo_stream do
+        render status: :ok
+      end
+    end
   end
 
-  def update
+  def update # rubocop:disable Metrics/MethodLength
     respond_to do |format|
       format.turbo_stream do
         @updated = WorkflowExecutions::UpdateService.new(@workflow_execution, current_user,
                                                          workflow_execution_update_params).execute
         if @updated
-          render status: :ok
+          render status: :ok,
+                 locals: { type: 'success',
+                           message: t('concerns.workflow_execution_actions.update.success',
+                                      workflow_name: @workflow_execution.metadata['workflow_name']) }
+
         else
-          render status: :unprocessable_entity
+          render status: :unprocessable_entity, locals: {
+            type: 'alert', message: t('concerns.workflow_execution_actions.update.error',
+                                      workflow_name: @workflow_execution.metadata['workflow_name'])
+          }
         end
       end
     end

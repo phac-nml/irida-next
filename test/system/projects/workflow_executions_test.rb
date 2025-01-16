@@ -368,5 +368,43 @@ module Projects
         assert_text @workflow_execution2.name
       end
     end
+
+    test 'analyst or higher access can edit workflow execution post launch from workflow execution page' do
+      ### SETUP START ###
+      login_as users(:james_doe)
+      workflow_execution = workflow_executions(:automated_workflow_execution)
+      visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
+      dt_value = 'Name'
+      new_we_name = 'New Name'
+      ### SETUP END ###
+
+      ### VERIFY START ###
+      assert_selector 'h1', text: workflow_execution.id
+
+      assert_no_selector 'dt', exact_text: dt_value
+      ### VERIFY END ###
+
+      ### ACTIONS START ###
+      assert_selector 'a', text: I18n.t(:'projects.workflow_executions.show.edit_button'), count: 1
+      click_link I18n.t(:'projects.workflow_executions.show.edit_button')
+
+      within('dialog') do
+        assert_selector 'h1', text: I18n.t('projects.workflow_executions.edit_dialog.title')
+        assert_selector 'p', text: I18n.t('projects.workflow_executions.edit_dialog.description',
+                                          workflow_execution_id: workflow_execution.id)
+        assert_selector 'label', text: dt_value
+        fill_in placeholder: I18n.t('projects.workflow_executions.edit_dialog.name_placeholder'),
+                with: new_we_name
+
+        click_button I18n.t(:'projects.workflow_executions.edit_dialog.submit_button')
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_selector 'h1', text: workflow_execution.id
+      assert_selector 'dt', text: dt_value
+      assert_selector 'dd', text: new_we_name
+      ### VERIFY END ###
+    end
   end
 end

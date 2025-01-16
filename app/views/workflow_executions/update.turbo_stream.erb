@@ -1,0 +1,29 @@
+<% unless @workflow_execution.errors.any? %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type:, data: message) %>
+  <% end %>
+<% end %>
+
+<% if @updated %>
+  <%= turbo_stream.update "edit_dialog",
+                      partial: "edit_dialog",
+                      locals: {
+                        open: @workflow_execution.errors.any?,
+                        workflow_execution: @workflow_execution,
+                      } %>
+
+  <%= turbo_stream.replace "workflow_execution_summary" do %>
+    <%= render partial: "summary" %>
+  <% end %>
+
+  <%= turbo_stream.update "we_name_header" do %>
+    <% if @workflow_execution.name.blank? %>
+      <%= @workflow_execution.metadata["workflow_name"] %>
+    <% else %>
+      <%= @workflow_execution.name %>
+    <% end %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.update "edit_workflow_execution_error_alert",
+                      viral_alert(type:, message:, classes: "mb-4") %>
+<% end %>

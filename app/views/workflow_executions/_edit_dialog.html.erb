@@ -1,0 +1,48 @@
+<%= viral_dialog(open: open,classes: ["overflow-visible"]) do |dialog| %>
+  <%= dialog.with_header(title: t("workflow_executions.edit_dialog.title")) %>
+  <%= dialog.with_section do %>
+
+    <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
+      <p class="dark:text-slate-400">
+        <%= t(
+          "workflow_executions.edit_dialog.description",
+          workflow_execution_id: @workflow_execution.id,
+        ) %>
+      </p>
+    </div>
+
+    <div class="mb-4">
+      <%= turbo_frame_tag("edit_workflow_execution_error_alert") %>
+    </div>
+
+    <%= form_with(model: workflow_execution, url: workflow_execution_path, method: :patch, class: "grid gap-4") do |form| %>
+      <div class="form-field">
+        <%= form.label :name %>
+        <%= form.text_field :name,
+                        autofocus: true,
+                        value: @workflow_execution.name,
+                        placeholder:
+                          t("workflow_executions.edit_dialog.name_placeholder") %>
+
+      </div>
+
+      <div class="mt-4">
+        <%= form.submit t("workflow_executions.edit_dialog.submit_button"),
+                    class:
+                      "focus:outline-none text-sm text-white bg-primary-700 hover:bg-primary-800 focus:ring-0 rounded-md p-2 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 cursor-pointer" %>
+
+        <button
+          type="button"
+          class="
+            focus:outline-none text-sm text-slate-900 border border-slate-200 bg-white
+            hover:bg-slate-100 hover:text-slate-950 focus:ring-0 rounded-md p-2
+            dark:text-white dark:bg-slate-600 dark:hover:bg-slate-700
+          "
+          data-action="click->viral--dialog#close"
+        >
+          <%= t("workflow_executions.edit_dialog.cancel_button") %>
+        </button>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
