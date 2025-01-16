@@ -694,7 +694,7 @@ module Projects
         assert_text "#{I18n.t('samples.table_component.counts.samples')}: 21"
         assert_selector 'strong[data-selection-target="selected"]', text: '0'
       end
-      ### VERIFY END
+      ### VERIFY END ###
     end
 
     test 'empty state of transfer sample project selection' do
@@ -1414,18 +1414,16 @@ module Projects
       # toggle metadata on for samples table
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
       assert_selector '#samples-table table thead tr th', count: 8
-      within('#samples-table table') do
-        within('thead') do
-          # metadatafield1 and 2 already exist, 3 does not and will be added by the import
-          assert_text 'METADATAFIELD1'
-          assert_text 'METADATAFIELD2'
-          assert_no_text 'METADATAFIELD3'
-        end
-        # sample 1 has no current value for metadatafield 1 and 2
-        within("tr[id='#{@sample1.id}']") do
-          assert_selector 'td:nth-child(6)', text: ''
-          assert_selector 'td:nth-child(7)', text: ''
-        end
+      within('#samples-table table thead') do
+        # metadatafield1 and 2 already exist, 3 does not and will be added by the import
+        assert_text 'METADATAFIELD1'
+        assert_text 'METADATAFIELD2'
+        assert_no_text 'METADATAFIELD3'
+      end
+      # sample 1 has no current value for metadatafield 1 and 2
+      within("tr[id='#{@sample1.id}']") do
+        assert_selector 'td:nth-child(6)', text: ''
+        assert_selector 'td:nth-child(7)', text: ''
       end
       ### SETUP END ###
 
@@ -1464,7 +1462,6 @@ module Projects
       ### SETUP START ###
       subgroup12aa = groups(:subgroup_twelve_a_a)
       project31 = projects(:project31)
-      sample34 = samples(:sample34)
       visit namespace_project_samples_url(subgroup12aa, project31)
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
@@ -1488,7 +1485,7 @@ module Projects
 
         ### VERIFY START ###
         assert_text I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
-                           sample_name: sample34.name, metadata_fields: 'metadatafield1')
+                           sample_name: samples(:sample34).name, metadata_fields: 'metadatafield1')
         click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
       end
       # metadatafield3 still added
@@ -1498,7 +1495,7 @@ module Projects
           assert_text 'METADATAFIELD3'
         end
         # new metadata value
-        within("tr[id='#{sample34.id}']") do
+        within("tr[id='#{samples(:sample34).id}']") do
           assert_selector 'td:nth-child(8)', text: '20'
         end
         ### VERIFY END ###
@@ -2376,6 +2373,29 @@ module Projects
         assert_no_selector "form[method='get']"
       end
       ### VERIFY END ###
+    end
+
+    test 'shows confirmation dialog when editing metadata field with changes' do
+      login_as users(:john_doe)
+      visit namespace_project_samples_url(@namespace, @project)
+      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      assert_selector 'table thead tr th', count: 7
+
+      within('table tbody tr:first-child td:nth-child(7)') do
+        find('.editable-field').click
+      end
+
+      fill_in 'metadata_field', with: 'New Value'
+      find('body').click
+
+      assert_selector 'dialog[open]'
+      assert_selector 'dialog button', text: I18n.t('shared.confirmation.confirm')
+      assert_selector 'dialog button', text: I18n.t('shared.confirmation.cancel')
+
+      click_button I18n.t('shared.confirmation.confirm')
+
+      assert_no_selector 'dialog[open]'
+      assert_selector '.editable-field', text: 'New Value'
     end
 
     def long_filter_text

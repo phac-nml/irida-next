@@ -13,8 +13,18 @@
                    action:
                      "blur->inline-edit#handleBlurEvent keydown->inline-edit#inputKeydown",
                  } %>
-  <%= render ConfirmationComponent.new  do %>
-    HELLO, PLEASE HELP ME
-  <% end %>
+    <%= viral_dialog(open: false) do |dialog| %>
+      <%= dialog.with_header(title: "Confirmation required") %>
+      <%= dialog.with_section do %>
+        <p class="text-base text-slate-900 dark:text-white text-wrap">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        </p>
+      <% end %>
+      <% dialog.with_secondary_action do %>
+        <%= viral_button(value: "confirm", state: :primary) { "Update" } %>
+        <%= viral_button(value: "cancel", state: :default) { "Discard" } %>
+      <% end %>
+    <% end %>
   <% end %>
 </td>
