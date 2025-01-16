@@ -2322,13 +2322,6 @@ module Projects
         assert_text I18n.t(:'validators.advanced_search_group_validator.uniqueness_error',
                            unique_field: 'metadata.metadatafield1')
       end
-
-      # close dialog
-      within('dialog') do
-        first('button').click
-      end
-
-      assert_text I18n.t(:'components.viral.pagy.empty_state.description')
       ### actions and VERIFY END ###
     end
 

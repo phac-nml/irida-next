@@ -18,6 +18,8 @@ module Projects
     end
 
     def search
+      return unless @query.valid?
+
       redirect_to namespace_project_samples_path(request.request_parameters.slice(:limit, :page))
     end
 

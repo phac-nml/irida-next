@@ -2,7 +2,7 @@
   data-controller="advanced-search"
   data-advanced-search-list-filter-outlet=".list-filter"
 >
-  <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open) do |dialog| %>
+  <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open, closable: false) do |dialog| %>
     <%= dialog.with_trigger do %>
       <button
         type="button"

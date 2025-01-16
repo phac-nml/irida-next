@@ -52,11 +52,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
         within all("div[data-advanced-search-target='groupsContainer']")[0] do
           assert_selector "div[data-advanced-search-target='conditionsContainer']", count: 1
         end
-
-        # verify closing the dialog
-        first('button').click
       end
-      assert_no_selector 'dialog'
     end
   end
 end
