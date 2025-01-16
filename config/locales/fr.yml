@@ -1672,6 +1672,12 @@ fr:
         loading: Loading...
     samples:
       metadata:
+        editing_field_cell:
+          dialog:
+            confirm_button: Save
+            description: Click `Save` to update the value to <span class='font-bold' data-inline-edit-target="newValue"></span>, or `Discard` to cancel and return to the previous value of <span class='font-bold'>%{value}</span>.
+            discard_button: Discard
+            title: Confirmation required
         file_imports:
           dialog:
             description: Importing a metadata spreadsheet allows multiple metadata fields to multiple samples be added, updated or removed at once.
