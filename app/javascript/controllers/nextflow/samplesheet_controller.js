@@ -17,6 +17,7 @@ export default class extends Controller {
   };
 
   #formData = new FormData(this.formTarget);
+
   #error_state = ["border-red-300", "dark:border-red-800"];
 
   #default_state = ["border-transparent"];
@@ -32,22 +33,20 @@ export default class extends Controller {
     });
 
     this.element.addEventListener("turbo:submit-end", (event) => {
-      this.test(event);
-    });
-
-    this.element.addEventListener("change", (event) => {
       this.submitTarget.disabled = false;
       if (this.hasTableTarget) {
         this.tableTarget.removeChild(this.tableTarget.lastElementChild);
       }
     });
-
+    this.token = document.querySelector('meta[name="csrf-token"]').content;
     this.updateParams();
   }
 
   updateParams() {
     let params = JSON.parse(this.paramsTarget.innerText);
-    console.log(typeof params);
+    // console.log(typeof params);
+    // console.log(params);
+    console.log("params");
     console.log(params);
     for (const property in params) {
       for (const nested_property in params[property]) {
@@ -55,19 +54,14 @@ export default class extends Controller {
           continue;
         }
         for (const third_property in params[property][nested_property]) {
-          console.log(third_property);
           this.#formData.append(
             `workflow_execution[samples_workflow_executions_attributes][${property}][${nested_property}][${third_property}]`,
-            JSON.stringify(params[property][nested_property][third_property]),
+            params[property][nested_property][third_property],
           );
         }
       }
     }
-
-    for (var [key, value] of this.#formData.entries()) {
-      console.log(key, value);
-    }
-    // console.log(formData);
+    console.log(this.#formData);
   }
 
   validateForm(event) {
@@ -102,23 +96,41 @@ export default class extends Controller {
 
     // this.formTarget.requestSubmit();
     console.log("hellonheoheo");
-    for (var [key, value] of this.#formData.entries()) {
-      console.log(key, value);
-    }
+    console.log(this.#formData);
+    // for (var [key, value] of this.#formData.entries()) {
+    //   console.log(key, value);
+    // }
+    // fetch("/-/workflow_executions", {
+    //   method: "POST",
+    //   body: this.#formData,
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     "X-CSRF-Token": Rails.csrfToken(),
+    //   },
+    // })
+    //   .then((resp) => resp.json())
+    //   .then((json) => {
+    //     console.log("hello");
+    //   })
+    //   .catch((error) => {
+    //     // SOME MORE CODE
+    //   });
+
     fetch("/-/workflow_executions", {
       method: "POST",
       body: this.#formData,
+      credentials: "same-origin",
       headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-Token": Rails.csrfToken(),
+        "X-CSRF-TOKEN": this.token,
       },
-    })
-      .then((resp) => resp.json())
-      .then((json) => {
-        console.log("hello");
-      })
-      .catch((error) => {
-        // SOME MORE CODE
-      });
+    }).then((response) => {
+      if (response.redirected && response.statusText == "OK") {
+        window.location.href = response.url;
+      }
+    });
+
+    // let result = response;
+    // console.log(response);
+    // alert(result.message);
   }
 }
