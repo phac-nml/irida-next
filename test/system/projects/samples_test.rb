@@ -2406,7 +2406,7 @@ module Projects
       assert_selector 'dialog button', text: I18n.t('shared.samples.metadata.editing_field_cell.dialog.discard_button')
 
       click_button I18n.t('shared.samples.metadata.editing_field_cell.dialog.confirm_button')
-        ### ACTIONS END ###
+      ### ACTIONS END ###
 
       ### VERIFY START ###
       assert_no_selector 'dialog[open]'
@@ -2447,7 +2447,7 @@ module Projects
       assert_selector 'dialog button', text: I18n.t('shared.samples.metadata.editing_field_cell.dialog.discard_button')
 
       click_button I18n.t('shared.samples.metadata.editing_field_cell.dialog.discard_button')
-        ### ACTIONS END ###
+      ### ACTIONS END ###
 
       ### VERIFY START ###
       assert_no_selector 'dialog[open]'
