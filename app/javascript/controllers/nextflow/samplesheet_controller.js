@@ -39,10 +39,10 @@ export default class extends Controller {
       }
     });
     this.token = document.querySelector('meta[name="csrf-token"]').content;
-    this.updateParams();
+    this.#setFormData();
   }
 
-  updateParams() {
+  #setFormData() {
     let params = JSON.parse(this.paramsTarget.innerText);
     // console.log(typeof params);
     // console.log(params);
@@ -62,6 +62,21 @@ export default class extends Controller {
       }
     }
     console.log(this.#formData);
+  }
+
+  updateParam(event) {
+    console.log("update");
+    switch (event.target.dataset.cellType) {
+      case "dropdown":
+        this.#formData.set(event.target.name, event.target.value);
+        break;
+      case "text":
+        this.#formData.set(event.target.name, event.target.value);
+        // code block
+        break;
+      default:
+      // code block
+    }
   }
 
   validateForm(event) {
