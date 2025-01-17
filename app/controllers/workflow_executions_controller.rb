@@ -7,12 +7,14 @@ class WorkflowExecutionsController < ApplicationController
   include WorkflowExecutionActions
 
   def create
+    puts 'this happened again'
     puts params
-    puts hi
+    puts workflow_execution_params
     @workflow_execution = WorkflowExecutions::CreateService.new(current_user, workflow_execution_params).execute
 
     if @workflow_execution.persisted?
-      redirect_to workflow_executions_path
+       redirect_to workflow_executions_path
+
     else
       render turbo_stream: [], status: :unprocessable_entity
     end
