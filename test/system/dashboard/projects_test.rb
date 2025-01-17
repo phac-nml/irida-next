@@ -383,7 +383,9 @@ module Dashboard
         end
         find('input#select2-input').click
         find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
-        click_on I18n.t('projects.samples.clones.dialog.submit_button')
+        perform_enqueued_jobs do
+          click_on I18n.t('projects.samples.clones.dialog.submit_button')
+        end
       end
       assert_text I18n.t('projects.samples.clones.create.success')
 
