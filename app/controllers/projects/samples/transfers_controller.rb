@@ -10,48 +10,24 @@ module Projects
       def new
         authorize! @project, to: :transfer_sample?
 
-        respond_to do |format|
-          format.turbo_stream do
-            render status: :ok
-          end
-        end
+        @broadcast_target = "samples_transfer_#{SecureRandom.uuid}"
       end
 
       def create
+        @broadcast_target = params[:broadcast_target]
         new_project_id = transfer_params[:new_project_id]
         sample_ids = transfer_params[:sample_ids]
-        @transferred_samples_ids = ::Samples::TransferService.new(@project, current_user).execute(new_project_id,
-                                                                                                  sample_ids)
 
-        if @project.errors.empty?
-          render status: :ok, locals: { type: :success, message: t('.success') }
-        elsif @project.errors.include?(:samples)
-          render_sample_errors
-        else
-          errors = @project.errors.full_messages_for(:base)
-          render status: :unprocessable_entity,
-                 locals: { type: :alert, message: t('.no_samples_transferred_error'),
-                           errors: }
-        end
+        ::Samples::TransferJob.set(wait_until: 1.second.from_now)
+                              .perform_later(@project, current_user, new_project_id, sample_ids, @broadcast_target)
+
+        render status: :ok
       end
 
       private
 
       def transfer_params
         params.require(:transfer).permit(:new_project_id, sample_ids: [])
-      end
-
-      def render_sample_errors
-        errors = @project.errors.messages_for(:samples)
-        if @transferred_samples_ids.count.positive?
-          render status: :partial_content,
-                 locals: { type: :alert, message: t('projects.samples.transfers.create.error'),
-                           errors: }
-        else
-          render status: :unprocessable_entity,
-                 locals: { type: :alert, message: t('projects.samples.transfers.create.error'),
-                           errors: }
-        end
       end
 
       def projects
