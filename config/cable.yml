@@ -1,10 +1,10 @@
 development:
-  adapter: postgresql
+  adapter: enhanced_postgresql
 
 test:
   adapter: test
 
 production:
-  adapter: postgresql
+  adapter: enhanced_postgresql
   url: <%= ENV['DATABASE_URL'] %>
   channel_prefix:
