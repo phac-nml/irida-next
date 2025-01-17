@@ -72,6 +72,7 @@ export default class extends Controller {
    */
   async handleBlurEvent(event) {
     if (!this.#hasValueChanged()) {
+      this.inputTarget.value = this.originalValue;
       this.submit();
       return;
     }
@@ -161,7 +162,10 @@ export default class extends Controller {
    * @returns {boolean}
    */
   #hasValueChanged() {
-    return this.inputTarget.value !== this.originalValue;
+    return (
+      this.inputTarget.value.trim() &&
+      this.inputTarget.value !== this.originalValue
+    );
   }
 
   /**
