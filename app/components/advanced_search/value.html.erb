@@ -2,7 +2,6 @@
   <% if %w[in not_in].include?(@condition.operator) %>
     <div
       data-controller="list-filter"
-      data-list-filter-selection-outlet="#samples-table"
       data-list-filter-filters-value="<%= @condition.value.present? ? @condition.value.to_s : '[]' %>"
       class="list-filter"
     >

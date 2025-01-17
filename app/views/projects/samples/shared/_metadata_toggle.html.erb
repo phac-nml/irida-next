@@ -3,7 +3,8 @@
     :metadata,
     {
       checked: @search_params[:metadata].to_i == 1,
-      "data-action": "change->metadata-toggle#submit",
+      "data-action":
+        "change->metadata-toggle#submit advanced-search#idempotentConnect",
       class: "sr-only peer",
     },
   ) %>
