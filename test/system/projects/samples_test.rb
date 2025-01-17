@@ -1609,7 +1609,9 @@ module Projects
         end
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
-        click_on I18n.t('projects.samples.clones.dialog.submit_button')
+        perform_enqueued_jobs do
+          click_on I18n.t('projects.samples.clones.dialog.submit_button')
+        end
       end
       ### ACTIONS END ###
 
@@ -1655,7 +1657,9 @@ module Projects
         assert_text I18n.t('projects.samples.clones.dialog.title')
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
-        click_on I18n.t('projects.samples.clones.dialog.submit_button')
+        perform_enqueued_jobs do
+          click_on I18n.t('projects.samples.clones.dialog.submit_button')
+        end
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -1703,8 +1707,9 @@ module Projects
         end
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{project25.id}']").click
-        click_on I18n.t('projects.samples.clones.dialog.submit_button')
-
+        perform_enqueued_jobs do
+          click_on I18n.t('projects.samples.clones.dialog.submit_button')
+        end
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -1811,7 +1816,9 @@ module Projects
         end
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
-        click_on I18n.t('projects.samples.clones.dialog.submit_button')
+        perform_enqueued_jobs do
+          click_on I18n.t('projects.samples.clones.dialog.submit_button')
+        end
       end
       ### ACTIONS END ###
 

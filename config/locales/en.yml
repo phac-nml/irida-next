@@ -1408,6 +1408,8 @@ en:
           ok_button: OK
         metadata_toggle:
           label: Metadata
+        success:
+          ok_button: OK
       show:
         add_metadata: Add Metadata
         concatenate_button: Concatenate Files
