@@ -33,7 +33,8 @@ module Samples
                                                    partial: 'projects/samples/shared/errors',
                                                    locals: {
                                                      type: :alert,
-                                                     message: I18n.t('projects.samples.clones.create.no_samples_cloned_error'),
+                                                     message:
+                                                       I18n.t('projects.samples.clones.create.no_samples_cloned_error'),
                                                      errors: errors
                                                    }
       end
