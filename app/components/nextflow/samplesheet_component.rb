@@ -17,10 +17,10 @@ module Nextflow
     end
 
     def samples_workflow_executions_attributes
-      test = samples.each_with_index.to_h do |sample, index|
+      attributes = samples.each_with_index.to_h do |sample, index|
         [index, samples_workflow_execution_attributes(sample)]
       end
-      test.to_json
+      attributes.to_json
     end
 
     private
@@ -42,8 +42,7 @@ module Nextflow
         when 'fastq_cell'
           [name, sample.attachments.empty? ? '' : sample.most_recent_fastq_file(name, @workflow_params)[:global_id]]
         when 'file_cell'
-          [name, '']
-          # [name, sample.most_recent_other_file(property['autopopulate'], property['pattern'])[:id]]
+          [name, sample.most_recent_other_file(property['autopopulate'], property['pattern'])[:global_id]]
         when 'metadata_cell'
           [name, sample.metadata.fetch(name, '')]
         when 'dropdown_cell'
