@@ -886,6 +886,7 @@ en:
       metadata_templates: Metadata Templates
       samples: Samples
       settings: Settings
+      workflow_executions: Workflow Executions
     subgroups:
       index:
         pagy:
@@ -901,6 +902,23 @@ en:
       success: Group transferred successfully
     update:
       success: Group %{group_name} was successfully updated
+    workflow_executions:
+      files:
+        table_header:
+          created_at: Created At
+          filename: Filename
+          format: Format
+          puid: ID
+          size: Size
+          type: Type
+      index:
+        create_export_button: Create Export
+        deselect_all_button: Deselect All
+        search:
+          placeholder: Filter by ID or name
+        select_all_button: Select All
+        subtitle: These are the workflow executions that have been shared within this group
+        title: Workflow Executions
   layouts:
     application:
       site_title: IRIDA Next
