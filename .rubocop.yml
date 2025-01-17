@@ -10,7 +10,7 @@ AllCops:
     - "**/bin/**/**"
     - "**/db/schema.rb"
     - "**/db/jobs_schema.rb"
-  TargetRubyVersion: "3.2"
+  TargetRubyVersion: "3.3"
   NewCops: enable
 
 # https://rubocop.readthedocs.io/en/latest/cops_metrics/#metricsblocklength
