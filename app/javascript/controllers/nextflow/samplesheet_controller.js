@@ -94,28 +94,6 @@ export default class extends Controller {
     //   this.formTarget.requestSubmit();
     // }
 
-    // this.formTarget.requestSubmit();
-    console.log("hellonheoheo");
-    console.log(this.#formData);
-    // for (var [key, value] of this.#formData.entries()) {
-    //   console.log(key, value);
-    // }
-    // fetch("/-/workflow_executions", {
-    //   method: "POST",
-    //   body: this.#formData,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     "X-CSRF-Token": Rails.csrfToken(),
-    //   },
-    // })
-    //   .then((resp) => resp.json())
-    //   .then((json) => {
-    //     console.log("hello");
-    //   })
-    //   .catch((error) => {
-    //     // SOME MORE CODE
-    //   });
-
     fetch("/-/workflow_executions", {
       method: "POST",
       body: this.#formData,
@@ -128,9 +106,5 @@ export default class extends Controller {
         window.location.href = response.url;
       }
     });
-
-    // let result = response;
-    // console.log(response);
-    // alert(result.message);
   }
 }

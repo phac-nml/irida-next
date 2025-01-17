@@ -10,6 +10,7 @@ class WorkflowExecutionsController < ApplicationController
     puts 'this happened again'
     puts params
     puts workflow_execution_params
+    puts workflow_execution_params_attributes
     @workflow_execution = WorkflowExecutions::CreateService.new(current_user, workflow_execution_params).execute
 
     if @workflow_execution.persisted?

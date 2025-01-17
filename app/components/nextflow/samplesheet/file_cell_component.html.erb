@@ -21,13 +21,6 @@ data: {
     "
     data-file-cell-required="<%= @required_properties.present? && @required_properties.include?(@property) ? "true" : "false" %>"
   >
-    <% unless @selected.empty? %>
-      <input
-        type="hidden"
-        name="workflow_execution[samples_workflow_executions_attributes][<%= @index%>][samplesheet_params][<%= @property %>]"
-        value='this is the old value'
-      >
-    <% end %>
     <%= @selected.empty? ? t(".no_selected_file") : @selected[:filename] %>
   </div>
 <% end %>
