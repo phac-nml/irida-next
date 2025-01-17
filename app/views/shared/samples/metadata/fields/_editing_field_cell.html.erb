@@ -11,8 +11,7 @@
                  data: {
                    "test-selector": "field-input",
                    "inline-edit-target": "input",
-                   action:
-                     "blur->inline-edit#handleBlurEvent keydown->inline-edit#inputKeydown",
+                   action: "blur->inline-edit#blur keydown->inline-edit#keydown",
                  } %>
     <%= viral_dialog(open: false) do |dialog| %>
       <%= dialog.with_header(
