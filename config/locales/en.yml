@@ -1727,10 +1727,11 @@ en:
       full_date: "%B %d, %Y"
   validators:
     advanced_search_group_validator:
-      base_error: There are group errors.
-      between_error: "'%{unique_field}' can use '>=' and '<=' only once."
-      blank_error: Fields, operators, and values cannot be blank.
-      uniqueness_error: "'%{unique_field}' must have unique operators."
+      between_error: can use '>=' and '<=' only once
+      blank_error: cannot be blank
+      condition_error: There condition has errors
+      group_error: There group has errors
+      uniqueness_error: must be unique
   viral:
     pagy:
       limit_component:

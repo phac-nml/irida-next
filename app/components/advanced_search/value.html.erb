@@ -1,21 +1,26 @@
-<% if %w[in not_in].include?(@condition.operator) %>
-  <div
-    data-controller="list-filter"
-    data-list-filter-selection-outlet="#samples-table"
-    data-list-filter-filters-value="<%= @condition.value.present? ? @condition.value.to_s : '[]' %>"
-    class="grow list-filter value"
-  >
-    <%= render ListInputComponent.new(
-      list_input_form_name:
-        "q[groups_attributes][#{@group_index}][conditions_attributes][#{@condition_index}][value][]",
-      show_description: false,
-    ) %>
-  </div>
-<% else %>
-
-  <div class="form-field grow value">
+<div class="form-field w-6/12 value">
+  <% if %w[in not_in].include?(@condition.operator) %>
+    <div
+      data-controller="list-filter"
+      data-list-filter-selection-outlet="#samples-table"
+      data-list-filter-filters-value="<%= @condition.value.present? ? @condition.value.to_s : '[]' %>"
+      class="list-filter"
+    >
+      <%= render ListInputComponent.new(
+        list_input_form_name:
+          "q[groups_attributes][#{@group_index}][conditions_attributes][#{@condition_index}][value][]",
+        show_description: false,
+      ) %>
+    </div>
+  <% else %>
     <%= @conditions_form.text_field :value,
                                 placeholder: t("advanced_search_component.value"),
                                 "aria-label": t("advanced_search_component.value") %>
-  </div>
-<% end %>
+  <% end %>
+  <turbo-frame
+    id="<%="group-#{@group_index}-condition-#{@condition_index}-value"%>"
+  >
+    <%= render "shared/form/field_errors",
+    errors: @condition.errors.full_messages_for(:value) %>
+  </turbo-frame>
+</div>

@@ -60,27 +60,31 @@
     <% end %>
   <% end %>
   <template data-advanced-search-target="listValueTemplate">
-    <div
-      data-controller="list-filter"
-      data-list-filter-selection-outlet="#samples-table"
-      data-list-filter-filters-value="'[]'"
-      class="grow list-filter value"
-    >
-      <%= render ListInputComponent.new(
-        list_input_form_name:
-          "q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][value][]",
-        show_description: false,
-      ) %>
+    <div class="form-field w-6/12 value">
+      <div
+        data-controller="list-filter"
+        data-list-filter-selection-outlet="#samples-table"
+        data-list-filter-filters-value="'[]'"
+        class="list-filter"
+      >
+        <%= render ListInputComponent.new(
+          list_input_form_name:
+            "q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][value][]",
+          show_description: false,
+        ) %>
+      </div>
+      <%= helpers.turbo_frame_tag "group-GROUP_INDEX_PLACEHOLDER-condition-CONDITION_INDEX_PLACEHOLDER-value" %>
     </div>
   </template>
   <template data-advanced-search-target="valueTemplate">
-    <div class="form-field grow value">
+    <div class="form-field w-6/12 value">
       <input
         type="text"
         name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][value]"
         placeholder="<%= t(".value") %>"
         aria-label="<%= t(".value") %>"
       />
+      <%= helpers.turbo_frame_tag "group-GROUP_INDEX_PLACEHOLDER-condition-CONDITION_INDEX_PLACEHOLDER-value" %>
     </div>
   </template>
   <template data-advanced-search-target="conditionTemplate">
@@ -88,7 +92,7 @@
       data-advanced-search-target="conditionsContainer"
       class="flex space-x-2 p-4"
     >
-      <div class="form-field">
+      <div class="form-field w-1/3">
         <select
           aria-label="<%= t(".field") %>"
           name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][field]"
@@ -98,8 +102,9 @@
             <option value="<%=field%>"><%= field %></option>
           <% end %>
         </select>
+        <%= helpers.turbo_frame_tag "group-GROUP_INDEX_PLACEHOLDER-condition-CONDITION_INDEX_PLACEHOLDER-field" %>
       </div>
-      <div class="form-field">
+      <div class="form-field w-1/6">
         <select
           aria-label="<%= t(".operator") %>"
           data-action="advanced-search#handleOperatorChange"
@@ -110,14 +115,16 @@
             <option value="<%=operation%>"><%= operation %></option>
           <% end %>
         </select>
+        <%= helpers.turbo_frame_tag "group-GROUP_INDEX_PLACEHOLDER-condition-CONDITION_INDEX_PLACEHOLDER-operator" %>
       </div>
-      <div class="form-field grow value">
+      <div class="form-field w-6/12 value">
         <input
           type="text"
           name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][value]"
           placeholder="<%= t(".value") %>"
           aria-label="<%= t(".value") %>"
         />
+        <%= helpers.turbo_frame_tag "group-GROUP_INDEX_PLACEHOLDER-condition-CONDITION_INDEX_PLACEHOLDER-value" %>
       </div>
       <button
         type="button"

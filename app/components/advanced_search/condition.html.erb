@@ -3,13 +3,19 @@
   class="flex space-x-2 p-4"
 >
   <%= @groups_form.fields_for :conditions, @condition do |conditions_form| %>
-    <div class="form-field">
+    <div class="form-field w-1/3">
       <%= conditions_form.select :field,
                              @fields,
                              { include_blank: t("advanced_search_component.field") },
                              { "aria-label": t("advanced_search_component.field") } %>
+      <turbo-frame
+        id="<%="group-#{@group_index}-condition-#{@condition_index}-field"%>"
+      >
+        <%= render "shared/form/field_errors",
+        errors: @condition.errors.full_messages_for(:field) %>
+      </turbo-frame>
     </div>
-    <div class="form-field">
+    <div class="form-field w-1/6">
       <%= conditions_form.select :operator,
                              @operations,
                              {
@@ -19,6 +25,12 @@
                                "aria-label": t("advanced_search_component.operator"),
                                "data-action": "advanced-search#handleOperatorChange",
                              } %>
+      <turbo-frame
+        id="<%="group-#{@group_index}-condition-#{@condition_index}-operator"%>"
+      >
+        <%= render "shared/form/field_errors",
+        errors: @condition.errors.full_messages_for(:operator) %>
+      </turbo-frame>
     </div>
     <%= render AdvancedSearch::Value.new(
       conditions_form: conditions_form,

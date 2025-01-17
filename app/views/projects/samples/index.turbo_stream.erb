@@ -5,14 +5,4 @@
                       status: @query.advanced_query?,
                     } %>
 
-<% if @query.errors.any? %>
-  <% @query.groups.each_with_index do |group, group_index| %>
-    <%= turbo_stream.update "group-error-messages-#{group_index}",
-                        partial: "projects/samples/search/errors",
-                        locals: {
-                          errors: group.errors,
-                        } %>
-  <% end %>
-<% end %>
-
 <turbo-stream action="refresh"></turbo-stream>

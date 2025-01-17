@@ -16,6 +16,8 @@ module Groups
     end
 
     def search
+      return unless @query.valid?
+
       redirect_to group_samples_path(request.request_parameters.slice(:limit, :page))
     end
 

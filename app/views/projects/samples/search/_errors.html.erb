@@ -1,9 +1,0 @@
-<% if errors.any? %>
-  <%= viral_alert(type: "alert", classes: "h-30 rounded-t-lg overflow-y-auto ") do %>
-    <ul class="mt-1.5 ml-4 list-disc list-inside">
-      <% errors.each do |error| %>
-        <li><%= error.full_message %></li>
-      <% end %>
-    </ul>
-  <% end %>
-<% end %>
