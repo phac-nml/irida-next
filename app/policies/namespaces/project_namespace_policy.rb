@@ -167,5 +167,12 @@ module Namespaces
       details[:name] = record.name
       false
     end
+
+    def create_metadata_template?
+      return true if Member::AccessLevel.manageable.include?(effective_access_level)
+
+      details[:name] = record.name
+      false
+    end
   end
 end

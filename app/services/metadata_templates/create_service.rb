@@ -8,25 +8,54 @@ module MetadataTemplates
     def initialize(user, namespace, fields = [], params = {})
       super(user, params)
       @namespace = namespace
-      @metadata_template = MetadataTemplate.new(params.merge(
-                                                  created_by: current_user,
-                                                  namespace: namespace,
-                                                  fields: fields
-                                                ))
     end
 
     def execute
-      return error('Unauthorized') unless can_create_template?
+      authorize! namespace, to: :create_metadata_template?
 
-      error(@metadata_template.errors.full_messages) unless @metadata_template.valid?
+      @metadata_template = MetadataTemplate.new(params.merge(
+        created_by: current_user,
+        namespace: namespace,
+        fields: fields
+      ))
+
+      if @metadata_template.save
+        @metadata_template.create_activity key: 'namespace.metadata_template.create',
+                                         owner: current_user,
+                                         parameters: {
+                                           template_id: @metadata_template.id,
+                                           namespace_id: namespace.id
+                                         }
+      end
+
+      @metadata_template
+    rescue StandardError => e
+      @metadata_template.errors.add(:base, e.message)
+      @metadata_template
     end
 
     private
 
     def can_create_template?
-      # Define authorization logic here
-      # Example: current_user.can?(:create_metadata_template, namespace)
-      true # Replace with actual authorization check
+      authorize! namespace, to: :create_metadata_template?
+    end
+
+    def create_activities
+      if namespace.group_namespace?
+        namespace.parent.create_activity key: 'group.metadata_template.create',
+                                         owner: current_user,
+                                         parameters: {
+                                           template_id: @metadata_template.id,
+                                           namespace_id: namespace.id
+                                         }
+      else
+        namespace.create_activity key: 'namespaces_project_namespace.metadata_template.create',
+                                  owner: current_user,
+                                  parameters: {
+                                    template_id: @metadata_template.id,
+                                    namespace_id: namespace.id
+                                  }
+      end
     end
   end
 end
