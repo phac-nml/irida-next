@@ -12,6 +12,7 @@ export default class extends Controller {
 
   connect() {
     this.inputTarget.focus();
+    this.inputTarget.select();
   }
 
   // Handle keyboard events
@@ -42,7 +43,7 @@ export default class extends Controller {
   // Private methods
   get hasChanges() {
     const newValue = this.inputTarget.value.trim();
-    return newValue && newValue !== this.originalValue;
+    return newValue !== this.originalValue;
   }
 
   updateNewValue() {
