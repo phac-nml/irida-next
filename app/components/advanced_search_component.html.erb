@@ -1,25 +1,38 @@
 <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open, closable: false) do |dialog| %>
   <%= dialog.with_trigger do %>
-    <button
-      type="button"
-      class="
-        relative text-slate-900 bg-white border border-slate-300 focus:outline-none
-        hover:bg-slate-100 focus:ring-4 focus:ring-slate-200 font-medium rounded-lg
-        text-sm px-5 py-2.5 dark:bg-slate-800 dark:text-white dark:border-slate-600
-        dark:hover:bg-slate-700 dark:hover:border-slate-600 dark:focus:ring-slate-700
-      "
-      data-action="advanced-search#idempotentConnect viral--dialog#open"
-      aria-label="<%= t(".title") %>"
-      title="<%= t(".title") %>"
-    >
-      <span
-        class="
-          absolute items-center justify-center -top-2 -end-2 w-4 h-4 me-3 bg-green-500
-          rounded-full <%= class_names(hidden: !@status) %>
-        "
-      ></span>
-      <%= viral_icon(name: "document_magnifying_glass", classes: "size-5") %>
-    </button>
+    <% if @status %>
+      <div class="inline-flex rounded-md" role="group">
+        <button
+          type="button"
+          class="
+            inline-flex items-center justify-center w-1/2 text-sm border rounded-s-md
+            cursor-pointer sm:w-auto focus:z-10 text-sm px-5 py-2.5
+          "
+          data-action="advanced-search#idempotentConnect viral--dialog#open"
+          aria-label="<%= t(".title") %>"
+        >
+          <%= t(".title") %>
+        </button>
+        <button
+          type="button"
+          class="
+            inline-flex items-center justify-center w-1/2 text-sm border rounded-e-md
+            cursor-pointer sm:w-auto focus:z-10 text-sm px-5 py-2.5
+          "
+          data-action="advanced-search#clearForm filters#submit"
+          aria-label="<%= t(".title") %>"
+          title="<%= t(".title") %>"
+        >
+          <%= viral_icon(name: "x_mark", classes: "size-5") %>
+        </button>
+      </div>
+    <% else %>
+      <%= viral_button(
+        data: {
+          action: "advanced-search#idempotentConnect viral--dialog#open",
+        },
+      ) { t(".title") } %>
+    <% end %>
   <% end %>
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
