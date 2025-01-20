@@ -11,7 +11,11 @@ module Groups
     private
 
     def namespace
-      @namespace = @group
+      @namespace = group
+    end
+
+    def group
+      @group ||= Group.find_by_full_path(request.params[:group_id] || request.params[:id]) # rubocop:disable Rails/DynamicFindBy
     end
 
     def workflow_execution
@@ -35,15 +39,15 @@ module Groups
       super
       @context_crumbs +=
         [{
-          name: I18n.t('projects.workflow_executions.index.title'),
-          path: namespace_project_workflow_executions_path
+          name: I18n.t('groups.workflow_executions.index.title'),
+          path: group_workflow_executions_path
         }]
       return unless action_name == 'show' && !@workflow_execution.nil?
 
       @context_crumbs +=
         [{
           name: @workflow_execution.id,
-          path: namespace_project_workflow_execution_path(@workflow_execution)
+          path: group_workflow_executions_path(@workflow_execution)
         }]
     end
 
@@ -54,7 +58,7 @@ module Groups
     end
 
     def redirect_path
-      namespace_project_workflow_executions_path
+      group_workflow_executions_path
     end
   end
 end

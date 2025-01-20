@@ -20,11 +20,11 @@
 <% end %>
 <div class="flow-root">
   <div class="flex mb-2">
-    <% if allowed_to?(:export_data?, @project.namespace) %>
+    <% if allowed_to?(:export_data?, @namespace) %>
       <div class="inline-flex grow space-x-2">
         <%= search_form_for(
                 @q,
-                url: select_namespace_project_workflow_executions_url(**request.query_parameters),
+                url: select_group_workflow_executions_url(**request.query_parameters),
                 html: { id: "select-all-form" },
                 class: "filters align-middle"
               ) do |f| %>
@@ -35,7 +35,7 @@
         <% end %>
         <%= search_form_for(
                 @q,
-                url: select_namespace_project_workflow_executions_url(**request.query_parameters),
+                url: select_group_workflow_executions_url(**request.query_parameters),
                 html: { id: "deselect-all-form" },
                 class: "filters align-middle"
               ) do |f| %>
@@ -48,7 +48,7 @@
     <div class="grow-0">
       <%= render SearchComponent.new(
         query: @q,
-        url: namespace_project_workflow_executions_path(**request.query_parameters),
+        url: group_workflow_executions_path(**request.query_parameters),
         search_attribute: :name_or_id_cont,
         placeholder: t(".search.placeholder"),
       ) %>
