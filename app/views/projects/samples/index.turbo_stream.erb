@@ -1,8 +1,7 @@
 <%= turbo_stream.update "table-filter",
                     partial: "table_filter",
                     locals: {
-                      open: @query.errors.any?,
-                      status: @query.advanced_query?,
+                      query: @query,
                     } %>
 
 <turbo-stream action="refresh"></turbo-stream>

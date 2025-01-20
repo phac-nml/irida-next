@@ -140,11 +140,7 @@
       <% end %>
     </div>
     <div id="table-filter" class="flex grow-0">
-      <%= render partial: "table_filter",
-      locals: {
-        open: @query.errors.any?,
-        status: @query.advanced_query?,
-      } %>
+      <%= render partial: "table_filter", locals: { query: @query } %>
     </div>
   </div>
 

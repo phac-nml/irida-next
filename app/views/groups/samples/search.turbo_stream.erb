@@ -1,25 +1,5 @@
-<% @query.groups.each_with_index do |group, group_index| %>
-  <% group.conditions.each_with_index do |condition, condition_index| %>
-    <%= turbo_stream.update(
-      "group-#{group_index}-condition-#{condition_index}-field",
-      partial: "shared/form/field_errors",
-      locals: {
-        errors: condition.errors.full_messages_for(:field),
-      },
-    ) %>
-    <%= turbo_stream.update(
-      "group-#{group_index}-condition-#{condition_index}-operator",
-      partial: "shared/form/field_errors",
-      locals: {
-        errors: condition.errors.full_messages_for(:operator),
-      },
-    ) %>
-    <%= turbo_stream.update(
-      "group-#{group_index}-condition-#{condition_index}-value",
-      partial: "shared/form/field_errors",
-      locals: {
-        errors: condition.errors.full_messages_for(:value),
-      },
-    ) %>
-  <% end %>
-<% end %>
+<%= turbo_stream.update "table-filter",
+                    partial: "table_filter",
+                    locals: {
+                      query: @query,
+                    } %>

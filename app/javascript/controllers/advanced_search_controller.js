@@ -59,15 +59,6 @@ export default class extends Controller {
           );
           inputField.name = updatedInputFieldName;
         });
-
-        let turboFields = condition.querySelectorAll("turbo-frame");
-        turboFields.forEach((turboField) => {
-          let updatedTurboFieldId = turboField.id.replace(
-            /(-condition-)\d+?(-)/,
-            "$1" + index + "$2",
-          );
-          turboField.id = updatedTurboFieldId;
-        });
       });
     } else {
       this.#clearCondition(condition);
@@ -100,15 +91,6 @@ export default class extends Controller {
           "$1" + index + "$2",
         );
         inputField.name = updatedInputFieldName;
-      });
-
-      let turboFields = group.querySelectorAll("turbo-frame");
-      turboFields.forEach((turboField) => {
-        let updatedTurboFieldId = turboField.id.replace(
-          /(group-)\d+?(-)/,
-          "$1" + index + "$2",
-        );
-        turboField.id = updatedTurboFieldId;
       });
     });
   }

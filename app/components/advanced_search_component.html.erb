@@ -20,7 +20,7 @@
             cursor-pointer sm:w-auto focus:z-10 text-sm px-5 py-2.5
           "
           data-action="advanced-search#clearForm filters#submit"
-          aria-label="<%= t(".close_aria_label") %>"
+          aria-label="<%= t(".clear_aria_label") %>"
         >
           <%= viral_icon(name: "x_mark", classes: "size-5") %>
         </button>
@@ -80,7 +80,6 @@
         show_description: false,
       ) %>
     </div>
-    <%= helpers.turbo_frame_tag "group-GROUP_INDEX_PLACEHOLDER-condition-CONDITION_INDEX_PLACEHOLDER-value" %>
   </div>
 </template>
 <template data-advanced-search-target="valueTemplate">
@@ -91,7 +90,6 @@
       placeholder="<%= t(".value") %>"
       aria-label="<%= t(".value") %>"
     />
-    <%= helpers.turbo_frame_tag "group-GROUP_INDEX_PLACEHOLDER-condition-CONDITION_INDEX_PLACEHOLDER-value" %>
   </div>
 </template>
 <template data-advanced-search-target="conditionTemplate">
@@ -109,7 +107,6 @@
           <option value="<%=field%>"><%= field %></option>
         <% end %>
       </select>
-      <%= helpers.turbo_frame_tag "group-GROUP_INDEX_PLACEHOLDER-condition-CONDITION_INDEX_PLACEHOLDER-field" %>
     </div>
     <div class="form-field w-1/6">
       <select
@@ -122,7 +119,6 @@
           <option value="<%=operation%>"><%= operation %></option>
         <% end %>
       </select>
-      <%= helpers.turbo_frame_tag "group-GROUP_INDEX_PLACEHOLDER-condition-CONDITION_INDEX_PLACEHOLDER-operator" %>
     </div>
     <div class="form-field w-6/12 value">
       <input
@@ -131,7 +127,6 @@
         placeholder="<%= t(".value") %>"
         aria-label="<%= t(".value") %>"
       />
-      <%= helpers.turbo_frame_tag "group-GROUP_INDEX_PLACEHOLDER-condition-CONDITION_INDEX_PLACEHOLDER-value" %>
     </div>
     <button
       type="button"
