@@ -1672,6 +1672,15 @@ en:
         loading: Loading...
     samples:
       metadata:
+        editing_field_cell:
+          dialog:
+            confirm_button: Save
+            description_with_new_value:
+              with_original_value: Click <kbd>Save</kbd> to update the value to <span class='font-bold underline' data-inline-edit-target="newValue"></span>, or <kbd>Discard</kbd> to cancel and return to the previous value of <span class='font-bold underline'>%{value}</span>.
+              without_original_value: Click <kbd>Save</kbd> to update the value to <span class='font-bold underline' data-inline-edit-target="newValue"></span>, or <kbd>Discard</kbd> to cancel and return to the previous empty value.
+            description_without_new_value: Click <kbd>Save</kbd> to remove the current value, or <kbd>Discard</kbd> to cancel and return to the previous value of <span class='font-bold underline'>%{value}</span>.
+            discard_button: Discard
+            title: Confirmation required
         file_imports:
           dialog:
             description: Importing a metadata spreadsheet allows multiple metadata fields to multiple samples be added, updated or removed at once.
