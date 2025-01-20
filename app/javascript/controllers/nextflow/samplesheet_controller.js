@@ -1,5 +1,4 @@
 import { Controller } from "@hotwired/stimulus";
-import Rails from "@rails/ujs";
 
 export default class extends Controller {
   static targets = [
@@ -13,14 +12,15 @@ export default class extends Controller {
   ];
   static values = {
     attachmentsError: { type: String },
-    test: { type: String },
   };
-
-  #formData = new FormData(this.formTarget);
 
   #error_state = ["border-red-300", "dark:border-red-800"];
 
   #default_state = ["border-transparent"];
+
+  // The samplesheet will use FormData, allowing us to create the inputs of a form without the associated DOM elements.
+  // This will help alleviate render time issues encountered with workflows with large sample counts
+  #formData = new FormData(this.formTarget);
 
   connect() {
     this.element.addEventListener("turbo:submit-start", (event) => {
@@ -38,7 +38,6 @@ export default class extends Controller {
         this.tableTarget.removeChild(this.tableTarget.lastElementChild);
       }
     });
-    this.token = document.querySelector('meta[name="csrf-token"]').content;
     this.#setInitialFormData();
   }
 
@@ -109,13 +108,13 @@ export default class extends Controller {
     // } else {
     //   this.formTarget.requestSubmit();
     // }
-    const formDataForSubmission = new URLSearchParams(this.#formData);
     fetch("/-/workflow_executions", {
       method: "POST",
-      body: formDataForSubmission,
+      body: new URLSearchParams(this.#formData),
       credentials: "same-origin",
       headers: {
-        "X-CSRF-TOKEN": this.token,
+        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
+          .content,
         "Content-Type": "application/x-www-form-urlencoded",
       },
     }).then((response) => {
