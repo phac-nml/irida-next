@@ -102,7 +102,7 @@ export default class extends Controller {
           inputField.name = updatedInputFieldName;
         });
       });
-      //hide 'Remove group' button if there's one group is left
+      //hide 'Remove group' button if there's one group left
       if (this.groupsContainerTargets.length === 1) {
         this.groupsContainerTarget
           .querySelector(

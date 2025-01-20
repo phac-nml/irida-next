@@ -1731,6 +1731,7 @@ en:
       between_error: can use '>=' and '<=' only once
       blank_error: cannot be blank
       condition_error: There condition has errors
+      date_format_error: must be formatted YYYY-MM-DD
       group_error: There group has errors
       uniqueness_error: must be unique
   viral:

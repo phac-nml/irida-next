@@ -6,7 +6,7 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
     return if empty_search?(record)
 
     record.groups.each do |group|
-      validate_blank_fields(group)
+      validate_fields(group)
       validate_unique_fields(group)
     end
 
@@ -28,9 +28,10 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
     false
   end
 
-  def validate_blank_fields(group)
+  def validate_fields(group)
     group.conditions.each do |condition|
       validate_blank_field(condition)
+      validate_date_field(condition)
     end
 
     return unless group.conditions.any? { |condition| condition.errors.any? }
@@ -52,6 +53,15 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
     return unless (condition.value.is_a?(Array) && condition.value.compact_blank.blank?) || condition.value.blank?
 
     condition.errors.add :value, I18n.t('validators.advanced_search_group_validator.blank_error')
+  end
+
+  def validate_date_field(condition)
+    if (%w[created_at updated_at
+           attachments_updated_at].include?(condition.field) || condition.field.end_with?('_date')) &&
+       condition.value !~ /^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$/
+      condition.errors.add :value,
+                           I18n.t('validators.advanced_search_group_validator.date_format_error')
+    end
   end
 
   def validate_unique_fields(group)
