@@ -76,23 +76,41 @@ export default class extends Controller {
       .replace(/CONDITION_INDEX_PLACEHOLDER/g, 0);
     let group = this.groupsContainerTargets[group_index];
     group.insertAdjacentHTML("afterbegin", newCondition);
+    //show 'Remove group' buttons if there's more than one group
+    if (this.groupsContainerTargets.length > 1) {
+      this.groupsContainerTargets.forEach((group) => {
+        group
+          .querySelector(
+            "div > button[data-action='advanced-search#removeGroup']",
+          )
+          .classList.remove("hidden");
+      });
+    }
   }
 
   removeGroup(event) {
     if (this.groupsContainerTargets.length > 1) {
       event.currentTarget.parentElement.parentElement.remove();
-    }
-    //re-index all the form fields within all the groups
-    this.groupsContainerTargets.forEach((group, index) => {
-      let inputFields = group.querySelectorAll("[name]");
-      inputFields.forEach((inputField) => {
-        let updatedInputFieldName = inputField.name.replace(
-          /(\[groups_attributes\]\[)\d+?(\])/,
-          "$1" + index + "$2",
-        );
-        inputField.name = updatedInputFieldName;
+      //re-index all the form fields within all the groups
+      this.groupsContainerTargets.forEach((group, index) => {
+        let inputFields = group.querySelectorAll("[name]");
+        inputFields.forEach((inputField) => {
+          let updatedInputFieldName = inputField.name.replace(
+            /(\[groups_attributes\]\[)\d+?(\])/,
+            "$1" + index + "$2",
+          );
+          inputField.name = updatedInputFieldName;
+        });
       });
-    });
+      //hide 'Remove group' button if there's one group is left
+      if (this.groupsContainerTargets.length === 1) {
+        this.groupsContainerTarget
+          .querySelector(
+            "div > button[data-action='advanced-search#removeGroup']",
+          )
+          .classList.add("hidden");
+      }
+    }
   }
 
   clearForm() {

@@ -2,7 +2,6 @@
   data-advanced-search-target="groupsContainer"
   class="border border-gray-300 rounded-lg"
 >
-  <div id="group-error-messages-<%= @group_index %>"></div>
   <%= @form.fields_for :groups, @group do |groups_form| %>
     <% @group.conditions.each_with_index do |condition, condition_index| %>
       <%= render AdvancedSearch::Condition.new(
@@ -19,7 +18,7 @@
     <%= viral_button(data: { action: "advanced-search#addCondition" }) do %>
       <%= t("advanced_search_component.add_condition_button") %>
     <% end %>
-    <%= viral_button(data: { action: "advanced-search#removeGroup" }) do %>
+    <%= viral_button(classes: class_names(hidden: !@show_remove_group_button), data: { action: "advanced-search#removeGroup" }) do %>
       <%= t("advanced_search_component.remove_group_button") %>
     <% end %>
   </div>
