@@ -25,7 +25,6 @@ data: {
         hover:border-slate-300 border-transparent border-2
       "
       data-file-cell-required="<%= @required_properties.present? && @required_properties.include?(@property) ? "true" : "false" %>"
-      data-nextflow--autofilled-cell-target="cell"
     >
       <%= @selected.empty? ? t(".no_selected_file") : @selected[:filename] %>
     </div>
