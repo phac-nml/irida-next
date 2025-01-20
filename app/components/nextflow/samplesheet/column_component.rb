@@ -23,15 +23,15 @@ module Nextflow
       def render_cell_type(property, entry, sample, fields, index, workflow_params) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/ParameterLists
         case entry['cell_type']
         when 'sample_cell'
-          render_sample_cell(sample, fields)
+          render_sample_cell(sample.puid)
         when 'sample_name_cell'
-          render_sample_name_cell(sample, fields)
+          render_sample_cell(sample.name)
         when 'fastq_cell'
           render_fastq_cell(sample, property, index, workflow_params)
         when 'file_cell'
           render_other_file_cell(sample, property, index, entry)
         when 'metadata_cell'
-          render_metadata_cell(sample, property, fields)
+          render_metadata_cell(sample, property, fields, index)
         when 'dropdown_cell'
           render_dropdown_cell(property, entry, fields)
         when 'input_cell'
@@ -55,16 +55,12 @@ module Nextflow
         files.select { |file| file[:filename] =~ Regexp.new(pattern) }
       end
 
-      def render_sample_cell(sample, fields)
-        render(Samplesheet::SampleCellComponent.new(sample:, fields:))
+      def render_sample_cell(sample_identifier)
+        render(Samplesheet::SampleCellComponent.new(sample_identifier:))
       end
 
-      def render_sample_name_cell(sample, fields)
-        render(Samplesheet::SampleNameCellComponent.new(sample:, fields:))
-      end
-
-      def render_metadata_cell(sample, name, fields)
-        render(Samplesheet::MetadataCellComponent.new(sample:, name:, form: fields, required: required?))
+      def render_metadata_cell(sample, name, fields, index)
+        render(Samplesheet::MetadataCellComponent.new(sample:, name:, index:, form: fields, required: required?))
       end
 
       # rubocop:disable Metrics/ParameterLists
