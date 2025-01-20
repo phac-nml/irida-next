@@ -23,21 +23,6 @@ export default class extends Controller {
   #formData = new FormData(this.formTarget);
 
   connect() {
-    this.element.addEventListener("turbo:submit-start", (event) => {
-      this.submitTarget.disabled = true;
-      if (this.hasTableTarget) {
-        this.tableTarget.appendChild(
-          this.loadingTarget.content.cloneNode(true),
-        );
-      }
-    });
-
-    this.element.addEventListener("turbo:submit-end", (event) => {
-      this.submitTarget.disabled = false;
-      if (this.hasTableTarget) {
-        this.tableTarget.removeChild(this.tableTarget.lastElementChild);
-      }
-    });
     this.#setInitialFormData();
   }
 
@@ -81,46 +66,51 @@ export default class extends Controller {
 
   validateForm(event) {
     event.preventDefault();
-    let readyToSubmit = true;
-    // const requiredFileCells = document.querySelectorAll(
-    //   "[data-file-cell-required='true']",
-    // );
-    // requiredFileCells.forEach((fileCell) => {
-    //   const firstChild = fileCell.firstElementChild;
-    //   if (
-    //     !firstChild ||
-    //     firstChild.type != "hidden" ||
-    //     !firstChild.value ||
-    //     !firstChild.value.startsWith("gid://")
-    //   ) {
-    //     fileCell.classList.remove(...this.#default_state);
-    //     fileCell.classList.add(...this.#error_state);
-    //     readyToSubmit = false;
-    //   } else {
-    //     fileCell.classList.remove(...this.#error_state);
-    //     fileCell.classList.add(...this.#default_state);
-    //   }
-    // });
+    this.submitTarget.disabled = true;
 
-    // if (!readyToSubmit) {
-    //   this.errorTarget.classList.remove("hidden");
-    //   this.errorMessageTarget.innerHTML = this.attachmentsErrorValue;
-    // } else {
-    //   this.formTarget.requestSubmit();
-    // }
-    fetch("/-/workflow_executions", {
-      method: "POST",
-      body: new URLSearchParams(this.#formData),
-      credentials: "same-origin",
-      headers: {
-        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
-          .content,
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    }).then((response) => {
-      if (response.redirected && response.statusText == "OK") {
-        window.location.href = response.url;
-      }
+    let readyToSubmit = this.#validateFileCells();
+
+    if (!readyToSubmit) {
+      this.errorTarget.classList.remove("hidden");
+      this.errorMessageTarget.innerHTML = this.attachmentsErrorValue;
+      this.submitTarget.disabled = false;
+    } else {
+      fetch("/-/workflow_executions", {
+        method: "POST",
+        body: new URLSearchParams(this.#formData),
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }).then((response) => {
+        if (response.redirected && response.statusText == "OK") {
+          window.location.href = response.url;
+        }
+      });
+    }
+  }
+
+  #validateFileCells() {
+    let readyToSubmit = true;
+    const missingRequiredFileCells = document.querySelectorAll(
+      "[data-file-missing='true']",
+    );
+    missingRequiredFileCells.forEach((fileCell) => {
+      fileCell.classList.remove(...this.#default_state);
+      fileCell.classList.add(...this.#error_state);
+      readyToSubmit = false;
     });
+
+    // revalidates file cells incase they need to be changed from error to default state
+    if (!readyToSubmit) {
+      const filledRequiredFileCells = document.querySelectorAll(
+        "[data-file-missing='false']",
+      );
+      filledRequiredFileCells.forEach((fileCell) => {
+        fileCell.classList.add(...this.#default_state);
+        fileCell.classList.remove(...this.#error_state);
+      });
+    }
+    return readyToSubmit;
   }
 }
