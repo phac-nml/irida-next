@@ -24,7 +24,7 @@ module Samples
         assert_authorized_to(:update_sample_metadata?, @project.namespace,
                              with: Namespaces::ProjectNamespacePolicy,
                              context: { user: @john_doe }) do
-          params = { file: @blob, sample_id_column: 'sample_name' }
+          params = { sample_id_column: 'sample_name' }
           Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, @blob.id, params).execute
         end
       end
@@ -33,14 +33,14 @@ module Samples
         assert_authorized_to(:update_sample_metadata?, @group,
                              with: GroupPolicy,
                              context: { user: @john_doe }) do
-          params = { file: @blob, sample_id_column: 'sample_puid' }
+          params = { sample_id_column: 'sample_puid' }
           Samples::Metadata::FileImportService.new(@group, @john_doe, @blob.id, params).execute
         end
       end
 
       test 'import sample metadata without permission for project namespace' do
         exception = assert_raises(ActionPolicy::Unauthorized) do
-          params = { file: @blob, sample_id_column: 'sample_name' }
+          params = { sample_id_column: 'sample_name' }
           Samples::Metadata::FileImportService.new(@project.namespace, @jane_doe, @blob.id, params).execute
         end
         assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
@@ -52,7 +52,7 @@ module Samples
 
       test 'import sample metadata without permission for group' do
         exception = assert_raises(ActionPolicy::Unauthorized) do
-          params = { file: @blob, sample_id_column: 'sample_puid' }
+          params = { sample_id_column: 'sample_puid' }
           Samples::Metadata::FileImportService.new(@group, @jane_doe, @blob.id, params).execute
         end
         assert_equal GroupPolicy, exception.policy
@@ -78,7 +78,7 @@ module Samples
       test 'import sample metadata via csv file using sample names for project namespace' do
         assert_equal({}, @sample1.metadata)
         assert_equal({}, @sample2.metadata)
-        params = { file: @blob, sample_id_column: 'sample_name' }
+        params = { sample_id_column: 'sample_name' }
         response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, @blob.id,
                                                             params).execute
         assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
@@ -244,7 +244,9 @@ module Samples
       end
 
       test 'import sample metadata with no sample_id_column' do
-        file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/metadata/missing_sample_id_column.csv'))
+        file = Rack::Test::UploadedFile.new(
+          Rails.root.join('test/fixtures/files/metadata/missing_sample_id_column.csv')
+        )
 
         blob = ActiveStorage::Blob.create_and_upload!(
           io: file,
@@ -274,7 +276,9 @@ module Samples
       end
 
       test 'import sample metadata with no metadata columns' do
-        file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv'))
+        file = Rack::Test::UploadedFile.new(
+          Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv')
+        )
 
         blob = ActiveStorage::Blob.create_and_upload!(
           io: file,
@@ -379,7 +383,9 @@ module Samples
                        'metadatafield2' => { 'id' => 1, 'source' => 'analysis',
                                              'updated_at' => '2000-01-01T00:00:00.000+00:00' } },
                      sample34.metadata_provenance)
-        file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/metadata/contains_analysis_values.csv'))
+        file = Rack::Test::UploadedFile.new(
+          Rails.root.join('test/fixtures/files/metadata/contains_analysis_values.csv')
+        )
 
         blob = ActiveStorage::Blob.create_and_upload!(
           io: file,
@@ -420,7 +426,9 @@ module Samples
         assert_equal({}, @sample1.metadata)
         assert_equal({}, @sample2.metadata)
 
-        file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/metadata/contains_whitespace_keys_and_values.csv'))
+        file = Rack::Test::UploadedFile.new(
+          Rails.root.join('test/fixtures/files/metadata/contains_whitespace_keys_and_values.csv')
+        )
 
         blob = ActiveStorage::Blob.create_and_upload!(
           io: file,
