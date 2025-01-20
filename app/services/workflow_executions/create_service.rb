@@ -53,7 +53,7 @@ module WorkflowExecutions
     end
 
     def autoset_params
-      params.merge(
+      params.merge!(
         workflow_type: workflow.type,
         workflow_type_version: workflow.type_version,
         workflow_engine: workflow.engine,
