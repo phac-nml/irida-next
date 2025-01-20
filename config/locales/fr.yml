@@ -1676,8 +1676,8 @@ fr:
           dialog:
             confirm_button: Save
             description_with_new_value:
-              other: Cliquez sur <kbd>Enregistrer</kbd> pour mettre à jour la valeur à <span class='font-bold underline' data-inline-edit-target="newValue"></span>, ou <kbd>Annuler</kbd> pour annuler et revenir à la valeur précédente de <span class='font-bold'>%{value}</span>.
-              zero: Cliquez sur <kbd>Enregistrer</kbd> pour mettre à jour la valeur à <span class='font-bold underline' data-inline-edit-target="newValue"></span>, ou <kbd>Annuler</kbd> pour annuler et revenir à la valeur précédente vide.
+              with_original_value: Cliquez sur <kbd>Enregistrer</kbd> pour mettre à jour la valeur à <span class='font-bold underline' data-inline-edit-target="newValue"></span>, ou <kbd>Annuler</kbd> pour annuler et revenir à la valeur précédente de <span class='font-bold'>%{value}</span>.
+              without_original_value: Cliquez sur <kbd>Enregistrer</kbd> pour mettre à jour la valeur à <span class='font-bold underline' data-inline-edit-target="newValue"></span>, ou <kbd>Annuler</kbd> pour annuler et revenir à la valeur précédente vide.
             description_without_new_value: Cliquez sur <kbd>Enregistrer</kbd> pour supprimer la valeur actuelle de <span class='font-bold'>%{value}</span>.
             discard_button: Annuler
             title: Confirmation requise

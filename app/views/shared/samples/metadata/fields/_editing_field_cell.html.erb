@@ -19,13 +19,19 @@
       ) %>
       <%= dialog.with_section do %>
 
-        <p class="text-base text-slate-900 dark:text-white text-wrap">
+        <p class="text-base leading-8 text-slate-900 dark:text-white text-wrap">
           <span data-inline-edit-target="descriptionWith" class="hidden">
-            <%= raw t(
-              "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value",
-              value: @value,
-              count: @value.present? ? @value.length : 0,
-            ) %>
+            <% if @value.present? %>
+              <%= raw t(
+                "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value.with_original_value",
+                value: @value,
+              ) %>
+            <% else %>
+              <%= raw t(
+                "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value.without_original_value",
+                value: @value,
+              ) %>
+            <% end %>
           </span>
           <span data-inline-edit-target="descriptionWithout" class="hidden">
             <%= raw t(
