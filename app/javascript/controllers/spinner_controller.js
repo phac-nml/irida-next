@@ -8,7 +8,7 @@ function preventEscapeListener(event) {
 }
 
 export default class extends Controller {
-  static targets = ['submit'];
+  static targets = ["submit"];
 
   submitStart() {
     document.addEventListener("keydown", preventEscapeListener, true);
