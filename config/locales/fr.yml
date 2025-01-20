@@ -421,10 +421,6 @@ fr:
         success: Successfully generated new personal access token for bot
       revoke:
         success: Successfully revoked personal access token %{pat_name}
-    file_import_actions:
-      create:
-        error: 'Metadata was not successfully imported for the following samples:'
-        success: Sample metadata was successfully imported.
     membership_actions:
       create:
         success: Member %{user} added successfully
@@ -1696,6 +1692,7 @@ fr:
                 description_html: The identifier is case-sensitive and can contain either the <b>sample name or ID</b>.
             sample_id_column: Sample ID Column
             select_sample_id_column: Select a Sample ID Column
+            spinner_message: Importing sample metadata, this might take a while...
             submit_button: Import Metadata
             title: Upload Sample Metadata
           errors:

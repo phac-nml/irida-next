@@ -1,6 +1,7 @@
 <div
   data-controller="projects--samples--metadata--complete"
-  data-projects--samples--metadata--complete-filters-outlet=".filters">
+  data-projects--samples--metadata--complete-filters-outlet=".filters"
+>
   <p class="mb-4"><%= t(".description") %></p>
 
   <% errors.each do |error| %>
@@ -12,5 +13,6 @@
       <%= t(".ok_button") %>
     <% end %>
   </div>
-</div
->
+</div>
+
+<turbo-stream action="refresh"></turbo-stream>

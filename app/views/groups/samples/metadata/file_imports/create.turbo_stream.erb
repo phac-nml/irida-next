@@ -1,14 +1,15 @@
-<% if @namespace.errors.empty? %>
-  <%= turbo_stream.replace "import_metadata_dialog_content",
-                       partial: "shared/samples/metadata/file_imports/success" %>
-<% elsif @namespace.errors.include?(:sample) %>
-  <%= turbo_stream.replace "import_metadata_dialog_content",
-                       partial: "shared/samples/metadata/file_imports/errors",
-                       locals: {
-                         type: type,
-                         errors: errors,
-                       } %>
-<% else %>
-  <%= turbo_stream.update "import_metadata_dialog_alert",
-                      viral_alert(type:, message:, classes: "mb-4") %>
+<%= turbo_stream.append "import_metadata_dialog_content" do %>
+  <div
+    role="status"
+    id="spinner"
+    class="
+      backdrop-blur-sm absolute h-full w-full -translate-x-1/2 -translate-y-1/2
+      top-2/4 left-1/2 grid place-items-center
+    "
+  >
+    <div class="grid place-items-center">
+      <%= viral_icon(name: :loading, classes: "animate-spin text-primary-500") %>
+      <span class="text-black dark:text-white"><%= t("shared.samples.metadata.file_imports.dialog.spinner_message") %></span>
+    </div>
+  </div>
 <% end %>

@@ -8,10 +8,10 @@ module Samples
     class FileImportService < BaseService # rubocop:disable Metrics/ClassLength
       SampleMetadataFileImportError = Class.new(StandardError)
 
-      def initialize(namespace, user = nil, params = {})
+      def initialize(namespace, user = nil, blob_id = nil, params = {})
         super(user, params)
         @namespace = namespace
-        @file = params[:file]
+        @file = ActiveStorage::Blob.find(blob_id)
         @sample_id_column = params[:sample_id_column]
         @ignore_empty_values = params[:ignore_empty_values]
         @spreadsheet = nil
@@ -41,7 +41,7 @@ module Samples
       end
 
       def validate_file_extension
-        file_extension = File.extname(@file).downcase
+        file_extension = File.extname(@file.filename.to_s).downcase
 
         return file_extension if %w[.csv .tsv .xls .xlsx].include?(file_extension)
 
@@ -84,9 +84,10 @@ module Samples
         extension = validate_file_extension
 
         @spreadsheet = if extension.eql? '.tsv'
-                         Roo::CSV.new(@file, csv_options: { col_sep: "\t" })
+                         Roo::CSV.new(ActiveStorage::Blob.service.path_for(@file.key), extension:,
+                                                                                       csv_options: { col_sep: "\t" })
                        else
-                         Roo::Spreadsheet.open(@file)
+                         Roo::Spreadsheet.open(ActiveStorage::Blob.service.path_for(@file.key), extension:)
                        end
 
         @headers = @spreadsheet.row(1).compact
@@ -110,6 +111,11 @@ module Samples
 
           metadata_changes = process_sample_metadata_row(sample_id, metadata)
           response[sample_id] = metadata_changes if metadata_changes
+
+          # delete the blob and file as we no longer require it
+          @file.purge
+
+          response
         rescue ActiveRecord::RecordNotFound
           @namespace.errors.add(:sample, error_message(sample_id))
         end
