@@ -36,7 +36,7 @@
         workflow_params:,
       ) %>
     <% end %>
-    <template data-nextflow--samplesheet-target="loading">
+    <template data-nextflow--samplesheet-target="processing">
       <div
         role="status"
         class="
@@ -48,7 +48,7 @@
           <span class="flex-shrink-0">
             <%= viral_icon(name: :loading, classes: "animate-spin text-primary-500 h-5 w-5") %>
           </span>
-          <span class="font-bold"><%= t(".loading") %></span>
+          <span class="font-bold"><%= t(".processing_request") %></span>
         </span>
       </div>
     </template>

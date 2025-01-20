@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = [
     "table",
-    "loading",
+    "processing",
     "submit",
     "error",
     "errorMessage",
@@ -66,14 +66,14 @@ export default class extends Controller {
 
   validateForm(event) {
     event.preventDefault();
-    this.submitTarget.disabled = true;
+    this.#enableProcessingState();
 
     let readyToSubmit = this.#validateFileCells();
 
     if (!readyToSubmit) {
       this.errorTarget.classList.remove("hidden");
       this.errorMessageTarget.innerHTML = this.attachmentsErrorValue;
-      this.submitTarget.disabled = false;
+      this.#disableProcessingState();
     } else {
       fetch("/-/workflow_executions", {
         method: "POST",
@@ -85,6 +85,8 @@ export default class extends Controller {
       }).then((response) => {
         if (response.redirected && response.statusText == "OK") {
           window.location.href = response.url;
+        } else {
+          this.#disableProcessingState();
         }
       });
     }
@@ -112,5 +114,21 @@ export default class extends Controller {
       });
     }
     return readyToSubmit;
+  }
+
+  #enableProcessingState() {
+    this.submitTarget.disabled = true;
+    if (this.hasTableTarget) {
+      this.tableTarget.appendChild(
+        this.processingTarget.content.cloneNode(true),
+      );
+    }
+  }
+
+  #disableProcessingState() {
+    this.submitTarget.disabled = false;
+    if (this.hasTableTarget) {
+      this.tableTarget.removeChild(this.tableTarget.lastElementChild);
+    }
   }
 }
