@@ -18,12 +18,21 @@
         title: t("shared.samples.metadata.editing_field_cell.dialog.title"),
       ) %>
       <%= dialog.with_section do %>
-        <p class="text-base text-slate-900 dark:text-white text-wrap" data-description>
-          <%= raw t(
-            "shared.samples.metadata.editing_field_cell.dialog.description",
-            value: @value,
-            count: @value.present? ? @value.length : 0,
-          ) %>
+
+        <p class="text-base text-slate-900 dark:text-white text-wrap">
+          <span data-inline-edit-target="descriptionWith" class="hidden">
+            <%= raw t(
+              "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value",
+              value: @value,
+              count: @value.present? ? @value.length : 0,
+            ) %>
+          </span>
+          <span data-inline-edit-target="descriptionWithout" class="hidden">
+            <%= raw t(
+              "shared.samples.metadata.editing_field_cell.dialog.description_without_new_value",
+              value: @value,
+            ) %>
+          </span>
         </p>
       <% end %>
       <% dialog.with_secondary_action do %>

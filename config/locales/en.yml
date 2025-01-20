@@ -1675,9 +1675,10 @@ en:
         editing_field_cell:
           dialog:
             confirm_button: Save
-            description:
-              zero: Click `Save` to update the value to <span class='font-bold' data-inline-edit-target="newValue"></span>, or `Discard` to cancel and return to the previous empty value.
-              other: Click `Save` to update the value to <span class='font-bold' data-inline-edit-target="newValue"></span>, or `Discard` to cancel and return to the previous value of <span class='font-bold'>%{value}</span>.
+            description_with_new_value:
+              other: Click <kbd>Save</kbd> to update the value to <span class='font-bold underline' data-inline-edit-target="newValue"></span>, or <kbd>Discard</kbd> to cancel and return to the previous value of <span class='font-bold underline'>%{value}</span>.
+              zero: Click <kbd>Save</kbd> to update the value to <span class='font-bold underline' data-inline-edit-target="newValue"></span>, or <kbd>Discard</kbd> to cancel and return to the previous empty value.
+            description_without_new_value: Click <kbd>Save</kbd> to remove the current value, or <kbd>Discard</kbd> to cancel and return to the previous value of <span class='font-bold underline'>%{value}</span>.
             discard_button: Discard
             title: Confirmation required
         file_imports:
