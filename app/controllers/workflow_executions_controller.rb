@@ -38,16 +38,10 @@ class WorkflowExecutionsController < ApplicationController
     [
       :name,
       :namespace_id,
-      :workflow_type,
-      :workflow_type_version,
-      :workflow_engine,
-      :workflow_engine_version,
-      :workflow_url,
       :update_samples,
       :email_notification,
       { metadata: {},
         workflow_params: {},
-        workflow_engine_parameters: {},
         samples_workflow_executions_attributes: samples_workflow_execution_params_attributes }
     ]
   end

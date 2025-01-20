@@ -2907,21 +2907,6 @@ input SubmitWorkflowExecutionInput {
   updateSamples: Boolean = false
 
   """
-  
-  """
-  workflowEngine: String!
-
-  """
-  List of Hashes containing `key` and `value` to be passed to the workflow engine.
-  """
-  workflowEngineParameters: [JSON!]!
-
-  """
-  Workflow Engine Version
-  """
-  workflowEngineVersion: String!
-
-  """
   Name of the pipeline to be run on this workflow execution
   """
   workflowName: String!
@@ -2930,21 +2915,6 @@ input SubmitWorkflowExecutionInput {
   Parameters to be passed to the pipeline.
   """
   workflowParams: JSON!
-
-  """
-  Type of pipelines workflow.
-  """
-  workflowType: String!
-
-  """
-  Version of the pipelines workflow type.
-  """
-  workflowTypeVersion: String!
-
-  """
-  Url for the pipeline.
-  """
-  workflowUrl: String!
 
   """
   Version of the pipeline to be run on this workflow execution

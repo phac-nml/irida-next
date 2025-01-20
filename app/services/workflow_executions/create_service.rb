@@ -3,13 +3,18 @@
 module WorkflowExecutions
   # Service used to Create a new WorkflowExecution
   class CreateService < BaseService
+    attr_accessor :workflow
+
     def initialize(user = nil, params = {})
       super
+      @workflow = Irida::Pipelines.instance.find_pipeline_by(params[:metadata][:workflow_name],
+                                                             params[:metadata][:workflow_version])
     end
 
-    def execute
+    def execute # rubocop:disable Metrics/AbcSize
       return false if params.empty?
 
+      autoset_params if @workflow
       @workflow_execution = WorkflowExecution.new(params)
 
       authorize! @workflow_execution.namespace, to: :submit_workflow?
@@ -30,9 +35,7 @@ module WorkflowExecutions
       @workflow_execution
     end
 
-    def sanitized_workflow_params # rubocop:disable Metrics/AbcSize
-      workflow = Irida::Pipelines.instance.find_pipeline_by(params[:metadata][:workflow_name],
-                                                            params[:metadata][:workflow_version])
+    def sanitized_workflow_params
       workflow_schema = JSON.parse(workflow.schema_loc.read)
 
       # remove any nil values
@@ -47,6 +50,17 @@ module WorkflowExecutions
       end
 
       sanitized_params
+    end
+
+    def autoset_params
+      params.merge(
+        workflow_type: workflow.type,
+        workflow_type_version: workflow.type_version,
+        workflow_engine: workflow.engine,
+        workflow_engine_version: workflow.engine_version,
+        workflow_url: workflow.url,
+        workflow_engine_parameters: { '-r': workflow.version }
+      )
     end
 
     def sanitize_workflow_param(property, value)

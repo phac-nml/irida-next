@@ -35,15 +35,6 @@
       </section>
 
       <%= workflow.hidden_field :namespace_id, value: @namespace_id %>
-      <%= workflow.hidden_field :workflow_type, value: @workflow.type %>
-      <%= workflow.hidden_field :workflow_type_version, value: @workflow.type_version %>
-      <%= workflow.hidden_field :workflow_engine, value: @workflow.engine %>
-      <%= workflow.hidden_field :workflow_engine_version, value: @workflow.engine_version %>
-      <%= workflow.hidden_field :workflow_url, value: @workflow.url %>
-
-      <%= workflow.fields_for "workflow_engine_parameters" do |engine| %>
-        <%= engine.hidden_field "-r", value: @workflow.version %>
-      <% end %>
 
       <%= workflow.fields_for "metadata" do |metadata| %>
         <%= metadata.hidden_field :workflow_name, value: @workflow.name %>
