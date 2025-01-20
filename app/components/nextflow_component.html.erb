@@ -1,6 +1,9 @@
 <div
   data-controller="nextflow--samplesheet"
   data-nextflow--samplesheet-attachments-error-value="<%= t(".attachments_error") %>"
+  data-action="
+    nextflow--autofilled-cell:sendAutofilledInputData->nextflow--samplesheet#updateAutofilledFormData
+  "
 >
   <h1
     class="

@@ -9,7 +9,7 @@ export default class extends Controller {
     "error",
     "errorMessage",
     "form",
-    "params",
+    "workflowAttributes",
   ];
   static values = {
     attachmentsError: { type: String },
@@ -39,44 +39,45 @@ export default class extends Controller {
       }
     });
     this.token = document.querySelector('meta[name="csrf-token"]').content;
-    this.#setFormData();
+    this.#setInitialFormData();
   }
 
-  #setFormData() {
-    let params = JSON.parse(this.paramsTarget.innerText);
-    // console.log(typeof params);
-    // console.log(params);
-    console.log("params");
-    console.log(params);
-    for (const property in params) {
-      for (const nested_property in params[property]) {
-        if (nested_property == "sample_id") {
+  #setInitialFormData() {
+    // attributes abbreviated to attrs
+    const samples_workflow_attrs = JSON.parse(
+      this.workflowAttributesTarget.innerText,
+    );
+    for (const index in samples_workflow_attrs) {
+      for (const sample_attrs in samples_workflow_attrs[index]) {
+        if (sample_attrs == "sample_id") {
+          // specifically adds sample to form
+          this.#setFormData(
+            `workflow_execution[samples_workflow_executions_attributes][${index}][${sample_attrs}]`,
+            samples_workflow_attrs[index][sample_attrs],
+          );
           continue;
         }
-        for (const third_property in params[property][nested_property]) {
-          this.#formData.append(
-            `workflow_execution[samples_workflow_executions_attributes][${property}][${nested_property}][${third_property}]`,
-            params[property][nested_property][third_property],
+        for (const property in samples_workflow_attrs[index][sample_attrs]) {
+          // adds all remaining sample data to form (files, metadata, etc.)
+          this.#setFormData(
+            `workflow_execution[samples_workflow_executions_attributes][${index}][${sample_attrs}][${property}]`,
+            samples_workflow_attrs[index][sample_attrs][property],
           );
         }
       }
     }
-    console.log(this.#formData);
   }
 
-  updateParam(event) {
-    console.log("update");
-    switch (event.target.dataset.cellType) {
-      case "dropdown":
-        this.#formData.set(event.target.name, event.target.value);
-        break;
-      case "text":
-        this.#formData.set(event.target.name, event.target.value);
-        // code block
-        break;
-      default:
-      // code block
-    }
+  updateEditableFormData(event) {
+    this.#setFormData(event.target.name, event.target.value);
+  }
+
+  updateAutofilledFormData({ detail: { content } }) {
+    this.#setFormData(content.inputName, content.inputValue);
+  }
+
+  #setFormData(inputName, inputValue) {
+    this.#formData.set(inputName, inputValue);
   }
 
   validateForm(event) {
@@ -108,13 +109,14 @@ export default class extends Controller {
     // } else {
     //   this.formTarget.requestSubmit();
     // }
-
+    const formDataForSubmission = new URLSearchParams(this.#formData);
     fetch("/-/workflow_executions", {
       method: "POST",
-      body: this.#formData,
+      body: formDataForSubmission,
       credentials: "same-origin",
       headers: {
         "X-CSRF-TOKEN": this.token,
+        "Content-Type": "application/x-www-form-urlencoded",
       },
     }).then((response) => {
       if (response.redirected && response.statusText == "OK") {
