@@ -12,22 +12,8 @@ module MetadataTemplates
 
     def execute
       authorize! namespace, to: :create_metadata_template?
-
-      @metadata_template = MetadataTemplate.new(params.merge(
-        created_by: current_user,
-        namespace: namespace,
-        fields: fields
-      ))
-
-      if @metadata_template.save
-        @metadata_template.create_activity key: 'namespace.metadata_template.create',
-                                         owner: current_user,
-                                         parameters: {
-                                           template_id: @metadata_template.id,
-                                           namespace_id: namespace.id
-                                         }
-      end
-
+      @metadata_template = build_template
+      save_template
       @metadata_template
     rescue StandardError => e
       @metadata_template.errors.add(:base, e.message)
@@ -35,6 +21,25 @@ module MetadataTemplates
     end
 
     private
+
+    def build_template
+      MetadataTemplate.new(params.merge(
+        created_by: current_user,
+        namespace: namespace,
+        fields: fields
+      ))
+    end
+
+    def save_template
+      return unless @metadata_template.save
+
+      @metadata_template.create_activity key: 'namespace.metadata_template.create',
+                                       owner: current_user,
+                                       parameters: {
+                                         template_id: @metadata_template.id,
+                                         namespace_id: namespace.id
+                                       }
+    end
 
     def can_create_template?
       authorize! namespace, to: :create_metadata_template?
