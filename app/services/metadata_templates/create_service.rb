@@ -33,15 +33,13 @@ module MetadataTemplates
 
     def validate_params
       if @params[:name].blank?
-        raise MetadataTemplates::CreateService::MetadataTemplateCreateError,
+        raise MetadataTemplateCreateError,
               I18n.t('services.metadata_templates.create.required.name')
       end
-      if @params[:fields].blank?
-        raise MetadataTemplates::CreateService::MetadataTemplateCreateError,
-              I18n.t('services.metadata_templates.create.required.fields')
-      end
+      return if @params[:fields].present?
 
-      true
+      raise MetadataTemplateCreateError,
+            I18n.t('services.metadata_templates.create.required.fields')
     end
 
     def save_template
