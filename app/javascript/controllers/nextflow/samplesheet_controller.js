@@ -13,6 +13,7 @@ export default class extends Controller {
   static values = {
     attachmentsError: { type: String },
     submissionError: { type: String },
+    url: { type: String },
   };
 
   #error_state = ["border-red-300", "dark:border-red-800"];
@@ -24,7 +25,9 @@ export default class extends Controller {
   #formData = new FormData();
 
   connect() {
-    this.#setInitialSamplesheetData();
+    if (this.hasWorkflowAttributesTarget) {
+      this.#setInitialSamplesheetData();
+    }
   }
 
   #setInitialSamplesheetData() {
@@ -73,7 +76,7 @@ export default class extends Controller {
       this.#enableErrorState(this.attachmentsErrorValue);
     } else {
       this.#combineFormData();
-      fetch("/-/workflow_executions", {
+      fetch(this.urlValue, {
         method: "POST",
         body: new URLSearchParams(this.#formData),
         credentials: "same-origin",

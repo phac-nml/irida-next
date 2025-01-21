@@ -46,7 +46,7 @@ module Nextflow
         when 'metadata_cell'
           [name, sample.metadata.fetch(name, '')]
         when 'dropdown_cell'
-          [name, ''] # TODO: set to correct value
+          [name, '']
         when 'input_cell'
           [name, '']
         end
