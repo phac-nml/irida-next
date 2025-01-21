@@ -1305,12 +1305,16 @@ module Projects
         perform_enqueued_jobs do
           click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
         end
-        ### ACTIONS END ###
+      end
 
-        ### VERIFY START ###
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      within('#dialog') do
         assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
         click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
       end
+      ### VERIFY END ###
 
       within("tr[id='#{@sample32.id}']") do
         # unchanged value

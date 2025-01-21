@@ -94,18 +94,19 @@ module Samples
       end
 
       def download_metadata_import_file(extension)
-        @temp_import_file.binmode
-        @file.download do |chunk|
-          @temp_import_file.write(chunk)
+        begin
+          @temp_import_file.binmode
+          @file.download do |chunk|
+            @temp_import_file.write(chunk)
+          end
+        ensure
+          @temp_import_file.close
         end
-
-        @temp_import_file.close
-
         @spreadsheet = if extension.eql? '.tsv'
-                         Roo::CSV.new(@temp_import_file, extension:,
-                                                         csv_options: { col_sep: "\t" })
+                         Roo::CSV.new(@temp_import_file.path, extension:,
+                                                              csv_options: { col_sep: "\t" })
                        else
-                         Roo::Spreadsheet.open(@temp_import_file, extension:)
+                         Roo::Spreadsheet.open(@temp_import_file.path, extension:)
                        end
       end
 
