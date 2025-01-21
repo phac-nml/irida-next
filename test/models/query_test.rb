@@ -66,7 +66,19 @@ class QueryTest < ActiveSupport::TestCase
     assert query.errors.added? :base, I18n.t('validators.advanced_search_group_validator.group_error')
     assert query.groups[0].errors.added? :base, I18n.t('validators.advanced_search_group_validator.condition_error')
     assert query.groups[0].conditions[0].errors.added? :value,
-                                                       I18n.t('validators.advanced_search_group_validator.date_format_error')
+                                                       I18n.t('validators.advanced_search_group_validator.date_format_error') # rubocop:disable Layout/LineLength
+  end
+
+  test 'valid advanced query with date' do
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes:
+                       { '0': { field: 'created_at', operator: '=', value: '2024-12-17' } }
+                      } },
+                      project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
+    query = Sample::Query.new(search_params)
+    assert query.advanced_query?
+    assert query.valid?
   end
 
   test 'invalid advanced query with non unique fields' do
@@ -84,7 +96,9 @@ class QueryTest < ActiveSupport::TestCase
     assert query.errors.added? :base, I18n.t('validators.advanced_search_group_validator.group_error')
     assert query.groups[0].errors.added? :base, I18n.t('validators.advanced_search_group_validator.condition_error')
     assert query.groups[0].conditions[0].errors.added? :field,
-                                                       I18n.t('validators.advanced_search_group_validator.uniqueness_error')
+                                                       I18n.t('validators.advanced_search_group_validator.uniqueness_error') # rubocop:disable Layout/LineLength
+    assert query.groups[0].conditions[1].errors.added? :field,
+                                                       I18n.t('validators.advanced_search_group_validator.uniqueness_error') # rubocop:disable Layout/LineLength
   end
 
   test 'invalid advanced query non unique fields using between operator' do
@@ -102,6 +116,22 @@ class QueryTest < ActiveSupport::TestCase
     assert query.errors.added? :base, I18n.t('validators.advanced_search_group_validator.group_error')
     assert query.groups[0].errors.added? :base, I18n.t('validators.advanced_search_group_validator.condition_error')
     assert query.groups[0].conditions[0].errors.added? :field,
-                                                       I18n.t('validators.advanced_search_group_validator.between_error')
+                                                       I18n.t('validators.advanced_search_group_validator.between_error') # rubocop:disable Layout/LineLength
+    assert query.groups[0].conditions[1].errors.added? :field,
+                                                       I18n.t('validators.advanced_search_group_validator.uniqueness_error') # rubocop:disable Layout/LineLength
+  end
+
+  test 'valid advanced query non unique fields using between operator' do
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes: {
+                          '0': { field: 'metadata.age', operator: '>=', value: '50' },
+                          '1': { field: 'metadata.age', operator: '<=', value: '100' }
+                        }
+                      } },
+                      project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
+    query = Sample::Query.new(search_params)
+    assert query.advanced_query?
+    assert query.valid?
   end
 end
