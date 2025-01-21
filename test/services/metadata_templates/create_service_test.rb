@@ -27,9 +27,8 @@ module MetadataTemplates
       }
 
       assert_no_difference -> { MetadataTemplate.count } do
-        result = MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
-
-        assert result.errors.include?(I18n.t('services.metadata_templates.create.required.name'))
+        MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
+        assert @namespace.errors.full_messages.include?(I18n.t('services.metadata_templates.create.required.name'))
       end
     end
   end
