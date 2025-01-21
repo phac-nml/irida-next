@@ -16,6 +16,7 @@ module Samples
         @ignore_empty_values = params[:ignore_empty_values]
         @spreadsheet = nil
         @headers = nil
+        @temp_import_file = Tempfile.new
       end
 
       def execute
@@ -83,12 +84,7 @@ module Samples
 
         extension = validate_file_extension
 
-        @spreadsheet = if extension.eql? '.tsv'
-                         Roo::CSV.new(ActiveStorage::Blob.service.path_for(@file.key), extension:,
-                                                                                       csv_options: { col_sep: "\t" })
-                       else
-                         Roo::Spreadsheet.open(ActiveStorage::Blob.service.path_for(@file.key), extension:)
-                       end
+        download_metadata_import_file(extension)
 
         @headers = @spreadsheet.row(1).compact
 
@@ -97,10 +93,24 @@ module Samples
         validate_file_rows
       end
 
+      def download_metadata_import_file(extension)
+        @file.download do |chunk|
+          @temp_import_file.write(chunk)
+        end
+
+        @temp_import_file.close
+
+        @spreadsheet = if extension.eql? '.tsv'
+                         Roo::CSV.new(@temp_import_file, extension:,
+                                                         csv_options: { col_sep: "\t" })
+                       else
+                         Roo::Spreadsheet.open(@temp_import_file, extension:)
+                       end
+      end
+
       def perform_file_import
         response = {}
         parse_settings = @headers.zip(@headers).to_h
-
         @spreadsheet.each_with_index(parse_settings) do |metadata, index|
           next unless index.positive?
 
@@ -111,15 +121,18 @@ module Samples
 
           metadata_changes = process_sample_metadata_row(sample_id, metadata)
           response[sample_id] = metadata_changes if metadata_changes
-
-          # delete the blob and file as we no longer require it
-          @file.purge
-
+          cleanup_files
           response
         rescue ActiveRecord::RecordNotFound
           @namespace.errors.add(:sample, error_message(sample_id))
         end
         response
+      end
+
+      def cleanup_files
+        # delete the blob and temporary file as we no longer require them
+        @file.purge
+        @temp_import_file.unlink
       end
 
       def error_message(sample_id)
