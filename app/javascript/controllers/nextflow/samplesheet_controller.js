@@ -65,14 +65,12 @@ export default class extends Controller {
   submitSamplesheet(event) {
     event.preventDefault();
     this.#enableProcessingState();
-
     // only file cells require an additional validation step. The rest of the cells are either autofilled or validation
     // of other required fields will be handled by the browser
     let readyToSubmit = this.#validateFileCells();
-
     if (!readyToSubmit) {
-      this.#enableErrorState(this.attachmentsErrorValue);
       this.#disableProcessingState();
+      this.#enableErrorState(this.attachmentsErrorValue);
     } else {
       this.#combineFormData();
       fetch("/-/workflow_executions", {
