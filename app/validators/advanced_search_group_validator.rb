@@ -56,8 +56,15 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
   end
 
   def validate_date_field(condition)
-    if %w[created_at updated_at
-          attachments_updated_at].include?(condition.field) || condition.field.end_with?('_date')
+    unless %w[created_at updated_at
+              attachments_updated_at].include?(condition.field) || condition.field.end_with?('_date')
+      return
+    end
+
+    if %w[contains in not_not].include?(condition.operator)
+      condition.errors.add :operator,
+                           I18n.t('validators.advanced_search_group_validator.date_operator_error')
+    else
       begin
         DateTime.strptime(condition.value, '%Y-%m-%d')
       rescue StandardError
