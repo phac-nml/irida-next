@@ -48,12 +48,7 @@ module MetadataTemplates
     def save_template
       return unless @metadata_template.save
 
-      @metadata_template.create_activity key: 'namespace.metadata_template.create',
-                                         owner: current_user,
-                                         parameters: {
-                                           template_id: @metadata_template.id,
-                                           namespace_id: @namespace.id
-                                         }
+      create_activities
     end
 
     def can_create_template?
@@ -61,21 +56,15 @@ module MetadataTemplates
     end
 
     def create_activities
-      if namespace.group_namespace?
-        namespace.parent.create_activity key: 'group.metadata_template.create',
-                                         owner: current_user,
-                                         parameters: {
-                                           template_id: @metadata_template.id,
-                                           namespace_id: @namespace.id
-                                         }
-      else
-        namespace.create_activity key: 'namespaces_project_namespace.metadata_template.create',
-                                  owner: current_user,
-                                  parameters: {
-                                    template_id: @metadata_template.id,
-                                    namespace_id: @namespace.id
-                                  }
-      end
+      activity_key = namespace.group_namespace? ? 'group.metadata_template.create' : 'namespaces_project_namespace.metadata_template.create'
+      namespace.create_activity key: activity_key,
+                                owner: current_user,
+                                parameters: {
+                                  template_id: @metadata_template.id,
+                                  template_name: @metadata_template.name,
+                                  namespace_id: @namespace.id,
+                                  action: 'metadata_template_create'
+                                }
     end
   end
 end

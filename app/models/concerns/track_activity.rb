@@ -135,8 +135,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   end
 
   def transfer_activity_parameters(params, activity) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-    if activity.parameters[:action] == 'project_namespace_transfer' ||
-       activity.parameters[:action] == 'group_namespace_transfer'
+    if %w[project_namespace_transfer group_namespace_transfer].include?(activity.parameters[:action])
 
       params.merge!({
                       old_namespace: activity.parameters[:old_namespace],
@@ -180,6 +179,13 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
                     })
     end
 
+    if activity.parameters[:action] == 'metadata_template_create'
+      params.merge!({
+                      template_id: activity.parameters[:template_id],
+                      template_name: activity.parameters[:template_name]
+                    })
+    end
+
     if activity.parameters[:action] == 'sample_destroy_multiple'
       params.merge!({
                       deleted_count: activity.parameters[:deleted_count],
@@ -197,6 +203,13 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   def additional_group_activity_params(params, activity)
     if activity.parameters[:action] == 'group_subgroup_destroy'
       params.merge!({ removed_group_puid: activity.parameters[:removed_group_puid] })
+    end
+
+    if activity.parameters[:action] == 'metadata_template_create'
+      params.merge!({
+                      template_id: activity.parameters[:template_id],
+                      template_name: activity.parameters[:template_name]
+                    })
     end
 
     return params unless activity.parameters[:action] == 'group_subgroup_create'

@@ -41,6 +41,12 @@
     old_namespace: @activity[:old_namespace],
     new_namespace: @activity[:new_namespace],
   ) %>
+<% elsif metadata_template_link %>
+  <%= t(
+    "#{@activity[:key]}",
+    user: @activity[:user],
+    template_name: @activity[:template_name],
+  ) %>
 <% else %>
   <%= t(
     "#{@activity[:key]}",

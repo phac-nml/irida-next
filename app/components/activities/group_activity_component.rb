@@ -19,5 +19,9 @@ module Activities
     def transfer_out
       @activity[:key].include?('transfer_out')
     end
+
+    def metadata_template_link
+      @activity[:action] == 'metadata_template_create'
+    end
   end
 end
