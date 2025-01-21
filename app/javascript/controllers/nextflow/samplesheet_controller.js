@@ -12,6 +12,7 @@ export default class extends Controller {
   ];
   static values = {
     attachmentsError: { type: String },
+    submissionError: { type: String },
   };
 
   #error_state = ["border-red-300", "dark:border-red-800"];
@@ -20,14 +21,13 @@ export default class extends Controller {
 
   // The samplesheet will use FormData, allowing us to create the inputs of a form without the associated DOM elements.
   // This will help alleviate render time issues encountered with workflows with large sample counts
-  #formData = new FormData(this.formTarget);
+  #formData = new FormData();
 
   connect() {
-    this.#setInitialFormData();
+    this.#setInitialSamplesheetData();
   }
 
-  #setInitialFormData() {
-    // attributes abbreviated to attrs
+  #setInitialSamplesheetData() {
     const samples_workflow_attrs = JSON.parse(
       this.workflowAttributesTarget.innerText,
     );
@@ -52,29 +52,29 @@ export default class extends Controller {
     }
   }
 
-  updateEditableFormData(event) {
+  // handles changes to text and dropdown cells
+  updateEditableSamplesheetData(event) {
     this.#setFormData(event.target.name, event.target.value);
   }
 
-  updateAutofilledFormData({ detail: { content } }) {
+  // handles changes to metadata autofill and file cells
+  updateAutofilledSamplesheetData({ detail: { content } }) {
     this.#setFormData(content.inputName, content.inputValue);
   }
 
-  #setFormData(inputName, inputValue) {
-    this.#formData.set(inputName, inputValue);
-  }
-
-  validateForm(event) {
+  submitSamplesheet(event) {
     event.preventDefault();
     this.#enableProcessingState();
 
+    // only file cells require an additional validation step. The rest of the cells are either autofilled or validation
+    // of other required fields will be handled by the browser
     let readyToSubmit = this.#validateFileCells();
 
     if (!readyToSubmit) {
-      this.errorTarget.classList.remove("hidden");
-      this.errorMessageTarget.innerHTML = this.attachmentsErrorValue;
+      this.#enableErrorState(this.attachmentsErrorValue);
       this.#disableProcessingState();
     } else {
+      this.#combineFormData();
       fetch("/-/workflow_executions", {
         method: "POST",
         body: new URLSearchParams(this.#formData),
@@ -83,13 +83,18 @@ export default class extends Controller {
           "Content-Type": "application/x-www-form-urlencoded",
         },
       }).then((response) => {
+        this.#disableProcessingState();
         if (response.redirected && response.statusText == "OK") {
           window.location.href = response.url;
         } else {
-          this.#disableProcessingState();
+          this.#enableErrorState(this.submissionErrorValue);
         }
       });
     }
+  }
+
+  #setFormData(inputName, inputValue) {
+    this.#formData.set(inputName, inputValue);
   }
 
   #validateFileCells() {
@@ -116,6 +121,13 @@ export default class extends Controller {
     return readyToSubmit;
   }
 
+  // combines parameter form data with samplesheet form data
+  #combineFormData() {
+    const parameterData = new FormData(this.formTarget);
+    for (const parameter of parameterData.entries()) {
+      this.#setFormData(parameter[0], parameter[1]);
+    }
+  }
   #enableProcessingState() {
     this.submitTarget.disabled = true;
     if (this.hasTableTarget) {
@@ -130,5 +142,10 @@ export default class extends Controller {
     if (this.hasTableTarget) {
       this.tableTarget.removeChild(this.tableTarget.lastElementChild);
     }
+  }
+
+  #enableErrorState(message) {
+    this.errorTarget.classList.remove("hidden");
+    this.errorMessageTarget.innerHTML = message;
   }
 }

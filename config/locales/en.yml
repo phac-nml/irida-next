@@ -972,6 +972,7 @@ en:
     name:
       helper: A custom name will make it easier to search for this in the future.
       label: Name (Optional)
+    submission_error: Something went wrong with the submission request.
   personal_access_tokens:
     revoke_confirmation:
       description: Are you sure you'd like to remove access token '%{token_name}' from bot %{bot_name}?

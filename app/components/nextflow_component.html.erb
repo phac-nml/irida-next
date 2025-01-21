@@ -1,8 +1,9 @@
 <div
   data-controller="nextflow--samplesheet"
   data-nextflow--samplesheet-attachments-error-value="<%= t(".attachments_error") %>"
+  data-nextflow--samplesheet-submission-error-value="<%= t(".submission_error") %>"
   data-action="
-    nextflow--autofilled-cell:sendAutofilledInputData->nextflow--samplesheet#updateAutofilledFormData
+    nextflow--autofilled-cell:sendAutofilledInputData->nextflow--samplesheet#updateAutofilledSamplesheetData
   "
 >
   <h1
@@ -118,7 +119,7 @@
     <button
       class="button button--state-primary button--size-default"
       data-nextflow--samplesheet-target="submit"
-      data-action="click->nextflow--samplesheet#validateForm"
+      data-action="click->nextflow--samplesheet#submitSamplesheet"
     >
       <% if instance.nil? %>
         <%= t(:"workflow_executions.submissions.create.submit") %>
