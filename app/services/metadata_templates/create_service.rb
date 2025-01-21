@@ -49,11 +49,7 @@ module MetadataTemplates
     end
 
     def create_activities
-      activity_key = if namespace.group_namespace?
-                       'group.metadata_template.create'
-                     else
-                       'namespaces_project_namespace.metadata_template.create'
-                     end
+      activity_key = namespace.group_namespace? ? 'group.metadata_template.create' : 'namespaces_project_namespace.metadata_template.create'
       namespace.create_activity key: activity_key,
                                 owner: current_user,
                                 parameters: {
