@@ -4,6 +4,7 @@ module MetadataTemplates
   # Service used to Create Metadata Templates
   class CreateService < BaseService
     MetadataTemplateCreateError = Class.new(StandardError)
+
     attr_accessor :namespace
 
     def initialize(user, namespace, params = {})
@@ -17,7 +18,7 @@ module MetadataTemplates
     end
 
     def execute
-      authorize! namespace, to: :create_metadata_templates?
+      authorize! namespace, to: :create_metadata_template?
 
       validate_params
 
@@ -32,14 +33,15 @@ module MetadataTemplates
 
     def validate_params
       if @params[:name].blank?
-        raise MetadataTemplateCreateError,
+        raise MetadataTemplates::CreateService::MetadataTemplateCreateError,
               I18n.t('services.metadata_templates.create.required.name')
       end
+      if @params[:fields].blank?
+        raise MetadataTemplates::CreateService::MetadataTemplateCreateError,
+              I18n.t('services.metadata_templates.create.required.fields')
+      end
 
-      return unless @params[:fields].blank? || !@params[:fields].is_a?(Array)
-
-      raise MetadataTemplateCreateError,
-            I18n.t('services.metadata_templates.create.required.fields')
+      true
     end
 
     def save_template
