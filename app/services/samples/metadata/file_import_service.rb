@@ -94,6 +94,7 @@ module Samples
       end
 
       def download_metadata_import_file(extension)
+        @temp_import_file.binmode
         @file.download do |chunk|
           @temp_import_file.write(chunk)
         end
