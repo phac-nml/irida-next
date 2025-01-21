@@ -493,13 +493,16 @@ module Projects
         # select destination project
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
-        click_on I18n.t('projects.samples.transfers.dialog.submit_button')
+        perform_enqueued_jobs do
+          click_on I18n.t('projects.samples.transfers.dialog.submit_button')
+        end
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
       # flash msg
       assert_text I18n.t('projects.samples.transfers.create.success')
+      click_button I18n.t('projects.samples.shared.success.ok_button')
       # originating project no longer has samples
       assert_text I18n.t('projects.samples.index.no_samples')
 
@@ -536,7 +539,9 @@ module Projects
         assert_text I18n.t('projects.samples.transfers.dialog.title')
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
-        click_on I18n.t('projects.samples.transfers.dialog.submit_button')
+        perform_enqueued_jobs do
+          click_on I18n.t('projects.samples.transfers.dialog.submit_button')
+        end
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -581,7 +586,9 @@ module Projects
         end
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{project25.id}']").click
-        click_on I18n.t('projects.samples.transfers.dialog.submit_button')
+        perform_enqueued_jobs do
+          click_on I18n.t('projects.samples.transfers.dialog.submit_button')
+        end
       end
       ### ACTIONS END ###
 
@@ -673,7 +680,9 @@ module Projects
         end
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
-        click_on I18n.t('projects.samples.transfers.dialog.submit_button')
+        perform_enqueued_jobs do
+          click_on I18n.t('projects.samples.transfers.dialog.submit_button')
+        end
       end
       ### ACTIONS END ###
 

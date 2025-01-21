@@ -6,10 +6,10 @@ module Samples
     TransferError = Class.new(StandardError)
 
     def execute(new_project_id, sample_ids)
-      validate(new_project_id, sample_ids)
-
       # Authorize if user can transfer samples from the current project
       authorize! @project, to: :transfer_sample?
+
+      validate(new_project_id, sample_ids)
 
       # Authorize if user can transfer samples to the new project
       @new_project = Project.find_by(id: new_project_id)
@@ -53,17 +53,16 @@ module Samples
       not_found_sample_ids = []
 
       sample_ids.each do |sample_id|
-        sample = Sample.find_by(id: sample_id, project_id: @project.id)
+        sample = Sample.find_by!(id: sample_id, project_id: @project.id)
         sample.update!(project_id: new_project_id)
         transferred_samples_ids << sample_id
         transferred_samples_puids << sample.puid
-      rescue StandardError
-        if sample
-          @project.errors.add(:samples, I18n.t('services.samples.transfer.sample_exists',
-                                               sample_name: sample.name, sample_puid: sample.puid))
-        else
-          not_found_sample_ids << sample_id
-        end
+      rescue ActiveRecord::RecordNotFound
+        not_found_sample_ids << sample_id
+        next
+      rescue ActiveRecord::RecordInvalid
+        @project.errors.add(:samples, I18n.t('services.samples.transfer.sample_exists',
+                                             sample_name: sample.name, sample_puid: sample.puid))
         next
       end
 

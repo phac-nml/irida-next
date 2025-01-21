@@ -1,6 +1,7 @@
 <%= viral_dialog(open: open, size: :large) do |dialog| %>
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
+    <%= turbo_stream_from @broadcast_target %>
     <%= turbo_frame_tag "transfer_samples_dialog_content" do %>
       <div
         data-controller="infinite-scroll viral--select2"
@@ -46,12 +47,12 @@
 
           <%= form_for(:transfer, url: namespace_project_samples_transfer_path, method: :post,
               data: {
-                controller: "spinner form--hidden-inputs",
+                controller: "form--hidden-inputs",
                 "form--hidden-inputs-selection-outlet": '#samples-table',
                 "form--hidden-inputs-field-name-value": "transfer[sample_ids][]",
-                action: "turbo:submit-start->spinner#submitStart turbo:submit-end->spinner#submitEnd"
               }
             ) do |form| %>
+            <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>"/>
             <div class="grid gap-4">
               <div class="form-field">
                 <%= form.label :new_project_id, t(".new_project_id") %>
@@ -63,8 +64,8 @@
                     class="
                       border-slate-300 text-slate-800 sm:text-sm rounded-md block w-full p-2.5
                       dark:bg-slate-800 dark:border-slate-600 dark:text-slate-50
-                      "
-                    >
+                    "
+                  >
                 <% else %>
                   <%= viral_select2(form:, name: :new_project_id, placeholder: t(".select_project")) do |select| %>
                     <% @projects.each do |project| %>
@@ -86,19 +87,13 @@
                             disabled: true,
                             data: {
                               action: "click->form--hidden-inputs#clearSelection",
-                              "spinner-target": "submit",
-                              "viral--select2-target": "submitButton"
+                              "viral--select2-target": "submitButton",
                             } %>
               </div>
             </div>
           <% end %>
         </div>
       </div>
-
-      <%= render partial: "shared/loading/spinner",
-      locals: {
-        spinner_message: t(".spinner_message"),
-      } %>
     <% end %>
   <% end %>
 <% end %>

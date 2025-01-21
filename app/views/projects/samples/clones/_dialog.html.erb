@@ -51,9 +51,9 @@
             "form--hidden-inputs-field-name-value": "clone[sample_ids][]",
           }
         ) do |form| %>
+            <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>"/>
             <div class="grid gap-4">
               <div class="form-field">
-                <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>"/>
                 <%= form.label :new_project_id, t(".new_project_id") %>
                 <% if @projects.empty? %>
                   <input
@@ -86,7 +86,6 @@
                             disabled: true,
                             data: {
                               action: "click->form--hidden-inputs#clearSelection",
-                              "spinner-target": "submit",
                               "viral--select2-target": "submitButton",
                             } %>
               </div>

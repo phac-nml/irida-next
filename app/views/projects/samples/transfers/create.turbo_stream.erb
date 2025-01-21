@@ -1,16 +1,15 @@
-<% if @project.errors.empty? %>
-  <%= turbo_stream.append "flashes" do %>
-    <%= viral_flash(type:, data: message) %>
-  <% end %>
-  <%= turbo_stream.update "samples_dialog", partial: "dialog", locals: { open: false } %>
-<% else %>
-  <%= turbo_stream.replace "transfer_samples_dialog_content",
-                       partial: "projects/samples/shared/errors",
-                       locals: {
-                         type: type,
-                         message: message,
-                         errors: errors,
-                       } %>
+<%= turbo_stream.append "transfer_samples_dialog_content" do %>
+  <div
+    role="status"
+    id="spinner"
+    class="
+      backdrop-blur-sm absolute h-full w-full -translate-x-1/2 -translate-y-1/2
+      top-2/4 left-1/2 grid place-items-center
+    "
+  >
+    <div class="grid place-items-center">
+      <%= viral_icon(name: :loading, classes: "animate-spin text-primary-500") %>
+      <span class="text-black dark:text-white"><%= t("projects.samples.transfers.dialog.spinner_message") %>.</span>
+    </div>
+  </div>
 <% end %>
-
-<turbo-stream action="refresh"></turbo-stream>
