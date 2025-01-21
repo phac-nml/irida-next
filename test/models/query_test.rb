@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class QueryTest < ActiveSupport::TestCase
-  def setup
+  test 'valid query' do
     search_params = { sort: 'updated_at desc',
                       groups_attributes: { '0': {
                         conditions_attributes:
@@ -11,12 +11,9 @@ class QueryTest < ActiveSupport::TestCase
                       } },
                       name_or_puid_cont: 'Project 1 Sample 1',
                       project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
-    @query = Sample::Query.new(search_params)
-  end
-
-  test 'valid query' do
-    assert_not @query.advanced_query?
-    assert @query.valid?
+    query = Sample::Query.new(search_params)
+    assert_not query.advanced_query?
+    assert query.valid?
   end
 
   test 'valid advanced query' do
@@ -101,7 +98,7 @@ class QueryTest < ActiveSupport::TestCase
                                                        I18n.t('validators.advanced_search_group_validator.uniqueness_error') # rubocop:disable Layout/LineLength
   end
 
-  test 'invalid advanced query non unique fields using between operator' do
+  test 'invalid advanced query with non unique fields using between operator' do
     search_params = { sort: 'updated_at desc',
                       groups_attributes: { '0': {
                         conditions_attributes: {
@@ -121,7 +118,7 @@ class QueryTest < ActiveSupport::TestCase
                                                        I18n.t('validators.advanced_search_group_validator.uniqueness_error') # rubocop:disable Layout/LineLength
   end
 
-  test 'valid advanced query non unique fields using between operator' do
+  test 'valid advanced query with non unique fields using between operator' do
     search_params = { sort: 'updated_at desc',
                       groups_attributes: { '0': {
                         conditions_attributes: {
@@ -133,5 +130,39 @@ class QueryTest < ActiveSupport::TestCase
     query = Sample::Query.new(search_params)
     assert query.advanced_query?
     assert query.valid?
+  end
+
+  test 'invalid advanced query with non numeric using between operator' do
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes: {
+                          '0': { field: 'metadata.age', operator: '>=', value: 'test' }
+                        }
+                      } },
+                      project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
+    query = Sample::Query.new(search_params)
+    assert query.advanced_query?
+    assert_not query.valid?
+    assert query.errors.added? :base, I18n.t('validators.advanced_search_group_validator.group_error')
+    assert query.groups[0].errors.added? :base, I18n.t('validators.advanced_search_group_validator.condition_error')
+    assert query.groups[0].conditions[0].errors.added? :operator,
+                                                       I18n.t('validators.advanced_search_group_validator.numeric_operator_error') # rubocop:disable Layout/LineLength
+  end
+
+  test 'invalid advanced query using invalid operator on date' do
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes: {
+                          '0': { field: 'created_at', operator: 'contains', value: '2024-12-17' }
+                        }
+                      } },
+                      project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
+    query = Sample::Query.new(search_params)
+    assert query.advanced_query?
+    assert_not query.valid?
+    assert query.errors.added? :base, I18n.t('validators.advanced_search_group_validator.group_error')
+    assert query.groups[0].errors.added? :base, I18n.t('validators.advanced_search_group_validator.condition_error')
+    assert query.groups[0].conditions[0].errors.added? :operator,
+                                                       I18n.t('validators.advanced_search_group_validator.date_operator_error') # rubocop:disable Layout/LineLength
   end
 end
