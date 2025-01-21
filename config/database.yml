@@ -56,8 +56,8 @@ test:
 #
 production:
   primary:
-      <<: *default
-      url: <%= ENV['DATABASE_URL'] %>
+    <<: *default
+    url: <%= ENV['DATABASE_URL'] %>
   jobs:
     <<: *jobs
     url: <%= ENV['JOBS_DATABASE_URL'] %>

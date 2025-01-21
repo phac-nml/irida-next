@@ -1,15 +1,28 @@
 <%= viral_dialog(open: true, size: :extra_large) do |dialog| %>
-  <% workflow_name = @automated_workflow_execution.name.empty? ? @automated_workflow_execution.id : @automated_workflow_execution.name %>
+  <% workflow_name =
+    (
+      if @automated_workflow_execution.name.empty?
+        @automated_workflow_execution.id
+      else
+        @automated_workflow_execution.name
+      end
+    ) %>
   <%= dialog.with_header(title: t(".title", workflow_name:)) %>
   <%= dialog.with_section do %>
     <%= render NextflowComponent.new(
       workflow: @workflow,
-      url: namespace_project_automated_workflow_execution_path(@project.parent, @project, @automated_workflow_execution),
+      url:
+        namespace_project_automated_workflow_execution_path(
+          @project.parent,
+          @project,
+          @automated_workflow_execution,
+        ),
       samples: Sample.none,
       allowed_to_update_samples: true,
       namespace_id: @project.namespace.id,
       fields: nil,
-      instance: @automated_workflow_execution
+      instance: @automated_workflow_execution,
+      automated_workflow: true,
     ) %>
   <% end %>
 <% end %>
