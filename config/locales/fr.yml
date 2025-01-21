@@ -1734,6 +1734,7 @@ fr:
       date_format_error: must be formatted YYYY-MM-DD
       date_operator_error: cannot be used on dates
       group_error: There group has errors
+      numeric_operator_error: can only be used on numbers
       uniqueness_error: must be unique
   viral:
     pagy:

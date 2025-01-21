@@ -31,7 +31,7 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
   def validate_fields(group)
     group.conditions.each do |condition|
       validate_blank_field(condition)
-      validate_date_field(condition)
+      validate_date_and_numeric_field(condition)
     end
 
     return unless group.conditions.any? { |condition| condition.errors.any? }
@@ -55,21 +55,24 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
     condition.errors.add :value, I18n.t('validators.advanced_search_group_validator.blank_error')
   end
 
-  def validate_date_field(condition)
-    unless %w[created_at updated_at
-              attachments_updated_at].include?(condition.field) || condition.field.end_with?('_date')
-      return
+  def validate_date_and_numeric_field(condition)
+    if %w[created_at updated_at attachments_updated_at].include?(condition.field) || condition.field.end_with?('_date')
+      validate_date_field(condition)
+    elsif %w[>= <=].include?(condition.operator)
+      unless Float(condition.value, exception: false)
+        condition.errors.add :operator, I18n.t('validators.advanced_search_group_validator.numeric_operator_error')
+      end
     end
+  end
 
+  def validate_date_field(condition)
     if %w[contains in not_not].include?(condition.operator)
-      condition.errors.add :operator,
-                           I18n.t('validators.advanced_search_group_validator.date_operator_error')
+      condition.errors.add :operator, I18n.t('validators.advanced_search_group_validator.date_operator_error')
     else
       begin
         DateTime.strptime(condition.value, '%Y-%m-%d')
       rescue StandardError
-        condition.errors.add :value,
-                             I18n.t('validators.advanced_search_group_validator.date_format_error')
+        condition.errors.add :value, I18n.t('validators.advanced_search_group_validator.date_format_error')
       end
     end
   end
