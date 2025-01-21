@@ -23,45 +23,35 @@ export default class extends Controller {
     let group = event.currentTarget.parentElement.closest(
       "div[data-advanced-search-target='groupsContainer']",
     );
-    let group_index = this.groupsContainerTargets.indexOf(group);
-    let condition_index = group.querySelectorAll(
-      "div[data-advanced-search-target='conditionsContainer']",
-    ).length;
-    let newCondition = this.conditionTemplateTarget.innerHTML
-      .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
-      .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
-    event.currentTarget.parentElement.insertAdjacentHTML(
-      "beforebegin",
-      newCondition,
-    );
+    this.#addConditionToGroup(group);
   }
 
   removeCondition(event) {
     let condition = event.currentTarget.parentElement;
-    let groupContainer = condition.closest(
+    let group = condition.closest(
       "div[data-advanced-search-target='groupsContainer']",
     );
-    let conditions = groupContainer.querySelectorAll(
+    let conditions = group.querySelectorAll(
       "div[data-advanced-search-target='conditionsContainer']",
     );
-    if (conditions.length > 1) {
-      condition.remove();
-      conditions = groupContainer.querySelectorAll(
-        "div[data-advanced-search-target='conditionsContainer']",
-      );
-      //re-index all the form fields within the group
-      conditions.forEach((condition, index) => {
-        let inputFields = condition.querySelectorAll("[name]");
-        inputFields.forEach((inputField) => {
-          let updatedInputFieldName = inputField.name.replace(
-            /(\[conditions_attributes\]\[)\d+?(\])/,
-            "$1" + index + "$2",
-          );
-          inputField.name = updatedInputFieldName;
-        });
+
+    condition.remove();
+    conditions = group.querySelectorAll(
+      "div[data-advanced-search-target='conditionsContainer']",
+    );
+    //re-index all the form fields within the group
+    conditions.forEach((condition, index) => {
+      let inputFields = condition.querySelectorAll("[name]");
+      inputFields.forEach((inputField) => {
+        let updatedInputFieldName = inputField.name.replace(
+          /(\[conditions_attributes\]\[)\d+?(\])/,
+          "$1" + index + "$2",
+        );
+        inputField.name = updatedInputFieldName;
       });
-    } else {
-      this.#clearCondition(condition);
+    });
+    if (conditions.length === 0) {
+      this.#addConditionToGroup(group);
     }
   }
 
@@ -121,13 +111,10 @@ export default class extends Controller {
         let conditions = group.querySelectorAll(
           "div[data-advanced-search-target='conditionsContainer']",
         );
-        conditions.forEach((condition, condition_index) => {
-          if (condition_index > 0) {
-            condition.remove();
-          } else {
-            this.#clearCondition(condition);
-          }
+        conditions.forEach((condition) => {
+          condition.remove();
         });
+        this.#addConditionToGroup(group);
       }
     });
   }
@@ -157,15 +144,14 @@ export default class extends Controller {
     }
   }
 
-  #clearCondition(condition) {
-    let input = condition.querySelector("input");
-    input.value = "";
-    let selects = condition.querySelectorAll("select");
-    selects.forEach((select) => {
-      select.value = "";
-    });
-    if (this.hasListFilterOutlet) {
-      this.listFilterOutlet.clear();
-    }
+  #addConditionToGroup(group) {
+    let group_index = this.groupsContainerTargets.indexOf(group);
+    let condition_index = group.querySelectorAll(
+      "div[data-advanced-search-target='conditionsContainer']",
+    ).length;
+    let newCondition = this.conditionTemplateTarget.innerHTML
+      .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
+      .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
+    group.lastElementChild.insertAdjacentHTML("beforebegin", newCondition);
   }
 }
