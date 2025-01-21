@@ -36,7 +36,8 @@ module MetadataTemplates
         raise MetadataTemplateCreateError,
               I18n.t('services.metadata_templates.create.required.name')
       end
-      return if @params[:fields].present?
+
+      return unless @params[:fields].blank? || !@params[:fields].is_a?(Array)
 
       raise MetadataTemplateCreateError,
             I18n.t('services.metadata_templates.create.required.fields')
