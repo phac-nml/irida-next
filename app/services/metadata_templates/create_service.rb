@@ -8,6 +8,7 @@ module MetadataTemplates
     def initialize(user, namespace, fields = [], params = {})
       super(user, params)
       @namespace = namespace
+      @fields = fields
     end
 
     def execute
@@ -24,21 +25,21 @@ module MetadataTemplates
 
     def build_template
       MetadataTemplate.new(params.merge(
-        created_by: current_user,
-        namespace: namespace,
-        fields: fields
-      ))
+                             created_by: current_user,
+                             namespace: @namespace,
+                             fields: @fields
+                           ))
     end
 
     def save_template
       return unless @metadata_template.save
 
       @metadata_template.create_activity key: 'namespace.metadata_template.create',
-                                       owner: current_user,
-                                       parameters: {
-                                         template_id: @metadata_template.id,
-                                         namespace_id: namespace.id
-                                       }
+                                         owner: current_user,
+                                         parameters: {
+                                           template_id: @metadata_template.id,
+                                           namespace_id: @namespace.id
+                                         }
     end
 
     def can_create_template?
@@ -51,14 +52,14 @@ module MetadataTemplates
                                          owner: current_user,
                                          parameters: {
                                            template_id: @metadata_template.id,
-                                           namespace_id: namespace.id
+                                           namespace_id: @namespace.id
                                          }
       else
         namespace.create_activity key: 'namespaces_project_namespace.metadata_template.create',
                                   owner: current_user,
                                   parameters: {
                                     template_id: @metadata_template.id,
-                                    namespace_id: namespace.id
+                                    namespace_id: @namespace.id
                                   }
       end
     end
