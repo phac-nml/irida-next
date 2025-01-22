@@ -120,7 +120,7 @@
     <button
       class="button button--state-primary button--size-default"
       data-nextflow--samplesheet-target="submit"
-      <% if automated_workflow %>
+      <% if @samples.empty? %>
       type="submit"
       <% else %>
       data-action="click->nextflow--samplesheet#submitSamplesheet"

@@ -21,7 +21,6 @@ export default class extends Controller {
   #default_state = ["border-transparent"];
 
   // The samplesheet will use FormData, allowing us to create the inputs of a form without the associated DOM elements.
-  // This will help alleviate render time issues encountered with workflows with large sample counts
   #formData = new FormData();
 
   connect() {
@@ -68,8 +67,8 @@ export default class extends Controller {
   submitSamplesheet(event) {
     event.preventDefault();
     this.#enableProcessingState();
-    // only file cells require an additional validation step. The rest of the cells are either autofilled or validation
-    // of other required fields will be handled by the browser
+    // only file cells require an additional validation step. The rest of the cells are either autofilled or validated
+    // by the browser required fields
     let readyToSubmit = this.#validateFileCells();
     if (!readyToSubmit) {
       this.#disableProcessingState();
@@ -103,14 +102,14 @@ export default class extends Controller {
     const missingRequiredFileCells = document.querySelectorAll(
       "[data-file-missing='true']",
     );
-    missingRequiredFileCells.forEach((fileCell) => {
-      fileCell.classList.remove(...this.#default_state);
-      fileCell.classList.add(...this.#error_state);
-      readyToSubmit = false;
-    });
+    if (missingRequiredFileCells.length > 0) {
+      missingRequiredFileCells.forEach((fileCell) => {
+        fileCell.classList.remove(...this.#default_state);
+        fileCell.classList.add(...this.#error_state);
+        readyToSubmit = false;
+      });
 
-    // revalidates file cells incase they need to be changed from error to default state
-    if (!readyToSubmit) {
+      // revalidates file cells incase they need to be changed from error to default state
       const filledRequiredFileCells = document.querySelectorAll(
         "[data-file-missing='false']",
       );
@@ -129,6 +128,7 @@ export default class extends Controller {
       this.#setFormData(parameter[0], parameter[1]);
     }
   }
+
   #enableProcessingState() {
     this.submitTarget.disabled = true;
     if (this.hasTableTarget) {

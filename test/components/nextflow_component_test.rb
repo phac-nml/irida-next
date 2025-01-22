@@ -20,8 +20,7 @@ class NextflowComponentTest < ViewComponentTestCase
       samples: [samples(:sample1), samples(:sample2), samples(:sample3)],
       url: 'https://nf-co.re/testpipeline',
       namespace_id: 'SDSDDFDSFDS',
-      fields: %w[metadata_1 metadata_2 metadata_3],
-      automated_workflow: false
+      fields: %w[metadata_1 metadata_2 metadata_3]
     )
 
     assert_selector 'form' do
@@ -89,8 +88,7 @@ class NextflowComponentTest < ViewComponentTestCase
         samples: [],
         url: 'https://github.com/phac-nml/mikrokondo',
         namespace_id: 'SDSDDFDSFDS',
-        fields: [],
-        automated_workflow: false
+        fields: []
       )
 
       assert_selector 'form' do
@@ -165,8 +163,7 @@ class NextflowComponentTest < ViewComponentTestCase
       url: 'https://nf-co.re/testpipeline',
       namespace_id: 'SDSDDFDSFDS',
       fields: %w[metadata_1 metadata_2 metadata_3],
-      instance:,
-      automated_workflow: false
+      instance:
     )
 
     # rubocop:disable Layout/LineLength
