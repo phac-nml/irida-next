@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/phac-nml/azure-blob.git
+  revision: 879c5f748e6e6e2c1cc6566bbf7a6c39b77acef8
+  branch: copy-blob
+  specs:
+    azure-blob (0.5.6)
+      rexml
+
 PATH
   remote: embedded_gems/pathogen
   specs:
@@ -125,8 +133,6 @@ GEM
       aws-sigv4 (~> 1.5)
     aws-sigv4 (1.9.1)
       aws-eventstream (~> 1, >= 1.0.2)
-    azure-blob (0.5.4)
-      rexml
     base64 (0.2.0)
     bcrypt (3.1.20)
     benchmark (0.4.0)
@@ -656,7 +662,7 @@ DEPENDENCIES
   activerecord-session_store (~> 2.1)
   activerecord_json_validator (~> 3.0.0)
   aws-sdk-s3
-  azure-blob
+  azure-blob!
   bootsnap
   brakeman
   business_time
