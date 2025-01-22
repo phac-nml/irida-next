@@ -52,10 +52,6 @@ module MetadataTemplates
       create_activities
     end
 
-    def can_create_template?
-      authorize! namespace, to: :create_metadata_template?
-    end
-
     def create_activities
       activity_key = namespace.group_namespace? ? 'group.metadata_template.create' : 'namespaces_project_namespace.metadata_template.create'
       namespace.create_activity key: activity_key,
