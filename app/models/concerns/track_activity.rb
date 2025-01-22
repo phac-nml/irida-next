@@ -187,7 +187,8 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
                     })
     end
 
-    if activity.parameters[:action] == 'metadata_template_create'
+    metadata_template_action_types = %w[metadata_template_create metadata_template_update metadata_template_destroy]
+    if metadata_template_action_types.include?(activity.parameters[:action])
       params.merge!({
                       template_id: activity.parameters[:template_id],
                       template_name: activity.parameters[:template_name]
@@ -213,7 +214,8 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
       params.merge!({ removed_group_puid: activity.parameters[:removed_group_puid] })
     end
 
-    if activity.parameters[:action] == 'metadata_template_create'
+    metadata_template_action_types = %w[metadata_template_create metadata_template_update metadata_template_destroy]
+    if metadata_template_action_types.include?(activity.parameters[:action])
       params.merge!({
                       template_id: activity.parameters[:template_id],
                       template_name: activity.parameters[:template_name]
