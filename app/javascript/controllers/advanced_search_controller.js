@@ -11,10 +11,6 @@ export default class extends Controller {
   ];
   static outlets = ["list-filter"];
 
-  connect() {}
-
-  idempotentConnect() {}
-
   addCondition(event) {
     let group = event.currentTarget.parentElement.closest(
       "div[data-advanced-search-target='groupsContainer']",
