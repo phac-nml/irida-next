@@ -21,6 +21,13 @@ module MetadataTemplates
 
     private
 
+    def validate_params
+      return unless @params[:fields].blank? || !@params[:fields].is_a?(Array)
+
+      raise MetadataTemplateUpdateError,
+            I18n.t('services.metadata_templates.create.required.fields')
+    end
+
     def create_activities
       activity_key = if @metadata_template.namespace.group_namespace?
                        'group.metadata_template.update'

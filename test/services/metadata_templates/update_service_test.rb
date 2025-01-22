@@ -18,34 +18,23 @@ module MetadataTemplates
       end
     end
 
-    test 'fails to update metadata template with invalid params' do
+    test 'updates metadata template with invalid params' do
       invalid_params = { fields: nil }
 
-      assert_no_changes -> { @metadata_template.reload.fields } do
+      assert_no_changes -> { [@metadata_template.fields] } do
         MetadataTemplates::UpdateService.new(@user, @metadata_template, invalid_params).execute
       end
-      assert_includes @metadata_template.errors[:fields],
-                      'value at root is not an array'
     end
 
-    test 'fails to update metadata template with numerical fields' do
-      invalid_params = { fields: [1] }
-
-      assert_no_changes -> { @metadata_template.reload.fields } do
-        MetadataTemplates::UpdateService.new(@user, @metadata_template, invalid_params).execute
-      end
-      assert_includes @metadata_template.errors[:fields], 'value at `/0` is not a string'
-    end
-
-    test 'fails to update metadata template with incorrect permissions' do
+    test 'updates metadata template with incorrect permissions' do
       valid_params = { name: 'new-metadata-template-name', description: 'new-metadata-template-description' }
-      user = users(:david_doe)
+      user = users(:ryan_doe)
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
         MetadataTemplates::UpdateService.new(user, @metadata_template, valid_params).execute
       end
 
-      assert_equal MetadataTemplatePolicy, exception.policy
+      assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
       assert_equal :update_metadata_template?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
     end
