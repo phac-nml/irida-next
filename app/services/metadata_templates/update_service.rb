@@ -13,12 +13,13 @@ module MetadataTemplates
     def execute
       authorize! @metadata_template.namespace, to: :update_metadata_template?
 
-      return false unless @metadata_template.update(params)
+      updated = @metadata_template.update!(params)
 
-      create_activities
-      true
-    rescue MetadataTemplates::UpdateService::MetadataTemplateUpdateError => e
-      @metadata_template.errors.add(:base, e.message)
+      create_activities if updated
+      @metadata_template
+    rescue ActiveRecord::RecordInvalid => e
+      @metadata_template.errors.add(:fields, e.message)
+      @metadata_template
     end
 
     private
