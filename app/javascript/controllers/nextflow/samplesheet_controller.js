@@ -67,8 +67,8 @@ export default class extends Controller {
   submitSamplesheet(event) {
     event.preventDefault();
     this.#enableProcessingState();
-    // only file cells require an additional validation step. The rest of the cells are either autofilled or validated
-    // by the browser required fields
+    // only required file cells require an additional validation step. The rest of the cells are either autofilled or
+    // validated by the browser required fields
     let readyToSubmit = this.#validateFileCells();
     if (!readyToSubmit) {
       this.#disableProcessingState();
