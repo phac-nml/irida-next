@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Connects to data-controller="filters"
+// Handles sending metadata and file form values to samplesheet FormData
 export default class extends Controller {
   static values = { inputName: { type: String }, inputValue: { type: String } };
 
