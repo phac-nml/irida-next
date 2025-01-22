@@ -6,6 +6,7 @@ module Nextflow
     class MetadataCellComponent < ViewComponent::Base
       attr_reader :form, :metadata, :name, :sample, :required, :index
 
+      # rubocop: disable Metrics/ParameterLists
       def initialize(form:, name:, sample:, index:, field: nil, required: false)
         @form = form
         @name = name
@@ -14,6 +15,7 @@ module Nextflow
         @index = index
         @metadata = metadata_value(field || name)
       end
+      # rubocop: enable Metrics/ParameterLists
 
       def metadata_value(name)
         sample.metadata.fetch(name, '')

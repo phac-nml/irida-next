@@ -45,9 +45,7 @@ module Nextflow
           [name, sample.most_recent_other_file(property['autopopulate'], property['pattern'])[:global_id]]
         when 'metadata_cell'
           [name, sample.metadata.fetch(name, '')]
-        when 'dropdown_cell'
-          [name, '']
-        when 'input_cell'
+        when 'dropdown_cell' || 'input_cell'
           [name, '']
         end
       end
