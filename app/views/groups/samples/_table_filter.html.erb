@@ -29,5 +29,5 @@
     status: query.advanced_query?,
   ) %>
   <%= render partial: "projects/samples/shared/metadata_toggle", locals: { form: f } %>
-  <%= f.submit hidden: true, "data-action": "advanced-search#idempotentConnect" %>
+  <%= f.submit hidden: true %>
 <% end %>

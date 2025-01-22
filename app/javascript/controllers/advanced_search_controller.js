@@ -13,11 +13,7 @@ export default class extends Controller {
 
   connect() {}
 
-  idempotentConnect() {
-    this.listFilterOutlets.forEach((outlet) => {
-      outlet.idempotentConnect();
-    });
-  }
+  idempotentConnect() {}
 
   addCondition(event) {
     let group = event.currentTarget.parentElement.closest(

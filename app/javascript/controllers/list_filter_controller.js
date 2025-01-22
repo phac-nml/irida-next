@@ -11,7 +11,7 @@ export default class extends Controller {
   static values = { filters: { type: Array, default: [] } };
 
   connect() {
-    this.#updateCount();
+    this.idempotentConnect();
   }
 
   idempotentConnect() {

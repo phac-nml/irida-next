@@ -8,7 +8,7 @@
             inline-flex items-center justify-center w-1/2 text-sm border rounded-s-md
             cursor-pointer sm:w-auto focus:z-10 text-sm px-5 py-2.5
           "
-          data-action="advanced-search#idempotentConnect viral--dialog#open"
+          data-action="viral--dialog#open"
           aria-label="<%= t(".title") %>"
         >
           <%= t(".title") %>
@@ -26,11 +26,7 @@
         </button>
       </div>
     <% else %>
-      <%= viral_button(
-        data: {
-          action: "advanced-search#idempotentConnect viral--dialog#open",
-        },
-      ) { t(".title") } %>
+      <%= viral_button(data: { action: "viral--dialog#open" }) { t(".title") } %>
     <% end %>
   <% end %>
   <%= dialog.with_header(title: t(".title")) %>
