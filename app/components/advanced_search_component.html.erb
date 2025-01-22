@@ -66,11 +66,7 @@
 <% end %>
 <template data-advanced-search-target="listValueTemplate">
   <div class="form-field w-6/12 value">
-    <div
-      data-controller="list-filter"
-      data-list-filter-filters-value="'[]'"
-      class="list-filter"
-    >
+    <div data-controller="list-filter" class="list-filter">
       <%= render ListInputComponent.new(
         list_input_form_name:
           "q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][value][]",
