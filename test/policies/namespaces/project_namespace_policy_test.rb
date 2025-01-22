@@ -66,16 +66,12 @@ module Namespaces
       assert @policy.apply(:update_sample_metadata?)
     end
 
-    test '#create_metadata_templates?' do
-      assert @policy.apply(:create_metadata_templates?)
+    test '#create_metadata_template?' do
+      assert @policy.apply(:create_metadata_template?)
     end
 
-    test '#update_metadata_templates?' do
-      assert @policy.apply(:update_metadata_templates?)
-    end
-
-    test '#destroy_metadata_templates?' do
-      assert @policy.apply(:destroy_metadata_templates?)
+    test '#destroy_metadata_template?' do
+      assert @policy.apply(:destroy_metadata_template?)
     end
 
     test '#view_metadata_templates?' do
