@@ -18,7 +18,7 @@ module MetadataTemplates
       end
     end
 
-    test 'failes to updates metadata template with invalid params' do
+    test 'fails to update metadata template with invalid params' do
       invalid_params = { fields: nil }
 
       assert_no_changes -> { @metadata_template.reload.fields } do
@@ -29,11 +29,13 @@ module MetadataTemplates
     end
 
     test 'fails to update metadata template with numerical fields' do
-      invalid_params = { fields: [1, 2, 3, 4] }
+      invalid_params = { fields: [1] }
 
       assert_no_changes -> { @metadata_template.reload.fields } do
         MetadataTemplates::UpdateService.new(@user, @metadata_template, invalid_params).execute
       end
+      assert_equal @metadata_template.errors[:fields],
+                   ['value at `/0` is not a string', 'Validation failed: Fields value at `/0` is not a string']
     end
 
     test 'updates metadata template with incorrect permissions' do
