@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/phac-nml/azure-blob.git
-  revision: 879c5f748e6e6e2c1cc6566bbf7a6c39b77acef8
+  revision: 6b9d5d55954d8818a4822c40927148bd6f9e12fe
   branch: copy-blob
   specs:
     azure-blob (0.5.6)
@@ -511,7 +511,7 @@ GEM
       actionpack (>= 5.2)
       railties (>= 5.2)
     retriable (3.1.2)
-    rexml (3.3.9)
+    rexml (3.4.0)
     roo (2.10.1)
       nokogiri (~> 1)
       rubyzip (>= 1.3.0, < 3.0.0)
