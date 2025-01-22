@@ -259,6 +259,12 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
+  def update_metadata_template?
+    return true if effective_access_level >= Member::AccessLevel::ANALYST
+
+    false
+  end
+
   def destroy_metadata_template?
     return true if effective_access_level >= Member::AccessLevel::ANALYST
 

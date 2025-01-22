@@ -181,5 +181,12 @@ module Namespaces
       details[:name] = record.name
       false
     end
+
+    def update_metadata_template?
+      return true if effective_access_level >= Member::AccessLevel::ANALYST
+
+      details[:name] = record.name
+      false
+    end
   end
 end

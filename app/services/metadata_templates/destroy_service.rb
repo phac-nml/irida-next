@@ -14,6 +14,21 @@ module MetadataTemplates
       authorize! @metadata_template.namespace, to: :destroy_metadata_template?
 
       @metadata_template.destroy
+
+      create_activities if @metadata_template.deleted?
+    end
+
+    def create_activities
+      activity_key = @metadata_template.namespace.group_namespace? ? 'group.metadata_template.destroy' : 'namespaces_project_namespace.metadata_template.destroy'
+
+      @metadata_template.namespace.create_activity key: activity_key,
+                                                   owner: current_user,
+                                                   parameters: {
+                                                     template_name: @metadata_template.name,
+                                                     template_id: @metadata_template.id,
+                                                     namespace_id: @metadata_template.namespace.id,
+                                                     action: 'metadata_template_destroy'
+                                                   }
     end
   end
 end

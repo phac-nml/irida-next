@@ -23,7 +23,8 @@ module Activities
     end
 
     def metadata_template_link
-      @activity[:action] == 'metadata_template_create'
+      metadata_template_action_types = %w[metadata_template_create metadata_template_update metadata_template_destroy]
+      metadata_template_action_types.include?(@activity[:action])
     end
   end
 end
