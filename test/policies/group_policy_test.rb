@@ -97,6 +97,14 @@ class GroupPolicyTest < ActiveSupport::TestCase
     assert @policy.apply(:destroy_attachment?)
   end
 
+  test '#create_metadata_template?' do
+    assert @policy.apply(:create_metadata_template?)
+  end
+
+  test '#destroy_metadata_template?' do
+    assert @policy.apply(:destroy_metadata_template?)
+  end
+
   test 'scope' do
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 

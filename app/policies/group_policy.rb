@@ -254,8 +254,15 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   def create_metadata_template?
-    return true if Member::AccessLevel.manageable.include?(effective_access_level)
+    return true if effective_access_level >= Member::AccessLevel::ANALYST
 
+    false
+  end
+
+  def destroy_metadata_template?
+    return true if effective_access_level >= Member::AccessLevel::ANALYST
+
+    details[:name] = record.name
     false
   end
 
