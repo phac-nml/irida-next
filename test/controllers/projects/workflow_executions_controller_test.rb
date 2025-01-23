@@ -43,6 +43,31 @@ module Projects
       assert_response :success
     end
 
+    test 'should show shared workflow execution' do
+      workflow_execution = workflow_executions(:workflow_execution_shared1)
+
+      get namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
+
+      assert_response :success
+    end
+
+    test 'should not show shared workflow execution for user with incorrect permissions' do
+      sign_in users(:micha_doe)
+      workflow_execution = workflow_executions(:workflow_execution_shared1)
+
+      get namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
+
+      assert_response :unauthorized
+    end
+
+    test 'should not show workflow execution that is not shared' do
+      workflow_execution = workflow_executions(:workflow_execution_valid)
+
+      get namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
+
+      assert_response :not_found
+    end
+
     test 'should not show workflow execution for user with incorrect permissions' do
       sign_in users(:micha_doe)
       workflow_execution = workflow_executions(:automated_workflow_execution)
