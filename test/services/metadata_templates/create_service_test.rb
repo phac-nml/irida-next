@@ -211,12 +211,10 @@ module MetadataTemplates
       MetadataTemplates::CreateService.new(@user, @namespace, valid_params).execute
 
       assert_no_difference -> { MetadataTemplate.count } do
-        assert_raises(ActiveRecord::RecordInvalid) do
-          MetadataTemplates::CreateService.new(@user, @namespace, valid_params).execute
-          assert @namespace
-            .errors
-            .full_messages.include?(I18n.t('activerecord.errors.models.metadata_template.attributes.name.taken'))
-        end
+        MetadataTemplates::CreateService.new(@user, @namespace, valid_params).execute
+        assert @namespace
+          .errors
+          .full_messages.first.include?(I18n.t('activerecord.errors.models.metadata_template.attributes.name.taken'))
       end
     end
   end
