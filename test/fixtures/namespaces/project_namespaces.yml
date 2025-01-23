@@ -302,7 +302,7 @@ project28_namespace:
   description: Project 28 description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:david_doe_group_four, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:david_doe, :uuid) %>
-  metadata_summary: { "unique_metadata_field": 1 }
+  metadata_summary: { "unique.metadata.field": 1 }
   puid: INXT_PRJ_AAAAAAAABA
 
 project29_namespace:

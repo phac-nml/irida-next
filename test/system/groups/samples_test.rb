@@ -12,6 +12,7 @@ module Groups
       @group = groups(:group_one)
       @sample1 = samples(:sample1)
       @sample2 = samples(:sample2)
+      @sample3 = samples(:sample3)
       @sample9 = samples(:sample9)
       @sample25 = samples(:sample25)
       @sample28 = samples(:sample28)
@@ -476,6 +477,53 @@ module Groups
         assert_selector "tr[id='#{@sample1.id}']"
         assert_selector "tr[id='#{@sample2.id}']"
         assert_selector "tr[id='#{@sample9.id}']"
+      end
+    end
+
+    test 'filter samples with advanced search using metadata fields names with extra periods' do
+      visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+
+      within '#samples-table table tbody' do
+        assert_selector "tr[id='#{@sample1.id}']"
+        assert_selector "tr[id='#{@sample2.id}']"
+        assert_selector "tr[id='#{@sample3.id}']"
+      end
+
+      click_button I18n.t(:'advanced_search_component.title')
+      within '#advanced-search-dialog' do
+        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        within all("div[data-advanced-search-target='groupsContainer']")[0] do
+          within all("div[data-advanced-search-target='conditionsContainer']")[0] do
+            find("select[name$='[field]']").find("option[value='metadata.unique.metadata.field']").select_option
+            find("select[name$='[operator]']").find("option[value='=']").select_option
+            find("input[name$='[value]']").fill_in with: @sample28.metadata['unique.metadata.field']
+          end
+        end
+
+        click_button I18n.t(:'advanced_search_component.apply_filter_button')
+      end
+
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 1
+        # sample28 found
+        assert_no_selector "tr[id='#{@sample1.id}']"
+        assert_no_selector "tr[id='#{@sample2.id}']"
+        assert_no_selector "tr[id='#{@sample3.id}']"
+        assert_selector "tr[id='#{@sample28.id}']"
+      end
+
+      click_button I18n.t(:'advanced_search_component.title')
+      within '#advanced-search-dialog' do
+        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        click_button I18n.t(:'advanced_search_component.clear_filter_button')
+      end
+
+      within '#samples-table table tbody' do
+        assert_selector "tr[id='#{@sample1.id}']"
+        assert_selector "tr[id='#{@sample2.id}']"
+        assert_selector "tr[id='#{@sample3.id}']"
       end
     end
 

@@ -113,7 +113,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
     groups.each do |group|
       and_conditions = {}
       group.conditions.map do |condition|
-        key = condition.field.gsub(/(?<!metadata)\./, '___')
+        key = condition.field.gsub(/(?<!^metadata)\./, '___')
         case condition.operator
         when '=', 'in'
           and_conditions[key] = condition.value
