@@ -2,7 +2,7 @@
   data-controller="projects--samples--metadata--complete"
   data-projects--samples--metadata--complete-filters-outlet=".filters"
 >
-  <p class="mb-4"><%= t(".description") %></p>
+  <p class="mb-4 dark:text-white"><%= t(".description") %></p>
 
   <% errors.each do |error| %>
     <%= viral_alert(type:, message: error, classes: "mb-4") %>
