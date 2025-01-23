@@ -17,7 +17,7 @@ module MetadataTemplates
       assert_not MetadataTemplate.exists?(@metadata_template.id)
     end
 
-    test 'destroys metadata template with incorrect permissions' do
+    test 'fails to destroy metadata template with incorrect permissions' do
       user = users(:steve_doe)
 
       assert_raises(ActionPolicy::Unauthorized) do
