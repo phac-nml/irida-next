@@ -196,7 +196,7 @@ module Namespaces
       false
     end
 
-    def update_metadata_template?
+    def update_metadata_templates?
       return true if Member::AccessLevel.manageable.include?(effective_access_level)
 
       details[:name] = record.name
