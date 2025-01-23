@@ -16,7 +16,13 @@ module Projects
     end
 
     def workflow_execution
-      @workflow_execution = WorkflowExecution.find_by!(id: params[:id], submitter: @project.namespace.automation_bot)
+      @workflow_execution = WorkflowExecution.find_by(
+        id: params[:id],
+        submitter: @project.namespace.automation_bot,
+        shared_with_namespace: false
+      ) || WorkflowExecution.find_by(id: params[:id], namespace:, shared_with_namespace: true)
+
+      raise ActiveRecord::RecordNotFound if @workflow_execution.nil?
     end
 
     def workflow_execution_update_params
