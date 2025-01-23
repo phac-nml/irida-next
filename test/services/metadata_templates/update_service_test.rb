@@ -38,7 +38,7 @@ module MetadataTemplates
                    ['value at `/0` is not a string', 'Validation failed: Fields value at `/0` is not a string']
     end
 
-    test 'updates metadata template with incorrect permissions' do
+    test 'fails to update metadata template with incorrect permissions' do
       valid_params = { name: 'new-metadata-template-name', description: 'new-metadata-template-description' }
       user = users(:ryan_doe)
 
