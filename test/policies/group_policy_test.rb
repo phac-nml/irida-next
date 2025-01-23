@@ -97,16 +97,16 @@ class GroupPolicyTest < ActiveSupport::TestCase
     assert @policy.apply(:destroy_attachment?)
   end
 
-  test '#create_metadata_template?' do
-    assert @policy.apply(:create_metadata_template?)
+  test '#create_metadata_templates?' do
+    assert @policy.apply(:create_metadata_templates?)
   end
 
-  test '#destroy_metadata_template?' do
-    assert @policy.apply(:destroy_metadata_template?)
+  test '#destroy_metadata_templates?' do
+    assert @policy.apply(:destroy_metadata_templates?)
   end
 
-  test '#update_metadata_template?' do
-    assert @policy.apply(:update_metadata_template?)
+  test '#update_metadata_templates?' do
+    assert @policy.apply(:update_metadata_templates?)
   end
 
   test 'scope' do
