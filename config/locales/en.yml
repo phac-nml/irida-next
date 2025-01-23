@@ -919,6 +919,10 @@ en:
         select_all_button: Select All
         subtitle: These are the workflow executions that have been shared within this group
         title: Workflow Executions
+      table:
+        empty:
+          description: There are no automated pipelines associated with this project.
+          title: No automated pipelines.
   layouts:
     application:
       site_title: IRIDA Next
