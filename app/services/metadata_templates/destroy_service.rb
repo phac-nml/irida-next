@@ -19,7 +19,11 @@ module MetadataTemplates
     end
 
     def create_activities
-      activity_key = @metadata_template.namespace.group_namespace? ? 'group.metadata_template.destroy' : 'namespaces_project_namespace.metadata_template.destroy'
+      activity_key = if @metadata_template.namespace.group_namespace?
+                       'group.metadata_template.destroy'
+                     else
+                       'namespaces_project_namespace.metadata_template.destroy'
+                     end
 
       @metadata_template.namespace.create_activity key: activity_key,
                                                    owner: current_user,
