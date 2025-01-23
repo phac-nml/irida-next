@@ -78,7 +78,7 @@ module WorkflowExecutions
     end
 
     def individual_path(workflow_execution)
-      if @namespace
+      if @namespace && @namespace.type == 'Project'
         namespace_project_workflow_execution_path(
           @namespace.parent,
           @namespace.project,
