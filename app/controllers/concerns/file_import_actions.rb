@@ -8,20 +8,27 @@ module FileImportActions
     before_action proc { namespace }
   end
 
-  def create
-    authorize! @namespace, to: :update_sample_metadata?
-    @imported_metadata = ::Samples::Metadata::FileImportService.new(@namespace, current_user,
-                                                                    file_import_params).execute
-    if @namespace.errors.empty?
-      render status: :ok, locals: { type: :success, message: t('concerns.file_import_actions.create.success') }
-    elsif @namespace.errors.include?(:sample)
-      errors = @namespace.errors.messages_for(:sample)
-      render status: :partial_content,
-             locals: { type: :alert, message: t('concerns.file_import_actions.create.error'), errors: }
-    else
-      error = @namespace.errors.full_messages_for(:base).first
-      render status: :unprocessable_entity, locals: { type: :danger, message: error }
-    end
+  def new
+    @broadcast_target = "metadata_import_#{SecureRandom.uuid}"
+  end
+
+  def create # rubocop:disable Metrics/AbcSize
+    @broadcast_target = params[:broadcast_target]
+
+    blob = ActiveStorage::Blob.create_and_upload!(
+      io: file_import_params[:file],
+      filename: file_import_params[:file].original_filename,
+      content_type: file_import_params[:file].content_type
+    )
+
+    ::Samples::MetadataImportJob.set(
+      wait_until: 1.second.from_now
+    ).perform_later(
+      @namespace, current_user,
+      @broadcast_target, blob.id, file_import_params.except(:file)
+    )
+
+    render status: :ok
   end
 
   private

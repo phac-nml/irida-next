@@ -1088,7 +1088,9 @@ module Projects
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        perform_enqueued_jobs do
+          click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        end
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -1151,7 +1153,9 @@ module Projects
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xls')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        perform_enqueued_jobs do
+          click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        end
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -1215,7 +1219,9 @@ module Projects
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xlsx')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        perform_enqueued_jobs do
+          click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        end
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -1260,7 +1266,9 @@ module Projects
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        perform_enqueued_jobs do
+          click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        end
       end
       ### ACTIONS END ###
 
@@ -1294,13 +1302,19 @@ module Projects
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         # enable ignore empty values
         find('input#file_import_ignore_empty_values').click
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        ### ACTIONS END ###
+        perform_enqueued_jobs do
+          click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        end
+      end
 
-        ### VERIFY START ###
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      within('#dialog') do
         assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
         click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
       end
+      ### VERIFY END ###
 
       within("tr[id='#{@sample32.id}']") do
         # unchanged value
@@ -1331,7 +1345,9 @@ module Projects
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         # leave ignore empty values disabled
         assert_not find('input#file_import_ignore_empty_values').checked?
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        perform_enqueued_jobs do
+          click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        end
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -1358,7 +1374,9 @@ module Projects
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/duplicate_headers.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        perform_enqueued_jobs do
+          click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        end
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -1381,7 +1399,9 @@ module Projects
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_rows.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        perform_enqueued_jobs do
+          click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        end
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -1404,7 +1424,9 @@ module Projects
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        perform_enqueued_jobs do
+          click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        end
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -1441,7 +1463,9 @@ module Projects
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/mixed_project_samples.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        perform_enqueued_jobs do
+          click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        end
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -1489,7 +1513,9 @@ module Projects
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_analysis_values.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
-        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        perform_enqueued_jobs do
+          click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        end
         ### ACTIONS END ###
 
         ### VERIFY START ###

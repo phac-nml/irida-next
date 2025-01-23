@@ -8,14 +8,15 @@ module Samples
     class FileImportService < BaseService # rubocop:disable Metrics/ClassLength
       SampleMetadataFileImportError = Class.new(StandardError)
 
-      def initialize(namespace, user = nil, params = {})
+      def initialize(namespace, user = nil, blob_id = nil, params = {})
         super(user, params)
         @namespace = namespace
-        @file = params[:file]
+        @file = ActiveStorage::Blob.find(blob_id)
         @sample_id_column = params[:sample_id_column]
         @ignore_empty_values = params[:ignore_empty_values]
         @spreadsheet = nil
         @headers = nil
+        @temp_import_file = Tempfile.new
       end
 
       def execute
@@ -41,7 +42,7 @@ module Samples
       end
 
       def validate_file_extension
-        file_extension = File.extname(@file).downcase
+        file_extension = File.extname(@file.filename.to_s).downcase
 
         return file_extension if %w[.csv .tsv .xls .xlsx].include?(file_extension)
 
@@ -83,11 +84,7 @@ module Samples
 
         extension = validate_file_extension
 
-        @spreadsheet = if extension.eql? '.tsv'
-                         Roo::CSV.new(@file, csv_options: { col_sep: "\t" })
-                       else
-                         Roo::Spreadsheet.open(@file)
-                       end
+        download_metadata_import_file(extension)
 
         @headers = @spreadsheet.row(1).compact
 
@@ -96,10 +93,26 @@ module Samples
         validate_file_rows
       end
 
+      def download_metadata_import_file(extension)
+        begin
+          @temp_import_file.binmode
+          @file.download do |chunk|
+            @temp_import_file.write(chunk)
+          end
+        ensure
+          @temp_import_file.close
+        end
+        @spreadsheet = if extension.eql? '.tsv'
+                         Roo::CSV.new(@temp_import_file.path, extension:,
+                                                              csv_options: { col_sep: "\t" })
+                       else
+                         Roo::Spreadsheet.open(@temp_import_file.path, extension:)
+                       end
+      end
+
       def perform_file_import
         response = {}
         parse_settings = @headers.zip(@headers).to_h
-
         @spreadsheet.each_with_index(parse_settings) do |metadata, index|
           next unless index.positive?
 
@@ -110,10 +123,18 @@ module Samples
 
           metadata_changes = process_sample_metadata_row(sample_id, metadata)
           response[sample_id] = metadata_changes if metadata_changes
+          cleanup_files
+          response
         rescue ActiveRecord::RecordNotFound
           @namespace.errors.add(:sample, error_message(sample_id))
         end
         response
+      end
+
+      def cleanup_files
+        # delete the blob and temporary file as we no longer require them
+        @file.purge
+        @temp_import_file.unlink
       end
 
       def error_message(sample_id)
