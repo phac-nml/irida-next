@@ -24,8 +24,8 @@
     search: @query,
     fields: @advanced_search_fields,
     operations: %w[= != <= >= contains in not_in],
-    open: query.errors.any?,
-    status: query.advanced_query?,
+    open: @query.errors.any?,
+    status: @query.advanced_query?,
   ) %>
   <%= render partial: "projects/samples/shared/metadata_toggle", locals: { form: f } %>
   <%= f.submit hidden: true %>
