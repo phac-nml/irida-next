@@ -197,7 +197,7 @@ module Namespaces
     end
 
     def update_metadata_template?
-      return true if effective_access_level >= Member::AccessLevel::ANALYST
+      return true if effective_access_level >= Member::AccessLevel::MAINTAINER
 
       details[:name] = record.name
       false
