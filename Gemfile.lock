@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/phac-nml/azure-blob.git
-  revision: 1b4c6b15e4753c81f70d8e834f856de401002f8a
+  revision: 9d6b5d5576f9a3b3b30c9d81db6213346ed446ee
   branch: copy-blob
   specs:
     azure-blob (0.5.6)
