@@ -9,7 +9,7 @@ module Groups
       private
 
       def metadata_template_params
-        params.require(:metadata_template).permit
+        params.require(:metadata_template).permit(:name, fields: [])
       end
 
       protected

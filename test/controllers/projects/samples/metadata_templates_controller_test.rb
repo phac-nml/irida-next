@@ -14,7 +14,7 @@ module Projects
       end
 
       test 'create metadata template' do
-        template_params = { name: 'New Template', fields: %w[field1 field2] }
+        template_params = { metadata_template: { name: 'New Template', fields: %w[field1 field2] } }
         post namespace_project_samples_metadata_templates_path(@namespace.parent, @namespace.project,
                                                                format: :turbo_stream), params: template_params
 
@@ -22,7 +22,7 @@ module Projects
       end
 
       test 'update metadata template' do
-        template_params = { name: 'New Name', fields: %w[field4 field5 field6] }
+        template_params = { metadata_template: { name: 'New Name', fields: %w[field4 field5 field6] } }
         put namespace_project_samples_metadata_template_path(@namespace.parent, @namespace.project, @metadata_template,
                                                              format: :turbo_stream), params: template_params
 
