@@ -169,32 +169,39 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   end
 
   def namespace_project_sample_activity_parameters(params, activity)
+    params = add_sample_activity_params(params, activity)
+    params = add_metadata_template_params(params, activity)
+    add_bulk_sample_params(params, activity)
+  end
+
+  def add_sample_activity_params(params, activity)
     sample_activity_action_types = %w[sample_create sample_update metadata_update sample_destroy attachment_create
                                       attachment_destroy]
+    return params unless sample_activity_action_types.include?(activity.parameters[:action])
 
-    if sample_activity_action_types.include?(activity.parameters[:action])
-      params.merge!({
-                      sample_id: activity.parameters[:sample_id],
-                      sample_puid: activity.parameters[:sample_puid]
-                    })
-    end
+    params.merge(
+      sample_id: activity.parameters[:sample_id],
+      sample_puid: activity.parameters[:sample_puid]
+    )
+  end
 
+  def add_metadata_template_params(params, activity)
     metadata_template_action_types = %w[metadata_template_create metadata_template_update metadata_template_destroy]
-    if metadata_template_action_types.include?(activity.parameters[:action])
-      params.merge!({
-                      template_id: activity.parameters[:template_id],
-                      template_name: activity.parameters[:template_name]
-                    })
-    end
+    return params unless metadata_template_action_types.include?(activity.parameters[:action])
 
-    if activity.parameters[:action] == 'sample_destroy_multiple'
-      params.merge!({
-                      deleted_count: activity.parameters[:deleted_count],
-                      samples_deleted_puids: activity.parameters[:samples_deleted_puids]
-                    })
-    end
+    params.merge(
+      template_id: activity.parameters[:template_id],
+      template_name: activity.parameters[:template_name]
+    )
+  end
 
-    params
+  def add_bulk_sample_params(params, activity)
+    return params unless activity.parameters[:action] == 'sample_destroy_multiple'
+
+    params.merge(
+      deleted_count: activity.parameters[:deleted_count],
+      samples_deleted_puids: activity.parameters[:samples_deleted_puids]
+    )
   end
 
   def format_created_at(created_at)
