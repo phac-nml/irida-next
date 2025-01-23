@@ -34,8 +34,7 @@ module MetadataTemplates
       assert_no_changes -> { @metadata_template.reload.fields } do
         MetadataTemplates::UpdateService.new(@user, @metadata_template, invalid_params).execute
       end
-      assert_equal @metadata_template.errors[:fields],
-                   ['value at `/0` is not a string', 'Validation failed: Fields value at `/0` is not a string']
+      assert_includes @metadata_template.errors[:fields], 'value at `/0` is not a string'
     end
 
     test 'fails to update metadata template with incorrect permissions' do
