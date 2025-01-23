@@ -29,7 +29,6 @@ module MetadataTemplates
                                                    owner: current_user,
                                                    parameters: {
                                                      template_name: @metadata_template.name,
-                                                     template_id: @metadata_template.id,
                                                      namespace_id: @metadata_template.namespace.id,
                                                      action: 'metadata_template_destroy'
                                                    }
