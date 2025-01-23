@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # model to represent sample search group
-class Sample::Group # rubocop:disable Style/ClassAndModuleChildren
+class Sample::SearchGroup # rubocop:disable Style/ClassAndModuleChildren
   include ActiveModel::Model
   include ActiveModel::Attributes
 
@@ -14,7 +14,7 @@ class Sample::Group # rubocop:disable Style/ClassAndModuleChildren
   def conditions_attributes=(attributes)
     @conditions ||= []
     attributes.each_value do |condition_params|
-      @conditions.push(Sample::Condition.new(condition_params))
+      @conditions.push(Sample::SearchCondition.new(condition_params))
     end
   end
 

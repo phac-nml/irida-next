@@ -11,7 +11,7 @@ class Sample::Search # rubocop:disable Style/ClassAndModuleChildren
   def groups_attributes=(attributes)
     @groups ||= []
     attributes.each_value do |group_params|
-      @groups.push(Sample::Group.new(group_params))
+      @groups.push(Sample::SearchGroup.new(group_params))
     end
   end
 

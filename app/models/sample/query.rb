@@ -14,7 +14,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
   attribute :name_or_puid_in, default: -> { [] }
   attribute :project_ids, default: -> { [] }
   attribute :groups, default: lambda {
-    [Sample::Group.new(conditions: [Sample::Condition.new(field: '', operator: '', value: '')])]
+    [Sample::SearchGroup.new(conditions: [Sample::SearchCondition.new(field: '', operator: '', value: '')])]
   }
   attribute :sort, :string, default: 'updated_at desc'
   attribute :advanced_query, :boolean, default: false
@@ -36,10 +36,10 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
       conditions ||= []
       group_attributes.each_value do |conditions_attributes|
         conditions_attributes.each_value do |condition_params|
-          conditions.push(Sample::Condition.new(condition_params))
+          conditions.push(Sample::SearchCondition.new(condition_params))
         end
       end
-      groups.push(Sample::Group.new(conditions:))
+      groups.push(Sample::SearchGroup.new(conditions:))
     end
     assign_attributes(groups:)
   end

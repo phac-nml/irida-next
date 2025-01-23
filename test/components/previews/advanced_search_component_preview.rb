@@ -4,16 +4,16 @@ class AdvancedSearchComponentPreview < ViewComponent::Preview
   def default # rubocop:disable Metrics/MethodLength
     search = Sample::Search.new(
       groups: [
-        Sample::Group.new(
+        Sample::SearchGroup.new(
           conditions: [
-            Sample::Condition.new(field: 'metadata.country', operator: '=', value: 'Canada'),
-            Sample::Condition.new(field: 'metadata.collection_date', operator: '>=', value: '2024-01-01'),
-            Sample::Condition.new(field: 'metadata.collection_date', operator: '<=', value: '2024-12-01')
+            Sample::SearchCondition.new(field: 'metadata.country', operator: '=', value: 'Canada'),
+            Sample::SearchCondition.new(field: 'metadata.collection_date', operator: '>=', value: '2024-01-01'),
+            Sample::SearchCondition.new(field: 'metadata.collection_date', operator: '<=', value: '2024-12-01')
           ]
         ),
-        Sample::Group.new(
+        Sample::SearchGroup.new(
           conditions: [
-            Sample::Condition.new(field: 'metadata.outbreak_code', operator: '=', value: '2406MLGX6-1')
+            Sample::SearchCondition.new(field: 'metadata.outbreak_code', operator: '=', value: '2406MLGX6-1')
           ]
         )
       ]

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # model to represent sample search condition
-class Sample::Condition # rubocop:disable Style/ClassAndModuleChildren
+class Sample::SearchCondition # rubocop:disable Style/ClassAndModuleChildren
   include ActiveModel::Model
   include ActiveModel::Attributes
 
