@@ -168,6 +168,11 @@ en:
           destroy:
             last_member: Cannot remove this member as this would leave the %{namespace_type} without an owner.
             last_member_self: You cannot remove yourself as this would leave the %{namespace_type} without an owner.
+        metadata_template:
+          attributes:
+            name:
+              blank: can't be blank
+              taken: has already been taken
         namespace:
           attributes:
             name:

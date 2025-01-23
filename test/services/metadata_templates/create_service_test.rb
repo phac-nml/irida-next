@@ -103,6 +103,7 @@ module MetadataTemplates
 
       assert_no_difference -> { MetadataTemplate.count } do
         MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
+        assert @namespace.errors.full_messages.include?(I18n.t('services.metadata_templates.create.required.fields'))
       end
     end
 
@@ -115,9 +116,13 @@ module MetadataTemplates
 
       MetadataTemplates::CreateService.new(@user, @namespace, valid_params).execute
 
-      # Attempt to create second template with same name
       assert_no_difference -> { MetadataTemplate.count } do
-        MetadataTemplates::CreateService.new(@user, @namespace, valid_params).execute
+        assert_raises(ActiveRecord::RecordInvalid) do
+          MetadataTemplates::CreateService.new(@user, @namespace, valid_params).execute
+          assert @namespace
+            .errors
+            .full_messages.include?(I18n.t('activerecord.errors.models.metadata_template.attributes.name.taken'))
+        end
       end
     end
   end
