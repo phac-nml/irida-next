@@ -1,0 +1,70 @@
+<template data-list-filter-target="template">
+  <%= viral_pill(color: :blue, classes: "search-tag inline-flex items-center filter-item mb-1 mr-1 py-1.5") do %>
+    <input
+      multiple="multiple"
+      class="hidden"
+      data="turbo-temporary"
+      name="<%= list_input_form_name %>"
+    >
+    <span class="mr-1 font-mono text-base font-semibold label"></span>
+    <button
+      type="button"
+      class="
+        inline-flex items-center p-1 text-sm bg-transparent rounded-full text-slate-400
+        hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-600
+        dark:hover:text-blue-300
+      "
+      data-action="click->list-filter#remove"
+      aria-label="<%= t(:'components.list_input.remove_tag') %>"
+    >
+      <%= viral_icon(name: "x_mark", classes: "w-4 h-4") %>
+    </button>
+  <% end %>
+</template>
+<div class="space-y-4">
+  <% if @show_description %>
+    <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+      <%= raw t(:"components.list_input.description") %>
+    </p>
+  <% end %>
+  <div
+    class="
+      relative flex flex-wrap font-mono bg-slate-50 border border-slate-300
+      text-slate-900 text-sm rounded-lg focus-within:ring-primary-500
+      focus-within:border-primary-500 w-full p-2.5 dark:bg-slate-700
+      dark:border-slate-600 dark:placeholder-slate-400 dark:text-white
+      dark:focus-within:ring-primary-500 dark:focus-within:border-primary-500k
+    "
+    data-list-filter-target="tags"
+    data-action="click->list-filter#focus"
+  >
+    <input
+      type="text"
+      name="<%= list_input_form_name %>"
+      class="bg-transparent border-none focus:outline-none focus:ring-0 grow"
+      autofocus
+      aria-label="<%= t(:'components.list_input.description') %>"
+      data-action='
+        keydown->list-filter#handleInput
+        paste->list-filter#handlePaste
+        turbo:morph-element->list-filter#idempotentConnect
+      '
+      data-list-filter-target="input"
+    />
+    <button
+      type="button"
+      class="
+        absolute inline-flex items-center justify-center w-5 h-5 text-xs font-bold
+        rounded-full text-slate-600 bg-slate-100 border-3 border-slate-10 bottom-2 end-2
+        dark:text-slate-300 dark:border-slate-900 dark:bg-slate-600
+        dark:hover:bg-slate-500 hover:bg-slate-300
+      "
+      data-action="click->list-filter#clear"
+      aria-label="<%= t(:'components.list_input.clear') %>"
+      title="<%= t(:'components.list_input.clear') %>"
+    >
+      <%= viral_icon(name: "x_mark", classes: "h-4 w-4") %>
+    </button>
+  </div>
+
+</div>

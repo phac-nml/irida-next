@@ -37,6 +37,24 @@ module Projects
       assert_response :success
     end
 
+    test 'should search' do
+      post search_namespace_project_samples_url(@namespace, @project),
+           params: { q: { name_or_puid_cont: '',
+                          groups_attributes: { '0': { conditions_attributes:
+                          { '0': { field: 'name', operator: 'contains', value: 'Sample 1' } } } } } },
+           as: :turbo_stream
+      assert_response :success
+    end
+
+    test 'should not search with invalid query' do
+      post search_namespace_project_samples_url(@namespace, @project),
+           params: { q: { name_or_puid_cont: '',
+                          groups_attributes: { '0': { conditions_attributes:
+                          { '0': { field: 'name', operator: 'contains', value: '' } } } } } },
+           as: :turbo_stream
+      assert_response :unprocessable_entity
+    end
+
     test 'should create sample' do
       assert_difference('Sample.count') do
         post namespace_project_samples_url(@namespace, @project),

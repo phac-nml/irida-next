@@ -1,0 +1,22 @@
+<% invalid_value = @condition.errors.include?(:value) %>
+<div class="form-field w-6/12 value <%= 'invalid' if invalid_value %>">
+  <% if %w[in not_in].include?(@condition.operator) %>
+    <div
+      data-controller="list-filter"
+      data-list-filter-filters-value="<%= @condition.value.present? ? @condition.value.to_s : '[]' %>"
+      class="list-filter"
+    >
+      <%= render ListInputComponent.new(
+        list_input_form_name:
+          "q[groups_attributes][#{@group_index}][conditions_attributes][#{@condition_index}][value][]",
+        show_description: false,
+      ) %>
+    </div>
+  <% else %>
+    <%= @conditions_form.text_field :value,
+                                placeholder: t("advanced_search_component.value"),
+                                "aria-label": t("advanced_search_component.value") %>
+  <% end %>
+  <%= render "shared/form/field_errors",
+  errors: @condition.errors.full_messages_for(:value) %>
+</div>

@@ -16,7 +16,15 @@ module Groups
     end
 
     def search
-      redirect_to group_samples_path(request.request_parameters.slice(:limit, :page))
+      respond_to do |format|
+        format.turbo_stream do
+          if @query.valid?
+            render status: :ok
+          else
+            render status: :unprocessable_entity
+          end
+        end
+      end
     end
 
     def select
@@ -75,6 +83,7 @@ module Groups
 
       @search_params = search_params
       set_metadata_fields
+      advanced_search_fields(@group)
 
       project_ids =
         authorized_scope(Project, type: :relation, as: :group_projects, scope_options: { group: @group }).pluck(:id)

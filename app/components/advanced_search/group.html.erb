@@ -1,0 +1,25 @@
+<div
+  data-advanced-search-target="groupsContainer"
+  class="border border-gray-300 rounded-lg"
+>
+  <%= @form.fields_for :groups, @group do |groups_form| %>
+    <% @group.conditions.each_with_index do |condition, condition_index| %>
+      <%= render AdvancedSearch::Condition.new(
+        groups_form: groups_form,
+        group_index: @group_index,
+        condition: condition,
+        condition_index: condition_index,
+        fields: @fields,
+        operations: @operations,
+      ) %>
+    <% end %>
+  <% end %>
+  <div class="flex justify-end space-x-2 p-4">
+    <%= viral_button(data: { action: "advanced-search#addCondition" }) do %>
+      <%= t("advanced_search_component.add_condition_button") %>
+    <% end %>
+    <%= viral_button(classes: class_names(hidden: !@show_remove_group_button), data: { action: "advanced-search#removeGroup" }) do %>
+      <%= t("advanced_search_component.remove_group_button") %>
+    <% end %>
+  </div>
+</div>

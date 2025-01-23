@@ -11,7 +11,7 @@ export default class extends Controller {
   static values = { filters: { type: Array, default: [] } };
 
   connect() {
-    this.#updateCount();
+    this.idempotentConnect();
   }
 
   idempotentConnect() {
@@ -127,11 +127,13 @@ export default class extends Controller {
   }
 
   #updateCount() {
-    const count = this.filtersValue.filter(
-      (sample) => sample.length > 0,
-    ).length;
-    this.countTarget.innerText = count;
-    this.countTarget.classList.toggle("hidden", count === 0);
-    this.countTarget.classList.toggle("inline-flex", count > 0);
+    if (this.hasCountTarget) {
+      const count = this.filtersValue.filter(
+        (sample) => sample.length > 0,
+      ).length;
+      this.countTarget.innerText = count;
+      this.countTarget.classList.toggle("hidden", count === 0);
+      this.countTarget.classList.toggle("inline-flex", count > 0);
+    }
   }
 }

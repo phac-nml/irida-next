@@ -18,4 +18,11 @@ module Metadata
   def fields_for_namespace(namespace: nil, show_fields: false)
     @fields = !show_fields || namespace.nil? ? [] : namespace.metadata_fields
   end
+
+  def advanced_search_fields(namespace)
+    sample_fields = %w[name puid created_at updated_at attachments_updated_at]
+    metadata_fields = namespace.metadata_fields
+    metadata_fields.map! { |field| "metadata.#{field}" }
+    @advanced_search_fields = sample_fields.concat(metadata_fields)
+  end
 end

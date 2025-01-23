@@ -1,0 +1,5 @@
+<%= turbo_stream.update "table-filter", partial: "table_filter" %>
+
+<% if @query.valid? %>
+  <turbo-stream action="refresh"></turbo-stream>
+<% end %>

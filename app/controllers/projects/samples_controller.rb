@@ -18,7 +18,15 @@ module Projects
     end
 
     def search
-      redirect_to namespace_project_samples_path(request.request_parameters.slice(:limit, :page))
+      respond_to do |format|
+        format.turbo_stream do
+          if @query.valid?
+            render status: :ok
+          else
+            render status: :unprocessable_entity
+          end
+        end
+      end
     end
 
     def show
@@ -142,6 +150,7 @@ module Projects
 
       @search_params = search_params
       set_metadata_fields
+      advanced_search_fields(@project.namespace)
 
       @query = Sample::Query.new(@search_params.except(:metadata).merge({ project_ids: [@project.id] }))
     end

@@ -272,6 +272,20 @@ fr:
         metadata_written_html: Project automation bot wrote pipeline %{href} metadata to sample %{sample_href}
         outputs_and_metadata_written_html: Project automation bot attached pipeline %{href} outputs and wrote metadata to sample %{sample_href}
         outputs_written_html: Project automation bot attached pipeline %{href} outputs to sample %{sample_href}
+  advanced_search_component:
+    add_condition_button: Add Condition
+    add_group_button: Add Group
+    apply_filter_button: Apply filter
+    clear_aria_label: Clear Advanced Search
+    clear_filter_button: Clear filter
+    description: This advanced search uses fields, operators and values to filter samples. Add groups with conditions to define the search criteria.
+    field: Field
+    operator: Operator
+    remove_condition_aria_label: Remove condition
+    remove_group_button: Remove group
+    rules: Operators cannot be used on the same field within a group more than once, except for '>=' and '<='. To filter by date range, the value should be of the format 'YYYY-MM-DD' and the metadata field should end with '_date'.
+    title: Advanced search
+    value: Value
   application:
     errors:
       access_denied: Access Denied.
@@ -376,10 +390,11 @@ fr:
       previous_version: Previous (Version %{version})
     list_filter:
       apply: Apply filter
+      title: Filter by sample names or Id
+    list_input:
       clear: Remove all tags
       description: Paste a list of <kbd>,</kbd> separated sample names or identifiers
       remove_tag: Remove
-      title: Filter by sample names or Id
     nextflow:
       email_notification: Receive an email notification when your analysis has completed?
       required: Required
@@ -792,8 +807,6 @@ fr:
           sample_export: Sample Export
         deselect_all_button: Deselect All
         import_metadata_button: Import metadata
-        search:
-          placeholder: Filter by ID or name
         select_all_button: Select All
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
         title: Samples
@@ -802,6 +815,9 @@ fr:
       table:
         no_associated_samples: There are no samples associated with this group.
         no_samples: No Samples
+      table_filter:
+        search:
+          placeholder: Filter by ID or name
     shared_namespaces:
       index:
         pagy:
@@ -1363,8 +1379,6 @@ fr:
         no_associated_samples: There are no samples associated with this project.
         no_samples: No Samples
         remove_button: Remove
-        search:
-          placeholder: Filter by ID or name
         select_all_button: Select All
         title: Samples
         transfer_button: Transfer samples
@@ -1463,6 +1477,9 @@ fr:
         upload: Upload
         upload_files: Upload Files
         uploading: Uploading
+      table_filter:
+        search:
+          placeholder: Filter by ID or name
       transfers:
         create:
           error: 'The following list of samples failed to transfer:'
@@ -1709,6 +1726,16 @@ fr:
       abbreviated: "%a %b%e %Y %H:%M"
       default: "%Y-%m-%d %H:%M:%S"
       full_date: "%B %d, %Y"
+  validators:
+    advanced_search_group_validator:
+      between_error: can use '>=' and '<=' only once
+      blank_error: cannot be blank
+      condition_error: There condition has errors
+      date_format_error: must be formatted YYYY-MM-DD
+      date_operator_error: cannot be used on dates
+      group_error: There group has errors
+      numeric_operator_error: can only be used on numbers
+      uniqueness_error: must be unique
   viral:
     pagy:
       limit_component:

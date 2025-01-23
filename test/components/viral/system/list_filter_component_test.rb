@@ -14,7 +14,7 @@ module System
         within 'dialog' do
           assert_accessible
           assert_selector 'h1', text: I18n.t(:'components.list_filter.title')
-          fill_in I18n.t(:'components.list_filter.description'), with: "#{puid1}, #{puid2}"
+          fill_in I18n.t(:'components.list_input.description'), with: "#{puid1}, #{puid2}"
           assert_selector 'span.label', count: 1
           assert_selector 'span.label', text: puid1
           find('input').text puid2
@@ -29,7 +29,7 @@ module System
           assert_selector 'span.label', count: 2
           assert_selector 'span.label', text: puid1
           assert_selector 'span.label', text: puid2
-          click_button I18n.t(:'components.list_filter.clear')
+          click_button I18n.t(:'components.list_input.clear')
           assert_selector 'span.label', count: 0
           click_button I18n.t(:'components.list_filter.apply')
         end

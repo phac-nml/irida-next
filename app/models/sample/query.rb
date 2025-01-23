@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # model to represent sample search form
-class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
+class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/ClassLength
   include ActiveModel::Model
   include ActiveModel::Attributes
   include Pagy::Backend
@@ -13,16 +13,35 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
   attribute :name_or_puid_cont, :string
   attribute :name_or_puid_in, default: -> { [] }
   attribute :project_ids, default: -> { [] }
+  attribute :groups, default: lambda {
+    [Sample::SearchGroup.new(conditions: [Sample::SearchCondition.new(field: '', operator: '', value: '')])]
+  }
   attribute :sort, :string, default: 'updated_at desc'
   attribute :advanced_query, :boolean, default: false
 
   validates :direction, inclusion: { in: %w[asc desc] }
   validates :project_ids, length: { minimum: 1 }
+  validates_with AdvancedSearchGroupValidator
 
   def initialize(...)
     super
     self.sort = sort
     self.advanced_query = advanced_query?
+    self.groups = groups
+  end
+
+  def groups_attributes=(attributes)
+    groups ||= []
+    attributes.each_value do |group_attributes|
+      conditions ||= []
+      group_attributes.each_value do |conditions_attributes|
+        conditions_attributes.each_value do |condition_params|
+          conditions.push(Sample::SearchCondition.new(condition_params))
+        end
+      end
+      groups.push(Sample::SearchGroup.new(conditions:))
+    end
+    assign_attributes(groups:)
   end
 
   def sort=(value)
@@ -33,7 +52,8 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
   end
 
   def advanced_query?
-    # simplified version, will be further implemented when we have the definition of an advanced query
+    return !groups.all?(&:empty?) if groups
+
     false
   end
 
@@ -83,9 +103,49 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren
        else
          {}
        end
-     )),
+     )).merge(advanced_search_params),
       order: { "#{column}": { order: direction, unmapped_type: 'long' } },
       includes: [project: { namespace: [{ parent: :route }, :route] }] }
+  end
+
+  def advanced_search_params # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
+    or_conditions = []
+    groups.each do |group|
+      and_conditions = {}
+      group.conditions.map do |condition|
+        case condition.operator
+        when '=', 'in'
+          and_conditions[condition.field] = condition.value
+        when '!=', 'not_in'
+          and_conditions[condition.field] = { not: condition.value }
+        when '<='
+          between_condition(and_conditions, condition, :lte)
+        when '>='
+          between_condition(and_conditions, condition, :gte)
+        when 'contains'
+          and_conditions[condition.field] = { ilike: "%#{condition.value}%" }
+        end
+      end
+      or_conditions << and_conditions
+    end
+    { _or: or_conditions }
+  end
+
+  def between_condition(and_conditions, condition, operation) # rubocop:disable Metrics/AbcSize
+    if %w[created_at updated_at attachments_updated_at].include?(condition.field) || condition.field.end_with?('_date')
+      and_conditions[condition.field] = if and_conditions[condition.field].nil?
+                                          { operation => condition.value }
+                                        else
+                                          and_conditions[condition.field].merge({ operation => condition.value })
+                                        end
+    else
+      and_conditions["#{condition.field}.numeric"] = if and_conditions["#{condition.field}.numeric"].nil?
+                                                       { operation => condition.value.to_i }
+                                                     else
+                                                       and_conditions["#{condition.field}.numeric"]
+                                                         .merge({ operation => condition.value.to_i })
+                                                     end
+    end
   end
 
   def ransack_params
