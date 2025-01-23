@@ -188,5 +188,9 @@ module Namespaces
       details[:name] = record.name
       false
     end
+
+    def view_metadata_templates?
+      true
+    end
   end
 end

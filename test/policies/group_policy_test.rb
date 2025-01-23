@@ -109,6 +109,10 @@ class GroupPolicyTest < ActiveSupport::TestCase
     assert @policy.apply(:update_metadata_templates?)
   end
 
+  test '#view_metadata_templates?' do
+    assert @policy.apply(:view_metadata_templates?)
+  end
+
   test 'scope' do
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 

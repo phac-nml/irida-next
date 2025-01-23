@@ -55,6 +55,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
             resource :deletion, only: %i[destroy new] do
               delete :destroy_multiple
             end
+            resources :metadata_templates
           end
         end
         collection do
