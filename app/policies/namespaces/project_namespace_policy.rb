@@ -169,21 +169,21 @@ module Namespaces
     end
 
     def create_metadata_template?
-      return true if effective_access_level >= Member::AccessLevel::MAINTAINER
+      return true if Member::AccessLevel.manageable.include?(effective_access_level)
 
       details[:name] = record.name
       false
     end
 
     def destroy_metadata_template?
-      return true if effective_access_level >= Member::AccessLevel::MAINTAINER
+      return true if Member::AccessLevel.manageable.include?(effective_access_level)
 
       details[:name] = record.name
       false
     end
 
     def update_metadata_template?
-      return true if effective_access_level >= Member::AccessLevel::MAINTAINER
+      return true if Member::AccessLevel.manageable.include?(effective_access_level)
 
       details[:name] = record.name
       false
