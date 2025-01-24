@@ -190,7 +190,10 @@ module Namespaces
     end
 
     def view_metadata_templates?
-      true
+      return true if Member::AccessLevel.manageable.include?(effective_access_level)
+
+      details[:name] = record.name
+      false
     end
   end
 end
