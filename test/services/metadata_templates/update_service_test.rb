@@ -39,14 +39,14 @@ module MetadataTemplates
 
     test 'fails to update metadata template with incorrect permissions' do
       valid_params = { name: 'new-metadata-template-name', description: 'new-metadata-template-description' }
-      user = users(:ryan_doe)
+      user = users(:david_doe)
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
         MetadataTemplates::UpdateService.new(user, @metadata_template, valid_params).execute
       end
 
       assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
-      assert_equal :update_metadata_template?, exception.rule
+      assert_equal :update_metadata_templates?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
     end
   end

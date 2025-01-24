@@ -11,7 +11,7 @@ module MetadataTemplates
     end
 
     def execute
-      authorize! @metadata_template.namespace, to: :destroy_metadata_template?
+      authorize! @metadata_template.namespace, to: :destroy_metadata_templates?
 
       @metadata_template.destroy
 

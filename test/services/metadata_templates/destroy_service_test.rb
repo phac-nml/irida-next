@@ -18,7 +18,7 @@ module MetadataTemplates
     end
 
     test 'fails to destroy metadata template with incorrect permissions' do
-      user = users(:steve_doe)
+      user = users(:david_doe)
 
       assert_raises(ActionPolicy::Unauthorized) do
         MetadataTemplates::DestroyService.new(user, @metadata_template).execute
@@ -29,7 +29,7 @@ module MetadataTemplates
       end
 
       assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
-      assert_equal :destroy_metadata_template?, exception.rule
+      assert_equal :destroy_metadata_templates?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
     end
   end
