@@ -136,7 +136,6 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
   def transfer_activity_parameters(params, activity) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     if %w[project_namespace_transfer group_namespace_transfer].include?(activity.parameters[:action])
-    if %w[project_namespace_transfer group_namespace_transfer].include?(activity.parameters[:action])
 
       params.merge!({
                       old_namespace: activity.parameters[:old_namespace],
