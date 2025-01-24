@@ -23,6 +23,7 @@ module MetadataTemplates
       @metadata_template
     rescue MetadataTemplates::CreateService::MetadataTemplateCreateError => e
       @namespace.errors.add(:base, e.message)
+      @metadata_template
     end
 
     private

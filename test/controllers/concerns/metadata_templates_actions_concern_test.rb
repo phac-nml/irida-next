@@ -56,7 +56,7 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
   test 'group metadata templates destroy' do
     delete group_samples_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream)
 
-    assert_response :success
+    assert_response :redirect
   end
 
   test 'project metadata templates index' do
@@ -113,6 +113,6 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
       format: :turbo_stream
     )
 
-    assert_response :success
+    assert_response :redirect
   end
 end

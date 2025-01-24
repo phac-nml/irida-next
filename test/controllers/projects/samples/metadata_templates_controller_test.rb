@@ -33,7 +33,7 @@ module Projects
         delete namespace_project_samples_metadata_template_path(@namespace.parent, @namespace.project,
                                                                 @metadata_template, format: :turbo_stream)
 
-        assert_response :success
+        assert_response :redirect
       end
 
       test 'view metadata templates listing' do

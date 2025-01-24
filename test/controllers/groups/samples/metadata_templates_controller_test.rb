@@ -29,7 +29,7 @@ module Groups
       test 'delete metadata template' do
         delete group_samples_metadata_template_path(@group, @metadata_template, format: :turbo_stream)
 
-        assert_response :success
+        assert_response :redirect
       end
 
       test 'view metadata templates listing' do
