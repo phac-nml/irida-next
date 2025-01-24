@@ -135,8 +135,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   end
 
   def transfer_activity_parameters(params, activity) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-    if activity.parameters[:action] == 'project_namespace_transfer' ||
-       activity.parameters[:action] == 'group_namespace_transfer'
+    if %w[project_namespace_transfer group_namespace_transfer].include?(activity.parameters[:action])
 
       params.merge!({
                       old_namespace: activity.parameters[:old_namespace],
@@ -170,24 +169,39 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   end
 
   def namespace_project_sample_activity_parameters(params, activity)
+    params = add_sample_activity_params(params, activity)
+    params = add_metadata_template_params(params, activity)
+    add_bulk_sample_params(params, activity)
+  end
+
+  def add_sample_activity_params(params, activity)
     sample_activity_action_types = %w[sample_create sample_update metadata_update sample_destroy attachment_create
                                       attachment_destroy]
+    return params unless sample_activity_action_types.include?(activity.parameters[:action])
 
-    if sample_activity_action_types.include?(activity.parameters[:action])
-      params.merge!({
-                      sample_id: activity.parameters[:sample_id],
-                      sample_puid: activity.parameters[:sample_puid]
-                    })
-    end
+    params.merge(
+      sample_id: activity.parameters[:sample_id],
+      sample_puid: activity.parameters[:sample_puid]
+    )
+  end
 
-    if activity.parameters[:action] == 'sample_destroy_multiple'
-      params.merge!({
-                      deleted_count: activity.parameters[:deleted_count],
-                      samples_deleted_puids: activity.parameters[:samples_deleted_puids]
-                    })
-    end
+  def add_metadata_template_params(params, activity)
+    metadata_template_action_types = %w[metadata_template_create metadata_template_update metadata_template_destroy]
+    return params unless metadata_template_action_types.include?(activity.parameters[:action])
 
-    params
+    params.merge(
+      template_id: activity.parameters[:template_id],
+      template_name: activity.parameters[:template_name]
+    )
+  end
+
+  def add_bulk_sample_params(params, activity)
+    return params unless activity.parameters[:action] == 'sample_destroy_multiple'
+
+    params.merge(
+      deleted_count: activity.parameters[:deleted_count],
+      samples_deleted_puids: activity.parameters[:samples_deleted_puids]
+    )
   end
 
   def format_created_at(created_at)
@@ -197,6 +211,14 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   def additional_group_activity_params(params, activity)
     if activity.parameters[:action] == 'group_subgroup_destroy'
       params.merge!({ removed_group_puid: activity.parameters[:removed_group_puid] })
+    end
+
+    metadata_template_action_types = %w[metadata_template_create metadata_template_update metadata_template_destroy]
+    if metadata_template_action_types.include?(activity.parameters[:action])
+      params.merge!({
+                      template_id: activity.parameters[:template_id],
+                      template_name: activity.parameters[:template_name]
+                    })
     end
 
     return params unless activity.parameters[:action] == 'group_subgroup_create'

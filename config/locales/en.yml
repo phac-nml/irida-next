@@ -168,6 +168,11 @@ en:
           destroy:
             last_member: Cannot remove this member as this would leave the %{namespace_type} without an owner.
             last_member_self: You cannot remove yourself as this would leave the %{namespace_type} without an owner.
+        metadata_template:
+          attributes:
+            name:
+              blank: can't be blank
+              taken: has already been taken
         namespace:
           attributes:
             name:
@@ -224,6 +229,10 @@ en:
     group:
       create_html: "%{user} created group"
       destroy_html: "%{user} removed group"
+      metadata_template:
+        create_html: "%{user} created metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{template_name}</span>"
+        destroy_html: "%{user} removed metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{template_name}</span>"
+        update_html: "%{user} updated metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{template_name}</span>"
       projects:
         create_html: "%{user} created project <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span> within group"
         destroy_html: "%{user} removed project <span class='font-medium text-slate-800 dark:text-slate-300'>%{project_puid}</span> from group"
@@ -248,6 +257,10 @@ en:
     namespaces_project_namespace:
       create_html: "%{user} created project"
       destroy_html: "%{user} removed project"
+      metadata_template:
+        create_html: "%{user} created metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{template_name}</span>"
+        destroy_html: "%{user} removed metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{template_name}</span>"
+        update_html: "%{user} updated metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{template_name}</span>"
       samples:
         attachment:
           create_html: "%{user} attached files to sample %{href}"
@@ -1626,6 +1639,11 @@ en:
       update:
         cannot_update_self: You cannot update your own %{namespace_type} role
         role_not_allowed: A maintainer can only update a member's role up to the Maintainer role
+    metadata_templates:
+      create:
+        required:
+          fields: Unable to create metadata template as the fields are required and must be an array of strings
+          name: Unable to create metadata template as the name is required
     personal_access_tokens:
       create:
         required:

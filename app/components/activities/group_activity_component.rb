@@ -19,5 +19,10 @@ module Activities
     def transfer_out
       @activity[:key].include?('transfer_out')
     end
+
+    def metadata_template_link
+      metadata_template_action_types = %w[metadata_template_create metadata_template_update]
+      metadata_template_action_types.include?(@activity[:action])
+    end
   end
 end

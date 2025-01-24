@@ -10,17 +10,21 @@ module Activities
     end
 
     def sample_link
-      @activity[:action] == 'sample_create' || @activity[:action] == 'sample_update' ||
-        @activity[:action] == 'attachment_create' || @activity[:action] == 'attachment_destroy' ||
-        @activity[:action] == 'metadata_update'
+      %w[sample_create sample_update attachment_create attachment_destroy
+         metadata_update].include?(@activity[:action])
     end
 
     def samples_link
-      @activity[:action] == 'sample_clone' || @activity[:action] == 'sample_transfer'
+      %w[sample_clone sample_transfer].include?(@activity[:action])
     end
 
     def samples_tab
       @activity[:action] == 'metadata_update' ? 'metadata' : ''
+    end
+
+    def metadata_template_link
+      metadata_template_action_types = %w[metadata_template_create metadata_template_update]
+      metadata_template_action_types.include?(@activity[:action])
     end
   end
 end
