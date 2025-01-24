@@ -20,9 +20,6 @@ module Metadata
   end
 
   def fields_for_namespace_or_template(namespace: nil, template: nil)
-    puts '======> FIELDS FOR NAMESPACE OR TEMPLATE ============='
-    puts "namespace: #{namespace.inspect}"
-    puts "template: #{template.inspect}"
     @fields = if template == 'none' || namespace.nil?
                 []
               elsif template == 'all'
