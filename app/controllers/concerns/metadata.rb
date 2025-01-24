@@ -15,8 +15,21 @@ module Metadata
     pagy(result)
   end
 
-  def fields_for_namespace(namespace: nil, show_fields: false)
-    @fields = !show_fields || namespace.nil? ? [] : namespace.metadata_fields
+  def metadata_templates_for_namespace(namespace: nil)
+    @metadata_templates = namespace.metadata_templates
+  end
+
+  def fields_for_namespace_or_template(namespace: nil, template: nil)
+    puts '======> FIELDS FOR NAMESPACE OR TEMPLATE ============='
+    puts "namespace: #{namespace.inspect}"
+    puts "template: #{template.inspect}"
+    @fields = if template == 'none' || namespace.nil?
+                []
+              elsif template == 'all'
+                namespace.metadata_fields
+              else
+                MetadataTemplate.find_by(name: template).fields
+              end
   end
 
   def advanced_search_fields(namespace)

@@ -10,6 +10,7 @@ module Projects
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
     before_action :query, only: %i[index search select]
+    before_action :metadata_templates, only: %i[index search select]
 
     def index
       @timestamp = DateTime.current
@@ -134,10 +135,10 @@ module Projects
       @current_page = t(:'projects.sidebar.samples')
     end
 
-    def set_metadata_fields
-      fields_for_namespace(
+    def metadata_fields(template)
+      fields_for_namespace_or_template(
         namespace: @project.namespace,
-        show_fields: @search_params && @search_params[:metadata].to_i == 1
+        template: template
       )
     end
 
@@ -149,15 +150,17 @@ module Projects
       authorize! @project, to: :sample_listing?
 
       @search_params = search_params
-      set_metadata_fields
+
+      metadata_fields(@search_params['metadata_template'])
+
       advanced_search_fields(@project.namespace)
 
       @query = Sample::Query.new(@search_params.except(:metadata).merge({ project_ids: [@project.id] }))
     end
 
     def search_params
-      updated_params = update_store(search_key,
-                                    params[:q].present? ? params[:q].to_unsafe_h : {}).with_indifferent_access
+      updated_params = update_store(search_key, params[:q]&.to_unsafe_h || {}).with_indifferent_access
+      updated_params[:metadata_template] = updated_params[:metadata_template].presence || 'none'
 
       if !updated_params.key?(:sort) ||
          (updated_params[:metadata].to_i.zero? && updated_params[:sort]&.match?(/metadata_/))
@@ -165,6 +168,10 @@ module Projects
         update_store(search_key, updated_params)
       end
       updated_params
+    end
+
+    def metadata_templates
+      @metadata_templates = metadata_templates_for_namespace(namespace: @project.namespace)
     end
   end
 end
