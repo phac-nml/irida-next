@@ -2,6 +2,9 @@
   <div class="hidden" data-nextflow--samplesheet-target="workflowAttributes">
     <%= samples_workflow_executions_attributes %>
   </div>
+  <div class="hidden" data-nextflow--samplesheet-target="samplesheetProperties">
+    <%= @properties.to_json %>
+  </div>
   <label class="block mb-2 text-sm font-medium text-slate-900 dark:text-white"><%= t(".label") %></label>
   <div
     role="alert"
@@ -53,5 +56,89 @@
       </div>
     </template>
   </div>
-
 </div>
+
+<template data-nextflow--samplesheet-target="cellContainer">
+  <div
+    style="content-visibility: auto;"
+    class="border table-td dark:border-slate-600 border-slate-100"
+  >
+  </div>
+</template>
+
+<template data-nextflow--samplesheet-target="sampleIdentifierCell">
+  <div class="p-2.5 sticky left-0">
+    CELL_PLACEHOLDER
+  </div>
+</template>
+
+<template data-nextflow--samplesheet-target="dropdownCell">
+  <select
+    aria-label="COLUMN_NAME_PLACEHOLDER"
+    class="
+      w-full focus:ring-primary-500 focus:border-primary-500 p-2.5 dark:bg-slate-700
+      bg-slate-50 border-none dark:border-none dark:placeholder-slate-400 text-inherit
+      text-sm dark:focus:ring-primary-500 dark:focus:border-primary-500 cursor-pointer
+    "
+    data-action="change->nextflow--samplesheet#updateEditableSamplesheetData"
+    name="workflow_execution[samples_workflow_executions_attributes][INDEX_PLACEHOLDER][samplesheet_params][COLUMN_NAME_PLACEHOLDER]"
+    id="workflow_execution_samples_workflow_executions_attributes_INDEX_PLACEHOLDER_samplesheet_params_COLUMN_NAME_PLACEHOLDER"
+  >
+    <option value="" label=" "></option>
+  </select>
+</template>
+
+<template data-nextflow--samplesheet-target="fileCell">
+  <div>
+    <%= link_to new_workflow_executions_file_selector_path(
+  "file_selector[attachable_id]": "ATTACHABLE_ID_PLACEHOLDER",
+  "file_selector[attachable_type]": "ATTACHABLE_TYPE_PLACEHOLDER",
+  "file_selector[index]": "INDEX_PLACEHOLDER",
+  "file_selector[selected_id]": "SELECTED_ID_PLACEHOLDER",
+  "file_selector[property]": "PROPERTY_PLACEHOLDER",
+  "file_selector[required_properties]": @required_properties,
+  "file_selector[file_type]": "FILE_TYPE_PLACEHOLDER",
+  "file_selector[file_selector_arguments]": {workflow_params:, patterns:}
+),
+data: {
+  turbo_stream: "true",
+} do %>
+      <div
+        id="<%="ATTACHABLE_ID_PLACEHOLDER_PROPERTY_PLACEHOLDER" %>"
+        class="
+          w-full focus:ring-primary-500 focus:border-primary-500 p-2 dark:bg-inherit
+          bg-inherit dark:placeholder-slate-400 text-inherit text-sm
+          dark:focus:ring-primary-500 dark:focus:border-primary-500 cursor-pointer
+          hover:border-slate-300 border-transparent border-2
+        "
+        <% if @required_properties.present? && @required_properties.include?(@property) %>
+        data-file-missing="<%= @selected.empty? ? "true" : "false" %>"
+        <% end %>
+      >
+        <%# <%= @selected.empty? ? t(".no_selected_file") : @selected[:filename] %>
+        CELL_VALUE_PLACEHOLDER
+      </div>
+    <% end %>
+  </div>
+
+</template>
+
+<template data-nextflow--samplesheet-target="metadataCell">
+  <div class="p-2.5 text-nowrap">
+    <span class="h-3.5 inline-block">METADATA_VALUE_PLACEHOLDER</span>
+  </div>
+</template>
+
+<template data-nextflow--samplesheet-target="textCell">
+  <input
+    class="
+      bg-slate-50 border-0 text-slate-900 text-sm focus:ring-primary-500 block w-full
+      p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400
+      dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500
+    "
+    data-action="change->nextflow--samplesheet#updateEditableSamplesheetData"
+    type="text"
+    name="NAME_PLACEHOLDER"
+    id="ID_PLACEHOLDER"
+  >
+</template>

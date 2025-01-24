@@ -9,11 +9,19 @@ export default class extends Controller {
     "errorMessage",
     "form",
     "workflowAttributes",
+    "samplesheetProperties",
+    "cellContainer",
+    "sampleIdentifierCell",
+    "dropdownCell",
+    "fileCell",
+    "metadataCell",
+    "textCell",
   ];
   static values = {
     attachmentsError: { type: String },
     submissionError: { type: String },
     url: { type: String },
+    workflow: { type: Object },
   };
 
   #error_state = ["border-red-300", "dark:border-red-800"];
@@ -22,32 +30,42 @@ export default class extends Controller {
 
   // The samplesheet will use FormData, allowing us to create the inputs of a form without the associated DOM elements.
   #formData = new FormData();
+  #currentPage = 1;
+  #samplesheetProperties = JSON.parse(
+    this.samplesheetPropertiesTarget.innerHTML,
+  );
+  #columnNames = Object.keys(this.#samplesheetProperties);
 
   connect() {
+    console.log("properties");
+    console.log(this.#samplesheetProperties);
     if (this.hasWorkflowAttributesTarget) {
+      this.samplesheetParams = JSON.parse(
+        this.workflowAttributesTarget.innerText,
+      );
       this.#setInitialSamplesheetData();
+      this.#loadPageData();
     }
   }
 
   #setInitialSamplesheetData() {
-    const samples_workflow_attrs = JSON.parse(
-      this.workflowAttributesTarget.innerText,
-    );
-    for (const index in samples_workflow_attrs) {
-      for (const sample_attrs in samples_workflow_attrs[index]) {
+    console.log("params");
+    console.log(this.samplesheetParams);
+    for (const index in this.samplesheetParams) {
+      for (const sample_attrs in this.samplesheetParams[index]) {
         if (sample_attrs == "sample_id") {
           // specifically adds sample to form
           this.#setFormData(
             `workflow_execution[samples_workflow_executions_attributes][${index}][${sample_attrs}]`,
-            samples_workflow_attrs[index][sample_attrs],
+            this.samplesheetParams[index][sample_attrs],
           );
           continue;
         }
-        for (const property in samples_workflow_attrs[index][sample_attrs]) {
+        for (const property in this.samplesheetParams[index][sample_attrs]) {
           // adds all remaining sample data to form (files, metadata, etc.)
           this.#setFormData(
             `workflow_execution[samples_workflow_executions_attributes][${index}][${sample_attrs}][${property}]`,
-            samples_workflow_attrs[index][sample_attrs][property],
+            this.samplesheetParams[index][sample_attrs][property]["form_value"],
           );
         }
       }
@@ -149,4 +167,167 @@ export default class extends Controller {
     this.errorTarget.classList.remove("hidden");
     this.errorMessageTarget.innerHTML = message;
   }
+
+  #loadPageData() {
+    let startingIndex = (this.#currentPage - 1) * 5;
+    this.#columnNames.forEach((columnName) => {
+      let columnNode = document.getElementById(`metadata-${columnName}-column`);
+      for (let i = 0; i < 1; i++) {
+        let container = this.#generateCellContainer(columnNode);
+        switch (this.#samplesheetProperties[columnName]["cell_type"]) {
+          case "sample_cell":
+          case "sample_name_cell":
+            this.#generateSampleCell(container, columnName, i);
+            break;
+          case "dropdown_cell":
+            this.#generateDropdownCell(
+              container,
+              columnName,
+              i,
+              this.#samplesheetProperties[columnName]["enum"],
+            );
+            break;
+          case "fastq_cell":
+          case "file_cell":
+            this.#generateFileCell(container, columnName, i);
+            break;
+          case "metadata_cell":
+            this.#generateMetadataCell(container, columnName, i);
+            break;
+          case "input_cell":
+            this.#generateTextCell(container, columnName, i);
+            break;
+          default:
+            this.#generateSampleCell(container, columnName, i);
+        }
+      }
+    });
+    // 1 -> 0-4
+    // 2 -> 5-9
+    // 3 -> 10-14
+    // 4 -> 15-19
+  }
+
+  // inserting the template html then requerying it out via lastElementChild turns the node from textNode into an
+  // HTML element we can manipulate via appendChild, insertHTML, etc.
+  #generateCellContainer(columnNode) {
+    let newCellContainer = this.cellContainerTarget.innerHTML;
+    columnNode.insertAdjacentHTML("beforeend", newCellContainer);
+    return columnNode.lastElementChild;
+  }
+
+  #generateSampleCell(container, columnName, index) {
+    let childNode = this.sampleIdentifierCellTarget.innerHTML.replace(
+      /CELL_PLACEHOLDER/g,
+      this.samplesheetParams[index]["samplesheet_params"][columnName][
+        "cell_value"
+      ],
+    );
+    container.insertAdjacentHTML("beforeend", childNode);
+  }
+
+  #generateDropdownCell(container, columnName, index, options) {
+    let childNode = this.dropdownCellTarget.innerHTML
+      .replace(/INDEX_PLACEHOLDER/g, index)
+      .replace(/COLUMN_NAME_PLACEHOLDER/g, columnName);
+
+    container.insertAdjacentHTML("beforeend", childNode);
+    let select = container.querySelector("select");
+    for (let j = 0; j < options.length; j++) {
+      let option = document.createElement("option");
+      option.value = options[j];
+      option.innerHTML = options[j];
+      select.appendChild(option);
+    }
+    // TODO SET SELECTED VALUE
+  }
+
+  #generateFileCell(container, columnName, index) {
+    let childNode = this.fileCellTarget.innerHTML
+      .replace(/INDEX_PLACEHOLDER/g, index)
+      .replace(/PROPERTY_PLACEHOLDER/g, columnName)
+      .replace(
+        /ATTACHABLE_ID_PLACEHOLDER/g,
+        this.samplesheetParams[index]["sample_id"],
+      )
+      .replace(/ATTACHABLE_TYPE_PLACEHOLDER/g, "Sample")
+      .replace(
+        /SELECTED_ID_PLACEHOLDER/g,
+        this.samplesheetParams[index]["samplesheet_params"][columnName][
+          "attachment_id"
+        ],
+      )
+      .replace(
+        /FILE_TYPE_PLACEHOLDER/g,
+        this.#samplesheetProperties[columnName]["cell_type"] == "fastq_cell"
+          ? "fastq"
+          : "other",
+      )
+      .replace(
+        /CELL_VALUE_PLACEHOLDER/g,
+        this.samplesheetParams[index]["samplesheet_params"][columnName][
+          "cell_value"
+        ],
+      );
+    container.insertAdjacentHTML("beforeend", childNode);
+
+    // sets the verification attribute for required file cells
+    if (this.#samplesheetProperties[columnName]["required"]) {
+      let fileNode = document.getElementById(
+        `${this.samplesheetParams[index]["sample_id"]}_${columnName}`,
+      );
+      fileNode.setAttribute(
+        "data-file-missing",
+        this.samplesheetParams[index]["samplesheet_params"][columnName][
+          "attachment_id"
+        ]
+          ? "false"
+          : "true",
+      );
+    }
+  }
+
+  #generateMetadataCell(container, columnName, index) {
+    if (
+      this.samplesheetParams[index]["samplesheet_params"][columnName][
+        "form_value"
+      ]
+    ) {
+      let childNode = his.metadataCellTarget.innerHTML.replace(
+        /METADATA_VALUE_PLACEHOLDER/g,
+        his.samplesheetParams[index]["samplesheet_params"][columnName][
+          "form_value"
+        ],
+      );
+      container.insertAdjacentHTML("beforeend", childNode);
+    } else {
+      this.#generateTextCell(container, columnName, index);
+    }
+  }
+
+  #generateTextCell(container, columnName, index) {
+    let childNode = this.textCellTarget.innerHTML
+      .replace(
+        /NAME_PLACEHOLDER/g,
+        `workflow_execution[samples_workflow_executions_attributes][${index}][samplesheet_params][${columnName}]`,
+      )
+      .replace(
+        /ID_PLACEHOLDER/g,
+        `workflow_execution_samples_workflow_executions_attributes_${index}_samplesheet_params_${columnName}`,
+      );
+
+    container.insertAdjacentHTML("beforeend", childNode);
+    const form_value =
+      this.samplesheetParams[index]["samplesheet_params"][columnName][
+        "form_value"
+      ];
+
+    if (form_value) {
+      container.lastElementChild.value = form_value;
+    }
+  }
 }
+
+// console.log(this.#samplesheetProperties);
+
+// console.log(this.samplesheetParams);

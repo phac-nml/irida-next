@@ -8,6 +8,8 @@ module WorkflowExecutions
     before_action :listing_attachments, only: %i[new create]
 
     def new
+      puts 'hihihhihi'
+      puts file_selector_params
       render turbo_stream: turbo_stream.update('file_selector_dialog',
                                                partial: 'file_selector_dialog',
                                                locals: { file_selector_params:, open: true }), status: :ok
@@ -33,7 +35,7 @@ module WorkflowExecutions
         :file_type,
         required_properties: [],
         file_selector_arguments: [
-          :pattern, { workflow_params: %i[name version] }
+          { patterns: {} }, { workflow_params: %i[name version] }
         ]
       )
     end
@@ -45,10 +47,10 @@ module WorkflowExecutions
           file_selector_params['property'], file_selector_params['file_selector_arguments']['workflow_params']
         )
       when 'other'
-        @listing_attachments = if file_selector_params['file_selector_arguments']['pattern']
+        @listing_attachments = if file_selector_params['file_selector_arguments']['patterns'][file_selector_params['property']]
                                  @attachable.filter_files_by_pattern(
                                    @attachable.sorted_files[:singles] || [],
-                                   file_selector_params['file_selector_arguments']['pattern']
+                                   file_selector_params['file_selector_arguments']['patterns'][file_selector_params['property']]
                                  )
                                else
                                  sample.sorted_files[:singles] || []
@@ -77,7 +79,7 @@ module WorkflowExecutions
                              byte_size: attachment.byte_size,
                              created_at: attachment.created_at,
                              metadata: attachment.metadata }
-      return unless file_selector_params['property'] == 'fastq_1' || file_selector_params['property'] == 'fastq_2'
+      return unless %w[fastq_1 fastq_2].include?(file_selector_params['property'])
 
       assign_associated_attachment_params(attachment)
     end

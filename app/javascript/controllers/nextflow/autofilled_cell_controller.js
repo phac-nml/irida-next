@@ -5,6 +5,7 @@ export default class extends Controller {
   static values = { inputName: { type: String }, inputValue: { type: String } };
 
   connect() {
+    console.log("autofilled");
     this.sendAutofilledInputData();
   }
 

@@ -56,7 +56,7 @@ module Nextflow
       end
 
       def render_sample_cell(sample_identifier)
-        render(Samplesheet::SampleCellComponent.new(sample_identifier:))
+        # render(Samplesheet::SampleCellComponent.new(sample_identifier:))
       end
 
       def render_metadata_cell(sample, name, fields, index)

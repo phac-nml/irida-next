@@ -57,17 +57,5 @@
     id="<%= "metadata-#{header}-column" %>"
     class="dark:bg-slate-700 bg-slate-50"
   >
-    <% samples.each_with_index do |sample, index| %>
-      <div
-        style="content-visibility: auto;"
-        class="border table-td dark:border-slate-600 border-slate-100"
-      >
-        <%= fields_for "workflow_execution[samples_workflow_executions_attributes][#{index}]" do |s| %>
-          <%= s.fields_for "samplesheet_params" do |fields| %>
-            <%= render_cell_type(header, property, sample, fields, index, workflow_params) %>
-          <% end %>
-        <% end %>
-      </div>
-    <% end %>
   </div>
 </div>
