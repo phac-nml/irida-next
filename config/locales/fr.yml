@@ -457,6 +457,14 @@ fr:
         success: Member %{user} successfully removed
       update:
         success: Member %{user_email} updated successfully
+    metadata_template_actions:
+      create:
+        success: Successfully created metadata template %{template_name}
+      destroy:
+        success: Successfully deleted metadata template %{template_name}
+      update:
+        error: Error updating metadata template %{template_name}
+        success: Successfully updated metadata template %{template_name}
     share_actions:
       create:
         success: Successfully linked group %{namespace_name} with group %{group_name}
