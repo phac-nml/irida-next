@@ -16,21 +16,44 @@ export default class extends Controller {
     "fileCell",
     "metadataCell",
     "textCell",
+    "previousBtn",
+    "nextBtn",
+    "pageNum",
   ];
+
   static values = {
     attachmentsError: { type: String },
     submissionError: { type: String },
     url: { type: String },
     workflow: { type: Object },
+    noSelectedFile: { type: String },
   };
 
   #error_state = ["border-red-300", "dark:border-red-800"];
-
   #default_state = ["border-transparent"];
+
+  #pagination_button_disabled_state = [
+    "cursor-default",
+    "text-slate-600",
+    "bg-slate-50",
+    "dark:bg-slate-700",
+    "dark:text-slate-400",
+  ];
+  #pagination_button_enabled_state = [
+    "text-slate-500",
+    "bg-white",
+    "hover:bg-slate-100",
+    "hover:text-slate-700",
+    "dark:bg-slate-800",
+    "dark:text-slate-400",
+    "dark:hover:bg-slate-700",
+    "dark:hover:text-white",
+  ];
 
   // The samplesheet will use FormData, allowing us to create the inputs of a form without the associated DOM elements.
   #formData = new FormData();
   #currentPage = 1;
+  #lastPage;
   #samplesheetProperties = JSON.parse(
     this.samplesheetPropertiesTarget.innerHTML,
   );
@@ -44,8 +67,18 @@ export default class extends Controller {
         this.workflowAttributesTarget.innerText,
       );
       this.#setInitialSamplesheetData();
+      this.#lastPage = Math.ceil(
+        Object.keys(this.samplesheetParams).length / 5,
+      );
+      if (this.#lastPage == 1) {
+        this.#disablePaginationButton(this.nextBtnTarget);
+      }
+      this.#generatePageNumberDropdown();
       this.#loadPageData();
     }
+  }
+  disconnect() {
+    console.log("disconect");
   }
 
   #setInitialSamplesheetData() {
@@ -80,6 +113,18 @@ export default class extends Controller {
   // handles changes to metadata autofill and file cells
   updateAutofilledSamplesheetData({ detail: { content } }) {
     this.#setFormData(content.inputName, content.inputValue);
+
+    // update samplesheetParams cell_value with the new filename to be displayed in samplesheet table
+    // as this is the only place to retrieve filename unlike all other fields that can be retrieved
+    // via formData (files are stored by globalID in formData)
+    if (content.file) {
+      let filename = content["file"]["filename"]
+        ? content["file"]["filename"]
+        : this.noSelectedFileValue;
+      this.samplesheetParams[content["file"]["index"]]["samplesheet_params"][
+        content["file"]["property"]
+      ]["cell_value"] = filename;
+    }
   }
 
   submitSamplesheet(event) {
@@ -113,6 +158,12 @@ export default class extends Controller {
 
   #setFormData(inputName, inputValue) {
     this.#formData.set(inputName, inputValue);
+  }
+
+  #retrieveFormData(index, columnName) {
+    return this.#formData.get(
+      `workflow_execution[samples_workflow_executions_attributes][${index}][samplesheet_params][${columnName}]`,
+    );
   }
 
   #validateFileCells() {
@@ -170,9 +221,17 @@ export default class extends Controller {
 
   #loadPageData() {
     let startingIndex = (this.#currentPage - 1) * 5;
+    let lastIndex = startingIndex + 5;
+    if (
+      this.#currentPage == this.#lastPage &&
+      Object.keys(this.samplesheetParams).length % 5 != 0
+    ) {
+      lastIndex =
+        (Object.keys(this.samplesheetParams).length % 5) + startingIndex;
+    }
     this.#columnNames.forEach((columnName) => {
       let columnNode = document.getElementById(`metadata-${columnName}-column`);
-      for (let i = 0; i < 1; i++) {
+      for (let i = startingIndex; i < lastIndex; i++) {
         let container = this.#generateCellContainer(columnNode);
         switch (this.#samplesheetProperties[columnName]["cell_type"]) {
           case "sample_cell":
@@ -202,10 +261,6 @@ export default class extends Controller {
         }
       }
     });
-    // 1 -> 0-4
-    // 2 -> 5-9
-    // 3 -> 10-14
-    // 4 -> 15-19
   }
 
   // inserting the template html then requerying it out via lastElementChild turns the node from textNode into an
@@ -219,9 +274,7 @@ export default class extends Controller {
   #generateSampleCell(container, columnName, index) {
     let childNode = this.sampleIdentifierCellTarget.innerHTML.replace(
       /CELL_PLACEHOLDER/g,
-      this.samplesheetParams[index]["samplesheet_params"][columnName][
-        "cell_value"
-      ],
+      this.#retrieveFormData(index, columnName),
     );
     container.insertAdjacentHTML("beforeend", childNode);
   }
@@ -239,7 +292,8 @@ export default class extends Controller {
       option.innerHTML = options[j];
       select.appendChild(option);
     }
-    // TODO SET SELECTED VALUE
+
+    select.value = this.#retrieveFormData(index, columnName);
   }
 
   #generateFileCell(container, columnName, index) {
@@ -295,9 +349,7 @@ export default class extends Controller {
     ) {
       let childNode = his.metadataCellTarget.innerHTML.replace(
         /METADATA_VALUE_PLACEHOLDER/g,
-        his.samplesheetParams[index]["samplesheet_params"][columnName][
-          "form_value"
-        ],
+        this.#retrieveFormData(index, columnName),
       );
       container.insertAdjacentHTML("beforeend", childNode);
     } else {
@@ -317,14 +369,76 @@ export default class extends Controller {
       );
 
     container.insertAdjacentHTML("beforeend", childNode);
-    const form_value =
-      this.samplesheetParams[index]["samplesheet_params"][columnName][
-        "form_value"
-      ];
-
+    const form_value = this.#retrieveFormData(index, columnName);
     if (form_value) {
       container.lastElementChild.value = form_value;
     }
+  }
+
+  previousPage() {
+    this.#currentPage -= 1;
+    this.pageNumTarget.value = this.#currentPage;
+    this.#updatePageData();
+  }
+
+  nextPage() {
+    this.#currentPage += 1;
+    this.pageNumTarget.value = this.#currentPage;
+    this.#updatePageData();
+  }
+
+  pageSelected() {
+    this.#currentPage = parseInt(this.pageNumTarget.value);
+    this.#updatePageData();
+  }
+
+  #updatePageData() {
+    this.#verifyButtonStates();
+    this.#clearSamplesheetTable();
+    this.#loadPageData();
+  }
+
+  #verifyButtonStates() {
+    if (this.#currentPage == 1) {
+      this.#disablePaginationButton(this.previousBtnTarget);
+      this.#enablePaginationButton(this.nextBtnTarget);
+    } else if (this.#currentPage == this.#lastPage) {
+      this.#disablePaginationButton(this.nextBtnTarget);
+      this.#enablePaginationButton(this.previousBtnTarget);
+    } else {
+      this.#enablePaginationButton(this.nextBtnTarget);
+      this.#enablePaginationButton(this.previousBtnTarget);
+    }
+  }
+
+  #disablePaginationButton(button) {
+    button.disabled = true;
+    button.classList.remove(...this.#pagination_button_enabled_state);
+    button.classList.add(...this.#pagination_button_disabled_state);
+  }
+
+  #enablePaginationButton(button) {
+    button.disabled = false;
+    button.classList.remove(...this.#pagination_button_disabled_state);
+    button.classList.add(...this.#pagination_button_enabled_state);
+  }
+
+  #generatePageNumberDropdown() {
+    let pageSelection = this.pageNumTarget;
+
+    for (let i = 1; i < this.#lastPage + 1; i++) {
+      let option = document.createElement("option");
+      option.value = i;
+      option.innerHTML = i;
+      pageSelection.appendChild(option);
+    }
+    pageSelection.value = 1;
+  }
+
+  #clearSamplesheetTable() {
+    this.#columnNames.forEach((columnName) => {
+      document.getElementById(`metadata-${columnName}-column`).innerHTML = "";
+    });
   }
 }
 

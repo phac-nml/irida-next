@@ -2,6 +2,10 @@
   data-controller="nextflow--autofilled-cell"
   data-nextflow--autofilled-cell-input-name-value="workflow_execution[samples_workflow_executions_attributes][<%= @index%>][samplesheet_params][<%= @property %>]"
   data-nextflow--autofilled-cell-input-value-value="<%= @selected[:global_id]%>"
+  data-nextflow--autofilled-cell-filename-value="<%= @selected[:filename]%>"
+  data-nextflow--autofilled-cell-index-value="<%= @index %>"
+  data-nextflow--autofilled-cell-property-value="<%= @property %>"
+  data-nextflow--autofilled-cell-type-value="file"
 >
   <%= link_to new_workflow_executions_file_selector_path(
   "file_selector[attachable_id]": @attachable.id,

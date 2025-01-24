@@ -25,7 +25,7 @@
     data-nextflow--samplesheet-target="table"
     class="
       samplesheet-table flex border dark:border-slate-600 border-slate-100 max-h-72
-      overflow-y-auto relative
+      overflow-y-auto relative mb-1
     "
   >
     <% properties.each do |header, property| %>
@@ -55,6 +55,46 @@
         </span>
       </div>
     </template>
+  </div>
+  <div class="flex items-center justify-end">
+    <nav aria-label="Pagination">
+      <ul class="inline-flex h-10 text-base">
+        <li><button
+            type="button"
+            class="
+              flex items-center justify-center px-4 h-10 ms-0 leading-tight border
+              border-slate-300 dark:border-slate-700 cursor-default text-slate-600 bg-slate-50
+              dark:bg-slate-700 dark:text-slate-400 border-e-0 rounded-s-lg
+            "
+            data-action="click->nextflow--samplesheet#previousPage"
+            data-nextflow--samplesheet-target="previousBtn"
+          >Previous</button>
+        </li>
+        <li><select
+            class="
+              flex items-center justify-center px-4 h-10 ms-0 leading-tight border
+              border-slate-300 dark:border-slate-700 text-slate-500 bg-white
+              hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
+              dark:hover:bg-slate-700 dark:hover:text-white cursor-pointer
+            "
+            data-nextflow--samplesheet-target="pageNum"
+            data-action="change->nextflow--samplesheet#pageSelected"
+          ></select>
+        </li>
+        <li><button
+            class="
+              flex items-center justify-center px-4 h-10 ms-0 leading-tight border
+              border-slate-300 dark:border-slate-700 text-slate-500 bg-white
+              hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
+              dark:hover:bg-slate-700 dark:hover:text-white rounded-e-lg
+            "
+            type="button"
+            data-nextflow--samplesheet-target="nextBtn"
+            data-action="click->nextflow--samplesheet#nextPage"
+          >Next</button>
+        </li>
+      </ul>
+    </nav>
   </div>
 </div>
 
@@ -120,7 +160,6 @@ data: {
       </div>
     <% end %>
   </div>
-
 </template>
 
 <template data-nextflow--samplesheet-target="metadataCell">
