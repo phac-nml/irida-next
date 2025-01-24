@@ -16,7 +16,7 @@ module Metadata
   end
 
   def metadata_templates_for_namespace(namespace: nil)
-    @metadata_templates = namespace.metadata_templates
+    @metadata_templates = namespace.metadata_templates_names
   end
 
   def fields_for_namespace_or_template(namespace: nil, template: nil)

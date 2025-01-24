@@ -261,8 +261,8 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     metadata_summary.keys
   end
 
-  def metadata_templates
-    ['PulseNet Default', 'Outbreak 25a']
+  def metadata_templates_names
+    MetadataTemplate.where(namespace: self).pluck(:name)
   end
 
   private
