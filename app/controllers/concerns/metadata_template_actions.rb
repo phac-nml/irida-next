@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Common metadata template actions
-module MetadataTemplateActions
+module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
 
   included do
@@ -53,16 +53,10 @@ module MetadataTemplateActions
     respond_to do |format|
       format.turbo_stream do
         if @metadata_template.persisted?
-          render status: :ok, locals: {
-            type: 'success',
-            message: I18n.t('concerns.metadata_template_actions.create.success', template_name: @metadata_template.name)
-          }
+          render_success(I18n.t('concerns.metadata_template_actions.create.success',
+                                template_name: @metadata_template.name))
         else
-          render status: :unprocessable_entity,
-                 locals:
-                { type: 'alert',
-                  message: @metadata_template.errors.full_messages.first }
-
+          render_error(@metadata_template.errors.full_messages.first)
         end
       end
     end
@@ -77,11 +71,7 @@ module MetadataTemplateActions
             I18n.t('concerns.metadata_template_actions.destroy.success', template_name: @metadata_template.name)
           redirect_to metadata_templates_path
         else
-          render status: :unprocessable_entity,
-                 locals: {
-                   type: 'alert',
-                   message: @metadata_template.errors.full_messages.first
-                 }
+          render_error(@metadata_template.errors.full_messages.first)
         end
       end
     end
@@ -93,16 +83,13 @@ module MetadataTemplateActions
     respond_to do |format|
       if @updated
         format.turbo_stream do
-          render status: :ok, locals: { type: 'success',
-                                        message: I18n.t('concerns.metadata_template_actions.update.success',
-                                                        template_name: @metadata_template.name) }
+          render_success(I18n.t('concerns.metadata_template_actions.update.success',
+                                template_name: @metadata_template.name))
         end
       else
         format.turbo_stream do
-          render status: :unprocessable_entity,
-                 locals: { type: 'alert',
-                           message: I18n.t('concerns.metadata_template_actions.update.error',
-                                           template_name: @metadata_template.name) }
+          render_error(I18n.t('concerns.metadata_template_actions.update.error',
+                              template_name: @metadata_template.name))
         end
       end
     end
@@ -122,5 +109,20 @@ module MetadataTemplateActions
 
   def metadata_template
     @metadata_template = MetadataTemplate.find_by(id: params[:id], namespace: @namespace)
+  end
+
+  def render_success(message)
+    render status: :ok, locals: {
+      type: 'success',
+      message:
+    }
+  end
+
+  def render_error(message)
+    render status: :unprocessable_entity,
+           locals: {
+             type: 'alert',
+             message:
+           }
   end
 end
