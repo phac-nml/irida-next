@@ -171,5 +171,9 @@ module Projects
       end
       updated_params
     end
+
+    def metadata_templates
+      @metadata_templates = metadata_templates_for_namespace(namespace: @project.namespace)
+    end
   end
 end
