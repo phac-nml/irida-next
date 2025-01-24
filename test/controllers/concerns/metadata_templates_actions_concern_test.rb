@@ -45,12 +45,27 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'group metadata templates create failed' do
+    metadata_template_params = { metadata_template: { fields: %w[field1 field5] } }
+    post group_samples_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
+
+    assert_response :unprocessable_entity
+  end
+
   test 'group metadata templates update' do
     metadata_template_params = { metadata_template: { name: 'This is the new template', fields: %w[field6 field10] } }
     put group_samples_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream),
         params: metadata_template_params
 
     assert_response :success
+  end
+
+  test 'group metadata templates update failed' do
+    metadata_template_params = { metadata_template: { name: nil } }
+    put group_samples_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream),
+        params: metadata_template_params
+
+    assert_response :unprocessable_entity
   end
 
   test 'group metadata templates destroy' do
@@ -96,6 +111,16 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'project metadata templates create failed' do
+    metadata_template_params = { metadata_template: { name: 'Newest template' } }
+    post namespace_project_samples_metadata_templates_path(
+      @project_namespace.parent,
+      @project, format: :turbo_stream
+    ), params: metadata_template_params
+
+    assert_response :unprocessable_entity
+  end
+
   test 'project metadata templates update' do
     metadata_template_params = { metadata_template: { name: 'This is the new template', fields: %w[field6 field10] } }
     put namespace_project_samples_metadata_template_path(
@@ -104,6 +129,16 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     ), params: metadata_template_params
 
     assert_response :success
+  end
+
+  test 'project metadata templates update failed' do
+    metadata_template_params = { metadata_template: { name: nil } }
+    put namespace_project_samples_metadata_template_path(
+      @project_namespace.parent,
+      @project, @project_metadata_template, format: :turbo_stream
+    ), params: metadata_template_params
+
+    assert_response :unprocessable_entity
   end
 
   test 'project metadata templates destroy' do

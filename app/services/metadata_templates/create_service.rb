@@ -8,9 +8,12 @@ module MetadataTemplates
 
     def initialize(user, namespace, params = {})
       super(user, params)
-      @metadata_template = nil
       @namespace = namespace
       @params = params
+      @metadata_template = MetadataTemplate.new(params.merge(
+                                                  created_by: current_user,
+                                                  namespace: namespace
+                                                ))
     end
 
     def execute
@@ -18,7 +21,6 @@ module MetadataTemplates
 
       validate_params
 
-      build_template
       save_template
       @metadata_template
     rescue MetadataTemplates::CreateService::MetadataTemplateCreateError => e
@@ -38,13 +40,6 @@ module MetadataTemplates
 
       raise MetadataTemplateCreateError,
             I18n.t('services.metadata_templates.create.required.fields')
-    end
-
-    def build_template
-      @metadata_template = MetadataTemplate.new(@params.merge(
-                                                  created_by: current_user,
-                                                  namespace: @namespace
-                                                ))
     end
 
     def save_template
