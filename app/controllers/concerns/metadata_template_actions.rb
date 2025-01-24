@@ -46,7 +46,9 @@ module MetadataTemplateActions
   end
 
   def create
-    # @metadata_template = MetadataTemplates::CreateService.new(current_user, @namespace, metadata_templates_params)
+    # @metadata_template = MetadataTemplates::CreateService.new(
+    # current_user, @namespace, metadata_templates_params)
+    # .execute
 
     # respond_to do |format|
     #   format.turbo_stream do
