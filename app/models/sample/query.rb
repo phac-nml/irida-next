@@ -113,17 +113,18 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
     groups.each do |group|
       and_conditions = {}
       group.conditions.map do |condition|
+        key = condition.field.gsub(/(?<!^metadata)\./, '___')
         case condition.operator
         when '=', 'in'
-          and_conditions[condition.field] = condition.value
+          and_conditions[key] = condition.value
         when '!=', 'not_in'
-          and_conditions[condition.field] = { not: condition.value }
+          and_conditions[key] = { not: condition.value }
         when '<='
-          between_condition(and_conditions, condition, :lte)
+          between_condition(and_conditions, condition, key, :lte)
         when '>='
-          between_condition(and_conditions, condition, :gte)
+          between_condition(and_conditions, condition, key, :gte)
         when 'contains'
-          and_conditions[condition.field] = { ilike: "%#{condition.value}%" }
+          and_conditions[key] = { ilike: "%#{condition.value}%" }
         end
       end
       or_conditions << and_conditions
@@ -131,20 +132,20 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
     { _or: or_conditions }
   end
 
-  def between_condition(and_conditions, condition, operation) # rubocop:disable Metrics/AbcSize
+  def between_condition(and_conditions, condition, key, operation) # rubocop:disable Metrics/AbcSize
     if %w[created_at updated_at attachments_updated_at].include?(condition.field) || condition.field.end_with?('_date')
-      and_conditions[condition.field] = if and_conditions[condition.field].nil?
-                                          { operation => condition.value }
-                                        else
-                                          and_conditions[condition.field].merge({ operation => condition.value })
-                                        end
+      and_conditions[key] = if and_conditions[key].nil?
+                              { operation => condition.value }
+                            else
+                              and_conditions[key].merge({ operation => condition.value })
+                            end
     else
-      and_conditions["#{condition.field}.numeric"] = if and_conditions["#{condition.field}.numeric"].nil?
-                                                       { operation => condition.value.to_i }
-                                                     else
-                                                       and_conditions["#{condition.field}.numeric"]
-                                                         .merge({ operation => condition.value.to_i })
-                                                     end
+      and_conditions["#{key}.numeric"] = if and_conditions["#{key}.numeric"].nil?
+                                           { operation => condition.value.to_i }
+                                         else
+                                           and_conditions["#{key}.numeric"]
+                                             .merge({ operation => condition.value.to_i })
+                                         end
     end
   end
 
