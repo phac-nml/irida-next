@@ -74,14 +74,6 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
       @stubs.post(endpoint) { |_env| raise Faraday::BadRequestError }
       @stubs.post(endpoint) { |_env| raise Faraday::BadRequestError }
       @stubs.post(endpoint) { |_env| raise Faraday::BadRequestError }
-      # a success (never reached) after 3 failed attempts
-      @stubs.post(endpoint) do |_env|
-        [
-          200,
-          { 'Content-Type': 'application/json' },
-          { run_id: @workflow_execution.run_id }
-        ]
-      end
 
       WorkflowExecutionSubmissionJob.perform_later(@workflow_execution)
       perform_enqueued_jobs_sequentially(only: WorkflowExecutionSubmissionJob)
