@@ -123,18 +123,22 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                            locale: @user.locale))
-      assert_selector 'table tbody tr', count: 20
-      assert_text @sample1.name
-      assert_text @sample2.name
+      within('table tbody') do
+        assert_selector 'tr', count: 20
+        assert_text @sample1.name
+        assert_text @sample2.name
+      end
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: 'Sample 1'
       find('input.t-search-component').native.send_keys(:return)
 
       assert_text 'Samples: 13'
-      assert_selector 'table tbody tr', count: 13
+      within('table tbody') do
+        assert_selector 'tr', count: 13
 
-      assert_text @sample1.name
-      assert_no_text @sample2.name
+        assert_text @sample1.name
+        assert_no_text @sample2.name
+      end
     end
 
     test 'can sort the list of samples' do
@@ -145,7 +149,9 @@ module Groups
       # Because PUIDs are not always generated the same, issues regarding order have occurred when hard testing
       # the expected ordering of samples based on PUID. To resolve this, we will gather the first 4 PUIDs and ensure
       # they are ordered as expected against one another.
-      assert_selector 'table tbody tr', count: 20
+      within('table tbody') do
+        assert_selector 'tr', count: 20
+      end
 
       click_on 'Sample ID'
       assert_selector 'table thead th:first-child svg.icon-arrow_up'
@@ -194,7 +200,9 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                            locale: @user.locale))
-      assert_selector 'table tbody tr', count: 20
+      within('table tbody') do
+        assert_selector 'tr', count: 20
+      end
       within('table tbody tr:first-child th') do
         assert_text @sample1.puid
       end
@@ -203,10 +211,12 @@ module Groups
       find('input.t-search-component').native.send_keys(:return)
 
       assert_text 'Samples: 13'
-      assert_selector 'table tbody tr', count: 13
+      within('table tbody') do
+        assert_selector 'tr', count: 13
 
-      assert_text @sample1.name
-      assert_no_text @sample2.name
+        assert_text @sample1.name
+        assert_no_text @sample2.name
+      end
 
       assert_no_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       click_on 'Sample Name'
@@ -237,14 +247,17 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
-      assert_selector 'table tbody tr', count: 1
-      assert_text @sample1.name
-      assert_no_text @sample2.name
-
+      within('table tbody') do
+        assert_selector 'tr', count: 1
+        assert_text @sample1.name
+        assert_no_text @sample2.name
+      end
       click_on 'Sample Name'
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
 
-      assert_selector 'table tbody tr', count: 1
+      within('table tbody') do
+        assert_selector 'tr', count: 1
+      end
       assert_selector 'table tbody tr:first-child th', text: @sample1.puid
       assert_selector 'table tbody tr:first-child td:nth-child(2)', text: @sample1.name
     end
@@ -260,18 +273,22 @@ module Groups
       assert_selector 'div#limit-component button div span', text: '10'
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
                                                                            locale: @user.locale))
-      assert_selector 'table tbody tr', count: 10
-      assert_text @sample1.puid
-      assert_text @sample2.puid
+      within('table tbody') do
+        assert_selector 'tr', count: 10
+        assert_text @sample1.puid
+        assert_text @sample2.puid
+      end
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.puid
       find('input.t-search-component').native.send_keys(:return)
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
-      assert_selector 'table tbody tr', count: 1
-      assert_text @sample1.name
-      assert_no_text @sample2.name
+      within('table tbody') do
+        assert_selector 'tr', count: 1
+        assert_text @sample1.name
+        assert_no_text @sample2.name
+      end
       assert_selector 'div#limit-component button div span', text: '10'
     end
 
@@ -286,16 +303,27 @@ module Groups
       assert_selector 'div#limit-component button div span', text: '10'
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
                                                                            locale: @user.locale))
-      assert_selector 'table tbody tr', count: 10
-      assert_selector 'table thead tr th', count: 6
+      within('table tbody') do
+        assert_selector 'tr', count: 10
+      end
+
+      within('table tbody thead tr') do
+        assert_selector 'th', count: 6
+      end
 
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
                                                                            locale: @user.locale))
-      assert_selector 'table tbody tr', count: 10
-      assert_selector 'table thead tr th', count: 9
+
+      within('table tbody') do
+        assert_selector 'tr', count: 10
+      end
+
+      within('table tbody thead tr') do
+        assert_selector 'th', count: 9
+      end
       assert_selector 'div#limit-component button div span', text: '10'
     end
 
@@ -304,7 +332,9 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                            locale: @user.locale))
-      assert_selector 'table tbody tr', count: 20
+      within('table tbody') do
+        assert_selector 'tr', count: 20
+      end
       within('table tbody tr:first-child th') do
         assert_text @sample1.puid
       end
@@ -331,10 +361,13 @@ module Groups
       find('input.t-search-component').native.send_keys(:return)
 
       assert_text '1-13 of 13'
-      assert_selector 'table tbody tr', count: 13
-      assert_text @sample1.name
-      assert_no_text @sample2.name
-      assert_no_text @sample9.name
+      within('table tbody') do
+        assert_selector 'tr', count: 13
+
+        assert_text @sample1.name
+        assert_no_text @sample2.name
+        assert_no_text @sample9.name
+      end
     end
 
     test 'can sort and then filter the list of samples by puid' do
@@ -342,7 +375,10 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                            locale: @user.locale))
-      assert_selector 'table tbody tr', count: 20
+      within('table tbody') do
+        assert_selector 'tr', count: 20
+      end
+
       within('table tbody tr:first-child th') do
         assert_text @sample1.puid
       end
@@ -370,10 +406,13 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
-      assert_selector 'table tbody tr', count: 1
-      assert_text @sample1.name
-      assert_no_text @sample2.name
-      assert_no_text @sample9.name
+      within('table tbody') do
+        assert_selector 'tr', count: 1
+
+        assert_text @sample1.name
+        assert_no_text @sample2.name
+        assert_no_text @sample9.name
+      end
     end
 
     test 'should be able to toggle metadata' do
@@ -381,7 +420,9 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                            locale: @user.locale))
-      assert_selector 'table thead tr th', count: 6
+      within('table thead tr') do
+        assert_selector 'th', count: 6
+      end
 
       click_on 'Last Updated'
       assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
@@ -389,7 +430,10 @@ module Groups
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
 
-      assert_selector 'table thead tr th', count: 9
+      within('table thead tr') do
+        assert_selector 'th', count: 9
+      end
+
       within('table tbody tr:first-child') do
         assert_text @sample30.name
         assert_selector 'td:nth-child(7) button', text: 'value1'
@@ -406,9 +450,14 @@ module Groups
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                            locale: @user.locale))
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
-      assert_selector 'table thead tr th', count: 6
+      within('table thead tr') do
+        assert_selector 'th', count: 6
+      end
+
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
-      assert_selector 'table thead tr th', count: 9
+      within('table thead tr') do
+        assert_selector 'th', count: 9
+      end
 
       click_on 'metadatafield1'
       assert_selector 'table thead th:nth-child(7) svg.icon-arrow_up'
@@ -424,7 +473,10 @@ module Groups
 
       # toggling metadata again causes sort to be reset
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
-      assert_selector 'table thead tr th', count: 6
+
+      within('table thead tr') do
+        assert_selector 'th', count: 6
+      end
 
       assert_selector 'table thead th:nth-child(5) svg.icon-arrow_down'
       within('tbody') do
@@ -836,14 +888,20 @@ module Groups
     test 'can update metadata value that is not from an analysis' do
       ### SETUP START ###
       visit group_samples_url(@group)
-      assert_selector 'table thead tr th', count: 6
+
+      within('table thead tr') do
+        assert_selector 'th', count: 6
+      end
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
 
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
-      assert_selector 'table thead tr th', count: 9
+
+      within('table thead tr') do
+        assert_selector 'th', count: 9
+      end
 
       within 'div.overflow-auto.scrollbar' do |div|
         div.scroll_to div.find('table thead th:nth-child(7)')
@@ -877,7 +935,10 @@ module Groups
       visit group_samples_url(@group)
 
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
-      assert_selector 'table thead tr th', count: 9
+
+      within('table thead tr') do
+        assert_selector 'th', count: 9
+      end
 
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample28.name
       find('input.t-search-component').native.send_keys(:return)
