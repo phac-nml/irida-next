@@ -328,8 +328,11 @@ module Projects
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      assert_selector "#samples-table table tbody tr[id='#{@sample1.id}']"
-      assert_selector '#samples-table table tbody tr', count: 3
+
+      within('#samples-table table tbody') do
+        assert_selector "tr[id='#{@sample1.id}']"
+        assert_selector 'tr', count: 3
+      end
 
       # nav to sample show
       visit namespace_project_sample_url(@namespace, @project, @sample1)
@@ -355,10 +358,12 @@ module Projects
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
                                                                            locale: @user.locale))
-      # remaining samples still appear on table
-      assert_selector '#samples-table table tbody tr', count: 2
-      # deleted sample row no longer exists
-      assert_no_selector "#samples-table table tbody tr[id='#{@sample1.id}']"
+      within('#samples-table table tbody') do
+        # remaining samples still appear on table
+        assert_selector 'tr', count: 2
+        # deleted sample row no longer exists
+        assert_no_selector "tr[id='#{@sample1.id}']"
+      end
       ### VERIFY END ###
     end
 
@@ -756,8 +761,11 @@ module Projects
       assert_selector 'div#limit-component button div span', text: '10'
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 10, count: 20,
                                                                            locale: @user.locale))
-      # verify table consists of 10 samples per page
-      assert_selector '#samples-table table tbody tr', count: 10
+      within('#samples-table table tbody') do
+        # verify table consists of 10 samples per page
+        assert_selector 'tr',
+                        count: 10
+      end
 
       # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: sample3.puid
@@ -1066,7 +1074,9 @@ module Projects
                                                                            locale: @user.locale))
       # toggle metadata on for samples table
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
-      assert_selector '#samples-table table thead tr th', count: 8
+      within('#samples-table table thead tr') do
+        assert_selector 'th', count: 8
+      end
       within('#samples-table table') do
         within('thead') do
           # metadatafield1 and 2 already exist, 3 does not and will be added by the import
@@ -1104,7 +1114,9 @@ module Projects
       end
 
       # metadatafield3 added to header
-      assert_selector '#samples-table table thead tr th', count: 9
+      within('#samples-table table thead tr') do
+        assert_selector 'th', count: 9
+      end
       within('#samples-table table') do
         within('thead') do
           assert_text 'METADATAFIELD3'
@@ -1132,7 +1144,9 @@ module Projects
                                                                            locale: @user.locale))
       # toggle metadata on for samples table
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
-      assert_selector '#samples-table table thead tr th', count: 8
+      within('#samples-table table thead tr') do
+        assert_selector 'th', count: 8
+      end
       within('#samples-table table') do
         within('thead') do
           # metadatafield 3 and 4 will be added by import
@@ -1167,8 +1181,10 @@ module Projects
         click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
       end
 
-      # metadatafield3 and 4 added to header
-      assert_selector '#samples-table table thead tr th', count: 10
+      within('#samples-table table thead tr') do
+        # metadatafield3 and 4 added to header
+        assert_selector 'th', count: 10
+      end
       within('#samples-table table') do
         within('thead') do
           assert_text 'METADATAFIELD3'
@@ -1234,7 +1250,9 @@ module Projects
       end
 
       # metadatafield3 and 4 added to header
-      assert_selector '#samples-table table thead tr th', count: 10
+      within('#samples-table table thead tr') do
+        assert_selector 'th', count: 10
+      end
       within('#samples-table table') do
         within('thead') do
           assert_text 'METADATAFIELD3'
@@ -1506,7 +1524,9 @@ module Projects
       # toggle metadata on for samples table
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
       # metadata that does not overwriting analysis values will still be added
-      assert_selector '#samples-table table thead tr th', count: 8
+      within('#samples-table table thead tr') do
+        assert_selector 'th', count: 8
+      end
       within('#samples-table table thead') do
         assert_no_text 'METADATAFIELD3'
       end
@@ -2421,20 +2441,26 @@ module Projects
     test 'can update metadata value that is not from an analysis' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
-      assert_selector 'table thead tr th', count: 6
+      within('table thead tr') do
+        assert_selector 'th', count: 6
+      end
 
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
 
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
-      assert_selector 'table thead tr th', count: 8
+      within('table thead tr') do
+        assert_selector 'th', count: 8
+      end
 
       within 'div.overflow-auto.scrollbar' do |div|
         div.scroll_to div.find('table thead th:nth-child(7)')
       end
 
-      assert_selector 'table thead tr th', count: 8
+      within('table thead tr') do
+        assert_selector 'th', count: 8
+      end
       ### SETUP END ###
 
       within('table tbody tr:first-child td:nth-child(7)') do
@@ -2497,7 +2523,9 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
 
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
-      assert_selector 'table thead tr th', count: 7
+      within('table thead tr') do
+        assert_selector 'th', count: 7
+      end
 
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample2.name
       find('input.t-search-component').native.send_keys(:return)
@@ -2514,20 +2542,28 @@ module Projects
     test 'shows confirmation dialog when editing metadata field with changes' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
-      assert_selector 'table thead tr th', count: 6
+
+      within('table thead tr') do
+        assert_selector 'th', count: 6
+      end
 
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
 
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
-      assert_selector 'table thead tr th', count: 8
+
+      within('table thead tr') do
+        assert_selector 'th', count: 8
+      end
 
       within 'div.overflow-auto.scrollbar' do |div|
         div.scroll_to div.find('table thead th:nth-child(7)')
       end
 
-      assert_selector 'table thead tr th', count: 8
+      within('table thead tr') do
+        assert_selector 'th', count: 8
+      end
       ### SETUP END ###
 
       within('table tbody tr:first-child td:nth-child(7)') do
@@ -2561,7 +2597,9 @@ module Projects
     test 'shows confirmation dialog can be cancelled resetting the value' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
-      assert_selector 'table thead tr th', count: 6
+      within('table thead tr') do
+        assert_selector 'th', count: 6
+      end
 
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
