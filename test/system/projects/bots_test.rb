@@ -417,7 +417,7 @@ module Projects
       assert_selector '#access-token-section'
       assert_no_selector '#access-token-section div'
       # create new PAT to render PAT panel
-      within "tr[id='#{@project_bot.id}']" do
+      within "table tbody tr[id='#{@project_bot.id}']" do
         click_link I18n.t('bots.index.table.actions.generate_new_token')
       end
 
