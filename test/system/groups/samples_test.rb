@@ -307,7 +307,7 @@ module Groups
         assert_selector 'tr', count: 10
       end
 
-      within('table tbody thead tr') do
+      within('table thead tr') do
         assert_selector 'th', count: 6
       end
 
@@ -321,7 +321,7 @@ module Groups
         assert_selector 'tr', count: 10
       end
 
-      within('table tbody thead tr') do
+      within('table thead tr') do
         assert_selector 'th', count: 9
       end
       assert_selector 'div#limit-component button div span', text: '10'
