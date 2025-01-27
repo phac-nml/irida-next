@@ -29,7 +29,7 @@
     "
   >
     <% properties.each do |header, property| %>
-      <%= render Nextflow::Samplesheet::ColumnComponent.new(
+      <%= render Nextflow::Samplesheet::HeaderComponent.new(
         namespace_id:,
         header:,
         property:,

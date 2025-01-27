@@ -83,6 +83,7 @@ export default class extends Controller {
     this.#samplesheetAttributes = JSON.parse(
       this.workflowAttributesTarget.innerText,
     );
+    console.log(this.#samplesheetAttributes);
     this.#columnNames = Object.keys(this.#samplesheetProperties);
 
     // enter all initial/autoloaded sample data into FormData

@@ -58,10 +58,9 @@ module Nextflow
     end
 
     def file_samplesheet_values(file)
-      {
+      { form_value: file.empty? ? '' : file[:global_id],
         filename: file.empty? ? I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file') : file[:filename],
-        attachment_id: file.empty? ? '' : file[:id]
-      }
+        attachment_id: file.empty? ? '' : file[:id] }
     end
 
     def metadata_samplesheet_values(sample, name)
