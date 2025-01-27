@@ -66,11 +66,7 @@ module Nextflow
 
     def metadata_samplesheet_values(sample, name)
       metadata = sample.metadata.fetch(name, '')
-      if metadata.empty?
-        { form_value: '' }
-      else
-        { form_value: metadata }
-      end
+      { form_value: metadata.empty? ? '' : metadata }
     end
 
     def extract_properties(schema)

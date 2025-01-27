@@ -307,7 +307,7 @@ export default class extends Controller {
 
   #generateSampleCell(container, columnName, index) {
     let childNode = this.sampleIdentifierCellTarget.innerHTML.replace(
-      /CELL_PLACEHOLDER/g,
+      /SAMPLE_IDENTIFIER/g,
       this.#retrieveFormData(index, columnName),
     );
     container.insertAdjacentHTML("beforeend", childNode);
@@ -319,7 +319,8 @@ export default class extends Controller {
       .replace(/COLUMN_NAME_PLACEHOLDER/g, columnName);
 
     container.insertAdjacentHTML("beforeend", childNode);
-    let select = container.querySelector("select");
+    let select = container.lastElementChild;
+    this.#verifyRequiredProperty(select, columnName);
     for (let j = 0; j < options.length; j++) {
       let option = document.createElement("option");
       option.value = options[j];
@@ -379,7 +380,7 @@ export default class extends Controller {
     let metadataValue = this.#retrieveFormData(index, columnName);
     if (metadataValue) {
       let childNode = this.metadataCellTarget.innerHTML.replace(
-        /METADATA_VALUE_PLACEHOLDER/g,
+        /METADATA_PLACEHOLDER/g,
         this.#retrieveFormData(index, columnName),
       );
       container.insertAdjacentHTML("beforeend", childNode);
@@ -400,9 +401,18 @@ export default class extends Controller {
       );
 
     container.insertAdjacentHTML("beforeend", childNode);
+    // requery to retrieve HTML node rather than textNode
+    let textCell = container.lastElementChild;
+    this.#verifyRequiredProperty(textCell, columnName);
     const form_value = this.#retrieveFormData(index, columnName);
     if (form_value) {
-      container.lastElementChild.value = form_value;
+      textCell.value = form_value;
+    }
+  }
+
+  #verifyRequiredProperty(node, columnName) {
+    if (this.#samplesheetProperties[columnName]["required"]) {
+      node.required = true;
     }
   }
 
