@@ -69,7 +69,7 @@ module WorkflowExecutions
 
         assert_text I18n.t(:'components.nextflow.update_samples')
         assert_text I18n.t(:'components.nextflow.email_notification')
-        assert_text I18n.t(:'components.nextflow.shared_with_namespace')
+        assert_text I18n.t(:'components.nextflow.shared_with_namespace', namespace_type: @project.namespace.type)
       end
     end
 
@@ -104,7 +104,7 @@ module WorkflowExecutions
 
         assert_text I18n.t(:'components.nextflow.update_samples')
         assert_text I18n.t(:'components.nextflow.email_notification')
-        assert_text I18n.t(:'components.nextflow.shared_with_namespace')
+        assert_text I18n.t(:'components.nextflow.shared_with_namespace', namespace_type: @project.namespace.type)
       end
     end
 
@@ -139,7 +139,7 @@ module WorkflowExecutions
 
         assert_no_text I18n.t(:'components.nextflow.update_samples')
         assert_text I18n.t(:'components.nextflow.email_notification')
-        assert_text I18n.t(:'components.nextflow.shared_with_namespace')
+        assert_text I18n.t(:'components.nextflow.shared_with_namespace', namespace_type: @project.namespace.type)
       end
     end
 
@@ -177,7 +177,7 @@ module WorkflowExecutions
 
         assert_no_text I18n.t(:'components.nextflow.update_samples')
         assert_text I18n.t(:'components.nextflow.email_notification')
-        assert_text I18n.t(:'components.nextflow.shared_with_namespace')
+        assert_text I18n.t(:'components.nextflow.shared_with_namespace', namespace_type: @project.namespace.type)
       end
     end
 
@@ -220,7 +220,7 @@ module WorkflowExecutions
 
         assert_text I18n.t(:'components.nextflow.update_samples')
         assert_text I18n.t(:'components.nextflow.email_notification')
-        assert_text I18n.t(:'components.nextflow.shared_with_namespace')
+        assert_text I18n.t(:'components.nextflow.shared_with_namespace', namespace_type: @namespace.type)
       end
     end
 
@@ -255,7 +255,7 @@ module WorkflowExecutions
 
         assert_text I18n.t(:'components.nextflow.update_samples')
         assert_text I18n.t(:'components.nextflow.email_notification')
-        assert_text I18n.t(:'components.nextflow.shared_with_namespace')
+        assert_text I18n.t(:'components.nextflow.shared_with_namespace', namespace_type: @namespace.type)
       end
     end
 
@@ -290,7 +290,7 @@ module WorkflowExecutions
 
         assert_no_text I18n.t(:'components.nextflow.update_samples')
         assert_text I18n.t(:'components.nextflow.email_notification')
-        assert_text I18n.t(:'components.nextflow.shared_with_namespace')
+        assert_text I18n.t(:'components.nextflow.shared_with_namespace', namespace_type: @namespace.type)
       end
     end
 
