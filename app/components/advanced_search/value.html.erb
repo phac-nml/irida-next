@@ -1,5 +1,11 @@
 <% invalid_value = @condition.errors.include?(:value) %>
-<div class="form-field w-6/12 value <%= 'invalid' if invalid_value %>">
+<% exists_operator = %w[exists not_exists].include?(@condition.operator) %>
+<div
+  class="
+    form-field w-6/12 value <%= 'invalid' if invalid_value %>
+    <%= 'invisible' if exists_operator %>
+  "
+>
   <% if %w[in not_in].include?(@condition.operator) %>
     <div
       data-controller="list-filter"
@@ -15,13 +21,7 @@
   <% else %>
     <%= @conditions_form.text_field :value,
                                 placeholder: t("advanced_search_component.value"),
-                                "aria-label": t("advanced_search_component.value"),
-                                class:
-                                  class_names(
-                                    invisible: %w[exists not_exists].include?(
-                                      @condition.operator,
-                                    ),
-                                  ) %>
+                                "aria-label": t("advanced_search_component.value") %>
   <% end %>
   <%= render "shared/form/field_errors",
   errors: @condition.errors.full_messages_for(:value) %>
