@@ -79,7 +79,7 @@
             "
             data-nextflow--samplesheet-target="pageNum"
             data-action="change->nextflow--samplesheet#pageSelected"
-          ></select>
+          ><option value="1" selected>1</option></select>
         </li>
         <li><button
             class="
@@ -155,8 +155,7 @@ data: {
         data-file-missing="<%= @selected.empty? ? "true" : "false" %>"
         <% end %>
       >
-        <%# <%= @selected.empty? ? t(".no_selected_file") : @selected[:filename] %>
-        CELL_VALUE_PLACEHOLDER
+        FILENAME_PLACEHOLDER
       </div>
     <% end %>
   </div>

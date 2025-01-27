@@ -39,9 +39,9 @@ module Nextflow
       @properties.to_h do |name, property|
         case property['cell_type']
         when 'sample_cell'
-          [name, { form_value: sample.puid, cell_type: 'sample_cell', cell_value: sample.puid }]
+          [name, { form_value: sample.puid }]
         when 'sample_name_cell'
-          [name, { form_value: sample.name, cell_type: 'sample_name_cell', cell_value: sample.name }]
+          [name, { form_value: sample.name }]
         when 'fastq_cell'
           [name,
            file_samplesheet_values(sample.attachments.empty? ? {} : sample.most_recent_fastq_file(name,
@@ -52,28 +52,24 @@ module Nextflow
         when 'metadata_cell'
           [name, metadata_samplesheet_values(sample, name)]
         when 'dropdown_cell' || 'input_cell'
-          [name, { form_value: '', cell_type: property['cell_type'], cell_value: '' }]
+          [name, { form_value: '' }]
         end
       end
     end
 
     def file_samplesheet_values(file)
-      { form_value: file.empty? ? '' : file[:global_id],
-        cell_type: 'file_cell',
-        cell_value: file.empty? ? I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file') : file[:filename],
-        attachment_id: file.empty? ? '' : file[:id] }
+      {
+        filename: file.empty? ? I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file') : file[:filename],
+        attachment_id: file.empty? ? '' : file[:id]
+      }
     end
 
     def metadata_samplesheet_values(sample, name)
       metadata = sample.metadata.fetch(name, '')
       if metadata.empty?
-        { form_value: '',
-          cell_type: 'text',
-          cell_value: nil }
+        { form_value: '' }
       else
-        { form_value: metadata,
-          cell_type: 'metadata_cell',
-          cell_value: metadata }
+        { form_value: metadata }
       end
     end
 

@@ -40,6 +40,7 @@ export default class extends Controller {
     "bg-slate-50",
     "dark:bg-slate-700",
     "dark:text-slate-400",
+    "pointer-events-none",
   ];
   #pagination_button_enabled_state = [
     "text-slate-500",
@@ -50,86 +51,83 @@ export default class extends Controller {
     "dark:text-slate-400",
     "dark:hover:bg-slate-700",
     "dark:hover:text-white",
+    "cursor",
+    "cursor-pointer",
   ];
 
   // The samplesheet will use FormData, allowing us to create the inputs of a form without the associated DOM elements.
   #formData = new FormData();
+
+  // pagination page params
   #currentPage = 1;
   #lastPage;
-  #samplesheetProperties = JSON.parse(
-    this.samplesheetPropertiesTarget.innerHTML,
-  );
-  #columnNames = Object.keys(this.#samplesheetProperties);
+
+  // samplesheetProperties contains all the parameters of each field type to the associated pipeline
+  #samplesheetProperties;
+
+  // samplesheetAttributes contains the specific sample values for table rendering and form submission
+  #samplesheetAttributes;
+  #columnNames;
 
   connect() {
-    console.log("properties");
-    console.log(this.#samplesheetProperties);
     if (this.hasWorkflowAttributesTarget) {
-      this.samplesheetParams = JSON.parse(
-        this.workflowAttributesTarget.innerText,
-      );
-      this.#setInitialSamplesheetData();
-      this.#lastPage = Math.ceil(
-        Object.keys(this.samplesheetParams).length / 5,
-      );
-      if (this.#lastPage == 1) {
-        this.#disablePaginationButton(this.nextBtnTarget);
-      }
-      this.#generatePageNumberDropdown();
-      this.#loadPageData();
+      this.#setSamplesheetParametersAndData();
     }
   }
 
+  #setSamplesheetParametersAndData() {
+    this.#samplesheetProperties = JSON.parse(
+      this.samplesheetPropertiesTarget.innerHTML,
+    );
+
+    this.#samplesheetAttributes = JSON.parse(
+      this.workflowAttributesTarget.innerText,
+    );
+    this.#columnNames = Object.keys(this.#samplesheetProperties);
+
+    // enter all initial/autoloaded sample data into FormData
+    this.#setInitialSamplesheetData();
+
+    // set last page based on number of samples
+    this.#lastPage = Math.ceil(
+      Object.keys(this.#samplesheetAttributes).length / 5,
+    );
+
+    // disable dropdown and next button if only 1 page of samples, otherwise create the dropdown page options
+    if (this.#lastPage == 1) {
+      this.#disablePaginationButton(this.nextBtnTarget);
+      this.#disablePaginationButton(this.pageNumTarget);
+    } else {
+      this.#generatePageNumberDropdown();
+    }
+    // render samples table
+    this.#loadTableData();
+  }
+
   #setInitialSamplesheetData() {
-    console.log("params");
-    console.log(this.samplesheetParams);
-    for (const index in this.samplesheetParams) {
-      for (const sample_attrs in this.samplesheetParams[index]) {
+    for (const index in this.#samplesheetAttributes) {
+      for (const sample_attrs in this.#samplesheetAttributes[index]) {
         if (sample_attrs == "sample_id") {
           // specifically adds sample to form
           this.#setFormData(
             `workflow_execution[samples_workflow_executions_attributes][${index}][${sample_attrs}]`,
-            this.samplesheetParams[index][sample_attrs],
+            this.#samplesheetAttributes[index][sample_attrs],
           );
           continue;
         }
-        for (const property in this.samplesheetParams[index][sample_attrs]) {
+        for (const property in this.#samplesheetAttributes[index][
+          sample_attrs
+        ]) {
           // adds all remaining sample data to form (files, metadata, etc.)
           this.#setFormData(
             `workflow_execution[samples_workflow_executions_attributes][${index}][${sample_attrs}][${property}]`,
-            this.samplesheetParams[index][sample_attrs][property]["form_value"],
+            this.#samplesheetAttributes[index][sample_attrs][property][
+              "form_value"
+            ],
           );
         }
       }
     }
-  }
-
-  // handles changes to text and dropdown cells
-  updateEditableSamplesheetData(event) {
-    this.#setFormData(event.target.name, event.target.value);
-  }
-
-  // handles changes to metadata autofill and file cells
-  updateFileData({ detail: { content } }) {
-    this.#setFormData(content.inputName, content.inputValue);
-
-    // update samplesheetParams cell_value with the new filename to be displayed in samplesheet table
-    // as this is the only place to retrieve filename unlike all other fields that can be retrieved
-    // via formData (files are stored by globalID in formData)
-    let filename = content["file"]["filename"]
-      ? content["file"]["filename"]
-      : this.noSelectedFileValue;
-    this.samplesheetParams[content["file"]["index"]]["samplesheet_params"][
-      content["file"]["property"]
-    ]["cell_value"] = filename;
-  }
-
-  updateMetadata({ detail: { content } }) {
-    for (const formName in content["metadata"]) {
-      this.#setFormData(formName, content["metadata"][formName]);
-    }
-    this.#clearSamplesheetTable();
-    this.#loadPageData();
   }
 
   submitSamplesheet(event) {
@@ -159,16 +157,6 @@ export default class extends Controller {
         }
       });
     }
-  }
-
-  #setFormData(inputName, inputValue) {
-    this.#formData.set(inputName, inputValue);
-  }
-
-  #retrieveFormData(index, columnName) {
-    return this.#formData.get(
-      `workflow_execution[samples_workflow_executions_attributes][${index}][samplesheet_params][${columnName}]`,
-    );
   }
 
   #validateFileCells() {
@@ -224,19 +212,57 @@ export default class extends Controller {
     this.errorMessageTarget.innerHTML = message;
   }
 
-  #loadPageData() {
+  #setFormData(inputName, inputValue) {
+    this.#formData.set(inputName, inputValue);
+  }
+
+  #retrieveFormData(index, columnName) {
+    return this.#formData.get(
+      `workflow_execution[samples_workflow_executions_attributes][${index}][samplesheet_params][${columnName}]`,
+    );
+  }
+
+  // handles changes to text and dropdown cells
+  updateEditableSamplesheetData(event) {
+    this.#setFormData(event.target.name, event.target.value);
+  }
+
+  // handles changes to file cells
+  updateFileData({ detail: { content } }) {
+    this.#setFormData(
+      `workflow_execution[samples_workflow_executions_attributes][${content["index"]}][samplesheet_params][${content["property"]}]`,
+      content["globalId"],
+    );
+
+    // update samplesheetParams filename with the new filename to be displayed in samplesheet table
+    // as this is the only place to retrieve filename unlike all other fields that can be retrieved
+    // via formData (files are stored by globalID in formData)
+    let filename = content["filename"]
+      ? content["filename"]
+      : this.noSelectedFileValue;
+    this.#samplesheetAttributes[content["index"]]["samplesheet_params"][
+      content["property"]
+    ]["filename"] = filename;
+  }
+
+  // handles changes to metadata autofill
+  updateMetadata({ detail: { content } }) {
+    for (const formName in content["metadata"]) {
+      this.#setFormData(formName, content["metadata"][formName]);
+    }
+    this.#clearSamplesheetTable();
+    this.#loadTableData();
+  }
+
+  #loadTableData() {
     let startingIndex = (this.#currentPage - 1) * 5;
     let lastIndex = startingIndex + 5;
     if (
       this.#currentPage == this.#lastPage &&
-      Object.keys(this.samplesheetParams).length % 5 != 0
+      Object.keys(this.#samplesheetAttributes).length % 5 != 0
     ) {
       lastIndex =
-        (Object.keys(this.samplesheetParams).length % 5) + startingIndex;
-    }
-
-    if (this.hasMetadataIndexStartTarget) {
-      this.#updateMetadataIndexes(startingIndex, lastIndex);
+        (Object.keys(this.#samplesheetAttributes).length % 5) + startingIndex;
     }
 
     this.#columnNames.forEach((columnName) => {
@@ -266,30 +292,9 @@ export default class extends Controller {
           case "input_cell":
             this.#generateTextCell(container, columnName, i);
             break;
-          default:
-            this.#generateSampleCell(container, columnName, i);
         }
       }
     });
-  }
-
-  #updateMetadataIndexes(startingIndex, endingIndex) {
-    for (let metadataIndexStartTarget of this.metadataIndexStartTargets) {
-      metadataIndexStartTarget.value = startingIndex;
-    }
-    for (let metadataIndexEndTarget of this.metadataIndexEndTargets) {
-      metadataIndexEndTarget.value = endingIndex;
-    }
-  }
-
-  #cleanupMetadataFields(property) {
-    let metadataColumn = document.getElementById(`metadata-${property}-column`);
-    for (const metadataField of metadataColumn.children) {
-      if (metadataField.hidden) {
-        console.log("hiddin");
-        // metadataField.remove();
-      }
-    }
   }
 
   // inserting the template html then requerying it out via lastElementChild turns the node from textNode into an
@@ -331,12 +336,12 @@ export default class extends Controller {
       .replace(/PROPERTY_PLACEHOLDER/g, columnName)
       .replace(
         /ATTACHABLE_ID_PLACEHOLDER/g,
-        this.samplesheetParams[index]["sample_id"],
+        this.#samplesheetAttributes[index]["sample_id"],
       )
       .replace(/ATTACHABLE_TYPE_PLACEHOLDER/g, "Sample")
       .replace(
         /SELECTED_ID_PLACEHOLDER/g,
-        this.samplesheetParams[index]["samplesheet_params"][columnName][
+        this.#samplesheetAttributes[index]["samplesheet_params"][columnName][
           "attachment_id"
         ],
       )
@@ -347,9 +352,9 @@ export default class extends Controller {
           : "other",
       )
       .replace(
-        /CELL_VALUE_PLACEHOLDER/g,
-        this.samplesheetParams[index]["samplesheet_params"][columnName][
-          "cell_value"
+        /FILENAME_PLACEHOLDER/g,
+        this.#samplesheetAttributes[index]["samplesheet_params"][columnName][
+          "filename"
         ],
       );
     container.insertAdjacentHTML("beforeend", childNode);
@@ -357,11 +362,11 @@ export default class extends Controller {
     // sets the verification attribute (whether a file cell is required and has a selection) for required file cells
     if (this.#samplesheetProperties[columnName]["required"]) {
       let fileNode = document.getElementById(
-        `${this.samplesheetParams[index]["sample_id"]}_${columnName}`,
+        `${this.#samplesheetAttributes[index]["sample_id"]}_${columnName}`,
       );
       fileNode.setAttribute(
         "data-file-missing",
-        this.samplesheetParams[index]["samplesheet_params"][columnName][
+        this.#samplesheetAttributes[index]["samplesheet_params"][columnName][
           "attachment_id"
         ]
           ? "false"
@@ -419,12 +424,12 @@ export default class extends Controller {
   }
 
   #updatePageData() {
-    this.#verifyButtonStates();
+    this.#verifyPaginationButtonStates();
     this.#clearSamplesheetTable();
-    this.#loadPageData();
+    this.#loadTableData();
   }
 
-  #verifyButtonStates() {
+  #verifyPaginationButtonStates() {
     if (this.#currentPage == 1) {
       this.#disablePaginationButton(this.previousBtnTarget);
       this.#enablePaginationButton(this.nextBtnTarget);
@@ -451,14 +456,13 @@ export default class extends Controller {
 
   #generatePageNumberDropdown() {
     let pageSelection = this.pageNumTarget;
-
-    for (let i = 1; i < this.#lastPage + 1; i++) {
+    // page 1 is already added by default
+    for (let i = 2; i < this.#lastPage + 1; i++) {
       let option = document.createElement("option");
       option.value = i;
       option.innerHTML = i;
       pageSelection.appendChild(option);
     }
-    pageSelection.value = 1;
   }
 
   #clearSamplesheetTable() {
@@ -467,7 +471,3 @@ export default class extends Controller {
     });
   }
 }
-
-// console.log(this.#samplesheetProperties);
-
-// console.log(this.samplesheetParams);
