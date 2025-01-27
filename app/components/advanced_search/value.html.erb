@@ -15,7 +15,13 @@
   <% else %>
     <%= @conditions_form.text_field :value,
                                 placeholder: t("advanced_search_component.value"),
-                                "aria-label": t("advanced_search_component.value") %>
+                                "aria-label": t("advanced_search_component.value"),
+                                class:
+                                  class_names(
+                                    invisible: %w[exists not_exists].include?(
+                                      @condition.operator,
+                                    ),
+                                  ) %>
   <% end %>
   <%= render "shared/form/field_errors",
   errors: @condition.errors.full_messages_for(:value) %>

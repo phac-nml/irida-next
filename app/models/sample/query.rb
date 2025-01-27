@@ -110,31 +110,39 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
       includes: [project: { namespace: [{ parent: :route }, :route] }] }
   end
 
-  def advanced_search_params # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
+  def advanced_search_params
     or_conditions = []
     groups.each do |group|
       and_conditions = {}
       group.conditions.map do |condition|
-        key = condition.field.gsub(/(?<!^metadata)\./, '___')
-        case condition.operator
-        when '=', 'in'
-          and_conditions[key] = condition.value
-        when '!=', 'not_in'
-          and_conditions[key] = { not: condition.value }
-        when '<='
-          between_condition(and_conditions, condition, key, :lte)
-        when '>='
-          between_condition(and_conditions, condition, key, :gte)
-        when 'contains'
-          and_conditions[key] = { ilike: "%#{condition.value}%" }
-        end
+        handle_condition(and_conditions, condition)
       end
       or_conditions << and_conditions
     end
     { _or: or_conditions }
   end
 
-  def between_condition(and_conditions, condition, key, operation) # rubocop:disable Metrics/AbcSize
+  def handle_condition(and_conditions, condition) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
+    key = condition.field.gsub(/(?<!^metadata)\./, '___')
+    case condition.operator
+    when '=', 'in'
+      and_conditions[key] = condition.value
+    when '!=', 'not_in'
+      and_conditions[key] = { not: condition.value }
+    when '<='
+      handle_between_condition(and_conditions, condition, key, :lte)
+    when '>='
+      handle_between_condition(and_conditions, condition, key, :gte)
+    when 'contains'
+      and_conditions[key] = { ilike: "%#{condition.value}%" }
+    when 'exists'
+      and_conditions[key] = { not: nil }
+    when 'not_exists'
+      and_conditions[key] = nil
+    end
+  end
+
+  def handle_between_condition(and_conditions, condition, key, operation) # rubocop:disable Metrics/AbcSize
     if %w[created_at updated_at attachments_updated_at].include?(condition.field) || condition.field.end_with?('_date')
       and_conditions[key] = if and_conditions[key].nil?
                               { operation => condition.value }

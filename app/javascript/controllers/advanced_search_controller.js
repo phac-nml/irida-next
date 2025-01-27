@@ -125,11 +125,15 @@ export default class extends Controller {
       ),
     ].indexOf(condition);
 
-    if (["in", "not_in"].includes(operator)) {
+    if (["exists", "not_exists"].includes(operator)) {
+      value.classList.add("invisible");
+    } else if (["in", "not_in"].includes(operator)) {
+      value.classList.remove("invisible");
       value.outerHTML = this.listValueTemplateTarget.innerHTML
         .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
         .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
     } else {
+      value.classList.remove("invisible");
       value.outerHTML = this.valueTemplateTarget.innerHTML
         .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
         .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
