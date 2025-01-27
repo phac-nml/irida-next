@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Handles sending metadata and file form values to samplesheet FormData
+// Handles sending file data to samplesheet after file selection
 export default class extends Controller {
   static values = {
     inputName: { type: String },
@@ -8,15 +8,13 @@ export default class extends Controller {
     filename: { type: String },
     index: { type: String },
     property: { type: String },
-    type: { type: String },
   };
 
   connect() {
-    console.log("autofilled");
-    this.sendAutofilledInputData();
+    this.sendFileData();
   }
 
-  sendAutofilledInputData() {
+  sendFileData() {
     let dispatchContent = {
       inputName: this.inputNameValue,
       inputValue: this.inputValueValue,
@@ -27,8 +25,10 @@ export default class extends Controller {
         index: this.indexValue,
         property: this.propertyValue,
       };
+    } else if (this.typeValue == "metadata") {
+      dispatchContent["metadata"] = { property: this.propertyValue };
     }
-    this.dispatch("sendAutofilledInputData", {
+    this.dispatch("sendFileData", {
       detail: {
         content: dispatchContent,
       },

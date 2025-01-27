@@ -19,6 +19,8 @@ export default class extends Controller {
     "previousBtn",
     "nextBtn",
     "pageNum",
+    "metadataIndexStart",
+    "metadataIndexEnd",
   ];
 
   static values = {
@@ -77,9 +79,6 @@ export default class extends Controller {
       this.#loadPageData();
     }
   }
-  disconnect() {
-    console.log("disconect");
-  }
 
   #setInitialSamplesheetData() {
     console.log("params");
@@ -111,20 +110,26 @@ export default class extends Controller {
   }
 
   // handles changes to metadata autofill and file cells
-  updateAutofilledSamplesheetData({ detail: { content } }) {
+  updateFileData({ detail: { content } }) {
     this.#setFormData(content.inputName, content.inputValue);
 
     // update samplesheetParams cell_value with the new filename to be displayed in samplesheet table
     // as this is the only place to retrieve filename unlike all other fields that can be retrieved
     // via formData (files are stored by globalID in formData)
-    if (content.file) {
-      let filename = content["file"]["filename"]
-        ? content["file"]["filename"]
-        : this.noSelectedFileValue;
-      this.samplesheetParams[content["file"]["index"]]["samplesheet_params"][
-        content["file"]["property"]
-      ]["cell_value"] = filename;
+    let filename = content["file"]["filename"]
+      ? content["file"]["filename"]
+      : this.noSelectedFileValue;
+    this.samplesheetParams[content["file"]["index"]]["samplesheet_params"][
+      content["file"]["property"]
+    ]["cell_value"] = filename;
+  }
+
+  updateMetadata({ detail: { content } }) {
+    for (const formName in content["metadata"]) {
+      this.#setFormData(formName, content["metadata"][formName]);
     }
+    this.#clearSamplesheetTable();
+    this.#loadPageData();
   }
 
   submitSamplesheet(event) {
@@ -229,6 +234,11 @@ export default class extends Controller {
       lastIndex =
         (Object.keys(this.samplesheetParams).length % 5) + startingIndex;
     }
+
+    if (this.hasMetadataIndexStartTarget) {
+      this.#updateMetadataIndexes(startingIndex, lastIndex);
+    }
+
     this.#columnNames.forEach((columnName) => {
       let columnNode = document.getElementById(`metadata-${columnName}-column`);
       for (let i = startingIndex; i < lastIndex; i++) {
@@ -261,6 +271,25 @@ export default class extends Controller {
         }
       }
     });
+  }
+
+  #updateMetadataIndexes(startingIndex, endingIndex) {
+    for (let metadataIndexStartTarget of this.metadataIndexStartTargets) {
+      metadataIndexStartTarget.value = startingIndex;
+    }
+    for (let metadataIndexEndTarget of this.metadataIndexEndTargets) {
+      metadataIndexEndTarget.value = endingIndex;
+    }
+  }
+
+  #cleanupMetadataFields(property) {
+    let metadataColumn = document.getElementById(`metadata-${property}-column`);
+    for (const metadataField of metadataColumn.children) {
+      if (metadataField.hidden) {
+        console.log("hiddin");
+        // metadataField.remove();
+      }
+    }
   }
 
   // inserting the template html then requerying it out via lastElementChild turns the node from textNode into an
@@ -325,7 +354,7 @@ export default class extends Controller {
       );
     container.insertAdjacentHTML("beforeend", childNode);
 
-    // sets the verification attribute for required file cells
+    // sets the verification attribute (whether a file cell is required and has a selection) for required file cells
     if (this.#samplesheetProperties[columnName]["required"]) {
       let fileNode = document.getElementById(
         `${this.samplesheetParams[index]["sample_id"]}_${columnName}`,
@@ -342,12 +371,9 @@ export default class extends Controller {
   }
 
   #generateMetadataCell(container, columnName, index) {
-    if (
-      this.samplesheetParams[index]["samplesheet_params"][columnName][
-        "form_value"
-      ]
-    ) {
-      let childNode = his.metadataCellTarget.innerHTML.replace(
+    let metadataValue = this.#retrieveFormData(index, columnName);
+    if (metadataValue) {
+      let childNode = this.metadataCellTarget.innerHTML.replace(
         /METADATA_VALUE_PLACEHOLDER/g,
         this.#retrieveFormData(index, columnName),
       );

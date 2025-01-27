@@ -25,6 +25,16 @@
                          id: "sample-#{sample.id}-#{header}",
                          multiple: true %>
         <% end %>
+        <input
+          type="hidden"
+          name="visibleIndexStart"
+          data-nextflow--samplesheet-target="metadataIndexStart"
+        />
+        <input
+          type="hidden"
+          name="visibleIndexEnd"
+          data-nextflow--samplesheet-target="metadataIndexEnd"
+        />
         <%= f.select :field,
                  options_for_select(metadata_fields_for_field(header), header),
                  { include_blank: !@required_properties.include?(header) },

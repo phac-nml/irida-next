@@ -1,15 +1,9 @@
 <%= turbo_stream.update "metadata-#{@header}-column" do %>
-  <% @samples.each_with_index do |sample, index| %>
-    <div class="dark:border-slate-600 border border-slate-100">
-      <%= fields_for "workflow_execution[samples_workflow_executions_attributes][#{index}][samplesheet_params]" do |form| %>
-        <%= render Nextflow::Samplesheet::MetadataCellComponent.new(
-          form:,
-          name: @header,
-          sample:,
-          field: @field,
-          index:,
-        ) %>
-      <% end %>
-    </div>
-  <% end %>
+  <div
+    hidden
+    data-controller="nextflow--metadata"
+    data-nextflow--metadata-metadata-value="<%= @metadata_samplesheet %>"
+    data-nextflow--metadata-property-value="<%= @header %>"
+  />
+
 <% end %>
