@@ -12,7 +12,7 @@
     <% else %>
       <%= form_with id: 'file_selector_form', url: workflow_executions_file_selector_index_path(file_selector: file_selector_params), method: :post do |form| %>
         <input type="hidden" name="format" value="turbo_stream"/>
-        <div class="table-container flex flex-col shrink min-h-0">
+        <div class="table-container flex flex-col shrink min-h-0 mb-2">
           <div class="overflow-auto scrollbar">
             <table
               class='

@@ -1022,6 +1022,8 @@ fr:
         required: Required
     samplesheet_component:
       label: Samples
+      next: Next
+      previous: Previous
       processing_request: Processing your request
   nextflow_component:
     attachments_error: The highlighted file cells below require a selection.

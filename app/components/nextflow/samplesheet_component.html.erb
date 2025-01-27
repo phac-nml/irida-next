@@ -57,7 +57,7 @@
     </template>
   </div>
   <div class="flex items-center justify-end">
-    <nav aria-label="Pagination">
+    <nav aria-label=<%= t("viral.pagy.pagination_component.aria-label") %>>
       <ul class="inline-flex h-10 text-base">
         <li><button
             type="button"
@@ -68,7 +68,8 @@
             "
             data-action="click->nextflow--samplesheet#previousPage"
             data-nextflow--samplesheet-target="previousBtn"
-          >Previous</button>
+            disabled
+          ><%= t(".previous") %></button>
         </li>
         <li><select
             class="
@@ -91,7 +92,7 @@
             type="button"
             data-nextflow--samplesheet-target="nextBtn"
             data-action="click->nextflow--samplesheet#nextPage"
-          >Next</button>
+          ><%= t(".next") %></button>
         </li>
       </ul>
     </nav>
