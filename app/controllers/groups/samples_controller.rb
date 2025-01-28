@@ -107,5 +107,9 @@ module Groups
     def search_key
       :"#{controller_name}_#{group.id}_search_params"
     end
+
+    def metadata_templates
+      @metadata_templates = metadata_templates_for_namespace(namespace: @group)
+    end
   end
 end
