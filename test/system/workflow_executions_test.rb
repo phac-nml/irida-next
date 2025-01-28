@@ -111,6 +111,28 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     end
   end
 
+  test 'should include a shared workflow in the list of workflow executions when the submitter is the current user' do
+    workflow_execution = workflow_executions(:workflow_execution_shared1)
+
+    visit workflow_executions_path
+
+    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+
+    tr = find('a', text: workflow_execution.id).ancestor('tr')
+
+    within tr do
+      assert_link 'Cancel'
+    end
+  end
+
+  test 'should not include a shared workflow in the workflow executions when the submitter is not the current user' do
+    workflow_execution = workflow_executions(:workflow_execution_shared2)
+
+    visit workflow_executions_path
+
+    assert_no_selector 'a', text: workflow_execution.id
+  end
+
   test 'should be able to cancel a workflow' do
     workflow_execution = workflow_executions(:irida_next_example_prepared)
 
@@ -456,5 +478,21 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector 'dt', text: dt_value
     assert_selector 'dd', text: new_we_name
     ### VERIFY END ###
+  end
+
+  test 'can view a shared workflow execution that the current user submitted' do
+    workflow_execution = workflow_executions(:workflow_execution_shared1)
+
+    visit workflow_execution_path(workflow_execution)
+
+    assert_text workflow_execution.id
+    assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
+    assert_text workflow_execution.metadata['workflow_name']
+    assert_text workflow_execution.metadata['workflow_version']
+
+    assert_link I18n.t(:'workflow_executions.show.create_export_button')
+    assert_link I18n.t(:'workflow_executions.show.cancel_button')
+    assert_link I18n.t(:'workflow_executions.show.edit_button')
+    assert_no_link I18n.t(:'workflow_executions.show.remove_button')
   end
 end

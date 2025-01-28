@@ -89,6 +89,35 @@ module Projects
       end
     end
 
+    test 'should include workflows that have been shared to the project' do
+      workflow_execution1 = workflow_executions(:workflow_execution_shared1)
+      workflow_execution2 = workflow_executions(:workflow_execution_shared2)
+
+      visit namespace_project_workflow_executions_path(@namespace, @project)
+
+      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+
+      tr = find('a', text: workflow_execution1.id).ancestor('tr')
+      within tr do
+        assert_no_link 'Cancel'
+        assert_no_link 'Destroy'
+      end
+
+      tr = find('a', text: workflow_execution2.id).ancestor('tr')
+      within tr do
+        assert_no_link 'Cancel'
+        assert_no_link 'Destroy'
+      end
+    end
+
+    test 'should not include shared workflows that were not shared to that specific project' do
+      workflow_execution = workflow_executions(:workflow_execution_shared3)
+
+      visit namespace_project_workflow_executions_path(@namespace, @project)
+
+      assert_no_selector 'a', text: workflow_execution.id
+    end
+
     test 'should be able to cancel a workflow' do
       workflow_execution = workflow_executions(:automated_example_prepared)
 
@@ -407,6 +436,22 @@ module Projects
       assert_selector 'dt', text: dt_value
       assert_selector 'dd', text: new_we_name
       ### VERIFY END ###
+    end
+
+    test 'can view a shared workflow execution that was shared by a different user' do
+      workflow_execution = workflow_executions(:workflow_execution_shared2)
+
+      visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
+
+      assert_text workflow_execution.id
+      assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
+      assert_text workflow_execution.metadata['workflow_name']
+      assert_text workflow_execution.metadata['workflow_version']
+
+      assert_link I18n.t(:'workflow_executions.show.create_export_button')
+      assert_no_link I18n.t(:'workflow_executions.show.cancel_button')
+      assert_no_link I18n.t(:'workflow_executions.show.edit_button')
+      assert_no_link I18n.t(:'workflow_executions.show.remove_button')
     end
   end
 end
