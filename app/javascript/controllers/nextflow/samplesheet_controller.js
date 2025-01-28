@@ -79,6 +79,7 @@ export default class extends Controller {
     this.#samplesheetProperties = JSON.parse(
       this.samplesheetPropertiesTarget.innerHTML,
     );
+    console.log(this.#samplesheetProperties);
 
     this.#samplesheetAttributes = JSON.parse(
       this.workflowAttributesTarget.innerText,
@@ -230,20 +231,31 @@ export default class extends Controller {
 
   // handles changes to file cells
   updateFileData({ detail: { content } }) {
-    this.#setFormData(
-      `workflow_execution[samples_workflow_executions_attributes][${content["index"]}][samplesheet_params][${content["property"]}]`,
-      content["globalId"],
-    );
+    console.log(content);
+    console.log(content["files"]);
+    content["files"].forEach((file) => {
+      this.#setFormData(
+        `workflow_execution[samples_workflow_executions_attributes][${content["index"]}][samplesheet_params][${file["property"]}]`,
+        file["global_id"],
+      );
 
-    // update samplesheetParams filename with the new filename to be displayed in samplesheet table
-    // as this is the only place to retrieve filename unlike all other fields that can be retrieved
-    // via formData (files are stored by globalID in formData)
-    let filename = content["filename"]
-      ? content["filename"]
-      : this.noSelectedFileValue;
-    this.#samplesheetAttributes[content["index"]]["samplesheet_params"][
-      content["property"]
-    ]["filename"] = filename;
+      // update samplesheetParams filename with the new filename to be displayed in samplesheet table
+      // as this is the only place to retrieve filename unlike all other fields that can be retrieved
+      // via formData (files are stored by globalID in formData)
+      let filename = file["filename"]
+        ? file["filename"]
+        : this.noSelectedFileValue;
+
+      this.#samplesheetAttributes[content["index"]]["samplesheet_params"][
+        file["property"]
+      ]["filename"] = filename;
+
+      this.#samplesheetAttributes[content["index"]]["samplesheet_params"][
+        file["property"]
+      ]["attachment_id"] = file["id"];
+    });
+
+    this.#resetSamplesheetTable();
   }
 
   // handles changes to metadata autofill
@@ -251,8 +263,7 @@ export default class extends Controller {
     for (const formName in content["metadata"]) {
       this.#setFormData(formName, content["metadata"][formName]);
     }
-    this.#clearSamplesheetTable();
-    this.#loadTableData();
+    this.#resetSamplesheetTable();
   }
 
   #loadTableData() {
@@ -333,6 +344,11 @@ export default class extends Controller {
   }
 
   #generateFileCell(container, columnName, index) {
+    let pattern = this.#samplesheetProperties[columnName]["pattern"];
+    if (pattern) {
+      // '+' becomes a space in url, so we have to encode with %2B
+      pattern = pattern.replace("+", "%2B");
+    }
     let childNode = this.fileCellTarget.innerHTML
       .replace(/INDEX_PLACEHOLDER/g, index)
       .replace(/PROPERTY_PLACEHOLDER/g, columnName)
@@ -347,12 +363,7 @@ export default class extends Controller {
           "attachment_id"
         ],
       )
-      .replace(
-        /FILE_TYPE_PLACEHOLDER/g,
-        this.#samplesheetProperties[columnName]["cell_type"] == "fastq_cell"
-          ? "fastq"
-          : "other",
-      )
+      .replace(/PATTERN_PLACEHOLDER/g, pattern)
       .replace(
         /FILENAME_PLACEHOLDER/g,
         this.#samplesheetAttributes[index]["samplesheet_params"][columnName][
@@ -436,8 +447,7 @@ export default class extends Controller {
 
   #updatePageData() {
     this.#verifyPaginationButtonStates();
-    this.#clearSamplesheetTable();
-    this.#loadTableData();
+    this.#resetSamplesheetTable();
   }
 
   #verifyPaginationButtonStates() {
@@ -476,9 +486,10 @@ export default class extends Controller {
     }
   }
 
-  #clearSamplesheetTable() {
+  #resetSamplesheetTable() {
     this.#columnNames.forEach((columnName) => {
       document.getElementById(`metadata-${columnName}-column`).innerHTML = "";
     });
+    this.#loadTableData();
   }
 }

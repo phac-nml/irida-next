@@ -45,7 +45,7 @@ module Nextflow
         when 'fastq_cell'
           [name,
            file_samplesheet_values(sample.attachments.empty? ? {} : sample.most_recent_fastq_file(name,
-                                                                                                  @workflow_params))]
+                                                                                                  property['pattern']))]
         when 'file_cell'
           [name,
            file_samplesheet_values(sample.most_recent_other_file(property['autopopulate'], property['pattern']))]
