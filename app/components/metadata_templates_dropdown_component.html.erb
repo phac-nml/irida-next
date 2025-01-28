@@ -1,11 +1,25 @@
-<label for="q[metadata_template]" class="sr-only">t("components.metadata_templates_dropdown.templates")</label>
-<%= form.select :metadata_template,
-            grouped_options_for_select(formatted_options, selected),
-            {},
-            {
-              data: {
-                action: "change->metadata-toggle#submit",
-              },
-              class:
-                "bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block  p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-            } %>
+<div class="relative">
+  <label for="metadata_template_select" class="sr-only">
+    <%= t("components.metadata_templates_dropdown.templates") %>
+  </label>
+  <%= form.select :metadata_template,
+              grouped_options_for_select(formatted_options, selected),
+              {},
+              {
+                id: "metadata_template_select",
+                data: {
+                  action: "change->metadata-toggle#submit",
+                },
+                class: [
+                  # Base styles
+                  "block text-sm rounded-lg p-2.5",
+                  # Colors - Light mode
+                  "bg-slate-50 border-slate-300 text-slate-900",
+                  # Colors - Dark mode
+                  "dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400",
+                  # Focus states
+                  "focus:ring-primary-500 focus:border-primary-500",
+                  "dark:focus:ring-primary-500 dark:focus:border-primary-500",
+                ].join(" "),
+              } %>
+</div>
