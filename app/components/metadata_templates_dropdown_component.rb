@@ -5,7 +5,6 @@ class MetadataTemplatesDropdownComponent < Component
   attr_reader :options, :form, :selected
 
   def initialize(metadata_templates: nil, form: nil, selected: 'none')
-    puts metadata_templates.inspect
     @metadata_templates = metadata_templates
     @form = form
     @selected = selected
