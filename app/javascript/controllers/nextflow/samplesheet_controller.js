@@ -21,6 +21,7 @@ export default class extends Controller {
     "pageNum",
     "metadataIndexStart",
     "metadataIndexEnd",
+    "dataPayload",
   ];
 
   static values = {
@@ -104,6 +105,8 @@ export default class extends Controller {
     }
     // render samples table
     this.#loadTableData();
+
+    console.log(document.getElementById("0_fastq_1"));
   }
 
   #setInitialSamplesheetData() {
@@ -231,8 +234,6 @@ export default class extends Controller {
 
   // handles changes to file cells
   updateFileData({ detail: { content } }) {
-    console.log(content);
-    console.log(content["files"]);
     content["files"].forEach((file) => {
       this.#setFormData(
         `workflow_execution[samples_workflow_executions_attributes][${content["index"]}][samplesheet_params][${file["property"]}]`,
@@ -253,17 +254,22 @@ export default class extends Controller {
       this.#samplesheetAttributes[content["index"]]["samplesheet_params"][
         file["property"]
       ]["attachment_id"] = file["id"];
-    });
 
-    this.#resetSamplesheetTable();
+      this.#updateCell(file["property"], content["index"], "file_cell");
+    });
+    this.#clearPayload();
   }
 
   // handles changes to metadata autofill
   updateMetadata({ detail: { content } }) {
-    for (const formName in content["metadata"]) {
-      this.#setFormData(formName, content["metadata"][formName]);
+    for (const index in content["metadata"]) {
+      this.#setFormData(
+        `workflow_execution[samples_workflow_executions_attributes][${index}][samplesheet_params][${content["property"]}]`,
+        content["metadata"][index],
+      );
+      this.#updateCell(content["property"], index, "metadata_cell");
     }
-    this.#resetSamplesheetTable();
+    this.#clearPayload();
   }
 
   #loadTableData() {
@@ -280,7 +286,7 @@ export default class extends Controller {
     this.#columnNames.forEach((columnName) => {
       let columnNode = document.getElementById(`metadata-${columnName}-column`);
       for (let i = startingIndex; i < lastIndex; i++) {
-        let container = this.#generateCellContainer(columnNode);
+        let container = this.#generateCellContainer(columnNode, columnName, i);
         switch (this.#samplesheetProperties[columnName]["cell_type"]) {
           case "sample_cell":
           case "sample_name_cell":
@@ -311,9 +317,12 @@ export default class extends Controller {
 
   // inserting the template html then requerying it out via lastElementChild turns the node from textNode into an
   // HTML element we can manipulate via appendChild, insertHTML, etc.
-  #generateCellContainer(columnNode) {
+  #generateCellContainer(columnNode, columnName, index) {
     let newCellContainer = this.cellContainerTarget.innerHTML;
     columnNode.insertAdjacentHTML("beforeend", newCellContainer);
+    let container = columnNode.lastElementChild;
+    container.id = `${index}_${columnName}`;
+    container.setAttribute("data-node-id", `${index}_${columnName}`);
     return columnNode.lastElementChild;
   }
 
@@ -491,5 +500,23 @@ export default class extends Controller {
       document.getElementById(`metadata-${columnName}-column`).innerHTML = "";
     });
     this.#loadTableData();
+  }
+
+  #updateCell(columnName, index, cell_type) {
+    let container = document.getElementById(`${index}_${columnName}`);
+    if (container) {
+      container.innerHTML = "";
+      if (cell_type == "file_cell") {
+        this.#generateFileCell(container, columnName, index);
+      } else {
+        this.#generateMetadataCell(container, columnName, index);
+      }
+    }
+  }
+
+  #clearPayload() {
+    if (this.hasDataPayloadTarget) {
+      this.dataPayloadTarget.remove();
+    }
   }
 }

@@ -4,11 +4,12 @@
                       open: false,
                       file_selector_params:,
                     } %>
-<%= turbo_stream.update "metadata-#{file_selector_params["property"]}-column" do %>
+<%= turbo_stream.append "metadata-#{file_selector_params["property"]}-column" do %>
   <div
     hidden
     data-controller="nextflow--file"
     data-nextflow--file-files-value="<%= @attachments_params.to_json %>"
+    data-nextflow--samplesheet-target="dataPayload"
   />
 
 <% end %>

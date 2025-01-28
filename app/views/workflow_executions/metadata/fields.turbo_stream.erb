@@ -1,9 +1,10 @@
-<%= turbo_stream.update "metadata-#{@header}-column" do %>
+<%= turbo_stream.append "metadata-#{@header}-column" do %>
   <div
     hidden
     data-controller="nextflow--metadata"
     data-nextflow--metadata-metadata-value="<%= @metadata_samplesheet %>"
     data-nextflow--metadata-property-value="<%= @header %>"
+    data-nextflow--samplesheet-target="dataPayload"
   />
 
 <% end %>

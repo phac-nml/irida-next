@@ -19,8 +19,7 @@ module WorkflowExecutions
     def generate_metadata_for_samplesheet
       metadata_samplesheet = {}
       @samples.each_with_index do |sample, index|
-        form_name = "workflow_execution[samples_workflow_executions_attributes][#{index}][samplesheet_params][#{@header}]"
-        metadata_samplesheet[form_name] = sample.metadata.fetch(@field, '')
+        metadata_samplesheet[index] = sample.metadata.fetch(@field, '')
       end
       metadata_samplesheet
     end
