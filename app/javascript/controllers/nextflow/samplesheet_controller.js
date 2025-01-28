@@ -25,15 +25,12 @@ export default class extends Controller {
   ];
 
   static values = {
-    attachmentsError: { type: String },
+    dataMissingError: { type: String },
     submissionError: { type: String },
     url: { type: String },
     workflow: { type: Object },
     noSelectedFile: { type: String },
   };
-
-  #error_state = ["border-red-300", "dark:border-red-800"];
-  #default_state = ["border-transparent"];
 
   #pagination_button_disabled_state = [
     "cursor-default",
@@ -60,6 +57,7 @@ export default class extends Controller {
   #formData = new FormData();
 
   #columnNames;
+  #requiredColumns = [];
 
   // pagination page params
   #currentPage = 1;
@@ -85,8 +83,18 @@ export default class extends Controller {
     this.#samplesheetAttributes = JSON.parse(
       this.workflowAttributesTarget.innerText,
     );
+
     this.#columnNames = Object.keys(this.#samplesheetProperties);
 
+    // set required columns
+    for (const column in this.#samplesheetProperties) {
+      if (column === "sample") {
+        continue;
+      }
+      if (this.#samplesheetProperties[column]["required"]) {
+        this.#requiredColumns.push(column);
+      }
+    }
     // enter all initial/autoloaded sample data into FormData
     this.#setInitialSamplesheetData();
 
@@ -135,12 +143,12 @@ export default class extends Controller {
   submitSamplesheet(event) {
     event.preventDefault();
     this.#enableProcessingState();
-    // only required file cells need an additional validation step. The rest of the cells are either autofilled or
-    // validated by the browser required fields
-    let readyToSubmit = this.#validateFileCells();
-    if (!readyToSubmit) {
+    let missingData = this.#validateData();
+    if (missingData.length > 0) {
       this.#disableProcessingState();
-      this.#enableErrorState(this.attachmentsErrorValue);
+      this.#enableErrorState(
+        this.dataMissingErrorValue.concat(missingData.join(", ")),
+      );
     } else {
       this.#combineFormData();
       fetch(this.urlValue, {
@@ -161,28 +169,23 @@ export default class extends Controller {
     }
   }
 
-  #validateFileCells() {
-    let readyToSubmit = true;
-    const missingRequiredFileCells = document.querySelectorAll(
-      "[data-file-missing='true']",
-    );
-    if (missingRequiredFileCells.length > 0) {
-      missingRequiredFileCells.forEach((fileCell) => {
-        fileCell.classList.remove(...this.#default_state);
-        fileCell.classList.add(...this.#error_state);
-        readyToSubmit = false;
-      });
-
-      // revalidates file cells incase they need to be changed from error to default state
-      const filledRequiredFileCells = document.querySelectorAll(
-        "[data-file-missing='false']",
-      );
-      filledRequiredFileCells.forEach((fileCell) => {
-        fileCell.classList.add(...this.#default_state);
-        fileCell.classList.remove(...this.#error_state);
-      });
-    }
-    return readyToSubmit;
+  #validateData() {
+    let missingData = [];
+    this.#requiredColumns.forEach((requiredColumn) => {
+      for (
+        let i = 0;
+        i < Object.keys(this.#samplesheetAttributes).length;
+        i++
+      ) {
+        if (!this.#retrieveFormData(i, requiredColumn)) {
+          let sample = this.#retrieveFormData(i, "sample");
+          if (!missingData.includes(sample)) {
+            missingData.push(sample);
+          }
+        }
+      }
+    });
+    return missingData;
   }
 
   // combines parameter form data with samplesheet form data
@@ -338,7 +341,6 @@ export default class extends Controller {
 
     container.insertAdjacentHTML("beforeend", childNode);
     let select = container.lastElementChild;
-    this.#verifyRequiredProperty(select, columnName);
     for (let j = 0; j < options.length; j++) {
       let option = document.createElement("option");
       option.value = options[j];
@@ -377,21 +379,6 @@ export default class extends Controller {
         ],
       );
     container.insertAdjacentHTML("beforeend", childNode);
-
-    // sets the verification attribute (whether a file cell is required and has a selection) for required file cells
-    if (this.#samplesheetProperties[columnName]["required"]) {
-      let fileNode = document.getElementById(
-        `${this.#samplesheetAttributes[index]["sample_id"]}_${columnName}`,
-      );
-      fileNode.setAttribute(
-        "data-file-missing",
-        this.#samplesheetAttributes[index]["samplesheet_params"][columnName][
-          "attachment_id"
-        ]
-          ? "false"
-          : "true",
-      );
-    }
   }
 
   #generateMetadataCell(container, columnName, index) {
@@ -421,16 +408,9 @@ export default class extends Controller {
     container.insertAdjacentHTML("beforeend", childNode);
     // requery to retrieve HTML node rather than textNode
     let textCell = container.lastElementChild;
-    this.#verifyRequiredProperty(textCell, columnName);
     const form_value = this.#retrieveFormData(index, columnName);
     if (form_value) {
       textCell.value = form_value;
-    }
-  }
-
-  #verifyRequiredProperty(node, columnName) {
-    if (this.#samplesheetProperties[columnName]["required"]) {
-      node.required = true;
     }
   }
 
