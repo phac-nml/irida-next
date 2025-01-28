@@ -261,8 +261,8 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     metadata_summary.keys
   end
 
-  def metadata_templates_names
-    MetadataTemplate.where(namespace: self).pluck(:name)
+  def metadata_templates
+    MetadataTemplate.where(namespace: self)
   end
 
   private

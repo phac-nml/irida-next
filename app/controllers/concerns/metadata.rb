@@ -15,17 +15,13 @@ module Metadata
     pagy(result)
   end
 
-  def metadata_templates_for_namespace(namespace: nil)
-    @metadata_templates = namespace.metadata_templates_names
-  end
-
   def fields_for_namespace_or_template(namespace: nil, template: nil)
     @fields = if template == 'none' || namespace.nil?
                 []
               elsif template == 'all'
                 namespace.metadata_fields
               else
-                MetadataTemplate.find_by(name: template).fields
+                MetadataTemplate.find_by(id: template).fields
               end
   end
 
@@ -38,5 +34,9 @@ module Metadata
 
   def current_metadata_template(params)
     params[:metadata_template] = params[:metadata_template].presence || 'none'
+  end
+
+  def metadata_templates_for_namespace(namespace: nil)
+    @metadata_templates = namespace.metadata_templates.map { |template| [template.name, template.id] }
   end
 end

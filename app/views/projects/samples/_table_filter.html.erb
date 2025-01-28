@@ -7,7 +7,9 @@
                      "t-search-component block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
                    placeholder: t(".search.placeholder") %>
     <div
-      class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none "
+      class="
+        absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
+      "
     >
       <%= viral_icon(
         name: "magnifying_glass",
@@ -26,28 +28,10 @@
     status: @query.advanced_query?,
   ) %>
   <%# <%= render partial: "projects/samples/shared/metadata_toggle", locals: { form: f } %>
-  <div class="flex items-center space-x-2">
-    <% grouped_options = [
-      [
-        "Metadata Fields",
-        [["All Metadata Fields", "all"], ["No Metadata Fields", "none"]],
-      ],
-      [
-        "Metadata Templates",
-        @metadata_templates.map { |template| [template, template] },
-      ],
-    ] %>
-    <%= f.select :metadata_template,
-             grouped_options_for_select(grouped_options, @query.metadata_template),
-             {},
-             {
-               data: {
-                 action: "change->metadata-toggle#submit",
-               },
-               class:
-                 "bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
-             } %>
-
-  </div>
+  <%= render MetadataTemplatesDropdownComponent.new(
+    metadata_templates: @metadata_templates,
+    form: f,
+    selected: @query.metadata_template,
+  ) %>
   <%= f.submit hidden: true %>
 <% end %>
