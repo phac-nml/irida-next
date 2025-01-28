@@ -16,7 +16,7 @@ module Metadata
   end
 
   def fields_for_namespace_or_template(namespace: nil, template: nil)
-    @fields = if template == 'none' || namespace.nil?
+    @fields = if template.blank? || template == 'none' || namespace.nil?
                 []
               elsif template == 'all'
                 namespace.metadata_fields
