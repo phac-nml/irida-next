@@ -4,7 +4,7 @@
 class MetadataTemplatesDropdownComponent < Component
   attr_reader :options, :form, :selected
 
-  def initialize(metadata_templates: nil, form: nil, selected: nil)
+  def initialize(metadata_templates: nil, form: nil, selected: 'none')
     puts metadata_templates.inspect
     @metadata_templates = metadata_templates
     @form = form
@@ -12,13 +12,18 @@ class MetadataTemplatesDropdownComponent < Component
   end
 
   def formatted_options
-    [
+    options = [
       [
-        'Metadata Fields',
-        [['All Metadata Fields', 'all'], ['No Metadata Fields', 'none']]
-
-      ],
-      ['Metadata Templates', @metadata_templates]
+        t('components.metadata_templates_dropdown.fields'),
+        [[t('components.metadata_templates_dropdown.all'), 'all'],
+         [t('components.metadata_templates_dropdown.none'), 'none']]
+      ]
     ]
+    puts options.inspect
+    if @metadata_templates.present?
+      options << [t('components.metadata_templates_dropdown.templates'),
+                  @metadata_templates]
+    end
+    options
   end
 end
