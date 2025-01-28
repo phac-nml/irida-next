@@ -19,7 +19,7 @@ class MetadataTemplatesDropdownComponent < Component
          [t('components.metadata_templates_dropdown.none'), 'none']]
       ]
     ]
-    puts options.inspect
+
     if @metadata_templates.present?
       options << [t('components.metadata_templates_dropdown.templates'),
                   @metadata_templates]
