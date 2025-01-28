@@ -59,6 +59,8 @@ export default class extends Controller {
   // The samplesheet will use FormData, allowing us to create the inputs of a form without the associated DOM elements.
   #formData = new FormData();
 
+  #columnNames;
+
   // pagination page params
   #currentPage = 1;
   #lastPage;
@@ -68,7 +70,6 @@ export default class extends Controller {
 
   // samplesheetAttributes contains the specific sample values for table rendering and form submission
   #samplesheetAttributes;
-  #columnNames;
 
   connect() {
     if (this.hasWorkflowAttributesTarget) {
@@ -80,12 +81,10 @@ export default class extends Controller {
     this.#samplesheetProperties = JSON.parse(
       this.samplesheetPropertiesTarget.innerHTML,
     );
-    console.log(this.#samplesheetProperties);
 
     this.#samplesheetAttributes = JSON.parse(
       this.workflowAttributesTarget.innerText,
     );
-    console.log(this.#samplesheetAttributes);
     this.#columnNames = Object.keys(this.#samplesheetProperties);
 
     // enter all initial/autoloaded sample data into FormData
@@ -103,10 +102,8 @@ export default class extends Controller {
     } else {
       this.#generatePageNumberDropdown();
     }
-    // render samples table
+    // render samplesheet table
     this.#loadTableData();
-
-    console.log(document.getElementById("0_fastq_1"));
   }
 
   #setInitialSamplesheetData() {
@@ -138,7 +135,7 @@ export default class extends Controller {
   submitSamplesheet(event) {
     event.preventDefault();
     this.#enableProcessingState();
-    // only required file cells require an additional validation step. The rest of the cells are either autofilled or
+    // only required file cells need an additional validation step. The rest of the cells are either autofilled or
     // validated by the browser required fields
     let readyToSubmit = this.#validateFileCells();
     if (!readyToSubmit) {
@@ -232,7 +229,7 @@ export default class extends Controller {
     this.#setFormData(event.target.name, event.target.value);
   }
 
-  // handles changes to file cells
+  // handles changes to file cells; triggered by nextflow/file_controller.js
   updateFileData({ detail: { content } }) {
     content["files"].forEach((file) => {
       this.#setFormData(
@@ -260,7 +257,7 @@ export default class extends Controller {
     this.#clearPayload();
   }
 
-  // handles changes to metadata autofill
+  // handles changes to metadata autofill; triggered by nextflow/metadata_controller.js
   updateMetadata({ detail: { content } }) {
     for (const index in content["metadata"]) {
       this.#setFormData(
@@ -456,7 +453,12 @@ export default class extends Controller {
 
   #updatePageData() {
     this.#verifyPaginationButtonStates();
-    this.#resetSamplesheetTable();
+
+    // delete the table data and reload with new indexes
+    this.#columnNames.forEach((columnName) => {
+      document.getElementById(`metadata-${columnName}-column`).innerHTML = "";
+    });
+    this.#loadTableData();
   }
 
   #verifyPaginationButtonStates() {
@@ -493,13 +495,6 @@ export default class extends Controller {
       option.innerHTML = i;
       pageSelection.appendChild(option);
     }
-  }
-
-  #resetSamplesheetTable() {
-    this.#columnNames.forEach((columnName) => {
-      document.getElementById(`metadata-${columnName}-column`).innerHTML = "";
-    });
-    this.#loadTableData();
   }
 
   #updateCell(columnName, index, cell_type) {

@@ -3,8 +3,7 @@
 module Nextflow
   # Render the contents of a Nextflow samplesheet to a table
   class SamplesheetComponent < Component
-    attr_reader :properties, :samples, :required_properties, :metadata_fields, :namespace_id, :workflow_params,
-                :patterns
+    attr_reader :properties, :samples, :required_properties, :metadata_fields, :namespace_id, :workflow_params
 
     FILE_CELL_TYPES = %w[fastq_cell file_cell].freeze
 
@@ -14,7 +13,6 @@ module Nextflow
       @metadata_fields = fields
       @required_properties = schema['items']['required'] || []
       @workflow_params = workflow_params
-      @patterns = {}
       extract_properties(schema)
     end
 
@@ -30,8 +28,7 @@ module Nextflow
     def samples_workflow_execution_attributes(sample)
       {
         'sample_id' => sample.id,
-        'samplesheet_params' => sample_samplesheet_params(sample),
-        'patterns' => {}
+        'samplesheet_params' => sample_samplesheet_params(sample)
       }
     end
 
@@ -73,10 +70,6 @@ module Nextflow
       @properties.each do |property, entry|
         @properties[property]['required'] = schema['items']['required'].include?(property)
         @properties[property]['cell_type'] = identify_cell_type(property, entry)
-        if @properties[property]['pattern'] && %w[fastq_cell
-                                                  file_cell].include?(@properties[property]['cell_type'])
-          @patterns[property] = @properties[property]['pattern']
-        end
       end
 
       if @required_properties.include?('fastq_1') && @required_properties.include?('fastq_2')
