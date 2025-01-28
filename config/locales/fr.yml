@@ -1618,7 +1618,7 @@ fr:
         search:
           placeholder: Filter by ID or name
         select_all_button: Select All
-        subtitle: These are the workflow executions that have been automatically launched for this project
+        subtitle: These are the workflow executions that have been automatically launched for this project, along with workflow executions that have been shared by any of its members.
         title: Workflow Executions
       show:
         cancel_button: Cancel
