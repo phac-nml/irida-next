@@ -46,7 +46,9 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
 
   def sort=(value)
     super
-    column, direction = sort.split
+    # use rpartition to split on the first space encountered from the right side
+    # this allows us to sort by metadata fields which contain spaces
+    column, _space, direction = sort.rpartition(' ')
     column = column.gsub('metadata_', 'metadata.') if column.match?(/metadata_/)
     assign_attributes(column:, direction:)
   end
