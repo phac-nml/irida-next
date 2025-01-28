@@ -35,4 +35,8 @@ module Metadata
     metadata_fields.map! { |field| "metadata.#{field}" }
     @advanced_search_fields = sample_fields.concat(metadata_fields)
   end
+
+  def current_metadata_template(params)
+    params[:metadata_template] = params[:metadata_template].presence || 'none'
+  end
 end

@@ -169,10 +169,6 @@ module Projects
       update_store(search_key, params[:q]&.to_unsafe_h || {}).with_indifferent_access
     end
 
-    def current_metadata_template(params)
-      params[:metadata_template] = params[:metadata_template].presence || 'none'
-    end
-
     def current_sort(params)
       return if params.key?(:sort) && !(params[:metadata].to_i.zero? && params[:sort]&.match?(/metadata_/))
 
