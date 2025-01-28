@@ -28,6 +28,10 @@
     open: @query.errors.any?,
     status: @query.advanced_query?,
   ) %>
-  <%= render partial: "projects/samples/shared/metadata_toggle", locals: { form: f } %>
+  <%= render MetadataTemplatesDropdownComponent.new(
+    metadata_templates: @metadata_templates,
+    form: f,
+    selected: @search_params[:metadata_template],
+  ) %>
   <%= f.submit hidden: true %>
 <% end %>
