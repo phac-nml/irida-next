@@ -8,6 +8,7 @@ module Groups
 
     before_action :group, :current_page
     before_action :query, only: %i[index search select]
+    before_action :metadata_templates, only: %i[index search select]
 
     def index
       @timestamp = DateTime.current
@@ -74,15 +75,15 @@ module Groups
       @current_page = t(:'groups.sidebar.samples')
     end
 
-    def set_metadata_fields
-      fields_for_namespace(namespace: @group, show_fields: @search_params && @search_params[:metadata].to_i == 1)
+    def metadata_fields(template)
+      fields_for_namespace_or_template(namespace: @group, template:)
     end
 
     def query
       authorize! @group, to: :sample_listing?
 
       @search_params = search_params
-      set_metadata_fields
+      metadata_fields(@search_params['metadata_template'])
       advanced_search_fields(@group)
 
       project_ids =
@@ -104,6 +105,10 @@ module Groups
 
     def search_key
       :"#{controller_name}_#{group.id}_search_params"
+    end
+
+    def metadata_templates
+      @metadata_templates = metadata_templates_for_namespace(namespace: @group)
     end
   end
 end
