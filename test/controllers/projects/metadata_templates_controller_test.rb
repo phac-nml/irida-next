@@ -111,7 +111,7 @@ module Projects
       sign_in users(:ryan_doe)
       get namespace_project_metadata_templates_path(@namespace.parent, @namespace.project)
 
-      assert_response :success
+      assert_response :unauthorized
     end
 
     test 'view metadata template' do
