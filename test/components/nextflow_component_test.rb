@@ -22,7 +22,7 @@ class NextflowComponentTest < ViewComponentTestCase
       workflow:,
       samples: [sample43, sample44],
       url: 'https://nf-co.re/testpipeline',
-      namespace_id: 'SDSDDFDSFDS',
+      namespace_id: projects(:project1).namespace,
       fields: %w[metadata_1 metadata_2 metadata_3]
     )
 
@@ -167,7 +167,7 @@ class NextflowComponentTest < ViewComponentTestCase
       workflow:,
       samples: [],
       url: 'https://nf-co.re/testpipeline',
-      namespace_id: 'SDSDDFDSFDS',
+      namespace_id: projects(:project1).namespace,
       fields: %w[metadata_1 metadata_2 metadata_3],
       instance:
     )
