@@ -1,9 +1,9 @@
 <% invalid_value = @condition.errors.include?(:value) %>
-<% exists_operator = %w[exists not_exists].include?(@condition.operator) %>
+<% operator_exists = @condition.operator.blank? %>
 <div
   class="
     form-field w-6/12 value <%= 'invalid' if invalid_value %>
-    <%= 'invisible' if exists_operator %>
+    <%= 'invisible' if operator_exists %>
   "
 >
   <% if %w[in not_in].include?(@condition.operator) %>

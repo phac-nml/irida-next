@@ -125,7 +125,7 @@ export default class extends Controller {
       ),
     ].indexOf(condition);
 
-    if (["exists", "not_exists"].includes(operator)) {
+    if (["", "exists", "not_exists"].includes(operator)) {
       value.classList.add("invisible");
     } else if (["in", "not_in"].includes(operator)) {
       value.classList.remove("invisible");
