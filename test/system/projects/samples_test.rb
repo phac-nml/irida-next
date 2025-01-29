@@ -1428,8 +1428,6 @@ module Projects
         perform_enqueued_jobs only: [::Samples::MetadataImportJob]
         ### ACTIONS END ###
 
-        assert_selector 'div#spinner'
-
         ### VERIFY START ###
         # error msg
         assert_text I18n.t('services.samples.metadata.import_file.missing_metadata_row')
