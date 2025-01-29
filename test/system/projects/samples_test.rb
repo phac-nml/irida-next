@@ -2612,6 +2612,8 @@ module Projects
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
 
+      assert_selector 'div#spinner'
+
       within('table thead tr') do
         assert_selector 'th', count: 8
       end
