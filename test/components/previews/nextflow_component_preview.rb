@@ -10,7 +10,8 @@ class NextflowComponentPreview < ViewComponent::Preview
       name: 'phac-nml/iridanextexample',
       description: 'IRIDA Next Example Pipeline',
       url: 'https://github.com/phac-nml/iridanextexample'
-    }
+    }.with_indifferent_access
+
     workflow = Irida::Pipeline.new(entry, '1.0.1',
                                    Rails.root.join('test/fixtures/files/nextflow/', schema_file),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))

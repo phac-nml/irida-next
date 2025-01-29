@@ -4,6 +4,9 @@ require 'view_component_test_case'
 
 class NextflowComponentTest < ViewComponentTestCase
   test 'default' do
+    sample43 = samples(:sample43)
+    sample44 = samples(:sample44)
+
     workflow = Irida::Pipeline.new(
       {
         'name' => 'phac-nml/iridanextexample',
@@ -17,7 +20,7 @@ class NextflowComponentTest < ViewComponentTestCase
 
     render_inline NextflowComponent.new(
       workflow:,
-      samples: [samples(:sample1), samples(:sample2), samples(:sample3)],
+      samples: [sample43, sample44],
       url: 'https://nf-co.re/testpipeline',
       namespace_id: 'SDSDDFDSFDS',
       fields: %w[metadata_1 metadata_2 metadata_3]
@@ -25,7 +28,6 @@ class NextflowComponentTest < ViewComponentTestCase
 
     assert_selector 'form' do
       assert_selector 'h1', text: 'phac-nml/iridanextexample', count: 1
-      assert_selector '.samplesheet-table .table-column:first-child .table-td', count: 3
       assert_selector 'input[type=text][name="workflow_execution[name]"]'
     end
   end

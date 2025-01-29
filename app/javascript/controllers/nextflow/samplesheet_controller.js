@@ -70,7 +70,6 @@ export default class extends Controller {
   #samplesheetAttributes;
 
   connect() {
-    console.log("hi");
     if (this.hasWorkflowAttributesTarget) {
       this.#setSamplesheetParametersAndData();
     }
@@ -80,11 +79,13 @@ export default class extends Controller {
     this.#samplesheetProperties = JSON.parse(
       this.samplesheetPropertiesTarget.innerHTML,
     );
-
+    // clear the now unnecessary DOM element
+    this.samplesheetPropertiesTarget.remove();
     this.#samplesheetAttributes = JSON.parse(
       this.workflowAttributesTarget.innerText,
     );
-
+    // clear the now unnecessary DOM element
+    this.workflowAttributesTarget.remove();
     this.#columnNames = Object.keys(this.#samplesheetProperties);
 
     // set required columns
