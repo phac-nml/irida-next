@@ -1023,6 +1023,8 @@ fr:
     samplesheet_component:
       label: Samples
       next: Next
+      page_selection:
+        aria_label: Pagination page selector
       previous: Previous
       processing_request: Processing your request
   nextflow_component:
