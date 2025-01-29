@@ -15,9 +15,7 @@ module WorkflowExecutions
         'selected_id' => nil,
         'property' => 'fastq_1',
         'required_properties' => %w[sample fastq_1],
-        'file_type' => 'fastq',
-        'file_selector_arguments' => { workflow_params: { name: 'phac-nml/iridanextexample',
-                                                          version: '1.0.3' } }
+        'pattern' => '^\S+\.f(ast)?q(\.gz)?$'
       }
 
       @expected_other_params = {
@@ -26,9 +24,7 @@ module WorkflowExecutions
         'index' => 1,
         'selected_id' => attachments(:attachment2).id,
         'property' => 'input',
-        'required_properties' => nil,
-        'file_type' => 'other',
-        'file_selector_arguments' => { pattern: nil }
+        'required_properties' => nil
       }
     end
     test 'new file selection with fastq params' do

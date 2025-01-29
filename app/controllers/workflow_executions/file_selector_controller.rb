@@ -48,7 +48,7 @@ module WorkflowExecutions
                                    file_selector_params['pattern']
                                  )
                                else
-                                 sample.sorted_files[:singles] || []
+                                 @attachable.sorted_files[:singles] || []
                                end
                              end
     end
