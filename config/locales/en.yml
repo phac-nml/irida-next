@@ -469,10 +469,6 @@ en:
         success: Successfully generated new personal access token for bot
       revoke:
         success: Successfully revoked personal access token %{pat_name}
-    file_import_actions:
-      create:
-        error: 'Metadata was not successfully imported for the following samples:'
-        success: Sample metadata was successfully imported.
     membership_actions:
       create:
         success: Member %{user} added successfully
