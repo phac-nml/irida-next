@@ -1,5 +1,9 @@
 <%= turbo_stream.update "table-filter", partial: "table_filter" %>
 
 <% if @query.valid? %>
+  <%= turbo_stream.append "samples-table" do %>
+    <%= render SpinnerComponent.new(message: t("groups.samples.table_filter.loading")) %>
+  <% end %>
+
   <turbo-stream action="refresh"></turbo-stream>
 <% end %>
