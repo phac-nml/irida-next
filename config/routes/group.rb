@@ -31,11 +31,11 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
       get :new_destroy
     end
     resources :group_links, only: %i[create destroy update index new]
+    resources :metadata_templates
     resources :samples, only: %i[index] do
       scope module: :samples, as: :samples do
         collection do
           resource :file_import, module: :metadata, only: %i[create new]
-          resources :metadata_templates
         end
       end
       collection do
