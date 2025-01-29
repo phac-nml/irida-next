@@ -19,8 +19,15 @@ module Types
                JSON.generate(json)
              },
              description: 'Filter samples by metadata which contains the supplied key value pairs'
+
     argument :metadata_jcont_key, String,
              required: false, camelize: false,
              description: 'Filter samples by metadata which contains the key'
+
+    # TODO
+    argument :search_groups, [SampleAdvancedSearchConditionsInputType],
+             required: false, camelize: false,
+             description: 'A list of search groups',
+             default_value: nil
   end
 end

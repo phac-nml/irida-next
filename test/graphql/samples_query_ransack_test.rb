@@ -239,4 +239,18 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
 
     assert_equal 0, data.count
   end
+
+  test 'ransack samples query with advanced search should work' do
+    result = IridaSchema.execute(SAMPLES_RANSACK_WITH_GROUP_QUERY,
+                                 context: { current_user: @user },
+                                 variables: { group_id: groups(:group_one).to_global_id.to_s,
+                                              filter: { search_groups: [{ search_conditions:
+                                 [{ field: 'name', operator: '=', value: 'Project 1 Sample 1' }] }] } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['samples']['nodes']
+
+    assert_equal 1, data.count
+  end
 end
