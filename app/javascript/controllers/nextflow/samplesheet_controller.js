@@ -70,6 +70,7 @@ export default class extends Controller {
   #samplesheetAttributes;
 
   connect() {
+    console.log("hi");
     if (this.hasWorkflowAttributesTarget) {
       this.#setSamplesheetParametersAndData();
     }
