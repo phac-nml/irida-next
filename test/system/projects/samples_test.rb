@@ -186,7 +186,7 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
 
-      assert_selector 'a', text: I18n.t('projects.samples.index.import_metadata_button')
+      assert_selector 'select#metadata_template_select'
     end
 
     test 'User with role < Maintainer does not see import metadata button' do
