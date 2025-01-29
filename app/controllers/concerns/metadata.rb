@@ -15,10 +15,6 @@ module Metadata
     pagy(result)
   end
 
-  def fields_for_namespace(namespace: nil, show_fields: false)
-    @fields = !show_fields || namespace.nil? ? [] : namespace.metadata_fields
-  end
-
   def fields_for_namespace_or_template(namespace: nil, template: nil)
     @fields = if template.blank? || template == 'none' || namespace.nil?
                 []
