@@ -469,10 +469,6 @@ fr:
         success: Successfully generated new personal access token for bot
       revoke:
         success: Successfully revoked personal access token %{pat_name}
-    file_import_actions:
-      create:
-        error: 'Metadata was not successfully imported for the following samples:'
-        success: Sample metadata was successfully imported.
     membership_actions:
       create:
         success: Member %{user} added successfully
@@ -579,7 +575,7 @@ fr:
       run_id: 'Run ID:'
       workflow: 'Workflow:'
     new:
-      after_submission_description_html: After submission, you will be redirected to the export page. While the export status is <span class="bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1 mr-1">processing</span>, the contents of the export are being created. Once the export status is <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded-full ml-1">ready</span>, it will be available for download. You will have 3 business days to download the export before it's deleted.
+      after_submission_description_html: After submission, you will be redirected to the export page. While the export status is <span class="px-2.5 py-0.5 mr-1 ml-1 text-xs font-medium rounded-full bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300">processing</span>, the contents of the export are being created. Once the export status is <span class="px-2.5 py-0.5 ml-1 text-xs font-medium text-green-800 bg-green-100 rounded-full dark:bg-green-900 dark:text-green-300">ready</span>, it will be available for download. You will have 3 business days to download the export before it's deleted.
       email_label: Receive an email notification when your export is ready to download?
       name_label: 'Export Name (Optional):'
       sample_description:
