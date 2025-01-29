@@ -119,19 +119,21 @@
                        class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
       </div>
       <div class="flex items-center h-5 mb-4">
-        <%= workflow.check_box :shared_with_namespace,
-                           {
-                             checked:
-                               instance.present? && instance["shared_with_namespace"],
-                             class:
-                               "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600",
-                           } %>
-        <%= workflow.label :shared_with_namespace,
-                       t(
-                         :"components.nextflow.shared_with_namespace",
-                         namespace_type: @namespace_type,
-                       ),
-                       class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
+        <% if !@workflow.automatable %>
+          <%= workflow.check_box :shared_with_namespace,
+                             {
+                               checked:
+                                 instance.present? && instance["shared_with_namespace"],
+                               class:
+                                 "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600",
+                             } %>
+          <%= workflow.label :shared_with_namespace,
+                         t(
+                           :"components.nextflow.shared_with_namespace",
+                           namespace_type: @namespace_type,
+                         ),
+                         class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
+        <% end %>
       </div>
     <% end %>
 
