@@ -19,18 +19,5 @@
         "executable": false
       }
     ]
-  }, {
-    "url": "https://github.com/phac-nml/fastmatchirida",
-    "name": "phac-nml/fastmatchirida",
-    "description": "IRIDA Next Fast Match Pipeline",
-    "versions": [
-      {
-        "name": "0.1.0"
-      }
-    ]
   }
-
-
-,  {    "url": "https://github.com/phac-nml/mikrokondo",    "name": "phac-nml/mikrokondo",    "description": "Mikrokondo",    "versions": [      {        "name": "0.5.0"      }    ]  }
-
 ]
