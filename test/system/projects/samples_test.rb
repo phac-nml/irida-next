@@ -1280,7 +1280,8 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
       # toggle metadata on for samples table
-      find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
+      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
+
       assert_selector '#samples-table table thead tr th', count: 8
       within('#samples-table table') do
         within('thead') do
@@ -1376,7 +1377,8 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 1,
                                                                                locale: @user.locale))
       # toggle metadata on for samples table
-      find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
+      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
+
       within("tr[id='#{@sample32.id}']") do
         # value for metadatafield1, which is blank on the csv to import and will be left unchanged after import
         assert_selector 'td:nth-child(6)', text: 'value1'
@@ -1419,7 +1421,8 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 1,
                                                                                locale: @user.locale))
       # toggle metadata on for samples table
-      find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
+      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
+
       within("tr[id='#{@sample32.id}']") do
         # value for metadatafield1, which is blank on the csv to import and will be deleted by the import
         assert_selector 'td:nth-child(6)', text: 'value1'
@@ -1531,7 +1534,8 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
       # toggle metadata on for samples table
-      find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
+      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
+
       assert_selector '#samples-table table thead tr th', count: 8
       within('#samples-table table thead') do
         # metadatafield1 and 2 already exist, 3 does not and will be added by the import
@@ -1588,7 +1592,8 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
                                                                            locale: @user.locale))
       # toggle metadata on for samples table
-      find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
+      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
+
       # metadata that does not overwriting analysis values will still be added
       within('#samples-table table thead tr') do
         assert_selector 'th', count: 8
