@@ -712,7 +712,12 @@ module WorkflowExecutions
 
         ### VERIFY START ###
         # verify error msg rendered
-        assert_text "#{I18n.t('nextflow_component.data_missing_error')}#{@sample44.puid}, #{sample46.puid}"
+        assert_selector 'div[data-nextflow--samplesheet-target="error"]'
+        within('div[data-nextflow--samplesheet-target="error"]') do
+          assert_text "#{I18n.t('nextflow_component.data_missing_error')}"
+          assert_text "- #{@sample44.puid}: fastq_1"
+          assert_text "- #{sample46.puid}: fastq_1"
+        end
         ### VERIFY END ###
       end
     end

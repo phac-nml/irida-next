@@ -18,7 +18,10 @@
       <%= viral_icon(name: "exclamation_circle", classes: "w-5 h-5 mr-3 stroke-2") %>
     </span>
     <div>
-      <div class="font-medium" data-nextflow--samplesheet-target="errorMessage"></div>
+      <div
+        class="font-medium whitespace-break-spaces"
+        data-nextflow--samplesheet-target="errorMessage"
+      ></div>
     </div>
   </div>
   <div
@@ -76,7 +79,8 @@
               flex items-center justify-center px-4 h-10 ms-0 leading-tight border
               border-slate-300 dark:border-slate-700 text-slate-500 bg-white
               hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
-              dark:hover:bg-slate-700 dark:hover:text-white cursor-pointer
+              dark:hover:bg-slate-700 dark:hover:text-white cursor-pointer border-transparent
+              focus:border-transparent focus:ring-0
             "
             data-nextflow--samplesheet-target="pageNum"
             data-action="change->nextflow--samplesheet#pageSelected"

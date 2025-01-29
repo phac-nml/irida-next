@@ -28,7 +28,6 @@ export default class extends Controller {
     dataMissingError: { type: String },
     submissionError: { type: String },
     url: { type: String },
-    workflow: { type: Object },
     noSelectedFile: { type: String },
   };
 
@@ -90,6 +89,7 @@ export default class extends Controller {
 
     // set required columns
     for (const column in this.#samplesheetProperties) {
+      // automatically autoloaded into samplesheet
       if (column === "sample") {
         continue;
       }
@@ -146,11 +146,18 @@ export default class extends Controller {
     event.preventDefault();
     this.#enableProcessingState();
     let missingData = this.#validateData();
-    if (missingData.length > 0) {
+    if (Object.keys(missingData).length > 0) {
       this.#disableProcessingState();
-      this.#enableErrorState(
-        this.dataMissingErrorValue.concat(missingData.join(", ")),
-      );
+      let errorMsg = this.dataMissingErrorValue;
+      for (const sample in missingData) {
+        console.log(`\n - ${sample}: ${missingData[sample].join(", ")}`);
+        errorMsg =
+          errorMsg +
+          `
+           - ${sample}: ${missingData[sample].join(", ")}`;
+        console.log(errorMsg);
+      }
+      this.#enableErrorState(errorMsg);
     } else {
       this.#combineFormData();
       fetch(this.urlValue, {
@@ -172,7 +179,7 @@ export default class extends Controller {
   }
 
   #validateData() {
-    let missingData = [];
+    let missingData = {};
     this.#requiredColumns.forEach((requiredColumn) => {
       for (
         let i = 0;
@@ -181,8 +188,10 @@ export default class extends Controller {
       ) {
         if (!this.#retrieveFormData(i, requiredColumn)) {
           let sample = this.#retrieveFormData(i, "sample");
-          if (!missingData.includes(sample)) {
-            missingData.push(sample);
+          if (sample in missingData) {
+            missingData[sample].push(requiredColumn);
+          } else {
+            missingData[sample] = [requiredColumn];
           }
         }
       }
