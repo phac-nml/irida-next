@@ -43,7 +43,7 @@ module Samples
     def system_arguments
       { tag: 'div' }.deep_merge(@system_arguments).tap do |args|
         args[:id] = 'samples-table'
-        args[:classes] = class_names(args[:classes], 'overflow-auto scrollbar')
+        args[:classes] = class_names(args[:classes], 'overflow-auto scrollbar relative')
         if @abilities[:select_samples]
           args[:data] ||= {}
           args[:data][:controller] = 'selection'
