@@ -1510,8 +1510,6 @@ en:
       shared:
         errors:
           ok_button: OK
-        metadata_toggle:
-          label: Metadata
         success:
           ok_button: OK
       show:
