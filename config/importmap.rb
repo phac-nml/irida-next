@@ -18,4 +18,3 @@ pin_all_from 'app/javascript/utilities', under: 'utilities'
 pin 'sortablejs' # @1.15.2
 pin 'local-time' # @3.0.2
 pin 'lodash' # @4.17.21
-pin '@rails/ujs', to: 'https://ga.jspm.io/npm:@rails/ujs@7.0.3-1/lib/assets/compiled/rails-ujs.js'

@@ -10,18 +10,18 @@ module WorkflowExecutions
       @header = params[:header]
       @name_format = params[:name_format]
       @field = params[:field]
-      @metadata_samplesheet = generate_metadata_for_samplesheet.to_json
+      @metadata = generate_metadata_for_samplesheet.to_json
       render status: :ok
     end
 
     private
 
     def generate_metadata_for_samplesheet
-      metadata_samplesheet = {}
+      metadata = {}
       @samples.each_with_index do |sample, index|
-        metadata_samplesheet[index] = sample.metadata.fetch(@field, '')
+        metadata[index] = sample.metadata.fetch(@field, '')
       end
-      metadata_samplesheet
+      metadata
     end
   end
 end

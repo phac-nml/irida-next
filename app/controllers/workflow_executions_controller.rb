@@ -11,7 +11,6 @@ class WorkflowExecutionsController < ApplicationController
 
     if @workflow_execution.persisted?
       redirect_to workflow_executions_path
-
     else
       render turbo_stream: [], status: :unprocessable_entity
     end
