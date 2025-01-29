@@ -119,7 +119,7 @@
                        class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
       </div>
       <div class="flex items-center h-5 mb-4">
-        <% if !@workflow.automatable %>
+        <% if !@workflow.automatable && @namespace_type %>
           <%= workflow.check_box :shared_with_namespace,
                              {
                                checked:
@@ -129,8 +129,7 @@
                              } %>
           <%= workflow.label :shared_with_namespace,
                          t(
-                           :"components.nextflow.shared_with_namespace",
-                           namespace_type: @namespace_type,
+                           :"components.nextflow.shared_with.#{@namespace_type.downcase}",
                          ),
                          class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
         <% end %>

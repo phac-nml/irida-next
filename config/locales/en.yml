@@ -422,7 +422,9 @@ en:
     nextflow:
       email_notification: Receive an email notification when your analysis has completed?
       required: Required
-      shared_with_namespace: Share results with %{namespace_type} members?
+      shared_with:
+        project: Share results with Project members?
+        group: Share results with Group members?
       update_samples: Update samples with analysis results
     pagination:
       next: Next
