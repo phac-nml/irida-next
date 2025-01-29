@@ -77,5 +77,9 @@ module Namespaces
     test '#destroy_metadata_templates?' do
       assert @policy.apply(:destroy_metadata_templates?)
     end
+
+    test '#view_metadata_templates?' do
+      assert @policy.apply(:view_metadata_templates?)
+    end
   end
 end

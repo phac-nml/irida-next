@@ -16,7 +16,7 @@ module MetadataTemplates
       updated = @metadata_template.update(params)
 
       create_activities if updated
-      @metadata_template
+      updated
     end
 
     private
