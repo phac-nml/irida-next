@@ -150,12 +150,8 @@ export default class extends Controller {
       this.#disableProcessingState();
       let errorMsg = this.dataMissingErrorValue;
       for (const sample in missingData) {
-        console.log(`\n - ${sample}: ${missingData[sample].join(", ")}`);
         errorMsg =
-          errorMsg +
-          `
-           - ${sample}: ${missingData[sample].join(", ")}`;
-        console.log(errorMsg);
+          errorMsg + `\n - ${sample}: ${missingData[sample].join(", ")}`;
       }
       this.#enableErrorState(errorMsg);
     } else {
