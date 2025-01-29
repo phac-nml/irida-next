@@ -7,9 +7,12 @@ module WorkflowExecutions
     include ActionView::Helpers::SanitizeHelper
 
     setup do
+      @sample22 = samples(:sample22)
       @sample43 = samples(:sample43)
       @sample44 = samples(:sample44)
+      @project2 = projects(:project2)
       @project = projects(:project37)
+      @group1 = groups(:group_one)
       @namespace = groups(:group_sixteen)
 
       @user = users(:jeff_doe)
@@ -666,15 +669,13 @@ module WorkflowExecutions
       login_as user
       fwd_attachment = attachments(:attachmentPEFWD43)
       rev_attachment = attachments(:attachmentPEREV43)
+      sample46 = samples(:sample46)
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
       # verify samples table loaded
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: user.locale))
       # select samples
-      within 'table' do
-        find("input[type='checkbox'][value='#{@sample43.id}']").click
-        find("input[type='checkbox'][value='#{@sample44.id}']").click
-      end
+      click_button I18n.t(:'projects.samples.index.select_all_button')
       # launch workflow execution dialog
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
@@ -699,19 +700,158 @@ module WorkflowExecutions
                         text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
         assert_selector "div[id='#{@sample44.id}_fastq_2']",
                         text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
+
+        assert_selector "div[id='#{sample46.id}_fastq_1']",
+                        text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
+        assert_selector "div[id='#{sample46.id}_fastq_2']",
+                        text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
         # verify error msg has not rendered
-        assert_no_text I18n.t('nextflow.samplesheet_component.attachments_error')
-        assert_no_selector 'div.border-red-300'
+        assert_no_text I18n.t('nextflow.samplesheet_component.data_missing_error')
         click_button I18n.t('workflow_executions.submissions.create.submit')
         ### ACTIONS END ###
 
         ### VERIFY START ###
         # verify error msg rendered
-        assert_text I18n.t('nextflow_component.attachments_error')
-        # verify error borders rendered (error msg and one attachment)
-        assert_selector 'div.border-red-300', count: 2
+        assert_text "#{I18n.t('nextflow_component.data_missing_error')}#{@sample44.puid}, #{sample46.puid}"
         ### VERIFY END ###
       end
+    end
+
+    test 'samplesheet pagination' do
+      ### SETUP START ###
+      user = users(:john_doe)
+      login_as user
+      visit namespace_project_samples_url(@group1, @project2)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
+                                                                           locale: user.locale))
+      # select samples
+      click_button I18n.t(:'projects.samples.index.select_all_button')
+      # launch workflow execution dialog
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      assert_selector '#dialog'
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_button text: 'phac-nml/iridanextexample', count: 3
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+      ### SETUP END ###
+
+      ### ACTIONS AND VERIFY START ###
+      within '#dialog' do
+        # verify pagination buttons as well as disabled previous state
+        assert_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
+                        text: I18n.t('nextflow.samplesheet_component.previous')
+        assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
+        within('select[data-action="change->nextflow--samplesheet#pageSelected"]') do
+          # verify only 4 pages exist
+          assert_selector 'option[value="1"]'
+          assert_selector 'option[value="2"]'
+          assert_selector 'option[value="3"]'
+          assert_selector 'option[value="4"]'
+          assert_no_selector 'option[value="5"]'
+        end
+        assert_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
+                        text: I18n.t('nextflow.samplesheet_component.next')
+
+        # navigate to page 2 of 4
+        click_button I18n.t('nextflow.samplesheet_component.next')
+
+        # verify previous button no longer disabled
+        assert_selector 'button[data-action="click->nextflow--samplesheet#previousPage"]',
+                        text: I18n.t('nextflow.samplesheet_component.previous')
+        assert_no_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
+                           text: I18n.t('nextflow.samplesheet_component.previous')
+        # page dropdown selection updated
+        assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '2'
+        # navigate to page 3 of 4
+        click_button I18n.t('nextflow.samplesheet_component.next')
+
+        assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '3'
+
+        # test navigating by page dropdown selection
+        find('select[data-action="change->nextflow--samplesheet#pageSelected"]').find('option[value="4"]').select_option
+
+        assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '4'
+        # verify next button is disabled on last page
+        assert_selector 'button[data-action="click->nextflow--samplesheet#nextPage"][disabled]',
+                        text: I18n.t('nextflow.samplesheet_component.next')
+      end
+      ### ACTIONS AND VERIFY END ###
+    end
+
+    test 'data retained in samplesheet after data and page change' do
+      ### SETUP START ###
+      user = users(:john_doe)
+      login_as user
+      rev_attachment = attachments(:sample22AttachmentFastqREV)
+      visit namespace_project_samples_url(@group1, @project2)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
+                                                                           locale: user.locale))
+
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # select samples
+      click_button I18n.t(:'projects.samples.index.select_all_button')
+      # launch workflow execution dialog
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      assert_selector '#dialog'
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_button text: 'phac-nml/iridanextexample', count: 3
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+
+      within '#dialog' do
+        # navigate to page 4
+        find('select[data-action="change->nextflow--samplesheet#pageSelected"]').find('option[value="4"]').select_option
+        assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '4'
+
+        # verify attachment to test initially has a selection
+        assert_selector "div[id='#{@sample22.id}_fastq_2']",
+                        text: rev_attachment.file.filename.to_s
+        find("div[id='#{@sample22.id}_fastq_2']").click
+      end
+
+      # select 'No file' option
+      # verify file selector rendered
+      assert_selector '#file_selector_form_dialog'
+      within('#file_selector_form_dialog') do
+        assert_selector 'h1', text: I18n.t('workflow_executions.file_selector.file_selector_dialog.select_file')
+        within('#file_selector_form') do
+          # verify no file option exists in non-required field
+          assert_selector '#attachment_id_no_attachment'
+          find('#attachment_id_no_attachment').click
+        end
+        click_button I18n.t('workflow_executions.file_selector.file_selector_dialog.submit_button')
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      within('#dialog') do
+        # file selection is now no file selected
+        assert_selector "div[id='#{@sample22.id}_fastq_2']",
+                        text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
+        # previously selected file no longer exists in table
+        assert_no_text rev_attachment.file.filename.to_s
+        # change page
+        click_button I18n.t('nextflow.samplesheet_component.previous')
+        assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '3'
+        assert_no_selector "div[id='#{@sample22.id}_fastq_2']"
+
+        # navigate back to original page
+        click_button I18n.t('nextflow.samplesheet_component.next')
+        assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '4'
+        # verify attachment selection is still 'No file' and original attachment does not exist in table
+        assert_selector "div[id='#{@sample22.id}_fastq_2']",
+                        text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
+        assert_no_text rev_attachment.file.filename.to_s
+      end
+      ### VERIFY END ###
     end
   end
 end

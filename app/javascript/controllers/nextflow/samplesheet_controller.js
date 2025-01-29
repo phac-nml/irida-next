@@ -322,7 +322,6 @@ export default class extends Controller {
     columnNode.insertAdjacentHTML("beforeend", newCellContainer);
     let container = columnNode.lastElementChild;
     container.id = `${index}_${columnName}`;
-    container.setAttribute("data-node-id", `${index}_${columnName}`);
     return columnNode.lastElementChild;
   }
 
