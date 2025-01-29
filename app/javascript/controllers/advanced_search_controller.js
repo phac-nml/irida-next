@@ -127,6 +127,10 @@ export default class extends Controller {
 
     if (["", "exists", "not_exists"].includes(operator)) {
       value.classList.add("invisible");
+      let inputs = value.querySelectorAll("input");
+      inputs.forEach((input) => {
+        input.value = "";
+      });
     } else if (["in", "not_in"].includes(operator)) {
       value.classList.remove("invisible");
       value.outerHTML = this.listValueTemplateTarget.innerHTML
