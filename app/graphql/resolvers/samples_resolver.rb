@@ -20,13 +20,12 @@ module Resolvers
              description: 'Order by',
              default_value: nil
 
-    def resolve(group_id:, filter:, order_by:) # rubocop:disable Metrics/AbcSize
+    def resolve(group_id:, filter:, order_by:)
       context.scoped_set!(:samples_preauthorized, true)
 
       filter = filter&.to_h
-      search_params = advanced_search_params(filter)
-      search_params.merge!(name_or_puid_cont: filter[:name_or_puid_cont]) if filter[:name_or_puid_cont]
-      search_params.merge!(name_or_puid_in: filter[:name_or_puid_in]) if filter[:name_or_puid_in]
+      search_params = {}
+      search_params.merge!(filter_params(filter)) if filter
       search_params.merge!(sort: "#{order_by.field} #{order_by.direction}") if order_by.present?
 
       if group_id
@@ -47,11 +46,19 @@ module Resolvers
 
     private
 
+    def filter_params(filter)
+      filter_params = {}
+      filter_params.merge!(advanced_search_params(filter)) if filter[:advanced_search_groups]
+      filter_params.merge!(name_or_puid_cont: filter[:name_or_puid_cont]) if filter[:name_or_puid_cont]
+      filter_params.merge!(name_or_puid_in: filter[:name_or_puid_in]) if filter[:name_or_puid_in]
+      filter_params
+    end
+
     def advanced_search_params(filter)
       groups = {}
-      filter[:advanced_search_groups]&.each_with_index do |group, group_index|
+      filter[:advanced_search_groups].each_with_index do |group, group_index|
         conditions = {}
-        group[:advanced_search_conditions]&.each_with_index do |condition, condition_index|
+        group[:advanced_search_conditions].each_with_index do |condition, condition_index|
           conditions.merge!({ condition_index => condition })
         end
         groups.merge!({ group_index => { conditions_attributes: conditions } })
@@ -66,7 +73,7 @@ module Resolvers
 
     def samples_by_group_scope(group_id:)
       group = IridaSchema.object_from_id(group_id, { expected_type: Group })
-      # authorize!(group, to: :sample_listing?, with: GroupPolicy, context: { token: context[:token] })
+      authorize!(group, to: :sample_listing?, with: GroupPolicy, context: { token: context[:token] })
       # authorized_scope(Sample, type: :relation, as: :namespace_samples, scope_options: { namespace: group })
       project_ids =
         authorized_scope(Project, type: :relation, as: :group_projects, scope_options: { group: group }).pluck(:id)
