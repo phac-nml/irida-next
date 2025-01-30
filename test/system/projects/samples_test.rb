@@ -852,6 +852,9 @@ module Projects
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.puid
       find('input.t-search-component').native.send_keys(:return)
 
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
+
       # verify sort is still applied
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       ### actions and VERIFY END ###
@@ -872,6 +875,9 @@ module Projects
       # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -897,6 +903,9 @@ module Projects
       # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample2.puid
       find('input.t-search-component').native.send_keys(:return)
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -917,6 +926,9 @@ module Projects
       ### ACTIONS START ###
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: 'sample'
       find('input.t-search-component').native.send_keys(:return)
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -938,6 +950,9 @@ module Projects
       ### ACTIONS START ###
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.puid
       find('input.t-search-component').native.send_keys(:return)
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -965,6 +980,9 @@ module Projects
       # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: filter_text
       find('input.t-search-component').native.send_keys(:return)
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
 
       assert_selector "tr[id='#{@sample1.id}']"
       assert_no_selector "tr[id='#{@sample2.id}']"
@@ -1015,6 +1033,9 @@ module Projects
       # apply filter
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: filter_text
       find('input.t-search-component').native.send_keys(:return)
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -2037,6 +2058,9 @@ module Projects
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: samples(:sample1).name
       find('input.t-search-component').native.send_keys(:return)
 
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
+
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 1
         assert_selector 'input[name="sample_ids[]"]:checked', count: 0
@@ -2055,6 +2079,9 @@ module Projects
       # remove filter
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: ' '
       find('input.t-search-component').native.send_keys(:return)
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
 
       within 'tfoot' do
         assert_text "#{I18n.t('samples.table_component.counts.samples')}: 3"
@@ -2451,6 +2478,9 @@ module Projects
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
 
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
+
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
 
@@ -2537,6 +2567,8 @@ module Projects
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample2.name
       find('input.t-search-component').native.send_keys(:return)
 
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
       ### SETUP END ###
 
       ### VERIFY START ###
@@ -2556,6 +2588,9 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
 
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
@@ -2613,6 +2648,9 @@ module Projects
 
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
 
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click

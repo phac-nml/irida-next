@@ -11,14 +11,16 @@ export default class extends Controller {
   }
 
   disconnect() {
-    this.openValue = false;
+    this.close();
   }
 
   open() {
+    this.openValue = true;
     this.dialogTarget.showModal();
   }
 
   close() {
+    this.openValue = false;
     this.dialogTarget.close();
   }
 
