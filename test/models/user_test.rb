@@ -91,7 +91,7 @@ class UserTest < ActiveSupport::TestCase
                current_password: 'password1' }
 
     assert_not @user.update_password_with_password(params)
-    assert_equal "Password confirmation doesn't match Password", @user.errors.full_messages.sentence
+    assert_equal "Password confirmation doesn't match Password", @user.errors.full_messages.to_sentence
   end
 
   test 'unable to update password with blank password' do
@@ -99,7 +99,7 @@ class UserTest < ActiveSupport::TestCase
                current_password: 'password1' }
 
     assert_not @user.update_password_with_password(params)
-    assert_equal "Password can't be blank", @user.errors.full_messages.sentence
+    assert_equal "Password can't be blank", @user.errors.full_messages.to_sentence
   end
 
   test 'unable to update password with wrong password' do
@@ -107,7 +107,7 @@ class UserTest < ActiveSupport::TestCase
                current_password: 'wrong_password' }
 
     assert_not @user.update_password_with_password(params)
-    assert_equal 'Current password is invalid', @user.errors.full_messages.sentence
+    assert_equal 'Current password is invalid', @user.errors.full_messages.to_sentence
   end
 
   test 'full_name should combine the users first and last names' do
