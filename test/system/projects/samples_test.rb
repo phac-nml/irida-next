@@ -1139,7 +1139,8 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
       # toggle metadata on for samples table
-      find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
+      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
+
       within('#samples-table table thead tr') do
         assert_selector 'th', count: 8
       end
@@ -1209,7 +1210,7 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
       # toggle metadata on for samples table
-      find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
+      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
       within('#samples-table table thead tr') do
         assert_selector 'th', count: 8
       end
@@ -2793,7 +2794,8 @@ module Projects
       assert_no_selector 'div#spinner'
 
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
-      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+
+      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
 
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
@@ -2840,7 +2842,8 @@ module Projects
       visit namespace_project_samples_url(subgroup12aa, project31)
       assert_selector 'table thead tr th', count: 6
 
-      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
+
       assert_selector 'table thead tr th', count: 8
 
       click_on I18n.t('projects.samples.show.table_header.last_updated')
@@ -2870,7 +2873,7 @@ module Projects
       login_as users(:ryan_doe)
       visit namespace_project_samples_url(@namespace, @project)
 
-      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
       within('table thead tr') do
         assert_selector 'th', count: 7
       end
@@ -2903,8 +2906,7 @@ module Projects
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
 
-      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
-      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
 
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
@@ -2963,8 +2965,7 @@ module Projects
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
 
-      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
-      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
 
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
