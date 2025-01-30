@@ -980,6 +980,10 @@ fr:
       updated_at: Access Granted
       user_email: Username
   metadata_templates:
+    table:
+      empty:
+        description: There are no metadata templates associated with this %{namespace_type}.
+        title: No metadata templates.
     table_component:
       action: Action
       created_at: Created Date

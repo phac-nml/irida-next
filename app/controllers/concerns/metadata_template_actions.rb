@@ -17,10 +17,6 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
     @q = load_metadata_templates.ransack(params[:q])
     set_default_sort
     @pagy, @metadata_templates = pagy(@q.result)
-    respond_to do |format|
-      format.html
-      format.turbo_stream
-    end
   end
 
   def new

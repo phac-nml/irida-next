@@ -19,15 +19,9 @@
   <% end %>
 <% end %>
 
-<div class="flex flex-col">
-  <%= turbo_frame_tag "metadata_templates", "data-turbo-temporary": true,
-                            src:
-                              (
-                                  namespace_project_metadata_templates_path(
-                                    format: :turbo_stream
-                                  )
-                              ) do %>
-    <%= render partial: "shared/loading/table" %>
-  <% end %>
-  <%= turbo_frame_tag "metadata_templates_pagination", "data-turbo-temporary": true %>
-</div>
+<%= render partial: "table",
+locals: {
+  workflow_executions: @metadata_templates,
+  pagy: @pagy,
+  q: @q,
+} %>

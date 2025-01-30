@@ -5,6 +5,8 @@ module Groups
   class MetadataTemplatesController < Groups::ApplicationController
     include MetadataTemplateActions
 
+    before_action :current_page
+
     private
 
     def metadata_template_params
@@ -20,6 +22,10 @@ module Groups
 
     def metadata_templates_path
       group_metadata_templates_path
+    end
+
+    def current_page
+      @current_page = t(:'groups.sidebar.metadata_templates')
     end
   end
 end
