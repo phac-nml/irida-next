@@ -140,11 +140,11 @@
                 <% end %>
               <% end %>
             <% end %>
-            <% if @renders_row_actions && (!workflow_execution.shared_with_namespace || @namespace.nil?) %>
-              <%= render_cell(
-                tag: 'td',
-                classes: class_names('px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2')
-              ) do %>
+            <%= render_cell(
+              tag: 'td',
+              classes: class_names('px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2')
+            ) do %>
+              <% if @renders_row_actions && (!workflow_execution.shared_with_namespace || @namespace.nil?) %>
                 <% if workflow_execution.cancellable? && @row_actions.key?(:cancel) %>
                   <%= link_to(
                     t(:"workflow_executions.index.actions.cancel_button"),
