@@ -11,15 +11,14 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
     @sample2 = samples(:sample44)
   end
   test 'default' do
-    sample = Sample.first
-    visit('/rails/view_components/nextflow_component/default')
+    visit("/rails/view_components/nextflow_samplesheet_component/default?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}")
 
     assert_selector '.samplesheet-table' do |table|
       table.assert_selector '.table-header', count: 5
       table.assert_selector '.table-column:last-of-type .table-header', text: 'STRANDEDNESS (REQUIRED)'
       table.assert_selector '.table-column:first-of-type .table-td', count: 2
-      table.assert_selector '.table-column:first-of-type .table-td:first-of-type', text: sample.puid
-      table.assert_selector '.table-column:nth-of-type(2) .table-td:first-of-type', text: sample.name
+      table.assert_selector '.table-column:first-of-type .table-td:first-of-type', text: @sample1.puid
+      table.assert_selector '.table-column:nth-of-type(2) .table-td:first-of-type', text: @sample1.name
       table.assert_selector '.table-column:last-of-type .table-td:first-of-type select option', count: 4
       table.assert_selector '.table-column:last-of-type .table-td:first-of-type select option:nth-of-type(2)',
                             text: 'forward'

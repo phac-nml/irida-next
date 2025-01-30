@@ -10,6 +10,7 @@ module WorkflowExecutions
       @sample22 = samples(:sample22)
       @sample43 = samples(:sample43)
       @sample44 = samples(:sample44)
+      @sample46 = samples(:sample46)
       @project2 = projects(:project2)
       @project = projects(:project37)
       @group1 = groups(:group_one)
@@ -669,7 +670,6 @@ module WorkflowExecutions
       login_as user
       fwd_attachment = attachments(:attachmentPEFWD43)
       rev_attachment = attachments(:attachmentPEREV43)
-      sample46 = samples(:sample46)
       visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
       # verify samples table loaded
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
@@ -701,9 +701,9 @@ module WorkflowExecutions
         assert_selector "div[id='#{@sample44.id}_fastq_2']",
                         text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
 
-        assert_selector "div[id='#{sample46.id}_fastq_1']",
+        assert_selector "div[id='#{@sample46.id}_fastq_1']",
                         text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
-        assert_selector "div[id='#{sample46.id}_fastq_2']",
+        assert_selector "div[id='#{@sample46.id}_fastq_2']",
                         text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
         # verify error msg has not rendered
         assert_no_text I18n.t('nextflow.samplesheet_component.data_missing_error')
@@ -716,7 +716,7 @@ module WorkflowExecutions
         within('div[data-nextflow--samplesheet-target="error"]') do
           assert_text "#{I18n.t('nextflow_component.data_missing_error')}"
           assert_text "- #{@sample44.puid}: fastq_1"
-          assert_text "- #{sample46.puid}: fastq_1"
+          assert_text "- #{@sample46.puid}: fastq_1"
         end
         ### VERIFY END ###
       end
@@ -857,6 +857,52 @@ module WorkflowExecutions
         assert_no_text rev_attachment.file.filename.to_s
       end
       ### VERIFY END ###
+    end
+
+    test 'pagination does not render if only one page of samples' do
+      ### SETUP START ###
+      user = users(:john_doe)
+      login_as user
+      visit namespace_project_samples_url(namespace_id: @namespace.path, project_id: @project.path)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: user.locale))
+      # select samples
+      click_button I18n.t(:'projects.samples.index.select_all_button')
+      # launch workflow execution dialog
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      assert_selector '#dialog'
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_button text: 'phac-nml/iridanextexample', count: 3
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within '#dialog' do
+        # verify samples samplesheet loaded
+        assert_selector 'div.sample-sheet'
+        within('#metadata-sample-column') do
+          assert_text @sample43.puid
+          assert_text @sample44.puid
+          assert_text @sample46.puid
+        end
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
+        # verify no pagination buttons rendered
+        assert_no_selector '#samplesheet_pagination'
+        assert_no_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
+                           text: I18n.t('nextflow.samplesheet_component.previous')
+        assert_no_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
+
+        assert_no_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
+                           text: I18n.t('nextflow.samplesheet_component.next')
+
+        ### VERIFY END ###
+      end
     end
   end
 end

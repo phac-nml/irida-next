@@ -83,6 +83,7 @@ export default class extends Controller {
     this.#samplesheetAttributes = JSON.parse(
       this.workflowAttributesTarget.innerText,
     );
+
     // clear the now unnecessary DOM element
     this.workflowAttributesTarget.remove();
     this.#columnNames = Object.keys(this.#samplesheetProperties);
@@ -106,10 +107,7 @@ export default class extends Controller {
     );
 
     // disable dropdown and next button if only 1 page of samples, otherwise create the dropdown page options
-    if (this.#lastPage == 1) {
-      this.#disablePaginationButton(this.nextBtnTarget);
-      this.#disablePaginationButton(this.pageNumTarget);
-    } else {
+    if (this.#lastPage > 1) {
       this.#generatePageNumberDropdown();
     }
     // render samplesheet table

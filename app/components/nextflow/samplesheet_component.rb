@@ -17,10 +17,9 @@ module Nextflow
     end
 
     def samples_workflow_executions_attributes
-      attributes = samples.each_with_index.to_h do |sample, index|
+      samples.each_with_index.to_h do |sample, index|
         [index, samples_workflow_execution_attributes(sample)]
       end
-      attributes.to_json
     end
 
     private

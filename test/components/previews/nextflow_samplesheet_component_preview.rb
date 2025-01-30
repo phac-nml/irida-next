@@ -2,13 +2,22 @@
 
 class NextflowSamplesheetComponentPreview < ViewComponent::Preview
   # @param schema_file select :schema_file_options
-  def default(schema_file: 'samplesheet_schema.json', sample_ids: [Sample.first.id, Sample.second.id])
+  def default(schema_file: 'nextflow_schema.json', sample_ids: [Sample.first.id, Sample.second.id])
     samples = Sample.where(id: sample_ids)
 
+    entry = {
+      name: 'phac-nml/iridanextexample',
+      description: 'IRIDA Next Example Pipeline',
+      url: 'https://github.com/phac-nml/iridanextexample'
+    }.with_indifferent_access
+
+    workflow = Irida::Pipeline.new(entry, '1.0.1',
+                                   Rails.root.join('test/fixtures/files/nextflow/', schema_file),
+                                   Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
+
     render_with_template(locals: {
-                           schema_file:,
                            samples:,
-                           fields: %w[insdc_accession country metadata_3]
+                           workflow:
                          })
   end
 

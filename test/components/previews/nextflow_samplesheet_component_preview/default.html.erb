@@ -1,15 +1,7 @@
-<%= render Nextflow::SamplesheetComponent.new(
-  schema:
-    JSON.parse(
-      File.read(
-        Rails.root.join("test", "fixtures", "files", "nextflow", schema_file),
-      ),
-    ),
+<%= render NextflowComponent.new(
+  workflow:,
+  url: "no_where",
   samples:,
-  fields:,
+  fields: [],
   namespace_id: "SDFSDFSDF",
-  workflow_params: {
-    name: "workflow-name",
-    version: "workflow-version",
-  },
 ) %>
