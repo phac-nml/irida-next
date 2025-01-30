@@ -423,8 +423,8 @@ en:
       email_notification: Receive an email notification when your analysis has completed?
       required: Required
       shared_with:
-        project: Share results with Project members?
         group: Share results with Group members?
+        project: Share results with Project members?
       update_samples: Update samples with analysis results
     pagination:
       next: Next
