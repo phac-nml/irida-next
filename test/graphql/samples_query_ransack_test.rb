@@ -180,10 +180,12 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     end
   end
 
-  test 'ransack samples query with metadata_jcont_key filter should work' do
+  test 'filter samples with advanced search checking if metadata field exists should work' do
     result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
                                  context: { current_user: @user },
-                                 variables: { filter: { metadata_jcont_key: 'metadatafield1' } })
+                                 variables: { filter: { advanced_search_groups: [{ advanced_search_conditions: [{
+                                   field: 'metadata.metadatafield1', operator: 'exists', value: ''
+                                 }] }] } })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
@@ -192,10 +194,12 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     assert_equal 4, data.count
   end
 
-  test 'ransack samples query with metadata_jcont_key filter should work ignoring case' do
+  test 'filter samples with advanced search using metadata field should work' do
     result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
                                  context: { current_user: @user },
-                                 variables: { filter: { metadata_jcont_key: 'MetadataField1' } })
+                                 variables: { filter: { advanced_search_groups: [{ advanced_search_conditions: [{
+                                   field: 'metadata.metadatafield1', operator: '=', value: 'value1'
+                                 }] }] } })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
@@ -204,47 +208,11 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     assert_equal 4, data.count
   end
 
-  test 'ransack samples query with metadata_jcont filter should work' do
-    result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
-                                 context: { current_user: @user },
-                                 variables: { filter: { metadata_jcont: { metadatafield1: 'value1' } } })
-
-    assert_nil result['errors'], 'should work and have no errors.'
-
-    data = result['data']['samples']['nodes']
-
-    assert_equal 4, data.count
-  end
-
-  test 'ransack samples query with metadata_jcont filter should work ignoring case' do
-    result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
-                                 context: { current_user: @user },
-                                 variables: { filter: { metadata_jcont: { MetadataField1: 'Value1' } } })
-
-    assert_nil result['errors'], 'should work and have no errors.'
-
-    data = result['data']['samples']['nodes']
-
-    assert_equal 4, data.count
-  end
-
-  test 'ransack samples query with metadata_jcont_key filter should work with non_existent key' do
-    result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
-                                 context: { current_user: @user },
-                                 variables: { filter: { metadata_jcont_key: 'non_existent' } })
-
-    assert_nil result['errors'], 'should work and have no errors.'
-
-    data = result['data']['samples']['nodes']
-
-    assert_equal 0, data.count
-  end
-
-  test 'ransack samples query with advanced search should work' do
+  test 'filter samples with advanced search should work' do
     result = IridaSchema.execute(SAMPLES_RANSACK_WITH_GROUP_QUERY,
                                  context: { current_user: @user },
                                  variables: { group_id: groups(:group_one).to_global_id.to_s,
-                                              filter: { search_groups: [{ search_conditions:
+                                              filter: { advanced_search_groups: [{ advanced_search_conditions:
                                  [{ field: 'name', operator: '=', value: 'Project 1 Sample 1' }] }] } })
 
     assert_nil result['errors'], 'should work and have no errors.'

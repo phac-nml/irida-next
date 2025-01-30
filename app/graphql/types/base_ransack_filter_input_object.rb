@@ -15,16 +15,17 @@ module Types
     graphql_name 'SampleAdvancedSearchCondition'
     description 'Sample Advanced Search Condition'
 
-    argument :field, String, 'Field of search condition', required: false
-    argument :operator, String, 'Operator of search condition', required: false
-    argument :value, String, 'Value of search condition', required: false
+    argument :field, String, 'Field of advanced search condition', required: false
+    argument :operator, String, 'Operator of advanced search condition', required: false
+    argument :value, String, 'Value of advanced search condition', required: false
   end
 
   class SampleAdvancedSearchConditionsInputType < BaseInputObject # rubocop:disable Style/Documentation
     graphql_name 'SampleAdvancedSearchConditions'
     description 'Sample Advanced Search Conditions'
 
-    argument :search_conditions, [SampleAdvancedSearchConditionInputType], 'A list of search conditions',
+    argument :advanced_search_conditions, [SampleAdvancedSearchConditionInputType],
+             'A list of advanced search conditions',
              required: false, camelize: false,
              default_value: nil
   end

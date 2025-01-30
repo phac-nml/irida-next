@@ -12,7 +12,7 @@ module Resolvers
 
     argument :filter, Types::SampleFilterType,
              required: false,
-             description: 'Ransack filter',
+             description: 'Ransack & Searchkick filter',
              default_value: nil
 
     argument :order_by, Types::SampleOrderInputType,
@@ -20,10 +20,13 @@ module Resolvers
              description: 'Order by',
              default_value: nil
 
-    def resolve(group_id:, filter:, order_by:)
+    def resolve(group_id:, filter:, order_by:) # rubocop:disable Metrics/AbcSize
       context.scoped_set!(:samples_preauthorized, true)
 
+      filter = filter&.to_h
       search_params = advanced_search_params(filter)
+      search_params.merge!(name_or_puid_cont: filter[:name_or_puid_cont]) if filter[:name_or_puid_cont]
+      search_params.merge!(name_or_puid_in: filter[:name_or_puid_in]) if filter[:name_or_puid_in]
       search_params.merge!(sort: "#{order_by.field} #{order_by.direction}") if order_by.present?
 
       if group_id
@@ -31,8 +34,6 @@ module Resolvers
       else
         search_params.merge!(samples_by_project_scope)
       end
-
-      # search_params.merge!({ project_ids: ['0129a30d-97ed-4a7f-a84a-33efeca83b0a'] }).to_json
 
       query = Sample::Query.new(search_params)
       samples = query.results
@@ -48,10 +49,10 @@ module Resolvers
 
     def advanced_search_params(filter)
       groups = {}
-      filter[:search_groups].each_with_index do |group, group_index|
+      filter[:advanced_search_groups]&.each_with_index do |group, group_index|
         conditions = {}
-        group[:search_conditions].each_with_index do |condition, condition_index|
-          conditions.merge!({ condition_index => condition.to_h })
+        group[:advanced_search_conditions]&.each_with_index do |condition, condition_index|
+          conditions.merge!({ condition_index => condition })
         end
         groups.merge!({ group_index => { conditions_attributes: conditions } })
       end
@@ -60,7 +61,7 @@ module Resolvers
 
     def samples_by_project_scope
       scope = authorized_scope Project, type: :relation
-      { project_ids: [scope.select(:id)] }
+      { project_ids: scope.pluck(:id) }
     end
 
     def samples_by_group_scope(group_id:)
