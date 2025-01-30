@@ -16,7 +16,7 @@ module Projects
                                                            create_field_params['create_fields']).execute
 
           if @sample.errors.any?
-            render status: :unprocessable_entity, locals: { type: 'error', message: @sample.errors.full_messages.first }
+            render status: :unprocessable_entity, locals: { type: 'error', message: error_message(@sample) }
           else
             status = get_create_status(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
             messages = get_create_messages(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
@@ -95,7 +95,7 @@ module Projects
               { type: 'success', message: t('projects.samples.metadata.fields.update.success') }
           else
             update_render_params[:status] = :unprocessable_entity
-            update_render_params[:message] = { type: 'error', message: @sample.errors.full_messages.first }
+            update_render_params[:message] = { type: 'error', message: error_message(@sample) }
           end
           update_render_params
         end
