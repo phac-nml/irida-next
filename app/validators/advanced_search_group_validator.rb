@@ -50,7 +50,8 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
                            I18n.t('validators.advanced_search_group_validator.blank_error')
     end
 
-    return unless (condition.value.is_a?(Array) && condition.value.compact_blank.blank?) || condition.value.blank?
+    return unless (condition.value.is_a?(Array) && condition.value.compact_blank.blank?) ||
+                  (%w[exists not_exists].exclude?(condition.operator) && condition.value.blank?)
 
     condition.errors.add :value, I18n.t('validators.advanced_search_group_validator.blank_error')
   end
