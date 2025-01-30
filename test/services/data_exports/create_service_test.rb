@@ -49,7 +49,7 @@ module DataExports
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(@user, invalid_params).execute
         assert_equal I18n.t('services.data_exports.create.invalid_export_samples'),
-                     data_export.errors.full_messages.first
+                     data_export.errors.full_messages.sentence
       end
     end
 
@@ -63,7 +63,7 @@ module DataExports
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(@user, invalid_params).execute
         assert_equal I18n.t('services.data_exports.create.invalid_export_samples'),
-                     data_export.errors.full_messages.first
+                     data_export.errors.full_messages.sentence
       end
     end
 
@@ -117,7 +117,7 @@ module DataExports
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(@user, invalid_params).execute
         assert_equal I18n.t('services.data_exports.create.invalid_export_workflow_executions'),
-                     data_export.errors.full_messages.first
+                     data_export.errors.full_messages.sentence
       end
     end
 
@@ -218,7 +218,7 @@ module DataExports
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(user, valid_params).execute
         assert_equal I18n.t('services.data_exports.create.invalid_export_workflow_executions'),
-                     data_export.errors.full_messages.first
+                     data_export.errors.full_messages.sentence
       end
     end
 
@@ -273,7 +273,7 @@ module DataExports
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(user, invalid_params).execute
         assert_equal I18n.t('services.data_exports.create.invalid_export_samples'),
-                     data_export.errors.full_messages.first
+                     data_export.errors.full_messages.sentence
       end
     end
 
@@ -293,7 +293,7 @@ module DataExports
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(user, invalid_params).execute
         assert_equal I18n.t('services.data_exports.create.invalid_export_samples'),
-                     data_export.errors.full_messages.first
+                     data_export.errors.full_messages.sentence
       end
     end
 
@@ -498,7 +498,7 @@ module DataExports
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(@user, params).execute
         assert_equal I18n.t('services.data_exports.create.invalid_export_workflow_executions'),
-                     data_export.errors.full_messages.first
+                     data_export.errors.full_messages.sentence
       end
     end
 
@@ -511,7 +511,7 @@ module DataExports
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(@user, params).execute
         assert_equal I18n.t('services.data_exports.create.invalid_export_workflow_executions'),
-                     data_export.errors.full_messages.first
+                     data_export.errors.full_messages.sentence
       end
     end
 
@@ -524,7 +524,7 @@ module DataExports
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(@user, params).execute
         assert_equal I18n.t('services.data_exports.create.non_completed_workflow_executions'),
-                     data_export.errors.full_messages.first
+                     data_export.errors.full_messages.sentence
       end
     end
 
@@ -538,7 +538,7 @@ module DataExports
       assert_no_difference -> { DataExport.count } do
         data_export = DataExports::CreateService.new(@user, params).execute
         assert_equal I18n.t('services.data_exports.create.non_completed_workflow_executions'),
-                     data_export.errors.full_messages.first
+                     data_export.errors.full_messages.sentence
       end
     end
   end

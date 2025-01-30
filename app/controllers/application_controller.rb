@@ -69,6 +69,6 @@ class ApplicationController < ActionController::Base
   end
 
   def error_message(object)
-    object.errors.full_messages.first
+    object.errors.full_messages.sentence
   end
 end
