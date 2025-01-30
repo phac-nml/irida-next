@@ -46,6 +46,7 @@
                 t(:"groups.sidebar.general"),
                 t(:"groups.sidebar.bot_accounts"),
                 t(:"groups.sidebar.history"),
+                t(:"groups.sidebar.metadata_templates")
               ],
               current_page: @current_page
               ) do |multi_level_menu| %>
@@ -63,6 +64,11 @@
                 url: group_history_path(@group),
                 label: t(:"groups.sidebar.history"),
                 selected: @current_page == t(:"groups.sidebar.history"),
+              ) %>
+              <% multi_level_menu.with_menu_item(
+                url: group_metadata_templates_path(@group),
+                label: t(:"groups.sidebar.metadata_templates"),
+                selected: @current_page == t(:"groups.sidebar.metadata_templates"),
               ) %>
             <% end %>
           <% end %>

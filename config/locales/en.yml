@@ -817,6 +817,11 @@ en:
         select_access_level: Select Access Level
         select_user: Select a User
         title: Add New Member
+    metadata_templates:
+      index:
+        new_button: Add New Template
+        subtitle: These are metadata templates for the group
+        title: Metadata Templates
     new_subgroup:
       cancel: Cancel
       empty_state: No namespaces are associated with that name or ID
@@ -874,6 +879,7 @@ en:
       history: History
       label: Group
       members: Members
+      metadata_templates: Metadata Templates
       samples: Samples
       settings: Settings
     subgroups:
@@ -973,6 +979,19 @@ en:
       namespace_name: Source
       updated_at: Access Granted
       user_email: Username
+  metadata_templates:
+    table_component:
+      action: Action
+      created_at: Created Date
+      created_by: Created By
+      description: Description
+      edit_aria_label: Edit metadata template %{template_name}
+      edit_button: Edit
+      name: Template Name
+      remove_aria_label: Delete metadata template %{template_name}
+      remove_button: Delete
+      remove_confirmation: Are you sure you want to delete metadata template %{template_name}
+      updated_at: Last Modified
   models:
     sample:
       analysis: Analysis
@@ -1299,6 +1318,11 @@ en:
         select_access_level: Select Access Level
         select_user: Select a User
         title: Add New Member
+    metadata_templates:
+      index:
+        new_button: Add New Template
+        subtitle: These are metadata templates for the project
+        title: Metadata Templates
     new:
       description: Project description, not required
       empty_state: No namespaces are associated with that name or ID
@@ -1537,6 +1561,7 @@ en:
       history: History
       label: Project
       members: Members
+      metadata_templates: Metadata Templates
       samples: Samples
       settings: Settings
       workflow_executions: Workflow Executions

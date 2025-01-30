@@ -1,0 +1,27 @@
+<%= render PaginationComponent.new(
+  info: pagy_info(@pagy),
+  prev_url:
+    (
+      if @pagy.prev
+        namespace_project_metadata_templates_url(
+          @namespace.parent,
+          @namespace.project,
+          page: @pagy.prev,
+        )
+      else
+        nil
+      end
+    ),
+  next_url:
+    (
+      if @pagy.next
+        namespace_project_metadata_templates_url(
+          @namespace.parent,
+          @namespace.project,
+          page: @pagy.next,
+        )
+      else
+        nil
+      end
+    ),
+) %>
