@@ -771,6 +771,9 @@ module Projects
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: sample3.puid
       find('input.t-search-component').native.send_keys(:return)
 
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
+
       # verify limit is still 10
       assert_selector 'div#limit-component button div span', text: '10'
 
@@ -2450,6 +2453,10 @@ module Projects
 
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
+
       within('table thead tr') do
         assert_selector 'th', count: 8
       end
@@ -2553,6 +2560,9 @@ module Projects
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
 
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
+
       within('table thead tr') do
         assert_selector 'th', count: 8
       end
@@ -2606,6 +2616,9 @@ module Projects
 
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
 
       within('table thead tr') do
         assert_selector 'th', count: 8

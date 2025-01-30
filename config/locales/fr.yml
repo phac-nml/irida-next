@@ -841,8 +841,9 @@ fr:
         no_associated_samples: There are no samples associated with this group.
         no_samples: No Samples
       table_filter:
+        loading: Recherche en cours...
         search:
-          placeholder: Filter by ID or name
+          placeholder: Filtrer par ID ou nom
     shared_namespaces:
       index:
         pagy:
@@ -1503,8 +1504,9 @@ fr:
         upload_files: Upload Files
         uploading: Uploading
       table_filter:
+        loading: Recherche en cours...
         search:
-          placeholder: Filter by ID or name
+          placeholder: Filtrer par ID ou nom
       transfers:
         create:
           error: 'The following list of samples failed to transfer:'

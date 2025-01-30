@@ -314,6 +314,9 @@ module Groups
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
 
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
+
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
                                                                            locale: @user.locale))
 
@@ -430,6 +433,9 @@ module Groups
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
 
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
+
       within('table thead tr') do
         assert_selector 'th', count: 9
       end
@@ -442,6 +448,8 @@ module Groups
       end
 
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
       assert_selector 'table thead tr th', count: 6
     end
 
@@ -455,6 +463,9 @@ module Groups
       end
 
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
+
       within('table thead tr') do
         assert_selector 'th', count: 9
       end
@@ -473,6 +484,8 @@ module Groups
 
       # toggling metadata again causes sort to be reset
       find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
 
       within('table thead tr') do
         assert_selector 'th', count: 6
@@ -850,6 +863,9 @@ module Groups
       visit group_samples_url(@group)
 
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
+
       assert_selector '#samples-table table thead tr th', count: 9
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
       within('div[data-metadata--file-import-loaded-value="true"]') do

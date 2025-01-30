@@ -841,6 +841,7 @@ en:
         no_associated_samples: There are no samples associated with this group.
         no_samples: No Samples
       table_filter:
+        loading: Loading search results...
         search:
           placeholder: Filter by ID or name
     shared_namespaces:
@@ -1503,6 +1504,7 @@ en:
         upload_files: Upload Files
         uploading: Uploading
       table_filter:
+        loading: Loading search results...
         search:
           placeholder: Filter by ID or name
       transfers:

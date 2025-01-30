@@ -1,13 +1,21 @@
 <div
-  role="status"
   id="spinner"
   class="
-    backdrop-blur-sm absolute h-full w-full -translate-x-1/2 -translate-y-1/2
-    top-2/4 left-1/2 grid place-items-center
+    absolute z-50 grid w-full h-full -translate-x-1/2 -translate-y-1/2
+    backdrop-blur-sm top-2/4 left-1/2 place-items-center
   "
 >
-  <div class="grid place-items-center">
-    <%= viral_icon(name: :loading, classes: "animate-spin text-primary-500") %>
-    <span class="text-black dark:text-white"><%= message %></span>
+  <div class="grid place-items-start">
+    <div
+      class="
+        flex items-center w-full max-w-xs p-4 space-x-4 text-gray-500 bg-white divide-x
+        divide-gray-200 rounded-lg shadow-sm rtl:space-x-reverse rtl:divide-x-reverse
+        dark:text-gray-400 dark:divide-gray-700 dark:bg-gray-800
+      "
+      role="status"
+    >
+      <%= viral_icon(name: :loading, classes: "animate-spin text-primary-500") %>
+      <span class="text-sm font-normal ps-4"><%= message %></span>
+    </div>
   </div>
 </div>
