@@ -71,7 +71,7 @@ module DataExports
     def authorized_export_project_workflows
       project_namespace = Namespace.find(params['export_parameters']['namespace_id'])
       authorize! project_namespace, to: :export_data?
-      authorized_scope(WorkflowExecution, type: :relation, as: :automated,
+      authorized_scope(WorkflowExecution, type: :relation, as: :automated_and_shared,
                                           scope_options: { project: project_namespace.project })
         .where(id: params['export_parameters']['ids'])
     end
