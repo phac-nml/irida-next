@@ -8,7 +8,7 @@ module MetadataTemplates
     include Ransack::Helpers::FormHelper
 
     # rubocop:disable Naming/MethodParameterName, Metrics/ParameterLists
-    def initialize(namespace, metadata_templates, pagy, q, current_user, empty = {}, abilities = {})
+    def initialize(namespace, metadata_templates, pagy, q, current_user, abilities = {})
       @namespace = namespace
       @metadata_templates = metadata_templates
       @pagy = pagy
@@ -16,7 +16,6 @@ module MetadataTemplates
       @current_user = current_user
       @abilities = abilities
       @columns = columns
-      @empty = empty
     end
     # rubocop:enable Naming/MethodParameterName, Metrics/ParameterLists
 
