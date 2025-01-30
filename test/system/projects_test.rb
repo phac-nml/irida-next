@@ -307,4 +307,41 @@ class ProjectsTest < ApplicationSystemTestCase
     assert_text 'Description is too long'
     assert_current_path '/group-1/project-1/-/edit'
   end
+
+  test 'should display metadata templates associated with the project' do
+    project = projects(:project1)
+    metadata_template = metadata_templates(:valid_metadata_template)
+    visit namespace_project_metadata_templates_url(project.namespace.parent, project)
+
+    assert_selector 'h1', text: I18n.t('projects.metadata_templates.index.title')
+    assert_selector 'p', text: I18n.t('projects.metadata_templates.index.subtitle')
+
+    within('table thead tr') do
+      assert_selector 'th', count: 6
+    end
+
+    within('table tbody') do
+      assert_selector 'tr', count: 1
+    end
+
+    within('table tbody tr:first-child td:nth-child(1)') do
+      assert_text metadata_template.name
+    end
+  end
+
+  test 'should not display metadata templates listing table if no metadata templates associated with the project' do
+    project = projects(:project2)
+
+    visit namespace_project_metadata_templates_url(project.namespace.parent, project)
+
+    assert_selector 'h1', text: I18n.t('projects.metadata_templates.index.title')
+    assert_selector 'p', text: I18n.t('projects.metadata_templates.index.subtitle')
+
+    assert_no_selector 'table'
+
+    assert_selector "div[class='empty_state_message']", count: 1
+
+    assert_text I18n.t('metadata_templates.table.empty.title', namespace_type: project.namespace.type.downcase)
+    assert_text I18n.t('metadata_templates.table.empty.description', namespace_type: project.namespace.type.downcase)
+  end
 end
