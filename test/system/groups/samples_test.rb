@@ -132,6 +132,9 @@ module Groups
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: 'Sample 1'
       find('input.t-search-component').native.send_keys(:return)
 
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
+
       assert_text 'Samples: 13'
       within('table tbody') do
         assert_selector 'tr', count: 13
@@ -210,6 +213,9 @@ module Groups
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: 'Sample 1'
       find('input.t-search-component').native.send_keys(:return)
 
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
+
       assert_text 'Samples: 13'
       within('table tbody') do
         assert_selector 'tr', count: 13
@@ -244,6 +250,9 @@ module Groups
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.puid
       find('input.t-search-component').native.send_keys(:return)
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
@@ -281,6 +290,9 @@ module Groups
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.puid
       find('input.t-search-component').native.send_keys(:return)
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
@@ -363,6 +375,9 @@ module Groups
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: 'Sample 1'
       find('input.t-search-component').native.send_keys(:return)
 
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
+
       assert_text '1-13 of 13'
       within('table tbody') do
         assert_selector 'tr', count: 13
@@ -406,6 +421,9 @@ module Groups
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.puid
       find('input.t-search-component').native.send_keys(:return)
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
@@ -694,6 +712,9 @@ module Groups
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
 
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
+
       assert_text 'Samples: 1'
       assert_selector 'table tbody tr', count: 1
 
@@ -714,6 +735,9 @@ module Groups
 
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: ' '
       find('input.t-search-component').native.send_keys(:return)
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
 
       assert_text 'Samples: 26'
       assert_selector 'tfoot strong[data-selection-target="selected"]', text: '0'
@@ -912,6 +936,9 @@ module Groups
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
 
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
+
       assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
 
@@ -958,6 +985,9 @@ module Groups
 
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample28.name
       find('input.t-search-component').native.send_keys(:return)
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
 
       ### SETUP END ###
 
