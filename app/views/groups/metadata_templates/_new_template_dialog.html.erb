@@ -1,5 +1,5 @@
 <%= viral_dialog(open: open, size: :large) do |dialog| %>
-  <%= dialog.with_header(title: "New Metadata Template") %>
+  <%= dialog.with_header(title: t("metadata_templates.new_template_dialog.title")) %>
   <%= dialog.with_section do %>
     <%= turbo_frame_tag "metadata_template_dialog_content" do %>
       <div
@@ -7,19 +7,16 @@
         data-viral--sortable-lists--two-lists-selection-selected-list-value="selected"
         data-viral--sortable-lists--two-lists-selection-available-list-value="available"
         data-viral--sortable-lists--two-lists-selection-field-name-value="metadata_template[fields][]"
-        data-infinite-scroll-singular-description-value="AAA"
-        data-infinite-scroll-plural-description-value="BBB"
-        data-infinite-scroll-non-zero-header-value="CCC"
         class="font-normal text-slate-500 dark:text-slate-400"
       >
         <div class="grid gap-4">
           <%= viral_sortable_lists(
-            title: "Metadata",
-            description: "These are the fields available to add to the metadata template. They are aggregated from the namespace and descendants"
+            title: t("metadata_templates.new_template_dialog.metadata"),
+            description: t("metadata_templates.new_template_dialog.description")
             ) do |sortable_lists| %>
             <%= sortable_lists.with_list(
               id: "available",
-              title: "Available",
+              title: t("metadata_templates.new_template_dialog.available"),
               list_items:
                 @namespace.metadata_fields.sort_by do |metadata_field|
                   metadata_field.downcase
@@ -30,7 +27,7 @@
             ) %>
             <%= sortable_lists.with_list(
               id: "selected",
-              title: "Selected",
+              title: t("metadata_templates.new_template_dialog.selected"),
               group: "metadata_selection",
               container_classes: "block mb-1 text-sm font-medium",
               list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
@@ -52,7 +49,7 @@
                 data-viral--sortable-lists--two-lists-selection-target="field"
               ></div>
               <div>
-                <%= form.submit "Submit",
+                <%= form.submit t("metadata_templates.new_template_dialog.submit_button"),
                             data: {
                               turbo_frame: "_top",
                               action:
