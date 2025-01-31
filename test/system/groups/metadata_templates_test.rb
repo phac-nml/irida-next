@@ -112,5 +112,33 @@ module Groups
                         text: metadata_template22.created_by.email
       end
     end
+
+    test 'should destroy metadata template associated with the group' do
+      group = groups(:group_one)
+      metadata_template = metadata_templates(:group_one_metadata_template0)
+
+      visit group_metadata_templates_url(group)
+
+      table_row = find(:table_row, [metadata_template.name])
+
+      within table_row do
+        assert_link I18n.t(:'metadata_templates.table_component.remove_button'), count: 1
+        click_link I18n.t(:'metadata_templates.table_component.remove_button')
+      end
+
+      assert_text I18n.t(
+        :'metadata_templates.table_component.remove_confirmation',
+        template_name: metadata_template.name
+      )
+
+      click_button I18n.t(:'components.confirmation.confirm')
+
+      within %(div[data-controller='viral--flash']) do
+        assert_text I18n.t(
+          :'concerns.metadata_template_actions.destroy.success',
+          template_name: metadata_template.name
+        )
+      end
+    end
   end
 end
