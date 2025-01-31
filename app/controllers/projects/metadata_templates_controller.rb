@@ -10,7 +10,7 @@ module Projects
     private
 
     def metadata_template_params
-      params.require(:metadata_template).permit(:name, fields: [])
+      params.require(:metadata_template).permit(:name, :description, fields: [])
     end
 
     protected
