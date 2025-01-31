@@ -24,6 +24,12 @@ class ProjectSamplesQueryTest < ActiveSupport::TestCase
 
   def setup
     @user = users(:john_doe)
+    Sample.reindex
+    Searchkick.enable_callbacks
+  end
+
+  teardown do
+    Searchkick.disable_callbacks
   end
 
   test 'project with sample query should work' do
@@ -98,7 +104,7 @@ class ProjectSamplesQueryTest < ActiveSupport::TestCase
 
     result = IridaSchema.execute(PROJECT_QUERY, context: { current_user: @user },
                                                 variables: { projectPath: project.full_path,
-                                                             sampleFilter: { name_cont: 'Sample 2' } })
+                                                             sampleFilter: { name_or_puid_cont: 'Sample 2' } })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
