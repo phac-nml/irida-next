@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'graphql/searchkick/relation_connection'
+
 # IridaSchema
 class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
   query Types::QueryType
@@ -7,6 +9,9 @@ class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
 
   # For batch-loading (see https://graphql-ruby.org/dataloader/overview.html)
   use GraphQL::Dataloader
+
+  # Add in connection for Searchkick results
+  connections.add(Searchkick::Relation, GraphQL::Searchkick::RelationConnection)
 
   max_depth 15
   max_complexity 550

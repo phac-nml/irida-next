@@ -35,9 +35,7 @@ module Resolvers
       end
 
       query = Sample::Query.new(search_params)
-      samples = query.results
-
-      Sample.where(id: samples.pluck(:id)) # TODO
+      query.results
     end
 
     def ready?(**_args)
