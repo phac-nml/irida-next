@@ -51,7 +51,7 @@ module Groups
     end
 
     test 'should not display metadata templates listing table if no metadata templates associated with the group' do
-      group = groups(:group_two)
+      group = groups(:group_five)
 
       visit group_metadata_templates_url(group)
 
