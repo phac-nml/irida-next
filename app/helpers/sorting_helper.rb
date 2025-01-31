@@ -15,7 +15,7 @@ module SortingHelper
                        url: sorting_url(ransack_obj, field, dir:),
                        icon_name: active_sort(ransack_obj, field, dir) ? 'check' : 'blank',
                        data: {
-                         turbo_stream: false
+                         turbo_stream: true
                        })
   end
 
