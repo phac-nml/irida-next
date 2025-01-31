@@ -24,11 +24,11 @@ class MetadataTemplate < ApplicationRecord
   validate :validate_namespace
 
   def self.ransackable_attributes(_auth_object = nil)
-    %w[name created_at created_by updated_at]
+    %w[name created_at description updated_at]
   end
 
   def self.ransackable_associations(_auth_object = nil)
-    %w[user namespace name]
+    %w[user namespace]
   end
 
   private

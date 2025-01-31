@@ -27,10 +27,10 @@ module MetadataTemplates
       }
     end
 
-    def row_arguments(member)
+    def row_arguments(metadata_template)
       { tag: 'tr' }.tap do |args|
         args[:classes] = class_names('bg-white', 'border-b', 'dark:bg-slate-800', 'dark:border-slate-700')
-        args[:id] = dom_id(member)
+        args[:id] = dom_id(metadata_template)
       end
     end
 
@@ -49,7 +49,7 @@ module MetadataTemplates
     private
 
     def columns
-      %i[name description created_by created_at updated_at]
+      %i[name description user_email created_at updated_at]
     end
   end
 end

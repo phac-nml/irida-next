@@ -15,6 +15,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   belongs_to :owner, class_name: 'User', optional: true
 
   belongs_to :parent, class_name: 'Namespace', optional: true
+
   has_many :children,
            lambda {
              where(type: Group.sti_name)

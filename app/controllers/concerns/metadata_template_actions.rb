@@ -12,8 +12,6 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   def index
     authorize! @namespace, to: :view_metadata_templates?
 
-    @metadata_templates = load_metadata_templates
-
     @q = load_metadata_templates.ransack(params[:q])
     set_default_sort
     @pagy, @metadata_templates = pagy(@q.result)
@@ -108,7 +106,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   private
 
   def load_metadata_templates
-    @metadata_templates = MetadataTemplate.where(namespace: @namespace)
+    MetadataTemplate.where(namespace: @namespace)
   end
 
   def metadata_template
