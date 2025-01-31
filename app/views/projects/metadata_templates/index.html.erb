@@ -1,27 +1,18 @@
 <%= turbo_frame_tag "metadata_template_modal" %>
 
-<%= render Viral::PageHeaderComponent.new(title: t(:".title"), subtitle: t(:".subtitle")) do |component| %>
-  <%= component.with_icon(name: "list_bullet", classes: "h-14 w-14 text-primary-700") %>
-  <%= component.with_buttons do %>
-    <% if allowed_to?(:create_metadata_templates?, @namespace) %>
-      <%= link_to I18n.t("projects.metadata_templates.index.new_button"),
-      new_namespace_project_metadata_template_path(
-        @namespace.parent,
-        @namespace.project,
-        tab: @tab,
-      ),
-      data: {
-        "turbo-frame" => "metadata_template_modal",
-        :turbo_stream => true,
-      },
-      class: "button button--state-primary button--size-default" %>
-    <% end %>
-  <% end %>
-<% end %>
-
-<%= render partial: "table",
+<%= render partial: "shared/metadata_templates/header",
 locals: {
-  workflow_executions: @metadata_templates,
-  pagy: @pagy,
-  q: @q,
+  title: t(:".title"),
+  subtitle: t(:".subtitle"),
+  new_template_button_text:
+    I18n.t("projects.metadata_templates.index.new_button"),
+  new_template_url:
+    new_namespace_project_metadata_template_path(
+      @namespace.parent,
+      @namespace.project,
+      tab: @tab,
+    ),
+  namespace: @namespace,
 } %>
+
+<%= render partial: "table" %>
