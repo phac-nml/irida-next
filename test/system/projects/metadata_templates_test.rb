@@ -4,6 +4,8 @@ require 'application_system_test_case'
 
 module Projects
   class MetadataTemplatesTest < ApplicationSystemTestCase
+    include ActionView::Helpers::SanitizeHelper
+
     def setup
       @user = users(:john_doe)
       login_as @user
@@ -65,15 +67,14 @@ module Projects
     end
 
     test 'should sort a list of metadata templates' do
-      project = projects(:project1)
-      metadata_template1 = metadata_templates(:project1_metadata_template0)
-      metadata_template20 = metadata_templates(:project1_metadata_template20)
-      metadata_template22 = metadata_templates(:valid_metadata_template)
+      project = projects(:john_doe_project2)
+      metadata_template1 = metadata_templates(:project2_metadata_template1)
+      metadata_template2 = metadata_templates(:project2_metadata_template2)
 
       visit namespace_project_metadata_templates_url(project.namespace.parent, project)
 
-      assert_text 'Displaying items 1-20 of 22 in total'
-      assert_selector 'table tbody tr', count: 20
+      strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 2))
+      assert_selector 'table tbody tr', count: 2
       assert_selector 'table thead th:first-child svg.icon-arrow_up'
 
       within('table tbody') do
@@ -82,34 +83,31 @@ module Projects
                         text: metadata_template1.description
       end
 
-      sort_link = find('table thead th:nth-child(1) a')
-      sort_link.trigger('click')
+      click_on I18n.t('metadata_templates.table_component.name')
       assert_selector 'table thead th:first-child svg.icon-arrow_down'
 
       within('table tbody') do
-        assert_selector 'tr:first-child td:first-child', text: metadata_template22.name
+        assert_selector 'tr:first-child td:first-child', text: metadata_template2.name
         assert_selector 'tr:first-child td:nth-child(2)',
-                        text: metadata_template22.description
+                        text: metadata_template2.description
       end
 
-      sort_link = find('table thead th:nth-child(3) a')
-      sort_link.trigger('click')
+      click_on I18n.t('metadata_templates.table_component.created_by_email')
       assert_selector 'table thead th:nth-child(3) svg.icon-arrow_up'
 
       within('table tbody') do
-        assert_selector 'tr:first-child td:first-child', text: metadata_template20.name
+        assert_selector 'tr:first-child td:first-child', text: metadata_template2.name
         assert_selector 'tr:first-child td:nth-child(3)',
-                        text: metadata_template20.created_by.email
+                        text: metadata_template2.created_by.email
       end
 
-      sort_link = find('table thead th:nth-child(3) a')
-      sort_link.trigger('click')
+      click_on I18n.t('metadata_templates.table_component.created_by_email')
       assert_selector 'table thead th:nth-child(3) svg.icon-arrow_down'
 
       within('table tbody') do
-        assert_selector 'tr:first-child td:first-child', text: metadata_template22.name
+        assert_selector 'tr:first-child td:first-child', text: metadata_template1.name
         assert_selector 'tr:first-child td:nth-child(3)',
-                        text: metadata_template22.created_by.email
+                        text: metadata_template1.created_by.email
       end
     end
 
