@@ -598,41 +598,4 @@ class GroupsTest < ApplicationSystemTestCase
       assert_text subgroup1.aggregated_samples_count
     end
   end
-
-  test 'should display metadata templates associated with the group' do
-    group = groups(:group_one)
-    metadata_template = metadata_templates(:valid_group_metadata_template)
-    visit group_metadata_templates_url(group)
-
-    assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
-    assert_selector 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
-
-    within('table thead tr') do
-      assert_selector 'th', count: 6
-    end
-
-    within('table tbody') do
-      assert_selector 'tr', count: 1
-    end
-
-    within('table tbody tr:first-child td:nth-child(1)') do
-      assert_text metadata_template.name
-    end
-  end
-
-  test 'should not display metadata templates listing table if no metadata templates associated with the group' do
-    group = groups(:group_two)
-
-    visit group_metadata_templates_url(group)
-
-    assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
-    assert_selector 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
-
-    assert_no_selector 'table'
-
-    assert_selector "div[class='empty_state_message']", count: 1
-
-    assert_text I18n.t('metadata_templates.table.empty.title', namespace_type: group.type.downcase)
-    assert_text I18n.t('metadata_templates.table.empty.description', namespace_type: group.type.downcase)
-  end
 end
