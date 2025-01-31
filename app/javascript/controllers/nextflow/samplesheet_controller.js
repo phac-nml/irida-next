@@ -106,7 +106,7 @@ export default class extends Controller {
       Object.keys(this.#samplesheetAttributes).length / 5,
     );
 
-    // disable dropdown and next button if only 1 page of samples, otherwise create the dropdown page options
+    // create the page dropdown options if there's more than one page
     if (this.#lastPage > 1) {
       this.#generatePageNumberDropdown();
     }
