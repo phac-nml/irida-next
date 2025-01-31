@@ -49,7 +49,7 @@ module MetadataTemplates
     private
 
     def columns
-      %i[name description user_email created_at updated_at]
+      %i[name description created_by_email created_at updated_at]
     end
   end
 end

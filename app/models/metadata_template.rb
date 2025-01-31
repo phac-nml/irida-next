@@ -28,7 +28,7 @@ class MetadataTemplate < ApplicationRecord
   end
 
   def self.ransackable_associations(_auth_object = nil)
-    %w[user namespace]
+    %w[created_by namespace]
   end
 
   private

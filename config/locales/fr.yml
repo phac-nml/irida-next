@@ -987,7 +987,7 @@ fr:
     table_component:
       action: Action
       created_at: Created Date
-      user_email: Created By
+      created_by_email: Created By
       description: Description
       edit_aria_label: Edit metadata template %{template_name}
       edit_button: Edit
