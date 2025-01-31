@@ -55,10 +55,10 @@
               <%= metadata_template.created_by.email %>
             </td>
             <td class="px-6 py-4">
-              <%= helpers.local_time_ago(metadata_template.created_at) %>
+              <%= helpers.local_time(metadata_template.created_at, :full_date) %>
             </td>
             <td class="px-6 py-4">
-              <%= helpers.local_time_ago(metadata_template.updated_at) %>
+              <%= helpers.local_time(metadata_template.created_at) %>
             </td>
             <td class="px-6 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2">
               <% if (@abilities[:update_metadata_template]) %>
