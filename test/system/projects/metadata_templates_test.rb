@@ -147,5 +147,48 @@ module Projects
         )
       end
     end
+
+    test 'maintainer or higher can access the metadata template page and create new template' do
+      project = projects(:project1)
+
+      visit namespace_project_metadata_templates_url(project.namespace.parent, project)
+
+      assert_selector 'h1', text: 'Metadata Templates'
+      assert_selector 'p', text: 'These are the metadata templates associated to the project'
+
+      assert_selector 'a', text: 'New Template', count: 1
+
+      click_on 'New Template'
+
+      assert_selector '#dialog'
+
+      within('span[data-controller-connected="true"] dialog') do
+        assert_selector 'h1', text: 'New Metadata Template'
+        assert_text "Select the metadata fields for new template by moving the metadata fields from the available list to the selected list. The template's fields ordering will be determined by the ordering of the selected list." # rubocop:disable Layout/LineLength
+
+        within "ul[id='available']" do
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield2'
+          assert_selector 'li', count: 2
+        end
+
+        within "ul[id='selected']" do
+          assert_no_text 'metadatafield1'
+          assert_no_text 'metadatafield2'
+          assert_no_selector 'li'
+        end
+
+        click_button I18n.t('viral.sortable_lists_component.add_all')
+        find('input#metadata_template_name').fill_in with: 'Newest template'
+        click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
+      end
+
+      within %(div[data-controller='viral--flash']) do
+        assert_text I18n.t(
+          :'concerns.metadata_template_actions.create.success',
+          template_name: 'Newest template'
+        )
+      end
+    end
   end
 end
