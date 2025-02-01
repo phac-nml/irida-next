@@ -144,18 +144,18 @@ module Groups
 
       visit group_metadata_templates_url(group)
 
-      assert_selector 'h1', text: 'Metadata Templates'
-      assert_selector 'p', text: 'These are the metadata templates associated to the group'
+      assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
+      assert_selector 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
 
-      assert_selector 'a', text: 'New Template', count: 1
+      assert_selector 'a', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
 
-      click_on 'New Template'
+      click_on I18n.t('groups.metadata_templates.index.new_button')
 
       assert_selector '#dialog'
 
       within('span[data-controller-connected="true"] dialog') do
-        assert_selector 'h1', text: 'New Metadata Template'
-        assert_text "Select the metadata fields for new template by moving the metadata fields from the available list to the selected list. The template's fields ordering will be determined by the ordering of the selected list." # rubocop:disable Layout/LineLength
+        assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
+        assert_text I18n.t('metadata_templates.new_template_dialog.description')
 
         within "ul[id='available']" do
           assert_text 'metadatafield1'
@@ -189,18 +189,18 @@ module Groups
 
       visit group_metadata_templates_url(group)
 
-      assert_selector 'h1', text: 'Metadata Templates'
-      assert_selector 'p', text: 'These are the metadata templates associated to the group'
+      assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
+      assert_selector 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
 
-      assert_selector 'a', text: 'New Template', count: 1
+      assert_selector 'a', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
 
-      click_on 'New Template'
+      click_on I18n.t('groups.metadata_templates.index.new_button')
 
       assert_selector '#dialog'
 
       within('span[data-controller-connected="true"] dialog') do
-        assert_selector 'h1', text: 'New Metadata Template'
-        assert_text "Select the metadata fields for new template by moving the metadata fields from the available list to the selected list. The template's fields ordering will be determined by the ordering of the selected list." # rubocop:disable Layout/LineLength
+        assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
+        assert_text I18n.t('metadata_templates.new_template_dialog.description')
 
         within "ul[id='available']" do
           assert_text 'metadatafield1'
@@ -230,19 +230,19 @@ module Groups
 
       visit group_metadata_templates_url(group)
 
-      assert_selector 'h1', text: 'Metadata Templates'
-      assert_selector 'p', text: 'These are the metadata templates associated to the group'
+      assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
+      assert_selector 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
 
-      assert_selector 'a', text: 'New Template', count: 1
+      assert_selector 'a', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
 
-      click_on 'New Template'
+      click_on I18n.t('groups.metadata_templates.index.new_button')
 
       assert_selector '#dialog'
 
       within('span[data-controller-connected="true"] dialog') do
         assert_accessible
-        assert_selector 'h1', text: 'New Metadata Template'
-        assert_text "Select the metadata fields for new template by moving the metadata fields from the available list to the selected list. The template's fields ordering will be determined by the ordering of the selected list." # rubocop:disable Layout/LineLength
+        assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
+        assert_text I18n.t('metadata_templates.new_template_dialog.description')
 
         within "ul[id='available']" do
           assert_text 'metadatafield1'
@@ -271,18 +271,18 @@ module Groups
 
       visit group_metadata_templates_url(group)
 
-      assert_selector 'h1', text: 'Metadata Templates'
-      assert_selector 'p', text: 'These are the metadata templates associated to the group'
+      assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
+      assert_selector 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
 
-      assert_selector 'a', text: 'New Template', count: 1
+      assert_selector 'a', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
 
-      click_on 'New Template'
+      click_on I18n.t('groups.metadata_templates.index.new_button')
 
       assert_selector '#dialog'
 
       within('span[data-controller-connected="true"] dialog') do
-        assert_selector 'h1', text: 'New Metadata Template'
-        assert_text "Select the metadata fields for new template by moving the metadata fields from the available list to the selected list. The template's fields ordering will be determined by the ordering of the selected list." # rubocop:disable Layout/LineLength
+        assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
+        assert_text I18n.t('metadata_templates.new_template_dialog.description')
 
         within "ul[id='available']" do
           assert_text 'metadatafield1'
