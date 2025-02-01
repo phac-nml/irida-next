@@ -183,5 +183,153 @@ module Groups
         )
       end
     end
+
+    test 'cannot create a template with no fields selected' do
+      group = groups(:group_one)
+
+      visit group_metadata_templates_url(group)
+
+      assert_selector 'h1', text: 'Metadata Templates'
+      assert_selector 'p', text: 'These are the metadata templates associated to the group'
+
+      assert_selector 'a', text: 'New Template', count: 1
+
+      click_on 'New Template'
+
+      assert_selector '#dialog'
+
+      within('span[data-controller-connected="true"] dialog') do
+        assert_selector 'h1', text: 'New Metadata Template'
+        assert_text "Select the metadata fields for new template by moving the metadata fields from the available list to the selected list. The template's fields ordering will be determined by the ordering of the selected list." # rubocop:disable Layout/LineLength
+
+        within "ul[id='available']" do
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield2'
+          assert_text 'unique.metadata.field'
+          assert_selector 'li', count: 3
+        end
+
+        within "ul[id='selected']" do
+          assert_no_text 'metadatafield1'
+          assert_no_text 'metadatafield2'
+          assert_no_text 'unique.metadata.field'
+          assert_no_selector 'li'
+        end
+
+        find('input#metadata_template_name').fill_in with: 'Newest template'
+
+        assert_selector "input[value='#{I18n.t('metadata_templates.new_template_dialog.submit_button')}']:disabled",
+                        count: 1
+      end
+
+      assert_no_selector "div[data-controller='viral--flash']"
+    end
+
+    test 'cannot create a template with no template name entered' do
+      group = groups(:group_one)
+
+      visit group_metadata_templates_url(group)
+
+      assert_selector 'h1', text: 'Metadata Templates'
+      assert_selector 'p', text: 'These are the metadata templates associated to the group'
+
+      assert_selector 'a', text: 'New Template', count: 1
+
+      click_on 'New Template'
+
+      assert_selector '#dialog'
+
+      within('span[data-controller-connected="true"] dialog') do
+        assert_accessible
+        assert_selector 'h1', text: 'New Metadata Template'
+        assert_text "Select the metadata fields for new template by moving the metadata fields from the available list to the selected list. The template's fields ordering will be determined by the ordering of the selected list." # rubocop:disable Layout/LineLength
+
+        within "ul[id='available']" do
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield2'
+          assert_text 'unique.metadata.field'
+          assert_selector 'li', count: 3
+        end
+
+        within "ul[id='selected']" do
+          assert_no_text 'metadatafield1'
+          assert_no_text 'metadatafield2'
+          assert_no_text 'unique.metadata.field'
+          assert_no_selector 'li'
+        end
+
+        click_button I18n.t('viral.sortable_lists_component.add_all')
+
+        click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
+      end
+
+      assert_no_selector "div[data-controller='viral--flash']"
+    end
+
+    test 'move fields between available and selected lists' do
+      group = groups(:group_one)
+
+      visit group_metadata_templates_url(group)
+
+      assert_selector 'h1', text: 'Metadata Templates'
+      assert_selector 'p', text: 'These are the metadata templates associated to the group'
+
+      assert_selector 'a', text: 'New Template', count: 1
+
+      click_on 'New Template'
+
+      assert_selector '#dialog'
+
+      within('span[data-controller-connected="true"] dialog') do
+        assert_selector 'h1', text: 'New Metadata Template'
+        assert_text "Select the metadata fields for new template by moving the metadata fields from the available list to the selected list. The template's fields ordering will be determined by the ordering of the selected list." # rubocop:disable Layout/LineLength
+
+        within "ul[id='available']" do
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield2'
+          assert_text 'unique.metadata.field'
+          assert_selector 'li', count: 3
+        end
+
+        within "ul[id='selected']" do
+          assert_no_text 'metadatafield1'
+          assert_no_text 'metadatafield2'
+          assert_no_text 'unique.metadata.field'
+          assert_no_selector 'li'
+        end
+
+        click_button I18n.t('viral.sortable_lists_component.add_all')
+
+        within "ul[id='available']" do
+          assert_no_text 'metadatafield1'
+          assert_no_text 'metadatafield2'
+          assert_no_text 'unique.metadata.field'
+          assert_no_selector 'li'
+        end
+
+        within "ul[id='selected']" do
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield2'
+          assert_text 'unique.metadata.field'
+          assert_selector 'li', count: 3
+        end
+
+        click_button I18n.t('viral.sortable_lists_component.remove_all')
+
+        within "ul[id='available']" do
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield2'
+          assert_text 'unique.metadata.field'
+          assert_selector 'li', count: 3
+        end
+
+        within "ul[id='selected']" do
+          assert_no_text 'metadatafield1'
+          assert_no_text 'metadatafield2'
+          assert_no_text 'unique.metadata.field'
+          assert_no_selector 'li'
+        end
+      end
+    end
   end
 end
