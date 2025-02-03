@@ -27,8 +27,8 @@ module MetadataTemplates
       }
 
       assert_no_difference -> { MetadataTemplate.count } do
-        MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
-        assert @namespace.errors.full_messages.include?(I18n.t('services.metadata_templates.create.required.name'))
+        new_template = MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
+        assert new_template.errors.full_messages.include?(I18n.t('services.metadata_templates.create.required.name'))
       end
     end
 
@@ -38,8 +38,8 @@ module MetadataTemplates
       }
 
       assert_no_difference -> { MetadataTemplate.count } do
-        MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
-        assert @namespace.errors.full_messages.include?(I18n.t('services.metadata_templates.create.required.fields'))
+        new_template = MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
+        assert new_template.errors.full_messages.include?(I18n.t('services.metadata_templates.create.required.fields'))
       end
     end
 
@@ -102,8 +102,8 @@ module MetadataTemplates
       }
 
       assert_no_difference -> { MetadataTemplate.count } do
-        MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
-        assert @namespace.errors.full_messages.include?(I18n.t('services.metadata_templates.create.required.fields'))
+        new_template = MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
+        assert new_template.errors.full_messages.include?(I18n.t('services.metadata_templates.create.required.fields'))
       end
     end
 
