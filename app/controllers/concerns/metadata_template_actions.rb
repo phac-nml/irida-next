@@ -106,7 +106,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   private
 
   def load_metadata_templates
-    MetadataTemplate.joins(:created_by).where(namespace: @namespace)
+    authorized_scope(MetadataTemplate, type: :relation, scope_options: { namespace: @namespace })
   end
 
   def metadata_template
