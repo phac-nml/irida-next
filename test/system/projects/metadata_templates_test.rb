@@ -328,5 +328,16 @@ module Projects
         end
       end
     end
+
+    test 'cannot view the add new template button if no fields are available for the project' do
+      project = projects(:project32)
+
+      visit namespace_project_metadata_templates_url(project.namespace.parent, project)
+
+      assert_selector 'h1', text: I18n.t('projects.metadata_templates.index.title')
+      assert_selector 'p', text: I18n.t('projects.metadata_templates.index.subtitle')
+
+      assert_no_selector 'a', text: I18n.t('projects.metadata_templates.index.new_button')
+    end
   end
 end

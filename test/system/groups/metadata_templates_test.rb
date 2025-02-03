@@ -331,5 +331,16 @@ module Groups
         end
       end
     end
+
+    test 'cannot view the add new template button if no fields are available for the group' do
+      group = groups(:group_two)
+
+      visit group_metadata_templates_url(group)
+
+      assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
+      assert_selector 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
+
+      assert_no_selector 'a', text: I18n.t('groups.metadata_templates.index.new_button')
+    end
   end
 end
