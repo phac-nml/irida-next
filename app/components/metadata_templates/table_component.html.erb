@@ -112,34 +112,6 @@
         <% end %>
       </tbody>
     </table>
-    <%= render PaginationComponent.new(
-      info: helpers.pagy_info(@pagy),
-      prev_url:
-        (
-          if @pagy.prev
-            helpers.pagy_url_for(@pagy, @pagy.prev).gsub(
-              "metadata_templates.turbo_stream",
-              "metadata_templates",
-            )
-          else
-            nil
-          end
-        ),
-      next_url:
-        (
-          if @pagy.next
-            helpers.pagy_url_for(@pagy, @pagy.next).gsub(
-              "metadata_templates.turbo_stream",
-              "metadata_templates",
-            )
-          else
-            nil
-          end
-        ),
-      data: {
-        turbo_action: "replace",
-      },
-    ) %>
   <% else %>
     <div class="empty_state_message">
       <%= viral_empty(
@@ -157,4 +129,34 @@
       ) %>
     </div>
   <% end %>
+<% end %>
+<% unless @metadata_templates.empty? %>
+  <%= render PaginationComponent.new(
+    info: helpers.pagy_info(@pagy),
+    prev_url:
+      (
+        if @pagy.prev
+          helpers.pagy_url_for(@pagy, @pagy.prev).gsub(
+            "metadata_templates.turbo_stream",
+            "metadata_templates",
+          )
+        else
+          nil
+        end
+      ),
+    next_url:
+      (
+        if @pagy.next
+          helpers.pagy_url_for(@pagy, @pagy.next).gsub(
+            "metadata_templates.turbo_stream",
+            "metadata_templates",
+          )
+        else
+          nil
+        end
+      ),
+    data: {
+      turbo_action: "replace",
+    },
+  ) %>
 <% end %>
