@@ -456,7 +456,7 @@ module Groups
         assert_selector 'td:nth-child(9) button', text: ''
       end
 
-      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
+      select(I18n.t('components.metadata_templates_dropdown.none'), from: 'q[metadata_template]')
 
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
