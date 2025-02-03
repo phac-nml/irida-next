@@ -7,17 +7,16 @@ module MetadataTemplates
   class TableComponent < Component
     include Ransack::Helpers::FormHelper
 
-    # rubocop:disable Naming/MethodParameterName, Metrics/ParameterLists
-    def initialize(namespace, metadata_templates, pagy, q, current_user, abilities = {})
+    # rubocop:disable Naming/MethodParameterName
+    def initialize(namespace, metadata_templates, pagy, q, current_user)
       @namespace = namespace
       @metadata_templates = metadata_templates
       @pagy = pagy
       @q = q
       @current_user = current_user
-      @abilities = abilities
       @columns = columns
     end
-    # rubocop:enable Naming/MethodParameterName, Metrics/ParameterLists
+    # rubocop:enable Naming/MethodParameterName
 
     def wrapper_arguments
       {
