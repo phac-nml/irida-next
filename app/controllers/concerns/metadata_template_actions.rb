@@ -19,6 +19,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
 
   def new
     authorize! @namespace, to: :create_metadata_templates?
+    @new_template = MetadataTemplate.new(namespace_id: @namespace.id)
 
     respond_to do |format|
       format.turbo_stream do
@@ -48,17 +49,17 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   end
 
   def create
-    @metadata_template = MetadataTemplates::CreateService.new(
+    @new_template = MetadataTemplates::CreateService.new(
       current_user, @namespace, metadata_template_params
     ).execute
 
     respond_to do |format|
       format.turbo_stream do
-        if @metadata_template.persisted?
+        if @new_template.persisted?
           render_success(I18n.t('concerns.metadata_template_actions.create.success',
-                                template_name: @metadata_template.name))
+                                template_name: @new_template.name))
         else
-          render_error(@metadata_template.errors.full_messages.first)
+          render_error(@new_template.errors.full_messages.first)
         end
       end
     end

@@ -1,6 +1,7 @@
 <%= viral_dialog(open: open, size: :large) do |dialog| %>
   <%= dialog.with_header(title: t("metadata_templates.new_template_dialog.title")) %>
   <%= dialog.with_section do %>
+    <%= turbo_frame_tag "metadata_template_error_alert" %>
     <%= turbo_frame_tag "metadata_template_dialog_content" do %>
       <div
         data-controller="viral--sortable-lists--two-lists-selection"

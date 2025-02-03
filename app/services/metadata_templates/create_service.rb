@@ -24,7 +24,7 @@ module MetadataTemplates
       save_template
       @metadata_template
     rescue MetadataTemplates::CreateService::MetadataTemplateCreateError => e
-      @namespace.errors.add(:base, e.message)
+      @metadata_template.errors.add(:base, e.message)
       @metadata_template
     end
 
