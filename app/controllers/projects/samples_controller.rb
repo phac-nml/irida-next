@@ -172,17 +172,6 @@ module Projects
       updated_params
     end
 
-    def initialize_search_params
-      update_store(search_key, params[:q]&.to_unsafe_h || {}).with_indifferent_access
-    end
-
-    def current_sort(params)
-      return if params.key?(:sort) && !(params[:metadata].to_i.zero? && params[:sort]&.match?(/metadata_/))
-
-      params[:sort] = 'updated_at desc'
-      update_store(search_key, params)
-    end
-
     def metadata_templates
       @metadata_templates = metadata_templates_for_namespace(namespace: @project.namespace)
     end
