@@ -468,7 +468,6 @@ module Groups
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                            locale: @user.locale))
-      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
       within('table thead tr') do
         assert_selector 'th', count: 6
       end
@@ -494,8 +493,7 @@ module Groups
       assert_selector 'tbody tr:first-child th', text: @sample30.puid
       assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample30.name
 
-      # toggling metadata again causes sort to be reset
-      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
+      select(I18n.t('components.metadata_templates_dropdown.none'), from: 'q[metadata_template]')
 
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
