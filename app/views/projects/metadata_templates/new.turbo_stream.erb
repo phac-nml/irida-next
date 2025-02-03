@@ -1,5 +1,6 @@
 <%= turbo_stream.update "metadata_template_modal",
-                    partial: "new_template_dialog",
+                    partial: "shared/metadata_templates/new_template_dialog",
                     locals: {
                       open: true,
+                      create_path: namespace_project_metadata_templates_path,
                     } %>

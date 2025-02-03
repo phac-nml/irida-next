@@ -59,7 +59,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
           render_success(I18n.t('concerns.metadata_template_actions.create.success',
                                 template_name: @new_template.name))
         else
-          render_error(@new_template.errors.full_messages.first)
+          render_error(error_message(@new_template))
         end
       end
     end
@@ -74,7 +74,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
             I18n.t('concerns.metadata_template_actions.destroy.success', template_name: @metadata_template.name)
           redirect_to metadata_templates_path
         else
-          render_error(@metadata_template.errors.full_messages.first)
+          render_error(error_message(@new_template))
         end
       end
     end

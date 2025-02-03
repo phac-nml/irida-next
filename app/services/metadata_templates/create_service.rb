@@ -45,7 +45,7 @@ module MetadataTemplates
     def save_template
       unless @metadata_template.save
         raise MetadataTemplateCreateError,
-              @namespace.errors.add(:base, @metadata_template.errors.full_messages.first)
+              @namespace.errors.add(:base, @metadata_template.errors.full_messages.to_sentence)
       end
 
       create_activities
