@@ -96,7 +96,7 @@ module Groups
       updated_params = update_store(search_key, params[:q].present? ? params[:q].to_unsafe_h : {})
 
       if !updated_params.key?(:sort) ||
-         (updated_params[:metadata].to_i.zero? && updated_params[:sort]&.match?(/metadata_/))
+         (updated_params[:metadata_template] == 'none' && updated_params[:sort]&.match?(/metadata_/))
         updated_params[:sort] = 'updated_at desc'
         update_store(search_key, updated_params)
       end
