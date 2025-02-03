@@ -46,7 +46,11 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
       end
 
       resources :group_links, only: %i[create destroy update index new]
-      resources :metadata_templates
+      resources :metadata_templates do
+        collection do
+          get :list
+        end
+      end
       resources :samples do
         scope module: :samples, as: :samples do
           collection do
