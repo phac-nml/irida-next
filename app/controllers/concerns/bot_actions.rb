@@ -45,7 +45,7 @@ module BotActions
           render status: :unprocessable_entity,
                  locals:
                 { type: 'alert',
-                  message: @new_bot_account[:bot_user_account].errors.full_messages.first,
+                  message: error_message(@new_bot_account[:bot_user_account]),
                   bot_params: }
 
         end
@@ -74,7 +74,7 @@ module BotActions
           render status: :unprocessable_entity,
                  locals: {
                    type: 'alert',
-                   message: @bot_account.errors.full_messages.first
+                   message: error_message(@bot_account)
                  }
         end
       end

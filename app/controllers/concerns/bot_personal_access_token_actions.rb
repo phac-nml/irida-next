@@ -47,7 +47,7 @@ module BotPersonalAccessTokenActions
           render status: :unprocessable_entity,
                  locals:
                 { type: 'alert',
-                  message: @personal_access_token.errors.full_messages.first }
+                  message: error_message(@personal_access_token) }
 
         end
       end
@@ -75,7 +75,7 @@ module BotPersonalAccessTokenActions
           }
         else
           render status: :unprocessable_entity, locals: { type: 'alert',
-                                                          message: @personal_access_token.errors.full_messages.first }
+                                                          message: error_message(@personal_access_token) }
         end
       end
     end

@@ -25,7 +25,7 @@ module Projects
           if @sample.errors.empty?
             render status: :ok, locals: { type: :success, message: t('.success') }
           else
-            @errors = @sample.errors.full_messages.first
+            @errors = error_message(@sample)
             render status: :unprocessable_entity, locals: { type: :danger,
                                                             message: @errors }
           end

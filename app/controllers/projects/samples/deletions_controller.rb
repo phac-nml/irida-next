@@ -28,7 +28,7 @@ module Projects
           else
             format.turbo_stream do
               render status: :unprocessable_entity,
-                     locals: { type: 'alert', message: @sample.errors.full_messages.first }
+                     locals: { type: 'alert', message: error_message(@sample) }
             end
           end
         end

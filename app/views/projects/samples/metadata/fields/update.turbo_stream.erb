@@ -4,16 +4,16 @@
   locals: {
     open: @sample.errors.any?,
     key: defined?(key) ? key : nil,
-    value: defined?(value) ? value : nil
-  }
+    value: defined?(value) ? value : nil,
+  },
 ) %>
 
 <% if @sample.errors.any? %>
   <%= turbo_stream.update "update-alert",
                       viral_alert(
                         type: "alert",
-                        message: @sample.errors.full_messages.first,
-                        classes: "mb-4"
+                        message: error_message(@sample),
+                        classes: "mb-4",
                       ) %>
 <% else %>
   <%= turbo_stream.append "flashes" do %>
@@ -23,7 +23,7 @@
   <%= turbo_stream.update "table-listing" do %>
     <% render partial: "projects/samples/metadata/table",
     locals: {
-      sample_metadata: @sample.metadata_with_provenance
+      sample_metadata: @sample.metadata_with_provenance,
     } %>
   <% end %>
 <% end %>

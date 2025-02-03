@@ -50,13 +50,13 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
           render status: :unprocessable_entity,
                  locals: { namespace_group_link: @created_namespace_group_link,
                            type: 'alert',
-                           message: @created_namespace_group_link.errors.full_messages.first }
+                           message: error_message(@created_namespace_group_link) }
         end
       end
     end
   end
 
-  def destroy # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def destroy # rubocop:disable Metrics/MethodLength
     GroupLinks::GroupUnlinkService.new(current_user, @namespace_group_link).execute
     @pagy, @namespace_group_links = pagy(load_namespace_group_links)
 
@@ -73,7 +73,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
           format.turbo_stream do
             render status: :unprocessable_entity,
                    locals: { namespace_group_link: @namespace_group_link, type: 'alert',
-                             message: @namespace_group_link.errors.full_messages.first }
+                             message: error_message(@namespace_group_link) }
           end
         end
       else

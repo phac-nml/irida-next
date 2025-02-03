@@ -54,7 +54,7 @@ module Projects
                           message: t('projects.samples.metadata.deletions.destroy.multi_success',
                                      deleted_keys: deleted_keys.join(', ')) }
           end
-          messages << { type: 'error', message: @sample.errors.full_messages.first } if @sample.errors.any?
+          messages << { type: 'error', message: error_message(@sample) } if @sample.errors.any?
           messages
         end
       end

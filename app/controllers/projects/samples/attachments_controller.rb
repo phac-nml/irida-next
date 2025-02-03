@@ -63,7 +63,7 @@ module Projects
               render status: :unprocessable_entity,
                      locals: { message: t('.error',
                                           filename: @attachment.file.filename,
-                                          errors: @attachment.errors.full_messages.first),
+                                          errors: error_message(@attachment)),
                                destroyed_attachments: nil }
             end
           end

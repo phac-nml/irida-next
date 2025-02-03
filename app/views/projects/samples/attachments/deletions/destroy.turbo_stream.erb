@@ -15,8 +15,8 @@
           t(
             ".error",
             filename: attachment.file.filename,
-            errors: attachment.errors.full_messages.first
-          )
+            errors: error_message(attachment),
+          ),
       ) %>
     <% end %>
   <% end %>
@@ -26,6 +26,6 @@
   "table-listing",
   partial: "projects/samples/attachments/table",
   locals: {
-    attachments: @sample.attachments
-  }
+    attachments: @sample.attachments,
+  },
 ) %>
