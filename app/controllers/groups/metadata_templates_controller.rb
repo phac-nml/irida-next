@@ -10,7 +10,7 @@ module Groups
     private
 
     def metadata_template_params
-      params.require(:metadata_template).permit(:name, fields: [])
+      params.require(:metadata_template).permit(:name, :description, fields: [])
     end
 
     protected
@@ -20,12 +20,23 @@ module Groups
       @namespace = @group
     end
 
-    def metadata_templates_path
-      group_metadata_templates_path
+    def context_crumbs
+      super
+      case action_name
+      when 'index'
+        @context_crumbs += [{
+          name: t('groups.metadata_templates.index.title'),
+          path: group_metadata_templates_path
+        }]
+      end
     end
 
     def current_page
       @current_page = t(:'groups.sidebar.metadata_templates')
+    end
+
+    def metadata_templates_path
+      group_metadata_templates_path
     end
   end
 end
