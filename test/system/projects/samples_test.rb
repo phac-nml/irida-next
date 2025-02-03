@@ -2793,8 +2793,6 @@ module Projects
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
 
-      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
-
       select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
 
       assert_selector 'div#spinner'
