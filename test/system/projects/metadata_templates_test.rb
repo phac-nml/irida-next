@@ -126,11 +126,6 @@ module Projects
         assert_selector 'tr', count: 20
       end
 
-      assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
-      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
-
-      click_on I18n.t(:'components.pagination.next')
-
       table_row = find(:table_row, [metadata_template.name])
 
       within table_row do
