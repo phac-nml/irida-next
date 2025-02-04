@@ -52,7 +52,7 @@ class MetadataTemplatePolicyTest < ActiveSupport::TestCase
     assert_equal 44, scoped_templates.length # 22 from group inheritance and 22 within the project
 
     group_namespace = groups(:group_three)
-    scoped_templates = @olicy.apply_scope(MetadataTemplate, type: :relation,
+    scoped_templates = policy.apply_scope(MetadataTemplate, type: :relation,
                                                             scope_options: { namespace: group_namespace })
 
     assert_equal 0, scoped_templates.length
