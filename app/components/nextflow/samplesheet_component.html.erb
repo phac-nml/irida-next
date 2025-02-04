@@ -142,9 +142,6 @@ data: {
           dark:focus:ring-primary-500 dark:focus:border-primary-500 cursor-pointer
           hover:border-slate-300 border-transparent border-2
         "
-        <% if @required_properties.present? && @required_properties.include?(@property) %>
-        data-file-missing="<%= @selected.empty? ? "true" : "false" %>"
-        <% end %>
       >
         FILENAME_PLACEHOLDER
       </div>

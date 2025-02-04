@@ -11,7 +11,7 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
     @sample2 = samples(:sample44)
   end
   test 'default' do
-    visit("/rails/view_components/nextflow_samplesheet_component/default?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}")
+    visit("/rails/view_components/nextflow_samplesheet_component/default?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
 
     assert_selector '.samplesheet-table' do |table|
       table.assert_selector '.table-header', count: 5
