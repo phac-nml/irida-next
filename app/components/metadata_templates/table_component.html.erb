@@ -54,7 +54,7 @@
                 classes: class_names('px-3 py-3', 'sticky left-0 bg-slate-50 dark:bg-slate-900': index.zero?)
               ) do %>
                 <% if column == :name %>
-                  <span class ="text-slate-900 dark:text-slate-100 font-semibold hover:underline">
+                  <span class="text-slate-900 dark:text-slate-100 font-semibold hover:underline">
                     <%= metadata_template.name %>
                   </span>
                 <% elsif column == :description %>
@@ -76,8 +76,10 @@
                 <% if @row_actions.key?(:update_metadata_templates) %>
                   <%= link_to(
                     t(:"metadata_templates.table_component.edit_button"),
-                    individual_path(metadata_template),
+                    edit_path(metadata_template),
                     data: {
+                      turbo_frame: "metadata_template_modal",
+                      turbo_stream: true,
                     },
                     aria: {
                       label:
