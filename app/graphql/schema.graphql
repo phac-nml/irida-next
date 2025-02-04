@@ -1720,7 +1720,7 @@ type Project implements Node {
     before: String
 
     """
-    Ransack & Searchkick filter
+    Sample filter
     """
     filter: SampleFilter = null
 
@@ -2291,7 +2291,7 @@ type Query {
     before: String
 
     """
-    Ransack & Searchkick filter
+    Sample filter
     """
     filter: SampleFilter = null
 
@@ -2524,12 +2524,12 @@ input SampleFilter {
   advanced_search_groups: [SampleAdvancedSearchConditions!] = null
 
   """
-  Filter samples which contains name or puid via Ransack
+  Filter samples which contains name or puid
   """
   name_or_puid_cont: String
 
   """
-  Filter samples by name or puid via Ransack
+  Filter samples by name or puid
   """
   name_or_puid_in: String
 }

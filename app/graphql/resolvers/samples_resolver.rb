@@ -12,7 +12,7 @@ module Resolvers
 
     argument :filter, Types::SampleFilterType,
              required: false,
-             description: 'Ransack & Searchkick filter',
+             description: 'Sample filter',
              default_value: nil
 
     argument :order_by, Types::SampleOrderInputType,
