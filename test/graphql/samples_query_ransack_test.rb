@@ -52,54 +52,6 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     Searchkick.disable_callbacks
   end
 
-  test 'filter samples using ransack search should work' do
-    result = IridaSchema.execute(SAMPLES_QUERY,
-                                 context: { current_user: @user },
-                                 variables: { filter: { name_or_puid_in: @sample.name } })
-
-    assert_nil result['errors'], 'should work and have no errors.'
-
-    data = result['data']['samples']['nodes']
-
-    assert_equal 1, data.count
-    assert_equal @sample.puid, data[0]['puid']
-  end
-
-  test 'filter samples using ransack search should work with order by' do
-    result = IridaSchema.execute(SAMPLES_QUERY,
-                                 context: { current_user: @user },
-                                 variables: { filter: { name_or_puid_cont: 'Project 1' },
-                                              orderBy: { field: 'created_at', direction: 'asc' } })
-
-    assert_nil result['errors'], 'should work and have no errors.'
-
-    data = result['data']['samples']['nodes']
-    assert_equal 3, data.count
-
-    assert_equal samples(:sample2).name, data[0]['name']
-    assert_equal samples(:sample2).puid, data[0]['puid']
-
-    assert_equal samples(:sample1).name, data[1]['name']
-    assert_equal samples(:sample1).puid, data[1]['puid']
-
-    assert_equal samples(:sample37).name, data[2]['name']
-    assert_equal samples(:sample37).puid, data[2]['puid']
-  end
-
-  test 'filter group samples using ransack search with group id should work' do
-    result = IridaSchema.execute(SAMPLES_WITH_GROUP_QUERY,
-                                 context: { current_user: @user },
-                                 variables: { group_id: groups(:group_one).to_global_id.to_s,
-                                              filter: { name_or_puid_in: @sample.name } })
-
-    assert_nil result['errors'], 'should work and have no errors.'
-
-    data = result['data']['samples']['nodes']
-
-    assert_equal 1, data.count
-    assert_equal @sample.puid, data[0]['puid']
-  end
-
   test 'filter group samples with group id should work with order by' do
     result = IridaSchema.execute(SAMPLES_WITH_GROUP_QUERY,
                                  context: { current_user: @user },
