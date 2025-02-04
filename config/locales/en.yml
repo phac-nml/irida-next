@@ -983,6 +983,13 @@ en:
       updated_at: Access Granted
       user_email: Username
   metadata_templates:
+    new_template_dialog:
+      available: Available
+      description: Select the metadata fields for new template by moving the metadata fields from the available list to the selected list. The template's fields ordering will be determined by the ordering of the selected list.
+      metadata: Metadata
+      selected: Selected
+      submit_button: Submit
+      title: New Metadata Template
     table:
       empty:
         description: There are no metadata templates associated with this %{namespace_type}.
@@ -999,6 +1006,7 @@ en:
       remove_button: Delete
       remove_confirmation: Are you sure you want to delete metadata template %{template_name}?
       updated_at: Last Modified
+
   models:
     sample:
       analysis: Analysis
