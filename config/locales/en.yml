@@ -18,6 +18,7 @@ en:
         destroy_attachment?: You are not authorized to destroy attachments for group %{name} on this server.
         destroy_bot_accounts?: You are not authorized to destroy bot accounts for group %{name} on this server.
         destroy_member?: You are not authorized to remove members for group %{name} on this server.
+        destroy_metadata_templates?: You are not authorized to destroy metadata templates for group %{name} on this server.
         edit?: You are not authorized to modify group %{name} on this server.
         export_data?: You are not authorized to export data from project %{name} on this server.
         link_namespace_with_group?: You are not authorized to link group %{name} with other groups on this server.
@@ -31,6 +32,7 @@ en:
         unlink_namespace_with_group?: You are not authorized to unlink group %{name} from other groups on this server.
         update?: You are not authorized to update group %{name} on this server.
         update_member?: You are not authorized to update members for group %{name} on this server.
+        update_metadata_templates?: You are not authorized to update metadata templates for group %{name} on this server.
         update_namespace_with_group_link?: You are not authorized to update group %{name} links with other groups on this server.
         update_sample_metadata?: You are not authorized to update sample metadata for group %{name} on this server.
         view_metadata_templates?: You are not authorized to view metadata templates for group %{name} on this server.
@@ -46,6 +48,7 @@ en:
         destroy_automated_workflow_executions?: You are not authorized to destroy automated pipelines for project %{name}
         destroy_bot_accounts?: You are not authorized to destroy bot accounts for project %{name} on this server.
         destroy_member?: You are not authorized to remove members from the project namespace %{name} on this server.
+        destroy_metadata_templates?: You are not authorized to destroy metadata templates for project %{name} on this server.
         export_data?: You are not authorized to export data from project %{name} on this server.
         link_namespace_with_group?: You are not authorized to link project %{name} with other groups on this server.
         member_listing?: You are not authorized to view members for the project namespace %{name} on this server.
@@ -54,6 +57,7 @@ en:
         update?: You are not authorized to update the namespace for project %{name} on this server.
         update_automated_workflow_executions?: You are not authorized to update automated pipelines for project %{name}
         update_member?: You are not authorized to update members for the project namespace %{name} on this server.
+        update_metadata_templates?: You are not authorized to update metadata templates for project %{name} on this server.
         update_namespace_with_group_link?: You are not authorized to update project %{name} links with other groups on this server.
         update_sample_metadata?: You are not authorized to update sample metadata for project %{name} on this server.
         view_automated_workflow_executions?: You are not authorized to view automated pipelines for project %{name}
@@ -984,7 +988,7 @@ en:
         description: There are no metadata templates associated with this %{namespace_type}.
         title: No metadata templates.
     table_component:
-      action: Action
+      actions: Actions
       created_at: Created Date
       created_by_email: Created By
       description: Description
@@ -993,7 +997,7 @@ en:
       name: Template Name
       remove_aria_label: Delete metadata template %{template_name}
       remove_button: Delete
-      remove_confirmation: Are you sure you want to delete metadata template %{template_name}
+      remove_confirmation: Are you sure you want to delete metadata template %{template_name}?
       updated_at: Last Modified
   models:
     sample:

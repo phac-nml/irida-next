@@ -25,11 +25,16 @@ class MetadataTemplatePolicy < ApplicationPolicy
 
   scope_for :relation do |relation, options|
     namespace = options[:namespace]
+    include_ancestral_templates = options[:include_ancestral_templates]
 
-    namespace_ids = if namespace.project_namespace?
-                      [namespace.id] + namespace.parent&.self_and_ancestor_ids
+    namespace_ids = if include_ancestral_templates
+                      if namespace.project_namespace?
+                        [namespace.id] + namespace.parent&.self_and_ancestor_ids
+                      else
+                        namespace.self_and_ancestor_ids
+                      end
                     else
-                      namespace.self_and_ancestor_ids
+                      namespace.id
                     end
 
     relation.joins(:created_by).where(namespace_id: namespace_ids)

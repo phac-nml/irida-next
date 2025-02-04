@@ -1,7 +1,12 @@
 <%= render MetadataTemplates::TableComponent.new(
-  @namespace,
   @metadata_templates,
+  @namespace,
   @pagy,
   @q,
-  current_user,
+  {
+    update_metadata_templates:
+      allowed_to?(:update_metadata_templates?, @namespace),
+    destroy_metadata_templates:
+      allowed_to?(:destroy_metadata_templates?, @namespace),
+  },
 ) %>

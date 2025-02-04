@@ -8,12 +8,13 @@ module MetadataTemplates
     include Ransack::Helpers::FormHelper
 
     # rubocop:disable Naming/MethodParameterName
-    def initialize(namespace, metadata_templates, pagy, q, current_user)
+    def initialize(metadata_templates, namespace, pagy, q, row_actions)
       @namespace = namespace
       @metadata_templates = metadata_templates
       @pagy = pagy
       @q = q
-      @current_user = current_user
+      @row_actions = row_actions
+      @renders_row_actions = @row_actions.select { |_key, value| value }.count.positive?
       @columns = columns
     end
     # rubocop:enable Naming/MethodParameterName
@@ -37,7 +38,7 @@ module MetadataTemplates
       render(Viral::BaseComponent.new(**arguments), &)
     end
 
-    def abilities_metadata_templates_path(metadata_template)
+    def individual_path(metadata_template)
       if @namespace.group_namespace?
         group_metadata_template_path(@namespace, metadata_template)
       else

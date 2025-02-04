@@ -27,12 +27,14 @@
               ) %>
             <% end %>
           <% end %>
-          <%= render_cell(
+          <% if @renders_row_actions %>
+            <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-6 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
+              classes: class_names('px-3 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
             ) do %>
-            <%= t(".action") %>
+              <%= t(".actions") %>
+            <% end %>
           <% end %>
         </tr>
       </thead>
@@ -44,70 +46,78 @@
       >
         <% @metadata_templates.each do |metadata_template| %>
           <%= render Viral::BaseComponent.new(**row_arguments(metadata_template)) do %>
-            <td class="px-6 py-3 sticky left-0 bg-slate-50 dark:bg-slate-900">
-              <div class="text-slate-900 dark:text-slate-100 font-semibold"><%= metadata_template.name %>
-              </div>
-            </td>
-            <td class="px-6 py-4">
-              <%= metadata_template.description %>
-            </td>
-            <td class="px-6 py-4">
-              <%= metadata_template.created_by.email %>
-            </td>
-            <td class="px-6 py-4">
-              <%= helpers.local_time(metadata_template.created_at, :full_date) %>
-            </td>
-            <td class="px-6 py-4">
-              <%= helpers.local_time_ago(metadata_template.updated_at) %>
-            </td>
-            <td class="px-6 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2">
-              <% if helpers.allowed_to?(:update_metadata_template?, metadata_template) %>
-                <%= link_to(
-                  t(:"metadata_templates.table_component.edit_button"),
-                  abilities_metadata_templates_path(metadata_template),
-                  data: {
-                  },
-                  aria: {
-                    label:
-                      (
-                        t(
-                          :"metadata_templates.table_component.edit_aria_label",
-                          template_name: metadata_template.name,
-                        )
-                      ),
-                  },
-                  class:
-                    "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                ) %>
+            <% @columns.each_with_index do |column, index| %>
+              <%= render_cell(
+                tag: index.zero? ? 'th' :'td',
+                scope: index.zero? ? 'row' : nil,
+                classes: class_names('px-3 py-3', 'sticky left-0 bg-slate-50 dark:bg-slate-900': index.zero?)
+              ) do %>
+                <% if column == :name %>
+                  <%= metadata_template.name %>
+                <% elsif column == :description %>
+                  <%= metadata_template.description %>
+                <% elsif column == :created_by_email %>
+                  <%= metadata_template.created_by.email %>
+                <% elsif column == :created_at %>
+                  <%= helpers.local_time(metadata_template.created_at, :full_date) %>
+                <% elsif column == :updated_at %>
+                  <%= helpers.local_time_ago(metadata_template.updated_at) %>
+                <% end %>
               <% end %>
-              <% if helpers.allowed_to?(:destroy_metadata_template?, metadata_template) %>
-                <%= link_to(
-                  t(:"metadata_templates.table_component.remove_button"),
-                  abilities_metadata_templates_path(metadata_template),
-                  data: {
-                    turbo_method: :delete,
-                    turbo_confirm:
-                      (
-                        t(
-                          :"metadata_templates.table_component.remove_confirmation",
-                          template_name: metadata_template.name,
-                        )
-                      ),
-                  },
-                  aria: {
-                    label:
-                      (
-                        t(
-                          :"metadata_templates.table_component.remove_aria_label",
-                          template_name: metadata_template.name,
-                        )
-                      ),
-                  },
-                  class:
-                    "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                ) %>
+            <% end %>
+            <% if @renders_row_actions %>
+              <%= render_cell(
+                tag: 'td',
+                classes: class_names('px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2')
+              ) do %>
+                <% if @row_actions.key?(:update_metadata_templates) %>
+                  <%= link_to(
+                    t(:"metadata_templates.table_component.edit_button"),
+                    individual_path(metadata_template),
+                    data: {
+                    },
+                    aria: {
+                      label:
+                        (
+                          t(
+                            :"metadata_templates.table_component.edit_aria_label",
+                            template_name: metadata_template.name,
+                          )
+                        ),
+                    },
+                    class:
+                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                  ) %>
+                <% end %>
+                <% if @row_actions.key?(:destroy_metadata_templates) %>
+                  <%= link_to(
+                    t(:"metadata_templates.table_component.remove_button"),
+                    individual_path(metadata_template),
+                    data: {
+                      turbo_method: :delete,
+                      turbo_confirm:
+                        (
+                          t(
+                            :"metadata_templates.table_component.remove_confirmation",
+                            template_name: metadata_template.name,
+                          )
+                        ),
+                    },
+                    aria: {
+                      label:
+                        (
+                          t(
+                            :"metadata_templates.table_component.remove_aria_label",
+                            template_name: metadata_template.name,
+                          )
+                        ),
+                    },
+                    class:
+                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                  ) %>
+                <% end %>
               <% end %>
-            </td>
+            <% end %>
           <% end %>
         <% end %>
       </tbody>

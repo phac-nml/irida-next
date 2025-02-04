@@ -40,7 +40,7 @@ group_one_metadata_template<%= (n) %>:
 project2_metadata_template1:
   name: First Project Template
   description: This is template 1 for the project"
-  fields: ["field_1}", "field_2", "field_3"]
+  fields: ["field_1", "field_2", "field_3"]
   created_at: <%= 2.hours.ago %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
@@ -48,7 +48,7 @@ project2_metadata_template1:
 project2_metadata_template2:
   name: Second Project Template
   description: This is template 2 for the project"
-  fields: ["field_1}", "field_2", "field_3"]
+  fields: ["field_1", "field_2", "field_3"]
   created_at: <%= 4.hours.ago %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
@@ -56,7 +56,7 @@ project2_metadata_template2:
 group_two_metadata_template1:
   name: First Group Template
   description: This is template 1 for the group
-  fields: ["field_1}", "field_2", "field_3"]
+  fields: ["field_1", "field_2", "field_3"]
   created_at: <%= 2.hours.ago %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_two, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
@@ -64,7 +64,7 @@ group_two_metadata_template1:
 group_two_metadata_template2:
   name: Second Group Template
   description: This is template 2 for the group
-  fields: ["field_1}", "field_2", "field_3"]
+  fields: ["field_1", "field_2", "field_3"]
   created_at: (<%= 3.hours.ago %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_two, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>

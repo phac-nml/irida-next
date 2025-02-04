@@ -175,6 +175,20 @@ module Namespaces
       false
     end
 
+    def update_metadata_templates?
+      return true if Member::AccessLevel.manageable.include?(effective_access_level)
+
+      details[:name] = record.name
+      false
+    end
+
+    def destroy_metadata_templates?
+      return true if Member::AccessLevel.manageable.include?(effective_access_level)
+
+      details[:name] = record.name
+      false
+    end
+
     def view_metadata_templates?
       return true if Member::AccessLevel.manageable.include?(effective_access_level)
 

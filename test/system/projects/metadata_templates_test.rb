@@ -13,7 +13,7 @@ module Projects
 
     test 'should display metadata templates associated with the project' do
       project = projects(:project1)
-      metadata_template = metadata_templates(:group_one_metadata_template0)
+      metadata_template = metadata_templates(:project1_metadata_template0)
       visit namespace_project_metadata_templates_url(project.namespace.parent, project)
 
       assert_selector 'h1', text: I18n.t('projects.metadata_templates.index.title')
@@ -33,29 +33,11 @@ module Projects
       click_on I18n.t(:'components.pagination.next')
 
       within('table tbody') do
-        assert_selector 'tr', count: 20
-      end
-
-      assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
-      assert_selector 'a', text: I18n.t(:'components.pagination.previous')
-
-      click_on I18n.t(:'components.pagination.next')
-
-      within('table tbody') do
-        assert_selector 'tr', count: 4
+        assert_selector 'tr', count: 2
       end
 
       assert_selector 'a', text: I18n.t(:'components.pagination.previous')
       assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
-
-      click_on I18n.t(:'components.pagination.previous')
-
-      within('table tbody') do
-        assert_selector 'tr', count: 20
-      end
-
-      assert_selector 'a', text: I18n.t(:'components.pagination.previous')
-      assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
 
       click_on I18n.t(:'components.pagination.previous')
 
