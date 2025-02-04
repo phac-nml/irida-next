@@ -3,7 +3,7 @@
 module Types
   # Sample Filter Type
   class SampleFilterType < BaseRansackFilterInputObject # rubocop:disable GraphQL/ObjectDescription
-    argument :advanced_search_groups, [SampleAdvancedSearchConditionsInputType],
+    argument :advanced_search_groups, [[SampleAdvancedSearchConditionInputType]],
              required: false, camelize: false,
              description: 'Filter samples by advanced search via Searchkick',
              default_value: nil

@@ -34,14 +34,4 @@ module Types
              required: false
     argument :value, String, 'Value of advanced search condition', required: false
   end
-
-  class SampleAdvancedSearchConditionsInputType < BaseInputObject # rubocop:disable Style/Documentation
-    graphql_name 'SampleAdvancedSearchConditions'
-    description 'Sample Advanced Search Conditions'
-
-    argument :advanced_search_conditions, [SampleAdvancedSearchConditionInputType],
-             'A list of advanced search conditions',
-             required: false, camelize: false,
-             default_value: nil
-  end
 end

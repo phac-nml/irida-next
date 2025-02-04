@@ -53,15 +53,12 @@ module Resolvers
     end
 
     def advanced_search_params(filter)
-      groups = {}
-      filter[:advanced_search_groups].each_with_index do |group, group_index|
-        conditions = {}
-        group[:advanced_search_conditions].each_with_index do |condition, condition_index|
-          conditions.merge!({ condition_index => condition })
-        end
-        groups.merge!({ group_index => { conditions_attributes: conditions } })
-      end
-      { groups_attributes: groups }
+      { groups_attributes: filter[:advanced_search_groups].map.with_index do |group, group_index|
+        [group_index,
+         { conditions_attributes: group.map.with_index do |condition, condition_index|
+           [condition_index, condition]
+         end.to_h }]
+      end.to_h }
     end
 
     def samples_by_project_scope

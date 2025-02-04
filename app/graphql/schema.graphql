@@ -2468,16 +2468,6 @@ enum SampleAdvancedSearchConditionOperator {
 }
 
 """
-Sample Advanced Search Conditions
-"""
-input SampleAdvancedSearchConditions {
-  """
-  A list of advanced search conditions
-  """
-  advanced_search_conditions: [SampleAdvancedSearchCondition!] = null
-}
-
-"""
 The connection type for Sample.
 """
 type SampleConnection {
@@ -2521,7 +2511,7 @@ input SampleFilter {
   """
   Filter samples by advanced search via Searchkick
   """
-  advanced_search_groups: [SampleAdvancedSearchConditions!] = null
+  advanced_search_groups: [[SampleAdvancedSearchCondition!]!] = null
 }
 
 """

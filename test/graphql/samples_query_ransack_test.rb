@@ -78,9 +78,9 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     result = IridaSchema.execute(SAMPLES_WITH_GROUP_QUERY,
                                  context: { current_user: @user },
                                  variables: { group_id: groups(:group_a).to_global_id.to_s,
-                                              filter: { advanced_search_groups: [{ advanced_search_conditions: [{
+                                              filter: { advanced_search_groups: [[{
                                                 field: 'name', operator: 'EQUALS', value: @sample.name
-                                              }] }] } })
+                                              }]] } })
 
     assert_not_nil result['errors'], 'should not work and have authorization errors.'
 
@@ -100,9 +100,9 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     result = IridaSchema.execute(SAMPLES_WITH_GROUP_QUERY,
                                  context: { current_user: user, token: },
                                  variables: { group_id: group.to_global_id.to_s,
-                                              filter: { advanced_search_groups: [{ advanced_search_conditions: [{
+                                              filter: { advanced_search_groups: [[{
                                                 field: 'name', operator: 'EQUALS', value: @sample.name
-                                              }] }] } })
+                                              }]] } })
 
     assert_not_nil result['errors'], 'should not work and have authorization errors.'
 
@@ -117,9 +117,9 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
   test 'filter samples with existing metadata field using advanced search should work' do
     result = IridaSchema.execute(SAMPLES_QUERY,
                                  context: { current_user: @user },
-                                 variables: { filter: { advanced_search_groups: [{ advanced_search_conditions: [{
+                                 variables: { filter: { advanced_search_groups: [[{
                                    field: 'metadata.metadatafield1', operator: 'EXISTS'
-                                 }] }] } })
+                                 }]] } })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
@@ -131,9 +131,9 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
   test 'filter samples with metadata field using advanced search should work' do
     result = IridaSchema.execute(SAMPLES_QUERY,
                                  context: { current_user: @user },
-                                 variables: { filter: { advanced_search_groups: [{ advanced_search_conditions: [{
+                                 variables: { filter: { advanced_search_groups: [[{
                                    field: 'metadata.metadatafield1', operator: 'EQUALS', value: 'value1'
-                                 }] }] } })
+                                 }]] } })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
