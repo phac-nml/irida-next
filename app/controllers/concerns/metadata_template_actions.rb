@@ -28,7 +28,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   end
 
   def edit
-    authorize! @namespace, to: :update_metadata_templates?
+    authorize! @metadata_template, to: :update_metadata_template?
 
     respond_to do |format|
       format.turbo_stream do

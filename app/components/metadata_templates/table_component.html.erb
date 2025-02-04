@@ -61,7 +61,7 @@
               <%= helpers.local_time_ago(metadata_template.updated_at) %>
             </td>
             <td class="px-6 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2">
-              <% if helpers.allowed_to?(:update_metadata_templates?, metadata_template.namespace) %>
+              <% if helpers.allowed_to?(:update_metadata_template?, metadata_template) %>
                 <%= link_to(
                   t(:"metadata_templates.table_component.edit_button"),
                   abilities_metadata_templates_path(metadata_template),
@@ -80,7 +80,7 @@
                     "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
                 ) %>
               <% end %>
-              <% if helpers.allowed_to?(:destroy_metadata_templates?, metadata_template.namespace) %>
+              <% if helpers.allowed_to?(:destroy_metadata_template?, metadata_template) %>
                 <%= link_to(
                   t(:"metadata_templates.table_component.remove_button"),
                   abilities_metadata_templates_path(metadata_template),

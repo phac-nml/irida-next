@@ -18,7 +18,6 @@ en:
         destroy_attachment?: You are not authorized to destroy attachments for group %{name} on this server.
         destroy_bot_accounts?: You are not authorized to destroy bot accounts for group %{name} on this server.
         destroy_member?: You are not authorized to remove members for group %{name} on this server.
-        destroy_metadata_templates?: You are not authorized to destroy metadata templates for group %{name} on this server.
         edit?: You are not authorized to modify group %{name} on this server.
         export_data?: You are not authorized to export data from project %{name} on this server.
         link_namespace_with_group?: You are not authorized to link group %{name} with other groups on this server.
@@ -32,11 +31,13 @@ en:
         unlink_namespace_with_group?: You are not authorized to unlink group %{name} from other groups on this server.
         update?: You are not authorized to update group %{name} on this server.
         update_member?: You are not authorized to update members for group %{name} on this server.
-        update_metadata_templates?: You are not authorized to update metadata templates for group %{name} on this server.
         update_namespace_with_group_link?: You are not authorized to update group %{name} links with other groups on this server.
         update_sample_metadata?: You are not authorized to update sample metadata for group %{name} on this server.
         view_metadata_templates?: You are not authorized to view metadata templates for group %{name} on this server.
       index?: You are not authorized to view the listing of resources on this server.
+      metadata_templates:
+        destroy_metadata_template?: You are not authorized to destroy metadata templates for group %{name} on this server.
+        update_metadata_template?: You are not authorized to update metadata templates for group %{name} on this server.
       namespaces/project_namespace:
         create_automated_workflow_executions?: You are not authorized to create automated pipelines for project %{name}
         create_bot_accounts?: You are not authorized to create bot accounts for project %{name} on this server.
@@ -45,7 +46,6 @@ en:
         destroy_automated_workflow_executions?: You are not authorized to destroy automated pipelines for project %{name}
         destroy_bot_accounts?: You are not authorized to destroy bot accounts for project %{name} on this server.
         destroy_member?: You are not authorized to remove members from the project namespace %{name} on this server.
-        destroy_metadata_templates?: You are not authorized to destroy metadata templates for project %{name} on this server.
         export_data?: You are not authorized to export data from project %{name} on this server.
         link_namespace_with_group?: You are not authorized to link project %{name} with other groups on this server.
         member_listing?: You are not authorized to view members for the project namespace %{name} on this server.
@@ -54,7 +54,6 @@ en:
         update?: You are not authorized to update the namespace for project %{name} on this server.
         update_automated_workflow_executions?: You are not authorized to update automated pipelines for project %{name}
         update_member?: You are not authorized to update members for the project namespace %{name} on this server.
-        update_metadata_templates?: You are not authorized to update metadata templates for project %{name} on this server.
         update_namespace_with_group_link?: You are not authorized to update project %{name} links with other groups on this server.
         update_sample_metadata?: You are not authorized to update sample metadata for project %{name} on this server.
         view_automated_workflow_executions?: You are not authorized to view automated pipelines for project %{name}

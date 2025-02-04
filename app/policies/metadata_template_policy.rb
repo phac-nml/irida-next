@@ -2,6 +2,27 @@
 
 # Base policy for metadata templates authorization
 class MetadataTemplatePolicy < ApplicationPolicy
+  def effective_access_level
+    return unless record.instance_of?(MetadataTemplate)
+
+    @access_level ||= Member.effective_access_level(record.namespace, user)
+    @access_level
+  end
+
+  def destroy_metadata_template?
+    return true if Member::AccessLevel.manageable.include?(effective_access_level)
+
+    details[:name] = record.namespace.name
+    false
+  end
+
+  def update_metadata_template?
+    return true if Member::AccessLevel.manageable.include?(effective_access_level)
+
+    details[:name] = record.namespace.name
+    false
+  end
+
   scope_for :relation do |relation, options|
     namespace = options[:namespace]
 
