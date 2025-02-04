@@ -822,6 +822,7 @@ fr:
         title: Add New Member
     metadata_templates:
       index:
+        edit_button: Edit Template
         new_button: Add New Template
         subtitle: These are metadata templates for the group
         title: Metadata Templates
@@ -983,6 +984,13 @@ fr:
       updated_at: Access Granted
       user_email: Username
   metadata_templates:
+    edit_template_dialog:
+      available: Available
+      description: Select the metadata fields for the template by moving the metadata fields from the available list to the selected list and vice versa. The template's fields ordering will be determined by the ordering of the selected list.
+      metadata: Metadata
+      selected: Selected
+      update_button: Update
+      title: Edit Metadata Template
     new_template_dialog:
       available: Available
       description: Select the metadata fields for new template by moving the metadata fields from the available list to the selected list. The template's fields ordering will be determined by the ordering of the selected list.
@@ -1340,6 +1348,7 @@ fr:
         title: Add New Member
     metadata_templates:
       index:
+        edit_button: Edit Template
         new_button: Add New Template
         subtitle: These are metadata templates for the project
         title: Metadata Templates
