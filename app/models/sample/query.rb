@@ -151,10 +151,10 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
                             end
     else
       and_conditions["#{key}.numeric"] = if and_conditions["#{key}.numeric"].nil?
-                                           { operation => condition.value.to_i }
+                                           { operation => condition.value.to_f }
                                          else
                                            and_conditions["#{key}.numeric"]
-                                             .merge({ operation => condition.value.to_i })
+                                             .merge({ operation => condition.value.to_f })
                                          end
     end
   end
