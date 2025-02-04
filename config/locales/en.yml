@@ -1006,7 +1006,6 @@ en:
       remove_button: Delete
       remove_confirmation: Are you sure you want to delete metadata template %{template_name}?
       updated_at: Last Modified
-
   models:
     sample:
       analysis: Analysis
