@@ -1022,12 +1022,12 @@ en:
       page_selection:
         aria_label: Pagination page selector
       previous: Previous
-      processing_request: Processing your request
   nextflow_component:
     data_missing_error: 'The following samples are missing required data: '
     name:
       helper: A custom name will make it easier to search for this in the future.
       label: Name (Optional)
+    processing_request: Processing your request
     submission_error: Something went wrong with the submission request.
   personal_access_tokens:
     revoke_confirmation:
@@ -1891,7 +1891,7 @@ en:
         title: "%{workflow} parameters"
         update: Update
       pipeline_selection:
-        loading: Preparing workflow execution arguments for COUNT_PLACEHOLDER samples, this may take a bit of time.
+        loading_html: "<span class='flex items-center space-x-2'><span class='font-medium text-slate-900 truncate dark:text-white group-hover:text-slate-100'>WORKFLOW_NAME_PLACEHOLDER</span><span class='bg-primary-100 text-primary-800 dark:bg-primary-800 dark:text-primary-400 text-xs font-medium px-2.5 py-0.5 rounded-full'>WORKFLOW_VERSION_PLACEHOLDER</span></span>Preparing workflow execution arguments for COUNT_PLACEHOLDER samples, this may take a bit of time."
         title: Workflow Selection
     summary:
       created_at: Created

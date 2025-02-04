@@ -42,22 +42,6 @@
         workflow_params:,
       ) %>
     <% end %>
-    <template data-nextflow--samplesheet-target="processing">
-      <div
-        role="status"
-        class="
-          absolute h-full w-full text-black dark:text-white backdrop-blur-sm flex
-          items-center justify-center z-20
-        "
-      >
-        <span class="flex items-center p-4 space-x-4">
-          <span class="flex-shrink-0">
-            <%= viral_icon(name: :loading, classes: "animate-spin text-primary-500 h-5 w-5") %>
-          </span>
-          <span class="font-bold"><%= t(".processing_request") %></span>
-        </span>
-      </div>
-    </template>
   </div>
   <% if samples_workflow_executions_attributes.count > 5 %>
     <div id="samplesheet_pagination" class="flex items-center justify-end">

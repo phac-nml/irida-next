@@ -3,11 +3,11 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = [
     "table",
-    "processing",
     "submit",
     "error",
     "errorMessage",
     "form",
+    "spinner",
     "workflowAttributes",
     "samplesheetProperties",
     "cellContainer",
@@ -203,18 +203,12 @@ export default class extends Controller {
 
   #enableProcessingState() {
     this.submitTarget.disabled = true;
-    if (this.hasTableTarget) {
-      this.tableTarget.appendChild(
-        this.processingTarget.content.cloneNode(true),
-      );
-    }
+    this.spinnerTarget.classList.remove("hidden");
   }
 
   #disableProcessingState() {
     this.submitTarget.disabled = false;
-    if (this.hasTableTarget) {
-      this.tableTarget.removeChild(this.tableTarget.lastElementChild);
-    }
+    this.spinnerTarget.classList.add("hidden");
   }
 
   #enableErrorState(message) {
