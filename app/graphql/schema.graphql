@@ -2512,6 +2512,11 @@ input SampleFilter {
   Filter samples by advanced search via Searchkick
   """
   advanced_search_groups: [[SampleAdvancedSearchCondition!]!] = null
+
+  """
+  Filter samples which contains name or puid
+  """
+  name_or_puid_cont: String
 }
 
 """

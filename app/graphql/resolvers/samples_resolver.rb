@@ -25,7 +25,7 @@ module Resolvers
 
       filter = filter&.to_h
       search_params = {}
-      search_params.merge!(advanced_search_params(filter)) if filter.present?
+      search_params.merge!(filter_params(filter)) if filter
       search_params.merge!(sort: "#{order_by.field} #{order_by.direction}") if order_by.present?
 
       if group_id
@@ -43,6 +43,13 @@ module Resolvers
     end
 
     private
+
+    def filter_params(filter)
+      filter_params = {}
+      filter_params.merge!(advanced_search_params(filter)) if filter[:advanced_search_groups]
+      filter_params.merge!(name_or_puid_cont: filter[:name_or_puid_cont]) if filter[:name_or_puid_cont]
+      filter_params
+    end
 
     def advanced_search_params(filter)
       { groups_attributes: filter[:advanced_search_groups].map.with_index do |group, group_index|
