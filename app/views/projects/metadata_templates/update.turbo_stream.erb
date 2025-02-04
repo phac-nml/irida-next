@@ -1,0 +1,21 @@
+<%= turbo_stream.update "metadata_template_modal",
+                    partial: "shared/metadata_templates/edit_template_dialog",
+                    locals: {
+                      open: @metadata_template.errors.any? ? true : false,
+                      update_path:
+                        namespace_project_metadata_template_path(
+                          @namespace.parent,
+                          @namespace.project,
+                          @metadata_template,
+                        ),
+                    } %>
+
+<% if !@metadata_template.errors.any? %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type:, data: message) %>
+  <% end %>
+
+<% else %>
+  <%= turbo_stream.update "metadata_template_error_alert",
+                      viral_alert(type:, message:, classes: "mb-4") %>
+<% end %>

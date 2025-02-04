@@ -7,7 +7,11 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   included do
     before_action proc { namespace }
     before_action proc { metadata_template }, only: %i[destroy edit show update]
+<<<<<<< HEAD
     before_action proc { metadata_template_fields }, only: %i[create new]
+=======
+    before_action proc { metadata_template_fields }, only: %i[edit update]
+>>>>>>> bfad392e1 (Setup edit template ui)
   end
 
   def index
@@ -81,7 +85,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def update
+  def update # rubocop:disable Metrics/MethodLength
     @updated = MetadataTemplates::UpdateService.new(current_user, @metadata_template, metadata_template_params).execute
 
     respond_to do |format|
@@ -91,9 +95,14 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
                                 template_name: @metadata_template.name))
         end
       else
+        msg = if @metadata_template.errors.any?
+                @metadata_template.errors.full_messages.to_sentence
+              else
+                I18n.t('concerns.metadata_template_actions.update.error',
+                       template_name: @metadata_template.name)
+              end
         format.turbo_stream do
-          render_error(I18n.t('concerns.metadata_template_actions.update.error',
-                              template_name: @metadata_template.name))
+          render_error(msg)
         end
       end
     end

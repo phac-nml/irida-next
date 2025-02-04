@@ -10,7 +10,8 @@ module Groups
     private
 
     def metadata_template_params
-      params.require(:metadata_template).permit(:name, :description, fields: [])
+      defaults = { fields: [] }
+      params.require(:metadata_template).permit(:name, :description, fields: []).reverse_merge(defaults)
     end
 
     protected

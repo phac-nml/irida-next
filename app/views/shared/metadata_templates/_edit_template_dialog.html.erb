@@ -1,0 +1,72 @@
+<%= viral_dialog(open: open, size: :large) do |dialog| %>
+  <%= dialog.with_header(title: "Edit Template #{@metadata_template.name}") %>
+  <%= dialog.with_section do %>
+    <%= turbo_frame_tag "metadata_template_error_alert" %>
+    <%= turbo_frame_tag "metadata_template_dialog_content" do %>
+      <div
+        data-controller="viral--sortable-lists--two-lists-selection"
+        data-viral--sortable-lists--two-lists-selection-selected-list-value="selected"
+        data-viral--sortable-lists--two-lists-selection-available-list-value="available"
+        data-viral--sortable-lists--two-lists-selection-field-name-value="metadata_template[fields][]"
+        class="font-normal text-slate-500 dark:text-slate-400"
+      >
+        <div class="grid gap-4">
+          <%= viral_sortable_lists(
+            title: t("metadata_templates.new_template_dialog.metadata"),
+            description: t("metadata_templates.new_template_dialog.description")
+            ) do |sortable_lists| %>
+            <%= sortable_lists.with_list(
+              id: "available",
+              title: t("metadata_templates.new_template_dialog.available"),
+              list_items: @available_metadata_fields,
+              group: "metadata_selection",
+              container_classes: "block mb-1 pr-2 text-sm font-medium",
+              list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
+            ) %>
+            <%= sortable_lists.with_list(
+              id: "selected",
+              title: t("metadata_templates.new_template_dialog.selected"),
+              list_items: @current_template_fields,
+              group: "metadata_selection",
+              container_classes: "block mb-1 text-sm font-medium",
+              list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
+            ) %>
+          <% end %>
+          <%= form_for(@metadata_template, url: update_path, method: :patch
+            ) do |form| %>
+            <div class="grid gap-4">
+              <div class="form-field mt-2">
+                <%= form.label :name %>
+                <%= form.text_field :name,
+                                class: "form-control",
+                                required: true,
+                                value: @metadata_template.name %>
+              </div>
+              <div class="form-field mt-2">
+                <%= form.label :description %>
+                <%= form.text_area :description,
+                               class: "form-control",
+                               value: @metadata_template.description %>
+              </div>
+              <div
+                class="hidden"
+                data-viral--sortable-lists--two-lists-selection-target="field"
+              ></div>
+              <div>
+                <%= form.submit "Update",
+                            data: {
+                              turbo_frame: "_top",
+                              action:
+                                "click->viral--sortable-lists--two-lists-selection#constructParams",
+                              "viral--sortable-lists--two-lists-selection-target": "submitBtn",
+                            },
+                            class: "button button--state-primary button--size-default",
+                            disabled: true %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
