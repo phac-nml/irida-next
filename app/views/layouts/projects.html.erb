@@ -56,7 +56,8 @@
                 t(:"projects.sidebar.general"),
                 t(:"projects.sidebar.bot_accounts"),
                 t(:"projects.sidebar.automated_workflow_executions"),
-                t(:"projects.sidebar.history")
+                t(:"projects.sidebar.history"),
+                t(:"projects.sidebar.metadata_templates")
               ],
               current_page: @current_page
             ) do |multi_level_menu| %>
@@ -82,6 +83,11 @@
                 url: project_history_path(@project),
                 label: t(:"projects.sidebar.history"),
                 selected: @current_page == t(:"projects.sidebar.history"),
+              ) %>
+              <% multi_level_menu.with_menu_item(
+                url: project_metadata_templates_path(@project),
+                label: t(:"projects.sidebar.metadata_templates"),
+                selected: @current_page == t(:"projects.sidebar.metadata_templates"),
               ) %>
             <% end %>
           <% end %>

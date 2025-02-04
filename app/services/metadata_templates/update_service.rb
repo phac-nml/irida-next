@@ -11,7 +11,7 @@ module MetadataTemplates
     end
 
     def execute
-      authorize! @metadata_template.namespace, to: :update_metadata_templates?
+      authorize! @metadata_template, to: :update_metadata_template?
 
       updated = @metadata_template.update(params)
 

@@ -28,8 +28,8 @@ module MetadataTemplates
         MetadataTemplates::DestroyService.new(user, @metadata_template).execute
       end
 
-      assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
-      assert_equal :destroy_metadata_templates?, exception.rule
+      assert_equal MetadataTemplatePolicy, exception.policy
+      assert_equal :destroy_metadata_template?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
     end
   end

@@ -45,8 +45,8 @@ module MetadataTemplates
         MetadataTemplates::UpdateService.new(user, @metadata_template, valid_params).execute
       end
 
-      assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
-      assert_equal :update_metadata_templates?, exception.rule
+      assert_equal MetadataTemplatePolicy, exception.policy
+      assert_equal :update_metadata_template?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
     end
   end

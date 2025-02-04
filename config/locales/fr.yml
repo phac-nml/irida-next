@@ -37,6 +37,9 @@ fr:
         update_sample_metadata?: You are not authorized to update sample metadata for group %{name} on this server.
         view_metadata_templates?: You are not authorized to view metadata templates for group %{name} on this server.
       index?: You are not authorized to view the listing of resources on this server.
+      metadata_templates:
+        destroy_metadata_template?: You are not authorized to destroy metadata templates for group %{name} on this server.
+        update_metadata_template?: You are not authorized to update metadata templates for group %{name} on this server.
       namespaces/project_namespace:
         create_automated_workflow_executions?: You are not authorized to create automated pipelines for project %{name}
         create_bot_accounts?: You are not authorized to create bot accounts for project %{name} on this server.
@@ -817,6 +820,11 @@ fr:
         select_access_level: Select Access Level
         select_user: Select a User
         title: Add New Member
+    metadata_templates:
+      index:
+        new_button: Add New Template
+        subtitle: These are metadata templates for the group
+        title: Metadata Templates
     new_subgroup:
       cancel: Cancel
       empty_state: No namespaces are associated with that name or ID
@@ -874,6 +882,7 @@ fr:
       history: History
       label: Group
       members: Members
+      metadata_templates: Metadata Templates
       samples: Samples
       settings: Settings
     subgroups:
@@ -973,6 +982,23 @@ fr:
       namespace_name: Source
       updated_at: Access Granted
       user_email: Username
+  metadata_templates:
+    table:
+      empty:
+        description: There are no metadata templates associated with this %{namespace_type}.
+        title: No metadata templates.
+    table_component:
+      actions: Actions
+      created_at: Created Date
+      created_by_email: Created By
+      description: Description
+      edit_aria_label: Edit metadata template %{template_name}
+      edit_button: Edit
+      name: Template Name
+      remove_aria_label: Delete metadata template %{template_name}
+      remove_button: Delete
+      remove_confirmation: Are you sure you want to delete metadata template %{template_name}?
+      updated_at: Last Modified
   models:
     sample:
       analysis: Analysis
@@ -1299,6 +1325,11 @@ fr:
         select_access_level: Select Access Level
         select_user: Select a User
         title: Add New Member
+    metadata_templates:
+      index:
+        new_button: Add New Template
+        subtitle: These are metadata templates for the project
+        title: Metadata Templates
     new:
       description: Project description, not required
       empty_state: No namespaces are associated with that name or ID
@@ -1537,6 +1568,7 @@ fr:
       history: History
       label: Project
       members: Members
+      metadata_templates: Metadata Templates
       samples: Samples
       settings: Settings
       workflow_executions: Workflow Executions

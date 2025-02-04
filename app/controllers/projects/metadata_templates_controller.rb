@@ -5,6 +5,8 @@ module Projects
   class MetadataTemplatesController < Projects::ApplicationController
     include MetadataTemplateActions
 
+    before_action :current_page
+
     private
 
     def metadata_template_params
@@ -21,6 +23,21 @@ module Projects
 
     def metadata_templates_path
       namespace_project_metadata_templates_path
+    end
+
+    def context_crumbs
+      super
+      case action_name
+      when 'index'
+        @context_crumbs += [{
+          name: t('projects.metadata_templates.index.title'),
+          path: namespace_project_metadata_templates_path
+        }]
+      end
+    end
+
+    def current_page
+      @current_page = t(:'projects.sidebar.metadata_templates')
     end
   end
 end

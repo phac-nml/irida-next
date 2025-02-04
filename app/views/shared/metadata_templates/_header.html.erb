@@ -1,0 +1,14 @@
+<%= render Viral::PageHeaderComponent.new(title: title, subtitle: subtitle) do |component| %>
+  <%= component.with_icon(name: "list_bullet", classes: "h-14 w-14 text-primary-700") %>
+  <%= component.with_buttons do %>
+    <% if allowed_to?(:create_metadata_templates?, namespace) %>
+      <%= link_to new_template_button_text,
+      new_template_url,
+      data: {
+        "turbo-frame" => "metadata_template_modal",
+        :turbo_stream => true,
+      },
+      class: "button button--state-primary button--size-default" %>
+    <% end %>
+  <% end %>
+<% end %>

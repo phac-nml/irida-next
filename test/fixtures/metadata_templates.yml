@@ -15,3 +15,56 @@ valid_group_metadata_template:
   created_at: <%= 3.hours.ago %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+
+
+<% 21.times do |n| %>
+project1_metadata_template<%= (n) %>:
+  name: <%= "Project Template#{n}" %>
+  description: <%= "This is template #{n} for the project" %>
+  fields: ["field_#{n+1}", "field_#{n+2}", "field_#{n+3}"]
+  created_at: <%= (n+3).hours.ago %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
+<% end %>
+
+<% 21.times do |n| %>
+group_one_metadata_template<%= (n) %>:
+  name: <%= "Group Template#{n}" %>
+  description: <%= "This is template #{n} for the group" %>
+  fields: ["field_#{n+1}", "field_#{n+2}", "field_#{n+3}"]
+  created_at: <%= (n+3).hours.ago %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
+<% end %>
+
+project2_metadata_template1:
+  name: First Project Template
+  description: This is template 1 for the project"
+  fields: ["field_1", "field_2", "field_3"]
+  created_at: <%= 2.hours.ago %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+
+project2_metadata_template2:
+  name: Second Project Template
+  description: This is template 2 for the project"
+  fields: ["field_1", "field_2", "field_3"]
+  created_at: <%= 4.hours.ago %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
+
+group_two_metadata_template1:
+  name: First Group Template
+  description: This is template 1 for the group
+  fields: ["field_1", "field_2", "field_3"]
+  created_at: <%= 2.hours.ago %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_two, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
+
+group_two_metadata_template2:
+  name: Second Group Template
+  description: This is template 2 for the group
+  fields: ["field_1", "field_2", "field_3"]
+  created_at: (<%= 3.hours.ago %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_two, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>

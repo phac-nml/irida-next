@@ -1,0 +1,174 @@
+<%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
+  <% unless @metadata_templates.empty? %>
+    <table
+      class="
+        w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+        whitespace-nowrap
+      "
+    >
+      <thead
+        class="
+          text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700
+          dark:text-slate-400
+        "
+      >
+        <tr>
+          <% @columns.each_with_index do |column, index| %>
+            <%= render_cell(
+              tag: 'th',
+              scope: 'col',
+              classes: class_names('px-3 py-3', 'sticky left-0 bg-slate-50 dark:bg-slate-900': index === 0, 'min-w-40': index === 1 || index === 2, 'min-w-48': index === 4)
+            ) do %>
+              <%= render Ransack::SortComponent.new(
+                ransack_obj: @q,
+                label: t(".#{column}"),
+                url: helpers.sorting_url(@q, column),
+                field: column,
+              ) %>
+            <% end %>
+          <% end %>
+          <% if @renders_row_actions %>
+            <%= render_cell(
+              tag: 'th',
+              scope: 'col',
+              classes: class_names('px-3 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
+            ) do %>
+              <%= t(".actions") %>
+            <% end %>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody
+        id="metadata-templates-table-body"
+        class="
+          bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
+        "
+      >
+        <% @metadata_templates.each do |metadata_template| %>
+          <%= render Viral::BaseComponent.new(**row_arguments(metadata_template)) do %>
+            <% @columns.each_with_index do |column, index| %>
+              <%= render_cell(
+                tag: 'td',
+                scope: nil,
+                classes: class_names('px-3 py-3', 'sticky left-0 bg-slate-50 dark:bg-slate-900': index.zero?)
+              ) do %>
+                <% if column == :name %>
+                  <span class ="text-slate-900 dark:text-slate-100 font-semibold hover:underline">
+                    <%= metadata_template.name %>
+                  </span>
+                <% elsif column == :description %>
+                  <%= metadata_template.description %>
+                <% elsif column == :created_by_email %>
+                  <%= metadata_template.created_by.email %>
+                <% elsif column == :created_at %>
+                  <%= helpers.local_time(metadata_template.created_at, :full_date) %>
+                <% elsif column == :updated_at %>
+                  <%= helpers.local_time_ago(metadata_template.updated_at) %>
+                <% end %>
+              <% end %>
+            <% end %>
+            <% if @renders_row_actions %>
+              <%= render_cell(
+                tag: 'td',
+                classes: class_names('px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2')
+              ) do %>
+                <% if @row_actions.key?(:update_metadata_templates) %>
+                  <%= link_to(
+                    t(:"metadata_templates.table_component.edit_button"),
+                    individual_path(metadata_template),
+                    data: {
+                    },
+                    aria: {
+                      label:
+                        (
+                          t(
+                            :"metadata_templates.table_component.edit_aria_label",
+                            template_name: metadata_template.name,
+                          )
+                        ),
+                    },
+                    class:
+                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                  ) %>
+                <% end %>
+                <% if @row_actions.key?(:destroy_metadata_templates) %>
+                  <%= link_to(
+                    t(:"metadata_templates.table_component.remove_button"),
+                    individual_path(metadata_template),
+                    data: {
+                      turbo_method: :delete,
+                      turbo_confirm:
+                        (
+                          t(
+                            :"metadata_templates.table_component.remove_confirmation",
+                            template_name: metadata_template.name,
+                          )
+                        ),
+                    },
+                    aria: {
+                      label:
+                        (
+                          t(
+                            :"metadata_templates.table_component.remove_aria_label",
+                            template_name: metadata_template.name,
+                          )
+                        ),
+                    },
+                    class:
+                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                  ) %>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <div class="empty_state_message">
+      <%= viral_empty(
+        title:
+          t(
+            :"metadata_templates.table.empty.title",
+            namespace_type: @namespace.type.downcase,
+          ),
+        description:
+          t(
+            :"metadata_templates.table.empty.description",
+            namespace_type: @namespace.type.downcase,
+          ),
+        icon_name: :document_text,
+      ) %>
+    </div>
+  <% end %>
+<% end %>
+<% unless @metadata_templates.empty? %>
+  <%= render PaginationComponent.new(
+    info: helpers.pagy_info(@pagy),
+    prev_url:
+      (
+        if @pagy.prev
+          helpers.pagy_url_for(@pagy, @pagy.prev).gsub(
+            "metadata_templates.turbo_stream",
+            "metadata_templates",
+          )
+        else
+          nil
+        end
+      ),
+    next_url:
+      (
+        if @pagy.next
+          helpers.pagy_url_for(@pagy, @pagy.next).gsub(
+            "metadata_templates.turbo_stream",
+            "metadata_templates",
+          )
+        else
+          nil
+        end
+      ),
+    data: {
+      turbo_action: "replace",
+    },
+  ) %>
+<% end %>

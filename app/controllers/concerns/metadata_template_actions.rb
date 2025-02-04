@@ -12,7 +12,9 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   def index
     authorize! @namespace, to: :view_metadata_templates?
 
-    @metadata_templates = load_metadata_templates
+    @q = load_metadata_templates.ransack(params[:q])
+    set_default_sort
+    @pagy, @metadata_templates = pagy(@q.result)
   end
 
   def new
@@ -26,7 +28,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   end
 
   def edit
-    authorize! @namespace, to: :update_metadata_templates?
+    authorize! @metadata_template, to: :update_metadata_template?
 
     respond_to do |format|
       format.turbo_stream do
@@ -104,7 +106,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   private
 
   def load_metadata_templates
-    @metadata_templates = MetadataTemplate.where(namespace: @namespace)
+    authorized_scope(MetadataTemplate, type: :relation, scope_options: { namespace: @namespace })
   end
 
   def metadata_template
@@ -124,5 +126,9 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
              type: 'alert',
              message:
            }
+  end
+
+  def set_default_sort
+    @q.sorts = 'name asc' if @q.sorts.empty?
   end
 end

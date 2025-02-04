@@ -23,6 +23,14 @@ class MetadataTemplate < ApplicationRecord
   validates :fields, presence: true, json: { message: ->(errors) { errors }, schema: METADATA_TEMPLATE_JSON_SCHEMA }
   validate :validate_namespace
 
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[name created_at description updated_at]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[created_by namespace]
+  end
+
   private
 
   def validate_namespace
