@@ -4,7 +4,7 @@ require 'roo'
 
 module Samples
   # Service used to batch create samples via a file
-  class BatchFileImportService < BaseService
+  class BatchFileImportService < BaseService # rubocop:disable Metrics/ClassLength
     SampleFileImportError = Class.new(StandardError)
 
     def initialize(namespace, user = nil, blob_id = nil, params = {})
@@ -62,7 +62,7 @@ module Samples
               I18n.t('services.samples.metadata.import_file.missing_sample_id_column')
       end
 
-      # TODO: check if we have a project puid
+      # TODO: check if we have a project puid header
 
       # return if @headers.count { |header| header != @sample_name_column }.positive?
 
@@ -86,29 +86,9 @@ module Samples
       end
 
       extension = validate_file_extension
-
-      # @spreadsheet = if extension.eql? '.tsv'
-      #                  Roo::CSV.new(@file, csv_options: { col_sep: "\t" })
-      #                else
-      #                  Roo::Spreadsheet.open(@file)
-      #                end
-
-      # # filter for ',' and '\t' to skip empty lines with column seperators
-      # empty_row_regex = /^(?:,*\s*)+$/
-      # @spreadsheet = if extension.eql? '.tsv'
-      #                   Roo::CSV.new(@file,
-      #                               csv_options: { skip_blanks: true, skip_lines: empty_row_regex, col_sep: "\t" })
-      #                 elsif extension.eql? '.csv'
-      #                   Roo::CSV.new(@file, csv_options: { skip_blanks: true, skip_lines: empty_row_regex })
-      #                 else
-      #                   Roo::Spreadsheet.open(@file)
-      #                 end
-      #
-
       download_batch_import_file(extension)
 
       @headers = @spreadsheet.row(1).compact
-
       validate_file_headers
 
       validate_file_rows
@@ -130,14 +110,12 @@ module Samples
                      end
     end
 
-    def perform_file_import
+    def perform_file_import # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       response = {}
       parse_settings = @headers.zip(@headers).to_h
 
       @spreadsheet.each_with_index(parse_settings) do |data, index|
         next unless index.positive?
-
-        # TODO: next when all data is nil (empty line)
 
         # TODO: handle metadata
 
@@ -145,14 +123,26 @@ module Samples
         project_puid = data[@project_puid_column]
         description = data[@sample_description_column]
 
-        # TODO: catch exceptions here
+        if sample_name.nil? || project_puid.nil?
+          response["index #{index}"] = {
+            path: ['sample'],
+            message: I18n.t('services.samples.batch_import.missing_field', index: index)
+          }
+          next
+        end
+
         project = Namespaces::ProjectNamespace.find_by(puid: project_puid)&.project
+        unless project
+          response[sample_name] = {
+            path: ['project'],
+            message: I18n.t('services.samples.batch_import.project_puid_not_found', project_puid: project_puid)
+          }
+          next
+        end
 
         response[sample_name] = process_sample_row(sample_name, project, description)
         cleanup_files
         response
-      rescue ActiveRecord::RecordNotFound
-        project.errors.add(:sample, error_message(sample_name))
       end
       response
     end
@@ -163,14 +153,6 @@ module Samples
       @temp_import_file.unlink
     end
 
-    def error_message(sample_id) # TODO: remove
-      if @namespace.type == 'Group'
-        I18n.t('services.samples.metadata.import_file.sample_not_found_within_group', sample_puid: sample_id)
-      else
-        I18n.t('services.samples.metadata.import_file.sample_not_found_within_project', sample_puid: sample_id)
-      end
-    end
-
     def process_sample_row(name, project, description)
       sample_params = { name:, description: }
       sample = Samples::CreateService.new(current_user, project, sample_params).execute
@@ -178,7 +160,7 @@ module Samples
       if sample.persisted?
         sample
       else
-        sample.errors.map do |error| # TODO: rework this error
+        sample.errors.map do |error|
           {
             path: ['sample', error.attribute.to_s.camelize(:lower)],
             message: error.message
@@ -186,21 +168,5 @@ module Samples
         end
       end
     end
-
-    # def find_sample(sample_id)
-    #   if @namespace.type == 'Group'
-    #     authorized_scope(Sample, type: :relation, as: :namespace_samples,
-    #                              scope_options: { namespace: @namespace,
-    #                                               minimum_access_level: Member::AccessLevel::MAINTAINER })
-    #       .find_by!(puid: sample_id)
-    #   else
-    #     project = @namespace.project
-    #     if Irida::PersistentUniqueId.valid_puid?(sample_id, Sample)
-    #       Sample.find_by!(puid: sample_id, project_id: project.id)
-    #     else
-    #       Sample.find_by!(name: sample_id, project_id: project.id)
-    #     end
-    #   end
-    # end
   end
 end
