@@ -63,24 +63,143 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
     if results_arguments[:limit] || results_arguments[:page]
       pagy_results(results_arguments[:limit], results_arguments[:page])
     else
-      advanced_query ? searchkick_results : ransack_results
+      non_pagy_results
     end
   end
 
   private
 
   def pagy_results(limit, page)
-    if advanced_query
+    if advanced_query && !ENV['RANSACK_ONLY_SEARCH'].present?
       pagy_searchkick(searchkick_pagy_results, limit:, page:)
     else
       pagy(ransack_results, limit:, page:)
     end
   end
 
+  def non_pagy_results
+    if advanced_query && !ENV['RANSACK_ONLY_SEARCH'].present?
+      searchkick_results
+    else
+      ransack_results
+    end
+  end
+
   def ransack_results
     return Sample.none unless valid?
 
-    sort_samples.ransack(ransack_params).result
+    scope = if advanced_query
+              sort_samples(advanced_query_scope)
+            else
+              sort_samples
+            end
+
+    scope.ransack(ransack_params).result
+  end
+
+  def advanced_query_scope
+    Sample.with(
+      namespace_samples: Sample.where(project_id: project_ids).select(:id),
+      filtered_samples: advanced_query_groups
+    ).where(
+      Arel.sql('samples.id in (select * from namespace_samples) and id in (select id from filtered_samples)')
+    )
+  end
+
+  def advanced_query_groups
+    or_conditions = []
+    groups.each do |group|
+      group_scope = Sample.all
+      group.conditions.map do |condition|
+        group_scope = add_condition(group_scope, condition)
+      end
+      or_conditions << group_scope
+    end
+    or_conditions
+  end
+
+  def add_condition(scope, condition) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+    metadata_field = condition.field.starts_with? 'metadata.'
+    metadata_key = (condition.field.gsub(/^metadata./, '') if metadata_field)
+    node = if metadata_field
+             Arel::Nodes::InfixOperation.new('->>', Sample.arel_table[:metadata],
+                                             Arel::Nodes::Quoted.new(metadata_key))
+           else
+             Sample.arel_table[condition.field]
+           end
+
+    case condition.operator
+    when '='
+      if metadata_field || %w[name puid].include?(condition.field)
+        scope.where(node.matches(condition.value))
+      else
+        scope.where(node.eq(condition.value))
+      end
+    when 'in'
+      if metadata_field || %w[name puid].include?(condition.field)
+        scope.where(node.matches_any(condition.value))
+      else
+        scope.where(node.in(condition.value))
+      end
+    when '!='
+      if metadata_field || %w[name puid].include?(condition.field)
+        scope.where(node.does_not_match(condition.value))
+      else
+        scope.where(node.not_eq(condition.value))
+      end
+    when 'not_in'
+      if metadata_field || %w[name puid].include?(condition.field)
+        scope.where(node.does_not_match_any(condition.value))
+      else
+        scope.where(node.not_in(condition.value))
+      end
+    when '<='
+      if !metadata_field
+        scope.where(node.lteq(condition.value))
+      elsif metadata_key.end_with?('_date')
+        scope
+          .where(node.matches_regexp('^\d{4}-\d{2}-\d{2}$'))
+          .where(
+            Arel::Nodes::NamedFunction.new(
+              'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DATE'))]
+            ).lteq(condition.value)
+          )
+      else
+        scope
+          .where(node.matches_regexp('^\d+\.?\d+$'))
+          .where(
+            Arel::Nodes::NamedFunction.new(
+              'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
+            ).lteq(condition.value)
+          )
+      end
+    when '>='
+      if !metadata_field
+        scope.where(node.gteq(condition.value))
+      elsif metadata_key.end_with?('_date')
+        scope
+          .where(node.matches_regexp('^\d{4}-\d{2}-\d{2}$'))
+          .where(
+            Arel::Nodes::NamedFunction.new(
+              'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DATE'))]
+            ).gteq(condition.value)
+          )
+      else
+        scope
+          .where(node.matches_regexp('^\d+\.?\d+$'))
+          .where(
+            Arel::Nodes::NamedFunction.new(
+              'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
+            ).gteq(condition.value)
+          )
+      end
+    when 'contains'
+      scope.where(node.matches("%#{condition.value}"))
+    when 'exists'
+      scope.where(node.not_eq(nil))
+    when 'not_exists'
+      scope.where(node.eq(nil))
+    end
   end
 
   def searchkick_pagy_results
