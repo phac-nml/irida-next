@@ -1733,6 +1733,14 @@ en:
         namespace_project_exists: Project with the same name or path already exists in the target namespace.
         project_in_namespace: Project in namespace
     samples:
+      batch_import:
+        project_puid_not_found: 'Project PUID %{project_puid} could not be found'
+        missing_field: 'Row with index %{index} is missing required fields'
+        missing_header: 'File is missing %{header_title} header for %{header_desc}'
+        missing_header_project: 'File is missing %{header_expected} header for project puid'
+        duplicate_column_names: The file has duplicate column header names. Please remove the columns with duplicate header names and retry uploading.
+        missing_data_row: The file does not have any data rows. Please add some rows of data to the file and retry uploading.
+        empty_file: The file cannot be empty.
       clone:
         empty_new_project_id: Destination project was not selected.
         empty_sample_ids: The sample ids are empty.

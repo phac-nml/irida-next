@@ -38,7 +38,7 @@ module Samples
       return unless @sample_name_column.nil?
 
       raise SampleFileImportError,
-            I18n.t('services.samples.metadata.import_file.empty_sample_id_column')
+            I18n.t('services.samples.metadata.import_file.empty_sample_id_column') # TODO: refactor out
     end
 
     def validate_file_extension
@@ -47,27 +47,27 @@ module Samples
       return file_extension if %w[.csv .tsv .xls .xlsx].include?(file_extension)
 
       raise SampleFileImportError,
-            I18n.t('services.samples.metadata.import_file.invalid_file_extension')
+            I18n.t('services.samples.metadata.import_file.invalid_file_extension') # TODO: refactor out
     end
 
     def validate_file_headers
       duplicate_headers = @headers.find_all { |header| @headers.count(header) > 1 }.uniq
       unless duplicate_headers.empty?
         raise SampleFileImportError,
-              I18n.t('services.samples.metadata.import_file.duplicate_column_names')
+              I18n.t('services.sammple.batch_import.duplicate_column_names')
       end
 
       unless @headers.include?(@sample_name_column)
         raise SampleFileImportError,
-              I18n.t('services.samples.metadata.import_file.missing_sample_id_column')
+              I18n.t('services.samples.batch_import.missing_header',
+                     header_title: @sample_name_column, header_desc: 'sample name')
       end
 
-      # TODO: check if we have a project puid header
-
-      # return if @headers.count { |header| header != @sample_name_column }.positive?
-
-      # raise SampleFileImportError,
-      #       I18n.t('services.samples.metadata.import_file.missing_metadata_column')
+      unless @headers.include?(@project_puid_column) # rubocop:disable Style/GuardClause
+        raise SampleFileImportError,
+              I18n.t('services.samples.batch_import.missing_header',
+                     header_title: @project_puid_column, header_desc: 'project puid')
+      end
     end
 
     def validate_file_rows
@@ -76,13 +76,13 @@ module Samples
       return unless first_row.compact.empty?
 
       raise SampleFileImportError,
-            I18n.t('services.samples.metadata.import_file.missing_metadata_row')
+            I18n.t('services.samples.batch_import.missing_data_row')
     end
 
     def validate_file
       if @file.nil?
         raise SampleFileImportError,
-              I18n.t('services.samples.metadata.import_file.empty_file')
+              I18n.t('services.samples.batch_import.empty_file')
       end
 
       extension = validate_file_extension
