@@ -1,0 +1,19 @@
+<%= form_with url: url, data: { turbo_frame: "metadata_templates_dropdown", turbo_stream: true }, method: :get do |f| %>
+  <input type="hidden" name="format" value="turbo_stream"/>
+  <%= f.hidden_field :metadata_template, value: metadata_template[:id] %>
+  <%= f.button type: :submit, class: "button button--state-default button--size-default", data: { 'dropdown-toggle': "dd-metadata_templates_dropdown", "dropdown-offset-skidding": 150, } do %>
+    <%= metadata_template[:name] %>
+    <%= viral_icon(name: "chevron_down", classes: "w-4 h-4 ml-2 flex-none") %>
+  <% end %>
+<% end %>
+<div
+  id="dd-metadata_templates_dropdown"
+  class="
+    z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44
+    dark:bg-gray-700
+  "
+>
+  <ul id="metadata_templates_dropdown">
+    <li>List of templates</li>
+  </ul>
+</div>

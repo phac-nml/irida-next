@@ -66,6 +66,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
           get :select
           post :list
           post :search
+          post :metadata_template
         end
         resources :attachments, module: :samples, only: %i[new create destroy] do
           scope module: :attachments, as: :attachments do

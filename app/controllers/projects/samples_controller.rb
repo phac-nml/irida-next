@@ -9,8 +9,8 @@ module Projects
 
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
-    before_action :query, only: %i[index search select]
-    before_action :metadata_templates, only: %i[index search select]
+    before_action :query, only: %i[index search select metadata_template]
+    before_action :current_metadata_template, only: %i[index metadata_template]
 
     def index
       @timestamp = DateTime.current
@@ -98,6 +98,16 @@ module Projects
       end
     end
 
+    def metadata_template
+      authorize! @project, to: :sample_listing?
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace('metadata_templates_button',
+                                                    partial: 'projects/samples/metadata_templates_button')
+        end
+      end
+    end
+
     private
 
     def sample
@@ -170,8 +180,21 @@ module Projects
       updated_params
     end
 
-    def metadata_templates
-      @metadata_templates = metadata_templates_for_namespace(namespace: @project.namespace)
+    def current_metadata_template
+      current_value = @search_params[:metadata_template] || 'none'
+
+      @metadata_template = if %w[none all].include?(current_value)
+                             {
+                               id: current_value,
+                               name: t("projects.metadata_templates.list.#{current_value}")
+                             }
+                           else
+                             template = MetadataTemplate.find_by(id: current_value)
+                             {
+                               id: template.id,
+                               name: template.name
+                             }
+                           end
     end
   end
 end

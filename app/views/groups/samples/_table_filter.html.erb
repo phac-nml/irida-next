@@ -35,3 +35,6 @@
   ) %>
   <%= f.submit hidden: true %>
 <% end %>
+<%= form_with url: list_group_metadata_templates_url(@group), data: { turbo_frame: "metadata_templates", turbo_stream: true }, method: :get do |f| %>
+  <%= f.submit "BUTTON" %>
+<% end %>

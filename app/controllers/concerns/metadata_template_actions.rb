@@ -8,6 +8,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
     before_action proc { namespace }
     before_action proc { metadata_template }, only: %i[destroy edit show update]
     before_action proc { metadata_template_fields }, only: %i[create new edit update]
+    before_action proc { metadata_templates }, only: %i[list]
   end
 
   def index
@@ -104,6 +105,22 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
+  def list
+    default_values = %w[none all]
+    @name = if default_values.include?(params[:metadata_template])
+              I18n.t("projects.metadata_templates.list.#{params[:metadata_template]}")
+            else
+              MetadataTemplate.find(params[:metadata_template]).name
+            end
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace('metadata_templates_dropdown',
+                                                  partial: 'projects/metadata_templates/list')
+      end
+    end
+  end
+
   protected
 
   def metadata_templates_path
@@ -111,6 +128,12 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   end
 
   private
+
+  def metadata_templates
+    @metadata_templates = authorized_scope(MetadataTemplate, type: :relation,
+                                                             scope_options: { namespace: @namespace,
+                                                                              include_ancestral_templates: true })
+  end
 
   def load_metadata_templates
     authorized_scope(MetadataTemplate, type: :relation, scope_options: { namespace: @namespace })
