@@ -536,6 +536,6 @@ group_metadata:
   path: group-metadata
   description: Group Metadata description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
-  metadata_summary: { "float_example": 3, "integer_example": 3 }
+  metadata_summary: { "example_date": 3, "example_float": 3, "example_integer": 3 }
   puid: INXT_GRP_AAAAAAAACO
   samples_count: 3

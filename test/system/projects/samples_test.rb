@@ -2314,7 +2314,7 @@ module Projects
       ### actions and VERIFY END ###
     end
 
-    test 'filter samples with advanced search using a float type' do
+    test 'filter samples with advanced search using between dates' do
       ### SETUP START ###
       user = users(:metadata_doe)
       login_as user
@@ -2340,9 +2340,18 @@ module Projects
         assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
         within all("div[data-advanced-search-target='groupsContainer']")[0] do
           within all("div[data-advanced-search-target='conditionsContainer']")[0] do
-            find("select[name$='[field]']").find("option[value='metadata.float_example']").select_option
+            find("select[name$='[field]']").find("option[value='metadata.example_date']").select_option
             find("select[name$='[operator]']").find("option[value='>=']").select_option
-            find("input[name$='[value]']").fill_in with: sample63.metadata['float_example']
+            find("input[name$='[value]']").fill_in with: (DateTime.strptime(sample62.metadata['example_date'],
+                                                                            '%Y-%m-%d') - 1.day).strftime('%Y-%m-%d')
+          end
+          click_button I18n.t(:'advanced_search_component.add_condition_button')
+          assert_selector "div[data-advanced-search-target='conditionsContainer']", count: 2
+          within all("div[data-advanced-search-target='conditionsContainer']")[1] do
+            find("select[name$='[field]']").find("option[value='metadata.example_date']").select_option
+            find("select[name$='[operator]']").find("option[value='<=']").select_option
+            find("input[name$='[value]']").fill_in with: (DateTime.strptime(sample62.metadata['example_date'],
+                                                                            '%Y-%m-%d') + 1.day).strftime('%Y-%m-%d')
           end
         end
         click_button I18n.t(:'advanced_search_component.apply_filter_button')
@@ -2351,9 +2360,137 @@ module Projects
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 1
         assert_no_selector "tr[id='#{sample61.id}']"
-        assert_no_selector "tr[id='#{sample62.id}']"
-        # sample63 found
+        assert_no_selector "tr[id='#{sample63.id}']"
+        # sample62 found
+        assert_selector "tr[id='#{sample62.id}']"
+      end
+
+      click_button I18n.t(:'advanced_search_component.title')
+      within '#advanced-search-dialog' do
+        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        click_button I18n.t(:'advanced_search_component.clear_filter_button')
+      end
+
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 3
+        assert_selector "tr[id='#{sample61.id}']"
+        assert_selector "tr[id='#{sample62.id}']"
         assert_selector "tr[id='#{sample63.id}']"
+      end
+      ### actions and VERIFY END ###
+    end
+
+    test 'filter samples with advanced search using between floats' do
+      ### SETUP START ###
+      user = users(:metadata_doe)
+      login_as user
+      sample61 = samples(:sample61)
+      sample62 = samples(:sample62)
+      sample63 = samples(:sample63)
+      project = projects(:projectMetadata)
+      namespace = groups(:group_metadata)
+      visit namespace_project_samples_url(namespace, project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: user.locale))
+      within '#samples-table table tbody' do
+        assert_selector "tr[id='#{sample61.id}']"
+        assert_selector "tr[id='#{sample62.id}']"
+        assert_selector "tr[id='#{sample63.id}']"
+      end
+      ### SETUP END ###
+
+      ### actions and VERIFY START ###
+      click_button I18n.t(:'advanced_search_component.title')
+      within '#advanced-search-dialog' do
+        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        within all("div[data-advanced-search-target='groupsContainer']")[0] do
+          within all("div[data-advanced-search-target='conditionsContainer']")[0] do
+            find("select[name$='[field]']").find("option[value='metadata.example_float']").select_option
+            find("select[name$='[operator]']").find("option[value='>=']").select_option
+            find("input[name$='[value]']").fill_in with: sample62.metadata['example_float'].to_f - 0.1
+          end
+          click_button I18n.t(:'advanced_search_component.add_condition_button')
+          assert_selector "div[data-advanced-search-target='conditionsContainer']", count: 2
+          within all("div[data-advanced-search-target='conditionsContainer']")[1] do
+            find("select[name$='[field]']").find("option[value='metadata.example_float']").select_option
+            find("select[name$='[operator]']").find("option[value='<=']").select_option
+            find("input[name$='[value]']").fill_in with: sample62.metadata['example_float'].to_f + 0.1
+          end
+        end
+        click_button I18n.t(:'advanced_search_component.apply_filter_button')
+      end
+
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 1
+        assert_no_selector "tr[id='#{sample61.id}']"
+        assert_no_selector "tr[id='#{sample63.id}']"
+        # sample62 found
+        assert_selector "tr[id='#{sample62.id}']"
+      end
+
+      click_button I18n.t(:'advanced_search_component.title')
+      within '#advanced-search-dialog' do
+        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        click_button I18n.t(:'advanced_search_component.clear_filter_button')
+      end
+
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 3
+        assert_selector "tr[id='#{sample61.id}']"
+        assert_selector "tr[id='#{sample62.id}']"
+        assert_selector "tr[id='#{sample63.id}']"
+      end
+      ### actions and VERIFY END ###
+    end
+
+    test 'filter samples with advanced search using between integers' do
+      ### SETUP START ###
+      user = users(:metadata_doe)
+      login_as user
+      sample61 = samples(:sample61)
+      sample62 = samples(:sample62)
+      sample63 = samples(:sample63)
+      project = projects(:projectMetadata)
+      namespace = groups(:group_metadata)
+      visit namespace_project_samples_url(namespace, project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: user.locale))
+      within '#samples-table table tbody' do
+        assert_selector "tr[id='#{sample61.id}']"
+        assert_selector "tr[id='#{sample62.id}']"
+        assert_selector "tr[id='#{sample63.id}']"
+      end
+      ### SETUP END ###
+
+      ### actions and VERIFY START ###
+      click_button I18n.t(:'advanced_search_component.title')
+      within '#advanced-search-dialog' do
+        assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
+        within all("div[data-advanced-search-target='groupsContainer']")[0] do
+          within all("div[data-advanced-search-target='conditionsContainer']")[0] do
+            find("select[name$='[field]']").find("option[value='metadata.example_integer']").select_option
+            find("select[name$='[operator]']").find("option[value='>=']").select_option
+            find("input[name$='[value]']").fill_in with: sample62.metadata['example_integer'].to_i - 1
+          end
+          click_button I18n.t(:'advanced_search_component.add_condition_button')
+          assert_selector "div[data-advanced-search-target='conditionsContainer']", count: 2
+          within all("div[data-advanced-search-target='conditionsContainer']")[1] do
+            find("select[name$='[field]']").find("option[value='metadata.example_integer']").select_option
+            find("select[name$='[operator]']").find("option[value='<=']").select_option
+            find("input[name$='[value]']").fill_in with: sample62.metadata['example_integer'].to_i + 1
+          end
+        end
+        click_button I18n.t(:'advanced_search_component.apply_filter_button')
+      end
+
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 1
+        assert_no_selector "tr[id='#{sample61.id}']"
+        assert_no_selector "tr[id='#{sample63.id}']"
+        # sample62 found
+        assert_selector "tr[id='#{sample62.id}']"
       end
 
       click_button I18n.t(:'advanced_search_component.title')
