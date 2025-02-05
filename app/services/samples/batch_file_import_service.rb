@@ -7,15 +7,16 @@ module Samples
   class BatchFileImportService < BaseService
     SampleFileImportError = Class.new(StandardError)
 
-    def initialize(namespace, user = nil, params = {})
+    def initialize(namespace, user = nil, blob_id = nil, params = {})
       super(user, params)
       @namespace = namespace
-      @file = params[:file]
+      @file = ActiveStorage::Blob.find(blob_id)
       @sample_name_column = params[:sample_name_column]
       @project_puid_column = params[:project_puid_column]
       @sample_description_column = params[:sample_description_column]
       @spreadsheet = nil
       @headers = nil
+      @temp_import_file = Tempfile.new
     end
 
     def execute
@@ -41,7 +42,7 @@ module Samples
     end
 
     def validate_file_extension
-      file_extension = File.extname(@file).downcase
+      file_extension = File.extname(@file.filename.to_s).downcase
 
       return file_extension if %w[.csv .tsv .xls .xlsx].include?(file_extension)
 
@@ -86,11 +87,11 @@ module Samples
 
       extension = validate_file_extension
 
-      @spreadsheet = if extension.eql? '.tsv'
-                       Roo::CSV.new(@file, csv_options: { col_sep: "\t" })
-                     else
-                       Roo::Spreadsheet.open(@file)
-                     end
+      # @spreadsheet = if extension.eql? '.tsv'
+      #                  Roo::CSV.new(@file, csv_options: { col_sep: "\t" })
+      #                else
+      #                  Roo::Spreadsheet.open(@file)
+      #                end
 
       # # filter for ',' and '\t' to skip empty lines with column seperators
       # empty_row_regex = /^(?:,*\s*)+$/
@@ -102,12 +103,31 @@ module Samples
       #                 else
       #                   Roo::Spreadsheet.open(@file)
       #                 end
+      #
+
+      download_batch_import_file(extension)
 
       @headers = @spreadsheet.row(1).compact
 
       validate_file_headers
 
       validate_file_rows
+    end
+
+    def download_batch_import_file(extension)
+      begin
+        @temp_import_file.binmode
+        @file.download do |chunk|
+          @temp_import_file.write(chunk)
+        end
+      ensure
+        @temp_import_file.close
+      end
+      @spreadsheet = if extension.eql? '.tsv'
+                       Roo::CSV.new(@temp_import_file, extension:, csv_options: { col_sep: "\t" })
+                     else
+                       Roo::Spreadsheet.open(@temp_import_file.path, extension:)
+                     end
     end
 
     def perform_file_import
@@ -129,10 +149,18 @@ module Samples
         project = Namespaces::ProjectNamespace.find_by(puid: project_puid)&.project
 
         response[sample_name] = process_sample_row(sample_name, project, description)
+        cleanup_files
+        response
       rescue ActiveRecord::RecordNotFound
         project.errors.add(:sample, error_message(sample_name))
       end
       response
+    end
+
+    def cleanup_files
+      # delete the blob and temporary file as we no longer require them
+      @file.purge
+      @temp_import_file.unlink
     end
 
     def error_message(sample_id) # TODO: remove
