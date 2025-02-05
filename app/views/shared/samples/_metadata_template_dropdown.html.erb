@@ -18,8 +18,11 @@
             dark:hover:text-white dark:hover:bg-slate-700",
     data: {
       'dropdown-toggle': "dd-metadata_templates_dropdown",
-      "dropdown-offset-skidding": 150,
+      "dropdown-offset-skidding": 220,
     } do %>
+    <div class="mr-2 text-sm font-bold uppercase">
+      Metadata Templates:
+    </div>
     <%= metadata_template[:name] %>
     <%= viral_icon(name: "chevron_down", classes: "w-4 h-4 ml-2 flex-none") %>
   <% end %>
@@ -32,6 +35,8 @@
   "
 >
   <ul id="metadata_templates_dropdown">
-    <li>List of templates</li>
+    <li>
+      <%= render SpinnerComponent.new(message: "Loading metadata templates...") %>
+    </li>
   </ul>
 </div>
