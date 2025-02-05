@@ -16,7 +16,53 @@ module Nextflow
       extract_properties(schema)
     end
 
+    def samples_workflow_executions_attributes
+      samples.each_with_index.to_h do |sample, index|
+        [index, samples_workflow_execution_attributes(sample)]
+      end
+    end
+
     private
+
+    def samples_workflow_execution_attributes(sample)
+      {
+        'sample_id' => sample.id,
+        'samplesheet_params' => sample_samplesheet_params(sample)
+      }
+    end
+
+    def sample_samplesheet_params(sample) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength
+      @properties.to_h do |name, property|
+        case property['cell_type']
+        when 'sample_cell'
+          [name, { form_value: sample.puid }]
+        when 'sample_name_cell'
+          [name, { form_value: sample.name }]
+        when 'fastq_cell'
+          [name,
+           file_samplesheet_values(sample.attachments.empty? ? {} : sample.most_recent_fastq_file(name,
+                                                                                                  property['pattern']))]
+        when 'file_cell'
+          [name,
+           file_samplesheet_values(sample.most_recent_other_file(property['autopopulate'], property['pattern']))]
+        when 'metadata_cell'
+          [name, metadata_samplesheet_values(sample, name)]
+        when 'dropdown_cell' || 'input_cell'
+          [name, { form_value: '' }]
+        end
+      end
+    end
+
+    def file_samplesheet_values(file)
+      { form_value: file.empty? ? '' : file[:global_id],
+        filename: file.empty? ? I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file') : file[:filename],
+        attachment_id: file.empty? ? '' : file[:id] }
+    end
+
+    def metadata_samplesheet_values(sample, name)
+      metadata = sample.metadata.fetch(name, '')
+      { form_value: metadata.empty? ? '' : metadata }
+    end
 
     def extract_properties(schema)
       @properties = schema['items']['properties']

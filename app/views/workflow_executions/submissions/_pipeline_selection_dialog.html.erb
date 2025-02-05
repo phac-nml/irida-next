@@ -1,16 +1,16 @@
 <%= viral_dialog(open: true) do |dialog| %>
   <%= dialog.with_header(
-    title: t(:"workflow_executions.submissions.pipeline_selection.title")
+    title: t(:"workflow_executions.submissions.pipeline_selection.title"),
   ) %>
   <%= dialog.with_section(data: { controller: "workflow-selection", "workflow-selection-selection-outlet": "#samples-table" }) do %>
     <%= form_with url: workflow_executions_submissions_path, data: { turbo_stream: true, "workflow-selection-target": "form" } do |form| %>
       <%= form.hidden_field :workflow_name,
                         data: {
-                          "workflow-selection-target": "workflowName"
+                          "workflow-selection-target": "workflowName",
                         } %>
       <%= form.hidden_field :workflow_version,
                         data: {
-                          "workflow-selection-target": "workflowVersion"
+                          "workflow-selection-target": "workflowVersion",
                         } %>
       <%= form.hidden_field :namespace_id, value: @namespace_id %>
       <div
@@ -30,50 +30,19 @@
               data-workflow-selection-namespaceId-param="<%= @namespace_id %>"
               data-action="click->workflow-selection#selectWorkflow"
             >
-              <span class="ws-loading hidden flex items-center p-4 space-x-4">
-                <span class="flex-shrink-0">
-                  <%= viral_icon(name: :loading, classes: "animate-spin text-primary-500") %>
-                </span>
-                <span class="flex-1 min-w-0 text-left">
-                  <span class="flex items-center space-x-2">
-                    <span class=" font-medium text-slate-900 truncate dark:text-white ">
-                      <%= workflow.name %>
-                    </span>
-                    <%= viral_pill(text: workflow.version, color: :primary) %>
-                  </span>
-                  <span
-                    class="
-                      ws-loading-text
-                      text-sm
-                      font-normal
-                      truncate
-                      text-slate-500
-                      dark:text-slate-400
-                      text-wrap
-                      mr-4
-                    "
-                  >
-                    <%= t(:"workflow_executions.submissions.pipeline_selection.loading") %>
-                  </span>
-                </span>
-              </span>
               <span class="ws-default flex items-center p-4 space-x-4 hover:bg-primary-600">
                 <span class="flex-shrink-0">
                   <%= viral_icon(
                     name: :rocket_launch,
                     classes:
-                      "ws-default dark:text-slate-500 group-hover:text-slate-100 group-hover:-rotate-45 transition-rotate-45 group-hover:duration-500 group-hover:ease-in-out"
+                      "ws-default dark:text-slate-500 group-hover:text-slate-100 group-hover:-rotate-45 transition-rotate-45 group-hover:duration-500 group-hover:ease-in-out",
                   ) %>
                 </span>
                 <span class="flex-1 min-w-0 text-left group-hover:stroke-slate-100">
                   <span class="flex items-center space-x-2">
                     <span
                       class="
-                        font-medium
-                        text-slate-900
-                        truncate
-                        dark:text-white
-                        group-hover:text-slate-100
+                        font-medium text-slate-900 truncate dark:text-white group-hover:text-slate-100
                       "
                     >
                       <%= workflow.name %>
@@ -82,11 +51,7 @@
                   </span>
                   <span
                     class="
-                      text-sm
-                      font-normal
-                      truncate
-                      text-slate-500
-                      dark:text-slate-400
+                      text-sm font-normal truncate text-slate-500 dark:text-slate-400
                       group-hover:text-slate-200
                     "
                   >
@@ -98,6 +63,11 @@
           </li>
         <% end %>
       </ul>
+      <span id="pipeline-spinner" class="hidden flex items-center p-4 space-x-4">
+        <%= render SpinnerComponent.new(
+          message: t("workflow_executions.submissions.pipeline_selection.loading_html"),
+        ) %>
+      </span>
     <% end %>
   <% end %>
 <% end %>

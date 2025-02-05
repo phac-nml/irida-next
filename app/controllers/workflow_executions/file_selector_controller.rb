@@ -30,30 +30,27 @@ module WorkflowExecutions
         :index,
         :property,
         :selected_id,
-        :file_type,
-        required_properties: [],
-        file_selector_arguments: [
-          :pattern, { workflow_params: %i[name version] }
-        ]
+        :pattern,
+        required_properties: []
       )
     end
 
-    def listing_attachments # rubocop:disable Metrics/AbcSize
-      case file_selector_params['file_type']
-      when 'fastq'
-        @listing_attachments = @attachable.samplesheet_fastq_files(
-          file_selector_params['property'], file_selector_params['file_selector_arguments']['workflow_params']
-        )
-      when 'other'
-        @listing_attachments = if file_selector_params['file_selector_arguments']['pattern']
+    def listing_attachments
+      @listing_attachments = case file_selector_params['property']
+                             when 'fastq_1', 'fastq_2'
+                               @attachable.samplesheet_fastq_files(
+                                 file_selector_params['property'], file_selector_params['pattern']
+                               )
+                             else
+                               if file_selector_params['pattern']
                                  @attachable.filter_files_by_pattern(
                                    @attachable.sorted_files[:singles] || [],
-                                   file_selector_params['file_selector_arguments']['pattern']
+                                   file_selector_params['pattern']
                                  )
                                else
-                                 sample.sorted_files[:singles] || []
+                                 @attachable.sorted_files[:singles] || []
                                end
-      end
+                             end
     end
 
     def attachable
@@ -67,42 +64,36 @@ module WorkflowExecutions
     end
 
     def attachments
-      @attachment_params = {}
-      return if params[:attachment_id] == 'no_attachment'
+      @attachments_params = {
+        index: file_selector_params[:index],
+        files: []
+      }
+      property = file_selector_params['property']
+      if params[:attachment_id] == 'no_attachment'
+        add_attachment_to_params(nil, property)
+      else
+        attachment = Attachment.find(params[:attachment_id])
+        add_attachment_to_params(attachment, property)
 
-      attachment = Attachment.find(params[:attachment_id])
-      @attachment_params = { filename: attachment.file.filename.to_s,
-                             global_id: attachment.to_global_id,
-                             id: attachment.id,
-                             byte_size: attachment.byte_size,
-                             created_at: attachment.created_at,
-                             metadata: attachment.metadata }
-      return unless file_selector_params['property'] == 'fastq_1' || file_selector_params['property'] == 'fastq_2'
+        return unless %w[fastq_1 fastq_2].include?(property)
 
-      assign_associated_attachment_params(attachment)
+        associated_property = property == 'fastq_1' ? 'fastq_2' : 'fastq_1'
+        add_attachment_to_params(attachment.associated_attachment, associated_property)
+      end
     end
 
-    def assign_associated_attachment_params(attachment) # rubocop:disable Metrics/MethodLength
-      @associated_attachment_params = {}
-
-      @associated_attachment_params[:property] = file_selector_params[:property] == 'fastq_1' ? 'fastq_2' : 'fastq_1'
-      @associated_attachment_params[:file_selector_arguments] = {
-        workflow_params: file_selector_params['file_selector_arguments']['workflow_params']
-      }
-
-      if attachment.associated_attachment
-        associated_attachment = attachment.associated_attachment
-        @associated_attachment_params[:file] = {
-          filename: associated_attachment.filename.to_s,
-          global_id: associated_attachment.to_global_id,
-          id: associated_attachment.id,
-          byte_size: associated_attachment.byte_size,
-          created_at: associated_attachment.created_at,
-          metadata: associated_attachment.metadata
-        }
-      else
-        @associated_attachment_params[:file] = {}
-      end
+    def add_attachment_to_params(attachment, property)
+      @attachments_params[:files] << if attachment
+                                       { filename: attachment.file.filename.to_s,
+                                         global_id: attachment.to_global_id,
+                                         id: attachment.id,
+                                         property: }
+                                     else
+                                       { filename: '',
+                                         global_id: '',
+                                         id: '',
+                                         property: }
+                                     end
     end
   end
 end

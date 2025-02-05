@@ -12,7 +12,7 @@
     <% else %>
       <%= form_with id: 'file_selector_form', url: workflow_executions_file_selector_index_path(file_selector: file_selector_params), method: :post do |form| %>
         <input type="hidden" name="format" value="turbo_stream"/>
-        <div class="table-container flex flex-col shrink min-h-0">
+        <div class="table-container flex flex-col shrink min-h-0 mb-2">
           <div class="overflow-auto scrollbar">
             <table
               class='
@@ -94,7 +94,7 @@
                     <td class="px-3 py-3 sticky left-0 bg-white dark:bg-slate-800">
                       <%= form.radio_button "attachment_id",
                                         "no_attachment",
-                                        checked: file_selector_params["selected_id"].nil?,
+                                        checked: file_selector_params["selected_id"].empty?,
                                         class:
                                           "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-400" %>
 

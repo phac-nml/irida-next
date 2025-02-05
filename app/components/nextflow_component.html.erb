@@ -1,6 +1,14 @@
 <div
   data-controller="nextflow--samplesheet"
-  data-nextflow--samplesheet-attachments-error-value="<%= t(".attachments_error") %>"
+  data-nextflow--samplesheet-data-missing-error-value="<%= t(".data_missing_error") %>"
+  data-nextflow--samplesheet-submission-error-value="<%= t(".submission_error") %>"
+  data-nextflow--samplesheet-url-value="<%= url %>"
+  data-nextflow--samplesheet-workflow-value="<%= {name: @workflow.name, version: @workflow.version }.to_json%>"
+  data-nextflow--samplesheet-no-selected-file-value="<%= t("nextflow.samplesheet.file_cell_component.no_selected_file")%>"
+  data-action="
+    nextflow--file:sendFileData->nextflow--samplesheet#updateFileData
+    nextflow--metadata:sendMetadata->nextflow--samplesheet#updateMetadata
+  "
 >
   <h1
     class="
@@ -115,7 +123,11 @@
     <button
       class="button button--state-primary button--size-default"
       data-nextflow--samplesheet-target="submit"
-      data-action="click->nextflow--samplesheet#validateForm"
+      <% if @samples.empty? %>
+      type="submit"
+      <% else %>
+      data-action="click->nextflow--samplesheet#submitSamplesheet"
+      <% end %>
     >
       <% if instance.nil? %>
         <%= t(:"workflow_executions.submissions.create.submit") %>
@@ -124,4 +136,10 @@
       <% end %>
     </button>
   <% end %>
+  <span
+    class="hidden flex items-center p-4 space-x-4"
+    data-nextflow--samplesheet-target="spinner"
+  >
+    <%= render SpinnerComponent.new(message: t(".processing_request")) %>
+  </span>
 </div>
