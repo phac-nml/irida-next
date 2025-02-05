@@ -108,8 +108,21 @@ module Groups
       :"#{controller_name}_#{group.id}_search_params"
     end
 
-    def metadata_templates
-      @metadata_templates = metadata_templates_for_namespace(namespace: @group)
+    def current_metadata_template
+      current_value = @search_params[:metadata_template] || 'none'
+
+      @metadata_template = if %w[none all].include?(current_value)
+                             {
+                               id: current_value,
+                               name: t("shared.samples.metadata_templates.fields.#{current_value}")
+                             }
+                           else
+                             template = MetadataTemplate.find_by(id: current_value)
+                             {
+                               id: template.id,
+                               name: template.name
+                             }
+                           end
     end
   end
 end

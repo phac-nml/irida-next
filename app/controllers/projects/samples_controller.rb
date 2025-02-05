@@ -178,7 +178,7 @@ module Projects
       @metadata_template = if %w[none all].include?(current_value)
                              {
                                id: current_value,
-                               name: t("shared.metadata_templates.fields.#{current_value}")
+                               name: t("shared.samples.metadata_templates.fields.#{current_value}")
                              }
                            else
                              template = MetadataTemplate.find_by(id: current_value)
