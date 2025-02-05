@@ -106,19 +106,9 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   end
 
   def list
-    default_values = %w[none all]
-    @name = if default_values.include?(params[:metadata_template])
-              I18n.t("shared.samples.metadata_templates.fields.#{params[:metadata_template]}")
-            else
-              MetadataTemplate.find(params[:metadata_template]).name
-            end
-    @limit = params[:limit]
-    @page = params[:page]
-    @url = if @namespace.is_a?(Group)
-             search_group_samples_url
-           else
-             search_namespace_project_samples_url
-           end
+    set_template_name
+    set_pagination_params
+    set_search_url
 
     respond_to do |format|
       format.turbo_stream do
@@ -176,5 +166,23 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
 
   def set_default_sort
     @q.sorts = 'name asc' if @q.sorts.empty?
+  end
+
+  def set_template_name
+    default_values = %w[none all]
+    @name = if default_values.include?(params[:metadata_template])
+              I18n.t("shared.samples.metadata_templates.fields.#{params[:metadata_template]}")
+            else
+              MetadataTemplate.find(params[:metadata_template]).name
+            end
+  end
+
+  def set_pagination_params
+    @limit = params[:limit]
+    @page = params[:page]
+  end
+
+  def set_search_url
+    @url = @namespace.is_a?(Group) ? search_group_samples_url : search_namespace_project_samples_url
   end
 end

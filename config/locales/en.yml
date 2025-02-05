@@ -1815,8 +1815,11 @@ en:
             ok_button: OK
       metadata_templates:
         fields:
-          none: None
+          label: Metadata Fields
+          none: No Fields
           all: All Fields
+        templates:
+          label: Metadata Templates
   time:
     formats:
       abbreviated: "%a %b%e %Y %H:%M"
