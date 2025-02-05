@@ -120,7 +120,9 @@ module MetadataTemplates
         MetadataTemplates::CreateService.new(@user, @namespace, valid_params).execute
         assert @namespace
           .errors
-          .full_messages.to_sentence.include?(I18n.t('activerecord.errors.models.metadata_template.attributes.name.taken'))
+          .full_messages.to_sentence.include?(
+            I18n.t('activerecord.errors.models.metadata_template.attributes.name.taken')
+          )
       end
     end
   end
