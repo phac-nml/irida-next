@@ -36,6 +36,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
       conditions ||= []
       group_attributes.each_value do |conditions_attributes|
         conditions_attributes.each_value do |condition_params|
+          condition_params[:value] = condition_params[:value].compact_blank if condition_params[:value].is_a?(Array)
           conditions.push(Sample::SearchCondition.new(condition_params))
         end
       end
@@ -195,7 +196,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
           )
       end
     when 'contains'
-      scope.where(node.matches("%#{condition.value}"))
+      scope.where(node.matches("%#{condition.value}%"))
     when 'exists'
       scope.where(node.not_eq(nil))
     when 'not_exists'
