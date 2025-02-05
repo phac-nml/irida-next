@@ -117,8 +117,8 @@ module MetadataTemplates
       MetadataTemplates::CreateService.new(@user, @namespace, valid_params).execute
 
       assert_no_difference -> { MetadataTemplate.count } do
-        MetadataTemplates::CreateService.new(@user, @namespace, valid_params).execute
-        assert @namespace
+        new_template = MetadataTemplates::CreateService.new(@user, @namespace, valid_params).execute
+        assert new_template
           .errors
           .full_messages.to_sentence.include?(
             I18n.t('activerecord.errors.models.metadata_template.attributes.name.taken')
