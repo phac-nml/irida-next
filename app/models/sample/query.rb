@@ -70,7 +70,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
   private
 
   def pagy_results(limit, page)
-    if advanced_query && !ENV['RANSACK_ONLY_SEARCH'].present?
+    if advanced_query && ENV['RANSACK_ONLY_SEARCH'].blank?
       pagy_searchkick(searchkick_pagy_results, limit:, page:)
     else
       pagy(ransack_results, limit:, page:)
@@ -78,7 +78,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
   end
 
   def non_pagy_results
-    if advanced_query && !ENV['RANSACK_ONLY_SEARCH'].present?
+    if advanced_query && ENV['RANSACK_ONLY_SEARCH'].blank?
       searchkick_results
     else
       ransack_results
@@ -128,6 +128,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
              Sample.arel_table[condition.field]
            end
 
+    # TODO: Refactor each case into it's own method
     case condition.operator
     when '='
       if metadata_field || %w[name puid].include?(condition.field)
