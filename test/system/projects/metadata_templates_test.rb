@@ -179,15 +179,25 @@ module Projects
         end
 
         click_button I18n.t('viral.sortable_lists_component.add_all')
-        find('input#metadata_template_name').fill_in with: 'Newest template'
+        find('input#metadata_template_name').fill_in with: 'Project Template011'
         click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
       end
 
       within %(div[data-controller='viral--flash']) do
         assert_text I18n.t(
           :'concerns.metadata_template_actions.create.success',
-          template_name: 'Newest template'
+          template_name: 'Project Template011'
         )
+      end
+
+      assert_selector 'div#spinner'
+      assert_text I18n.t('metadata_templates.table_component.spinner_message')
+      assert_no_selector 'div#spinner'
+
+      table_row = find(:table_row, ['Project Template011'])
+
+      within(table_row) do
+        assert_text 'Project Template011'
       end
     end
 
@@ -227,6 +237,8 @@ module Projects
       end
 
       assert_no_selector "div[data-controller='viral--flash']"
+      assert_no_selector 'div#spinner'
+      assert_no_text I18n.t('metadata_templates.table_component.spinner_message')
     end
 
     test 'cannot create a template with no template name entered' do
@@ -267,6 +279,8 @@ module Projects
       end
 
       assert_no_selector "div[data-controller='viral--flash']"
+      assert_no_selector 'div#spinner'
+      assert_no_text I18n.t('metadata_templates.table_component.spinner_message')
     end
 
     test 'move fields between available and selected lists' do

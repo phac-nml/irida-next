@@ -1005,6 +1005,7 @@ fr:
       remove_aria_label: Delete metadata template %{template_name}
       remove_button: Delete
       remove_confirmation: Are you sure you want to delete metadata template %{template_name}?
+      spinner_message: Loading metadata templates...
       updated_at: Last Modified
   models:
     sample:
