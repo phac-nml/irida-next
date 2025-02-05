@@ -1,21 +1,6 @@
-<%= turbo_stream.update "metadata_template_modal",
-                    partial: "shared/metadata_templates/new_template_dialog",
-                    locals: {
-                      open: @new_template.errors.any? ? true : false,
-                      create_path: group_metadata_templates_path,
-                    } %>
-
-<% if @new_template.persisted? %>
-  <%= turbo_stream.append "flashes" do %>
-    <%= viral_flash(type:, data: message) %>
-  <% end %>
-  <%= turbo_stream.append "metadata-templates-table" do %>
-    <%= render SpinnerComponent.new(
-      message: t("metadata_templates.table_component.spinner_message"),
-    ) %>
-  <% end %>
-  <turbo-stream action="refresh"></turbo-stream>
-<% else %>
-  <%= turbo_stream.update "metadata_template_error_alert",
-                      viral_alert(type:, message:, classes: "mb-4") %>
-<% end %>
+<%= render partial: "shared/metadata_templates/create",
+locals: {
+  create_path: group_metadata_templates_path,
+  type: type,
+  message: message,
+} %>
