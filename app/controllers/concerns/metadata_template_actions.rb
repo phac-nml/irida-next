@@ -7,6 +7,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   included do
     before_action proc { namespace }
     before_action proc { metadata_template }, only: %i[destroy edit show update]
+    before_action proc { metadata_template_fields }, only: %i[create new]
   end
 
   def index
@@ -112,6 +113,15 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
 
   def metadata_template
     @metadata_template = MetadataTemplate.find_by(id: params[:id], namespace: @namespace)
+  end
+
+  def metadata_template_fields
+    @current_template_fields = if params.key?(:metadata_template) && metadata_template_params.key?(:fields)
+                                 metadata_template_params[:fields]
+                               else
+                                 @metadata_template.nil? ? [] : @metadata_template.fields
+                               end
+    @available_metadata_fields = @namespace.metadata_fields.sort_by(&:downcase) - @current_template_fields
   end
 
   def render_success(message)

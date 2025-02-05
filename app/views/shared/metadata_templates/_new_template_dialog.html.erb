@@ -18,10 +18,7 @@
             <%= sortable_lists.with_list(
               id: "available",
               title: t("metadata_templates.new_template_dialog.available"),
-              list_items:
-                @namespace.metadata_fields.sort_by do |metadata_field|
-                  metadata_field.downcase
-                end,
+              list_items: @available_metadata_fields,
               group: "metadata_selection",
               container_classes: "block mb-1 pr-2 text-sm font-medium",
               list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
@@ -29,6 +26,7 @@
             <%= sortable_lists.with_list(
               id: "selected",
               title: t("metadata_templates.new_template_dialog.selected"),
+              list_items: @current_template_fields,
               group: "metadata_selection",
               container_classes: "block mb-1 text-sm font-medium",
               list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
@@ -39,11 +37,16 @@
             <div class="grid gap-4">
               <div class="form-field mt-2">
                 <%= form.label :name %>
-                <%= form.text_field :name, class: "form-control", required: true %>
+                <%= form.text_field :name,
+                                class: "form-control",
+                                required: true,
+                                value: @new_template&.name %>
               </div>
               <div class="form-field mt-2">
                 <%= form.label :description %>
-                <%= form.text_area :description, class: "form-control" %>
+                <%= form.text_area :description,
+                               class: "form-control",
+                               value: @new_template&.description %>
               </div>
               <div
                 class="hidden"
@@ -59,7 +62,7 @@
                             },
                             class:
                               "focus:outline-none text-sm text-white bg-primary-700 hover:bg-primary-800 focus:ring-0 rounded-md p-2 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 cursor-pointer",
-                            disabled: true %>
+                            disabled: !@current_template_fields.length.positive? %>
               </div>
             </div>
           <% end %>
