@@ -9,8 +9,8 @@ module Projects
 
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
-    before_action :query, only: %i[index search select metadata_template]
-    before_action :current_metadata_template, only: %i[index metadata_template]
+    before_action :query, only: %i[index search select]
+    before_action :current_metadata_template, only: %i[index]
 
     def index
       @timestamp = DateTime.current
@@ -176,7 +176,7 @@ module Projects
       @metadata_template = if %w[none all].include?(current_value)
                              {
                                id: current_value,
-                               name: t("shared.metadata_templates.fields.#{current_value}")
+                               name: t("shared.samples.metadata_templates.fields.#{current_value}")
                              }
                            else
                              template = MetadataTemplate.find_by(id: current_value)

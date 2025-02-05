@@ -3,7 +3,7 @@
   <input type="hidden" name="limit" value="<%= pagy&.limit %>"/>
   <input type="hidden" name="page" value="<%= pagy&.page %>"/>
   <%= f.hidden_field :metadata_template, value: metadata_template[:id] %>
-  <%= f.button type: :submit, class: "button button--state-default button--size-default", data: { 'dropdown-toggle': "dd-metadata_templates_dropdown", "dropdown-offset-skidding": 150, } do %>
+  <%= f.button type: :submit, class: "button button--state-default button--size-default ml-2", data: { 'dropdown-toggle': "dd-metadata_templates_dropdown", "dropdown-offset-skidding": 150, } do %>
     <%= metadata_template[:name] %>
     <%= viral_icon(name: "chevron_down", classes: "w-4 h-4 ml-2 flex-none") %>
   <% end %>

@@ -108,7 +108,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   def list
     default_values = %w[none all]
     @name = if default_values.include?(params[:metadata_template])
-              I18n.t("projects.metadata_templates.list.#{params[:metadata_template]}")
+              I18n.t("shared.samples.metadata_templates.fields.#{params[:metadata_template]}")
             else
               MetadataTemplate.find(params[:metadata_template]).name
             end
