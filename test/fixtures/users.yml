@@ -213,3 +213,10 @@ empty_doe:
   email: <%= "empty_doe@localhost" %>
   first_name: Empty
   last_name: Doe
+
+metadata_doe:
+  <<: *DEFAULTS
+  email: <%= "metadata_doe@localhost" %>
+  first_name: Metadata
+  last_name: Doe
+

@@ -622,3 +622,15 @@ group_jeff_member_user_bot_account:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_jeff, :uuid) %>
   access_level: <%= Member::AccessLevel::UPLOADER %>
   expires_at: <%= 20.days.from_now %>
+
+group_metadata_member_metadata_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_metadata, :uuid) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+project_metadata_member_metadata_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectMetadata_namespace, :uuid) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
