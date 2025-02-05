@@ -112,6 +112,8 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
             else
               MetadataTemplate.find(params[:metadata_template]).name
             end
+    @limit = params[:limit]
+    @page = params[:page]
 
     respond_to do |format|
       format.turbo_stream do
