@@ -4,30 +4,29 @@ require 'roo'
 
 module Samples
   # Service used to batch create samples via a file
-  class FileImportService < BaseService
+  class BatchFileImportService < BaseService
     SampleFileImportError = Class.new(StandardError)
 
-    # def initialize(namespace, user = nil, params = {})
-    def initialize(project, user = nil, params = {})
+    def initialize(namespace, user = nil, params = {})
       super(user, params)
-      @project = project
-      # @namespace = namespace
+      @namespace = namespace
       @file = params[:file]
       @sample_name_column = params[:sample_name_column]
-      @sample_description_column = params[:sample_description_column] # TODO: do somthing with this
+      @project_puid_column = params[:project_puid_column]
+      @sample_description_column = params[:sample_description_column]
       @spreadsheet = nil
       @headers = nil
     end
 
     def execute
-      authorize! @project.namespace, to: :update_sample_metadata?
+      authorize! @namespace, to: :update_sample_metadata?
 
       validate_sample_name_column
 
       validate_file
 
       perform_file_import
-    rescue Samples::FileImportService::SampleFileImportError => e
+    rescue Samples::BatchFileImportService::SampleFileImportError => e
       @namespace.errors.add(:base, e.message)
       {}
     end
@@ -93,6 +92,17 @@ module Samples
                        Roo::Spreadsheet.open(@file)
                      end
 
+      # # filter for ',' and '\t' to skip empty lines with column seperators
+      # empty_row_regex = /^(?:,*\s*)+$/
+      # @spreadsheet = if extension.eql? '.tsv'
+      #                   Roo::CSV.new(@file,
+      #                               csv_options: { skip_blanks: true, skip_lines: empty_row_regex, col_sep: "\t" })
+      #                 elsif extension.eql? '.csv'
+      #                   Roo::CSV.new(@file, csv_options: { skip_blanks: true, skip_lines: empty_row_regex })
+      #                 else
+      #                   Roo::Spreadsheet.open(@file)
+      #                 end
+
       @headers = @spreadsheet.row(1).compact
 
       validate_file_headers
@@ -109,13 +119,18 @@ module Samples
 
         # TODO: next when all data is nil (empty line)
 
+        # TODO: handle metadata
+
         sample_name = data[@sample_name_column]
+        project_puid = data[@project_puid_column]
+        description = data[@sample_description_column]
 
-        # TODO:  do work here
+        # TODO: catch exceptions here
+        project = Namespaces::ProjectNamespace.find_by(puid: project_puid)&.project
 
-        response[sample_name] = process_sample_row(sample_name, nil) # TODO
+        response[sample_name] = process_sample_row(sample_name, project, description)
       rescue ActiveRecord::RecordNotFound
-        @project.errors.add(:sample, error_message(sample_name))
+        project.errors.add(:sample, error_message(sample_name))
       end
       response
     end
@@ -128,9 +143,9 @@ module Samples
       end
     end
 
-    def process_sample_row(name, description)
+    def process_sample_row(name, project, description)
       sample_params = { name:, description: }
-      sample = Samples::CreateService.new(current_user, @project, sample_params).execute
+      sample = Samples::CreateService.new(current_user, project, sample_params).execute
 
       if sample.persisted?
         sample
