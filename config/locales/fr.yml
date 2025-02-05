@@ -987,10 +987,9 @@ fr:
     edit_template_dialog:
       available: Available
       description: Select the metadata fields for the template by moving the metadata fields from the available list to the selected list and vice versa. The template's fields ordering will be determined by the ordering of the selected list.
-      metadata: Metadata
       selected: Selected
-      update_button: Update
       title: Edit Metadata Template
+      update_button: Update
     new_template_dialog:
       available: Available
       description: Select the metadata fields for new template by moving the metadata fields from the available list to the selected list. The template's fields ordering will be determined by the ordering of the selected list.

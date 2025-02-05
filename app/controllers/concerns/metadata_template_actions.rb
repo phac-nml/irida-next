@@ -7,11 +7,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   included do
     before_action proc { namespace }
     before_action proc { metadata_template }, only: %i[destroy edit show update]
-<<<<<<< HEAD
-    before_action proc { metadata_template_fields }, only: %i[create new]
-=======
-    before_action proc { metadata_template_fields }, only: %i[edit update]
->>>>>>> bfad392e1 (Setup edit template ui)
+    before_action proc { metadata_template_fields }, only: %i[create new edit update]
   end
 
   def index
