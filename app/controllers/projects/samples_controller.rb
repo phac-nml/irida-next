@@ -98,16 +98,6 @@ module Projects
       end
     end
 
-    def metadata_template
-      authorize! @project, to: :sample_listing?
-      respond_to do |format|
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace('metadata_templates_button',
-                                                    partial: 'projects/samples/metadata_templates_button')
-        end
-      end
-    end
-
     private
 
     def sample
