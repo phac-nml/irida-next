@@ -14,22 +14,34 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
   test '#read?' do
     assert @policy.apply(:read?)
 
+    # shared workflow execution
+    # user is project member
     user = users(:ryan_doe)
-    policy = WorkflowExecutionPolicy.new(@workflow_execution, user:)
+    workflow_execution = workflow_executions(:workflow_execution_shared2)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
 
     assert policy.apply(:read?)
 
-    user = users(:project1_automation_bot)
+    # user is not project member
     user_incorrect_permissions = users(:micha_doe)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user: user_incorrect_permissions)
+
+    assert_not policy.apply(:read?)
+
+    # automated workflow execution
+    # user is project automation bot
+    user = users(:project1_automation_bot)
     workflow_execution = workflow_executions(:automated_workflow_execution)
     policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
 
     assert policy.apply(:read?)
 
+    # user is project creator
     policy = WorkflowExecutionPolicy.new(workflow_execution, user: @user)
 
     assert policy.apply(:read?)
 
+    # user with incorrect permissions
     policy = WorkflowExecutionPolicy.new(workflow_execution, user: user_incorrect_permissions)
 
     assert_not policy.apply(:read?)
@@ -48,15 +60,36 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
   test 'update?' do
     assert @policy.apply(:update?)
 
-    user = users(:james_doe)
+    # automated workflow execution
+    # user is ANALYST
     workflow_execution = workflow_executions(:automated_workflow_execution)
-    policy = WorkflowExecutionPolicy.new(workflow_execution, user: user)
+    user = users(:james_doe)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
 
     assert policy.apply(:update?)
 
+    # user is GUEST
     user = users(:ryan_doe)
-    workflow_execution = workflow_executions(:automated_workflow_execution)
-    policy = WorkflowExecutionPolicy.new(workflow_execution, user: user)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
+
+    assert_not policy.apply(:update?)
+
+    # shared workflow execution
+    # user is submitter
+    workflow_execution = workflow_executions(:workflow_execution_shared2)
+    user = users(:james_doe)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
+
+    assert policy.apply(:update?)
+
+    # user is member of project
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user: @user)
+
+    assert_not policy.apply(:update?)
+
+    # user is not member of project
+    user = users(:micha_doe)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
 
     assert_not policy.apply(:update?)
   end
@@ -64,15 +97,36 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
   test 'edit?' do
     assert @policy.apply(:edit?)
 
+    # automated workflow execution
+    # user is ANALYST
     user = users(:james_doe)
     workflow_execution = workflow_executions(:automated_workflow_execution)
-    policy = WorkflowExecutionPolicy.new(workflow_execution, user: user)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
 
     assert policy.apply(:edit?)
 
+    # user is GUEST
     user = users(:ryan_doe)
-    workflow_execution = workflow_executions(:automated_workflow_execution)
-    policy = WorkflowExecutionPolicy.new(workflow_execution, user: user)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
+
+    assert_not policy.apply(:edit?)
+
+    # shared workflow execution
+    # user is submitter
+    workflow_execution = workflow_executions(:workflow_execution_shared2)
+    user = users(:james_doe)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
+
+    assert policy.apply(:edit?)
+
+    # user is member of project
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user: @user)
+
+    assert_not policy.apply(:edit?)
+
+    # user is not member of project
+    user = users(:micha_doe)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
 
     assert_not policy.apply(:edit?)
   end
@@ -80,19 +134,41 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
   test '#cancel?' do
     assert @policy.apply(:cancel?)
 
+    # automated workflow execution
+    # user is project automation bot
     user = users(:project1_automation_bot)
     workflow_execution = workflow_executions(:automated_workflow_execution)
     policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
 
     assert policy.apply(:cancel?)
 
-    automated_workflow_execution = workflow_executions(:automated_workflow_execution)
-    policy = WorkflowExecutionPolicy.new(automated_workflow_execution, user: @user)
+    # user is project OWNER
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user: @user)
 
     assert policy.apply(:cancel?)
 
+    # user with incorrect permissions
     user_incorrect_permissions = users(:ryan_doe)
     policy = WorkflowExecutionPolicy.new(workflow_execution, user: user_incorrect_permissions)
+
+    assert_not policy.apply(:cancel?)
+
+    # shared workflow execution
+    # user is submitter
+    workflow_execution = workflow_executions(:workflow_execution_shared2)
+    user = users(:james_doe)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
+
+    assert policy.apply(:cancel?)
+
+    # user is member of project
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user: @user)
+
+    assert_not policy.apply(:cancel?)
+
+    # user is not member of project
+    user = users(:micha_doe)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
 
     assert_not policy.apply(:cancel?)
   end
@@ -100,6 +176,8 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
   test '#destroy?' do
     assert @policy.apply(:destroy?)
 
+    # automated workflow execution
+    # user is project automation bot
     user = users(:project1_automation_bot)
     user_incorrect_permissions = users(:ryan_doe)
     workflow_execution = workflow_executions(:automated_workflow_execution)
@@ -107,13 +185,34 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
 
     assert policy.apply(:destroy?)
 
+    # user is project OWNER
     policy = WorkflowExecutionPolicy.new(workflow_execution, user: @user)
 
     assert policy.apply(:destroy?)
 
+    # user with incorrect permissions
     policy = WorkflowExecutionPolicy.new(workflow_execution, user: user_incorrect_permissions)
 
     assert_not policy.apply(:destroy?)
+
+    # shared workflow execution
+    # user is submitter
+    workflow_execution = workflow_executions(:workflow_execution_shared2)
+    user = users(:james_doe)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
+
+    assert policy.apply(:cancel?)
+
+    # user is member of project
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user: @user)
+
+    assert_not policy.apply(:cancel?)
+
+    # user is not member of project
+    user = users(:micha_doe)
+    policy = WorkflowExecutionPolicy.new(workflow_execution, user:)
+
+    assert_not policy.apply(:cancel?)
   end
 
   test 'automated scope' do
