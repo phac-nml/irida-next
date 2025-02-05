@@ -59,8 +59,9 @@
                                 "click->viral--sortable-lists--two-lists-selection#constructParams",
                               "viral--sortable-lists--two-lists-selection-target": "submitBtn",
                             },
-                            class: "button button--state-primary button--size-default",
-                            disabled: true %>
+                            class:
+                              "focus:outline-none text-sm text-white bg-primary-700 hover:bg-primary-800 focus:ring-0 rounded-md p-2 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 cursor-pointer",
+                            disabled: !@current_template_fields.length.positive? %>
               </div>
             </div>
           <% end %>
