@@ -1813,6 +1813,13 @@ fr:
           success:
             description: The metadata was imported successfully!
             ok_button: OK
+      metadata_templates:
+        fields:
+          all: Afficher tous les champs
+          label: Champs de métadonnées
+          none: Masquer tous les champs
+        templates:
+          label: Modèles de métadonnées
   time:
     formats:
       abbreviated: "%a %b%e %Y %H:%M"
