@@ -1359,9 +1359,6 @@ en:
         new_button: Add New Template
         subtitle: These are metadata templates for the project
         title: Metadata Templates
-      list:
-        none: None
-        all: All Fields
     new:
       description: Project description, not required
       empty_state: No namespaces are associated with that name or ID
@@ -1816,6 +1813,10 @@ en:
           success:
             description: The metadata was imported successfully!
             ok_button: OK
+      metadata_templates:
+        fields:
+          none: None
+          all: All Fields
   time:
     formats:
       abbreviated: "%a %b%e %Y %H:%M"

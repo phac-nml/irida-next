@@ -1,4 +1,4 @@
-<%= form_with url: search_namespace_project_samples_url, method: :post,
+<%= form_with url: @url, method: :post,
 data: {
   turbo_stream: true,
 } do |f| %>
@@ -18,7 +18,7 @@ data: {
           value="all"
           name="q[metadata_template]"
           onchange="this.form.requestSubmit()"
-          <%= @name == t("projects.metadata_templates.list.all") ? "checked" : "" %>
+          <%= @name == t("shared.samples.metadata_templates.fields.all") ? "checked" : "" %>
           class="
             w-4 h-4 text-blue-600 bg-slate-100 border-slate-300 focus:ring-blue-500
             dark:focus:ring-blue-600 dark:ring-offset-slate-700
@@ -31,7 +31,7 @@ data: {
           class="
             w-full py-3 text-sm font-medium text-slate-900 ms-2 dark:text-slate-300
           "
-        ><%= t("projects.metadata_templates.list.all") %></label>
+        ><%= t("shared.samples.metadata_templates.fields.all") %></label>
       </div>
     </li>
     <li class="w-full border-b border-slate-200 dark:border-slate-600">
@@ -42,7 +42,7 @@ data: {
           value="none"
           onchange="this.form.requestSubmit()"
           name="q[metadata_template]"
-          <%= @name == t("projects.metadata_templates.list.none") ? "checked" : "" %>
+          <%= @name == t("shared.samples.metadata_templates.fields.none") ? "checked" : "" %>
           class="
             w-4 h-4 text-blue-600 bg-slate-100 border-slate-300 focus:ring-blue-500
             dark:focus:ring-blue-600 dark:ring-offset-slate-700
@@ -55,7 +55,7 @@ data: {
           class="
             w-full py-3 text-sm font-medium text-slate-900 ms-2 dark:text-slate-300
           "
-        ><%= t("projects.metadata_templates.list.none") %></label>
+        ><%= t("shared.samples.metadata_templates.fields.none") %></label>
       </div>
     </li>
     <% @metadata_templates.each do |metadata_template| %>

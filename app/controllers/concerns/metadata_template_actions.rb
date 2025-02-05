@@ -114,11 +114,16 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
             end
     @limit = params[:limit]
     @page = params[:page]
+    @url = if @namespace.is_a?(Group)
+             search_group_samples_url
+           else
+             search_namespace_project_samples_url
+           end
 
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: turbo_stream.replace('metadata_templates_dropdown',
-                                                  partial: 'projects/metadata_templates/list')
+                                                  partial: 'shared/samples/metadata_templates_list')
       end
     end
   end
