@@ -529,3 +529,13 @@ subgroup_papa_a:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_papa, :uuid) %>
   puid: INXT_GRP_AAAAAAAACN
   samples_count: 0
+
+group_metadata:
+  <<: *DEFAULTS
+  name: Group Metadata
+  path: group-metadata
+  description: Group Metadata description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
+  metadata_summary: { "example_date": 3, "example_float": 3, "example_integer": 3 }
+  puid: INXT_GRP_AAAAAAAACO
+  samples_count: 3

@@ -324,3 +324,8 @@ projectMikeB:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectMikeB_namespace, :uuid) %>
   samples_count: 2
+
+projectMetadata:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectMetadata_namespace, :uuid) %>
+  samples_count: 3

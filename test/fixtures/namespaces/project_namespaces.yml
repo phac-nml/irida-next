@@ -562,3 +562,14 @@ projectMikeB_namespace:
   description: Project Mike B description
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_mike_b, :uuid) %>
   puid: INXT_PRJ_AAAAAAAABZ
+
+projectMetadata_namespace:
+  <<: *DEFAULTS
+  name: Project Metadata
+  path: project-metadata
+  description: Project Metadata description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_metadata, :uuid) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
+  metadata_summary:
+    { "example_date": 3, "example_float": 3, "example_integer": 3 }
+  puid: INXT_PRJ_AAAAAAAACA

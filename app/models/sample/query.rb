@@ -142,7 +142,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
     end
   end
 
-  def handle_between_condition(and_conditions, condition, key, operation) # rubocop:disable Metrics/AbcSize
+  def handle_between_condition(and_conditions, condition, key, operation)
     if %w[created_at updated_at attachments_updated_at].include?(condition.field) || condition.field.end_with?('_date')
       and_conditions[key] = if and_conditions[key].nil?
                               { operation => condition.value }
@@ -151,10 +151,10 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
                             end
     else
       and_conditions["#{key}.numeric"] = if and_conditions["#{key}.numeric"].nil?
-                                           { operation => condition.value.to_i }
+                                           { operation => condition.value }
                                          else
                                            and_conditions["#{key}.numeric"]
-                                             .merge({ operation => condition.value.to_i })
+                                             .merge({ operation => condition.value })
                                          end
     end
   end

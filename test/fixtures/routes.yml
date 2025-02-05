@@ -603,3 +603,13 @@ subgroup_papa_a_route:
   name: Group Papa / Subgroup Papa A
   path: group-papa/subgroup-papa-a
   source: subgroup_papa_a (Namespace)
+
+group_metadata_route:
+  name: Group Metadata
+  path: group-metadata
+  source: group_metadata (Namespace)
+
+projectMetadata_namespace_route:
+  name: Group Metadata / Project Metadata
+  path: group-metadata/project-metadata
+  source: projectMetadata_namespace (Namespace)
