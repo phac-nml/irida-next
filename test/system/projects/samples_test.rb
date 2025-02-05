@@ -2314,7 +2314,7 @@ module Projects
       ### actions and VERIFY END ###
     end
 
-    test 'filter samples with advanced search using different a float type' do
+    test 'filter samples with advanced search using a float type' do
       ### SETUP START ###
       user = users(:metadata_doe)
       login_as user
