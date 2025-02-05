@@ -37,6 +37,8 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
       group_attributes.each_value do |conditions_attributes|
         conditions_attributes.each_value do |condition_params|
           condition_params[:value] = condition_params[:value].compact_blank if condition_params[:value].is_a?(Array)
+          Rails.logger.debug 'Debug Here'
+          Rails.logger.debug condition_params[:value]
           conditions.push(Sample::SearchCondition.new(condition_params))
         end
       end
@@ -151,7 +153,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
       end
     when 'not_in'
       if metadata_field || %w[name puid].include?(condition.field)
-        scope.where(node.does_not_match_any(condition.value))
+        scope.where(node.does_not_match_all(condition.value))
       else
         scope.where(node.not_in(condition.value))
       end
