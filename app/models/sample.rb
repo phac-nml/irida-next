@@ -60,7 +60,16 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
       ]
     },
     deep_paging: true,
-    text_middle: %i[name puid]
+    text_middle: %i[name puid],
+    settings: {
+      index: {
+        mapping: {
+          total_fields: {
+            limit: 10_000
+          }
+        }
+      }
+    }
 
   belongs_to :project, counter_cache: true
 
