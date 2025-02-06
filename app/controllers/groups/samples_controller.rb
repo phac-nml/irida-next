@@ -108,7 +108,7 @@ module Groups
     end
 
     def current_metadata_template
-      current_value = @search_params[:metadata_template] || 'none'
+      current_value = @search_params['metadata_template'] || 'none'
 
       @metadata_template = if %w[none all].include?(current_value)
                              {
