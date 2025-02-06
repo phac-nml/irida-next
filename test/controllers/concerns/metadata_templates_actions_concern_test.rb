@@ -310,4 +310,94 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
 
     assert_response :unauthorized
   end
+
+  test 'group metadata templates list with none template' do
+    get list_group_metadata_templates_path(@group, metadata_template: 'none', format: :turbo_stream)
+
+    assert_response :success
+    assert_includes @response.body, I18n.t('shared.samples.metadata_templates.fields.none')
+  end
+
+  test 'group metadata templates list with all template' do
+    get list_group_metadata_templates_path(@group, metadata_template: 'all', format: :turbo_stream)
+
+    assert_response :success
+    assert_includes @response.body, I18n.t('shared.samples.metadata_templates.fields.all')
+  end
+
+  test 'group metadata templates list with specific template' do
+    get list_group_metadata_templates_path(@group, metadata_template: @group_metadata_template.id,
+                                                   format: :turbo_stream)
+
+    assert_response :success
+    assert_includes @response.body, @group_metadata_template.name
+  end
+
+  test 'group metadata templates list with pagination params' do
+    get list_group_metadata_templates_path(@group,
+                                           metadata_template: 'all',
+                                           limit: 10,
+                                           page: 2,
+                                           format: :turbo_stream)
+
+    assert_response :success
+    # Verify the response includes the paginated content
+    assert_includes @response.body, 'turbo-stream'
+    assert_includes @response.body, 'metadata_templates_dropdown'
+  end
+
+  test 'group metadata templates list unauthorized' do
+    sign_in users(:ryan_doe)
+    get list_group_metadata_templates_path(@group, metadata_template: 'all', format: :turbo_stream)
+
+    assert_response :unauthorized
+  end
+
+  test 'project metadata templates list with none template' do
+    get list_namespace_project_metadata_templates_path(
+      @project_namespace.parent,
+      @project,
+      metadata_template: 'none',
+      format: :turbo_stream
+    )
+
+    assert_response :success
+    assert_includes @response.body, I18n.t('shared.samples.metadata_templates.fields.none')
+  end
+
+  test 'project metadata templates list with all template' do
+    get list_namespace_project_metadata_templates_path(
+      @project_namespace.parent,
+      @project,
+      metadata_template: 'all',
+      format: :turbo_stream
+    )
+
+    assert_response :success
+    assert_includes @response.body, I18n.t('shared.samples.metadata_templates.fields.all')
+  end
+
+  test 'project metadata templates list with specific template' do
+    get list_namespace_project_metadata_templates_path(
+      @project_namespace.parent,
+      @project,
+      metadata_template: @project_metadata_template.id,
+      format: :turbo_stream
+    )
+
+    assert_response :success
+    assert_includes @response.body, @project_metadata_template.name
+  end
+
+  test 'project metadata templates list unauthorized' do
+    sign_in users(:ryan_doe)
+    get list_namespace_project_metadata_templates_path(
+      @project_namespace.parent,
+      @project,
+      metadata_template: 'all',
+      format: :turbo_stream
+    )
+
+    assert_response :unauthorized
+  end
 end

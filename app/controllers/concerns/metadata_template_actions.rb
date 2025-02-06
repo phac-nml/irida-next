@@ -106,6 +106,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   end
 
   def list
+    authorize! @namespace, to: :view_metadata_templates?
     set_template_name
     set_pagination_params
     set_search_url
