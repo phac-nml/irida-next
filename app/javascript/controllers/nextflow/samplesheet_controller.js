@@ -63,7 +63,7 @@ export default class extends Controller {
   #requiredColumns = [];
 
   // pagination page params
-  #currentPage = 1;
+  #currentPage;
   #lastPage;
 
   // sample data within the samplesheet is centered around which index they're at (to get data from the 100th sample,
@@ -101,7 +101,7 @@ export default class extends Controller {
 
     this.#totalSamples = Object.keys(this.#samplesheetAttributes).length;
     this.#columnNames = Object.keys(this.#samplesheetProperties);
-    console.log(this.#samplesheetAttributes);
+
     // set required columns
     for (const column in this.#samplesheetProperties) {
       // automatically autoloaded into samplesheet
@@ -115,10 +115,12 @@ export default class extends Controller {
     // enter all initial/autoloaded sample data into FormData
     this.#setInitialSamplesheetData();
 
+    // set initial sample indexes to include all samples
     this.#currentSampleIndexes = [
       ...Array(Object.keys(this.#samplesheetAttributes).length).keys(),
     ];
 
+    // setup pagination
     this.#setPagination();
     // render samplesheet table
     this.#loadTableData();
@@ -281,55 +283,6 @@ export default class extends Controller {
     this.#clearPayload();
   }
 
-  filter() {
-    console.log(this.#samplesheetAttributes);
-    this.#currentPage = 1;
-
-    if (this.filterTarget.value) {
-      this.#currentSampleIndexes = [];
-      // loop through all samples in #samplesheetAttributes via index ->
-      // check if it contains the sample (puid) or sample_name property ->
-      // check if the filter should include the sample based on its puid or name
-      for (let i = 0; i < this.#totalSamples; i++) {
-        if (
-          this.#samplesheetAttributes[i]["samplesheet_params"].hasOwnProperty(
-            "sample",
-          )
-        ) {
-          this.#checkValueForFilter("sample", i);
-        }
-        if (
-          this.#samplesheetAttributes[i]["samplesheet_params"].hasOwnProperty(
-            "sample_name",
-          )
-        ) {
-          this.#checkValueForFilter("sample_name", i);
-        }
-      }
-    } else {
-      // reset table to include all samples
-      this.#currentSampleIndexes = [
-        ...Array(Object.keys(this.#samplesheetAttributes).length).keys(),
-      ];
-    }
-    this.#setPagination();
-    this.#updatePageData();
-  }
-
-  #checkValueForFilter(columnName, index) {
-    if (
-      this.#samplesheetAttributes[index]["samplesheet_params"][columnName][
-        "form_value"
-      ]
-        .toLowerCase()
-        .includes(this.filterTarget.value.toLowerCase())
-    ) {
-      if (!this.#currentSampleIndexes.includes(index)) {
-        this.#currentSampleIndexes.push(index);
-      }
-    }
-  }
-
   #loadTableData() {
     if (this.#currentSampleIndexes.length > 0) {
       this.emptyStateTarget.classList.add("hidden");
@@ -482,6 +435,7 @@ export default class extends Controller {
   }
 
   #setPagination() {
+    this.#currentPage = 1;
     this.paginationContainerTarget.innerHTML = "";
     // set last page based on number of samples
     this.#lastPage = Math.ceil(this.#currentSampleIndexes.length / 5);
@@ -573,6 +527,54 @@ export default class extends Controller {
   #clearPayload() {
     if (this.hasDataPayloadTarget) {
       this.dataPayloadTarget.remove();
+    }
+  }
+
+  // when filtering samples, we will add the indexes of samples that fit the filter into the #currentSampleIndexes array
+  // we can then easily access each sample's data via its index and still paginate in groups of 5
+  filter() {
+    if (this.filterTarget.value) {
+      this.#currentSampleIndexes = [];
+      // loop through all samples in #samplesheetAttributes via index ->
+      // check if it contains the sample (puid) or sample_name property ->
+      // check if the filter should include the sample based on its puid or name
+      for (let i = 0; i < this.#totalSamples; i++) {
+        if (
+          this.#samplesheetAttributes[i]["samplesheet_params"].hasOwnProperty(
+            "sample",
+          )
+        ) {
+          this.#checkValueForFilter("sample", i);
+        }
+        if (
+          this.#samplesheetAttributes[i]["samplesheet_params"].hasOwnProperty(
+            "sample_name",
+          )
+        ) {
+          this.#checkValueForFilter("sample_name", i);
+        }
+      }
+    } else {
+      // reset table to include all samples if filter is empty
+      this.#currentSampleIndexes = [
+        ...Array(Object.keys(this.#samplesheetAttributes).length).keys(),
+      ];
+    }
+    this.#setPagination();
+    this.#updatePageData();
+  }
+
+  #checkValueForFilter(columnName, index) {
+    if (
+      this.#samplesheetAttributes[index]["samplesheet_params"][columnName][
+        "form_value"
+      ]
+        .toLowerCase()
+        .includes(this.filterTarget.value.toLowerCase())
+    ) {
+      if (!this.#currentSampleIndexes.includes(index)) {
+        this.#currentSampleIndexes.push(index);
+      }
     }
   }
 }
