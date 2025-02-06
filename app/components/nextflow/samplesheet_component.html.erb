@@ -80,14 +80,12 @@
       description: t("components.viral.pagy.empty_state.description"),
     ) %>
   </div>
-  <% if samples_workflow_executions_attributes.count > 5 %>
-    <div
-      data-nextflow--samplesheet-target="paginationContainer"
-      id="samplesheet_pagination"
-      class="flex items-center justify-end"
-    >
-    </div>
-  <% end %>
+  <div
+    data-nextflow--samplesheet-target="paginationContainer"
+    id="samplesheet_pagination"
+    class="flex items-center justify-end"
+  >
+  </div>
 </div>
 
 <template data-nextflow--samplesheet-target="cellContainer">

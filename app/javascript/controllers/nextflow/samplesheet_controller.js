@@ -71,6 +71,8 @@ export default class extends Controller {
   // where we can easily access samples via a wide range of indexes
   #currentSampleIndexes = [];
 
+  #totalSamples;
+
   // samplesheetProperties contains all the parameters of each field type to the associated pipeline
   #samplesheetProperties;
 
@@ -90,14 +92,16 @@ export default class extends Controller {
     );
     // clear the now unnecessary DOM element
     this.samplesheetPropertiesTarget.remove();
+
     this.#samplesheetAttributes = JSON.parse(
       this.workflowAttributesTarget.innerText,
     );
-
     // clear the now unnecessary DOM element
     this.workflowAttributesTarget.remove();
-    this.#columnNames = Object.keys(this.#samplesheetProperties);
 
+    this.#totalSamples = Object.keys(this.#samplesheetAttributes).length;
+    this.#columnNames = Object.keys(this.#samplesheetProperties);
+    console.log(this.#samplesheetAttributes);
     // set required columns
     for (const column in this.#samplesheetProperties) {
       // automatically autoloaded into samplesheet
@@ -278,39 +282,52 @@ export default class extends Controller {
   }
 
   filter() {
+    console.log(this.#samplesheetAttributes);
     this.#currentPage = 1;
+
     if (this.filterTarget.value) {
       this.#currentSampleIndexes = [];
-      for (const pair of this.#formData.entries()) {
+      // loop through all samples in #samplesheetAttributes via index ->
+      // check if it contains the sample (puid) or sample_name property ->
+      // check if the filter should include the sample based on its puid or name
+      for (let i = 0; i < this.#totalSamples; i++) {
         if (
-          pair[0].includes("[samplesheet_params][sample]") ||
-          pair[0].includes("[samplesheet_params][sample_name]")
+          this.#samplesheetAttributes[i]["samplesheet_params"].hasOwnProperty(
+            "sample",
+          )
         ) {
-          if (
-            pair[1]
-              .toLowerCase()
-              .includes(this.filterTarget.value.toLowerCase())
-          ) {
-            let index = pair[0]
-              .split(
-                "workflow_execution[samples_workflow_executions_attributes][",
-              )[1]
-              .split("]")[0];
-
-            if (!this.#currentSampleIndexes.includes(index)) {
-              this.#currentSampleIndexes.push(index);
-            }
-            continue;
-          }
+          this.#checkValueForFilter("sample", i);
+        }
+        if (
+          this.#samplesheetAttributes[i]["samplesheet_params"].hasOwnProperty(
+            "sample_name",
+          )
+        ) {
+          this.#checkValueForFilter("sample_name", i);
         }
       }
     } else {
+      // reset table to include all samples
       this.#currentSampleIndexes = [
         ...Array(Object.keys(this.#samplesheetAttributes).length).keys(),
       ];
     }
     this.#setPagination();
     this.#updatePageData();
+  }
+
+  #checkValueForFilter(columnName, index) {
+    if (
+      this.#samplesheetAttributes[index]["samplesheet_params"][columnName][
+        "form_value"
+      ]
+        .toLowerCase()
+        .includes(this.filterTarget.value.toLowerCase())
+    ) {
+      if (!this.#currentSampleIndexes.includes(index)) {
+        this.#currentSampleIndexes.push(index);
+      }
+    }
   }
 
   #loadTableData() {
@@ -532,13 +549,12 @@ export default class extends Controller {
   }
 
   #generatePageNumberDropdown() {
-    let pageSelection = this.pageNumTarget;
     // page 1 is already added by default
     for (let i = 2; i < this.#lastPage + 1; i++) {
       let option = document.createElement("option");
       option.value = i;
       option.innerHTML = i;
-      pageSelection.appendChild(option);
+      this.pageNumTarget.appendChild(option);
     }
   }
 
