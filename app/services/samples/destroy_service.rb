@@ -24,8 +24,6 @@ module Samples
       sample_destroyed = sample.destroy
 
       if sample_destroyed
-        Sample.search_index.refresh
-
         @project.namespace.create_activity key: 'namespaces_project_namespace.samples.destroy',
                                            owner: current_user,
                                            parameters:
@@ -51,8 +49,6 @@ module Samples
         update_metadata_summary(sample)
         samples_deleted_puids << sample.puid
       end
-
-      Sample.search_index.refresh
 
       update_samples_count(samples_to_delete_count) if @project.parent.type == 'Group'
 
