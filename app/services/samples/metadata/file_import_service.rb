@@ -5,110 +5,24 @@ require 'roo'
 module Samples
   module Metadata
     # Service used to import sample metadata via a file
-    class FileImportService < BaseService # rubocop:disable Metrics/ClassLength
-      SampleMetadataFileImportError = Class.new(StandardError)
-
+    class FileImportService < BaseSpreadsheetImportService
       def initialize(namespace, user = nil, blob_id = nil, params = {})
-        super(user, params)
-        @namespace = namespace
-        @file = ActiveStorage::Blob.find(blob_id)
         @sample_id_column = params[:sample_id_column]
+        required_headers = [@sample_id_column]
         @ignore_empty_values = params[:ignore_empty_values]
-        @spreadsheet = nil
-        @headers = nil
-        @temp_import_file = Tempfile.new
+        super(namespace, user, blob_id, required_headers, 1, params)
       end
 
       def execute
         authorize! @namespace, to: :update_sample_metadata?
-
-        validate_sample_id_column
-
         validate_file
-
         perform_file_import
-      rescue Samples::Metadata::FileImportService::SampleMetadataFileImportError => e
+      rescue FileImportError => e
         @namespace.errors.add(:base, e.message)
         {}
       end
 
-      private
-
-      def validate_sample_id_column
-        return unless @sample_id_column.nil?
-
-        raise SampleMetadataFileImportError,
-              I18n.t('services.samples.metadata.import_file.empty_sample_id_column')
-      end
-
-      def validate_file_extension
-        file_extension = File.extname(@file.filename.to_s).downcase
-
-        return file_extension if %w[.csv .tsv .xls .xlsx].include?(file_extension)
-
-        raise SampleMetadataFileImportError,
-              I18n.t('services.samples.metadata.import_file.invalid_file_extension')
-      end
-
-      def validate_file_headers
-        duplicate_headers = @headers.find_all { |header| @headers.count(header) > 1 }.uniq
-        unless duplicate_headers.empty?
-          raise SampleMetadataFileImportError,
-                I18n.t('services.samples.metadata.import_file.duplicate_column_names')
-        end
-
-        unless @headers.include?(@sample_id_column)
-          raise SampleMetadataFileImportError,
-                I18n.t('services.samples.metadata.import_file.missing_sample_id_column')
-        end
-
-        return if @headers.count { |header| header != @sample_id_column }.positive?
-
-        raise SampleMetadataFileImportError,
-              I18n.t('services.samples.metadata.import_file.missing_metadata_column')
-      end
-
-      def validate_file_rows
-        first_row = @spreadsheet.row(2)
-        return unless first_row.compact.empty?
-
-        raise SampleMetadataFileImportError,
-              I18n.t('services.samples.metadata.import_file.missing_metadata_row')
-      end
-
-      def validate_file
-        if @file.nil?
-          raise SampleMetadataFileImportError,
-                I18n.t('services.samples.metadata.import_file.empty_file')
-        end
-
-        extension = validate_file_extension
-
-        download_metadata_import_file(extension)
-
-        @headers = @spreadsheet.row(1).compact
-
-        validate_file_headers
-
-        validate_file_rows
-      end
-
-      def download_metadata_import_file(extension)
-        begin
-          @temp_import_file.binmode
-          @file.download do |chunk|
-            @temp_import_file.write(chunk)
-          end
-        ensure
-          @temp_import_file.close
-        end
-        @spreadsheet = if extension.eql? '.tsv'
-                         Roo::CSV.new(@temp_import_file.path, extension:,
-                                                              csv_options: { col_sep: "\t" })
-                       else
-                         Roo::Spreadsheet.open(@temp_import_file.path, extension:)
-                       end
-      end
+      protected
 
       def perform_file_import
         response = {}
@@ -131,11 +45,7 @@ module Samples
         response
       end
 
-      def cleanup_files
-        # delete the blob and temporary file as we no longer require them
-        @file.purge
-        @temp_import_file.unlink
-      end
+      private
 
       def error_message(sample_id)
         if @namespace.type == 'Group'

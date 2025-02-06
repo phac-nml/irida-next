@@ -6,41 +6,24 @@ require 'roo'
 class BaseSpreadsheetImportService < BaseService
   FileImportError = Class.new(StandardError)
 
-  def initialize(namespace, user = nil, blob_id = nil, required_headers = [], params = {}) # rubocop:disable Metrics/ParameterLists
+  def initialize(namespace, user = nil, blob_id = nil, required_headers = [], minimum_additional_data_columns = 0, params = {}) # rubocop:disable Metrics/ParameterLists,Layout/LineLength
     super(user, params)
     @namespace = namespace
     @file = ActiveStorage::Blob.find(blob_id)
     @required_headers = required_headers
+    @minimum_additional_data_columns = minimum_additional_data_columns
     @spreadsheet = nil
     @headers = nil
     @temp_import_file = Tempfile.new
   end
 
   def execute
-    validate_required_columns
-
-    validate_file
-
-    perform_file_import
-  rescue FileImportError => e
-    @namespace.errors.add(:base, e.message)
-    {}
+    raise NotImplementedError
   end
 
   protected
 
-  def validate_required_columns
-    @required_headers.each do |header|
-      raise FileImportError, I18n.t('services.samples.metadata.import_file.empty_sample_id_column') if header.nil? # TODO: text
-    end
-  end
-
   def validate_file
-    if @file.nil?
-      raise FileImportError,
-            I18n.t('services.samples.batch_import.empty_file') # TODO: text
-    end
-
     extension = validate_file_extension
     download_batch_import_file(extension)
 
@@ -55,8 +38,7 @@ class BaseSpreadsheetImportService < BaseService
 
     return file_extension if %w[.csv .tsv .xls .xlsx].include?(file_extension)
 
-    raise SampleFileImportError,
-          I18n.t('services.samples.metadata.import_file.invalid_file_extension') # TODO: text
+    raise FileImportError, I18n.t('services.spreadsheet_import.invalid_file_extension')
   end
 
   def download_batch_import_file(extension)
@@ -69,24 +51,29 @@ class BaseSpreadsheetImportService < BaseService
       @temp_import_file.close
     end
     @spreadsheet = if extension.eql? '.tsv'
-                      Roo::CSV.new(@temp_import_file, extension:, csv_options: { col_sep: "\t" })
-                    else
-                      Roo::Spreadsheet.open(@temp_import_file.path, extension:)
-                    end
+                     Roo::Spreadsheet.open(@temp_import_file.path,
+                                           { extension: '.csv', csv_options: { col_sep: "\t" } })
+                   else
+                     Roo::Spreadsheet.open(@temp_import_file.path, extension:)
+                   end
   end
 
   def validate_file_headers
     duplicate_headers = @headers.find_all { |header| @headers.count(header) > 1 }.uniq
     unless duplicate_headers.empty?
-      raise SampleFileImportError,
-            I18n.t('services.sammple.batch_import.duplicate_column_names') # TODO: text
+      raise FileImportError,
+            I18n.t('services.spreadsheet_import.duplicate_column_names')
     end
 
     @required_headers.each do |req_header|
       unless @headers.include?(req_header)
-        raise FileImportError, I18n.t('services.samples.batch_import.missing_header', header_title: req_header) # TODO: text
+        raise FileImportError, I18n.t('services.spreadsheet_import.missing_header', header_title: req_header)
       end
     end
+
+    return unless @headers.count < (@required_headers.count + @minimum_additional_data_columns)
+
+    raise FileImportError, I18n.t('services.spreadsheet_import.missing_data_columns')
   end
 
   def validate_file_rows
@@ -94,7 +81,7 @@ class BaseSpreadsheetImportService < BaseService
     first_row = @spreadsheet.row(2)
     return unless first_row.compact.empty?
 
-    raise FileImportError, I18n.t('services.samples.batch_import.missing_data_row') # TODO: text
+    raise FileImportError, I18n.t('services.spreadsheet_import.missing_data_row')
   end
 
   def perform_file_import

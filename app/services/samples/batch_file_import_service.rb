@@ -10,12 +10,16 @@ module Samples
       @project_puid_column = params[:project_puid_column]
       @sample_description_column = params[:sample_description_column]
       required_headers = [@sample_name_column, @project_puid_column]
-      super(namespace, user, blob_id, required_headers, params)
+      super(namespace, user, blob_id, required_headers, 0, params)
     end
 
     def execute
       authorize! @namespace, to: :update_sample_metadata?
-      super
+      validate_file
+      perform_file_import
+    rescue FileImportError => e
+      @namespace.errors.add(:base, e.message)
+      {}
     end
 
     protected
@@ -36,7 +40,7 @@ module Samples
         if sample_name.nil? || project_puid.nil?
           response["index #{index}"] = {
             path: ['sample'],
-            message: I18n.t('services.samples.batch_import.missing_field', index: index)
+            message: I18n.t('services.spreadsheet_import.missing_field', index: index)
           }
           next
         end

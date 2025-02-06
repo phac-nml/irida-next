@@ -1733,6 +1733,8 @@ fr:
         namespace_project_exists: Project with the same name or path already exists in the target namespace.
         project_in_namespace: Project in namespace
     samples:
+      batch_import:
+        project_puid_not_found: Project PUID '%{project_puid}' could not be found
       clone:
         empty_new_project_id: Destination project was not selected.
         empty_sample_ids: The sample ids are empty.
@@ -1746,13 +1748,6 @@ fr:
           sample_does_not_belong_to_project: Sample '%{sample_name}'' does not belong to project '%{project_name}'
           single_all_keys_exist: Metadata key '%{key}' already exist.
         import_file:
-          duplicate_column_names: The file has duplicate column header names. Please remove the columns with duplicate header names and retry uploading.
-          empty_file: The file cannot be empty.
-          empty_sample_id_column: The sample id column cannot be empty.
-          invalid_file_extension: The file can only be a csv or excel.
-          missing_metadata_column: The file does not have any metadata columns. Please add some columns of metadata to the file and retry uploading.
-          missing_metadata_row: The file does not have any metadata rows. Please add some rows of metadata to the file and retry uploading.
-          missing_sample_id_column: The file is missing the sample id column.  Please make sure the sample id column exists and retry uploading.
           sample_metadata_fields_not_updated: Sample '%{sample_name}' with field(s) '%{metadata_fields}' cannot be updated.
           sample_not_found_within_group: Could not find sample with puid '%{sample_puid}' in this group.
           sample_not_found_within_project: Could not find sample with puid or name '%{sample_puid}' in this project.
@@ -1770,6 +1765,13 @@ fr:
         same_project: The samples already exist in the project. Please select a different project.
         sample_exists: 'Sample %{sample_puid}: Conflicts with sample named ''%{sample_name}'' in the target project'
         samples_not_found: 'Samples with the following sample ids could not be transferred as they were not found in the source project: %{sample_ids}'
+    spreadsheet_import:
+      missing_field: Row with index '%{index}' is missing required fields
+      missing_header: File is missing the header '%{header_title}'
+      duplicate_column_names: The file has duplicate column header names. Please remove the columns with duplicate header names and retry uploading.
+      missing_data_row: The file does not have any data rows. Please add some rows of data to the file and retry uploading.
+      missing_data_columns: File is missing data columns. Please add additional data columns and headers and retry uploading.
+      invalid_file_extension: The file can only be a csv, tsv or excel.
   shared:
     alert:
       list:
