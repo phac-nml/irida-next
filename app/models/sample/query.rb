@@ -167,7 +167,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
           )
       else
         scope
-          .where(node.matches_regexp('^\d+\.?\d+$'))
+          .where(node.matches_regexp('^\d+(\.\d+)?$'))
           .where(
             Arel::Nodes::NamedFunction.new(
               'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
@@ -187,7 +187,7 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
           )
       else
         scope
-          .where(node.matches_regexp('^\d+\.?\d+$'))
+          .where(node.matches_regexp('^\d+(\.\d+)?$'))
           .where(
             Arel::Nodes::NamedFunction.new(
               'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DOUBLE PRECISION'))]
