@@ -28,10 +28,5 @@
     open: @query.errors.any?,
     status: @query.advanced_query?,
   ) %>
-  <%= render MetadataTemplatesDropdownComponent.new(
-    metadata_templates: @metadata_templates,
-    form: f,
-    selected: @search_params[:metadata_template],
-  ) %>
   <%= f.submit hidden: true %>
 <% end %>
