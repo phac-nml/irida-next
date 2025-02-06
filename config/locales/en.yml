@@ -184,6 +184,8 @@ en:
             name:
               blank: can't be blank
               taken: has already been taken
+            fields:
+              taken: already exist in another template with the same ordering
         namespace:
           attributes:
             name:
