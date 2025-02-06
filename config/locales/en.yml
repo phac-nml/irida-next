@@ -1766,12 +1766,12 @@ en:
         sample_exists: 'Sample %{sample_puid}: Conflicts with sample named ''%{sample_name}'' in the target project'
         samples_not_found: 'Samples with the following sample ids could not be transferred as they were not found in the source project: %{sample_ids}'
     spreadsheet_import:
+      duplicate_column_names: The file has duplicate column header names. Please remove the columns with duplicate header names and retry uploading.
+      invalid_file_extension: The file can only be a csv, tsv or excel.
+      missing_data_columns: File is missing data columns. Please add additional data columns and headers and retry uploading.
+      missing_data_row: The file does not have any data rows. Please add some rows of data to the file and retry uploading.
       missing_field: Row with index '%{index}' is missing required fields
       missing_header: File is missing the header '%{header_title}'
-      duplicate_column_names: The file has duplicate column header names. Please remove the columns with duplicate header names and retry uploading.
-      missing_data_row: The file does not have any data rows. Please add some rows of data to the file and retry uploading.
-      missing_data_columns: File is missing data columns. Please add additional data columns and headers and retry uploading.
-      invalid_file_extension: The file can only be a csv, tsv or excel.
   shared:
     alert:
       list:
