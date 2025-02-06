@@ -36,12 +36,12 @@ class WorkflowExecutionPolicy < ApplicationPolicy
     false
   end
 
-  def read? # rubocop:disable Metrics/AbcSize
+  def read? # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
     return true if record.submitter.id == user.id
 
     # submitted by automation bot and user has access
     if (record.namespace.type == Namespaces::ProjectNamespace.sti_name) &&
-       (record.submitter.id == record.namespace.automation_bot.id) &&
+       record.namespace.automation_bot && (record.submitter.id == record.namespace.automation_bot.id) &&
        (effective_access_level > Member::AccessLevel::NO_ACCESS)
       return true
     end
@@ -66,7 +66,7 @@ class WorkflowExecutionPolicy < ApplicationPolicy
 
     # submitted by automation bot and user has managable access
     if (record.namespace.type == Namespaces::ProjectNamespace.sti_name) &&
-       (record.submitter.id == record.namespace.automation_bot.id) &&
+       record.namespace.automation_bot && (record.submitter.id == record.namespace.automation_bot.id) &&
        Member::AccessLevel.manageable.include?(effective_access_level)
       return true
     end
@@ -81,7 +81,7 @@ class WorkflowExecutionPolicy < ApplicationPolicy
 
     # submitted by automation bot and user is analyst or higher
     if (record.namespace.type == Namespaces::ProjectNamespace.sti_name) &&
-       (record.submitter.id == record.namespace.automation_bot.id) &&
+       record.namespace.automation_bot && (record.submitter.id == record.namespace.automation_bot.id) &&
        (effective_access_level >= Member::AccessLevel::ANALYST)
       return true
     end
@@ -95,7 +95,7 @@ class WorkflowExecutionPolicy < ApplicationPolicy
 
     # submitted by automation bot and user is analyst or higher
     if (record.namespace.type == Namespaces::ProjectNamespace.sti_name) &&
-       (record.submitter.id == record.namespace.automation_bot.id) &&
+       record.namespace.automation_bot && (record.submitter.id == record.namespace.automation_bot.id) &&
        (effective_access_level >= Member::AccessLevel::ANALYST)
       return true
     end
