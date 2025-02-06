@@ -23,6 +23,9 @@ export default class extends Controller {
     "metadataIndexEnd",
     "dataPayload",
     "filter",
+    "pagination",
+    "paginationContainer",
+    "emptyState",
   ];
 
   static values = {
@@ -63,6 +66,9 @@ export default class extends Controller {
   #currentPage = 1;
   #lastPage;
 
+  // sample data within the samplesheet is centered around which index they're at (to get data from the 100th sample,
+  // you need to access it via index 99). Main use case for having an array of sample indexes is for filtering,
+  // where we can easily access samples via a wide range of indexes
   #currentSampleIndexes = [];
 
   // samplesheetProperties contains all the parameters of each field type to the associated pipeline
@@ -105,19 +111,11 @@ export default class extends Controller {
     // enter all initial/autoloaded sample data into FormData
     this.#setInitialSamplesheetData();
 
-    // set last page based on number of samples
-    this.#lastPage = Math.ceil(
-      Object.keys(this.#samplesheetAttributes).length / 5,
-    );
-
-    // create the page dropdown options if there's more than one page
-    if (this.#lastPage > 1) {
-      this.#generatePageNumberDropdown();
-    }
-
     this.#currentSampleIndexes = [
       ...Array(Object.keys(this.#samplesheetAttributes).length).keys(),
     ];
+
+    this.#setPagination();
     // render samplesheet table
     this.#loadTableData();
   }
@@ -280,55 +278,92 @@ export default class extends Controller {
   }
 
   filter() {
-    console.log(this.filterTarget.value);
+    this.#currentPage = 1;
+    if (this.filterTarget.value) {
+      this.#currentSampleIndexes = [];
+      for (const pair of this.#formData.entries()) {
+        if (
+          pair[0].includes("[samplesheet_params][sample]") ||
+          pair[0].includes("[samplesheet_params][sample_name]")
+        ) {
+          if (
+            pair[1]
+              .toLowerCase()
+              .includes(this.filterTarget.value.toLowerCase())
+          ) {
+            let index = pair[0]
+              .split(
+                "workflow_execution[samples_workflow_executions_attributes][",
+              )[1]
+              .split("]")[0];
+
+            if (!this.#currentSampleIndexes.includes(index)) {
+              this.#currentSampleIndexes.push(index);
+            }
+            continue;
+          }
+        }
+      }
+    } else {
+      this.#currentSampleIndexes = [
+        ...Array(Object.keys(this.#samplesheetAttributes).length).keys(),
+      ];
+    }
+    this.#setPagination();
+    this.#updatePageData();
   }
 
   #loadTableData() {
-    let startingIndex = (this.#currentPage - 1) * 5;
-    let lastIndex = startingIndex + 5;
-    if (
-      this.#currentPage == this.#lastPage &&
-      Object.keys(this.#samplesheetAttributes).length % 5 != 0
-    ) {
-      lastIndex =
-        (Object.keys(this.#samplesheetAttributes).length % 5) + startingIndex;
-    }
-
-    this.#columnNames.forEach((columnName) => {
-      let columnNode = document.getElementById(`metadata-${columnName}-column`);
-      for (let i = startingIndex; i < lastIndex; i++) {
-        let sampleIndex = this.#currentSampleIndexes[i];
-        let container = this.#generateCellContainer(
-          columnNode,
-          columnName,
-          sampleIndex,
-        );
-        switch (this.#samplesheetProperties[columnName]["cell_type"]) {
-          case "sample_cell":
-          case "sample_name_cell":
-            this.#generateSampleCell(container, columnName, sampleIndex);
-            break;
-          case "dropdown_cell":
-            this.#generateDropdownCell(
-              container,
-              columnName,
-              sampleIndex,
-              this.#samplesheetProperties[columnName]["enum"],
-            );
-            break;
-          case "fastq_cell":
-          case "file_cell":
-            this.#generateFileCell(container, columnName, sampleIndex);
-            break;
-          case "metadata_cell":
-            this.#generateMetadataCell(container, columnName, sampleIndex);
-            break;
-          case "input_cell":
-            this.#generateTextCell(container, columnName, sampleIndex);
-            break;
-        }
+    if (this.#currentSampleIndexes.length > 0) {
+      this.emptyStateTarget.classList.add("hidden");
+      let startingIndex = (this.#currentPage - 1) * 5;
+      let lastIndex = startingIndex + 5;
+      if (
+        this.#currentPage == this.#lastPage &&
+        this.#currentSampleIndexes.length % 5 != 0
+      ) {
+        lastIndex = (this.#currentSampleIndexes.length % 5) + startingIndex;
       }
-    });
+      this.#columnNames.forEach((columnName) => {
+        let columnNode = document.getElementById(
+          `metadata-${columnName}-column`,
+        );
+        for (let i = startingIndex; i < lastIndex; i++) {
+          let sampleIndex = this.#currentSampleIndexes[i];
+          let container = this.#generateCellContainer(
+            columnNode,
+            columnName,
+            sampleIndex,
+          );
+          switch (this.#samplesheetProperties[columnName]["cell_type"]) {
+            case "sample_cell":
+            case "sample_name_cell":
+              this.#generateSampleCell(container, columnName, sampleIndex);
+              break;
+            case "dropdown_cell":
+              this.#generateDropdownCell(
+                container,
+                columnName,
+                sampleIndex,
+                this.#samplesheetProperties[columnName]["enum"],
+              );
+              break;
+            case "fastq_cell":
+            case "file_cell":
+              this.#generateFileCell(container, columnName, sampleIndex);
+              break;
+            case "metadata_cell":
+              this.#generateMetadataCell(container, columnName, sampleIndex);
+              break;
+            case "input_cell":
+              this.#generateTextCell(container, columnName, sampleIndex);
+              break;
+          }
+        }
+      });
+    } else {
+      this.emptyStateTarget.classList.remove("hidden");
+    }
   }
 
   // inserting the template html then requerying it out via lastElementChild turns the node from textNode into an
@@ -429,6 +464,20 @@ export default class extends Controller {
     }
   }
 
+  #setPagination() {
+    this.paginationContainerTarget.innerHTML = "";
+    // set last page based on number of samples
+    this.#lastPage = Math.ceil(this.#currentSampleIndexes.length / 5);
+    // create the page dropdown options if there's more than one page
+    if (this.#lastPage > 1) {
+      this.paginationContainerTarget.insertAdjacentHTML(
+        "beforeend",
+        this.paginationTarget.innerHTML,
+      );
+      this.#generatePageNumberDropdown();
+    }
+  }
+
   previousPage() {
     this.#currentPage -= 1;
     this.pageNumTarget.value = this.#currentPage;
@@ -447,8 +496,9 @@ export default class extends Controller {
   }
 
   #updatePageData() {
-    this.#verifyPaginationButtonStates();
-
+    if (this.#lastPage > 1) {
+      this.#verifyPaginationButtonStates();
+    }
     // delete the table data and reload with new indexes
     this.#columnNames.forEach((columnName) => {
       document.getElementById(`metadata-${columnName}-column`).innerHTML = "";
