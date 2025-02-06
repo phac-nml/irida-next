@@ -91,6 +91,7 @@ export default class extends Controller {
   }
 
   constructParams() {
+    this.fieldTarget.innerHTML = null;
     const list_values = this.selectedList.querySelectorAll("li")
 
     for (const list_value of list_values) {
