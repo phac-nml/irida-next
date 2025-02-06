@@ -22,6 +22,7 @@ export default class extends Controller {
     "metadataIndexStart",
     "metadataIndexEnd",
     "dataPayload",
+    "filter",
   ];
 
   static values = {
@@ -61,6 +62,8 @@ export default class extends Controller {
   // pagination page params
   #currentPage = 1;
   #lastPage;
+
+  #currentSampleIndexes = [];
 
   // samplesheetProperties contains all the parameters of each field type to the associated pipeline
   #samplesheetProperties;
@@ -111,6 +114,10 @@ export default class extends Controller {
     if (this.#lastPage > 1) {
       this.#generatePageNumberDropdown();
     }
+
+    this.#currentSampleIndexes = [
+      ...Array(Object.keys(this.#samplesheetAttributes).length).keys(),
+    ];
     // render samplesheet table
     this.#loadTableData();
   }
@@ -272,8 +279,8 @@ export default class extends Controller {
     this.#clearPayload();
   }
 
-  filterTable({ detail: { content } }) {
-    console.log(content);
+  filter() {
+    console.log(this.filterTarget.value);
   }
 
   #loadTableData() {
@@ -290,29 +297,34 @@ export default class extends Controller {
     this.#columnNames.forEach((columnName) => {
       let columnNode = document.getElementById(`metadata-${columnName}-column`);
       for (let i = startingIndex; i < lastIndex; i++) {
-        let container = this.#generateCellContainer(columnNode, columnName, i);
+        let sampleIndex = this.#currentSampleIndexes[i];
+        let container = this.#generateCellContainer(
+          columnNode,
+          columnName,
+          sampleIndex,
+        );
         switch (this.#samplesheetProperties[columnName]["cell_type"]) {
           case "sample_cell":
           case "sample_name_cell":
-            this.#generateSampleCell(container, columnName, i);
+            this.#generateSampleCell(container, columnName, sampleIndex);
             break;
           case "dropdown_cell":
             this.#generateDropdownCell(
               container,
               columnName,
-              i,
+              sampleIndex,
               this.#samplesheetProperties[columnName]["enum"],
             );
             break;
           case "fastq_cell":
           case "file_cell":
-            this.#generateFileCell(container, columnName, i);
+            this.#generateFileCell(container, columnName, sampleIndex);
             break;
           case "metadata_cell":
-            this.#generateMetadataCell(container, columnName, i);
+            this.#generateMetadataCell(container, columnName, sampleIndex);
             break;
           case "input_cell":
-            this.#generateTextCell(container, columnName, i);
+            this.#generateTextCell(container, columnName, sampleIndex);
             break;
         }
       }
