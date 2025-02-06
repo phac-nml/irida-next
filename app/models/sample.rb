@@ -1,75 +1,14 @@
 # frozen_string_literal: true
 
 # entity class for Sample
-class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
+class Sample < ApplicationRecord
   include MetadataSortable
   include HasPuid
   include History
   include FileSelector
 
-  extend Pagy::Searchkick
-
   has_logidze
   acts_as_paranoid
-
-  searchkick \
-    merge_mappings: true,
-    mappings: {
-      dynamic_templates: [
-        {
-          string_template: {
-            match: '*',
-            match_mapping_type: 'string',
-            path_unmatch: 'metadata.*',
-            mapping: {
-              fields: {
-                analyzed: {
-                  analyzer: 'searchkick_index',
-                  index: true,
-                  type: 'text'
-                }
-              },
-              ignore_above: 30_000,
-              type: 'keyword'
-            }
-          }
-        },
-        {
-          metadata_dates: {
-            path_match: 'metadata.*_date',
-            mapping: {
-              type: 'date',
-              ignore_malformed: true
-            }
-          }
-        }, {
-          metadata_non_dates: {
-            path_match: 'metadata.*',
-            path_unmatch: 'metadata.*_date',
-            mapping: {
-              type: 'keyword',
-              fields: {
-                numeric: {
-                  type: 'double',
-                  ignore_malformed: true
-                }
-              }
-            }
-          }
-        }
-      ]
-    },
-    deep_paging: true,
-    text_middle: %i[name puid],
-    settings: {
-      index: {
-        mapping: {
-          total_fields: {
-            limit: 10_000
-          }
-        }
-      }
-    }
 
   belongs_to :project, counter_cache: true
 
@@ -116,18 +55,6 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
     sample_metadata
   end
 
-  def search_data
-    {
-      name: name,
-      puid: puid,
-      project_id: project_id,
-      metadata: metadata.transform_keys { |k| k.gsub('.', '___') },
-      created_at: created_at,
-      updated_at: updated_at,
-      attachments_updated_at: attachments_updated_at
-    }.compact
-  end
-
   def field?(field)
     metadata.key?(field)
   end
@@ -136,9 +63,5 @@ class Sample < ApplicationRecord # rubocop:disable Metrics/ClassLength
     return true unless metadata_provenance.key?(field)
 
     metadata_provenance[field]['source'] == 'user'
-  end
-
-  def should_index?
-    !deleted?
   end
 end

@@ -11,13 +11,6 @@ module Dashboard
       @project2 = projects(:project2)
       @group1 = groups(:group_one)
       @sample1 = samples(:sample1)
-
-      Sample.reindex
-      Searchkick.enable_callbacks
-    end
-
-    def teardown
-      Searchkick.disable_callbacks
     end
 
     test 'can see the list of projects' do

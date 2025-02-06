@@ -29,13 +29,6 @@ module WorkflowExecutions
       @attachment_rev3 = attachments(:attachmentPEREV3)
       @attachment_fwd43 = attachments(:attachmentPEFWD43)
       @attachment_rev43 = attachments(:attachmentPEREV43)
-
-      Sample.reindex
-      Searchkick.enable_callbacks
-    end
-
-    teardown do
-      Searchkick.disable_callbacks
     end
 
     test 'should display a pipeline selection modal for project samples as owner' do

@@ -7,13 +7,6 @@ module Groups
     setup do
       sign_in users(:john_doe)
       @group = groups(:group_one)
-
-      Sample.reindex
-      Searchkick.enable_callbacks
-    end
-
-    teardown do
-      Searchkick.disable_callbacks
     end
 
     test 'should get index' do

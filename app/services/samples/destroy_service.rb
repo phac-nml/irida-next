@@ -48,7 +48,6 @@ module Samples
       samples = samples.destroy_all
 
       samples.each do |sample|
-        # Sample.searchkick_index.remove(sample)
         update_metadata_summary(sample)
         samples_deleted_puids << sample.puid
       end

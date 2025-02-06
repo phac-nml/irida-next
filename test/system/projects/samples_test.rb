@@ -18,13 +18,6 @@ module Projects
       @project29 = projects(:project29)
       @namespace = groups(:group_one)
       @subgroup12a = groups(:subgroup_twelve_a)
-
-      Sample.reindex
-      Searchkick.enable_callbacks
-    end
-
-    teardown do
-      Searchkick.disable_callbacks
     end
 
     test 'samples index table' do

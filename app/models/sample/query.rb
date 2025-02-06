@@ -70,19 +70,11 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
   private
 
   def pagy_results(limit, page)
-    if advanced_query && ENV['RANSACK_ONLY_SEARCH'].blank?
-      pagy_searchkick(searchkick_pagy_results, limit:, page:)
-    else
-      pagy(ransack_results, limit:, page:)
-    end
+    pagy(ransack_results, limit:, page:)
   end
 
   def non_pagy_results
-    if advanced_query && ENV['RANSACK_ONLY_SEARCH'].blank?
-      searchkick_results
-    else
-      ransack_results
-    end
+    ransack_results
   end
 
   def ransack_results
@@ -200,82 +192,6 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
       scope.where(node.not_eq(nil))
     when 'not_exists'
       scope.where(node.eq(nil))
-    end
-  end
-
-  def searchkick_pagy_results
-    return Sample.pagy_search('') unless valid?
-
-    Sample.pagy_search(name_or_puid_cont.presence || '*', **searchkick_kwargs)
-  end
-
-  def searchkick_results
-    return Sample.search('') unless valid?
-
-    Sample.search(name_or_puid_cont.presence || '*', **searchkick_kwargs)
-  end
-
-  def searchkick_kwargs
-    { fields: [{ name: :text_middle }, { puid: :text_middle }],
-      misspellings: false,
-      where: { project_id: project_ids }.merge((
-       if name_or_puid_in.present?
-         { _or: [{ name: name_or_puid_in },
-                 { puid: name_or_puid_in }] }
-       else
-         {}
-       end
-     )).merge(advanced_search_params),
-      order: { "#{column}": { order: direction, unmapped_type: 'long' } },
-      includes: [project: { namespace: [{ parent: :route }, :route] }] }
-  end
-
-  def advanced_search_params
-    or_conditions = []
-    groups.each do |group|
-      and_conditions = {}
-      group.conditions.map do |condition|
-        handle_condition(and_conditions, condition)
-      end
-      or_conditions << and_conditions
-    end
-    { _or: or_conditions }
-  end
-
-  def handle_condition(and_conditions, condition) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
-    key = condition.field.gsub(/(?<!^metadata)\./, '___')
-    case condition.operator
-    when '=', 'in'
-      and_conditions[key] = condition.value
-    when '!=', 'not_in'
-      and_conditions[key] = { not: condition.value }
-    when '<='
-      handle_between_condition(and_conditions, condition, key, :lte)
-    when '>='
-      handle_between_condition(and_conditions, condition, key, :gte)
-    when 'contains'
-      and_conditions[key] = { ilike: "%#{condition.value}%" }
-    when 'exists'
-      and_conditions[key] = { not: nil }
-    when 'not_exists'
-      and_conditions[key] = nil
-    end
-  end
-
-  def handle_between_condition(and_conditions, condition, key, operation)
-    if %w[created_at updated_at attachments_updated_at].include?(condition.field) || condition.field.end_with?('_date')
-      and_conditions[key] = if and_conditions[key].nil?
-                              { operation => condition.value }
-                            else
-                              and_conditions[key].merge({ operation => condition.value })
-                            end
-    else
-      and_conditions["#{key}.numeric"] = if and_conditions["#{key}.numeric"].nil?
-                                           { operation => condition.value }
-                                         else
-                                           and_conditions["#{key}.numeric"]
-                                             .merge({ operation => condition.value })
-                                         end
     end
   end
 

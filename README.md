@@ -99,15 +99,6 @@ Start postgresql service:
 sudo systemctl start postgresql.service
 ```
 
-## OpenSearch Setup
-
-Install [OpenSearch](https://opensearch.org/downloads.html). For [Homebrew](https://brew.sh/), use:
-
-```sh
-brew install opensearch
-brew services start opensearch
-```
-
 ## Serve
 
 ```bash

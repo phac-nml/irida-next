@@ -10,13 +10,6 @@ module Projects
       @sample23 = samples(:sample23)
       @project = projects(:project1)
       @namespace = groups(:group_one)
-
-      Sample.reindex
-      Searchkick.enable_callbacks
-    end
-
-    teardown do
-      Searchkick.enable_callbacks
     end
 
     test 'should get index where member in parent group' do

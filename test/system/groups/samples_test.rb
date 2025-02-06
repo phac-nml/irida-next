@@ -18,13 +18,6 @@ module Groups
       @sample28 = samples(:sample28)
       @sample30 = samples(:sample30)
       @sample31 = samples(:sample31)
-
-      Sample.reindex
-      Searchkick.enable_callbacks
-    end
-
-    def teardown
-      Searchkick.disable_callbacks
     end
 
     def retrieve_puids
