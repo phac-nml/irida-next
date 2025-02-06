@@ -159,10 +159,10 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
         scope.where(node.lteq(condition.value))
       elsif metadata_key.end_with?('_date')
         scope
-          .where(node.matches_regexp('^\d{4}-\d{2}-\d{2}$'))
+          .where(node.matches_regexp('^\d{4}(-\d{2}){0,2}$'))
           .where(
             Arel::Nodes::NamedFunction.new(
-              'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DATE'))]
+              'TO_DATE', [node, Arel::Nodes::SqlLiteral.new("'YYYY-MM-DD'")]
             ).lteq(condition.value)
           )
       else
@@ -179,10 +179,10 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
         scope.where(node.gteq(condition.value))
       elsif metadata_key.end_with?('_date')
         scope
-          .where(node.matches_regexp('^\d{4}-\d{2}-\d{2}$'))
+          .where(node.matches_regexp('^\d{4}(-\d{2}){0,2}$'))
           .where(
             Arel::Nodes::NamedFunction.new(
-              'CAST', [node.as(Arel::Nodes::SqlLiteral.new('DATE'))]
+              'TO_DATE', [node, Arel::Nodes::SqlLiteral.new("'YYYY-MM-DD'")]
             ).gteq(condition.value)
           )
       else
