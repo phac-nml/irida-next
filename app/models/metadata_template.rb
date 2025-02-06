@@ -20,7 +20,11 @@ class MetadataTemplate < ApplicationRecord
   belongs_to :group, optional: true, foreign_key: :namespace_id # rubocop:disable Rails/InverseOf
   belongs_to :project_namespace, optional: true, foreign_key: :namespace_id, class_name: 'Namespaces::ProjectNamespace' # rubocop:disable Rails/InverseOf
 
-  validates :fields, presence: true, json: { message: ->(errors) { errors }, schema: METADATA_TEMPLATE_JSON_SCHEMA }
+  validates :fields, presence: true, json: { message: lambda { |errors|
+    errors
+  }, schema: METADATA_TEMPLATE_JSON_SCHEMA },
+                     uniqueness: { scope: [:namespace_id] }
+
   validate :validate_namespace
 
   def self.ransackable_attributes(_auth_object = nil)

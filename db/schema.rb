@@ -158,6 +158,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_10_214118) do
     t.datetime "updated_at", null: false
     t.jsonb "log_data"
     t.index ["created_by_id"], name: "index_metadata_templates_on_created_by_id"
+    t.index ["fields", "namespace_id"], name: "index_template_fields_with_namespace", unique: true, where: "(deleted_at IS NULL)"
     t.index ["namespace_id", "name"], name: "index_template_name_with_namespace", unique: true, where: "(deleted_at IS NULL)"
     t.index ["namespace_id"], name: "index_metadata_templates_on_namespace_id"
   end
