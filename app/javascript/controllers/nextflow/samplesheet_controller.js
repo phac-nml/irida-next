@@ -70,7 +70,9 @@ export default class extends Controller {
 
   connect() {
     if (this.hasWorkflowAttributesTarget) {
+      this.#enableProcessingState();
       this.#setSamplesheetParametersAndData();
+      this.#disableProcessingState();
     }
   }
 
@@ -163,7 +165,7 @@ export default class extends Controller {
         },
       }).then((response) => {
         this.#disableProcessingState();
-        if (response.redirected && response.statusText == "OK") {
+        if (response.redirected && response.status == "200") {
           window.location.href = response.url;
         } else {
           this.#enableErrorState(this.submissionErrorValue);
