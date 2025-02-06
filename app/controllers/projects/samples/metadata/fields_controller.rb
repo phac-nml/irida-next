@@ -193,7 +193,7 @@ module Projects
 
         def render_update_error
           render status: :unprocessable_entity,
-                 locals: { type: 'error', message: @sample.errors.full_messages.first }
+                 locals: { type: 'error', message: error_message(@sample) }
         end
 
         def render_update_success

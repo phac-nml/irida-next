@@ -26,14 +26,16 @@ export default class extends Controller {
     this.availableList.addEventListener("mouseover", this.buttonStateListener)
   }
 
-  addAll() {
+  addAll(event) {
+    event.preventDefault();
     for (const item of this.allListItems) {
       this.selectedList.append(item)
     }
     this.#checkButtonStates()
   }
 
-  removeAll() {
+  removeAll(event) {
+    event.preventDefault();
     for (const item of this.allListItems) {
       this.availableList.append(item)
     }
@@ -91,6 +93,7 @@ export default class extends Controller {
   }
 
   constructParams() {
+    this.fieldTarget.innerHTML = null;
     const list_values = this.selectedList.querySelectorAll("li")
 
     for (const list_value of list_values) {

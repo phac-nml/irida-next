@@ -7,6 +7,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   included do
     before_action proc { namespace }
     before_action proc { metadata_template }, only: %i[destroy edit show update]
+    before_action proc { metadata_template_fields }, only: %i[create new]
   end
 
   def index
@@ -19,6 +20,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
 
   def new
     authorize! @namespace, to: :create_metadata_templates?
+    @new_template = MetadataTemplate.new(namespace_id: @namespace.id)
 
     respond_to do |format|
       format.turbo_stream do
@@ -48,17 +50,17 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   end
 
   def create
-    @metadata_template = MetadataTemplates::CreateService.new(
+    @new_template = MetadataTemplates::CreateService.new(
       current_user, @namespace, metadata_template_params
     ).execute
 
     respond_to do |format|
       format.turbo_stream do
-        if @metadata_template.persisted?
+        if @new_template.persisted?
           render_success(I18n.t('concerns.metadata_template_actions.create.success',
-                                template_name: @metadata_template.name))
+                                template_name: @new_template.name))
         else
-          render_error(@metadata_template.errors.full_messages.first)
+          render_error(error_message(@new_template))
         end
       end
     end
@@ -73,7 +75,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
             I18n.t('concerns.metadata_template_actions.destroy.success', template_name: @metadata_template.name)
           redirect_to metadata_templates_path
         else
-          render_error(@metadata_template.errors.full_messages.first)
+          render_error(error_message(@new_template))
         end
       end
     end
@@ -111,6 +113,15 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
 
   def metadata_template
     @metadata_template = MetadataTemplate.find_by(id: params[:id], namespace: @namespace)
+  end
+
+  def metadata_template_fields
+    @current_template_fields = if params.key?(:metadata_template) && metadata_template_params.key?(:fields)
+                                 metadata_template_params[:fields]
+                               else
+                                 @metadata_template.nil? ? [] : @metadata_template.fields
+                               end
+    @available_metadata_fields = @namespace.metadata_fields.sort_by(&:downcase) - @current_template_fields
   end
 
   def render_success(message)
