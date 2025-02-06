@@ -822,7 +822,6 @@ fr:
         title: Add New Member
     metadata_templates:
       index:
-        edit_button: Edit Template
         new_button: Add New Template
         subtitle: These are metadata templates for the group
         title: Metadata Templates
@@ -1348,7 +1347,6 @@ fr:
         title: Add New Member
     metadata_templates:
       index:
-        edit_button: Edit Template
         new_button: Add New Template
         subtitle: These are metadata templates for the project
         title: Metadata Templates
