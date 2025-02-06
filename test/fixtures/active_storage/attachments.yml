@@ -143,6 +143,11 @@ samples_workflow_execution_completed_output:
   record: samples_workflow_execution_completed_output_attachment (Attachment)
   blob: samples_workflow_execution_completed_output_blob
 
+samples_shared_workflow_execution_completed_output:
+  name: file
+  record: samples_shared_workflow_execution_completed_output_attachment (Attachment)
+  blob: samples_shared_workflow_execution_completed_output_blob
+
 data_export_7_test_export:
   name: file
   record: data_export_seven (DataExport)
@@ -157,6 +162,16 @@ data_export_9_test_export:
   name: file
   record: data_export_nine (DataExport)
   blob: data_export_9_test_export_blob
+
+data_export_11_test_export:
+  name: file
+  record: data_export_eleven (DataExport)
+  blob: data_export_11_test_export_blob
+
+data_export_12_test_export:
+  name: file
+  record: data_export_twelve (DataExport)
+  blob: data_export_12_test_export_blob
 
 attachmentEndToEndFWD_file_test_file_fastq:
   name: file
