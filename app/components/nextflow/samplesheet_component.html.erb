@@ -5,7 +5,47 @@
   <div class="hidden" data-nextflow--samplesheet-target="samplesheetProperties">
     <%= @properties.to_json %>
   </div>
-  <label class="block mb-2 text-sm font-medium text-slate-900 dark:text-white"><%= t(".label") %></label>
+  <div class="flex mb-2 justify-between">
+    <label class="text-sm font-medium text-slate-900 dark:text-white mt-auto"><%= t(".label") %></label>
+    <div data-controller="nextflow--filter" class="relative">
+      <input
+        data-action="nextflow--filter#change"
+        data-nextflow--filter-target="input"
+        class="
+          t-search-component block w-full p-2.5 pl-10 pr-10 text-sm text-slate-900 border
+          border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500
+          focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600
+          dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500
+          dark:focus:border-primary-500
+        "
+        placeholder="Filter by ID or name"
+        type="text"
+      >
+      <div
+        class="
+          absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
+        "
+      >
+        <%= viral_icon(
+          name: "magnifying_glass",
+          classes: "w-4 h-4 text-slate-500 dark:text-slate-400",
+        ) %>
+      </div>
+      <div
+        data-nextflow--filter-target="clear"
+        class="hidden absolute inset-y-0 right-0 flex items-center mr-2"
+      >
+        <button
+          data-action="nextflow--filter#clear"
+          type="button"
+          class=""
+          aria-label="clear"
+        >
+          <%= viral_icon(name: "x_mark", classes: "size-5 text-slate-500 dark:text-slate-400") %>
+        </button>
+      </div>
+    </div>
+  </div>
   <div
     role="alert"
     class="

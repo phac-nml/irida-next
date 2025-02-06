@@ -272,6 +272,10 @@ export default class extends Controller {
     this.#clearPayload();
   }
 
+  filterTable({ detail: { content } }) {
+    console.log(content);
+  }
+
   #loadTableData() {
     let startingIndex = (this.#currentPage - 1) * 5;
     let lastIndex = startingIndex + 5;
