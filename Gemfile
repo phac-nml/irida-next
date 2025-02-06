@@ -178,6 +178,7 @@ group :test do
   gem 'capybara'
   gem 'cuprite'
 
+  gem 'rails-controller-testing'
   gem 'simplecov', require: false
   gem 'timecop'
 
