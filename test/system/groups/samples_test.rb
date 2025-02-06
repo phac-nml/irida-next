@@ -316,7 +316,8 @@ module Groups
         assert_selector 'th', count: 6
       end
 
-      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      choose 'q[metadata_template]', option: 'all'
 
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
@@ -440,7 +441,8 @@ module Groups
       click_on 'Last Updated'
       assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
 
-      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      choose 'q[metadata_template]', option: 'all'
 
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
@@ -456,7 +458,8 @@ module Groups
         assert_selector 'td:nth-child(9) button', text: ''
       end
 
-      select(I18n.t('components.metadata_templates_dropdown.none'), from: 'q[metadata_template]')
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      choose 'q[metadata_template]', option: 'none'
 
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
@@ -472,7 +475,8 @@ module Groups
         assert_selector 'th', count: 6
       end
 
-      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      choose 'q[metadata_template]', option: 'all'
 
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
@@ -493,7 +497,8 @@ module Groups
       assert_selector 'tbody tr:first-child th', text: @sample30.puid
       assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample30.name
 
-      select(I18n.t('components.metadata_templates_dropdown.none'), from: 'q[metadata_template]')
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      choose 'q[metadata_template]', option: 'none'
 
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
@@ -924,7 +929,9 @@ module Groups
     test 'should partially import metadata with missing sample errors' do
       visit group_samples_url(@group)
 
-      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      choose 'q[metadata_template]', option: 'all'
+
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
 
@@ -977,7 +984,11 @@ module Groups
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
 
-      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      choose 'q[metadata_template]', option: 'all'
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
 
       within('table thead tr') do
         assert_selector 'th', count: 9
@@ -1014,7 +1025,12 @@ module Groups
       login_as users(:ryan_doe)
       visit group_samples_url(@group)
 
-      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
+      # toggle metadata on for samples table
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      choose 'q[metadata_template]', option: 'all'
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
 
       within('table thead tr') do
         assert_selector 'th', count: 9
