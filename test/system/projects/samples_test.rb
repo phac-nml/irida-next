@@ -1542,7 +1542,7 @@ module Projects
 
         ### VERIFY START ###
         # error msg
-        assert_text I18n.t('services.spreadsheet_import.missing_data_column')
+        assert_text I18n.t('services.spreadsheet_import.missing_data_columns')
         ### VERIFY END ###
       end
     end
