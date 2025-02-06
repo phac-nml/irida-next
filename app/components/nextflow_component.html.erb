@@ -126,6 +126,7 @@
       <% if @samples.empty? %>
       type="submit"
       <% else %>
+      disabled="disabled"
       data-action="click->nextflow--samplesheet#submitSamplesheet"
       <% end %>
     >
@@ -136,10 +137,12 @@
       <% end %>
     </button>
   <% end %>
-  <span
-    class="hidden flex items-center p-4 space-x-4"
-    data-nextflow--samplesheet-target="spinner"
-  >
-    <%= render SpinnerComponent.new(message: t(".processing_request")) %>
-  </span>
+  <% unless @samples.empty? %>
+    <span
+      class="flex items-center p-4 space-x-4"
+      data-nextflow--samplesheet-target="spinner"
+    >
+      <%= render SpinnerComponent.new(message: t(".processing_request")) %>
+    </span>
+  <% end %>
 </div>

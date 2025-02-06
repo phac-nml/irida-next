@@ -70,7 +70,6 @@ export default class extends Controller {
 
   connect() {
     if (this.hasWorkflowAttributesTarget) {
-      this.#enableProcessingState();
       this.#setSamplesheetParametersAndData();
       this.#disableProcessingState();
     }
