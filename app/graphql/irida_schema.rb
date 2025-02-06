@@ -11,7 +11,7 @@ class IridaSchema < GraphQL::Schema # rubocop:disable GraphQL/ObjectDescription
   use GraphQL::Dataloader
 
   # Add in connection for Searchkick results
-  connections.add(Searchkick::Relation, GraphQL::Searchkick::RelationConnection)
+  connections.add(Searchkick::Relation, Graphql::Searchkick::RelationConnection)
 
   max_depth 15
   max_complexity 550

@@ -2,7 +2,7 @@
 
 require 'graphql/pagination/relation_connection'
 
-module GraphQL
+module Graphql
   module Searchkick
     # Customizes `RelationConnection` to work with `Searchkick::Relation`s.
     class RelationConnection < GraphQL::Pagination::RelationConnection # rubocop:disable GraphQL/ObjectDescription
