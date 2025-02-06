@@ -922,8 +922,8 @@ module WorkflowExecutions
         ### ACTIONS END ###
 
         ### VERIFY START ###
-        # verify no pagination buttons rendered
-        assert_no_selector '#samplesheet_pagination'
+        # verify empty pagination container with no pagination buttons rendered
+        assert_selector 'div[data-nextflow--samplesheet-target="paginationContainer"]'
         assert_no_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
                            text: I18n.t('nextflow.samplesheet_component.previous')
         assert_no_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
@@ -933,6 +933,204 @@ module WorkflowExecutions
 
         ### VERIFY END ###
       end
+    end
+
+    test 'pagination filtering' do
+      ### SETUP START ###
+      user = users(:john_doe)
+      sample3 = samples(:sample3)
+      sample4 = samples(:sample4)
+      sample5 = samples(:sample5)
+      login_as user
+      visit namespace_project_samples_url(@group1, @project2)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
+                                                                           locale: user.locale))
+      # select samples
+      click_button I18n.t(:'projects.samples.index.select_all_button')
+      # launch workflow execution dialog
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      assert_selector '#dialog'
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_button text: 'phac-nml/iridanextexample', count: 3
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within '#dialog' do
+        # verify pagination buttons
+        assert_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
+                        text: I18n.t('nextflow.samplesheet_component.previous')
+        assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
+        within('select[data-action="change->nextflow--samplesheet#pageSelected"]') do
+          assert_selector 'option[value="1"]'
+          assert_selector 'option[value="2"]'
+          assert_selector 'option[value="3"]'
+          assert_selector 'option[value="4"]'
+        end
+        assert_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
+                        text: I18n.t('nextflow.samplesheet_component.next')
+        # verify current samples listed
+        within('#metadata-sample-column') do
+          assert_text sample3.puid
+          assert_text sample4.puid
+          assert_text sample5.puid
+          assert_no_text @sample22.puid
+          assert_selector 'div[class="p-2.5 sticky left-0"]', count: 5
+        end
+        # enter filter
+        find('input#samplesheet-filter').fill_in with: @sample22.puid
+        find('input#samplesheet-filter').send_keys :enter
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
+        # verify above samples no longer listed and only the filter sample is rendered
+        within('#metadata-sample-column') do
+          assert_no_text sample3.puid
+          assert_no_text sample4.puid
+          assert_no_text sample5.puid
+          assert_text @sample22.puid
+          assert_selector 'div[class="p-2.5 sticky left-0"]', count: 1
+        end
+        # verify pagination is removed because there is only 1 page of samples remaining
+        assert_selector 'div[data-nextflow--samplesheet-target="paginationContainer"]'
+        assert_no_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
+                           text: I18n.t('nextflow.samplesheet_component.previous')
+        assert_no_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
+
+        assert_no_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
+                           text: I18n.t('nextflow.samplesheet_component.next')
+      end
+      ### VERIFY END ###
+    end
+
+    test 'samplesheet filtering still paginates' do
+      ### SETUP START ###
+      user = users(:john_doe)
+      login_as user
+      visit namespace_project_samples_url(@group1, @project2)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
+                                                                           locale: user.locale))
+      # select samples
+      click_button I18n.t(:'projects.samples.index.select_all_button')
+      # launch workflow execution dialog
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      assert_selector '#dialog'
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_button text: 'phac-nml/iridanextexample', count: 3
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within '#dialog' do
+        # verify pagination buttons
+        assert_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
+                        text: I18n.t('nextflow.samplesheet_component.previous')
+        assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
+        within('select[data-action="change->nextflow--samplesheet#pageSelected"]') do
+          assert_selector 'option[value="1"]'
+          assert_selector 'option[value="2"]'
+          assert_selector 'option[value="3"]'
+          assert_selector 'option[value="4"]'
+        end
+        assert_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
+                        text: I18n.t('nextflow.samplesheet_component.next')
+        # verify current samples listed
+        within('#metadata-sample-column') do
+          assert_selector 'div[class="p-2.5 sticky left-0"]', count: 5
+        end
+        # enter filter
+        find('input#samplesheet-filter').fill_in with: 'Project 2 Sample'
+        find('input#samplesheet-filter').send_keys :enter
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
+        within('#metadata-sample-column') do
+          assert_selector 'div[class="p-2.5 sticky left-0"]', count: 5
+        end
+        # verify 4 pages of samples still exist
+        within('select[data-action="change->nextflow--samplesheet#pageSelected"]') do
+          assert_selector 'option[value="1"]'
+          assert_selector 'option[value="2"]'
+          assert_selector 'option[value="3"]'
+          assert_selector 'option[value="4"]'
+        end
+      end
+      ### VERIFY END ###
+    end
+
+    test 'samplesheet filtering empty state' do
+      ### SETUP START ###
+      user = users(:john_doe)
+      login_as user
+      visit namespace_project_samples_url(@group1, @project2)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
+                                                                           locale: user.locale))
+      # select samples
+      click_button I18n.t(:'projects.samples.index.select_all_button')
+      # launch workflow execution dialog
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      assert_selector '#dialog'
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_button text: 'phac-nml/iridanextexample', count: 3
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within '#dialog' do
+        # verify pagination buttons
+        assert_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
+                        text: I18n.t('nextflow.samplesheet_component.previous')
+        assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
+        within('select[data-action="change->nextflow--samplesheet#pageSelected"]') do
+          assert_selector 'option[value="1"]'
+          assert_selector 'option[value="2"]'
+          assert_selector 'option[value="3"]'
+          assert_selector 'option[value="4"]'
+        end
+        assert_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
+                        text: I18n.t('nextflow.samplesheet_component.next')
+        # verify current samples listed
+        within('#metadata-sample-column') do
+          assert_selector 'div[class="p-2.5 sticky left-0"]', count: 5
+        end
+        # enter filter
+        find('input#samplesheet-filter').fill_in with: 'not a valid filter'
+        find('input#samplesheet-filter').send_keys :enter
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
+        # verify no samples in samplesheet
+        within('#metadata-sample-column') do
+          assert_no_selector 'div[class="p-2.5 sticky left-0"]'
+        end
+
+        # verify empty state
+        assert_selector 'div[data-nextflow--samplesheet-target="emptyState"]'
+        assert_text I18n.t('components.viral.pagy.empty_state.title')
+        assert_text I18n.t('components.viral.pagy.empty_state.description')
+
+        # verify pagination is removed
+        assert_selector 'div[data-nextflow--samplesheet-target="paginationContainer"]'
+        assert_no_selector 'button[data-action="click->nextflow--samplesheet#previousPage"][disabled]',
+                           text: I18n.t('nextflow.samplesheet_component.previous')
+        assert_no_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
+
+        assert_no_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
+                           text: I18n.t('nextflow.samplesheet_component.next')
+      end
+      ### VERIFY END ###
     end
   end
 end

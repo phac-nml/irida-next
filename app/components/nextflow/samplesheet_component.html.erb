@@ -9,6 +9,7 @@
     <label class="text-sm font-medium text-slate-900 dark:text-white mt-auto"><%= t(".label") %></label>
     <div class="relative">
       <input
+        id="samplesheet-filter"
         data-nextflow--samplesheet-target="filter"
         data-action="keydown.enter->nextflow--samplesheet#filter"
         class="
@@ -20,7 +21,7 @@
         "
         placeholder="Filter by ID or name"
         type="search"
-      >
+      />
       <div
         class="
           absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
@@ -82,7 +83,6 @@
   </div>
   <div
     data-nextflow--samplesheet-target="paginationContainer"
-    id="samplesheet_pagination"
     class="flex items-center justify-end"
   >
   </div>
