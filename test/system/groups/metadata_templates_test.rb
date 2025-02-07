@@ -475,9 +475,9 @@ module Groups
 
         # fields currently in template fixture
         within "ul[id='selected']" do
-          assert_text 'field_4'
-          assert_text 'field_5'
-          assert_text 'field_6'
+          assert_text 'field_1'
+          assert_text 'field_2'
+          assert_text 'field_3'
           assert_selector 'li', count: 3
         end
 
@@ -491,9 +491,9 @@ module Groups
         end
 
         within "ul[id='selected']" do
-          assert_text 'field_4'
-          assert_text 'field_5'
-          assert_text 'field_6'
+          assert_text 'field_1'
+          assert_text 'field_2'
+          assert_text 'field_3'
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'unique.metadata.field'
