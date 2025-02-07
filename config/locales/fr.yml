@@ -1814,6 +1814,7 @@ fr:
           label: Champs de métadonnées
           none: Masquer tous les champs
         label: Modèles de métadonnées
+        loading: Loading metadata templates...
         templates:
           label: Modèles de métadonnées
   time:
@@ -1916,7 +1917,7 @@ fr:
         title: "%{workflow} parameters"
         update: Update
       pipeline_selection:
-        loading_html: "<span class='flex items-center space-x-2'><span class='font-medium text-slate-900 truncate dark:text-white group-hover:text-slate-100'>WORKFLOW_NAME_PLACEHOLDER</span><span class='bg-primary-100 text-primary-800 dark:bg-primary-800 dark:text-primary-400 text-xs font-medium px-2.5 py-0.5 rounded-full'>WORKFLOW_VERSION_PLACEHOLDER</span></span>Preparing workflow execution arguments for COUNT_PLACEHOLDER samples, this may take a bit of time."
+        loading_html: "<span class='flex items-center space-x-2'><span class='font-medium truncate text-slate-900 dark:text-white group-hover:text-slate-100'>WORKFLOW_NAME_PLACEHOLDER</span><span class='bg-primary-100 text-primary-800 dark:bg-primary-800 dark:text-primary-400 text-xs font-medium px-2.5 py-0.5 rounded-full'>WORKFLOW_VERSION_PLACEHOLDER</span></span>Preparing workflow execution arguments for COUNT_PLACEHOLDER samples, this may take a bit of time."
         title: Workflow Selection
     summary:
       created_at: Created

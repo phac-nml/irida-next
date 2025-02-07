@@ -18,13 +18,12 @@
             dark:hover:text-white dark:hover:bg-slate-700",
     data: {
       'dropdown-toggle': "dd-metadata_templates_dropdown",
-      "dropdown-offset-skidding": 220,
+      "dropdown-offset-skidding": 150,
     } do %>
-    <div class="mr-2 text-sm uppercase">
-      <%= t("shared.samples.metadata_templates.label") %>:
+    <div class="text-sm">
+      <%= t("shared.samples.metadata_templates.label") %>
     </div>
-    <%= metadata_template[:name] %>
-    <%= viral_icon(name: "chevron_down", classes: "w-4 h-4 ml-2 flex-none") %>
+    <%= viral_icon(name: "adjustment_horizontal", classes: "w-4 h-4 ml-2 flex-none") %>
   <% end %>
 <% end %>
 <div
@@ -36,7 +35,9 @@
 >
   <ul id="metadata_templates_dropdown">
     <li>
-      <%= render SpinnerComponent.new(message: "Loading metadata templates...") %>
+      <%= render SpinnerComponent.new(
+        message: t("shared.samples.metadata_templates.loading"),
+      ) %>
     </li>
   </ul>
 </div>
