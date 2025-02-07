@@ -122,7 +122,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
 
   def metadata_template_fields
     @current_template_fields = if params.key?(:metadata_template) && metadata_template_params.key?(:fields)
-                                 metadata_template_params[:fields].uniq
+                                 metadata_template_params[:fields]
                                else
                                  @metadata_template.nil? ? [] : @metadata_template.fields
                                end
