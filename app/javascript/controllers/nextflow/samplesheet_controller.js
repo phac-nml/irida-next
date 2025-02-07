@@ -33,6 +33,8 @@ export default class extends Controller {
     submissionError: { type: String },
     url: { type: String },
     noSelectedFile: { type: String },
+    processingRequest: { type: String },
+    filteringSamples: { type: String },
   };
 
   #pagination_button_disabled_state = [
@@ -154,34 +156,37 @@ export default class extends Controller {
 
   submitSamplesheet(event) {
     event.preventDefault();
-    this.#enableProcessingState();
-    let missingData = this.#validateData();
-    if (Object.keys(missingData).length > 0) {
-      this.#disableProcessingState();
-      let errorMsg = this.dataMissingErrorValue;
-      for (const sample in missingData) {
-        errorMsg =
-          errorMsg + `\n - ${sample}: ${missingData[sample].join(", ")}`;
-      }
-      this.#enableErrorState(errorMsg);
-    } else {
-      this.#combineFormData();
-      fetch(this.urlValue, {
-        method: "POST",
-        body: new URLSearchParams(this.#formData),
-        credentials: "same-origin",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }).then((response) => {
+    this.#enableProcessingState(this.processingRequestValue);
+    // 50ms timeout allows the browser to update the DOM elements enabling the overlay prior to starting the submission
+    setTimeout(() => {
+      let missingData = this.#validateData();
+      if (Object.keys(missingData).length > 0) {
         this.#disableProcessingState();
-        if (response.redirected && response.status == "200") {
-          window.location.href = response.url;
-        } else {
-          this.#enableErrorState(this.submissionErrorValue);
+        let errorMsg = this.dataMissingErrorValue;
+        for (const sample in missingData) {
+          errorMsg =
+            errorMsg + `\n - ${sample}: ${missingData[sample].join(", ")}`;
         }
-      });
-    }
+        this.#enableErrorState(errorMsg);
+      } else {
+        this.#combineFormData();
+        fetch(this.urlValue, {
+          method: "POST",
+          body: new URLSearchParams(this.#formData),
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }).then((response) => {
+          this.#disableProcessingState();
+          if (response.redirected && response.status == "200") {
+            window.location.href = response.url;
+          } else {
+            this.#enableErrorState(this.submissionErrorValue);
+          }
+        });
+      }
+    }, 100);
   }
 
   #validateData() {
@@ -213,7 +218,8 @@ export default class extends Controller {
     }
   }
 
-  #enableProcessingState() {
+  #enableProcessingState(message) {
+    document.getElementById("spinner-message").innerHTML = message;
     this.submitTarget.disabled = true;
     this.spinnerTarget.classList.remove("hidden");
   }
@@ -533,35 +539,41 @@ export default class extends Controller {
   // when filtering samples, we will add the indexes of samples that fit the filter into the #currentSampleIndexes array
   // we can then easily access each sample's data via its index and still paginate in groups of 5
   filter() {
-    if (this.filterTarget.value) {
-      this.#currentSampleIndexes = [];
-      // loop through all samples in #samplesheetAttributes via index ->
-      // check if it contains the sample (puid) or sample_name property ->
-      // check if the filter should include the sample based on its puid or name
-      for (let i = 0; i < this.#totalSamples; i++) {
-        if (
-          this.#samplesheetAttributes[i]["samplesheet_params"].hasOwnProperty(
-            "sample",
-          )
-        ) {
-          this.#checkValueForFilter("sample", i);
+    this.#enableProcessingState(this.filteringSamplesValue);
+    // 50ms timeout allows the browser to update the DOM elements enabling the overlay prior to starting the filtering process
+    setTimeout(() => {
+      if (this.filterTarget.value) {
+        this.#currentSampleIndexes = [];
+        // loop through all samples in #samplesheetAttributes via index ->
+        // check if it contains the sample (puid) or sample_name property ->
+        // check if the filter should include the sample based on its puid or name
+        for (let i = 0; i < this.#totalSamples; i++) {
+          if (
+            this.#samplesheetAttributes[i]["samplesheet_params"].hasOwnProperty(
+              "sample",
+            )
+          ) {
+            this.#checkValueForFilter("sample", i);
+          }
+          if (
+            this.#samplesheetAttributes[i]["samplesheet_params"].hasOwnProperty(
+              "sample_name",
+            )
+          ) {
+            this.#checkValueForFilter("sample_name", i);
+          }
         }
-        if (
-          this.#samplesheetAttributes[i]["samplesheet_params"].hasOwnProperty(
-            "sample_name",
-          )
-        ) {
-          this.#checkValueForFilter("sample_name", i);
-        }
+      } else {
+        // reset table to include all samples if filter is empty
+        this.#currentSampleIndexes = [
+          ...Array(Object.keys(this.#samplesheetAttributes).length).keys(),
+        ];
       }
-    } else {
-      // reset table to include all samples if filter is empty
-      this.#currentSampleIndexes = [
-        ...Array(Object.keys(this.#samplesheetAttributes).length).keys(),
-      ];
-    }
-    this.#setPagination();
-    this.#updatePageData();
+
+      this.#disableProcessingState();
+      this.#setPagination();
+      this.#updatePageData();
+    }, 50);
   }
 
   #checkValueForFilter(columnName, index) {
