@@ -8,13 +8,13 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
     before_action proc { namespace }
     before_action proc { metadata_template }, only: %i[destroy edit show update]
     before_action proc { metadata_template_fields }, only: %i[create new edit update]
-    before_action proc { metadata_templates }, only: %i[list]
+    before_action proc { metadata_templates_ancestral }, only: %i[list]
   end
 
   def index
     authorize! @namespace, to: :view_metadata_templates?
 
-    @q = load_metadata_templates.ransack(params[:q])
+    @q = load_namespace_metadata_templates.ransack(params[:q])
     set_default_sort
     @pagy, @metadata_templates = pagy(@q.result)
   end
@@ -127,13 +127,13 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
 
   private
 
-  def metadata_templates
+  def metadata_templates_ancestral
     @metadata_templates = authorized_scope(MetadataTemplate, type: :relation,
                                                              scope_options: { namespace: @namespace,
                                                                               include_ancestral_templates: true })
   end
 
-  def load_metadata_templates
+  def load_namespace_metadata_templates
     authorized_scope(MetadataTemplate, type: :relation, scope_options: { namespace: @namespace })
   end
 
