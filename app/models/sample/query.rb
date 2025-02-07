@@ -144,13 +144,13 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
       end
     when '!='
       if metadata_field || %w[name puid].include?(condition.field)
-        scope.where(node.does_not_match(condition.value))
+        scope.where(node.eq(nil).or(node.does_not_match(condition.value)))
       else
         scope.where(node.not_eq(condition.value))
       end
     when 'not_in'
       if metadata_field || %w[name puid].include?(condition.field)
-        scope.where(node.does_not_match_all(condition.value))
+        scope.where(node.eq(nil).or(node.does_not_match_all(condition.value)))
       else
         scope.where(node.not_in(condition.value))
       end
