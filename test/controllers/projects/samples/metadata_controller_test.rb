@@ -16,7 +16,8 @@ module Projects
     test 'delete metadata field added by user' do
       delete namespace_project_sample_metadata_path(@namespace, @project29, @sample32),
              params: { 'sample' => { 'metadata' => { 'metadatafield1' => '' } }, format: :turbo_stream }
-      assert_response :successP
+      assert_response :success
+    end
 
     test 'delete metadata field added by analysis' do
       sample34 = samples(:sample34)
