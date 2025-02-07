@@ -45,6 +45,8 @@ module Samples
           next
         end
 
+        # TODO: need to check that we don't already have a sample with this sample name in the results. special case.
+
         project = Namespaces::ProjectNamespace.find_by(puid: project_puid)&.project
         unless project
           response[sample_name] = {

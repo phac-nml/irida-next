@@ -13,7 +13,7 @@ module Samples
         @project = projects(:project1)
         @project2 = projects(:project2)
 
-        file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/valid_batch_sample_import.csv'))
+        file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/batch_sample_import_valid.csv'))
         @blob = ActiveStorage::Blob.create_and_upload!(
           io: file,
           filename: file.original_filename,
@@ -113,7 +113,7 @@ module Samples
         assert_equal I18n.t('services.samples.batch_import.project_puid_not_in_namespace',
                             project_puid: @project.puid,
                             namespace: @project2.namespace.full_path),
-                     response['my new sample'][:message]
+                     response['my new sample 2'][:message]
       end
 
       test 'import samples into a project that does not belong to group namespace' do
@@ -132,8 +132,138 @@ module Samples
         assert_equal I18n.t('services.samples.batch_import.project_puid_not_in_namespace',
                             project_puid: @project.puid,
                             namespace: @group2.full_path),
-                     response['my new sample'][:message]
+                     response['my new sample 2'][:message]
       end
+
+      test 'import with bad data invalid project' do
+        assert_equal 3, @project.samples.count
+
+        file = Rack::Test::UploadedFile.new(
+          Rails.root.join('test/fixtures/files/batch_sample_import_invalid_project.csv')
+        )
+        blob = ActiveStorage::Blob.create_and_upload!(
+          io: file,
+          filename: file.original_filename,
+          content_type: file.content_type
+        )
+
+        response = Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id,
+                                                       @default_params).execute
+
+        assert_equal 4, @project.samples.count
+
+        assert_equal I18n.t('services.samples.batch_import.project_puid_not_found',
+                            project_puid: 'invalid_puid'),
+                     response['my new sample 2'][:message]
+      end
+
+      test 'import with bad data missing puid' do
+        assert_equal 3, @project.samples.count
+
+        file = Rack::Test::UploadedFile.new(
+          Rails.root.join('test/fixtures/files/batch_sample_import_invalid_missing_puid.csv')
+        )
+        blob = ActiveStorage::Blob.create_and_upload!(
+          io: file,
+          filename: file.original_filename,
+          content_type: file.content_type
+        )
+
+        response = Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id,
+                                                       @default_params).execute
+
+        assert_equal 4, @project.samples.count
+
+        assert_equal I18n.t('services.spreadsheet_import.missing_field',
+                            index: 2),
+                     response['index 2'][:message]
+      end
+
+      test 'import with bad data blank line' do
+        assert_equal 3, @project.samples.count
+
+        file = Rack::Test::UploadedFile.new(
+          Rails.root.join('test/fixtures/files/batch_sample_import_invalid_blank_line.csv')
+        )
+        blob = ActiveStorage::Blob.create_and_upload!(
+          io: file,
+          filename: file.original_filename,
+          content_type: file.content_type
+        )
+
+        response = Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id,
+                                                       @default_params).execute
+
+        assert_equal 5, @project.samples.count
+
+        assert_equal I18n.t('services.spreadsheet_import.missing_field',
+                            index: 2),
+                     response['index 2'][:message]
+      end
+
+      test 'import with bad data short sample name' do
+        assert_equal 3, @project.samples.count
+
+        file = Rack::Test::UploadedFile.new(
+          Rails.root.join('test/fixtures/files/batch_sample_import_invalid_short_sample_name.csv')
+        )
+        blob = ActiveStorage::Blob.create_and_upload!(
+          io: file,
+          filename: file.original_filename,
+          content_type: file.content_type
+        )
+
+        response = Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id,
+                                                       @default_params).execute
+
+        assert_equal 4, @project.samples.count
+
+        assert_equal ['sample', 'name'], response['m'][0][:path] # rubocop:disable Style/WordArray
+        assert_equal 'is too short (minimum is 3 characters)', response['m'][0][:message]
+      end
+
+      test 'import with bad data sample already exists' do
+        assert_equal 3, @project.samples.count
+
+        file = Rack::Test::UploadedFile.new(
+          Rails.root.join('test/fixtures/files/batch_sample_import_invalid_sample_exists.csv')
+        )
+        blob = ActiveStorage::Blob.create_and_upload!(
+          io: file,
+          filename: file.original_filename,
+          content_type: file.content_type
+        )
+
+        response = Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id,
+                                                       @default_params).execute
+
+        assert_equal 4, @project.samples.count
+
+        assert_equal ['sample', 'name'], response['Project 1 Sample 1'][0][:path] # rubocop:disable Style/WordArray
+        assert_equal 'has already been taken', response['Project 1 Sample 1'][0][:message]
+      end
+
+      # test 'import with bad data invalid duplicate sample name in file' do
+      #   assert_equal 3, @project.samples.count
+
+      #   file = Rack::Test::UploadedFile.new(
+      #     Rails.root.join('test/fixtures/files/batch_sample_import_invalid_sample_dup_in_file.csv')
+      #   )
+      #   blob = ActiveStorage::Blob.create_and_upload!(
+      #     io: file,
+      #     filename: file.original_filename,
+      #     content_type: file.content_type
+      #   )
+
+      #   response = Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id,
+      #                                                  @default_params).execute
+
+      #   assert_equal 4, @project.samples.count
+
+      #   assert_equal I18n.t('services.samples.batch_import.project_puid_not_found',
+      #                       index: 2),
+      #                response['index 2'][:message]
+      # end
     end
   end
 end
