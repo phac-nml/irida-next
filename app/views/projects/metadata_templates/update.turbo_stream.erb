@@ -1,0 +1,11 @@
+<%= render partial: "shared/metadata_templates/update",
+locals: {
+  update_path:
+    namespace_project_metadata_template_path(
+      @namespace.parent,
+      @namespace.project,
+      @metadata_template,
+    ),
+  type: type,
+  message: message,
+} %>

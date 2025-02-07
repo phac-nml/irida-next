@@ -1,0 +1,11 @@
+<%= turbo_stream.update "metadata_template_modal",
+                    partial: "shared/metadata_templates/edit_template_dialog",
+                    locals: {
+                      open: true,
+                      update_path:
+                        namespace_project_metadata_template_path(
+                          @namespace.parent,
+                          @namespace.project,
+                          @metadata_template,
+                        ),
+                    } %>

@@ -28,6 +28,7 @@ export default class extends Controller {
 
   addAll(event) {
     event.preventDefault();
+
     for (const item of this.allListItems) {
       this.selectedList.append(item)
     }
@@ -36,6 +37,7 @@ export default class extends Controller {
 
   removeAll(event) {
     event.preventDefault();
+
     for (const item of this.allListItems) {
       this.availableList.append(item)
     }

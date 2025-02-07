@@ -1198,12 +1198,12 @@ module Projects
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
 
         perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        ### ACTIONS END ###
-
-        ### VERIFY START ###
-        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
-        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
       end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+      click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
 
       within('#samples-table table thead tr') do
         # metadatafield3 and 4 added to header

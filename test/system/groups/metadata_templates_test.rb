@@ -356,5 +356,87 @@ module Groups
 
       assert_no_selector 'a', text: I18n.t('groups.metadata_templates.index.new_button')
     end
+
+    test 'should edit metadata template associated with the group' do
+      group = groups(:group_one)
+      metadata_template = metadata_templates(:group_one_metadata_template0)
+
+      visit group_metadata_templates_url(group)
+
+      table_row = find(:table_row, [metadata_template.name])
+
+      assert_equal 3, metadata_template.fields.length
+      assert_equal 'Group Template0', metadata_template.name
+
+      within table_row do
+        assert_link I18n.t(:'metadata_templates.table_component.edit_button'), count: 1
+        click_link I18n.t(:'metadata_templates.table_component.edit_button')
+      end
+
+      assert_selector '#dialog'
+
+      within('span[data-controller-connected="true"] dialog') do
+        assert_text I18n.t('metadata_templates.edit_template_dialog.title')
+
+        within "ul[id='available']" do
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield2'
+          assert_text 'unique.metadata.field'
+          assert_selector 'li', count: 3
+        end
+
+        # fields currently in template fixture
+        within "ul[id='selected']" do
+          assert_text 'field_4'
+          assert_text 'field_5'
+          assert_text 'field_6'
+          assert_selector 'li', count: 3
+        end
+
+        click_button I18n.t('viral.sortable_lists_component.add_all')
+
+        within "ul[id='available']" do
+          assert_no_text 'metadatafield1'
+          assert_no_text 'metadatafield2'
+          assert_no_text 'unique.metadata.field'
+          assert_no_selector 'li'
+        end
+
+        within "ul[id='selected']" do
+          assert_text 'field_4'
+          assert_text 'field_5'
+          assert_text 'field_6'
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield2'
+          assert_text 'unique.metadata.field'
+          assert_selector 'li', count: 6
+        end
+
+        fill_in 'Name', with: 'Group Template011'
+
+        assert_selector 'input[type="submit"]', count: 1
+        click_on I18n.t('metadata_templates.edit_template_dialog.update_button')
+      end
+
+      within %(div[data-controller='viral--flash']) do
+        assert_text I18n.t(
+          :'concerns.metadata_template_actions.update.success',
+          template_name: 'Group Template011'
+        )
+      end
+
+      assert_selector 'div#spinner'
+      assert_text I18n.t('metadata_templates.table_component.spinner_message')
+      assert_no_selector 'div#spinner'
+
+      assert_equal 6, metadata_template.reload.fields.length
+      assert_equal 'Group Template011', metadata_template.name
+
+      table_row = find(:table_row, ['Group Template011'])
+
+      within(table_row) do
+        assert_text 'Group Template011'
+      end
+    end
   end
 end

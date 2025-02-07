@@ -160,8 +160,6 @@ module Projects
 
       click_on I18n.t('projects.metadata_templates.index.new_button')
 
-      assert_selector '#dialog'
-
       within('span[data-controller-connected="true"] dialog') do
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.new_template_dialog.description')
@@ -352,6 +350,85 @@ module Projects
       assert_selector 'p', text: I18n.t('projects.metadata_templates.index.subtitle')
 
       assert_no_selector 'a', text: I18n.t('projects.metadata_templates.index.new_button')
+    end
+
+    test 'should edit metadata template associated with the project' do
+      project = projects(:project1)
+      metadata_template = metadata_templates(:project1_metadata_template0)
+
+      visit namespace_project_metadata_templates_url(project.namespace.parent, project)
+
+      table_row = find(:table_row, [metadata_template.name])
+
+      assert_equal 3, metadata_template.fields.length
+      assert_equal 'Project Template0', metadata_template.name
+
+      within table_row do
+        assert_link I18n.t(:'metadata_templates.table_component.edit_button'), count: 1
+        click_link I18n.t(:'metadata_templates.table_component.edit_button')
+      end
+
+      assert_selector '#dialog'
+
+      within('span[data-controller-connected="true"] dialog') do
+        assert_text I18n.t('metadata_templates.edit_template_dialog.title')
+
+        within "ul[id='available']" do
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield2'
+          assert_selector 'li', count: 2
+        end
+
+        # fields currently in template fixture
+        within "ul[id='selected']" do
+          assert_text 'field_1'
+          assert_text 'field_2'
+          assert_text 'field_3'
+          assert_selector 'li', count: 3
+        end
+
+        click_button I18n.t('viral.sortable_lists_component.add_all')
+
+        within "ul[id='available']" do
+          assert_no_text 'metadatafield1'
+          assert_no_text 'metadatafield2'
+          assert_no_selector 'li'
+        end
+
+        within "ul[id='selected']" do
+          assert_text 'field_1'
+          assert_text 'field_2'
+          assert_text 'field_3'
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield2'
+          assert_selector 'li', count: 5
+        end
+
+        fill_in 'Name', with: 'Project Template011'
+
+        assert_selector 'input[type="submit"]', count: 1
+        click_on I18n.t('metadata_templates.edit_template_dialog.update_button')
+      end
+
+      within %(div[data-controller='viral--flash']) do
+        assert_text I18n.t(
+          :'concerns.metadata_template_actions.update.success',
+          template_name: 'Project Template011'
+        )
+      end
+
+      assert_selector 'div#spinner'
+      assert_text I18n.t('metadata_templates.table_component.spinner_message')
+      assert_no_selector 'div#spinner'
+
+      assert_equal 5, metadata_template.reload.fields.length
+      assert_equal 'Project Template011', metadata_template.name
+
+      table_row = find(:table_row, ['Project Template011'])
+
+      within(table_row) do
+        assert_text 'Project Template011'
+      end
     end
   end
 end

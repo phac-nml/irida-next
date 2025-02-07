@@ -21,7 +21,7 @@ valid_group_metadata_template:
 project1_metadata_template<%= (n) %>:
   name: <%= "Project Template#{n}" %>
   description: <%= "This is template #{n} for the project" %>
-  fields: ["field_#{n+1}", "field_#{n+2}", "field_#{n+3}"]
+  fields: ["field_1", "field_2", "field_3"]
   created_at: <%= (n+3).hours.ago %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
@@ -31,7 +31,7 @@ project1_metadata_template<%= (n) %>:
 group_one_metadata_template<%= (n) %>:
   name: <%= "Group Template#{n}" %>
   description: <%= "This is template #{n} for the group" %>
-  fields: ["field_#{n+1}", "field_#{n+2}", "field_#{n+3}"]
+  fields: ["field_4", "field_5", "field_6"]
   created_at: <%= (n+3).hours.ago %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
