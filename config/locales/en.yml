@@ -1734,6 +1734,7 @@ en:
         project_in_namespace: Project in namespace
     samples:
       batch_import:
+        duplicate_sample_name: Duplicate sample name on index '%{index}'
         project_puid_not_found: Project PUID '%{project_puid}' could not be found
         project_puid_not_in_namespace: Project PUID '%{project_puid}' is not accessible from namespace '%{namespace}'
       clone:

@@ -243,27 +243,27 @@ module Samples
         assert_equal 'has already been taken', response['Project 1 Sample 1'][0][:message]
       end
 
-      # test 'import with bad data invalid duplicate sample name in file' do
-      #   assert_equal 3, @project.samples.count
+      test 'import with bad data invalid duplicate sample name in file' do
+        assert_equal 3, @project.samples.count
 
-      #   file = Rack::Test::UploadedFile.new(
-      #     Rails.root.join('test/fixtures/files/batch_sample_import_invalid_sample_dup_in_file.csv')
-      #   )
-      #   blob = ActiveStorage::Blob.create_and_upload!(
-      #     io: file,
-      #     filename: file.original_filename,
-      #     content_type: file.content_type
-      #   )
+        file = Rack::Test::UploadedFile.new(
+          Rails.root.join('test/fixtures/files/batch_sample_import_invalid_sample_dup_in_file.csv')
+        )
+        blob = ActiveStorage::Blob.create_and_upload!(
+          io: file,
+          filename: file.original_filename,
+          content_type: file.content_type
+        )
 
-      #   response = Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id,
-      #                                                  @default_params).execute
+        response = Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id,
+                                                       @default_params).execute
 
-      #   assert_equal 4, @project.samples.count
+        assert_equal 4, @project.samples.count
 
-      #   assert_equal I18n.t('services.samples.batch_import.project_puid_not_found',
-      #                       index: 2),
-      #                response['index 2'][:message]
-      # end
+        assert_equal I18n.t('services.samples.batch_import.duplicate_sample_name',
+                            index: 2),
+                     response['index 2'][:message]
+      end
     end
   end
 end

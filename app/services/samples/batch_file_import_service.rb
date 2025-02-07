@@ -45,7 +45,13 @@ module Samples
           next
         end
 
-        # TODO: need to check that we don't already have a sample with this sample name in the results. special case.
+        if response.key?(sample_name)
+          response["index #{index}"] = {
+            path: ['sample'],
+            message: I18n.t('services.samples.batch_import.duplicate_sample_name', index: index)
+          }
+          next
+        end
 
         project = Namespaces::ProjectNamespace.find_by(puid: project_puid)&.project
         unless project
