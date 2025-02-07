@@ -186,7 +186,7 @@ export default class extends Controller {
           }
         });
       }
-    }, 100);
+    }, 50);
   }
 
   #validateData() {
