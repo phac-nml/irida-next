@@ -40,4 +40,3 @@ class MetadataTemplatePolicy < ApplicationPolicy
     relation.joins(:created_by).where(namespace_id: namespace_ids)
   end
 end
-
