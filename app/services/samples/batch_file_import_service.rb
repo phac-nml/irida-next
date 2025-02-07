@@ -31,7 +31,7 @@ module Samples
       @spreadsheet.each_with_index(parse_settings) do |data, index| # rubocop:disable Metrics/BlockLength
         next unless index.positive?
 
-        # TODO: handle metadata
+        # TODO: handle metadata headers
 
         sample_name = data[@sample_name_column]
         project_puid = data[@project_puid_column]
@@ -74,6 +74,7 @@ module Samples
     private
 
     def process_sample_row(name, project, description)
+      # TODO: process metadata too
       sample_params = { name:, description: }
       sample = Samples::CreateService.new(current_user, project, sample_params).execute
 
@@ -88,6 +89,5 @@ module Samples
         end
       end
     end
-
   end
 end

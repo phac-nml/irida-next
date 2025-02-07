@@ -100,9 +100,8 @@ module Samples
         assert_equal 3, @project.samples.count
         assert_equal 20, @project2.samples.count
 
-        response = Samples::BatchFileImportService.new(@project2.namespace, @john_doe, @blob.id, @default_params).execute
-
-        puts response
+        response = Samples::BatchFileImportService.new(@project2.namespace, @john_doe, @blob.id,
+                                                       @default_params).execute
 
         assert_equal 3, @project.samples.count
         assert_equal 20, @project2.samples.count
@@ -122,8 +121,6 @@ module Samples
         assert_equal 20, @project2.samples.count
 
         response = Samples::BatchFileImportService.new(@group2, @john_doe, @blob.id, @default_params).execute
-
-        puts response
 
         assert_equal 3, @project.samples.count
         assert_equal 20, @project2.samples.count
