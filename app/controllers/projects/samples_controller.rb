@@ -161,6 +161,7 @@ module Projects
     def search_params
       updated_params = update_store(search_key,
                                     params[:q].present? ? params[:q].to_unsafe_h : {}).with_indifferent_access
+      updated_params.slice!(:name_or_puid_cont, :name_or_puid_in, :groups_attributes, :metadata_template, :sort)
 
       if !updated_params.key?(:sort) ||
          (updated_params[:metadata_template] == 'none' && updated_params[:sort]&.match?(/metadata_/))
