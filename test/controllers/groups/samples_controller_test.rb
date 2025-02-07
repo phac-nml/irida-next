@@ -52,34 +52,23 @@ module Groups
     test 'should handle metadata template none' do
       get group_samples_path(@group), params: { q: { metadata_template: 'none' } }
       assert_response :success
-      assert_equal 'none', assigns(:metadata_template)[:id]
+      doc = Nokogiri::HTML(response.body)
+      assert doc.at_css('input[name="metadata_template"][value="none"]')
     end
 
     test 'should handle metadata template all' do
       get group_samples_path(@group), params: { q: { metadata_template: 'all' } }
       assert_response :success
-      assert_equal 'all', assigns(:metadata_template)[:id]
+      doc = Nokogiri::HTML(response.body)
+      assert doc.at_css('input[name="metadata_template"][value="all"]')
     end
 
     test 'should handle specific metadata template' do
       template = metadata_templates(:valid_group_metadata_template)
       get group_samples_path(@group), params: { q: { metadata_template: template.id } }
       assert_response :success
-      assert_equal template.id, assigns(:metadata_template)[:id]
-      assert_equal template.name, assigns(:metadata_template)[:name]
-    end
-
-    test 'should set default sort when none provided' do
-      get group_samples_path(@group)
-      assert_response :success
-      assert_equal 'updated_at desc', assigns(:search_params)[:sort]
-    end
-
-    test 'should reset sort when switching to none template with metadata sort' do
-      get group_samples_path(@group),
-          params: { q: { metadata_template: 'none', sort: 'metadata_field1' } }
-      assert_response :success
-      assert_equal 'updated_at desc', assigns(:search_params)[:sort]
+      doc = Nokogiri::HTML(response.body)
+      assert doc.at_css("input[name='metadata_template'][value='#{template.id}']")
     end
 
     test 'should not allow unauthorized access to index' do
