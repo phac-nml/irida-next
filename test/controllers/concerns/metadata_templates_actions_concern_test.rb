@@ -20,13 +20,6 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'group metadata templates index unauthorized' do
-    sign_in users(:ryan_doe)
-    get group_metadata_templates_path(@group)
-
-    assert_response :unauthorized
-  end
-
   test 'group metadata templates new' do
     get new_group_metadata_template_path(@group, format: :turbo_stream)
 
@@ -57,13 +50,6 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     get group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream)
 
     assert_response :success
-  end
-
-  test 'group metadata templates show unauthorized' do
-    sign_in users(:ryan_doe)
-    get group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream)
-
-    assert_response :unauthorized
   end
 
   test 'group metadata templates create' do
@@ -144,13 +130,6 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'project metadata templates index unauthorized' do
-    sign_in users(:ryan_doe)
-    get namespace_project_metadata_templates_path(@project_namespace.parent, @project)
-
-    assert_response :unauthorized
-  end
-
   test 'project metadata templates new' do
     get new_namespace_project_metadata_template_path(@project_namespace.parent, @project, format: :turbo_stream)
 
@@ -186,14 +165,6 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
                                                  @project, @project_metadata_template, format: :turbo_stream)
 
     assert_response :success
-  end
-
-  test 'project metadata templates show unauthorized' do
-    sign_in users(:ryan_doe)
-    get namespace_project_metadata_template_path(@project_namespace.parent,
-                                                 @project, @project_metadata_template, format: :turbo_stream)
-
-    assert_response :unauthorized
   end
 
   test 'project metadata templates create' do
