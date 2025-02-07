@@ -32,7 +32,7 @@ data: {
           value="all"
           name="q[metadata_template]"
           onchange="this.form.requestSubmit()"
-          <%= @name == t("shared.samples.metadata_templates.fields.all") ? "checked" : "" %>
+          <%= @metadata_template_name == t("shared.samples.metadata_templates.fields.all") ? "checked" : "" %>
           class="
             w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500
             dark:focus:ring-primary-600 dark:ring-offset-slate-700
@@ -61,7 +61,7 @@ data: {
           value="none"
           onchange="this.form.requestSubmit()"
           name="q[metadata_template]"
-          <%= @name == t("shared.samples.metadata_templates.fields.none") ? "checked" : "" %>
+          <%= @metadata_template_name == t("shared.samples.metadata_templates.fields.none") ? "checked" : "" %>
           class="
             w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500
             dark:focus:ring-primary-600 dark:ring-offset-slate-700
@@ -100,7 +100,7 @@ data: {
               value="<%= metadata_template.id %>"
               onchange="this.form.requestSubmit()"
               name="q[metadata_template]"
-              <%= @name == metadata_template.name ? "checked" : "" %>
+              <%= @metadata_template_name == metadata_template.name ? "checked" : "" %>
             >
             <label
               for="rl-<%= metadata_template.id %>"
