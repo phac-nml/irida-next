@@ -13,7 +13,6 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
   attribute :name_or_puid_cont, :string
   attribute :name_or_puid_in, default: -> { [] }
   attribute :project_ids, default: -> { [] }
-  attribute :metadata_template, :string, default: 'none'
   attribute :groups, default: lambda {
     [Sample::SearchGroup.new(conditions: [Sample::SearchCondition.new(field: '', operator: '', value: '')])]
   }
