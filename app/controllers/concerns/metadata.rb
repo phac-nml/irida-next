@@ -23,7 +23,8 @@ module Metadata
               elsif template == 'all'
                 namespace.metadata_fields
               else
-                MetadataTemplate.find_by(id: template).fields
+                template = MetadataTemplate.find_by(id: template)
+                template.present? ? template.fields : []
               end
   end
 
