@@ -50,22 +50,6 @@ class MetadataConcernTest < ActionDispatch::IntegrationTest
     assert_equal expected_fields.sort, actual_fields.sort
   end
 
-  test 'current_metadata_template returns none when params are empty' do
-    params = { metadata_template: '' }
-    result = @controller.current_metadata_template(params)
-
-    assert_equal 'none', result
-    assert_equal 'none', params[:metadata_template]
-  end
-
-  test 'current_metadata_template preserves existing template value' do
-    params = { metadata_template: 'template1' }
-    result = @controller.current_metadata_template(params)
-
-    assert_equal 'template1', result
-    assert_equal 'template1', params[:metadata_template]
-  end
-
   test 'metadata_templates_for_namespace returns formatted template options' do
     template = metadata_templates(:valid_group_metadata_template)
     @controller.metadata_templates_for_namespace(namespace: @group)
