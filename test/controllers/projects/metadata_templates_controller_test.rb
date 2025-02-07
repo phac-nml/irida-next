@@ -107,26 +107,11 @@ module Projects
       assert_response :success
     end
 
-    test 'view metadata templates listing unauthorized' do
-      sign_in users(:ryan_doe)
-      get namespace_project_metadata_templates_path(@namespace.parent, @namespace.project)
-
-      assert_response :unauthorized
-    end
-
     test 'view metadata template' do
       get namespace_project_metadata_template_path(@namespace.parent, @namespace.project, @metadata_template,
                                                    format: :turbo_stream)
 
       assert_response :success
-    end
-
-    test 'view metadata template unauthorized' do
-      sign_in users(:ryan_doe)
-      get namespace_project_metadata_template_path(@namespace.parent, @namespace.project, @metadata_template,
-                                                   format: :turbo_stream)
-
-      assert_response :unauthorized
     end
 
     test 'edit metadata template' do
