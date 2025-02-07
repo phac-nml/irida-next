@@ -155,7 +155,7 @@ module Projects
 
       advanced_search_fields(@project.namespace)
 
-      @query = Sample::Query.new(@search_params.except(:metadata_template).merge({ project_ids: [@project.id] }))
+      @query = Sample::Query.new(@search_params.except('metadata_template').merge({ project_ids: [@project.id] }))
     end
 
     def search_params
