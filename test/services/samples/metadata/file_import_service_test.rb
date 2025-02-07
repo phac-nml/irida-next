@@ -62,7 +62,7 @@ module Samples
                             name: @group.name), exception.result.message
       end
 
-      test 'import sample metadata with no file' do
+      test 'import sample metadata with empty file' do
         file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/metadata/empty.csv'))
         blob = ActiveStorage::Blob.create_and_upload!(
           io: file,
