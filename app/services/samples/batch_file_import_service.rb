@@ -24,11 +24,11 @@ module Samples
 
     protected
 
-    def perform_file_import # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    def perform_file_import # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity
       response = {}
       parse_settings = @headers.zip(@headers).to_h
 
-      @spreadsheet.each_with_index(parse_settings) do |data, index|
+      @spreadsheet.each_with_index(parse_settings) do |data, index| # rubocop:disable Metrics/BlockLength
         next unless index.positive?
 
         # TODO: handle metadata
@@ -50,6 +50,16 @@ module Samples
           response[sample_name] = {
             path: ['project'],
             message: I18n.t('services.samples.batch_import.project_puid_not_found', project_puid: project_puid)
+          }
+          next
+        end
+
+        unless project.accessible_from_namespace?(@namespace)
+          response[sample_name] = {
+            path: ['project'],
+            message: I18n.t('services.samples.batch_import.project_puid_not_in_namespace',
+                            project_puid: project_puid,
+                            namespace: @namespace.full_path)
           }
           next
         end
@@ -78,5 +88,6 @@ module Samples
         end
       end
     end
+
   end
 end

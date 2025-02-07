@@ -9,6 +9,7 @@ module Samples
         @john_doe = users(:john_doe)
         @jane_doe = users(:jane_doe)
         @group = groups(:group_one)
+        @group2 = groups(:group_two)
         @project = projects(:project1)
         @project2 = projects(:project2)
 
@@ -95,22 +96,46 @@ module Samples
                      I18n.t('services.spreadsheet_import.missing_header', header_title: 'sample_name'))
       end
 
+      test 'import samples into a project that does not belong to project namespace' do
+        assert_equal 3, @project.samples.count
+        assert_equal 20, @project2.samples.count
+
+        response = Samples::BatchFileImportService.new(@project2.namespace, @john_doe, @blob.id, @default_params).execute
+
+        puts response
+
+        assert_equal 3, @project.samples.count
+        assert_equal 20, @project2.samples.count
+
+        assert_equal I18n.t('services.samples.batch_import.project_puid_not_in_namespace',
+                            project_puid: @project.puid,
+                            namespace: @project2.namespace.full_path),
+                     response['my new sample'][:message]
+        assert_equal I18n.t('services.samples.batch_import.project_puid_not_in_namespace',
+                            project_puid: @project.puid,
+                            namespace: @project2.namespace.full_path),
+                     response['my new sample'][:message]
+      end
+
       test 'import samples into a project that does not belong to group namespace' do
         assert_equal 3, @project.samples.count
         assert_equal 20, @project2.samples.count
 
-        exception = assert_raises(ActionPolicy::Unauthorized) do
-          Samples::BatchFileImportService.new(@project2.namespace, @john_doe, @blob.id, @default_params).execute
-        end
+        response = Samples::BatchFileImportService.new(@group2, @john_doe, @blob.id, @default_params).execute
 
-        assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
-        assert_equal :update_sample_metadata?, exception.rule
-        assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-        assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.update_sample_metadata?',
-                            name: @project.name), exception.result.message
+        puts response
 
         assert_equal 3, @project.samples.count
         assert_equal 20, @project2.samples.count
+
+        assert_equal I18n.t('services.samples.batch_import.project_puid_not_in_namespace',
+                            project_puid: @project.puid,
+                            namespace: @group2.full_path),
+                     response['my new sample'][:message]
+        assert_equal I18n.t('services.samples.batch_import.project_puid_not_in_namespace',
+                            project_puid: @project.puid,
+                            namespace: @group2.full_path),
+                     response['my new sample'][:message]
       end
     end
   end

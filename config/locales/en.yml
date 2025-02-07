@@ -1735,6 +1735,7 @@ en:
     samples:
       batch_import:
         project_puid_not_found: Project PUID '%{project_puid}' could not be found
+        project_puid_not_in_namespace: Project PUID '%{project_puid}' is not accessible from namespace '%{namespace}'
       clone:
         empty_new_project_id: Destination project was not selected.
         empty_sample_ids: The sample ids are empty.

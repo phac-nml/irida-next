@@ -43,6 +43,22 @@ class Project < ApplicationRecord
     %w[namespace]
   end
 
+  def accessible_from_namespace?(other_namespace) # rubocop:disable Metrics/AbcSize
+    if other_namespace.project_namespace?
+      namespace.id == other_namespace.id
+    elsif other_namespace.group_namespace?
+      return true if other_namespace.id == namespace.parent.id
+
+      return true if namespace.self_and_ancestor_ids.where(id: other_namespace.id).count.positive?
+
+      return true if namespace.shared_with_groups.where(id: other_namespace.id).count.positive?
+
+      false
+    else
+      false
+    end
+  end
+
   private
 
   def destroy_namespace
