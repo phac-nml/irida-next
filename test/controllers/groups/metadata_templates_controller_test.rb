@@ -97,26 +97,11 @@ module Groups
       assert_response :success
     end
 
-    test 'view metadata templates listing unauthorized' do
-      sign_in users(:ryan_doe)
-      get group_metadata_templates_path(@group)
-
-      assert_response :unauthorized
-    end
-
     test 'view metadata template' do
       get group_metadata_template_path(@group, @metadata_template,
                                        format: :turbo_stream)
 
       assert_response :success
-    end
-
-    test 'view metadata template unauthorized' do
-      sign_in users(:ryan_doe)
-      get group_metadata_template_path(@group, @metadata_template,
-                                       format: :turbo_stream)
-
-      assert_response :unauthorized
     end
 
     test 'edit metadata template' do

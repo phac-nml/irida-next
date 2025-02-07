@@ -185,8 +185,6 @@ module Projects
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-
-      assert_selector 'select#metadata_template_select'
     end
 
     test 'User with role < Maintainer does not see import metadata button' do
@@ -2822,7 +2820,8 @@ module Projects
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
 
-      select(I18n.t('components.metadata_templates_dropdown.all'), from: 'q[metadata_template]')
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      choose 'q[metadata_template]', option: 'all'
 
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
@@ -2945,9 +2944,6 @@ module Projects
 
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'all'
-
-      assert_selector 'div#spinner'
-      assert_no_selector 'div#spinner'
 
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
