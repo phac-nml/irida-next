@@ -315,8 +315,6 @@ end
 if Rails.env.development?
   current_year = Time.zone.now.year
 
-  Searchkick.disable_callbacks
-
   users = [
     {
       email: 'admin@email.com',
@@ -822,8 +820,4 @@ if Rails.env.development?
   DataExport.suppressing_turbo_broadcasts do
     seed_exports
   end
-
-  # index samples using searchkick
-  Searchkick.enable_callbacks
-  Sample.reindex
 end
