@@ -2,7 +2,7 @@
 
 class AdvancedSearchComponentPreview < ViewComponent::Preview
   def default # rubocop:disable Metrics/MethodLength
-    search = Sample::Search.new(
+    search = Sample::Query.new(
       groups: [
         Sample::SearchGroup.new(
           conditions: [
