@@ -1736,7 +1736,7 @@ fr:
       batch_import:
         duplicate_sample_name: Duplicate sample name on index '%{index}'
         project_puid_not_found: Project PUID '%{project_puid}' could not be found
-        project_puid_not_in_namespace: Project PUID '%{project_puid}' is not accessible from namespace '%{namespace}'
+         Project PUID '%{project_puid}' is not accessible from namespace '%{namespace}, or you do not have permission to create samples on the shared project within the namespace'
       clone:
         empty_new_project_id: Destination project was not selected.
         empty_sample_ids: The sample ids are empty.
