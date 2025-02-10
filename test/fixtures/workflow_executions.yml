@@ -863,3 +863,82 @@ workflow_execution_valid_on_group:
   run_id: "my_group_run_id_1"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+
+workflow_execution_shared1:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "wn1", "workflow_version": "wv1" }
+  workflow_params: { "key_a": "value_a" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "my_run_id_shared_1"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  shared_with_namespace: true
+
+workflow_execution_shared2:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "wn1", "workflow_version": "wv1" }
+  workflow_params: { "key_a": "value_a" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "my_run_id_shared_2"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  shared_with_namespace: true
+
+workflow_execution_shared3:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "wn1", "workflow_version": "wv1" }
+  workflow_params: { "key_a": "value_a" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "my_run_id_shared_3"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid) %>
+  shared_with_namespace: true
+
+workflow_execution_completed_shared1:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/irida_next_shared_example_completed_with_output"
+  run_id: "my_run_id_shared_1"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid) %>
+  name: "irida_next_user_shared_example_completed_with_output"
+  state: "completed"
+  blob_run_directory: "not a run dir"
+  cleaned: false
+  shared_with_namespace: true
+
+workflow_execution_completed_shared2:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/irida_next_shared_example_completed_with_output"
+  run_id: "my_run_id_shared_2"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:micha_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid) %>
+  name: "irida_next_member_shared_example_completed_with_output"
+  state: "completed"
+  blob_run_directory: "not a run dir"
+  cleaned: false
+  shared_with_namespace: true

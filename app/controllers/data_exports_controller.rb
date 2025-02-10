@@ -178,11 +178,10 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
 
   def redirect_to_workflow_execution
     workflow_execution = WorkflowExecution.find_by(id: params['identifier'])
-    submitter = workflow_execution.submitter
-    if submitter.user_type == 'human'
+    if workflow_execution.submitter == current_user
       redirect_to workflow_execution_path(workflow_execution)
     else
-      namespace = Namespace.find_by(puid: submitter.first_name)
+      namespace = workflow_execution.namespace
       redirect_to namespace_project_workflow_execution_path(namespace.parent, namespace.project, workflow_execution)
     end
   end

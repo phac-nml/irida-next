@@ -335,6 +335,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_09_162252) do
     t.uuid "namespace_id"
     t.boolean "cleaned", default: false, null: false
     t.jsonb "log_data"
+    t.boolean "shared_with_namespace", default: false, null: false
     t.index ["created_at"], name: "index_workflow_executions_on_created_at"
     t.index ["namespace_id"], name: "index_workflow_executions_on_namespace_id"
     t.index ["state"], name: "index_workflow_executions_on_state"

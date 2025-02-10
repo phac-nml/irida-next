@@ -139,3 +139,26 @@ data_export_ten:
   expires_at: <%= 5.days.from_now %>
   manifest: '{"type":"Samples Export","date": "2024-01-01","children":[{"name":"INXT_PRJ_AAAAAAAAAB","type":"folder","irida-next-type":"project","irida-next-name":"Project 2","children":[{"name":"INXT_SAM_AAAAAAAAAV","type":"folder","irida-next-type":"sample","irida-next-name":"Project 2 Sample 22","children":[{"name":"INXT_ATT_ABAAAAAAAI","type":"folder","irida-next-type":"attachment","children":[{"name":"test_file_14.txt","type":"file","metadata":{"format":"text"}}]},{"name":"INXT_ATT_ABAAAAAAAH","type":"folder","irida-next-type":"attachment","children":[{"name":"test_file_5.fasta","type":"file","metadata":{"format":"fasta","type":"assembly"}}]}]}]}]}'
 
+data_export_eleven:
+  name: Data Export 11
+  export_type: analysis
+  status: ready
+  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>], analysis_type: 'user'}
+  email_notification: true
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:micha_doe, :uuid) %>
+  expires_at: <%= 5.days.from_now %>
+  manifest: '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":"<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>", "type":"folder","irida-next-type":"workflow_execution","irida-next-name":"<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>","children":[{"name":"summary.txt.gz","type":"file"},{"name":"INXT_SAM_AAAAAAAABW","type":"folder","irida-next-type":"sample","irida-next-name":"Sample 47","children":[{"name":"INXT_SAM_AAAAAAAABW.assembly.fa.gz","type":"file"}]}]}]}'
+
+data_export_twelve:
+  name: Data Export 12
+  export_type: analysis
+  status: ready
+  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>], analysis_type: 'user'}
+  email_notification: true
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.day.ago %>
+  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  expires_at: <%= 5.days.from_now %>
+  manifest: '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":"<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>", "type":"folder","irida-next-type":"workflow_execution","irida-next-name":"<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>","children":[{"name":"summary.txt.gz","type":"file"},{"name":"INXT_SAM_AAAAAAAABW","type":"folder","irida-next-type":"sample","irida-next-name":"Sample 47","children":[{"name":"INXT_SAM_AAAAAAAABW.assembly.fa.gz","type":"file"}]}]}]}'

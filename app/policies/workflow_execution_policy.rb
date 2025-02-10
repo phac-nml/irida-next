@@ -21,16 +21,13 @@ class WorkflowExecutionPolicy < ApplicationPolicy
     User.user_types[user.user_type] == User.user_types[:project_automation_bot]
   end
 
-  def destroy? # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
-    unless project_automation_bot?(user)
-      return true if record.submitter.id == user.id
-      return true if Member::AccessLevel.manageable.include?(effective_access_level)
-    end
+  def destroy? # rubocop:disable Metrics/AbcSize
+    return true if record.submitter.id == user.id
 
+    # submitted by automation bot and user has managable access
     if (record.namespace.type == Namespaces::ProjectNamespace.sti_name) &&
        (record.submitter.id == record.namespace.automation_bot.id) &&
-       (record.namespace.automation_bot.id == user.id) &&
-       Member::AccessLevel.manageable.include?(effective_access_level(record.namespace.automation_bot))
+       Member::AccessLevel.manageable.include?(effective_access_level)
       return true
     end
 
@@ -40,17 +37,17 @@ class WorkflowExecutionPolicy < ApplicationPolicy
   end
 
   def read? # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
-    unless project_automation_bot?(user)
-      return true if record.submitter.id == user.id
-      return true if effective_access_level(user) > Member::AccessLevel::NO_ACCESS
-    end
+    return true if record.submitter.id == user.id
 
+    # submitted by automation bot and user has access
     if (record.namespace.type == Namespaces::ProjectNamespace.sti_name) &&
-       (record.submitter.id == record.namespace.automation_bot.id) &&
-       (record.namespace.automation_bot.id == user.id) &&
-       (effective_access_level(record.namespace.automation_bot) > Member::AccessLevel::NO_ACCESS)
+       record.namespace.automation_bot && (record.submitter.id == record.namespace.automation_bot.id) &&
+       (effective_access_level > Member::AccessLevel::NO_ACCESS)
       return true
     end
+
+    # shared by submitter to namespace
+    return true if record.shared_with_namespace && (effective_access_level > Member::AccessLevel::NO_ACCESS)
 
     details[:id] = record.id
     false
@@ -64,16 +61,13 @@ class WorkflowExecutionPolicy < ApplicationPolicy
     false
   end
 
-  def cancel? # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
-    unless project_automation_bot?(user)
-      return true if record.submitter.id == user.id
-      return true if Member::AccessLevel.manageable.include?(effective_access_level)
-    end
+  def cancel? # rubocop:disable Metrics/AbcSize
+    return true if record.submitter.id == user.id
 
+    # submitted by automation bot and user has managable access
     if (record.namespace.type == Namespaces::ProjectNamespace.sti_name) &&
-       (record.submitter.id == record.namespace.automation_bot.id) &&
-       (record.namespace.automation_bot.id == user.id) &&
-       Member::AccessLevel.manageable.include?(effective_access_level(record.namespace.automation_bot))
+       record.namespace.automation_bot && (record.submitter.id == record.namespace.automation_bot.id) &&
+       Member::AccessLevel.manageable.include?(effective_access_level)
       return true
     end
 
@@ -82,17 +76,29 @@ class WorkflowExecutionPolicy < ApplicationPolicy
     false
   end
 
-  def edit?
+  def edit? # rubocop:disable Metrics/AbcSize
     return true if record.submitter.id == user.id
-    return true if effective_access_level >= Member::AccessLevel::ANALYST
+
+    # submitted by automation bot and user is analyst or higher
+    if (record.namespace.type == Namespaces::ProjectNamespace.sti_name) &&
+       record.namespace.automation_bot && (record.submitter.id == record.namespace.automation_bot.id) &&
+       (effective_access_level >= Member::AccessLevel::ANALYST)
+      return true
+    end
 
     details[:id] = record.id
     false
   end
 
-  def update?
+  def update? # rubocop:disable Metrics/AbcSize
     return true if record.submitter.id == user.id
-    return true if effective_access_level >= Member::AccessLevel::ANALYST
+
+    # submitted by automation bot and user is analyst or higher
+    if (record.namespace.type == Namespaces::ProjectNamespace.sti_name) &&
+       record.namespace.automation_bot && (record.submitter.id == record.namespace.automation_bot.id) &&
+       (effective_access_level >= Member::AccessLevel::ANALYST)
+      return true
+    end
 
     details[:id] = record.id
     false
@@ -108,5 +114,12 @@ class WorkflowExecutionPolicy < ApplicationPolicy
     user = options[:user]
 
     relation.where(submitter_id: user.id)
+  end
+
+  scope_for :relation, :automated_and_shared do |relation, options|
+    project = options[:project]
+
+    relation.where(submitter: project.namespace.automation_bot)
+            .or(relation.where(namespace_id: project.namespace.id, shared_with_namespace: true))
   end
 end

@@ -62,6 +62,7 @@ module WorkflowExecutions
 
         assert_text I18n.t(:'components.nextflow.update_samples')
         assert_text I18n.t(:'components.nextflow.email_notification')
+        assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}")
       end
     end
 
@@ -96,6 +97,7 @@ module WorkflowExecutions
 
         assert_text I18n.t(:'components.nextflow.update_samples')
         assert_text I18n.t(:'components.nextflow.email_notification')
+        assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}")
       end
     end
 
@@ -130,6 +132,7 @@ module WorkflowExecutions
 
         assert_no_text I18n.t(:'components.nextflow.update_samples')
         assert_text I18n.t(:'components.nextflow.email_notification')
+        assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}")
       end
     end
 
@@ -167,6 +170,7 @@ module WorkflowExecutions
 
         assert_no_text I18n.t(:'components.nextflow.update_samples')
         assert_text I18n.t(:'components.nextflow.email_notification')
+        assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}")
       end
     end
 
@@ -209,6 +213,7 @@ module WorkflowExecutions
 
         assert_text I18n.t(:'components.nextflow.update_samples')
         assert_text I18n.t(:'components.nextflow.email_notification')
+        assert_text I18n.t(:"components.nextflow.shared_with.#{@namespace.type.downcase}")
       end
     end
 
@@ -243,6 +248,7 @@ module WorkflowExecutions
 
         assert_text I18n.t(:'components.nextflow.update_samples')
         assert_text I18n.t(:'components.nextflow.email_notification')
+        assert_text I18n.t(:"components.nextflow.shared_with.#{@namespace.type.downcase}")
       end
     end
 
@@ -277,6 +283,7 @@ module WorkflowExecutions
 
         assert_no_text I18n.t(:'components.nextflow.update_samples')
         assert_text I18n.t(:'components.nextflow.email_notification')
+        assert_text I18n.t(:"components.nextflow.shared_with.#{@namespace.type.downcase}")
       end
     end
 

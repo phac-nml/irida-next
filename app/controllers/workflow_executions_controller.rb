@@ -40,6 +40,7 @@ class WorkflowExecutionsController < ApplicationController
       :namespace_id,
       :update_samples,
       :email_notification,
+      :shared_with_namespace,
       { metadata: {},
         workflow_params: {},
         samples_workflow_executions_attributes: samples_workflow_execution_params_attributes }

@@ -3,7 +3,7 @@
 require 'application_system_test_case'
 
 class WorkflowExecutionsTest < ApplicationSystemTestCase
-  WORKFLOW_EXECUTION_COUNT = 19
+  WORKFLOW_EXECUTION_COUNT = 20
 
   setup do
     @user = users(:john_doe)
@@ -27,6 +27,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
+    assert_text 'Displaying 20 items'
     assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
   end
 
@@ -57,6 +58,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     workflow_execution8 = workflow_executions(:irida_next_example_canceling)
     workflow_execution9 = workflow_executions(:irida_next_example_canceled)
     workflow_execution12 = workflow_executions(:irida_next_example_new)
+    workflow_execution_shared1 = workflow_executions(:workflow_execution_shared1)
 
     visit workflow_executions_path
 
@@ -78,7 +80,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within('#workflow-executions-table table tbody') do
       assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
       assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution.run_id
-      assert_selector "tr:nth-child(3) td:nth-child(#{@run_id_col})", text: workflow_execution9.run_id
+      assert_selector "tr:nth-child(3) td:nth-child(#{@run_id_col})", text: workflow_execution_shared1.run_id
       assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
     end
 
@@ -107,6 +109,28 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
                       text: workflow_execution9.metadata['workflow_name']
     end
+  end
+
+  test 'should include a shared workflow in the list of workflow executions when the submitter is the current user' do
+    workflow_execution = workflow_executions(:workflow_execution_shared1)
+
+    visit workflow_executions_path
+
+    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+
+    assert_selector "tr[id='#{workflow_execution.id}']"
+    within("tr[id='#{workflow_execution.id}'] td:last-child") do
+      assert_link I18n.t(:'workflow_executions.index.actions.cancel_button')
+    end
+  end
+
+  test 'should not include a shared workflow in the workflow executions when the submitter is not the current user' do
+    workflow_execution = workflow_executions(:workflow_execution_shared2)
+
+    visit workflow_executions_path
+
+    assert_selector '#workflow-executions-table'
+    assert_no_selector "tr[id='#{workflow_execution.id}']"
   end
 
   test 'should be able to cancel a workflow' do
@@ -374,8 +398,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   test 'can filter by ID and name on workflow execution index page' do
     visit workflow_executions_path
 
-    assert_text 'Displaying 19 items'
-    assert_selector 'table tbody tr', count: 19
+    assert_text 'Displaying 20 items'
+    assert_selector 'table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
     within('table tbody') do
       assert_text @workflow_execution2.id
@@ -402,8 +426,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
             with: ''
     find('input.t-search-component').native.send_keys(:return)
 
-    assert_text 'Displaying 19 items'
-    assert_selector 'table tbody tr', count: 19
+    assert_text 'Displaying 20 items'
+    assert_selector 'table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
     fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
             with: @workflow_execution3.name
@@ -454,5 +478,21 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector 'dt', text: dt_value
     assert_selector 'dd', text: new_we_name
     ### VERIFY END ###
+  end
+
+  test 'can view a shared workflow execution that the current user submitted' do
+    workflow_execution = workflow_executions(:workflow_execution_shared1)
+
+    visit workflow_execution_path(workflow_execution)
+
+    assert_text workflow_execution.id
+    assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
+    assert_text workflow_execution.metadata['workflow_name']
+    assert_text workflow_execution.metadata['workflow_version']
+
+    assert_link I18n.t(:'workflow_executions.show.create_export_button')
+    assert_link I18n.t(:'workflow_executions.show.cancel_button')
+    assert_link I18n.t(:'workflow_executions.show.edit_button')
+    assert_no_link I18n.t(:'workflow_executions.show.remove_button')
   end
 end

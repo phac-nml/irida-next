@@ -22,13 +22,15 @@ class NextflowComponentTest < ViewComponentTestCase
       workflow:,
       samples: [sample43, sample44],
       url: 'https://nf-co.re/testpipeline',
-      namespace_id: 'SDSDDFDSFDS',
+      namespace_id: projects(:project1).namespace,
       fields: %w[metadata_1 metadata_2 metadata_3]
     )
 
     assert_selector 'form' do
       assert_selector 'h1', text: 'phac-nml/iridanextexample', count: 1
       assert_selector 'input[type=text][name="workflow_execution[name]"]'
+      assert_selector 'input[type=checkbox][name="workflow_execution[shared_with_namespace]"]'
+      assert_text 'Share results with Project members?'
     end
   end
 
@@ -155,7 +157,9 @@ class NextflowComponentTest < ViewComponentTestCase
                                      url: 'https://github.com/phac-nml/mikrokondo',
                                      name: 'phac-nml/mikrokondo',
                                      description: 'Mikrokondo pipeline'
-                                   }, '0.1.2',
+                                   },
+                                   { 'name' => '0.1.2',
+                                     'automatable' => true },
                                    Rails.root.join('test/fixtures/files/nextflow/mikrokondo/nextflow_schema.json'),
                                    Rails.root.join('test/fixtures/files/nextflow/samplesheet_schema.json'))
 
@@ -163,7 +167,7 @@ class NextflowComponentTest < ViewComponentTestCase
       workflow:,
       samples: [],
       url: 'https://nf-co.re/testpipeline',
-      namespace_id: 'SDSDDFDSFDS',
+      namespace_id: projects(:project1).namespace,
       fields: %w[metadata_1 metadata_2 metadata_3],
       instance:
     )
@@ -179,6 +183,7 @@ class NextflowComponentTest < ViewComponentTestCase
       assert_selector 'input[type="radio"][name="workflow_execution[workflow_params][skip_depth_sampling]"][value="false"][checked="checked"]',
                       count: 1
       assert_no_selector 'input[type="radio"][name="workflow_execution[workflow_params][skip_depth_sampling]"][value="true"][checked="checked"]'
+      assert_no_selector 'input[type=checkbox][name="workflow_execution[shared_with_namespace]"]'
     end
     # rubocop:enable Layout/LineLength
   end

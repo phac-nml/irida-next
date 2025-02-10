@@ -422,6 +422,9 @@ fr:
     nextflow:
       email_notification: Receive an email notification when your analysis has completed?
       required: Required
+      shared_with:
+        group: Share results with Group members?
+        project: Share results with Project members?
       update_samples: Update samples with analysis results
     pagination:
       next: Next
@@ -1617,7 +1620,7 @@ fr:
         search:
           placeholder: Filter by ID or name
         select_all_button: Select All
-        subtitle: These are the workflow executions that have been automatically launched for this project
+        subtitle: These are the workflow executions that have been automatically launched for this project, along with workflow executions that have been shared by any of its members.
         title: Workflow Executions
       show:
         cancel_button: Cancel

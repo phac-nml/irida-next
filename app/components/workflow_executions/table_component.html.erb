@@ -145,31 +145,33 @@
                 tag: 'td',
                 classes: class_names('px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2')
               ) do %>
-                <% if workflow_execution.cancellable? && @row_actions.key?(:cancel) %>
-                  <%= link_to(
-                    t(:"workflow_executions.index.actions.cancel_button"),
-                    cancel_path(workflow_execution),
-                    data: {
-                      turbo_stream: true,
-                      turbo_method: :put,
-                      turbo_confirm: t(:"workflow_executions.index.actions.cancel_confirm"),
-                    },
-                    class:
-                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                  ) %>
-                <% end %>
-                <% if workflow_execution.deletable? && @row_actions.key?(:destroy) %>
-                  <%= link_to(
-                    t(:"workflow_executions.index.actions.delete_button"),
-                    individual_path(workflow_execution),
-                    data: {
-                      turbo_stream: true,
-                      turbo_method: :delete,
-                      turbo_confirm: t(:"workflow_executions.index.actions.delete_confirm"),
-                    },
-                    class:
-                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                  ) %>
+                <% if !workflow_execution.shared_with_namespace || @namespace.nil? %>
+                  <% if workflow_execution.cancellable? && @row_actions.key?(:cancel) %>
+                    <%= link_to(
+                      t(:"workflow_executions.index.actions.cancel_button"),
+                      cancel_path(workflow_execution),
+                      data: {
+                        turbo_stream: true,
+                        turbo_method: :put,
+                        turbo_confirm: t(:"workflow_executions.index.actions.cancel_confirm"),
+                      },
+                      class:
+                        "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                    ) %>
+                  <% end %>
+                  <% if workflow_execution.deletable? && @row_actions.key?(:destroy) %>
+                    <%= link_to(
+                      t(:"workflow_executions.index.actions.delete_button"),
+                      individual_path(workflow_execution),
+                      data: {
+                        turbo_stream: true,
+                        turbo_method: :delete,
+                        turbo_confirm: t(:"workflow_executions.index.actions.delete_confirm"),
+                      },
+                      class:
+                        "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                    ) %>
+                  <% end %>
                 <% end %>
               <% end %>
             <% end %>
