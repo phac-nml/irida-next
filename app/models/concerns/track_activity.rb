@@ -139,6 +139,10 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     end
   end
 
+  def get_object_by_puid(puid, relation)
+    relation.with_deleted.find_by(puid: puid)
+  end
+
   def transfer_activity_parameters(params, activity) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     if %w[project_namespace_transfer group_namespace_transfer].include?(activity.parameters[:action])
 
@@ -181,12 +185,13 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
   def add_sample_activity_params(params, activity)
     sample_activity_action_types = %w[sample_create sample_update metadata_update sample_destroy attachment_create
-                                      attachment_destroy]
+                                      attachment_destroy sample_destroy]
     return params unless sample_activity_action_types.include?(activity.parameters[:action])
 
     params.merge(
       sample_id: activity.parameters[:sample_id],
-      sample_puid: activity.parameters[:sample_puid]
+      sample_puid: activity.parameters[:sample_puid],
+      sample: get_object_by_puid(activity.parameters[:sample_puid], Sample)
     )
   end
 

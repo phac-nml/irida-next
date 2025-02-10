@@ -10,12 +10,16 @@ module Activities
         @activity = activity
       end
 
-      def samples_tab
-        @activity[:action] == 'metadata_update' ? 'metadata' : ''
-      end
-
       def sample_destroy_multiple_action
         @activity[:action] == 'sample_destroy_multiple'
+      end
+
+      def sample_exists(sample)
+        !sample.deleted?
+      end
+
+      def samples_tab
+        @activity[:action] == 'metadata_update' ? 'metadata' : ''
       end
     end
   end
