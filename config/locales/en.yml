@@ -276,9 +276,9 @@ en:
       create_html: "%{user} created project"
       destroy_html: "%{user} removed project"
       metadata_template:
-        create_html: "%{user} created metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{template_name}</span>"
+        create_html: "%{user} created metadata template %{href}</span>"
         destroy_html: "%{user} removed metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{template_name}</span>"
-        update_html: "%{user} updated metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{template_name}</span>"
+        update_html: "%{user} updated metadata template %{href}"
       samples:
         attachment:
           create_html: "%{user} attached files to sample %{href}"

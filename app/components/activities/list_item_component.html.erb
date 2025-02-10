@@ -14,7 +14,25 @@
     <% if activity[:type] == 'Namespace' && activity[:key].include?('group') %>
       <%= render Activities::GroupActivityComponent.new(activity: activity) %>
     <% elsif activity[:type] == 'Namespace' && activity[:key].include?('project_namespace') %>
-      <%= render Activities::ProjectActivityComponent.new(activity: activity) %>
+      <% if metadata_template_action %>
+        <%= render Activities::Projects::MetadataTemplateActivityComponent.new(
+          activity: activity,
+        ) %>
+      <% elsif sample_action %>
+        <%= render Activities::Projects::SampleActivityComponent.new(activity: activity) %>
+      <% elsif sample_transfer_action %>
+        <%= render Activities::Projects::SampleTransferActivityComponent.new(
+          activity: activity,
+        ) %>
+      <% elsif sample_clone_action %>
+        <%= render Activities::Projects::SampleCloneActivityComponent.new(
+          activity: activity,
+        ) %>
+      <% elsif project_namespace_transfer_action %>
+        <%= render Activities::Projects::TransferActivityComponent.new(activity: activity) %>
+      <% else %>
+        <%= render Activities::Projects::BaseActivityComponent.new(activity: activity) %>
+      <% end %>
     <% elsif activity[:type] == 'WorkflowExecution' %>
       <%= render Activities::WorkflowExecutionActivityComponent.new(activity: activity) %>
     <% elsif activity[:type] == 'Member' %>

@@ -1,10 +1,10 @@
 <div>
   <ol class="relative border-s border-slate-200 dark:border-slate-700">
-    <%= helpers.turbo_frame_tag "activities" do %>
+    <div id="activities">
       <% activities.each do |activity| %>
         <%= render Activities::ListItemComponent.new(activity: activity) %>
       <% end %>
-    <% end %>
+    </div>
   </ol>
 
   <div id="next_link">

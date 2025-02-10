@@ -131,7 +131,12 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   end
 
   def get_object_by_id(identifier, relation)
-    relation.with_deleted.find_by(id: identifier)
+    if relation == Project
+      proj = relation.with_deleted.find_by(id: identifier)&.namespace_id
+      Namespace.with_deleted.find_by(id: proj) if proj.present?
+    else
+      relation.with_deleted.find_by(id: identifier)
+    end
   end
 
   def transfer_activity_parameters(params, activity) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
@@ -191,7 +196,8 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
     params.merge(
       template_id: activity.parameters[:template_id],
-      template_name: activity.parameters[:template_name]
+      template_name: activity.parameters[:template_name],
+      template: get_object_by_id(activity.parameters[:template_id], MetadataTemplate)
     )
   end
 
