@@ -23,19 +23,12 @@ module Resolvers
     def resolve(group_id:, filter:, order_by:)
       context.scoped_set!(:samples_preauthorized, true)
 
-      filter = filter&.to_h
-      search_params = {}
-      search_params.merge!(filter_params(filter)) if filter
-      search_params.merge!(sort: "#{order_by.field} #{order_by.direction}") if order_by.present?
-
-      if group_id
-        search_params.merge!(samples_by_group_scope(group_id:))
+      query = Sample::Query.new(params(group_id, filter, order_by))
+      if query.valid?
+        query.results
       else
-        search_params.merge!(samples_by_project_scope)
+        handle_validation_errors(query)
       end
-
-      query = Sample::Query.new(search_params)
-      query.results
     end
 
     def ready?(**_args)
@@ -43,6 +36,37 @@ module Resolvers
     end
 
     private
+
+    def handle_validation_errors(query)
+      errors = []
+      query.groups.each do |group|
+        group.conditions.each do |condition|
+          condition.errors.messages.each do |attribute, message|
+            errors << "'#{condition.send(attribute.to_sym)}' #{message.first}"
+          end
+        end
+      end
+
+      raise GraphQL::ExecutionError.new(
+        'Validation failed',
+        extensions: {
+          validationErrors: errors
+        }
+      )
+    end
+
+    def params(group_id, filter, order_by)
+      filter = filter&.to_h
+      params = {}
+      params.merge!(filter_params(filter)) if filter
+      params.merge!(sort: "#{order_by.field} #{order_by.direction}") if order_by.present?
+
+      if group_id
+        params.merge!(samples_by_group_scope(group_id:))
+      else
+        params.merge!(samples_by_project_scope)
+      end
+    end
 
     def filter_params(filter)
       filter_params = {}
