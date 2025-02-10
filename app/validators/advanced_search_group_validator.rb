@@ -67,6 +67,8 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
   end
 
   def validate_date_field(condition)
+    return if %w[exists not_exists].include?(condition.operator)
+
     if %w[contains in not_not].include?(condition.operator)
       condition.errors.add :operator, I18n.t('validators.advanced_search_group_validator.date_operator_error')
     else
