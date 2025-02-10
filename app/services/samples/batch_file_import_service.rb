@@ -24,7 +24,7 @@ module Samples
 
     protected
 
-    def perform_file_import # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity
+    def perform_file_import # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
       response = {}
       parse_settings = @headers.zip(@headers).to_h
 
@@ -62,7 +62,7 @@ module Samples
           next
         end
 
-        unless project.accessible_from_namespace?(@namespace)
+        unless accessible_from_namespace?(project)
           response[sample_name] = {
             path: ['project'],
             message: I18n.t('services.samples.batch_import.project_puid_not_in_namespace',
@@ -80,6 +80,19 @@ module Samples
     end
 
     private
+
+    def accessible_from_namespace?(project)
+      if @namespace.project_namespace?
+        @namespace.id == project.namespace.id
+      elsif @namespace.group_namespace?
+        authorized_scope(Project, type: :relation, as: :group_projects, scope_options: {
+                           group: @namespace,
+                           minimum_access_level: Member::AccessLevel::UPLOADER
+                         }).where(id: project.id).count.positive?
+      else
+        false
+      end
+    end
 
     def process_sample_row(name, project, description)
       # TODO: process metadata too
