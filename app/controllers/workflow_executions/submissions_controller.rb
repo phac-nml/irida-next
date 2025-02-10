@@ -17,9 +17,8 @@ module WorkflowExecutions
 
     def create
       @namespace = Namespace.find_by(id: @namespace_id)
-      fields_for_namespace(
-        namespace: @namespace,
-        show_fields: true
+      fields_for_namespace_or_template(
+        namespace: @namespace
       )
       render status: :ok
     end
