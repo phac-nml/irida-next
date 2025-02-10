@@ -43,13 +43,6 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     @user = users(:john_doe)
     @sample = samples(:sample1)
     @sample32 = samples(:sample32)
-
-    Sample.reindex
-    Searchkick.enable_callbacks
-  end
-
-  teardown do
-    Searchkick.disable_callbacks
   end
 
   test 'filter samples using ransack search should work' do

@@ -24,12 +24,6 @@ class ProjectSamplesQueryTest < ActiveSupport::TestCase
 
   def setup
     @user = users(:john_doe)
-    Sample.reindex
-    Searchkick.enable_callbacks
-  end
-
-  teardown do
-    Searchkick.disable_callbacks
   end
 
   test 'project with sample query should work' do
