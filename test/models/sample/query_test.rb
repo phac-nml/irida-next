@@ -78,6 +78,21 @@ class QueryTest < ActiveSupport::TestCase
     assert query.valid?
   end
 
+  test 'valid advanced query with date exists and not_exists operators' do
+    search_params = { sort: 'updated_at desc',
+                      groups_attributes: { '0': {
+                        conditions_attributes:
+                       {
+                         '0': { field: 'created_at', operator: 'exists' },
+                         '1': { field: 'attachments_updated_at', operator: 'not_exists' }
+                       }
+                      } },
+                      project_ids: ['15438e41-f27c-5010-b021-fe991c68bb04'] }
+    query = Sample::Query.new(search_params)
+    assert query.advanced_query?
+    assert query.valid?
+  end
+
   test 'invalid advanced query with non unique fields' do
     search_params = { sort: 'updated_at desc',
                       groups_attributes: { '0': {

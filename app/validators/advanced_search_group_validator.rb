@@ -17,13 +17,8 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
 
   private
 
-  def empty_search?(record) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
-    if record.groups.length == 1 && record.groups[0].conditions.length == 1 &&
-       record.groups[0].conditions[0].field.blank? && record.groups[0].conditions[0].operator.blank? &&
-       ((record.groups[0].conditions[0].value.is_a?(Array) &&
-       record.groups[0].conditions[0].value.compact_blank.blank?) || record.groups[0].conditions[0].value.blank?)
-      return true
-    end
+  def empty_search?(record)
+    return true if record.groups.length == 1 && record.groups[0].empty?
 
     false
   end
@@ -69,7 +64,7 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
   def validate_date_field(condition)
     if %w[contains in not_not].include?(condition.operator)
       condition.errors.add :operator, I18n.t('validators.advanced_search_group_validator.date_operator_error')
-    else
+    elsif %w[exists not_exists].exclude?(condition.operator)
       begin
         DateTime.strptime(condition.value, '%Y-%m-%d')
       rescue StandardError
