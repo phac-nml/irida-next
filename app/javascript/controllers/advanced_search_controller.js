@@ -16,6 +16,10 @@ export default class extends Controller {
     confirmCloseText: String,
   };
 
+  connect() {
+    this.idempotentConnect();
+  }
+
   idempotentConnect() {
     this.searchGroupsContainerTarget.innerHTML =
       this.searchGroupsTemplateTarget.innerHTML;
