@@ -35,7 +35,7 @@
     href:
       link_to(
         @activity[:project].puid,
-        namespace_project_path(@activity[:group], @activity[:project]),
+        namespace_project_path(@activity[:group], @activity[:project].project),
         class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
       ),
     old_namespace: @activity[:old_namespace],
