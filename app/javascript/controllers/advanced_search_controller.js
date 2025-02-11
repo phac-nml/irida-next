@@ -6,10 +6,41 @@ export default class extends Controller {
     "conditionTemplate",
     "groupsContainer",
     "groupTemplate",
-    "valueTemplate",
     "listValueTemplate",
+    "searchGroupsContainer",
+    "searchGroupsTemplate",
+    "valueTemplate",
   ];
   static outlets = ["list-filter"];
+  static values = {
+    confirmCloseText: String,
+  };
+
+  idempotentConnect() {
+    this.searchGroupsContainerTarget.innerHTML =
+      this.searchGroupsTemplateTarget.innerHTML;
+  }
+
+  clear() {
+    this.searchGroupsContainerTarget.innerHTML = "";
+  }
+
+  close(event) {
+    if (
+      this.searchGroupsContainerTarget.innerHTML.trim() ===
+      this.searchGroupsTemplateTarget.innerHTML.trim()
+    ) {
+      this.clear();
+    } else {
+      if (window.confirm(this.confirmCloseTextValue)) {
+        this.clear();
+      } else {
+        // TODO: Confirm if the user wants to abort which would clear filters
+        event.stopImmediatePropagation();
+        event.preventDefault();
+      }
+    }
+  }
 
   addCondition(event) {
     let group = event.currentTarget.parentElement.closest(
@@ -47,10 +78,10 @@ export default class extends Controller {
     }
   }
 
-  addGroup(event) {
+  addGroup() {
     let group_index = this.groupsContainerTargets.length;
-    event.currentTarget.parentElement.insertAdjacentHTML(
-      "beforebegin",
+    this.searchGroupsContainerTarget.insertAdjacentHTML(
+      "beforeend",
       this.groupTemplateTarget.innerHTML,
     );
     let newCondition = this.conditionTemplateTarget.innerHTML
@@ -96,19 +127,8 @@ export default class extends Controller {
   }
 
   clearForm() {
-    this.groupsContainerTargets.forEach((group, group_index) => {
-      if (group_index > 0) {
-        group.remove();
-      } else {
-        let conditions = group.querySelectorAll(
-          "div[data-advanced-search-target='conditionsContainer']",
-        );
-        conditions.forEach((condition) => {
-          condition.remove();
-        });
-        this.#addConditionToGroup(group);
-      }
-    });
+    this.clear();
+    this.addGroup();
   }
 
   handleOperatorChange(event) {

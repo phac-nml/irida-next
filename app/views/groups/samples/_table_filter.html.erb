@@ -1,4 +1,4 @@
-<%= form_with model: @query, scope: :q, url: search_group_samples_url, method: :post, data: { controller: "advanced-search filters selection metadata-toggle", "advanced-search-list-filter-outlet":".list-filter", "metadata-toggle-page-value": @pagy&.page, "filters-selection-outlet": "#samples-table" }, class: "filters flex items-center space-x-2" do |f| %>
+<%= form_with model: @query, scope: :q, url: search_group_samples_url, method: :post, data: { controller: "filters selection metadata-toggle", "metadata-toggle-page-value": @pagy&.page, "filters-selection-outlet": "#samples-table" }, class: "filters flex items-center space-x-2" do |f| %>
   <%= f.label :name_or_puid_cont, t(".search.placeholder"), class: "sr-only" %>
   <div class="relative">
     <%= f.search_field :name_or_puid_cont,
