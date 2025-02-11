@@ -37,11 +37,11 @@ module Samples
 
           metadata_changes = process_sample_metadata_row(sample_id, metadata)
           response[sample_id] = metadata_changes if metadata_changes
-          cleanup_files
-          response
         rescue ActiveRecord::RecordNotFound
           @namespace.errors.add(:sample, error_message(sample_id))
         end
+
+        cleanup_files
         response
       end
 
