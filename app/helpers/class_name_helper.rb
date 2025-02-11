@@ -19,7 +19,7 @@ module ClassNameHelper
     array.each do |class_name|
       classes.concat(class_names(class_name).split) if class_name
     end
-    classes.split
+    classes
   end
 
   def class_names_from_hash(hash)
