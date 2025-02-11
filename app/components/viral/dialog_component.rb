@@ -24,7 +24,7 @@ module Viral
 
     renders_one :trigger
 
-    def initialize(id: 'dialog', title: '', size: SIZE_DEFAULT, open: false, closable: true, header_system_arguments: {}, **system_arguments) # rubocop:disable Metrics/ParameterLists,Layout/LineLength
+    def initialize(id: 'dialog', title: '', size: SIZE_DEFAULT, open: false, closable: true, header_system_arguments: {}, **system_arguments) # rubocop:disable Metrics/ParameterLists,Layout/LineLength,Metrics/MethodLength
       @id = id
       @title = title
       @open = open
@@ -33,7 +33,11 @@ module Viral
       @header_system_arguments = header_system_arguments
       @system_arguments = system_arguments
 
-      @system_arguments[:data].merge!({ 'viral--dialog-target' => 'dialog' })
+      @system_arguments[:data] = if @system_arguments.key?(:data)
+                                   @system_arguments[:data].merge({ 'viral--dialog-target' => 'dialog' })
+                                 else
+                                   { 'viral--dialog-target' => 'dialog' }
+                                 end
 
       return if closable
 
