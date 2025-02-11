@@ -39,7 +39,6 @@ export default class extends Controller {
       if (window.confirm(this.confirmCloseTextValue)) {
         this.clear();
       } else {
-        // TODO: Confirm if the user wants to abort which would clear filters
         event.stopImmediatePropagation();
         event.preventDefault();
       }
