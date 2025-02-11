@@ -4,8 +4,6 @@ module Activities
   module Projects
     # Component for rendering an project sample activity
     class SampleActivityComponent < BaseActivityComponent
-      include PathHelper
-
       def sample_destroy_multiple_action
         @activity[:action] == 'sample_destroy_multiple'
       end

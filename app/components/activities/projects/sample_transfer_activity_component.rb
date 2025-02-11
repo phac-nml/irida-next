@@ -4,8 +4,6 @@ module Activities
   module Projects
     # Component for rendering project sample transfer activity
     class SampleTransferActivityComponent < BaseActivityComponent
-      include PathHelper
-
       def project_exists(namespace)
         return false if namespace.nil?
 

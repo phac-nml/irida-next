@@ -4,8 +4,6 @@ module Activities
   module Projects
     # Component for rendering a metadata template activity for projects
     class MetadataTemplateActivityComponent < BaseActivityComponent
-      include PathHelper
-
       def destroy_template
         @activity[:action] == 'metadata_template_destroy'
       end

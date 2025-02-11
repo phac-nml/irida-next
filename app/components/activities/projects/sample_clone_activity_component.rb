@@ -4,8 +4,6 @@ module Activities
   module Projects
     # Component for rendering project sample clone activity
     class SampleCloneActivityComponent < BaseActivityComponent
-      include PathHelper
-
       def project_exists(namespace)
         return false if namespace.nil?
 
