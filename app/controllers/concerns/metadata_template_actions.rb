@@ -107,7 +107,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
 
   def list
     authorize! @namespace, to: :view_metadata_templates?
-    set_template_name
+    current_metadata_template_id
     set_pagination_params
     set_search_url
 
@@ -169,13 +169,13 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
     @q.sorts = 'name asc' if @q.sorts.empty?
   end
 
-  def set_template_name
+  def current_metadata_template_id
     default_values = %w[none all]
-    @metadata_template_name = if default_values.include?(params[:metadata_template])
-                                I18n.t("shared.samples.metadata_templates.fields.#{params[:metadata_template]}")
-                              else
-                                MetadataTemplate.find(params[:metadata_template]).name
-                              end
+    @current_metadata_template_id = if default_values.include?(params[:metadata_template])
+                                      params[:metadata_template]
+                                    else
+                                      MetadataTemplate.find(params[:metadata_template]).id
+                                    end
   end
 
   def set_pagination_params
