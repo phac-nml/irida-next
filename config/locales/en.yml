@@ -302,6 +302,7 @@ en:
     apply_filter_button: Apply filter
     clear_aria_label: Clear Advanced Search
     clear_filter_button: Clear filter
+    confirm_close_text: Are you sure that you want to discard your filter modifications and close the advanced search dialog?
     description: This advanced search uses fields, operators and values to filter samples. Add groups with conditions to define the search criteria.
     field: Field
     operator: Operator

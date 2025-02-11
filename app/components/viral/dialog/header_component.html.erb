@@ -1,4 +1,4 @@
-<%= render Viral::BaseComponent.new(tag: "div", **system_arguments) do %>
+<%= render Viral::BaseComponent.new(tag: "div", **system_arguments.except(:close_action)) do %>
   <h1 class="dialog--title">
     <%= title %>
   </h1>
@@ -6,7 +6,10 @@
     <button
       type="button"
       class="dialog--close"
-      data-action="click->viral--dialog#close"
+      data-action="
+        <%= system_arguments[:close_action]%>
+        click->viral--dialog#close
+      "
       aria-label="<%= t(:"components.dialog.close") %>"
     >
       <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>

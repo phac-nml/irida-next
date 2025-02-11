@@ -406,6 +406,13 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
       click_link I18n.t('projects.samples.index.transfer_button')
       ### ACTIONS END ###
 
@@ -429,6 +436,13 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
       click_link I18n.t('projects.samples.index.transfer_button')
       ### ACTIONS END ###
 
@@ -478,6 +492,13 @@ module Projects
       ### ACTIONS START ###
       # select all 3 samples
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
       click_link I18n.t('projects.samples.index.transfer_button')
       assert_selector '#dialog'
       within('#dialog') do
@@ -528,6 +549,13 @@ module Projects
       ### ACTIONS START ###
       # select samples
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
       # clear localstorage
       Capybara.execute_script 'sessionStorage.clear()'
       # launch transfer dialog
@@ -573,6 +601,13 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
       click_link I18n.t('projects.samples.index.transfer_button')
 
       assert_selector '#dialog'
@@ -631,6 +666,13 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 1
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 1'
+        assert_selector 'strong[data-selection-target="selected"]', text: '1'
+      end
       click_link I18n.t('projects.samples.index.transfer_button')
       ### ACTIONS END ###
 
@@ -719,6 +761,13 @@ module Projects
       ### ACTIONS START ###
       # select samples
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
 
       # launch dialog
       click_link I18n.t('projects.samples.index.transfer_button')
@@ -1610,6 +1659,13 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
       click_link I18n.t('projects.samples.index.clone_button')
       ### ACTIONS END ###
 
@@ -1633,6 +1689,13 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
       click_link I18n.t('projects.samples.index.clone_button')
       ### ACTIONS END ###
 
@@ -1722,6 +1785,13 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
       # clear localstorage
       Capybara.execute_script 'sessionStorage.clear()'
       click_link I18n.t('projects.samples.index.clone_button')
@@ -1770,6 +1840,13 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
       click_link I18n.t('projects.samples.index.clone_button')
       assert_selector '#dialog'
       within('#dialog') do
@@ -1818,6 +1895,13 @@ module Projects
 
       ### ACTIONS START ####
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
       click_link I18n.t('projects.samples.index.clone_button')
       assert_selector '#dialog'
       within('#dialog') do
@@ -1841,6 +1925,13 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 1
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 1'
+        assert_selector 'strong[data-selection-target="selected"]', text: '1'
+      end
       click_link I18n.t('projects.samples.index.clone_button')
       ### ACTIONS END ###
 
@@ -2130,6 +2221,13 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
       click_link I18n.t('projects.samples.index.delete_samples_button')
       ### ACTIONS END ###
 
@@ -2153,6 +2251,13 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
       click_link I18n.t('projects.samples.index.delete_samples_button')
       ### ACTIONS END ###
 
@@ -2181,6 +2286,13 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
       click_link I18n.t('projects.samples.index.delete_samples_button')
       within('#dialog') do
         click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
@@ -2213,6 +2325,13 @@ module Projects
       ### ACTIONS START ###
       # select all samples
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
 
       # destroy sample1 with remove action link
       within '#samples-table table tbody tr:first-child' do

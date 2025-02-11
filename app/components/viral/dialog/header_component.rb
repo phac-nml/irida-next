@@ -6,10 +6,11 @@ module Viral
     class HeaderComponent < Viral::BaseComponent
       attr_reader :title, :closable
 
-      def initialize(title:, closable: true)
+      def initialize(title:, closable: true, **system_arguments)
         @title = title
         @closable = closable
-        @system_arguments = {}
+        @system_arguments = system_arguments
+
         @system_arguments[:classes] = class_names(@system_arguments[:classes], 'dialog--header')
       end
     end

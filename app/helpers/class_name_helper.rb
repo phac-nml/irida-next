@@ -5,11 +5,11 @@ module ClassNameHelper
   def class_names(*args)
     classes = []
     args.each do |class_name|
-      classes << class_name if class_name.is_a?(String) && class_name.present?
-      classes += class_names_from_array(class_name) if class_name.is_a?(Array)
-      classes += class_names_from_hash(class_name) if class_name.is_a?(Hash)
+      classes.concat(class_name.split) if class_name.is_a?(String) && class_name.present?
+      classes.concat(class_names_from_array(class_name)) if class_name.is_a?(Array)
+      classes.concat(class_names_from_hash(class_name)) if class_name.is_a?(Hash)
     end
-    classes.compact.uniq.join(' ')
+    classes.compact.sort.uniq.join(' ')
   end
 
   private
@@ -17,7 +17,7 @@ module ClassNameHelper
   def class_names_from_array(array)
     classes = []
     array.each do |class_name|
-      classes << class_names(class_name) if class_name
+      classes.concat(class_names(class_name).split) if class_name
     end
     classes
   end
@@ -25,7 +25,7 @@ module ClassNameHelper
   def class_names_from_hash(hash)
     classes = []
     hash.each do |class_name, value|
-      classes << class_name if value
+      classes.concat(class_name.to_s.split) if value
     end
     classes
   end
