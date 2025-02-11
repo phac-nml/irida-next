@@ -139,7 +139,6 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
       proj = relation.with_deleted.find_by(id: identifier)&.namespace_id
       Namespace.with_deleted.find_by(id: proj) if proj.present?
     elsif relation.method_defined?(:with_deleted)
-
       relation.with_deleted.find_by(id: identifier)
     else
       relation.find_by(id: identifier)
@@ -169,7 +168,9 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
     if activity.parameters[:action] == 'sample_transfer'
       params.merge!({
+                      source_project_puid: activity.parameters[:source_project_puid],
                       source_project: get_object_by_id(activity.parameters[:source_project], Project),
+                      target_project_puid: activity.parameters[:target_project_puid],
                       target_project: get_object_by_id(activity.parameters[:target_project], Project),
                       transferred_samples_ids: activity.parameters[:transferred_samples_ids],
                       transferred_samples_puids: activity.parameters[:transferred_samples_puids]
@@ -178,7 +179,9 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
     if activity.parameters[:action] == 'sample_clone'
       params.merge!({
+                      source_project_puid: activity.parameters[:source_project_puid],
                       source_project: get_object_by_id(activity.parameters[:source_project], Project),
+                      target_project_puid: activity.parameters[:target_project_puid],
                       target_project: get_object_by_id(activity.parameters[:target_project], Project),
                       cloned_samples_ids: activity.parameters[:cloned_samples_ids],
                       cloned_samples_puids: activity.parameters[:cloned_samples_puids]

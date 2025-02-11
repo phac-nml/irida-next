@@ -92,6 +92,7 @@ module Samples
                                          owner: current_user,
                                          parameters:
                                           {
+                                            target_project_puid: @new_project.puid,
                                             target_project: @new_project.id,
                                             cloned_samples_ids: cloned_sample_ids,
                                             cloned_samples_puids: cloned_sample_puids,
@@ -102,6 +103,7 @@ module Samples
                                              owner: current_user,
                                              parameters:
                                               {
+                                                source_project_puid: @project.puid,
                                                 source_project: @project.id,
                                                 cloned_samples_ids: cloned_sample_ids,
                                                 cloned_samples_puids: cloned_sample_puids,
