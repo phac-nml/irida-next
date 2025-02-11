@@ -740,11 +740,11 @@ module WorkflowExecutions
       # select samples
       click_button I18n.t(:'projects.samples.index.select_all_button')
       within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
       within 'tfoot' do
-        assert_text 'Samples: 3'
-        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+        assert_text 'Samples: 20'
+        assert_selector 'strong[data-selection-target="selected"]', text: '20'
       end
       # launch workflow execution dialog
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
@@ -819,8 +819,8 @@ module WorkflowExecutions
         assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
       within 'tfoot' do
-        assert_text 'Samples: 26'
-        assert_selector 'strong[data-selection-target="selected"]', text: '26'
+        assert_text 'Samples: 20'
+        assert_selector 'strong[data-selection-target="selected"]', text: '20'
       end
       # launch workflow execution dialog
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
