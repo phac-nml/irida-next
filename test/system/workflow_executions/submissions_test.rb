@@ -29,6 +29,8 @@ module WorkflowExecutions
       @attachment_rev3 = attachments(:attachmentPEREV3)
       @attachment_fwd43 = attachments(:attachmentPEFWD43)
       @attachment_rev43 = attachments(:attachmentPEREV43)
+
+      Flipper.enable(:workflow_execution_sharing)
     end
 
     test 'should display a pipeline selection modal for project samples as owner' do
