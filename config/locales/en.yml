@@ -298,7 +298,7 @@ en:
     workflow_execution:
       automated_workflow:
         create_html: "%{user} setup automated pipeline <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span> for the project"
-        launch_html: Project automation bot launched pipeline %{href} on sample %{sample_href}
+        launch_html: "Project automation bot launched pipeline <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span> on sample <span class='font-medium text-slate-800 dark:text-slate-300'>%{sample_href}</span>"
         destroy_html: "%{user} removed automated pipeline <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span> for the project"
       automated_workflow_completion:
         metadata_written_html: Project automation bot wrote pipeline %{href} metadata to sample %{sample_href}

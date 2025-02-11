@@ -94,7 +94,10 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
     relation = activity.parameters[:automated] == true ? AutomatedWorkflowExecution : WorkflowExecution
 
-    base_params.merge!({ workflow_execution: get_object_by_id(activity.parameters[:workflow_id], relation) })
+    base_params.merge!({
+                         workflow_execution: get_object_by_id(activity.parameters[:workflow_id], relation),
+                         sample: get_object_by_id(activity.parameters[:sample_id], Sample)
+                       })
   end
 
   def member_activity(activity)

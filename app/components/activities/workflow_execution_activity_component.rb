@@ -16,5 +16,11 @@ module Activities
         !@activity[:workflow_execution].deleted?
       end
     end
+
+    def workflow_execution_sample_exists
+      return false if @activity[:sample].nil?
+
+      !@activity[:sample].deleted?
+    end
   end
 end
