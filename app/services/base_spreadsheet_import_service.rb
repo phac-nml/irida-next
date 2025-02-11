@@ -65,10 +65,9 @@ class BaseSpreadsheetImportService < BaseService
             I18n.t('services.spreadsheet_import.duplicate_column_names')
     end
 
-    @required_headers.each do |req_header|
-      unless @headers.include?(req_header)
-        raise FileImportError, I18n.t('services.spreadsheet_import.missing_header', header_title: req_header)
-      end
+    missing_headers = @required_headers - @headers
+    unless missing_headers.empty?
+      raise FileImportError, I18n.t('services.spreadsheet_import.missing_header', header_title: missing_headers)
     end
 
     return unless @headers.count < (@required_headers.count + @minimum_additional_data_columns)
