@@ -11,6 +11,8 @@ module Activities
       end
 
       def project_exists(namespace)
+        return false if namespace.nil?
+
         !namespace.deleted? && !namespace.project.deleted?
       end
     end

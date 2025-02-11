@@ -15,6 +15,8 @@ module Activities
       end
 
       def sample_exists(sample)
+        return false if sample.nil?
+
         !sample.deleted?
       end
 
