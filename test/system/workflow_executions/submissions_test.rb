@@ -676,6 +676,13 @@ module WorkflowExecutions
                                                                            locale: user.locale))
       # select samples
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
       # launch workflow execution dialog
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
@@ -732,6 +739,13 @@ module WorkflowExecutions
                                                                            locale: user.locale))
       # select samples
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
       # launch workflow execution dialog
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
@@ -801,6 +815,13 @@ module WorkflowExecutions
       ### ACTIONS START ###
       # select samples
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 26'
+        assert_selector 'strong[data-selection-target="selected"]', text: '26'
+      end
       # launch workflow execution dialog
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
@@ -869,6 +890,13 @@ module WorkflowExecutions
                                                                            locale: user.locale))
       # select samples
       click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
       # launch workflow execution dialog
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 
