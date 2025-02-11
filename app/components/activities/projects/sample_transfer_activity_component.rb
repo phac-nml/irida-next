@@ -2,13 +2,9 @@
 
 module Activities
   module Projects
-    # Component for rendering an sample transfer activity of type Namespace for Projects
-    class SampleTransferActivityComponent < Component
+    # Component for rendering project sample transfer activity
+    class SampleTransferActivityComponent < BaseActivityComponent
       include PathHelper
-
-      def initialize(activity: nil)
-        @activity = activity
-      end
 
       def project_exists(namespace)
         return false if namespace.nil?

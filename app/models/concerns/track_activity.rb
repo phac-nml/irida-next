@@ -80,7 +80,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   def workflow_execution_activity(activity)
     activity_trackable = activity_trackable(activity, Namespace)
 
-    {
+    base_params = {
       created_at: format_created_at(activity.created_at),
       key: "activity.#{activity.key}_html",
       user: activity_creator(activity),
@@ -91,6 +91,10 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
       sample_id: activity.parameters[:sample_id],
       automated: activity.parameters[:automated]
     }
+
+    relation = activity.parameters[:automated] == true ? AutomatedWorkflowExecution : WorkflowExecution
+
+    base_params.merge!({ workflow_execution: get_object_by_id(activity.parameters[:workflow_id], relation) })
   end
 
   def member_activity(activity)
@@ -134,13 +138,20 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     if relation == Project
       proj = relation.with_deleted.find_by(id: identifier)&.namespace_id
       Namespace.with_deleted.find_by(id: proj) if proj.present?
-    else
+    elsif relation.method_defined?(:with_deleted)
+
       relation.with_deleted.find_by(id: identifier)
+    else
+      relation.find_by(id: identifier)
     end
   end
 
   def get_object_by_puid(puid, relation)
-    relation.with_deleted.find_by(puid: puid)
+    if relation.method_defined?(:with_deleted)
+      relation.with_deleted.find_by(puid: puid)
+    else
+      relation.find_by(puid: puid)
+    end
   end
 
   def transfer_activity_parameters(params, activity) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength

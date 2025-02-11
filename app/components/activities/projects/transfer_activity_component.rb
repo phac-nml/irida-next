@@ -2,13 +2,9 @@
 
 module Activities
   module Projects
-    # Component for rendering an activity of type Namespace for Projects
-    class TransferActivityComponent < Component
+    # Component for rendering project namespace transfer activity
+    class TransferActivityComponent < BaseActivityComponent
       include PathHelper
-
-      def initialize(activity: nil)
-        @activity = activity
-      end
     end
   end
 end

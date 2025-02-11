@@ -2,7 +2,7 @@
 
 module Activities
   module Projects
-    # Component for rendering an activity of type Namespace for Projects
+    # Base Component for rendering an activity of type Namespace for Projects
     class BaseActivityComponent < Component
       include PathHelper
 

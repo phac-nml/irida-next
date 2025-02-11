@@ -2,13 +2,9 @@
 
 module Activities
   module Projects
-    # Component for rendering an activity of type Namespace for Projects
-    class SampleCloneActivityComponent < Component
+    # Component for rendering project sample clone activity
+    class SampleCloneActivityComponent < BaseActivityComponent
       include PathHelper
-
-      def initialize(activity: nil)
-        @activity = activity
-      end
 
       def project_exists(namespace)
         return false if namespace.nil?

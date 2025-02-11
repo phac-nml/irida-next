@@ -297,7 +297,7 @@ en:
       update_html: "%{user} updated project attributes"
     workflow_execution:
       automated_workflow:
-        create_html: "%{user} setup automated pipeline %{href} for the project"
+        create_html: "%{user} setup automated pipeline <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span> for the project"
         launch_html: Project automation bot launched pipeline %{href} on sample %{sample_href}
       automated_workflow_completion:
         metadata_written_html: Project automation bot wrote pipeline %{href} metadata to sample %{sample_href}
