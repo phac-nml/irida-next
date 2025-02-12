@@ -1820,6 +1820,9 @@ en:
           none: Hide All Fields
         label: Metadata
         loading: Loading metadata templates...
+        template_select:
+          label: Select fields by metadata template
+          no_template: No template
         templates:
           label: Metadata Templates
         tooltip: Metadata display settings

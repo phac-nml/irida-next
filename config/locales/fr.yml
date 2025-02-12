@@ -1820,6 +1820,9 @@ fr:
           none: Masquer tous les champs
         label: Modèles de métadonnées
         loading: Chargement des modèles de métadonnées...
+        template_select:
+          label: Select fields by metadata template
+          no_template: No template
         templates:
           label: Modèles de métadonnées
         tooltip: Paramètres de visualisation des métadonnées

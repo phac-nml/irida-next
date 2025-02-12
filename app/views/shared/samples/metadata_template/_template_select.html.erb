@@ -1,0 +1,21 @@
+<div>
+  <label
+    for="template-selector"
+    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+  ><%= t("shared.samples.metadata_templates.template_select.label") %></label>
+  <select
+    id="template-selector"
+    data-action="viral--sortable-lists--two-lists-selection#setTemplate"
+    class="
+      bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg
+      focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5
+      dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400
+      dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500
+    "
+  >
+    <option value="none"><%= t("shared.samples.metadata_templates.template_select.no_template") %></option>
+    <%= templates.each do |template| %>
+      <option data-fields="<%= template[:fields] %>" value="<%= template[:id] %>"><%= template[:name] %></option>
+    <% end %>
+  </select>
+</div>
