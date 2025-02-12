@@ -68,12 +68,12 @@ export default class extends Controller {
   #currentPage;
   #lastPage;
 
-  // sample data within the samplesheet is centered around which index they're at (to get data from the 100th sample,
-  // you need to access it via index 99). Main use case for having an array of sample indexes is for filtering,
-  // where we can easily access samples via a wide range of indexes
+  // sample data within the samplesheet is centered around which index they're at.
+  // Main use case for having an array of sample indexes is for filtering,
+  // where we can easily access samples via a wide range of indexes when the sample list is filtered down
   #currentSampleIndexes = [];
-  #filterableColumns = [];
 
+  #filterableColumns = [];
   #totalSamples;
 
   // samplesheetProperties contains all the parameters of each field type to the associated pipeline
@@ -540,8 +540,8 @@ export default class extends Controller {
     }
   }
 
-  // when filtering samples, we will add the indexes of samples that fit the filter into the #currentSampleIndexes array
-  // we can then easily access each sample's data via its index and still paginate in groups of 5
+  // when filtering samples, we will add the indexes of samples that fit the filter into the #currentSampleIndexes array.
+  // we can then easily access each sample's data via its index and still paginate in pages of 5
   filter() {
     this.#enableProcessingState(this.filteringSamplesValue);
     // 50ms timeout allows the browser to update the DOM elements enabling the overlay prior to starting the filtering process

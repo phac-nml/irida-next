@@ -1056,6 +1056,7 @@ module WorkflowExecutions
           assert_selector 'div[class="p-2.5 sticky left-0"]', count: 5
         end
         # verify 4 pages of samples still exist
+        assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
         within('select[data-action="change->nextflow--samplesheet#pageSelected"]') do
           assert_selector 'option[value="1"]'
           assert_selector 'option[value="2"]'
