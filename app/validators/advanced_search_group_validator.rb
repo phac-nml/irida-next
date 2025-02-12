@@ -37,7 +37,7 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
 
   def validate_key(condition)
     return if %w[name puid created_at updated_at
-                 attachments_updated_at].include?(condition.field) || condition.field.start_with?('metadata.')
+                 attachments_updated_at].include?(condition.field) || /^metadata\..+$/ =~ condition.field
 
     condition.errors.add :field, I18n.t('validators.advanced_search_group_validator.invalid_field_error')
   end
