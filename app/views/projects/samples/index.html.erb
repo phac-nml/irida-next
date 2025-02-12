@@ -142,6 +142,17 @@
     <div id="table-filter" class="flex grow-0">
       <%= render partial: "table_filter", locals: { query: @query } %>
     </div>
+
+    <%= render partial: "shared/samples/metadata_template_dropdown",
+    locals: {
+      url:
+        list_namespace_project_metadata_templates_url(
+          @project.namespace.parent,
+          @project,
+        ),
+      metadata_template: @metadata_template,
+      pagy: @pagy,
+    } %>
   </div>
 
   <%= render partial: "table",

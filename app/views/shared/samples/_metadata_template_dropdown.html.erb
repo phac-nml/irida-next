@@ -1,0 +1,44 @@
+<%= form_with url: url, data: { turbo_frame: "metadata_templates_dropdown", turbo_stream: true }, method: :get do |f| %>
+  <input type="hidden" name="format" value="turbo_stream"/>
+  <input type="hidden" name="limit" value="<%= pagy&.limit %>"/>
+  <input type="hidden" name="page" value="<%= pagy&.page %>"/>
+  <%= f.hidden_field :metadata_template, value: metadata_template[:id] %>
+  <%= f.button type: :submit,
+    class: "inline-flex items-center justify-center
+            w-1/2 sm:w-auto
+            px-5 py-2.5 ml-2
+            text-sm
+            border rounded-md
+            cursor-pointer
+            focus:z-10 focus:outline-none focus:ring-slate-200
+            bg-white text-slate-900 border-slate-200
+            hover:bg-slate-100 hover:text-slate-950
+            dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600
+            dark:focus:ring-slate-700
+            dark:hover:text-white dark:hover:bg-slate-700",
+    title: t("shared.samples.metadata_templates.tooltip"),
+    data: {
+      'dropdown-toggle': "dd-metadata_templates_dropdown",
+      "dropdown-offset-skidding": 150,
+    } do %>
+    <div class="text-sm">
+      <%= t("shared.samples.metadata_templates.label") %>
+    </div>
+    <%= viral_icon(name: "adjustment_horizontal", classes: "w-4 h-4 ml-2 flex-none") %>
+  <% end %>
+<% end %>
+<div
+  id="dd-metadata_templates_dropdown"
+  class="
+    z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44
+    dark:bg-gray-700
+  "
+>
+  <ul id="metadata_templates_dropdown">
+    <li>
+      <%= render SpinnerComponent.new(
+        message: t("shared.samples.metadata_templates.loading"),
+      ) %>
+    </li>
+  </ul>
+</div>

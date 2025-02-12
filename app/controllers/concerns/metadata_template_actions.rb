@@ -8,12 +8,13 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
     before_action proc { namespace }
     before_action proc { metadata_template }, only: %i[destroy edit show update]
     before_action proc { metadata_template_fields }, only: %i[create new edit update]
+    before_action proc { metadata_templates_ancestral }, only: %i[list]
   end
 
   def index
     authorize! @namespace, to: :view_metadata_templates?
 
-    @q = load_metadata_templates.ransack(params[:q])
+    @q = load_namespace_metadata_templates.ransack(params[:q])
     set_default_sort
     @pagy, @metadata_templates = pagy(@q.result)
   end
@@ -104,6 +105,20 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
+  def list
+    authorize! @namespace, to: :view_metadata_templates?
+    current_metadata_template_id
+    set_pagination_params
+    set_search_url
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace('metadata_templates_dropdown',
+                                                  partial: 'shared/samples/metadata_templates_list')
+      end
+    end
+  end
+
   protected
 
   def metadata_templates_path
@@ -112,7 +127,13 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
 
   private
 
-  def load_metadata_templates
+  def metadata_templates_ancestral
+    @metadata_templates = authorized_scope(MetadataTemplate, type: :relation,
+                                                             scope_options: { namespace: @namespace,
+                                                                              include_ancestral_templates: true })
+  end
+
+  def load_namespace_metadata_templates
     authorized_scope(MetadataTemplate, type: :relation, scope_options: { namespace: @namespace })
   end
 
@@ -146,5 +167,23 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
 
   def set_default_sort
     @q.sorts = 'name asc' if @q.sorts.empty?
+  end
+
+  def current_metadata_template_id
+    default_values = %w[none all]
+    @current_metadata_template_id = if default_values.include?(params[:metadata_template])
+                                      params[:metadata_template]
+                                    else
+                                      MetadataTemplate.find(params[:metadata_template]).id
+                                    end
+  end
+
+  def set_pagination_params
+    @limit = params[:limit]
+    @page = params[:page]
+  end
+
+  def set_search_url
+    @url = @namespace.is_a?(Group) ? search_group_samples_url : search_namespace_project_samples_url
   end
 end

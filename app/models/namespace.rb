@@ -261,6 +261,10 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
     metadata_summary.keys
   end
 
+  def metadata_templates
+    MetadataTemplate.where(namespace: self)
+  end
+
   private
 
   # Method to restore namespace routes when the namespace is restored

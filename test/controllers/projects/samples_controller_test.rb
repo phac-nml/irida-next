@@ -158,5 +158,19 @@ module Projects
       }
       assert_response :success
     end
+
+    test 'should handle metadata template none' do
+      get namespace_project_samples_path(@namespace, @project), params: { q: { metadata_template: 'none' } }
+      assert_response :success
+      doc = Nokogiri::HTML(response.body)
+      assert doc.at_css('input[name="metadata_template"][value="none"]')
+    end
+
+    test 'should handle metadata template all' do
+      get namespace_project_samples_path(@namespace, @project), params: { q: { metadata_template: 'all' } }
+      assert_response :success
+      doc = Nokogiri::HTML(response.body)
+      assert doc.at_css('input[name="metadata_template"][value="all"]')
+    end
   end
 end

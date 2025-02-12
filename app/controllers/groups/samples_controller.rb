@@ -8,6 +8,7 @@ module Groups
 
     before_action :group, :current_page
     before_action :query, only: %i[index search select]
+    before_action :current_metadata_template, only: %i[index]
 
     def index
       @timestamp = DateTime.current
@@ -74,28 +75,29 @@ module Groups
       @current_page = t(:'groups.sidebar.samples')
     end
 
-    def set_metadata_fields
-      fields_for_namespace(namespace: @group, show_fields: @search_params && @search_params[:metadata].to_i == 1)
+    def metadata_fields(template)
+      fields_for_namespace_or_template(namespace: @group, template:)
     end
 
     def query
       authorize! @group, to: :sample_listing?
 
       @search_params = search_params
-      set_metadata_fields
+      metadata_fields(@search_params['metadata_template'])
       advanced_search_fields(@group)
 
       project_ids =
         authorized_scope(Project, type: :relation, as: :group_projects, scope_options: { group: @group }).pluck(:id)
 
-      @query = Sample::Query.new(@search_params.except(:metadata).merge({ project_ids: project_ids }))
+      @query = Sample::Query.new(@search_params.except('metadata_template').merge({ project_ids: project_ids }))
     end
 
     def search_params
       updated_params = update_store(search_key, params[:q].present? ? params[:q].to_unsafe_h : {})
+      updated_params.slice!('name_or_puid_cont', 'name_or_puid_in', 'groups_attributes', 'metadata_template', 'sort')
 
       if !updated_params.key?(:sort) ||
-         (updated_params[:metadata].to_i.zero? && updated_params[:sort]&.match?(/metadata_/))
+         (updated_params[:metadata_template] == 'none' && updated_params[:sort]&.match?(/metadata_/))
         updated_params[:sort] = 'updated_at desc'
         update_store(search_key, updated_params)
       end

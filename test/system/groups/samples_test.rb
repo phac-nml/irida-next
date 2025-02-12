@@ -316,8 +316,8 @@ module Groups
         assert_selector 'th', count: 6
       end
 
-      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
-      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      choose 'q[metadata_template]', option: 'all'
 
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
@@ -441,8 +441,8 @@ module Groups
       click_on 'Last Updated'
       assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
 
-      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
-      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      choose 'q[metadata_template]', option: 'all'
 
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
@@ -458,9 +458,12 @@ module Groups
         assert_selector 'td:nth-child(9) button', text: ''
       end
 
-      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      choose 'q[metadata_template]', option: 'none'
+
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
+
       assert_selector 'table thead tr th', count: 6
     end
 
@@ -468,12 +471,13 @@ module Groups
       visit group_samples_url(@group)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                            locale: @user.locale))
-      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
       within('table thead tr') do
         assert_selector 'th', count: 6
       end
 
-      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      choose 'q[metadata_template]', option: 'all'
+
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
 
@@ -493,8 +497,9 @@ module Groups
       assert_selector 'tbody tr:first-child th', text: @sample30.puid
       assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample30.name
 
-      # toggling metadata again causes sort to be reset
-      find('label', text: I18n.t(:'projects.samples.shared.metadata_toggle.label')).click
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      choose 'q[metadata_template]', option: 'none'
+
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
 
@@ -924,7 +929,9 @@ module Groups
     test 'should partially import metadata with missing sample errors' do
       visit group_samples_url(@group)
 
-      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      choose 'q[metadata_template]', option: 'all'
+
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
 
@@ -977,8 +984,11 @@ module Groups
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
 
-      assert_selector 'label', text: I18n.t('projects.samples.shared.metadata_toggle.label'), count: 1
-      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      choose 'q[metadata_template]', option: 'all'
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
 
       within('table thead tr') do
         assert_selector 'th', count: 9
@@ -1015,7 +1025,12 @@ module Groups
       login_as users(:ryan_doe)
       visit group_samples_url(@group)
 
-      find('label', text: I18n.t('projects.samples.shared.metadata_toggle.label')).click
+      # toggle metadata on for samples table
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      choose 'q[metadata_template]', option: 'all'
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
 
       within('table thead tr') do
         assert_selector 'th', count: 9
