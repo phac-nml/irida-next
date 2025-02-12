@@ -1,40 +1,32 @@
 # frozen_string_literal: true
 
-module Resolvers
-  # Samples Resolver
-  class SamplesResolver < BaseResolver
-    type Types::SampleType.connection_type, null: true
+# Validators
+module Validators
+  # Query Validator
+  class QueryValidator < BaseValidator # rubocop:disable GraphQL/ObjectDescription
+    def validate(_object, context, value)
+      query = Sample::Query.new(params(value[:group_id], value[:filter], value[:order_by], context))
 
-    argument :group_id, GraphQL::Types::ID,
-             required: false,
-             description: 'Optional group identifier to return list of samples for.',
-             default_value: nil
+      return if query.valid?
 
-    argument :filter, Types::SampleFilterType,
-             required: false,
-             description: 'Sample filter',
-             default_value: nil
-
-    argument :order_by, Types::SampleOrderInputType,
-             required: false,
-             description: 'Order by',
-             default_value: nil
-
-    def resolve(group_id:, filter:, order_by:)
-      context.scoped_set!(:samples_preauthorized, true)
-      query = Sample::Query.new(params(group_id, filter, order_by))
-      query.results
+      error_messages(query)
     end
-
-    def ready?(**_args)
-      authorize!(to: :query?, with: GraphqlPolicy, context: { token: context[:token] })
-    end
-
-    validates Validators::QueryValidator => {}
 
     private
 
-    def params(group_id, filter, order_by)
+    def error_messages(query)
+      errors = []
+      query.groups.each do |group|
+        group.conditions.each do |condition|
+          condition.errors.messages.each do |attribute, message|
+            errors << "'#{condition.send(attribute.to_sym)}' #{message.first}"
+          end
+        end
+      end
+      errors
+    end
+
+    def params(group_id, filter, order_by, context)
       filter = filter&.to_h
       params = {}
       params.merge!(filter_params(filter)) if filter
@@ -43,7 +35,7 @@ module Resolvers
       if group_id
         params.merge!(samples_by_group_scope(group_id:))
       else
-        params.merge!(samples_by_project_scope)
+        params.merge!(samples_by_project_scope(context))
       end
     end
 
@@ -63,8 +55,8 @@ module Resolvers
       end.to_h }
     end
 
-    def samples_by_project_scope
-      scope = authorized_scope Project, type: :relation
+    def samples_by_project_scope(context)
+      scope = authorized_scope Project, type: :relation, context: { user: context[:current_user] }
       { project_ids: scope.pluck(:id) }
     end
 
