@@ -45,7 +45,7 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     @sample32 = samples(:sample32)
   end
 
-  test 'filter samples using ransack search should work' do
+  test 'filter samples should work' do
     result = IridaSchema.execute(SAMPLES_QUERY,
                                  context: { current_user: @user },
                                  variables: { filter: { name_or_puid_cont: @sample.name } })
@@ -55,7 +55,7 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     assert_equal @sample.puid, data[0]['puid']
   end
 
-  test 'filter samples using ransack search should work with order by' do
+  test 'filter samples should work with order by' do
     result = IridaSchema.execute(SAMPLES_QUERY,
                                  context: { current_user: @user },
                                  variables: { filter: { name_or_puid_cont: 'Project 1' },
@@ -71,7 +71,7 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     assert_equal samples(:sample37).puid, data[2]['puid']
   end
 
-  test 'filter group samples using ransack search with group id should work' do
+  test 'filter group samples should work' do
     result = IridaSchema.execute(SAMPLES_WITH_GROUP_QUERY,
                                  context: { current_user: @user },
                                  variables: { group_id: groups(:group_one).to_global_id.to_s,
@@ -82,7 +82,7 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     assert_equal @sample.puid, data[0]['puid']
   end
 
-  test 'filter group samples with group id should work with order by' do
+  test 'filter group samples should work with order by' do
     result = IridaSchema.execute(SAMPLES_WITH_GROUP_QUERY,
                                  context: { current_user: @user },
                                  variables: { group_id: groups(:group_one).to_global_id.to_s,
@@ -144,21 +144,7 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     assert_nil data
   end
 
-  test 'filter samples with existing metadata field using advanced search should work' do
-    result = IridaSchema.execute(SAMPLES_QUERY,
-                                 context: { current_user: @user },
-                                 variables: { filter: { advanced_search_groups: [[{
-                                   field: 'metadata.metadatafield1', operator: 'EXISTS'
-                                 }]] } })
-
-    assert_nil result['errors'], 'should work and have no errors.'
-
-    data = result['data']['samples']['nodes']
-
-    assert_equal 4, data.count
-  end
-
-  test 'filter samples with metadata field using advanced search should work' do
+  test 'filter samples using advanced search should work' do
     result = IridaSchema.execute(SAMPLES_QUERY,
                                  context: { current_user: @user },
                                  variables: { filter: { advanced_search_groups: [[{
@@ -170,5 +156,36 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     data = result['data']['samples']['nodes']
 
     assert_equal 4, data.count
+  end
+
+  test 'filter samples with ignoring case using advanced search should work' do
+    result = IridaSchema.execute(SAMPLES_QUERY,
+                                 context: { current_user: @user },
+                                 variables: { filter: { advanced_search_groups: [[{
+                                   field: 'metadata.metadatafield1', operator: 'EQUALS', value: 'Value1'
+                                 }]] } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['samples']['nodes']
+
+    assert_equal 4, data.count
+  end
+
+  test 'filter samples with non-existent metadata key using advanced search should work' do
+    result = IridaSchema.execute(SAMPLES_QUERY,
+                                 context: { current_user: @user },
+                                 variables: { filter: { advanced_search_groups: [[{
+                                   field: 'non_existent', operator: 'EXISTS'
+                                 }]] } })
+
+    assert_not_nil result['errors'], 'should work and have no errors.'
+
+    assert_equal "'non_existent' is an invalid metadata field",
+                 result['errors'].first['message']
+
+    data = result['data']['samples']
+
+    assert_nil data
   end
 end

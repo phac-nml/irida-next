@@ -24,7 +24,7 @@ module Validators
           end
         end
       end
-      errors
+      errors.uniq
     end
   end
 end
