@@ -1047,11 +1047,16 @@ module WorkflowExecutions
           assert_selector 'div[class="p-2.5 sticky left-0"]', count: 5
         end
         # enter filter
-        find('input#samplesheet-filter').fill_in with: 'Project 2 Sample'
-        find('input#samplesheet-filter').send_keys :enter
+        find('input#samplesheet-filter').fill_in with: 'inxt_sam_'
+        find('input#samplesheet-filter').native.send_keys(:return)
         ### ACTIONS END ###
 
         ### VERIFY START ###
+        assert_selector 'div#spinner'
+        assert_no_selector 'div#spinner'
+        assert_selector %(input#samplesheet-filter) do |input|
+          assert_equal 'inxt_sam_', input['value']
+        end
         assert_selector '#metadata-sample-column'
         within('#metadata-sample-column') do
           assert_selector 'div[class="p-2.5 sticky left-0"]', count: 5
