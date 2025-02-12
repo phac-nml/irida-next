@@ -119,7 +119,7 @@
                        class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
       </div>
       <%# do not render checkbox for an automated workflow execution %>
-      <% if @namespace_type && !@samples.empty? %>
+      <% if Flipper.enabled?(:workflow_execution_sharing) && @namespace_type && !@samples.empty? %>
         <div class="flex items-center h-5 mb-4">
           <%= workflow.check_box :shared_with_namespace,
                              {

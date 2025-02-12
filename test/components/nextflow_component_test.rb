@@ -4,6 +4,8 @@ require 'view_component_test_case'
 
 class NextflowComponentTest < ViewComponentTestCase
   test 'default' do
+    Flipper.enable(:workflow_execution_sharing)
+
     sample43 = samples(:sample43)
     sample44 = samples(:sample44)
 

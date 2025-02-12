@@ -4,6 +4,8 @@ require 'faker'
 
 Faker::Config.locale = 'en'
 
+Flipper.enable(:workflow_execution_sharing)
+
 @namespace_group_link_expiry_date = (Time.zone.today + 14).strftime('%Y-%m-%d')
 
 # This file should contain all the record creation needed to seed the database with its default values.

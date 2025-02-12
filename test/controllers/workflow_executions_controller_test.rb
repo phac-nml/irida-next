@@ -11,6 +11,8 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should create workflow execution with valid params' do
+    Flipper.enable :workflow_execution_sharing
+
     assert_difference -> { WorkflowExecution.count } => 1,
                       -> { SamplesWorkflowExecution.count } => 1 do
       post workflow_executions_path(format: :turbo_stream),

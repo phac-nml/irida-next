@@ -40,11 +40,11 @@ class WorkflowExecutionsController < ApplicationController
       :namespace_id,
       :update_samples,
       :email_notification,
-      :shared_with_namespace,
+      Flipper.enabled?(:workflow_execution_sharing) ? :shared_with_namespace : nil,
       { metadata: {},
         workflow_params: {},
         samples_workflow_executions_attributes: samples_workflow_execution_params_attributes }
-    ]
+    ].compact
   end
 
   def samples_workflow_execution_params_attributes
