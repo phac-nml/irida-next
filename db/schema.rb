@@ -158,7 +158,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_10_214118) do
     t.datetime "updated_at", null: false
     t.jsonb "log_data"
     t.index ["created_by_id"], name: "index_metadata_templates_on_created_by_id"
-    t.index ["fields", "namespace_id"], name: "index_template_fields_with_namespace", unique: true, where: "(deleted_at IS NULL)"
     t.index ["namespace_id", "name"], name: "index_template_name_with_namespace", unique: true, where: "(deleted_at IS NULL)"
     t.index ["namespace_id"], name: "index_metadata_templates_on_namespace_id"
   end
@@ -351,8 +350,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_10_214118) do
     t.string "name"
     t.uuid "namespace_id"
     t.boolean "cleaned", default: false, null: false
-    t.jsonb "log_data"
     t.boolean "shared_with_namespace", default: false, null: false
+    t.jsonb "log_data"
     t.index ["created_at"], name: "index_workflow_executions_on_created_at"
     t.index ["namespace_id"], name: "index_workflow_executions_on_namespace_id"
     t.index ["state"], name: "index_workflow_executions_on_state"
