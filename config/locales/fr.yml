@@ -420,11 +420,6 @@ fr:
       clear: Remove all tags
       description: Paste a list of <kbd>,</kbd> separated sample names or identifiers
       remove_tag: Remove
-    metadata_templates_dropdown:
-      all: All Metadata Fields
-      fields: Metadata Fields
-      none: No Metadata Fields
-      templates: Metadata Templates
     nextflow:
       email_notification: Receive an email notification when your analysis has completed?
       required: Required
