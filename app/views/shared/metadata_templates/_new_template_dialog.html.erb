@@ -14,14 +14,14 @@
           <%= form_for(:metadata_template, url: create_path, method: :post
             ) do |form| %>
             <div class="grid gap-4">
-              <div class="form-field mt-2">
+              <div class="mt-2 form-field">
                 <%= form.label :name %>
                 <%= form.text_field :name,
                                 class: "form-control",
                                 required: true,
                                 value: @new_template&.name %>
               </div>
-              <div class="form-field mt-2">
+              <div class="mt-2 form-field">
                 <%= form.label :description %>
                 <%= form.text_area :description,
                                class: "form-control",
@@ -31,10 +31,19 @@
                 class="hidden"
                 data-viral--sortable-lists--two-lists-selection-target="field"
               ></div>
-              <%= viral_sortable_lists(
-            title: t("metadata_templates.new_template_dialog.metadata"),
-            description: t("metadata_templates.new_template_dialog.description")
-            ) do |sortable_lists| %>
+
+              <div>
+                <div class="text-sm font-medium text-slate-900 dark:text-white">
+                  t("metadata_templates.new_template_dialog.metadata")
+                </div>
+                <div
+                  class="text-sm font-medium leading-relaxed  text-slate-500 dark:text-slate-400"
+                >
+                  <%= t("metadata_templates.new_template_dialog.description") %>
+                </div>
+              </div>
+
+              <%= viral_sortable_lists do |sortable_lists| %>
                 <%= sortable_lists.with_list(
                   id: "available",
                   title: t("metadata_templates.new_template_dialog.available"),
