@@ -3,13 +3,10 @@
 module Viral
   # This component creates the sortable_lists.
   class SortableListsComponent < Viral::Component
-    attr_reader :title, :description
-
     renders_many :lists, Viral::SortableList::ListComponent
 
-    def initialize(title: nil, description: nil)
-      @title = title
-      @description = description
+    def initialize(**system_arguments)
+      @system_arguments = system_arguments
     end
   end
 end

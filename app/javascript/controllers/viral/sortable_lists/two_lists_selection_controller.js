@@ -112,4 +112,25 @@ export default class extends Controller {
     this.selectedList.removeEventListener("mouseover", this.buttonStateListener)
     this.availableList.removeEventListener("mouseover", this.buttonStateListener)
   }
+
+  setTemplate(event) {
+    const target = event.target
+    const templateId = target.value
+    const fields = target.options[target.selectedIndex].dataset.fields
+
+    const allItems = this.#constructAllListItems(this.availableList, this.selectedList)
+
+    if (templateId === "none") {
+      this.removeAll(event)
+      return
+    }
+
+    allItems.forEach(item => {
+      if (fields.includes(item.innerText)) {
+        this.selectedList.append(item)
+      } else {
+        this.availableList.append(item)
+      }
+    })
+  }
 }

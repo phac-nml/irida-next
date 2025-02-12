@@ -46,6 +46,12 @@ module Metadata
     @metadata_templates = namespace.metadata_templates.map { |template| [template.name, template.id] }
   end
 
+  def metadata_templates_ancestral
+    @metadata_templates = authorized_scope(MetadataTemplate, type: :relation,
+                                                             scope_options: { namespace: @namespace,
+                                                                              include_ancestral_templates: true })
+  end
+
   # Gets or builds current metadata template information
   def current_metadata_template
     current_value = @search_params['metadata_template'] || 'none'

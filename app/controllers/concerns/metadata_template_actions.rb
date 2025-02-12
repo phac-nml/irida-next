@@ -3,6 +3,7 @@
 # Common metadata template actions
 module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
+  include Metadata
 
   included do
     before_action proc { namespace }
@@ -126,12 +127,6 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   end
 
   private
-
-  def metadata_templates_ancestral
-    @metadata_templates = authorized_scope(MetadataTemplate, type: :relation,
-                                                             scope_options: { namespace: @namespace,
-                                                                              include_ancestral_templates: true })
-  end
 
   def load_namespace_metadata_templates
     authorized_scope(MetadataTemplate, type: :relation, scope_options: { namespace: @namespace })
