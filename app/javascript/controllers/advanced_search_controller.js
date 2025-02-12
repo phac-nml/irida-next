@@ -30,7 +30,11 @@ export default class extends Controller {
   }
 
   close(event) {
-    if (
+    if (!(event instanceof KeyboardEvent) && event.type === "keydown") {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+    else if (
       this.searchGroupsContainerTarget.innerHTML.trim() ===
       this.searchGroupsTemplateTarget.innerHTML.trim()
     ) {
