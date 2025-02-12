@@ -11,20 +11,18 @@ module WorkflowExecutions
     include Devise::Test::IntegrationHelpers
 
     setup do
+      sign_in users(:john_doe)
       @group = groups(:group_one)
       @project = projects(:project1)
       @controller = TestController.new
     end
 
     test 'should render pipeline selection on turbo stream request' do
-      sign_in users(:john_doe)
-
       get pipeline_selection_workflow_executions_submissions_path(format: :turbo_stream)
       assert_response :ok
     end
 
     test 'create submission' do
-      sign_in users(:john_doe)
       sample1 = samples(:sample1)
       post workflow_executions_submissions_path(namespace_id: @project.namespace.id,
                                                 workflow_name: 'phac-nml/iridanextexample',
@@ -35,8 +33,6 @@ module WorkflowExecutions
     end
 
     test '@fields in create' do
-      sign_in users(:john_doe)
-
       post workflow_executions_submissions_path(format: :turbo_stream, workflow_name: 'phac-nml/iridanextexample',
                                                 workflow_version: '1.0.3', namespace_id: @group.id)
       assert_response :ok
