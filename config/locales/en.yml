@@ -930,6 +930,7 @@ en:
       metadata_templates: Metadata Templates
       samples: Samples
       settings: Settings
+      workflow_executions: Workflow Executions
     subgroups:
       index:
         pagy:

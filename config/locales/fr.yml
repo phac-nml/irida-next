@@ -930,6 +930,7 @@ fr:
       metadata_templates: Modèles de métadonnées
       samples: Échantillons
       settings: Paramètres
+      workflow_executions: Exécutions de flux de travail
     subgroups:
       index:
         pagy:
