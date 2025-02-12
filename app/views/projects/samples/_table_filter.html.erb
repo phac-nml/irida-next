@@ -1,36 +1,15 @@
-<%= form_with model: @query,
-               scope: :q,
-               url: search_namespace_project_samples_url,
-               method: :post,
-               data: {
-                 turbo_stream: true,
-                 controller: "advanced-search filters selection metadata-toggle",
-                 "advanced-search-list-filter-outlet": ".list-filter",
-                 "metadata-toggle-page-value": @pagy&.page,
-                 "filters-selection-outlet": "#samples-table"
-               },
-               class: "filters flex items-center space-x-2" do |f| %>
+<%= form_with model: @query, scope: :q, url: search_namespace_project_samples_url, method: :post, data: { turbo_stream: true, controller: "filters selection metadata-toggle", "metadata-toggle-page-value": @pagy&.page, "filters-selection-outlet": "#samples-table" }, class: "filters flex items-center space-x-2" do |f| %>
   <%= f.label :name_or_puid_cont, t(".search.placeholder"), class: "sr-only" %>
   <div class="relative">
     <%= f.search_field :name_or_puid_cont,
                    "data-action": "selection#clear",
                    class:
-                     "t-search-component
-                              block w-full
-                              p-2.5 pl-10
-                              text-sm text-slate-900
-                              border border-slate-300 rounded-lg
-                              bg-slate-50
-                              focus:ring-primary-500 focus:border-primary-500
-                              dark:bg-slate-700
-                              dark:border-slate-600
-                              dark:placeholder-slate-400
-                              dark:text-white
-                              dark:focus:ring-primary-500
-                              dark:focus:border-primary-500",
+                     "t-search-component block w-full p-2.5 pl-10 text-sm text-slate-900 border border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
                    placeholder: t(".search.placeholder") %>
     <div
-      class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none "
+      class="
+        absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
+      "
     >
       <%= viral_icon(
         name: "magnifying_glass",
