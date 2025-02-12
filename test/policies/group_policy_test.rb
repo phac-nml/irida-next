@@ -85,6 +85,10 @@ class GroupPolicyTest < ActiveSupport::TestCase
     assert @policy.apply(:update_sample_metadata?)
   end
 
+  test '#import_samples_and_metadata?' do
+    assert @policy.apply(:import_samples_and_metadata?)
+  end
+
   test '#view_attachments?' do
     assert @policy.apply(:view_attachments?)
   end

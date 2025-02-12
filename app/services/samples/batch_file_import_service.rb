@@ -14,7 +14,7 @@ module Samples
     end
 
     def execute
-      authorize! @namespace, to: :update_sample_metadata?
+      authorize! @namespace, to: :import_samples_and_metadata?
       validate_file
       perform_file_import
     rescue FileImportError => e

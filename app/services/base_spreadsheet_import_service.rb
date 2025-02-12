@@ -67,7 +67,8 @@ class BaseSpreadsheetImportService < BaseService
 
     missing_headers = @required_headers - @headers
     unless missing_headers.empty?
-      raise FileImportError, I18n.t('services.spreadsheet_import.missing_header', header_title: missing_headers)
+      raise FileImportError, I18n.t('services.spreadsheet_import.missing_header',
+                                    header_title: missing_headers.join(','))
     end
 
     return unless @headers.count < (@required_headers.count + @minimum_additional_data_columns)

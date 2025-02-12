@@ -73,7 +73,7 @@ module Samples
         params = { sample_id_column: 'sample_name' }
         assert_empty Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, blob.id, params).execute
         assert_equal(@project.namespace.errors.full_messages_for(:base).first,
-                     I18n.t('services.spreadsheet_import.missing_header', header_title: ['sample_name']))
+                     I18n.t('services.spreadsheet_import.missing_header', header_title: 'sample_name'))
       end
 
       test 'import sample metadata via csv file using sample names for project namespace' do
@@ -258,7 +258,7 @@ module Samples
         params = { sample_id_column: 'sample_name' }
         assert_empty Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, blob.id, params).execute
         assert_equal(@project.namespace.errors.full_messages_for(:base).first,
-                     I18n.t('services.spreadsheet_import.missing_header', header_title: ['sample_name']))
+                     I18n.t('services.spreadsheet_import.missing_header', header_title: 'sample_name'))
       end
 
       test 'import sample metadata with duplicate column names' do

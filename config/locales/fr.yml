@@ -1773,7 +1773,7 @@ fr:
       missing_data_columns: File is missing data columns. Please add additional data columns and headers and retry uploading.
       missing_data_row: The file does not have any data rows. Please add some rows of data to the file and retry uploading.
       missing_field: Row with index '%{index}' is missing required fields
-      missing_header: File is missing the header '%{header_title}'
+      missing_header: File is missing the header(s) '%{header_title}'
   shared:
     alert:
       list:
