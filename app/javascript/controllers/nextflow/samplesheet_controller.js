@@ -557,10 +557,8 @@ export default class extends Controller {
                 .toLowerCase()
                 .includes(this.filterTarget.value.toLowerCase())
             ) {
-              if (!this.#currentSampleIndexes.includes(i)) {
-                this.#currentSampleIndexes.push(i);
-                break;
-              }
+              this.#currentSampleIndexes.push(i);
+              break;
             }
           }
         }

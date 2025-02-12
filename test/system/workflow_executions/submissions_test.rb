@@ -1052,6 +1052,7 @@ module WorkflowExecutions
         ### ACTIONS END ###
 
         ### VERIFY START ###
+        assert_selector '#metadata-sample-column'
         within('#metadata-sample-column') do
           assert_selector 'div[class="p-2.5 sticky left-0"]', count: 5
         end
