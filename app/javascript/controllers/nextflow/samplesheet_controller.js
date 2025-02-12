@@ -72,6 +72,7 @@ export default class extends Controller {
   // you need to access it via index 99). Main use case for having an array of sample indexes is for filtering,
   // where we can easily access samples via a wide range of indexes
   #currentSampleIndexes = [];
+  #filterableColumns = [];
 
   #totalSamples;
 
@@ -121,6 +122,9 @@ export default class extends Controller {
     this.#currentSampleIndexes = [
       ...Array(Object.keys(this.#samplesheetAttributes).length).keys(),
     ];
+
+    // specify the available columns for filtering
+    this.#setFilterableColumns();
 
     // setup pagination
     this.#setPagination();
@@ -544,23 +548,20 @@ export default class extends Controller {
     setTimeout(() => {
       if (this.filterTarget.value) {
         this.#currentSampleIndexes = [];
-        // loop through all samples in #samplesheetAttributes via index ->
-        // check if it contains the sample (puid) or sample_name property ->
-        // check if the filter should include the sample based on its puid or name
         for (let i = 0; i < this.#totalSamples; i++) {
-          if (
-            this.#samplesheetAttributes[i]["samplesheet_params"].hasOwnProperty(
-              "sample",
-            )
-          ) {
-            this.#checkValueForFilter("sample", i);
-          }
-          if (
-            this.#samplesheetAttributes[i]["samplesheet_params"].hasOwnProperty(
-              "sample_name",
-            )
-          ) {
-            this.#checkValueForFilter("sample_name", i);
+          for (let j = 0; j < this.#filterableColumns.length; j++) {
+            if (
+              this.#samplesheetAttributes[i]["samplesheet_params"][
+                this.#filterableColumns[j]
+              ]["form_value"]
+                .toLowerCase()
+                .includes(this.filterTarget.value.toLowerCase())
+            ) {
+              if (!this.#currentSampleIndexes.includes(i)) {
+                this.#currentSampleIndexes.push(i);
+                break;
+              }
+            }
           }
         }
       } else {
@@ -576,17 +577,23 @@ export default class extends Controller {
     }, 50);
   }
 
-  #checkValueForFilter(columnName, index) {
+  // check first sample entry for which columns are available for filter so we don't need to do it for each sample
+  // while filtering
+  #setFilterableColumns() {
     if (
-      this.#samplesheetAttributes[index]["samplesheet_params"][columnName][
-        "form_value"
-      ]
-        .toLowerCase()
-        .includes(this.filterTarget.value.toLowerCase())
+      this.#samplesheetAttributes[0]["samplesheet_params"].hasOwnProperty(
+        "sample",
+      )
     ) {
-      if (!this.#currentSampleIndexes.includes(index)) {
-        this.#currentSampleIndexes.push(index);
-      }
+      this.#filterableColumns.push("sample");
+    }
+
+    if (
+      this.#samplesheetAttributes[0]["samplesheet_params"].hasOwnProperty(
+        "sample_name",
+      )
+    ) {
+      this.#filterableColumns.push("sample_name");
     }
   }
 }
