@@ -8,14 +8,9 @@ class PipelineQueryTest < ActiveSupport::TestCase
       pipeline(workflowName: $workflow_name, workflowVersion: $workflow_version, workflowType: $workflow_type) {
         automatable
         description
-        engine
-        engineVersion
         executable
         metadata
         name
-        type
-        typeVersion
-        url
         version
         workflowParams
       }
