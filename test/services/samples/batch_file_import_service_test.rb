@@ -28,7 +28,7 @@ module Samples
     test 'import samples with permission for project namespace' do
       assert_equal 3, @project.samples.count
 
-      assert_authorized_to(:update_sample_metadata?, @project.namespace,
+      assert_authorized_to(:import_samples_and_metadata?, @project.namespace,
                            with: Namespaces::ProjectNamespacePolicy,
                            context: { user: @john_doe }) do
         Samples::BatchFileImportService.new(@project.namespace, @john_doe, @blob.id, @default_params).execute
@@ -42,7 +42,7 @@ module Samples
     test 'import samples with permission for group' do
       assert_equal 3, @project.samples.count
 
-      assert_authorized_to(:update_sample_metadata?, @group,
+      assert_authorized_to(:import_samples_and_metadata?, @group,
                            with: GroupPolicy,
                            context: { user: @john_doe }) do
         Samples::BatchFileImportService.new(@group, @john_doe, @blob.id, @default_params).execute
@@ -60,9 +60,9 @@ module Samples
         Samples::BatchFileImportService.new(@project.namespace, @jane_doe, @blob.id, @default_params).execute
       end
       assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
-      assert_equal :update_sample_metadata?, exception.rule
+      assert_equal :import_samples_and_metadata?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.update_sample_metadata?',
+      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.import_samples_and_metadata?',
                           name: @project.name), exception.result.message
 
       assert_equal 3, @project.samples.count
@@ -75,9 +75,9 @@ module Samples
         Samples::BatchFileImportService.new(@group, @jane_doe, @blob.id, @default_params).execute
       end
       assert_equal GroupPolicy, exception.policy
-      assert_equal :update_sample_metadata?, exception.rule
+      assert_equal :import_samples_and_metadata?, exception.rule
       assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.group.update_sample_metadata?',
+      assert_equal I18n.t(:'action_policy.policy.group.import_samples_and_metadata?',
                           name: @group.name), exception.result.message
       assert_equal 3, @project.samples.count
     end
