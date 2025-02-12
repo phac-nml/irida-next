@@ -2,10 +2,6 @@
 
 require 'test_helper'
 
-class TestController < ApplicationController
-  include Metadata
-end
-
 module WorkflowExecutions
   class SubmissionControllerTest < ActionDispatch::IntegrationTest
     include Devise::Test::IntegrationHelpers
@@ -14,7 +10,6 @@ module WorkflowExecutions
       sign_in users(:john_doe)
       @group = groups(:group_one)
       @project = projects(:project1)
-      @controller = TestController.new
     end
 
     test 'should render pipeline selection on turbo stream request' do
@@ -34,7 +29,7 @@ module WorkflowExecutions
 
     test '@fields in create' do
       post workflow_executions_submissions_path(format: :turbo_stream, workflow_name: 'phac-nml/iridanextexample',
-                                                workflow_version: '1.0.3', namespace_id: @group.id)
+                                                workflow_version: '1.0.2', namespace_id: @group.id)
       assert_response :ok
       assert_equal ['metadatafield1', 'metadatafield2', 'unique.metadata.field'],
                    @controller.instance_eval('@fields', __FILE__, __LINE__)
