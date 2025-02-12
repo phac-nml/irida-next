@@ -10,4 +10,6 @@ if Rails.env.development?
   get '/console', to: 'console#show'
 
   mount Lookbook::Engine, at: '/rails/lookbook'
+
+  mount Flipper::UI.app(Flipper), at: '/rails/flipper'
 end
