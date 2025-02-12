@@ -2509,7 +2509,7 @@ type SampleEdge {
 
 input SampleFilter {
   """
-  Filter samples by advanced search via Searchkick
+  Filter samples by advanced search
   """
   advanced_search_groups: [[SampleAdvancedSearchCondition!]!] = null
 

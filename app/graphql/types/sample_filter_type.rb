@@ -8,7 +8,7 @@ module Types
 
     argument :advanced_search_groups, [[SampleAdvancedSearchConditionInputType]],
              required: false, camelize: false,
-             description: 'Filter samples by advanced search via Searchkick',
+             description: 'Filter samples by advanced search',
              default_value: nil
   end
 end
