@@ -174,6 +174,13 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
+  def view_workflow_executions?
+    return true if effective_access_level >= Member::AccessLevel::ANALYST
+
+    details[:name] = record.name
+    false
+  end
+
   def export_data?
     return true if effective_access_level >= Member::AccessLevel::ANALYST
 
