@@ -84,4 +84,10 @@ module Metadata
       name: template.name
     }
   end
+
+  def metadata_templates_ancestral
+    @metadata_templates = authorized_scope(MetadataTemplate, type: :relation,
+                                                             scope_options: { namespace: @namespace,
+                                                                              include_ancestral_templates: true })
+  end
 end

@@ -1,11 +1,38 @@
 <div>
-  <div class="flex justify-between block text-sm font-medium text-slate-900 dark:text-white">
+  <div class="block text-sm font-medium text-slate-900 dark:text-white">
     <%= title %>
   </div>
-  <div class="text-sm font-medium text-base leading-relaxed text-slate-500 dark:text-slate-400">
+  <div
+    class="
+      text-base font-medium leading-relaxed text-slate-500 dark:text-slate-400
+    "
+  >
     <%= description %>
   </div>
 </div>
+<% unless templates.empty? %>
+  <div>
+    <label
+      for="template-selector"
+      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+    ><%= template_label %></label>
+    <select
+      id="template-selector"
+      data-action="viral--sortable-lists--two-lists-selection#setTemplate"
+      class="
+        ￼ bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg ￼
+        focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 ￼
+        dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 ￼
+        dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 ￼
+      "
+    >
+      <option value="none"><%= t("viral.sortable_lists_component.no_template") %></option>
+      <%= templates.each do |template| %>
+        <option data-fields="<%= template[:fields] %>" value="<%= template[:id] %>"><%= template[:name] %></option>
+      <% end %>
+    </select>
+  </div>
+<% end %>
 <div class="flex">
   <% lists.each do |list| %>
     <%= list %>
@@ -16,14 +43,14 @@
     class="mr-2 text-sm"
     data-action="click->viral--sortable-lists--two-lists-selection#addAll"
     data-viral--sortable-lists--two-lists-selection-target="addAll"
-    >
+  >
     <%= t(".add_all") %>
   </button>
   <button
     class="ml-2 text-sm"
     data-action="click->viral--sortable-lists--two-lists-selection#removeAll"
     data-viral--sortable-lists--two-lists-selection-target="removeAll"
-    >
+  >
     <%= t(".remove_all") %>
   </button>
 </div>
