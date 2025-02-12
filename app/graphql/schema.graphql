@@ -1588,16 +1588,6 @@ type Pipeline {
   """
   
   """
-  engine: String
-
-  """
-  
-  """
-  engineVersion: String
-
-  """
-  
-  """
   executable: Boolean
 
   """
@@ -1609,21 +1599,6 @@ type Pipeline {
   
   """
   name: String
-
-  """
-  
-  """
-  type: String
-
-  """
-  
-  """
-  typeVersion: String
-
-  """
-  URL of the pipeline GitHub repository
-  """
-  url: String!
 
   """
   
