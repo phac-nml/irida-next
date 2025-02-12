@@ -27,6 +27,17 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
       end
     end
 
+    if Irida::Pipelines.instance.available_pipelines.any?
+      resources :workflow_executions, only: %i[index] do
+        member do
+          put :cancel
+        end
+        collection do
+          get :select
+        end
+      end
+    end
+
     resources :attachments, only: %i[create destroy index new] do
       get :new_destroy
     end
