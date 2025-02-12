@@ -239,4 +239,13 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
 
     assert_equal 12, workflow_executions.count
   end
+
+  test 'group shared scope' do
+    group = groups(:group_one)
+
+    workflow_executions = @policy.apply_scope(WorkflowExecution, type: :relation, name: :group_shared,
+                                                                 scope_options: { group: })
+
+    assert_equal 2, workflow_executions.count
+  end
 end
