@@ -3,7 +3,7 @@
 module Resolvers
   # Samples Resolver
   class SamplesResolver < BaseResolver
-    include Concerns::QueryConcern
+    include QueryConcern
 
     type Types::SampleType.connection_type, null: true
 
@@ -24,7 +24,7 @@ module Resolvers
 
     def resolve(group_id:, filter:, order_by:)
       context.scoped_set!(:samples_preauthorized, true)
-      query = Sample::Query.new(params(context, group_id, filter, order_by))
+      query = Sample::Query.new(params(context, nil, group_id, filter, order_by))
       query.results
     end
 

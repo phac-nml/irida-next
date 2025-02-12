@@ -3,6 +3,8 @@
 module Resolvers
   # Project Sample Resolver
   class ProjectSamplesResolver < BaseResolver
+    include QueryConcern
+
     alias project object
 
     argument :filter, Types::SampleFilterType,
@@ -19,32 +21,10 @@ module Resolvers
       context.scoped_set!(:project, project)
       context.scoped_set!(:samples_preauthorized, true)
 
-      filter = filter&.to_h
-      search_params = {}
-      search_params.merge!(filter_params(filter)) if filter
-      search_params.merge!(sort: "#{order_by.field} #{order_by.direction}") if order_by.present?
-      search_params.merge!({ project_ids: [project.id] })
-
-      query = Sample::Query.new(search_params)
+      query = Sample::Query.new(params(context, project.id, nil, filter, order_by))
       query.results
     end
 
-    private
-
-    def filter_params(filter)
-      filter_params = {}
-      filter_params.merge!(advanced_search_params(filter)) if filter[:advanced_search_groups]
-      filter_params.merge!(name_or_puid_cont: filter[:name_or_puid_cont]) if filter[:name_or_puid_cont]
-      filter_params
-    end
-
-    def advanced_search_params(filter)
-      { groups_attributes: filter[:advanced_search_groups].map.with_index do |group, group_index|
-        [group_index,
-         { conditions_attributes: group.map.with_index do |condition, condition_index|
-           [condition_index, condition]
-         end.to_h }]
-      end.to_h }
-    end
+    validates Validators::QueryValidator => {}
   end
 end
