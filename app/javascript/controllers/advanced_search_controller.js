@@ -34,7 +34,7 @@ export default class extends Controller {
       event.preventDefault();
       event.stopImmediatePropagation();
     }
-    else if (!this.dirty()) {
+    else if (!this.#dirty()) {
       this.clear();
     } else {
       if (window.confirm(this.confirmCloseTextValue)) {
@@ -44,21 +44,6 @@ export default class extends Controller {
         event.preventDefault();
       }
     }
-  }
-
-  dirty() {
-    let dirty = true;
-    if (this.searchGroupsContainerTarget.innerHTML.trim() === this.searchGroupsTemplateTarget.innerHTML.trim()) {
-      dirty = false;
-      const currentInputs = this.searchGroupsContainerTarget.querySelectorAll("[id^='q_groups_attributes_']");
-      const originalInputs = this.searchGroupsTemplateTarget.content.querySelectorAll("[id^='q_groups_attributes_']");
-      originalInputs.forEach((item, index) => {
-        if (item.value !== currentInputs[index].value) {
-          dirty = true;
-        }
-      });
-    }
-    return dirty;
   }
 
   addCondition(event) {
@@ -192,5 +177,20 @@ export default class extends Controller {
       .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
       .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
     group.lastElementChild.insertAdjacentHTML("beforebegin", newCondition);
+  }
+
+  #dirty() {
+    let dirty = true;
+    if (this.searchGroupsContainerTarget.innerHTML.trim() === this.searchGroupsTemplateTarget.innerHTML.trim()) {
+      dirty = false;
+      const currentInputs = this.searchGroupsContainerTarget.querySelectorAll("[id^='q_groups_attributes_']");
+      const originalInputs = this.searchGroupsTemplateTarget.content.querySelectorAll("[id^='q_groups_attributes_']");
+      originalInputs.forEach((item, index) => {
+        if (item.value !== currentInputs[index].value) {
+          dirty = true;
+        }
+      });
+    }
+    return dirty;
   }
 }
