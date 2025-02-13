@@ -119,7 +119,7 @@ export default class extends Controller {
     this.#setInitialSamplesheetData();
 
     // set initial sample indexes to include all samples
-    this.#setSampleIndexesToAll();
+    this.#setCurrentSampleIndexesToAll();
 
     // specify the available columns for filtering
     this.#setFilterableColumns();
@@ -538,7 +538,7 @@ export default class extends Controller {
     }
   }
 
-  #setSampleIndexesToAll() {
+  #setCurrentSampleIndexesToAll() {
     this.#currentSampleIndexes = [
       ...Array(Object.keys(this.#samplesheetAttributes).length).keys(),
     ];
@@ -568,7 +568,7 @@ export default class extends Controller {
         }
       } else {
         // reset table to include all samples if filter is empty
-        this.#setSampleIndexesToAll();
+        this.#setCurrentSampleIndexesToAll();
       }
 
       this.#disableProcessingState();
