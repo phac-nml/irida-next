@@ -62,7 +62,7 @@ Result
 }
 ```
 
-The `name` and `version` fields will be used in the next step. In this example version `1.0.1`.
+The `name` and `version` fields will be used in the next step. In this example version `1.0.3`.
 
 ### 2. Query for Pipeline Information
 
@@ -247,9 +247,13 @@ We will be using the `fullPath` field in the next step, and `id` in the final st
 
 Using the `fullPath` from the previous step, we will query for the sample and file information we will use in the pipeline.
 
-Step 2 informed us that we the sample `id`, the sample `puid`, and file (attachment) `id`'s
+Step 2 informed us that for each sample we need:
 
-In this example we are only going to use 1 sample.
+* the sample `id`
+* the sample `puid`,
+* the file (attachment) `id`'s
+
+In this example we will only use 1 sample.
 
 ```graphql
 query getProjectInfo{
@@ -305,7 +309,7 @@ Result
 }
 ```
 
-In our example, we are interested in the forward and reverse reads, filenames `08-55...R1...fastq.gz` and `08-55...R2...fastq.gz`. Take care to note which file id is forward and reverse as the next step will accept them as `fastq_1` and `fastq_2`.
+In our example, we are interested in the forward and reverse reads, filenames `08-55...R1...fastq.gz` and `08-55...R2...fastq.gz`. Take care to note which file id is forward and reverse as the next step will accept them as `fastq_1` and `fastq_2`. The read directions can also be queried from the `attachments` `metadata` fields.
 
 ### 5. Submit a Workflow Execution using the information queried in the previous steps
 
