@@ -575,22 +575,13 @@ export default class extends Controller {
     }, 50);
   }
 
-  // check first sample entry for which columns are available for filter so we don't need to do it for each sample
-  // while filtering
+  // check samplesheet properties for sample and sample_name and add them as filterable if present
   #setFilterableColumns() {
-    if (
-      this.#samplesheetAttributes[0]["samplesheet_params"].hasOwnProperty(
-        "sample",
-      )
-    ) {
+    if (this.#samplesheetProperties.hasOwnProperty("sample")) {
       this.#filterableColumns.push("sample");
     }
 
-    if (
-      this.#samplesheetAttributes[0]["samplesheet_params"].hasOwnProperty(
-        "sample_name",
-      )
-    ) {
+    if (this.#samplesheetProperties.hasOwnProperty("sample_name")) {
       this.#filterableColumns.push("sample_name");
     }
   }
