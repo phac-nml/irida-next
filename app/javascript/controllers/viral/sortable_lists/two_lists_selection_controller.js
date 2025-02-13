@@ -210,6 +210,8 @@ export default class extends Controller {
           this.availableList.append(item);
         }
       });
+
+      this.#checkButtonStates();
     } catch (error) {
       console.error("Error setting template:", error);
     }
