@@ -39,8 +39,7 @@ export default class extends Controller {
     for (const item of this.allListItems) {
       this.selectedList.append(item);
     }
-    this.templateSelectorTarget.value = "none";
-    this.#checkButtonStates();
+    this.#checkStates();
   }
 
   removeAll(event) {
