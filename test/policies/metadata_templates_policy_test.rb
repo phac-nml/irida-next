@@ -49,7 +49,7 @@ class MetadataTemplatePolicyTest < ActiveSupport::TestCase
     scoped_templates = policy.apply_scope(MetadataTemplate, type: :relation,
                                                             scope_options: { namespace: @project_namespace })
 
-    assert_equal 22, scoped_templates.length # 22 from group inheritance and 22 within the project
+    assert_equal 23, scoped_templates.length # 23 from group inheritance and 23 within the project
 
     group_namespace = groups(:group_three)
     scoped_templates = policy.apply_scope(MetadataTemplate, type: :relation,
