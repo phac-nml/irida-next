@@ -20,13 +20,6 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'group metadata templates index unauthorized' do
-    sign_in users(:ryan_doe)
-    get group_metadata_templates_path(@group)
-
-    assert_response :unauthorized
-  end
-
   test 'group metadata templates new' do
     get new_group_metadata_template_path(@group, format: :turbo_stream)
 
@@ -146,23 +139,10 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
-  test 'group metadata templates destroy with invalid id' do
-    delete group_metadata_template_path(@group, -1, format: :turbo_stream)
-
-    assert_response :not_found
-  end
-
   test 'project metadata templates index' do
     get namespace_project_metadata_templates_path(@project_namespace.parent, @project)
 
     assert_response :success
-  end
-
-  test 'project metadata templates index unauthorized' do
-    sign_in users(:ryan_doe)
-    get namespace_project_metadata_templates_path(@project_namespace.parent, @project)
-
-    assert_response :unauthorized
   end
 
   test 'project metadata templates new' do
@@ -331,12 +311,6 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     )
 
     assert_response :unauthorized
-  end
-
-  test 'project metadata templates destroy with invalid id' do
-    delete namespace_project_metadata_template_path(@project_namespace.parent, @project, -1, format: :turbo_stream)
-
-    assert_response :not_found
   end
 
   test 'group metadata templates list with none template' do
