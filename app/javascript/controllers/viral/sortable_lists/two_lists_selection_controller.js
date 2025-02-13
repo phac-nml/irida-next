@@ -75,7 +75,9 @@ export default class extends Controller {
 
   #checkStates() {
     this.#checkButtonStates();
-    this.#checkTemplateSelectorState();
+    if (this.hasTemplateSelectorTarget) {
+      this.#checkTemplateSelectorState();
+    }
   }
 
   #checkButtonStates() {
