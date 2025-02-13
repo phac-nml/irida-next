@@ -1,3 +1,3 @@
-<%= form_with model: search, url: "#", data: { controller: "advanced-search" } do |form| %>
+<%= form_with model: search, scope: :q, url: "#" do |form| %>
   <%= render AdvancedSearchComponent.new(search:, form:, fields:, operations:) %>
 <% end %>
