@@ -119,9 +119,7 @@ export default class extends Controller {
     this.#setInitialSamplesheetData();
 
     // set initial sample indexes to include all samples
-    this.#currentSampleIndexes = [
-      ...Array(Object.keys(this.#samplesheetAttributes).length).keys(),
-    ];
+    this.#setSampleIndexesToAll();
 
     // specify the available columns for filtering
     this.#setFilterableColumns();
@@ -540,6 +538,12 @@ export default class extends Controller {
     }
   }
 
+  #setSampleIndexesToAll() {
+    this.#currentSampleIndexes = [
+      ...Array(Object.keys(this.#samplesheetAttributes).length).keys(),
+    ];
+  }
+
   // when filtering samples, we will add the indexes of samples that fit the filter into the #currentSampleIndexes array.
   // we can then easily access each sample's data via its index and still paginate in pages of 5
   filter() {
@@ -564,9 +568,7 @@ export default class extends Controller {
         }
       } else {
         // reset table to include all samples if filter is empty
-        this.#currentSampleIndexes = [
-          ...Array(Object.keys(this.#samplesheetAttributes).length).keys(),
-        ];
+        this.#setSampleIndexesToAll();
       }
 
       this.#disableProcessingState();
