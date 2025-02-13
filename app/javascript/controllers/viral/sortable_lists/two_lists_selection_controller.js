@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import { createHiddenInput } from "utilities/form";
 
 export default class extends Controller {
-  static targets = ["field", "submitBtn", "addAll", "removeAll"];
+  static targets = ["field", "submitBtn", "addAll", "removeAll", "templateSelector"];
 
   static values = {
     selectedList: String,
@@ -39,6 +39,7 @@ export default class extends Controller {
     for (const item of this.allListItems) {
       this.selectedList.append(item);
     }
+    this.templateSelectorTarget.value = "none";
     this.#checkButtonStates();
   }
 
@@ -48,6 +49,7 @@ export default class extends Controller {
     for (const item of this.allListItems) {
       this.availableList.append(item);
     }
+    this.templateSelectorTarget.value = "none";
     this.#checkButtonStates();
   }
 
@@ -87,6 +89,7 @@ export default class extends Controller {
       this.#setAddOrRemoveButtonDisableState(this.removeAllTarget, false);
       this.#setAddOrRemoveButtonDisableState(this.addAllTarget, false);
     }
+    console.log("Button states checked");
   }
 
   #setSubmitButtonDisableState(disableState) {
