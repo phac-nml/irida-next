@@ -28,9 +28,9 @@ export default class extends Controller {
     this.#setInitialSelectAllState(this.availableList, this.addAllTarget);
     this.#setInitialSelectAllState(this.selectedList, this.removeAllTarget);
 
-    this.buttonStateListener = this.#checkButtonStates.bind(this);
-    this.selectedList.addEventListener("mouseover", this.buttonStateListener);
-    this.availableList.addEventListener("mouseover", this.buttonStateListener);
+    this.buttonStateListener = this.#checkStates.bind(this);
+    this.selectedList.addEventListener("drop", this.buttonStateListener);
+    this.availableList.addEventListener("drop", this.buttonStateListener);
   }
 
   addAll(event) {
@@ -73,6 +73,11 @@ export default class extends Controller {
     }
   }
 
+  #checkStates() {
+    this.#checkButtonStates();
+    this.#checkTemplateSelectorState();
+  }
+
   #checkButtonStates() {
     const selected_values = this.selectedList.querySelectorAll("li");
     const available_values = this.availableList.querySelectorAll("li");
@@ -89,7 +94,27 @@ export default class extends Controller {
       this.#setAddOrRemoveButtonDisableState(this.removeAllTarget, false);
       this.#setAddOrRemoveButtonDisableState(this.addAllTarget, false);
     }
-    console.log("Button states checked");
+  }
+
+  #checkTemplateSelectorState() {
+    const selected_values = this.selectedList.querySelectorAll("li");
+    if (selected_values.length === 0) {
+      this.templateSelectorTarget.value = "none";
+    } else {
+      const selectedListValues = JSON.stringify(
+        Array.from(selected_values).map((li) => li.innerText),
+      );
+
+      let template = "none";
+      for (const option of this.templateSelectorTarget.options) {
+        const templateFields = option.dataset.fields;
+        if (templateFields === selectedListValues) {
+          template = option.value;
+          break;
+        }
+      }
+      this.templateSelectorTarget.value = template;
+    }
   }
 
   #setSubmitButtonDisableState(disableState) {
