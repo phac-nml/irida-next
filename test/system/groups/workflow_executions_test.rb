@@ -107,5 +107,55 @@ module Groups
       assert_no_selector "tr[id='#{workflow_execution1.id}']"
       assert_no_selector "tr[id='#{workflow_execution2.id}']"
     end
+
+    test 'can view a workflow execution' do
+      visit group_workflow_executions_path(@group)
+
+      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title')
+      within("tr[id='#{@workflow_execution_group_shared1.id}'] th") do
+        click_link @workflow_execution_group_shared1.id
+      end
+
+      assert_text @workflow_execution_group_shared1.id
+      assert_text I18n.t(:"workflow_executions.state.#{@workflow_execution_group_shared1.state}")
+      assert_text @workflow_execution_group_shared1.metadata['workflow_name']
+      assert_text @workflow_execution_group_shared1.metadata['workflow_version']
+
+      within %(div[id="workflow-execution-tabs"]) do
+        click_on I18n.t('workflow_executions.show.tabs.files')
+      end
+
+      assert_text 'FILENAME'
+
+      click_on I18n.t('workflow_executions.show.tabs.params')
+
+      assert_selector 'div.project_name-param > span', text: '--project_name'
+      assert_selector 'div.project_name-param > input[value="assembly"]'
+
+      assert_selector 'div.assembler-param > span', text: '--assembler'
+      assert_selector 'div.assembler-param > input[value="stub"]'
+
+      assert_selector 'div.random_seed-param > span', text: '--random_seed'
+      assert_selector 'div.random_seed-param > input[value="1"]'
+    end
+
+    test 'can view a shared workflow execution that was shared by a different user' do
+      visit group_workflow_executions_path(@group)
+
+      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title')
+      within("tr[id='#{@workflow_execution_group_shared2.id}'] th") do
+        click_link @workflow_execution_group_shared2.id
+      end
+
+      assert_text @workflow_execution_group_shared2.id
+      assert_text I18n.t(:"workflow_executions.state.#{@workflow_execution_group_shared2.state}")
+      assert_text @workflow_execution_group_shared2.metadata['workflow_name']
+      assert_text @workflow_execution_group_shared2.metadata['workflow_version']
+
+      assert_link I18n.t(:'workflow_executions.show.create_export_button')
+      assert_no_link I18n.t(:'workflow_executions.show.cancel_button')
+      assert_no_link I18n.t(:'workflow_executions.show.edit_button')
+      assert_no_link I18n.t(:'workflow_executions.show.remove_button')
+    end
   end
 end
