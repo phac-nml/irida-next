@@ -158,7 +158,7 @@ export default class extends Controller {
 
   submitSamplesheet(event) {
     event.preventDefault();
-    this.#enableProcessingState();
+    this.#enableProcessingState(this.processingRequestValue);
     // 50ms timeout allows the browser to update the DOM elements enabling the overlay prior to starting the submission
     setTimeout(() => {
       let missingData = this.#validateData();
