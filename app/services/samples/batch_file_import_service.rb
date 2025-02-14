@@ -119,7 +119,7 @@ module Samples
       @group_namespace_projects ||= authorized_scope(
         Project, type: :relation, as: :group_projects, scope_options: {
           group: @namespace,
-          minimum_access_level: Member::AccessLevel::UPLOADER
+          minimum_access_level: Member::AccessLevel::MAINTAINER
         }
       )
     end
