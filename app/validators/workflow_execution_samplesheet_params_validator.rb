@@ -2,8 +2,8 @@
 
 # Validator for Workflow Execution Samplesheet Params
 class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator # rubocop:disable Metrics/ClassLength
-  def validate(record)
-    return if record.persisted? # only validate on creation
+  def validate(record) # rubocop:disable Metrics/AbcSize
+    return unless record.workflow_execution.state == 'initial' # only validate on creation
 
     workflow = Irida::Pipelines.instance.find_pipeline_by(record.workflow_execution.metadata['workflow_name'],
                                                           record.workflow_execution.metadata['workflow_version'],
