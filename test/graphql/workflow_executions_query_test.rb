@@ -132,7 +132,7 @@ class WorkflowExecutionsQueryTest < ActiveSupport::TestCase
 
     data = result['data']['node']
 
-    exp_metadata = { 'workflow_name' => 'wn1', 'workflow_version' => 'wv1' }
+    exp_metadata = { 'workflow_name' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.3' }
     assert_equal exp_metadata, data['metadata']
   end
 
