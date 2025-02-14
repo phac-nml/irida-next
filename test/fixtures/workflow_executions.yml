@@ -31,6 +31,16 @@ workflow_execution_invalid_metadata:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
 
+workflow_execution_invalid_workflow:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "wn1", "workflow_version": "invalid" }
+  workflow_params: { "key_a": "value_a" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "my_run_id_2"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+
 workflow_execution_invalid_namespace:
   <<: *DEFAULTS
   metadata: { "workflow_name": "wn1", "workflow_version": "wv1" }

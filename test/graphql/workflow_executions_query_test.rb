@@ -156,13 +156,7 @@ class WorkflowExecutionsQueryTest < ActiveSupport::TestCase
 
   test 'workflow executions nodes query should on groups' do
     user = users(:james_doe)
-    prelim_query = IridaSchema.execute(
-      WORKFLOW_EXECUTIONS_QUERY,
-      context: { current_user: user },
-      variables: { first: 1 }
-    )['data']
-
-    workflow_execution_id = prelim_query['workflowExecutions']['nodes'][0]['id']
+    workflow_execution_id = workflow_executions(:workflow_execution_valid_on_group).to_global_id.to_s
 
     result = IridaSchema.execute(WORKFLOW_EXECUTIONS_NODE_QUERY, context: { current_user: user },
                                                                  variables: { workflow_execution_id: })

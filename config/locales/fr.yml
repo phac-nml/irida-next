@@ -206,6 +206,9 @@ fr:
           attributes:
             scopes:
               inclusion: can only contain available scopes
+        workflow_execution:
+          invalid_namespace: can only be Group or Project
+          invalid_workflow: unable to find workflow with name '%{workflow_name}' and version '%{workflow_version}'
     exceptions:
       personal_access_token:
         not_found: Could not find personal access token with id %{token_id}

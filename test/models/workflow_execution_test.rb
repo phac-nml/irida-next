@@ -6,6 +6,7 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
   def setup
     @workflow_execution_valid = workflow_executions(:workflow_execution_valid)
     @workflow_execution_invalid_metadata = workflow_executions(:workflow_execution_invalid_metadata)
+    @workflow_execution_invalid_workflow = workflow_executions(:workflow_execution_invalid_workflow)
     @workflow_execution_invalid_namespace = workflow_executions(:workflow_execution_invalid_namespace)
   end
 
@@ -17,9 +18,8 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
   test 'workflow execution with an invalid namespace_id' do
     assert_not @workflow_execution_invalid_namespace.valid?
     assert_not_nil @workflow_execution_invalid_namespace.errors[:namespace]
-    assert @workflow_execution_invalid_namespace
-      .errors[:base]
-      .include?('workflow executions can only belong to a Project or Group namespace')
+    assert_includes @workflow_execution_invalid_namespace.errors[:namespace],
+                    I18n.t('activerecord.errors.models.workflow_execution.invalid_namespace')
   end
 
   test 'valid workflow execution' do
@@ -29,10 +29,17 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
   test 'invalid metadata' do
     assert_not @workflow_execution_invalid_metadata.valid?
     assert_not_nil @workflow_execution_invalid_metadata.errors[:metadata]
-    assert_equal(
-      ['Metadata object at root is missing required properties: workflow_version'],
-      @workflow_execution_invalid_metadata.errors.full_messages
-    )
+    assert_includes @workflow_execution_invalid_metadata.errors.full_messages,
+                    'Metadata object at root is missing required properties: workflow_version'
+  end
+
+  test 'invalid workflow specified' do
+    assert_not @workflow_execution_invalid_workflow.valid?
+    assert_not_nil @workflow_execution_invalid_workflow.errors[:base]
+    assert_includes @workflow_execution_invalid_workflow.errors[:base],
+                    I18n.t('activerecord.errors.models.workflow_execution.invalid_workflow',
+                           workflow_name: @workflow_execution_invalid_workflow.metadata['workflow_name'],
+                           workflow_version: @workflow_execution_invalid_workflow.metadata['workflow_version'])
   end
 
   test 'state with type enum using key assignment' do
