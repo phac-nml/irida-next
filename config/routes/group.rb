@@ -28,7 +28,7 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
     end
 
     if Irida::Pipelines.instance.available_pipelines.any?
-      resources :workflow_executions, only: %i[index] do
+      resources :workflow_executions, only: %i[index show] do
         member do
           put :cancel
         end
