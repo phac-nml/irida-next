@@ -8,6 +8,11 @@ attachment2_file_test_file_B_fastq:
   record: attachment2 (Attachment)
   blob: attachment2_file_test_file_B_fastq_blob
 
+attachment3_file_test_file_5_fasta:
+  name: file
+  record: attachment3 (Attachment)
+  blob: attachment3_file_test_file_5_fasta_blob
+
 attachmentA_file_test_file_fastq:
   name: file
   record: attachmentA (Attachment)

@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class SamplesWorkflowExecutionsTest < ActiveSupport::TestCase
-  def setup
+  def setup # rubocop:disable Metrics/MethodLength
     @samples_workflow_executions_valid = samples_workflow_executions(
       :samples_workflow_executions_valid
     )
@@ -15,6 +15,9 @@ class SamplesWorkflowExecutionsTest < ActiveSupport::TestCase
     )
     @samples_workflow_executions_invalid_file_id = samples_workflow_executions(
       :samples_workflow_executions_invalid_file_id
+    )
+    @samples_workflow_executions_invalid_file_format = samples_workflow_executions(
+      :samples_workflow_executions_invalid_file_format
     )
     @samples_workflow_executions_mismatch_file_id = samples_workflow_executions(
       :samples_workflow_executions_mismatch_file_id
@@ -53,6 +56,16 @@ class SamplesWorkflowExecutionsTest < ActiveSupport::TestCase
       expected_error,
       @samples_workflow_executions_invalid_file_id.errors.full_messages[0]
     )
+  end
+
+  test 'invalid file format' do
+    assert_not @samples_workflow_executions_invalid_file_format.valid?
+    assert_not_nil @samples_workflow_executions_invalid_file_format.errors
+    expected_error =
+      "Samplesheet params #{I18n.t('validators.workflow_execution_samplesheet_params_validator.attachment_format_error',
+                                   property: 'fastq_2', file_format: '^\\S+\\.f(ast)?q(\\.gz)?$')}"
+    assert_includes @samples_workflow_executions_invalid_file_format.errors.full_messages,
+                    expected_error
   end
 
   test 'mismatch file id' do

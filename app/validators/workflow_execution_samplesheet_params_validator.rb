@@ -150,25 +150,27 @@ class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator # rub
     false
   end
 
-  def validate_attachment_format(record, attachment, property, entry) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
+  def validate_attachment_format(record, attachment, property, entry) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength
     valid = true
+    expected_pattern = if entry.key?('pattern')
+                         entry['pattern']
+                       elsif entry.key?('anyOf')
+                         entry['anyOf'].select do |condition|
+                           condition.key?('pattern')
+                         end.pluck('pattern').join('|')
+                       end
+
     case entry['cell_type']
     when 'fastq_cell'
       valid = attachment.fastq?
     when 'file_cell'
-      if entry.key?[:pattern]
-        valid = attachment.filename.match?(entry[:pattern])
-      elsif entry.key?(:any_of)
-        entry.key[:any_of].each do |matcher|
-          valid = attachment.filename.match?(matcher[:pattern]) if matcher.key?[:pattern]
-        end
-      end
+      valid = attachment.filename.match?(expected_pattern) if expected_pattern
     end
 
     return if valid
 
     record.errors.add :samplesheet_params,
                       I18n.t('validators.workflow_execution_samplesheet_params_validator.attachment_format_error',
-                             property:)
+                             property:, file_format: expected_pattern)
   end
 end

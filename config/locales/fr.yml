@@ -1840,7 +1840,7 @@ fr:
       numeric_operator_error: can only be used on numbers
       uniqueness_error: must be unique
     workflow_execution_samplesheet_params_validator:
-      attachment_format_error: property '%{property}' must match the expected file format
+      attachment_format_error: property '%{property}' must match the expected file format of '%{file_format}'
       attachment_gid_error: property '%{property}' must be a valid Attachment GID
       blank_error: property '%{property}' is required and cannot be blank
       sample_attachment_error: property '%{property}' must belong to the Sample
