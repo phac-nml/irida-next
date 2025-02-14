@@ -27,7 +27,7 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
       end
     end
 
-    if Irida::Pipelines.instance.available_pipelines.any?
+    if Flipper.enabled?(:workflow_execution_sharing) && Irida::Pipelines.instance.available_pipelines.any?
       resources :workflow_executions, only: %i[index show] do
         member do
           put :cancel
