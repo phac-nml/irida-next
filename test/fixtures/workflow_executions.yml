@@ -987,8 +987,16 @@ workflow_execution_completed_shared2:
 
 workflow_execution_group_shared1:
   <<: *DEFAULTS
-  metadata: { "workflow_name": "wn1", "workflow_version": "wv1" }
-  workflow_params: { "key_a": "value_a" }
+  metadata:
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
+    }
+  workflow_params: {
+    "assembler": "stub",
+    "project_name": "assembly",
+    "random_seed": "1",
+  }
   workflow_engine_parameters: { "-r": "dev" }
   workflow_url: "my_workflow_url"
   run_id: "my_run_id_group_shared_1"
