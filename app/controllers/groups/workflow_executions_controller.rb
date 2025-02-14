@@ -7,7 +7,6 @@ module Groups
     include Metadata
     include WorkflowExecutionActions
 
-    before_action :group
     before_action :namespace
 
     private
@@ -17,7 +16,13 @@ module Groups
     end
 
     def namespace
-      @namespace = @group
+      @namespace = group
+    end
+
+    def workflow_execution
+      @workflow_execution = WorkflowExecution.find_by(id: params[:id], namespace:, shared_with_namespace: true)
+
+      raise ActiveRecord::RecordNotFound if @workflow_execution.nil?
     end
 
     def load_workflows
@@ -41,7 +46,7 @@ module Groups
       @context_crumbs +=
         [{
           name: @workflow_execution.id,
-          path: group_workflow_executions_path(@workflow_execution)
+          path: group_workflow_execution_path(@workflow_execution)
         }]
     end
 

@@ -1,0 +1,60 @@
+<%= render Viral::PageHeaderComponent.new(title: turbo_frame_tag('we_name_header') do @workflow_execution.name.blank? ? @workflow_execution.metadata["workflow_name"] :
+   @workflow_execution.name end, id: @workflow_execution.id, id_color: find_pill_color_for_state(@workflow_execution.state)) do |component| %>
+  <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
+  <%= component.with_buttons do %>
+    <div class="flex flex-row">
+      <% if allowed_to?(:export_data?, @namespace) %>
+        <% if @workflow_execution.completed? %>
+          <%= link_to t("projects.workflow_executions.show.create_export_button"),
+          new_data_export_path(
+            export_type: "analysis",
+            analysis_type: "group",
+            namespace_id: @namespace.id,
+            workflow_execution_id: @workflow_execution.id,
+            single_workflow: true,
+          ),
+          data: {
+            turbo_stream: true,
+          },
+          class: "button button--size-default button--state-default mr-2" %>
+        <% else %>
+          <%= link_to t("projects.workflow_executions.show.create_export_button"),
+          new_data_export_path(
+            export_type: "analysis",
+            analysis_type: "group",
+            namespace_id: @namespace.id,
+            workflow_execution_id: @workflow_execution.id,
+            single_workflow: true,
+          ),
+          data: {
+            turbo_stream: true,
+          },
+          class:
+            "button button--size-default button--state-default pointer-events-none cursor-not-allowed bg-slate-100 text-slate-600 mr-2 dark:bg-slate-600 dark:text-slate-300" %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+<%= viral_tabs(id: "workflow-execution-tabs", label: "Tabs") do |tabs| %>
+  <%= tabs.with_tab(url: group_workflow_execution_path(@namespace, @workflow_execution, tab: "summary"), selected: @tab == "summary" || @tab == nil, controls: "workflow-execution-tabs") do %>
+    <%= t(:"workflow_executions.show.tabs.summary") %>
+  <% end %>
+  <%= tabs.with_tab(url: group_workflow_execution_path(@namespace, @workflow_execution, tab: "params"), selected: @tab == "params", controls: "workflow-execution-tabs") do %>
+    <%= t(:"workflow_executions.show.tabs.params") %>
+  <% end %>
+  <%= tabs.with_tab(url: group_workflow_execution_path(@namespace, @workflow_execution, tab: "files"), selected: @tab == "files", controls: "workflow-execution-tabs") do %>
+    <%= t(:"workflow_executions.show.tabs.files") %>
+  <% end %>
+
+  <%= tabs.with_tab_content do %>
+    <% if @tab == 'summary' || @tab == nil %>
+      <%= render partial: "summary" %>
+    <% elsif @tab == "params" %>
+      <%= render partial: "params" %>
+    <% elsif @tab == 'files' %>
+      <%= render partial: "files" %>
+    <% end %>
+  <% end %>
+<% end %>
