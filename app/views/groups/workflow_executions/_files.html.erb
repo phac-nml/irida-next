@@ -1,0 +1,42 @@
+<div class="relative overflow-x-auto" data-turbo-temporary>
+  <table
+    id="files-table"
+    class="
+      w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+      whitespace-nowrap
+    "
+  >
+    <thead
+      class="
+        text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700
+        dark:text-slate-400
+      "
+    >
+      <tr>
+        <th
+          scope="col"
+          class="
+            px-6 py-3 text-left bg-slate-50 dark:bg-slate-700 sticky left-0 z-10
+          "
+        ><%= t(:".table_header.puid") %></th>
+        <th scope="col" class="px-6 py-3"><%= t(:".table_header.filename") %></th>
+        <th scope="col" class="px-6 py-3"><%= t(:".table_header.format") %></th>
+        <th scope="col" class="px-6 py-3"><%= t(:".table_header.type") %></th>
+        <th scope="col" class="px-6 py-3"><%= t(:".table_header.size") %></th>
+        <th scope="col" class="px-6 py-3"><%= t(:".table_header.created_at") %></th>
+      </tr>
+    </thead>
+    <tbody
+      id="attachments-table-body"
+      class="
+        bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
+      "
+    >
+      <% @attachments.each do |attachment| %>
+        <% unless attachment.associated_attachment && attachment.metadata['direction'] == 'reverse' %>
+          <%= render partial: "attachment", locals: { attachment: attachment } %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>

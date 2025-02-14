@@ -1,0 +1,45 @@
+<%= turbo_frame_tag "workflow_execution_summary" do %>
+  <div class="px-4 py-4">
+    <dl
+      class="
+        max-w-md text-slate-900 divide-y divide-slate-200 dark:text-white
+        dark:divide-slate-700
+      "
+    >
+      <div class="flex flex-col pb-3">
+        <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".run_id") %></dt>
+        <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @workflow_execution.run_id %></dd>
+      </div>
+      <div class="flex flex-col pb-3">
+        <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".state") %></dt>
+        <dd class="text-lg font-semibold text-slate-900 dark:text-white">
+          <%= render Viral::PillComponent.new(color: find_pill_color_for_state(@workflow_execution.state)) do %>
+            <%= t("workflow_executions.state.#{@workflow_execution.state}") %>
+          <% end %>
+        </dd>
+      </div>
+      <% unless @workflow_execution.name.blank? %>
+        <div class="flex flex-col pb-3">
+          <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".name") %></dt>
+          <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @workflow_execution.name %></dd>
+        </div>
+      <% end %>
+      <div class="flex flex-col py-3">
+        <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".workflow_name") %></dt>
+        <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @workflow_execution.metadata["workflow_name"] %></dd>
+      </div>
+      <div class="flex flex-col py-3">
+        <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".workflow_version") %></dt>
+        <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @workflow_execution.metadata["workflow_version"] %></dd>
+      </div>
+      <div class="flex flex-col py-3">
+        <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".created_at") %></dt>
+        <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= local_time(@workflow_execution.created_at, :full_date) %></dd>
+      </div>
+      <div class="flex flex-col pt-3">
+        <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".updated_at") %></dt>
+        <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= local_time(@workflow_execution.updated_at, :long) %></dd>
+      </div>
+    </dl>
+  </div>
+<% end %>
