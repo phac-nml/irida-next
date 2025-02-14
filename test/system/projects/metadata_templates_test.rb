@@ -33,7 +33,7 @@ module Projects
       click_on I18n.t(:'components.pagination.next')
 
       within('table tbody') do
-        assert_selector 'tr', count: 2
+        assert_selector 'tr', count: 3
       end
 
       assert_selector 'a', text: I18n.t(:'components.pagination.previous')

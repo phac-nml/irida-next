@@ -581,6 +581,7 @@ fr:
         non_zero: Samples (COUNT_PLACEHOLDER selected)
         zero: Samples (0 selected)
       submit_button: Submit
+      template_select_label: Sélectionner les champs par modèle de métadonnées
     new_analysis_export_dialog:
       description:
         plural: This export will contain COUNT_PLACEHOLDER workflow executions.
@@ -1849,6 +1850,7 @@ fr:
         previous: Previous
     sortable_lists_component:
       add_all: Add all
+      no_template: Aucun modèle
       remove_all: Remove all
   workflow_executions:
     edit_dialog:

@@ -68,3 +68,11 @@ group_two_metadata_template2:
   created_at: (<%= 3.hours.ago %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_two, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+
+project1_metadata_template_with_existing_fields:
+  name: Project Template with existing fields
+  description: This is a template with existing fields
+  fields: ["metadatafield1"]
+  created_at: <%= 3.hours.ago %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>

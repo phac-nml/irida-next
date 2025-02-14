@@ -4,6 +4,7 @@
 class DataExportsController < ApplicationController # rubocop:disable Metrics/ClassLength
   include BreadcrumbNavigation
   include ListActions
+  include Metadata
 
   before_action :data_export, only: %i[destroy show]
   before_action :data_exports, only: %i[destroy]
@@ -152,7 +153,10 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     when 'sample'
       { open: true, namespace_id: params[:namespace_id], formats: Attachment::FORMAT_REGEX.keys.sort }
     when 'linelist'
-      { open: true, namespace_id: params[:namespace_id] }
+      templates = metadata_templates_ancestral.map do |template|
+        { id: template.id, name: template.name, fields: template.fields }
+      end
+      { open: true, namespace_id: params[:namespace_id], templates: templates }
     end
   end
 

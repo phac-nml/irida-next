@@ -27,9 +27,9 @@
               <button
                 type="button"
                 class="
-                  flex items-center justify-between w-full p-3 font-medium rtl:text-right
-                  text-black dark:text-white border border-slate-200 dark:border-slate-700
-                  hover:bg-slate-100 dark:hover:bg-slate-800 gap-3 rounded-t
+                  flex items-center justify-between w-full gap-3 p-3 font-medium text-black border
+                  rounded-t rtl:text-right dark:text-white border-slate-200 dark:border-slate-700
+                  hover:bg-slate-100 dark:hover:bg-slate-800
                 "
                 data-action="collapsible#toggle"
                 aria-expanded="true"
@@ -50,9 +50,14 @@
               class="hidden"
               aria-labelledby="<%= "accordion-collapse-heading-samples" %>"
             >
-              <div class="text-base leading-relaxed text-slate-500 dark:text-slate-400 p-2.5 border border-t-0 border-slate-300">
+              <div
+                class="
+                  text-base leading-relaxed text-slate-500 dark:text-slate-400 p-2.5 border
+                  border-t-0 border-slate-300
+                "
+              >
                 <span data-infinite-scroll-target="summary">
-                   <%= t(:"data_exports.new.sample_description.zero") %>
+                  <%= t(:"data_exports.new.sample_description.zero") %>
                 </span>
                 <span><%= t(:"data_exports.new.after_submission_description_html") %></span>
               </div>
@@ -75,7 +80,10 @@
             description: t(".metadata_description",
               available: t(".available").downcase,
               selected: t(".selected").downcase
-            )) do |sortable_lists| %>
+            ),
+            templates: templates,
+            template_label: t("data_exports.new.template_select_label")
+            ) do |sortable_lists| %>
             <%= sortable_lists.with_list(
               id: t(".available"),
               title: t(".available"),
@@ -103,7 +111,7 @@
               }
             ) do |form| %>
             <div class="grid gap-4">
-              <div class="form-field mt-1">
+              <div class="mt-1 form-field">
                 <%= form.label :name, t(".format") %>
                 <div class="flex">
                   <div class="flex items-center">
@@ -147,20 +155,23 @@
                   </div>
                 </div>
               </div>
-              <%= render partial: "name_and_email", locals: {form:} %>
+              <%= render partial: "name_and_email", locals: { form: } %>
               <div>
                 <%= form.hidden_field :export_type, value: "linelist" %>
                 <input type="hidden" aria-hidden="true"
                 name="data_export[export_parameters][namespace_id]", value=<%= namespace_id %>>
               </div>
-              <div class="hidden" data-viral--sortable-lists--two-lists-selection-target="field"></div>
+              <div
+                class="hidden"
+                data-viral--sortable-lists--two-lists-selection-target="field"
+              ></div>
               <div>
                 <%= form.submit t("data_exports.new.submit_button"),
                             data: {
                               turbo_frame: "_top",
                               action:
                                 "click->form--hidden-inputs#clearSelection click->viral--sortable-lists--two-lists-selection#constructParams",
-                              "viral--sortable-lists--two-lists-selection-target": "submitBtn"
+                              "viral--sortable-lists--two-lists-selection-target": "submitBtn",
                             },
                             class: "button button--state-primary button--size-default",
                             disabled: true %>

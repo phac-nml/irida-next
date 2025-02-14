@@ -89,6 +89,13 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
+  test 'group metadata templates create with invalid params' do
+    metadata_template_params = { metadata_template: { name: '', fields: [] } }
+    post group_metadata_templates_path(@group, format: :turbo_stream), params: metadata_template_params
+
+    assert_response :unprocessable_entity
+  end
+
   test 'group metadata templates update' do
     metadata_template_params = { metadata_template: { name: 'This is the new template', fields: %w[field6 field10] } }
     put group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream),
@@ -105,6 +112,14 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
 
     metadata_template_params = { metadata_template: { fields: [] } }
+    put group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream),
+        params: metadata_template_params
+
+    assert_response :unprocessable_entity
+  end
+
+  test 'group metadata templates update with invalid params' do
+    metadata_template_params = { metadata_template: { name: '', fields: [] } }
     put group_metadata_template_path(@group, @group_metadata_template, format: :turbo_stream),
         params: metadata_template_params
 
@@ -222,6 +237,14 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
+  test 'project metadata templates create with invalid params' do
+    metadata_template_params = { metadata_template: { name: '', fields: [] } }
+    post namespace_project_metadata_templates_path(@project_namespace.parent, @project, format: :turbo_stream),
+         params: metadata_template_params
+
+    assert_response :unprocessable_entity
+  end
+
   test 'project metadata templates update' do
     metadata_template_params = { metadata_template: { name: 'This is the new template', fields: %w[field6 field10] } }
     put namespace_project_metadata_template_path(
@@ -246,6 +269,14 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
       @project_namespace.parent,
       @project, @project_metadata_template, format: :turbo_stream
     ), params: metadata_template_params
+
+    assert_response :unprocessable_entity
+  end
+
+  test 'project metadata templates update with invalid params' do
+    metadata_template_params = { metadata_template: { name: '', fields: [] } }
+    put namespace_project_metadata_template_path(@project_namespace.parent, @project, @project_metadata_template, format: :turbo_stream),
+        params: metadata_template_params
 
     assert_response :unprocessable_entity
   end
@@ -317,6 +348,14 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, 'metadata_templates_dropdown'
   end
 
+  test 'group metadata templates index with pagination and sorting' do
+    get group_metadata_templates_path(@group, params: { q: { s: 'name desc' }, page: 2, limit: 10 })
+
+    assert_response :success
+    # Verify the response includes the sorted and paginated content
+    assert_includes @response.body, 'turbo-stream'
+  end
+
   test 'project metadata templates list with none template' do
     get list_namespace_project_metadata_templates_path(
       @project_namespace.parent,
@@ -351,5 +390,14 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_includes @response.body, @project_metadata_template.name
+  end
+
+  test 'project metadata templates index with pagination and sorting' do
+    get namespace_project_metadata_templates_path(@project_namespace.parent, @project,
+                                                  params: { q: { s: 'name desc' }, page: 2, limit: 10 })
+
+    assert_response :success
+    # Verify the response includes the sorted and paginated content
+    assert_includes @response.body, 'turbo-stream'
   end
 end

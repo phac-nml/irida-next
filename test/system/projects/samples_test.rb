@@ -3050,6 +3050,40 @@ module Projects
       ### VERIFY END ###
     end
 
+    test 'linelist export test' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+
+      # Assert that the Export button is disabled when no samples are selected
+      assert_selector '[aria-disabled="true"]', text: I18n.t('projects.samples.index.create_export_button.label')
+
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      within '#samples-table table tbody' do
+        assert_selector 'tr', count: 3
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
+      click_button I18n.t('projects.samples.index.create_export_button.label')
+      click_link I18n.t('projects.samples.index.create_export_button.linelist_export')
+      assert_selector "div[data-controller='infinite-scroll viral--sortable-lists--two-lists-selection']"
+      assert_no_selector 'ul#Selected li', text: 'metadatafield1'
+      select 'Project Template with existing fields', from: I18n.t('data_exports.new.template_select_label')
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_no_selector 'ul#Available li', text: 'metadatafield1'
+      assert_selector 'ul#Selected li', text: 'metadatafield1', count: 1
+      ### VERIFY END ###
+    end
+
     def long_filter_text
       text = (1..500).map { |n| "sample#{n}" }.join(', ')
       "#{text}, #{@sample1.name}" # Need to comma to force the tag to be created
