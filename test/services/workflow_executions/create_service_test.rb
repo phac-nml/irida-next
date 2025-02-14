@@ -16,7 +16,7 @@ module WorkflowExecutions
           sample_id: @sample.id,
           samplesheet_params: {
             sample: @sample.puid,
-            fastq_1: @attachment.to_global_id
+            fastq_1: @attachment.to_global_id # rubocop:disable Naming/VariableNumber
           }
         }
       }
@@ -391,8 +391,10 @@ module WorkflowExecutions
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
 
       assert_includes @workflow_execution.errors.full_messages,
-                      "Samples workflow executions[0] samplesheet params #{I18n.t('validators.workflow_execution_samplesheet_params_validator.sample_puid_error',
-                                                                                  property: 'sample')}"
+                      "Samples workflow executions[0] samplesheet params #{I18n.t(
+                        'validators.workflow_execution_samplesheet_params_validator.sample_puid_error',
+                        property: 'sample'
+                      )}"
       assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
     end
 
@@ -424,7 +426,8 @@ module WorkflowExecutions
 
       assert_includes @workflow_execution.errors.full_messages,
                       "Samples workflow executions[0] samplesheet params #{I18n.t(
-                        'validators.workflow_execution_samplesheet_params_validator.sample_attachment_error', property: 'fastq_1'
+                        'validators.workflow_execution_samplesheet_params_validator.sample_attachment_error',
+                        property: 'fastq_1'
                       )}"
       assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
     end
