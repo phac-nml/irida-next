@@ -955,6 +955,10 @@ fr:
         select_all_button: Tout sélectionner
         subtitle: These are the workflow executions that have been shared within this group
         title: Exécutions de flux de travail
+      table:
+        empty:
+          description: There are no workflow executions associated with this group.
+          title: No workflow executions.
   layouts:
     application:
       site_title: IRIDA Next

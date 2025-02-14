@@ -948,13 +948,17 @@ en:
       success: Group %{group_name} was successfully updated
     workflow_executions:
       index:
-          create_export_button: Create Export
-          deselect_all_button: Deselect All
-          search:
-            placeholder: Filter by ID or name
-          select_all_button: Select All
-          subtitle: These are the workflow executions that have been shared within this group
-          title: Workflow Executions
+        create_export_button: Create Export
+        deselect_all_button: Deselect All
+        search:
+          placeholder: Filter by ID or name
+        select_all_button: Select All
+        subtitle: These are the workflow executions that have been shared within this group
+        title: Workflow Executions
+      table:
+        empty:
+          description: There are no workflow executions associated with this group.
+          title: No workflow executions.
   layouts:
     application:
       site_title: IRIDA Next
