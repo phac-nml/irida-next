@@ -991,9 +991,10 @@ workflow_execution_group_shared1:
   workflow_params: { "key_a": "value_a" }
   workflow_engine_parameters: { "-r": "dev" }
   workflow_url: "my_workflow_url"
-  run_id: "my_run_id_shared_1"
+  run_id: "my_run_id_group_shared_1"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  name: "Group Shared Example1"
   shared_with_namespace: true
 
 workflow_execution_group_shared2:
@@ -1002,7 +1003,20 @@ workflow_execution_group_shared2:
   workflow_params: { "key_a": "value_a" }
   workflow_engine_parameters: { "-r": "dev" }
   workflow_url: "my_workflow_url"
-  run_id: "my_run_id_shared_2"
+  run_id: "my_run_id_group_shared_2"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  name: "Group Shared Example2"
+  shared_with_namespace: true
+
+workflow_execution_group_shared3:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "wn1", "workflow_version": "wv1" }
+  workflow_params: { "key_a": "value_a" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "my_run_id_group_shared_3"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  name: "Group Shared Example3"
   shared_with_namespace: true
