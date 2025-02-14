@@ -82,7 +82,7 @@ irida_next_example_prepared:
   run_id: "my_run_id_4"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:prepared] %>
+  state: "prepared"
   email_notification: true
   cleaned: false
 
@@ -103,7 +103,7 @@ irida_next_example_submitted:
   run_id: "my_run_id_5"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:submitted] %>
+  state: "submitted"
   cleaned: false
 
 irida_next_example_completed:
@@ -123,7 +123,7 @@ irida_next_example_completed:
   run_id: "my_run_id_6"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:completed] %>
+  state: "completed"
   blob_run_directory: "not a run dir"
   cleaned: true
 
@@ -145,7 +145,7 @@ irida_next_example_completed_2_files:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   name: 'irida_next_example_completed_2_files'
-  state: <%= WorkflowExecution.states[:completed] %>
+  state: "completed"
   blob_run_directory: "not a run dir"
   cleaned: true
 
@@ -166,7 +166,7 @@ irida_next_example_completed_unclean:
   run_id: "my_run_id_6a"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:completed] %>
+  state: "completed"
   blob_run_directory: "not a run dir"
   cleaned: false
 
@@ -187,7 +187,7 @@ irida_next_example_error:
   run_id: "my_run_id_7"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:error] %>
+  state: "error"
   cleaned: true
 
 irida_next_example_error_unclean:
@@ -207,7 +207,7 @@ irida_next_example_error_unclean:
   run_id: "my_run_id_7a"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:error] %>
+  state: "error"
   cleaned: false
 
 irida_next_example_canceling:
@@ -227,7 +227,7 @@ irida_next_example_canceling:
   run_id: "my_run_id_8"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:canceling] %>
+  state: "canceling"
   cleaned: false
 
 irida_next_example_canceled:
@@ -247,7 +247,7 @@ irida_next_example_canceled:
   run_id: "my_run_id_9"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:canceled] %>
+  state: "canceled"
   cleaned: true
 
 irida_next_example_canceled_unclean:
@@ -267,7 +267,7 @@ irida_next_example_canceled_unclean:
   run_id: "my_run_id_9a"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:canceled] %>
+  state: "canceled"
   cleaned: false
 
 irida_next_example_running:
@@ -287,7 +287,7 @@ irida_next_example_running:
   run_id: "my_run_id_10"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:running] %>
+  state: "running"
   cleaned: false
 
 irida_next_example_new:
@@ -307,7 +307,7 @@ irida_next_example_new:
   run_id: "my_run_id_12"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:initial] %>
+  state: "initial"
   cleaned: false
 
 irida_next_example_completing_a:
@@ -327,7 +327,7 @@ irida_next_example_completing_a:
   run_id: "my_run_id_a"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:completing] %>
+  state: "completing"
   blob_run_directory: "not a run dir"
   email_notification: true
   cleaned: false
@@ -349,7 +349,7 @@ irida_next_example_completing_b:
   run_id: "my_run_id_b"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:completing] %>
+  state: "completing"
   blob_run_directory: "not a run dir"
   cleaned: false
 
@@ -370,7 +370,7 @@ irida_next_example_completing_c:
   run_id: "my_run_id_c"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:completing] %>
+  state: "completing"
   blob_run_directory: "not a run dir"
   update_samples: true
   cleaned: false
@@ -392,7 +392,7 @@ irida_next_example_completing_d:
   run_id: "my_run_id_d"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:completing] %>
+  state: "completing"
   blob_run_directory: "not a run dir"
   cleaned: false
 
@@ -413,7 +413,7 @@ irida_next_example_completing_e:
   run_id: "my_run_id_e"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:completing] %>
+  state: "completing"
   blob_run_directory: "not a run dir"
   cleaned: false
 
@@ -434,7 +434,7 @@ irida_next_example_completing_f:
   run_id: "my_run_id_f"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:completing] %>
+  state: "completing"
   blob_run_directory: "not a run dir"
   update_samples: false
   email_notification: true
@@ -457,7 +457,7 @@ irida_next_example_completing_g:
   run_id: "my_run_id_g"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:projectA_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:completing] %>
+  state: "completing"
   blob_run_directory: "not a run dir"
   update_samples: true
   email_notification: true
@@ -481,7 +481,7 @@ irida_next_example_completed_with_output:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
   name: "irida_next_example_completed_with_output"
-  state: <%= WorkflowExecution.states[:completed] %>
+  state: "completed"
   blob_run_directory: "not a run dir"
   cleaned: false
 
@@ -502,7 +502,7 @@ automated_workflow_execution:
   run_id: "my_run_id_13"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:completed] %>
+  state: "completed"
   blob_run_directory: "not a run dir"
   cleaned: true
 
@@ -524,7 +524,7 @@ workflow_execution<%= (n) %>:
   run_id: <%= "my_run_id_#{n}" %>
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project33_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:initial] %>
+  state: "initial"
   cleaned: false
 <% end %>
 
@@ -563,7 +563,7 @@ automated_example_prepared:
   run_id: "my_run_id_4"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:prepared] %>
+  state: "prepared"
   email_notification: true
   cleaned: false
 
@@ -584,7 +584,7 @@ automated_example_submitted:
   run_id: "my_run_id_5"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:submitted] %>
+  state: "submitted"
   cleaned: false
 
 automated_example_completed:
@@ -605,7 +605,7 @@ automated_example_completed:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   name: "automated_example_completed"
-  state: <%= WorkflowExecution.states[:completed] %>
+  state: "completed"
   blob_run_directory: "not a run dir"
   cleaned: true
 
@@ -626,7 +626,7 @@ automated_example_error:
   run_id: "my_run_id_7"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:error] %>
+  state: "error"
   cleaned: true
 
 automated_example_canceling:
@@ -646,7 +646,7 @@ automated_example_canceling:
   run_id: "my_run_id_8"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:canceling] %>
+  state: "canceling"
   cleaned: false
 
 automated_example_canceled:
@@ -667,7 +667,7 @@ automated_example_canceled:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   name: "automated_example_canceled"
-  state: <%= WorkflowExecution.states[:canceled] %>
+  state: "canceled"
   cleaned: true
 
 automated_example_running:
@@ -687,7 +687,7 @@ automated_example_running:
   run_id: "my_run_id_10"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:running] %>
+  state: "running"
   cleaned: false
 
 automated_example_new:
@@ -707,7 +707,7 @@ automated_example_new:
   run_id: "my_run_id_12"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:initial] %>
+  state: "initial"
   cleaned: false
 
 automated_workflow_execution_existing:
@@ -745,7 +745,7 @@ irida_next_example_end_to_end:
   workflow_url: "https://github.com/phac-nml/iridanextexample"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
-  state: <%= WorkflowExecution.states[:initial] %>
+  state: "initial"
   cleaned: false
 
 irida_next_example_completed_DELETE:
@@ -766,7 +766,7 @@ irida_next_example_completed_DELETE:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
   blob_run_directory: "not a run dir"
-  state: <%= WorkflowExecution.states[:completed] %>
+  state: "completed"
   cleaned: true
 
 irida_next_example_error_DELETE:
@@ -783,7 +783,7 @@ irida_next_example_error_DELETE:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
   blob_run_directory: "not a run dir"
-  state: <%= WorkflowExecution.states[:error] %>
+  state: "error"
   cleaned: true
 
 irida_next_example_canceled_DELETE:
@@ -800,7 +800,7 @@ irida_next_example_canceled_DELETE:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
   blob_run_directory: "not a run dir"
-  state: <%= WorkflowExecution.states[:canceled] %>
+  state: "canceled"
   cleaned: true
 
 irida_next_example_completed_unclean_DELETE:
@@ -817,7 +817,7 @@ irida_next_example_completed_unclean_DELETE:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
   blob_run_directory: "not a run dir"
-  state: <%= WorkflowExecution.states[:completed] %>
+  state: "completed"
   cleaned: false
 
 irida_next_example_error_unclean_DELETE:
@@ -834,7 +834,7 @@ irida_next_example_error_unclean_DELETE:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
   blob_run_directory: "not a run dir"
-  state: <%= WorkflowExecution.states[:error] %>
+  state: "error"
   cleaned: false
 
 irida_next_example_canceled_unclean_DELETE:
@@ -851,7 +851,7 @@ irida_next_example_canceled_unclean_DELETE:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
   blob_run_directory: "not a run dir"
-  state: <%= WorkflowExecution.states[:canceled] %>
+  state: "canceled"
   cleaned: false
 
 workflow_execution_valid_on_group:
@@ -915,7 +915,7 @@ workflow_execution_completed_shared1:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid) %>
   name: "irida_next_user_shared_example_completed_with_output"
-  state: <%= WorkflowExecution.states[:completed] %>
+  state: "completed"
   blob_run_directory: "not a run dir"
   cleaned: false
   shared_with_namespace: true
@@ -938,7 +938,7 @@ workflow_execution_completed_shared2:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:micha_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid) %>
   name: "irida_next_member_shared_example_completed_with_output"
-  state: <%= WorkflowExecution.states[:completed] %>
+  state: "completed"
   blob_run_directory: "not a run dir"
   cleaned: false
   shared_with_namespace: true
