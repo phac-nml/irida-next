@@ -38,13 +38,15 @@
             label: t(:"groups.sidebar.activity"),
             selected: @current_page == t(:"groups.sidebar.activity"),
           ) %>
-          <% if allowed_to?(:view_workflow_executions?, @group) && @pipelines_enabled %>
-            <%= render section.with_item(
-              url: group_workflow_executions_path(@group),
-              icon: "command_line",
-              label: t(:"groups.sidebar.workflow_executions"),
-              selected: @current_page == t(:"groups.sidebar.workflow_executions"),
-            ) %>
+          <% if Flipper.enabled?(:workflow_execution_sharing) %>
+            <% if allowed_to?(:view_workflow_executions?, @group) && @pipelines_enabled %>
+              <%= render section.with_item(
+                url: group_workflow_executions_path(@group),
+                icon: "command_line",
+                label: t(:"groups.sidebar.workflow_executions"),
+                selected: @current_page == t(:"groups.sidebar.workflow_executions"),
+              ) %>
+            <% end %>
           <% end %>
           <% if allowed_to?(:update?, @group) %>
             <%= render section.with_multi_level_menu(
