@@ -64,9 +64,9 @@ Advanced search uses groups & conditions to build complex queries based on crite
 
 **Groups** consist of one or more conditions.
 
-**Conditions** consists of a _field_, _operator_, and _value_.
+**Conditions** consists of a field, operator, and value.
 
-**Fields** can be one of name, puid, created_at, updated_at, or attachments_updated_at. If the field is metadata, it must begin with 'metadata.'.
+**Fields** are sample attributes which can be one of name, puid, created_at, updated_at, or attachments_updated_at. If the field is metadata, it must begin with 'metadata.'.
 
 **Operators** can only be one of EQUALS, NOT_EQUALS, LESS_THAN_EQUALS, GREATER_THAN_EQUALS, CONTAINS, EXISTS, NOT_EXISTS, IN, and NOT_IN.
 
@@ -78,20 +78,20 @@ The advanced search input is validated before the search is performed. This is a
 
 1. Date values must be formatted "YYYY-MM-DD" and the field must end with '\_date'.
 
-2. Conditions must have unique fields within the same group unless using the between operators. Between operators are LESS_THAN_EQUALS, GREATER_THAN_EQUALS.
+2. Conditions must have unique fields within the same group unless using the between operators. Between operators are LESS_THAN_EQUAL and GREATER_THAN_EQUALS.
 
 Validation rules mentioned above around operators have been summarized in this table for quick reference.
 
-| Operator            | Value            | Uniqueness                                |
-| ------------------- | ---------------- | ----------------------------------------- |
-| EQUALS              | String           | Cannot be combined with other operators.  |
-| NOT_EQUALS          | String           | Cannot be combined with other operators.  |
-| LESS_THAN_EQUALS    | Date or numeric  | Can be combined with GREATER_THAN_EQUALS. |
-| GREATER_THAN_EQUALS | Date or numeric  | Can be combined with LESS_THAN_EQUALS.    |
-| CONTAINS            | String           | Cannot be combined with other operators.  |
-| EXISTS              | N/A              | Cannot be combined with other operators.  |
-| NOT_EXISTS          | N/A              | Cannot be combined with other operators.  |
-| IN                  | Array of strings | Cannot be combined with other operators.  |
-| NOT_IN              | Array of strings | Cannot be combined with other operators.  |
+| Operator            | Value            | Uniqueness                               |
+| ------------------- | ---------------- | ---------------------------------------- |
+| EQUALS              | String           | Cannot be combined with other operators  |
+| NOT_EQUALS          | String           | Cannot be combined with other operators  |
+| LESS_THAN_EQUALS    | Date or numeric  | Can be combined with GREATER_THAN_EQUALS |
+| GREATER_THAN_EQUALS | Date or numeric  | Can be combined with LESS_THAN_EQUALS    |
+| CONTAINS            | String           | Cannot be combined with other operators  |
+| EXISTS              | N/A              | Cannot be combined with other operators  |
+| NOT_EXISTS          | N/A              | Cannot be combined with other operators  |
+| IN                  | Array of strings | Cannot be combined with other operators  |
+| NOT_IN              | Array of strings | Cannot be combined with other operators  |
 
-_\* The Uniqueness column compares conditions within the same group._
+_\* The uniqueness column compares conditions within the same group._

@@ -188,4 +188,18 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
 
     assert_nil data
   end
+
+  test 'filter samples with narray of values using advanced search should work' do
+    result = IridaSchema.execute(SAMPLES_QUERY,
+                                 context: { current_user: @user },
+                                 variables: { filter: { advanced_search_groups: [[{
+                                   field: 'name', operator: 'IN', value: ['Project 1 Sample 1', 'Project 1 Sample 2']
+                                 }]] } })
+
+    assert_nil result['errors'], 'should work and have no errors.'
+
+    data = result['data']['samples']['nodes']
+
+    assert_equal 3, data.count
+  end
 end

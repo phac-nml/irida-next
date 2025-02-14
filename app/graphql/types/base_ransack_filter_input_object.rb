@@ -25,6 +25,16 @@ module Types
     value 'NOT_IN', value: 'not_in'
   end
 
+  class ValueScalar < BaseScalar # rubocop:disable Style/Documentation
+    description 'Sample Advanced Search Condition Value'
+
+    def self.coerce_input(value, _context)
+      return value if value.nil? || value.is_a?(String) || value.is_a?(Array)
+
+      raise GraphQL::CoercionError, "#{value.inspect} is not valid"
+    end
+  end
+
   class SampleAdvancedSearchConditionInputType < BaseInputObject # rubocop:disable Style/Documentation
     graphql_name 'SampleAdvancedSearchCondition'
     description 'Sample Advanced Search Condition'
@@ -32,6 +42,6 @@ module Types
     argument :field, String, 'Field of advanced search condition', required: false
     argument :operator, SampleAdvancedSearchConditionOperatorInputType, 'Operator of advanced search condition',
              required: false
-    argument :value, String, 'Value of advanced search condition', required: false
+    argument :value, ValueScalar, 'Value of advanced search condition', required: false
   end
 end
