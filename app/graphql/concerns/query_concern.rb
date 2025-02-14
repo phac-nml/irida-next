@@ -44,7 +44,6 @@ module QueryConcern # rubocop:disable GraphQL/ObjectDescription
     group = IridaSchema.object_from_id(group_id, { expected_type: Group })
     authorize!(group, to: :sample_listing?, with: GroupPolicy,
                       context: { user: context[:current_user], token: context[:token] })
-    # authorized_scope(Sample, type: :relation, as: :namespace_samples, scope_options: { namespace: group })
     project_ids =
       authorized_scope(Project, type: :relation, as: :group_projects, context: { user: context[:current_user] },
                                 scope_options: { group: group }).pluck(:id)

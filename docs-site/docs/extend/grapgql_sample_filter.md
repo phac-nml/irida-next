@@ -64,7 +64,7 @@ Advanced search uses groups & conditions to build complex queries based on crite
 
 **Groups** consist of one or more conditions.
 
-**Conditions** consists of a field, operator, and value.
+**Conditions** consist of a field, operator, and value.
 
 **Fields** are sample attributes which can be one of name, puid, created_at, updated_at, or attachments_updated_at. If the field is metadata, it must begin with 'metadata.'.
 
