@@ -94,7 +94,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       assert_selector "tr:nth-child(3) td:nth-child(#{@workflow_name_col})",
                       text: workflow_execution8.metadata['workflow_name']
       assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
-                      text: workflow_execution1.metadata['workflow_name']
+                      text: workflow_execution2.metadata['workflow_name']
     end
 
     click_on 'Workflow Name'
@@ -103,9 +103,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within('#workflow-executions-table table tbody') do
       assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
       assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                      text: workflow_execution1.metadata['workflow_name']
-      assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
                       text: workflow_execution2.metadata['workflow_name']
+      assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
+                      text: workflow_execution_shared1.metadata['workflow_name']
       assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
                       text: workflow_execution9.metadata['workflow_name']
     end

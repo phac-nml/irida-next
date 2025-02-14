@@ -73,6 +73,9 @@ module Irida
                                        end
 
     ActiveRecord::SessionStore::Session.serializer = :json
+
+    # index nested attribute errors
+    config.active_record.index_nested_attribute_errors = true
   end
 end
 

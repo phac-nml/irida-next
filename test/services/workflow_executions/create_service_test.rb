@@ -10,11 +10,13 @@ module WorkflowExecutions
       @user = users(:john_doe)
       @project = projects(:project1)
       @sample = samples(:sample1)
+      @attachment = attachments(:attachment1)
       @samples_workflow_executions_attributes = {
         '0': {
           sample_id: @sample.id,
           samplesheet_params: {
-            sample: @sample.puid
+            sample: @sample.puid,
+            fastq_1: @attachment.to_global_id # rubocop:disable Naming/VariableNumber
           }
         }
       }
@@ -364,7 +366,6 @@ module WorkflowExecutions
     end
 
     test 'create new workflow execution with non matching sample puid in sample sheet' do
-      skip 'validator needs rewrite'
       samples_workflow_executions_attributes = {
         '0': {
           sample_id: samples(:sample1).id,
@@ -389,13 +390,15 @@ module WorkflowExecutions
 
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
 
-      assert @workflow_execution.errors.full_messages
-                                .include?('Sample Provided Sample PUID INXT_SAM_AAAAAAAAAB does not match SampleWorkflowExecution Sample PUID INXT_SAM_AAAAAAAAAA') # rubocop:disable Layout/LineLength
+      assert_includes @workflow_execution.errors.full_messages,
+                      "Samples workflow executions[0] samplesheet params #{I18n.t(
+                        'validators.workflow_execution_samplesheet_params_validator.sample_puid_error',
+                        property: 'sample'
+                      )}"
       assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
     end
 
     test 'create new workflow execution with non matching attachments to sample' do
-      skip 'validator needs rewrite'
       samples_workflow_executions_attributes = {
         '0': {
           sample_id: samples(:sample2).id,
@@ -421,8 +424,11 @@ module WorkflowExecutions
 
       @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
 
-      assert @workflow_execution.errors.full_messages
-                                .include?('Attachment Attachment does not belong to Sample INXT_SAM_AAAAAAAAAB.')
+      assert_includes @workflow_execution.errors.full_messages,
+                      "Samples workflow executions[0] samplesheet params #{I18n.t(
+                        'validators.workflow_execution_samplesheet_params_validator.sample_attachment_error',
+                        property: 'fastq_1'
+                      )}"
       assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob)
     end
   end

@@ -26,6 +26,7 @@ class WorkflowExecution < ApplicationRecord
 
   validates :metadata, presence: true, json: { message: ->(errors) { errors }, schema: METADATA_JSON_SCHEMA }
   validate :validate_namespace
+  validate :validate_workflow_available, if: :initial?
 
   enum :state, %i[initial prepared submitted running completing completed error canceling canceled]
 
@@ -79,7 +80,17 @@ class WorkflowExecution < ApplicationRecord
   def validate_namespace
     return if %w[Group Project].include?(namespace.type)
 
-    errors.add(:base, 'workflow executions can only belong to a Project or Group namespace')
+    errors.add(:namespace, I18n.t('activerecord.errors.models.workflow_execution.invalid_namespace'))
+  end
+
+  def validate_workflow_available
+    return if Irida::Pipelines.instance.find_pipeline_by(metadata['workflow_name'], metadata['workflow_version'],
+                                                         'available').present?
+
+    errors.add(:base,
+               I18n.t('activerecord.errors.models.workflow_execution.invalid_workflow',
+                      workflow_name: metadata['workflow_name'],
+                      workflow_version: metadata['workflow_version']))
   end
 
   private

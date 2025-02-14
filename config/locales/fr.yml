@@ -206,6 +206,9 @@ fr:
           attributes:
             scopes:
               inclusion: can only contain available scopes
+        workflow_execution:
+          invalid_namespace: can only be Group or Project
+          invalid_workflow: unable to find workflow with name '%{workflow_name}' and version '%{workflow_version}'
     exceptions:
       personal_access_token:
         not_found: Could not find personal access token with id %{token_id}
@@ -1837,6 +1840,13 @@ fr:
       group_error: There group has errors
       numeric_operator_error: can only be used on numbers
       uniqueness_error: must be unique
+    workflow_execution_samplesheet_params_validator:
+      attachment_format_error: property '%{property}' must match the expected file format of '%{file_format}'
+      attachment_gid_error: property '%{property}' must be a valid Attachment GID
+      blank_error: property '%{property}' is required and cannot be blank
+      sample_attachment_error: property '%{property}' must belong to the Sample
+      sample_name_error: property '%{property}' must match Sample Name
+      sample_puid_error: property '%{property}' must match Sample PUID
   viral:
     pagy:
       limit_component:
@@ -1853,6 +1863,8 @@ fr:
       no_template: Aucun modèle
       remove_all: Remove all
   workflow_executions:
+    create:
+      error_message: 'The following errors prevented the Workflow Execution from being created:'
     edit_dialog:
       cancel_button: Cancel
       description: You are editing workflow execution '%{workflow_execution_id}'

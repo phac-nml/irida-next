@@ -25,6 +25,7 @@
   >
     <%= text_for(@workflow.description) %>
   </p>
+  <%= helpers.turbo_frame_tag "workflow_execution_errors" %>
   <%= form_with url: url, method: (instance.nil? ? :post : :patch),
                 data: { turbo_frame: "_top", "nextflow--samplesheet-target": "form" } do |form| %>
     <input id="submission_turbo" type="hidden" name="format" value="turbo_stream"/>
