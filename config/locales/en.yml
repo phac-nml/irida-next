@@ -461,8 +461,8 @@ en:
       email_notification: Receive an email notification when your analysis has completed?
       required: Required
       shared_with:
-        group: Share results with Group members?
-        project: Share results with Project members?
+        group: Share results with group members?
+        project: Share results with project members?
       update_samples: Update samples with analysis results
     project_dashboard:
       activity_title: Latest Activity
