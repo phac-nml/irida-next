@@ -48,8 +48,7 @@ export default class extends Controller {
     for (const item of this.allListItems) {
       this.availableList.append(item);
     }
-    this.templateSelectorTarget.value = "none";
-    this.#checkButtonStates();
+    this.#checkStates();
   }
 
   #constructAllListItems(listOne, listTwo) {
