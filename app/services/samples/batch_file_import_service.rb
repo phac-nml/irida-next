@@ -62,10 +62,7 @@ module Samples
       if @namespace.project_namespace?
         @namespace.id == project.namespace.id
       elsif @namespace.group_namespace?
-        authorized_scope(Project, type: :relation, as: :group_projects, scope_options: {
-                           group: @namespace,
-                           minimum_access_level: Member::AccessLevel::UPLOADER
-                         }).where(id: project.id).count.positive?
+        group_namespace_projects.select { |proj| proj.id == project.id }.count.positive?
       else
         false
       end
@@ -116,6 +113,15 @@ module Samples
           }
         end
       end
+    end
+
+    def group_namespace_projects
+      @group_namespace_projects ||= authorized_scope(
+        Project, type: :relation, as: :group_projects, scope_options: {
+          group: @namespace,
+          minimum_access_level: Member::AccessLevel::UPLOADER
+        }
+      )
     end
   end
 end
