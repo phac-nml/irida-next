@@ -189,7 +189,7 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     assert_nil data
   end
 
-  test 'filter samples with narray of values using advanced search should work' do
+  test 'filter samples with an array of values using advanced search should work' do
     result = IridaSchema.execute(SAMPLES_QUERY,
                                  context: { current_user: @user },
                                  variables: { filter: { advanced_search_groups: [[{

@@ -2449,7 +2449,7 @@ input SampleAdvancedSearchCondition {
   """
   Value of advanced search condition
   """
-  value: String
+  value: ValueScalar
 }
 
 """
@@ -2785,6 +2785,11 @@ type UserError {
   """
   path: [String!]
 }
+
+"""
+Sample Advanced Search Condition Value
+"""
+scalar ValueScalar
 
 """
 A workflow execution

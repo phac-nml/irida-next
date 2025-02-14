@@ -672,6 +672,9 @@ fr:
         project: Create new project
     screen_reader:
       close: Close
+  graphql:
+    value_scalar:
+      error: "%{value} must be a string or an array of strings"
   groups:
     activity:
       title: Group activity
