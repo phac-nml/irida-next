@@ -1,0 +1,18 @@
+<%= render WorkflowExecutions::TableComponent.new(
+  workflow_executions,
+  pagy,
+  q,
+  namespace: namespace,
+  search_params: @search_params,
+  abilities: {
+    select_workflow_executions: allowed_to?(:export_data?, namespace),
+  },
+  row_actions: {
+    cancel: allowed_to?(:update?, namespace),
+    destroy: allowed_to?(:update?, namespace),
+  },
+  empty: {
+    title: t(:".empty.title"),
+    description: t(:".empty.description"),
+  },
+) %>

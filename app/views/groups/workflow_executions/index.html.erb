@@ -1,3 +1,5 @@
+<%= turbo_frame_tag "selected" %>
+
 <%= render Viral::PageHeaderComponent.new(
   title: t(".title"),
   subtitle: t(".subtitle"),
@@ -55,3 +57,11 @@
     </div>
   </div>
 </div>
+
+<%= render partial: "table",
+locals: {
+  workflow_executions: @workflow_executions,
+  pagy: @pagy,
+  q: @q,
+  namespace: @namespace,
+} %>
