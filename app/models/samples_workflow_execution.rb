@@ -12,5 +12,5 @@ class SamplesWorkflowExecution < ApplicationRecord
 
   # TODO: Re-enable after validator has been rewritten to validate based on samplesheet schema from the pipeline
   # instead of assuming that all fields other than sample are attachemnts
-  # validates_with WorkflowExecutionSamplesheetParamsValidator
+  validates_with WorkflowExecutionSamplesheetParamsValidator
 end
