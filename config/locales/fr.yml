@@ -947,6 +947,14 @@ fr:
     update:
       success: Le groupe %{group_name} a été mis à jour avec succès
     workflow_executions:
+      files:
+        table_header:
+          created_at: Created At
+          filename: Filename
+          format: Format
+          puid: ID
+          size: Size
+          type: Type
       index:
         create_export_button: Créer une exportation
         deselect_all_button: Désélectionner tout
@@ -955,6 +963,21 @@ fr:
         select_all_button: Tout sélectionner
         subtitle: These are the workflow executions that have been shared within this group
         title: Exécutions de flux de travail
+      show:
+        cancel_button: Annuler
+        cancel_button_confirmation: Êtes-vous sûr de vouloir annuler cette exécution de flux de travail?
+        create_export_button: Créer une exportation
+        edit_button: Modifier
+        remove_button: Retirer
+        remove_button_confirmation: Êtes-vous sûr de vouloir supprimer cette exécution de flux de travail?
+      summary:
+        created_at: Créé
+        name: Nom
+        run_id: Exécuter l’identifiant
+        state: État
+        updated_at: Dernière mise à jour
+        workflow_name: Nom du flux de travail
+        workflow_version: Version du flux de travail
       table:
         empty:
           description: There are no workflow executions associated with this group.

@@ -947,6 +947,14 @@ en:
     update:
       success: Group %{group_name} was successfully updated
     workflow_executions:
+      files:
+        table_header:
+          created_at: Created At
+          filename: Filename
+          format: Format
+          puid: ID
+          size: Size
+          type: Type
       index:
         create_export_button: Create Export
         deselect_all_button: Deselect All
@@ -955,6 +963,20 @@ en:
         select_all_button: Select All
         subtitle: These are the workflow executions that have been shared within this group
         title: Workflow Executions
+      show:
+        cancel_button: Cancel
+        cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
+        create_export_button: Create Export
+        remove_button: Remove
+        remove_button_confirmation: Are you sure that you want to remove this workflow execution?
+      summary:
+        created_at: Created
+        name: Name
+        run_id: Run ID
+        state: State
+        updated_at: Last Updated
+        workflow_name: Workflow Name
+        workflow_version: Workflow Version
       table:
         empty:
           description: There are no workflow executions associated with this group.
