@@ -19,6 +19,8 @@ module Groups
       @workflow_name_col = '5'
       @workflow_version_col = '6'
       @created_at_col = '7'
+
+      Flipper.enable(:workflow_execution_sharing)
     end
 
     test 'should display a list of workflow executions' do
@@ -75,11 +77,11 @@ module Groups
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 3
         assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                        text: @workflow_execution_group_shared1.metadata['workflow_name']
+                        text: @workflow_execution_group_shared3.metadata['workflow_name']
         assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
                         text: @workflow_execution_group_shared2.metadata['workflow_name']
         assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
-                        text: @workflow_execution_group_shared3.metadata['workflow_name']
+                        text: @workflow_execution_group_shared1.metadata['workflow_name']
       end
     end
 
