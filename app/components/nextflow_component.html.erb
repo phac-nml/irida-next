@@ -5,6 +5,8 @@
   data-nextflow--samplesheet-url-value="<%= url %>"
   data-nextflow--samplesheet-workflow-value="<%= {name: @workflow.name, version: @workflow.version }.to_json%>"
   data-nextflow--samplesheet-no-selected-file-value="<%= t("nextflow.samplesheet.file_cell_component.no_selected_file")%>"
+  data-nextflow--samplesheet-processing-request-value="<%= t(".processing_request")%>"
+  data-nextflow--samplesheet-filtering-samples-value="<%= t(".filtering_samples")%>"
   data-action="
     nextflow--file:sendFileData->nextflow--samplesheet#updateFileData
     nextflow--metadata:sendMetadata->nextflow--samplesheet#updateMetadata
@@ -39,7 +41,7 @@
         <%= workflow.text_field :name,
                             value: instance.present? ? instance.name : nil,
                             class:
-                              "bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+                              "bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" %>
       </section>
 
       <%= workflow.hidden_field :namespace_id, value: @namespace_id %>
@@ -143,6 +145,7 @@
       <% if @samples.empty? %>
       type="submit"
       <% else %>
+      type="button"
       disabled="disabled"
       data-action="click->nextflow--samplesheet#submitSamplesheet"
       <% end %>
@@ -159,7 +162,7 @@
       class="flex items-center p-4 space-x-4"
       data-nextflow--samplesheet-target="spinner"
     >
-      <%= render SpinnerComponent.new(message: t(".processing_request")) %>
+      <%= render SpinnerComponent.new(message: t(".processing_samplesheet")) %>
     </span>
   <% end %>
 </div>

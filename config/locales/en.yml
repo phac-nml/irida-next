@@ -1036,6 +1036,7 @@ en:
         default: "%{label} (default)"
         required: Required
     samplesheet_component:
+      filter_placeholder: Filter by ID or name
       label: Samples
       next: Next
       page_selection:
@@ -1043,10 +1044,12 @@ en:
       previous: Previous
   nextflow_component:
     data_missing_error: 'The following samples are missing required data: '
+    filtering_samples: Filtering samples, this may take some time.
     name:
       helper: A custom name will make it easier to search for this in the future.
       label: Name (Optional)
-    processing_request: Processing your request
+    processing_request: Processing your submission, this may take some time.
+    processing_samplesheet: Processing samplesheet, this may take some time.
     submission_error: Something went wrong with the submission request.
   personal_access_tokens:
     revoke_confirmation:

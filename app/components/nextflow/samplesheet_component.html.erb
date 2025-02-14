@@ -5,7 +5,35 @@
   <div class="hidden" data-nextflow--samplesheet-target="samplesheetProperties">
     <%= @properties.to_json %>
   </div>
-  <label class="block mb-2 text-sm font-medium text-slate-900 dark:text-white"><%= t(".label") %></label>
+  <div class="flex mb-2 justify-between">
+    <label class="text-sm font-medium text-slate-900 dark:text-white mt-auto"><%= t(".label") %></label>
+    <div class="relative">
+      <input
+        id="samplesheet-filter"
+        data-nextflow--samplesheet-target="filter"
+        data-action="keydown.enter->nextflow--samplesheet#filter"
+        class="
+          t-search-component block w-full p-2.5 pl-10 text-sm text-slate-900 border
+          border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500
+          focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600
+          dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500
+          dark:focus:border-primary-500
+        "
+        placeholder="<%= t('.filter_placeholder')%>"
+        type="search"
+      />
+      <div
+        class="
+          absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
+        "
+      >
+        <%= viral_icon(
+          name: "magnifying_glass",
+          classes: "w-4 h-4 text-slate-500 dark:text-slate-400",
+        ) %>
+      </div>
+    </div>
+  </div>
   <div
     role="alert"
     class="
@@ -43,51 +71,21 @@
       ) %>
     <% end %>
   </div>
-  <% if samples_workflow_executions_attributes.count > 5 %>
-    <div id="samplesheet_pagination" class="flex items-center justify-end">
-      <nav aria-label="<%= t("viral.pagy.pagination_component.aria-label") %>">
-        <ul class="inline-flex h-10 text-base">
-          <li><button
-              type="button"
-              class="
-                flex items-center justify-center px-4 h-10 ms-0 leading-tight border
-                border-slate-300 dark:border-slate-700 cursor-default text-slate-600 bg-slate-50
-                dark:bg-slate-700 dark:text-slate-400 border-e-0 rounded-s-lg
-              "
-              data-action="click->nextflow--samplesheet#previousPage"
-              data-nextflow--samplesheet-target="previousBtn"
-              disabled="disabled"
-            ><%= t(".previous") %></button>
-          </li>
-          <li><select
-              class="
-                flex items-center justify-center px-4 h-10 ms-0 leading-tight border
-                border-slate-300 dark:border-slate-700 text-slate-500 bg-white
-                hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
-                dark:hover:bg-slate-700 dark:hover:text-white cursor-pointer focus:ring-0
-                focus:border-primary-500 dark:focus:border-primary-500
-              "
-              data-nextflow--samplesheet-target="pageNum"
-              data-action="change->nextflow--samplesheet#pageSelected"
-              aria-label="<%= t(".page_selection.aria_label") %>"
-            ><option value="1" selected="selected">1</option></select>
-          </li>
-          <li><button
-              class="
-                flex items-center justify-center px-4 h-10 ms-0 leading-tight border
-                border-slate-300 dark:border-slate-700 text-slate-500 bg-white
-                hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
-                dark:hover:bg-slate-700 dark:hover:text-white rounded-e-lg border-l-0
-              "
-              type="button"
-              data-nextflow--samplesheet-target="nextBtn"
-              data-action="click->nextflow--samplesheet#nextPage"
-            ><%= t(".next") %></button>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  <% end %>
+  <div
+    data-nextflow--samplesheet-target="emptyState"
+    class="hidden flex justify-center"
+  >
+    <%= render Viral::EmptyStateComponent.new(
+      icon_name: :magnifying_glass,
+      title: t("components.viral.pagy.empty_state.title"),
+      description: t("components.viral.pagy.empty_state.description"),
+    ) %>
+  </div>
+  <div
+    data-nextflow--samplesheet-target="paginationContainer"
+    class="flex items-center justify-end"
+  >
+  </div>
 </div>
 
 <template data-nextflow--samplesheet-target="cellContainer">
@@ -168,4 +166,48 @@ data: {
     name="NAME_PLACEHOLDER"
     id="ID_PLACEHOLDER"
   />
+</template>
+
+<template data-nextflow--samplesheet-target="pagination">
+  <nav aria-label="<%= t("viral.pagy.pagination_component.aria-label") %>">
+    <ul class="inline-flex h-10 text-base">
+      <li><button
+          type="button"
+          class="
+            flex items-center justify-center px-4 h-10 ms-0 leading-tight border
+            border-slate-300 dark:border-slate-700 cursor-default text-slate-600 bg-slate-50
+            dark:bg-slate-700 dark:text-slate-400 border-e-0 rounded-s-lg
+          "
+          data-action="click->nextflow--samplesheet#previousPage"
+          data-nextflow--samplesheet-target="previousBtn"
+          disabled="disabled"
+        ><%= t(".previous") %></button>
+      </li>
+      <li><select
+          class="
+            flex items-center justify-center px-4 h-10 ms-0 leading-tight border
+            border-slate-300 dark:border-slate-700 text-slate-500 bg-white
+            hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
+            dark:hover:bg-slate-700 dark:hover:text-white cursor-pointer focus:ring-0
+            focus:border-primary-500 dark:focus:border-primary-500
+          "
+          data-nextflow--samplesheet-target="pageNum"
+          data-action="change->nextflow--samplesheet#pageSelected"
+          aria-label="<%= t(".page_selection.aria_label") %>"
+        ><option value="1" selected="selected">1</option></select>
+      </li>
+      <li><button
+          class="
+            flex items-center justify-center px-4 h-10 ms-0 leading-tight border
+            border-slate-300 dark:border-slate-700 text-slate-500 bg-white
+            hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
+            dark:hover:bg-slate-700 dark:hover:text-white rounded-e-lg border-l-0
+          "
+          type="button"
+          data-nextflow--samplesheet-target="nextBtn"
+          data-action="click->nextflow--samplesheet#nextPage"
+        ><%= t(".next") %></button>
+      </li>
+    </ul>
+  </nav>
 </template>

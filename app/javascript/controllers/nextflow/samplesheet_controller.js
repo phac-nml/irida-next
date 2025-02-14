@@ -22,6 +22,10 @@ export default class extends Controller {
     "metadataIndexStart",
     "metadataIndexEnd",
     "dataPayload",
+    "filter",
+    "pagination",
+    "paginationContainer",
+    "emptyState",
   ];
 
   static values = {
@@ -29,6 +33,8 @@ export default class extends Controller {
     submissionError: { type: String },
     url: { type: String },
     noSelectedFile: { type: String },
+    processingRequest: { type: String },
+    filteringSamples: { type: String },
   };
 
   #pagination_button_disabled_state = [
@@ -59,8 +65,16 @@ export default class extends Controller {
   #requiredColumns = [];
 
   // pagination page params
-  #currentPage = 1;
+  #currentPage;
   #lastPage;
+
+  // sample data within the samplesheet is centered around which index they're at.
+  // Main use case for having an array of sample indexes is for filtering,
+  // where we can easily access samples via a wide range of indexes when the sample list is filtered down
+  #currentSampleIndexes = [];
+
+  #filterableColumns = [];
+  #totalSamples;
 
   // samplesheetProperties contains all the parameters of each field type to the associated pipeline
   #samplesheetProperties;
@@ -81,12 +95,14 @@ export default class extends Controller {
     );
     // clear the now unnecessary DOM element
     this.samplesheetPropertiesTarget.remove();
+
     this.#samplesheetAttributes = JSON.parse(
       this.workflowAttributesTarget.innerText,
     );
-
     // clear the now unnecessary DOM element
     this.workflowAttributesTarget.remove();
+
+    this.#totalSamples = Object.keys(this.#samplesheetAttributes).length;
     this.#columnNames = Object.keys(this.#samplesheetProperties);
 
     // set required columns
@@ -102,15 +118,14 @@ export default class extends Controller {
     // enter all initial/autoloaded sample data into FormData
     this.#setInitialSamplesheetData();
 
-    // set last page based on number of samples
-    this.#lastPage = Math.ceil(
-      Object.keys(this.#samplesheetAttributes).length / 5,
-    );
+    // set initial sample indexes to include all samples
+    this.#setCurrentSampleIndexesToAll();
 
-    // create the page dropdown options if there's more than one page
-    if (this.#lastPage > 1) {
-      this.#generatePageNumberDropdown();
-    }
+    // specify the available columns for filtering
+    this.#setFilterableColumns();
+
+    // setup pagination
+    this.#setPagination();
     // render samplesheet table
     this.#loadTableData();
   }
@@ -143,34 +158,37 @@ export default class extends Controller {
 
   submitSamplesheet(event) {
     event.preventDefault();
-    this.#enableProcessingState();
-    let missingData = this.#validateData();
-    if (Object.keys(missingData).length > 0) {
-      this.#disableProcessingState();
-      let errorMsg = this.dataMissingErrorValue;
-      for (const sample in missingData) {
-        errorMsg =
-          errorMsg + `\n - ${sample}: ${missingData[sample].join(", ")}`;
-      }
-      this.#enableErrorState(errorMsg);
-    } else {
-      this.#combineFormData();
-      fetch(this.urlValue, {
-        method: "POST",
-        body: new URLSearchParams(this.#formData),
-        credentials: "same-origin",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }).then((response) => {
+    this.#enableProcessingState(this.processingRequestValue);
+    // 50ms timeout allows the browser to update the DOM elements enabling the overlay prior to starting the submission
+    setTimeout(() => {
+      let missingData = this.#validateData();
+      if (Object.keys(missingData).length > 0) {
         this.#disableProcessingState();
-        if (response.redirected && response.status == "200") {
-          window.location.href = response.url;
-        } else {
-          this.#enableErrorState(this.submissionErrorValue);
+        let errorMsg = this.dataMissingErrorValue;
+        for (const sample in missingData) {
+          errorMsg =
+            errorMsg + `\n - ${sample}: ${missingData[sample].join(", ")}`;
         }
-      });
-    }
+        this.#enableErrorState(errorMsg);
+      } else {
+        this.#combineFormData();
+        fetch(this.urlValue, {
+          method: "POST",
+          body: new URLSearchParams(this.#formData),
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }).then((response) => {
+          this.#disableProcessingState();
+          if (response.redirected && response.status == "200") {
+            window.location.href = response.url;
+          } else {
+            this.#enableErrorState(this.submissionErrorValue);
+          }
+        });
+      }
+    }, 50);
   }
 
   #validateData() {
@@ -202,7 +220,8 @@ export default class extends Controller {
     }
   }
 
-  #enableProcessingState() {
+  #enableProcessingState(message) {
+    document.getElementById("spinner-message").innerHTML = message;
     this.submitTarget.disabled = true;
     this.spinnerTarget.classList.remove("hidden");
   }
@@ -273,46 +292,56 @@ export default class extends Controller {
   }
 
   #loadTableData() {
-    let startingIndex = (this.#currentPage - 1) * 5;
-    let lastIndex = startingIndex + 5;
-    if (
-      this.#currentPage == this.#lastPage &&
-      Object.keys(this.#samplesheetAttributes).length % 5 != 0
-    ) {
-      lastIndex =
-        (Object.keys(this.#samplesheetAttributes).length % 5) + startingIndex;
-    }
-
-    this.#columnNames.forEach((columnName) => {
-      let columnNode = document.getElementById(`metadata-${columnName}-column`);
-      for (let i = startingIndex; i < lastIndex; i++) {
-        let container = this.#generateCellContainer(columnNode, columnName, i);
-        switch (this.#samplesheetProperties[columnName]["cell_type"]) {
-          case "sample_cell":
-          case "sample_name_cell":
-            this.#generateSampleCell(container, columnName, i);
-            break;
-          case "dropdown_cell":
-            this.#generateDropdownCell(
-              container,
-              columnName,
-              i,
-              this.#samplesheetProperties[columnName]["enum"],
-            );
-            break;
-          case "fastq_cell":
-          case "file_cell":
-            this.#generateFileCell(container, columnName, i);
-            break;
-          case "metadata_cell":
-            this.#generateMetadataCell(container, columnName, i);
-            break;
-          case "input_cell":
-            this.#generateTextCell(container, columnName, i);
-            break;
-        }
+    if (this.#currentSampleIndexes.length > 0) {
+      this.emptyStateTarget.classList.add("hidden");
+      let startingIndex = (this.#currentPage - 1) * 5;
+      let lastIndex = startingIndex + 5;
+      if (
+        this.#currentPage == this.#lastPage &&
+        this.#currentSampleIndexes.length % 5 != 0
+      ) {
+        lastIndex = (this.#currentSampleIndexes.length % 5) + startingIndex;
       }
-    });
+      this.#columnNames.forEach((columnName) => {
+        let columnNode = document.getElementById(
+          `metadata-${columnName}-column`,
+        );
+        for (let i = startingIndex; i < lastIndex; i++) {
+          let sampleIndex = this.#currentSampleIndexes[i];
+          let container = this.#generateCellContainer(
+            columnNode,
+            columnName,
+            sampleIndex,
+          );
+          switch (this.#samplesheetProperties[columnName]["cell_type"]) {
+            case "sample_cell":
+            case "sample_name_cell":
+              this.#generateSampleCell(container, columnName, sampleIndex);
+              break;
+            case "dropdown_cell":
+              this.#generateDropdownCell(
+                container,
+                columnName,
+                sampleIndex,
+                this.#samplesheetProperties[columnName]["enum"],
+              );
+              break;
+            case "fastq_cell":
+            case "file_cell":
+              this.#generateFileCell(container, columnName, sampleIndex);
+              break;
+            case "metadata_cell":
+              this.#generateMetadataCell(container, columnName, sampleIndex);
+              break;
+            case "input_cell":
+              this.#generateTextCell(container, columnName, sampleIndex);
+              break;
+          }
+        }
+      });
+    } else {
+      this.emptyStateTarget.classList.remove("hidden");
+    }
   }
 
   // inserting the template html then requerying it out via lastElementChild turns the node from textNode into an
@@ -413,6 +442,21 @@ export default class extends Controller {
     }
   }
 
+  #setPagination() {
+    this.#currentPage = 1;
+    this.paginationContainerTarget.innerHTML = "";
+    // set last page based on number of samples
+    this.#lastPage = Math.ceil(this.#currentSampleIndexes.length / 5);
+    // create the page dropdown options if there's more than one page
+    if (this.#lastPage > 1) {
+      this.paginationContainerTarget.insertAdjacentHTML(
+        "beforeend",
+        this.paginationTarget.innerHTML,
+      );
+      this.#generatePageNumberDropdown();
+    }
+  }
+
   previousPage() {
     this.#currentPage -= 1;
     this.pageNumTarget.value = this.#currentPage;
@@ -431,8 +475,9 @@ export default class extends Controller {
   }
 
   #updatePageData() {
-    this.#verifyPaginationButtonStates();
-
+    if (this.#lastPage > 1) {
+      this.#verifyPaginationButtonStates();
+    }
     // delete the table data and reload with new indexes
     this.#columnNames.forEach((columnName) => {
       document.getElementById(`metadata-${columnName}-column`).innerHTML = "";
@@ -466,13 +511,12 @@ export default class extends Controller {
   }
 
   #generatePageNumberDropdown() {
-    let pageSelection = this.pageNumTarget;
     // page 1 is already added by default
     for (let i = 2; i < this.#lastPage + 1; i++) {
       let option = document.createElement("option");
       option.value = i;
       option.innerHTML = i;
-      pageSelection.appendChild(option);
+      this.pageNumTarget.appendChild(option);
     }
   }
 
@@ -491,6 +535,56 @@ export default class extends Controller {
   #clearPayload() {
     if (this.hasDataPayloadTarget) {
       this.dataPayloadTarget.remove();
+    }
+  }
+
+  #setCurrentSampleIndexesToAll() {
+    this.#currentSampleIndexes = [
+      ...Array(Object.keys(this.#samplesheetAttributes).length).keys(),
+    ];
+  }
+
+  // when filtering samples, we will add the indexes of samples that fit the filter into the #currentSampleIndexes array.
+  // we can then easily access each sample's data via its index and still paginate in pages of 5
+  filter() {
+    this.#enableProcessingState(this.filteringSamplesValue);
+    // 50ms timeout allows the browser to update the DOM elements enabling the overlay prior to starting the filtering process
+    setTimeout(() => {
+      if (this.filterTarget.value) {
+        this.#currentSampleIndexes = [];
+        for (let i = 0; i < this.#totalSamples; i++) {
+          for (let j = 0; j < this.#filterableColumns.length; j++) {
+            if (
+              this.#samplesheetAttributes[i]["samplesheet_params"][
+                this.#filterableColumns[j]
+              ]["form_value"]
+                .toLowerCase()
+                .includes(this.filterTarget.value.toLowerCase())
+            ) {
+              this.#currentSampleIndexes.push(i);
+              break;
+            }
+          }
+        }
+      } else {
+        // reset table to include all samples if filter is empty
+        this.#setCurrentSampleIndexesToAll();
+      }
+
+      this.#disableProcessingState();
+      this.#setPagination();
+      this.#updatePageData();
+    }, 50);
+  }
+
+  // check samplesheet properties for sample and sample_name and add them as filterable if present
+  #setFilterableColumns() {
+    if (this.#samplesheetProperties.hasOwnProperty("sample")) {
+      this.#filterableColumns.push("sample");
+    }
+
+    if (this.#samplesheetProperties.hasOwnProperty("sample_name")) {
+      this.#filterableColumns.push("sample_name");
     }
   }
 }
