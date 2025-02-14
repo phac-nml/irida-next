@@ -158,7 +158,7 @@ export default class extends Controller {
 
   submitSamplesheet(event) {
     event.preventDefault();
-    this.#enableProcessingState(this.processingRequestValue);
+    this.#enableProcessingState();
     // 50ms timeout allows the browser to update the DOM elements enabling the overlay prior to starting the submission
     setTimeout(() => {
       let missingData = this.#validateData();
@@ -183,10 +183,20 @@ export default class extends Controller {
           this.#disableProcessingState();
           if (response.redirected && response.status == "200") {
             window.location.href = response.url;
+            return nil
+          } else if (response.status == "422") {
+            return response.text();
           } else {
             this.#enableErrorState(this.submissionErrorValue);
+            return nil;
           }
-        });
+        }).then(((data) => {
+          if (data) {
+            let responseElement = document.createElement("div");
+            responseElement.innerHTML = data;
+            document.querySelector('main').appendChild(responseElement);
+          }
+        }));
       }
     }, 50);
   }

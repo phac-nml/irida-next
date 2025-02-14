@@ -1861,6 +1861,8 @@ en:
       add_all: Add all
       remove_all: Remove all
   workflow_executions:
+    create:
+      error_message: 'The following errors prevented the Workflow Execution from being created:'
     edit_dialog:
       cancel_button: Cancel
       description: You are editing workflow execution '%{workflow_execution_id}'
