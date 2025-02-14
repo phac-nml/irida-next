@@ -26,8 +26,12 @@ module Groups
     end
 
     def load_workflows
-      authorized_scope(WorkflowExecution, type: :relation, as: :group_shared,
-                                          scope_options: { group: @group })
+      if Flipper.enabled?(:workflow_execution_sharing)
+        authorized_scope(WorkflowExecution, type: :relation, as: :group_shared,
+                                            scope_options: { group: @group })
+      else
+        WorkflowExecution.none
+      end
     end
 
     def current_page
