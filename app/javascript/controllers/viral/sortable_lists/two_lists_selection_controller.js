@@ -107,11 +107,15 @@ export default class extends Controller {
 
       let template = "none";
       for (const option of this.templateSelectorTarget.options) {
-        const templateFields = option.dataset.fields;
+        if(typeof option.dataset.fields !== "undefined") {
+        const templateFields = JSON.stringify(
+          JSON.parse(option.dataset.fields),
+        );
         if (templateFields === selectedListValues) {
           template = option.value;
           break;
         }
+      }
       }
       this.templateSelectorTarget.value = template;
     }
@@ -183,33 +187,31 @@ export default class extends Controller {
         return;
       }
 
-      const fields = selectedOption.dataset.fields || "";
-
-      // Get all list items from both lists
-      const allItems = this.#constructAllListItems(
-        this.availableList,
-        this.selectedList,
-      );
+      // Reset the lists to their initial state
+      // Move all items to available list in one operation for better performance
+      this.availableList.append(...this.allListItems);
+      this.selectedList.innerHTML = "";
 
       // Handle "none" template selection by removing all items
       if (templateId === "none") {
-        this.removeAll(event);
         return;
       }
 
       // Sort items into selected/available lists based on template fields
-      allItems.forEach((item) => {
-        if (!item || !item.innerText) {
-          console.warn("Invalid list item encountered");
-          return;
-        }
+      // but maintain the order of the items in the template fields
+      const fields = JSON.parse(selectedOption.dataset.fields);
+      const items = Array.from(this.availableList.querySelectorAll("li"));
+      const textFields = Array.from(items).map((item) => item.innerText);
 
-        if (fields.includes(item.innerText)) {
-          this.selectedList.append(item);
-        } else {
-          this.availableList.append(item);
+      fields.forEach((element) => {
+        const index = textFields.indexOf(element);
+        if (index !== -1) {
+          this.selectedList.append(items[index]);
+          items.splice(index, 1);
+          textFields.splice(index, 1);
         }
       });
+      this.availableList.append(...items);
 
       this.#checkButtonStates();
     } catch (error) {
