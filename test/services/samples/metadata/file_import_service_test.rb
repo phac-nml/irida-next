@@ -62,18 +62,19 @@ module Samples
                             name: @group.name), exception.result.message
       end
 
-      test 'import sample metadata with empty params' do
-        assert_empty Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, @blob.id, {}).execute
-        assert_equal(@project.namespace.errors.full_messages_for(:base).first,
-                     I18n.t('services.samples.metadata.import_file.empty_sample_id_column'))
-      end
+      test 'import sample metadata with empty file' do
+        file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/metadata/empty.csv'))
+        blob = ActiveStorage::Blob.create_and_upload!(
+          io: file,
+          filename: file.original_filename,
+          content_type: file.content_type
+        )
 
-      # test 'import sample metadata with no file' do
-      #   params = { sample_id_column: 'sample_name' }
-      #   assert_empty Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, params).execute
-      #   assert_equal(@project.namespace.errors.full_messages_for(:base).first,
-      #                I18n.t('services.samples.metadata.import_file.empty_file'))
-      # end
+        params = { sample_id_column: 'sample_name' }
+        assert_empty Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, blob.id, params).execute
+        assert_equal(@project.namespace.errors.full_messages_for(:base).first,
+                     I18n.t('services.spreadsheet_import.missing_header', header_title: 'sample_name'))
+      end
 
       test 'import sample metadata via csv file using sample names for project namespace' do
         assert_equal({}, @sample1.metadata)
@@ -240,7 +241,7 @@ module Samples
         params = { sample_id_column: 'sample_name' }
         assert_empty Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, blob.id, params).execute
         assert_equal(@project.namespace.errors.full_messages_for(:base).first,
-                     I18n.t('services.samples.metadata.import_file.invalid_file_extension'))
+                     I18n.t('services.spreadsheet_import.invalid_file_extension'))
       end
 
       test 'import sample metadata with no sample_id_column' do
@@ -257,7 +258,7 @@ module Samples
         params = { sample_id_column: 'sample_name' }
         assert_empty Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, blob.id, params).execute
         assert_equal(@project.namespace.errors.full_messages_for(:base).first,
-                     I18n.t('services.samples.metadata.import_file.missing_sample_id_column'))
+                     I18n.t('services.spreadsheet_import.missing_header', header_title: 'sample_name'))
       end
 
       test 'import sample metadata with duplicate column names' do
@@ -272,7 +273,7 @@ module Samples
         params = { sample_id_column: 'sample_name' }
         assert_empty Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, blob.id, params).execute
         assert_equal(@project.namespace.errors.full_messages_for(:base).first,
-                     I18n.t('services.samples.metadata.import_file.duplicate_column_names'))
+                     I18n.t('services.spreadsheet_import.duplicate_column_names'))
       end
 
       test 'import sample metadata with no metadata columns' do
@@ -289,7 +290,7 @@ module Samples
         params = { sample_id_column: 'sample_name' }
         assert_empty Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, blob.id, params).execute
         assert_equal(@project.namespace.errors.full_messages_for(:base).first,
-                     I18n.t('services.samples.metadata.import_file.missing_metadata_column'))
+                     I18n.t('services.spreadsheet_import.missing_data_columns'))
       end
 
       test 'import sample metadata with no metadata rows' do
@@ -304,7 +305,7 @@ module Samples
         params = { sample_id_column: 'sample_name' }
         assert_empty Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, blob.id, params).execute
         assert_equal(@project.namespace.errors.full_messages_for(:base).first,
-                     I18n.t('services.samples.metadata.import_file.missing_metadata_row'))
+                     I18n.t('services.spreadsheet_import.missing_data_row'))
       end
 
       test 'import sample metadata with an empty header' do

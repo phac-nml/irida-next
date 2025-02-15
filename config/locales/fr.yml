@@ -21,6 +21,7 @@ fr:
         destroy_metadata_templates?: You are not authorized to destroy metadata templates for group %{name} on this server.
         edit?: You are not authorized to modify group %{name} on this server.
         export_data?: You are not authorized to export data from project %{name} on this server.
+        import_samples_and_metadata?: You are not authorized to import samples and metadata for group %{name} on this server.
         link_namespace_with_group?: You are not authorized to link group %{name} with other groups on this server.
         member_listing?: You are not authorized to view members for group %{name} on this server.
         new?: You are not authorized to create a project under group %{name} on this server.
@@ -50,6 +51,7 @@ fr:
         destroy_member?: You are not authorized to remove members from the project namespace %{name} on this server.
         destroy_metadata_templates?: You are not authorized to destroy metadata templates for project %{name} on this server.
         export_data?: You are not authorized to export data from project %{name} on this server.
+        import_samples_and_metadata?: You are not authorized to import samples and metadata for group %{name} on this server.
         link_namespace_with_group?: You are not authorized to link project %{name} with other groups on this server.
         member_listing?: You are not authorized to view members for the project namespace %{name} on this server.
         submit_workflow?: You are not authorized to submit workflows for samples within project %{name} on this server.
@@ -1736,6 +1738,10 @@ fr:
         namespace_project_exists: Project with the same name or path already exists in the target namespace.
         project_in_namespace: Project in namespace
     samples:
+      batch_import:
+        duplicate_sample_name: Duplicate sample name on index '%{index}'
+        project_puid_not_found: Project PUID '%{project_puid}' could not be found
+        project_puid_not_in_namespace: Project PUID '%{project_puid}' is not accessible from namespace '%{namespace}, or you do not have permission to create samples on the shared project within the namespace'
       clone:
         empty_new_project_id: Destination project was not selected.
         empty_sample_ids: The sample ids are empty.
@@ -1749,13 +1755,6 @@ fr:
           sample_does_not_belong_to_project: Sample '%{sample_name}'' does not belong to project '%{project_name}'
           single_all_keys_exist: Metadata key '%{key}' already exist.
         import_file:
-          duplicate_column_names: The file has duplicate column header names. Please remove the columns with duplicate header names and retry uploading.
-          empty_file: The file cannot be empty.
-          empty_sample_id_column: The sample id column cannot be empty.
-          invalid_file_extension: The file can only be a csv or excel.
-          missing_metadata_column: The file does not have any metadata columns. Please add some columns of metadata to the file and retry uploading.
-          missing_metadata_row: The file does not have any metadata rows. Please add some rows of metadata to the file and retry uploading.
-          missing_sample_id_column: The file is missing the sample id column.  Please make sure the sample id column exists and retry uploading.
           sample_metadata_fields_not_updated: Sample '%{sample_name}' with field(s) '%{metadata_fields}' cannot be updated.
           sample_not_found_within_group: Could not find sample with puid '%{sample_puid}' in this group.
           sample_not_found_within_project: Could not find sample with puid or name '%{sample_puid}' in this project.
@@ -1773,6 +1772,13 @@ fr:
         same_project: The samples already exist in the project. Please select a different project.
         sample_exists: 'Sample %{sample_puid}: Conflicts with sample named ''%{sample_name}'' in the target project'
         samples_not_found: 'Samples with the following sample ids could not be transferred as they were not found in the source project: %{sample_ids}'
+    spreadsheet_import:
+      duplicate_column_names: The file has duplicate column header names. Please remove the columns with duplicate header names and retry uploading.
+      invalid_file_extension: The file can only be a csv, tsv or excel.
+      missing_data_columns: File is missing data columns. Please add additional data columns and headers and retry uploading.
+      missing_data_row: The file does not have any data rows. Please add some rows of data to the file and retry uploading.
+      missing_field: Row with index '%{index}' is missing required fields
+      missing_header: File is missing the header(s) '%{header_title}'
   shared:
     alert:
       list:

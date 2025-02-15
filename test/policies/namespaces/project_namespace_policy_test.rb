@@ -66,6 +66,10 @@ module Namespaces
       assert @policy.apply(:update_sample_metadata?)
     end
 
+    test '#import_samples_and_metadata?' do
+      assert @policy.apply(:import_samples_and_metadata?)
+    end
+
     test '#create_metadata_templates?' do
       assert @policy.apply(:create_metadata_templates?)
     end

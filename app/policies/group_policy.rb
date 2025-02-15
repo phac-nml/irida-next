@@ -230,6 +230,13 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
+  def import_samples_and_metadata?
+    return true if Member::AccessLevel.manageable.include?(effective_access_level)
+
+    details[:name] = record.name
+    false
+  end
+
   def view_attachments?
     return true if effective_access_level >= Member::AccessLevel::ANALYST
 

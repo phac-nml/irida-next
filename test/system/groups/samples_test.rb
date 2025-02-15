@@ -814,7 +814,7 @@ module Groups
         perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
       within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('services.samples.metadata.import_file.invalid_file_extension')
+        assert_text I18n.t('services.spreadsheet_import.invalid_file_extension')
       end
     end
 
@@ -892,7 +892,7 @@ module Groups
         perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
       within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('services.samples.metadata.import_file.duplicate_column_names')
+        assert_text I18n.t('services.spreadsheet_import.duplicate_column_names')
       end
     end
 
@@ -907,7 +907,7 @@ module Groups
         perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
       within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('services.samples.metadata.import_file.missing_metadata_row')
+        assert_text I18n.t('services.spreadsheet_import.missing_data_row')
       end
     end
 
@@ -922,7 +922,7 @@ module Groups
         perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
       within %(turbo-frame[id="samples_dialog"]) do
-        assert_text I18n.t('services.samples.metadata.import_file.missing_metadata_column')
+        assert_text I18n.t('services.spreadsheet_import.missing_data_columns')
       end
     end
 
