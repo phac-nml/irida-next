@@ -28,6 +28,7 @@ module MetadataTemplates
       @metadata_template.namespace.create_activity key: activity_key,
                                                    owner: current_user,
                                                    parameters: {
+                                                     template_id: @metadata_template.id,
                                                      template_name: @metadata_template.name,
                                                      namespace_id: @metadata_template.namespace.id,
                                                      action: 'metadata_template_destroy'
