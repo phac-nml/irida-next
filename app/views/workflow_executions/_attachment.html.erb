@@ -1,6 +1,9 @@
 <tr
   id="<%= dom_id(attachment) %>"
-  class="bg-white border-b dark:bg-slate-800 dark:border-slate-700 text-slate-500 dark:text-slate-400"
+  class="
+    bg-white border-b dark:bg-slate-800 dark:border-slate-700 text-slate-500
+    dark:text-slate-400
+  "
 >
   <td class="px-6 py-4">
     <%= attachment.puid %>
@@ -14,7 +17,7 @@
             <%= link_to attachment.file.filename,
             rails_blob_path(attachment),
             data: {
-              turbo: false
+              turbo: false,
             },
             class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
           </span>
@@ -25,7 +28,7 @@
             <%= link_to attachment.associated_attachment.file.filename,
             rails_blob_path(attachment.associated_attachment),
             data: {
-              turbo: false
+              turbo: false,
             },
             class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
           </span>
@@ -41,7 +44,7 @@
             <%= link_to attachment.file.filename,
             rails_blob_path(attachment.file),
             data: {
-              turbo: false
+              turbo: false,
             },
             class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
           </span>
@@ -52,11 +55,11 @@
 
   <td class="px-6 py-4"><%= viral_pill(
       text: attachment.metadata["format"],
-      color: find_pill_color_for_attachment(attachment, "format")
+      color: find_pill_color_for_attachment(attachment, "format"),
     ) %></td>
   <td class="px-6 py-4"><%= viral_pill(
       text: attachment.metadata["type"],
-      color: find_pill_color_for_attachment(attachment, "type")
+      color: find_pill_color_for_attachment(attachment, "type"),
     ) %></td>
 
   <% if attachment.associated_attachment %>
@@ -74,5 +77,24 @@
 
   <td class="px-6 py-4">
     <%= local_time_ago(attachment.created_at) %>
+  </td>
+
+  <td class="px-6 py-4 space-x-2 flex justify-end">
+    <button class="text-blue-600 dark:text-blue-100 font-semibold hover:underline"><%= t(".preview") %></button>
+    <% if attachment.associated_attachment %>
+      <%= link_to attachment.associated_attachment.file.filename,
+      rails_blob_path(attachment.associated_attachment),
+      data: {
+        turbo: false,
+      },
+      class: "text-blue-900 dark:text-blue-100 font-semibold hover:underline" %>
+    <% else %>
+      <%= link_to t(".download"),
+      rails_blob_path(attachment.file),
+      data: {
+        turbo: false,
+      },
+      class: "text-blue-600 dark:text-blue-100 font-semibold hover:underline" %>
+    <% end %>
   </td>
 </tr>

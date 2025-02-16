@@ -2,22 +2,13 @@
   <table
     id="files-table"
     class="
-      w-full
-      text-sm
-      text-left
-      rtl:text-right
-      text-slate-500
-      dark:text-slate-400
-      whitespace-nowrap
+      w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+      whitespace-nowrap table-auto
     "
   >
     <thead
       class="
-        text-xs
-        text-slate-700
-        uppercase
-        bg-slate-50
-        dark:bg-slate-700
+        text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700
         dark:text-slate-400
       "
     >
@@ -25,14 +16,7 @@
         <th
           scope="col"
           class="
-            px-6
-            py-3
-            text-left
-            bg-slate-50
-            dark:bg-slate-700
-            sticky
-            left-0
-            z-10
+            px-6 py-3 text-left bg-slate-50 dark:bg-slate-700 sticky left-0 z-10
           "
         ><%= t(:".table_header.puid") %></th>
         <th scope="col" class="px-6 py-3"><%= t(:".table_header.filename") %></th>
@@ -40,16 +24,13 @@
         <th scope="col" class="px-6 py-3"><%= t(:".table_header.type") %></th>
         <th scope="col" class="px-6 py-3"><%= t(:".table_header.size") %></th>
         <th scope="col" class="px-6 py-3"><%= t(:".table_header.created_at") %></th>
+        <th scope="col" class="px-6 py-3 text-right"><%= t(:".table_header.actions") %></th>
       </tr>
     </thead>
     <tbody
       id="attachments-table-body"
       class="
-        bg-white
-        divide-y
-        divide-slate-200
-        dark:bg-slate-800
-        dark:divide-slate-700
+        bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
       "
     >
       <% @attachments.each do |attachment| %>
