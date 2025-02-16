@@ -346,7 +346,7 @@ en:
         title: Delete File
       new_attachment_component:
         files: Files
-        files_ignored: "fasta and fastq files must be compressed. The following file(s) cannot be uploaded:"
+        files_ignored: 'fasta and fastq files must be compressed. The following file(s) cannot be uploaded:'
         upload: Upload
         upload_files: Upload Files
         uploading: Uploading
@@ -431,7 +431,7 @@ en:
       transferred_by: "%{type} transferred by %{user}"
     history_version:
       current_version: Current (Version %{version})
-      keys_deleted: "Keys deleted:"
+      keys_deleted: 'Keys deleted:'
       previous_version: Previous (Version %{version})
     list_filter:
       apply: Apply filter
@@ -470,7 +470,7 @@ en:
   concerns:
     attachment_actions:
       destroy:
-        error: "File %{filename} was not removed due to the following errors: %{errors}"
+        error: 'File %{filename} was not removed due to the following errors: %{errors}'
     bot_actions:
       create:
         success: Bot account was successfully added
@@ -582,14 +582,14 @@ en:
         status: Status
       title: Data Exports
     list_workflow_execution:
-      id: "ID:"
-      name: "Name:"
-      run_id: "Run ID:"
-      workflow: "Workflow:"
+      id: 'ID:'
+      name: 'Name:'
+      run_id: 'Run ID:'
+      workflow: 'Workflow:'
     new:
       after_submission_description_html: After submission, you will be redirected to the export page. While the export status is <span class="px-2.5 py-0.5 mr-1 ml-1 text-xs font-medium rounded-full bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300">processing</span>, the contents of the export are being created. Once the export status is <span class="px-2.5 py-0.5 ml-1 text-xs font-medium text-green-800 bg-green-100 rounded-full dark:bg-green-900 dark:text-green-300">ready</span>, it will be available for download. You will have 3 business days to download the export before it's deleted.
       email_label: Receive an email notification when your export is ready to download?
-      name_label: "Export Name (Optional):"
+      name_label: 'Export Name (Optional):'
       sample_description:
         plural: This export will contain COUNT_PLACEHOLDER samples.
         singular: This export will contain 1 sample.
@@ -657,7 +657,7 @@ en:
   errors:
     messages:
       not_saved:
-        one: "1 error prohibited this %{resource} from being saved:"
+        one: '1 error prohibited this %{resource} from being saved:'
         other: "%{count} errors prohibited this %{resource} from being saved:"
   general:
     default_sidebar:
@@ -690,7 +690,7 @@ en:
       title: Group activity
     attachments:
       create:
-        failure: "File %{filename} was not uploaded due to the following errors: %{errors}"
+        failure: 'File %{filename} was not uploaded due to the following errors: %{errors}'
         success: File %{filename} was successfully uploaded.
       destroy:
         success: File %{filename} was successfully removed.
@@ -764,18 +764,18 @@ en:
         transfer:
           confirm:
             points_html:
-              - To prevent accidental actions we ask you to confirm your intention.
-              - Please type <kbd>%{group}</kbd> to proceed or close this dialog to cancel.
+            - To prevent accidental actions we ask you to confirm your intention.
+            - Please type <kbd>%{group}</kbd> to proceed or close this dialog to cancel.
             warning_html: You are going to transfer <strong>%{group_name}</strong> to another namespace. Once you confirm, this action cannot be undone.
           descriptions:
-            - Transfer group to another parent group.
+          - Transfer group to another parent group.
           empty_state: No namespaces are associated with that name or ID
           new_namespace_id: Select a parent group
           no_available_namespaces: You do not have access to any destination namespaces to transfer this group
           points:
-            - Be careful. Changing a group's parent can have unintended side effects.
-            - You can only transfer groups where you have sufficient permissions.
-            - If the parent group's visibility is lower than the group's current visibility, visibility levels for subgroups and projects will be changed to match the new parent group's visibility.
+          - Be careful. Changing a group's parent can have unintended side effects.
+          - You can only transfer groups where you have sufficient permissions.
+          - If the parent group's visibility is lower than the group's current visibility, visibility levels for subgroups and projects will be changed to match the new parent group's visibility.
           select_group: Select Group
           submit: Transfer group
           title: Transfer group
@@ -934,10 +934,10 @@ en:
       export_ready:
         download_before_html: Please download the export before <strong>%{date}</strong> as it will be deleted after this time.
         ready_for_download_html: Your export <strong>%{name}</strong> is ready for download.
-        view_exports: "To view and download the export, click the button below:"
+        view_exports: 'To view and download the export, click the button below:'
     email_template:
       automated_message: This email was sent from an automated system. Please do not reply to this email.
-      copy_paste: "Or copy and paste this link into your browser:"
+      copy_paste: 'Or copy and paste this link into your browser:'
       greeting: Hello,
       greeting_with_name: Hello %{name},
       thanks: Thanks,
@@ -945,11 +945,11 @@ en:
       access_granted_manager_email:
         body_html: Group '%{group_name}' has been <strong>granted</strong> access to %{namespace_type} '%{namespace_name}'
         subject: Group '%{group_name}' has been granted access to %{namespace_type} '%{namespace_name}'
-        view_details: "To view all the members of %{namespace_type} '%{namespace_name}', click the button below:"
+        view_details: 'To view all the members of %{namespace_type} ''%{namespace_name}'', click the button below:'
       access_granted_user_email:
         body_html: Group '%{group_name}' has been <strong>granted</strong> access to %{namespace_type} '%{namespace_name}'
         subject: Group '%{group_name}' has been granted access to %{namespace_type} '%{namespace_name}'
-        view_details: "To view %{namespace_type} '%{namespace_name}', click the button below:"
+        view_details: 'To view %{namespace_type} ''%{namespace_name}'', click the button below:'
       access_revoked_manager_email:
         body_html: "%{namespace_type} '%{namespace_name}' access has been <strong>revoked</strong> for Group '%{group_name}'"
         subject: "%{namespace_type} '%{namespace_name}' access has been revoked for Group '%{group_name}'"
@@ -960,15 +960,15 @@ en:
       access_granted_manager_email:
         body_html: User '%{first_name} %{last_name}' (%{email}) has been <strong>granted</strong> access to %{type} '%{name}'
         subject: User '%{first_name} %{last_name}' (%{email}) has been granted access to %{type} '%{name}'
-        view_details: "To view all the members of %{type} '%{name}', click the button below:"
+        view_details: 'To view all the members of %{type} ''%{name}'', click the button below:'
       access_granted_user_email:
         body_html: You have been <strong>granted</strong> access to %{type} '%{name}'
         subject: You have been granted access to %{type} '%{name}'
-        view_details: "To view %{type} '%{name}', click the button below:"
+        view_details: 'To view %{type} ''%{name}'', click the button below:'
       access_revoked_manager_email:
         body_html: "%{type} '%{name}' access has been <strong>revoked</strong> for User '%{first_name} %{last_name}' (%{email})"
         subject: "%{type} '%{name}' access has been revoked for User '%{first_name} %{last_name}' (%{email})"
-        view_details: "To view all the members of %{type} '%{name}', click the button below:"
+        view_details: 'To view all the members of %{type} ''%{name}'', click the button below:'
       access_revoked_user_email:
         body_html: Your access to %{type} '%{name}' has been <strong>revoked</strong>
         subject: Your access to %{type} '%{name}' has been revoked
@@ -985,7 +985,7 @@ en:
       error_user_email:
         body_html: Your pipeline <strong>%{id}</strong> did not complete successfully due to errors.
         subject: Pipeline Errored - %{id}
-      view_details: "To view the pipeline summary, click the button below:"
+      view_details: 'To view the pipeline summary, click the button below:'
   members:
     access_levels:
       level_0: No Access
@@ -1095,8 +1095,8 @@ en:
         confirm: Are you sure you want to delete your account?
         description: Deleting your account has the following effects
         effects:
-          - All projects and groups you own will be deleted
-          - All projects and groups you are a member of will be left intact
+        - All projects and groups you own will be deleted
+        - All projects and groups you are a member of will be left intact
     passwords:
       update:
         forgot: Forgot your password?
@@ -1160,7 +1160,7 @@ en:
       title: Project Activity
     attachments:
       create:
-        failure: "File %{filename} was not uploaded due to the following errors: %{errors}"
+        failure: 'File %{filename} was not uploaded due to the following errors: %{errors}'
         success: File %{filename} was successfully uploaded.
       destroy:
         success: File %{filename} was successfully removed.
@@ -1188,7 +1188,7 @@ en:
       edit:
         error: Cannot edit automated pipeline %{workflow_name}
       edit_dialog:
-        title: "Editing Automated Pipeline: %{workflow_name}"
+        title: 'Editing Automated Pipeline: %{workflow_name}'
       index:
         add_new_automated_workflow_execution: New automated pipeline
         subtitle: Setup automated pipelines to launch when paired-end data is uploaded to the project
@@ -1266,20 +1266,20 @@ en:
         transfer:
           confirm:
             points_html:
-              - To prevent accidental actions we ask you to confirm your intention.
-              - Please type <kbd>%{project}</kbd> to proceed or close this dialog to cancel
+            - To prevent accidental actions we ask you to confirm your intention.
+            - Please type <kbd>%{project}</kbd> to proceed or close this dialog to cancel
             warning_html: You are going to transfer <strong>%{project_name}</strong> to another namespace. Once you confirm, this action cannot be undone.
           descriptions:
-            - Transfer your project into another namespace.
-            - When you transfer your project to a group, you can easily manage multiple projects and users.
-            - "Things to be aware of before transferring your project:"
+          - Transfer your project into another namespace.
+          - When you transfer your project to a group, you can easily manage multiple projects and users.
+          - 'Things to be aware of before transferring your project:'
           empty_state: No namespaces are associated with that name or ID
           new_namespace_id: Select a new namespace
           no_available_namespaces: You do not have access to any destination namespaces to transfer this project
           points:
-            - Be careful! Changing a project's namespace can have unintended side effects.
-            - You can only transfer projects to groups where you have sufficient permissions.
-            - Project visibility level will change to match namespace rules when transferring to a group.
+          - Be careful! Changing a project's namespace can have unintended side effects.
+          - You can only transfer projects to groups where you have sufficient permissions.
+          - Project visibility level will change to match namespace rules when transferring to a group.
           select_namespace: Select Namespace
           submit: Transfer project
           title: Transfer project
@@ -1397,11 +1397,11 @@ en:
             success: Files were successfully concatenated.
           modal:
             basename: Filename
-            description: "The following files were selected to be concatenated:"
+            description: 'The following files were selected to be concatenated:'
             submit_button: Concatenate
             title: Concatenate Files
         create:
-          failure: "File %{filename} was not uploaded due to the following errors: %{errors}"
+          failure: 'File %{filename} was not uploaded due to the following errors: %{errors}'
           success: File %{filename} was successfully uploaded.
         delete_attachment_modal:
           description: Are you sure that you want to delete this file from the sample?
@@ -1409,20 +1409,20 @@ en:
           title: Delete File
         deletions:
           destroy:
-            error: "File %{filename} was not removed due to the following errors: %{errors}"
+            error: 'File %{filename} was not removed due to the following errors: %{errors}'
             partial_success: Some files were successfully deleted.
             success: Files were successfully deleted.
           modal:
-            description: "The following files were selected for deletion:"
+            description: 'The following files were selected for deletion:'
             submit_button: Delete
             title: Delete Files
         destroy:
-          error: "File %{filename} was not removed due to the following errors: %{errors}"
+          error: 'File %{filename} was not removed due to the following errors: %{errors}'
           success: File %{filename} was successfully removed.
       clones:
         create:
-          error: "The following list of samples failed to copy:"
-          no_samples_cloned_error: "Samples were not copied for the following reasons:"
+          error: 'The following list of samples failed to copy:'
+          no_samples_cloned_error: 'Samples were not copied for the following reasons:'
           success: Samples were successfully copied.
         dialog:
           description:
@@ -1453,8 +1453,8 @@ en:
           title: Delete Sample
         new_multiple_deletions_dialog:
           description:
-            plural: "The following COUNT_PLACEHOLDER samples have been selected for deletion:"
-            singular: "The following sample has been selected for deletion:"
+            plural: 'The following COUNT_PLACEHOLDER samples have been selected for deletion:'
+            singular: 'The following sample has been selected for deletion:'
             zero: No samples have been selected for deletion
           loading: Loading...
           samples: Samples
@@ -1495,7 +1495,7 @@ en:
             multi_success: Metadata keys '%{deleted_keys}' were successfully deleted.
             single_success: Metadata key '%{deleted_key}' was successfully deleted.
           modal:
-            description: "Metadata fields selected for deletion:"
+            description: 'Metadata fields selected for deletion:'
             key_header: Key
             submit_button: Delete
             title: Delete Metadata
@@ -1534,7 +1534,7 @@ en:
         delete_metadata_button: Delete Metadata
         edit_button: Edit this sample
         files: Files
-        files_ignored: "fasta and fastq files must be compressed. The following file(s) cannot be uploaded:"
+        files_ignored: 'fasta and fastq files must be compressed. The following file(s) cannot be uploaded:'
         history:
           modal:
             created_by: Sample created by %{user}
@@ -1586,8 +1586,8 @@ en:
           placeholder: Filter by ID or name
       transfers:
         create:
-          error: "The following list of samples failed to transfer:"
-          no_samples_transferred_error: "Samples were not transferred for the following reasons:"
+          error: 'The following list of samples failed to transfer:'
+          no_samples_transferred_error: 'Samples were not transferred for the following reasons:'
           success: Samples were successfully transferred.
         dialog:
           description:
@@ -1631,13 +1631,13 @@ en:
         title: Edit automated workflow execution
       files:
         table_header:
+          actions: Actions
           created_at: Created At
           filename: Filename
           format: Format
           puid: ID
           size: Size
           type: Type
-          actions: Actions
       index:
         create_export_button: Create Export
         deselect_all_button: Deselect All
@@ -1762,8 +1762,8 @@ en:
         empty_new_project_id: Destination project was not selected.
         empty_sample_ids: The sample ids are empty.
         same_project: The source and destination projects are the same. Please select a different destination project.
-        sample_exists: "Sample %{sample_puid}: Conflicts with sample named '%{sample_name}' in the target project"
-        samples_not_found: "Samples with the following sample ids could not be copied as they were not found in the source project: %{sample_ids}"
+        sample_exists: 'Sample %{sample_puid}: Conflicts with sample named ''%{sample_name}'' in the target project'
+        samples_not_found: 'Samples with the following sample ids could not be copied as they were not found in the source project: %{sample_ids}'
       metadata:
         empty_metadata: No metadata was received to update sample '%{sample_name}'
         fields:
@@ -1821,7 +1821,7 @@ en:
             ignore_empty_values:
               description: If selected, any metadata fields without an associated value will be ignored and those metadata keys will not be removed from the sample if present. However, if this not selected, any samples with the metadata key and empty value will be deleted.
             namespace:
-              description: "The spreadsheet is required to have a column that contains a sample identifier. "
+              description: 'The spreadsheet is required to have a column that contains a sample identifier. '
               group:
                 description_html: The identifier is case-sensitive and must contain the <b>sample ID</b>.
               project:
@@ -1832,7 +1832,7 @@ en:
             submit_button: Import Metadata
             title: Upload Sample Metadata
           errors:
-            description: "The sample metadata import completed with the following errors:"
+            description: 'The sample metadata import completed with the following errors:'
             ok_button: OK
           success:
             description: The metadata was imported successfully!
@@ -1911,13 +1911,13 @@ en:
         submit_button: Submit
     files:
       table_header:
+        actions: Actions
         created_at: Created At
         filename: Filename
         format: Format
         puid: ID
         size: Size
         type: Type
-        actions: Actions
     index:
       actions:
         cancel_button: Cancel
