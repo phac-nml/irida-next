@@ -141,19 +141,19 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     if relation == Project
       proj = relation.with_deleted.find_by(id: identifier)&.namespace_id
       Namespace.with_deleted.find_by(id: proj) if proj.present?
-    elsif relation.method_defined?(:with_deleted)
-      relation.with_deleted.find_by(id: identifier)
     else
-      relation.find_by(id: identifier)
+      relation.with_deleted.find_by(id: identifier)
     end
+  rescue StandardError
+    # acts_as_paranoid not setup on model
+    relation.find_by(id: identifier)
   end
 
   def get_object_by_puid(puid, relation)
-    if relation.method_defined?(:with_deleted)
-      relation.with_deleted.find_by(puid: puid)
-    else
-      relation.find_by(puid: puid)
-    end
+    relation.with_deleted.find_by(puid: puid)
+  rescue StandardError
+    # acts_as_paranoid not setup on model
+    relation.find_by(puid: puid)
   end
 
   def transfer_activity_parameters(params, activity) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
