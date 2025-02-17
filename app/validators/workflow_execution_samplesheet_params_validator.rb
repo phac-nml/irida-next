@@ -164,7 +164,7 @@ class WorkflowExecutionSamplesheetParamsValidator < ActiveModel::Validator # rub
     when 'fastq_cell'
       valid = attachment.fastq?
     when 'file_cell'
-      valid = attachment.filename.match?(expected_pattern) if expected_pattern
+      valid = attachment.filename.to_s.match?(expected_pattern) if expected_pattern
     end
 
     return if valid
