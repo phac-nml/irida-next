@@ -6,7 +6,7 @@ module Types
     argument :name_or_puid_cont, String, required: false, camelize: false,
                                          description: 'Filter samples which contains name or puid'
 
-    argument :advanced_search_groups, [[SampleAdvancedSearchConditionInputType]],
+    argument :advanced_search, [[SampleAdvancedSearchConditionInputType]],
              required: false, camelize: false,
              description: 'Filter samples by advanced search',
              default_value: nil

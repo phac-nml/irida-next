@@ -29,7 +29,7 @@ module Validators
     end
 
     def error_message_prefix(group_index, condition_index, attribute)
-      "filter.advanced_search_groups.#{group_index}.#{condition_index}.#{attribute.to_s.camelize(:lower)}:"
+      "filter.advanced_search.#{group_index}.#{condition_index}.#{attribute.to_s.camelize(:lower)}:"
     end
   end
 end

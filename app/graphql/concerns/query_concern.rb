@@ -21,13 +21,13 @@ module QueryConcern # rubocop:disable GraphQL/ObjectDescription
 
   def filter_params(filter)
     filter_params = {}
-    filter_params.merge!(advanced_search_params(filter:)) if filter[:advanced_search_groups]
+    filter_params.merge!(advanced_search_params(filter:)) if filter[:advanced_search]
     filter_params.merge!(name_or_puid_cont: filter[:name_or_puid_cont]) if filter[:name_or_puid_cont]
     filter_params
   end
 
   def advanced_search_params(filter:)
-    { groups_attributes: filter[:advanced_search_groups].map.with_index do |group, group_index|
+    { groups_attributes: filter[:advanced_search].map.with_index do |group, group_index|
       [group_index,
        { conditions_attributes: group.map.with_index do |condition, condition_index|
          [condition_index, condition]

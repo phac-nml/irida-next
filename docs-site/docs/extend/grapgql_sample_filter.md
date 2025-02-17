@@ -19,7 +19,7 @@ query {
     orderBy: { field: name, direction: desc }
     filter: {
       name_or_puid_cont: "Sample Name"
-      advanced_search_groups: [
+      advanced_search: [
         [
           { field: "metadata.country", operator: EQUALS, value: "Canada" }
           {
@@ -98,4 +98,4 @@ _\* The uniqueness column compares conditions within the same group._
 
 Error messages will be prefixed with the group index, condition index, and condition attribute (field, operator, or value)
 to make it easier to understand which filter argument caused a failure.
-An example error message example is `filter.advanced_search_groups.0.0.field: 'metadata.' is an invalid metadata field`.
+An example error message example is `filter.advanced_search.0.0.field: 'metadata.' is an invalid metadata field`.

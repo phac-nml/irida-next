@@ -108,7 +108,7 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     result = IridaSchema.execute(SAMPLES_WITH_GROUP_QUERY,
                                  context: { current_user: @user },
                                  variables: { group_id: groups(:group_a).to_global_id.to_s,
-                                              filter: { advanced_search_groups: [[{
+                                              filter: { advanced_search: [[{
                                                 field: 'name', operator: 'EQUALS', value: @sample.name
                                               }]] } })
 
@@ -130,7 +130,7 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     result = IridaSchema.execute(SAMPLES_WITH_GROUP_QUERY,
                                  context: { current_user: user, token: },
                                  variables: { group_id: group.to_global_id.to_s,
-                                              filter: { advanced_search_groups: [[{
+                                              filter: { advanced_search: [[{
                                                 field: 'name', operator: 'EQUALS', value: @sample.name
                                               }]] } })
 
@@ -147,7 +147,7 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
   test 'filter samples using advanced search should work' do
     result = IridaSchema.execute(SAMPLES_QUERY,
                                  context: { current_user: @user },
-                                 variables: { filter: { advanced_search_groups: [[{
+                                 variables: { filter: { advanced_search: [[{
                                    field: 'metadata.metadatafield1', operator: 'EQUALS', value: 'value1'
                                  }]] } })
 
@@ -161,7 +161,7 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
   test 'filter samples with ignoring case using advanced search should work' do
     result = IridaSchema.execute(SAMPLES_QUERY,
                                  context: { current_user: @user },
-                                 variables: { filter: { advanced_search_groups: [[{
+                                 variables: { filter: { advanced_search: [[{
                                    field: 'metadata.metadatafield1', operator: 'EQUALS', value: 'Value1'
                                  }]] } })
 
@@ -175,7 +175,7 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
   test 'filter samples with non-existent metadata key using advanced search should work' do
     result = IridaSchema.execute(SAMPLES_QUERY,
                                  context: { current_user: @user },
-                                 variables: { filter: { advanced_search_groups: [[{
+                                 variables: { filter: { advanced_search: [[{
                                    field: 'non_existent', operator: 'EXISTS'
                                  }]] } })
 
@@ -192,7 +192,7 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
   test 'filter samples with an array of values using advanced search should work' do
     result = IridaSchema.execute(SAMPLES_QUERY,
                                  context: { current_user: @user },
-                                 variables: { filter: { advanced_search_groups: [[{
+                                 variables: { filter: { advanced_search: [[{
                                    field: 'name', operator: 'IN', value: ['Project 1 Sample 1', 'Project 1 Sample 2']
                                  }]] } })
 
