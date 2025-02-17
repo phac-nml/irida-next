@@ -181,7 +181,7 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
 
     assert_not_nil result['errors'], 'should work and have no errors.'
 
-    assert_equal "'non_existent' is an invalid metadata field",
+    assert_equal "filter.advanced_search.0.0.field: 'non_existent' is an invalid metadata field",
                  result['errors'].first['message']
 
     data = result['data']['samples']
