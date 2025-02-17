@@ -28,8 +28,10 @@ module Projects
 
       render_inline Activities::Projects::MetadataTemplateActivityComponent.new(activity: activity_to_render)
 
-      assert_text strip_tags(I18n.t('activity.namespaces_project_namespace.metadata_template.create_html', user: 'System',
-                                                                                                           href: template.name))
+      assert_text strip_tags(
+        I18n.t('activity.namespaces_project_namespace.metadata_template.create_html', user: 'System',
+                                                                                      href: template.name)
+      )
       assert_selector 'a',
                       text: template.name
     end

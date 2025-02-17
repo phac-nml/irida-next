@@ -77,7 +77,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     transfer_activity_parameters(params, activity)
   end
 
-  def workflow_execution_activity(activity)
+  def workflow_execution_activity(activity) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     activity_trackable = activity_trackable(activity, Namespace)
 
     base_params = {

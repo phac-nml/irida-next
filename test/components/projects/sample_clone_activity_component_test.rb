@@ -26,9 +26,12 @@ module Projects
       render_inline Activities::Projects::SampleCloneActivityComponent.new(activity: activity_to_render)
 
       assert_text strip_tags(
-        I18n.t('activity.namespaces_project_namespace.samples.clone_html', user: 'System',
-                                                                           href: activity_to_render[:target_project_puid],
-                                                                           cloned_samples_count: activity_to_render[:cloned_samples_ids]&.size)
+        I18n.t(
+          'activity.namespaces_project_namespace.samples.clone_html',
+          user: 'System',
+          href: activity_to_render[:target_project_puid],
+          cloned_samples_count: activity_to_render[:cloned_samples_ids]&.size
+        )
       )
 
       assert_selector 'a',
@@ -51,9 +54,12 @@ module Projects
       render_inline Activities::Projects::SampleCloneActivityComponent.new(activity: activity_to_render)
 
       assert_text strip_tags(
-        I18n.t('activity.namespaces_project_namespace.samples.cloned_from_html', user: 'System',
-                                                                                 href: activity_to_render[:source_project_puid],
-                                                                                 cloned_samples_count: activity_to_render[:cloned_samples_ids]&.size)
+        I18n.t(
+          'activity.namespaces_project_namespace.samples.cloned_from_html',
+          user: 'System',
+          href: activity_to_render[:source_project_puid],
+          cloned_samples_count: activity_to_render[:cloned_samples_ids]&.size
+        )
       )
 
       assert_selector 'a',
@@ -79,9 +85,12 @@ module Projects
       render_inline Activities::Projects::SampleCloneActivityComponent.new(activity: activity_to_render)
 
       assert_text strip_tags(
-        I18n.t('activity.namespaces_project_namespace.samples.cloned_from_html', user: 'System',
-                                                                                 href: activity_to_render[:source_project_puid],
-                                                                                 cloned_samples_count: activity_to_render[:cloned_samples_ids]&.size)
+        I18n.t(
+          'activity.namespaces_project_namespace.samples.cloned_from_html',
+          user: 'System',
+          href: activity_to_render[:source_project_puid],
+          cloned_samples_count: activity_to_render[:cloned_samples_ids]&.size
+        )
       )
 
       assert_no_selector 'a',
@@ -107,9 +116,12 @@ module Projects
       render_inline Activities::Projects::SampleCloneActivityComponent.new(activity: activity_to_render)
 
       assert_text strip_tags(
-        I18n.t('activity.namespaces_project_namespace.samples.clone_html', user: 'System',
-                                                                           href: activity_to_render[:target_project_puid],
-                                                                           cloned_samples_count: activity_to_render[:cloned_samples_ids]&.size)
+        I18n.t(
+          'activity.namespaces_project_namespace.samples.clone_html',
+          user: 'System',
+          href: activity_to_render[:target_project_puid],
+          cloned_samples_count: activity_to_render[:cloned_samples_ids]&.size
+        )
       )
 
       assert_no_selector 'a',
