@@ -1720,7 +1720,7 @@ type Project implements Node {
     before: String
 
     """
-    Ransack filter
+    Sample filter
     """
     filter: SampleFilter = null
 
@@ -2291,7 +2291,7 @@ type Query {
     before: String
 
     """
-    Ransack filter
+    Sample filter
     """
     filter: SampleFilter = null
 
@@ -2433,6 +2433,41 @@ type Sample implements Node {
 }
 
 """
+Sample Advanced Search Condition
+"""
+input SampleAdvancedSearchCondition {
+  """
+  Field of advanced search condition
+  """
+  field: String
+
+  """
+  Operator of advanced search condition
+  """
+  operator: SampleAdvancedSearchConditionOperator
+
+  """
+  Value of advanced search condition
+  """
+  value: ValueScalar
+}
+
+"""
+Sample Advanced Search Condition Operator
+"""
+enum SampleAdvancedSearchConditionOperator {
+  CONTAINS
+  EQUALS
+  EXISTS
+  GREATER_THAN_EQUALS
+  IN
+  LESS_THAN_EQUALS
+  NOT_EQUALS
+  NOT_EXISTS
+  NOT_IN
+}
+
+"""
 The connection type for Sample.
 """
 type SampleConnection {
@@ -2473,326 +2508,15 @@ type SampleEdge {
 }
 
 input SampleFilter {
-  attachments_updated_at_blank: String
-  attachments_updated_at_cont: String
-  attachments_updated_at_cont_all: [String!]
-  attachments_updated_at_cont_any: [String!]
-  attachments_updated_at_does_not_match: String
-  attachments_updated_at_does_not_match_all: [String!]
-  attachments_updated_at_does_not_match_any: [String!]
-  attachments_updated_at_end: String
-  attachments_updated_at_end_all: [String!]
-  attachments_updated_at_end_any: [String!]
-  attachments_updated_at_eq: String
-  attachments_updated_at_eq_all: [String!]
-  attachments_updated_at_eq_any: [String!]
-  attachments_updated_at_false: String
-  attachments_updated_at_gt: String
-  attachments_updated_at_gt_all: [String!]
-  attachments_updated_at_gt_any: [String!]
-  attachments_updated_at_gteq: String
-  attachments_updated_at_gteq_all: [String!]
-  attachments_updated_at_gteq_any: [String!]
-  attachments_updated_at_i_cont: String
-  attachments_updated_at_i_cont_all: [String!]
-  attachments_updated_at_i_cont_any: [String!]
-  attachments_updated_at_in: [String!]
-  attachments_updated_at_in_all: [String!]
-  attachments_updated_at_in_any: [String!]
-  attachments_updated_at_lt: String
-  attachments_updated_at_lt_all: [String!]
-  attachments_updated_at_lt_any: [String!]
-  attachments_updated_at_lteq: String
-  attachments_updated_at_lteq_all: [String!]
-  attachments_updated_at_lteq_any: [String!]
-  attachments_updated_at_matches: String
-  attachments_updated_at_matches_all: [String!]
-  attachments_updated_at_matches_any: [String!]
-  attachments_updated_at_not_cont: String
-  attachments_updated_at_not_cont_all: [String!]
-  attachments_updated_at_not_cont_any: [String!]
-  attachments_updated_at_not_end: String
-  attachments_updated_at_not_end_all: [String!]
-  attachments_updated_at_not_end_any: [String!]
-  attachments_updated_at_not_eq: String
-  attachments_updated_at_not_eq_all: [String!]
-  attachments_updated_at_not_eq_any: [String!]
-  attachments_updated_at_not_false: String
-  attachments_updated_at_not_i_cont: String
-  attachments_updated_at_not_i_cont_all: [String!]
-  attachments_updated_at_not_i_cont_any: [String!]
-  attachments_updated_at_not_in: [String!]
-  attachments_updated_at_not_in_all: [String!]
-  attachments_updated_at_not_in_any: [String!]
-  attachments_updated_at_not_null: String
-  attachments_updated_at_not_start: String
-  attachments_updated_at_not_start_all: [String!]
-  attachments_updated_at_not_start_any: [String!]
-  attachments_updated_at_not_true: String
-  attachments_updated_at_null: String
-  attachments_updated_at_present: String
-  attachments_updated_at_start: String
-  attachments_updated_at_start_all: [String!]
-  attachments_updated_at_start_any: [String!]
-  attachments_updated_at_true: String
-  created_at_blank: String
-  created_at_cont: String
-  created_at_cont_all: [String!]
-  created_at_cont_any: [String!]
-  created_at_does_not_match: String
-  created_at_does_not_match_all: [String!]
-  created_at_does_not_match_any: [String!]
-  created_at_end: String
-  created_at_end_all: [String!]
-  created_at_end_any: [String!]
-  created_at_eq: String
-  created_at_eq_all: [String!]
-  created_at_eq_any: [String!]
-  created_at_false: String
-  created_at_gt: String
-  created_at_gt_all: [String!]
-  created_at_gt_any: [String!]
-  created_at_gteq: String
-  created_at_gteq_all: [String!]
-  created_at_gteq_any: [String!]
-  created_at_i_cont: String
-  created_at_i_cont_all: [String!]
-  created_at_i_cont_any: [String!]
-  created_at_in: [String!]
-  created_at_in_all: [String!]
-  created_at_in_any: [String!]
-  created_at_lt: String
-  created_at_lt_all: [String!]
-  created_at_lt_any: [String!]
-  created_at_lteq: String
-  created_at_lteq_all: [String!]
-  created_at_lteq_any: [String!]
-  created_at_matches: String
-  created_at_matches_all: [String!]
-  created_at_matches_any: [String!]
-  created_at_not_cont: String
-  created_at_not_cont_all: [String!]
-  created_at_not_cont_any: [String!]
-  created_at_not_end: String
-  created_at_not_end_all: [String!]
-  created_at_not_end_any: [String!]
-  created_at_not_eq: String
-  created_at_not_eq_all: [String!]
-  created_at_not_eq_any: [String!]
-  created_at_not_false: String
-  created_at_not_i_cont: String
-  created_at_not_i_cont_all: [String!]
-  created_at_not_i_cont_any: [String!]
-  created_at_not_in: [String!]
-  created_at_not_in_all: [String!]
-  created_at_not_in_any: [String!]
-  created_at_not_null: String
-  created_at_not_start: String
-  created_at_not_start_all: [String!]
-  created_at_not_start_any: [String!]
-  created_at_not_true: String
-  created_at_null: String
-  created_at_present: String
-  created_at_start: String
-  created_at_start_all: [String!]
-  created_at_start_any: [String!]
-  created_at_true: String
+  """
+  Filter samples by advanced search
+  """
+  advanced_search: [[SampleAdvancedSearchCondition!]!] = null
 
   """
-  Filter samples by metadata which contains the supplied key value pairs
+  Filter samples which contains name or puid
   """
-  metadata_jcont: JSON
-
-  """
-  Filter samples by metadata which contains the key
-  """
-  metadata_jcont_key: String
-  name_blank: String
-  name_cont: String
-  name_cont_all: [String!]
-  name_cont_any: [String!]
-  name_does_not_match: String
-  name_does_not_match_all: [String!]
-  name_does_not_match_any: [String!]
-  name_end: String
-  name_end_all: [String!]
-  name_end_any: [String!]
-  name_eq: String
-  name_eq_all: [String!]
-  name_eq_any: [String!]
-  name_false: String
-  name_gt: String
-  name_gt_all: [String!]
-  name_gt_any: [String!]
-  name_gteq: String
-  name_gteq_all: [String!]
-  name_gteq_any: [String!]
-  name_i_cont: String
-  name_i_cont_all: [String!]
-  name_i_cont_any: [String!]
-  name_in: [String!]
-  name_in_all: [String!]
-  name_in_any: [String!]
-  name_lt: String
-  name_lt_all: [String!]
-  name_lt_any: [String!]
-  name_lteq: String
-  name_lteq_all: [String!]
-  name_lteq_any: [String!]
-  name_matches: String
-  name_matches_all: [String!]
-  name_matches_any: [String!]
-  name_not_cont: String
-  name_not_cont_all: [String!]
-  name_not_cont_any: [String!]
-  name_not_end: String
-  name_not_end_all: [String!]
-  name_not_end_any: [String!]
-  name_not_eq: String
-  name_not_eq_all: [String!]
-  name_not_eq_any: [String!]
-  name_not_false: String
-  name_not_i_cont: String
-  name_not_i_cont_all: [String!]
-  name_not_i_cont_any: [String!]
-  name_not_in: [String!]
-  name_not_in_all: [String!]
-  name_not_in_any: [String!]
-  name_not_null: String
-  name_not_start: String
-  name_not_start_all: [String!]
-  name_not_start_any: [String!]
-  name_not_true: String
-  name_null: String
-  name_present: String
-  name_start: String
-  name_start_all: [String!]
-  name_start_any: [String!]
-  name_true: String
-  puid_blank: String
-  puid_cont: String
-  puid_cont_all: [String!]
-  puid_cont_any: [String!]
-  puid_does_not_match: String
-  puid_does_not_match_all: [String!]
-  puid_does_not_match_any: [String!]
-  puid_end: String
-  puid_end_all: [String!]
-  puid_end_any: [String!]
-  puid_eq: String
-  puid_eq_all: [String!]
-  puid_eq_any: [String!]
-  puid_false: String
-  puid_gt: String
-  puid_gt_all: [String!]
-  puid_gt_any: [String!]
-  puid_gteq: String
-  puid_gteq_all: [String!]
-  puid_gteq_any: [String!]
-  puid_i_cont: String
-  puid_i_cont_all: [String!]
-  puid_i_cont_any: [String!]
-  puid_in: [String!]
-  puid_in_all: [String!]
-  puid_in_any: [String!]
-  puid_lt: String
-  puid_lt_all: [String!]
-  puid_lt_any: [String!]
-  puid_lteq: String
-  puid_lteq_all: [String!]
-  puid_lteq_any: [String!]
-  puid_matches: String
-  puid_matches_all: [String!]
-  puid_matches_any: [String!]
-  puid_not_cont: String
-  puid_not_cont_all: [String!]
-  puid_not_cont_any: [String!]
-  puid_not_end: String
-  puid_not_end_all: [String!]
-  puid_not_end_any: [String!]
-  puid_not_eq: String
-  puid_not_eq_all: [String!]
-  puid_not_eq_any: [String!]
-  puid_not_false: String
-  puid_not_i_cont: String
-  puid_not_i_cont_all: [String!]
-  puid_not_i_cont_any: [String!]
-  puid_not_in: [String!]
-  puid_not_in_all: [String!]
-  puid_not_in_any: [String!]
-  puid_not_null: String
-  puid_not_start: String
-  puid_not_start_all: [String!]
-  puid_not_start_any: [String!]
-  puid_not_true: String
-  puid_null: String
-  puid_present: String
-  puid_start: String
-  puid_start_all: [String!]
-  puid_start_any: [String!]
-  puid_true: String
-  updated_at_blank: String
-  updated_at_cont: String
-  updated_at_cont_all: [String!]
-  updated_at_cont_any: [String!]
-  updated_at_does_not_match: String
-  updated_at_does_not_match_all: [String!]
-  updated_at_does_not_match_any: [String!]
-  updated_at_end: String
-  updated_at_end_all: [String!]
-  updated_at_end_any: [String!]
-  updated_at_eq: String
-  updated_at_eq_all: [String!]
-  updated_at_eq_any: [String!]
-  updated_at_false: String
-  updated_at_gt: String
-  updated_at_gt_all: [String!]
-  updated_at_gt_any: [String!]
-  updated_at_gteq: String
-  updated_at_gteq_all: [String!]
-  updated_at_gteq_any: [String!]
-  updated_at_i_cont: String
-  updated_at_i_cont_all: [String!]
-  updated_at_i_cont_any: [String!]
-  updated_at_in: [String!]
-  updated_at_in_all: [String!]
-  updated_at_in_any: [String!]
-  updated_at_lt: String
-  updated_at_lt_all: [String!]
-  updated_at_lt_any: [String!]
-  updated_at_lteq: String
-  updated_at_lteq_all: [String!]
-  updated_at_lteq_any: [String!]
-  updated_at_matches: String
-  updated_at_matches_all: [String!]
-  updated_at_matches_any: [String!]
-  updated_at_not_cont: String
-  updated_at_not_cont_all: [String!]
-  updated_at_not_cont_any: [String!]
-  updated_at_not_end: String
-  updated_at_not_end_all: [String!]
-  updated_at_not_end_any: [String!]
-  updated_at_not_eq: String
-  updated_at_not_eq_all: [String!]
-  updated_at_not_eq_any: [String!]
-  updated_at_not_false: String
-  updated_at_not_i_cont: String
-  updated_at_not_i_cont_all: [String!]
-  updated_at_not_i_cont_any: [String!]
-  updated_at_not_in: [String!]
-  updated_at_not_in_all: [String!]
-  updated_at_not_in_any: [String!]
-  updated_at_not_null: String
-  updated_at_not_start: String
-  updated_at_not_start_all: [String!]
-  updated_at_not_start_any: [String!]
-  updated_at_not_true: String
-  updated_at_null: String
-  updated_at_present: String
-  updated_at_start: String
-  updated_at_start_all: [String!]
-  updated_at_start_any: [String!]
-  updated_at_true: String
+  name_or_puid_cont: String
 }
 
 """
@@ -3061,6 +2785,11 @@ type UserError {
   """
   path: [String!]
 }
+
+"""
+Sample Advanced Search Condition Value
+"""
+scalar ValueScalar
 
 """
 A workflow execution

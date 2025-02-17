@@ -672,6 +672,9 @@ en:
         project: Create new project
     screen_reader:
       close: Close
+  graphql:
+    value_scalar:
+      error: "%{value} must be a string or an array of strings"
   groups:
     activity:
       title: Group activity
@@ -1846,6 +1849,7 @@ en:
       date_format_error: must be formatted YYYY-MM-DD
       date_operator_error: cannot be used on dates
       group_error: There group has errors
+      invalid_field_error: is an invalid metadata field
       numeric_operator_error: can only be used on numbers
       uniqueness_error: must be unique
     workflow_execution_samplesheet_params_validator:

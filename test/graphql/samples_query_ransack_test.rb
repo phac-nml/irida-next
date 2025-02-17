@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class SamplesQueryRansackTest < ActiveSupport::TestCase
-  SAMPLES_RANSACK_QUERY = <<~GRAPHQL
+  SAMPLES_QUERY = <<~GRAPHQL
     query($filter: SampleFilter, $orderBy: SampleOrder) {
       samples(filter: $filter, orderBy: $orderBy) {
         nodes {
@@ -21,7 +21,7 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     }
   GRAPHQL
 
-  SAMPLES_RANSACK_WITH_GROUP_QUERY = <<~GRAPHQL
+  SAMPLES_WITH_GROUP_QUERY = <<~GRAPHQL
     query($filter: SampleFilter, $group_id: ID!, $orderBy: SampleOrder) {
       samples(filter: $filter, groupId: $group_id, orderBy: $orderBy) {
         nodes {
@@ -45,78 +45,53 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     @sample32 = samples(:sample32)
   end
 
-  test 'ransack samples query should work' do
-    original_date = Time.zone.today
-    Timecop.travel(5.days.from_now) do
-      @sample.created_at = Time.zone.now
-      @sample.save!
-
-      result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
-                                   context: { current_user: @user },
-                                   variables: { filter: { created_at_gt: (original_date + 1.day).to_s } })
-
-      assert_nil result['errors'], 'should work and have no errors.'
-
-      data = result['data']['samples']['nodes']
-
-      assert_equal 1, data.count
-      assert_equal @sample.puid, data[0]['puid']
-    end
+  test 'filter samples should work' do
+    result = IridaSchema.execute(SAMPLES_QUERY,
+                                 context: { current_user: @user },
+                                 variables: { filter: { name_or_puid_cont: @sample.name } })
+    assert_nil result['errors'], 'should work and have no errors.'
+    data = result['data']['samples']['nodes']
+    assert_equal 1, data.count
+    assert_equal @sample.puid, data[0]['puid']
   end
 
-  test 'samples query should work with order by' do
-    result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
+  test 'filter samples should work with order by' do
+    result = IridaSchema.execute(SAMPLES_QUERY,
                                  context: { current_user: @user },
-                                 variables: { filter: { name_start: 'Project 1' },
+                                 variables: { filter: { name_or_puid_cont: 'Project 1' },
+                                              orderBy: { field: 'created_at', direction: 'asc' } })
+    assert_nil result['errors'], 'should work and have no errors.'
+    data = result['data']['samples']['nodes']
+    assert_equal 3, data.count
+    assert_equal samples(:sample2).name, data[0]['name']
+    assert_equal samples(:sample2).puid, data[0]['puid']
+    assert_equal samples(:sample1).name, data[1]['name']
+    assert_equal samples(:sample1).puid, data[1]['puid']
+    assert_equal samples(:sample37).name, data[2]['name']
+    assert_equal samples(:sample37).puid, data[2]['puid']
+  end
+
+  test 'filter group samples should work' do
+    result = IridaSchema.execute(SAMPLES_WITH_GROUP_QUERY,
+                                 context: { current_user: @user },
+                                 variables: { group_id: groups(:group_one).to_global_id.to_s,
+                                              filter: { name_or_puid_cont: @sample.name } })
+    assert_nil result['errors'], 'should work and have no errors.'
+    data = result['data']['samples']['nodes']
+    assert_equal 1, data.count
+    assert_equal @sample.puid, data[0]['puid']
+  end
+
+  test 'filter group samples should work with order by' do
+    result = IridaSchema.execute(SAMPLES_WITH_GROUP_QUERY,
+                                 context: { current_user: @user },
+                                 variables: { group_id: groups(:group_one).to_global_id.to_s,
                                               orderBy: { field: 'created_at', direction: 'asc' } })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
     data = result['data']['samples']['nodes']
-    assert_equal 3, data.count
 
-    assert_equal samples(:sample2).name, data[0]['name']
-    assert_equal samples(:sample2).puid, data[0]['puid']
-
-    assert_equal samples(:sample1).name, data[1]['name']
-    assert_equal samples(:sample1).puid, data[1]['puid']
-
-    assert_equal samples(:sample37).name, data[2]['name']
-    assert_equal samples(:sample37).puid, data[2]['puid']
-  end
-
-  test 'ransack samples query with group id should work' do
-    original_date = Time.zone.today
-
-    Timecop.travel(5.days.from_now) do
-      @sample.created_at = Time.zone.now
-      @sample.save!
-
-      result = IridaSchema.execute(SAMPLES_RANSACK_WITH_GROUP_QUERY,
-                                   context: { current_user: @user },
-                                   variables:
-                                   { group_id: groups(:group_one).to_global_id.to_s,
-                                     filter: { created_at_gt: (original_date + 1.day).to_s } })
-
-      assert_nil result['errors'], 'should work and have no errors.'
-
-      data = result['data']['samples']['nodes']
-
-      assert_equal 1, data.count
-      assert_equal @sample.puid, data[0]['puid']
-    end
-  end
-
-  test 'ransack samples query with group id should work with order by' do
-    result = IridaSchema.execute(SAMPLES_RANSACK_WITH_GROUP_QUERY,
-                                 context: { current_user: @user },
-                                 variables:
-                                 { group_id: groups(:group_one).to_global_id.to_s,
-                                   orderBy: { field: 'created_at', direction: 'asc' } })
-
-    assert_nil result['errors'], 'should work and have no errors.'
-
-    data = result['data']['samples']['nodes']
     assert_equal 25, data.count
 
     assert_equal samples(:sample30).name, data[0]['name']
@@ -129,61 +104,52 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     assert_equal samples(:sample28).puid, data[2]['puid']
   end
 
-  test 'ransack group samples query should throw authorization error' do
-    original_date = Time.zone.today
+  test 'filter group samples should throw authorization error' do
+    result = IridaSchema.execute(SAMPLES_WITH_GROUP_QUERY,
+                                 context: { current_user: @user },
+                                 variables: { group_id: groups(:group_a).to_global_id.to_s,
+                                              filter: { advanced_search: [[{
+                                                field: 'name', operator: 'EQUALS', value: @sample.name
+                                              }]] } })
 
-    Timecop.travel(5.days.from_now) do
-      @sample.created_at = Time.zone.now
-      @sample.save!
+    assert_not_nil result['errors'], 'should not work and have authorization errors.'
 
-      result = IridaSchema.execute(SAMPLES_RANSACK_WITH_GROUP_QUERY,
-                                   context: { current_user: @user },
-                                   variables:
-                                   { group_id: groups(:group_a).to_global_id.to_s,
-                                     filter: { created_at_gt: (original_date + 1.day).to_s } })
+    assert_equal "You are not authorized to view samples for group #{groups(:group_a).name} on this server.",
+                 result['errors'].first['message']
 
-      assert_not_nil result['errors'], 'should not work and have authorization errors.'
+    data = result['data']['samples']
 
-      assert_equal "You are not authorized to view samples for group #{groups(:group_a).name} on this server.",
-                   result['errors'].first['message']
-
-      data = result['data']['samples']
-
-      assert_nil data
-    end
+    assert_nil data
   end
 
-  test 'ransack group samples query should throw authorization error due to expired token for uploader access level' do
+  test 'filter group samples should throw authorization error due to expired token for uploader access level' do
     user = users(:user_bot_account0)
     token = personal_access_tokens(:user_bot_account0_valid_pat)
     group = groups(:group_one)
-    original_date = Time.zone.today
 
-    Timecop.travel(5.days.from_now) do
-      @sample.created_at = Time.zone.now
-      @sample.save!
+    result = IridaSchema.execute(SAMPLES_WITH_GROUP_QUERY,
+                                 context: { current_user: user, token: },
+                                 variables: { group_id: group.to_global_id.to_s,
+                                              filter: { advanced_search: [[{
+                                                field: 'name', operator: 'EQUALS', value: @sample.name
+                                              }]] } })
 
-      result = IridaSchema.execute(SAMPLES_RANSACK_WITH_GROUP_QUERY,
-                                   context: { current_user: user, token: },
-                                   variables:
-                                   { group_id: group.to_global_id.to_s,
-                                     filter: { created_at_gt: (original_date + 1.day).to_s } })
+    assert_not_nil result['errors'], 'should not work and have authorization errors.'
 
-      assert_not_nil result['errors'], 'should not work and have authorization errors.'
+    assert_equal "You are not authorized to view samples for group #{group.name} on this server.",
+                 result['errors'].first['message']
 
-      assert_equal "You are not authorized to view samples for group #{group.name} on this server.",
-                   result['errors'].first['message']
+    data = result['data']['samples']
 
-      data = result['data']['samples']
-
-      assert_nil data
-    end
+    assert_nil data
   end
 
-  test 'ransack samples query with metadata_jcont_key filter should work' do
-    result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
+  test 'filter samples using advanced search should work' do
+    result = IridaSchema.execute(SAMPLES_QUERY,
                                  context: { current_user: @user },
-                                 variables: { filter: { metadata_jcont_key: 'metadatafield1' } })
+                                 variables: { filter: { advanced_search: [[{
+                                   field: 'metadata.metadatafield1', operator: 'EQUALS', value: 'value1'
+                                 }]] } })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
@@ -192,10 +158,12 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     assert_equal 4, data.count
   end
 
-  test 'ransack samples query with metadata_jcont_key filter should work ignoring case' do
-    result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
+  test 'filter samples with ignoring case using advanced search should work' do
+    result = IridaSchema.execute(SAMPLES_QUERY,
                                  context: { current_user: @user },
-                                 variables: { filter: { metadata_jcont_key: 'MetadataField1' } })
+                                 variables: { filter: { advanced_search: [[{
+                                   field: 'metadata.metadatafield1', operator: 'EQUALS', value: 'Value1'
+                                 }]] } })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
@@ -204,39 +172,34 @@ class SamplesQueryRansackTest < ActiveSupport::TestCase
     assert_equal 4, data.count
   end
 
-  test 'ransack samples query with metadata_jcont filter should work' do
-    result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
+  test 'filter samples with non-existent metadata key using advanced search should work' do
+    result = IridaSchema.execute(SAMPLES_QUERY,
                                  context: { current_user: @user },
-                                 variables: { filter: { metadata_jcont: { metadatafield1: 'value1' } } })
+                                 variables: { filter: { advanced_search: [[{
+                                   field: 'non_existent', operator: 'EXISTS'
+                                 }]] } })
 
-    assert_nil result['errors'], 'should work and have no errors.'
+    assert_not_nil result['errors'], 'should work and have no errors.'
 
-    data = result['data']['samples']['nodes']
+    assert_equal "filter.advanced_search.0.0.field: 'non_existent' is an invalid metadata field",
+                 result['errors'].first['message']
 
-    assert_equal 4, data.count
+    data = result['data']['samples']
+
+    assert_nil data
   end
 
-  test 'ransack samples query with metadata_jcont filter should work ignoring case' do
-    result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
+  test 'filter samples with an array of values using advanced search should work' do
+    result = IridaSchema.execute(SAMPLES_QUERY,
                                  context: { current_user: @user },
-                                 variables: { filter: { metadata_jcont: { MetadataField1: 'Value1' } } })
+                                 variables: { filter: { advanced_search: [[{
+                                   field: 'name', operator: 'IN', value: ['Project 1 Sample 1', 'Project 1 Sample 2']
+                                 }]] } })
 
     assert_nil result['errors'], 'should work and have no errors.'
 
     data = result['data']['samples']['nodes']
 
-    assert_equal 4, data.count
-  end
-
-  test 'ransack samples query with metadata_jcont_key filter should work with non_existent key' do
-    result = IridaSchema.execute(SAMPLES_RANSACK_QUERY,
-                                 context: { current_user: @user },
-                                 variables: { filter: { metadata_jcont_key: 'non_existent' } })
-
-    assert_nil result['errors'], 'should work and have no errors.'
-
-    data = result['data']['samples']['nodes']
-
-    assert_equal 0, data.count
+    assert_equal 3, data.count
   end
 end

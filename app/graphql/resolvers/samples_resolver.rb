@@ -3,6 +3,8 @@
 module Resolvers
   # Samples Resolver
   class SamplesResolver < BaseResolver
+    include QueryConcern
+
     type Types::SampleType.connection_type, null: true
 
     argument :group_id, GraphQL::Types::ID,
@@ -12,7 +14,7 @@ module Resolvers
 
     argument :filter, Types::SampleFilterType,
              required: false,
-             description: 'Ransack filter',
+             description: 'Sample filter',
              default_value: nil
 
     argument :order_by, Types::SampleOrderInputType,
@@ -22,28 +24,14 @@ module Resolvers
 
     def resolve(group_id:, filter:, order_by:)
       context.scoped_set!(:samples_preauthorized, true)
-      samples = group_id ? samples_by_group_scope(group_id:) : samples_by_project_scope
-      ransack_obj = samples.ransack(filter&.to_h)
-      ransack_obj.sorts = ["#{order_by.field} #{order_by.direction}"] if order_by.present?
-
-      ransack_obj.result
+      query = Sample::Query.new(params(context, nil, group_id, filter, order_by))
+      query.results
     end
 
     def ready?(**_args)
       authorize!(to: :query?, with: GraphqlPolicy, context: { token: context[:token] })
     end
 
-    private
-
-    def samples_by_project_scope
-      scope = authorized_scope Project, type: :relation
-      Sample.where(project_id: scope.select(:id))
-    end
-
-    def samples_by_group_scope(group_id:)
-      group = IridaSchema.object_from_id(group_id, { expected_type: Group })
-      authorize!(group, to: :sample_listing?, with: GroupPolicy, context: { token: context[:token] })
-      authorized_scope(Sample, type: :relation, as: :namespace_samples, scope_options: { namespace: group })
-    end
+    validates Validators::QueryValidator => {}
   end
 end

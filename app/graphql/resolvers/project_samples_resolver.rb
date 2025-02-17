@@ -3,11 +3,13 @@
 module Resolvers
   # Project Sample Resolver
   class ProjectSamplesResolver < BaseResolver
+    include QueryConcern
+
     alias project object
 
     argument :filter, Types::SampleFilterType,
              required: false,
-             description: 'Ransack filter',
+             description: 'Sample filter',
              default_value: nil
 
     argument :order_by, Types::SampleOrderInputType,
@@ -18,10 +20,11 @@ module Resolvers
     def resolve(filter:, order_by:)
       context.scoped_set!(:project, project)
       context.scoped_set!(:samples_preauthorized, true)
-      ransack_obj = project.samples.ransack(filter&.to_h)
-      ransack_obj.sorts = ["#{order_by.field} #{order_by.direction}"] if order_by.present?
 
-      ransack_obj.result
+      query = Sample::Query.new(params(context, project.id, nil, filter, order_by))
+      query.results
     end
+
+    validates Validators::QueryValidator => {}
   end
 end

@@ -25,6 +25,7 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
 
   def validate_fields(group)
     group.conditions.each do |condition|
+      validate_key(condition)
       validate_blank_field(condition)
       validate_date_and_numeric_field(condition)
     end
@@ -32,6 +33,13 @@ class AdvancedSearchGroupValidator < ActiveModel::Validator
     return unless group.conditions.any? { |condition| condition.errors.any? }
 
     group.errors.add :base, I18n.t('validators.advanced_search_group_validator.condition_error')
+  end
+
+  def validate_key(condition)
+    return if %w[name puid created_at updated_at
+                 attachments_updated_at].include?(condition.field) || /^metadata\..+$/ =~ condition.field
+
+    condition.errors.add :field, I18n.t('validators.advanced_search_group_validator.invalid_field_error')
   end
 
   def validate_blank_field(condition) # rubocop:disable Metrics/AbcSize
