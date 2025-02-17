@@ -10,7 +10,6 @@ module Samples
       @project_puid_column = params[:project_puid_column]
       @sample_description_column = params[:sample_description_column]
       required_headers = [@sample_name_column, @project_puid_column]
-      @ignore_empty_values = params[:ignore_empty_values]
       super(namespace, user, blob_id, required_headers, 0, params)
     end
 
@@ -100,16 +99,20 @@ module Samples
 
     def process_metadata_row(data)
       metadata = data.except(@sample_name_column, @project_puid_column, @sample_description_column)
-      metadata.compact! if @ignore_empty_values
+      metadata.compact!
 
       metadata
     end
 
     def process_sample_row(name, project, description, metadata)
-      sample_params = { name:, description:, metadata: }
+      sample_params = { name:, description: }
       sample = Samples::CreateService.new(current_user, project, sample_params).execute
 
       if sample.persisted?
+        Metadata::UpdateService.new(
+          sample.project, sample, current_user, { 'metadata' => metadata }
+        ).execute
+
         sample
       else
         sample.errors.map do |error|
