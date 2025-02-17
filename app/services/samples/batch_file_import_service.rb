@@ -4,12 +4,13 @@ require 'roo'
 
 module Samples
   # Service used to batch create samples via a file
-  class BatchFileImportService < BaseSpreadsheetImportService
+  class BatchFileImportService < BaseSpreadsheetImportService # rubocop:disable Metrics/ClassLength
     def initialize(namespace, user = nil, blob_id = nil, params = {})
       @sample_name_column = params[:sample_name_column]
       @project_puid_column = params[:project_puid_column]
       @sample_description_column = params[:sample_description_column]
       required_headers = [@sample_name_column, @project_puid_column]
+      @ignore_empty_values = params[:ignore_empty_values]
       super(namespace, user, blob_id, required_headers, 0, params)
     end
 
@@ -31,11 +32,10 @@ module Samples
       @spreadsheet.each_with_index(parse_settings) do |data, index|
         next unless index.positive?
 
-        # TODO: handle metadata headers
-
         sample_name = data[@sample_name_column]
         project_puid = data[@project_puid_column]
         description = data[@sample_description_column]
+        metadata = process_metadata_row(data)
 
         error = errors_on_sample_row(sample_name, project_puid, response, index)
         unless error.nil?
@@ -50,7 +50,7 @@ module Samples
           next
         end
 
-        response[sample_name] = process_sample_row(sample_name, project, description)
+        response[sample_name] = process_sample_row(sample_name, project, description, metadata)
       end
       cleanup_files
       response
@@ -98,9 +98,15 @@ module Samples
       end
     end
 
-    def process_sample_row(name, project, description)
-      # TODO: process metadata too
-      sample_params = { name:, description: }
+    def process_metadata_row(data)
+      metadata = data.except(@sample_name_column, @project_puid_column, @sample_description_column)
+      metadata.compact! if @ignore_empty_values
+
+      metadata
+    end
+
+    def process_sample_row(name, project, description, metadata)
+      sample_params = { name:, description:, metadata: }
       sample = Samples::CreateService.new(current_user, project, sample_params).execute
 
       if sample.persisted?
