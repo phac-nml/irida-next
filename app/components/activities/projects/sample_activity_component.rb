@@ -10,6 +10,7 @@ module Activities
 
       def sample_exists(sample)
         return false if sample.nil?
+        return false if sample.project.namespace != @activity[:current_project]
 
         !sample.deleted?
       end
