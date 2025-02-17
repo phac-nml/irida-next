@@ -8,7 +8,7 @@ require 'irida/pipeline'
 
 module Irida
   # Class that reads a workflow config file and registers the available pipelines
-  class Pipelines # rubocop:disable Metrics/ClassLength
+  class Pipelines
     PipelinesJsonFormatException = Class.new StandardError
     PIPELINES_JSON_SCHEMA = Rails.root.join('config/schemas/pipelines_schema.json')
 
@@ -17,14 +17,9 @@ module Irida
     attr_reader :available_pipelines, :automatable_pipelines, :executable_pipelines
 
     def initialize(**params)
-      @pipeline_config_dir =
-        params.key?(:pipeline_config_dir) ? params[:pipeline_config_dir] : 'config/pipelines'
-      @pipeline_schema_file_dir =
-        params.key?(:pipeline_schema_file_dir) ? params[:pipeline_schema_file_dir] : 'private/pipelines'
-      @pipeline_config_file =
-        params.key?(:pipeline_config_file) ? params[:pipeline_config_file] : 'pipelines.json'
-      @pipeline_schema_status_file =
-        params.key?(:pipeline_schema_status_file) ? params[:pipeline_schema_status_file] : 'status.json'
+      @pipeline_config_file = params.fetch(:pipeline_config_file, 'config/pipelines/pipelines.json')
+      @pipeline_schema_file_dir = params.fetch(:pipeline_schema_file_dir, 'private/pipelines')
+      @pipeline_schema_status_file = params.fetch(:pipeline_schema_status_file, 'status.json')
       @available_pipelines = {}
       @automatable_pipelines = {}
       @executable_pipelines = {}
@@ -56,8 +51,8 @@ module Irida
 
     # read in the json pipeline config
     def read_json_config
-      path = File.basename(@pipeline_config_file)
-      data = JSON.parse(Rails.root.join(@pipeline_config_dir, path).read)
+      path = @pipeline_config_file
+      data = JSON.parse(Rails.root.join(path).read)
 
       errors = JSONSchemer.schema(PIPELINES_JSON_SCHEMA.read).validate(data).to_a
 

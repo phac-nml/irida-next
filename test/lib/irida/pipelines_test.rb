@@ -28,7 +28,7 @@ class PipelinesTest < ActiveSupport::TestCase
     stub_request(:any, 'https://raw.githubusercontent.com/phac-nml/iridanextexample/1.0.0/assets/schema_input.json')
       .to_return(status: 200, body:, headers: { etag: '[W/"f1Fg"]' })
 
-    @pipelines = Irida::Pipelines.new(pipeline_config_dir: 'test/config/pipelines',
+    @pipelines = Irida::Pipelines.new(pipeline_config_file: 'test/config/pipelines/pipelines.json',
                                       pipeline_schema_file_dir: @pipeline_schema_file_dir)
   end
 
