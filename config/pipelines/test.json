@@ -19,5 +19,15 @@
         "executable": false
       }
     ]
+  },
+  {
+    "url": "https://github.com/phac-nml/gasclustering",
+    "name": "phac-nml/gasclustering",
+    "description": "Genomic Address Service Clustering Workflow",
+    "versions": [
+      {
+        "name": "0.4.2"
+      }
+    ]
   }
 ]

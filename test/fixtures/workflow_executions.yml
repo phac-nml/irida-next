@@ -21,6 +21,16 @@ workflow_execution_valid:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
 
+workflow_execution_gasclustering:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "phac-nml/gasclustering", "workflow_version": "0.4.2" }
+  workflow_params: { "key_a": "value_a" }
+  workflow_engine_parameters: { "-r": "0.4.2" }
+  workflow_url: "my_workflow_url"
+  run_id: "my_run_id_1"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+
 workflow_execution_invalid_metadata:
   <<: *DEFAULTS
   metadata: { "workflow_name": "wn1", "missing a param here": "invalid" }

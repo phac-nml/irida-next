@@ -32,7 +32,7 @@ class PipelinesQueryTest < ActiveSupport::TestCase
     data = result['data']['pipelines']
 
     assert_not_empty data, 'sample type should work'
-    assert_equal 3, data.count
+    assert_equal 4, data.count
     data.each do |pipeline|
       assert_equal true, pipeline['executable']
     end
@@ -81,8 +81,8 @@ class PipelinesQueryTest < ActiveSupport::TestCase
       end
     end
 
-    assert_equal 3, executable_count
+    assert_equal 4, executable_count
     assert_equal 1, automatable_count
-    assert_equal 4, total_count
+    assert_equal 5, total_count
   end
 end
