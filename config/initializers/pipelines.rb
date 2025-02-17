@@ -3,7 +3,12 @@
 require 'irida/pipelines'
 
 Rails.application.config.to_prepare do
-  Irida::Pipelines.instance = Irida::Pipelines.new if Irida::Pipelines.instance.nil?
+  pipeline_config_file = if Rails.root.join("config/pipelines/#{Rails.env}.json").exist?
+                           "config/pipelines/#{Rails.env}.json"
+                         else
+                           'config/pipelines/pipelines.json'
+                         end
+  Irida::Pipelines.instance = Irida::Pipelines.new(pipeline_config_file:) if Irida::Pipelines.instance.nil?
 end
 
 Rails.application.config.after_initialize do

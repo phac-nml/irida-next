@@ -35,7 +35,7 @@ class PipelinesSchemaTest < ActiveSupport::TestCase
 
   test 'pipelines with bad schema' do
     assert_raises Irida::Pipelines::PipelinesJsonFormatException do
-      Irida::Pipelines.new(pipeline_config_dir: 'test/config/pipelines_with_bad_schema',
+      Irida::Pipelines.new(pipeline_config_file: 'test/config/pipelines_with_bad_schema/pipelines.json',
                            pipeline_schema_file_dir: @pipeline_schema_file_dir)
     end
   end
