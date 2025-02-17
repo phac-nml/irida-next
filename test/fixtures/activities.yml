@@ -51,7 +51,7 @@ project1_namespace_sample_clone:
       target_project_puid: INXT_PRJ_AAAAAAAAAB,
       target_project: <%= ActiveRecord::FixtureSet.identify(:project2,
       :uuid) %>,
-      clone_samples_ids: [<%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>],
+      cloned_samples_ids: [<%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>],
       cloned_samples_puids: ["INXT_SAM_AAAAAAAAAA"],
       action: "sample_clone",
     }
@@ -81,7 +81,7 @@ project2_namespace_sample_cloned_from_project1:
       source_project_puid: INXT_PRJ_AAAAAAAAAA,
       source_project: <%= ActiveRecord::FixtureSet.identify(:project1,
       :uuid) %>,
-      clone_samples_ids: [<%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>],
+      cloned_samples_ids: [<%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>],
       cloned_samples_puids: ["INXT_SAM_AAAAAAAAAA"],
       action: "sample_clone",
     }
