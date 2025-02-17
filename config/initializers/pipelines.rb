@@ -6,7 +6,7 @@ Rails.application.config.to_prepare do
   pipeline_config_file = if Rails.root.join("config/pipelines/#{Rails.env}.json").exist?
                            "config/pipelines/#{Rails.env}.json"
                          else
-                           'config/pipelines/pipeline.json'
+                           'config/pipelines/pipelines.json'
                          end
   Irida::Pipelines.instance = Irida::Pipelines.new(pipeline_config_file:) if Irida::Pipelines.instance.nil?
 end
