@@ -11,7 +11,7 @@ module Activities
       def template_exists
         return false if @activity[:template].nil?
 
-        true
+        !@activity[:template].deleted?
       end
     end
   end
