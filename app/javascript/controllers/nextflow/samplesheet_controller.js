@@ -179,24 +179,26 @@ export default class extends Controller {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
-        }).then((response) => {
-          this.#disableProcessingState();
-          if (response.redirected && response.status == "200") {
-            window.location.href = response.url;
-            return nil
-          } else if (response.status == "422") {
-            return response.text();
-          } else {
-            this.#enableErrorState(this.submissionErrorValue);
-            return nil;
-          }
-        }).then(((data) => {
-          if (data) {
-            let responseElement = document.createElement("div");
-            responseElement.innerHTML = data;
-            document.querySelector('main').appendChild(responseElement);
-          }
-        }));
+        })
+          .then((response) => {
+            this.#disableProcessingState();
+            if (response.redirected && response.status == "200") {
+              window.location.href = response.url;
+              return null;
+            } else if (response.status == "422") {
+              return response.text();
+            } else {
+              this.#enableErrorState(this.submissionErrorValue);
+              return null;
+            }
+          })
+          .then((data) => {
+            if (data) {
+              let responseElement = document.createElement("div");
+              responseElement.innerHTML = data;
+              document.querySelector("main").appendChild(responseElement);
+            }
+          });
       }
     }, 50);
   }
