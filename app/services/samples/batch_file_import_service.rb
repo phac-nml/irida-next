@@ -10,7 +10,6 @@ module Samples
       @project_puid_column = params[:project_puid_column]
       @sample_description_column = params[:sample_description_column]
       required_headers = [@sample_name_column, @project_puid_column]
-      @ignore_empty_values = params[:ignore_empty_values]
       super(namespace, user, blob_id, required_headers, 0, params)
     end
 
