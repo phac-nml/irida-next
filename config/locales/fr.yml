@@ -183,6 +183,8 @@ fr:
             last_member_self: You cannot remove yourself as this would leave the %{namespace_type} without an owner.
         metadata_template:
           attributes:
+            fields:
+              taken: already exist in another template with the same ordering
             name:
               blank: can't be blank
               takene: has already been taken

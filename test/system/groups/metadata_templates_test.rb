@@ -280,6 +280,94 @@ module Groups
       assert_no_text I18n.t('metadata_templates.table_component.spinner_message')
     end
 
+    test 'cannot create a template with duplicate fields with same ordering in another template' do
+      group = groups(:group_one)
+
+      visit group_metadata_templates_url(group)
+
+      assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
+      assert_selector 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
+
+      assert_selector 'a', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
+
+      click_on I18n.t('groups.metadata_templates.index.new_button')
+
+      assert_selector '#dialog'
+
+      within('span[data-controller-connected="true"] dialog') do
+        assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
+        assert_text I18n.t('metadata_templates.new_template_dialog.description')
+
+        within "ul[id='available']" do
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield2'
+          assert_text 'unique.metadata.field'
+          assert_selector 'li', count: 3
+        end
+
+        within "ul[id='selected']" do
+          assert_no_text 'metadatafield1'
+          assert_no_text 'metadatafield2'
+          assert_no_text 'unique.metadata.field'
+          assert_no_selector 'li'
+        end
+
+        click_button I18n.t('viral.sortable_lists_component.add_all')
+        find('input#metadata_template_name').fill_in with: 'Group Template011'
+        click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
+      end
+
+      within %(div[data-controller='viral--flash']) do
+        assert_text I18n.t(
+          :'concerns.metadata_template_actions.create.success',
+          template_name: 'Group Template011'
+        )
+      end
+
+      assert_selector 'div#spinner'
+      assert_text I18n.t('metadata_templates.table_component.spinner_message')
+      assert_no_selector 'div#spinner'
+
+      table_row = find(:table_row, ['Group Template011'])
+
+      within(table_row) do
+        assert_text 'Group Template011'
+      end
+
+      click_on I18n.t('groups.metadata_templates.index.new_button')
+
+      assert_selector '#dialog'
+
+      within('span[data-controller-connected="true"] dialog') do
+        assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
+        assert_text I18n.t('metadata_templates.new_template_dialog.description')
+
+        within "ul[id='available']" do
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield2'
+          assert_text 'unique.metadata.field'
+          assert_selector 'li', count: 3
+        end
+
+        within "ul[id='selected']" do
+          assert_no_text 'metadatafield1'
+          assert_no_text 'metadatafield2'
+          assert_no_text 'unique.metadata.field'
+          assert_no_selector 'li'
+        end
+
+        click_button I18n.t('viral.sortable_lists_component.add_all')
+        find('input#metadata_template_name').fill_in with: 'Group Template011 New'
+        click_button I18n.t('metadata_templates.new_template_dialog.submit_button')
+
+        assert_text 'Fields already exist in another template with the same ordering'
+      end
+
+      assert_no_selector "div[data-controller='viral--flash']"
+      assert_no_selector 'div#spinner'
+      assert_no_text I18n.t('metadata_templates.table_component.spinner_message')
+    end
+
     test 'move fields between available and selected lists' do
       group = groups(:group_one)
 
@@ -387,9 +475,9 @@ module Groups
 
         # fields currently in template fixture
         within "ul[id='selected']" do
-          assert_text 'field_4'
-          assert_text 'field_5'
-          assert_text 'field_6'
+          assert_text 'field_1'
+          assert_text 'field_2'
+          assert_text 'field_3'
           assert_selector 'li', count: 3
         end
 
@@ -403,9 +491,9 @@ module Groups
         end
 
         within "ul[id='selected']" do
-          assert_text 'field_4'
-          assert_text 'field_5'
-          assert_text 'field_6'
+          assert_text 'field_1'
+          assert_text 'field_2'
+          assert_text 'field_3'
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'unique.metadata.field'
