@@ -69,7 +69,8 @@ class SamplesWorkflowExecutionsTest < ActiveSupport::TestCase
     assert_not_nil @samples_workflow_executions_invalid_file_format_non_fastq.errors
     expected_error =
       "Samplesheet params #{I18n.t('validators.workflow_execution_samplesheet_params_validator.attachment_format_error',
-                                   property: 'mlst_alleles', file_format: '^\\S+\\.mlst(\\.subtyping)?\\.json(\\.gz)?$')}"
+                                   property: 'mlst_alleles',
+                                   file_format: '^\\S+\\.mlst(\\.subtyping)?\\.json(\\.gz)?$')}"
     assert_includes @samples_workflow_executions_invalid_file_format_non_fastq.errors.full_messages,
                     expected_error
   end
