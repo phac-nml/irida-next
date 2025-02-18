@@ -33,7 +33,6 @@ module Samples
                   end
         parse_settings = headers.zip(headers).to_h
         row_count = @spreadsheet.last_row - 1
-
         increment_size = 100 / row_count.to_f
         current_progress = 0
         last_increment = 0
@@ -46,8 +45,7 @@ module Samples
           metadata.compact! if @ignore_empty_values
 
           metadata_changes = process_sample_metadata_row(sample_id, metadata)
-          response[sample_id] = metadata_changes if not_updated_metadata_changes
-
+          response[sample_id] = metadata_changes if metadata_changes
           current_progress += increment_size
           if (current_progress - last_increment) > 1
             (current_progress - last_increment).ceil.times do

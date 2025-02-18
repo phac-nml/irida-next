@@ -117,14 +117,5 @@ module Samples
         @new_project.parent.update_samples_count_by_addition_services(transferred_samples_count)
       end
     end
-
-    def stream_progress_update(action, target, content, broadcast_target)
-      Turbo::StreamsChannel.broadcast_action_to(
-        broadcast_target,
-        action:,
-        target:,
-        content:
-      )
-    end
   end
 end
