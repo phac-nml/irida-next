@@ -1,9 +1,6 @@
 <tr
   id="<%= dom_id(attachment) %>"
-  class="
-    bg-white border-b dark:bg-slate-800 dark:border-slate-700 text-slate-500
-    dark:text-slate-400
-  "
+  class="bg-white border-b  dark:bg-slate-800 dark:border-slate-700 text-slate-500 dark:text-slate-400"
 >
   <td class="px-6 py-4">
     <%= attachment.puid %>
@@ -11,7 +8,7 @@
   <% if attachment.associated_attachment && attachment.metadata['direction'] == 'forward' %>
     <td class="px-6 py-4">
       <div>
-        <div class="flex mb-4 items-center">
+        <div class="flex items-center mb-4">
           <%= viral_icon(name: :arrow_right, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
           <span>
             <%= link_to attachment.file.filename,
@@ -79,7 +76,7 @@
     <%= local_time_ago(attachment.created_at) %>
   </td>
 
-  <td class="px-6 py-4 space-x-2 flex justify-end">
+  <td class="flex justify-end px-6 py-4 space-x-2">
     <%= link_to workflow_executions_attachments_path(attachment: attachment.id), class: "text-blue-600 dark:text-blue-100 font-semibold hover:underline" do %>
       <%= t(".preview") %>
     <% end %>

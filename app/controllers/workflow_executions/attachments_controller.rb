@@ -2,10 +2,44 @@
 
 module WorkflowExecutions
   # Controller for managing attachments related to workflow executions
-  class AttachmentsController < ApplicationController
+  class AttachmentsController < WorkflowExecutionsController
+    include BreadcrumbNavigation
+
+    before_action :attachment, only: [:index]
+    before_action :workflow_execution, only: [:index]
+    # before_action :context_crumbs, only: [:index]
+
     def index
       @attachment = Attachment.find_by(id: params[:attachment])
-      @foo = params[:attachment]
+      @context_crumbs = context_crumbs
+    end
+
+    private
+
+    def workflow_execution
+      @workflow_execution = WorkflowExecution.find_by!(id: params[:workflow_execution], submitter: current_user)
+    end
+
+    def attachment
+      @attachment = Attachment.find_by(id: params[:attachment])
+    end
+
+    def context_crumbs
+      @context_crumbs =
+        [{
+          name: I18n.t('workflow_executions.index.title'),
+          path: workflow_executions_path
+        }, {
+          name: @workflow_execution.name || @workflow_execution.id,
+          path: workflow_execution_path(@workflow_execution)
+        }]
+
+      @context_crumbs +=
+        [{
+          name: @attachment.file.filename,
+          path: workflow_executions_attachments_path(attachment: @attachment.id,
+                                                     workflow_execution: @workflow_execution.id)
+        }]
     end
   end
 end
