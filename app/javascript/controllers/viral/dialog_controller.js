@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["dialog"];
+  static targets = ["dialog", "close"];
 
   static values = { open: Boolean };
 
@@ -26,5 +26,11 @@ export default class extends Controller {
 
   handleEsc(event) {
     event.preventDefault();
+  }
+
+  hideClose() {
+    if (this.hasCloseTarget) {
+      this.closeTarget.classList.add("hidden");
+    }
   }
 }

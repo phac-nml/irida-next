@@ -5,15 +5,14 @@ module Samples
   class CloneService < BaseProjectService
     CloneError = Class.new(StandardError)
 
-    def execute(new_project_id, sample_ids)
+    def execute(new_project_id, sample_ids, broadcast_target)
       authorize! @project, to: :clone_sample?
 
       validate(new_project_id, sample_ids)
 
       @new_project = Project.find_by(id: new_project_id)
       authorize! @new_project, to: :clone_sample_into_project?
-
-      clone_samples(sample_ids)
+      clone_samples(sample_ids, broadcast_target)
     rescue Samples::CloneService::CloneError => e
       @project.errors.add(:base, e.message)
       {}
@@ -31,16 +30,19 @@ module Samples
       raise CloneError, I18n.t('services.samples.clone.same_project')
     end
 
-    def clone_samples(sample_ids) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
+    def clone_samples(sample_ids, broadcast_target) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
       cloned_sample_ids = {}
       cloned_sample_puids = {}
       not_found_sample_ids = []
-
+      completed_count = 0
+      total_count = sample_ids.length
       sample_ids.each do |sample_id|
         sample = Sample.find_by!(id: sample_id, project_id: @project.id)
         cloned_sample = clone_sample(sample)
         cloned_sample_ids[sample_id] = cloned_sample.id unless cloned_sample.nil?
         cloned_sample_puids[sample.puid] = cloned_sample.puid unless cloned_sample.nil?
+        completed_count += 1
+        stream_progress_update(completed_count, total_count, broadcast_target)
       rescue ActiveRecord::RecordNotFound
         not_found_sample_ids << sample_id
         next
@@ -109,6 +111,18 @@ module Samples
                                                 cloned_samples_puids: cloned_sample_puids,
                                                 action: 'sample_clone'
                                               }
+    end
+
+    def stream_progress_update(completed_count, total_count, broadcast_target)
+      percentage = ((completed_count.to_f / total_count) * 100).round
+      Turbo::StreamsChannel.broadcast_update_to(
+        broadcast_target,
+        target: 'clone_samples_dialog_content',
+        partial: 'shared/progress_bar',
+        locals: {
+          percentage: "#{percentage}"
+        }
+      )
     end
   end
 end
