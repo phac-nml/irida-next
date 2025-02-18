@@ -27,6 +27,7 @@ export default class extends Controller {
     // Get a handle on the original available list
     this.#originalAvailableList = [
       ...this.availableList.querySelectorAll("li"),
+      ...this.selectedList.querySelectorAll("li"),
     ];
     Object.freeze(this.#originalAvailableList);
 
@@ -64,16 +65,18 @@ export default class extends Controller {
 
   #checkStates() {
     this.#checkButtonStates();
+
     if (this.hasTemplateSelectorTarget) {
       this.#checkTemplateSelectorState();
-
-      // Make sure the items in the availableList are in the originalAvailableList
-      this.availableList.querySelectorAll("li").forEach((li) => {
-        if (!this.#originalAvailableList.includes(li)) {
-          this.availableList.removeChild(li);
-        }
-      });
+      this.#cleanupAvailableList();
     }
+  }
+
+  #cleanupAvailableList() {
+    const itemsToRemove = Array.from(this.availableList.querySelectorAll("li"))
+      .filter(li => !this.#originalAvailableList.includes(li));
+
+    itemsToRemove.forEach(li => li.remove());
   }
 
   #checkButtonStates() {
