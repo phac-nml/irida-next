@@ -80,7 +80,9 @@
   </td>
 
   <td class="px-6 py-4 space-x-2 flex justify-end">
-    <button class="text-blue-600 dark:text-blue-100 font-semibold hover:underline"><%= t(".preview") %></button>
+    <%= link_to workflow_executions_attachments_path(attachment: attachment.id), class: "text-blue-600 dark:text-blue-100 font-semibold hover:underline" do %>
+      <%= t(".preview") %>
+    <% end %>
     <% if attachment.associated_attachment %>
       <%= link_to attachment.associated_attachment.file.filename,
       rails_blob_path(attachment.associated_attachment),

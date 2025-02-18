@@ -35,7 +35,11 @@
     >
       <% @attachments.each do |attachment| %>
         <% unless attachment.associated_attachment && attachment.metadata['direction'] == 'reverse' %>
-          <%= render partial: "attachment", locals: { attachment: attachment } %>
+          <%= render partial: "attachment",
+          locals: {
+            attachment: attachment,
+            workflow_execution: @workflow_execution,
+          } %>
         <% end %>
       <% end %>
     </tbody>
