@@ -204,7 +204,7 @@ export default class extends Controller {
         } else {
           const template = this.itemTemplateTarget.content.cloneNode(true);
           template.querySelector("li").innerText = element;
-          template.id = element;
+          template.querySelector("li").id = element.replace(/\s+/g, "-");
           this.selectedList.append(template);
         }
       });
