@@ -14,7 +14,7 @@
     >
       <div class="flex items-center space-x-4">
         <div class="text-slate-600 dark:text-slate-400">
-          <%= viral_icon(name: :document_text, classes: "w-8 h-8") %>
+          <%= viral_icon(name: :document_text, classes: "w-10 h-10") %>
         </div>
         <div>
           <h1 class="text-xl font-semibold text-slate-900 dark:text-white"><%= @attachment.file.filename %></h1>
@@ -76,8 +76,8 @@
         </pre>
       <% else %>
         <div class="py-12 text-center text-slate-500 dark:text-slate-400">
-          <p>Preview not available for this file type</p>
-          <p class="mt-2 text-sm">Please download to view the contents</p>
+          <p><%= t(".not_available.title") %></p>
+          <p class="mt-2 text-sm"><%= t(".not_available.details") %></p>
         </div>
       <% end %>
     </div>
