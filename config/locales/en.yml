@@ -1894,6 +1894,9 @@ en:
         copied: Copied
         copy: Copy
         download: Download
+        not_available:
+          details: Please download to view the contents
+          title: Preview not available for this file type
     edit_dialog:
       cancel_button: Cancel
       description: You are editing workflow execution '%{workflow_execution_id}'
