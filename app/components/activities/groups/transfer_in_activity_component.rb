@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Activities
   module Groups
-    # Component for rendering a subgroup transferred out of a group activity
+    # Component for rendering a subgroup transferred into a group activity
     class TransferInActivityComponent < Component
       def initialize(activity: nil)
         @activity = activity

@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Activities
   module Groups
     module Projects
-      # Component for rendering a subgroup transferred out of a group project activity
+      # Component for rendering a group projects activity
       class CrudActivityComponent < Component
         def initialize(activity: nil)
           @activity = activity

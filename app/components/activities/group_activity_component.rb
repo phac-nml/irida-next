@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Activities
-  # Component for rendering an activity of type Namespace for Projects
+  # Component for rendering an activity of type Namespace for Groups
   class GroupActivityComponent < Component
     def initialize(activity: nil)
       @activity = activity

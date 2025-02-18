@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Activities
   module Groups
-    # Component for rendering a metadata template activity for groups
+    # Component for rendering a subgroup activity for groups
     class SubgroupActivityComponent < Component
       def initialize(activity: nil)
         @activity = activity
