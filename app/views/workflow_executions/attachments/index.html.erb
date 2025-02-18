@@ -1,4 +1,4 @@
-<div class="container mx-auto px-4 py-8">
+<div class="container mx-auto px-4 py-8" data-controller="clipboard">
   <div
     class="
       bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200
@@ -31,6 +31,40 @@
       </div>
 
       <div class="flex items-center space-x-2">
+        <button
+          data-clipboard-target="button"
+          data-action="clipboard#copy"
+          class="
+            inline-flex items-center px-4 py-2 text-sm font-medium text-slate-900
+            dark:text-white bg-white dark:bg-slate-700 border border-slate-200
+            dark:border-slate-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600
+            focus:ring-4 focus:ring-slate-100 dark:focus:ring-slate-700
+          "
+        >
+          <div class="flex items-center hidden" data-clipboard-target="successIcon">
+            <%= viral_icon(
+              name: "check",
+              classes: "w-4 h-4 mr-2",
+              color: :success,
+              data: {
+                clipboard_target: "successIcon",
+              },
+            ) %>
+            Copied
+          </div>
+          <span class="flex items-center" data-clipboard-target="buttonLabel">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
+              />
+            </svg>
+            Copy
+          </span>
+        </button>
+
         <%= link_to rails_blob_path(@attachment.file, disposition: :attachment),
             class: "inline-flex items-center px-4 py-2 text-sm font-medium text-slate-900 dark:text-white bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 focus:ring-4 focus:ring-slate-100 dark:focus:ring-slate-700" do %>
           <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -51,6 +85,7 @@
         <%= image_tag @attachment.file, class: "max-w-full rounded-lg" %>
       <% elsif @attachment.file.content_type.start_with?('text/') %>
         <pre
+          data-clipboard-target="source"
           class="
             p-4 bg-slate-50 dark:bg-slate-900 rounded-lg overflow-x-auto dark:text-slate-300
           "

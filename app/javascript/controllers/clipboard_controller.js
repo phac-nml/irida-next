@@ -1,25 +1,24 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["button", "content"];
-  #tooltip;
+  static targets = ["source", "buttonLabel", "successIcon"];
+  static classes = ["copied"];
 
-  connect() {
-    this.#tooltip = new Tooltip(this.contentTarget, this.buttonTarget, {
-      placement: "top",
-      triggerType: "none",
-    });
-  }
+  async copy() {
+    try {
+      const content = this.sourceTarget.textContent.trim();
+      await navigator.clipboard.writeText(content);
 
-  copy(e) {
-    e.stopImmediatePropagation();
-    navigator.clipboard.writeText(e.target.value).then(this.#notify.bind(this));
-  }
-
-  #notify() {
-    this.#tooltip.show();
-    setTimeout(() => {
-      this.#tooltip.hide();
-    }, 1000);
+      // Visual feedback
+      this.successIconTarget.classList.remove("hidden");
+      this.buttonLabelTarget.classList.add("sr-only");
+      // Reset after 2 seconds
+      setTimeout(() => {
+        this.successIconTarget.classList.add("hidden");
+        this.buttonLabelTarget.classList.remove("sr-only");
+      }, 2000);
+    } catch (err) {
+      console.error("Failed to copy text:", err);
+    }
   }
 }
