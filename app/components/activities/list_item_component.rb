@@ -9,6 +9,10 @@ module Activities
       @activity = activity
     end
 
+    def project_crud_action
+      @activity[:key].include?('group.projects.create') ||  @activity[:key].include?('group.projects.destroy')
+    end
+
     def metadata_template_action
       %w[metadata_template_create metadata_template_destroy metadata_template_update].include?(@activity[:action])
     end
@@ -28,6 +32,23 @@ module Activities
 
     def sample_transfer_action
       %w[sample_transfer].include?(@activity[:action])
+    end
+
+    def subgroup_action
+      @activity[:action] == 'group_subgroup_destroy' || (@activity[:action] == 'group_subgroup_create') ||
+        (@activity[:action] == 'group_namespace_transfer')
+    end
+
+    def transfer_in_action
+      @activity[:key].include?('group.transfer_in')
+    end
+
+    def transfer_out_action
+      @activity[:key].include?('group.transfer_out')
+    end
+
+    def project_transfer_action
+      @activity[:action] == 'project_namespace_transfer'
     end
   end
 end

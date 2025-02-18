@@ -236,7 +236,9 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     created_at.strftime(I18n.t('time.formats.abbreviated'))
   end
 
-  def additional_group_activity_params(params, activity)
+  def additional_group_activity_params(params, activity) # rubocop:disable Metrics/AbcSize
+    params = add_metadata_template_params(params, activity)
+
     if activity.parameters[:action] == 'group_subgroup_destroy'
       params.merge!({ removed_group_puid: activity.parameters[:removed_group_puid] })
     end

@@ -1,0 +1,10 @@
+<span>
+  <%= t(
+    "#{@activity[:key]}",
+    user: @activity[:user],
+    project_puid: @activity[:project_puid],
+    old_namespace: @activity[:old_namespace],
+    new_namespace: @activity[:new_namespace],
+    group_puid: @activity[:transferred_group].puid,
+  ) %>
+</span>

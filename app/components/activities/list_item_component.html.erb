@@ -12,7 +12,27 @@
   ><%= helpers.local_time(activity[:created_at], :long) %></div>
   <p class="mb-4 text-base font-normal text-slate-500 dark:text-slate-400">
     <% if activity[:type] == 'Namespace' && activity[:key].include?('group') %>
-      <%= render Activities::GroupActivityComponent.new(activity: activity) %>
+      <% if metadata_template_action %>
+        <%= render Activities::Groups::MetadataTemplateActivityComponent.new(
+          activity: activity,
+        ) %>
+      <% elsif transfer_in_action %>
+        <%= render Activities::Groups::TransferInActivityComponent.new(activity: activity) %>
+      <% elsif transfer_out_action %>
+        <%= render Activities::Groups::TransferOutActivityComponent.new(activity: activity) %>
+      <% elsif subgroup_action %>
+        <%= render Activities::Groups::SubgroupActivityComponent.new(activity: activity) %>
+      <% elsif project_crud_action %>
+        <%= render Activities::Groups::Projects::CrudActivityComponent.new(
+          activity: activity,
+        ) %>
+      <% elsif project_transfer_action %>
+        <%= render Activities::Groups::Projects::TransferActivityComponent.new(
+          activity: activity,
+        ) %>
+      <% else %>
+        <%= render Activities::GroupActivityComponent.new(activity: activity) %>
+      <% end %>
     <% elsif activity[:type] == 'Namespace' && activity[:key].include?('project_namespace') %>
       <% if metadata_template_action %>
         <%= render Activities::Projects::MetadataTemplateActivityComponent.new(

@@ -1,0 +1,22 @@
+<% if project_exists %>
+  <%= t(
+    "#{@activity[:key]}",
+    user: @activity[:user],
+    href:
+      link_to(
+        @activity[:project_puid],
+        namespace_project_path(@activity[:group], @activity[:project]),
+        class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
+      ),
+  ) %>
+<% else %>
+  <% if destroy_group_project %>
+    <%= t(
+      "#{@activity[:key]}",
+      user: @activity[:user],
+      project_puid: @activity[:project_puid],
+    ) %>
+  <% else %>
+    <%= t("#{@activity[:key]}", user: @activity[:user], href: @activity[:project_puid]) %>
+  <% end %>
+<% end %>
