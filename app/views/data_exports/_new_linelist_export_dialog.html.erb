@@ -103,6 +103,13 @@
               list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
             ) %>
           <% end %>
+
+          <template
+            id="sortable-list-item-template"
+            data-viral--sortable-lists--two-lists-selection-target="itemTemplate"
+          >
+            <%= render Viral::SortableList::ListItemComponent.new(list_item: "NAME_HERE") %>
+          </template>
           <%= form_for(:data_export, url: data_exports_path, method: :post,
               data: {
                 controller: "form--hidden-inputs",

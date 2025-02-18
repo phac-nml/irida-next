@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import { createHiddenInput } from "utilities/form";
 
 export default class extends Controller {
-  static targets = ["field", "submitBtn", "addAll", "removeAll", "templateSelector"];
+  static targets = ["field", "submitBtn", "addAll", "removeAll", "templateSelector", "itemTemplate"];
 
   static values = {
     selectedList: String,
@@ -17,14 +17,20 @@ export default class extends Controller {
     "dark:text-slate-700",
   ];
   #enabledClasses = ["underline", "hover:no-underline"];
+  #originalAvailableList;
 
   connect() {
+    // Get a handle on the available and selected lists
     this.availableList = document.getElementById(this.availableListValue);
     this.selectedList = document.getElementById(this.selectedListValue);
-    this.allListItems = this.#constructAllListItems(
-      this.availableList,
-      this.selectedList,
-    );
+
+    // Get a handle on the original available list
+    this.#originalAvailableList = [
+      ...this.availableList.querySelectorAll("li"),
+      ...this.selectedList.querySelectorAll("li"),
+    ];
+    Object.freeze(this.#originalAvailableList);
+
     this.#setInitialSelectAllState(this.availableList, this.addAllTarget);
     this.#setInitialSelectAllState(this.selectedList, this.removeAllTarget);
 
@@ -35,30 +41,16 @@ export default class extends Controller {
 
   addAll(event) {
     event.preventDefault();
-
-    for (const item of this.allListItems) {
-      this.selectedList.append(item);
-    }
+    this.availableList.innerHTML = "";
+    this.selectedList.append(...this.#originalAvailableList);
     this.#checkStates();
   }
 
   removeAll(event) {
     event.preventDefault();
-
-    for (const item of this.allListItems) {
-      this.availableList.append(item);
-    }
+    this.availableList.append(...this.#originalAvailableList);
+    this.selectedList.innerHTML = "";
     this.#checkStates();
-  }
-
-  #constructAllListItems(listOne, listTwo) {
-    const listOneItems = Array.prototype.slice.call(
-      listOne.querySelectorAll("li"),
-    );
-    const listTwoItems = Array.prototype.slice.call(
-      listTwo.querySelectorAll("li"),
-    );
-    return listOneItems.concat(listTwoItems);
   }
 
   #setInitialSelectAllState(list, button) {
@@ -73,9 +65,18 @@ export default class extends Controller {
 
   #checkStates() {
     this.#checkButtonStates();
+
     if (this.hasTemplateSelectorTarget) {
       this.#checkTemplateSelectorState();
+      this.#cleanupAvailableList();
     }
+  }
+
+  #cleanupAvailableList() {
+    const itemsToRemove = Array.from(this.availableList.querySelectorAll("li"))
+      .filter(li => !this.#originalAvailableList.includes(li));
+
+    itemsToRemove.forEach(li => li.remove());
   }
 
   #checkButtonStates() {
@@ -189,8 +190,9 @@ export default class extends Controller {
 
       // Reset the lists to their initial state
       // Move all items to available list in one operation for better performance
-      this.availableList.append(...this.allListItems);
+      this.availableList.innerHTML = "";
       this.selectedList.innerHTML = "";
+      this.availableList.append(...this.#originalAvailableList);
 
       // Handle "none" template selection by removing all items
       if (templateId === "none") {
@@ -209,6 +211,11 @@ export default class extends Controller {
           this.selectedList.append(items[index]);
           items.splice(index, 1);
           textFields.splice(index, 1);
+        } else {
+          const template = this.itemTemplateTarget.content.cloneNode(true);
+          template.querySelector("li").innerText = element;
+          template.querySelector("li").id = element.replace(/\s+/g, "-");
+          this.selectedList.append(template);
         }
       });
       this.availableList.append(...items);
