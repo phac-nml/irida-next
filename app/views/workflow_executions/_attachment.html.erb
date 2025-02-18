@@ -1,6 +1,9 @@
 <tr
   id="<%= dom_id(attachment) %>"
-  class="bg-white border-b  dark:bg-slate-800 dark:border-slate-700 text-slate-500 dark:text-slate-400"
+  class="
+    bg-white border-b dark:bg-slate-800 dark:border-slate-700 text-slate-500
+    dark:text-slate-400
+  "
 >
   <td class="px-6 py-4">
     <%= attachment.puid %>
@@ -77,7 +80,7 @@
   </td>
 
   <td class="flex justify-end px-6 py-4 space-x-2">
-    <%= link_to workflow_executions_attachments_path(attachment: attachment.id), class: "text-blue-600 dark:text-blue-100 font-semibold hover:underline" do %>
+    <%= link_to workflow_executions_attachments_path(attachment: attachment.id, workflow_execution: @workflow_execution.id), class: "text-blue-600 dark:text-blue-100 font-semibold hover:underline" do %>
       <%= t(".preview") %>
     <% end %>
     <% if attachment.associated_attachment %>
