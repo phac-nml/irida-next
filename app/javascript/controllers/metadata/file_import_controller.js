@@ -2,11 +2,9 @@ import { Controller } from "@hotwired/stimulus";
 import * as XLSX from "xlsx";
 
 export default class extends Controller {
-  static targets = ["selectInput", "submitButton"];
-  static values = {
-    loaded: Boolean
-  };
+  static targets = ["sampleIdColumn", "metadataColumns", "submitButton"];
 
+  #headers = [];
   #disabled_classes = [
     "bg-slate-50",
     "border",
@@ -28,12 +26,18 @@ export default class extends Controller {
   ];
 
   connect() {
-    this.#disableSelectInput();
+    this.#disableTarget(this.sampleIdColumnTarget);
+    this.#disableTarget(this.metadataColumnsTarget);
     this.submitButtonTarget.disabled = true;
-    this.loadedValue = true;
   }
 
-  toggleSubmitButton(event) {
+  changeSampleIDInput() {
+    this.#removeInputOptions(this.metadataColumnsTarget);
+    this.#disableTarget(this.metadataColumnsTarget);
+    this.#addMetadataInputOptions();
+  }
+
+  changeMetadataInput(event) {
     const { value } = event.target;
     this.submitButtonTarget.disabled = !value;
   }
@@ -42,7 +46,7 @@ export default class extends Controller {
     const { files } = event.target;
 
     if (!files.length) {
-      this.#removeSelectOptions();
+      this.#removeInputsOptions();
       return;
     }
 
@@ -53,33 +57,65 @@ export default class extends Controller {
       const workbook = XLSX.read(reader.result, { sheetRows: 1 });
       const worksheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[worksheetName];
-      const headers = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
-      this.#removeSelectOptions();
-      this.#addSelectOptions(headers);
+      this.#headers = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
+      this.#removeInputsOptions();
+      this.#addSampleIDInputOptions();
     };
   }
 
-  #removeSelectOptions() {
-    while (this.selectInputTarget.options.length > 1) {
-      this.selectInputTarget.remove(this.selectInputTarget.options.length - 1);
-    }
-    this.#disableSelectInput();
+  #removeInputsOptions() {
+    this.#removeInputOptions(this.sampleIdColumnTarget);
+    this.#removeInputOptions(this.metadataColumnsTarget);
+    this.#disableTarget(this.sampleIdColumnTarget);
+    this.#disableTarget(this.metadataColumnsTarget);
     this.submitButtonTarget.disabled = true;
   }
 
-  #addSelectOptions(headers) {
-    for (let header of headers) {
+  #addSampleIDInputOptions() {
+    for (let header of this.#headers) {
       const option = document.createElement("option");
       option.value = header;
       option.text = header;
-      this.selectInputTarget.append(option);
+      this.sampleIdColumnTarget.append(option);
     }
-    this.selectInputTarget.disabled = false;
-    this.selectInputTarget.classList.remove(...this.#disabled_classes);
+    this.sampleIdColumnTarget.disabled = false;
+    this.sampleIdColumnTarget.classList.remove(...this.#disabled_classes);
   }
 
-  #disableSelectInput() {
-    this.selectInputTarget.disabled = true;
-    this.selectInputTarget.classList.add(...this.#disabled_classes);
+  #addMetadataInputOptions() {
+    const ignoreList = [
+      "sample id",
+      "sample name",
+      "project id",
+      "created_at",
+      "updated_at",
+      "last_updated_at",
+    ];
+
+    let columns = this.#headers.filter(
+      (header) =>
+        !ignoreList.includes(header) &&
+        header != this.sampleIdColumnTarget.value,
+    );
+
+    for (let column of columns) {
+      const option = document.createElement("option");
+      option.value = column;
+      option.text = column;
+      this.metadataColumnsTarget.append(option);
+    }
+    this.metadataColumnsTarget.disabled = false;
+    this.metadataColumnsTarget.classList.remove(...this.#disabled_classes);
+  }
+
+  #removeInputOptions(target) {
+    while (target.options.length > 1) {
+      target.remove(target.options.length - 1);
+    }
+  }
+
+  #disableTarget(target) {
+    target.disabled = true;
+    target.classList.add(...this.#disabled_classes);
   }
 }

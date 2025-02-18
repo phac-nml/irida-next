@@ -47,8 +47,22 @@
                         { prompt: t(".select_sample_id_column") },
                         required: true,
                         data: {
-                          "metadata--file-import-target": "selectInput",
-                          action: "change->metadata--file-import#toggleSubmitButton",
+                          "metadata--file-import-target": "sampleIdColumn",
+                          action: "change->metadata--file-import#changeSampleIDInput",
+                        } %>
+          </div>
+          <div class="form-field">
+            <%= form.label :metadata_columns,
+                       t(".metadata_columns"),
+                       class:
+                         "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
+            <%= form.select :metadata_columns,
+                        {},
+                        { multiple: true, prompt: t(".select_metadata_columns") },
+                        required: true,
+                        data: {
+                          "metadata--file-import-target": "metadataColumns",
+                          action: "change->metadata--file-import#changeMetadataInput",
                         } %>
           </div>
           <div class="flex items-center">
