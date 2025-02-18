@@ -218,9 +218,8 @@ group1_project_transfer_out:
   key: "group.projects.transfer_out"
   parameters: {
     project_id: <%= ActiveRecord::FixtureSet.identify(:project1, :uuid) %>,
-    old_namespace: <%= ActiveRecord::FixtureSet.identify(:group_one, :puid) %>,
-    new_namespace: <%= ActiveRecord::FixtureSet.identify(:group_two, :puid) %>,
-    project_puid: <%= ActiveRecord::FixtureSet.identify(:project1, :puid) %>,
+    old_namespace: INXT_GRP_AAAAAAAAAA,
+    new_namespace: INXT_GRP_AAAAAAAAAC,
     action: 'project_namespace_transfer'
   }
   created_at: <%= Time.zone.now %>
@@ -232,9 +231,8 @@ group1_project_transfer_in:
   key: "group.projects.transfer_in"
   parameters: {
     project_id: <%= ActiveRecord::FixtureSet.identify(:project1, :uuid) %>,
-    old_namespace: <%= ActiveRecord::FixtureSet.identify(:group_two, :puid) %>,
-    new_namespace: <%= ActiveRecord::FixtureSet.identify(:group_one, :puid) %>,
-    project_puid: <%= ActiveRecord::FixtureSet.identify(:project1, :puid) %>,
+    old_namespace: INXT_GRP_AAAAAAAAAC,
+    new_namespace: INXT_GRP_AAAAAAAAAA,
     action: 'project_namespace_transfer'
   }
   created_at: <%= Time.zone.now %>
