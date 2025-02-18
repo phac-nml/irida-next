@@ -207,7 +207,7 @@ group1_project_create:
   key: "group.projects.create"
   parameters: {
     project_id: <%= ActiveRecord::FixtureSet.identify(:project1, :uuid) %>,
-    project_puid: <%= ActiveRecord::FixtureSet.identify(:project1, :puid) %>,
+    project_puid: INXT_PRJ_AAAAAAAAAA,
   }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
@@ -238,21 +238,23 @@ group1_project_transfer_in:
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
-group1_group_transfer_in:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  key: "group.transfer_in_no_exisiting_namespace"
-  parameters: {
-    transferred_group_id: <%= ActiveRecord::FixtureSet.identify(:group_two, :uuid) %>,
-    new_namespace: <%= ActiveRecord::FixtureSet.identify(:group_one, :puid) %>,
-    action: 'group_namespace_transfer'
-  }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
 group1_member_james_doe_create:
   trackable_type: "Member"
   trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one_member_james_doe, :uuid) %>
   key: "member.create"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+group_one_metadata_template_create:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  key: "group.metadata_template.create"
+  parameters:
+    {
+      template_id: <%= ActiveRecord::FixtureSet.identify(:valid_group_metadata_template, :uuid) %>,
+      template_name: "Valid Group Template",
+      namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>,
+      action: "metadata_template_create",
+    }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>

@@ -7,10 +7,6 @@ module Activities
           @activity = activity
         end
 
-        def destroy_group_project
-          @activity[:action] == 'group_project_destroy'
-        end
-
         def project_exists
           return false if @activity[:project].nil?
 

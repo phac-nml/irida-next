@@ -10,7 +10,7 @@ module Activities
         def project_exists
           return false if @activity[:project].nil?
 
-          !@activity[:project].deleted? && @activity[:project].parent != @activity[:group]
+          !@activity[:project].deleted? && (@activity[:project].parent == @activity[:group])
         end
       end
     end
