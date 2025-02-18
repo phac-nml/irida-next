@@ -1889,6 +1889,11 @@ en:
     attachment:
       download: Download
       preview: Preview
+    attachments:
+      index:
+        copied: Copied
+        copy: Copy
+        download: Download
     edit_dialog:
       cancel_button: Cancel
       description: You are editing workflow execution '%{workflow_execution_id}'
