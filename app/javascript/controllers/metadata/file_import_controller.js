@@ -2,6 +2,11 @@ import { Controller } from "@hotwired/stimulus";
 import * as XLSX from "xlsx";
 
 export default class extends Controller {
+  static targets = ["selectInput", "submitButton"];
+  static values = {
+    loaded: Boolean,
+  };
+
   static targets = [
     "sampleIdColumn",
     "metadataColumns",

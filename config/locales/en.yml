@@ -1802,6 +1802,7 @@ en:
       samples_list_skeleton:
         loading: Loading...
     progress_bar:
+      finalizing: Finalizing...
       in_progress: Action in progress. Please do not refresh the page.
     samples:
       metadata:

@@ -5,7 +5,7 @@ module Samples
   class TransferService < BaseProjectService
     TransferError = Class.new(StandardError)
 
-    def execute(new_project_id, sample_ids)
+    def execute(new_project_id, sample_ids, broadcast_target)
       # Authorize if user can transfer samples from the current project
       authorize! @project, to: :transfer_sample?
 
@@ -19,7 +19,7 @@ module Samples
         validate_maintainer_sample_transfer
       end
 
-      transfer(new_project_id, sample_ids)
+      transfer(new_project_id, sample_ids, broadcast_target)
     rescue Samples::TransferService::TransferError => e
       @project.errors.add(:base, e.message)
       []
@@ -47,7 +47,7 @@ module Samples
             I18n.t('services.samples.transfer.maintainer_transfer_not_allowed')
     end
 
-    def transfer(new_project_id, sample_ids) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    def transfer(new_project_id, sample_ids, broadcast_target) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       transferred_samples_ids = []
       transferred_samples_puids = []
       not_found_sample_ids = []
@@ -57,6 +57,7 @@ module Samples
         sample.update!(project_id: new_project_id)
         transferred_samples_ids << sample_id
         transferred_samples_puids << sample.puid
+        stream_progress_update('append', 'progress-bar', '<div></div>', broadcast_target)
       rescue ActiveRecord::RecordNotFound
         not_found_sample_ids << sample_id
         next
@@ -73,6 +74,8 @@ module Samples
       end
 
       if transferred_samples_ids.count.positive?
+        stream_progress_update('update', 'progress-message', I18n.t('shared.progress_bar.finalizing'),
+                               broadcast_target)
         create_activities(transferred_samples_ids, transferred_samples_puids)
 
         @project.namespace.update_metadata_summary_by_sample_transfer(transferred_samples_ids,
@@ -113,6 +116,15 @@ module Samples
       elsif @new_project.parent.type == 'Group'
         @new_project.parent.update_samples_count_by_addition_services(transferred_samples_count)
       end
+    end
+
+    def stream_progress_update(action, target, content, broadcast_target)
+      Turbo::StreamsChannel.broadcast_action_to(
+        broadcast_target,
+        action:,
+        target:,
+        content:
+      )
     end
   end
 end

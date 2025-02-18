@@ -13,10 +13,10 @@ module Samples
         super(namespace, user, blob_id, [@sample_id_column], 1, params)
       end
 
-      def execute
+      def execute(broadcast_target)
         authorize! @namespace, to: :update_sample_metadata?
         validate_file
-        perform_file_import
+        perform_file_import(broadcast_target)
       rescue FileImportError => e
         @namespace.errors.add(:base, e.message)
         {}
@@ -24,7 +24,7 @@ module Samples
 
       protected
 
-      def perform_file_import # rubocop:disable Metrics/MethodLength
+      def perform_file_import(broadcast_target) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         response = {}
         headers = if Flipper.enabled?(:metadata_import_field_selection)
                     @selected_headers << @sample_id_column
@@ -32,6 +32,11 @@ module Samples
                     @headers
                   end
         parse_settings = headers.zip(headers).to_h
+        row_count = @spreadsheet.last_row - 1
+
+        increment_size = 100 / row_count.to_f
+        current_progress = 0
+        last_increment = 0
         @spreadsheet.each_with_index(parse_settings) do |metadata, index|
           next unless index.positive?
 
@@ -41,7 +46,15 @@ module Samples
           metadata.compact! if @ignore_empty_values
 
           metadata_changes = process_sample_metadata_row(sample_id, metadata)
-          response[sample_id] = metadata_changes if metadata_changes
+          response[sample_id] = metadata_changes if not_updated_metadata_changes
+
+          current_progress += increment_size
+          if (current_progress - last_increment) > 1
+            (current_progress - last_increment).ceil.times do
+              stream_progress_update('append', 'progress-bar', '<div></div>', broadcast_target)
+            end
+            last_increment = current_progress
+          end
         rescue ActiveRecord::RecordNotFound
           @namespace.errors.add(:sample, error_message(sample_id))
         end

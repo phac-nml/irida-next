@@ -1,5 +1,3 @@
-<%= turbo_stream.append "import_metadata_dialog_content" do %>
-  <%= render SpinnerComponent.new(
-    message: t("shared.samples.metadata.file_imports.dialog.spinner_message"),
-  ) %>
+<%= turbo_stream.update "import_metadata_dialog_content" do %>
+  <%= render partial: "shared/progress_bar", locals: { total_count: 100 } %>
 <% end %>

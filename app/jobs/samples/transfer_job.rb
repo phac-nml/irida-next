@@ -7,7 +7,8 @@ module Samples
 
     def perform(project, current_user, new_project_id, sample_ids, broadcast_target) # rubocop:disable Metrics/MethodLength
       @transferred_sample_ids = ::Samples::TransferService.new(project, current_user).execute(new_project_id,
-                                                                                              sample_ids)
+                                                                                              sample_ids,
+                                                                                              broadcast_target)
 
       if project.errors.empty?
         Turbo::StreamsChannel.broadcast_replace_to(

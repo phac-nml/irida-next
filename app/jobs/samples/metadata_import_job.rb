@@ -6,7 +6,7 @@ module Samples
     queue_as :default
 
     def perform(namespace, current_user, broadcast_target, blob_id, params) # rubocop:disable Metrics/MethodLength
-      ::Samples::Metadata::FileImportService.new(namespace, current_user, blob_id, params).execute
+      ::Samples::Metadata::FileImportService.new(namespace, current_user, blob_id, params).execute(broadcast_target)
 
       if namespace.errors.empty?
         Turbo::StreamsChannel.broadcast_replace_to(
