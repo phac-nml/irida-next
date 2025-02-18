@@ -66,6 +66,13 @@ export default class extends Controller {
     this.#checkButtonStates();
     if (this.hasTemplateSelectorTarget) {
       this.#checkTemplateSelectorState();
+
+      // Make sure the items in the availableList are in the originalAvailableList
+      this.availableList.querySelectorAll("li").forEach((li) => {
+        if (!this.#originalAvailableList.includes(li)) {
+          this.availableList.removeChild(li);
+        }
+      });
     }
   }
 
