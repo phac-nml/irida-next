@@ -1,21 +1,23 @@
-<% if group_exists %>
-  <%= t(
-    "#{@activity[:key]}",
-    user: @activity[:user],
-    name: @activity[:name],
-    href:
-      link_to(
-        @activity[:created_group].puid,
-        group_path(@activity[:created_group]),
-      ),
-    group_puid: @activity[:group].puid,
-  ) %>
-<% else %>
-  <%= t(
-    "#{@activity[:key]}",
-    user: @activity[:user],
-    name: @activity[:name],
-    href: @activity[:created_group].puid,
-    group_puid: @activity[:group].puid,
-  ) %>
-<% end %>
+<span>
+  <% if group_exists %>
+    <%= t(
+      "#{@activity[:key]}",
+      user: @activity[:user],
+      name: @activity[:name],
+      href:
+        link_to(
+          @activity[:created_group].puid,
+          group_path(@activity[:created_group]),
+        ),
+      group_puid: @activity[:group].puid,
+    ) %>
+  <% else %>
+    <%= t(
+      "#{@activity[:key]}",
+      user: @activity[:user],
+      name: @activity[:name],
+      href: @activity[:created_group].puid,
+      group_puid: @activity[:group].puid,
+    ) %>
+  <% end %>
+</span>
