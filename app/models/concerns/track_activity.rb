@@ -77,10 +77,10 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     transfer_activity_parameters(params, activity)
   end
 
-  def workflow_execution_activity(activity)
+  def workflow_execution_activity(activity) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     activity_trackable = activity_trackable(activity, Namespace)
 
-    {
+    base_params = {
       created_at: format_created_at(activity.created_at),
       key: "activity.#{activity.key}_html",
       user: activity_creator(activity),
@@ -91,6 +91,13 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
       sample_id: activity.parameters[:sample_id],
       automated: activity.parameters[:automated]
     }
+
+    relation = activity.parameters[:automated] == true ? AutomatedWorkflowExecution : WorkflowExecution
+
+    base_params.merge!({
+                         workflow_execution: get_object_by_id(activity.parameters[:workflow_id], relation),
+                         sample: get_object_by_id(activity.parameters[:sample_id], Sample)
+                       })
   end
 
   def member_activity(activity)
@@ -131,7 +138,22 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   end
 
   def get_object_by_id(identifier, relation)
-    relation.with_deleted.find_by(id: identifier)
+    if relation == Project
+      proj = relation.with_deleted.find_by(id: identifier)&.namespace_id
+      Namespace.with_deleted.find_by(id: proj) if proj.present?
+    else
+      relation.with_deleted.find_by(id: identifier)
+    end
+  rescue StandardError
+    # acts_as_paranoid not setup on model
+    relation.find_by(id: identifier)
+  end
+
+  def get_object_by_puid(puid, relation)
+    relation.with_deleted.find_by(puid: puid)
+  rescue StandardError
+    # acts_as_paranoid not setup on model
+    relation.find_by(puid: puid)
   end
 
   def transfer_activity_parameters(params, activity) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
@@ -149,7 +171,9 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
     if activity.parameters[:action] == 'sample_transfer'
       params.merge!({
+                      source_project_puid: activity.parameters[:source_project_puid],
                       source_project: get_object_by_id(activity.parameters[:source_project], Project),
+                      target_project_puid: activity.parameters[:target_project_puid],
                       target_project: get_object_by_id(activity.parameters[:target_project], Project),
                       transferred_samples_ids: activity.parameters[:transferred_samples_ids],
                       transferred_samples_puids: activity.parameters[:transferred_samples_puids]
@@ -158,7 +182,9 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
     if activity.parameters[:action] == 'sample_clone'
       params.merge!({
+                      source_project_puid: activity.parameters[:source_project_puid],
                       source_project: get_object_by_id(activity.parameters[:source_project], Project),
+                      target_project_puid: activity.parameters[:target_project_puid],
                       target_project: get_object_by_id(activity.parameters[:target_project], Project),
                       cloned_samples_ids: activity.parameters[:cloned_samples_ids],
                       cloned_samples_puids: activity.parameters[:cloned_samples_puids]
@@ -176,12 +202,13 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
   def add_sample_activity_params(params, activity)
     sample_activity_action_types = %w[sample_create sample_update metadata_update sample_destroy attachment_create
-                                      attachment_destroy]
+                                      attachment_destroy sample_destroy]
     return params unless sample_activity_action_types.include?(activity.parameters[:action])
 
     params.merge(
       sample_id: activity.parameters[:sample_id],
-      sample_puid: activity.parameters[:sample_puid]
+      sample_puid: activity.parameters[:sample_puid],
+      sample: get_object_by_puid(activity.parameters[:sample_puid], Sample)
     )
   end
 
@@ -191,7 +218,8 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
     params.merge(
       template_id: activity.parameters[:template_id],
-      template_name: activity.parameters[:template_name]
+      template_name: activity.parameters[:template_name],
+      template: get_object_by_id(activity.parameters[:template_id], MetadataTemplate)
     )
   end
 

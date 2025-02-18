@@ -88,6 +88,7 @@ module Samples
                                          owner: current_user,
                                          parameters:
                                           {
+                                            target_project_puid: @new_project.puid,
                                             target_project: @new_project.id,
                                             transferred_samples_ids:,
                                             transferred_samples_puids:,
@@ -98,6 +99,7 @@ module Samples
                                              owner: current_user,
                                              parameters:
                                               {
+                                                source_project_puid: @project.puid,
                                                 source_project: @project.id,
                                                 transferred_samples_ids:,
                                                 transferred_samples_puids:,

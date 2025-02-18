@@ -17,5 +17,11 @@ module Activities
         )
       end
     end
+
+    def member_exists
+      return false if @activity[:member].nil?
+
+      !@activity[:member].deleted?
+    end
   end
 end

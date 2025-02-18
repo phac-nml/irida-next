@@ -8,7 +8,7 @@ module Activities
     end
 
     def project_link
-      @activity[:group] && @activity[:project] && !@activity[:project].namespace.nil?
+      @activity[:group] && @activity[:project]
     end
 
     def group_link

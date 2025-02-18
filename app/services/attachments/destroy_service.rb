@@ -53,6 +53,8 @@ module Attachments
     def create_activity
       return unless @attachable.instance_of?(Sample)
 
+      return if @attachment.metadata.key?('direction') && @attachment.metadata['direction'] == 'reverse'
+
       @attachable.project.namespace.create_activity key: 'namespaces_project_namespace.samples.attachment.destroy',
                                                     owner: current_user,
                                                     trackable_id: @attachable.id,

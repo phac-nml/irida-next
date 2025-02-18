@@ -16,7 +16,7 @@ class ActivityComponentTest < ViewComponentTestCase
     @pagy = Pagy.new(count: 12, page: 1, limit: 10)
 
     assert_equal 12, @activities.length
-    assert_equal 2, @project2_activities.length
+    assert_equal 3, @project2_activities.length
 
     assert_equal(1, @activities.count { |activity| activity[:key].include?('project_namespace.create') })
     assert_equal(1, @activities.count { |activity| activity[:key].include?('project_namespace.samples.create') })
@@ -30,14 +30,9 @@ class ActivityComponentTest < ViewComponentTestCase
                       activity[:key].include?('workflow_execution.automated_workflow.launch')
                     end)
     assert_equal(1, @activities.count { |activity| activity[:key].include?('namespace_group_link.create') })
-    assert_equal(1, @activities.count do |activity|
-                      activity[:key].include?('namespaces_project_namespace.samples.destroy_multiple')
-                    end)
+
     assert_equal(1, @activities.count do |activity|
       activity[:key].include?('namespaces_project_namespace.transfer')
-    end)
-    assert_equal(1, @activities.count do |activity|
-      activity[:key].include?('namespaces_project_namespace.samples.metadata.update')
     end)
 
     assert_equal(1, @project2_activities.count { |activity| activity[:key].include?('project_namespace.create') })
