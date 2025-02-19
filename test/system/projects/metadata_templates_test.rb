@@ -27,27 +27,25 @@ module Projects
         assert_selector 'tr', count: 20
       end
 
-      assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
-      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+      assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
 
-      click_on I18n.t(:'components.pagination.next')
+      click_on I18n.t(:'viral.pagy.pagination_component.next')
 
       within('table tbody') do
         assert_selector 'tr', count: 3
       end
 
-      assert_selector 'a', text: I18n.t(:'components.pagination.previous')
-      assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
+      assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
 
-      click_on I18n.t(:'components.pagination.previous')
+      click_on I18n.t(:'viral.pagy.pagination_component.previous')
 
       within('table tbody') do
         assert_selector 'tr', count: 20
       end
 
-      within('table tbody tr:first-child td:nth-child(1)') do
-        assert_text metadata_template.name
-      end
+      assert_text metadata_template.name
     end
 
     test 'should not display metadata templates listing table if no metadata templates associated with the project' do

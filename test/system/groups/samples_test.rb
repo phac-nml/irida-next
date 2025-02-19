@@ -794,9 +794,11 @@ module Groups
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
         click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
@@ -810,9 +812,11 @@ module Groups
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('services.spreadsheet_import.invalid_file_extension')
       end
@@ -830,9 +834,11 @@ module Groups
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
         check 'Ignore empty values'
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
         click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
@@ -864,9 +870,11 @@ module Groups
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
         assert_not find_field('Ignore empty values').checked?
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
         click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
@@ -888,9 +896,11 @@ module Groups
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/duplicate_headers.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('services.spreadsheet_import.duplicate_column_names')
       end
@@ -903,9 +913,11 @@ module Groups
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_rows.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('services.spreadsheet_import.missing_data_row')
       end
@@ -918,9 +930,11 @@ module Groups
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('services.spreadsheet_import.missing_data_columns')
       end
@@ -942,9 +956,11 @@ module Groups
                     Rails.root.join('test/fixtures/files/metadata/mixed_project_samples_with_puid.csv')
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('shared.samples.metadata.file_imports.errors.description')
         click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
@@ -961,9 +977,11 @@ module Groups
                     Rails.root.join('test/fixtures/files/metadata/contains_analysis_values_with_puid.csv')
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
       within %(turbo-frame[id="samples_dialog"]) do
         assert_text I18n.t('shared.samples.metadata.file_imports.errors.description')
         click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')

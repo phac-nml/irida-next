@@ -26,10 +26,11 @@ module MetadataTemplates
         fields: ['Field 1', 'Field 2']
       }
 
-      assert_no_difference -> { MetadataTemplate.count } do
-        new_template = MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
-        assert new_template.errors.full_messages.include?(I18n.t('services.metadata_templates.create.required.name'))
+      new_template = assert_no_difference -> { MetadataTemplate.count } do
+        MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
       end
+
+      assert new_template.errors.full_messages.include?(I18n.t('services.metadata_templates.create.required.name'))
     end
 
     test 'metadata template not created due to missing fields' do
@@ -37,10 +38,11 @@ module MetadataTemplates
         name: 'Sample Template'
       }
 
-      assert_no_difference -> { MetadataTemplate.count } do
-        new_template = MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
-        assert new_template.errors.full_messages.include?(I18n.t('services.metadata_templates.create.required.fields'))
+      new_template = assert_no_difference -> { MetadataTemplate.count } do
+        MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
       end
+
+      assert new_template.errors.full_messages.include?(I18n.t('services.metadata_templates.create.required.fields'))
     end
 
     test 'raises unauthorized error when user lacks permission' do
@@ -62,17 +64,19 @@ module MetadataTemplates
         fields: ['Field 1']
       }
 
-      assert_difference -> { PublicActivity::Activity.count } => 1 do
-        template = MetadataTemplates::CreateService.new(@user, group, valid_params).execute
-
-        activity = PublicActivity::Activity.where(trackable_id: group.id, key: 'group.metadata_template.create').last
-        assert_equal 'group.metadata_template.create', activity.key
-        assert_equal @user, activity.owner
-        assert_equal template.id, activity.parameters[:template_id]
-        assert_equal 'Group Template', activity.parameters[:template_name]
-        assert_equal group.id, activity.parameters[:namespace_id]
-        assert_equal 'metadata_template_create', activity.parameters[:action]
+      template = assert_difference -> { PublicActivity::Activity.count } => 1 do
+        MetadataTemplates::CreateService.new(@user, group, valid_params).execute
       end
+
+      activity = PublicActivity::Activity.where(
+        trackable_id: group.id, key: 'group.metadata_template.create'
+      ).order(created_at: :desc).first
+      assert_equal 'group.metadata_template.create', activity.key
+      assert_equal @user, activity.owner
+      assert_equal template.id, activity.parameters[:template_id]
+      assert_equal 'Group Template', activity.parameters[:template_name]
+      assert_equal group.id, activity.parameters[:namespace_id]
+      assert_equal 'metadata_template_create', activity.parameters[:action]
     end
 
     test 'creates activity record for project namespace' do
@@ -81,18 +85,19 @@ module MetadataTemplates
         fields: ['Field 1']
       }
 
-      assert_difference -> { PublicActivity::Activity.count } => 1 do
-        template = MetadataTemplates::CreateService.new(@user, @namespace, valid_params).execute
-
-        activity = PublicActivity::Activity.where(trackable_id: @namespace.id,
-                                                  key: 'namespaces_project_namespace.metadata_template.create').last
-        assert_equal 'namespaces_project_namespace.metadata_template.create', activity.key
-        assert_equal @user, activity.owner
-        assert_equal template.id, activity.parameters[:template_id]
-        assert_equal 'Project Template', activity.parameters[:template_name]
-        assert_equal @namespace.id, activity.parameters[:namespace_id]
-        assert_equal 'metadata_template_create', activity.parameters[:action]
+      template = assert_difference -> { PublicActivity::Activity.count } => 1 do
+        MetadataTemplates::CreateService.new(@user, @namespace, valid_params).execute
       end
+
+      activity = PublicActivity::Activity.where(
+        trackable_id: @namespace.id, key: 'namespaces_project_namespace.metadata_template.create'
+      ).order(created_at: :desc).first
+      assert_equal 'namespaces_project_namespace.metadata_template.create', activity.key
+      assert_equal @user, activity.owner
+      assert_equal template.id, activity.parameters[:template_id]
+      assert_equal 'Project Template', activity.parameters[:template_name]
+      assert_equal @namespace.id, activity.parameters[:namespace_id]
+      assert_equal 'metadata_template_create', activity.parameters[:action]
     end
 
     test 'validates field format' do
@@ -101,10 +106,11 @@ module MetadataTemplates
         fields: 'not_an_array' # Should be an array
       }
 
-      assert_no_difference -> { MetadataTemplate.count } do
-        new_template = MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
-        assert new_template.errors.full_messages.include?(I18n.t('services.metadata_templates.create.required.fields'))
+      new_template = assert_no_difference -> { MetadataTemplate.count } do
+        MetadataTemplates::CreateService.new(@user, @namespace, invalid_params).execute
       end
+
+      assert new_template.errors.full_messages.include?(I18n.t('services.metadata_templates.create.required.fields'))
     end
 
     test 'prevents duplicate template names within same namespace' do
@@ -116,14 +122,12 @@ module MetadataTemplates
 
       MetadataTemplates::CreateService.new(@user, @namespace, valid_params).execute
 
-      assert_no_difference -> { MetadataTemplate.count } do
-        new_template = MetadataTemplates::CreateService.new(@user, @namespace, valid_params).execute
-        assert new_template
-          .errors
-          .full_messages.to_sentence.include?(
-            I18n.t('activerecord.errors.models.metadata_template.attributes.name.taken')
-          )
+      new_template = assert_no_difference -> { MetadataTemplate.count } do
+        MetadataTemplates::CreateService.new(@user, @namespace, valid_params).execute
       end
+      assert new_template.errors.full_messages.to_sentence.include?(
+        I18n.t('activerecord.errors.models.metadata_template.attributes.name.taken')
+      )
     end
   end
 end

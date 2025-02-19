@@ -1,13 +1,13 @@
 <div class=" w-full border-t border-slate-200 dark:border-slate-700">
   <div class="flex items-center justify-center space-x-4 mt-6">
     <% if prev_url %>
-      <%= link_to t("components.pagination.previous"),
+      <%= link_to t("viral.pagy.pagination_component.previous"),
                   prev_url,
                   **link_arguments,
                   class: "button button--state-default button--size-default" %>
     <% end %>
     <% if next_url %>
-      <%= link_to t("components.pagination.next"),
+      <%= link_to t("viral.pagy.pagination_component.next"),
                   next_url,
                   **link_arguments,
                   class: "button button--state-default button--size-default" %>

@@ -28,19 +28,19 @@ module Projects
       assert_selector 'tr', count: 20 + header_row_count
 
       # pagy
-      assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
-      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+      assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
 
       # second page of table
-      click_on I18n.t(:'components.pagination.next')
+      click_on I18n.t(:'viral.pagy.pagination_component.next')
       assert_selector 'tr', count: 1 + header_row_count
 
       # pagy updated
-      assert_selector 'a', text: I18n.t(:'components.pagination.previous')
-      assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
+      assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
 
       # pagy previous works
-      click_on I18n.t(:'components.pagination.previous')
+      click_on I18n.t(:'viral.pagy.pagination_component.previous')
       assert_selector 'tr', count: 20 + header_row_count
     end
 
@@ -52,8 +52,8 @@ module Projects
 
       assert_selector 'tr', count: 0
 
-      assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
-      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
 
       within('div.empty_state_message') do
         assert_text I18n.t(:'bots.index.table.empty_state.title')
@@ -181,8 +181,8 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 20,
                                                                            locale: @user.locale))
       # no pagy next/previous buttons since only 1 page for table
-      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
-      assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
+      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
       ### VERIFY END ###
     end
 
@@ -446,7 +446,8 @@ module Projects
       # additional asserts to prevent flakes
       assert_selector '#bots-table'
       assert_selector '#bots-table table tbody tr', count: 20
-      within('#bots-table table tbody tr:first-child td:last-child') do
+      assert_selector "#bots-table table tbody tr[id='#{@project_bot.id}']"
+      within("#bots-table table tbody tr[id='#{@project_bot.id}'] td:last-child") do
         # destroy bot
         click_link I18n.t(:'bots.index.table.actions.destroy')
       end

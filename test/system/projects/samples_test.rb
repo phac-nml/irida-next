@@ -1172,15 +1172,17 @@ module Projects
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
         ### ACTIONS END ###
-
-        ### VERIFY START ###
-        # success msg
-        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
-        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
       end
+
+      ### VERIFY START ###
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
+      # success msg
+      assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+      click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
 
       # metadatafield3 added to header
       within('#samples-table table thead tr') do
@@ -1246,12 +1248,15 @@ module Projects
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xls')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
+      # success msg
       assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
       click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
 
@@ -1319,14 +1324,16 @@ module Projects
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xlsx')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
         ### ACTIONS END ###
-
-        ### VERIFY START ###
-        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
-        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
       end
+
+      ### VERIFY START ###
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
+      assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+      click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
 
       # metadatafield3 and 4 added to header
       within('#samples-table table thead tr') do
@@ -1368,12 +1375,14 @@ module Projects
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
       within('#dialog') do
         # error msg
         assert_text I18n.t('services.spreadsheet_import.invalid_file_extension')
@@ -1409,11 +1418,13 @@ module Projects
         # enable ignore empty values
         find('input#file_import_ignore_empty_values').click
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
-
       ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       ### VERIFY START ###
       within('#dialog') do
@@ -1457,14 +1468,17 @@ module Projects
         # leave ignore empty values disabled
         assert_not find('input#file_import_ignore_empty_values').checked?
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        ### ACTIONS END ###
-
-        ### VERIFY START ###
-        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
-        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
       end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
+      assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+      click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
+
       within("tr[id='#{@sample32.id}']") do
         # value is deleted for metadatafield1
         assert_selector 'td:nth-child(6)', text: ''
@@ -1486,15 +1500,17 @@ module Projects
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/duplicate_headers.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        ### ACTIONS END ###
-
-        ### VERIFY START ###
-        # error msg
-        assert_text I18n.t('services.spreadsheet_import.duplicate_column_names')
-        ### VERIFY END ###
       end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
+      # error msg
+      assert_text I18n.t('services.spreadsheet_import.duplicate_column_names')
+      ### VERIFY END ###
     end
 
     test 'should not import metadata with missing metadata row errors' do
@@ -1511,15 +1527,17 @@ module Projects
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_rows.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        ### ACTIONS END ###
-
-        ### VERIFY START ###
-        # error msg
-        assert_text I18n.t('services.spreadsheet_import.missing_data_row')
-        ### VERIFY END ###
       end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
+      # error msg
+      assert_text I18n.t('services.spreadsheet_import.missing_data_row')
+      ### VERIFY END ###
     end
 
     test 'should not import metadata with missing metadata column errors' do
@@ -1536,15 +1554,17 @@ module Projects
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        ### ACTIONS END ###
-
-        ### VERIFY START ###
-        # error msg
-        assert_text I18n.t('services.spreadsheet_import.missing_data_columns')
-        ### VERIFY END ###
       end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
+      # error msg
+      assert_text I18n.t('services.spreadsheet_import.missing_data_columns')
+      ### VERIFY END ###
     end
 
     test 'should partially import metadata with missing sample errors' do
@@ -1580,16 +1600,18 @@ module Projects
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/mixed_project_samples.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        ### ACTIONS END ###
-
-        ### VERIFY START ###
-        # sample 3 does not exist in current project
-        assert_text I18n.t('services.samples.metadata.import_file.sample_not_found_within_project',
-                           sample_puid: 'Project 2 Sample 3')
-        click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
       end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
+      # sample 3 does not exist in current project
+      assert_text I18n.t('services.samples.metadata.import_file.sample_not_found_within_project',
+                         sample_puid: 'Project 2 Sample 3')
+      click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
 
       # metadata still imported
       assert_selector '#samples-table table thead tr th', count: 9
@@ -1637,15 +1659,17 @@ module Projects
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_analysis_values.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        ### ACTIONS END ###
-
-        ### VERIFY START ###
-        assert_text I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
-                           sample_name: samples(:sample34).name, metadata_fields: 'metadatafield1')
-        click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
       end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
+      assert_text I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
+                         sample_name: samples(:sample34).name, metadata_fields: 'metadatafield1')
+      click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
       # metadatafield3 still added
       assert_selector '#samples-table table thead tr th', count: 9
       within('#samples-table table') do
