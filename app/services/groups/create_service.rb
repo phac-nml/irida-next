@@ -29,6 +29,7 @@ module Groups
                                         owner: current_user,
                                         parameters: {
                                           created_group_id: @group.id,
+                                          created_group_puid: @group.puid,
                                           action: 'group_subgroup_create'
                                         }
         end

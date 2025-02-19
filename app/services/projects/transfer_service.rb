@@ -54,11 +54,13 @@ module Projects
       UpdateMembershipsJob.perform_later(new_namespace_member_ids)
     end
 
-    def create_activities(project) # rubocop:disable Metrics/MethodLength
+    def create_activities(project) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       project.namespace.create_activity action: :transfer,
                                         owner: current_user,
                                         parameters:
                                         {
+                                          project_id: project.id,
+                                          project_puid: project.namespace.puid,
                                           old_namespace: @old_namespace.puid,
                                           new_namespace: @new_namespace.puid,
                                           action: 'project_namespace_transfer'
@@ -69,6 +71,7 @@ module Projects
                                      parameters:
                                      {
                                        project_id: project.id,
+                                       project_puid: project.namespace.puid,
                                        old_namespace: @old_namespace.puid,
                                        new_namespace: @new_namespace.puid,
                                        action: 'project_namespace_transfer'
@@ -81,6 +84,7 @@ module Projects
                                      parameters:
                                      {
                                        project_id: project.id,
+                                       project_puid: project.namespace.puid,
                                        old_namespace: @old_namespace.puid,
                                        new_namespace: @new_namespace.puid,
                                        action: 'project_namespace_transfer'

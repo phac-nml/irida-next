@@ -14,7 +14,7 @@
         name: @activity[:name],
         href:
           link_to(
-            @activity[:created_group].puid,
+            @activity[:created_group_puid],
             group_path(@activity[:created_group]),
           ),
       ) %>
@@ -23,7 +23,7 @@
         "#{@activity[:key]}",
         user: @activity[:user],
         name: @activity[:name],
-        href: @activity[:created_group].puid,
+        href: @activity[:created_group_puid],
       ) %>
     <% end %>
   <% end %>

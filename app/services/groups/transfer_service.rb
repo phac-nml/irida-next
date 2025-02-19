@@ -60,6 +60,7 @@ module Groups
                                       parameters:
                                       {
                                         transferred_group_id: @group.id,
+                                        transferred_group_puid: @group.puid,
                                         old_namespace: old_namespace.puid,
                                         new_namespace: new_namespace.puid,
                                         action: 'group_namespace_transfer'
@@ -70,6 +71,7 @@ module Groups
                                       parameters:
                                       {
                                         transferred_group_id: @group.id,
+                                        transferred_group_puid: @group.puid,
                                         old_namespace: old_namespace.puid,
                                         new_namespace: new_namespace.puid,
                                         action: 'group_namespace_transfer'
@@ -80,6 +82,7 @@ module Groups
                                parameters:
                                {
                                  transferred_group_id: @group.id,
+                                 transferred_group_puid: @group.puid,
                                  old_namespace: old_namespace.puid,
                                  new_namespace: new_namespace.puid,
                                  action: 'group_namespace_transfer'
@@ -91,6 +94,7 @@ module Groups
                                       parameters:
                                       {
                                         transferred_group_id: @group.id,
+                                        transferred_group_puid: @group.puid,
                                         new_namespace: new_namespace.puid,
                                         action: 'group_namespace_transfer'
                                       }
@@ -100,6 +104,7 @@ module Groups
                                parameters:
                                {
                                  transferred_group_id: @group.id,
+                                 transferred_group_puid: @group.puid,
                                  new_namespace: new_namespace.puid,
                                  action: 'group_namespace_transfer'
                                }

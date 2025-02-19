@@ -261,7 +261,7 @@ en:
         destroy_html: "%{user} removed descendant group <span class='font-medium text-slate-800 dark:text-slate-300'>%{removed_group_puid}</span>"
       transfer_in_html: "%{user} transferred group <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span> into group <span class='font-medium text-slate-800 dark:text-slate-300'>%{new_namespace}</span> from <span class='font-medium text-slate-800 dark:text-slate-300'>%{old_namespace}</span>"
       transfer_in_no_exisiting_namespace_html: "%{user} transferred group <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span> into group <span class='font-medium text-slate-800 dark:text-slate-300'>%{new_namespace}</span>"
-      transfer_out_html: "%{user} transferred group <span class='font-medium text-slate-800 dark:text-slate-300'>%{group_puid}</span> into group <span class='font-medium text-slate-800 dark:text-slate-300'>%{new_namespace}</span>"
+      transfer_out_html: "%{user} transferred group <span class='font-medium text-slate-800 dark:text-slate-300'>%{transferred_group_puid}</span> into group <span class='font-medium text-slate-800 dark:text-slate-300'>%{new_namespace}</span>"
       update_html: "%{user} updated group attributes"
     member:
       create_html: "%{user} added member <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span> to %{namespace_type}"
