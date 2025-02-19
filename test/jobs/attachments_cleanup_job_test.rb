@@ -36,7 +36,7 @@ class AttachmentsCleanupJobTest < ActiveJob::TestCase
     # run job and verify file/object count changes
     assert_difference -> { ActiveStorage::Attachment.count } => -1,
                       -> { Attachment.only_deleted.count } => -1,
-                      -> { Attachment.all.count } => 0 do
+                      -> { Attachment.count } => 0 do
       AttachmentsCleanupJob.perform_now
     end
 
@@ -69,7 +69,7 @@ class AttachmentsCleanupJobTest < ActiveJob::TestCase
     # run job and verify file/object count changes
     assert_difference -> { ActiveStorage::Attachment.count } => -1,
                       -> { Attachment.only_deleted.count } => -1,
-                      -> { Attachment.all.count } => 0 do
+                      -> { Attachment.count } => 0 do
       AttachmentsCleanupJob.perform_now(days_old: 14)
     end
 
@@ -100,7 +100,7 @@ class AttachmentsCleanupJobTest < ActiveJob::TestCase
     # run job and verify file/object count changes
     assert_difference -> { ActiveStorage::Attachment.count } => -2,
                       -> { Attachment.only_deleted.count } => -2,
-                      -> { Attachment.all.count } => 0 do
+                      -> { Attachment.count } => 0 do
       AttachmentsCleanupJob.perform_now
     end
 

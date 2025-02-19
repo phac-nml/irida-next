@@ -186,5 +186,4 @@ end
 
 gem 'activerecord-session_store', '~> 2.1'
 
-# TODO: upgrade to 5.25.1 once released: https://github.com/minitest/minitest/issues/1007
-gem 'minitest', '5.24.1'
+gem 'minitest'

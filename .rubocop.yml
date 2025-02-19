@@ -1,6 +1,8 @@
 require:
-  - rubocop-rails
   - rubocop-graphql
+
+plugins:
+  - rubocop-rails
 
 Rails:
   Enabled: true
@@ -75,3 +77,11 @@ Rails/BulkChangeTable:
 Rails/FindEach:
   Exclude:
     - "db/migrate/*.rb"
+
+Rails/HelperInstanceVariable:
+  Exclude:
+    - "test/**/*.rb"
+
+Rails/ActionFilter:
+  Exclude:
+    - "test/**/*.rb"
