@@ -1897,6 +1897,8 @@ en:
         not_available:
           details: Please download to view the contents
           title: Preview not available for this file type
+    create:
+      error_message: 'The following errors prevented the Workflow Execution from being created:'
     edit_dialog:
       cancel_button: Cancel
       description: You are editing workflow execution '%{workflow_execution_id}'

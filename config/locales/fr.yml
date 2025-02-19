@@ -1897,6 +1897,8 @@ fr:
         not_available:
           details: Please download to view the contents
           title: Preview not available for this file type
+    create:
+      error_message: 'Les erreurs suivantes ont empêché la création de l''exécution du pipeline:'
     edit_dialog:
       cancel_button: Cancel
       description: You are editing workflow execution '%{workflow_execution_id}'
