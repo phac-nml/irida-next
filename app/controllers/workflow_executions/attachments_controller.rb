@@ -28,23 +28,34 @@ module WorkflowExecutions
     end
 
     def context_crumbs
-      @context_crumbs = [{
-        name: I18n.t('workflow_executions.index.title'),
-        path: workflow_executions_path
-      }]
+      @context_crumbs = [base_crumb]
 
       return if @workflow_execution.nil?
 
-      @context_crumbs << {
-        name: @workflow_execution.name || @workflow_execution.id,
-        path: workflow_execution_path(@workflow_execution, tab: 'files')
-      }
+      @context_crumbs.concat(workflow_execution_crumbs)
+    end
 
-      @context_crumbs << {
-        name: @attachment.file.filename,
-        path: workflow_executions_attachments_path(attachment: @attachment.id,
-                                                   workflow_execution: @workflow_execution.id)
+    def base_crumb
+      {
+        name: I18n.t('workflow_executions.index.title'),
+        path: workflow_executions_path
       }
+    end
+
+    def workflow_execution_crumbs
+      [
+        {
+          name: @workflow_execution.name || @workflow_execution.id,
+          path: workflow_execution_path(@workflow_execution, tab: 'files')
+        },
+        {
+          name: @attachment.file.filename,
+          path: workflow_executions_attachments_path(
+            attachment: @attachment.id,
+            workflow_execution: @workflow_execution.id
+          )
+        }
+      ]
     end
   end
 end
