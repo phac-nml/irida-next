@@ -324,7 +324,7 @@ module Dashboard
         find('input#select2-input').click
         find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
-        assert_text I18n.t('projects.samples.transfers.dialog.spinner_message')
+        assert_text I18n.t('shared.progress_bar.in_progress')
         perform_enqueued_jobs only: [::Samples::TransferJob]
       end
 
@@ -380,7 +380,7 @@ module Dashboard
         find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
 
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
-        assert_text I18n.t('projects.samples.clones.dialog.spinner_message')
+        assert_text I18n.t('shared.progress_bar.in_progress')
         perform_enqueued_jobs only: [::Samples::CloneJob]
       end
       assert_text I18n.t('projects.samples.clones.create.success')

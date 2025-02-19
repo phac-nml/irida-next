@@ -13,7 +13,7 @@ module Samples
         super(namespace, user, blob_id, [@sample_id_column], 1, params)
       end
 
-      def execute(broadcast_target)
+      def execute(broadcast_target = nil)
         authorize! @namespace, to: :update_sample_metadata?
         validate_file
         perform_file_import(broadcast_target)
@@ -36,7 +36,7 @@ module Samples
         @spreadsheet.each_with_index(parse_settings) do |metadata, index|
           next unless index.positive?
 
-          stream_progress_update('append', 'progress-bar', '<div></div>', broadcast_target)
+          stream_progress_update('append', 'progress-bar', '<div></div>', broadcast_target) if broadcast_target
           sample_id = metadata[@sample_id_column]
 
           metadata.delete(@sample_id_column)

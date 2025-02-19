@@ -15,7 +15,7 @@ module Projects
         @broadcast_target = params[:broadcast_target]
         new_project_id = clone_params[:new_project_id]
         sample_ids = clone_params[:sample_ids]
-        @samples_count = sample_ids.length
+        @samples_count = sample_ids.nil? ? 0 : sample_ids.count
 
         ::Samples::CloneJob.set(wait_until: 1.second.from_now).perform_later(@project, current_user, new_project_id,
                                                                              sample_ids, @broadcast_target)

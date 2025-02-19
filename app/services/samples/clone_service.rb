@@ -5,7 +5,7 @@ module Samples
   class CloneService < BaseProjectService
     CloneError = Class.new(StandardError)
 
-    def execute(new_project_id, sample_ids, broadcast_target)
+    def execute(new_project_id, sample_ids, broadcast_target = nil)
       authorize! @project, to: :clone_sample?
 
       validate(new_project_id, sample_ids)
@@ -30,7 +30,7 @@ module Samples
       raise CloneError, I18n.t('services.samples.clone.same_project')
     end
 
-    def clone_samples(sample_ids, broadcast_target) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
+    def clone_samples(sample_ids, broadcast_target) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
       cloned_sample_ids = {}
       cloned_sample_puids = {}
       not_found_sample_ids = []
@@ -40,7 +40,7 @@ module Samples
         cloned_sample = clone_sample(sample)
         cloned_sample_ids[sample_id] = cloned_sample.id unless cloned_sample.nil?
         cloned_sample_puids[sample.puid] = cloned_sample.puid unless cloned_sample.nil?
-        stream_progress_update('append', 'progress-bar', '<div></div>', broadcast_target)
+        stream_progress_update('append', 'progress-bar', '<div></div>', broadcast_target) if broadcast_target
       rescue ActiveRecord::RecordNotFound
         not_found_sample_ids << sample_id
         next
