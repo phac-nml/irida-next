@@ -481,6 +481,22 @@ module Samples
                      @sample1.reload.metadata)
         assert_equal({}, @sample2.reload.metadata)
       end
+
+      test 'import sample metadata selecting a column' do
+        assert_equal({}, @sample1.metadata)
+        assert_equal({}, @sample2.metadata)
+        params = { sample_id_column: 'sample_name', metadata_columns: %w[metadatafield1] }
+        response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, @blob.id,
+                                                            params).execute
+        assert_equal({ @sample1.name => { added: %w[metadatafield1],
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] },
+                       @sample2.name => { added: %w[metadatafield1],
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
+        assert_equal({ 'metadatafield1' => '10' },
+                     @sample1.reload.metadata)
+        assert_equal({ 'metadatafield1' => '15' },
+                     @sample2.reload.metadata)
+      end
     end
   end
 end
