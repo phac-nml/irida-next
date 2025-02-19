@@ -75,7 +75,7 @@ module Samples
 
       if transferred_samples_ids.count.positive?
         if broadcast_target
-          stream_progress_update('update', 'progress-message', I18n.t('shared.progress_bar.finalizing'),
+          stream_progress_update('update', 'progress-message', I18n.t('viral.progress_bar_component.finalizing'),
                                  broadcast_target)
         end
         create_activities(transferred_samples_ids, transferred_samples_puids)

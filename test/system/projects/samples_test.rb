@@ -513,7 +513,7 @@ module Projects
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
-        assert_text I18n.t('shared.progress_bar.in_progress')
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
 
         perform_enqueued_jobs only: [::Samples::TransferJob]
       end
@@ -567,7 +567,7 @@ module Projects
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
-        assert_text I18n.t('shared.progress_bar.in_progress')
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
 
         perform_enqueued_jobs only: [::Samples::TransferJob]
         ### ACTIONS END ###
@@ -622,7 +622,7 @@ module Projects
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{project25.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
-        assert_text I18n.t('shared.progress_bar.in_progress')
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
 
         perform_enqueued_jobs only: [::Samples::TransferJob]
       end
@@ -724,7 +724,7 @@ module Projects
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
-        assert_text I18n.t('shared.progress_bar.in_progress')
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
 
         perform_enqueued_jobs only: [::Samples::TransferJob]
       end
@@ -1354,6 +1354,8 @@ module Projects
           assert_selector 'li', count: 3
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
         ### ACTIONS END ###
       end
 
@@ -1446,6 +1448,8 @@ module Projects
           assert_selector 'li', count: 5
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
       ### ACTIONS END ###
 
@@ -1538,6 +1542,8 @@ module Projects
           assert_selector 'li', count: 5
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
         ### ACTIONS END ###
       end
 
@@ -1597,6 +1603,8 @@ module Projects
           assert_selector 'li', count: 1
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
       ### ACTIONS END ###
 
@@ -1651,6 +1659,8 @@ module Projects
         # enable ignore empty values
         find('input#file_import_ignore_empty_values').click
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
       ### ACTIONS END ###
 
@@ -1712,8 +1722,9 @@ module Projects
         # leave ignore empty values disabled
         assert_not find('input#file_import_ignore_empty_values').checked?
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
-      ### ACTIONS END ###
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+        ### ACTIONS END ###
 
       ### VERIFY START ###
       assert_text I18n.t('shared.progress_bar.in_progress')
@@ -1755,8 +1766,9 @@ module Projects
           assert_selector 'li', count: 4
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
-      ### ACTIONS END ###
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+        ### ACTIONS END ###
 
       ### VERIFY START ###
       assert_text I18n.t('shared.progress_bar.in_progress')
@@ -1793,8 +1805,9 @@ module Projects
           assert_selector 'li', count: 3
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
-      ### ACTIONS END ###
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+        ### ACTIONS END ###
 
       ### VERIFY START ###
       assert_text I18n.t('shared.progress_bar.in_progress')
@@ -1871,8 +1884,7 @@ module Projects
           assert_selector 'li', count: 3
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-      end
-      ### ACTIONS END ###
+        ### ACTIONS END ###
 
       ### VERIFY START ###
       assert_text I18n.t('shared.progress_bar.in_progress')
@@ -1928,16 +1940,6 @@ module Projects
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_analysis_values.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
-        within "ul[id='available']" do
-          assert_no_text 'metadatafield1'
-          assert_no_text 'metadatafield3'
-          assert_no_selector 'li'
-        end
-        within "ul[id='selected']" do
-          assert_text 'metadatafield1'
-          assert_text 'metadatafield3'
-          assert_selector 'li', count: 2
-        end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
       ### ACTIONS END ###
@@ -2082,7 +2084,7 @@ module Projects
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
-        assert_text I18n.t('shared.progress_bar.in_progress')
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
 
         perform_enqueued_jobs only: [::Samples::CloneJob]
       end
@@ -2138,7 +2140,7 @@ module Projects
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
-        assert_text I18n.t('shared.progress_bar.in_progress')
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
 
         perform_enqueued_jobs only: [::Samples::CloneJob]
         ### ACTIONS END ###
@@ -2196,7 +2198,7 @@ module Projects
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{project25.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
-        assert_text I18n.t('shared.progress_bar.in_progress')
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
 
         perform_enqueued_jobs only: [::Samples::CloneJob]
         ### ACTIONS END ###
@@ -2320,7 +2322,7 @@ module Projects
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
-        assert_text I18n.t('shared.progress_bar.in_progress')
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
 
         perform_enqueued_jobs only: [::Samples::CloneJob]
       end

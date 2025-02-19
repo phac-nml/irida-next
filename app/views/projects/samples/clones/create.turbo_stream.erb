@@ -1,6 +1,3 @@
 <%= turbo_stream.update "clone_samples_dialog_content" do %>
-  <%= render partial: "shared/progress_bar",
-  locals: {
-    items_to_complete: @samples_count,
-  } %>
+  <%= render Viral::ProgressBarComponent.new(items_to_complete: @samples_count) %>
 <% end %>
