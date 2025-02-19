@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus";
 // Connects to data-controller="progress-bar"
 export default class extends Controller {
   static values = {
-    totalCount: 0,
+    itemsToComplete: 0,
     completedCount: 0,
   };
   static targets = ["progress", "progressText"];
@@ -25,7 +25,7 @@ export default class extends Controller {
   }
 
   updateProgress() {
-    let progress = (this.completedCountValue / this.totalCountValue) * 100;
+    let progress = (this.completedCountValue / this.itemsToCompleteValue) * 100;
     if (progress > 100) {
       progress = 100;
     }

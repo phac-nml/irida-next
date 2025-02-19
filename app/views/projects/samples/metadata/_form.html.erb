@@ -5,14 +5,70 @@
     <template data-projects--samples--metadata--create-target="fieldTemplate">
       <div class="flex space-x-2 mb-4 inputField">
         <div class="relative z-0 w-full group">
-          <input type="text" id="key[PLACEHOLDER]" name="key[PLACEHOLDER]" required class="keyInput block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0 border-b-2 border-slate-300 appearance-none dark:text-white dark:border-slate-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer" placeholder=" " />
-          <label for="key[PLACEHOLDER]" class="keyLabel peer-focus:font-medium absolute text-sm text-slate-500 dark:text-slate-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-primary-500 peer-focus:dark:text-primary-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"><%= t(".key") %></label>
+          <input
+            type="text"
+            id="key[PLACEHOLDER]"
+            name="key[PLACEHOLDER]"
+            required
+            class="
+              keyInput block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0
+              border-b-2 border-slate-300 appearance-none dark:text-white
+              dark:border-slate-600 dark:focus:border-primary-500 focus:outline-none
+              focus:ring-0 focus:border-primary-500 peer
+            "
+            placeholder=""
+          />
+          <label
+            for="key[PLACEHOLDER]"
+            class="
+              keyLabel peer-focus:font-medium absolute text-sm text-slate-500
+              dark:text-slate-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10
+              origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4
+              rtl:peer-focus:left-auto peer-focus:text-primary-500
+              peer-focus:dark:text-primary-500 peer-placeholder-shown:scale-100
+              peer-placeholder-shown:translate-y-0 peer-focus:scale-75
+              peer-focus:-translate-y-6
+            "
+          ><%= t(".key") %></label>
         </div>
         <div class="relative z-0 w-full group">
-          <input type="text" id="value[PLACEHOLDER]" name="value[PLACEHOLDER]" required class="valueInput block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0 border-b-2 border-slate-300 appearance-none dark:text-white dark:border-slate-600 dark:focus:border-primary-500 focus:outline-none focus:ring-0 focus:border-primary-500 peer" placeholder=" " />
-          <label for="value[PLACEHOLDER]" class="valueLabel peer-focus:font-medium absolute text-sm text-slate-500 dark:text-slate-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-primary-500 peer-focus:dark:text-primary-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"><%= t(".value") %></label>
+          <input
+            type="text"
+            id="value[PLACEHOLDER]"
+            name="value[PLACEHOLDER]"
+            required
+            class="
+              valueInput block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent
+              border-0 border-b-2 border-slate-300 appearance-none dark:text-white
+              dark:border-slate-600 dark:focus:border-primary-500 focus:outline-none
+              focus:ring-0 focus:border-primary-500 peer
+            "
+            placeholder=""
+          />
+          <label
+            for="value[PLACEHOLDER]"
+            class="
+              valueLabel peer-focus:font-medium absolute text-sm text-slate-500
+              dark:text-slate-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10
+              origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4
+              rtl:peer-focus:left-auto peer-focus:text-primary-500
+              peer-focus:dark:text-primary-500 peer-placeholder-shown:scale-100
+              peer-placeholder-shown:translate-y-0 peer-focus:scale-75
+              peer-focus:-translate-y-6
+            "
+          ><%= t(".value") %></label>
         </div>
-        <button type="button" data-action="projects--samples--metadata--create#removeField" class="ml-auto bg-white text-slate-400 hover:text-slate-900 rounded-lg focus:ring-2 focus:ring-slate-300 p-1.5 hover:bg-slate-100 inline-flex items-center justify-center h-8 w-8 dark:text-slate-500 dark:hover:text-white dark:bg-slate-800 dark:hover:bg-slate-700" aria-label="<%= t(".remove_field")%>">
+        <button
+          type="button"
+          data-action="projects--samples--metadata--create#removeField"
+          class="
+            ml-auto bg-white text-slate-400 hover:text-slate-900 rounded-lg focus:ring-2
+            focus:ring-slate-300 p-1.5 hover:bg-slate-100 inline-flex items-center
+            justify-center h-8 w-8 dark:text-slate-500 dark:hover:text-white
+            dark:bg-slate-800 dark:hover:bg-slate-700
+          "
+          aria-label="<%= t(".remove_field")%>"
+        >
           <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>
         </button>
       </div>
@@ -20,51 +76,51 @@
     <div data-projects--samples--metadata--create-target="fieldsContainer"></div>
     <div class="text-center">
       <%= form.button t(".create_field_button"),
-          type: 'button',
-          class: 'text-slate-900
-            bg-white
-            border
-            border-slate-200
-            focus:outline-none
-            hover:bg-slate-100
-            hover:text-slate-950
-            focus:ring-4 font-medium
-            rounded-lg
-            text-sm
-            px-5
-            py-2.5
-            me-2
-            mb-2
-            dark:bg-slate-800
-            dark:text-slate-400
-            dark:border-slate-600
-            dark:hover:text-white
-            dark:hover:bg-slate-700
-            dark:focus:ring-slate-700',
-          "data-action": 'projects--samples--metadata--create#addField'
-      %>
+                  type: "button",
+                  class:
+                    "text-slate-900
+                        bg-white
+                        border
+                        border-slate-200
+                        focus:outline-none
+                        hover:bg-slate-100
+                        hover:text-slate-950
+                        focus:ring-4 font-medium
+                        rounded-lg
+                        text-sm
+                        px-5
+                        py-2.5
+                        me-2
+                        mb-2
+                        dark:bg-slate-800
+                        dark:text-slate-400
+                        dark:border-slate-600
+                        dark:hover:text-white
+                        dark:hover:bg-slate-700
+                        dark:focus:ring-slate-700",
+                  "data-action": "projects--samples--metadata--create#addField" %>
     </div>
     <div>
       <%= form.submit t(".submit_button"),
-            class: "focus:outline-none
-              text-white
-              border-primary-800
-              bg-primary-700
-              hover:bg-primary-800
-              focus:ring-4
-              focus:ring-primary-300
-              font-medium rounded-lg
-              text-sm
-              px-5
-              py-2.5
-              me-2
-              mb-2
-              dark:border-primary-900
-              dark:bg-primary-800
-              dark:hover:bg-primary-700
-              dark:focus:ring-primary-700",
-            'data-action': 'projects--samples--metadata--create#buildMetadata'
-            %>
+                  class:
+                    "focus:outline-none
+                          text-white
+                          border-primary-800
+                          bg-primary-700
+                          hover:bg-primary-800
+                          focus:ring-4
+                          focus:ring-primary-300
+                          font-medium rounded-lg
+                          text-sm
+                          px-5
+                          py-2.5
+                          me-2
+                          mb-2
+                          dark:border-primary-900
+                          dark:bg-primary-800
+                          dark:hover:bg-primary-700
+                          dark:focus:ring-primary-700",
+                  "data-action": "projects--samples--metadata--create#buildMetadata" %>
     </div>
   </div>
 <% end %>

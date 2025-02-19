@@ -33,12 +33,10 @@ module Samples
                   end
         parse_settings = headers.zip(headers).to_h
         row_count = @spreadsheet.last_row - 1
-        increment_size = 100 / row_count.to_f
-        current_progress = 0
-        last_increment = 0
         @spreadsheet.each_with_index(parse_settings) do |metadata, index|
           next unless index.positive?
 
+          stream_progress_update('append', 'progress-bar', '<div></div>', broadcast_target)
           sample_id = metadata[@sample_id_column]
 
           metadata.delete(@sample_id_column)
@@ -46,13 +44,6 @@ module Samples
 
           metadata_changes = process_sample_metadata_row(sample_id, metadata)
           response[sample_id] = metadata_changes if metadata_changes
-          current_progress += increment_size
-          if (current_progress - last_increment) > 1
-            (current_progress - last_increment).ceil.times do
-              stream_progress_update('append', 'progress-bar', '<div></div>', broadcast_target)
-            end
-            last_increment = current_progress
-          end
         rescue ActiveRecord::RecordNotFound
           @namespace.errors.add(:sample, error_message(sample_id))
         end
