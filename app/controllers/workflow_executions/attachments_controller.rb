@@ -21,8 +21,6 @@ module WorkflowExecutions
 
     def workflow_execution
       @workflow_execution = WorkflowExecution.find_by!(id: params[:workflow_execution], submitter: current_user)
-    rescue ActiveRecord::RecordNotFound
-      render file: 'public/404.html', status: :not_found
     end
 
     def attachment
@@ -30,22 +28,23 @@ module WorkflowExecutions
     end
 
     def context_crumbs
-      @context_crumbs =
-        [{
-          name: I18n.t('workflow_executions.index.title'),
-          path: workflow_executions_path
-        }, {
-          name: @workflow_execution.name || @workflow_execution.id,
-          path: workflow_execution_path(@workflow_execution,
-                                        tab: 'files')
-        }]
+      @context_crumbs = [{
+        name: I18n.t('workflow_executions.index.title'),
+        path: workflow_executions_path
+      }]
 
-      @context_crumbs +=
-        [{
-          name: @attachment.file.filename,
-          path: workflow_executions_attachments_path(attachment: @attachment.id,
-                                                     workflow_execution: @workflow_execution.id)
-        }]
+      return if @workflow_execution.nil?
+
+      @context_crumbs << {
+        name: @workflow_execution.name || @workflow_execution.id,
+        path: workflow_execution_path(@workflow_execution, tab: 'files')
+      }
+
+      @context_crumbs << {
+        name: @attachment.file.filename,
+        path: workflow_executions_attachments_path(attachment: @attachment.id,
+                                                   workflow_execution: @workflow_execution.id)
+      }
     end
   end
 end
