@@ -243,7 +243,7 @@ GEM
       railties (>= 6.0.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    good_job (4.6.0)
+    good_job (4.9.0)
       activejob (>= 6.1.0)
       activerecord (>= 6.1.0)
       concurrent-ruby (>= 1.3.1)
@@ -690,7 +690,7 @@ DEPENDENCIES
   flipper-active_record (~> 1.3.2)
   flipper-ui (~> 1.3.2)
   fx
-  good_job (~> 4.6.0)
+  good_job (~> 4.9.0)
   google-cloud-storage (~> 1.11)
   graphiql-rails
   graphql
