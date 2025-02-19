@@ -58,6 +58,7 @@ module Mutations
 
     def ready?(**_args)
       authorize!(to: :mutate?, with: GraphqlPolicy, context: { user: context[:current_user], token: context[:token] })
+      true
     end
 
     private
