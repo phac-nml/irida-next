@@ -431,7 +431,7 @@ GEM
       ruby-saml (~> 1.17)
     orm_adapter (0.5.0)
     os (1.1.4)
-    pagy (9.0.5)
+    pagy (9.3.3)
     parallel (1.26.3)
     paranoia (3.0.0)
       activerecord (>= 6, < 8.1)
@@ -708,7 +708,7 @@ DEPENDENCIES
   omniauth-entra-id
   omniauth-rails_csrf_protection
   omniauth-saml
-  pagy (~> 9.0.5)
+  pagy (~> 9.3.3)
   paranoia
   pathogen_view_components!
   pg
