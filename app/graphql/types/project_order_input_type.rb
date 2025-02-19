@@ -6,7 +6,7 @@ module Types
     description 'Field to sort the samples by'
     value 'created_at'
     value 'updated_at'
-    value 'name'
+    value 'name', value_method: :project_name
   end
 
   class ProjectOrderInputType < BaseInputObject # rubocop:disable Style/Documentation

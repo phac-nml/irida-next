@@ -287,9 +287,10 @@ GEM
       signet (>= 0.16, < 2.a)
     graphiql-rails (1.10.1)
       railties
-    graphql (2.3.14)
+    graphql (2.4.10)
       base64
       fiber-storage
+      logger
     hana (1.3.7)
     hashdiff (1.1.1)
     hashie (5.0.0)

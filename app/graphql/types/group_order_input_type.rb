@@ -6,7 +6,7 @@ module Types
     description 'Field to sort the groups by'
     value 'created_at'
     value 'updated_at'
-    value 'name'
+    value 'name', value_method: :group_name
   end
 
   class GroupOrderInputType < BaseInputObject # rubocop:disable Style/Documentation
