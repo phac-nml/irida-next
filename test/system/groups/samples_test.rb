@@ -814,7 +814,13 @@ module Groups
       within('div[data-metadata--file-import-loaded-value="true"]') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
-        assert find("input[value='#{I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')}'").disabled?
+        find('#file_import_metadata_columns', wait: 1).find("option[value='header']").select_option
+        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+
+        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+      end
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('services.spreadsheet_import.invalid_file_extension')
       end
     end
 
