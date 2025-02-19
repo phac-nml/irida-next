@@ -30,7 +30,11 @@ module Members
       end
       if member.save
         send_emails if @email_notification && !has_previous_access
-        member.create_activity key: 'member.create', owner: current_user if @member.user != current_user
+        if @member.user != current_user
+          member.create_activity key: 'member.create', owner: current_user, parameters: {
+            member_email: @member.user.email
+          }
+        end
       end
 
       member

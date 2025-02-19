@@ -110,6 +110,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
       namespace_type: activity_trackable.namespace.type.downcase,
       name: activity_trackable.namespace.name,
       member: activity_trackable,
+      member_email: activity.parameters[:member_email],
       type: 'Member'
     }
   end

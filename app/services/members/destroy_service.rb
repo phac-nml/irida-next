@@ -46,9 +46,13 @@ module Members
 
     def create_activities
       if current_user == member.user
-        member.create_activity key: 'member.destroy_self', owner: current_user
+        member.create_activity key: 'member.destroy_self', owner: current_user, parameters: {
+          member_email: member.user.email
+        }
       else
-        member.create_activity key: 'member.destroy', owner: current_user
+        member.create_activity key: 'member.destroy', owner: current_user, parameters: {
+          member_email: member.user.email
+        }
       end
     end
   end

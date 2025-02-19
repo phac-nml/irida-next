@@ -30,7 +30,9 @@ module Members
 
       if updated
         UpdateMembershipsJob.perform_later(member.id)
-        member.create_activity key: 'member.update', owner: current_user
+        member.create_activity key: 'member.update', owner: current_user, parameters: {
+          member_email: member.user.email
+        }
       end
 
       updated
