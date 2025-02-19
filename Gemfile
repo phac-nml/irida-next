@@ -63,7 +63,7 @@ gem 'faraday-net_http_persistent', '~> 2.1'
 gem 'heroicon-rails', '>= 0.2.9'
 gem 'pathogen_view_components', path: './embedded_gems/pathogen'
 gem 'tailwindcss-rails', '~> 2.7'
-gem 'view_component', '~> 3.20.0'
+gem 'view_component', '~> 3.21.0'
 
 # Pagy
 gem 'pagy', '~> 9.3.3'
