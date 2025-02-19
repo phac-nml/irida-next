@@ -20,7 +20,10 @@ module GroupLinks
       return unless namespace_group_link.deleted?
 
       namespace_group_link.create_activity key: 'namespace_group_link.destroy',
-                                           owner: current_user
+                                           owner: current_user,
+                                           parameters: {
+                                             group_name: namespace_group_link.group.name
+                                           }
     end
   end
 end

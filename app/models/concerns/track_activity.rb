@@ -124,7 +124,9 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
       namespace_type: activity_trackable.namespace.type.downcase,
       name: activity_trackable.namespace.name,
       group: activity_trackable.group,
+      group_name: activity.parameters[:group_name],
       namespace: activity_trackable.namespace,
+      group_link: get_object_by_id(activity_trackable.id, NamespaceGroupLink),
       type: 'NamespaceGroupLink'
     }
   end

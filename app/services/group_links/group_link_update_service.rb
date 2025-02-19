@@ -17,7 +17,10 @@ module GroupLinks
 
       if updated
         namespace_group_link.create_activity key: 'namespace_group_link.update',
-                                             owner: current_user
+                                             owner: current_user,
+                                             parameters: {
+                                               group_name: namespace_group_link.group.name
+                                             }
       end
 
       updated

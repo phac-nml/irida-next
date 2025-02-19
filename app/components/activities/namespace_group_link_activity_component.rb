@@ -6,5 +6,11 @@ module Activities
     def initialize(activity: nil)
       @activity = activity
     end
+
+    def group_link_exists
+      return false if @activity[:group_link].nil?
+
+      !@activity[:group_link].deleted?
+    end
   end
 end

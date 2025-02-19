@@ -33,7 +33,10 @@ module GroupLinks
 
       if namespace_group_link.persisted?
         namespace_group_link.create_activity key: 'namespace_group_link.create',
-                                             owner: current_user
+                                             owner: current_user,
+                                             parameters: {
+                                               group_name: namespace_group_link.group.name
+                                             }
       end
 
       namespace_group_link
