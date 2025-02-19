@@ -9,6 +9,9 @@ class AddProjectPuidToTransferActivities < ActiveRecord::Migration[7.2]
 
     activities.each do |activity|
       transferred_project = Project.with_deleted.find_by(id: activity.parameters[:project_id])
+
+      next if transferred_project.nil?
+
       ns = Namespace.with_deleted.find_by(id: transferred_project.namespace_id)
 
       unless ns.nil?
