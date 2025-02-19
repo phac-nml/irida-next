@@ -44,7 +44,7 @@ module Members
       MemberMailer.access_revoked_user_email(member, namespace).deliver_later
     end
 
-    def create_activities
+    def create_activities # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       namespace_key = if member.namespace.group_namespace?
                         'group'
                       else
