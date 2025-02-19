@@ -5,16 +5,14 @@ module WorkflowExecutions
   class AttachmentsController < WorkflowExecutionsController
     include BreadcrumbNavigation
 
-    before_action :attachment, only: [:index]
     before_action :workflow_execution, only: [:index]
+    before_action :attachment, only: [:index]
     before_action :context_crumbs, only: [:index]
 
     def index
       return if @attachment
 
-      flash.now[:error] = I18n.t('workflow_executions.attachments.errors.not_found')
       render :file_not_found, status: :not_found
-      nil
     end
 
     private
@@ -28,11 +26,9 @@ module WorkflowExecutions
     end
 
     def context_crumbs
-      @context_crumbs = [base_crumb]
-
-      return if @workflow_execution.nil?
-
-      @context_crumbs.concat(workflow_execution_crumbs)
+      @context_crumbs = [base_crumb].then do |crumbs|
+        @workflow_execution ? crumbs.concat(workflow_execution_crumbs) : crumbs
+      end
     end
 
     def base_crumb
