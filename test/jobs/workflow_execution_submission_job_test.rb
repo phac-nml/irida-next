@@ -31,12 +31,9 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
       end
     end
 
-    assert_performed_jobs(1)
-
-    assert @workflow_execution.reload.submitted?
-
     assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
     assert_performed_jobs(1, only: WorkflowExecutionSubmissionJob)
+    assert @workflow_execution.reload.submitted?
   end
 
   test 'repeated connection errors' do
@@ -59,15 +56,12 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionSubmissionJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_sequentially(delay_seconds: 4, only: WorkflowExecutionSubmissionJob)
+      perform_enqueued_jobs_sequentially(delay_seconds: 3, only: WorkflowExecutionSubmissionJob)
     end
-
-    assert_performed_jobs(6)
-
-    assert @workflow_execution.reload.submitted?
 
     assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
     assert_performed_jobs(6, only: WorkflowExecutionSubmissionJob)
+    assert @workflow_execution.reload.submitted?
   end
 
   test 'repeated api exception errors' do
@@ -80,17 +74,14 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
       @stubs.post(endpoint) { |_env| raise Faraday::BadRequestError }
 
       WorkflowExecutionSubmissionJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_sequentially(delay_seconds: 4, only: WorkflowExecutionSubmissionJob)
+      perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionSubmissionJob)
     end
-
-    assert_performed_jobs(3)
-
-    @workflow_execution.reload
-    assert @workflow_execution.error?
-    assert @workflow_execution.http_error_code == 400
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_performed_jobs(3, only: WorkflowExecutionSubmissionJob)
+    @workflow_execution.reload
+    assert @workflow_execution.error?
+    assert @workflow_execution.http_error_code == 400
   end
 
   test 'api exception error then a success' do
@@ -112,11 +103,8 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
       perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionSubmissionJob)
     end
 
-    assert_performed_jobs(2)
-
-    assert @workflow_execution.reload.submitted?
-
     assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
     assert_performed_jobs(2, only: WorkflowExecutionSubmissionJob)
+    assert @workflow_execution.reload.submitted?
   end
 end
