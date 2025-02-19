@@ -93,8 +93,8 @@ GEM
       multi_json (~> 1.11, >= 1.11.2)
       rack (>= 2.0.8, < 4)
       railties (>= 6.1)
-    activerecord_json_validator (3.0.0)
-      activerecord (>= 4.2.0, < 8)
+    activerecord_json_validator (3.1.0)
+      activerecord (>= 4.2.0, < 9)
       json_schemer (~> 2.2)
     activestorage (7.2.2.1)
       actionpack (= 7.2.2.1)
@@ -326,7 +326,7 @@ GEM
       activesupport (>= 5.0.0)
     jmespath (1.6.2)
     json (2.9.1)
-    json_schemer (2.3.0)
+    json_schemer (2.4.0)
       bigdecimal
       hana (~> 1.3)
       regexp_parser (~> 2.0)
@@ -669,7 +669,7 @@ DEPENDENCIES
   actioncable-enhanced-postgresql-adapter
   active_storage_validations
   activerecord-session_store (~> 2.1)
-  activerecord_json_validator (~> 3.0.0)
+  activerecord_json_validator (~> 3.1.0)
   aws-sdk-s3
   azure-blob!
   bootsnap

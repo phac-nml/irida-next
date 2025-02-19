@@ -102,7 +102,7 @@ gem 'fx'
 gem 'paranoia'
 
 # Validate json schema's
-gem 'activerecord_json_validator', '~> 3.0.0'
+gem 'activerecord_json_validator', '~> 3.1.0'
 
 # ActiveStorage
 gem 'active_storage_validations'
