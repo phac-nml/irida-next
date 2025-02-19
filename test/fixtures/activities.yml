@@ -196,6 +196,7 @@ group1_subgroup_create:
   key: "group.subgroups.create"
   parameters: {
     created_group_id: <%= ActiveRecord::FixtureSet.identify(:subgroup1, :uuid) %>,
+    created_group_puid: INXT_GRP_AAAAAAAAAB,
     action: 'group_subgroup_create'
   }
   created_at: <%= Time.zone.now %>
@@ -218,6 +219,7 @@ group1_project_transfer_out:
   key: "group.projects.transfer_out"
   parameters: {
     project_id: <%= ActiveRecord::FixtureSet.identify(:project1, :uuid) %>,
+    project_puid: INXT_PRJ_AAAAAAAAAA,
     old_namespace: INXT_GRP_AAAAAAAAAA,
     new_namespace: INXT_GRP_AAAAAAAAAC,
     action: 'project_namespace_transfer'
@@ -231,6 +233,7 @@ group1_project_transfer_in:
   key: "group.projects.transfer_in"
   parameters: {
     project_id: <%= ActiveRecord::FixtureSet.identify(:project1, :uuid) %>,
+    project_puid: INXT_PRJ_AAAAAAAAAA,
     old_namespace: INXT_GRP_AAAAAAAAAC,
     new_namespace: INXT_GRP_AAAAAAAAAA,
     action: 'project_namespace_transfer'

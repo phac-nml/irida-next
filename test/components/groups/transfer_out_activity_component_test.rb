@@ -40,7 +40,7 @@ module Groups
         I18n.t('activity.group.transfer_out_html', user: @user.email,
                                                    old_namespace: @group.puid,
                                                    new_namespace: group2.puid,
-                                                   group_puid: @subgroup.puid)
+                                                   transferred_group_puid: @subgroup.puid)
       )
 
       assert_no_selector 'a',
