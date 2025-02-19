@@ -32,6 +32,8 @@ class WorkflowExecutionCancelationJobTest < ActiveJobTestCase
       end
     end
 
+    assert_performed_jobs(1)
+
     assert @workflow_execution.reload.canceled?
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
@@ -58,8 +60,10 @@ class WorkflowExecutionCancelationJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionCancelationJob.perform_later(@workflow_execution, @user)
-      perform_enqueued_jobs_sequentially(only: WorkflowExecutionCancelationJob)
+      perform_enqueued_jobs_sequentially(delay_seconds: 4, only: WorkflowExecutionCancelationJob)
     end
+
+    assert_performed_jobs(6)
 
     assert @workflow_execution.reload.canceled?
 
@@ -84,8 +88,10 @@ class WorkflowExecutionCancelationJobTest < ActiveJobTestCase
         ]
       end
 
+      assert_performed_jobs(3)
+
       WorkflowExecutionCancelationJob.perform_later(@workflow_execution, @user)
-      perform_enqueued_jobs_sequentially(only: WorkflowExecutionCancelationJob)
+      perform_enqueued_jobs_sequentially(delay_seconds: 4, only: WorkflowExecutionCancelationJob)
     end
 
     @workflow_execution.reload
@@ -111,8 +117,10 @@ class WorkflowExecutionCancelationJobTest < ActiveJobTestCase
         ]
       end
 
+      assert_performed_jobs(2)
+
       WorkflowExecutionCancelationJob.perform_later(@workflow_execution, @user)
-      perform_enqueued_jobs_sequentially(only: WorkflowExecutionCancelationJob)
+      perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionCancelationJob)
     end
 
     assert @workflow_execution.reload.canceled?

@@ -34,6 +34,8 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
       end
     end
 
+    assert_performed_jobs(1)
+
     assert @workflow_execution.reload.completing?
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)
@@ -63,8 +65,10 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionStatusJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_sequentially(only: WorkflowExecutionStatusJob)
+      perform_enqueued_jobs_sequentially(delay_seconds: 4, only: WorkflowExecutionStatusJob)
     end
+
+    assert_performed_jobs(6)
 
     assert @workflow_execution.reload.completing?
 
@@ -93,8 +97,10 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionStatusJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_sequentially(only: WorkflowExecutionStatusJob)
+      perform_enqueued_jobs_sequentially(delay_seconds: 4, only: WorkflowExecutionStatusJob)
     end
+
+    assert_performed_jobs(3)
 
     @workflow_execution.reload
     assert @workflow_execution.error?
@@ -123,8 +129,10 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionStatusJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_sequentially(only: WorkflowExecutionStatusJob)
+      perform_enqueued_jobs_sequentially(delay_seconds: 4, only: WorkflowExecutionStatusJob)
     end
+
+    assert_performed_jobs(2)
 
     assert @workflow_execution.reload.completing?
 

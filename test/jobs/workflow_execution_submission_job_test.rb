@@ -31,6 +31,8 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
       end
     end
 
+    assert_performed_jobs(1)
+
     assert @workflow_execution.reload.submitted?
 
     assert_enqueued_jobs(1, only: WorkflowExecutionStatusJob)
@@ -57,8 +59,10 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionSubmissionJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_sequentially(only: WorkflowExecutionSubmissionJob)
+      perform_enqueued_jobs_sequentially(delay_seconds: 4, only: WorkflowExecutionSubmissionJob)
     end
+
+    assert_performed_jobs(6)
 
     assert @workflow_execution.reload.submitted?
 
@@ -76,8 +80,10 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
       @stubs.post(endpoint) { |_env| raise Faraday::BadRequestError }
 
       WorkflowExecutionSubmissionJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_sequentially(only: WorkflowExecutionSubmissionJob)
+      perform_enqueued_jobs_sequentially(delay_seconds: 4, only: WorkflowExecutionSubmissionJob)
     end
+
+    assert_performed_jobs(3)
 
     @workflow_execution.reload
     assert @workflow_execution.error?
@@ -103,8 +109,10 @@ class WorkflowExecutionSubmissionJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionSubmissionJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_sequentially(only: WorkflowExecutionSubmissionJob)
+      perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionSubmissionJob)
     end
+
+    assert_performed_jobs(2)
 
     assert @workflow_execution.reload.submitted?
 
