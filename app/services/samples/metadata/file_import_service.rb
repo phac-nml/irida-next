@@ -8,9 +8,9 @@ module Samples
     class FileImportService < BaseSpreadsheetImportService
       def initialize(namespace, user = nil, blob_id = nil, params = {})
         @sample_id_column = params[:sample_id_column]
-        required_headers = [@sample_id_column]
+        @selected_headers = params[:metadata_columns] || []
         @ignore_empty_values = params[:ignore_empty_values]
-        super(namespace, user, blob_id, required_headers, 1, params)
+        super(namespace, user, blob_id, [@sample_id_column], 1, params)
       end
 
       def execute
@@ -26,7 +26,8 @@ module Samples
 
       def perform_file_import
         response = {}
-        parse_settings = @headers.zip(@headers).to_h
+        headers = @selected_headers << @sample_id_column
+        parse_settings = headers.zip(headers).to_h
         @spreadsheet.each_with_index(parse_settings) do |metadata, index|
           next unless index.positive?
 

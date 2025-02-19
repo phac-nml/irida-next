@@ -3,6 +3,9 @@ import * as XLSX from "xlsx";
 
 export default class extends Controller {
   static targets = ["sampleIdColumn", "metadataColumns", "submitButton"];
+  static values = {
+    loaded: Boolean,
+  };
 
   #headers = [];
   #disabled_classes = [
@@ -29,6 +32,7 @@ export default class extends Controller {
     this.#disableTarget(this.sampleIdColumnTarget);
     this.#disableTarget(this.metadataColumnsTarget);
     this.submitButtonTarget.disabled = true;
+    this.loadedValue = true;
   }
 
   changeSampleIDInput() {

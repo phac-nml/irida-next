@@ -1827,7 +1827,6 @@ en:
               project:
                 description_html: The identifier is case-sensitive and can contain either the <b>sample name or ID</b>.
             sample_id_column: Sample ID Column
-            select_metadata_columns: Select Metadata Columns
             select_sample_id_column: Select a Sample ID Column
             spinner_message: Importing sample metadata, this might take a while...
             submit_button: Import Metadata

@@ -58,7 +58,7 @@
                          "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
             <%= form.select :metadata_columns,
                         {},
-                        { multiple: true },
+                        { multiple: true, include_hidden: false },
                         required: true,
                         data: {
                           "metadata--file-import-target": "metadataColumns",
