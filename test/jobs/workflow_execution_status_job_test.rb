@@ -38,6 +38,36 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
     assert @workflow_execution.reload.completing?
   end
 
+  test 'repeated connection errors' do
+    mock_client = connection_builder(stubs: @stubs, connection_count: 6)
+
+    Integrations::Ga4ghWesApi::V1::ApiConnection.stub :new, mock_client do
+      endpoint = "/runs/#{@workflow_execution.run_id}/status"
+      @stubs.get(endpoint) { |_env| raise Faraday::ConnectionFailed }
+      @stubs.get(endpoint) { |_env| raise Faraday::ConnectionFailed }
+      @stubs.get(endpoint) { |_env| raise Faraday::ConnectionFailed }
+      @stubs.get(endpoint) { |_env| raise Faraday::ConnectionFailed }
+      @stubs.get(endpoint) { |_env| raise Faraday::ConnectionFailed }
+      # a success after 5 failed attempts
+      @stubs.get(endpoint) do |_env|
+        [
+          200,
+          { 'Content-Type': 'application/json' },
+          {
+            run_id: @workflow_execution.run_id,
+            state: 'COMPLETE'
+          }
+        ]
+      end
+
+      WorkflowExecutionStatusJob.perform_later(@workflow_execution)
+      perform_enqueued_jobs_sequentially(delay_seconds: 3, only: WorkflowExecutionStatusJob)
+    end
+
+    assert_performed_jobs(6, only: WorkflowExecutionStatusJob)
+    assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)
+    assert @workflow_execution.reload.completing?
+  end
 
   test 'repeated api exception errors' do
     mock_client = connection_builder(stubs: @stubs, connection_count: 3)
