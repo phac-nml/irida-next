@@ -8,10 +8,11 @@ class AddProjectPuidToTransferActivities < ActiveRecord::Migration[7.2]
     activities = PublicActivity::Activity.where(key: activity_keys)
 
     activities.each do |activity|
-      transferred_project = Project.find_by(id: activity.parameters[:project_id])
+      transferred_project = Project.with_deleted.find_by(id: activity.parameters[:project_id])
+      ns = Namespace.with_deleted.find_by(id: transferred_project.namespace_id)
 
-      unless transferred_project.nil?
-        activity.parameters[:project_puid] = transferred_project.namespace.puid
+      unless ns.nil?
+        activity.parameters[:project_puid] = ns.puid
         activity.save
       end
     end
