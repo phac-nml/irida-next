@@ -7,6 +7,8 @@ module Projects
     include ActionView::Helpers::SanitizeHelper
 
     setup do
+      Flipper.enable(:metadata_import_field_selection)
+
       @user = users(:john_doe)
       login_as @user
       @sample1 = samples(:sample1)

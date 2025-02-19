@@ -7,6 +7,8 @@ module Groups
     include ActionView::Helpers::SanitizeHelper
 
     def setup
+      Flipper.enable(:metadata_import_field_selection)
+
       @user = users(:john_doe)
       login_as @user
       @group = groups(:group_one)

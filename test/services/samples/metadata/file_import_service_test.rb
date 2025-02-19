@@ -6,6 +6,8 @@ module Samples
   module Metadata
     class FileImportServiceTest < ActiveSupport::TestCase
       def setup
+        Flipper.enable(:metadata_import_field_selection)
+
         @john_doe = users(:john_doe)
         @jane_doe = users(:jane_doe)
         @group = groups(:group_one)

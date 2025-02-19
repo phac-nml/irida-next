@@ -24,9 +24,13 @@ module Samples
 
       protected
 
-      def perform_file_import
+      def perform_file_import # rubocop:disable Metrics/MethodLength
         response = {}
-        headers = @selected_headers << @sample_id_column
+        headers = if Flipper.enabled?(:metadata_import_field_selection)
+                    @selected_headers << @sample_id_column
+                  else
+                    @headers
+                  end
         parse_settings = headers.zip(headers).to_h
         @spreadsheet.each_with_index(parse_settings) do |metadata, index|
           next unless index.positive?
