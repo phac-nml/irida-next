@@ -33,8 +33,9 @@ export default class extends Controller {
 
   changeSampleIDInput() {
     this.#removeInputOptions(this.metadataColumnsTarget);
-    this.#disableTarget(this.metadataColumnsTarget);
     this.#addMetadataInputOptions();
+    this.#enableTarget(this.metadataColumnsTarget);
+    this.submitButtonTarget.disabled = true;
   }
 
   changeMetadataInput(event) {
@@ -60,6 +61,8 @@ export default class extends Controller {
       this.#headers = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
       this.#removeInputsOptions();
       this.#addSampleIDInputOptions();
+      this.#enableTarget(this.sampleIdColumnTarget);
+      this.#disableTarget(this.metadataColumnsTarget);
     };
   }
 
@@ -78,8 +81,6 @@ export default class extends Controller {
       option.text = header;
       this.sampleIdColumnTarget.append(option);
     }
-    this.sampleIdColumnTarget.disabled = false;
-    this.sampleIdColumnTarget.classList.remove(...this.#disabled_classes);
   }
 
   #addMetadataInputOptions() {
@@ -94,8 +95,8 @@ export default class extends Controller {
 
     let columns = this.#headers.filter(
       (header) =>
-        !ignoreList.includes(header) &&
-        header != this.sampleIdColumnTarget.value,
+        !ignoreList.includes(header.toLowerCase()) &&
+        header.toLowerCase() != this.sampleIdColumnTarget.value.toLowerCase(),
     );
 
     for (let column of columns) {
@@ -104,18 +105,24 @@ export default class extends Controller {
       option.text = column;
       this.metadataColumnsTarget.append(option);
     }
-    this.metadataColumnsTarget.disabled = false;
-    this.metadataColumnsTarget.classList.remove(...this.#disabled_classes);
   }
 
   #removeInputOptions(target) {
-    while (target.options.length > 1) {
-      target.remove(target.options.length - 1);
+    for (let index = target.options.length - 1; index >= 0; index--) {
+      //do not remove the placeholder
+      if (target.options[index].value) {
+        target.remove(index);
+      }
     }
   }
 
   #disableTarget(target) {
     target.disabled = true;
     target.classList.add(...this.#disabled_classes);
+  }
+
+  #enableTarget(target) {
+    target.disabled = false;
+    target.classList.remove(...this.#disabled_classes);
   }
 }
