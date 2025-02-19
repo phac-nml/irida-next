@@ -15,16 +15,18 @@ project2_namespace_create:
   updated_at: <%= Time.zone.now %>
 
 project1_namespace_member_james_doe_create:
-  trackable_type: "Member"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project_one_member_james_doe, :uuid) %>
-  key: "member.create"
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  key: "namespaces_project_namespace.member.create"
+  parameters: { member_email: 'james.doe@localhost', action: 'member_create' }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
 project1_namespace_member_ryan_doe_create:
-  trackable_type: "Member"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project_one_member_ryan_doe, :uuid) %>
-  key: "member.create"
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  key: "namespaces_project_namespace.member.create"
+  parameters: { member_email: 'ryan.doe@localhost', action: 'member_create' }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -242,9 +244,10 @@ group1_project_transfer_in:
   updated_at: <%= Time.zone.now %>
 
 group1_member_james_doe_create:
-  trackable_type: "Member"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one_member_james_doe, :uuid) %>
-  key: "member.create"
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  key: "group.member.create"
+  parameters: { member_email: 'james.doe@localhost', action: 'member_create' }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 

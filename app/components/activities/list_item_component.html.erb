@@ -48,6 +48,8 @@
         <%= render Activities::Projects::SampleCloneActivityComponent.new(
           activity: activity,
         ) %>
+      <% elsif member_action %>
+        <%= render Activities::MemberActivityComponent.new(activity: activity) %>
       <% elsif project_namespace_transfer_action %>
         <%= render Activities::Projects::TransferActivityComponent.new(activity: activity) %>
       <% else %>
@@ -55,8 +57,6 @@
       <% end %>
     <% elsif activity[:type] == 'WorkflowExecution' %>
       <%= render Activities::WorkflowExecutionActivityComponent.new(activity: activity) %>
-    <% elsif activity[:type] == 'Member' %>
-      <%= render Activities::MemberActivityComponent.new(activity: activity) %>
     <% elsif activity[:type] == 'NamespaceGroupLink' %>
       <%= render Activities::NamespaceGroupLinkActivityComponent.new(activity: activity) %>
     <% end %>

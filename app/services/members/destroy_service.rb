@@ -45,13 +45,21 @@ module Members
     end
 
     def create_activities
+      namespace_key = if member.namespace.group_namespace?
+                        'group'
+                      else
+                        'namespaces_project_namespace'
+                      end
+
       if current_user == member.user
-        member.create_activity key: 'member.destroy_self', owner: current_user, parameters: {
-          member_email: member.user.email
+        member.namespace.create_activity key: "#{namespace_key}.member.destroy_self", owner: current_user, parameters: {
+          member_email: member.user.email,
+          action: 'member_destroy'
         }
       else
-        member.create_activity key: 'member.destroy', owner: current_user, parameters: {
-          member_email: member.user.email
+        member.namespace.create_activity key: "#{namespace_key}.member.destroy", owner: current_user, parameters: {
+          member_email: member.user.email,
+          action: 'member_destroy'
         }
       end
     end

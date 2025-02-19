@@ -20,7 +20,7 @@ class ActivityComponentTest < ViewComponentTestCase
 
     assert_equal(1, @activities.count { |activity| activity[:key].include?('project_namespace.create') })
     assert_equal(1, @activities.count { |activity| activity[:key].include?('project_namespace.samples.create') })
-    assert_equal(2, @activities.count { |activity| activity[:key].include?('member.create') })
+    assert_equal(2, @activities.count { |activity| activity[:key].include?('project_namespace.member.create') })
     assert_equal(1, @activities.count { |activity| activity[:key].include?('project_namespace.samples.clone') })
     assert_equal(1, @activities.count { |activity| activity[:key].include?('project_namespace.samples.transfer') })
     assert_equal(1, @activities.count do |activity|
@@ -73,7 +73,7 @@ class ActivityComponentTest < ViewComponentTestCase
     assert_equal(1, @activities.count { |activity| activity[:key].include?('group.projects.create') })
     assert_equal(1, @activities.count { |activity| activity[:key].include?('group.projects.transfer_out') })
     assert_equal(1, @activities.count { |activity| activity[:key].include?('group.projects.transfer_in') })
-    assert_equal(1, @activities.count { |activity| activity[:key].include?('member.create') })
+    assert_equal(1, @activities.count { |activity| activity[:key].include?('group.member.create') })
 
     render_inline ActivityComponent.new(activities: @activities, pagy: @pagy)
 

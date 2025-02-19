@@ -10,7 +10,7 @@ class AddUserEmailToMemberActivities < ActiveRecord::Migration[7.2]
       member = Member.with_deleted.find_by(id: activity.trackable_id)
 
       unless member.nil?
-        activity.parameters['member_email'] = member.user.email
+        activity.parameters[:member_email] = member.user.email
         activity.save
       end
     end
