@@ -9,6 +9,11 @@ module Activities
       @activity = activity
     end
 
+    def group_link_action
+      %w[group_link_create group_link_destroy group_link_update group_link_created group_link_destroyed
+         group_link_updated].include?(@activity[:action])
+    end
+
     def member_action
       %w[member_create member_update member_destroy].include?(@activity[:action])
     end

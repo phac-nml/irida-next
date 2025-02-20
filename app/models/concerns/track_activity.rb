@@ -25,8 +25,6 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
         elsif activity.key.include?('workflow_execution')
           activities << workflow_execution_activity(activity)
         end
-      when 'NamespaceGroupLink'
-        activities << namespace_group_link_activity(activity)
       end
     end
 
@@ -51,7 +49,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     return base_params if activity.parameters[:action].blank?
 
     params = member_activity_params(activity, activity_trackable, base_params)
-
+    params = group_link_params(activity, params)
     params = transfer_activity_parameters(params, activity)
 
     namespace_project_sample_activity_parameters(params, activity)
@@ -75,7 +73,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     return base_params if activity.parameters[:action].blank?
 
     params = member_activity_params(activity, activity_trackable, base_params)
-
+    params = group_link_params(activity, params)
     params = additional_group_activity_params(params, activity)
 
     transfer_activity_parameters(params, activity)
@@ -114,21 +112,26 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     params.merge!(member: member, member_email: activity.parameters[:member_email])
   end
 
-  def namespace_group_link_activity(activity)
-    activity_trackable = activity_trackable(activity, NamespaceGroupLink)
+  def group_link_params(activity, params) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    group_link_namespace_action_types = %w[group_link_create group_link_destroy group_link_update]
+    group_link_group_action_types = %w[group_link_created group_link_destroyed group_link_updated]
 
-    {
-      created_at: format_created_at(activity.created_at),
-      key: "activity.#{activity.key}_html",
-      user: activity_creator(activity),
-      namespace_type: activity_trackable.namespace.type.downcase,
-      name: activity_trackable.namespace.name,
-      group: activity_trackable.group,
-      group_name: activity.parameters[:group_name],
-      namespace: activity_trackable.namespace,
-      group_link: get_object_by_id(activity_trackable.id, NamespaceGroupLink),
-      type: 'NamespaceGroupLink'
-    }
+    unless group_link_namespace_action_types.include?(activity.parameters[:action]) ||
+           group_link_group_action_types.include?(activity.parameters[:action])
+      return params
+    end
+
+    group_link = NamespaceGroupLink.joins(:namespace, :group).with_deleted.find_by(
+      group: { puid: activity.parameters[:group_puid] },
+      namespace: { puid: activity.parameters[:namespace_puid] }
+    )
+
+    params.merge!({ group_link: group_link,
+                    group_puid: activity.parameters[:group_puid],
+                    group_name: activity.parameters[:group_name],
+                    namespace_puid: activity.parameters[:namespace_puid],
+                    namespace_name: activity.parameters[:namespace_name],
+                    namespace_type: activity.parameters[:namespace_type] })
   end
 
   def activity_creator(activity)
