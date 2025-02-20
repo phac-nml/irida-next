@@ -4,15 +4,17 @@ module WorkflowExecutions
   # Controller for managing attachments related to workflow executions
   class AttachmentsController < WorkflowExecutionsController
     include BreadcrumbNavigation
+    include ContentTypeHandler
 
     before_action :workflow_execution, only: [:index]
     before_action :attachment, only: [:index]
     before_action :context_crumbs, only: [:index]
 
     def index
-      return if @attachment
+      return render :file_not_found, status: :not_found unless @attachment
 
-      render :file_not_found, status: :not_found
+      @preview_type = determine_preview_type(@attachment.file.content_type)
+      @previewable = previewable?(@attachment.file.content_type)
     end
 
     private

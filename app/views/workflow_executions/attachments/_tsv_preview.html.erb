@@ -1,0 +1,44 @@
+<div class="overflow-x-auto">
+  <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
+    <thead class="bg-slate-50 dark:bg-slate-700">
+      <tr>
+        <% file.open do |f| %>
+          <% headers = f.readline.strip.split("\t") %>
+          <% headers.each do |header| %>
+            <th
+              scope="col"
+              class="
+                px-6 py-3 text-xs font-medium tracking-wider text-left uppercase text-slate-500
+                dark:text-slate-400
+              "
+            >
+              <%= header %>
+            </th>
+          <% end %>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody
+      class="
+        bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
+      "
+    >
+      <% file.open do |f| %>
+        <% f.readline # Skip header row %>
+        <% f.each_line.take(100).each do |line| %>
+          <tr class="hover:bg-slate-50 dark:hover:bg-slate-700">
+            <% line.strip.split("\t").each do |cell| %>
+              <td
+                class="
+                  px-6 py-4 text-sm whitespace-nowrap text-slate-900 dark:text-slate-200
+                "
+              >
+                <%= cell %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
