@@ -84,6 +84,27 @@
             </div>
           <% end %>
         </pre>
+      <% elsif @attachment.file.content_type.start_with?('application/json') %>
+        <div class="hidden" data-clipboard-target="source">
+          <%= JSON.parse(@attachment.file.download) %>
+        </div>
+        <pre
+          class="
+            p-4 overflow-x-auto rounded-lg bg-slate-50 dark:bg-slate-900 dark:text-slate-300
+          "
+        >
+          <% JSON.pretty_generate(JSON.parse(@attachment.file.download)).lines.each_with_index do |line, index| %>
+            <div class="flex">
+              <span
+                class="
+                  w-12 pr-2 text-right border-r select-none min-w-12 text-slate-400
+                  dark:text-slate-600 border-slate-200 dark:border-slate-700
+                "
+              ><%= index + 1 %></span>
+              <span class="pl-4 text-wrap"><%= line %></span>
+            </div>
+          <% end %>
+        </pre>
       <% else %>
         <div class="py-12 text-center text-slate-500 dark:text-slate-400">
           <p><%= t(".not_available.title") %></p>
