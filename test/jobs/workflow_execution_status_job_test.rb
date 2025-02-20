@@ -33,11 +33,9 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
         WorkflowExecutionStatusJob.perform_later(@workflow_execution)
       end
     end
-
-    assert @workflow_execution.reload.completing?
-
     assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)
     assert_performed_jobs 1
+    assert @workflow_execution.reload.completing?
   end
 
   test 'repeated connection errors' do
@@ -63,13 +61,12 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionStatusJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_sequentially(only: WorkflowExecutionStatusJob)
+      perform_enqueued_jobs_sequentially(delay_seconds: 3, only: WorkflowExecutionStatusJob)
     end
-
-    assert @workflow_execution.reload.completing?
 
     assert_performed_jobs(6, only: WorkflowExecutionStatusJob)
     assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)
+    assert @workflow_execution.reload.completing?
   end
 
   test 'repeated api exception errors' do
@@ -93,15 +90,14 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionStatusJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_sequentially(only: WorkflowExecutionStatusJob)
+      perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionStatusJob)
     end
-
-    @workflow_execution.reload
-    assert @workflow_execution.error?
-    assert @workflow_execution.http_error_code == 400
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_performed_jobs(3, only: WorkflowExecutionStatusJob)
+    @workflow_execution.reload
+    assert @workflow_execution.error?
+    assert @workflow_execution.http_error_code == 400
   end
 
   test 'api exception error then a success' do
@@ -123,12 +119,11 @@ class WorkflowExecutionStatusJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionStatusJob.perform_later(@workflow_execution)
-      perform_enqueued_jobs_sequentially(only: WorkflowExecutionStatusJob)
+      perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionStatusJob)
     end
-
-    assert @workflow_execution.reload.completing?
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCompletionJob)
     assert_performed_jobs(2, only: WorkflowExecutionStatusJob)
+    assert @workflow_execution.reload.completing?
   end
 end

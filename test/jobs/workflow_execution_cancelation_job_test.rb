@@ -32,10 +32,9 @@ class WorkflowExecutionCancelationJobTest < ActiveJobTestCase
       end
     end
 
-    assert @workflow_execution.reload.canceled?
-
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_performed_jobs(1, only: WorkflowExecutionCancelationJob)
+    assert @workflow_execution.reload.canceled?
   end
 
   test 'repeated connection errors' do
@@ -58,13 +57,12 @@ class WorkflowExecutionCancelationJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionCancelationJob.perform_later(@workflow_execution, @user)
-      perform_enqueued_jobs_sequentially(only: WorkflowExecutionCancelationJob)
+      perform_enqueued_jobs_sequentially(delay_seconds: 3, only: WorkflowExecutionCancelationJob)
     end
-
-    assert @workflow_execution.reload.canceled?
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_performed_jobs(6, only: WorkflowExecutionCancelationJob)
+    assert @workflow_execution.reload.canceled?
   end
 
   test 'repeated api exception errors' do
@@ -85,15 +83,14 @@ class WorkflowExecutionCancelationJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionCancelationJob.perform_later(@workflow_execution, @user)
-      perform_enqueued_jobs_sequentially(only: WorkflowExecutionCancelationJob)
+      perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionCancelationJob)
     end
-
-    @workflow_execution.reload
-    assert @workflow_execution.error?
-    assert @workflow_execution.http_error_code == 400
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_performed_jobs(3, only: WorkflowExecutionCancelationJob)
+    @workflow_execution.reload
+    assert @workflow_execution.error?
+    assert @workflow_execution.http_error_code == 400
   end
 
   test 'api exception error then a success' do
@@ -112,12 +109,11 @@ class WorkflowExecutionCancelationJobTest < ActiveJobTestCase
       end
 
       WorkflowExecutionCancelationJob.perform_later(@workflow_execution, @user)
-      perform_enqueued_jobs_sequentially(only: WorkflowExecutionCancelationJob)
+      perform_enqueued_jobs_sequentially(delay_seconds: 2, only: WorkflowExecutionCancelationJob)
     end
-
-    assert @workflow_execution.reload.canceled?
 
     assert_enqueued_jobs(1, only: WorkflowExecutionCleanupJob)
     assert_performed_jobs(2, only: WorkflowExecutionCancelationJob)
+    assert @workflow_execution.reload.canceled?
   end
 end
