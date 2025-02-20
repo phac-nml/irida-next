@@ -1,0 +1,83 @@
+name: "irida-next"
+
+services:
+  rails-app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+
+    volumes:
+      - ../..:/workspaces:cached
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+
+    # Uncomment the next line to use a non-root user for all processes.
+    # user: vscode
+
+    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
+    depends_on:
+      - browserless
+      - postgres
+      - sapporo
+
+  browserless:
+    image: browserless/chrome:latest
+    restart: unless-stopped
+    environment:
+      - PORT=4000
+    ports:
+      - "4000:4000"
+
+  postgres:
+    image: postgres:16.1
+    restart: unless-stopped
+    networks:
+      - default
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  docker:
+    image: docker:dind
+    privileged: true
+    restart: unless-stopped
+    volumes:
+      - ../..:/workspaces:cached
+      - docker-data:/certs
+      - sapporo-data:/opt/sapporo-runs
+
+  sapporo:
+    build:
+      context: https://github.com/phac-nml/sapporo-service.git#irida-next
+      dockerfile: Dockerfile-irida-next
+
+    volumes:
+      - ../..:/workspaces:cached
+      - docker-data:/certs:ro
+      - sapporo-data:/opt/sapporo-runs
+
+    command: sapporo
+
+    depends_on:
+      - docker
+
+    environment:
+      DOCKER_HOST: tcp://docker:2376
+      DOCKER_CERT_PATH: /certs/client
+      DOCKER_TLS_VERIFY: 1
+      SAPPORO_HOST: 0.0.0.0
+      SAPPORO_PORT: 1122
+      SAPPORO_RUN_SH: /app/sapporo/run_irida_next.sh
+      SAPPORO_RUN_DIR: /opt/sapporo-runs
+
+    ports:
+      - "1122:1122"
+
+volumes:
+  postgres-data:
+  sapporo-data:
+  docker-data:
