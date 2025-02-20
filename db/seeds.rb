@@ -230,6 +230,11 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
   attachment = workflow_execution_completed.outputs.build
   attachment.file.attach(io: Rails.root.join('test/fixtures/files/blob_outputs/normal', csv_file_name).open,
                          filename: csv_file_name)
+
+  tsv_file_name = 'testTSV.tsv'
+  attachment = workflow_execution_completed.outputs.build
+  attachment.file.attach(io: Rails.root.join('test/fixtures/files/blob_outputs/normal', tsv_file_name).open,
+                         filename: tsv_file_name)
   attachment.save!
 
   SamplesWorkflowExecution.create(
