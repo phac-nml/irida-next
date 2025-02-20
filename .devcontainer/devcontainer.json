@@ -1,0 +1,51 @@
+// For format details, see https://containers.dev/implementors/json_reference/.
+// For config options, see the README at: https://github.com/devcontainers/templates/tree/main/src/ruby
+{
+  "name": "irida-next",
+  "dockerComposeFile": "compose.yaml",
+  "service": "rails-app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20.14.0",
+      "pnpmVersion": "9.2.0"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/rails/devcontainer/features/activestorage": {},
+    "ghcr.io/rails/devcontainer/features/postgres-client": {}
+  },
+
+  "containerEnv": {
+    "PARALLEL_WORKERS": "1",
+    "CAPYBARA_SERVER_PORT": "45678",
+    "BROWSERLESS_HOST": "browserless",
+    "DB_HOST": "postgres",
+    "GA4GH_WES_URL": "http://sapporo:1122"
+  },
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  "forwardPorts": [1122, 3000, 5432, 6379],
+
+  // Configure tool-specific properties.
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "shopify.ruby-lsp",
+        "koichisasada.vscode-rdbg",
+        "connorshea.vscode-ruby-test-adapter",
+        "hbenl.vscode-test-explorer",
+        "elia.erb-formatter",
+        "esbenp.prettier-vscode",
+        "streetsidesoftware.code-spell-checker"
+      ]
+    }
+  },
+
+  // Uncomment to connect as root instead. More info: https://containers.dev/implementors/json_reference/#remoteUser.
+  // "remoteUser": "root",
+
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "bin/setup --skip-server"
+}

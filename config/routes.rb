@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  if ENV.fetch('RAILS_ENV', 'development') == 'development'
+  if Rails.env.development?
     default_url_options protocol: ENV.fetch('RAILS_PROTOCOL', 'http'),
                         host: ENV.fetch('RAILS_HOST', 'localhost'),
                         port: ENV.fetch('RAILS_PORT', 3000)
+  elsif Rails.env.test? && ENV.key?('DEVCONTAINER')
+    default_url_options protocol: ENV.fetch('RAILS_PROTOCOL', 'http'),
+                        host: 'rails-app'
   else
     default_url_options protocol: ENV.fetch('RAILS_PROTOCOL', 'http'),
                         host: ENV.fetch('RAILS_HOST', 'localhost')
