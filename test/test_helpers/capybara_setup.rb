@@ -4,19 +4,6 @@
 
 Capybara.server = :puma, { Silent: true }
 
-# Make server listening on all hosts
-Capybara.server_host = '0.0.0.0'
-# Use a hostname accessible from the outside world
-Capybara.app_host = 'http://localhost'
-
-# Which domain to use when setting cookies directly in tests.
-CAPYBARA_COOKIE_DOMAIN = URI.parse(Capybara.app_host).host.then do |host|
-  # If host is a top-level domain
-  next host unless host.include?('.')
-
-  ".#{host}"
-end
-
 # Don't wait too long in `have_xyz` matchers
 Capybara.default_max_wait_time = 20.seconds
 
