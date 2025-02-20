@@ -2,5 +2,13 @@
 
 if Rails.env.test?
   require 'webmock'
-  WebMock.disable_net_connect!(allow_localhost: true)
+
+  allowed_hosts = []
+
+  if ENV.key?('BROWSERLESS_HOST')
+    allowed_hosts << ENV.fetch('BROWSERLESS_HOST')
+    allowed_hosts << 'rails-app'
+  end
+
+  WebMock.disable_net_connect!(allow_localhost: true, allow: allowed_hosts)
 end
