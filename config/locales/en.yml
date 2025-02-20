@@ -435,9 +435,6 @@ en:
         group: Share results with Group members?
         project: Share results with Project members?
       update_samples: Update samples with analysis results
-    pagination:
-      next: Next
-      previous: Prev
     project_dashboard:
       activity_title: Latest Activity
       info_title: Project Information

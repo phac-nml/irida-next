@@ -40,14 +40,14 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector '#workflow-executions-table table tbody tr', count: 20
 
-    assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
-    assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
-    click_on I18n.t(:'components.pagination.next')
+    assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+    assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+    click_on I18n.t(:'viral.pagy.pagination_component.next')
     assert_selector '#workflow-executions-table table tbody tr', count: 5
 
-    assert_selector 'a', text: I18n.t(:'components.pagination.previous')
-    assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
-    click_on I18n.t(:'components.pagination.previous')
+    assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+    assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+    click_on I18n.t(:'viral.pagy.pagination_component.previous')
     assert_selector '#workflow-executions-table table tbody tr', count: 20
   end
 

@@ -24,8 +24,8 @@ module Dashboard
         end
       end
 
-      click_on I18n.t(:'components.pagination.next')
-      assert_text I18n.t(:'components.pagination.previous')
+      click_on I18n.t(:'viral.pagy.pagination_component.next')
+      assert_text I18n.t(:'viral.pagy.pagination_component.previous')
       within 'ul.groups-list.namespace-list-tree' do
         assert_selector 'li', count: 6
         [*('f'..'a')].each do |letter|
@@ -33,8 +33,8 @@ module Dashboard
         end
       end
 
-      click_on I18n.t(:'components.pagination.previous')
-      assert_text I18n.t(:'components.pagination.next')
+      click_on I18n.t(:'viral.pagy.pagination_component.previous')
+      assert_text I18n.t(:'viral.pagy.pagination_component.next')
       within 'ul.groups-list.namespace-list-tree' do
         assert_selector 'li', count: 20
         [*('z'..'g')].each do |letter|

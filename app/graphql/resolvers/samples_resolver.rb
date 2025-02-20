@@ -30,6 +30,7 @@ module Resolvers
 
     def ready?(**_args)
       authorize!(to: :query?, with: GraphqlPolicy, context: { token: context[:token] })
+      true
     end
 
     validates Validators::QueryValidator => {}

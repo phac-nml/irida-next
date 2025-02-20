@@ -415,7 +415,7 @@ class GroupsTest < ApplicationSystemTestCase
 
     assert_selector 'a.active', text: I18n.t(:'groups.show.tabs.subgroups_and_projects')
     assert_selector 'li.namespace-entry', count: 20
-    click_on I18n.t(:'components.pagination.next')
+    click_on I18n.t(:'viral.pagy.pagination_component.next')
     assert_selector 'li.namespace-entry', count: 1
 
     click_on I18n.t(:'groups.show.tabs.shared_namespaces')
@@ -434,7 +434,7 @@ class GroupsTest < ApplicationSystemTestCase
   test 'search subgroups and projects' do
     @group = groups(:group_one)
     visit group_url(@group)
-    assert_text I18n.t(:'components.pagination.next')
+    assert_text I18n.t(:'viral.pagy.pagination_component.next')
     fill_in I18n.t('groups.show.search.placeholder'), with: 'project 2'
     find('input.t-search-component').native.send_keys(:return)
 

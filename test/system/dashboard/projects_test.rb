@@ -20,13 +20,13 @@ module Dashboard
       assert_text 'Displaying items 1-20 of 39 in total'
       assert_selector 'tr', count: 20
       assert_text @project.human_name
-      assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
-      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+      assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
 
-      click_on I18n.t(:'components.pagination.next')
+      click_on I18n.t(:'viral.pagy.pagination_component.next')
       assert_text 'Displaying items 21-39 of 39 in total'
       assert_selector 'tr', count: 19
-      click_on I18n.t(:'components.pagination.previous')
+      click_on I18n.t(:'viral.pagy.pagination_component.previous')
       assert_text 'Displaying items 1-20 of 39 in total'
       assert_selector 'tr', count: 20
 
@@ -43,13 +43,13 @@ module Dashboard
       assert_text 'Displaying items 1-20 of 22 in total'
       assert_selector 'tr', count: 20
       assert_text @project.human_name
-      assert_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
-      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+      assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
 
-      click_on I18n.t(:'components.pagination.next')
+      click_on I18n.t(:'viral.pagy.pagination_component.next')
       assert_text 'Displaying items 21-22 of 22 in total'
       assert_selector 'tr', count: 2
-      click_on I18n.t(:'components.pagination.previous')
+      click_on I18n.t(:'viral.pagy.pagination_component.previous')
       assert_text 'Displaying items 1-20 of 22 in total'
       assert_selector 'tr', count: 20
 
@@ -67,8 +67,8 @@ module Dashboard
       assert_text 'Displaying 4 items'
       assert_selector 'tr', count: 4
       assert_text projects(:john_doe_project2).human_name
-      assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
-      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
     end
 
     test 'can search the list of projects by name' do
@@ -82,8 +82,8 @@ module Dashboard
       find('input.t-search-component').native.send_keys(:return)
 
       assert_selector 'tr', count: 12
-      assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
-      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
 
       assert_selector %(input.t-search-component) do |input|
         assert_equal @project.name, input['value']
@@ -137,8 +137,8 @@ module Dashboard
       find('input.t-search-component').native.send_keys(:return)
       assert_text 'Displaying 12 items'
       assert_selector 'tr', count: 12
-      assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
-      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
 
       click_on I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
       click_on I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
@@ -177,8 +177,8 @@ module Dashboard
 
       assert_text 'Displaying 12 items'
       assert_selector 'tr', count: 12
-      assert_no_selector 'a', text: /\A#{I18n.t(:'components.pagination.next')}\Z/
-      assert_no_selector 'a', text: I18n.t(:'components.pagination.previous')
+      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
 
       within('tbody tr:first-child') do
         assert_text projects(:project19).human_name

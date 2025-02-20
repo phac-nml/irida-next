@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.3.1'
+ruby '3.3.7'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 7.2.0'
@@ -12,7 +12,7 @@ gem 'rails', '~> 7.2.0'
 gem 'sprockets-rails'
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem 'puma', '~> 6.4'
+gem 'puma', '~> 6.6'
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem 'importmap-rails'
@@ -63,10 +63,10 @@ gem 'faraday-net_http_persistent', '~> 2.1'
 gem 'heroicon-rails', '>= 0.2.9'
 gem 'pathogen_view_components', path: './embedded_gems/pathogen'
 gem 'tailwindcss-rails', '~> 2.7'
-gem 'view_component', '~> 3.20.0'
+gem 'view_component', '~> 3.21.0'
 
 # Pagy
-gem 'pagy', '~> 9.0.5' # omit patch digit
+gem 'pagy', '~> 9.3.3'
 
 # Ransack
 gem 'ransack', '~> 4.2.1'
@@ -102,7 +102,7 @@ gem 'fx'
 gem 'paranoia'
 
 # Validate json schema's
-gem 'activerecord_json_validator', '~> 3.0.0'
+gem 'activerecord_json_validator', '~> 3.1.0'
 
 # ActiveStorage
 gem 'active_storage_validations'
@@ -111,7 +111,7 @@ gem 'azure-blob', github: 'phac-nml/azure-blob', branch: 'copy-blob', require: f
 gem 'google-cloud-storage', '~> 1.11', require: false
 
 # job queueing
-gem 'good_job', '~> 4.6.0'
+gem 'good_job', '~> 4.9.0'
 
 # spreadsheet parser [https://github.com/roo-rb/roo]
 gem 'roo', '~> 2.10.0'
@@ -186,5 +186,4 @@ end
 
 gem 'activerecord-session_store', '~> 2.1'
 
-# TODO: upgrade to 5.25.1 once released: https://github.com/minitest/minitest/issues/1007
-gem 'minitest', '5.24.1'
+gem 'minitest'
