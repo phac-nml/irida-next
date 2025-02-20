@@ -58,10 +58,12 @@
     <div class="p-6">
       <% if @attachment.file.content_type.start_with?('image/') %>
         <%= image_tag @attachment.file, class: "max-w-full rounded-lg" %>
-      <% elsif @attachment.file.content_type.start_with?('text/') %>
+      <% elsif @attachment.file.content_type.start_with?('text/plain') %>
         <%= render "text_preview", file: @attachment.file %>
       <% elsif @attachment.file.content_type.start_with?('application/json') %>
         <%= render "json_preview", file: @attachment.file %>
+      <% elsif @attachment.file.content_type.start_with?('text/csv') %>
+        <%= render "csv_preview", file: @attachment.file %>
       <% else %>
         <div class="flex flex-col items-center justify-center py-12 text-center">
           <div class="mb-4">

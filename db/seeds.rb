@@ -220,6 +220,18 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
                          filename: json_file_name)
   attachment.save!
 
+  image_file_name = 'testImage.webp'
+  attachment = workflow_execution_completed.outputs.build
+  attachment.file.attach(io: Rails.root.join('test/fixtures/files/blob_outputs/normal', image_file_name).open,
+                         filename: image_file_name)
+  attachment.save!
+
+  csv_file_name = 'testCSV.csv'
+  attachment = workflow_execution_completed.outputs.build
+  attachment.file.attach(io: Rails.root.join('test/fixtures/files/blob_outputs/normal', csv_file_name).open,
+                         filename: csv_file_name)
+  attachment.save!
+
   SamplesWorkflowExecution.create(
     sample: Sample.first,
     workflow_execution: workflow_execution_completed
