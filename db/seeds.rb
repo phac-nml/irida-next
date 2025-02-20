@@ -214,6 +214,12 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
   attachment.file.attach(io: Rails.root.join('test/fixtures/files/blob_outputs/normal', filename).open, filename:)
   attachment.save!
 
+  json_file_name = 'testJson.json'
+  attachment = workflow_execution_completed.outputs.build
+  attachment.file.attach(io: Rails.root.join('test/fixtures/files/blob_outputs/normal', json_file_name).open,
+                         filename: json_file_name)
+  attachment.save!
+
   SamplesWorkflowExecution.create(
     sample: Sample.first,
     workflow_execution: workflow_execution_completed
