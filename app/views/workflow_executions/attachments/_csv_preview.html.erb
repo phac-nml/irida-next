@@ -1,0 +1,24 @@
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <table class="w-full text-sm text-left text-slate-500">
+    <thead class="text-xs uppercase text-slate-700 bg-slate-50">
+      <tr>
+        <% CSV.parse(file.download, headers: true).headers.each do |header| %>
+          <th scope="col" class="px-6 py-3">
+            <%= header %>
+          </th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% CSV.parse(file.download, headers: true).each do |row| %>
+        <tr class="bg-white border-b hover:bg-slate-50">
+          <% row.each do |_header, value| %>
+            <td class="px-6 py-4">
+              <%= value %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
