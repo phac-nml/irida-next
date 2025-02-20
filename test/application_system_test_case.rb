@@ -10,6 +10,7 @@ require 'test_helpers/html5_helpers'
 require 'action_dispatch/system_test_case'
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
+  served_by host: 'rails-app', port: ENV['CAPYBARA_SERVER_PORT'] if ENV.key?('CAPYBARA_SERVER_PORT')
   driven_by :irida_next_cuprite
 
   include AxeHelpers
