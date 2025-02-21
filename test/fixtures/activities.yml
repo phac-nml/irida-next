@@ -180,6 +180,21 @@ project1_shared_w_group_charlie:
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
+group_charlie_shared_by_project1:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_charlie, :uuid) %>
+  key: "group.namespace_group_link.created"
+  parameters: {
+    group_name: 'Group Charlie',
+    group_puid: 'INXT_GRP_AAAAAAAAAU',
+    namespace_name: 'Project 1',
+    namespace_puid: 'INXT_PRJ_AAAAAAAAAA',
+    namespace_type: project,
+    action: 'group_link_created'
+  }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
 project1_namespace_transfer:
   trackable_type: "Namespace"
   trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
@@ -259,6 +274,7 @@ group1_member_james_doe_create:
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
+<<<<<<< HEAD
 group_one_metadata_template_create:
   trackable_type: "Namespace"
   trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
@@ -274,6 +290,9 @@ group_one_metadata_template_create:
   updated_at: <%= Time.zone.now %>
 
 group1_shared_w_david_doe_group_fou:
+=======
+group1_shared_w_david_doe_group_four:
+>>>>>>> ed4d2a91 (Added tests for group activity created when a namespace group link is created)
   trackable_type: "Namespace"
   trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   key: "group.namespace_group_link.create"
@@ -284,6 +303,21 @@ group1_shared_w_david_doe_group_fou:
     namespace_puid: 'INXT_GRP_AAAAAAAAAA',
     namespace_type: group',
     action: 'group_link_create'
+  }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+david_doe_group_four_shared_by_group1:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:david_doe_group_four, :uuid) %>
+  key: "group.namespace_group_link.created"
+  parameters: {
+    group_name: 'Group 4',
+    group_puid: 'INXT_GRP_AAAAAAAAAF',
+    namespace_name: 'Group 1',
+    namespace_puid: 'INXT_GRP_AAAAAAAAAA',
+    namespace_type: 'group',
+    action: 'group_link_created'
   }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
