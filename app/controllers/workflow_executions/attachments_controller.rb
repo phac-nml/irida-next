@@ -5,6 +5,7 @@ module WorkflowExecutions
   class AttachmentsController < WorkflowExecutionsController
     include BreadcrumbNavigation
     include ContentTypeHandler
+    helper ExcelHelper
 
     before_action :workflow_execution, only: [:index]
     before_action :attachment, only: [:index]
@@ -15,6 +16,8 @@ module WorkflowExecutions
 
       @preview_type = determine_preview_type(@attachment.file.content_type)
       @previewable = previewable?(@attachment.file.content_type)
+      @copyable = copyable?(@attachment.file.content_type)
+      @foo = 'bar'
     end
 
     private

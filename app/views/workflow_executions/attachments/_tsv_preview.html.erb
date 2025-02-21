@@ -1,6 +1,5 @@
-<div class="hidden" data-clipboard-target="source">
-  <%= file.download %>
-</div>
+
+
 <div class="overflow-x-auto">
   <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
     <thead class="bg-slate-50 dark:bg-slate-700">
@@ -10,10 +9,7 @@
           <% headers.each do |header| %>
             <th
               scope="col"
-              class="
-                px-6 py-3 text-xs font-medium tracking-wider text-left uppercase text-slate-500
-                dark:text-slate-400
-              "
+              class="px-6 py-3 text-xs font-medium tracking-wider text-left uppercase  text-slate-500 dark:text-slate-400"
             >
               <%= header %>
             </th>
@@ -22,9 +18,7 @@
       </tr>
     </thead>
     <tbody
-      class="
-        bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
-      "
+      class="bg-white divide-y  divide-slate-200 dark:bg-slate-800 dark:divide-slate-700"
     >
       <% file.open do |f| %>
         <% f.readline # Skip header row %>
@@ -32,9 +26,7 @@
           <tr class="hover:bg-slate-50 dark:hover:bg-slate-700">
             <% line.strip.split("\t").each do |cell| %>
               <td
-                class="
-                  px-6 py-4 text-sm whitespace-nowrap text-slate-900 dark:text-slate-200
-                "
+                class="px-6 py-4 text-sm  whitespace-nowrap text-slate-900 dark:text-slate-200"
               >
                 <%= cell %>
               </td>
