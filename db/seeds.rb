@@ -237,6 +237,12 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
                          filename: tsv_file_name)
   attachment.save!
 
+  excel_file_name = 'testExcel.xlsx'
+  attachment = workflow_execution_completed.outputs.build
+  attachment.file.attach(io: Rails.root.join('test/fixtures/files/blob_outputs/normal', excel_file_name).open,
+                         filename: excel_file_name)
+  attachment.save!
+
   SamplesWorkflowExecution.create(
     sample: Sample.first,
     workflow_execution: workflow_execution_completed
