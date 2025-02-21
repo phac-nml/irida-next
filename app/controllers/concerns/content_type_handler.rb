@@ -21,8 +21,12 @@ module ContentTypeHandler
     'text/plain' => :text,
     'application/json' => :json,
     'text/csv' => :csv,
-    'text/tab-separated-values' => :tsv
+    'text/tab-separated-values' => :tsv,
+    'application/vnd.ms-excel' => :excel,
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => :excel
   }.freeze
+
+  COPYABLE_TYPES = ['text/plain', 'application/json', 'text/csv', 'text/tab-separated-values'].freeze
 
   def determine_preview_type(content_type)
     PREVIEWABLE_TYPES.find { |key, _| content_type.start_with?(key) }&.last
@@ -30,5 +34,9 @@ module ContentTypeHandler
 
   def previewable?(content_type)
     determine_preview_type(content_type).present?
+  end
+
+  def copyable?(content_type)
+    COPYABLE_TYPES.find { |key, _| content_type.start_with?(key) }.present?
   end
 end
