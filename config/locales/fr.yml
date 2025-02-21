@@ -253,9 +253,9 @@ fr:
         destroy_self_html: "%{href} removed themself from group"
         update_html: "%{user} updated group member %{href} attributes"
       metadata_template:
-        create_html: "%{user} created metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{template_name}</span>"
-        destroy_html: "%{user} removed metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{template_name}</span>"
-        update_html: "%{user} updated metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{template_name}</span>"
+        create_html: "%{user} created metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span>"
+        destroy_html: "%{user} removed metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span>"
+        update_html: "%{user} updated metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span>"
       namespace_group_link:
         create_html: "%{user} shared group with group <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span>"
         created_html: "%{user} shared %{namespace_type} <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span> with group"
@@ -285,7 +285,7 @@ fr:
         update_html: "%{user} updated project member %{href} attributes"
       metadata_template:
         create_html: "%{user} created metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span>"
-        destroy_html: "%{user} removed metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{template_name}</span>"
+        destroy_html: "%{user} removed metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span>"
         update_html: "%{user} updated metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span>"
       namespace_group_link:
         create_html: "%{user} shared project with group <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span>"
