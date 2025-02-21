@@ -32,7 +32,7 @@ class NextflowComponentTest < ViewComponentTestCase
       assert_selector 'h1', text: 'phac-nml/iridanextexample', count: 1
       assert_selector 'input[type=text][name="workflow_execution[name]"]'
       assert_selector 'input[type=checkbox][name="workflow_execution[shared_with_namespace]"]'
-      assert_text 'Share results with Project members?'
+      assert_text I18n.t(:'components.nextflow.shared_with.project')
     end
   end
 
