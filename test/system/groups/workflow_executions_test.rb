@@ -29,10 +29,13 @@ module Groups
       assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title')
       assert_selector 'p', text: I18n.t(:'groups.workflow_executions.index.subtitle')
 
-      assert_selector '#workflow-executions-table table tbody tr', count: 3
+      assert_selector '#workflow-executions-table table tbody tr', count: 8
     end
 
     test 'should sort a list of workflow executions' do
+      workflow_execution_running = workflow_executions(:workflow_execution_group_shared_running)
+      workflow_execution_prepared = workflow_executions(:workflow_execution_group_shared_prepared)
+      workflow_execution_submitted = workflow_executions(:workflow_execution_group_shared_submitted)
       visit group_workflow_executions_path(@group)
 
       assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title')
@@ -42,9 +45,9 @@ module Groups
       assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.icon-arrow_up"
 
       within('#workflow-executions-table table tbody') do
-        assert_selector 'tr', count: 3
-        assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: @workflow_execution_group_shared1.run_id
-        assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: @workflow_execution_group_shared2.run_id
+        assert_selector 'tr', count: 8
+        assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution_running.run_id
+        assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: workflow_execution_prepared.run_id
         assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: @workflow_execution_group_shared3.run_id
       end
 
@@ -52,17 +55,17 @@ module Groups
       assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.icon-arrow_down"
 
       within('#workflow-executions-table table tbody') do
-        assert_selector 'tr', count: 3
+        assert_selector 'tr', count: 8
         assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: @workflow_execution_group_shared3.run_id
         assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: @workflow_execution_group_shared2.run_id
-        assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: @workflow_execution_group_shared1.run_id
+        assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution_running.run_id
       end
 
       click_on I18n.t(:'workflow_executions.table_component.workflow_name')
       assert_selector "#workflow-executions-table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_up"
 
       within('#workflow-executions-table table tbody') do
-        assert_selector 'tr', count: 3
+        assert_selector 'tr', count: 8
         assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
                         text: @workflow_execution_group_shared1.metadata['workflow_name']
         assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
@@ -75,11 +78,11 @@ module Groups
       assert_selector "#workflow-executions-table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_down"
 
       within('#workflow-executions-table table tbody') do
-        assert_selector 'tr', count: 3
+        assert_selector 'tr', count: 8
         assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
-                        text: @workflow_execution_group_shared3.metadata['workflow_name']
+                        text: workflow_execution_running.metadata['workflow_name']
         assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
-                        text: @workflow_execution_group_shared2.metadata['workflow_name']
+                        text: workflow_execution_submitted.metadata['workflow_name']
         assert_selector "tr:last-child td:nth-child(#{@workflow_name_col})",
                         text: @workflow_execution_group_shared1.metadata['workflow_name']
       end
@@ -111,6 +114,7 @@ module Groups
     end
 
     test 'can view a workflow execution' do
+      login_as users(:joan_doe)
       visit group_workflow_executions_path(@group)
 
       assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title')
@@ -158,6 +162,43 @@ module Groups
       assert_no_link I18n.t(:'workflow_executions.show.cancel_button')
       assert_no_link I18n.t(:'workflow_executions.show.edit_button')
       assert_no_link I18n.t(:'workflow_executions.show.remove_button')
+
+      within %(div[id="workflow-execution-tabs"]) do
+        click_on I18n.t('workflow_executions.show.tabs.files')
+      end
+
+      assert_text 'FILENAME'
+
+      click_on I18n.t('workflow_executions.show.tabs.params')
+
+      assert_selector 'div.project_name-param > span', text: '--project_name'
+      assert_selector 'div.project_name-param > input[value="assembly"]'
+
+      assert_selector 'div.assembler-param > span', text: '--assembler'
+      assert_selector 'div.assembler-param > input[value="stub"]'
+
+      assert_selector 'div.random_seed-param > span', text: '--random_seed'
+      assert_selector 'div.random_seed-param > input[value="1"]'
+    end
+
+    test 'should be able to cancel a workflow' do
+      login_as users(:joan_doe)
+      workflow_execution = workflow_executions(:workflow_execution_group_shared1)
+
+      visit group_workflow_execution_path(@group, workflow_execution)
+
+      assert_text workflow_execution.id
+      assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
+
+      click_link I18n.t(:'groups.workflow_executions.show.cancel_button')
+
+      within('#turbo-confirm[open]') do
+        click_button I18n.t(:'components.confirmation.confirm')
+      end
+
+      assert_text workflow_execution.id
+      assert_equal workflow_execution.reload.state, 'canceled'
+      assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
     end
   end
 end
