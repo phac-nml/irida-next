@@ -15,10 +15,10 @@
           <%= viral_icon(name: :arrow_right, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
           <span>
             <%= link_to attachment.file.filename,
-            rails_blob_path(attachment),
-            data: {
-              turbo: false,
-            },
+            workflow_executions_attachments_path(
+              attachment: attachment.id,
+              workflow_execution: @workflow_execution.id,
+            ),
             class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
           </span>
         </div>
@@ -26,10 +26,10 @@
           <%= viral_icon(name: :arrow_left, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
           <span>
             <%= link_to attachment.associated_attachment.file.filename,
-            rails_blob_path(attachment.associated_attachment),
-            data: {
-              turbo: false,
-            },
+            workflow_executions_attachments_path(
+              attachment: attachment.id,
+              workflow_execution: @workflow_execution.id,
+            ),
             class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
           </span>
         </div>
@@ -42,10 +42,10 @@
           <%= viral_icon(name: :document_text, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
           <span>
             <%= link_to attachment.file.filename,
-            rails_blob_path(attachment.file),
-            data: {
-              turbo: false,
-            },
+            workflow_executions_attachments_path(
+              attachment: attachment.id,
+              workflow_execution: @workflow_execution.id,
+            ),
             class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
           </span>
         </div>
