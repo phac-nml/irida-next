@@ -808,6 +808,37 @@ module Groups
       end
     end
 
+    test 'should import metadata with disabled feature flag' do
+      Flipper.disable(:metadata_import_field_selection)
+      visit group_samples_url(@group)
+      click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
+      within('#dialog') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
+        find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
+        within "ul[id='available']" do
+          assert_no_text 'metadatafield1'
+          assert_no_text 'metadatafield2'
+          assert_no_text 'metadatafield3'
+          assert_no_selector 'li'
+        end
+        within "ul[id='selected']" do
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield2'
+          assert_text 'metadatafield3'
+          assert_selector 'li', count: 3
+        end
+        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+      end
+      assert_text I18n.t('viral.progress_bar_component.in_progress')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+        click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
+      end
+    end
+
     test 'should import metadata via csv' do
       visit group_samples_url(@group)
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
@@ -828,7 +859,7 @@ module Groups
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
-      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+      assert_text I18n.t('viral.progress_bar_component.in_progress')
 
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
@@ -886,7 +917,7 @@ module Groups
         check 'Ignore empty values'
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
-      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+      assert_text I18n.t('viral.progress_bar_component.in_progress')
 
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
@@ -934,7 +965,7 @@ module Groups
         assert_not find_field('Ignore empty values').checked?
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
-      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+      assert_text I18n.t('viral.progress_bar_component.in_progress')
 
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
@@ -972,7 +1003,7 @@ module Groups
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
-      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+      assert_text I18n.t('viral.progress_bar_component.in_progress')
 
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
@@ -1001,7 +1032,7 @@ module Groups
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
-      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+      assert_text I18n.t('viral.progress_bar_component.in_progress')
 
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
@@ -1049,7 +1080,7 @@ module Groups
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
-      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+      assert_text I18n.t('viral.progress_bar_component.in_progress')
 
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
@@ -1080,7 +1111,7 @@ module Groups
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
-      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+      assert_text I18n.t('viral.progress_bar_component.in_progress')
 
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
