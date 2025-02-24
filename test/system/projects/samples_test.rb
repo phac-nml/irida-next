@@ -1300,6 +1300,186 @@ module Projects
       ### VERIFY END ###
     end
 
+    test 'should import metadata with disabled feature flag' do
+      ### SETUP START ###
+      Flipper.disable(:metadata_import_field_selection)
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      # toggle metadata on for samples table
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      choose 'q[metadata_template]', option: 'all'
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
+
+      within('#samples-table table thead tr') do
+        assert_selector 'th', count: 8
+      end
+      within('#samples-table table') do
+        within('thead') do
+          # metadatafield1 and 2 already exist, 3 does not and will be added by the import
+          assert_text 'METADATAFIELD1'
+          assert_text 'METADATAFIELD2'
+          assert_no_text 'METADATAFIELD3'
+        end
+        # sample 1 and 2 have no current value for metadatafield 1 and 2
+        within("tr[id='#{@sample1.id}']") do
+          assert_selector 'td:nth-child(6)', text: ''
+          assert_selector 'td:nth-child(7)', text: ''
+        end
+        within("tr[id='#{@sample2.id}']") do
+          assert_selector 'td:nth-child(6)', text: ''
+          assert_selector 'td:nth-child(7)', text: ''
+        end
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # start import
+      click_link I18n.t('projects.samples.index.import_metadata_button')
+      within('#dialog') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.csv')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        within "ul[id='available']" do
+          assert_no_text 'metadatafield1'
+          assert_no_text 'metadatafield2'
+          assert_no_text 'metadatafield3'
+          assert_no_selector 'li'
+        end
+        within "ul[id='selected']" do
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield2'
+          assert_text 'metadatafield3'
+          assert_selector 'li', count: 3
+        end
+        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        ### ACTIONS END ###
+      end
+
+      ### VERIFY START ###
+      assert_text I18n.t('shared.progress_bar.in_progress')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
+      # success msg
+      assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+      click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
+
+      # metadatafield3 added to header
+      within('#samples-table table thead tr') do
+        assert_selector 'th', count: 9
+      end
+      within('#samples-table table') do
+        within('thead') do
+          assert_text 'METADATAFIELD3'
+        end
+        # sample 1 and 2 metadata is updated
+        within("tr[id='#{@sample1.id}']") do
+          assert_selector 'td:nth-child(6)', text: '10'
+          assert_selector 'td:nth-child(7)', text: '20'
+          assert_selector 'td:nth-child(8)', text: '30'
+        end
+        within("tr[id='#{@sample2.id}']") do
+          assert_selector 'td:nth-child(6)', text: '15'
+          assert_selector 'td:nth-child(7)', text: '25'
+          assert_selector 'td:nth-child(8)', text: '35'
+        end
+      end
+      ### VERIFY END ###
+    end
+
+    test 'should import metadata with disabled feature flag' do
+      ### SETUP START ###
+      Flipper.disable(:metadata_import_field_selection)
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      # toggle metadata on for samples table
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      choose 'q[metadata_template]', option: 'all'
+
+      assert_selector 'div#spinner'
+      assert_no_selector 'div#spinner'
+
+      within('#samples-table table thead tr') do
+        assert_selector 'th', count: 8
+      end
+      within('#samples-table table') do
+        within('thead') do
+          # metadatafield1 and 2 already exist, 3 does not and will be added by the import
+          assert_text 'METADATAFIELD1'
+          assert_text 'METADATAFIELD2'
+          assert_no_text 'METADATAFIELD3'
+        end
+        # sample 1 and 2 have no current value for metadatafield 1 and 2
+        within("tr[id='#{@sample1.id}']") do
+          assert_selector 'td:nth-child(6)', text: ''
+          assert_selector 'td:nth-child(7)', text: ''
+        end
+        within("tr[id='#{@sample2.id}']") do
+          assert_selector 'td:nth-child(6)', text: ''
+          assert_selector 'td:nth-child(7)', text: ''
+        end
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # start import
+      click_link I18n.t('projects.samples.index.import_metadata_button')
+      within('#dialog') do
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.csv')
+        find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        within "ul[id='available']" do
+          assert_no_text 'metadatafield1'
+          assert_no_text 'metadatafield2'
+          assert_no_text 'metadatafield3'
+          assert_no_selector 'li'
+        end
+        within "ul[id='selected']" do
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield2'
+          assert_text 'metadatafield3'
+          assert_selector 'li', count: 3
+        end
+        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        ### ACTIONS END ###
+      end
+
+      ### VERIFY START ###
+      assert_text I18n.t('shared.progress_bar.in_progress')
+
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+
+      # success msg
+      assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
+      click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
+
+      # metadatafield3 added to header
+      within('#samples-table table thead tr') do
+        assert_selector 'th', count: 9
+      end
+      within('#samples-table table') do
+        within('thead') do
+          assert_text 'METADATAFIELD3'
+        end
+        # sample 1 and 2 metadata is updated
+        within("tr[id='#{@sample1.id}']") do
+          assert_selector 'td:nth-child(6)', text: '10'
+          assert_selector 'td:nth-child(7)', text: '20'
+          assert_selector 'td:nth-child(8)', text: '30'
+        end
+        within("tr[id='#{@sample2.id}']") do
+          assert_selector 'td:nth-child(6)', text: '15'
+          assert_selector 'td:nth-child(7)', text: '25'
+          assert_selector 'td:nth-child(8)', text: '35'
+        end
+      end
+      ### VERIFY END ###
+    end
+
     test 'should import metadata via csv' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
@@ -1354,14 +1534,11 @@ module Projects
           assert_selector 'li', count: 3
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
         ### ACTIONS END ###
       end
 
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
-
+      assert_text I18n.t('viral.progress_bar_component.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       # success msg
@@ -1603,13 +1780,11 @@ module Projects
           assert_selector 'li', count: 1
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       within('#dialog') do
@@ -1766,12 +1941,11 @@ module Projects
           assert_selector 'li', count: 4
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        ### ACTIONS END ###
 
+    end
+        ### ACTIONS END ###
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       # error msg
@@ -1805,12 +1979,10 @@ module Projects
           assert_selector 'li', count: 3
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
         ### ACTIONS END ###
-
+    end
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       # error msg
@@ -1884,10 +2056,11 @@ module Projects
           assert_selector 'li', count: 3
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+    end
         ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       # sample 3 does not exist in current project
@@ -1945,7 +2118,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       assert_text I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
