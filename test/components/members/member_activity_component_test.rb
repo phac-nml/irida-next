@@ -79,8 +79,7 @@ class MemberActivityComponentTest < ViewComponentTestCase
              user: @user.email,
              href: @member.user.email)
     )
-    assert_no_selector 'a',
-                       text: @member.user.email
+    assert_selector 'a[disabled="disabled"]', text: @member.user.email
   end
 
   test 'create project member then really destroy activity' do
@@ -104,8 +103,8 @@ class MemberActivityComponentTest < ViewComponentTestCase
              user: 'System',
              href: @member.user.email)
     )
-    assert_no_selector 'a',
-                       text: @member.user.email
+
+    assert_selector 'a[disabled="disabled"]', text: @member.user.email
   end
 
   test 'add member to group activity' do
@@ -178,8 +177,8 @@ class MemberActivityComponentTest < ViewComponentTestCase
              user: @user.email,
              href: member.user.email)
     )
-    assert_no_selector 'a',
-                       text: member.user.email
+
+    assert_selector 'a[disabled="disabled"]', text: member.user.email
   end
 
   test 'create group member then really destroy activity' do
@@ -204,7 +203,7 @@ class MemberActivityComponentTest < ViewComponentTestCase
              user: 'System',
              href: member.user.email)
     )
-    assert_no_selector 'a',
-                       text: member.user.email
+
+    assert_selector 'a[disabled="disabled"]', text: member.user.email
   end
 end
