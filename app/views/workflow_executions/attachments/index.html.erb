@@ -1,4 +1,4 @@
-<div class="container px-4 py-8 mx-auto" data-controller="clipboard">
+<div class="container px-4 py-8 mx-auto" data-controller="">
   <div
     class="
       bg-white border rounded-lg shadow-sm dark:bg-slate-800 border-slate-200
@@ -29,8 +29,8 @@
       <div class="flex items-center space-x-2">
         <% if @copyable %>
           <button
-            data-clipboard-target="button"
-            data-action="clipboard#copy"
+            data--target="button"
+            data-action="#copy"
             class="
               inline-flex items-center px-4 py-2 text-sm font-medium bg-white border
               rounded-lg text-slate-900 dark:text-white dark:bg-slate-700 border-slate-200
@@ -38,11 +38,11 @@
               focus:ring-slate-100 dark:focus:ring-slate-700
             "
           >
-            <div class="flex items-center hidden" data-clipboard-target="successIcon">
+            <div class="flex items-center hidden" data--target="successIcon">
               <%= viral_icon(name: "check", classes: "w-4 h-4 mr-2", color: :success) %>
               <%= t(".copied") %>
             </div>
-            <span class="flex items-center" data-clipboard-target="buttonLabel">
+            <span class="flex items-center" data--target="buttonLabel">
               <%= viral_icon(name: :clipboard_document, classes: "w-4 h-4 mr-2") %>
               <%= t(".copy") %>
             </span>
