@@ -34,7 +34,8 @@ module Projects
         )
       )
 
-      assert_no_selector 'a'
+      assert_selector 'a[disabled="disabled"]', text: activity_to_render[:old_namespace]
+      assert_selector 'a[disabled="disabled"]', text: activity_to_render[:new_namespace]
     end
   end
 end
