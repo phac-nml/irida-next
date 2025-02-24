@@ -1,0 +1,5 @@
+<%= turbo_stream.append "import_dialog_content" do %>
+  <%= render SpinnerComponent.new(
+    message: t("shared.samples.file_imports.dialog.spinner_message"), # TODO: ui stuff
+  ) %>
+<% end %>
