@@ -5,7 +5,7 @@ module Projects
     module Metadata
       # Controller actions for Project Samples Metadata File Import Controller
       class FileImportsController < Projects::ApplicationController
-        include FileImportActions
+        include MetadataFileImportActions
 
         respond_to :turbo_stream
 

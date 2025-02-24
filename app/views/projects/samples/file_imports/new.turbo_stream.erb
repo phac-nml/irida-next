@@ -1,0 +1,6 @@
+<%= turbo_stream.update "samples_dialog",
+                    partial: "shared/samples/file_imports/dialog", # TODO: ui stuff
+                    locals: {
+                      open: true,
+                      url: namespace_project_file_import_path,
+                    } %>

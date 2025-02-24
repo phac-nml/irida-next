@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Common file import actions
-module FileImportActions
+module MetadataFileImportActions
   extend ActiveSupport::Concern
 
   included do
@@ -37,3 +37,4 @@ module FileImportActions
     params.require(:file_import).permit(:file, :sample_id_column, :ignore_empty_values, metadata_columns: [])
   end
 end
+
