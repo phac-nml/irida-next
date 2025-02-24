@@ -1625,14 +1625,11 @@ module Projects
           assert_selector 'li', count: 5
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
-
+      assert_text I18n.t('viral.progress_bar_component.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       # success msg
@@ -1719,14 +1716,11 @@ module Projects
           assert_selector 'li', count: 5
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
-        ### ACTIONS END ###
       end
+      ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
-
+      assert_text I18n.t('viral.progress_bar_component.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
@@ -1784,7 +1778,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
+      assert_text I18n.t('viral.progress_bar_component.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       within('#dialog') do
@@ -1834,13 +1828,11 @@ module Projects
         # enable ignore empty values
         find('input#file_import_ignore_empty_values').click
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_text I18n.t('viral.progress_bar_component.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       ### VERIFY START ###
@@ -1897,12 +1889,10 @@ module Projects
         # leave ignore empty values disabled
         assert_not find('input#file_import_ignore_empty_values').checked?
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
-        perform_enqueued_jobs only: [::Samples::MetadataImportJob]
         ### ACTIONS END ###
-
+      end
       ### VERIFY START ###
-      assert_text I18n.t('shared.progress_bar.in_progress')
+      assert_text I18n.t('viral.progress_bar_component.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
@@ -1941,11 +1931,10 @@ module Projects
           assert_selector 'li', count: 4
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-
-    end
-        ### ACTIONS END ###
+      end
+      ### ACTIONS END ###
       ### VERIFY START ###
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
+      assert_text I18n.t('viral.progress_bar_component.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       # error msg
@@ -1980,9 +1969,9 @@ module Projects
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
         ### ACTIONS END ###
-    end
+      end
       ### VERIFY START ###
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
+      assert_text I18n.t('viral.progress_bar_component.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       # error msg
@@ -2056,11 +2045,11 @@ module Projects
           assert_selector 'li', count: 3
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-    end
-        ### ACTIONS END ###
+      end
+      ### ACTIONS END ###
 
       ### VERIFY START ###
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
+      assert_text I18n.t('viral.progress_bar_component.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       # sample 3 does not exist in current project
@@ -2118,7 +2107,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
+      assert_text I18n.t('viral.progress_bar_component.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       assert_text I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
