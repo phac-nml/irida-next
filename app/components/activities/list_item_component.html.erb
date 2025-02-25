@@ -22,6 +22,8 @@
         <%= render Activities::Groups::TransferOutActivityComponent.new(activity: activity) %>
       <% elsif subgroup_action %>
         <%= render Activities::Groups::SubgroupActivityComponent.new(activity: activity) %>
+      <% elsif member_action %>
+        <%= render Activities::MemberActivityComponent.new(activity: activity) %>
       <% elsif project_crud_action %>
         <%= render Activities::Groups::Projects::CrudActivityComponent.new(
           activity: activity,
