@@ -17,7 +17,6 @@ module WorkflowExecutions
       @preview_type = determine_preview_type(@attachment.file.content_type)
       @previewable = previewable?(@attachment.file.content_type)
       @copyable = copyable?(@attachment.file.content_type)
-      @foo = 'bar'
     end
 
     private
