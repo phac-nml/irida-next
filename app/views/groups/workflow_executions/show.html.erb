@@ -1,3 +1,9 @@
+<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+
+<%= turbo_stream_from @workflow_execution %>
+
+<%= turbo_frame_tag "export_dialog" %>
+
 <%= render Viral::PageHeaderComponent.new(title: turbo_frame_tag('we_name_header') do @workflow_execution.name.blank? ? @workflow_execution.metadata["workflow_name"] :
    @workflow_execution.name end, id: @workflow_execution.id, id_color: find_pill_color_for_state(@workflow_execution.state)) do |component| %>
   <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
