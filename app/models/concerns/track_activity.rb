@@ -121,10 +121,10 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
       return params
     end
 
-    group_link = NamespaceGroupLink.joins(:namespace, :group).with_deleted.find_by(
+    group_link = NamespaceGroupLink.joins(:namespace, :group).with_deleted.where(
       group: { puid: activity.parameters[:group_puid] },
       namespace: { puid: activity.parameters[:namespace_puid] }
-    )
+    ).last
 
     params.merge!({ group_link: group_link,
                     group_puid: activity.parameters[:group_puid],
