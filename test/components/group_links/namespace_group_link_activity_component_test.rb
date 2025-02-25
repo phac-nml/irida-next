@@ -214,6 +214,30 @@ module GroupLinks
       )
       assert_selector 'a[disabled="disabled"]',
                       text: @group_namespace_group_link.group.puid
+
+      group = groups(:david_doe_group_four)
+      activities = group.human_readable_activity(group.retrieve_group_activity).reverse
+
+      assert_equal(1, activities.count do |activity|
+        activity[:key].include?('group.namespace_group_link.created')
+      end)
+
+      activity_to_render = activities.find do |a|
+        a[:key] == 'activity.group.namespace_group_link.created_html'
+      end
+
+      render_inline Activities::NamespaceGroupLinkActivityComponent.new(activity: activity_to_render)
+
+      assert_text strip_tags(
+        I18n.t(
+          'activity.group.namespace_group_link.created_html',
+          user: 'System',
+          href: @group_namespace_group_link.namespace.puid,
+          namespace_type: 'group'
+        )
+      )
+      assert_selector 'a[disabled="disabled"]',
+                      text: @group_namespace_group_link.namespace.puid
     end
 
     test 'namespace group link group shared activity' do
