@@ -34,5 +34,25 @@ module WorkflowExecutions
       )
       assert_response :redirect
     end
+
+    # Added test to verify access is denied for unauthenticated users
+    test 'index redirects to sign in when user is not authenticated' do
+      sign_out @user
+      get workflow_executions_attachments_path(
+        workflow_execution: @workflow_execution.id,
+        attachment: @attachment.id
+      )
+      assert_response :redirect
+      assert_redirected_to new_user_session_path
+    end
+
+    # Updated test to verify behavior when workflow execution is missing, expecting 404
+    test 'index renders file_not_found when workflow execution is missing' do
+      get workflow_executions_attachments_path(
+        workflow_execution: 999_999,
+        attachment: @attachment.id
+      )
+      assert_response :not_found
+    end
   end
 end
