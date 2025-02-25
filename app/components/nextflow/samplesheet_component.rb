@@ -53,6 +53,16 @@ module Nextflow
       end
     end
 
+    def expected_pattern(entry)
+      if entry.key?('pattern')
+        entry['pattern']
+      elsif entry.key?('anyOf')
+        entry['anyOf'].select do |condition|
+          condition.key?('pattern')
+        end.pluck('pattern').join('|')
+      end
+    end
+
     def file_samplesheet_values(file)
       { form_value: file.empty? ? '' : file[:global_id],
         filename: file.empty? ? I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file') : file[:filename],
@@ -64,11 +74,12 @@ module Nextflow
       { form_value: metadata.empty? ? '' : metadata }
     end
 
-    def extract_properties(schema)
+    def extract_properties(schema) # rubocop:disable Metrics/AbcSize
       @properties = schema['items']['properties']
       @properties.each do |property, entry|
         @properties[property]['required'] = schema['items']['required'].include?(property)
         @properties[property]['cell_type'] = identify_cell_type(property, entry)
+        @properties[property]['pattern'] = expected_pattern(entry)
       end
 
       if @required_properties.include?('fastq_1') && @required_properties.include?('fastq_2')
