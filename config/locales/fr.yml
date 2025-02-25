@@ -309,9 +309,9 @@ fr:
       update_html: "%{user} updated project attributes"
     workflow_execution:
       automated_workflow:
-        create_html: "%{user} setup automated pipeline <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span> for the project"
-        destroy_html: "%{user} removed automated pipeline <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span> for the project"
-        launch_html: Project automation bot launched pipeline <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span> on sample <span class='font-medium text-slate-800 dark:text-slate-300'>%{sample_href}</span>
+        create_html: "%{user} setup automated pipeline %{href} for the project"
+        destroy_html: "%{user} removed automated pipeline %{href} for the project"
+        launch_html: Project automation bot launched pipeline %{href} on sample %{sample_href}
       automated_workflow_completion:
         metadata_written_html: Project automation bot wrote pipeline %{href} metadata to sample %{sample_href}
         outputs_and_metadata_written_html: Project automation bot attached pipeline %{href} outputs and wrote metadata to sample %{sample_href}

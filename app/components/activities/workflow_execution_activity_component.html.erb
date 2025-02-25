@@ -1,28 +1,26 @@
 <% if @activity[:automated] == true %>
   <% if workflow_execution_exists %>
-    <%= t(
-      "#{@activity[:key]}",
-      user: @activity[:user],
-      href:
-        link_to(
+   <% href = link_to(
           @activity[:workflow_id],
           namespace_project_automated_workflow_executions_path(
             @activity[:namespace].parent,
             @activity[:namespace].project,
           ),
           class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
-        ),
-    ) %>
+        )%>
   <% else %>
-    <%= t("#{@activity[:key]}", user: @activity[:user], href: @activity[:workflow_id]) %>
+   <% href = link_to(
+          @activity[:workflow_id],
+          '#',
+          class: "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
+          disabled: true
+        )%>
   <% end %>
+
+   <%= t("#{@activity[:key]}", user: @activity[:user], href: href) %>
 <% else %>
   <% if workflow_execution_exists && workflow_execution_sample_exists %>
-    <%= t(
-      "#{@activity[:key]}",
-      user: @activity[:user],
-      href:
-        link_to(
+    <% href = link_to(
           @activity[:workflow_id],
           namespace_project_workflow_execution_path(
             @activity[:namespace].parent,
@@ -30,9 +28,9 @@
             @activity[:workflow_id],
           ),
           class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
-        ),
-      sample_href:
-        link_to(
+        ) %>
+
+    <% sample_href = link_to(
           @activity[:sample_puid],
           namespace_project_sample_path(
             @activity[:namespace].parent,
@@ -40,14 +38,9 @@
             @activity[:sample_id],
           ),
           class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
-        ),
-    ) %>
+        ) %>
   <% elsif workflow_execution_exists %>
-    <%= t(
-      "#{@activity[:key]}",
-      user: @activity[:user],
-      href:
-        link_to(
+    <% href = link_to(
           @activity[:workflow_id],
           namespace_project_workflow_execution_path(
             @activity[:namespace].parent,
@@ -55,16 +48,23 @@
             @activity[:workflow_id],
           ),
           class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
-        ),
-      sample_href: @activity[:sample_puid],
-    ) %>
+        ) %>
+
+    <% sample_href = link_to(
+          @activity[:wsample_puid],
+          '#',
+          class: "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
+          disabled: true
+        )%>
   <% elsif workflow_execution_sample_exists %>
-    <%= t(
-      "#{@activity[:key]}",
-      user: @activity[:user],
-      href: @activity[:workflow_id],
-      sample_href:
-        link_to(
+    <% href = link_to(
+          @activity[:workflow_id],
+          '#',
+          class: "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
+          disabled: true
+        ) %>
+
+    <% sample_href = link_to(
           @activity[:sample_puid],
           namespace_project_sample_path(
             @activity[:namespace].parent,
@@ -72,14 +72,27 @@
             @activity[:sample_id],
           ),
           class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
-        ),
-    ) %>
+        )%>
   <% else %>
-    <%= t(
-      "#{@activity[:key]}",
-      user: @activity[:user],
-      href: @activity[:workflow_id],
-      sample_href: @activity[:sample_puid],
-    ) %>
+    <% href =  link_to(
+          @activity[:workflow_id],
+          '#',
+          class: "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
+          disabled: true
+        ) %>
+
+    <% sample_href = link_to(
+          @activity[:sample_puid],
+          '#',
+          class: "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
+          disabled: true
+        ) %>
   <% end %>
+
+  <%= t(
+    "#{@activity[:key]}",
+    user: @activity[:user],
+    href: href,
+    sample_href: sample_href,
+  ) %>
 <% end %>
