@@ -44,11 +44,23 @@ module Members
       MemberMailer.access_revoked_user_email(member, namespace).deliver_later
     end
 
-    def create_activities
+    def create_activities # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      namespace_key = if member.namespace.group_namespace?
+                        'group'
+                      else
+                        'namespaces_project_namespace'
+                      end
+
       if current_user == member.user
-        member.create_activity key: 'member.destroy_self', owner: current_user
+        member.namespace.create_activity key: "#{namespace_key}.member.destroy_self", owner: current_user, parameters: {
+          member_email: member.user.email,
+          action: 'member_destroy'
+        }
       else
-        member.create_activity key: 'member.destroy', owner: current_user
+        member.namespace.create_activity key: "#{namespace_key}.member.destroy", owner: current_user, parameters: {
+          member_email: member.user.email,
+          action: 'member_destroy'
+        }
       end
     end
   end

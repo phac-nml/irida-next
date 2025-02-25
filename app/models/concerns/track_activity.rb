@@ -8,9 +8,11 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     include PublicActivity::Common
   end
 
-  def human_readable_activity(public_activities) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity
+  def human_readable_activity(public_activities) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity
     activities = []
     public_activities.each do |activity|
+      next if !activity.parameters[:member_email].nil? && activity.parameters[:member_email].include?('automation')
+
       trackable_type = activity.trackable_type
       activity[:parameters] = convert_activity_parameter_keys(activity)
 
@@ -23,8 +25,6 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
         elsif activity.key.include?('workflow_execution')
           activities << workflow_execution_activity(activity)
         end
-      when 'Member'
-        activities << member_activity(activity)
       when 'NamespaceGroupLink'
         activities << namespace_group_link_activity(activity)
       end
@@ -50,12 +50,14 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
     return base_params if activity.parameters[:action].blank?
 
-    params = transfer_activity_parameters(base_params, activity)
+    params = member_activity_params(activity, activity_trackable, base_params)
+
+    params = transfer_activity_parameters(params, activity)
 
     namespace_project_sample_activity_parameters(params, activity)
   end
 
-  def group_activity(activity) # rubocop:disable Metrics/AbcSize
+  def group_activity(activity) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     activity_trackable = activity_trackable(activity, Group)
 
     base_params = {
@@ -72,7 +74,9 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
     return base_params if activity.parameters[:action].blank?
 
-    params = additional_group_activity_params(base_params, activity)
+    params = member_activity_params(activity, activity_trackable, base_params)
+
+    params = additional_group_activity_params(params, activity)
 
     transfer_activity_parameters(params, activity)
   end
@@ -100,18 +104,14 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
                        })
   end
 
-  def member_activity(activity)
-    activity_trackable = activity_trackable(activity, Member)
+  def member_activity_params(activity, activity_trackable, params)
+    member_action_types = %w[member_create member_destroy member_update]
+    return params unless member_action_types.include?(activity.parameters[:action])
 
-    {
-      created_at: format_created_at(activity.created_at),
-      key: "activity.#{activity.key}_html",
-      user: activity_creator(activity),
-      namespace_type: activity_trackable.namespace.type.downcase,
-      name: activity_trackable.namespace.name,
-      member: activity_trackable,
-      type: 'Member'
-    }
+    member = Member.joins(:user, :namespace).with_deleted.where(user: { email: activity.parameters[:member_email] },
+                                                                namespace: { id: activity_trackable.id }).last
+
+    params.merge!(member: member, member_email: activity.parameters[:member_email])
   end
 
   def namespace_group_link_activity(activity)

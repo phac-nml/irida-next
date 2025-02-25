@@ -30,7 +30,16 @@ module Members
 
       if updated
         UpdateMembershipsJob.perform_later(member.id)
-        member.create_activity key: 'member.update', owner: current_user
+
+        namespace_key = if member.namespace.group_namespace?
+                          'group'
+                        else
+                          'namespaces_project_namespace'
+                        end
+        member.namespace.create_activity key: "#{namespace_key}.member.update", owner: current_user, parameters: {
+          member_email: member.user.email,
+          action: 'member_update'
+        }
       end
 
       updated

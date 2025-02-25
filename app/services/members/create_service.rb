@@ -30,7 +30,18 @@ module Members
       end
       if member.save
         send_emails if @email_notification && !has_previous_access
-        member.create_activity key: 'member.create', owner: current_user if @member.user != current_user
+        if @member.user != current_user
+          namespace_key = if member.namespace.group_namespace?
+                            'group'
+                          else
+                            'namespaces_project_namespace'
+                          end
+          member.namespace.create_activity key: "#{namespace_key}.member.create", owner: current_user,
+                                           parameters: {
+                                             member_email: @member.user.email,
+                                             action: 'member_create'
+                                           }
+        end
       end
 
       member

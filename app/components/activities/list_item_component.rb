@@ -9,12 +9,16 @@ module Activities
       @activity = activity
     end
 
-    def project_crud_action
-      @activity[:key].include?('group.projects.create') ||  @activity[:key].include?('group.projects.destroy')
+    def member_action
+      %w[member_create member_update member_destroy].include?(@activity[:action])
     end
 
     def metadata_template_action
       %w[metadata_template_create metadata_template_destroy metadata_template_update].include?(@activity[:action])
+    end
+
+    def project_crud_action
+      @activity[:key].include?('group.projects.create') ||  @activity[:key].include?('group.projects.destroy')
     end
 
     def project_namespace_transfer_action

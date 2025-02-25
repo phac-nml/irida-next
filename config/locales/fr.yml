@@ -247,6 +247,11 @@ fr:
     group:
       create_html: "%{user} created group"
       destroy_html: "%{user} removed group"
+      member:
+        create_html: "%{user} added member %{href} to group"
+        destroy_html: "%{user} removed member %{href} from group"
+        destroy_self_html: "%{href} removed themself from group"
+        update_html: "%{user} updated group member %{href} attributes"
       metadata_template:
         create_html: "%{user} created metadata template %{href}"
         destroy_html: "%{user} removed metadata template %{href}"
@@ -263,11 +268,6 @@ fr:
       transfer_in_no_exisiting_namespace_html: "%{user} transferred group %{href} into group %{new_namespace}"
       transfer_out_html: "%{user} transferred group %{transferred_group_puid} into group %{new_namespace}"
       update_html: "%{user} updated group attributes"
-    member:
-      create_html: "%{user} added member <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span> to %{namespace_type}"
-      destroy_html: "%{user} removed member <span class='font-medium text-slate-800 dark:text-slate-300'>%{member}</span> from %{namespace_type}"
-      destroy_self_html: "<span class='font-medium text-slate-800 dark:text-slate-300'>%{member}</span> removed themself from %{namespace_type}"
-      update_html: "%{user} updated %{namespace_type} member %{href} attributes"
     namespace_group_link:
       create_html: "%{user} shared %{namespace_type} with group %{href}"
       destroy_html: "%{user} unshared %{namespace_type} with group <span class='font-medium text-slate-800 dark:text-slate-300'>%{group_name}</span>"
@@ -275,6 +275,11 @@ fr:
     namespaces_project_namespace:
       create_html: "%{user} created project"
       destroy_html: "%{user} removed project"
+      member:
+        create_html: "%{user} added member %{href} to project"
+        destroy_html: "%{user} removed member %{href} from project"
+        destroy_self_html: "%{href} removed themself from project"
+        update_html: "%{user} updated project member %{href} attributes"
       metadata_template:
         create_html: "%{user} created metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span>"
         destroy_html: "%{user} removed metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{template_name}</span>"
