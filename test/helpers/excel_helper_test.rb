@@ -80,4 +80,31 @@ class ExcelHelperTest < ActionView::TestCase
     end
     assert_match('An unexpected error occurred while parsing the file', error.message)
   end
+
+  test 'parses CSV file with only headers' do
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/only_headers.csv'))
+    blob = ActiveStorage::Blob.create_and_upload!(
+      io: file,
+      filename: file.original_filename,
+      content_type: file.content_type
+    )
+    result = parse_excel_file(blob)
+
+    # Expect only one row containing headers
+    assert_equal 1, result.length
+    assert_equal %w[name age city], result[0]
+  end
+
+  test 'raises error when file is completely empty' do
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/empty.csv'))
+    blob = ActiveStorage::Blob.create_and_upload!(
+      io: file,
+      filename: file.original_filename,
+      content_type: file.content_type
+    )
+    error = assert_raises(ExcelParsingError) do
+      parse_excel_file(blob)
+    end
+    assert_match('No headers found in file', error.message)
+  end
 end
