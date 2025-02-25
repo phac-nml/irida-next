@@ -12,7 +12,11 @@ module WorkflowExecutions
     before_action :context_crumbs, only: [:index]
 
     def index
-      return render :file_not_found, status: :not_found unless @attachment
+      unless @attachment
+        redirect_back fallback_location: workflow_executions_path,
+                      alert: I18n.t('workflow_executions.attachments.file_not_found')
+        return
+      end
 
       @preview_type = determine_preview_type(@attachment.file.content_type)
       @previewable = previewable?(@attachment.file.content_type)
@@ -43,6 +47,8 @@ module WorkflowExecutions
     end
 
     def workflow_execution_crumbs
+      return [] unless @attachment.present? && @workflow_execution.present?
+
       [
         {
           name: @workflow_execution.name || @workflow_execution.id,
