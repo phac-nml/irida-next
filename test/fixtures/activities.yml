@@ -128,7 +128,7 @@ project1_namespace_automated_workflow_execution_create:
   key: "workflow_execution.automated_workflow.create"
   parameters:
     {
-      workflow_id: <%= ActiveRecord::FixtureSet.identify(:automated_workflow_execution,
+      workflow_id: <%= ActiveRecord::FixtureSet.identify(:valid_automated_workflow_execution,
       :uuid) %>,
       automated: true
     }
@@ -141,12 +141,11 @@ project1_namespace_automated_workflow_execution_launch:
   key: "workflow_execution.automated_workflow.launch"
   parameters:
     {
-      workflow_id: <%= ActiveRecord::FixtureSet.identify(:automated_workflow_execution,
+      workflow_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_valid,
       :uuid) %>,
-      workflow_name: <%= ActiveRecord::FixtureSet.identify(:automated_workflow_execution,
-      :name) %>,
+      workflow_name: "",
       sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>,
-      sample_puid: <%= ActiveRecord::FixtureSet.identify(:sample1, :puid) %>
+      sample_puid: "INXT_SAM_AAAAAAAAAA"
     }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
