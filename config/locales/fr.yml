@@ -1900,6 +1900,7 @@ fr:
       download: Download
       preview: Preview
     attachments:
+      file_not_found: File not found
       index:
         copied: Copié
         copy: Copier
