@@ -2,6 +2,7 @@
 
 require 'test_helper'
 
+# Test suite for the ContentTypeHandler module, ensuring it correctly determines preview types and content properties.
 class ContentTypeHandlerTest < ActionDispatch::IntegrationTest
   # Create a dummy class that includes the ContentTypeHandler module to test its methods.
   class DummyClass
