@@ -51,20 +51,22 @@
                           action: "change->metadata--file-import#changeSampleIDInput",
                         } %>
           </div>
-          <div class="form-field">
-            <%= form.label :metadata_columns,
-                       t(".metadata_columns"),
-                       class:
-                         "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
-            <%= form.select :metadata_columns,
-                        {},
-                        { multiple: true, include_hidden: false },
-                        required: true,
-                        data: {
-                          "metadata--file-import-target": "metadataColumns",
-                          action: "change->metadata--file-import#changeMetadataInput",
-                        } %>
-          </div>
+          <% if Flipper.enabled?(:metadata_import_field_selection) %>
+            <div class="form-field">
+              <%= form.label :metadata_columns,
+                         t(".metadata_columns"),
+                         class:
+                           "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
+              <%= form.select :metadata_columns,
+                          {},
+                          { multiple: true, include_hidden: false },
+                          required: true,
+                          data: {
+                            "metadata--file-import-target": "metadataColumns",
+                            action: "change->metadata--file-import#changeMetadataInput",
+                          } %>
+            </div>
+          <% end %>
           <div class="flex items-center">
             <%= form.check_box :ignore_empty_values,
                            {

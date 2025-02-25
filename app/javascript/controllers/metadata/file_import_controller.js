@@ -30,16 +30,22 @@ export default class extends Controller {
 
   connect() {
     this.#disableTarget(this.sampleIdColumnTarget);
-    this.#disableTarget(this.metadataColumnsTarget);
+    if (this.hasMetadataColumnsTarget) {
+      this.#disableTarget(this.metadataColumnsTarget);
+    }
     this.submitButtonTarget.disabled = true;
     this.loadedValue = true;
   }
 
   changeSampleIDInput() {
-    this.#removeInputOptions(this.metadataColumnsTarget);
-    this.#addMetadataInputOptions();
-    this.#enableTarget(this.metadataColumnsTarget);
-    this.submitButtonTarget.disabled = true;
+    if (this.hasMetadataColumnsTarget) {
+      this.#removeInputOptions(this.metadataColumnsTarget);
+      this.#addMetadataInputOptions();
+      this.#enableTarget(this.metadataColumnsTarget);
+      this.submitButtonTarget.disabled = true;
+    } else {
+      this.submitButtonTarget.disabled = false;
+    }
   }
 
   changeMetadataInput(event) {
@@ -66,15 +72,19 @@ export default class extends Controller {
       this.#removeInputsOptions();
       this.#addSampleIDInputOptions();
       this.#enableTarget(this.sampleIdColumnTarget);
-      this.#disableTarget(this.metadataColumnsTarget);
+      if (this.hasMetadataColumnsTarget) {
+        this.#disableTarget(this.metadataColumnsTarget);
+      }
     };
   }
 
   #removeInputsOptions() {
     this.#removeInputOptions(this.sampleIdColumnTarget);
-    this.#removeInputOptions(this.metadataColumnsTarget);
     this.#disableTarget(this.sampleIdColumnTarget);
-    this.#disableTarget(this.metadataColumnsTarget);
+    if (this.hasMetadataColumnsTarget) {
+      this.#removeInputOptions(this.metadataColumnsTarget);
+      this.#disableTarget(this.metadataColumnsTarget);
+    }
     this.submitButtonTarget.disabled = true;
   }
 
