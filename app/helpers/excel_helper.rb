@@ -16,7 +16,6 @@ module ExcelHelper
     raise ExcelParsingError, 'No file provided' if file.blank?
 
     extension = File.extname(file.filename.to_s).downcase
-
     data = []
     file.open do |f|
       spreadsheet = open_spreadsheet(f.path, extension)
@@ -39,7 +38,16 @@ module ExcelHelper
   # @param extension [String] the file extension
   # @return [Roo::Spreadsheet] the opened spreadsheet
   def open_spreadsheet(path, extension)
-    Roo::Spreadsheet.open(path, extension: extension, file_warning: :ignore)
+    case extension.downcase
+    when '.csv'
+      Roo::CSV.new(path)
+    when '.xlsx'
+      Roo::Excelx.new(path)
+    when '.xls'
+      Roo::Excel.new(path)
+    else
+      raise ExcelParsingError, 'Unknown file type'
+    end
   end
 
   # Extracts headers from the first row of the spreadsheet
@@ -61,7 +69,24 @@ module ExcelHelper
     data = []
     (2..spreadsheet.last_row).each do |i|
       row_data = spreadsheet.row(i)
-      next unless row_data.any?(&:present?) && row_data.length == headers.length
+      next unless row_data.any?(&:present?)
+
+      # Skip rows that have incomplete data
+      next unless row_data.length >= headers.length && row_data[0...headers.length].all?(&:present?)
+
+      # If row has more columns than headers, truncate the extra columns
+      row_data = row_data[0...headers.length]
+
+      # Convert numeric strings to numbers
+      row_data = row_data.map do |val|
+        if val.to_s.match?(/\A\d+\z/)
+          val.to_i
+        elsif val.to_s.match?(/\A\d*\.\d+\z/)
+          val.to_f
+        else
+          val
+        end
+      end
 
       data << headers.zip(row_data).to_h
     end
@@ -81,6 +106,7 @@ module ExcelHelper
   # @raise [ExcelParsingError] with a custom error message
   def handle_standard_error(error)
     Rails.logger.error "Unexpected error parsing Excel file: #{error.class} - #{error.message}"
-    raise ExcelParsingError, 'An unexpected error occurred while parsing the file'
+    Rails.logger.error error.backtrace.join("\n")
+    raise ExcelParsingError, "An unexpected error occurred while parsing the file: #{error.message}"
   end
 end
