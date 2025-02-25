@@ -1,0 +1,21 @@
+name: trigger-azure-devops
+
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'phac-nml'
+    steps:
+      - name: Azure Pipelines Action
+        uses: Azure/pipelines@v1.2
+        with:
+          azure-devops-project-url: ${{ secrets.PROJECT_URL }}
+          azure-pipeline-name: ${{ secrets.PIPELINE_NAME }}
+          azure-devops-token: ${{ secrets.DEVOPS_PAT }}
