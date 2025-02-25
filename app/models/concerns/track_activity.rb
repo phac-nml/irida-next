@@ -108,8 +108,8 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     member_action_types = %w[member_create member_destroy member_update]
     return params unless member_action_types.include?(activity.parameters[:action])
 
-    member = Member.joins(:user, :namespace).with_deleted.find_by(user: { email: activity.parameters[:member_email] },
-                                                                  namespace: { id: activity_trackable.id })
+    member = Member.joins(:user, :namespace).with_deleted.where(user: { email: activity.parameters[:member_email] },
+                                                                namespace: { id: activity_trackable.id }).last
 
     params.merge!(member: member, member_email: activity.parameters[:member_email])
   end
