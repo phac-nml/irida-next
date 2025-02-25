@@ -58,8 +58,8 @@ module Groups
                                                              new_namespace: @group.puid,
                                                              href: @project.namespace.puid)
         )
-        assert_no_selector 'a',
-                           text: @project.namespace.puid
+        assert_selector 'a[disabled="disabled"]',
+                        text: @project.namespace.puid
       end
     end
   end

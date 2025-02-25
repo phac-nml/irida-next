@@ -94,8 +94,8 @@ module Groups
                                                   href: subgroup.puid)
       )
 
-      assert_no_selector 'a',
-                         text: subgroup.puid
+      assert_selector 'a[disabled="disabled"]',
+                      text: subgroup.puid
     end
   end
 end

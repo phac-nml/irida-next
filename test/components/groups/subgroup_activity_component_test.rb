@@ -50,10 +50,10 @@ module Groups
 
       assert_text strip_tags(
         I18n.t('activity.group.subgroups.destroy_html', user: @user.email,
-                                                        removed_group_puid: @subgroup.puid)
+                                                        href: @subgroup.puid)
       )
-      assert_no_selector 'a',
-                         text: @subgroup.puid
+      assert_selector 'a[disabled="disabled"]',
+                      text: @subgroup.puid
     end
 
     test 'create subgroup and then soft delete activity' do
@@ -76,8 +76,8 @@ module Groups
                                                        href: @subgroup.puid)
       )
 
-      assert_no_selector 'a',
-                         text: @subgroup.puid
+      assert_selector 'a[disabled="disabled"]',
+                      text: @subgroup.puid
     end
 
     test 'create subgroup and then transfer to another parent group activity' do
@@ -105,8 +105,8 @@ module Groups
                                                        href: @subgroup.puid)
       )
 
-      assert_no_selector 'a',
-                         text: @subgroup.puid
+      assert_selector 'a[disabled="disabled"]',
+                      text: @subgroup.puid
     end
   end
 end
