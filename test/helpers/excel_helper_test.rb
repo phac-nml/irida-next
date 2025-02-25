@@ -14,62 +14,70 @@ class ExcelHelperTest < ActionView::TestCase
   end
 
   test 'raises error when headers are missing in CSV file' do
-    Tempfile.create(['empty_headers', '.csv']) do |tempfile|
-      # Write CSV with blank header row and one data row.
-      tempfile.write(" , , \n1,2,3")
-      tempfile.rewind
-      uploaded_file = ActionDispatch::Http::UploadedFile.new(
-        filename: 'empty_headers.csv',
-        type: 'text/csv',
-        tempfile: tempfile
-      )
-      assert_raises(ExcelParsingError, 'No headers found in file') do
-        parse_excel_file(uploaded_file)
-      end
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/missing_headers.csv'))
+    blob = ActiveStorage::Blob.create_and_upload!(
+      io: file,
+      filename: file.original_filename,
+      content_type: file.content_type
+    )
+    assert_raises(ExcelParsingError, 'No headers found in file') do
+      parse_excel_file(blob)
     end
   end
 
-  test 'handles Roo error by raising ExcelParsingError with custom message' do
-    Tempfile.create(['dummy', '.csv']) do |tempfile|
-      tempfile.write("name,age\nAlice,30")
-      tempfile.rewind
-      uploaded_file = ActionDispatch::Http::UploadedFile.new(
-        filename: 'dummy.csv',
-        type: 'text/csv',
-        tempfile: tempfile
-      )
-      # Stub open_spreadsheet to simulate a Roo::Error
-      def open_spreadsheet(_path, _extension)
-        raise Roo::Error, 'simulated roo error'
-      end
+  test 'successfully parses CSV file with valid data' do
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/good_csv.csv'))
+    blob = ActiveStorage::Blob.create_and_upload!(
+      io: file,
+      filename: file.original_filename,
+      content_type: file.content_type
+    )
+    result = parse_excel_file(blob)
 
-      error = assert_raises(ExcelParsingError) do
-        parse_excel_file(uploaded_file)
-      end
-      assert_match('An unexpected error occurred while parsing the file', error.message)
-    end
+    assert_equal 3, result.length
+    assert_equal %w[name age city], result[0]
+    assert_equal({ 'name' => 'Alice', 'age' => 30, 'city' => 'New York' }, result[1])
+    assert_equal({ 'name' => 'Bob', 'age' => 25, 'city' => 'London' }, result[2])
   end
 
-  test 'handles unexpected errors by raising ExcelParsingError with generic message' do
-    Tempfile.create(['dummy', '.csv']) do |tempfile|
-      tempfile.write("name,age\nAlice,30")
-      tempfile.rewind
-      uploaded_file = ActionDispatch::Http::UploadedFile.new(
-        filename: 'dummy.csv',
-        type: 'text/csv',
-        tempfile: tempfile
-      )
-      # Stub extract_headers to trigger a StandardError
-      original_extract_headers = method(:extract_headers)
-      define_singleton_method(:extract_headers) do |*args|
-        raise StandardError, 'unexpected error'
-      end
+  test 'skips empty rows in data' do
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/missing_rows.csv'))
+    blob = ActiveStorage::Blob.create_and_upload!(
+      io: file,
+      filename: file.original_filename,
+      content_type: file.content_type
+    )
+    result = parse_excel_file(blob)
 
-      error = assert_raises(ExcelParsingError) do
-        parse_excel_file(uploaded_file)
-      end
-      assert_equal 'An unexpected error occurred while parsing the file', error.message
-      define_singleton_method(:extract_headers, original_extract_headers)
+    assert_equal 3, result.length # headers + 2 data rows
+    assert_equal %w[name age], result[0]
+  end
+
+  test 'handles rows with incorrect number of columns' do
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/incorrect_cols.csv'))
+    blob = ActiveStorage::Blob.create_and_upload!(
+      io: file,
+      filename: file.original_filename,
+      content_type: file.content_type
+    )
+    result = parse_excel_file(blob)
+
+    assert_equal 2, result.length # Only headers and the valid row
+    assert_equal %w[name age city], result[0]
+    assert_equal({ 'name' => 'Bob', 'age' => 25, 'city' => 'London' }, result[1])
+  end
+
+  test 'raises error for unsupported file format' do
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/unsupported.txt'))
+    blob = ActiveStorage::Blob.create_and_upload!(
+      io: file,
+      filename: file.original_filename,
+      content_type: file.content_type
+    )
+
+    error = assert_raises(ExcelParsingError) do
+      parse_excel_file(blob)
     end
+    assert_match('An unexpected error occurred while parsing the file', error.message)
   end
 end

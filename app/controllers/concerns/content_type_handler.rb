@@ -37,6 +37,6 @@ module ContentTypeHandler
   end
 
   def copyable?(content_type)
-    COPYABLE_TYPES.find { |key, _| content_type.start_with?(key) }.present?
+    COPYABLE_TYPES.include?(content_type)
   end
 end
