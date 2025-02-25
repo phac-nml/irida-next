@@ -14,7 +14,7 @@ class MoveGroupLinkActivitiesToNamespace < ActiveRecord::Migration[7.2]
       group = Namespace.with_deleted.find_by(id: group_link&.group&.id)
       namespace = Namespace.with_deleted.find_by(id: group_link&.namespace&.id)
 
-      next if namespace.nil? || group.nil?
+      next if namespace.nil? || namespace.deleted? || group.nil?
 
       namespace_key = if namespace.group_namespace?
                         'group'
@@ -41,6 +41,8 @@ class MoveGroupLinkActivitiesToNamespace < ActiveRecord::Migration[7.2]
 
       activity.parameters[:action] = action
       activity.save!
+
+      next if group.deleted?
 
       activity_key = if activity.parameters[:action] == 'group_link_create'
                        'group.namespace_group_link.created'

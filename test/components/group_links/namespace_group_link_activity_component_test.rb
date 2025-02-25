@@ -85,8 +85,8 @@ module GroupLinks
           href: @namespace_group_link.group.puid
         )
       )
-      assert_no_selector 'a',
-                         text: @namespace_group_link.group.puid
+      assert_selector 'a[disabled="disabled"]',
+                      text: @namespace_group_link.group.puid
     end
 
     test 'project create namespace group link and permanently destroy activity' do
@@ -111,8 +111,8 @@ module GroupLinks
           href: @namespace_group_link.group.puid
         )
       )
-      assert_no_selector 'a',
-                         text: @namespace_group_link.group.puid
+      assert_selector 'a[disabled="disabled"]',
+                      text: @namespace_group_link.group.puid
     end
 
     test 'group create namespace group link activity' do
@@ -186,8 +186,8 @@ module GroupLinks
           href: @group_namespace_group_link.group.puid
         )
       )
-      assert_no_selector 'a',
-                         text: @group_namespace_group_link.group.puid
+      assert_selector 'a[disabled="disabled"]',
+                      text: @group_namespace_group_link.group.puid
     end
 
     test 'group create namespace group link and destroy permanently activity' do
@@ -212,8 +212,8 @@ module GroupLinks
           href: @group_namespace_group_link.group.puid
         )
       )
-      assert_no_selector 'a',
-                         text: @group_namespace_group_link.group.puid
+      assert_selector 'a[disabled="disabled"]',
+                      text: @group_namespace_group_link.group.puid
     end
 
     test 'namespace group link group shared activity' do
