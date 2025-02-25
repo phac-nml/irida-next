@@ -1,5 +1,6 @@
+<% contents = file.download %>
 <div class="hidden" data-copy-target="source">
-  <%= file.download %>
+  <%= contents %>
 </div>
 <div
   class="
@@ -7,7 +8,7 @@
     dark:text-slate-300
   "
 >
-  <% JSON.pretty_generate(JSON.parse(file.download)).lines.each_with_index do |line, index| %>
+  <% JSON.pretty_generate(JSON.parse(contents)).lines.each_with_index do |line, index| %>
     <pre class="flex dark:text-slate-400">
       <span
         class="

@@ -1,12 +1,13 @@
+<% contents = file.download %>
 <div class="hidden" data-copy-target="source">
-  <%= file.download %>
+  <%= contents %>
 </div>
 <pre
   class="
     p-4 overflow-x-auto rounded-lg bg-slate-50 dark:bg-slate-900 dark:text-slate-300
   "
 >
-  <% file.download.lines.each_with_index do |line, index| %>
+  <% contents.lines.each_with_index do |line, index| %>
     <div class="flex">
       <span
         class="
