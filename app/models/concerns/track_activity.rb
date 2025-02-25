@@ -165,8 +165,14 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
                     })
     end
 
+    if activity.parameters[:action] == 'project_namespace_transfer'
+      params.merge!({ project: get_object_by_id(activity.parameters[:project_id], Project),
+                      project_puid: activity.parameters[:project_puid] })
+    end
+
     if activity.parameters[:action] == 'group_namespace_transfer'
-      params.merge!({ transferred_group: get_object_by_id(activity.parameters[:transferred_group_id], Group) })
+      params.merge!({ transferred_group: get_object_by_id(activity.parameters[:transferred_group_id], Group),
+                      transferred_group_puid: activity.parameters[:transferred_group_puid] })
     end
 
     if activity.parameters[:action] == 'sample_transfer'
@@ -236,7 +242,9 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     created_at.strftime(I18n.t('time.formats.abbreviated'))
   end
 
-  def additional_group_activity_params(params, activity)
+  def additional_group_activity_params(params, activity) # rubocop:disable Metrics/AbcSize
+    params = add_metadata_template_params(params, activity)
+
     if activity.parameters[:action] == 'group_subgroup_destroy'
       params.merge!({ removed_group_puid: activity.parameters[:removed_group_puid] })
     end
@@ -251,7 +259,8 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
     return params unless activity.parameters[:action] == 'group_subgroup_create'
 
-    params.merge!({ created_group: get_object_by_id(activity.parameters[:created_group_id], Group) })
+    params.merge!({ created_group: get_object_by_id(activity.parameters[:created_group_id], Group),
+                    created_group_puid: activity.parameters[:created_group_puid] })
   end
 
   # convert string keys to symbols
