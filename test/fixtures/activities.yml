@@ -166,9 +166,32 @@ project1_namespace_sample_attachment_create:
   updated_at: <%= Time.zone.now %>
 
 project1_shared_w_group_charlie:
-  trackable_type: "NamespaceGroupLink"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link18, :uuid) %>
-  key: "namespace_group_link.create"
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  key: "namespaces_project_namespace.namespace_group_link.create"
+  parameters: {
+    group_name: 'Group Charlie',
+    group_puid: 'INXT_GRP_AAAAAAAAAU',
+    namespace_name: 'Project 1',
+    namespace_puid: 'INXT_PRJ_AAAAAAAAAA',
+    namespace_type: project',
+    action: 'group_link_create'
+  }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+group_charlie_shared_by_project1:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_charlie, :uuid) %>
+  key: "group.namespace_group_link.created"
+  parameters: {
+    group_name: 'Group Charlie',
+    group_puid: 'INXT_GRP_AAAAAAAAAU',
+    namespace_name: 'Project 1',
+    namespace_puid: 'INXT_PRJ_AAAAAAAAAA',
+    namespace_type: project,
+    action: 'group_link_created'
+  }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -255,12 +278,41 @@ group_one_metadata_template_create:
   trackable_type: "Namespace"
   trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   key: "group.metadata_template.create"
-  parameters:
-    {
-      template_id: <%= ActiveRecord::FixtureSet.identify(:valid_group_metadata_template, :uuid) %>,
-      template_name: "Valid Group Template",
-      namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>,
-      action: "metadata_template_create",
+  parameters: {
+    template_id: <%= ActiveRecord::FixtureSet.identify(:valid_group_metadata_template, :uuid) %>,
+    template_name: "Valid Group Template",
+    namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>,
+    action: "metadata_template_create"
     }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+group1_shared_w_david_doe_group_four:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  key: "group.namespace_group_link.create"
+  parameters: {
+    group_name: 'Group 4',
+    group_puid: 'INXT_GRP_AAAAAAAAAF',
+    namespace_name: 'Group 1',
+    namespace_puid: 'INXT_GRP_AAAAAAAAAA',
+    namespace_type: group',
+    action: 'group_link_create'
+  }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+david_doe_group_four_shared_by_group1:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:david_doe_group_four, :uuid) %>
+  key: "group.namespace_group_link.created"
+  parameters: {
+    group_name: 'Group 4',
+    group_puid: 'INXT_GRP_AAAAAAAAAF',
+    namespace_name: 'Group 1',
+    namespace_puid: 'INXT_GRP_AAAAAAAAAA',
+    namespace_type: 'group',
+    action: 'group_link_created'
+  }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>

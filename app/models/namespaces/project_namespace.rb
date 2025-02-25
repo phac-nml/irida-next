@@ -96,11 +96,6 @@ module Namespaces
       PublicActivity::Activity.where(
         trackable_id: id,
         trackable_type: 'Namespace'
-      ).or(
-        PublicActivity::Activity.where(
-          trackable_id: NamespaceGroupLink.with_deleted.where(namespace: self).select(:id),
-          trackable_type: 'NamespaceGroupLink'
-        )
       )
     end
   end

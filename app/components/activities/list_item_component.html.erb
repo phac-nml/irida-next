@@ -32,11 +32,15 @@
         <%= render Activities::Groups::Projects::TransferActivityComponent.new(
           activity: activity,
         ) %>
+      <% elsif group_link_action %>
+        <%= render Activities::NamespaceGroupLinkActivityComponent.new(activity: activity) %>
       <% else %>
         <%= render Activities::GroupActivityComponent.new(activity: activity) %>
       <% end %>
     <% elsif activity[:type] == 'Namespace' && activity[:key].include?('project_namespace') %>
-      <% if metadata_template_action %>
+      <% if group_link_action %>
+        <%= render Activities::NamespaceGroupLinkActivityComponent.new(activity: activity) %>
+      <% elsif metadata_template_action %>
         <%= render Activities::Projects::MetadataTemplateActivityComponent.new(
           activity: activity,
         ) %>
@@ -59,8 +63,6 @@
       <% end %>
     <% elsif activity[:type] == 'WorkflowExecution' %>
       <%= render Activities::WorkflowExecutionActivityComponent.new(activity: activity) %>
-    <% elsif activity[:type] == 'NamespaceGroupLink' %>
-      <%= render Activities::NamespaceGroupLinkActivityComponent.new(activity: activity) %>
     <% end %>
   </p>
 </li>

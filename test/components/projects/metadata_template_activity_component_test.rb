@@ -92,7 +92,7 @@ module Projects
         I18n.t('activity.namespaces_project_namespace.metadata_template.update_html', user: @user.email,
                                                                                       href: template.name)
       )
-      assert_no_selector 'a', text: template.name
+      assert_selector 'a[disabled="disabled"]', text: template.name
     end
 
     test 'soft deleted template activity' do
@@ -116,10 +116,10 @@ module Projects
 
       assert_text strip_tags(
         I18n.t('activity.namespaces_project_namespace.metadata_template.destroy_html', user: @user.email,
-                                                                                       template_name: template.name)
+                                                                                       href: template.name)
       )
 
-      assert_no_selector 'a', text: @template.name
+      assert_selector 'a[disabled="disabled"]', text: template.name
     end
 
     test 'permanently deleted template activity' do
@@ -145,10 +145,10 @@ module Projects
 
       assert_text strip_tags(
         I18n.t('activity.namespaces_project_namespace.metadata_template.destroy_html', user: @user.email,
-                                                                                       template_name: template.name)
+                                                                                       href: template.name)
       )
 
-      assert_no_selector 'a', text: @template.name
+      assert_selector 'a[disabled="disabled"]', text: template.name
     end
   end
 end
