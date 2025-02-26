@@ -89,8 +89,6 @@ class ExcelHelperTest < ActionView::TestCase
       content_type: file.content_type
     )
     result = parse_excel_file(blob)
-
-    # Expect only one row containing headers
     assert_equal 1, result.length
     assert_equal %w[name age city], result[0]
   end
@@ -123,7 +121,7 @@ class ExcelHelperTest < ActionView::TestCase
     assert_equal({ 'name' => 'Bob', 'age' => 25, 'city' => 'London' }, result[2])
   end
 
-  test 'rases error when Excel file is missing headers' do
+  test 'raises error when Excel file is missing headers' do
     file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/missing_headers.xlsx'))
     blob = ActiveStorage::Blob.create_and_upload!(
       io: file,
@@ -136,7 +134,7 @@ class ExcelHelperTest < ActionView::TestCase
     assert_match('No headers found in file', error.message)
   end
 
-  test 'raises error when Excel file is missing data' do
+  test 'raises error when Excel file has only headers' do
     file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/only_headers.xlsx'))
     blob = ActiveStorage::Blob.create_and_upload!(
       io: file,
@@ -145,7 +143,6 @@ class ExcelHelperTest < ActionView::TestCase
     )
     result = parse_excel_file(blob)
 
-    # Expect only one row containing headers
     assert_equal 1, result.length
     assert_equal %w[name age city], result[0]
   end
