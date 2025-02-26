@@ -94,7 +94,7 @@ module Nextflow
 
       return 'sample_name_cell' if property == 'sample_name'
 
-      return 'fastq_cell' if property.match(/fastq_\d+/)
+      return 'fastq_cell' if property.match(/^fastq_\d+$/)
 
       return 'file_cell' if check_for_file(entry)
 

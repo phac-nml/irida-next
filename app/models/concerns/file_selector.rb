@@ -41,13 +41,9 @@ module FileSelector
   def samplesheet_fastq_files(property, pattern)
     direction = fastq_direction(property)
     singles = filter_files_by_pattern(sorted_files[:singles] || [], pattern || "/^\S+.f(ast)?q(.gz)?$/")
-    files = []
-    if sorted_files[direction].present?
-      files = sorted_files[direction] || []
-      files.concat(singles) if property['pe_only'].blank?
-    else
-      files = singles
-    end
+    files = sorted_files.fetch(direction, [])
+
+    files.concat(singles) if (direction == :pe_forward && property['pe_only'].blank?) || direction == :none
     (files.sort_by! { |file| file[:created_at] }).reverse
   end
 
@@ -58,9 +54,11 @@ module FileSelector
 
     if sorted_files[direction].present?
       sorted_files[direction].last
-    else
+    elsif %i[pe_forward none].include?(direction)
       last_single = filter_files_by_pattern(sorted_files[:singles] || [], pattern || "/^\S+.f(ast)?q(.gz)?$/").last
       last_single.nil? ? {} : last_single
+    else
+      {}
     end
   end
 
@@ -82,6 +80,13 @@ module FileSelector
   private
 
   def fastq_direction(property)
-    property.match(/fastq_(\d+)/)[1].to_i == 1 ? :pe_forward : :pe_reverse
+    case property.match(/^fastq_(\d+)$/).to_a[1]
+    when '1'
+      :pe_forward
+    when '2'
+      :pe_reverse
+    else
+      :single
+    end
   end
 end
