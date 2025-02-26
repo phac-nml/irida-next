@@ -5,6 +5,7 @@ fr:
       new:
         submit_button: Renvoyer les instructions de confirmation
         title: Renvoyer les instructions de confirmation
+    layout:
       title: IRIDA Next
     mailer:
       confirmation_instructions:
