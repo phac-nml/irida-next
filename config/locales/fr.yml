@@ -804,6 +804,9 @@ fr:
         aria_labels:
           expires_at: Group access expiration
           group_access_level: Group Access Level
+        empty_state:
+          description: There are no groups that have been delegated access to this group
+          title: No groups
       new:
         button:
           cancel: Cancel

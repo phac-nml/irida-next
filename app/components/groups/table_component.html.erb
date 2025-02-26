@@ -158,7 +158,7 @@
   </table>
   <div class="empty_state_message">
     <%= viral_empty(
-      title: t(:"projects.group_links.index.empty_state.title"),
+      title: t(:"#{@namespace.type.lower}s.group_links.index.empty_state.title"),
       description: t(:"projects.group_links.index.empty_state.description"),
       icon_name: :document_text,
     ) %>
