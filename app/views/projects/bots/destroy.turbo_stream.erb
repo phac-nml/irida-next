@@ -1,6 +1,6 @@
 <%= turbo_stream.append "flashes" do %>
   <%= viral_flash(type:, data: message) %>
 <% end %>
-<% if @bot_account.deleted? %>
-  <turbo-stream action="refresh"></turbo-stream>
-<% end %>
+
+<%= turbo_stream.remove "access-token-section" %>
+<turbo-stream action="refresh"></turbo-stream>
