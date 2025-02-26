@@ -1882,7 +1882,6 @@ en:
         next: Next
         previous: Previous
     progress_bar_component:
-      finalizing: Finalizing...
       in_progress: Action in progress. Please do not refresh the page.
     sortable_lists_component:
       add_all: Add all
