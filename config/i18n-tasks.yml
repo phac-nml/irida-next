@@ -1,3 +1,5 @@
+<% require './lib/i18n_csv_tasks' %>
+
 # i18n-tasks finds and manages missing and unused translations: https://github.com/glebm/i18n-tasks
 
 # The "main" locale.
@@ -6,6 +8,12 @@ base_locale: en
 # locales: [es, fr]
 ## Reporting locale, default: en. Available: en, ru.
 # internal_locale: en
+
+csv:
+  export:
+    - tmp/i18n-export/main.csv
+  import:
+    - tmp/i18n-export/main.csv
 
 # Read and write translations.
 data:
