@@ -13,8 +13,8 @@ importers:
         version: 2.5.2
     devDependencies:
       axe-core:
-        specifier: ^4.6.3
-        version: 4.9.1
+        specifier: ^4.10.2
+        version: 4.10.2
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
@@ -51,8 +51,8 @@ packages:
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
 
-  axe-core@4.9.1:
-    resolution: {integrity: sha512-QbUdXJVTpvUTHU7871ppZkdOLBeGUKBQWHkHrvN2V9IQWGMt61zf3B45BtzjxEJzYuj0JBjBZP/hmYS/R9pmAw==}
+  axe-core@4.10.2:
+    resolution: {integrity: sha512-RE3mdQ7P3FRSe7eqCWoeQ/Z9QXrtniSjp1wUjt5nRC3WIpz5rSCve6o3fsZ2aCpJtrZjSZgjwXAoTO5k4tEI0w==}
     engines: {node: '>=4'}
 
   deepmerge@4.3.1:
@@ -183,7 +183,7 @@ snapshots:
 
   '@types/resolve@1.20.2': {}
 
-  axe-core@4.9.1: {}
+  axe-core@4.10.2: {}
 
   deepmerge@4.3.1: {}
 
