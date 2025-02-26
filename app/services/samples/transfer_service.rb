@@ -52,12 +52,13 @@ module Samples
       transferred_samples_puids = []
       not_found_sample_ids = []
 
-      sample_ids.each do |sample_id|
+      sample_ids.each.with_index(1) do |sample_id, index|
         sample = Sample.find_by!(id: sample_id, project_id: @project.id)
         sample.update!(project_id: new_project_id)
         transferred_samples_ids << sample_id
         transferred_samples_puids << sample.puid
-        stream_progress_update('append', 'progress-bar', '<div></div>', broadcast_target) if broadcast_target
+
+        stream_progress_update('append', 'progress-bar', '<div></div>', broadcast_target, index, sample_ids.count)
       rescue ActiveRecord::RecordNotFound
         not_found_sample_ids << sample_id
         next
@@ -74,18 +75,18 @@ module Samples
       end
 
       if transferred_samples_ids.count.positive?
-        if broadcast_target
-          stream_progress_update('update', 'progress-message', I18n.t('viral.progress_bar_component.finalizing'),
-                                 broadcast_target)
-        end
-        create_activities(transferred_samples_ids, transferred_samples_puids)
-
-        @project.namespace.update_metadata_summary_by_sample_transfer(transferred_samples_ids,
-                                                                      new_project_id)
-        update_samples_count(transferred_samples_ids.count)
+        update_namespace_attributes(transferred_samples_ids, transferred_samples_puids, new_project_id)
       end
 
       transferred_samples_ids
+    end
+
+    def update_namespace_attributes(transferred_samples_ids, transferred_samples_puids, new_project_id)
+      create_activities(transferred_samples_ids, transferred_samples_puids)
+
+      @project.namespace.update_metadata_summary_by_sample_transfer(transferred_samples_ids,
+                                                                    new_project_id)
+      update_samples_count(transferred_samples_ids.count)
     end
 
     def create_activities(transferred_samples_ids, transferred_samples_puids) # rubocop:disable Metrics/MethodLength

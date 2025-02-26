@@ -860,7 +860,6 @@ module Groups
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
       assert_text I18n.t('viral.progress_bar_component.in_progress')
-
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       within %(turbo-frame[id="samples_dialog"]) do
@@ -1119,6 +1118,25 @@ module Groups
         assert_text I18n.t('shared.samples.metadata.file_imports.errors.description')
         click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
       end
+    end
+
+    test 'dialog close button is hidden during metadata import' do
+      visit group_samples_url(@group)
+      click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
+      within('#dialog') do
+        # dialog close button available when selecting params
+        assert_selector 'button.dialog--close'
+
+        within('div[data-metadata--file-import-loaded-value="true"]') do
+          attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
+          find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
+          click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        end
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        # dialog button hidden while importing
+        assert_no_selector 'button.dialog--close'
+      end
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
     end
 
     test 'can update metadata value that is not from an analysis' do

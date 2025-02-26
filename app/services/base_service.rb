@@ -16,7 +16,10 @@ class BaseService
 
   private
 
-  def stream_progress_update(action, target, content, broadcast_target)
+  # rubocop: disable Metrics/ParameterLists
+  def stream_progress_update(action, target, content, broadcast_target, index, final_index)
+    return unless broadcast_target && ((index % 50).zero? || index == final_index)
+
     Turbo::StreamsChannel.broadcast_action_to(
       broadcast_target,
       action:,
@@ -24,4 +27,5 @@ class BaseService
       content:
     )
   end
+  # rubocop: enable Metrics/ParameterLists
 end

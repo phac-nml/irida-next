@@ -27,10 +27,4 @@ export default class extends Controller {
   handleEsc(event) {
     event.preventDefault();
   }
-
-  hideClose() {
-    if (this.hasCloseTarget) {
-      this.closeTarget.classList.add("hidden");
-    }
-  }
 }

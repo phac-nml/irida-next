@@ -1,4 +1,4 @@
-<%= viral_dialog(open: open, size: :large) do |dialog| %>
+<%= viral_dialog(open: open, size: :large, closable: closable) do |dialog| %>
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
     <%= turbo_stream_from @broadcast_target %>
@@ -86,9 +86,7 @@
                             class: "button button--size-default button--state-primary",
                             disabled: true,
                             data: {
-                              action:
-                                "click->form--hidden-inputs#clearSelection
-                                                               click->viral--dialog#hideClose",
+                              action: "click->form--hidden-inputs#clearSelection",
                               "viral--select2-target": "submitButton",
                             } %>
               </div>

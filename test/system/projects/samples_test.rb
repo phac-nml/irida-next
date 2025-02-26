@@ -539,6 +539,46 @@ module Projects
       ### VERIFY END ###
     end
 
+    test 'dialog close button hidden during transfer samples' do
+      ### SETUP START ###
+      samples = @project.samples.pluck(:puid, :name)
+      # originating project has 3 samples prior to transfer
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # select all 3 samples
+      click_button I18n.t(:'projects.samples.index.select_all_button')
+      click_link I18n.t('projects.samples.index.transfer_button')
+      assert_selector '#dialog'
+      within('#dialog') do
+        # close button available before confirming
+        assert_selector 'button.dialog--close'
+        within('#list_selections') do
+          samples.each do |sample|
+            # additional asserts to help prevent select2 actions below from flaking
+            assert_text sample[0]
+            assert_text sample[1]
+          end
+        end
+        # select destination project
+        find('input#select2-input').click
+        find("button[data-viral--select2-value-param='#{@project2.id}']").click
+        click_on I18n.t('projects.samples.transfers.dialog.submit_button')
+
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        # close button hidden during transfer
+        assert_no_selector 'button.dialog--close'
+        perform_enqueued_jobs only: [::Samples::TransferJob]
+        ### VERIFY END ###
+      end
+    end
+
     test 'should not transfer samples with session storage cleared' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
@@ -1752,6 +1792,25 @@ module Projects
       ### VERIFY END ###
     end
 
+    test 'dialog close button is hidden during metadata import' do
+      visit namespace_project_samples_url(@namespace, @project)
+      click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
+      within('#dialog') do
+        # dialog close button available when selecting params
+        assert_selector 'button.dialog--close'
+
+        within('div[data-metadata--file-import-loaded-value="true"]') do
+          attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xlsx')
+          find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+          click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        end
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        # dialog button hidden while importing
+        assert_no_selector 'button.dialog--close'
+      end
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
+    end
+
     test 'should not import metadata via invalid file type' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
@@ -2273,6 +2332,48 @@ module Projects
         assert_text @sample2.name
       end
       ### VERIFY END ###
+    end
+
+    test 'dialog close button hidden while cloning samples' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # select samples 1 and 2 for cloning
+      within '#samples-table table tbody' do
+        find("input#sample_#{@sample1.id}").click
+        find("input#sample_#{@sample2.id}").click
+      end
+      click_link I18n.t('projects.samples.index.clone_button')
+      assert_selector '#dialog'
+      within('#dialog') do
+        # close button available before confirming cloning
+        assert_selector 'button.dialog--close'
+        within('#list_selections') do
+          # additional asserts to help prevent select2 actions below from flaking
+          assert_text @sample1.name
+          assert_text @sample1.puid
+          assert_text @sample2.name
+          assert_text @sample2.puid
+        end
+        find('input#select2-input').click
+        find("button[data-viral--select2-value-param='#{@project2.id}']").click
+        click_on I18n.t('projects.samples.clones.dialog.submit_button')
+
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
+        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        # close button hidden during cloning
+        assert_no_selector 'button.dialog--close'
+        perform_enqueued_jobs only: [::Samples::CloneJob]
+
+        ### VERIFY END ###
+      end
     end
 
     test 'should not clone samples with session storage cleared' do
