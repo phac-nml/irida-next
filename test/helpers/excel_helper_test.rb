@@ -107,4 +107,46 @@ class ExcelHelperTest < ActionView::TestCase
     end
     assert_match('No headers found in file', error.message)
   end
+
+  test 'parses Excel file with valid data' do
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/good.xlsx'))
+    blob = ActiveStorage::Blob.create_and_upload!(
+      io: file,
+      filename: file.original_filename,
+      content_type: file.content_type
+    )
+    result = parse_excel_file(blob)
+
+    assert_equal 3, result.length # headers + 2 data rows
+    assert_equal %w[name age city], result[0]
+    assert_equal({ 'name' => 'Alice', 'age' => 30, 'city' => 'New York' }, result[1])
+    assert_equal({ 'name' => 'Bob', 'age' => 25, 'city' => 'London' }, result[2])
+  end
+
+  test 'rases error when Excel file is missing headers' do
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/missing_headers.xlsx'))
+    blob = ActiveStorage::Blob.create_and_upload!(
+      io: file,
+      filename: file.original_filename,
+      content_type: file.content_type
+    )
+    error = assert_raises(ExcelParsingError) do
+      parse_excel_file(blob)
+    end
+    assert_match('No headers found in file', error.message)
+  end
+
+  test 'raises error when Excel file is missing data' do
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/only_headers.xlsx'))
+    blob = ActiveStorage::Blob.create_and_upload!(
+      io: file,
+      filename: file.original_filename,
+      content_type: file.content_type
+    )
+    result = parse_excel_file(blob)
+
+    # Expect only one row containing headers
+    assert_equal 1, result.length
+    assert_equal %w[name age city], result[0]
+  end
 end
