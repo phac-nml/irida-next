@@ -93,8 +93,8 @@ module Projects
         )
       )
 
-      assert_no_selector 'a',
-                         text: activity_to_render[:source_project_puid]
+      assert_selector 'a[disabled="disabled"]',
+                      text: activity_to_render[:source_project_puid]
     end
 
     test 'sample transfer target project deleted actvity' do
@@ -124,8 +124,8 @@ module Projects
         )
       )
 
-      assert_no_selector 'a',
-                         text: activity_to_render[:target_project_puid]
+      assert_selector 'a[disabled="disabled"]',
+                      text: activity_to_render[:target_project_puid]
     end
   end
 end

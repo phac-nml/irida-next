@@ -284,34 +284,34 @@ fr:
         destroy_self_html: "%{href} removed themself from project"
         update_html: "%{user} updated project member %{href} attributes"
       metadata_template:
-        create_html: "%{user} created metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span>"
-        destroy_html: "%{user} removed metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span>"
-        update_html: "%{user} updated metadata template <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span>"
+        create_html: "%{user} created metadata template %{href}"
+        destroy_html: "%{user} removed metadata template %{href}"
+        update_html: "%{user} updated metadata template %{href}"
       namespace_group_link:
         create_html: "%{user} shared project with group %{href}"
         destroy_html: "%{user} unshared project with group %{href}"
         update_html: "%{user} updated share attributes between project and group %{href}"
       samples:
         attachment:
-          create_html: "%{user} attached files to sample <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span>"
-          destroy_html: "%{user} removed files from sample <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span>"
-        clone_html: "%{user} copied <span class='font-medium text-slate-800 dark:text-slate-300'>%{cloned_samples_count}</span> samples to project <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span>"
-        cloned_from_html: "%{user} copied <span class='font-medium text-slate-800 dark:text-slate-300'>%{cloned_samples_count}</span> samples from project <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span>"
-        create_html: "%{user} created sample <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span>"
-        destroy_html: "%{user} removed sample <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span>"
-        destroy_multiple_html: "%{user} removed <span class='font-medium text-slate-800 dark:text-slate-300'>%{deleted_count}</span> samples from project"
+          create_html: "%{user} attached files to sample %{href}"
+          destroy_html: "%{user} removed files from sample %{href}"
+        clone_html: "%{user} copied %{cloned_samples_count} samples to project %{href}"
+        cloned_from_html: "%{user} copied %{cloned_samples_count} samples from project %{href}"
+        create_html: "%{user} created sample %{href}"
+        destroy_html: "%{user} removed sample %{href}"
+        destroy_multiple_html: "%{user} removed %{href} samples from project"
         metadata:
-          update_html: "%{user} updated sample <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span> metadata"
-        transfer_html: "%{user} transferred <span class='font-medium text-slate-800 dark:text-slate-300'>%{transferred_samples_count}</span> samples to project <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span>"
-        transferred_from_html: "%{user} transferred <span class='font-medium text-slate-800 dark:text-slate-300'>%{transferred_samples_count}</span> samples from project <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span>"
-        update_html: "%{user} updated sample <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span> attributes"
-      transfer_html: "%{user} transferred project from namespace <span class='font-medium text-slate-800 dark:text-slate-300'>%{old_namespace}</span> to <span class='font-medium text-slate-800 dark:text-slate-300'>%{new_namespace}</span>"
+          update_html: "%{user} updated sample %{href} metadata"
+        transfer_html: "%{user} transferred %{transferred_samples_count} samples to project %{href}"
+        transferred_from_html: "%{user} transferred %{transferred_samples_count} samples from project %{href}"
+        update_html: "%{user} updated sample %{href} attributes"
+      transfer_html: "%{user} transferred project from namespace %{old_namespace} to %{new_namespace}"
       update_html: "%{user} updated project attributes"
     workflow_execution:
       automated_workflow:
-        create_html: "%{user} setup automated pipeline <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span> for the project"
-        destroy_html: "%{user} removed automated pipeline <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span> for the project"
-        launch_html: Project automation bot launched pipeline <span class='font-medium text-slate-800 dark:text-slate-300'>%{href}</span> on sample <span class='font-medium text-slate-800 dark:text-slate-300'>%{sample_href}</span>
+        create_html: "%{user} setup automated pipeline %{href} for the project"
+        destroy_html: "%{user} removed automated pipeline %{href} for the project"
+        launch_html: Project automation bot launched pipeline %{href} on sample %{sample_href}
       automated_workflow_completion:
         metadata_written_html: Project automation bot wrote pipeline %{href} metadata to sample %{sample_href}
         outputs_and_metadata_written_html: Project automation bot attached pipeline %{href} outputs and wrote metadata to sample %{sample_href}
