@@ -3,59 +3,58 @@ fr:
   devise:
     confirmations:
       new:
-        submit_button: Submit button
-        title: Title
-    layout:
+        submit_button: Renvoyer les instructions de confirmation
+        title: Renvoyer les instructions de confirmation
       title: IRIDA Next
     mailer:
       confirmation_instructions:
         confirm_button: Confirm my account
-        greeting: Welcome %{email}!
+        greeting: Bienvenue %{email}!
         instructions: 'You can confirm your account email through the link below:'
       email_changed:
         confirmed_email_info: We're contacting you to notify you that your email has been changed to %{email}.
-        greeting: Hello %{email}!
-        unconfirmed_email_info: We're contacting you to notify you that your email is being changed to %{email}.
+        greeting: Bonjour %{email}!
+        unconfirmed_email_info: Nous vous contactons pour vous notifier que votre adresse de courriel a été changée en %{email}.
       password_change:
-        greeting: Hello %{email}!
-        password_change_info: We're contacting you to notify you that your password has been changed.
+        greeting: Bonjour %{email}!
+        password_change_info: Nous vous contactons pour vous notifier que votre mot de passe a été modifié.
       reset_password_instructions:
-        disclaimer_info: If you didn't request this, please ignore this email.
-        greeting: Hello %{email}!
-        instructions: Someone has requested a link to change your password. You can do this through the link below.
-        link_info: Your password won't change until you access the link above and create a new one.
-        reset_button: Change my password
+        disclaimer_info: Si vous n'avez pas émis cette demande, merci d'ignorer ce courriel.
+        greeting: Bonjour %{email}!
+        instructions: 'Quelqu''un a demandé un lien pour changer votre mot de passe, le voici :'
+        link_info:  Votre mot de passe ne changera pas tant que vous n'aurez pas cliqué sur ce lien et renseigné un nouveau mot de passe.
+        reset_button: Changer mon mot de passe
       unlock_instructions:
-        greeting: Hello %{email}!
-        instructions: 'Click the link below to unlock your account:'
-        locked_info: Your account has been locked due to an excessive number of unsuccessful sign in attempts.
-        unlock_button: Unlock my account
+        greeting: Bonjour %{email}!
+        instructions: 'Suivez ce lien pour débloquer votre compte:'
+        locked_info: Votre compte a été bloqué suite à un nombre d'essais de connexions manquées trop important
+        unlock_button: Débloquer mon compte
     passwords:
       edit:
-        password_confirmation_label: Confirm new password
+        password_confirmation_label: Confirmez votre nouveau mot de passe
         password_hint: "(%{minimum_password_length} characters minimum)"
-        password_label: New password
-        submit_button: Change my password
-        title: Change your password
+        password_label: Nouveau mot de passe
+        submit_button: Changer mon mot de passe
+        title: Changer votre mot de passe
       new:
-        submit_button: Send me reset password instructions
+        submit_button: Envoyez-moi des instructions pour réinitialiser mon mot de passe
     registrations:
       edit:
         back_link: Back
-        cancel_button: Cancel my account
-        cancel_confirmation: Are you sure?
-        cancel_title: Cancel my account
+        cancel_button: Supprimer mon compte
+        cancel_confirmation: "Êtes-vous sûr ?"
+        cancel_title: Supprimer mon compte
         confirmation_message: 'Currently waiting confirmation for: %{email}'
-        current_password_hint: "(we need your current password to confirm your changes)"
-        password_blank_hint: "(leave blank if you don't want to change it)"
+        current_password_hint: "(nous avons besoin de votre mot de passe actuel pour valider ces modifications)"
+        password_blank_hint: "(laissez ce champ vide pour le laisser inchangé)"
         password_length_hint: "(%{minimum_password_length} characters minimum)"
-        submit_button: Update
-        title: Edit %{resource_name}
-        unhappy: Unhappy?
+        submit_button: Modifier
+        title: "Éditer %{resource_name}"
+        unhappy: 'Pas content ?'
       new:
         password_hint: "(%{minimum_password_length} characters minimum)"
         signed_up: Already signed up?
-        submit_button: Sign up
+        submit_button: Inscription
     sessions:
       new_with_providers:
         local_button: Sign in with Local Account
@@ -63,15 +62,15 @@ fr:
         return_button: Return to sign in selection
     shared:
       form:
-        sign_in: Sign in
+        sign_in: Connexion
       links:
-        confirmation_link: Didn't receive confirmation instructions?
+        confirmation_link: Vous n'avez pas reçu le courriel de confirmation ?
         create_an_account: Don't have an account?
         create_an_account_link: Register now
-        forgot_password_link: Forgot your password?
-        sign_in_link: Sign in
-        unlock_link: Didn't receive unlock instructions?
+        forgot_password_link: Mot de passe oublié ?
+        sign_in_link: Connexion
+        unlock_link: Vous n'avez pas reçu le courriel de déblocage ?
     unlocks:
       new:
-        submit_button: Resend unlock instructions
-        title: Resend unlock instructions
+        submit_button: Renvoyer les instructions de déblocage
+        title: Renvoyer les instructions de déblocage
