@@ -20,9 +20,9 @@
           ) do %>
             <%= render Ransack::SortComponent.new(
               ransack_obj: @q,
-              label: t(".#{column}"),
-              url: helpers.sorting_url(@q, column),
-              field: column,
+              label: NamespaceGroupLink.human_attribute_name(column),
+              url: helpers.sorting_url(@q, column.to_s.gsub(".", "_")),
+              field: column.to_s.gsub(".", "_").to_sym,
             ) %>
           <% end %>
         <% end %>
@@ -158,7 +158,7 @@
   </table>
   <div class="empty_state_message">
     <%= viral_empty(
-      title: t(:"#{@namespace.type.lower}s.group_links.index.empty_state.title"),
+      title: t(:"#{@namespace.type.downcase}s.group_links.index.empty_state.title"),
       description: t(:"projects.group_links.index.empty_state.description"),
       icon_name: :document_text,
     ) %>
