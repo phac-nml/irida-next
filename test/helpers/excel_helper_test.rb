@@ -62,9 +62,10 @@ class ExcelHelperTest < ActionView::TestCase
     )
     result = parse_excel_file(blob)
 
-    assert_equal 2, result.length # Only headers and the valid row
+    assert_equal 3, result.length # Only headers and the valid row
     assert_equal %w[name age city], result[0]
-    assert_equal({ 'name' => 'Bob', 'age' => 25, 'city' => 'London' }, result[1])
+    assert_equal({ 'name' => 'Alice', 'age' => 30, 'city' => nil }, result[1])
+    assert_equal({ 'name' => 'Bob', 'age' => 25, 'city' => 'London' }, result[2])
   end
 
   test 'raises error for unsupported file format' do
