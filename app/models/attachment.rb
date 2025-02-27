@@ -14,6 +14,7 @@ class Attachment < ApplicationRecord
     'spreadsheet' => /^\S+\.(xls|xlsx)?$/,
     'json' => /^\S+\.(json)?(\.gz)?$/,
     'genbank' => /^\S+\.(gbk|gbf|genbank)?(\.gz)?$/,
+    'image' => /^\S+\.(png|jpg|jpeg|gif|bmp|tiff|svg|webp)$/,
     'unknown' => nil
   }.freeze
 
