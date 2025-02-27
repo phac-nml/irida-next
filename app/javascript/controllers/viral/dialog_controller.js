@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["dialog", "close"];
+  static targets = ["dialog"];
 
   static values = { open: Boolean };
 
