@@ -209,45 +209,22 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
     }
   )
 
-  filename = 'summary.txt'
-  attachment = workflow_execution_completed.outputs.build
-  attachment.file.attach(io: Rails.root.join('test/fixtures/files/blob_outputs/normal', filename).open, filename:)
-  attachment.save!
-
-  json_file_name = 'testJson.json'
-  attachment = workflow_execution_completed.outputs.build
-  attachment.file.attach(io: Rails.root.join('test/fixtures/files/blob_outputs/normal', json_file_name).open,
-                         filename: json_file_name)
-  attachment.save!
-
-  image_file_name = 'testImage.webp'
-  attachment = workflow_execution_completed.outputs.build
-  attachment.file.attach(io: Rails.root.join('test/fixtures/files/blob_outputs/normal', image_file_name).open,
-                         filename: image_file_name)
-  attachment.save!
-
-  csv_file_name = 'testCSV.csv'
-  attachment = workflow_execution_completed.outputs.build
-  attachment.file.attach(io: Rails.root.join('test/fixtures/files/blob_outputs/normal', csv_file_name).open,
-                         filename: csv_file_name)
-  attachment.save!
-
-  tsv_file_name = 'testTSV.tsv'
-  attachment = workflow_execution_completed.outputs.build
-  attachment.file.attach(io: Rails.root.join('test/fixtures/files/blob_outputs/normal', tsv_file_name).open,
-                         filename: tsv_file_name)
-  attachment.save!
-
-  excel_file_name = 'testExcel.xlsx'
-  attachment = workflow_execution_completed.outputs.build
-  attachment.file.attach(io: Rails.root.join('test/fixtures/files/blob_outputs/normal', excel_file_name).open,
-                         filename: excel_file_name)
-  attachment.save!
-
   SamplesWorkflowExecution.create(
     sample: Sample.first,
     workflow_execution: workflow_execution_completed
   )
+
+  # Iterate over all files in tes/fixtures/fils/blob_outputs/normal and attach them to the workflow_execution_completed
+  Dir.foreach(Rails.root.join('test/fixtures/files/blob_outputs/normal')) do |f|
+    next unless File.file?(File.join('test/fixtures/files/blob_outputs/normal', f))
+
+    blob = ActiveStorage::Blob.create_and_upload!(
+      io: Rails.root.join('test/fixtures/files/blob_outputs/normal', f).open,
+      filename: f.to_s
+    ).signed_id
+    attachment = workflow_execution_completed.outputs.build(file: blob)
+    attachment.save!
+  end
 end
 
 def seed_exports # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
