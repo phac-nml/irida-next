@@ -4,7 +4,7 @@ module WorkflowExecutions
   # Controller for managing attachments related to workflow executions
   class AttachmentsController < WorkflowExecutionsController
     include BreadcrumbNavigation
-    include ContentTypeHandler
+    include FileFormatHandler
     helper ExcelHelper
 
     before_action :workflow_execution, only: [:index]
@@ -18,9 +18,9 @@ module WorkflowExecutions
         return
       end
 
-      @preview_type = determine_preview_type(@attachment.file.content_type)
-      @previewable = previewable?(@attachment.file.content_type)
-      @copyable = copyable?(@attachment.file.content_type)
+      @preview_type = determine_preview_type(@attachment.metadata['format'])
+      @previewable = previewable?(@attachment.metadata['format'])
+      @copyable = copyable?(@attachment.metadata['format'])
     end
 
     private
