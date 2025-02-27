@@ -1526,6 +1526,7 @@ en:
           ok_button: OK
         success:
           ok_button: OK
+          success: Success
       show:
         add_metadata: Add Metadata
         concatenate_button: Concatenate Files
@@ -1837,6 +1838,7 @@ en:
           success:
             description: The metadata was imported successfully!
             ok_button: OK
+            success: Success
       metadata_templates:
         fields:
           all: Show All Fields
