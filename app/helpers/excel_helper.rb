@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
-# ExcelHelper is a helper module that provides methods for parsing Excel files.
-# It supports .xlsx, .xls, and .csv formats.
+# ExcelHelper module provides utility methods to read and parse Excel and CSV files.
+# Supported formats: .xlsx, .xls, and .csv. Numeric strings are automatically converted to numbers.
 module ExcelHelper
   SUPPORTED_FORMATS = %w[.xlsx .xls .csv].freeze
 
-  # Custom error class for Excel parsing errors
+  # Custom exception used when errors occur during Excel parsing.
   class ExcelParsingError < StandardError; end
 
-  # Parses an Excel file and returns the data as an array of hashes.
-  # @param file [ActionDispatch::Http::UploadedFile] the uploaded file to parse
-  # @return [Array<Hash>] the parsed data
-  # @raise [ExcelParsingError] if the file is blank or headers are missing
+  # Parses an Excel/CSV file and returns its contents as an array.
+  # @param file [ActionDispatch::Http::UploadedFile] the file to be parsed.
+  # @return [Array<Hash>] an array with the first element as headers and subsequent elements as row hashes.
+  # @raise [ExcelParsingError] if the file is missing or headers cannot be extracted.
   def parse_excel_file(file)
     raise ExcelParsingError, 'No file provided' if file.blank?
 
@@ -33,10 +33,10 @@ module ExcelHelper
 
   private
 
-  # Opens the spreadsheet using Roo::Spreadsheet
-  # @param path [String] the file path
-  # @param extension [String] the file extension
-  # @return [Roo::Spreadsheet] the opened spreadsheet
+  # Opens the file as a spreadsheet using Roo, based on its file extension.
+  # @param path [String] the full file path.
+  # @param extension [String] the file extension.
+  # @return [Roo::Spreadsheet] the spreadsheet instance.
   def open_spreadsheet(path, extension)
     case extension.downcase
     when '.csv'
@@ -50,10 +50,10 @@ module ExcelHelper
     end
   end
 
-  # Extracts headers from the first row of the spreadsheet
-  # @param spreadsheet [Roo::Spreadsheet] the spreadsheet object
-  # @return [Array<String>] the extracted headers
-  # @raise [ExcelParsingError] if no headers are found
+  # Extracts the header row from the spreadsheet.
+  # @param spreadsheet [Roo::Spreadsheet] the spreadsheet to read.
+  # @return [Array<String>] an array of header names.
+  # @raise [ExcelParsingError] if the header row is empty.
   def extract_headers(spreadsheet)
     headers = spreadsheet.row(1).map(&:presence).compact
     raise ExcelParsingError, 'No headers found in file' if headers.empty?
@@ -61,49 +61,47 @@ module ExcelHelper
     headers
   end
 
-  # Extracts data from the spreadsheet and maps it to the headers
-  # @param spreadsheet [Roo::Spreadsheet] the spreadsheet object
-  # @param headers [Array<String>] the headers
-  # @return [Array<Hash>] the extracted data
+  # Extracts row data from the spreadsheet and maps each row to a header.
+  # @param spreadsheet [Roo::Spreadsheet] the spreadsheet to parse.
+  # @param headers [Array<String>] an array of header names.
+  # @return [Array<Hash>] array of hashes representing the rows.
   def extract_data(spreadsheet, headers)
     data = []
     (2..spreadsheet.last_row).each do |i|
       row_data = spreadsheet.row(i)
       next unless row_data.any?(&:present?)
 
-      # Skip rows that have incomplete data
-      next unless row_data.length >= headers.length && row_data[0...headers.length].all?(&:present?)
-
-      # If row has more columns than headers, truncate the extra columns
       row_data = row_data[0...headers.length]
-
-      # Convert numeric strings to numbers
-      row_data = row_data.map do |val|
-        if val.to_s.match?(/\A\d+\z/)
-          val.to_i
-        elsif val.to_s.match?(/\A\d*\.\d+\z/)
-          val.to_f
-        else
-          val
-        end
-      end
-
+      row_data = row_data.map { |val| convert_numeric(val) }
       data << headers.zip(row_data).to_h
     end
     data
   end
 
-  # Handles Roo::Error exceptions
-  # @param error [Roo::Error] the error object
-  # @raise [ExcelParsingError] with a custom error message
+  # Converts numeric string values to Integer or Float.
+  # @param val [Object] the value from a cell.
+  # @return [Integer, Float, Object] the numeric conversion or the original value.
+  def convert_numeric(val)
+    if val.to_s.match?(/\A\d+\z/)
+      val.to_i
+    elsif val.to_s.match?(/\A\d*\.\d+\z/)
+      val.to_f
+    else
+      val
+    end
+  end
+
+  # Logs Roo-specific errors and raises a custom ExcelParsingError.
+  # @param error [Roo::Error] the encountered Roo exception.
+  # @raise [ExcelParsingError] with details of the Roo error.
   def handle_roo_error(error)
     Rails.logger.error "Excel parsing error: #{error.message}"
     raise ExcelParsingError, "Failed to parse Excel file: #{error.message}"
   end
 
-  # Handles StandardError exceptions
-  # @param error [StandardError] the error object
-  # @raise [ExcelParsingError] with a custom error message
+  # Logs general errors during parsing and raises a custom ExcelParsingError.
+  # @param error [StandardError] the encountered exception.
+  # @raise [ExcelParsingError] containing the error message and backtrace.
   def handle_standard_error(error)
     Rails.logger.error "Unexpected error parsing Excel file: #{error.class} - #{error.message}"
     Rails.logger.error error.backtrace.join("\n")
