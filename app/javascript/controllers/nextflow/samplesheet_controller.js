@@ -599,4 +599,14 @@ export default class extends Controller {
       this.#filterableColumns.push("sample_name");
     }
   }
+
+  setMetadataHeader(event) {
+    const metadataHeaderTarget = event.target.id.split("-")[1];
+    const metadataSelection = event.target.value;
+    let metadataHeaderInput = document.querySelector(
+      `input[data-metadata="${metadataHeaderTarget}"]`,
+    );
+
+    metadataHeaderInput.value = metadataSelection;
+  }
 }
