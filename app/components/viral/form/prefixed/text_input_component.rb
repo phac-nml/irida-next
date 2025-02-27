@@ -5,7 +5,7 @@ module Viral
     module Prefixed
       # Viral form input with a prefix that can contain text or svg providing additional context to the input
       class TextInputComponent < Viral::Component
-        attr_reader :form, :name, :value, :pattern, :placeholder, :required
+        attr_reader :form, :name, :value, :pattern, :placeholder, :required, :metadata
 
         renders_one :prefix
 
@@ -16,6 +16,13 @@ module Viral
           @placeholder = placeholder
           @required = required
           @value = value
+          @metadata = metadata_header(value)
+        end
+
+        private
+
+        def metadata_header(value)
+          /metadata_[0-9]+/.match?(value.to_s) ? value : nil
         end
       end
     end
