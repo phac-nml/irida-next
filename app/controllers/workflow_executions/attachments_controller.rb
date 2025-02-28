@@ -4,7 +4,6 @@ module WorkflowExecutions
   # Controller for managing attachments related to workflow executions
   class AttachmentsController < WorkflowExecutionsController
     include BreadcrumbNavigation
-    include FileFormatHandler
     helper ExcelHelper
 
     before_action :workflow_execution, only: [:index]
@@ -12,15 +11,11 @@ module WorkflowExecutions
     before_action :context_crumbs, only: [:index]
 
     def index
-      unless @attachment
-        redirect_back fallback_location: workflow_executions_path,
-                      alert: I18n.t('workflow_executions.attachments.file_not_found')
-        return
-      end
+      return if @attachment
 
-      @preview_type = determine_preview_type(@attachment.metadata['format'])
-      @previewable = previewable?(@attachment.metadata['format'])
-      @copyable = copyable?(@attachment.metadata['format'])
+      redirect_back fallback_location: workflow_executions_path,
+                    alert: I18n.t('workflow_executions.attachments.file_not_found')
+      nil
     end
 
     private
