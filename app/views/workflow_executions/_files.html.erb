@@ -1,23 +1,15 @@
-<div class="relative overflow-x-auto" data-turbo-temporary>
+<div class="relative overflow-x-auto" data-turbo-permanent>
   <table
     id="files-table"
-    class="
-      w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-      whitespace-nowrap table-auto
-    "
+    class="w-full text-sm text-left table-auto  rtl:text-right text-slate-500 dark:text-slate-400 whitespace-nowrap"
   >
     <thead
-      class="
-        text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700
-        dark:text-slate-400
-      "
+      class="text-xs uppercase  text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-400"
     >
       <tr>
         <th
           scope="col"
-          class="
-            px-6 py-3 text-left bg-slate-50 dark:bg-slate-700 sticky left-0 z-10
-          "
+          class="sticky left-0 z-10 px-6 py-3 text-left  bg-slate-50 dark:bg-slate-700"
         ><%= t(:".table_header.puid") %></th>
         <th scope="col" class="px-6 py-3"><%= t(:".table_header.filename") %></th>
         <th scope="col" class="px-6 py-3"><%= t(:".table_header.format") %></th>
@@ -29,9 +21,7 @@
     </thead>
     <tbody
       id="attachments-table-body"
-      class="
-        bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
-      "
+      class="bg-white divide-y  divide-slate-200 dark:bg-slate-800 dark:divide-slate-700"
     >
       <% @attachments.each do |attachment| %>
         <% unless attachment.associated_attachment && attachment.metadata['direction'] == 'reverse' %>
