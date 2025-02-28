@@ -78,7 +78,7 @@
 
   <td class="flex justify-end px-6 py-4 space-x-2">
     <% if attachment.previewable? %>
-      <%= link_to workflow_executions_attachments_path(attachment: attachment.id, workflow_execution: @workflow_execution.id), class: "text-blue-600 dark:text-blue-100 font-semibold hover:underline" do %>
+      <%= link_to workflow_executions_attachments_path(attachment: attachment.id, workflow_execution: @workflow_execution.id), class: "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer" do %>
         <%= t(".preview") %>
       <% end %>
     <% end %>
@@ -88,14 +88,16 @@
       data: {
         turbo: false,
       },
-      class: "text-blue-900 dark:text-blue-100 font-semibold hover:underline" %>
+      class:
+        "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer" %>
     <% else %>
       <%= link_to t(".download"),
       rails_blob_path(attachment.file),
       data: {
         turbo: false,
       },
-      class: "text-blue-600 dark:text-blue-100 font-semibold hover:underline" %>
+      class:
+        "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer" %>
     <% end %>
   </td>
 </tr>
