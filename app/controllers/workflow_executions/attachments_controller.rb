@@ -29,9 +29,8 @@ module WorkflowExecutions
     end
 
     def context_crumbs
-      @context_crumbs = [base_crumb].then do |crumbs|
-        @workflow_execution ? crumbs.concat(workflow_execution_crumbs) : crumbs
-      end
+      super
+      @context_crumbs += workflow_execution_crumbs
     end
 
     def base_crumb
