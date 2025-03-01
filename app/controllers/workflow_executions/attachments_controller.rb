@@ -29,8 +29,22 @@ module WorkflowExecutions
     end
 
     def context_crumbs
-      super
-      @context_crumbs += workflow_execution_crumbs
+      @context_crumbs =
+        [{
+          name: I18n.t('workflow_executions.index.title'),
+          path: workflow_executions_path
+        },
+         {
+           name: @workflow_execution.name.presence || @workflow_execution.id,
+           path: workflow_execution_path(@workflow_execution)
+         }, {
+           name: @attachment.file.filename,
+           path: workflow_executions_attachments_path(
+             attachment: @attachment.id,
+             workflow_execution: @workflow_execution.id,
+             tab: 'files'
+           )
+         }]
     end
 
     def base_crumb
