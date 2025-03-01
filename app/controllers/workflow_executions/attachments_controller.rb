@@ -11,7 +11,7 @@ module WorkflowExecutions
     before_action :context_crumbs, only: [:index]
 
     def index
-      return if @attachment
+      return if @attachment.present?
 
       redirect_back fallback_location: workflow_executions_path,
                     alert: I18n.t('workflow_executions.attachments.file_not_found')
