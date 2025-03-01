@@ -83,7 +83,7 @@ class Attachment < ApplicationRecord
   end
 
   def previewable?
-    PREVIEWABLE_TYPES.key?(metadata['format'])
+    PREVIEWABLE_TYPES.key?(metadata['format']) && metadata['compression'] != 'gzip'
   end
 
   def copyable?
