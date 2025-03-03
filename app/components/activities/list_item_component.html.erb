@@ -34,6 +34,8 @@
         ) %>
       <% elsif group_link_action %>
         <%= render Activities::NamespaceGroupLinkActivityComponent.new(activity: activity) %>
+      <% elsif sample_action %>
+        <%= render Activities::Groups::SampleActivityComponent.new(activity: activity) %>
       <% else %>
         <%= render Activities::GroupActivityComponent.new(activity: activity) %>
       <% end %>
