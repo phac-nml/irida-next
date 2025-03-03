@@ -58,7 +58,8 @@ module Samples
         transferred_samples_ids << sample_id
         transferred_samples_puids << sample.puid
 
-        stream_progress_update('append', 'progress-bar', '<div></div>', broadcast_target, index, sample_ids.count)
+        stream_progress_update('replace', 'progress-index', "<div id='progress-index' class='hidden' data-progress-bar-target='progressIndex'>#{index}</div>",
+                               broadcast_target)
       rescue ActiveRecord::RecordNotFound
         not_found_sample_ids << sample_id
         next

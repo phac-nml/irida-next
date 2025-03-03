@@ -1,24 +1,22 @@
 import { Controller } from "@hotwired/stimulus";
 
 // A progress bar will accept itemsToComplete to calculate the ongoing percentage of completed tasks (ie: samples to copy)
-// Each time 50 tasks are completed (50 samples are copied) or the final task is completed (sample 101 of 101),
-// an empty div will be appended and observed via the MutationObserver,
-// and completedCount will be incremented by 50. This then updates the progress bar and percentage text.
-// eg: if there are 101 samples to copy, itemsToComplete = 101, and we'll observe 3 empty divs appended
-// (at 50, 100, and 101) and increasing the progress variables accordingly.
+// Each time a task is completed (such as one sample is copied), a hidden div's (progressIndexTarget) content will be
+// updated with the new value equaling the number of ongoing completed tasks (total samples copied so far).
+// The mutationObserver will observe this content change, and the progress bar values will be updated accordingly
 export default class extends Controller {
   static values = {
     itemsToComplete: 0,
     completedCount: 0,
   };
-  static targets = ["progress", "progressText"];
+  static targets = ["progress", "progressText", "progressIndex"];
   connect() {
     // warns user about refreshing page during action progress
     window.addEventListener("beforeunload", this.beforeUnloadHandler);
     this.observer = new MutationObserver((mutationsList, _observer) => {
       for (let mutation of mutationsList) {
         if (mutation.type === "childList") {
-          this.increment();
+          this.updateProgress();
         }
       }
     });
@@ -34,14 +32,11 @@ export default class extends Controller {
     event.preventDefault();
   }
 
-  increment() {
-    this.completedCountValue += 50;
-    this.updateProgress();
-  }
-
   updateProgress() {
+    this.completedCountValue = parseInt(this.progressIndexTarget.textContent);
+    console.log(this.completedCountValue);
     let progress = (this.completedCountValue / this.itemsToCompleteValue) * 100;
-    // our progress percent logic likely has the 100% (completed) state above 100%, so we adjust it to 100
+    // in case of rounding errors
     if (progress > 100) {
       progress = 100;
     }
