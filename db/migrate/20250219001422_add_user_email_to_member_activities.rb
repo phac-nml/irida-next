@@ -12,7 +12,7 @@ class AddUserEmailToMemberActivities < ActiveRecord::Migration[7.2]
       next if member.nil?
 
       activity.parameters[:member_email] = if member.user.nil?
-                                             'Deleted User'
+                                             'deleted_user'
                                            else
                                              member.user.email
                                            end
