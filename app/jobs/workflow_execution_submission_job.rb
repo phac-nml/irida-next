@@ -14,7 +14,7 @@ class WorkflowExecutionSubmissionJob < ApplicationJob
     workflow_execution.http_error_code = exception.http_error_code
     workflow_execution.save
 
-    WorkflowExecutionCleanupJob.perform_later(workflow_execution)
+    WorkflowExecutionCleanupJob.set(queue: :waitable_queue).perform_later(workflow_execution)
 
     workflow_execution
   end
@@ -27,6 +27,7 @@ class WorkflowExecutionSubmissionJob < ApplicationJob
 
     return if workflow_execution.run_id.nil?
 
-    WorkflowExecutionStatusJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
+    WorkflowExecutionStatusJob.set(queue: :waitable_queue,
+                                   wait_until: 30.seconds.from_now).perform_later(workflow_execution)
   end
 end

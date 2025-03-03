@@ -29,7 +29,9 @@ module WorkflowExecutions
 
       if @workflow_execution.save
         create_activities
-        WorkflowExecutionPreparationJob.perform_later(@workflow_execution)
+        WorkflowExecutionPreparationJob.set(
+          queue: :waitable_queue
+        ).perform_later(@workflow_execution)
       end
 
       @workflow_execution

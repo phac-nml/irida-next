@@ -29,7 +29,9 @@ module Members
       updated = member.update(params)
 
       if updated
-        UpdateMembershipsJob.perform_later(member.id)
+        UpdateMembershipsJob.set(
+          queue: :prioritized_queue
+        ).perform_later(member.id)
 
         namespace_key = if member.namespace.group_namespace?
                           'group'

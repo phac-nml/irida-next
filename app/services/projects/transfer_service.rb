@@ -51,7 +51,9 @@ module Projects
 
       create_activities(project)
 
-      UpdateMembershipsJob.perform_later(new_namespace_member_ids)
+      UpdateMembershipsJob.set(
+        queue: :prioritized_queue
+      ).perform_later(new_namespace_member_ids)
     end
 
     def create_activities(project) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize

@@ -17,7 +17,9 @@ module WorkflowExecutions
         # Schedule a job to cancel the run on the ga4gh wes server
         @workflow_execution.state = :canceling
         @workflow_execution.save
-        WorkflowExecutionCancelationJob.perform_later(@workflow_execution, current_user)
+        WorkflowExecutionCancelationJob.set(
+          queue: :waitable_queue
+        ).perform_later(@workflow_execution, current_user)
       elsif @workflow_execution.initial?
         # No files to clean up, mark as cleaned and do not create a cleanup job.
         @workflow_execution.state = :canceled
@@ -27,7 +29,9 @@ module WorkflowExecutions
         # Files were generated but not sent to ga4gh, schedule a cleanup job
         @workflow_execution.state = :canceled
         @workflow_execution.save
-        WorkflowExecutionCleanupJob.perform_later(@workflow_execution)
+        WorkflowExecutionCleanupJob.set(
+          queue: :waitable_queue
+        ).perform_later(@workflow_execution)
       end
 
       @workflow_execution

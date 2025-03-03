@@ -45,7 +45,9 @@ module WorkflowExecutions
 
       @workflow_execution.save
 
-      WorkflowExecutionCleanupJob.perform_later(@workflow_execution)
+      WorkflowExecutionCleanupJob.set(
+        queue: :waitable_queue
+      ).perform_later(@workflow_execution)
 
       @workflow_execution
     end

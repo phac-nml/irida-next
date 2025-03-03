@@ -22,6 +22,7 @@ module FileImportActions
     )
 
     ::Samples::MetadataImportJob.set(
+      queue: :prioritized_queue,
       wait_until: 1.second.from_now
     ).perform_later(
       @namespace, current_user,
