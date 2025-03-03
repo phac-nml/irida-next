@@ -8,7 +8,7 @@ module WorkflowExecutions
 
     before_action :workflow_execution, only: [:index]
     before_action :attachment, only: [:index]
-    before_action :context_crumbs, only: [:index]
+    before_action :context_crumbs, only: [:index], if: -> { @attachment.present? && @workflow_execution.present? }
 
     def index
       return if @attachment.present?
@@ -21,7 +21,8 @@ module WorkflowExecutions
     private
 
     def workflow_execution
-      @workflow_execution = WorkflowExecution.find_by!(id: params[:workflow_execution], submitter: current_user)
+      @workflow_execution = WorkflowExecution.find_by(id: params[:workflow_execution], submitter: current_user)
+      render 'shared/error/not_found', status: :not_found, layout: 'application' unless @workflow_execution
     end
 
     def attachment
