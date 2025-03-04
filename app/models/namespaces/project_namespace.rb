@@ -52,15 +52,24 @@ module Namespaces
       add_to_metadata_summary_count(namespaces_to_update, added_metadata, true) unless added_metadata.empty?
     end
 
-    # old_namespaces are the namespaces the sample belongs to prior to transfer
-    # new_namespaces are the namespaces the sample is being transferred to
-    # transferred_samples_id is the ID of the sample that is being transferred
-    def update_metadata_summary_by_sample_transfer(transferred_sample_id, old_namespaces, new_namespaces)
-      sample = Sample.find(transferred_sample_id)
-      return if sample.metadata.empty?
+    # self = the original parent of the transferred samples
+    # new_project_id = the project ID receiving the new samples
+    # transferred_samples_ids contains the IDs of the transferred samples
+    def update_metadata_summary_by_sample_transfer(transferred_samples_ids, new_project_id, broadcast_target) # rubocop:disable Metrics/AbcSize
+      old_namespaces = [self] + parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
+      new_project_namespace = Project.find(new_project_id).namespace
+      new_namespaces =
+        [new_project_namespace] +
+        new_project_namespace.parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
+      sample_count = transferred_samples_ids.count
+      transferred_samples_ids.each.with_index(1) do |sample_id, index|
+        broadcast_update(broadcast_target, (sample_count + index)) if broadcast_target
+        sample = Sample.find(sample_id)
+        next if sample.metadata.empty?
 
-      subtract_from_metadata_summary_count(old_namespaces, sample.metadata, true)
-      add_to_metadata_summary_count(new_namespaces, sample.metadata, true)
+        subtract_from_metadata_summary_count(old_namespaces, sample.metadata, true)
+        add_to_metadata_summary_count(new_namespaces, sample.metadata, true)
+      end
     end
 
     def update_metadata_summary_by_sample_deletion(sample)

@@ -186,9 +186,6 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
     project29 = namespaces_project_namespaces(:project29_namespace)
     sample32 = samples(:sample32)
 
-    new_namespaces =
-      [@project_namespace] +
-      @project_namespace.parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
     assert_equal 10, @project_namespace['metadata_summary']['metadatafield1']
     assert_equal 35, @project_namespace['metadata_summary']['metadatafield2']
     assert_equal 633, @project_namespace.parent['metadata_summary']['metadatafield1']
@@ -197,7 +194,7 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
     assert_equal 1, project29['metadata_summary']['metadatafield1']
     assert_equal 1, project29['metadata_summary']['metadatafield2']
 
-    project29.update_metadata_summary_by_sample_transfer(sample32.id, [project29], new_namespaces)
+    project29.update_metadata_summary_by_sample_transfer([sample32.id], @project_namespace.project.id)
 
     assert_equal 11, @project_namespace.reload['metadata_summary']['metadatafield1']
     assert_equal 36, @project_namespace.reload['metadata_summary']['metadatafield2']
@@ -215,13 +212,10 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
     sample32.metadata_provenance = {}
     sample32.save
 
-    new_namespaces =
-      [@project_namespace] +
-      @project_namespace.parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
     assert_no_changes -> { @project_namespace.reload.metadata_summary } do
       assert_no_changes -> { @project_namespace.parent.reload.metadata_summary } do
         assert_no_changes -> { project29.reload.metadata_summary } do
-          project29.update_metadata_summary_by_sample_transfer(sample32.id, [project29], new_namespaces)
+          project29.update_metadata_summary_by_sample_transfer([sample32.id], @project_namespace.project.id)
         end
       end
     end
