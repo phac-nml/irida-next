@@ -71,15 +71,18 @@ module Samples
                                              sample_name: sample.name, sample_puid: sample.puid))
         next
       end
+
       unless not_found_sample_ids.empty?
         @project.errors.add(:samples,
                             I18n.t('services.samples.transfer.samples_not_found',
                                    sample_ids: not_found_sample_ids.join(', ')))
       end
-      return unless transferred_samples_ids.count.positive?
 
-      update_namespace_attributes(transferred_samples_ids, transferred_samples_puids, new_project_id,
-                                  broadcast_target)
+      if transferred_samples_ids.count.positive?
+        update_namespace_attributes(transferred_samples_ids, transferred_samples_puids, new_project_id,
+                                    broadcast_target)
+      end
+
       transferred_samples_ids
     end
 
