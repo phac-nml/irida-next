@@ -264,5 +264,64 @@ module Samples
                           index: 2),
                    response['index 2'][:message]
     end
+
+    test 'import samples with metadata' do
+      assert_equal 3, @project.samples.count
+
+      file = Rack::Test::UploadedFile.new(
+        Rails.root.join('test/fixtures/files/batch_sample_import_with_metadata_valid.csv')
+      )
+      blob = ActiveStorage::Blob.create_and_upload!(
+        io: file,
+        filename: file.original_filename,
+        content_type: file.content_type
+      )
+
+      response = Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id, @default_params).execute
+
+      assert_equal 5, @project.samples.count
+
+      m1 = { 'metadata1' => 'a', 'metadata2' => 'b' }
+      m2 = { 'metadata1' => 'c', 'metadata2' => 'd' }
+
+      assert_equal m1, response['my new sample'].metadata
+      assert_equal m1, @project.samples.where(name: 'my new sample')[0].metadata
+      assert_equal m2, response['my new sample 2'].metadata
+      assert_equal m2, @project.samples.where(name: 'my new sample 2')[0].metadata
+
+      assert_equal 'user', @project.samples.where(name: 'my new sample')[0].metadata_provenance['metadata1']['source']
+      assert_equal 'user', @project.samples.where(name: 'my new sample')[0].metadata_provenance['metadata2']['source']
+      assert_equal 'user', @project.samples.where(name: 'my new sample 2')[0].metadata_provenance['metadata1']['source']
+      assert_equal 'user', @project.samples.where(name: 'my new sample 2')[0].metadata_provenance['metadata2']['source']
+    end
+
+    test 'import samples with metadata with empty value' do
+      assert_equal 3, @project.samples.count
+
+      file = Rack::Test::UploadedFile.new(
+        Rails.root.join('test/fixtures/files/batch_sample_import_with_metadata_with_empty.csv')
+      )
+      blob = ActiveStorage::Blob.create_and_upload!(
+        io: file,
+        filename: file.original_filename,
+        content_type: file.content_type
+      )
+
+      response = Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id, @default_params).execute
+
+      assert_equal 5, @project.samples.count
+
+      m1 = { 'metadata1' => 'a', 'metadata2' => 'b' }
+      m2 = { 'metadata2' => 'd' }
+
+      assert_equal m1, response['my new sample'].metadata
+      assert_equal m1, @project.samples.where(name: 'my new sample')[0].metadata
+      assert_equal m2, response['my new sample 2'].metadata
+      assert_equal m2, @project.samples.where(name: 'my new sample 2')[0].metadata
+
+      assert_equal 'user', @project.samples.where(name: 'my new sample')[0].metadata_provenance['metadata1']['source']
+      assert_equal 'user', @project.samples.where(name: 'my new sample')[0].metadata_provenance['metadata2']['source']
+      assert_equal 'user', @project.samples.where(name: 'my new sample 2')[0].metadata_provenance['metadata2']['source']
+    end
   end
 end
