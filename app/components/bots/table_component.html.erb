@@ -52,7 +52,9 @@
           t("bots.index.table.actions.destroy"),
           destroy_path(row),
           data: {
-            "turbo-stream": true,
+            turbo_method: :delete,
+            turbo_confirm:
+              t("bots.destroy_confirmation.description", bot_name: row.user.email),
           },
           aria: {
             label: t("bots.index.table.actions.destroy_aria_label"),

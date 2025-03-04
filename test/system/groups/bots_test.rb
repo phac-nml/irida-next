@@ -442,9 +442,11 @@ module Groups
       assert_selector '#bots-table'
       assert_selector '#bots-table table tbody tr', count: 20
       assert_selector "#bots-table table tbody tr[id='#{@group_bot.id}']"
-      within("#bots-table table tbody tr[id='#{@group_bot.id}'] td:last-child") do
+      within("#bots-table table tbody tr[id='#{@group_bot.id}']") do
+        sleep 1
+        assert_text I18n.t(:'bots.index.table.actions.destroy')
         # destroy bot
-        click_link I18n.t(:'bots.index.table.actions.destroy')
+        find('a', text: I18n.t(:'bots.index.table.actions.destroy')).click
       end
 
       # confirm destroy bot
