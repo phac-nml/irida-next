@@ -194,7 +194,8 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
     assert_equal 1, project29['metadata_summary']['metadatafield1']
     assert_equal 1, project29['metadata_summary']['metadatafield2']
 
-    project29.update_metadata_summary_by_sample_transfer([sample32.id], @project_namespace.project.id)
+    project29.update_metadata_summary_by_sample_transfer([sample32.id], @project_namespace.project.id,
+                                                         'a_broadcast_target')
 
     assert_equal 11, @project_namespace.reload['metadata_summary']['metadatafield1']
     assert_equal 36, @project_namespace.reload['metadata_summary']['metadatafield2']
@@ -215,7 +216,8 @@ class ProjectNamespaceTest < ActiveSupport::TestCase
     assert_no_changes -> { @project_namespace.reload.metadata_summary } do
       assert_no_changes -> { @project_namespace.parent.reload.metadata_summary } do
         assert_no_changes -> { project29.reload.metadata_summary } do
-          project29.update_metadata_summary_by_sample_transfer([sample32.id], @project_namespace.project.id)
+          project29.update_metadata_summary_by_sample_transfer([sample32.id], @project_namespace.project.id,
+                                                               'a_broadcast_target')
         end
       end
     end

@@ -58,6 +58,8 @@ module Samples
       end
 
       update_namespace_attributes(cloned_sample_ids, cloned_sample_puids) if cloned_sample_ids.count.positive?
+
+      cloned_sample_ids
     end
 
     def clone_sample(sample)

@@ -80,6 +80,7 @@ module Samples
 
       update_namespace_attributes(transferred_samples_ids, transferred_samples_puids, new_project_id,
                                   broadcast_target)
+      transferred_samples_ids
     end
 
     def update_namespace_attributes(transferred_samples_ids, transferred_samples_puids, new_project_id,
