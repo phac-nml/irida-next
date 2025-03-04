@@ -31,9 +31,9 @@ module WorkflowExecutions
     def context_crumbs
       @context_crumbs = [
         workflow_executions_crumb,
-        workflow_execution_crumb,
-        attachment_crumb
+        workflow_execution_crumb
       ]
+      @context_crumbs << attachment_crumb if @attachment.present?
     end
 
     def workflow_executions_crumb
