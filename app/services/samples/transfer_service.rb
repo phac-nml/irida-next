@@ -51,7 +51,7 @@ module Samples
       transferred_samples_ids = []
       transferred_samples_puids = []
       not_found_sample_ids = []
-      old_namespaces = [@project] +
+      old_namespaces = [@project.namespace] +
                        @project.parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
       new_namespaces = new_namespaces_for_transfer(new_project_id)
 
