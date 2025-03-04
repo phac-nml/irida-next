@@ -14,7 +14,7 @@ class WorkflowExecutionStatusJob < ApplicationJob
     workflow_execution.http_error_code = exception.http_error_code
     workflow_execution.save
 
-    WorkflowExecutionCleanupJob.set(queue: :waitable_queue).perform_later(workflow_execution)
+    WorkflowExecutionCleanupJob.perform_later(workflow_execution)
 
     workflow_execution
   end
@@ -28,11 +28,11 @@ class WorkflowExecutionStatusJob < ApplicationJob
 
     case workflow_execution.state.to_sym
     when :canceled, :error
-      WorkflowExecutionCleanupJob.set(queue: :waitable_queue).perform_later(workflow_execution)
+      WorkflowExecutionCleanupJob.perform_later(workflow_execution)
     when :completing
-      WorkflowExecutionCompletionJob.set(queue: :waitable_queue).perform_later(workflow_execution)
+      WorkflowExecutionCompletionJob.perform_later(workflow_execution)
     else
-      WorkflowExecutionStatusJob.set(queue: :waitable_queue).set(wait_until: 30.seconds.from_now)
+      WorkflowExecutionStatusJob.set(wait_until: 30.seconds.from_now)
                                 .perform_later(workflow_execution)
     end
   end

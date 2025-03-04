@@ -34,7 +34,6 @@ export default class extends Controller {
 
   updateProgress() {
     this.completedCountValue = parseInt(this.progressIndexTarget.textContent);
-    console.log(this.completedCountValue);
     let progress = (this.completedCountValue / this.itemsToCompleteValue) * 100;
     // in case of rounding errors
     if (progress > 100) {

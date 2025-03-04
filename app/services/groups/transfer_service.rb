@@ -29,9 +29,7 @@ module Groups
 
       create_activities(old_namespace, new_namespace)
 
-      UpdateMembershipsJob.set(
-        queue: :prioritized_queue
-      ).perform_later(new_namespace_member_ids)
+      UpdateMembershipsJob.perform_later(new_namespace_member_ids)
 
       update_samples_count(old_namespace, new_namespace)
 

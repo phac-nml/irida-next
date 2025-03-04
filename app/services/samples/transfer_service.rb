@@ -58,8 +58,13 @@ module Samples
         transferred_samples_ids << sample_id
         transferred_samples_puids << sample.puid
 
-        stream_progress_update('replace', 'progress-index', "<div id='progress-index' class='hidden' data-progress-bar-target='progressIndex'>#{index}</div>",
-                               broadcast_target)
+        stream_progress_update(
+          'replace',
+          'progress-index',
+          "<div id='progress-index' class='hidden' data-progress-bar-target='progressIndex'>#{index}</div>",
+          broadcast_target
+        )
+        puts 'in loop'
       rescue ActiveRecord::RecordNotFound
         not_found_sample_ids << sample_id
         next
@@ -68,25 +73,27 @@ module Samples
                                              sample_name: sample.name, sample_puid: sample.puid))
         next
       end
-
+      puts 'after loop'
       unless not_found_sample_ids.empty?
         @project.errors.add(:samples,
                             I18n.t('services.samples.transfer.samples_not_found',
                                    sample_ids: not_found_sample_ids.join(', ')))
       end
-
+      puts 'after not found sample ids'
       if transferred_samples_ids.count.positive?
         update_namespace_attributes(transferred_samples_ids, transferred_samples_puids, new_project_id)
       end
-
+      puts 'just before return'
       transferred_samples_ids
     end
 
     def update_namespace_attributes(transferred_samples_ids, transferred_samples_puids, new_project_id)
+      puts 'in update namespace'
       create_activities(transferred_samples_ids, transferred_samples_puids)
-
+      puts 'after activites'
       @project.namespace.update_metadata_summary_by_sample_transfer(transferred_samples_ids,
                                                                     new_project_id)
+      puts 'after update metadata'
       update_samples_count(transferred_samples_ids.count)
     end
 

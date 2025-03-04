@@ -165,7 +165,7 @@ module Attachments
         return
       end
 
-      AutomatedWorkflowExecutions::LaunchJob.set(queue: :waitable_queue).perform_later(@attachable, pe_attachment_pair)
+      AutomatedWorkflowExecutions::LaunchJob.perform_later(@attachable, pe_attachment_pair)
     end
   end
 end

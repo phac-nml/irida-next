@@ -13,8 +13,7 @@ module ActiveJobTestHelpers
 
     while enqueued_jobs.count >= 1 && class_filter.call(enqueued_jobs.first['job_class'])
       perform_enqueued_jobs(
-        only: ->(job) { job['job_id'] == enqueued_jobs.first['job_id'] },
-        queue: :waitable_queue
+        only: ->(job) { job['job_id'] == enqueued_jobs.first['job_id'] }
       )
       sleep(delay_seconds)
     end

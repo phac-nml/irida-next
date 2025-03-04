@@ -17,10 +17,8 @@ module Projects
         sample_ids = clone_params[:sample_ids]
         @samples_count = sample_ids.nil? ? 0 : sample_ids.count
 
-        ::Samples::CloneJob.set(
-          queue: :prioritized_queue, wait_until: 1.second.from_now
-        ).perform_later(@project, current_user, new_project_id,
-                        sample_ids, @broadcast_target)
+        ::Samples::CloneJob.set(wait_until: 1.second.from_now).perform_later(@project, current_user, new_project_id,
+                                                                             sample_ids, @broadcast_target)
 
         render status: :ok
       end
