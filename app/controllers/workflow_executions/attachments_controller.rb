@@ -33,7 +33,7 @@ module WorkflowExecutions
         workflow_executions_crumb,
         workflow_execution_crumb
       ]
-      @context_crumbs << attachment_crumb if @attachment.present?
+      @context_crumbs << attachment_crumb if Flipper.enabled?(:attachments_preview) && @attachment.present?
     end
 
     def workflow_executions_crumb
