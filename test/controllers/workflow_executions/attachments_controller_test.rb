@@ -5,6 +5,7 @@ require 'test_helper'
 module WorkflowExecutions
   class AttachmentsControllerTest < ActionDispatch::IntegrationTest
     setup do
+      Flipper.enable(:attachments_preview)
       @user = users(:john_doe)
       sign_in @user
       @workflow_execution = workflow_executions(:workflow_execution_valid)
