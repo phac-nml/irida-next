@@ -2,7 +2,12 @@ import { Controller } from "@hotwired/stimulus";
 import * as XLSX from "xlsx";
 
 export default class extends Controller {
-  static targets = ["sampleIdColumn", "metadataColumns", "submitButton"];
+  static targets = [
+    "sampleIdColumn",
+    "metadataColumnsTemplate",
+    "metadataColumns",
+    "sortableListsItemTemplate",
+  ];
   static values = {
     loaded: Boolean,
   };
@@ -30,34 +35,19 @@ export default class extends Controller {
 
   connect() {
     this.#disableTarget(this.sampleIdColumnTarget);
-    if (this.hasMetadataColumnsTarget) {
-      this.#disableTarget(this.metadataColumnsTarget);
-    }
-    this.submitButtonTarget.disabled = true;
-    this.loadedValue = true;
+    this.metadataColumnsTarget.innerHTML = "";
   }
 
   changeSampleIDInput() {
-    if (this.hasMetadataColumnsTarget) {
-      this.#removeInputOptions(this.metadataColumnsTarget);
-      this.#addMetadataInputOptions();
-      this.#enableTarget(this.metadataColumnsTarget);
-      this.submitButtonTarget.disabled = true;
-    } else {
-      this.submitButtonTarget.disabled = false;
-    }
-  }
-
-  changeMetadataInput(event) {
-    const { value } = event.target;
-    this.submitButtonTarget.disabled = !value;
+    this.#addMetadataColumns();
   }
 
   readFile(event) {
     const { files } = event.target;
 
     if (!files.length) {
-      this.#removeInputsOptions();
+      this.#removeSampleIDInputOptions();
+      this.metadataColumnsTarget.innerHTML = "";
       return;
     }
 
@@ -69,23 +59,16 @@ export default class extends Controller {
       const worksheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[worksheetName];
       this.#headers = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
-      this.#removeInputsOptions();
+      this.metadataColumnsTarget.innerHTML = "";
+      this.#removeSampleIDInputOptions();
       this.#addSampleIDInputOptions();
       this.#enableTarget(this.sampleIdColumnTarget);
-      if (this.hasMetadataColumnsTarget) {
-        this.#disableTarget(this.metadataColumnsTarget);
-      }
     };
   }
 
-  #removeInputsOptions() {
+  #removeSampleIDInputOptions() {
     this.#removeInputOptions(this.sampleIdColumnTarget);
     this.#disableTarget(this.sampleIdColumnTarget);
-    if (this.hasMetadataColumnsTarget) {
-      this.#removeInputOptions(this.metadataColumnsTarget);
-      this.#disableTarget(this.metadataColumnsTarget);
-    }
-    this.submitButtonTarget.disabled = true;
   }
 
   #addSampleIDInputOptions() {
@@ -97,7 +80,7 @@ export default class extends Controller {
     }
   }
 
-  #addMetadataInputOptions() {
+  #addMetadataColumns() {
     const ignoreList = [
       "sample id",
       "sample name",
@@ -113,12 +96,16 @@ export default class extends Controller {
         header.toLowerCase() != this.sampleIdColumnTarget.value.toLowerCase(),
     );
 
-    for (let column of columns) {
-      const option = document.createElement("option");
-      option.value = column;
-      option.text = column;
-      this.metadataColumnsTarget.append(option);
-    }
+    this.metadataColumnsTarget.innerHTML =
+      this.metadataColumnsTemplateTarget.innerHTML;
+
+    columns.forEach((column) => {
+      const template =
+        this.sortableListsItemTemplateTarget.content.cloneNode(true);
+      template.querySelector("li").innerText = column;
+      template.querySelector("li").id = column.replace(/\s+/g, "-");
+      this.metadataColumnsTarget.querySelector("#Available").append(template);
+    });
   }
 
   #removeInputOptions(target) {

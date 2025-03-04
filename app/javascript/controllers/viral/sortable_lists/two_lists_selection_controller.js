@@ -2,7 +2,14 @@ import { Controller } from "@hotwired/stimulus";
 import { createHiddenInput } from "utilities/form";
 
 export default class extends Controller {
-  static targets = ["field", "submitBtn", "addAll", "removeAll", "templateSelector", "itemTemplate"];
+  static targets = [
+    "field",
+    "submitBtn",
+    "addAll",
+    "removeAll",
+    "templateSelector",
+    "itemTemplate",
+  ];
 
   static values = {
     selectedList: String,
@@ -20,23 +27,29 @@ export default class extends Controller {
   #originalAvailableList;
 
   connect() {
+    this.idempotentConnect();
+  }
+
+  idempotentConnect() {
     // Get a handle on the available and selected lists
     this.availableList = document.getElementById(this.availableListValue);
     this.selectedList = document.getElementById(this.selectedListValue);
 
-    // Get a handle on the original available list
-    this.#originalAvailableList = [
-      ...this.availableList.querySelectorAll("li"),
-      ...this.selectedList.querySelectorAll("li"),
-    ];
-    Object.freeze(this.#originalAvailableList);
+    if (this.availableList && this.selectedList) {
+      // Get a handle on the original available list
+      this.#originalAvailableList = [
+        ...this.availableList.querySelectorAll("li"),
+        ...this.selectedList.querySelectorAll("li"),
+      ];
+      Object.freeze(this.#originalAvailableList);
 
-    this.#setInitialSelectAllState(this.availableList, this.addAllTarget);
-    this.#setInitialSelectAllState(this.selectedList, this.removeAllTarget);
+      this.#setInitialSelectAllState(this.availableList, this.addAllTarget);
+      this.#setInitialSelectAllState(this.selectedList, this.removeAllTarget);
 
-    this.buttonStateListener = this.#checkStates.bind(this);
-    this.selectedList.addEventListener("drop", this.buttonStateListener);
-    this.availableList.addEventListener("drop", this.buttonStateListener);
+      this.buttonStateListener = this.#checkStates.bind(this);
+      this.selectedList.addEventListener("drop", this.buttonStateListener);
+      this.availableList.addEventListener("drop", this.buttonStateListener);
+    }
   }
 
   addAll(event) {
@@ -73,10 +86,11 @@ export default class extends Controller {
   }
 
   #cleanupAvailableList() {
-    const itemsToRemove = Array.from(this.availableList.querySelectorAll("li"))
-      .filter(li => !this.#originalAvailableList.includes(li));
+    const itemsToRemove = Array.from(
+      this.availableList.querySelectorAll("li"),
+    ).filter((li) => !this.#originalAvailableList.includes(li));
 
-    itemsToRemove.forEach(li => li.remove());
+    itemsToRemove.forEach((li) => li.remove());
   }
 
   #checkButtonStates() {
@@ -108,15 +122,15 @@ export default class extends Controller {
 
       let template = "none";
       for (const option of this.templateSelectorTarget.options) {
-        if(typeof option.dataset.fields !== "undefined") {
-        const templateFields = JSON.stringify(
-          JSON.parse(option.dataset.fields),
-        );
-        if (templateFields === selectedListValues) {
-          template = option.value;
-          break;
+        if (typeof option.dataset.fields !== "undefined") {
+          const templateFields = JSON.stringify(
+            JSON.parse(option.dataset.fields),
+          );
+          if (templateFields === selectedListValues) {
+            template = option.value;
+            break;
+          }
         }
-      }
       }
       this.templateSelectorTarget.value = template;
     }
