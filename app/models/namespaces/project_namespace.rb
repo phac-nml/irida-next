@@ -106,7 +106,8 @@ module Namespaces
         broadcast_target,
         action: 'replace',
         target: 'progress-index',
-        content: "<div id='progress-index' class='hidden' data-progress-bar-target='progressIndex'>#{current_index}</div>"
+        content: "<div id='progress-index' class='hidden' data-progress-bar-target='progressIndex'>" \
+                 "#{current_index}</div>"
       )
     end
   end
