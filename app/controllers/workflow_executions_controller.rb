@@ -70,7 +70,7 @@ class WorkflowExecutionsController < ApplicationController
 
     @context_crumbs +=
       [{
-        name: @workflow_execution.id,
+        name: @workflow_execution.name.presence || @workflow_execution.id,
         path: workflow_execution_path(@workflow_execution)
       }]
   end
