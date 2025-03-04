@@ -9,9 +9,7 @@ module Samples
       @transferred_sample_ids = ::Samples::TransferService.new(project, current_user).execute(new_project_id,
                                                                                               sample_ids,
                                                                                               broadcast_target)
-      puts 'before if'
       if project.errors.empty?
-        puts 'before stream'
         Turbo::StreamsChannel.broadcast_replace_to(
           broadcast_target,
           target: 'transfer_samples_dialog_content',
@@ -21,7 +19,6 @@ module Samples
             message: I18n.t('projects.samples.transfers.create.success')
           }
         )
-        puts 'after stream'
       elsif project.errors.include?(:samples)
         errors = project.errors.messages_for(:samples)
         Turbo::StreamsChannel.broadcast_replace_to(
