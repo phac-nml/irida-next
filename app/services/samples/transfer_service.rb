@@ -51,6 +51,9 @@ module Samples
       transferred_samples_ids = []
       transferred_samples_puids = []
       not_found_sample_ids = []
+      old_namespaces = [@project] +
+                       @project.parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
+      new_namespaces = new_namespaces_for_transfer(new_project_id)
 
       sample_ids.each.with_index(1) do |sample_id, index|
         stream_progress_update(
@@ -63,6 +66,7 @@ module Samples
         sample.update!(project_id: new_project_id)
         transferred_samples_ids << sample_id
         transferred_samples_puids << sample.puid
+        @project.namespace.update_metadata_summary_by_sample_transfer(sample_id, old_namespaces, new_namespaces)
       rescue ActiveRecord::RecordNotFound
         not_found_sample_ids << sample_id
         next
@@ -79,18 +83,14 @@ module Samples
       end
 
       if transferred_samples_ids.count.positive?
-        update_namespace_attributes(transferred_samples_ids, transferred_samples_puids, new_project_id,
-                                    broadcast_target)
+        update_namespace_attributes(transferred_samples_ids, transferred_samples_puids)
       end
 
       transferred_samples_ids
     end
 
-    def update_namespace_attributes(transferred_samples_ids, transferred_samples_puids, new_project_id,
-                                    broadcast_target)
+    def update_namespace_attributes(transferred_samples_ids, transferred_samples_puids)
       create_activities(transferred_samples_ids, transferred_samples_puids)
-      @project.namespace.update_metadata_summary_by_sample_transfer(transferred_samples_ids,
-                                                                    new_project_id, broadcast_target)
       update_samples_count(transferred_samples_ids.count)
     end
 
@@ -124,6 +124,12 @@ module Samples
       elsif @new_project.parent.type == 'Group'
         @new_project.parent.update_samples_count_by_addition_services(transferred_samples_count)
       end
+    end
+
+    def new_namespaces_for_transfer(new_project_id)
+      new_project_namespace = Project.find(new_project_id).namespace
+      [new_project_namespace] +
+        new_project_namespace.parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
     end
   end
 end
