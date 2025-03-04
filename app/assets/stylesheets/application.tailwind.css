@@ -42,7 +42,7 @@ body {
   }
 
   .navbar-button,
-  button.navbar-button.Viral-Dropdown--icon {
+  button.navbar-button.viral-dropdown--icon {
     @apply p-1 text-sm rounded-md text-slate-500 hover:bg-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
   }
 
@@ -165,7 +165,7 @@ body {
     @apply w-5 h-5;
   }
 
-  .Viral-Icon {
+  .viral-icon {
     height: 2rem;
     width: 2rem;
     max-height: 100%;
@@ -174,7 +174,7 @@ body {
     @apply flex justify-center align-middle;
   }
 
-  .Viral-Icon__Svg {
+  .viral-icon__Svg {
     position: relative;
     display: block;
     width: 100%;
@@ -182,35 +182,35 @@ body {
     max-height: 100%;
   }
 
-  .Viral-Icon--colorBase {
+  .viral-icon--colorBase {
     @apply text-slate-900;
   }
 
-  .Viral-Icon--colorSubdued {
+  .viral-icon--colorSubdued {
     @apply text-slate-400;
   }
 
-  .Viral-Icon--colorCritical {
+  .viral-icon--colorCritical {
     @apply text-red-500;
   }
 
-  .Viral-Icon--colorWarning {
+  .viral-icon--colorWarning {
     @apply text-yellow-500;
   }
 
-  .Viral-Icon--colorSuccess {
+  .viral-icon--colorSuccess {
     @apply text-green-500;
   }
 
-  .Viral-Icon--colorPrimary {
+  .viral-icon--colorPrimary {
     @apply text-primary-500;
   }
 
-  .Viral-Dropdown--button {
+  .viral-dropdown--button {
     @apply flex items-center py-2.5 px-5 text-sm font-medium text-slate-900 focus:outline-none bg-white rounded-md border border-slate-200 hover:bg-slate-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-slate-200 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700;
   }
 
-  .Viral-Dropdown--icon {
+  .viral-dropdown--icon {
     @apply rounded-md text-sm text-slate-500 p-2.5 hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
   }
 

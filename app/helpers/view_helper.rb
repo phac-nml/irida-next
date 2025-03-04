@@ -50,7 +50,7 @@ module ViewHelper
     file = File.read(path)
     doc = Nokogiri::HTML::DocumentFragment.parse(file)
     svg = doc.at_css 'svg'
-    svg[:class] = "Viral-Icon__Svg icon-#{name}"
+    svg[:class] = "viral-icon__Svg icon-#{name}"
     svg[:focusable] = false
     svg[:'aria-hidden'] = true
     doc.to_html.html_safe # rubocop:disable Rails/OutputSafety
