@@ -55,7 +55,7 @@ module Viral
     def system_arguments_for_button
       {
         classes: class_names(
-          'Viral-Dropdown--button',
+          'viral-dropdown--button',
           system_arguments[:classes]
         )
       }
@@ -64,7 +64,7 @@ module Viral
     def system_arguments_for_icon
       {
         classes: class_names(
-          'Viral-Dropdown--icon',
+          'viral-dropdown--icon',
           system_arguments[:classes]
         )
       }

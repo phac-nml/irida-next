@@ -93,7 +93,7 @@ module Projects
       login_as users(:ryan_doe)
       visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
       within('table') do
-        assert_selector 'button.Viral-Dropdown--icon', count: 0
+        assert_selector 'button.viral-dropdown--icon', count: 0
       end
     end
 

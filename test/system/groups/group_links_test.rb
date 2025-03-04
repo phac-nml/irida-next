@@ -93,7 +93,7 @@ module Groups
       visit group_members_url(@namespace, tab: 'invited_groups')
 
       within('table') do
-        assert_selector 'button.Viral-Dropdown--icon', count: 0
+        assert_selector 'button.viral-dropdown--icon', count: 0
       end
     end
 

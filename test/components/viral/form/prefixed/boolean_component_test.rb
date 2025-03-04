@@ -16,7 +16,7 @@ module Viral
 
         test 'with_icon' do
           render_preview(:with_icon)
-          assert_selector 'span.Viral-Icon.Viral-Icon--colorWarning', count: 1
+          assert_selector 'span.viral-icon.viral-icon--colorWarning', count: 1
           assert_selector 'input[type="radio"]', count: 2
           assert_selector 'input[type="radio"][value="true"][checked="checked"]', count: 1
           assert_no_selector 'input[type="radio"][value="false"][checked="checked"]'

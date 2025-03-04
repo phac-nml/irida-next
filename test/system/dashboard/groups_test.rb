@@ -222,12 +222,12 @@ module Dashboard
       within('#groups_tree') do
         within("#group_#{group1.id}") do
           assert_text group1.name
-          assert_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+          assert_selector 'svg[class="viral-icon__Svg icon-chevron_right"]'
         end
 
         within("#group_#{group3.id}") do
           assert_text group3.name
-          assert_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+          assert_selector 'svg[class="viral-icon__Svg icon-chevron_right"]'
         end
       end
 
@@ -237,7 +237,7 @@ module Dashboard
       within('#groups_tree') do
         assert_text group1.name
         assert_text group3.name
-        assert_no_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+        assert_no_selector 'svg[class="viral-icon__Svg icon-chevron_right"]'
       end
     end
 
