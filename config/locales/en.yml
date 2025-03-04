@@ -1821,7 +1821,6 @@ en:
             ignore_empty_values:
               description: If selected, any metadata fields without an associated value will be ignored and those metadata keys will not be removed from the sample if present. However, if this not selected, any samples with the metadata key and empty value will be deleted.
             metadata_columns: Metadata Columns
-            metadata_columns_description: Metadata columns description
             namespace:
               description: The spreadsheet is required to have a column that contains a sample identifier.
               group:

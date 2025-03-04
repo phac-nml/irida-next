@@ -8,8 +8,8 @@
 
       <div
         data-controller="metadata--file-import viral--sortable-lists--two-lists-selection"
-        data-viral--sortable-lists--two-lists-selection-selected-list-value="<%= t(".selected") %>"
-        data-viral--sortable-lists--two-lists-selection-available-list-value="<%= t(".available") %>"
+        data-viral--sortable-lists--two-lists-selection-selected-list-value="selected"
+        data-viral--sortable-lists--two-lists-selection-available-list-value="available"
         data-viral--sortable-lists--two-lists-selection-field-name-value="file_import[metadata_columns][]"
       >
 
@@ -61,33 +61,31 @@
             </div>
             <% if Flipper.enabled?(:metadata_import_field_selection) %>
               <div data-metadata--file-import-target="metadataColumns"></div>
-              <template data-metadata--file-import-target="metadataColumnsTemplate">
-                <div
-                  class="hidden"
-                  data-viral--sortable-lists--two-lists-selection-target="field"
-                ></div>
-                <%= viral_sortable_lists(
-            title: t(".metadata_columns"),
-            description: t(".metadata_columns_description",
-              available: t(".available").downcase,
-              selected: t(".selected").downcase
-            ),
+              <template data-metadata--file-import-target="sortableListsTemplate">
+                <div class="grid gap-4">
+                  <div
+                    class="hidden"
+                    data-viral--sortable-lists--two-lists-selection-target="field"
+                  ></div>
+                  <%= viral_sortable_lists(
+                title: t(".metadata_columns"),
             ) do |sortable_lists| %>
-                  <%= sortable_lists.with_list(
-                    id: t(".available"),
-                    title: t(".available"),
-                    group: "metadata_selection",
-                    container_classes: "block mb-1 pr-2 text-sm font-medium",
-                    list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
-                  ) %>
-                  <%= sortable_lists.with_list(
-                    id: t(".selected"),
-                    title: t(".selected"),
-                    group: "metadata_selection",
-                    container_classes: "block mb-1 text-sm font-medium",
-                    list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
-                  ) %>
-                <% end %>
+                    <%= sortable_lists.with_list(
+                      id: "available",
+                      title: t(".available"),
+                      group: "metadata_selection",
+                      container_classes: "block mb-1 pr-2 text-sm font-medium",
+                      list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
+                    ) %>
+                    <%= sortable_lists.with_list(
+                      id: "selected",
+                      title: t(".selected"),
+                      group: "metadata_selection",
+                      container_classes: "block mb-1 text-sm font-medium",
+                      list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
+                    ) %>
+                  <% end %>
+                </div>
               </template>
               <template data-metadata--file-import-target="sortableListsItemTemplate">
                 <%= render Viral::SortableList::ListItemComponent.new(list_item: "NAME_HERE") %>

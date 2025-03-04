@@ -792,12 +792,23 @@ module Groups
     test 'should import metadata via csv' do
       visit group_samples_url(@group)
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
-      within('div[data-metadata--file-import-loaded-value="true"]') do
+      within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
-        find('#file_import_metadata_columns', wait: 1).find("option[value='metadatafield1']").select_option
-        find('#file_import_metadata_columns', wait: 1).find("option[value='metadatafield2']").select_option
-        find('#file_import_metadata_columns', wait: 1).find("option[value='metadatafield3']").select_option
+        assert I18n.t('viral.sortable_lists_component.add_all')
+        click_button I18n.t('viral.sortable_lists_component.add_all')
+        within "ul[id='available']" do
+          assert_no_text 'metadatafield1'
+          assert_no_text 'metadatafield2'
+          assert_no_text 'metadatafield3'
+          assert_no_selector 'li'
+        end
+        within "ul[id='selected']" do
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield2'
+          assert_text 'metadatafield3'
+          assert_selector 'li', count: 3
+        end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
       assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
@@ -813,10 +824,19 @@ module Groups
     test 'should not import metadata via invalid file type' do
       visit group_samples_url(@group)
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
-      within('div[data-metadata--file-import-loaded-value="true"]') do
+      within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
-        find('#file_import_metadata_columns', wait: 1).find("option[value='header']").select_option
+        assert I18n.t('viral.sortable_lists_component.add_all')
+        click_button I18n.t('viral.sortable_lists_component.add_all')
+        within "ul[id='available']" do
+          assert_no_text 'header'
+          assert_no_selector 'li'
+        end
+        within "ul[id='selected']" do
+          assert_text 'header'
+          assert_selector 'li', count: 1
+        end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
 
         perform_enqueued_jobs only: [::Samples::MetadataImportJob]
@@ -832,13 +852,24 @@ module Groups
       sample = samples(:sample32)
       visit group_samples_url(group)
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
-      within('div[data-metadata--file-import-loaded-value="true"]') do
+      within('#dialog') do
         attach_file 'file_import[file]',
                     Rails.root.join('test/fixtures/files/metadata/contains_empty_values_with_puid.csv')
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
-        find('#file_import_metadata_columns', wait: 1).find("option[value='metadatafield1']").select_option
-        find('#file_import_metadata_columns', wait: 1).find("option[value='metadatafield2']").select_option
-        find('#file_import_metadata_columns', wait: 1).find("option[value='metadatafield3']").select_option
+        assert I18n.t('viral.sortable_lists_component.add_all')
+        click_button I18n.t('viral.sortable_lists_component.add_all')
+        within "ul[id='available']" do
+          assert_no_text 'metadatafield1'
+          assert_no_text 'metadatafield2'
+          assert_no_text 'metadatafield3'
+          assert_no_selector 'li'
+        end
+        within "ul[id='selected']" do
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield2'
+          assert_text 'metadatafield3'
+          assert_selector 'li', count: 3
+        end
         check 'Ignore empty values'
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
@@ -871,13 +902,24 @@ module Groups
       sample = samples(:sample32)
       visit group_samples_url(group)
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
-      within('div[data-metadata--file-import-loaded-value="true"]') do
+      within('#dialog') do
         attach_file 'file_import[file]',
                     Rails.root.join('test/fixtures/files/metadata/contains_empty_values_with_puid.csv')
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
-        find('#file_import_metadata_columns', wait: 1).find("option[value='metadatafield1']").select_option
-        find('#file_import_metadata_columns', wait: 1).find("option[value='metadatafield2']").select_option
-        find('#file_import_metadata_columns', wait: 1).find("option[value='metadatafield3']").select_option
+        assert I18n.t('viral.sortable_lists_component.add_all')
+        click_button I18n.t('viral.sortable_lists_component.add_all')
+        within "ul[id='available']" do
+          assert_no_text 'metadatafield1'
+          assert_no_text 'metadatafield2'
+          assert_no_text 'metadatafield3'
+          assert_no_selector 'li'
+        end
+        within "ul[id='selected']" do
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield2'
+          assert_text 'metadatafield3'
+          assert_selector 'li', count: 3
+        end
         assert_not find_field('Ignore empty values').checked?
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
@@ -902,13 +944,23 @@ module Groups
     test 'should not import metadata with duplicate header errors' do
       visit group_samples_url(@group)
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
-      within('div[data-metadata--file-import-loaded-value="true"]') do
+      within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/duplicate_headers.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
-        find('#file_import_metadata_columns', wait: 1).find(:xpath, 'option[1]').select_option
-        find('#file_import_metadata_columns', wait: 1).find(:xpath, 'option[2]').select_option
-        find('#file_import_metadata_columns', wait: 1).find(:xpath, 'option[3]').select_option
-        find('#file_import_metadata_columns', wait: 1).find(:xpath, 'option[4]').select_option
+        assert I18n.t('viral.sortable_lists_component.add_all')
+        click_button I18n.t('viral.sortable_lists_component.add_all')
+        within "ul[id='available']" do
+          assert_no_text 'metadatafield1'
+          assert_no_text 'metadatafield2'
+          assert_no_text 'metadatafield3'
+          assert_no_selector 'li'
+        end
+        within "ul[id='selected']" do
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield2'
+          assert_text 'metadatafield3'
+          assert_selector 'li', count: 4
+        end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
       assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
@@ -923,12 +975,23 @@ module Groups
     test 'should not import metadata with missing metadata row errors' do
       visit group_samples_url(@group)
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
-      within('div[data-metadata--file-import-loaded-value="true"]') do
+      within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_rows.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
-        find('#file_import_metadata_columns', wait: 1).find("option[value='metadatafield1']").select_option
-        find('#file_import_metadata_columns', wait: 1).find("option[value='metadatafield2']").select_option
-        find('#file_import_metadata_columns', wait: 1).find("option[value='metadatafield3']").select_option
+        assert I18n.t('viral.sortable_lists_component.add_all')
+        click_button I18n.t('viral.sortable_lists_component.add_all')
+        within "ul[id='available']" do
+          assert_no_text 'metadatafield1'
+          assert_no_text 'metadatafield2'
+          assert_no_text 'metadatafield3'
+          assert_no_selector 'li'
+        end
+        within "ul[id='selected']" do
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield2'
+          assert_text 'metadatafield3'
+          assert_selector 'li', count: 3
+        end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
       assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
@@ -943,7 +1006,7 @@ module Groups
     test 'should not import metadata with missing metadata column errors' do
       visit group_samples_url(@group)
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
-      within('div[data-metadata--file-import-loaded-value="true"]') do
+      within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
         assert find("input[value='#{I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')}'").disabled?
@@ -961,13 +1024,24 @@ module Groups
 
       assert_selector '#samples-table table thead tr th', count: 9
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
-      within('div[data-metadata--file-import-loaded-value="true"]') do
+      within('#dialog') do
         attach_file 'file_import[file]',
                     Rails.root.join('test/fixtures/files/metadata/mixed_project_samples_with_puid.csv')
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
-        find('#file_import_metadata_columns', wait: 1).find("option[value='metadatafield1']").select_option
-        find('#file_import_metadata_columns', wait: 1).find("option[value='metadatafield2']").select_option
-        find('#file_import_metadata_columns', wait: 1).find("option[value='metadatafield3']").select_option
+        assert I18n.t('viral.sortable_lists_component.add_all')
+        click_button I18n.t('viral.sortable_lists_component.add_all')
+        within "ul[id='available']" do
+          assert_no_text 'metadatafield1'
+          assert_no_text 'metadatafield2'
+          assert_no_text 'metadatafield3'
+          assert_no_selector 'li'
+        end
+        within "ul[id='selected']" do
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield2'
+          assert_text 'metadatafield3'
+          assert_selector 'li', count: 3
+        end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
       assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
@@ -985,12 +1059,22 @@ module Groups
       group = groups(:group_twelve)
       visit group_samples_url(group)
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
-      within('div[data-metadata--file-import-loaded-value="true"]') do
+      within('#dialog') do
         attach_file 'file_import[file]',
                     Rails.root.join('test/fixtures/files/metadata/contains_analysis_values_with_puid.csv')
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
-        find('#file_import_metadata_columns', wait: 1).find("option[value='metadatafield1']").select_option
-        find('#file_import_metadata_columns', wait: 1).find("option[value='metadatafield3']").select_option
+        assert I18n.t('viral.sortable_lists_component.add_all')
+        click_button I18n.t('viral.sortable_lists_component.add_all')
+        within "ul[id='available']" do
+          assert_no_text 'metadatafield1'
+          assert_no_text 'metadatafield3'
+          assert_no_selector 'li'
+        end
+        within "ul[id='selected']" do
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield3'
+          assert_selector 'li', count: 2
+        end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
       assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')

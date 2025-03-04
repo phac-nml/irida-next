@@ -4,13 +4,10 @@ import * as XLSX from "xlsx";
 export default class extends Controller {
   static targets = [
     "sampleIdColumn",
-    "metadataColumnsTemplate",
     "metadataColumns",
+    "sortableListsTemplate",
     "sortableListsItemTemplate",
   ];
-  static values = {
-    loaded: Boolean,
-  };
 
   #headers = [];
   #disabled_classes = [
@@ -35,7 +32,6 @@ export default class extends Controller {
 
   connect() {
     this.#disableTarget(this.sampleIdColumnTarget);
-    this.metadataColumnsTarget.innerHTML = "";
   }
 
   changeSampleIDInput() {
@@ -59,10 +55,9 @@ export default class extends Controller {
       const worksheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[worksheetName];
       this.#headers = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
-      this.metadataColumnsTarget.innerHTML = "";
       this.#removeSampleIDInputOptions();
       this.#addSampleIDInputOptions();
-      this.#enableTarget(this.sampleIdColumnTarget);
+      this.metadataColumnsTarget.innerHTML = "";
     };
   }
 
@@ -78,6 +73,7 @@ export default class extends Controller {
       option.text = header;
       this.sampleIdColumnTarget.append(option);
     }
+    this.#enableTarget(this.sampleIdColumnTarget);
   }
 
   #addMetadataColumns() {
@@ -97,14 +93,14 @@ export default class extends Controller {
     );
 
     this.metadataColumnsTarget.innerHTML =
-      this.metadataColumnsTemplateTarget.innerHTML;
+      this.sortableListsTemplateTarget.innerHTML;
 
     columns.forEach((column) => {
       const template =
         this.sortableListsItemTemplateTarget.content.cloneNode(true);
       template.querySelector("li").innerText = column;
       template.querySelector("li").id = column.replace(/\s+/g, "-");
-      this.metadataColumnsTarget.querySelector("#Available").append(template);
+      this.metadataColumnsTarget.querySelector("#available").append(template);
     });
   }
 
