@@ -8,7 +8,7 @@ module WorkflowExecutions
 
     before_action :workflow_execution, only: [:index]
     before_action :attachment, only: [:index]
-    before_action :context_crumbs, only: [:index], if: -> { @attachment.present? && @workflow_execution.present? }
+    before_action :context_crumbs, only: [:index]
 
     def index
       return if @attachment.present?
@@ -21,8 +21,7 @@ module WorkflowExecutions
     private
 
     def workflow_execution
-      @workflow_execution = WorkflowExecution.find_by(id: params[:workflow_execution], submitter: current_user)
-      render 'shared/error/not_found', status: :not_found, layout: 'application' unless @workflow_execution
+      @workflow_execution = WorkflowExecution.find_by!(id: params[:workflow_execution], submitter: current_user)
     end
 
     def attachment
@@ -30,47 +29,33 @@ module WorkflowExecutions
     end
 
     def context_crumbs
-      @context_crumbs =
-        [{
-          name: I18n.t('workflow_executions.index.title'),
-          path: workflow_executions_path
-        },
-         {
-           name: @workflow_execution.name.presence || @workflow_execution.id,
-           path: workflow_execution_path(@workflow_execution)
-         }, {
-           name: @attachment.file.filename,
-           path: workflow_executions_attachments_path(
-             attachment: @attachment.id,
-             workflow_execution: @workflow_execution.id,
-             tab: 'files'
-           )
-         }]
+      @context_crumbs = [
+        workflow_executions_crumb,
+        workflow_execution_crumb,
+        attachment_crumb
+      ]
     end
 
-    def base_crumb
+    def workflow_executions_crumb
       {
         name: I18n.t('workflow_executions.index.title'),
         path: workflow_executions_path
       }
     end
 
-    def workflow_execution_crumbs
-      return [] unless @attachment.present? && @workflow_execution.present?
+    def workflow_execution_crumb
+      {
+        name: @workflow_execution.name.presence || @workflow_execution.id,
+        path: workflow_execution_path(@workflow_execution, tab: 'files'),
+        workflow_execution: @workflow_execution.id
+      }
+    end
 
-      [
-        {
-          name: @workflow_execution.name || @workflow_execution.id,
-          path: workflow_execution_path(@workflow_execution, tab: 'files')
-        },
-        {
-          name: @attachment.file.filename,
-          path: workflow_executions_attachments_path(
-            attachment: @attachment.id,
-            workflow_execution: @workflow_execution.id
-          )
-        }
-      ]
+    def attachment_crumb
+      {
+        name: @attachment.file.filename,
+        path: workflow_executions_attachments_path(attachment: @attachment.id)
+      }
     end
   end
 end
