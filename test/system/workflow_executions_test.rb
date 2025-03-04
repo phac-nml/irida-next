@@ -381,6 +381,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'can preview a file attachment for a workflow execution' do
+    Flipper.enable(:attachments_preview)
     workflow_execution = workflow_executions(:irida_next_example_completed_with_output)
     attachment = attachments(:project1Attachment2)
 
