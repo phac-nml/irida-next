@@ -77,17 +77,16 @@
     </div>
   </div>
 
-  <div
-    role="status"
-    id="spinner"
-    class="
-      hidden backdrop-blur-sm absolute h-full w-full -translate-x-1/2 -translate-y-1/2
-      top-2/4 left-1/2 grid place-items-center
-    "
-  >
-    <div class="grid place-items-center">
-      <%= viral_icon(name: :loading, classes: "animate-spin text-primary-500") %>
-      <span class="text-black dark:text-white"><%= t(:".spinner") %>.</span>
+    <div
+      role="status"
+      id="spinner"
+      class="absolute grid hidden w-full h-full -translate-x-1/2 -translate-y-1/2 backdrop-blur-sm top-2/4 left-1/2 place-items-center"
+    >
+      <div class="grid place-items-center">
+        <%= viral_icon(name: :loading, classes: "animate-spin text-primary-500") %>
+        <span class="text-black dark:text-white"><%= t(:".spinner") %>.</span>
+      </div>
     </div>
-  </div>
+
+  <% end %>
 <% end %>

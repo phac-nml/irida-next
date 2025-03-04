@@ -1,7 +1,7 @@
 <%= viral_dialog(open: open, id: "file_selector_form_dialog", size: :extra_large) do |dialog| %>
   <% dialog.with_header(title: t(".select_file")) %>
   <% if @listing_attachments.empty? %>
-    <div class="empty_state_message mb-2">
+    <div class="mb-2 empty_state_message">
       <%= viral_empty(
         title: t(".empty.title"),
         description: t(".empty.description"),
@@ -11,23 +11,17 @@
   <% else %>
     <%= form_with id: 'file_selector_form', url: workflow_executions_file_selector_index_path(file_selector: file_selector_params), method: :post do |form| %>
       <input type="hidden" name="format" value="turbo_stream"/>
-      <div class="table-container flex flex-col shrink min-h-0 mb-2">
+      <div class="flex flex-col min-h-0 mb-2 table-container shrink">
         <div class="overflow-auto scrollbar">
           <table
-            class='
-              w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-              whitespace-nowrap
-            '
+            class='w-full text-sm text-left  rtl:text-right text-slate-500 dark:text-slate-400 whitespace-nowrap'
           >
             <thead
-              class='
-                sticky top-0 z-10 text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
-                dark:text-slate-300
-              '
+              class='sticky top-0 z-10 text-xs uppercase  text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-300'
             >
               <tr>
                 <th
-                  class="sticky left-0 bg-slate-50 dark:bg-slate-700 px-3 py-3"
+                  class="sticky left-0 px-3 py-3 bg-slate-50 dark:bg-slate-700"
                   aria-hidden="true"
                 >
                 </th>
@@ -50,14 +44,11 @@
             </thead>
 
             <tbody
-              class='
-                overflow-y-auto bg-white divide-y divide-slate-200 dark:bg-slate-800
-                dark:divide-slate-700
-              '
+              class='overflow-y-auto bg-white divide-y  divide-slate-200 dark:bg-slate-800 dark:divide-slate-700'
             >
               <% @listing_attachments.each do |attachment| %>
                 <tr class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
-                  <td class="px-3 py-3 sticky left-0 bg-white dark:bg-slate-800">
+                  <td class="sticky left-0 px-3 py-3 bg-white dark:bg-slate-800">
                     <%= form.radio_button "attachment_id",
                                       attachment[:id],
                                       checked:
@@ -88,27 +79,27 @@
               <% end %>
               <% unless file_selector_params["required_properties"].present? && file_selector_params["required_properties"].include?(file_selector_params["property"]) %>
                 <tr class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
-                  <td class="px-3 py-3 sticky left-0 bg-white dark:bg-slate-800">
+                  <td class="sticky left-0 px-3 py-3 bg-white dark:bg-slate-800">
                     <%= form.radio_button "attachment_id",
                                       "no_attachment",
                                       checked: file_selector_params["selected_id"].empty?,
                                       class:
                                         "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-400" %>
 
-                  </td>
-                  <td class="px-3 py-3">
-                    <%= t(".no_file") %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
+                    </td>
+                    <td class="px-3 py-3">
+                      <%= t(".no_file") %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-      <% unless @listing_attachments.empty? %>
-        <%= form.submit t(".submit_button"),
-                    class:
-                      "inline-flex items-center justify-center text-sm border rounded-md cursor-pointer sm:w-auto focus:z-10 focus:outline-none text-white bg-primary-700 hover:bg-primary-800 focus:ring-0 rounded-md px-5 py-3 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 dark:border-primary-900 dark:hover:bg-primary-700" %>
+        <% unless @listing_attachments.empty? %>
+          <%= form.submit t(".submit_button"),
+                      class:
+                        "inline-flex items-center justify-center text-sm border rounded-md cursor-pointer sm:w-auto focus:z-10 focus:outline-none text-white bg-primary-700 hover:bg-primary-800 focus:ring-0 rounded-md px-5 py-3 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 dark:border-primary-900 dark:hover:bg-primary-700" %>
 
       <% end %>
     <% end %>

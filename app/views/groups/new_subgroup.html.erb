@@ -2,7 +2,7 @@
   <%= component.with_icon(name:"squares_plus", classes: "h-14 w-14 text-primary-700" ) %>
 <% end %>
 
-<div data-controller="slugify" class="p-4 bg-white border border-slate-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-slate-700 sm:p-6 dark:bg-slate-800">
+<div data-controller="slugify" class="p-4 bg-white border border-slate-200 rounded-lg shadow-xs 2xl:col-span-2 dark:border-slate-700 sm:p-6 dark:bg-slate-800">
   <%= form_with(model: @new_group, url: groups_path, method: :post, data: { controller: "viral--select2" }) do |form| %>
     <div class="grid gap-4">
 
