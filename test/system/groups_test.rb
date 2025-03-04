@@ -453,12 +453,12 @@ class GroupsTest < ApplicationSystemTestCase
       assert_selector 'li', count: 2
       within("#group_#{subgroup12a.id}") do
         assert_text subgroup12a.name
-        assert_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+        assert_selector 'svg[class="viral-icon__Svg icon-chevron_right"]'
       end
 
       within("#group_#{subgroup12b.id}") do
         assert_text subgroup12b.name
-        assert_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+        assert_selector 'svg[class="viral-icon__Svg icon-chevron_right"]'
       end
 
       assert_no_text subgroup12aa.name
@@ -472,7 +472,7 @@ class GroupsTest < ApplicationSystemTestCase
       assert_text subgroup12a.name
       assert_text subgroup12b.name
       assert_text subgroup12aa.name
-      assert_no_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+      assert_no_selector 'svg[class="viral-icon__Svg icon-chevron_right"]'
     end
   end
 
@@ -486,7 +486,7 @@ class GroupsTest < ApplicationSystemTestCase
       assert_selector 'li', count: 1
       within("#group_#{@subgroup2.id}") do
         assert_text @subgroup2.name
-        assert_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+        assert_selector 'svg[class="viral-icon__Svg icon-chevron_right"]'
       end
       assert_no_text subgroup3.name
       assert_no_selector "li#group_#{subgroup3.id}"
@@ -499,7 +499,7 @@ class GroupsTest < ApplicationSystemTestCase
     within('div.namespace-tree-container') do
       assert_selector 'li', count: 1
       assert_text subgroup3.name
-      assert_no_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+      assert_no_selector 'svg[class="viral-icon__Svg icon-chevron_right"]'
     end
   end
 
@@ -512,7 +512,7 @@ class GroupsTest < ApplicationSystemTestCase
       assert_selector 'li', count: 1
       within("#group_#{@subgroup2.id}") do
         assert_text @subgroup2.name
-        assert_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+        assert_selector 'svg[class="viral-icon__Svg icon-chevron_right"]'
       end
 
       subgroup_num = 3
@@ -536,7 +536,7 @@ class GroupsTest < ApplicationSystemTestCase
         subgroup_num += 1
       end
 
-      assert_no_selector 'svg[class="Viral-Icon__Svg icon-chevron_right"]'
+      assert_no_selector 'svg[class="viral-icon__Svg icon-chevron_right"]'
     end
   end
 
