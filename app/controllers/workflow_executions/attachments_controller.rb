@@ -11,7 +11,7 @@ module WorkflowExecutions
     before_action :context_crumbs, only: [:index]
 
     def index
-      return if @attachment.present?
+      return if @attachment.present? && Flipper.enabled?(:attachments_preview)
 
       redirect_back fallback_location: workflow_executions_path,
                     alert: I18n.t('workflow_executions.attachments.file_not_found')
