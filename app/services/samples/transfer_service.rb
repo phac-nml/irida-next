@@ -53,17 +53,16 @@ module Samples
       not_found_sample_ids = []
 
       sample_ids.each.with_index(1) do |sample_id, index|
-        sample = Sample.find_by!(id: sample_id, project_id: @project.id)
-        sample.update!(project_id: new_project_id)
-        transferred_samples_ids << sample_id
-        transferred_samples_puids << sample.puid
-
         stream_progress_update(
           'replace',
           'progress-index',
           "<div id='progress-index' class='hidden' data-progress-bar-target='progressIndex'>#{index}</div>",
           broadcast_target
         )
+        sample = Sample.find_by!(id: sample_id, project_id: @project.id)
+        sample.update!(project_id: new_project_id)
+        transferred_samples_ids << sample_id
+        transferred_samples_puids << sample.puid
       rescue ActiveRecord::RecordNotFound
         not_found_sample_ids << sample_id
         next
@@ -77,17 +76,17 @@ module Samples
                             I18n.t('services.samples.transfer.samples_not_found',
                                    sample_ids: not_found_sample_ids.join(', ')))
       end
-      if transferred_samples_ids.count.positive?
-        update_namespace_attributes(transferred_samples_ids, transferred_samples_puids, new_project_id)
-      end
+      return unless transferred_samples_ids.count.positive?
 
-      transferred_samples_ids
+      update_namespace_attributes(transferred_samples_ids, transferred_samples_puids, new_project_id,
+                                  broadcast_target)
     end
 
-    def update_namespace_attributes(transferred_samples_ids, transferred_samples_puids, new_project_id)
+    def update_namespace_attributes(transferred_samples_ids, transferred_samples_puids, new_project_id,
+                                    broadcast_target)
       create_activities(transferred_samples_ids, transferred_samples_puids)
       @project.namespace.update_metadata_summary_by_sample_transfer(transferred_samples_ids,
-                                                                    new_project_id)
+                                                                    new_project_id, broadcast_target)
       update_samples_count(transferred_samples_ids.count)
     end
 

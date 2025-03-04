@@ -36,9 +36,12 @@ module Samples
         @spreadsheet.each_with_index(parse_settings) do |metadata, index|
           next unless index.positive?
 
-          stream_progress_update('replace', 'progress-index',
-                                 "<div id='progress-index' class='hidden' data-progress-bar-target='progressIndex'>#{index + 1}</div>",
-                                 broadcast_target)
+          stream_progress_update(
+            'replace',
+            'progress-index',
+            "<div id='progress-index' class='hidden' data-progress-bar-target='progressIndex'>#{index + 1}</div>",
+            broadcast_target
+          )
 
           sample_id = metadata[@sample_id_column]
 

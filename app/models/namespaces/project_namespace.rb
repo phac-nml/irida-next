@@ -55,13 +55,15 @@ module Namespaces
     # self = the original parent of the transferred samples
     # new_project_id = the project ID receiving the new samples
     # transferred_samples_ids contains the IDs of the transferred samples
-    def update_metadata_summary_by_sample_transfer(transferred_samples_ids, new_project_id) # rubocop:disable Metrics/AbcSize
+    def update_metadata_summary_by_sample_transfer(transferred_samples_ids, new_project_id, broadcast_target) # rubocop:disable Metrics/AbcSize
       old_namespaces = [self] + parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
       new_project_namespace = Project.find(new_project_id).namespace
       new_namespaces =
         [new_project_namespace] +
         new_project_namespace.parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
-      transferred_samples_ids.each do |sample_id|
+      sample_count = transferred_samples_ids.count
+      transferred_samples_ids.each.with_index(1) do |sample_id, index|
+        broadcast_update(broadcast_target, (sample_count + index)) if broadcast_target
         sample = Sample.find(sample_id)
         next if sample.metadata.empty?
 
@@ -96,6 +98,15 @@ module Namespaces
       PublicActivity::Activity.where(
         trackable_id: id,
         trackable_type: 'Namespace'
+      )
+    end
+
+    def broadcast_update(broadcast_target, current_index)
+      Turbo::StreamsChannel.broadcast_action_to(
+        broadcast_target,
+        action: 'replace',
+        target: 'progress-index',
+        content: "<div id='progress-index' class='hidden' data-progress-bar-target='progressIndex'>#{current_index}</div>"
       )
     end
   end

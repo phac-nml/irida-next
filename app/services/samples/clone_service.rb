@@ -36,12 +36,16 @@ module Samples
       not_found_sample_ids = []
 
       sample_ids.each.with_index(1) do |sample_id, index|
+        stream_progress_update(
+          'replace',
+          'progress-index',
+          "<div id='progress-index' class='hidden' data-progress-bar-target='progressIndex'>#{index}</div>",
+          broadcast_target
+        )
         sample = Sample.find_by!(id: sample_id, project_id: @project.id)
         cloned_sample = clone_sample(sample)
         cloned_sample_ids[sample_id] = cloned_sample.id unless cloned_sample.nil?
         cloned_sample_puids[sample.puid] = cloned_sample.puid unless cloned_sample.nil?
-        stream_progress_update('replace', 'progress-index', "<div id='progress-index' class='hidden' data-progress-bar-target='progressIndex'>#{index}</div>",
-                               broadcast_target)
       rescue ActiveRecord::RecordNotFound
         not_found_sample_ids << sample_id
         next
@@ -54,8 +58,6 @@ module Samples
       end
 
       update_namespace_attributes(cloned_sample_ids, cloned_sample_puids) if cloned_sample_ids.count.positive?
-
-      cloned_sample_ids
     end
 
     def clone_sample(sample)
