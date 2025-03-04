@@ -4,9 +4,7 @@
   <%= turbo_frame_tag("deletion-alert") %>
 
   <div
-    class="
-      mb-4 font-normal text-slate-500 dark:text-slate-400 overflow-x-visible
-    "
+    class="mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400"
   >
     <p class="mb-4">
       <%= t("bots.destroy_confirmation.description", bot_name: bot_account.user.email) %>

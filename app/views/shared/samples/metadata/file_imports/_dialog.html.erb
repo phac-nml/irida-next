@@ -44,7 +44,7 @@
                               action: "change->metadata--file-import#readFile",
                             },
                             class:
-                              "block w-full text-sm text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 focus:outline-none dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
+                              "block w-full text-sm text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 focus:outline-hidden dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
             <p class="mt-1 text-sm text-slate-500 dark:text-slate-300"><%= t(".file_help") %></p>
           </div>
           <div class="form-field">
@@ -98,7 +98,7 @@
             <%= form.check_box :ignore_empty_values,
                            {
                              class:
-                               "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600",
+                               "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 rounded-sm focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600",
                            },
                            true,
                            false %>
@@ -108,7 +108,7 @@
             <%= viral_tooltip(title: t(:'.ignore_empty_values.description')) do %>
               <div
                 class="
-                  inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500
+                  inline-flex items-center justify-center shrink-0 w-8 h-8 text-blue-500
                   rounded-lg dark:text-blue-200
                 "
               >

@@ -35,17 +35,14 @@
                   class:
                     "focus:outline-none text-sm text-white bg-primary-700 hover:bg-primary-800 focus:ring-0 rounded-md p-2 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 cursor-pointer" %>
 
-      <button
-        type="button"
-        class="
-          focus:outline-none text-sm text-slate-900 border border-slate-200 bg-white
-          hover:bg-slate-100 hover:text-slate-950 focus:ring-0 rounded-md p-2
-          dark:text-white dark:bg-slate-600 dark:hover:bg-slate-700
-        "
-        data-action="click->viral--dialog#close"
-      >
-        <%= t("projects.workflow_executions.edit_dialog.cancel_button") %>
-      </button>
-    </div>
+        <button
+          type="button"
+          class="p-2 text-sm bg-white border rounded-md focus:outline-none text-slate-900 border-slate-200 hover:bg-slate-100 hover:text-slate-950 focus:ring-0 dark:text-white dark:bg-slate-600 dark:hover:bg-slate-700"
+          data-action="click->viral--dialog#close"
+        >
+          <%= t("projects.workflow_executions.edit_dialog.cancel_button") %>
+        </button>
+      </div>
+    <% end %>
   <% end %>
 <% end %>
