@@ -3,14 +3,7 @@
 module AxeHelpers
   AccessibilityError = Class.new(StandardError)
 
-  # Skip `:region` which relates to preview page structure rather than individual component.
-  # Skip `:aria-required-children` is broken in 4.5: https://github.com/dequelabs/axe-core/issues/3758
-  # Skip `:link-in-text-block` which is new and seems broken.
-  AXE_RULES_TO_SKIP = %i[
-    region
-    aria-required-children
-    link-in-text-block
-  ].freeze
+  AXE_RULES_TO_SKIP = %i[].freeze
 
   def format_accessibility_errors(violations) # rubocop:disable Metrics
     index = 0
