@@ -513,7 +513,7 @@ module Projects
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::TransferJob]
       end
@@ -571,7 +571,7 @@ module Projects
         ### ACTIONS END ###
 
         ### VERIFY START ###
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        assert_text I18n.t('shared.progress_bar.in_progress')
         # close button hidden during transfer
         assert_no_selector 'button.dialog--close'
         perform_enqueued_jobs only: [::Samples::TransferJob]
@@ -607,7 +607,7 @@ module Projects
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::TransferJob]
         ### ACTIONS END ###
@@ -662,7 +662,7 @@ module Projects
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{project25.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::TransferJob]
       end
@@ -764,7 +764,7 @@ module Projects
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::TransferJob]
       end
@@ -1578,7 +1578,7 @@ module Projects
       end
 
       ### VERIFY START ###
-      assert_text I18n.t('viral.progress_bar_component.in_progress')
+      assert_text I18n.t('shared.progress_bar.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       # success msg
@@ -1669,7 +1669,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('viral.progress_bar_component.in_progress')
+      assert_text I18n.t('shared.progress_bar.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       # success msg
@@ -1760,7 +1760,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('viral.progress_bar_component.in_progress')
+      assert_text I18n.t('shared.progress_bar.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
@@ -1804,7 +1804,7 @@ module Projects
           find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
           click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
         end
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        assert_text I18n.t('shared.progress_bar.in_progress')
         # dialog button hidden while importing
         assert_no_selector 'button.dialog--close'
       end
@@ -1837,7 +1837,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('viral.progress_bar_component.in_progress')
+      assert_text I18n.t('shared.progress_bar.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       within('#dialog') do
@@ -1891,7 +1891,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('viral.progress_bar_component.in_progress')
+      assert_text I18n.t('shared.progress_bar.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       ### VERIFY START ###
@@ -1951,7 +1951,7 @@ module Projects
         ### ACTIONS END ###
       end
       ### VERIFY START ###
-      assert_text I18n.t('viral.progress_bar_component.in_progress')
+      assert_text I18n.t('shared.progress_bar.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
@@ -1993,7 +1993,7 @@ module Projects
       end
       ### ACTIONS END ###
       ### VERIFY START ###
-      assert_text I18n.t('viral.progress_bar_component.in_progress')
+      assert_text I18n.t('shared.progress_bar.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       # error msg
@@ -2030,7 +2030,7 @@ module Projects
         ### ACTIONS END ###
       end
       ### VERIFY START ###
-      assert_text I18n.t('viral.progress_bar_component.in_progress')
+      assert_text I18n.t('shared.progress_bar.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       # error msg
@@ -2108,7 +2108,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('viral.progress_bar_component.in_progress')
+      assert_text I18n.t('shared.progress_bar.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       # sample 3 does not exist in current project
@@ -2166,7 +2166,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('viral.progress_bar_component.in_progress')
+      assert_text I18n.t('shared.progress_bar.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       assert_text I18n.t('services.samples.metadata.import_file.sample_metadata_fields_not_updated',
@@ -2305,7 +2305,7 @@ module Projects
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::CloneJob]
       end
@@ -2367,7 +2367,7 @@ module Projects
         ### ACTIONS END ###
 
         ### VERIFY START ###
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        assert_text I18n.t('shared.progress_bar.in_progress')
         # close button hidden during cloning
         assert_no_selector 'button.dialog--close'
         perform_enqueued_jobs only: [::Samples::CloneJob]
@@ -2403,7 +2403,7 @@ module Projects
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::CloneJob]
         ### ACTIONS END ###
@@ -2461,7 +2461,7 @@ module Projects
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{project25.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::CloneJob]
         ### ACTIONS END ###
@@ -2585,7 +2585,7 @@ module Projects
         find('input#select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
-        assert_text I18n.t('viral.progress_bar_component.in_progress')
+        assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::CloneJob]
       end

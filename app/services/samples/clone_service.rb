@@ -34,12 +34,10 @@ module Samples
       cloned_sample_ids = {}
       cloned_sample_puids = {}
       not_found_sample_ids = []
-
+      total_sample_count = sample_ids.count.to_f
       sample_ids.each.with_index(1) do |sample_id, index|
-        stream_progress_update(
-          'replace',
-          'progress-index',
-          "<div id='progress-index' class='hidden' data-progress-bar-target='progressIndex'>#{index}</div>",
+        update_progress_bar(
+          (index / total_sample_count * 100),
           broadcast_target
         )
         sample = Sample.find_by!(id: sample_id, project_id: @project.id)

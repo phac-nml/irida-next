@@ -24,7 +24,6 @@ module ViewHelper
     prefixed_select2: 'Viral::Form::Prefixed::Select2Component',
     prefixed_text_input: 'Viral::Form::Prefixed::TextInputComponent',
     pill: 'Viral::PillComponent',
-    progress_bar: 'Viral::ProgressBarComponent',
     select2: 'Viral::Select2Component',
     select2option: 'Viral::Select2OptionComponent',
     select: 'Viral::Form::SelectComponent',

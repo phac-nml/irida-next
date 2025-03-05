@@ -6,5 +6,5 @@
                     } %>
 
 <%= turbo_stream.update "transfer_samples_dialog_content" do %>
-  <%= render Viral::ProgressBarComponent.new(items_to_complete: (@samples_count)) %>
+  <%= render partial: "shared/progress_bar" %>
 <% end %>
