@@ -8,6 +8,7 @@ Flipper.enable(:workflow_execution_sharing)
 Flipper.enable(:metadata_import_field_selection)
 Flipper.enable(:progress_bars)
 Flipper.enable(:update_nextflow_metadata_param)
+Flipper.enable(:attachments_preview)
 
 @namespace_group_link_expiry_date = (Time.zone.today + 14).strftime('%Y-%m-%d')
 
