@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import * as XLSX from "xlsx";
 
 export default class extends Controller {
-  static targets = ["selectInput", "submitButton", "samplesCount"];
+  static targets = ["selectInput", "submitButton"];
   static values = {
     loaded: Boolean,
   };
@@ -73,7 +73,7 @@ export default class extends Controller {
     reader.readAsArrayBuffer(files[0]);
 
     reader.onload = () => {
-      const workbook = XLSX.read(reader.result);
+      const workbook = XLSX.read(reader.result, { sheetRows: 1 });
       const worksheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[worksheetName];
       this.#headers = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];

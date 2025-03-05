@@ -14,7 +14,6 @@ module FileImportActions
 
   def create # rubocop:disable Metrics/AbcSize
     @broadcast_target = params[:broadcast_target]
-    @samples_count = params[:samples_count]
     blob = ActiveStorage::Blob.create_and_upload!(
       io: file_import_params[:file],
       filename: file_import_params[:file].original_filename,
