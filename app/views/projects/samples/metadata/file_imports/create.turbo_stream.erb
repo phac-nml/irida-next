@@ -7,5 +7,5 @@
                     } %>
 
 <%= turbo_stream.update "import_metadata_dialog_content" do %>
-  <%= render partial: "shared/progress_bar" %>
+  <%= render partial: "shared/progress_bar", locals: { percentage: 0 }  %>
 <% end %>
