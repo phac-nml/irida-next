@@ -483,6 +483,28 @@ irida_next_example_completing_g:
   email_notification: true
   cleaned: false
 
+irida_next_example_completing_h:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
+  run_id: "my_run_id_h"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
+  state: "completing"
+  blob_run_directory: "not a run dir"
+  update_samples: true
+  cleaned: false
+
 irida_next_example_completed_with_output:
   <<: *DEFAULTS
   metadata:

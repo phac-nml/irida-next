@@ -173,6 +173,36 @@ module WorkflowExecutions
         blob_run_directory: blob_run_directory_e
       )
 
+      # normal3/
+      # get a new secure token for each workflow execution
+      @workflow_execution_with_deleted_samples = workflow_executions(:irida_next_example_completing_h)
+      blob_run_directory_h = ActiveStorage::Blob.generate_unique_secure_token
+      @workflow_execution_with_deleted_samples.blob_run_directory = blob_run_directory_h
+
+      # create file blobs
+      # create file blobs
+      @normal2_output_json_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal2/iridanext.output.json',
+        blob_run_directory: blob_run_directory_h,
+        gzip: true
+      )
+      @normal2_output_summary_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal2/summary.txt',
+        blob_run_directory: blob_run_directory_h
+      )
+      @normal2_output_analysis1_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal2/analysis1.txt',
+        blob_run_directory: blob_run_directory_h
+      )
+      @normal2_output_analysis2_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal2/analysis2.txt',
+        blob_run_directory: blob_run_directory_h
+      )
+      @normal2_output_analysis3_file_blob = make_and_upload_blob(
+        filepath: 'test/fixtures/files/blob_outputs/normal2/analysis3.txt',
+        blob_run_directory: blob_run_directory_h
+      )
+
       # associated test samples
       @sample_a = samples(:sampleA)
       @sample_b = samples(:sampleB)
@@ -561,6 +591,32 @@ module WorkflowExecutions
 
       assert_equal 1, @sample42.attachments.count
       assert_equal 'analysis3.txt', @sample42.attachments[0].filename.to_s
+
+      assert_equal 'completed', workflow_execution.state
+
+      assert_no_enqueued_emails
+
+      assert_nil PublicActivity::Activity.find_by(
+        trackable_id: workflow_execution.namespace.id,
+        trackable_type: 'Namespace'
+      )
+    end
+
+    test 'completes workflow execution with deleted samples' do
+      workflow_execution = @workflow_execution_with_deleted_samples
+
+      assert 'completing', workflow_execution.state
+
+      assert_equal 'my_run_id_h', workflow_execution.run_id
+
+      assert @sample41.attachments.empty?
+      assert @sample42.attachments.empty?
+
+      assert WorkflowExecutions::CompletionService.new(workflow_execution, {}).execute
+
+      assert_equal 0, @sample41.attachments.count
+
+      assert_equal 0, @sample42.attachments.count
 
       assert_equal 'completed', workflow_execution.state
 

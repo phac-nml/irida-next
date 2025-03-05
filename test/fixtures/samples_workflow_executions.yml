@@ -155,43 +155,85 @@ sample1_irida_next_example_new:
 
 sample41_irida_next_example_completing_c:
   sample_id: <%= ActiveRecord::FixtureSet.identify(:sample41, :uuid) %>
+  samplesheet_params: {
+    "sample": "INXT_SAM_AAAAAAAABQ"
+  }
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_c, :uuid) %>
 
 sample42_irida_next_example_completing_c:
   sample_id: <%= ActiveRecord::FixtureSet.identify(:sample42, :uuid) %>
+  samplesheet_params: {
+    "sample": "INXT_SAM_AAAAAAAABR"
+  }
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_c, :uuid) %>
 
 sample41_irida_next_example_completing_d:
   sample_id: <%= ActiveRecord::FixtureSet.identify(:sample41, :uuid) %>
+  samplesheet_params: {
+    "sample": "INXT_SAM_AAAAAAAABQ"
+  }
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_d, :uuid) %>
 
 sample42_irida_next_example_completing_d:
   sample_id: <%= ActiveRecord::FixtureSet.identify(:sample42, :uuid) %>
+  samplesheet_params: {
+    "sample": "INXT_SAM_AAAAAAAABR"
+  }
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_d, :uuid) %>
 
 sample41_irida_next_example_completing_e:
   sample_id: <%= ActiveRecord::FixtureSet.identify(:sample41, :uuid) %>
+  samplesheet_params: {
+    "sample": "INXT_SAM_AAAAAAAABQ"
+  }
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_e, :uuid) %>
 
 sample42_irida_next_example_completing_e:
   sample_id: <%= ActiveRecord::FixtureSet.identify(:sample42, :uuid) %>
+  samplesheet_params: {
+    "sample": "INXT_SAM_AAAAAAAABR"
+  }
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_e, :uuid) %>
 
 sample41_irida_next_example_completing_f:
   sample_id: <%= ActiveRecord::FixtureSet.identify(:sample41, :uuid) %>
+  samplesheet_params: {
+    "sample": "INXT_SAM_AAAAAAAABQ"
+  }
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_f, :uuid) %>
 
 sample42_irida_next_example_completing_f:
   sample_id: <%= ActiveRecord::FixtureSet.identify(:sample42, :uuid) %>
+  samplesheet_params: {
+    "sample": "INXT_SAM_AAAAAAAABR"
+  }
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_f, :uuid) %>
 
 sampleA_irida_next_example_completing_g:
   sample_id: <%= ActiveRecord::FixtureSet.identify(:sampleA, :uuid) %>
+  samplesheet_params: {
+    "sample": "INXT_SAM_AAAAAAAAA3"
+  }
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_g, :uuid) %>
 
 sampleB_irida_next_example_completing_g:
   sample_id: <%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>
+  samplesheet_params: {
+    "sample": "INXT_SAM_AAAAAAAAA4"
+  }
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_g, :uuid) %>
+
+sample41_irida_next_example_completing_h:
+  samplesheet_params: {
+    "sample": "INXT_SAM_AAAAAAAABQ"
+  }
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_h, :uuid) %>
+
+sample42_irida_next_example_completing_h:
+  samplesheet_params: {
+    "sample": "INXT_SAM_AAAAAAAABR"
+  }
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_h, :uuid) %>
 
 sample46_irida_next_example_completed_with_output:
   sample_id: <%= ActiveRecord::FixtureSet.identify(:sample46, :uuid) %>
