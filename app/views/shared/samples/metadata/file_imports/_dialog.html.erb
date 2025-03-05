@@ -7,10 +7,14 @@
       <%= turbo_frame_tag "import_metadata_dialog_alert" %>
 
       <div
+        <% if Flipper.enabled?(:metadata_import_field_selection) %>
         data-controller="metadata--file-import viral--sortable-lists--two-lists-selection"
         data-viral--sortable-lists--two-lists-selection-selected-list-value="selected"
         data-viral--sortable-lists--two-lists-selection-available-list-value="available"
         data-viral--sortable-lists--two-lists-selection-field-name-value="file_import[metadata_columns][]"
+        <% else %>
+        data-controller="metadata--file-import"
+        <% end%>
       >
 
         <%= form_for(:file_import, url: url, method: :post) do |form| %>
@@ -122,6 +126,7 @@
                             action:
                               "click->viral--sortable-lists--two-lists-selection#constructParams",
                             "viral--sortable-lists--two-lists-selection-target": "submitBtn",
+                            "metadata--file-import-target": "submitButton",
                           },
                           disabled: true %>
             </div>

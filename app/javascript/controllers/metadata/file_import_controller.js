@@ -7,6 +7,7 @@ export default class extends Controller {
     "metadataColumns",
     "sortableListsTemplate",
     "sortableListsItemTemplate",
+    "submitButton",
   ];
 
   #headers = [];
@@ -35,7 +36,11 @@ export default class extends Controller {
   }
 
   changeSampleIDInput() {
-    this.#addMetadataColumns();
+    if (this.hasMetadataColumnsTarget) {
+      this.#addMetadataColumns();
+    } else {
+      this.submitButtonTarget.disabled = false;
+    }
   }
 
   readFile(event) {
@@ -57,7 +62,9 @@ export default class extends Controller {
       this.#headers = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
       this.#removeSampleIDInputOptions();
       this.#addSampleIDInputOptions();
-      this.metadataColumnsTarget.innerHTML = "";
+      if (this.hasMetadataColumnsTarget) {
+        this.metadataColumnsTarget.innerHTML = "";
+      }
     };
   }
 
