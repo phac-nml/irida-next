@@ -5,6 +5,7 @@ require 'faker'
 Faker::Config.locale = 'en'
 
 Flipper.enable(:workflow_execution_sharing)
+Flipper.enable(:attachments_preview)
 
 @namespace_group_link_expiry_date = (Time.zone.today + 14).strftime('%Y-%m-%d')
 
