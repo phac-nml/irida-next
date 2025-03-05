@@ -52,9 +52,9 @@ module Namespaces
       add_to_metadata_summary_count(namespaces_to_update, added_metadata, true) unless added_metadata.empty?
     end
 
-    # self = the original parent of the transferred samples
-    # new_project_id = the project ID receiving the new samples
-    # transferred_samples_ids contains the IDs of the transferred samples
+    # transferred_sample_id = sample being transferred
+    # old_namespaces = namespaces sample originally belonged to
+    # new_namespaces = namespaces sample are being transferred to
     def update_metadata_summary_by_sample_transfer(transferred_sample_id, old_namespaces, new_namespaces)
       sample = Sample.find(transferred_sample_id)
       return if sample.metadata.empty?

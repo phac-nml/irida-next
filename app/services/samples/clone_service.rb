@@ -36,10 +36,7 @@ module Samples
       not_found_sample_ids = []
       total_sample_count = sample_ids.count.to_f
       sample_ids.each.with_index(1) do |sample_id, index|
-        update_progress_bar(
-          (index / total_sample_count * 100),
-          broadcast_target
-        )
+        update_progress_bar(index, total_sample_count, broadcast_target)
         sample = Sample.find_by!(id: sample_id, project_id: @project.id)
         cloned_sample = clone_sample(sample)
         cloned_sample_ids[sample_id] = cloned_sample.id unless cloned_sample.nil?

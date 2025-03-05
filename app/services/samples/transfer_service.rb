@@ -51,14 +51,11 @@ module Samples
       transferred_samples_ids = []
       transferred_samples_puids = []
       not_found_sample_ids = []
-      old_namespaces = namespaces_for_transfer(@project)
-      new_namespaces = namespaces_for_transfer(@new_project)
+      old_namespaces = namespaces_for_transfer(@project.namespace)
+      new_namespaces = namespaces_for_transfer(@new_project.namespace)
       total_sample_count = sample_ids.count.to_f
       sample_ids.each.with_index(1) do |sample_id, index|
-        update_progress_bar(
-          (index / total_sample_count * 100),
-          broadcast_target
-        )
+        update_progress_bar(index, total_sample_count, broadcast_target)
         sample = Sample.find_by!(id: sample_id, project_id: @project.id)
         sample.update!(project_id: new_project_id)
         transferred_samples_ids << sample_id
@@ -123,8 +120,7 @@ module Samples
       end
     end
 
-    def namespaces_for_transfer(project)
-      project_namespace = project.namespace
+    def namespaces_for_transfer(project_namespace)
       [project_namespace] +
         project_namespace.parent.self_and_ancestors.where.not(type: Namespaces::UserNamespace.sti_name)
     end

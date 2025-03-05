@@ -24,7 +24,7 @@ module Samples
 
       protected
 
-      def perform_file_import(broadcast_target) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      def perform_file_import(broadcast_target) # rubocop:disable Metrics/MethodLength
         response = {}
         headers = if Flipper.enabled?(:metadata_import_field_selection)
                     @selected_headers << @sample_id_column
@@ -36,7 +36,7 @@ module Samples
         @spreadsheet.each_with_index(parse_settings) do |metadata, index|
           next unless index.positive?
 
-          update_progress_bar((index / total_sample_count * 100), broadcast_target)
+          update_progress_bar(index, total_sample_count, broadcast_target)
 
           sample_id = metadata[@sample_id_column]
 
