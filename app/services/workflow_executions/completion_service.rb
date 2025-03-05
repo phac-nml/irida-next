@@ -97,8 +97,6 @@ module WorkflowExecutions
           puid: sample_file_paths_tuple[:sample_puid]
         )
 
-        next if samples_workflow_execution.sample.nil?
-
         @attachable_blobs_tuple_list.append({ attachable: samples_workflow_execution,
                                               blob_id_list: sample_file_blob_list })
       end
