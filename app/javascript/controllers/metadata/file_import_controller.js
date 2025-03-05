@@ -35,20 +35,32 @@ export default class extends Controller {
     this.#disableTarget(this.sampleIdColumnTarget);
   }
 
-  changeSampleIDInput() {
-    if (this.hasMetadataColumnsTarget) {
-      this.#addMetadataColumns();
+  changeSampleIDInput(event) {
+    const { value } = event.target;
+
+    if (value) {
+      if (this.hasMetadataColumnsTarget) {
+        this.#addMetadataColumns();
+      } else {
+        this.submitButtonTarget.disabled = false;
+      }
     } else {
-      this.submitButtonTarget.disabled = false;
+      if (this.hasMetadataColumnsTarget) {
+        this.#removeMetadataColumns();
+      } else {
+        this.submitButtonTarget.disabled = true;
+      }
     }
   }
 
   readFile(event) {
     const { files } = event.target;
 
+    this.#removeSampleIDInputOptions();
+    this.#removeMetadataColumns();
+    this.submitButtonTarget.disabled = true;
+
     if (!files.length) {
-      this.#removeSampleIDInputOptions();
-      this.metadataColumnsTarget.innerHTML = "";
       return;
     }
 
@@ -60,12 +72,14 @@ export default class extends Controller {
       const worksheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[worksheetName];
       this.#headers = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
-      this.#removeSampleIDInputOptions();
       this.#addSampleIDInputOptions();
-      if (this.hasMetadataColumnsTarget) {
-        this.metadataColumnsTarget.innerHTML = "";
-      }
     };
+  }
+
+  #removeMetadataColumns() {
+    if (this.hasMetadataColumnsTarget) {
+      this.metadataColumnsTarget.innerHTML = "";
+    }
   }
 
   #removeSampleIDInputOptions() {
