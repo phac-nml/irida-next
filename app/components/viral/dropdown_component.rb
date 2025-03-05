@@ -55,7 +55,7 @@ module Viral
     def system_arguments_for_button
       {
         classes: class_names(
-          'viral-dropdown--button',
+          'viral-dropdown--button cursor-pointer',
           system_arguments[:classes]
         )
       }
