@@ -75,7 +75,7 @@ module WorkflowExecutions
     end
 
     def process_global_file_paths(output_global_file_paths:)
-      # Handle ouput files for workflow execution
+      # Handle output files for workflow execution
       global_file_blob_list = []
       output_global_file_paths&.each do |blob_file_path|
         global_file_blob_list.append(download_and_make_new_blob(blob_file_path:))
@@ -97,13 +97,19 @@ module WorkflowExecutions
           puid: sample_file_paths_tuple[:sample_puid]
         )
 
+        next if samples_workflow_execution.sample.nil?
+
         @attachable_blobs_tuple_list.append({ attachable: samples_workflow_execution,
                                               blob_id_list: sample_file_blob_list })
       end
     end
 
     def get_samples_workflow_executions_by_sample_puid(puid:)
-      @workflow_execution.samples_workflow_executions.joins(:sample).find_by(sample: { puid: })
+      @workflow_execution.samples_workflow_executions.find_by(
+        Arel::Nodes::InfixOperation.new(
+          '->>', SamplesWorkflowExecution.arel_table[:samplesheet_params], Arel::Nodes::Quoted.new('sample')
+        ).eq(puid)
+      )
     end
 
     def attach_blobs_to_attachables
@@ -129,7 +135,7 @@ module WorkflowExecutions
 
     def merge_metadata_onto_samples
       @workflow_execution.samples_workflow_executions&.each do |swe|
-        next if swe.metadata.nil?
+        next if swe.sample.nil? || swe.metadata.nil?
 
         params = {
           'metadata' => swe.metadata,
@@ -144,7 +150,7 @@ module WorkflowExecutions
 
     def put_output_attachments_onto_samples
       @workflow_execution.samples_workflow_executions&.each do |swe|
-        next if swe.outputs.empty?
+        next if swe.sample.nil? || swe.outputs.empty?
 
         files = swe.outputs.map { |output| output.file.signed_id }
         params = { files:, include_activity: false }
@@ -158,7 +164,7 @@ module WorkflowExecutions
       return unless current_user.automation_bot?
 
       @workflow_execution.samples_workflow_executions&.each do |swe|
-        next if swe.metadata.nil? && swe.outputs.empty?
+        next if swe.sample.nil? || (swe.metadata.nil? && swe.outputs.empty?)
 
         if !swe.metadata.nil? && !swe.outputs.empty?
           @workflow_execution.namespace.create_activity key: 'workflow_execution.automated_workflow_completion.outputs_and_metadata_written', # rubocop:disable Layout/LineLength
