@@ -1,11 +1,17 @@
 <aside
   id="sidebar"
-  class="flex flex-col text-sm border-r sidebar border-slate-200 bg-slate-50 dark:border-slate-950 dark:bg-slate-900"
+  class="
+    flex flex-col text-sm border-r sidebar border-slate-200 bg-slate-50
+    dark:border-slate-950 dark:bg-slate-900
+  "
   aria-label="Sidebar"
 >
   <div class="grow">
     <div
-      class="flex overflow-x-hidden justify-between items-center px-2 whitespace-nowrap bg-slate-200 dark:bg-slate-950"
+      class="
+        flex overflow-x-hidden justify-between items-center px-2 whitespace-nowrap
+        bg-slate-200 dark:bg-slate-950
+      "
       style="height: 50px;"
     >
       <a href="<%= root_path %>" class="whitespace-nowrap">
@@ -18,11 +24,13 @@
         </span>
       </a>
       <div
-        class="flex flex-row shrink-0 justify-end items-center space-x-1 space-y-1"
+        class="
+          flex flex-row shrink-0 justify-end items-center space-x-1 space-y-1
+        "
       >
         <button
           data-action="click->layout#collapse"
-          class="navbar-button"
+          class="navbar-button cursor-pointer"
           aria-label="<%= t(:'general.navbar.collapse.aria_label') %>"
         >
           <%= viral_icon(name: "sidebar", classes: "w-6 h-6") %>
@@ -63,12 +71,19 @@
       data-viral--dropdown-position-value="bottom-start"
     >
       <button
-        class="py-2 w-full rounded-md border transition-colors duration-200 border-slate-400 bg-slate-100 dark:bg-slate-900 hover:bg-slate-300 dark:hover:bg-slate-950 dark:border-slate-800 dark:text-slate-200"
+        class="
+          py-2 w-full rounded-md border transition-colors duration-200 border-slate-400
+          bg-slate-100 dark:bg-slate-900 hover:bg-slate-300 dark:hover:bg-slate-950
+          dark:border-slate-800 dark:text-slate-200 cursor-pointer
+        "
         data-viral--dropdown-target='trigger'
       ><%= t(:"general.default_sidebar.goto") %></button>
       <div
         data-viral--dropdown-target="menu"
-        class="hidden z-20 mx-3 w-56 bg-white rounded-lg divide-y shadow-sm divide-slate-100 dark:bg-slate-700"
+        class="
+          hidden z-20 mx-3 w-56 bg-white rounded-lg divide-y shadow-sm divide-slate-100
+          dark:bg-slate-700
+        "
       >
         <h3 class="py-2 pl-4 font-semibold text-slate-900 dark:text-white">
           <%= t(:"general.default_sidebar.title") %>
