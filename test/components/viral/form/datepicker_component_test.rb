@@ -9,14 +9,14 @@ module Viral
         render_preview(:default)
         assert_no_selector 'label'
         assert_selector 'input[type="text"]', count: 1
-        assert_selector '.Viral-Icon', count: 1
+        assert_selector '.viral-icon', count: 1
       end
 
       test 'with label' do
         render_preview(:with_label)
         assert_selector 'label', text: 'Pick a date'
         assert_selector 'input[type="text"]', count: 1
-        assert_selector '.Viral-Icon', count: 1
+        assert_selector '.viral-icon', count: 1
       end
 
       test 'with help text' do
