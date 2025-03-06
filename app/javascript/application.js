@@ -1,9 +1,11 @@
 // Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
 import "@hotwired/turbo-rails";
 import "controllers";
-import * as ActiveStorage from "@rails/activestorage";
-import LocalTime from "local-time";
 import "flowbite";
+
+import * as ActiveStorage from "@rails/activestorage";
+
+import LocalTime from "local-time";
 
 LocalTime.start();
 ActiveStorage.start();
@@ -12,7 +14,7 @@ document.addEventListener("turbo:morph", () => {
   LocalTime.run();
 });
 
-Turbo.setConfirmMethod((message, element) => {
+Turbo.config.forms.confirm = (message, element) => {
   const dialog = document.getElementById("turbo-confirm");
   if (!dialog) {
     console.error(
@@ -63,4 +65,4 @@ Turbo.setConfirmMethod((message, element) => {
       { once: true },
     );
   });
-});
+};
