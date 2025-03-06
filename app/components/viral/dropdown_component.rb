@@ -64,7 +64,7 @@ module Viral
     def system_arguments_for_icon
       {
         classes: class_names(
-          'viral-dropdown--icon',
+          'viral-dropdown--icon cursor-pointer',
           system_arguments[:classes]
         )
       }

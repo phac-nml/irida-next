@@ -3,17 +3,8 @@
   <button
     type="button"
     class="
-      flex
-      w-full
-      items-center
-      mt-1
-      p-3
-      transition-colors
-      ease-in-out
-      delay-75
-      hover:bg-slate-200
-      dark:text-slate-200
-      dark:hover:bg-slate-700
+      flex w-full items-center mt-1 p-3 transition-colors ease-in-out delay-75
+      hover:bg-slate-200 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer
     "
     aria-controls="<%= control_id %>"
     data-action="collapsible#toggle"
@@ -21,13 +12,17 @@
     <%= viral_icon(
       name: icon,
       classes:
-        "shrink-0 w-5 h-5 ml-1 text-slate-800 transition duration-75 group-hover:text-slate-900 dark:text-slate-400 dark:group-hover:text-white"
+        "shrink-0 w-5 h-5 ml-1 text-slate-800 transition duration-75 group-hover:text-slate-900 dark:text-slate-400 dark:group-hover:text-white",
     ) %>
     <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap"><%= title %></span>
     <%= viral_icon(
       name: "chevron_down",
-      classes: class_names('mr-0 w-4 h-4', { 'rotate-180': selectable_pages.include?(current_page) }),
-      "data-collapsible-target": "icon"
+      classes:
+        class_names(
+          "mr-0 w-4 h-4",
+          { "rotate-180": selectable_pages.include?(current_page) },
+        ),
+      "data-collapsible-target": "icon",
     ) %>
   </button>
   <ul
@@ -38,20 +33,10 @@
     <% menu_items.each do |menu_item| %>
       <li class="Layout-Sidebar-MultiLevelMenu__Item">
         <a
-          href=<%= menu_item.url %>
+          href="<%= menu_item.url %>"
           class="
-            flex
-            w-full
-            items-center
-            p-2
-            text-slate-900
-            t
-            delay-75
-            pl-11
-            group
-            hover:bg-slate-200
-            dark:text-white
-            dark:hover:bg-slate-700
+            flex w-full items-center p-2 text-slate-900 t delay-75 pl-11 group
+            hover:bg-slate-200 dark:text-white dark:hover:bg-slate-700
           "
         >
           <%= render Layout::Sidebar::SelectedComponent.new(selected: menu_item.selected) %>
