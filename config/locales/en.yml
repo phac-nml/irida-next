@@ -1802,6 +1802,9 @@ en:
       samples_list_skeleton:
         loading: Loading...
     samples:
+      file_imports:
+        dialog:
+          spinner_message: Importing samples, this might take a while...
       metadata:
         editing_field_cell:
           dialog:
