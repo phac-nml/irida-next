@@ -37,4 +37,3 @@ module MetadataFileImportActions
     params.require(:file_import).permit(:file, :sample_id_column, :ignore_empty_values, metadata_columns: [])
   end
 end
-
