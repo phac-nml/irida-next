@@ -32,7 +32,8 @@ module Samples
                     @headers
                   end
         parse_settings = headers.zip(headers).to_h
-        row_count = @spreadsheet.last_row - 1
+        # minus 1 to exclude header
+        total_sample_count = @spreadsheet.count - 1
         @spreadsheet.each_with_index(parse_settings) do |metadata, index|
           next unless index.positive?
 
