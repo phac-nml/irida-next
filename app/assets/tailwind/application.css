@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @plugin 'flowbite/plugin';
 
@@ -41,7 +41,7 @@
   display: grid;
   grid-template-columns: 280px 1fr;
   grid-template-rows: 1fr;
-  @apply w-screen h-screen transition-all;
+  @apply h-screen w-screen transition-all;
 
   &.collapsed {
     grid-template-columns: 0 1fr;
@@ -55,24 +55,24 @@
 }
 
 @utility sidebar {
-  grid-template-areas: 'navigation' 'collapse';
+  grid-template-areas: "navigation" "collapse";
   grid-template-rows: 1fr 40px;
   overflow-x: hidden;
 }
 
 @utility navbar-button {
-  @apply p-1 text-sm rounded-md text-slate-500 hover:bg-slate-300 focus:outline-hidden focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+  @apply focus:outline-hidden rounded-md p-1 text-sm text-slate-500 hover:bg-slate-300 focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
 
   & button.viral-dropdown--icon {
-    @apply p-1 text-sm rounded-md text-slate-500 hover:bg-slate-300 focus:outline-hidden focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+    @apply focus:outline-hidden rounded-md p-1 text-sm text-slate-500 hover:bg-slate-300 focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
   }
 }
 
 @utility viral-dropdown--icon {
   & button.navbar-button {
-    @apply p-1 text-sm rounded-md text-slate-500 hover:bg-slate-300 focus:outline-hidden focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+    @apply focus:outline-hidden rounded-md p-1 text-sm text-slate-500 hover:bg-slate-300 focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
   }
-  @apply rounded-md text-sm text-slate-500 p-2.5 hover:bg-slate-100 focus:outline-hidden focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+  @apply focus:outline-hidden rounded-md p-2.5 text-sm text-slate-500 hover:bg-slate-100 focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
 }
 
 @utility link {
@@ -80,55 +80,55 @@
 }
 
 @utility card {
-  @apply p-4 border rounded-md shadow-xs bg-slate-50 border-slate-200 dark:border-slate-700 sm:p-6 dark:bg-slate-800;
+  @apply shadow-xs rounded-md border border-slate-200 bg-slate-50 p-4 sm:p-6 dark:border-slate-700 dark:bg-slate-800;
 }
 
 @utility form-field {
   & label {
-    @apply block mb-1 text-sm font-medium text-slate-900 dark:text-white;
+    @apply mb-1 block text-sm font-medium text-slate-900 dark:text-white;
   }
 
   & div.field_with_errors {
     @apply block w-full;
   }
 
-  & input[type='text'] {
-    @apply border border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500;
+  & input[type="text"] {
+    @apply focus:ring-primary-600 focus:border-primary-600 block w-full rounded-md border border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 
-  & input[type='search'] {
-    @apply border border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500;
+  & input[type="search"] {
+    @apply focus:ring-primary-600 focus:border-primary-600 block w-full rounded-md border border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 
-  & input[type='password'] {
-    @apply border border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500;
+  & input[type="password"] {
+    @apply focus:ring-primary-600 focus:border-primary-600 block w-full rounded-md border border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 
-  & input[type='email'] {
-    @apply border border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500;
+  & input[type="email"] {
+    @apply focus:ring-primary-600 focus:border-primary-600 block w-full rounded-md border border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 
-  & input[type='text'].prefixed {
+  & input[type="text"].prefixed {
     @apply rounded-l-none rounded-r-md;
   }
 
-  & input[type='search'].prefixed {
+  & input[type="search"].prefixed {
     @apply rounded-l-none rounded-r-md;
   }
 
-  & input[type='password'].prefixed {
+  & input[type="password"].prefixed {
     @apply rounded-l-none rounded-r-md;
   }
 
-  & input[type='email'].prefixed {
+  & input[type="email"].prefixed {
     @apply rounded-l-none rounded-r-md;
   }
 
-  &.datepicker input[type='text'] {
-    @apply border border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-700 focus:border-primary-700 block w-full pl-10 p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+  &.datepicker input[type="text"] {
+    @apply focus:ring-primary-700 focus:border-primary-700 block w-full rounded-md border border-slate-300 p-2.5 pl-10 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-blue-500 dark:focus:ring-blue-500;
   }
 
-  & .select2 input[type='text'] {
+  & .select2 input[type="text"] {
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' aria-hidden='true' viewBox='0 0 10 6'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 1 4 4 4-4'/%3E%3C/svg%3E");
     background-position: right 0.75rem center;
     background-repeat: no-repeat;
@@ -139,19 +139,19 @@
   }
 
   & select {
-    @apply border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500;
+    @apply focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-md border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 
   & select option {
-    @apply border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500;
+    @apply focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-md border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 
-  & select:has(option[value='']:checked) {
+  & select:has(option[value=""]:checked) {
     @apply text-gray-500 dark:text-slate-400;
   }
 
   & select.error {
-    @apply border-red-500 text-slate-900 sm:text-sm rounded-md focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-slate-800 dark:border-red-400 dark:placeholder-slate-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500;
+    @apply block w-full rounded-md border-red-500 p-2.5 text-slate-900 focus:border-red-500 focus:ring-red-500 sm:text-sm dark:border-red-400 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-red-500 dark:focus:ring-red-500;
   }
 
   & select.prefixed {
@@ -165,27 +165,27 @@
     line-height: inherit;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
-    @apply rounded-r-md border p-2.5 block w-full bg-white border-slate-300 text-sm text-slate-900 focus:border-green-500 focus:ring-green-500 dark:placeholder-slate-400 dark:shadow-sm-light dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply block w-full rounded-r-md border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-green-500 focus:ring-green-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:drop-shadow-sm dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 
   &.invalid label {
     @apply text-red-700 dark:text-red-500;
   }
 
-  &.invalid input[type='text'] {
-    @apply placeholder-red-700 border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500 dark:placeholder-red-300 dark:border-red-400 dark:bg-red-800;
+  &.invalid input[type="text"] {
+    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
   }
 
-  &.invalid input[type='file'] {
-    @apply placeholder-red-700 border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500 dark:placeholder-red-300 dark:border-red-400 dark:bg-red-800;
+  &.invalid input[type="file"] {
+    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
   }
 
   &.invalid textarea {
-    @apply placeholder-red-700 border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500 dark:placeholder-red-300 dark:border-red-400 dark:bg-red-800;
+    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
   }
 
   & textarea {
-    @apply block w-full rounded-md border border-slate-300 text-sm text-slate-900 p-2.5 focus:border-green-500 focus:ring-green-500 dark:placeholder-slate-400 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply block w-full rounded-md border border-slate-300 p-2.5 text-sm text-slate-900 focus:border-green-500 focus:ring-green-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 }
 
@@ -196,19 +196,19 @@
 }
 
 @utility prefixed {
-  .form-field &input[type='text'] {
+  .form-field &input[type="text"] {
     @apply rounded-l-none rounded-r-md;
   }
 
-  .form-field &input[type='search'] {
+  .form-field &input[type="search"] {
     @apply rounded-l-none rounded-r-md;
   }
 
-  .form-field &input[type='password'] {
+  .form-field &input[type="password"] {
     @apply rounded-l-none rounded-r-md;
   }
 
-  .form-field &input[type='email'] {
+  .form-field &input[type="email"] {
     @apply rounded-l-none rounded-r-md;
   }
 
@@ -223,18 +223,18 @@
     line-height: inherit;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
-    @apply rounded-r-md border p-2.5 block w-full bg-white border-slate-300 text-sm text-slate-900 focus:border-green-500 focus:ring-green-500 dark:placeholder-slate-400 dark:shadow-sm-light dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply block w-full rounded-r-md border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-green-500 focus:ring-green-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:drop-shadow-sm dark:focus:border-green-500 dark:focus:ring-green-500;
   }
 }
 
 @utility datepicker {
-  &.form-field input[type='text'] {
-    @apply border border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-700 focus:border-primary-700 block w-full pl-10 p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+  &.form-field input[type="text"] {
+    @apply focus:ring-primary-700 focus:border-primary-700 block w-full rounded-md border border-slate-300 p-2.5 pl-10 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-blue-500 dark:focus:ring-blue-500;
   }
 }
 
 @utility select2 {
-  .form-field & input[type='text'] {
+  .form-field & input[type="text"] {
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' aria-hidden='true' viewBox='0 0 10 6'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 1 4 4 4-4'/%3E%3C/svg%3E");
     background-position: right 0.75rem center;
     background-repeat: no-repeat;
@@ -247,7 +247,7 @@
 
 @utility error {
   .form-field &select {
-    @apply border-red-500 text-slate-900 sm:text-sm rounded-md focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-slate-800 dark:border-red-400 dark:placeholder-slate-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500;
+    @apply block w-full rounded-md border-red-500 p-2.5 text-slate-900 focus:border-red-500 focus:ring-red-500 sm:text-sm dark:border-red-400 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-red-500 dark:focus:ring-red-500;
   }
 }
 
@@ -256,16 +256,16 @@
     @apply text-red-700 dark:text-red-500;
   }
 
-  &.form-field input[type='text'] {
-    @apply placeholder-red-700 border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500 dark:placeholder-red-300 dark:border-red-400 dark:bg-red-800;
+  &.form-field input[type="text"] {
+    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
   }
 
-  &.form-field input[type='file'] {
-    @apply placeholder-red-700 border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500 dark:placeholder-red-300 dark:border-red-400 dark:bg-red-800;
+  &.form-field input[type="file"] {
+    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
   }
 
   &.form-field textarea {
-    @apply placeholder-red-700 border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500 dark:placeholder-red-300 dark:border-red-400 dark:bg-red-800;
+    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
   }
 }
 
@@ -274,10 +274,10 @@
 }
 
 @utility row-btn {
-  @apply px-1 py-0 text-sm text-slate-500 hover:bg-slate-100 focus:outline-hidden focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+  @apply focus:outline-hidden px-1 py-0 text-sm text-slate-500 hover:bg-slate-100 focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
 
   & svg {
-    @apply w-5 h-5;
+    @apply h-5 w-5;
   }
 }
 
@@ -323,19 +323,19 @@
 }
 
 @utility viral-dropdown--button {
-  @apply flex items-center py-2.5 px-5 text-sm font-medium text-slate-900 focus:outline-hidden bg-white rounded-md border border-slate-200 hover:bg-slate-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-slate-200 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700;
+  @apply focus:outline-hidden hover:text-primary-700 flex items-center rounded-md border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-900 hover:bg-slate-100 focus:z-10 focus:ring-4 focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700;
 }
 
 @utility button {
-  @apply inline-flex items-center justify-center w-1/2 text-sm border rounded-md cursor-pointer sm:w-auto focus:z-10;
+  @apply inline-flex w-1/2 cursor-pointer items-center justify-center rounded-md border text-sm focus:z-10 sm:w-auto;
 
   &:disabled {
-    @apply opacity-50 cursor-not-allowed;
+    @apply cursor-not-allowed opacity-50;
   }
 }
 
 @utility button--size-default {
-  @apply text-sm px-5 py-2.5;
+  @apply px-5 py-2.5 text-sm;
 }
 
 @utility button--size-small {
@@ -343,23 +343,23 @@
 }
 
 @utility button--size-large {
-  @apply py-3 text-lg px-7;
+  @apply px-7 py-3 text-lg;
 }
 
 @utility button--state-default {
-  @apply bg-white text-slate-900 border-slate-200 focus:outline-hidden hover:bg-slate-100 hover:text-slate-950 focus:ring-slate-200 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700;
+  @apply focus:outline-hidden border-slate-200 bg-white text-slate-900 hover:bg-slate-100 hover:text-slate-950 focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700;
 }
 
 @utility button--state-destructive {
-  @apply text-white bg-red-700 border-red-800 focus:outline-hidden hover:bg-red-800 focus:ring-red-300 dark:focus:ring-red-700 dark:bg-red-600 dark:text-white dark:border-red-600 dark:hover:bg-red-700;
+  @apply focus:outline-hidden border-red-800 bg-red-700 text-white hover:bg-red-800 focus:ring-red-300 dark:border-red-600 dark:bg-red-600 dark:text-white dark:hover:bg-red-700 dark:focus:ring-red-700;
 }
 
 @utility button--state-primary {
-  @apply text-white border-primary-800 bg-primary-700 focus:outline-hidden hover:bg-primary-800 focus:ring-primary-300 dark:focus:ring-primary-700 dark:bg-primary-800 dark:text-white dark:border-primary-900 dark:hover:bg-primary-700;
+  @apply border-primary-800 bg-primary-700 focus:outline-hidden hover:bg-primary-800 focus:ring-primary-300 dark:focus:ring-primary-700 dark:bg-primary-800 dark:border-primary-900 dark:hover:bg-primary-700 text-white dark:text-white;
 }
 
 @utility dialog--size {
-  @apply relative w-full max-h-full;
+  @apply relative max-h-full w-full;
 }
 
 @utility dialog--size-sm {
@@ -379,7 +379,7 @@
 }
 
 @utility dialog--header {
-  @apply flex items-start justify-between p-5 border-b rounded-t dark:border-slate-600;
+  @apply flex items-start justify-between rounded-t border-b p-5 dark:border-slate-600;
 }
 
 @utility dialog--title {
@@ -387,7 +387,7 @@
 }
 
 @utility dialog--close {
-  @apply text-slate-400 bg-transparent hover:bg-slate-200 hover:text-slate-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-slate-600 dark:hover:text-white focus:outline-hidden focus:ring-4 focus:ring-slate-200 dark:focus:ring-slate-700;
+  @apply focus:outline-hidden ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-slate-400 hover:bg-slate-200 hover:text-slate-900 focus:ring-4 focus:ring-slate-200 dark:hover:bg-slate-600 dark:hover:text-white dark:focus:ring-slate-700;
 }
 
 @utility dialog--section {
@@ -395,7 +395,7 @@
 }
 
 @utility avatar {
-  @apply relative inline-flex items-center justify-center flex-none overflow-hidden rounded-md text-slate-800 dark:text-slate-300;
+  @apply relative inline-flex flex-none items-center justify-center overflow-hidden rounded-md text-slate-800 dark:text-slate-300;
   --tw-avatar-bg-lightness: 35%;
   --tw-avatar-border-lightness: 35%;
   --tw-avatar-bg-alpha: 0.3;
@@ -453,7 +453,7 @@
   }
 
   & &::before {
-    content: '';
+    content: "";
     display: block;
     width: 0;
     position: absolute;
@@ -468,7 +468,7 @@
   }
 
   & & .namespace-entry::before {
-    content: '';
+    content: "";
     display: block;
     width: 10px;
     height: 0;
@@ -502,7 +502,7 @@
   }
 
   & .namespace-entry.has-children > .namespace-entry-contents:hover {
-    @apply cursor-pointer border-slate-50 dark:border-slate-600 bg-slate-50 dark:bg-slate-600;
+    @apply cursor-pointer border-slate-50 bg-slate-50 dark:border-slate-600 dark:bg-slate-600;
   }
 
   & .namespace-entry-contents .namespace-text-container {
@@ -576,7 +576,7 @@
   }
 
   .namespace-list-tree .namespace-list-tree &::before {
-    content: '';
+    content: "";
     display: block;
     width: 10px;
     height: 0;
@@ -610,7 +610,7 @@
   }
 
   .namespace-list-tree &.has-children > .namespace-entry-contents:hover {
-    @apply cursor-pointer border-slate-50 dark:border-slate-600 bg-slate-50 dark:bg-slate-600;
+    @apply cursor-pointer border-slate-50 bg-slate-50 dark:border-slate-600 dark:bg-slate-600;
   }
 }
 
@@ -627,7 +627,7 @@
   }
 
   .namespace-list-tree &.namespace-entry > .namespace-entry-contents:hover {
-    @apply cursor-pointer border-slate-50 dark:border-slate-600 bg-slate-50 dark:bg-slate-600;
+    @apply cursor-pointer border-slate-50 bg-slate-50 dark:border-slate-600 dark:bg-slate-600;
   }
 }
 
@@ -663,7 +663,7 @@
 
 @utility namespace-entry-contents {
   .namespace-list-tree .namespace-entry.has-children > &:hover {
-    @apply cursor-pointer border-slate-50 dark:border-slate-600 bg-slate-50 dark:bg-slate-600;
+    @apply cursor-pointer border-slate-50 bg-slate-50 dark:border-slate-600 dark:bg-slate-600;
   }
 
   .namespace-list-tree & .namespace-text-container {
@@ -802,7 +802,7 @@
 
 @layer components {
   kbd {
-    @apply px-2 py-1.5 text-sm font-semibold text-slate-800 bg-slate-100 border border-slate-200 rounded-lg dark:bg-slate-600 dark:text-slate-100 dark:border-slate-500;
+    @apply rounded-lg border border-slate-200 bg-slate-100 px-2 py-1.5 text-sm font-semibold text-slate-800 dark:border-slate-500 dark:bg-slate-600 dark:text-slate-100;
   }
 
   dt {
@@ -822,7 +822,7 @@
   }
 
   input[type="checkbox"] {
-    @apply w-4 h-4 border rounded-sm border-slate-300 bg-slate-50 focus:ring-primary-300 focus:ring-4 dark:border-slate-600 dark:bg-slate-800 dark:ring-offset-slate-800 dark:focus:ring-primary-600;
+    @apply focus:ring-primary-300 dark:focus:ring-primary-600 h-4 w-4 rounded-sm border border-slate-300 bg-slate-50 focus:ring-4 dark:border-slate-600 dark:bg-slate-800 dark:ring-offset-slate-800;
   }
 
   input[type="search"]::-webkit-search-cancel-button {
@@ -835,11 +835,11 @@
 
   /* VIRAL DIALOG */
   dialog {
-    @apply w-full max-w-2xl max-h-full p-0 bg-white rounded-lg shadow-sm dark:bg-slate-800 focus:outline-hidden;
+    @apply focus:outline-hidden max-h-full w-full max-w-2xl rounded-lg bg-white p-0 shadow-sm dark:bg-slate-800;
   }
 
   dialog::backdrop {
-    @apply bg-slate-400/30 dark:bg-slate-900/40 backdrop-blur-xs;
+    @apply backdrop-blur-xs bg-slate-400/30 dark:bg-slate-900/40;
   }
 
   strong {
@@ -848,32 +848,32 @@
 }
 
 .pagy-nav.pagination {
-  @apply inline-flex -space-x-px rounded-md shadow-xs isolate;
+  @apply shadow-xs isolate inline-flex -space-x-px rounded-md;
 }
 
 .page.next a {
-  @apply flex items-center justify-center h-full py-1.5 px-3 leading-tight text-slate-500 bg-white rounded-r-lg border border-slate-300 hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white;
+  @apply flex h-full items-center justify-center rounded-r-lg border border-slate-300 bg-white px-3 py-1.5 leading-tight text-slate-500 hover:bg-slate-100 hover:text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white;
 }
 
 .page.prev a {
-  @apply flex items-center justify-center h-full py-1.5 px-3 ml-0 text-slate-500 bg-white rounded-l-lg border border-slate-300 hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white;
+  @apply ml-0 flex h-full items-center justify-center rounded-l-lg border border-slate-300 bg-white px-3 py-1.5 text-slate-500 hover:bg-slate-100 hover:text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white;
 }
 
 .page.next.disabled {
-  @apply flex items-center justify-center h-full py-1.5 px-3 ml-0 text-slate-500 bg-slate-50 rounded-r-lg border border-slate-300 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-400 cursor-not-allowed;
+  @apply ml-0 flex h-full cursor-not-allowed items-center justify-center rounded-r-lg border border-slate-300 bg-slate-50 px-3 py-1.5 text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400;
 }
 
 .page.prev.disabled {
-  @apply flex items-center justify-center h-full py-1.5 px-3 ml-0 text-slate-500 bg-slate-50 rounded-l-lg border border-slate-300 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-400 cursor-not-allowed;
+  @apply ml-0 flex h-full cursor-not-allowed items-center justify-center rounded-l-lg border border-slate-300 bg-slate-50 px-3 py-1.5 text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400;
 }
 
 .page a,
 .page.gap {
-  @apply relative inline-flex items-center px-4 py-2 text-sm font-medium bg-white border text-slate-900 border-slate-200 focus:outline-hidden hover:bg-slate-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-slate-200 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700;
+  @apply focus:outline-hidden hover:text-primary-700 relative inline-flex items-center border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-100 focus:z-10 focus:ring-4 focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700;
 }
 
 .page.active {
-  @apply z-10 flex items-center justify-center px-3 py-2 text-sm leading-tight border text-primary-600 bg-primary-50 border-primary-300 hover:bg-primary-100 hover:text-primary-700 dark:border-slate-700 dark:bg-slate-800 dark:text-white;
+  @apply text-primary-600 bg-primary-50 border-primary-300 hover:bg-primary-100 hover:text-primary-700 z-10 flex items-center justify-center border px-3 py-2 text-sm leading-tight dark:border-slate-700 dark:bg-slate-800 dark:text-white;
 }
 
 .pagy-info {
@@ -881,7 +881,7 @@
 }
 
 div.field_with_errors > :is(select) {
-  @apply text-red-900 placeholder-red-300 border-red-700;
+  @apply border-red-700 text-red-900 placeholder-red-300;
 }
 
 .table-container table:not(:has(tbody td)) {
