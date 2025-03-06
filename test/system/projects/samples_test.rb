@@ -20,6 +20,8 @@ module Projects
       @project29 = projects(:project29)
       @namespace = groups(:group_one)
       @subgroup12a = groups(:subgroup_twelve_a)
+
+      Flipper.enable(:progress_bars)
     end
 
     test 'samples index table' do

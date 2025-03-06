@@ -1434,6 +1434,7 @@ en:
           no_available_projects: No available projects
           samples: Samples
           select_project: Select project
+          spinner_message: Copying samples, this might take a while...
           submit_button: Submit
           title: Copy Samples
       create:
@@ -1599,6 +1600,7 @@ en:
           no_available_projects: No available projects
           samples: Samples
           select_project: Select project
+          spinner_message: Transferring samples, this might take a while...
           submit_button: Submit
           title: Transfer Samples
       update:
