@@ -72,7 +72,7 @@ class DataExport < ApplicationRecord
 
   def validate_analysis_type
     if export_parameters.key?('analysis_type')
-      unless %w[project user].include?(export_parameters['analysis_type'])
+      unless %w[group project user].include?(export_parameters['analysis_type'])
         errors.add(:export_parameters,
                    I18n.t('activerecord.errors.models.data_export.attributes.export_parameters.invalid_analysis_type'))
       end
