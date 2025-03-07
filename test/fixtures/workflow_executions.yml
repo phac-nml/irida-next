@@ -1075,7 +1075,7 @@ workflow_execution_completed_group_shared2:
   workflow_engine_parameters: { "-r": "dev" }
   workflow_url: "https://github.com/phac-nml/irida_next_shared_example_completed_with_output"
   run_id: "my_run_id_group_shared_2"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:michelle_doe, :uuid) %>
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:micha_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
   name: "irida_next_user_group_shared_example_completed_with_output"
   state: "completed"
