@@ -121,16 +121,14 @@ export default class extends Controller {
         this.sortableListsItemTemplateTarget.content.cloneNode(true);
       template.querySelector("li").innerText = column;
       template.querySelector("li").id = column.replace(/\s+/g, "-");
-      this.metadataColumnsTarget.querySelector("#available").append(template);
+      this.metadataColumnsTarget.querySelector("#selected").append(template);
     });
+    this.submitButtonTarget.disabled = !columns.length;
   }
 
   #removeInputOptions(target) {
-    for (let index = target.options.length - 1; index >= 0; index--) {
-      //do not remove the placeholder
-      if (target.options[index].value) {
-        target.remove(index);
-      }
+    while (target.options.length > 1) {
+      target.remove(target.options.length - 1);
     }
   }
 

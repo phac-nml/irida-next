@@ -814,8 +814,6 @@ module Groups
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
-        assert I18n.t('viral.sortable_lists_component.add_all')
-        click_button I18n.t('viral.sortable_lists_component.add_all')
         within "ul[id='available']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
@@ -846,8 +844,6 @@ module Groups
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
-        assert I18n.t('viral.sortable_lists_component.add_all')
-        click_button I18n.t('viral.sortable_lists_component.add_all')
         within "ul[id='available']" do
           assert_no_text 'header'
           assert_no_selector 'li'
@@ -875,8 +871,6 @@ module Groups
         attach_file 'file_import[file]',
                     Rails.root.join('test/fixtures/files/metadata/contains_empty_values_with_puid.csv')
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
-        assert I18n.t('viral.sortable_lists_component.add_all')
-        click_button I18n.t('viral.sortable_lists_component.add_all')
         within "ul[id='available']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
@@ -925,8 +919,6 @@ module Groups
         attach_file 'file_import[file]',
                     Rails.root.join('test/fixtures/files/metadata/contains_empty_values_with_puid.csv')
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
-        assert I18n.t('viral.sortable_lists_component.add_all')
-        click_button I18n.t('viral.sortable_lists_component.add_all')
         within "ul[id='available']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
@@ -966,8 +958,6 @@ module Groups
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/duplicate_headers.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
-        assert I18n.t('viral.sortable_lists_component.add_all')
-        click_button I18n.t('viral.sortable_lists_component.add_all')
         within "ul[id='available']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
@@ -997,8 +987,6 @@ module Groups
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_rows.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
-        assert I18n.t('viral.sortable_lists_component.add_all')
-        click_button I18n.t('viral.sortable_lists_component.add_all')
         within "ul[id='available']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
@@ -1047,8 +1035,6 @@ module Groups
         attach_file 'file_import[file]',
                     Rails.root.join('test/fixtures/files/metadata/mixed_project_samples_with_puid.csv')
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
-        assert I18n.t('viral.sortable_lists_component.add_all')
-        click_button I18n.t('viral.sortable_lists_component.add_all')
         within "ul[id='available']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
@@ -1082,8 +1068,6 @@ module Groups
         attach_file 'file_import[file]',
                     Rails.root.join('test/fixtures/files/metadata/contains_analysis_values_with_puid.csv')
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
-        assert I18n.t('viral.sortable_lists_component.add_all')
-        click_button I18n.t('viral.sortable_lists_component.add_all')
         within "ul[id='available']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield3'
