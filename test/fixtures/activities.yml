@@ -315,3 +315,27 @@ david_doe_group_four_shared_by_group1:
   }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
+
+project1_namespace_sample_import_create:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  key: "namespaces_project_namespace.import_samples.create"
+  parameters:
+    {
+      imported_samples_count: 2,
+      action: "import_samples",
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+group1_sample_import_create:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  key: "group.import_samples.create"
+  parameters:
+    {
+      imported_samples_count: 2,
+      action: "import_samples",
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
