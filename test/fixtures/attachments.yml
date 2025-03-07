@@ -249,6 +249,11 @@ samples_shared_workflow_execution_completed_output_attachment:
   attachable: sample47_workflow_execution_completed_shared2 (SamplesWorkflowExecution)
   puid: INXT_ATT_AAAAAAAAAV
 
+samples_group_shared_workflow_execution_completed_output_attachment:
+  metadata: {"type": "assembly", "format": "fasta", "compression": "gzip"}
+  attachable: sample47_workflow_execution_completed_group_shared2 (SamplesWorkflowExecution)
+  puid: INXT_ATT_AAAAAAAAAW
+
 attachmentEndToEndFWD:
   metadata:
     {

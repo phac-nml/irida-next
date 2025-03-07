@@ -253,6 +253,15 @@ sample47_workflow_execution_completed_shared2:
     "fastq_2": ""
   }
 
+sample47_workflow_execution_completed_group_shared2:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample47, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_group_shared2, :uuid) %>
+  samplesheet_params: {
+    "sample": <%= "Sample_#{ActiveRecord::FixtureSet.identify(:sample47, :uuid)}" %>,
+    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:samples_group_shared_workflow_execution_completed_output, :uuid)}" %>,
+    "fastq_2": ""
+  }
+
 sample1_automated_example_submitted:
   sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:automated_example_submitted, :uuid) %>
