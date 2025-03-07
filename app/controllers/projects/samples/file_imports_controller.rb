@@ -4,7 +4,7 @@ module Projects
   module Samples
     # Controller actions for Project Samples File Import Controller
     class FileImportsController < Projects::ApplicationController
-      include SampleFileImportActions
+      include SampleFileImportActions if Flipper.enabled?(:batch_sample_file_import)
 
       respond_to :turbo_stream
 

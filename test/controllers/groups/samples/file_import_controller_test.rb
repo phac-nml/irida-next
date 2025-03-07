@@ -9,6 +9,8 @@ module Groups
         sign_in users(:john_doe)
         @group = groups(:group_one)
         @csv = fixture_file_upload('test/fixtures/files/batch_sample_import_valid.csv')
+
+        Flipper.enable(:batch_sample_file_import)
       end
 
       test 'should enqueue a Samples::BatchSampleImportJob' do
