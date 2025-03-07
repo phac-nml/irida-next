@@ -11,7 +11,7 @@
     <div class="flex flex-row">
       <% if allowed_to?(:export_data?, @namespace) %>
         <% if @workflow_execution.completed? %>
-          <%= link_to t("projects.workflow_executions.show.create_export_button"),
+          <%= link_to t("groups.workflow_executions.show.create_export_button"),
           new_data_export_path(
             export_type: "analysis",
             analysis_type: "group",
@@ -24,7 +24,7 @@
           },
           class: "button button--size-default button--state-default mr-2" %>
         <% else %>
-          <%= link_to t("projects.workflow_executions.show.create_export_button"),
+          <%= link_to t("groups.workflow_executions.show.create_export_button"),
           new_data_export_path(
             export_type: "analysis",
             analysis_type: "group",
