@@ -251,7 +251,7 @@ module Projects
                       text: sample.puid
     end
 
-    test 'batch sample import actvity' do
+    test 'project batch sample import actvity' do
       project_namespace = namespaces_project_namespaces(:project1_namespace)
       activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
 
