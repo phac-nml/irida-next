@@ -4,7 +4,7 @@ module Groups
   module Samples
     # Controller actions for Group Samples File Import Controller
     class FileImportsController < Groups::ApplicationController
-      include SampleFileImportActions if Flipper.enabled?(:batch_sample_file_import)
+      include SampleFileImportActions
 
       respond_to :turbo_stream
 
