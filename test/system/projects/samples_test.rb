@@ -1488,9 +1488,8 @@ module Projects
           assert_selector 'li', count: 5
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+        ### ACTIONS END ###
       end
-      ### ACTIONS END ###
-
       ### VERIFY START ###
       assert_text I18n.t('shared.progress_bar.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
@@ -1680,8 +1679,9 @@ module Projects
         # leave ignore empty values disabled
         assert_not find('input#file_import_ignore_empty_values').checked?
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        ### ACTIONS END ###
       end
+      ### ACTIONS END ###
+
       ### VERIFY START ###
       assert_text I18n.t('shared.progress_bar.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
@@ -1724,6 +1724,7 @@ module Projects
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
       ### ACTIONS END ###
+
       ### VERIFY START ###
       assert_text I18n.t('shared.progress_bar.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
@@ -1759,8 +1760,9 @@ module Projects
           assert_selector 'li', count: 3
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        ### ACTIONS END ###
       end
+      ### ACTIONS END ###
+
       ### VERIFY START ###
       assert_text I18n.t('shared.progress_bar.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
@@ -1893,6 +1895,16 @@ module Projects
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_analysis_values.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
+        within "ul[id='available']" do
+          assert_no_text 'metadatafield1'
+          assert_no_text 'metadatafield3'
+          assert_no_selector 'li'
+        end
+        within "ul[id='selected']" do
+          assert_text 'metadatafield1'
+          assert_text 'metadatafield3'
+          assert_selector 'li', count: 2
+        end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
       ### ACTIONS END ###
