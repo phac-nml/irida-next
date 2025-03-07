@@ -21,6 +21,7 @@ class DataExportsTest < ApplicationSystemTestCase
     @sample1 = samples(:sample1)
     @sample2 = samples(:sample2)
     @sample30 = samples(:sample30)
+    @sample47 = samples(:sample47)
     @workflow_execution1 = workflow_executions(:irida_next_example_completed_with_output)
     @workflow_execution2 = workflow_executions(:irida_next_example_completed)
     @workflow_execution3 = workflow_executions(:irida_next_example_error)
@@ -28,6 +29,8 @@ class DataExportsTest < ApplicationSystemTestCase
     @workflow_execution5 = workflow_executions(:automated_example_error)
     @shared_workflow_execution1 = workflow_executions(:workflow_execution_completed_shared1)
     @shared_workflow_execution2 = workflow_executions(:workflow_execution_completed_shared2)
+    @group_shared_workflow_execution1 = workflow_executions(:workflow_execution_completed_group_shared1)
+    @group_shared_workflow_execution2 = workflow_executions(:workflow_execution_completed_group_shared2)
 
     Project.reset_counters(@project1.id, :samples_count)
 
@@ -526,9 +529,8 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'div:nth-child(2) dd', text: 'test data export'
   end
 
-  test 'create analysis export using users shared workflow execution from user workflow execution show page' do
-    user = users(:james_doe)
-    login_as user
+  test 'create analysis export using users project shared workflow execution from user workflow execution show page' do
+    login_as users(:james_doe)
     visit workflow_execution_path(@shared_workflow_execution1)
 
     click_link I18n.t('workflow_executions.show.create_export_button', locale: user.locale), match: :first
@@ -560,6 +562,45 @@ class DataExportsTest < ApplicationSystemTestCase
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
       click_button I18n.t('data_exports.new.submit_button', locale: user.locale)
+    end
+
+    assert_selector 'dl', count: 1
+    assert_selector 'div:nth-child(2) dd', text: 'test data export'
+  end
+
+  test 'create analysis export using users group shared workflow execution from user workflow execution show page' do
+    login_as users(:james_doe)
+    visit workflow_execution_path(@group_shared_workflow_execution1)
+
+    click_link I18n.t('workflow_executions.show.create_export_button'), match: :first
+
+    within 'dialog[open].dialog--size-lg' do
+      assert_accessible
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.title')
+      assert_text I18n.t('data_exports.new_single_analysis_export_dialog.single_selection')
+      assert_text I18n.t('data_exports.new.name_label')
+      assert_text I18n.t('data_exports.new.email_label')
+
+      assert_no_selector 'turbo-frame[id="list_selections"]'
+      assert_no_text @group_shared_workflow_execution1.id
+      assert_no_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
+      assert_no_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
+
+      click_button I18n.t('data_exports.new_single_analysis_export_dialog.single_selection')
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
+      assert_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
+      assert_text @group_shared_workflow_execution1.id
+      assert_text @group_shared_workflow_execution1.run_id
+      assert_text @group_shared_workflow_execution1.metadata['workflow_name']
+      assert_text @group_shared_workflow_execution1.metadata['workflow_version']
+
+      find('input#data_export_name').fill_in with: 'test data export'
+      find("input[type='checkbox'][id='data_export_email_notification']").click
+      click_button I18n.t('data_exports.new.submit_button')
     end
 
     assert_selector 'dl', count: 1
@@ -606,6 +647,45 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'div:nth-child(2) dd', text: 'test data export'
   end
 
+  test 'create analysis export using users group shared workflow execution from group workflow execution show page' do
+    login_as users(:james_doe)
+    visit group_workflow_execution_path(@group5, @group_shared_workflow_execution1)
+
+    click_link I18n.t('workflow_executions.show.create_export_button'), match: :first
+
+    within 'dialog[open].dialog--size-lg' do
+      assert_accessible
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.title')
+      assert_text I18n.t('data_exports.new_single_analysis_export_dialog.single_selection')
+      assert_text I18n.t('data_exports.new.name_label')
+      assert_text I18n.t('data_exports.new.email_label')
+
+      assert_no_selector 'turbo-frame[id="list_selections"]'
+      assert_no_text @group_shared_workflow_execution1.id
+      assert_no_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
+      assert_no_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
+
+      click_button I18n.t('data_exports.new_single_analysis_export_dialog.single_selection')
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
+      assert_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
+      assert_text @group_shared_workflow_execution1.id
+      assert_text @group_shared_workflow_execution1.run_id
+      assert_text @group_shared_workflow_execution1.metadata['workflow_name']
+      assert_text @group_shared_workflow_execution1.metadata['workflow_version']
+
+      find('input#data_export_name').fill_in with: 'test data export'
+      find("input[type='checkbox'][id='data_export_email_notification']").click
+      click_button I18n.t('data_exports.new.submit_button')
+    end
+
+    assert_selector 'dl', count: 1
+    assert_selector 'div:nth-child(2) dd', text: 'test data export'
+  end
+
   test 'create analysis export from project shared workflow execution from project workflow execution show page' do
     user = users(:james_doe)
     login_as user
@@ -646,9 +726,47 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'div:nth-child(2) dd', text: 'test data export'
   end
 
+  test 'create analysis export from group shared workflow execution from group workflow execution show page' do
+    login_as users(:james_doe)
+    visit group_workflow_execution_path(@group5, @group_shared_workflow_execution2)
+
+    click_link I18n.t('workflow_executions.show.create_export_button'), match: :first
+
+    within 'dialog[open].dialog--size-lg' do
+      assert_accessible
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.title')
+      assert_text I18n.t('data_exports.new_single_analysis_export_dialog.single_selection')
+      assert_text I18n.t('data_exports.new.name_label')
+      assert_text I18n.t('data_exports.new.email_label')
+
+      assert_no_selector 'turbo-frame[id="list_selections"]'
+      assert_no_text @group_shared_workflow_execution2.id
+      assert_no_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
+      assert_no_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
+
+      click_button I18n.t('data_exports.new_single_analysis_export_dialog.single_selection')
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
+      assert_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
+      assert_text @group_shared_workflow_execution2.id
+      assert_text @group_shared_workflow_execution2.run_id
+      assert_text @group_shared_workflow_execution2.metadata['workflow_name']
+      assert_text @group_shared_workflow_execution2.metadata['workflow_version']
+
+      find('input#data_export_name').fill_in with: 'test data export'
+      find("input[type='checkbox'][id='data_export_email_notification']").click
+      click_button I18n.t('data_exports.new.submit_button')
+    end
+
+    assert_selector 'dl', count: 1
+    assert_selector 'div:nth-child(2) dd', text: 'test data export'
+  end
+
   test 'clicking links in preview tab for analysis data export from user shared workflow execution' do
     login_as users(:micha_doe)
-    sample47 = samples(:sample47)
     data_export11 = data_exports(:data_export_eleven)
     visit data_export_path(data_export11, tab: 'preview')
 
@@ -665,17 +783,16 @@ class DataExportsTest < ApplicationSystemTestCase
 
     visit data_export_path(data_export11, tab: 'preview')
 
-    click_link sample47.puid
+    click_link @sample47.puid
 
-    assert_text sample47.name
-    assert_text sample47.puid
+    assert_text @sample47.name
+    assert_text @sample47.puid
   end
 
   test 'clicking links in preview tab for analysis data export from project shared workflow execution' do
     login_as users(:james_doe)
-    sample47 = samples(:sample47)
-    data_export11 = data_exports(:data_export_twelve)
-    visit data_export_path(data_export11, tab: 'preview')
+    data_export12 = data_exports(:data_export_twelve)
+    visit data_export_path(data_export12, tab: 'preview')
 
     click_link @shared_workflow_execution2.id
 
@@ -688,12 +805,36 @@ class DataExportsTest < ApplicationSystemTestCase
       assert_text @shared_workflow_execution2.metadata['workflow_version']
     end
 
-    visit data_export_path(data_export11, tab: 'preview')
+    visit data_export_path(data_export12, tab: 'preview')
 
-    click_link sample47.puid
+    click_link @sample47.puid
 
-    assert_text sample47.name
-    assert_text sample47.puid
+    assert_text @sample47.name
+    assert_text @sample47.puid
+  end
+
+  test 'clicking links in preview tab for analysis data export from group shared workflow execution' do
+    login_as users(:james_doe)
+    data_export13 = data_exports(:data_export_thirteen)
+    visit data_export_path(data_export13, tab: 'preview')
+
+    click_link @group_shared_workflow_execution2.id
+
+    assert_current_path(group_workflow_execution_path(@group5, @group_shared_workflow_execution2))
+    assert_text @group_shared_workflow_execution2.id
+
+    within first('dl') do
+      assert_text @group_shared_workflow_execution2.run_id
+      assert_text @group_shared_workflow_execution2.metadata['workflow_name']
+      assert_text @group_shared_workflow_execution2.metadata['workflow_version']
+    end
+
+    visit data_export_path(data_export13, tab: 'preview')
+
+    click_link @sample47.puid
+
+    assert_text @sample47.name
+    assert_text @sample47.puid
   end
 
   test 'create export state between completed and non-completed workflow executions' do
@@ -1269,6 +1410,114 @@ class DataExportsTest < ApplicationSystemTestCase
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
       click_button I18n.t('data_exports.new.submit_button', locale: user.locale)
+    end
+
+    assert_selector 'dl', count: 1
+    assert_selector 'div:nth-child(2) dd', text: 'test data export'
+  end
+
+  test 'new analysis export with single workflow execution from group workflow executions index page' do
+    login_as users(:micha_doe)
+    visit group_workflow_executions_path(@group5)
+    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+                    text: I18n.t('projects.workflow_executions.index.create_export_button')
+
+    within %(#workflow-executions-table) do
+      find("input[type='checkbox'][value='#{@group_shared_workflow_execution1.id}']").click
+    end
+
+    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+                       text: I18n.t('projects.workflow_executions.index.create_export_button')
+    click_link I18n.t('projects.workflow_executions.index.create_export_button')
+
+    within 'dialog[open].dialog--size-lg' do
+      assert_accessible
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.title')
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.selection_count.non_zero').gsub! 'COUNT_PLACEHOLDER',
+                                                                                                   '1'
+      assert_text I18n.t('data_exports.new.name_label')
+      assert_text I18n.t('data_exports.new.email_label')
+
+      assert_no_selector 'turbo-frame[id="list_selections"]'
+      assert_no_text @group_shared_workflow_execution1.id
+      assert_no_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
+      assert_no_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
+      click_button I18n.t('data_exports.new_analysis_export_dialog.selection_count.non_zero').gsub! 'COUNT_PLACEHOLDER',
+                                                                                                    '1'
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
+      assert_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
+      assert_selector 'turbo-frame[id="list_selections"]'
+      within %(turbo-frame[id="list_selections"]) do
+        assert_text @group_shared_workflow_execution1.id
+        assert_text @group_shared_workflow_execution1.run_id
+        assert_text @group_shared_workflow_execution1.metadata['workflow_name']
+        assert_text @group_shared_workflow_execution1.metadata['workflow_version']
+      end
+
+      find('input#data_export_name').fill_in with: 'test data export'
+      find("input[type='checkbox'][id='data_export_email_notification']").click
+      click_button I18n.t('data_exports.new.submit_button')
+    end
+
+    assert_selector 'dl', count: 1
+    assert_selector 'div:nth-child(2) dd', text: 'test data export'
+  end
+
+  test 'create analysis export with multiple shared workflow executions from group workflow executions index page' do
+    login_as users(:micha_doe)
+    visit group_workflow_executions_path(@group5)
+    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+                    text: I18n.t('projects.workflow_executions.index.create_export_button')
+
+    within %(#workflow-executions-table) do
+      find("input[type='checkbox'][value='#{@group_shared_workflow_execution1.id}']").click
+      find("input[type='checkbox'][value='#{@group_shared_workflow_execution2.id}']").click
+    end
+
+    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+                       text: I18n.t('projects.workflow_executions.index.create_export_button')
+    click_link I18n.t('projects.workflow_executions.index.create_export_button')
+
+    within 'dialog[open].dialog--size-lg' do
+      assert_accessible
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.title')
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.selection_count.non_zero').gsub! 'COUNT_PLACEHOLDER',
+                                                                                                   '2'
+      assert_text I18n.t('data_exports.new.name_label')
+      assert_text I18n.t('data_exports.new.email_label')
+
+      assert_no_selector 'turbo-frame[id="list_selections"]'
+      assert_no_text @group_shared_workflow_execution1.id
+      assert_no_text @group_shared_workflow_execution2.id
+      assert_no_text I18n.t('data_exports.new_analysis_export_dialog.description.plural').gsub! 'COUNT_PLACEHOLDER', '2'
+      assert_no_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
+      click_button I18n.t('data_exports.new_analysis_export_dialog.selection_count.non_zero').gsub! 'COUNT_PLACEHOLDER',
+                                                                                                    '2'
+      assert_text  I18n.t('data_exports.new_analysis_export_dialog.description.plural').gsub! 'COUNT_PLACEHOLDER', '2'
+      assert_text ActionController::Base.helpers.strip_tags(
+        I18n.t('data_exports.new.after_submission_description_html')
+      )
+      assert_selector 'turbo-frame[id="list_selections"]'
+      within %(turbo-frame[id="list_selections"]) do
+        assert_text @group_shared_workflow_execution1.id
+        assert_text @group_shared_workflow_execution1.run_id
+        assert_text @group_shared_workflow_execution1.metadata['workflow_name']
+        assert_text @group_shared_workflow_execution1.metadata['workflow_version']
+        assert_text @group_shared_workflow_execution2.id
+        assert_text @group_shared_workflow_execution2.run_id
+        assert_text @group_shared_workflow_execution2.metadata['workflow_name']
+        assert_text @group_shared_workflow_execution2.metadata['workflow_version']
+      end
+
+      find('input#data_export_name').fill_in with: 'test data export'
+      find("input[type='checkbox'][id='data_export_email_notification']").click
+      click_button I18n.t('data_exports.new.submit_button')
     end
 
     assert_selector 'dl', count: 1
