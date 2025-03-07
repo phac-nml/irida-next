@@ -147,7 +147,7 @@ module Samples
           owner: current_user,
           parameters:
           {
-            sample_count: sample_count,
+            imported_samples_count: sample_count,
             action: 'import_samples'
           }
         )
@@ -160,7 +160,7 @@ module Samples
                                  owner: current_user,
                                  parameters:
                                  {
-                                   sample_count: total_sample_count,
+                                   imported_samples_count: total_sample_count,
                                    action: 'import_samples'
                                  }
     end
