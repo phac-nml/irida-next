@@ -2,7 +2,7 @@
 
 require 'view_component_test_case'
 
-module Projects
+module Groups
   class SampleActivityComponentTest < ViewComponentTestCase
     include ActionView::Helpers::SanitizeHelper
 
@@ -10,7 +10,7 @@ module Projects
       @user = users(:john_doe)
     end
 
-    test 'group batch sample import actvity' do
+    test 'batch sample import actvity' do
       group = groups(:group_one)
       activities = group.human_readable_activity(group.retrieve_group_activity).reverse
 
