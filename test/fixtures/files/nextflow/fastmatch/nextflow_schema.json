@@ -1,0 +1,355 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "$id": "https://raw.githubusercontent.com/phac-nml/fastmatchirida/main/nextflow_schema.json",
+    "title": "phac-nml/fastmatchirida pipeline parameters",
+    "description": "IRIDA Next Example Pipeline",
+    "type": "object",
+    "definitions": {
+        "input_output_options": {
+            "title": "Input/output options",
+            "type": "object",
+            "fa_icon": "fas fa-terminal",
+            "description": "Define where the pipeline should find input data and save output data.",
+            "required": ["input", "outdir"],
+            "properties": {
+                "input": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "mimetype": "text/csv",
+                    "pattern": "^\\S+\\.csv$",
+                    "schema": "assets/schema_input.json",
+                    "description": "Path to comma-separated file containing information about the samples in the experiment.",
+                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row.",
+                    "fa_icon": "fas fa-file-csv"
+                },
+                "outdir": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
+                    "fa_icon": "fas fa-folder-open"
+                },
+                "email": {
+                    "type": "string",
+                    "description": "Email address for completion summary.",
+                    "fa_icon": "fas fa-envelope",
+                    "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
+                    "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
+                    "hidden": true
+                }
+            }
+        },
+        "metadata": {
+            "title": "Metadata",
+            "type": "object",
+            "description": "The column header names of the metadata columns.",
+            "default": "",
+            "properties": {
+                "metadata_1_header": {
+                    "type": "string",
+                    "default": "metadata_1",
+                    "description": "The header name of metadata column 1.",
+                    "fa_icon": "far fa-sticky-note",
+                    "pattern": "^[^\\n\\t\"]+$"
+                },
+                "metadata_2_header": {
+                    "type": "string",
+                    "default": "metadata_2",
+                    "description": "The header name of metadata column 2.",
+                    "fa_icon": "far fa-sticky-note",
+                    "pattern": "^[^\\n\\t\"]+$"
+                },
+                "metadata_3_header": {
+                    "type": "string",
+                    "default": "metadata_3",
+                    "description": "The header name of metadata column 3.",
+                    "fa_icon": "far fa-sticky-note",
+                    "pattern": "^[^\\n\\t\"]+$"
+                },
+                "metadata_4_header": {
+                    "type": "string",
+                    "default": "metadata_4",
+                    "description": "The header name of metadata column 4.",
+                    "fa_icon": "far fa-sticky-note",
+                    "pattern": "^[^\\n\\t\"]+$"
+                },
+                "metadata_5_header": {
+                    "type": "string",
+                    "default": "metadata_5",
+                    "description": "The header name of metadata column 5.",
+                    "fa_icon": "far fa-sticky-note",
+                    "pattern": "^[^\\n\\t\"]+$"
+                },
+                "metadata_6_header": {
+                    "type": "string",
+                    "default": "metadata_6",
+                    "description": "The header name of metadata column 6.",
+                    "fa_icon": "far fa-sticky-note",
+                    "pattern": "^[^\\n\\t\"]+$"
+                },
+                "metadata_7_header": {
+                    "type": "string",
+                    "default": "metadata_7",
+                    "description": "The header name of metadata column 7.",
+                    "fa_icon": "far fa-sticky-note",
+                    "pattern": "^[^\\n\\t\"]+$"
+                },
+                "metadata_8_header": {
+                    "type": "string",
+                    "default": "metadata_8",
+                    "description": "The header name of metadata column 8.",
+                    "fa_icon": "far fa-sticky-note",
+                    "pattern": "^[^\\n\\t\"]+$"
+                }
+            },
+            "fa_icon": "far fa-clipboard"
+        },
+        "fastmatch": {
+            "title": "FastMatch",
+            "type": "object",
+            "description": "Parameters for FastMatch",
+            "default": "",
+            "properties": {
+                "threshold": {
+                    "type": "number",
+                    "description": "Comparison score threshold value",
+                    "default": 1.0,
+                    "minimum": 0
+                }
+            }
+        },
+        "profile_dists": {
+            "title": "Profile Dists",
+            "type": "object",
+            "description": "Parameters for profile_dists distance calculations",
+            "default": "",
+            "properties": {
+                "pd_distm": {
+                    "type": "string",
+                    "description": "The distance method/unit",
+                    "enum": ["hamming", "scaled"],
+                    "default": "hamming"
+                },
+                "pd_missing_threshold": {
+                    "type": "number",
+                    "description": "The maximum proportion of missing data per locus for a locus to be kept in the analysis",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "default": 1
+                },
+                "pd_sample_quality_threshold": {
+                    "type": "number",
+                    "description": "The maximum proportion of missing data per sample for a sample to be kept in the analysis",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "default": 1
+                },
+                "pd_file_type": {
+                    "type": "string",
+                    "description": "Output format file type",
+                    "enum": ["text", "parquet"],
+                    "default": "text"
+                },
+                "pd_mapping_file": {
+                    "type": "string",
+                    "pattern": "^\\S+\\.json(\\.gz)?$",
+                    "description": "A file used to map allele codes to integers for internal distance calculations",
+                    "exists": true,
+                    "hidden": true,
+                    "format": "file-path"
+                },
+                "pd_skip": {
+                    "description": "Skip QA/QC steps",
+                    "type": "boolean"
+                },
+                "pd_columns": {
+                    "type": "string",
+                    "pattern": "^\\S+$",
+                    "description": "Defines the loci to keep within the analysis. Formatted as a single column file with one locus name per line or list of comma-separated loci",
+                    "exists": true,
+                    "format": "file-path"
+                },
+                "pd_count_missing": {
+                    "type": "boolean",
+                    "description": "Count missing alleles as different"
+                }
+            }
+        },
+        "institutional_config_options": {
+            "title": "Institutional config options",
+            "type": "object",
+            "fa_icon": "fas fa-university",
+            "description": "Parameters used to describe centralised config profiles. These should not be edited.",
+            "help_text": "The centralised nf-core configuration profiles use a handful of pipeline parameters to describe themselves. This information is then printed to the Nextflow log when you run a pipeline. You should not need to change these values when you run a pipeline.",
+            "properties": {
+                "config_profile_name": {
+                    "type": "string",
+                    "description": "Institutional config name.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-users-cog"
+                },
+                "config_profile_description": {
+                    "type": "string",
+                    "description": "Institutional config description.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-users-cog"
+                },
+                "config_profile_contact": {
+                    "type": "string",
+                    "description": "Institutional config contact information.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-users-cog"
+                },
+                "config_profile_url": {
+                    "type": "string",
+                    "description": "Institutional config URL link.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-users-cog"
+                }
+            }
+        },
+        "max_job_request_options": {
+            "title": "Max job request options",
+            "type": "object",
+            "fa_icon": "fab fa-acquisitions-incorporated",
+            "description": "Set the top limit for requested resources for any single job.",
+            "help_text": "If you are running on a smaller system, a pipeline step requesting more resources than are available may cause the Nextflow to stop the run with an error. These options allow you to cap the maximum resources requested by any single job so that the pipeline will run on your system.\n\nNote that you can not _increase_ the resources requested by any job using these options. For that you will need your own configuration file. See [the nf-core website](https://nf-co.re/usage/configuration) for details.",
+            "properties": {
+                "max_cpus": {
+                    "type": "integer",
+                    "description": "Maximum number of CPUs that can be requested for any single job.",
+                    "default": 4,
+                    "fa_icon": "fas fa-microchip",
+                    "hidden": true,
+                    "help_text": "Use to set an upper-limit for the CPU requirement for each process. Should be an integer e.g. `--max_cpus 1`"
+                },
+                "max_memory": {
+                    "type": "string",
+                    "description": "Maximum amount of memory that can be requested for any single job.",
+                    "default": "2.GB",
+                    "fa_icon": "fas fa-memory",
+                    "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
+                    "hidden": true,
+                    "help_text": "Use to set an upper-limit for the memory requirement for each process. Should be a string in the format integer-unit e.g. `--max_memory '8.GB'`"
+                },
+                "max_time": {
+                    "type": "string",
+                    "description": "Maximum amount of time that can be requested for any single job.",
+                    "default": "1.h",
+                    "fa_icon": "far fa-clock",
+                    "pattern": "^(\\d+\\.?\\s*(s|m|h|d|day)\\s*)+$",
+                    "hidden": true,
+                    "help_text": "Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`"
+                }
+            }
+        },
+        "generic_options": {
+            "title": "Generic options",
+            "type": "object",
+            "fa_icon": "fas fa-file-import",
+            "description": "Less common options for the pipeline, typically set in a config file.",
+            "help_text": "These options are common to all nf-core pipelines and allow you to customise some of the core preferences for how the pipeline runs.\n\nTypically these options would be set in a Nextflow config file loaded for all pipeline runs, such as `~/.nextflow/config`.",
+            "properties": {
+                "help": {
+                    "type": "boolean",
+                    "description": "Display help text.",
+                    "fa_icon": "fas fa-question-circle",
+                    "hidden": true
+                },
+                "version": {
+                    "type": "boolean",
+                    "description": "Display version and exit.",
+                    "fa_icon": "fas fa-question-circle",
+                    "hidden": true
+                },
+                "publish_dir_mode": {
+                    "type": "string",
+                    "default": "copy",
+                    "description": "Method used to save pipeline results to output directory.",
+                    "help_text": "The Nextflow `publishDir` option specifies which intermediate files should be saved to the output directory. This option tells the pipeline what method should be used to move these files. See [Nextflow docs](https://www.nextflow.io/docs/latest/process.html#publishdir) for details.",
+                    "fa_icon": "fas fa-copy",
+                    "enum": ["symlink", "rellink", "link", "copy", "copyNoFollow", "move"],
+                    "hidden": true
+                },
+                "email_on_fail": {
+                    "type": "string",
+                    "description": "Email address for completion summary, only when pipeline fails.",
+                    "fa_icon": "fas fa-exclamation-triangle",
+                    "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
+                    "help_text": "An email address to send a summary email to when the pipeline is completed - ONLY sent if the pipeline does not exit successfully.",
+                    "hidden": true
+                },
+                "plaintext_email": {
+                    "type": "boolean",
+                    "description": "Send plain-text email instead of HTML.",
+                    "fa_icon": "fas fa-remove-format",
+                    "hidden": true
+                },
+                "monochrome_logs": {
+                    "type": "boolean",
+                    "description": "Do not use coloured log outputs.",
+                    "fa_icon": "fas fa-palette",
+                    "hidden": true
+                },
+                "hook_url": {
+                    "type": "string",
+                    "description": "Incoming hook URL for messaging service",
+                    "fa_icon": "fas fa-people-group",
+                    "help_text": "Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.",
+                    "hidden": true
+                },
+                "validate_params": {
+                    "type": "boolean",
+                    "description": "Boolean whether to validate parameters against the schema at runtime",
+                    "default": true,
+                    "fa_icon": "fas fa-check-square",
+                    "hidden": true
+                },
+                "validationShowHiddenParams": {
+                    "type": "boolean",
+                    "fa_icon": "far fa-eye-slash",
+                    "description": "Show all params when using `--help`",
+                    "hidden": true,
+                    "help_text": "By default, parameters set as _hidden_ in the schema are not shown on the command line when a user runs with `--help`. Specifying this option will tell the pipeline to show all parameters."
+                },
+                "validationFailUnrecognisedParams": {
+                    "type": "boolean",
+                    "fa_icon": "far fa-check-circle",
+                    "description": "Validation of parameters fails when an unrecognised parameter is found.",
+                    "hidden": true,
+                    "help_text": "By default, when an unrecognised parameter is found, it returns a warinig."
+                },
+                "validationLenientMode": {
+                    "type": "boolean",
+                    "fa_icon": "far fa-check-circle",
+                    "description": "Validation of parameters in lenient more.",
+                    "hidden": true,
+                    "help_text": "Allows string values that are parseable as numbers or booleans. For further information see [JSONSchema docs](https://github.com/everit-org/json-schema#lenient-mode)."
+                }
+            }
+        }
+    },
+    "allOf": [
+        {
+            "$ref": "#/definitions/input_output_options"
+        },
+        {
+            "$ref": "#/definitions/fastmatch"
+        },
+        {
+            "$ref": "#/definitions/metadata"
+        },
+        {
+            "$ref": "#/definitions/profile_dists"
+        },
+        {
+            "$ref": "#/definitions/institutional_config_options"
+        },
+        {
+            "$ref": "#/definitions/max_job_request_options"
+        },
+        {
+            "$ref": "#/definitions/generic_options"
+        }
+    ]
+}
