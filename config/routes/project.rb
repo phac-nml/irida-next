@@ -22,7 +22,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
         get :new_destroy
       end
 
-      resource :file_import, module: :samples, only: %i[create new]
+      resource :file_import, module: :samples, only: %i[create new] if Flipper.enabled?(:batch_sample_file_import)
 
       resources :bots, only: %i[create destroy index new] do
         get :destroy_confirmation
