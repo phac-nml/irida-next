@@ -186,7 +186,11 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
       redirect_to workflow_execution_path(workflow_execution)
     else
       namespace = workflow_execution.namespace
-      redirect_to namespace_project_workflow_execution_path(namespace.parent, namespace.project, workflow_execution)
+      if namespace.type == 'Group'
+        redirect_to group_workflow_execution_path(namespace, workflow_execution)
+      else
+        redirect_to namespace_project_workflow_execution_path(namespace.parent, namespace.project, workflow_execution)
+      end
     end
   end
 end
