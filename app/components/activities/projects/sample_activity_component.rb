@@ -18,6 +18,10 @@ module Activities
       def samples_tab
         @activity[:action] == 'metadata_update' ? 'metadata' : ''
       end
+
+      def import_samples_action
+        @activity[:action] == 'import_samples'
+      end
     end
   end
 end

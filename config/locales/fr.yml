@@ -247,6 +247,8 @@ fr:
     group:
       create_html: "%{user} created group"
       destroy_html: "%{user} removed group"
+      import_samples:
+        create_html: "%{user} imported %{href} samples to projects within this group"
       member:
         create_html: "%{user} added member %{href} to group"
         destroy_html: "%{user} removed member %{href} from group"
@@ -278,6 +280,8 @@ fr:
     namespaces_project_namespace:
       create_html: "%{user} created project"
       destroy_html: "%{user} removed project"
+      import_samples:
+        create_html: "%{user} imported %{href} samples to project"
       member:
         create_html: "%{user} added member %{href} to project"
         destroy_html: "%{user} removed member %{href} from project"

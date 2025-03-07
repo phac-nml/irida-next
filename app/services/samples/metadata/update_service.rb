@@ -15,7 +15,7 @@ module Samples
         @metadata = params['metadata']
         @analysis_id = params['analysis_id']
         @metadata_changes = { added: [], updated: [], deleted: [], not_updated: [], unchanged: [] }
-        @include_activity = params.key?('include_activity') ? params['include_activity'] : true
+        @include_activity = params.key?(:include_activity) ? params[:include_activity] : true
       end
 
       def execute # rubocop:disable Metrics/MethodLength, Metrics/AbcSize

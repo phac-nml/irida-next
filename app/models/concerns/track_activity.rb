@@ -208,6 +208,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   def namespace_project_sample_activity_parameters(params, activity)
     params = add_sample_activity_params(params, activity)
     params = add_metadata_template_params(params, activity)
+    params = add_samples_import_params(params, activity)
     add_bulk_sample_params(params, activity)
   end
 
@@ -234,6 +235,14 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     )
   end
 
+  def add_samples_import_params(params, activity)
+    return params unless activity.parameters[:action] == 'import_samples'
+
+    params.merge(
+      imported_samples_count: activity.parameters[:imported_samples_count]
+    )
+  end
+
   def add_bulk_sample_params(params, activity)
     return params unless activity.parameters[:action] == 'sample_destroy_multiple'
 
@@ -249,6 +258,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
   def additional_group_activity_params(params, activity) # rubocop:disable Metrics/AbcSize
     params = add_metadata_template_params(params, activity)
+    params = add_samples_import_params(params, activity)
 
     if activity.parameters[:action] == 'group_subgroup_destroy'
       params.merge!({ removed_group_puid: activity.parameters[:removed_group_puid] })

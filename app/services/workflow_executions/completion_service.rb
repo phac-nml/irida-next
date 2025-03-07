@@ -138,7 +138,7 @@ module WorkflowExecutions
         params = {
           'metadata' => swe.metadata,
           'analysis_id' => @workflow_execution.id,
-          'include_activity' => false
+          include_activity: false
         }
         Samples::Metadata::UpdateService.new(
           swe.sample.project, swe.sample, current_user, params
