@@ -29,8 +29,6 @@ jobs:
           --health-retries 5
 
     steps:
-      - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y curl libjemalloc2 libvips
       - name: Check out code
         uses: actions/checkout@v4
       - name: Set up Ruby
@@ -48,9 +46,6 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
-      - name: Precompile assets
-        run: |
-          bin/rails assets:precompile
       - name: Download Sapporo
         uses: actions/checkout@v3
         with:
