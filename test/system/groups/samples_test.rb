@@ -800,7 +800,7 @@ module Groups
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
-      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
@@ -1100,7 +1100,7 @@ module Groups
         # dialog close button available when selecting params
         assert_selector 'button.dialog--close'
 
-        within('div[data-metadata--file-import-loaded-value="true"]') do
+        within('#dialog') do
           attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
           find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
           click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
