@@ -1885,6 +1885,18 @@ en:
       no_template: No template
       remove_all: Remove all
   workflow_executions:
+    attachment:
+      download: Download
+      preview: Preview
+    attachments:
+      file_not_found: File not found
+      index:
+        copied: Copied
+        copy: Copy
+        download: Download
+        not_available:
+          details: Please download to view the contents
+          title: Preview not available for this file type
     create:
       error_message: 'The following errors prevented the Workflow Execution from being created:'
     edit_dialog:
@@ -1909,6 +1921,7 @@ en:
         submit_button: Submit
     files:
       table_header:
+        actions: Actions
         created_at: Created At
         filename: Filename
         format: Format

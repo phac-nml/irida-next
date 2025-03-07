@@ -1,0 +1,74 @@
+<div
+  class="container px-4 py-8 mx-auto"
+  data-controller="copy"
+  id="<%= dom_id(@attachment) %>"
+>
+  <div
+    class="bg-white border rounded-lg shadow-sm  dark:bg-slate-800 border-slate-200 dark:border-slate-700"
+  >
+    <!-- Header with filename and actions -->
+    <div
+      class="flex items-center justify-between px-6 py-4 border-b  border-slate-200 dark:border-slate-700"
+    >
+      <div class="flex items-center space-x-4">
+        <div class="text-slate-600 dark:text-slate-400">
+          <%= viral_icon(name: :document_text, classes: "w-10 h-10") %>
+        </div>
+        <div>
+          <h1 class="text-xl font-semibold text-slate-900 dark:text-white"><%= @attachment.file.filename %></h1>
+          <p class="text-sm text-slate-500 dark:text-slate-400">
+            <%= number_to_human_size(@attachment.file.byte_size) %>
+            •
+            <%= time_tag @attachment.created_at, class: "text-slate-500 dark:text-slate-400" %>
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <% if @attachment.copyable? %>
+          <button
+            data-copy-target="button"
+            data-action="copy#copy"
+            class="inline-flex items-center px-4 py-2 text-sm font-medium bg-white border rounded-lg  text-slate-900 dark:text-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-600 focus:ring-4 focus:ring-slate-100 dark:focus:ring-slate-700"
+          >
+            <div class="flex items-center hidden" data-copy-target="successIcon">
+              <%= viral_icon(name: "check", classes: "w-4 h-4 mr-2", color: :success) %>
+              <%= t(".copied") %>
+            </div>
+            <span class="flex items-center" data-copy-target="buttonLabel">
+              <%= viral_icon(name: :clipboard_document, classes: "w-4 h-4 mr-2") %>
+              <%= t(".copy") %>
+            </span>
+          </button>
+        <% end %>
+
+        <%= link_to rails_blob_path(@attachment.file, disposition: :attachment),
+            class: "inline-flex items-center px-4 py-2 text-sm font-medium text-slate-900 dark:text-white bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 focus:ring-4 focus:ring-slate-100 dark:focus:ring-slate-700" do %>
+          <%= viral_icon(name: :download, classes: "w-4 h-4 mr-2") %>
+          <%= t(".download") %>
+        <% end %>
+      </div>
+    </div>
+    <!-- File preview area -->
+    <div class="p-6">
+      <% if @attachment.previewable? %>
+        <%= render "#{@attachment.metadata["format"]}_preview", file: @attachment.file %>
+      <% else %>
+        <div class="flex flex-col items-center justify-center py-12 text-center">
+          <div class="mb-4">
+            <%= viral_icon(
+              name: "document_text",
+              classes: "w-12 h-12 text-slate-400 dark:text-slate-500",
+            ) %>
+          </div>
+          <h3 class="mb-2 text-lg font-medium text-slate-900 dark:text-white">
+            <%= t(".not_available.title") %>
+          </h3>
+          <p class="text-sm text-slate-500 dark:text-slate-400">
+            <%= t(".not_available.details") %>
+          </p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

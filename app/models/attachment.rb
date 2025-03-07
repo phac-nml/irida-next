@@ -14,8 +14,23 @@ class Attachment < ApplicationRecord
     'spreadsheet' => /^\S+\.(xls|xlsx)?$/,
     'json' => /^\S+\.(json)?(\.gz)?$/,
     'genbank' => /^\S+\.(gbk|gbf|genbank)?(\.gz)?$/,
+    'image' => /^\S+\.(png|jpg|jpeg|gif|bmp|tiff|svg|webp)$/,
     'unknown' => nil
   }.freeze
+
+  PREVIEWABLE_TYPES = {
+    'image' => :image,
+    'text' => :text,
+    'fasta' => :text,
+    'fastq' => :text,
+    'genbank' => :text,
+    'json' => :json,
+    'csv' => :csv,
+    'tsv' => :tsv,
+    'spreadsheet' => :excel
+  }.freeze
+
+  COPYABLE_TYPES = %w[text json csv tsv fasta fastq genbank].freeze
 
   has_logidze
   acts_as_paranoid
@@ -65,6 +80,14 @@ class Attachment < ApplicationRecord
 
   def associated_attachment
     Attachment.find_by(attachable:, id: metadata['associated_attachment_id'])
+  end
+
+  def previewable?
+    PREVIEWABLE_TYPES.key?(metadata['format']) && metadata['compression'] == 'none'
+  end
+
+  def copyable?
+    COPYABLE_TYPES.include?(metadata['format'])
   end
 
   private

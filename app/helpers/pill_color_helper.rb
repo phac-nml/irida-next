@@ -8,6 +8,7 @@ module PillColorHelper
       fastq: 'green',
       text: 'orange',
       csv: 'fuchsia',
+      image: 'purple',
       tsv: 'lime',
       json: 'sky',
       genbank: 'teal',
