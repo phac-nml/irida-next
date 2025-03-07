@@ -1,4 +1,4 @@
-<%= viral_dialog(open: open) do |dialog| %>
+<%= viral_dialog(open: open, size: :large) do |dialog| %>
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
     <%= turbo_stream_from @broadcast_target %>
@@ -6,83 +6,133 @@
 
       <%= turbo_frame_tag "import_metadata_dialog_alert" %>
 
-      <%= form_for(:file_import, url: url, method: :post) do |form| %>
-        <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>"/>
-        <div class="grid gap-4" data-controller="metadata--file-import">
-          <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
-            <%= t(".description") %>
-          </p>
-          <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
-            <%= t(".namespace.description") %>
-            <% if @namespace.type == 'Group' %>
-              <%= t(".namespace.group.description_html") %>
-            <% else %>
-              <%= t(".namespace.project.description_html") %>
+      <div
+        <% if Flipper.enabled?(:metadata_import_field_selection) %>
+        data-controller="metadata--file-import viral--sortable-lists--two-lists-selection"
+        data-viral--sortable-lists--two-lists-selection-selected-list-value="selected"
+        data-viral--sortable-lists--two-lists-selection-available-list-value="available"
+        data-viral--sortable-lists--two-lists-selection-field-name-value="file_import[metadata_columns][]"
+        <% else %>
+        data-controller="metadata--file-import"
+        <% end%>
+      >
+
+        <%= form_for(:file_import, url: url, method: :post) do |form| %>
+          <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>"/>
+          <div class="grid gap-4">
+            <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+              <%= t(".description") %>
+            </p>
+            <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+              <%= t(".namespace.description") %>
+              <% if @namespace.type == 'Group' %>
+                <%= t(".namespace.group.description_html") %>
+              <% else %>
+                <%= t(".namespace.project.description_html") %>
+              <% end %>
+            </p>
+            <div class="form-field">
+              <%= form.label :file,
+                         t(".file"),
+                         class:
+                           "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
+              <%= form.file_field :file,
+                              required: true,
+                              accept:
+                                # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+                                "text/csv,.tsv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                              data: {
+                                action: "change->metadata--file-import#readFile",
+                              },
+                              class:
+                                "block w-full text-sm text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 focus:outline-none dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
+              <p class="mt-1 text-sm text-slate-500 dark:text-slate-300"><%= t(".file_help") %></p>
+            </div>
+            <div class="form-field">
+              <%= form.label :sample_id_column,
+                         t(".sample_id_column"),
+                         class:
+                           "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
+              <%= form.select :sample_id_column,
+                          {},
+                          { prompt: t(".select_sample_id_column") },
+                          required: true,
+                          data: {
+                            "metadata--file-import-target": "sampleIdColumn",
+                            action:
+                              "change->metadata--file-import#changeSampleIDInput viral--sortable-lists--two-lists-selection#idempotentConnect",
+                          } %>
+            </div>
+            <% if Flipper.enabled?(:metadata_import_field_selection) %>
+              <div data-metadata--file-import-target="metadataColumns"></div>
+              <template data-metadata--file-import-target="sortableListsTemplate">
+                <div class="grid gap-4">
+                  <div
+                    class="hidden"
+                    data-viral--sortable-lists--two-lists-selection-target="field"
+                  ></div>
+                  <%= viral_sortable_lists(
+                title: t(".metadata_columns"),
+            ) do |sortable_lists| %>
+                    <%= sortable_lists.with_list(
+                      id: "available",
+                      title: t(".available"),
+                      group: "metadata_selection",
+                      container_classes: "block mb-1 pr-2 text-sm font-medium",
+                      list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
+                    ) %>
+                    <%= sortable_lists.with_list(
+                      id: "selected",
+                      title: t(".selected"),
+                      group: "metadata_selection",
+                      container_classes: "block mb-1 text-sm font-medium",
+                      list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
+                    ) %>
+                  <% end %>
+                </div>
+              </template>
+              <template data-metadata--file-import-target="sortableListsItemTemplate">
+                <%= render Viral::SortableList::ListItemComponent.new(list_item: "NAME_HERE") %>
+              </template>
             <% end %>
-          </p>
-          <div class="form-field">
-            <%= form.label :file,
-                       t(".file"),
-                       class:
-                         "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
-            <%= form.file_field :file,
-                            required: true,
-                            accept:
-                              # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
-                              "text/csv,.tsv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                            data: {
-                              action: "change->metadata--file-import#readFile",
-                            },
-                            class:
-                              "block w-full text-sm text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 focus:outline-none dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
-            <p class="mt-1 text-sm text-slate-500 dark:text-slate-300"><%= t(".file_help") %></p>
+            <div class="flex items-center">
+              <%= form.check_box :ignore_empty_values,
+                             {
+                               class:
+                                 "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600",
+                             },
+                             true,
+                             false %>
+              <%= form.label :ignore_empty_values,
+                         t(".ignore_empty_values"),
+                         class: "ml-2 text-sm font-medium text-slate-900 dark:text-slate-300" %>
+              <%= viral_tooltip(title: t(:'.ignore_empty_values.description')) do %>
+                <div
+                  class="
+                    inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500
+                    rounded-lg dark:text-blue-200
+                  "
+                >
+                  <%= viral_icon(name: "information_circle_solid", classes: "w-5 h-5") %>
+                  <span class="sr-only"><%= t("components.flash.information_icon") %></span>
+                </div>
+              <% end %>
+            </div>
+            <div>
+              <%= form.submit t(".submit_button"),
+                          class: "button button--size-default button--state-primary",
+                          data: {
+                            turbo_frame: "_top",
+                            action:
+                              "click->viral--sortable-lists--two-lists-selection#constructParams",
+                            "viral--sortable-lists--two-lists-selection-target": "submitBtn",
+                            "metadata--file-import-target": "submitButton",
+                          },
+                          disabled: true %>
+            </div>
           </div>
-          <div class="form-field">
-            <%= form.label :sample_id_column,
-                       t(".sample_id_column"),
-                       class:
-                         "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
-            <%= form.select :sample_id_column,
-                        {},
-                        { prompt: t(".select_sample_id_column") },
-                        required: true,
-                        data: {
-                          "metadata--file-import-target": "selectInput",
-                          action: "change->metadata--file-import#toggleSubmitButton",
-                        } %>
-          </div>
-          <div class="flex items-center">
-            <%= form.check_box :ignore_empty_values,
-                           {
-                             class:
-                               "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600",
-                           },
-                           true,
-                           false %>
-            <%= form.label :ignore_empty_values,
-                       t(".ignore_empty_values"),
-                       class: "ml-2 text-sm font-medium text-slate-900 dark:text-slate-300" %>
-            <%= viral_tooltip(title: t(:'.ignore_empty_values.description')) do %>
-              <div
-                class="
-                  inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500
-                  rounded-lg dark:text-blue-200
-                "
-              >
-                <%= viral_icon(name: "information_circle_solid", classes: "w-5 h-5") %>
-                <span class="sr-only"><%= t("components.flash.information_icon") %></span>
-              </div>
-            <% end %>
-          </div>
-          <div>
-            <%= form.submit t(".submit_button"),
-                        class: "button button--size-default button--state-primary",
-                        data: {
-                          "metadata--file-import-target": "submitButton",
-                        } %>
-          </div>
-        </div>
-      <% end %>
+        <% end %>
+      </div>
     <% end %>
   <% end %>
 <% end %>

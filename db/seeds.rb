@@ -5,6 +5,7 @@ require 'faker'
 Faker::Config.locale = 'en'
 
 Flipper.enable(:workflow_execution_sharing)
+Flipper.enable(:metadata_import_field_selection)
 
 @namespace_group_link_expiry_date = (Time.zone.today + 14).strftime('%Y-%m-%d')
 

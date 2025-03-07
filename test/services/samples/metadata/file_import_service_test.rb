@@ -6,6 +6,8 @@ module Samples
   module Metadata
     class FileImportServiceTest < ActiveSupport::TestCase
       def setup
+        Flipper.enable(:metadata_import_field_selection)
+
         @john_doe = users(:john_doe)
         @jane_doe = users(:jane_doe)
         @group = groups(:group_one)
@@ -79,7 +81,7 @@ module Samples
       test 'import sample metadata via csv file using sample names for project namespace' do
         assert_equal({}, @sample1.metadata)
         assert_equal({}, @sample2.metadata)
-        params = { sample_id_column: 'sample_name' }
+        params = { sample_id_column: 'sample_name', metadata_columns: %w[metadatafield1 metadatafield2 metadatafield3] }
         response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, @blob.id,
                                                             params).execute
         assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
@@ -104,7 +106,7 @@ module Samples
           content_type: file.content_type
         )
 
-        params = { sample_id_column: 'sample_puid' }
+        params = { sample_id_column: 'sample_puid', metadata_columns: %w[metadatafield1 metadatafield2 metadatafield3] }
         response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, blob.id,
                                                             params).execute
         assert_equal({ @sample1.puid => { added: %w[metadatafield1 metadatafield2 metadatafield3],
@@ -142,7 +144,8 @@ module Samples
           content_type: file.content_type
         )
 
-        params = { sample_id_column: 'sample_puid' }
+        params = { sample_id_column: 'sample_puid',
+                   metadata_columns: %w[metadatafield1 metadatafield2 metadatafield3] }
         response = Samples::Metadata::FileImportService.new(@group, @john_doe, blob.id,
                                                             params).execute
         assert_equal({ @sample1.puid => { added: %w[metadatafield1 metadatafield2 metadatafield3],
@@ -167,7 +170,8 @@ module Samples
           content_type: file.content_type
         )
 
-        params = { sample_id_column: 'sample_name' }
+        params = { sample_id_column: 'sample_name',
+                   metadata_columns: %w[metadatafield1 metadatafield2 metadatafield3 metadatafield4] }
         response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, blob.id, params).execute
         assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3 metadatafield4],
                                           updated: [], deleted: [], not_updated: [], unchanged: [] },
@@ -192,7 +196,8 @@ module Samples
           content_type: file.content_type
         )
 
-        params = { sample_id_column: 'sample_name' }
+        params = { sample_id_column: 'sample_name',
+                   metadata_columns: %w[metadatafield1 metadatafield2 metadatafield3 metadatafield4] }
         response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, blob.id, params).execute
         assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3 metadatafield4],
                                           updated: [], deleted: [], not_updated: [], unchanged: [] },
@@ -216,7 +221,7 @@ module Samples
           filename: file.original_filename,
           content_type: file.content_type
         )
-        params = { sample_id_column: 'sample_name' }
+        params = { sample_id_column: 'sample_name', metadata_columns: %w[metadatafield1 metadatafield2 metadatafield3] }
         response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, blob.id,
                                                             params).execute
         assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
@@ -320,7 +325,7 @@ module Samples
           content_type: file.content_type
         )
 
-        params = { sample_id_column: 'sample_name' }
+        params = { sample_id_column: 'sample_name', metadata_columns: %w[metadatafield1 metadatafield3] }
         response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, blob.id,
                                                             params).execute
         assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield3],
@@ -343,7 +348,7 @@ module Samples
           content_type: file.content_type
         )
 
-        params = { sample_id_column: 'sample_name' }
+        params = { sample_id_column: 'sample_name', metadata_columns: %w[metadatafield1 metadatafield3] }
         response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, blob.id,
                                                             params).execute
         assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield3],
@@ -367,7 +372,8 @@ module Samples
           content_type: file.content_type
         )
 
-        params = { sample_id_column: 'sample_name', ignore_empty_values: true }
+        params = { sample_id_column: 'sample_name', metadata_columns: %w[metadatafield1 metadatafield2 metadatafield3],
+                   ignore_empty_values: true }
         response = Samples::Metadata::FileImportService.new(project29.namespace, @john_doe, blob.id, params).execute
         assert_equal({ sample32.name => { added: ['metadatafield3'], updated: ['metadatafield2'],
                                           deleted: [], not_updated: [], unchanged: [] } }, response)
@@ -394,7 +400,7 @@ module Samples
           content_type: file.content_type
         )
 
-        params = { sample_id_column: 'sample_name' }
+        params = { sample_id_column: 'sample_name', metadata_columns: %w[metadatafield1 metadatafield3] }
         response = Samples::Metadata::FileImportService.new(project31.namespace, @john_doe, blob.id, params).execute
         assert_empty response
         assert_equal("Sample 'Sample 34' with field(s) 'metadatafield1' cannot be updated.",
@@ -416,7 +422,8 @@ module Samples
           content_type: file.content_type
         )
 
-        params = { sample_id_column: 'sample_name', ignore_empty_values: false }
+        params = { sample_id_column: 'sample_name', metadata_columns: %w[metadatafield1 metadatafield2 metadatafield3],
+                   ignore_empty_values: false }
         response = Samples::Metadata::FileImportService.new(project29.namespace, @john_doe, blob.id, params).execute
         assert_equal({ sample32.name => { added: ['metadatafield3'], updated: ['metadatafield2'],
                                           deleted: ['metadatafield1'], not_updated: [], unchanged: [] } }, response)
@@ -437,7 +444,8 @@ module Samples
           content_type: file.content_type
         )
 
-        params = { sample_id_column: 'sample_name' }
+        params = { sample_id_column: 'sample_name',
+                   metadata_columns: ['sample_name', 'metadatafield1', ' metadatafield2 ', 'metadatafield3'] }
         response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, blob.id,
                                                             params).execute
         assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
@@ -461,7 +469,7 @@ module Samples
           filename: file.original_filename,
           content_type: file.content_type
         )
-        params = { sample_id_column: 'sample_name' }
+        params = { sample_id_column: 'sample_name', metadata_columns: %w[metadatafield1 metadatafield2 metadatafield3] }
         response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, blob.id, params).execute
         assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
                                           updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
@@ -474,6 +482,22 @@ module Samples
         assert_equal({ 'metadatafield1' => '10', 'metadatafield2' => '20', 'metadatafield3' => '30' },
                      @sample1.reload.metadata)
         assert_equal({}, @sample2.reload.metadata)
+      end
+
+      test 'import sample metadata selecting a column' do
+        assert_equal({}, @sample1.metadata)
+        assert_equal({}, @sample2.metadata)
+        params = { sample_id_column: 'sample_name', metadata_columns: %w[metadatafield1] }
+        response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, @blob.id,
+                                                            params).execute
+        assert_equal({ @sample1.name => { added: %w[metadatafield1],
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] },
+                       @sample2.name => { added: %w[metadatafield1],
+                                          updated: [], deleted: [], not_updated: [], unchanged: [] } }, response)
+        assert_equal({ 'metadatafield1' => '10' },
+                     @sample1.reload.metadata)
+        assert_equal({ 'metadatafield1' => '15' },
+                     @sample2.reload.metadata)
       end
     end
   end
