@@ -3,7 +3,11 @@
 module Activities
   module Groups
     # Component for rendering an group sample activity
-    class SampleActivityComponent < BaseActivityComponent
+    class SampleActivityComponent < Component
+      def initialize(activity: nil)
+        @activity = activity
+      end
+
       def import_samples_action
         @activity[:action] == 'import_samples'
       end
