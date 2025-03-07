@@ -1100,11 +1100,10 @@ module Groups
         # dialog close button available when selecting params
         assert_selector 'button.dialog--close'
 
-        within('#dialog') do
-          attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
-          find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
-          click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
-        end
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
+        find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
+        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+
         assert_text I18n.t('shared.progress_bar.in_progress')
         # dialog button hidden while importing
         assert_no_selector 'button.dialog--close'
