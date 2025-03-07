@@ -13,9 +13,9 @@ class ActivityComponentTest < ViewComponentTestCase
     ).reverse
 
     # Limit set to 10 per page
-    @pagy = Pagy.new(count: 12, page: 1, limit: 10)
+    @pagy = Pagy.new(count: 13, page: 1, limit: 10)
 
-    assert_equal 12, @activities.length
+    assert_equal 13, @activities.length
     assert_equal 3, @project2_activities.length
 
     assert_equal(1, @activities.count { |activity| activity[:key].include?('project_namespace.create') })
@@ -64,9 +64,9 @@ class ActivityComponentTest < ViewComponentTestCase
     @activities = group.human_readable_activity(group.retrieve_group_activity).reverse
 
     # Limit set to 10 per page
-    @pagy = Pagy.new(count: 8, page: 1, limit: 10)
+    @pagy = Pagy.new(count: 9, page: 1, limit: 10)
 
-    assert_equal 8, @activities.length
+    assert_equal 9, @activities.length
 
     assert_equal(1, @activities.count { |activity| activity[:key].include?('group.create') })
     assert_equal(1, @activities.count { |activity| activity[:key].include?('group.subgroups.create') })
@@ -75,6 +75,7 @@ class ActivityComponentTest < ViewComponentTestCase
     assert_equal(1, @activities.count { |activity| activity[:key].include?('group.projects.transfer_in') })
     assert_equal(1, @activities.count { |activity| activity[:key].include?('group.member.create') })
     assert_equal(1, @activities.count { |activity| activity[:key].include?('group.namespace_group_link.create') })
+    assert_equal(1, @activities.count { |activity| activity[:key].include?('group.import_samples.create') })
 
     render_inline ActivityComponent.new(activities: @activities, pagy: @pagy)
 
