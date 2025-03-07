@@ -1,43 +1,44 @@
-# PostgreSQL configuration options for development, production,
-# and test profiles. Currently using postgres version 14.6
+# PostgreSQL. Versions 9.3 and up are supported.
 #
-#   Ensure the PostgreSQL gem is defined in your Gemfile
-#   gem "pg"
+# Install the pg driver:
+#   gem install pg
+# On macOS with Homebrew:
+#   gem install pg -- --with-pg-config=/usr/local/bin/pg_config
+# On Windows:
+#   gem install pg
+#       Choose the win32 build.
+#       Install PostgreSQL and put its /bin directory on your path.
 #
-#   Also, ensure you have postgresql installed on your machine
-#   and/or dev/prod server either using asdf or using the OS
-#   package manager (such as apt-get for Ubuntu)
+# Configure Using Gemfile
+# gem "pg"
 #
 default: &default
   adapter: postgresql
   encoding: unicode
   # For details on connection pooling, see Rails configuration guide
-  # http://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  # https://guides.rubyonrails.org/configuring.html#database-pooling
+  #
+  # For GoodJob container, pool size is GOOD_JOB_MAX_THREADS (5) + 3 (1 for LISTEN/NOTIFY, 2 for CRON)
+  pool: <%= $PROGRAM_NAME.include?("good_job") ? ENV.fetch("GOOD_JOB_MAX_THREADS", 5).to_i + 3 : (ENV.fetch("RAILS_MAX_THREADS", 5).to_i) %>
+  <% if ENV["DB_HOST"] %>
+  host: <%= ENV["DB_HOST"] %>
+  username: postgres
+  password: postgres
+  <% else %>
+  host: localhost
   username: test
   password: test
-  host: localhost
-  timeout: 5000
+  <% end %>
 
-jobs: &jobs
-  adapter: postgresql
-  encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
-  # http://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: test
-  password: test
-  host: localhost
-  timeout: 5000
-  migrations_paths: db/jobs_migrate
 
 development:
   primary:
     <<: *default
     database: irida_next_development
   jobs:
-    <<: *jobs
+    <<: *default
     database: irida_next_jobs_development
+    migrations_paths: db/jobs_migrate
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -47,17 +48,38 @@ test:
     <<: *default
     database: irida_next_test
   jobs:
-    <<: *jobs
+    <<: *default
     database: irida_next_jobs_test
+    migrations_paths: db/jobs_migrate
 
+# As with config/credentials.yml, you never want to store sensitive information,
+# like your database password, in your source code. If your source code is
+# ever seen by anyone, they now have access to your database.
+#
+# Instead, provide the password or a full connection URL as an environment
+# variable when you boot the app. For example:
 #
 #   DATABASE_URL="postgres://myuser:mypass@localhost/somedatabase"
 #   JOBS_DATABASE_URL="postgres://myuser:mypass@localhost/someotherdatabase"
 #
+# If the connection URL is provided in the special DATABASE_URL environment
+# variable, Rails will automatically merge its configuration values on top of
+# the values provided in this file. Alternatively, you can specify a connection
+# URL environment variable explicitly:
+#
+#   production:
+#     url: <%= ENV["MY_APP_DATABASE_URL"] %>
+#
+# Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
+# for a full overview on how database connection configuration can be specified.
+#
 production:
-  primary:
+  primary: &primary_production
     <<: *default
-    url: <%= ENV['DATABASE_URL'] %>
+    database: irida_next_production
+    username: irida_next
+    password: <%= ENV["IRIDA_NEXT_DATABASE_PASSWORD"] %>
   jobs:
-    <<: *jobs
-    url: <%= ENV['JOBS_DATABASE_URL'] %>
+    <<: *primary_production
+    database: irida_next_jobs_production
+    migrations_paths: db/jobs_migrate
