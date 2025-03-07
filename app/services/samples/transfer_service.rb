@@ -53,7 +53,7 @@ module Samples
       not_found_sample_ids = []
       old_namespaces = namespaces_for_transfer(@project.namespace)
       new_namespaces = namespaces_for_transfer(@new_project.namespace)
-      total_sample_count = sample_ids.count.to_f
+      total_sample_count = sample_ids.count
       sample_ids.each.with_index(1) do |sample_id, index|
         update_progress_bar(index, total_sample_count, broadcast_target)
         sample = Sample.find_by!(id: sample_id, project_id: @project.id)
