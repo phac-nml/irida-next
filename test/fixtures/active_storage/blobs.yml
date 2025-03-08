@@ -89,6 +89,8 @@ samples_workflow_execution_completed_output_blob: <%= ActiveStorage::FixtureSet.
 
 samples_shared_workflow_execution_completed_output_blob: <%= ActiveStorage::FixtureSet.blob filename: "INXT_SAM_AAAAAAAABW.assembly.fa.gz", service_name: "test" %>
 
+samples_group_shared_workflow_execution_completed_output_blob: <%= ActiveStorage::FixtureSet.blob filename: "INXT_SAM_AAAAAAAABW.assembly.fa.gz", service_name: "test" %>
+
 data_export_7_test_export_blob: <%= ActiveStorage::FixtureSet.blob filename: "data_export_7.zip", service_name: "test" %>
 
 data_export_8_test_export_blob: <%= ActiveStorage::FixtureSet.blob filename: "data_export_8.csv", service_name: "test" %>
@@ -98,6 +100,8 @@ data_export_9_test_export_blob: <%= ActiveStorage::FixtureSet.blob filename: "da
 data_export_11_test_export_blob: <%= ActiveStorage::FixtureSet.blob filename: "data_export_11.zip", service_name: "test" %>
 
 data_export_12_test_export_blob: <%= ActiveStorage::FixtureSet.blob filename: "data_export_12.zip", service_name: "test" %>
+
+data_export_13_test_export_blob: <%= ActiveStorage::FixtureSet.blob filename: "data_export_13.zip", service_name: "test" %>
 
 attachmentEndToEndFWD_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_end_to_end_F.fastq", service_name: "test" %>
 attachmentEndToEndREV_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file_end_to_end_R.fastq", service_name: "test" %>

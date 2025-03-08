@@ -44,6 +44,8 @@ module DataExports
     def validate_analysis_ids
       workflow_executions = if params['export_parameters']['analysis_type'] == 'project'
                               authorized_export_project_workflows
+                            elsif params['export_parameters']['analysis_type'] == 'group'
+                              authorized_export_group_workflows
                             else
                               authorized_export_user_workflows
                             end
@@ -73,6 +75,14 @@ module DataExports
       authorize! project_namespace, to: :export_data?
       authorized_scope(WorkflowExecution, type: :relation, as: :automated_and_shared,
                                           scope_options: { project: project_namespace.project })
+        .where(id: params['export_parameters']['ids'])
+    end
+
+    def authorized_export_group_workflows
+      namespace = Namespace.find(params['export_parameters']['namespace_id'])
+      authorize! namespace, to: :export_data?
+      authorized_scope(WorkflowExecution, type: :relation, as: :group_shared,
+                                          scope_options: { group: namespace })
         .where(id: params['export_parameters']['ids'])
     end
 
