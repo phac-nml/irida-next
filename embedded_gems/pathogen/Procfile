@@ -1,0 +1,2 @@
+css: tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/pathogen_view_components.css --watch
+web: cd demo && bin/dev

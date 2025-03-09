@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html
+  class="<%= params.has_key?(:lookbook) ? params[:lookbook][:display][:theme] : 'light' %>"
+>
+  <head>
+    <title>Component Preview</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "pathogen_view_components", "data-turbo-track": "reload" %>
+
+    <%= hotwire_livereload_tags if Rails.env.development? %>
+
+    <% if Rails.env.development? %>
+      <%= javascript_include_tag "hotwire-livereload", defer: true %>
+    <% end %>
+  </head>
+
+  <body class="dark:bg-slate-900">
+    <div id="component-preview" class="w-screen h-screen p-4">
+      <% if params.dig(:lookbook, :display, :theme) == "all" || params.dig(:theme) == "all" %>
+        <div class="theme-wrap">
+          <% color_themes.each do |theme| %>
+            <div class="preview-wrap" <%= color_theme_attributes(theme) %>>
+              <%= yield %>
+              <div class="theme-name"><%= theme %></div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="preview-wrap">
+          <%= yield %>
+        </div>
+      <% end %>
+    </div>
+  </body>
+</html>

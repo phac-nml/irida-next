@@ -13,4 +13,5 @@ group :development do
   gem 'rubocop-performance'
   gem 'rubocop-rails'
   gem 'rubocop-rails-accessibility', '~> 1.0'
+  gem 'tailwindcss-rails'
 end
