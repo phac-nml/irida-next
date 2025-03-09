@@ -20,6 +20,8 @@ module Groups
       @sample28 = samples(:sample28)
       @sample30 = samples(:sample30)
       @sample31 = samples(:sample31)
+
+      Flipper.enable(:progress_bars)
     end
 
     def retrieve_puids
@@ -798,7 +800,7 @@ module Groups
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
-      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
@@ -828,8 +830,7 @@ module Groups
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
-      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
-
+      assert_text I18n.t('shared.progress_bar.in_progress')
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
       within %(turbo-frame[id="samples_dialog"]) do
@@ -853,6 +854,8 @@ module Groups
           assert_selector 'li', count: 1
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+
+        assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::MetadataImportJob]
       end
@@ -886,7 +889,7 @@ module Groups
         check 'Ignore empty values'
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
-      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
@@ -934,7 +937,7 @@ module Groups
         assert_not find_field('Ignore empty values').checked?
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
-      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
@@ -972,7 +975,7 @@ module Groups
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
-      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
@@ -1001,7 +1004,7 @@ module Groups
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
-      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
@@ -1049,7 +1052,7 @@ module Groups
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
-      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
@@ -1080,7 +1083,7 @@ module Groups
         end
         click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
       end
-      assert_text I18n.t('shared.samples.metadata.file_imports.dialog.spinner_message')
+      assert_text I18n.t('shared.progress_bar.in_progress')
 
       perform_enqueued_jobs only: [::Samples::MetadataImportJob]
 
@@ -1088,6 +1091,24 @@ module Groups
         assert_text I18n.t('shared.samples.metadata.file_imports.errors.description')
         click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
       end
+    end
+
+    test 'dialog close button is hidden during metadata import' do
+      visit group_samples_url(@group)
+      click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
+      within('#dialog') do
+        # dialog close button available when selecting params
+        assert_selector 'button.dialog--close'
+
+        attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
+        find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
+        click_on I18n.t('shared.samples.metadata.file_imports.dialog.submit_button')
+
+        assert_text I18n.t('shared.progress_bar.in_progress')
+        # dialog button hidden while importing
+        assert_no_selector 'button.dialog--close'
+      end
+      perform_enqueued_jobs only: [::Samples::MetadataImportJob]
     end
 
     test 'can update metadata value that is not from an analysis' do

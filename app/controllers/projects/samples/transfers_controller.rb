@@ -17,9 +17,8 @@ module Projects
         @broadcast_target = params[:broadcast_target]
         new_project_id = transfer_params[:new_project_id]
         sample_ids = transfer_params[:sample_ids]
-
-        ::Samples::TransferJob.set(wait_until: 1.second.from_now)
-                              .perform_later(@project, current_user, new_project_id, sample_ids, @broadcast_target)
+        ::Samples::TransferJob.set(wait_until: 1.second.from_now).perform_later(@project, current_user, new_project_id,
+                                                                                sample_ids, @broadcast_target)
 
         render status: :ok
       end

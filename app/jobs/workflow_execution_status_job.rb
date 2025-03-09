@@ -32,7 +32,8 @@ class WorkflowExecutionStatusJob < ApplicationJob
     when :completing
       WorkflowExecutionCompletionJob.perform_later(workflow_execution)
     else
-      WorkflowExecutionStatusJob.set(wait_until: 30.seconds.from_now).perform_later(workflow_execution)
+      WorkflowExecutionStatusJob.set(wait_until: 30.seconds.from_now)
+                                .perform_later(workflow_execution)
     end
   end
 end

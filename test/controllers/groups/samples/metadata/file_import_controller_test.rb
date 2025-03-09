@@ -19,7 +19,8 @@ module Groups
                    file_import: {
                      file: @csv,
                      sample_id_column: 'sample_name'
-                   }
+                   },
+                   broadcast_target: 'a_broadcast_target'
                  }
           end
         end
