@@ -1217,13 +1217,13 @@ module WorkflowExecutions
 
         # check metadata values of samples
         within('div[id="0_metadata_1"]') do
-          assert_text sample32.metadata['metadatafield1']
+          assert_selector 'span', text: sample32.metadata['metadatafield1']
         end
         within('div[id="1_metadata_1"]') do
-          assert_text sample33.metadata['metadatafield1']
+          assert_selector 'span', text: sample33.metadata['metadatafield1']
         end
         within('div[id="2_metadata_1"]') do
-          assert_text sample34.metadata['metadatafield1']
+          assert_selector 'span', text: sample34.metadata['metadatafield1']
         end
         within('div[id="3_metadata_1"]') do
           # sample contains no metadata value for this field, stays text input
@@ -1231,13 +1231,13 @@ module WorkflowExecutions
         end
 
         within('div[id="0_metadata_2"]') do
-          assert_text sample32.metadata['metadatafield2']
+          assert_selector 'span', text: sample32.metadata['metadatafield2']
         end
         within('div[id="1_metadata_2"]') do
-          assert_text sample33.metadata['metadatafield2']
+          assert_selector 'span', text: sample33.metadata['metadatafield2']
         end
         within('div[id="2_metadata_2"]') do
-          assert_text sample34.metadata['metadatafield2']
+          assert_selector 'span', text: sample34.metadata['metadatafield2']
         end
         within('div[id="3_metadata_2"]') do
           # sample contains no metadata value for this field, stays text input
