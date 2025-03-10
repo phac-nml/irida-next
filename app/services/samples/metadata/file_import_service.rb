@@ -24,7 +24,7 @@ module Samples
 
       protected
 
-      def perform_file_import(broadcast_target) # rubocop:disable Metrics/MethodLength
+      def perform_file_import(broadcast_target) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         response = {}
         headers = if Flipper.enabled?(:metadata_import_field_selection)
                     @selected_headers << @sample_id_column

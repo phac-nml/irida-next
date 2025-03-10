@@ -5,14 +5,14 @@ module Samples
   class TransferJob < ApplicationJob
     queue_as :default
 
-    def perform(project, current_user, new_project_id, sample_ids, broadcast_target) # rubocop:disable Metrics/MethodLength
+    def perform(project, current_user, new_project_id, sample_ids, broadcast_target) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       if Flipper.enabled?(:progress_bars)
         @transferred_sample_ids = ::Samples::TransferService.new(project, current_user).execute(new_project_id,
-                                                                                              sample_ids,
-                                                                                              broadcast_target)
+                                                                                                sample_ids,
+                                                                                                broadcast_target)
       else
         @transferred_sample_ids = ::Samples::TransferService.new(project, current_user).execute(new_project_id,
-                                                                                              sample_ids)
+                                                                                                sample_ids)
       end
 
       if project.errors.empty?
