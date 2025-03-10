@@ -73,8 +73,8 @@
   </td>
 
   <td class="flex justify-end px-6 py-4 space-x-2">
-    <% if Flipper.enabled?(:attachment_preview) && attachment.previewable? %>
-      <%= link_to workflow_executions_attachments_path(attachment: attachment.id, workflow_execution: @workflow_execution.id), class: "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer" do %>
+    <% if Flipper.enabled?(:attachments_preview) && attachment.previewable? %>
+      <%= link_to attachment_path(attachment_id: attachment.id, workflow_execution: @workflow_execution.id), class: "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer" do %>
         <%= t(".preview") %>
       <% end %>
     <% end %>
