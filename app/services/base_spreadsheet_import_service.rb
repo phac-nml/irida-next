@@ -56,6 +56,7 @@ class BaseSpreadsheetImportService < BaseService
                    else
                      Roo::Spreadsheet.open(@temp_import_file.path, extension:)
                    end
+    @spreadsheet.parse(clean: true)
   end
 
   def validate_file_headers
