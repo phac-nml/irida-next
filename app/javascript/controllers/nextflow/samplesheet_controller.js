@@ -599,4 +599,15 @@ export default class extends Controller {
       this.#filterableColumns.push("sample_name");
     }
   }
+
+  setMetadataParam(event) {
+    const metadataSamplesheetColumn = event.target.id.split("-")[1];
+    const metadataField = event.target.value;
+    let metadataParameter = document.querySelector(
+      `input[data-metadata="${metadataSamplesheetColumn}"]`,
+    );
+    if (metadataParameter) {
+      metadataParameter.value = metadataField;
+    }
+  }
 }
