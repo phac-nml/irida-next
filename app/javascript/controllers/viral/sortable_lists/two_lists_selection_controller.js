@@ -163,7 +163,7 @@ export default class extends Controller {
 
     for (const list_value of list_values) {
       this.fieldTarget.appendChild(
-        createHiddenInput(this.fieldNameValue, list_value.textContent),
+        createHiddenInput(this.fieldNameValue, list_value.innerText),
       );
     }
   }
