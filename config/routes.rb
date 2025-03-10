@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   scope path: '-' do
     resources :groups, only: %i[index new create]
     resources :projects, only: %i[index new create]
+    resources :attachment, only: %i[show]
     draw :workflow_executions unless Irida::Pipelines.instance.available_pipelines.empty?
     resources :data_exports, only: %i[index new create destroy show] do
       member do
@@ -37,7 +38,6 @@ Rails.application.routes.draw do
   draw :group
 
   draw :api
-  draw :attachment
   draw :dashboard
   draw :user
   draw :project

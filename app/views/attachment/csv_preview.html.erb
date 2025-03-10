@@ -1,10 +1,19 @@
-<% contents = CSV.parse(file.download, col_sep: "\t", headers: true) %>
+<% contents = CSV.parse(@attachment.file.download, headers: true) %>
 <div class="hidden" data-copy-target="source">
   <%= contents %>
 </div>
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-  <table class="w-full text-sm text-left text-slate-500">
-    <thead class="text-xs uppercase text-slate-700 bg-slate-50">
+  <table
+    class="
+      w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+    "
+  >
+    <thead
+      class="
+        text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700
+        dark:text-slate-400
+      "
+    >
       <tr>
         <% headers = contents.headers %>
         <% headers.each do |header| %>
@@ -16,7 +25,12 @@
     </thead>
     <tbody>
       <% contents.each do |row| %>
-        <tr class="bg-white border-b hover:bg-slate-50">
+        <tr
+          class="
+            bg-white border-b dark:bg-slate-800 dark:border-slate-700 hover:bg-slate-50
+            dark:hover:bg-slate-600
+          "
+        >
           <% row.each do |_header, value| %>
             <td class="px-6 py-4">
               <%= value %>
