@@ -2009,3 +2009,9 @@ en:
       updated_at: Last Updated
       workflow_name: Workflow Name
       workflow_version: Workflow Version
+  spreadsheet_helper:
+    no_file: "No file provided"
+    unknown_file_format: "Unknown file type: %{extension}"
+    no_headers: "No headers found in file"
+    failed_parsing: "Failed to parse spreadsheet file: %{error}"
+    unexpected_error: "An unexpected error occurred while parsing the file: %{error}"

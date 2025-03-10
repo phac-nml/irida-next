@@ -13,7 +13,7 @@ module SpreadsheetHelper
   # @return [Array<Hash>] an array with the first element as headers and subsequent elements as row hashes.
   # @raise [SpreadsheetParsingError] if the file is missing or headers cannot be extracted.
   def parse_spreadsheet(file)
-    raise SpreadsheetParsingError, 'No file provided' if file.blank?
+    raise SpreadsheetParsingError, t('spreadsheet_helper.no_file') if file.blank?
 
     extension = File.extname(file.filename.to_s).downcase
     data = []
@@ -46,7 +46,7 @@ module SpreadsheetHelper
     when '.xls'
       Roo::Excel.new(path)
     else
-      raise SpreadsheetParsingError, 'Unknown file type'
+      raise SpreadsheetParsingError, t('spreadsheet_helper.unknown_file_format', extension: extension)
     end
   end
 
@@ -56,7 +56,7 @@ module SpreadsheetHelper
   # @raise [SpreadsheetParsingError] if the header row is empty.
   def extract_headers(spreadsheet)
     headers = spreadsheet.row(1).map(&:presence).compact
-    raise SpreadsheetParsingError, 'No headers found in file' if headers.empty?
+    raise SpreadsheetParsingError, t('spreadsheet_helper.no_headers') if headers.empty?
 
     headers
   end
@@ -96,15 +96,15 @@ module SpreadsheetHelper
   # @raise [SpreadsheetParsingError] with details of the Roo error.
   def handle_roo_error(error)
     Rails.logger.error "Spreadsheet parsing error: #{error.message}"
-    raise SpreadsheetParsingError, "Failed to parse spreadsheet file: #{error.message}"
+    raise SpreadsheetParsingError, t('spreadsheet_helper.failed_parsing', error: error.message)
   end
 
   # Logs general errors during parsing and raises a custom SpreadsheetParsingError.
   # @param error [StandardError] the encountered exception.
   # @raise [SpreadsheetParsingError] containing the error message and backtrace.
   def handle_standard_error(error)
-    Rails.logger.error "Unexpected error parsing spreadsheet file: #{error.class} - #{error.message}"
+    Rails.logger.error t('spreadsheet_helper.unexpected_error', error: "#{error.class} - #{error.message}")
     Rails.logger.error error.backtrace.join("\n")
-    raise SpreadsheetParsingError, "An unexpected error occurred while parsing the file: #{error.message}"
+    raise SpreadsheetParsingError, t('spreadsheet_helper.unexpected_error', error: error.message)
   end
 end

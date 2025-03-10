@@ -1860,6 +1860,12 @@ fr:
         templates:
           label: Modèles de métadonnées
         tooltip: Paramètres de visualisation des métadonnées
+  spreadsheet_helper:
+    no_file: "Aucun fichier fourni"
+    unknown_file: "Type de fichier inconnu"
+    no_headers: "Aucun en-tête trouvé dans le fichier"
+    failed_parsing: "Échec de l'analyse du fichier feuille de calcul : %{error}"
+    unexpected_error: "Une erreur inattendue s'est produite lors de l'analyse du fichier : %{error}"
   time:
     formats:
       abbreviated: "%a %b%e %Y %H:%M"
