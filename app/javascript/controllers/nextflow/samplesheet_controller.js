@@ -87,7 +87,6 @@ export default class extends Controller {
       this.#setSamplesheetParametersAndData();
       this.#disableProcessingState();
     }
-    console.log("hi");
   }
 
   #setSamplesheetParametersAndData() {
