@@ -1169,6 +1169,7 @@ module WorkflowExecutions
 
       ### ACTIONS START ###
       within '#dialog' do
+        assert_selector 'h1', text: 'phac-nml/gasclustering'
         # assert indexes of samples
         within('div[id="0_sample"]') do
           assert_text sample32.puid
@@ -1199,9 +1200,9 @@ module WorkflowExecutions
           assert_selector 'input[type="text"]', count: 4
         end
 
-        # change metadata_1 and metadata_8 option selection
-        find('#field-metadata_1').find("option[value='metadatafield1']").select_option
-        find('#field-metadata_2').find("option[value='metadatafield2']").select_option
+        # change metadata_1 and metadata_2 option selection
+        find('#field-metadata_1', wait: 1).find("option[value='metadatafield1']").select_option
+        find('#field-metadata_2', wait: 1).find("option[value='metadatafield2']").select_option
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -1274,6 +1275,7 @@ module WorkflowExecutions
 
       ### ACTIONS START ###
       within '#dialog' do
+        assert_selector 'h1', text: 'phac-nml/gasclustering'
         # check default metadata dropdown selected values
         within('#field-metadata_1') do
           assert_text 'metadata_1'
@@ -1284,8 +1286,8 @@ module WorkflowExecutions
         end
 
         # change metadata_1 and metadata_8 option selection
-        find('#field-metadata_1').find("option[value='metadatafield1']").select_option
-        find('#field-metadata_8').find("option[value='metadatafield2']").select_option
+        find('#field-metadata_1', wait: 1).find("option[value='metadatafield1']").select_option
+        find('#field-metadata_8', wait: 1).find("option[value='metadatafield2']").select_option
 
         # check new metadata dropdown selected values
         within('#field-metadata_1') do
