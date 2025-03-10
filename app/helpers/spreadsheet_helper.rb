@@ -13,7 +13,7 @@ module SpreadsheetHelper
   # @return [Array<Hash>] an array with the first element as headers and subsequent elements as row hashes.
   # @raise [SpreadsheetParsingError] if the file is missing or headers cannot be extracted.
   def parse_spreadsheet(file)
-    raise SpreadsheetParsingError, t('spreadsheet_helper.no_file') if file.blank?
+    raise SpreadsheetParsingError, t('spreadsheet_helper.no_file') unless file.present?
 
     extension = File.extname(file.filename.to_s).downcase
     data = []
@@ -26,19 +26,21 @@ module SpreadsheetHelper
 
     data
   rescue Roo::Error => e
-    handle_roo_error(e)
+    Rails.logger.error "Spreadsheet parsing error: #{e.message}"
   rescue StandardError => e
-    handle_standard_error(e)
+    Rails.logger.error t('spreadsheet_helper.unexpected_error', error: "#{e.class} - #{e.message}")
+    Rails.logger.error e.backtrace.join("\n")
+    raise SpreadsheetParsingError, t('spreadsheet_helper.unexpected_error', error: e.message)
   end
 
   private
 
   # Opens the file as a spreadsheet using Roo, based on its file extension.
   # @param path [String] the full file path.
-  # @param extension [String] the file extension.
+  # @param file_extension [String] the file extension.
   # @return [Roo::Spreadsheet] the spreadsheet instance.
-  def open_spreadsheet(path, extension)
-    case extension
+  def open_spreadsheet(path, file_extension)
+    case file_extension
     when '.csv'
       Roo::CSV.new(path)
     when '.xlsx'
@@ -46,7 +48,7 @@ module SpreadsheetHelper
     when '.xls'
       Roo::Excel.new(path)
     else
-      raise SpreadsheetParsingError, t('spreadsheet_helper.unknown_file_format', extension: extension)
+      raise SpreadsheetParsingError, t('spreadsheet_helper.unknown_file_format', extension: file_extension)
     end
   end
 
