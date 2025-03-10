@@ -38,7 +38,7 @@ module SpreadsheetHelper
   # @param extension [String] the file extension.
   # @return [Roo::Spreadsheet] the spreadsheet instance.
   def open_spreadsheet(path, extension)
-    case extension.downcase
+    case extension
     when '.csv'
       Roo::CSV.new(path)
     when '.xlsx'
