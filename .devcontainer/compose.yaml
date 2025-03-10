@@ -24,17 +24,16 @@ services:
 
   browserless:
     image: browserless/chrome:latest
-    restart: unless-stopped
+    restart: always
+    volumes:
+      - ../..:/workspaces:cached
     environment:
-      - PORT=4000
-    ports:
-      - "4000:4000"
+      PORT: 4000
+      TIMEOUT: 600000 # sessions live up to 10 minutes max
 
   postgres:
     image: postgres:16.1
     restart: unless-stopped
-    networks:
-      - default
     volumes:
       - postgres-data:/var/lib/postgresql/data
     environment:

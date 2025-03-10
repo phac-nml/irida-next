@@ -6,7 +6,7 @@ require 'capybara/cuprite'
 # with #driven_by method.
 Capybara.register_driver(:irida_next_cuprite) do |app|
   options = {}
-  options['no-sandbox'] = nil if ENV['CI']
+  options['no-sandbox'] = nil if ENV['CI'] || ENV.key?('BROWSERLESS_HOST')
   options['disable-smooth-scrolling'] = true
   Capybara::Cuprite::Driver.new(
     app,
