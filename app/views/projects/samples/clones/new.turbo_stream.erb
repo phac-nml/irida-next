@@ -1,1 +1,6 @@
-<%= turbo_stream.update "samples_dialog", partial: "dialog", locals: { open: true } %>
+<%= turbo_stream.update "samples_dialog",
+                    partial: "dialog",
+                    locals: {
+                      open: true,
+                      closable: true,
+                    } %>

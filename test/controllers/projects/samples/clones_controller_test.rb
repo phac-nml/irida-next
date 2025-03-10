@@ -21,7 +21,8 @@ module Projects
                  clone: {
                    new_project_id: @new_project.id,
                    sample_ids: [@sample1.id, @sample2.id]
-                 }
+                 },
+                 broadcast_target: 'a_broadcast_target'
                }
         end
       end

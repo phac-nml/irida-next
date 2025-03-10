@@ -6,8 +6,12 @@ module Samples
     queue_as :default
 
     def perform(project, current_user, new_project_id, sample_ids, broadcast_target) # rubocop:disable Metrics/MethodLength
-      @transferred_sample_ids = ::Samples::TransferService.new(project, current_user).execute(new_project_id,
-                                                                                              sample_ids)
+      @transferred_sample_ids = ::Samples::TransferService.new(project, current_user)
+                                                          .execute(
+                                                            new_project_id,
+                                                            sample_ids,
+                                                            Flipper.enabled?(:progress_bars) ? broadcast_target : nil
+                                                          )
 
       if project.errors.empty?
         Turbo::StreamsChannel.broadcast_replace_to(

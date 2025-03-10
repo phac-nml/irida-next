@@ -34,7 +34,8 @@ module Projects
                  transfer: {
                    new_project_id: @project2.id,
                    sample_ids: [@sample1.id, @sample2.id]
-                 }
+                 },
+                 broadcast_target: 'a_broadcast_target'
                }
         end
       end
