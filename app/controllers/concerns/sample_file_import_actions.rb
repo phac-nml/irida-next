@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Common file import actions
-module FileImportActions
+module SampleFileImportActions
   extend ActiveSupport::Concern
 
   included do
@@ -9,7 +9,7 @@ module FileImportActions
   end
 
   def new
-    @broadcast_target = "metadata_import_#{SecureRandom.uuid}"
+    @broadcast_target = "samples_import_#{SecureRandom.uuid}"
   end
 
   def create # rubocop:disable Metrics/AbcSize
@@ -21,7 +21,7 @@ module FileImportActions
       content_type: file_import_params[:file].content_type
     )
 
-    ::Samples::MetadataImportJob.set(
+    ::Samples::BatchSampleImportJob.set(
       wait_until: 1.second.from_now
     ).perform_later(
       @namespace, current_user,
@@ -34,6 +34,6 @@ module FileImportActions
   private
 
   def file_import_params
-    params.require(:file_import).permit(:file, :sample_id_column, :ignore_empty_values, metadata_columns: [])
+    params.require(:file_import).permit(:file, :sample_id_column, :project_puid_column, :sample_description_column)
   end
 end

@@ -5,7 +5,7 @@ module Groups
     module Metadata
       # Controller actions for Group Samples Metadata File Import Controller
       class FileImportsController < Groups::ApplicationController
-        include FileImportActions
+        include MetadataFileImportActions
 
         respond_to :turbo_stream
 
