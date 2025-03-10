@@ -27,6 +27,7 @@ module Attachable
   extend ActiveSupport::Concern
 
   included do
+    before_action :ensure_enabled
     before_action :attachment
     before_action :context_crumbs
     before_action :current_page
@@ -119,5 +120,9 @@ module Attachable
       name: @attachment.file.filename,
       path: workflow_executions_attachments_path(attachment: @attachment.id)
     }
+  end
+
+  def ensure_enabled
+    redirect_back(fallback_location: root_path) unless Flipper.enabled?(:attachments_preview)
   end
 end
