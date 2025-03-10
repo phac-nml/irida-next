@@ -58,24 +58,6 @@ class NextflowSamplesheetComponentPreview < ViewComponent::Preview
                          })
   end
 
-  def with_metadata_and_values(schema_file: 'nextflow_schema.json', sample_ids: [Sample.first.id, Sample.second.id])
-    samples = Sample.where(id: sample_ids)
-    entry = {
-      name: 'phac-nml/fastmatchirida',
-      description: 'FastMatch',
-      url: 'https://github.com/phac-nml/fastmatchirida'
-    }.with_indifferent_access
-
-    workflow = Irida::Pipeline.new(entry, '1.0.1',
-                                   Rails.root.join('test/fixtures/files/nextflow/fastmatch/', schema_file),
-                                   Rails.root.join('test/fixtures/files/nextflow/fastmatch/samplesheet_schema.json'))
-
-    render_with_template(locals: {
-                           samples:,
-                           workflow:
-                         })
-  end
-
   private
 
   def schema_file_options

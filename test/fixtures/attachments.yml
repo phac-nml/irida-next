@@ -40,7 +40,8 @@ attachmentPEFWD1:
       "format": "fastq",
       "direction": "forward",
       "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV1, :uuid) %>,
+      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV1,
+      :uuid) %>,
     }
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAF
@@ -52,7 +53,8 @@ attachmentPEREV1:
       "format": "fastq",
       "direction": "reverse",
       "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD1, :uuid) %>,
+      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD1,
+      :uuid) %>,
     }
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAF
@@ -64,7 +66,8 @@ attachmentPEFWD2:
       "format": "fastq",
       "direction": "forward",
       "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV2, :uuid) %>,
+      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV2,
+      :uuid) %>,
     }
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAG
@@ -76,7 +79,8 @@ attachmentPEREV2:
       "format": "fastq",
       "direction": "reverse",
       "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD2, :uuid) %>,
+      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD2,
+      :uuid) %>,
     }
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAG
@@ -88,7 +92,8 @@ attachmentPEFWD3:
       "format": "fastq",
       "direction": "forward",
       "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV3, :uuid) %>,
+      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV3,
+      :uuid) %>,
     }
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAH
@@ -100,7 +105,8 @@ attachmentPEREV3:
       "format": "fastq",
       "direction": "reverse",
       "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD3, :uuid) %>,
+      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD3,
+      :uuid) %>,
     }
   attachable: sampleB (Sample)
   puid: INXT_ATT_AAAAAAAAAH
@@ -234,12 +240,12 @@ workflow_execution_completed_output_attachment:
   puid: INXT_ATT_AAAAAAAAAT
 
 samples_workflow_execution_completed_output_attachment:
-  metadata: {"type": "assembly", "format": "fasta", "compression": "gzip"}
+  metadata: { "type": "assembly", "format": "fasta", "compression": "gzip" }
   attachable: sample46_irida_next_example_completed_with_output (SamplesWorkflowExecution)
   puid: INXT_ATT_AAAAAAAAAU
 
 samples_shared_workflow_execution_completed_output_attachment:
-  metadata: {"type": "assembly", "format": "fasta", "compression": "gzip"}
+  metadata: { "type": "assembly", "format": "fasta", "compression": "gzip" }
   attachable: sample47_workflow_execution_completed_shared2 (SamplesWorkflowExecution)
   puid: INXT_ATT_AAAAAAAAAV
 
@@ -250,7 +256,8 @@ attachmentEndToEndFWD:
       "format": "fastq",
       "direction": "forward",
       "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentEndToEndREV, :uuid) %>,
+      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentEndToEndREV,
+      :uuid) %>,
     }
   attachable: sampleEndToEnd (Sample)
   puid: INXT_ATT_ABAAAAAAAA
@@ -262,44 +269,29 @@ attachmentEndToEndREV:
       "format": "fastq",
       "direction": "reverse",
       "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentEndToEndFWD, :uuid) %>,
+      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentEndToEndFWD,
+      :uuid) %>,
     }
   attachable: sampleEndToEnd (Sample)
   puid: INXT_ATT_ABAAAAAAAB
 
 attachmentDELETE:
-  metadata:
-    {
-      "format": "fastq",
-      "compression": "none",
-    }
+  metadata: { "format": "fastq", "compression": "none" }
   attachable: sampleDELETE (Sample)
   puid: INXT_ATT_ABAAAAAAAC
 
 attachment_completed_unclean_DELETE:
-  metadata:
-    {
-      "format": "fastq",
-      "compression": "none",
-    }
+  metadata: { "format": "fastq", "compression": "none" }
   attachable: sample_completed_unclean_DELETE (Sample)
   puid: INXT_ATT_ABAAAAAAAD
 
 attachment_error_unclean_DELETE:
-  metadata:
-    {
-      "format": "fastq",
-      "compression": "none",
-    }
+  metadata: { "format": "fastq", "compression": "none" }
   attachable: sample_error_unclean_DELETE (Sample)
   puid: INXT_ATT_ABAAAAAAAE
 
 attachment_canceled_unclean_DELETE:
-  metadata:
-    {
-      "format": "fastq",
-      "compression": "none",
-    }
+  metadata: { "format": "fastq", "compression": "none" }
   attachable: sample_canceled_unclean_DELETE (Sample)
   puid: INXT_ATT_ABAAAAAAAF
 
@@ -310,7 +302,8 @@ attachmentPEREV43:
       "format": "fastq",
       "direction": "reverse",
       "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD43, :uuid) %>,
+      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD43,
+      :uuid) %>,
     }
   attachable: sample43 (Sample)
   puid: INXT_ATT_AXDGAAAAAF
@@ -322,7 +315,8 @@ attachmentPEFWD43:
       "format": "fastq",
       "direction": "forward",
       "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV43, :uuid) %>,
+      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV43,
+      :uuid) %>,
     }
   attachable: sample43 (Sample)
   puid: INXT_ATT_AXDGAAAAAF
@@ -334,7 +328,8 @@ sample22AttachmentFastqFWD:
       "format": "fastq",
       "direction": "forward",
       "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:sample22AttachmentFastqREV, :uuid) %>,
+      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:sample22AttachmentFastqREV,
+      :uuid) %>,
     }
   attachable: sample22 (Sample)
   puid: INXT_ATT_ABAAAAAAAG
@@ -346,18 +341,19 @@ sample22AttachmentFastqREV:
       "format": "fastq",
       "direction": "reverse",
       "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:sample22AttachmentFastqFWD, :uuid) %>,
+      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:sample22AttachmentFastqFWD,
+      :uuid) %>,
     }
   attachable: sample22 (Sample)
   puid: INXT_ATT_ABAAAAAAAG
 
 sample22AttachmentFasta:
-  metadata: {"type": "assembly", "format": "fasta", "compression": "none"}
+  metadata: { "type": "assembly", "format": "fasta", "compression": "none" }
   attachable: sample22 (Sample)
   puid: INXT_ATT_ABAAAAAAAH
 
 sample22AttachmentText:
-  metadata: {"format": "text", "compression": "none"}
+  metadata: { "format": "text", "compression": "none" }
   attachable: sample22 (Sample)
   puid: INXT_ATT_ABAAAAAAAI
 
@@ -385,3 +381,14 @@ group1Attachment2:
   puid: INXT_ATT_ABAAAAAAAM
   created_at: <%= 2.hours.ago %>
 
+group1Attachment2:
+  metadata: { "compression": "none", "format": "csv" }
+  attachable: group_one (Namespace)
+  puid: INXT_ATT_ABAAAAAAAM
+  created_at: <%= 2.hours.ago %>
+
+gasclusteringAttachment:
+  metadata: {"compression": "none", "format": "json"}
+  attachable: sample32 (Sample)
+  puid: INXT_ATT_ABAAAAAAAO
+  created_at: <%= 2.hours.ago %>
