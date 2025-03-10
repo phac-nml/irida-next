@@ -5,7 +5,7 @@ module Samples
   class CloneJob < ApplicationJob
     queue_as :default
 
-    def perform(project, current_user, new_project_id, sample_ids, broadcast_target) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    def perform(project, current_user, new_project_id, sample_ids, broadcast_target) # rubocop:disable Metrics/MethodLength
       @cloned_sample_ids = ::Samples::CloneService.new(project, current_user)
                                                   .execute(
                                                     new_project_id,
