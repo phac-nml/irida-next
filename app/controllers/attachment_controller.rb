@@ -147,6 +147,7 @@ class AttachmentController < ApplicationController
     }
   end
 
+  # Ensures that the attachments preview feature is enabled.
   def ensure_enabled
     redirect_back(fallback_location: root_path) unless Flipper.enabled?(:attachments_preview)
   end
