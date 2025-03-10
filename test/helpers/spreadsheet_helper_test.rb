@@ -4,29 +4,29 @@ require 'test_helper'
 require 'tempfile'
 require 'csv'
 
-class ExcelHelperTest < ActionView::TestCase
-  include ExcelHelper
+class SpreadsheetHelperTest < ActionView::TestCase
+  include SpreadsheetHelper
 
   test 'raises error when no file is provided' do
-    assert_raises(ExcelParsingError, 'No file provided') do
+    assert_raises(SpreadsheetParsingError, 'No file provided') do
       parse_excel_file(nil)
     end
   end
 
   test 'raises error when headers are missing in CSV file' do
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/missing_headers.csv'))
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/spreadsheet_helper_test/missing_headers.csv'))
     blob = ActiveStorage::Blob.create_and_upload!(
       io: file,
       filename: file.original_filename,
       content_type: file.content_type
     )
-    assert_raises(ExcelParsingError, 'No headers found in file') do
+    assert_raises(SpreadsheetParsingError, 'No headers found in file') do
       parse_excel_file(blob)
     end
   end
 
   test 'successfully parses CSV file with valid data' do
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/good_csv.csv'))
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/spreadsheet_helper_test/good_csv.csv'))
     blob = ActiveStorage::Blob.create_and_upload!(
       io: file,
       filename: file.original_filename,
@@ -41,7 +41,7 @@ class ExcelHelperTest < ActionView::TestCase
   end
 
   test 'skips empty rows in data' do
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/missing_rows.csv'))
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/spreadsheet_helper_test/missing_rows.csv'))
     blob = ActiveStorage::Blob.create_and_upload!(
       io: file,
       filename: file.original_filename,
@@ -54,7 +54,7 @@ class ExcelHelperTest < ActionView::TestCase
   end
 
   test 'handles rows with incorrect number of columns' do
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/incorrect_cols.csv'))
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/spreadsheet_helper_test/incorrect_cols.csv'))
     blob = ActiveStorage::Blob.create_and_upload!(
       io: file,
       filename: file.original_filename,
@@ -69,21 +69,21 @@ class ExcelHelperTest < ActionView::TestCase
   end
 
   test 'raises error for unsupported file format' do
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/unsupported.txt'))
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/spreadsheet_helper_test/unsupported.txt'))
     blob = ActiveStorage::Blob.create_and_upload!(
       io: file,
       filename: file.original_filename,
       content_type: file.content_type
     )
 
-    error = assert_raises(ExcelParsingError) do
+    error = assert_raises(SpreadsheetParsingError) do
       parse_excel_file(blob)
     end
     assert_match('An unexpected error occurred while parsing the file', error.message)
   end
 
   test 'parses CSV file with only headers' do
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/only_headers.csv'))
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/spreadsheet_helper_test/only_headers.csv'))
     blob = ActiveStorage::Blob.create_and_upload!(
       io: file,
       filename: file.original_filename,
@@ -95,20 +95,20 @@ class ExcelHelperTest < ActionView::TestCase
   end
 
   test 'raises error when file is completely empty' do
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/empty.csv'))
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/spreadsheet_helper_test/empty.csv'))
     blob = ActiveStorage::Blob.create_and_upload!(
       io: file,
       filename: file.original_filename,
       content_type: file.content_type
     )
-    error = assert_raises(ExcelParsingError) do
+    error = assert_raises(SpreadsheetParsingError) do
       parse_excel_file(blob)
     end
     assert_match('No headers found in file', error.message)
   end
 
   test 'parses Excel file with valid data' do
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/good.xlsx'))
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/spreadsheet_helper_test/good.xlsx'))
     blob = ActiveStorage::Blob.create_and_upload!(
       io: file,
       filename: file.original_filename,
@@ -123,20 +123,20 @@ class ExcelHelperTest < ActionView::TestCase
   end
 
   test 'raises error when Excel file is missing headers' do
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/missing_headers.xlsx'))
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/spreadsheet_helper_test/missing_headers.xlsx'))
     blob = ActiveStorage::Blob.create_and_upload!(
       io: file,
       filename: file.original_filename,
       content_type: file.content_type
     )
-    error = assert_raises(ExcelParsingError) do
+    error = assert_raises(SpreadsheetParsingError) do
       parse_excel_file(blob)
     end
     assert_match('No headers found in file', error.message)
   end
 
   test 'raises error when Excel file has only headers' do
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/excel_helper_test/only_headers.xlsx'))
+    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/spreadsheet_helper_test/only_headers.xlsx'))
     blob = ActiveStorage::Blob.create_and_upload!(
       io: file,
       filename: file.original_filename,
