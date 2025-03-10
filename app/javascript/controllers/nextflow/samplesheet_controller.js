@@ -600,14 +600,14 @@ export default class extends Controller {
     }
   }
 
-  setMetadataHeader(event) {
-    const metadataHeaderTarget = event.target.id.split("-")[1];
-    const metadataSelection = event.target.value;
-    let metadataHeaderInput = document.querySelector(
-      `input[data-metadata="${metadataHeaderTarget}"]`,
+  setMetadataParam(event) {
+    const metadataSamplesheetColumn = event.target.id.split("-")[1];
+    const metadataField = event.target.value;
+    let metadataParameter = document.querySelector(
+      `input[data-metadata="${metadataSamplesheetColumn}"]`,
     );
-    if (metadataHeaderInput) {
-      metadataHeaderInput.value = metadataSelection;
+    if (metadataParameter) {
+      metadataParameter.value = metadataField;
     }
   }
 }
