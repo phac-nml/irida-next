@@ -32,7 +32,8 @@ class AttachmentController < ApplicationController
   # @return [void]
   # @raise [ActionController::UnknownFormat] if the format is not supported
   def show
-    return handle_preview if @attachment.present? && Flipper.enabled?(:attachments_preview)
+    @attachments_preview_enabled ||= Flipper.enabled?(:attachments_preview)
+    return handle_preview if @attachment.present? && @attachments_preview_enabled
 
     handle_not_found
   end
@@ -45,8 +46,6 @@ class AttachmentController < ApplicationController
   def handle_preview
     format = @attachment.metadata['format']
     render "#{format}_preview"
-  rescue ActionView::MissingTemplate
-    handle_not_found
   end
 
   # Handles the case when the attachment is not found or preview is not available
