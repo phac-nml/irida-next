@@ -87,6 +87,7 @@ export default class extends Controller {
       this.#setSamplesheetParametersAndData();
       this.#disableProcessingState();
     }
+    console.log("hi");
   }
 
   #setSamplesheetParametersAndData() {
@@ -606,7 +607,6 @@ export default class extends Controller {
     let metadataHeaderInput = document.querySelector(
       `input[data-metadata="${metadataHeaderTarget}"]`,
     );
-    console.log(metadataHeaderInput);
     if (metadataHeaderInput) {
       metadataHeaderInput.value = metadataSelection;
     }

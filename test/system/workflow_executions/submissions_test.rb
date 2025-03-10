@@ -1139,5 +1139,180 @@ module WorkflowExecutions
       end
       ### VERIFY END ###
     end
+
+    test 'samplesheet metadata selection changes samplesheet values' do
+      ### SETUP START ###
+      user = users(:john_doe)
+      namespace = groups(:group_twelve)
+      login_as user
+
+      visit group_samples_url(namespace)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 4, count: 4,
+                                                                           locale: user.locale))
+      # select samples
+
+      click_button I18n.t(:'projects.samples.index.select_all_button')
+      # launch workflow execution dialog
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      assert_selector '#dialog'
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_button text: 'phac-nml/gasclustering'
+        click_button 'phac-nml/gasclustering'
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within '#dialog' do
+        # check default metadata dropdown selected values
+        within('#field-metadata_1') do
+          assert_text 'metadata_1'
+        end
+
+        within('metadata-metadata_1-column') do
+          assert_selector 'input[type="text"]', count: 5
+        end
+
+        within('#field-metadata_2') do
+          assert_text 'metadata_2'
+        end
+
+        within('metadata-metadata_2-column') do
+          assert_selector 'input[type="text"]', count: 5
+        end
+
+        # change metadata_1 and metadata_8 option selection
+        find('#field-metadata_1').find("option[value='metadatafield1']").select_option
+        find('#field-metadata_2').find("option[value='metadatafield2']").select_option
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
+        # check new metadata dropdown selected values
+        within('#field-metadata_1') do
+          assert_text 'metadatafield1'
+        end
+
+        within('#field-metadata_2') do
+          assert_text 'metadatafield2'
+        end
+
+        # check metadata values of samples
+        within('#0_metadata_1') do
+          assert_text 'value1'
+        end
+        within('#1_metadata_1') do
+          assert_text 'value1'
+        end
+        within('#2_metadata_1') do
+          assert_text 'value1'
+        end
+        within('#3_metadata_1') do
+          # sample contains no metadata value for this field, keeps text input
+          assert_no_text 'value1'
+          assert_selector 'input[type="text"]'
+        end
+
+        within('#0_metadata_2') do
+          assert_text 'value2'
+        end
+        within('#1_metadata_2') do
+          assert_text 'value2'
+        end
+        within('#2_metadata_2') do
+          assert_text 'value2'
+        end
+        within('#3_metadata_2') do
+          # sample contains no metadata value for this field, keeps text input
+          assert_no_text 'value2'
+          assert_selector 'input[type="text"]'
+        end
+        ### VERIFY END ###
+      end
+    end
+
+    test 'samplesheet metadata header changes param value' do
+      ### SETUP START ###
+      user = users(:john_doe)
+      namespace = groups(:group_twelve)
+      sample32 = samples(:sample32)
+      login_as user
+
+      visit group_samples_url(namespace)
+      # verify samples table loaded
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 4, count: 4,
+                                                                           locale: user.locale))
+      # select samples
+      within 'table' do
+        find("input[type='checkbox'][value='#{sample32.id}']").click
+      end
+      # launch workflow execution dialog
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      assert_selector '#dialog'
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_button text: 'phac-nml/gasclustering'
+        click_button 'phac-nml/gasclustering'
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within '#dialog' do
+        # check default metadata dropdown selected values
+        within('#field-metadata_1') do
+          assert_text 'metadata_1'
+        end
+
+        within('#field-metadata_8') do
+          assert_text 'metadata_8'
+        end
+
+        # change metadata_1 and metadata_8 option selection
+        find('#field-metadata_1').find("option[value='metadatafield1']").select_option
+        find('#field-metadata_2').find("option[value='metadatafield2']").select_option
+
+        # check new metadata dropdown selected values
+        within('#field-metadata_1') do
+          assert_text 'metadatafield1'
+        end
+
+        within('#field-metadata_8') do
+          assert_text 'metadatafield2'
+        end
+
+        # submit pipeline
+        click_button I18n.t(:'workflow_executions.submissions.create.submit')
+      end
+
+      # verify redirection to workflow executions page
+      assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+
+      # click the submitted workflow execution from above
+      within('table tbody tr:first-child th:first-child') do
+        find('a').click
+      end
+
+      # verify show page
+      assert_selector 'h1', text: 'phac-nml/gasclustering'
+      assert_text I18n.t(:'workflow_executions.show.tabs.params')
+      # click parameters tab
+      click_link I18n.t(:'workflow_executions.show.tabs.params')
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      # verify new parameter values
+      within('.metadata_1_header-param') do
+        assert_selector 'input[disabled][value="metadatafield1"]'
+        assert_no_selector 'input[disabled][value="metadata_1"]'
+      end
+
+      within('.metadata_8_header-param') do
+        assert_selector 'input[disabled][value="metadatafield2"]'
+        assert_no_selector 'input[disabled][value="metadata_8"]'
+      end
+      ### VERIFY END ###
+    end
   end
 end
