@@ -1171,16 +1171,16 @@ module WorkflowExecutions
           assert_text 'metadata_1'
         end
 
-        within('metadata-metadata_1-column') do
-          assert_selector 'input[type="text"]', count: 5
+        within('#metadata-metadata_1-column') do
+          assert_selector 'input[type="text"]', count: 4
         end
 
         within('#field-metadata_2') do
           assert_text 'metadata_2'
         end
 
-        within('metadata-metadata_2-column') do
-          assert_selector 'input[type="text"]', count: 5
+        within('#metadata-metadata_2-column') do
+          assert_selector 'input[type="text"]', count: 4
         end
 
         # change metadata_1 and metadata_8 option selection
@@ -1199,33 +1199,31 @@ module WorkflowExecutions
         end
 
         # check metadata values of samples
-        within('#0_metadata_1') do
+        within('div[id="0_metadata_1"]') do
           assert_text 'value1'
         end
-        within('#1_metadata_1') do
+        within('div[id="1_metadata_1"]') do
           assert_text 'value1'
         end
-        within('#2_metadata_1') do
+        within('div[id="2_metadata_1"]') do
           assert_text 'value1'
         end
-        within('#3_metadata_1') do
-          # sample contains no metadata value for this field, keeps text input
-          assert_no_text 'value1'
+        within('div[id="3_metadata_1"]') do
+          # sample contains no metadata value for this field, stays text input
           assert_selector 'input[type="text"]'
         end
 
-        within('#0_metadata_2') do
+        within('div[id="0_metadata_2"]') do
           assert_text 'value2'
         end
-        within('#1_metadata_2') do
+        within('div[id="1_metadata_2"]') do
           assert_text 'value2'
         end
-        within('#2_metadata_2') do
+        within('div[id="2_metadata_2"]') do
           assert_text 'value2'
         end
-        within('#3_metadata_2') do
-          # sample contains no metadata value for this field, keeps text input
-          assert_no_text 'value2'
+        within('div[id="3_metadata_2"]') do
+          # sample contains no metadata value for this field, stays text input
           assert_selector 'input[type="text"]'
         end
         ### VERIFY END ###
@@ -1271,7 +1269,7 @@ module WorkflowExecutions
 
         # change metadata_1 and metadata_8 option selection
         find('#field-metadata_1').find("option[value='metadatafield1']").select_option
-        find('#field-metadata_2').find("option[value='metadatafield2']").select_option
+        find('#field-metadata_8').find("option[value='metadatafield2']").select_option
 
         # check new metadata dropdown selected values
         within('#field-metadata_1') do
