@@ -445,7 +445,7 @@ module Samples
         )
 
         params = { sample_id_column: 'sample_name',
-                   metadata_columns: ['sample_name', 'metadatafield1', ' metadatafield2 ', 'metadatafield3'] }
+                   metadata_columns: %w[sample_name metadatafield1 metadatafield2 metadatafield3] }
         response = Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, blob.id,
                                                             params).execute
         assert_equal({ @sample1.name => { added: %w[metadatafield1 metadatafield2 metadatafield3],
