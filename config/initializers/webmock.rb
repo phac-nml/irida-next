@@ -7,6 +7,7 @@ if Rails.env.test?
 
   if ENV.key?('BROWSERLESS_HOST')
     allowed_hosts << ENV.fetch('BROWSERLESS_HOST')
+    allowed_hosts << 'sapporo'
     allowed_hosts << 'rails-app'
   end
 
