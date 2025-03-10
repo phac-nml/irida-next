@@ -1169,6 +1169,19 @@ module WorkflowExecutions
 
       ### ACTIONS START ###
       within '#dialog' do
+        # assert indexes of samples
+        within('div[id="0_sample"]') do
+          assert_text sample32.puid
+        end
+
+        within('div[id="1_sample"]') do
+          assert_text sample33.puid
+        end
+
+        within('div[id="2_sample"]') do
+          assert_text sample34.puid
+        end
+
         # check default metadata dropdown selected values
         within('#field-metadata_1') do
           assert_text 'metadata_1'
