@@ -8,8 +8,8 @@ class SpreadsheetHelperTest < ActionView::TestCase
   include SpreadsheetHelper
 
   test 'raises error when no file is provided' do
-    assert_raises(SpreadsheetParsingError, 'No file provided') do
-      parse_excel_file(nil)
+    assert_raises(SpreadsheetParsingError, t('spreadsheet_helper.no_file')) do
+      parse_spreadsheet(nil)
     end
   end
 
@@ -20,8 +20,8 @@ class SpreadsheetHelperTest < ActionView::TestCase
       filename: file.original_filename,
       content_type: file.content_type
     )
-    assert_raises(SpreadsheetParsingError, 'No headers found in file') do
-      parse_excel_file(blob)
+    assert_raises(SpreadsheetParsingError, t('spreadsheet_helper.no_headers')) do
+      parse_spreadsheet(blob)
     end
   end
 
@@ -32,7 +32,7 @@ class SpreadsheetHelperTest < ActionView::TestCase
       filename: file.original_filename,
       content_type: file.content_type
     )
-    result = parse_excel_file(blob)
+    result = parse_spreadsheet(blob)
 
     assert_equal 3, result.length
     assert_equal %w[name age city], result[0]
@@ -47,7 +47,7 @@ class SpreadsheetHelperTest < ActionView::TestCase
       filename: file.original_filename,
       content_type: file.content_type
     )
-    result = parse_excel_file(blob)
+    result = parse_spreadsheet(blob)
 
     assert_equal 3, result.length # headers + 2 data rows
     assert_equal %w[name age], result[0]
@@ -60,7 +60,7 @@ class SpreadsheetHelperTest < ActionView::TestCase
       filename: file.original_filename,
       content_type: file.content_type
     )
-    result = parse_excel_file(blob)
+    result = parse_spreadsheet(blob)
 
     assert_equal 3, result.length # Only headers and the valid row
     assert_equal %w[name age city], result[0]
@@ -77,9 +77,10 @@ class SpreadsheetHelperTest < ActionView::TestCase
     )
 
     error = assert_raises(SpreadsheetParsingError) do
-      parse_excel_file(blob)
+      parse_spreadsheet(blob)
     end
-    assert_match('An unexpected error occurred while parsing the file', error.message)
+    assert_match(t('spreadsheet_helper.unknown_file_format', extension: File.extname(file.original_filename)),
+                 error.message)
   end
 
   test 'parses CSV file with only headers' do
@@ -89,7 +90,7 @@ class SpreadsheetHelperTest < ActionView::TestCase
       filename: file.original_filename,
       content_type: file.content_type
     )
-    result = parse_excel_file(blob)
+    result = parse_spreadsheet(blob)
     assert_equal 1, result.length
     assert_equal %w[name age city], result[0]
   end
@@ -102,9 +103,9 @@ class SpreadsheetHelperTest < ActionView::TestCase
       content_type: file.content_type
     )
     error = assert_raises(SpreadsheetParsingError) do
-      parse_excel_file(blob)
+      parse_spreadsheet(blob)
     end
-    assert_match('No headers found in file', error.message)
+    assert_match t('spreadsheet_helper.no_headers'), error.message
   end
 
   test 'parses Excel file with valid data' do
@@ -114,7 +115,7 @@ class SpreadsheetHelperTest < ActionView::TestCase
       filename: file.original_filename,
       content_type: file.content_type
     )
-    result = parse_excel_file(blob)
+    result = parse_spreadsheet(blob)
 
     assert_equal 3, result.length # headers + 2 data rows
     assert_equal %w[name age city], result[0]
@@ -130,9 +131,9 @@ class SpreadsheetHelperTest < ActionView::TestCase
       content_type: file.content_type
     )
     error = assert_raises(SpreadsheetParsingError) do
-      parse_excel_file(blob)
+      parse_spreadsheet(blob)
     end
-    assert_match('No headers found in file', error.message)
+    assert_match t('spreadsheet_helper.no_headers'), error.message
   end
 
   test 'raises error when Excel file has only headers' do
@@ -142,7 +143,7 @@ class SpreadsheetHelperTest < ActionView::TestCase
       filename: file.original_filename,
       content_type: file.content_type
     )
-    result = parse_excel_file(blob)
+    result = parse_spreadsheet(blob)
 
     assert_equal 1, result.length
     assert_equal %w[name age city], result[0]
