@@ -1144,6 +1144,9 @@ module WorkflowExecutions
       ### SETUP START ###
       user = users(:john_doe)
       namespace = groups(:group_twelve)
+      sample32 = samples(:sample32)
+      sample33 = samples(:sample33)
+      sample34 = samples(:sample34)
       login_as user
 
       visit group_samples_url(namespace)
@@ -1200,13 +1203,13 @@ module WorkflowExecutions
 
         # check metadata values of samples
         within('div[id="0_metadata_1"]') do
-          assert_text 'value1'
+          assert_text sample32.metadata['metadatafield1']
         end
         within('div[id="1_metadata_1"]') do
-          assert_text 'value1'
+          assert_text sample33.metadata['metadatafield1']
         end
         within('div[id="2_metadata_1"]') do
-          assert_text 'value1'
+          assert_text sample34.metadata['metadatafield1']
         end
         within('div[id="3_metadata_1"]') do
           # sample contains no metadata value for this field, stays text input
@@ -1214,13 +1217,13 @@ module WorkflowExecutions
         end
 
         within('div[id="0_metadata_2"]') do
-          assert_text 'value2'
+          assert_text sample32.metadata['metadatafield2']
         end
         within('div[id="1_metadata_2"]') do
-          assert_text 'value2'
+          assert_text sample33.metadata['metadatafield2']
         end
         within('div[id="2_metadata_2"]') do
-          assert_text 'value2'
+          assert_text sample34.metadata['metadatafield2']
         end
         within('div[id="3_metadata_2"]') do
           # sample contains no metadata value for this field, stays text input
