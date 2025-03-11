@@ -606,7 +606,7 @@ export default class extends Controller {
     let metadataParameter = document.querySelector(
       `input[data-metadata-header-name="${metadataSamplesheetColumn}"]`,
     );
-    console.log(metadataParameter);
+
     if (metadataParameter) {
       metadataParameter.value = metadataField;
     }
