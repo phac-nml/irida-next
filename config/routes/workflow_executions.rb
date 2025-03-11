@@ -18,7 +18,6 @@ resources :workflow_executions, only: %i[index create show destroy edit update] 
           post :fields
         end
       end
-      resources :attachments, only: %i[index]
     end
   end
 
