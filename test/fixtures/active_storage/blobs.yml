@@ -124,3 +124,4 @@ attachment_csv_blob: <%= ActiveStorage::FixtureSet.blob filename: "attachment_pr
 attachment_text_blob: <%= ActiveStorage::FixtureSet.blob filename: "attachment_preview.txt", service_name: "test" %>
 attachment_json_blob: <%= ActiveStorage::FixtureSet.blob filename: "attachment_preview.json", service_name: "test" %>
 attachment_spreadsheet: <%= ActiveStorage::FixtureSet.blob filename: "attachment_preview.xlsx", service_name: "test" %>
+attachment_image: <%= ActiveStorage::FixtureSet.blob filename: "attachment_preview.webp", service_name: "test" %>

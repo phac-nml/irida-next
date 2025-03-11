@@ -59,5 +59,6 @@ class AttachmentTest < ApplicationSystemTestCase
     assert_no_selector 'button', text: I18n.t('attachment.show.copy')
     assert_link I18n.t('attachment.show.download')
     assert_selector 'img', count: 1
+    
   end
 end

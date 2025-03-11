@@ -262,3 +262,8 @@ attachment_spreadsheet:
   name: file
   record: attachmentSpreadsheet (Attachment)
   blob: attachment_spreadsheet
+
+attachment_image:
+  name: file
+  record: attachmentImage (Attachment)
+  blob: attachment_image
