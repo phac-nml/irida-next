@@ -342,7 +342,15 @@ fr:
       resource_not_found: Resource Not Found.
   attachment:
     show:
-      file_not_found: Fichier non trouvé.
+      copied: Copied
+      copy: Copy
+      download: Download
+      file_not_found: File not found.
+      image:
+        alt: Rendering of file %{filename}
+      not_available:
+        details: Please download to view the contents
+        title: Preview not available for this file type
   attachments:
     dialogs:
       delete_attachment_component:
@@ -1865,7 +1873,7 @@ fr:
     no_file: Aucun fichier fourni
     no_headers: Aucun en-tête trouvé dans le fichier
     unexpected_error: 'Une erreur inattendue s''est produite lors de l''analyse du fichier : %{error}'
-    unknown_file: Type de fichier inconnu
+    unknown_file_format: Type de fichier inconnu
   time:
     formats:
       abbreviated: "%a %b%e %Y %H:%M"
@@ -1908,14 +1916,6 @@ fr:
     attachment:
       download: Download
       preview: Preview
-    attachments:
-      index:
-        copied: Copié
-        copy: Copier
-        download: Télécharger
-        not_available:
-          details: Please download to view the contents
-          title: Preview not available for this file type
     create:
       error_message: 'Les erreurs suivantes ont empêché la création de l''exécution du pipeline:'
     edit_dialog:

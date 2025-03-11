@@ -346,6 +346,8 @@ en:
       copy: Copy
       download: Download
       file_not_found: File not found.
+      image:
+        alt: Rendering of file %{filename}
       not_available:
         details: Please download to view the contents
         title: Preview not available for this file type
