@@ -315,7 +315,6 @@ module Samples
       end
 
       test 'unchanged metadata value when updating to current value' do
-        freeze_time
         params = { 'metadata' => { 'metadatafield1' => 'value1' } }
 
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample32.metadata)
@@ -333,6 +332,31 @@ module Samples
                                              'updated_at' => '2000-01-01T00:00:00.000+00:00' } },
                      @sample32.metadata_provenance)
         assert_equal({ added: [], updated: [], deleted: [], not_updated: [], unchanged: %w[metadatafield1] },
+                     metadata_changes)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project29.namespace.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
+        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+      end
+
+      test 'unchanged metadata value when updating to current value with force update' do
+        freeze_time
+        params = { 'metadata' => { 'metadatafield1' => 'value1' }, 'force_update' => true }
+
+        assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample32.metadata)
+        assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project29.namespace.metadata_summary)
+        assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)
+        assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
+
+        metadata_changes = Samples::Metadata::UpdateService.new(@project29, @sample32, @user, params).execute
+
+        assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample32.metadata)
+        # timestamps should not update as the fields are unchanged
+        assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user',
+                                             'updated_at' => Time.current },
+                       'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
+                                             'updated_at' => '2000-01-01T00:00:00.000+00:00'  } },
+                     @sample32.metadata_provenance)
+        assert_equal({ added: [], updated: %w[metadatafield1], deleted: [], not_updated: [], unchanged: [] },
                      metadata_changes)
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @project29.namespace.metadata_summary)
         assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12a.metadata_summary)

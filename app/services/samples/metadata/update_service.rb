@@ -16,6 +16,7 @@ module Samples
         @analysis_id = params['analysis_id']
         @metadata_changes = { added: [], updated: [], deleted: [], not_updated: [], unchanged: [] }
         @include_activity = params.key?(:include_activity) ? params[:include_activity] : true
+        @force_update = params.key?('force_update') ? params['force_update'] : false
       end
 
       def execute # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -84,7 +85,6 @@ module Samples
 
           key = key.to_s.downcase.strip
           value = value.to_s.strip # remove data types
-
           status = get_metadata_change_status(key, value)
           next unless status
 
@@ -119,7 +119,7 @@ module Samples
               @sample.metadata_provenance[key]['source'] == 'analysis'
           :not_updated
         elsif @sample.field?(key) && @sample.metadata[key] == value
-          :unchanged
+          @force_update ? :updated : :unchanged
         else
           @sample.field?(key) ? :updated : :added
         end
