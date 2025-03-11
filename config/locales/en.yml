@@ -1820,9 +1820,6 @@ en:
     progress_bar:
       in_progress: Action in progress. Please do not refresh the page.
     samples:
-      file_imports:
-        dialog:
-          spinner_message: Importing samples, this might take a while...
       metadata:
         editing_field_cell:
           dialog:
@@ -1871,6 +1868,9 @@ en:
         templates:
           label: Metadata Templates
         tooltip: Metadata display settings
+      spreadsheet_imports:
+        dialog:
+          spinner_message: Importing samples, this might take a while...
   spreadsheet_helper:
     failed_parsing: 'Failed to parse spreadsheet file: %{error}'
     no_file: No file provided

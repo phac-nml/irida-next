@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Common file import actions
+# Common Sample Spreadsheet import actions
 module SampleSpreadsheetImportActions
   extend ActiveSupport::Concern
 
