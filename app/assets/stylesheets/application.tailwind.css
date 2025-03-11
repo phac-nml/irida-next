@@ -248,7 +248,7 @@ body {
 
   /* VIRAL DIALOG */
   dialog {
-    @apply w-full max-w-2xl max-h-full p-0 bg-white rounded-lg shadow dark:bg-slate-800 focus:outline-none;
+    @apply w-full max-w-2xl max-h-full p-0 bg-white rounded-lg shadow dark:bg-slate-800 focus:outline-none overflow-y-hidden;
   }
 
   dialog::backdrop {
@@ -288,7 +288,8 @@ body {
   }
 
   .dialog--section {
-    @apply p-5;
+    max-height: calc(80vh - 1.25rem - 2.5rem);
+    @apply p-5 overflow-y-auto;
   }
 
   .avatar {
