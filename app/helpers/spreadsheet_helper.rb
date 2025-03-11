@@ -1,17 +1,18 @@
 # frozen_string_literal: true
 
-# SpreadsheetHelper module provides utility methods to read and parse Excel and CSV files.
-# Supported formats: .xlsx, .xls, and .csv. Numeric strings are automatically converted to numbers.
+# 📊 SpreadsheetHelper module provides utility methods to read and parse Excel and CSV files.
+# 🔍 Supported formats: .xlsx, .xls, and .csv
+# 🔢 Automatically converts numeric strings to their proper number types
 module SpreadsheetHelper
   SUPPORTED_FORMATS = %w[.xlsx .xls .csv].freeze
 
-  # Custom exception used when errors occur during Excel parsing.
+  # ⚠️ Custom exception for spreadsheet parsing failures
   class SpreadsheetParsingError < StandardError; end
 
-  # Parses an Excel/CSV file and returns its contents as an array.
-  # @param file [ActionDispatch::Http::UploadedFile] the file to be parsed.
-  # @return [Array<Hash>] an array with the first element as headers and subsequent elements as row hashes.
-  # @raise [SpreadsheetParsingError] if the file is missing or headers cannot be extracted.
+  # 📝 Parses an Excel/CSV file and returns its contents as structured data
+  # @param file [ActionDispatch::Http::UploadedFile] the uploaded file to parse
+  # @return [Array<Hash>] array of row data with headers as keys
+  # @raise [SpreadsheetParsingError] if file is missing or invalid
   def parse_spreadsheet(file)
     raise SpreadsheetParsingError, t('spreadsheet_helper.no_file') unless file.present?
 
@@ -35,10 +36,11 @@ module SpreadsheetHelper
 
   private
 
-  # Opens the file as a spreadsheet using Roo, based on its file extension.
-  # @param path [String] the full file path.
-  # @param file_extension [String] the file extension.
-  # @return [Roo::Spreadsheet] the spreadsheet instance.
+  # 📂 Opens a spreadsheet file using the appropriate Roo class based on file extension
+  # @param path [String] the full file path
+  # @param file_extension [String] the lowercase file extension (e.g., '.xlsx')
+  # @return [Roo::Spreadsheet] the spreadsheet object ready for reading
+  # @raise [SpreadsheetParsingError] if file format is unsupported
   def open_spreadsheet(path, file_extension)
     case file_extension
     when '.csv'
@@ -52,10 +54,10 @@ module SpreadsheetHelper
     end
   end
 
-  # Extracts the header row from the spreadsheet.
-  # @param spreadsheet [Roo::Spreadsheet] the spreadsheet to read.
-  # @return [Array<String>] an array of header names.
-  # @raise [SpreadsheetParsingError] if the header row is empty.
+  # 🏷️ Extracts the header row (first row) from the spreadsheet
+  # @param spreadsheet [Roo::Spreadsheet] the spreadsheet to read
+  # @return [Array<String>] array of column header names
+  # @raise [SpreadsheetParsingError] if headers are missing or empty
   def extract_headers(spreadsheet)
     headers = spreadsheet.row(1).map(&:presence).compact
     raise SpreadsheetParsingError, t('spreadsheet_helper.no_headers') if headers.empty?
@@ -63,10 +65,10 @@ module SpreadsheetHelper
     headers
   end
 
-  # Extracts row data from the spreadsheet and maps each row to a header.
-  # @param spreadsheet [Roo::Spreadsheet] the spreadsheet to parse.
-  # @param headers [Array<String>] an array of header names.
-  # @return [Array<Hash>] array of hashes representing the rows.
+  # 📋 Extracts all data rows from the spreadsheet and maps them to headers
+  # @param spreadsheet [Roo::Spreadsheet] the spreadsheet to parse
+  # @param headers [Array<String>] the column header names
+  # @return [Array<Hash>] array of hashes where each hash represents a row
   def extract_data(spreadsheet, headers)
     data = []
     (2..spreadsheet.last_row).each do |i|
@@ -80,9 +82,9 @@ module SpreadsheetHelper
     data
   end
 
-  # Converts numeric string values to Integer or Float.
-  # @param val [Object] the value from a cell.
-  # @return [Integer, Float, Object] the numeric conversion or the original value.
+  # 🔢 Smart conversion of string values to appropriate number types
+  # @param val [Object] the cell value to convert
+  # @return [Integer, Float, Object] converted number or original value
   def convert_numeric(val)
     if val.to_s.match?(/\A\d+\z/)
       val.to_i
@@ -93,17 +95,17 @@ module SpreadsheetHelper
     end
   end
 
-  # Logs Roo-specific errors and raises a custom SpreadsheetParsingError.
-  # @param error [Roo::Error] the encountered Roo exception.
-  # @raise [SpreadsheetParsingError] with details of the Roo error.
+  # 🐞 Handles Roo-specific errors during spreadsheet processing
+  # @param error [Roo::Error] the Roo exception that occurred
+  # @raise [SpreadsheetParsingError] with friendly error message
   def handle_roo_error(error)
     Rails.logger.error "Spreadsheet parsing error: #{error.message}"
     raise SpreadsheetParsingError, t('spreadsheet_helper.failed_parsing', error: error.message)
   end
 
-  # Logs general errors during parsing and raises a custom SpreadsheetParsingError.
-  # @param error [StandardError] the encountered exception.
-  # @raise [SpreadsheetParsingError] containing the error message and backtrace.
+  # 🚨 Handles general errors during spreadsheet processing
+  # @param error [StandardError] the exception that occurred
+  # @raise [SpreadsheetParsingError] with user-friendly error message
   def handle_standard_error(error)
     Rails.logger.error t('spreadsheet_helper.unexpected_error', error: "#{error.class} - #{error.message}")
     Rails.logger.error error.backtrace.join("\n")
