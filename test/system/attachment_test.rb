@@ -58,7 +58,7 @@ class AttachmentTest < ApplicationSystemTestCase
     assert_selector 'h1', text: attachment.file.filename.to_s
     assert_no_selector 'button', text: I18n.t('attachment.show.copy')
     assert_link I18n.t('attachment.show.download')
-    assert_selector 'img', count: 1
-    
+    assert_selector "img[alt='#{I18n.t('attachment.show.image.alt', filename: attachment.file.filename.to_s)}']",
+                    count: 1
   end
 end
