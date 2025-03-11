@@ -6,6 +6,8 @@ module Groups
     class FileImportsController < Groups::ApplicationController
       include SampleFileImportActions
 
+      before_action :ensure_enabled
+
       respond_to :turbo_stream
 
       private
@@ -16,6 +18,10 @@ module Groups
 
       def group
         @group = Group.find_by_full_path(params[:group_id]) # rubocop:disable Rails/DynamicFindBy
+      end
+
+      def ensure_enabled
+        render :not_found unless Flipper.enabled?(:batch_sample_file_import)
       end
     end
   end
