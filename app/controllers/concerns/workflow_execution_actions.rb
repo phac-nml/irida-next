@@ -126,6 +126,11 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
+  def destroy_confirmation
+    puts params
+    puts hi
+  end
+
   private
 
   def workflow_properties
