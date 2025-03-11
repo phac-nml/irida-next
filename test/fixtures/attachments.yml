@@ -415,3 +415,9 @@ attachmentImage:
   attachable: project1_namespace (Namespace)
   puid: INXT_ATT_ABAAAAAABE
   created_at: <%= 2.hours.ago %>
+
+attachmentTSV:
+  metadata: { "compression": "none", "format": "tsv" }
+  attachable: project1_namespace (Namespace)
+  puid: INXT_ATT_ABAAAAAABF
+  created_at: <%= 2.hours.ago %>

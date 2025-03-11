@@ -21,6 +21,18 @@ class AttachmentTest < ApplicationSystemTestCase
     assert_selector 'tbody tr', count: 15
   end
 
+  test 'can preview a tsv file' do
+    attachment = attachments(:attachmentTSV)
+    visit attachment_path(attachments(:attachmentTSV))
+    assert_selector 'h1', text: attachment.file.filename.to_s
+    assert_button I18n.t('attachment.show.copy')
+    assert_link I18n.t('attachment.show.download')
+
+    assert_selector 'table', count: 1
+    assert_selector 'thead th', count: 8
+    assert_selector 'tbody tr', count: 10
+  end
+
   test 'can preview a text file' do
     attachment = attachments(:attachmentText)
     visit attachment_path(attachments(:attachmentText))

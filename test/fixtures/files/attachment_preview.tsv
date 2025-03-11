@@ -1,0 +1,11 @@
+pfge_id	sample_date	bacterial_species	restriction_enzyme	banding_pattern	cluster_type	cluster_id	cluster_size
+1	6/29/2020	Listeria monocytogenes	XbaI	A	Single	1	9
+2	10/13/2013	Listeria monocytogenes	XbaI	D	Single	2	234
+3	7/9/2012	Listeria monocytogenes	SpeI	B	Multiple	3	811
+4	12/16/2012	Listeria monocytogenes	SpeI	A	Undefined	4	952
+5	1/12/2014	Salmonella enterica	XbaI	D	Multiple	5	615
+6	2/28/2016	Salmonella enterica	XbaI	B	Single	6	69
+7	4/25/2017	Escherichia coli	XbaI	B	Single	7	766
+8	3/31/2012	Listeria monocytogenes	XbaI	B	Undefined	8	382
+9	5/6/2018	Salmonella enterica	NotI	C	Multiple	9	761
+10	11/19/2018	Listeria monocytogenes	XbaI	A	Multiple	10	186

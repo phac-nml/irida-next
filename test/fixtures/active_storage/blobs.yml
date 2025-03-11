@@ -121,6 +121,7 @@ gasclustering_test_file_json_blob: <%= ActiveStorage::FixtureSet.blob filename: 
 # ⬇️ attachment_test.rb files ⬇️
 # --------------------------------
 attachment_csv_blob: <%= ActiveStorage::FixtureSet.blob filename: "attachment_preview.csv", service_name: "test" %>
+attachment_tsv_blob: <%= ActiveStorage::FixtureSet.blob filename: "attachment_preview.tsv", service_name: "test" %>
 attachment_text_blob: <%= ActiveStorage::FixtureSet.blob filename: "attachment_preview.txt", service_name: "test" %>
 attachment_json_blob: <%= ActiveStorage::FixtureSet.blob filename: "attachment_preview.json", service_name: "test" %>
 attachment_spreadsheet: <%= ActiveStorage::FixtureSet.blob filename: "attachment_preview.xlsx", service_name: "test" %>
