@@ -7,8 +7,7 @@ module BreadcrumbNavigation
   private
 
   def render(*args)
-    # Skip context_crumbs when rendering error pages
-    context_crumbs unless args.first.to_s.include?('error')
+    context_crumbs
     super
   end
 end
