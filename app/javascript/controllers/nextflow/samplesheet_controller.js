@@ -58,6 +58,12 @@ export default class extends Controller {
     "cursor-pointer",
   ];
 
+  #metadata_parameter_updated_state = [
+    "ring-2",
+    "ring-primary-500",
+    "dark:ring-primary-600",
+  ];
+
   // The samplesheet will use FormData, allowing us to create the inputs of a form without the associated DOM elements.
   #formData = new FormData();
 
@@ -609,6 +615,15 @@ export default class extends Controller {
 
     if (metadataParameter) {
       metadataParameter.value = metadataField;
+      metadataParameter.classList.add(
+        ...this.#metadata_parameter_updated_state,
+      );
+
+      setTimeout(() => {
+        metadataParameter.classList.remove(
+          ...this.#metadata_parameter_updated_state,
+        );
+      }, 1000);
     }
   }
 }
