@@ -22,8 +22,6 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
         get :new_destroy
       end
 
-      resource :file_import, module: :samples, only: %i[create new]
-
       resources :bots, only: %i[create destroy index new] do
         get :destroy_confirmation
         resources :personal_access_tokens, module: :bots, only: %i[index new create] do
@@ -59,6 +57,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
             resource :clone, only: %i[create new]
             resource :transfer, only: %i[create new]
             resource :file_import, module: :metadata, only: %i[create new]
+            resource :spreadsheet_import, only: %i[create new]
             resource :deletion, only: %i[destroy new] do
               delete :destroy_multiple
             end

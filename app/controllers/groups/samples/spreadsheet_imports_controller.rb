@@ -2,8 +2,8 @@
 
 module Groups
   module Samples
-    # Controller actions for Group Samples File Import Controller
-    class FileImportsController < Groups::ApplicationController
+    # Controller actions for Group Samples Spreadsheet Import Controller
+    class SpreadsheetImportsController < Groups::ApplicationController
       include SampleFileImportActions
 
       before_action :ensure_enabled

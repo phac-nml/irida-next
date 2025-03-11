@@ -2,8 +2,8 @@
 
 module Projects
   module Samples
-    # Controller actions for Project Samples File Import Controller
-    class FileImportsController < Projects::ApplicationController
+    # Controller actions for Project Samples Spreadsheet Import Controller
+    class SpreadsheetImportsController < Projects::ApplicationController
       include SampleFileImportActions
 
       before_action :ensure_enabled

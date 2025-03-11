@@ -4,7 +4,7 @@ require 'test_helper'
 
 module Projects
   module Samples
-    class FileImportControllerTest < ActionDispatch::IntegrationTest
+    class SpreadsheetImportControllerTest < ActionDispatch::IntegrationTest
       setup do
         sign_in users(:john_doe)
         @namespace = groups(:group_one)
@@ -16,7 +16,7 @@ module Projects
 
       test 'should enqueue a Samples::BatchSampleImportJob' do
         assert_enqueued_jobs 1, only: ::Samples::BatchSampleImportJob do
-          post namespace_project_file_import_path(@namespace, @project, format: :turbo_stream),
+          post namespace_project_samples_spreadsheet_import_path(@namespace, @project, format: :turbo_stream),
                params: {
                  file_import: {
                    file: @csv,
