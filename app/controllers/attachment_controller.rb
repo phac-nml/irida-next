@@ -13,10 +13,10 @@
 class AttachmentController < ApplicationController
   layout 'attachment'
 
-  before_action :ensure_enabled
-  before_action :attachment
-  before_action :context_crumbs
-  before_action :current_page
+  before_action :check_attachments_preview_enabled
+  before_action :set_attachment
+  before_action :set_context_crumbs
+  before_action :set_current_page
 
   # Displays a preview of the attachment if the file exists and preview is enabled.
   # The preview format is determined by the attachment's metadata format.
@@ -35,8 +35,7 @@ class AttachmentController < ApplicationController
   # @return [void]
   # @raise [ActionController::UnknownFormat] if the format is not supported
   def show
-    @attachments_preview_enabled ||= Flipper.enabled?(:attachments_preview)
-    return handle_preview if @attachment.present? && @attachments_preview_enabled
+    return handle_preview if @attachment.present?
 
     handle_not_found
   end
@@ -48,11 +47,13 @@ class AttachmentController < ApplicationController
   # @return [void]
   def handle_preview
     format = @attachment.metadata['format']
-    render "#{format}_preview"
+    if lookup_context.template_exists?("attachment/#{format}_preview")
+      render "#{format}_preview"
+    else
+      handle_not_found
+    end
   end
 
-  # Handles the case when the attachment is not found or preview is not available
-  #
   # @return [void]
   def handle_not_found
     redirect_back fallback_location: request.referer || root_path,
@@ -67,7 +68,7 @@ class AttachmentController < ApplicationController
   # @example
   #   attachment
   #   # => #<Attachment id: 123, ...>
-  def attachment
+  def set_attachment
     @attachment = Attachment.find_by(id: params[:id])
   end
 
@@ -84,7 +85,7 @@ class AttachmentController < ApplicationController
   #
   # @return [void]
   # @raise [RuntimeError] If attachment has not been set via #attachment method
-  def context_crumbs
+  def set_context_crumbs
     @context_crumbs = []
 
     parent = @attachment.attachable
@@ -97,7 +98,7 @@ class AttachmentController < ApplicationController
   # Sets the current sidebar tab based on the presence of workflow execution parameters.
   #
   # @return [void]
-  def current_page
+  def set_current_page
     @current_page = I18n.t(:'general.default_sidebar.workflows') if params[:workflow_execution].present?
   end
 
@@ -142,13 +143,15 @@ class AttachmentController < ApplicationController
   #   # => { name: "example.pdf", path: "/workflow_executions/attachments/123" }
   def attachment_crumb
     {
-      name: @attachment.file.filename,
+      name: @attachment.file.filename.to_s,
       path: workflow_executions_attachments_path(attachment: @attachment.id)
     }
   end
 
   # Ensures that the attachments preview feature is enabled.
-  def ensure_enabled
+  # Checks if the attachments preview feature is enabled using Flipper.
+  # If the feature is not enabled, redirects the user back to the previous page or the root path.
+  def check_attachments_preview_enabled
     redirect_back(fallback_location: root_path) unless Flipper.enabled?(:attachments_preview)
   end
 end
