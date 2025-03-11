@@ -106,7 +106,7 @@ class AttachmentController < ApplicationController
   def attachment_crumb
     {
       name: @attachment.file.filename.to_s,
-      path: workflow_executions_attachments_path(attachment: @attachment.id)
+      path: attachment_path(attachment: @attachment.id)
     }
   end
 
