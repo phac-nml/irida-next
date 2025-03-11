@@ -16,6 +16,15 @@
       action_link_required_value: 1,
     },
     class: "button button--size-default button--state-default action-link" %>
+    <%= link_to "delete",
+    destroy_confirmation_workflow_executions_path,
+    data: {
+      action: "turbo:morph-element->action-link#idempotentConnect",
+      turbo_stream: true,
+      controller: "action-link",
+      action_link_required_value: 1,
+    },
+    class: "button button--size-default button--state-default action-link" %>
   <% end %>
 <% end %>
 <div class="flow-root">
