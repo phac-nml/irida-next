@@ -105,8 +105,9 @@
             <%= render partial: "name_and_email", locals: { form: } %>
             <div>
               <%= form.hidden_field :export_type, value: "sample" %>
-              <input type="hidden" aria-hidden="true"
-              name="data_export[export_parameters][namespace_id]", value=<%= namespace_id %>
+              <%= form.fields_for :export_parameters do |export_parameters| %>
+                <%= export_parameters.hidden_field :namespace_id, value: namespace_id %>
+              <% end %>
             </div>
             <div
               class="hidden"
