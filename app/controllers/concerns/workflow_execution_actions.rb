@@ -3,6 +3,7 @@
 # Common workflow execution actions
 module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
+  include ListActions
 
   included do
     before_action :set_default_tab, only: :show
@@ -127,8 +128,18 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def destroy_confirmation
-    puts params
-    puts hi
+    # if params[:single_workflow]
+    #   render turbo_stream: turbo_stream.update('workflow_execution_dialog',
+    #                                            partial: 'new_single_analysis_export_dialog',
+    #                                            locals: new_locals), status: :ok
+    # else
+      render turbo_stream: turbo_stream.update('workflow_execution_dialog',
+                                               partial: "shared/workflow_executions/destroy_confirmation_dialog"),
+                                               status: :ok,
+                                               locals: {
+                                                open: true
+                                               }
+    # end
   end
 
   private

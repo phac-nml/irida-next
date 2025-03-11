@@ -1,6 +1,7 @@
 <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 
 <%= turbo_frame_tag "export_dialog" %>
+<%= turbo_frame_tag "workflow_execution_dialog" %>
 <%= turbo_frame_tag "selected" %>
 
 <%= turbo_stream_from current_user, :workflow_executions %>
