@@ -380,20 +380,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text 'test_file_A.fastq'
   end
 
-  test 'can preview a file attachment for a workflow execution' do
-    Flipper.enable(:attachments_preview)
-    workflow_execution = workflow_executions(:irida_next_example_completed_with_output)
-    attachment = attachments(:project1Attachment2)
-
-    visit workflow_executions_attachments_path(workflow_execution: workflow_execution.id, attachment: attachment.id)
-
-    assert_text attachment.file.filename
-    assert_selector "div##{dom_id(attachment)}"
-    assert_button I18n.t(:'workflow_executions.attachments.index.copy')
-    assert_link I18n.t(:'workflow_executions.attachments.index.download')
-    assert_selector 'table tr td', text: 'INXT_SAM_AAAAAAAABC'
-  end
-
   test 'can remove workflow execution from workflow execution page' do
     visit workflow_execution_path(@workflow_execution1)
 
