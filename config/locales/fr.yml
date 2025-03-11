@@ -1869,11 +1869,11 @@ fr:
           label: Modèles de métadonnées
         tooltip: Paramètres de visualisation des métadonnées
   spreadsheet_helper:
-    failed_parsing: 'Échec de l''analyse du fichier feuille de calcul : %{error}'
-    no_file: Aucun fichier fourni
-    no_headers: Aucun en-tête trouvé dans le fichier
-    unexpected_error: 'Une erreur inattendue s''est produite lors de l''analyse du fichier : %{error}'
-    unknown_file_format: Type de fichier inconnu
+    failed_parsing: 'Failed to parse spreadsheet file: %{error}'
+    no_file: No file provided
+    no_headers: No headers found in file
+    unexpected_error: 'An unexpected error occurred while parsing the file: %{error}'
+    unknown_file_format: 'Unknown file type: %{extension}'
   time:
     formats:
       abbreviated: "%a %b%e %Y %H:%M"
@@ -1917,7 +1917,7 @@ fr:
       download: Download
       preview: Preview
     create:
-      error_message: 'Les erreurs suivantes ont empêché la création de l''exécution du pipeline:'
+      error_message: 'The following errors prevented the Workflow Execution from being created:'
     edit_dialog:
       cancel_button: Cancel
       description: You are editing workflow execution '%{workflow_execution_id}'
