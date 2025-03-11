@@ -9,7 +9,6 @@ class AttachmentController < ApplicationController
   before_action :check_attachments_preview_enabled
   before_action :set_attachment
   before_action :set_context_crumbs
-  before_action :set_current_page
 
   # 🖼️ Shows a preview of the attachment if it exists
   # Preview format depends on the file type in metadata
@@ -74,17 +73,13 @@ class AttachmentController < ApplicationController
     @context_crumbs << attachment_crumb if @attachment.present?
   end
 
-  # 📌 Sets the active sidebar tab based on parameters
-  def set_current_page
-    @current_page = I18n.t(:'general.default_sidebar.workflows') if params[:workflow_execution].present?
-  end
-
   # ⬇️ Breadcrumb generation methods ⬇️
   # -----------------------------------
 
   # 🔗 Creates breadcrumb items for a WorkflowExecution
   # Returns array of hashes with name and path info
   def workflow_execution_crumb(workflow_execution)
+    set_workflow_page_context
     [{
       name: I18n.t('workflow_executions.index.title'),
       path: workflow_executions_path
@@ -93,6 +88,11 @@ class AttachmentController < ApplicationController
       path: workflow_execution_path(workflow_execution, tab: 'files'),
       workflow_execution: workflow_execution.id
     }]
+  end
+
+  # 📝 Sets the current page context for workflow-related views
+  def set_workflow_page_context
+    @current_page = I18n.t(:'general.default_sidebar.workflows')
   end
 
   # 🔄 Creates breadcrumbs for SamplesWorkflowExecution

@@ -386,3 +386,26 @@ gasclusteringAttachment:
   attachable: sample32 (Sample)
   puid: INXT_ATT_ABAAAAAAAN
   created_at: <%= 2.hours.ago %>
+attachmentCSV:
+  metadata: { "compression": "none", "format": "csv" }
+  attachable: project1_namespace (Namespace)
+  puid: INXT_ATT_ABAAAAAABA
+  created_at: <%= 2.hours.ago %>
+
+attachmentText:
+  metadata: { "compression": "none", "format": "text" }
+  attachable: project1_namespace (Namespace)
+  puid: INXT_ATT_ABAAAAAABB
+  created_at: <%= 2.hours.ago %>
+
+attachmentJSON:
+  metadata: { "compression": "none", "format": "json" }
+  attachable: project1_namespace (Namespace)
+  puid: INXT_ATT_ABAAAAAABC
+  created_at: <%= 2.hours.ago %>
+
+attachmentSpreadsheet:
+  metadata: { "compression": "none", "format": "spreadsheet" }
+  attachable: project1_namespace (Namespace)
+  puid: INXT_ATT_ABAAAAAABD
+  created_at: <%= 2.hours.ago %>
