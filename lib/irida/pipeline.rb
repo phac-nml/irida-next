@@ -5,11 +5,11 @@ module Irida
   class Pipeline
     attr_accessor :name, :description, :metadata, :type, :type_version,
                   :engine, :engine_version, :url, :version, :schema_loc, :schema_input_loc, :automatable, :executable,
-                  :default_params
+                  :default_params, :default_workflow_params
 
     IGNORED_PARAMS = %w[outdir email].freeze
 
-    def initialize(entry, version, schema_loc, schema_input_loc)
+    def initialize(entry, version, schema_loc, schema_input_loc) # rubocop:disable Metrics/MethodLength
       @name = entry['name']
       @description = entry['description']
       @metadata = { workflow_name: name, workflow_version: version }
@@ -25,6 +25,7 @@ module Irida
       @executable = true unless version['executable'] == false
       @overrides = overrides_for_entry(entry)
       @default_params = default_params_for_entry(entry)
+      @default_workflow_params = default_workflow_params_for_entry(entry)
     end
 
     def workflow_params
@@ -102,32 +103,36 @@ module Irida
         )
     end
 
-    def default_params_for_entry(entry) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    def default_workflow_params_for_entry(entry) # rubocop:disable Metrics/CyclomaticComplexity
       return {} if entry['versions'].nil?
 
-      overrides = entry['overrides'] || {}
-      default_params = {
-        workflow_type: @type,
-        workflow_type_version: @type_version,
-        workflow_engine: 'nextflow',
-        workflow_engine_version: @engine_version,
-        workflow_url: @url,
-        workflow_engine_parameters: { '-r': @version }
-      }
+      default_workflow_params = {}
 
-      return default_params unless overrides.key?('definitions')
+      return default_workflow_params unless @overrides.key?('definitions')
 
-      overrides['definitions'].each_value do |definition|
+      @overrides['definitions'].each_value do |definition|
         next unless definition.key?('properties')
 
         definition['properties'].each do |name, property|
           property.each do |key, value|
-            default_params.merge!({ workflow_params: { name => value } }) if key == 'default'
+            default_workflow_params.merge!({ workflow_params: { name => value } }) if key == 'default'
           end
         end
       end
+      default_workflow_params
+    end
 
-      default_params
+    def default_params_for_entry(entry)
+      return {} if entry['versions'].nil?
+
+      {
+        workflow_type: @type,
+        workflow_type_version: @type_version,
+        workflow_engine: @engine,
+        workflow_engine_version: @engine_version,
+        workflow_url: @url,
+        workflow_engine_parameters: { '-r': @version }
+      }
     end
   end
 end

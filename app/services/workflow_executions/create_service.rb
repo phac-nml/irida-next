@@ -53,7 +53,8 @@ module WorkflowExecutions
     end
 
     def autoset_params
-      params.reverse_merge!(@workflow.default_params)
+      params.merge!(@workflow.default_params)
+      params['workflow_params'].reverse_merge!(@workflow.default_workflow_params[:workflow_params])
     end
 
     def sanitize_workflow_param(property, value)
