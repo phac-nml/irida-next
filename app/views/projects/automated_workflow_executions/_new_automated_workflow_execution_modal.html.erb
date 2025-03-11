@@ -1,4 +1,4 @@
-<%= viral_dialog(open: true, size: :extra_large) do |dialog| %>>
+<%= viral_dialog(open: true, size: :extra_large) do |dialog| %>
   <% dialog.with_header(title: t(:".title", workflow: @workflow.name)) %>
   <%= render NextflowComponent.new(
     workflow: @workflow,

@@ -1,4 +1,4 @@
-<%= viral_dialog(open: open,classes: ["overflow-visible"]) do |dialog| %>>
+<%= viral_dialog(open: open,classes: ["overflow-visible"]) do |dialog| %>
   <% dialog.with_header(title: I18n.t("projects.group_links.new.title")) %>
   <%= turbo_frame_tag("invite-group-alert") %>
   <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
