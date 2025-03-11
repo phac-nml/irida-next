@@ -1,35 +1,32 @@
 <%= viral_dialog(open: open, classes: ["overflow-x-visible"]) do |dialog| %>
-  <%= dialog.with_header(title: t(".title")) %>
-  <%= dialog.with_section do %>
+  <% dialog.with_header(title: t(".title")) %>
+  <%= turbo_frame_tag("deletion-alert") %>
 
-    <%= turbo_frame_tag("deletion-alert") %>
-
-    <div class="mb-4 font-normal text-slate-500 dark:text-slate-400">
-      <p class="mb-4"><%= t(".description") %></p>
-      <div data-controller="projects--samples--metadata--delete-listing">
-        <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400 mb-4">
-          <thead class="text-slate-700 bg-slate-50 dark:bg-slate-900 dark:text-slate-400">
-            <tr>
-              <th class="px-6 py-4"><%= t(".key_header") %></th>
-              <th class="px-6 py-4"><%= t(".value_header") %></th>
-            </tr>
-          </thead>
-          <tbody data-projects--samples--metadata--delete-listing-target="tableBody"></tbody>
-        </table>
-      </div>
+  <div class="mb-4 font-normal text-slate-500 dark:text-slate-400">
+    <p class="mb-4"><%= t(".description") %></p>
+    <div data-controller="projects--samples--metadata--delete-listing">
+      <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400 mb-4">
+        <thead class="text-slate-700 bg-slate-50 dark:bg-slate-900 dark:text-slate-400">
+          <tr>
+            <th class="px-6 py-4"><%= t(".key_header") %></th>
+            <th class="px-6 py-4"><%= t(".value_header") %></th>
+          </tr>
+        </thead>
+        <tbody data-projects--samples--metadata--delete-listing-target="tableBody"></tbody>
+      </table>
     </div>
+  </div>
 
-    <%= form_for(:deletion, url: namespace_project_sample_metadata_deletion_path,
+  <%= form_for(:deletion, url: namespace_project_sample_metadata_deletion_path,
     data: {
       controller: "projects--samples--metadata--destroy",
       'projects--samples--metadata--destroy-storage-key-value': namespace_project_sample_url(id: @sample.id),
       action: 'turbo:submit-end->projects--samples--metadata--destroy#clear'
     }, method: :delete) do |form| %>
-      <div data-projects--samples--metadata--destroy-target="field"></div>
-      <div>
-        <%= form.submit t(".submit_button"),
-                    class: "button button--size-default button--state-destructive" %>
-      </div>
-    <% end %>
+    <div data-projects--samples--metadata--destroy-target="field"></div>
+    <div>
+      <%= form.submit t(".submit_button"),
+                  class: "button button--size-default button--state-destructive" %>
+    </div>
   <% end %>
 <% end %>

@@ -4,7 +4,7 @@
   data-list-filter-filters-value="<%= filters.present? ? filters.to_s : '[]' %>"
 >
   <%= viral_dialog(id: 'list-filter-dialog') do |dialog| %>
-    <%= dialog.with_trigger do %>
+    <% dialog.with_trigger do %>
       <button
         type="button"
         class="
@@ -28,11 +28,9 @@
         <%= viral_icon(name: "document_magnifying_glass", classes: "size-5") %>
       </button>
     <% end %>
-    <%= dialog.with_header(title: t(:"components.list_filter.title")) %>
-    <%= dialog.with_section do %>
-      <%= render ListInputComponent.new(list_input_form_name: "q[name_or_puid_in][]") %>
-    <% end %>
-    <%= dialog.with_primary_action(
+    <% dialog.with_header(title: t(:"components.list_filter.title")) %>
+    <%= render ListInputComponent.new(list_input_form_name: "q[name_or_puid_in][]") %>
+    <% dialog.with_primary_action(
       "data-action": "list-filter#afterSubmit filters#submit viral--dialog#close",
     ) { t(:"components.list_filter.apply") } %>
   <% end %>

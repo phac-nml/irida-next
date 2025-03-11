@@ -13,8 +13,11 @@
         <%= header %>
       <% end %>
 
-      <% if section.present? %>
-        <%= section %>
+      <% if content.present? %>
+
+        <%= render Viral::Dialog::SectionComponent.new do %>
+          <%= content %>
+        <% end %>
       <% end %>
 
       <% if render_footer? %>

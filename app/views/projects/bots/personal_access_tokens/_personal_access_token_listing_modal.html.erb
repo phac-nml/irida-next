@@ -1,21 +1,19 @@
 <%= viral_dialog(open: open, id: 'bot_tokens_dialog', size: :extra_large) do |dialog| %>
-  <%= dialog.with_header(
+  <% dialog.with_header(
     title: t("projects.bots.index.personal_access_tokens_listing_modal.title"),
   ) %>
-  <%= dialog.with_section do %>
-    <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
-      <p class="dark:text-slate-400">
-        <%= t(
-          "projects.bots.index.personal_access_tokens_listing_modal.description",
-          bot_account: @bot_account.user.email,
-        ) %>
-      </p>
-    </div>
+  <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
+    <p class="dark:text-slate-400">
+      <%= t(
+        "projects.bots.index.personal_access_tokens_listing_modal.description",
+        bot_account: @bot_account.user.email,
+      ) %>
+    </p>
+  </div>
 
-    <div class="mb-4">
-      <%= turbo_frame_tag("personal-access-token-alert") %>
-    </div>
+  <div class="mb-4">
+    <%= turbo_frame_tag("personal-access-token-alert") %>
+  </div>
 
-    <%= render partial: "table", locals: { personal_access_tokens: } %>
-  <% end %>
+  <%= render partial: "table", locals: { personal_access_tokens: } %>
 <% end %>

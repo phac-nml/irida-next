@@ -1,17 +1,14 @@
 <%= viral_dialog(open: true, size: :large) do |dialog| %>
-  <%= dialog.with_header(
-    title: t(".version_number", version_number: log_data[:version])
+  <% dialog.with_header(
+    title: t(".version_number", version_number: log_data[:version]),
   ) %>
-  <%= dialog.with_section do %>
-    <div>
-      <%= render partial: "project_history_modal_description", locals: { log_data: } %>
-      <%= render HistoryVersionComponent.new(log_data: log_data) %>
-    </div>
-    <% dialog.with_secondary_action do %>
-      <%= viral_button(data: { action: 'click->viral--dialog#close' }) do %>
-        <%= t(".close") %>
-      <% end %>
+  <div>
+    <%= render partial: "project_history_modal_description", locals: { log_data: } %>
+    <%= render HistoryVersionComponent.new(log_data: log_data) %>
+  </div>
+  <% dialog.with_secondary_action do %>
+    <%= viral_button(data: { action: 'click->viral--dialog#close' }) do %>
+      <%= t(".close") %>
     <% end %>
-
   <% end %>
 <% end %>

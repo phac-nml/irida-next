@@ -1,9 +1,10 @@
 <%= viral_dialog(open: open) do |dialog| %>
-  <% dialog.with_header(title: t("projects.samples.show.metadata.update.update_metadata")) %>
-  <% dialog.with_section do %>
-    <%= render partial: "projects/samples/metadata/update_form",
-    locals: {
-        key:, value:
-    } %>
-  <% end %>
+  <% dialog.with_header(
+    title: t("projects.samples.show.metadata.update.update_metadata"),
+  ) %>
+  <%= render partial: "projects/samples/metadata/update_form",
+  locals: {
+    key:,
+    value:,
+  } %>
 <% end %>

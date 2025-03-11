@@ -1,9 +1,7 @@
 <%= viral_dialog(open: open) do |dialog| %>
   <% dialog.with_header(title: t("projects.samples.show.upload_files")) %>
-  <% dialog.with_section do %>
-    <%= render partial: "projects/samples/attachments/form",
-    locals: {
-      attachment: attachment
-    } %>
-  <% end %>
+  <%= render partial: "projects/samples/attachments/form",
+  locals: {
+    attachment: attachment,
+  } %>
 <% end %>

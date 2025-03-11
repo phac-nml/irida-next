@@ -1,136 +1,130 @@
 <%= viral_dialog(open: open, size: :large) do |dialog| %>
-  <%= dialog.with_header(title: t(".title")) %>
-  <%= dialog.with_section do %>
-    <%= turbo_frame_tag "sample_export_dialog_content" do %>
-      <div
-        data-controller="infinite-scroll viral--sortable-lists--two-lists-selection"
-        data-viral--sortable-lists--two-lists-selection-selected-list-value="<%= t(".selected") %>"
-        data-viral--sortable-lists--two-lists-selection-available-list-value="<%= t(".available") %>"
-        data-viral--sortable-lists--two-lists-selection-field-name-value="data_export[export_parameters][attachment_formats][]"
-        data-infinite-scroll-selection-outlet='#samples-table'
-        data-infinite-scroll-paged-field-name-value="sample_ids[]"
-        data-infinite-scroll-singular-description-value="<%= t(:"data_exports.new.sample_description.singular") %>"
-        data-infinite-scroll-plural-description-value="<%= t(:"data_exports.new.sample_description.plural") %>"
-        data-infinite-scroll-non-zero-header-value="<%= t(:"data_exports.new.samples_count.non_zero") %>"
-        class="font-normal text-slate-500 dark:text-slate-400"
-      >
-        <%= form_with(
+  <% dialog.with_header(title: t(".title")) %>
+  <%= turbo_frame_tag "sample_export_dialog_content" do %>
+    <div
+      data-controller="infinite-scroll viral--sortable-lists--two-lists-selection"
+      data-viral--sortable-lists--two-lists-selection-selected-list-value="<%= t(".selected") %>"
+      data-viral--sortable-lists--two-lists-selection-available-list-value="<%= t(".available") %>"
+      data-viral--sortable-lists--two-lists-selection-field-name-value="data_export[export_parameters][attachment_formats][]"
+      data-infinite-scroll-selection-outlet='#samples-table'
+      data-infinite-scroll-paged-field-name-value="sample_ids[]"
+      data-infinite-scroll-singular-description-value="<%= t(:"data_exports.new.sample_description.singular") %>"
+      data-infinite-scroll-plural-description-value="<%= t(:"data_exports.new.sample_description.plural") %>"
+      data-infinite-scroll-non-zero-header-value="<%= t(:"data_exports.new.samples_count.non_zero") %>"
+      class="font-normal text-slate-500 dark:text-slate-400"
+    >
+      <%= form_with(
         url: list_data_exports_path(list_class: 'sample'),
         data: { "infinite-scroll-target": "pageForm" }
       ) do %>
-          <div data-infinite-scroll-target="pageFormContent"></div>
-        <% end %>
+        <div data-infinite-scroll-target="pageFormContent"></div>
+      <% end %>
 
-        <div class="grid gap-4">
-          <div data-controller="collapsible">
-            <h2 id="<%= "accordion-collapse-heading-samples" %>">
-              <button
-                type="button"
-                class="
-                  flex
-                  items-center
-                  justify-between
-                  w-full
-                  p-3
-                  font-medium
-                  rtl:text-right
-                  text-black
-                  dark:text-white
-                  border
-                  border-slate-200
-                  dark:border-slate-700
-                  hover:bg-slate-100
-                  dark:hover:bg-slate-800
-                  gap-3
-                  rounded-t
-                "
-                data-action="collapsible#toggle"
-                aria-expanded="true"
-                aria-controls="<%= "accordion-collapse-body-samples" %>"
-              >
-                <span data-infinite-scroll-target="selectionCount"><%= t(".samples") %></span>
-                <%= viral_icon(
-                  name: "chevron_down",
-                  classes: "mr-0 w-4 h-4 rotate-0",
-                  "data-collapsible-target": "icon"
-                ) %>
-              </button>
-            </h2>
-
-            <div
-              data-collapsible-target="item"
-              id="<%= "accordion-collapse-body-samples" %>"
-              class="hidden"
-              aria-labelledby="<%= "accordion-collapse-heading-samples" %>"
-            >
-              <div class="text-base leading-relaxed text-slate-500 dark:text-slate-400 p-2.5 border border-t-0 border-slate-300">
-                <span data-infinite-scroll-target="summary">
-                   <%= t(:"data_exports.new.sample_description.zero") %>
-                </span>
-                <span><%= t(:"data_exports.new.after_submission_description_html") %></span>
-              </div>
-              <div
+      <div class="grid gap-4">
+        <div data-controller="collapsible">
+          <h2 id="<%= "accordion-collapse-heading-samples" %>">
+            <button
+              type="button"
               class="
-                overflow-y-auto max-h-[200px] border border-t-0 border-slate-300 rounded-b block w-full
-                p-2.5 dark:bg-slate-800 dark:border-slate-600
+                flex items-center justify-between w-full p-3 font-medium rtl:text-right
+                text-black dark:text-white border border-slate-200 dark:border-slate-700
+                hover:bg-slate-100 dark:hover:bg-slate-800 gap-3 rounded-t
+              "
+              data-action="collapsible#toggle"
+              aria-expanded="true"
+              aria-controls="<%= "accordion-collapse-body-samples" %>"
+            >
+              <span data-infinite-scroll-target="selectionCount"><%= t(".samples") %></span>
+              <%= viral_icon(
+                name: "chevron_down",
+                classes: "mr-0 w-4 h-4 rotate-0",
+                "data-collapsible-target": "icon",
+              ) %>
+            </button>
+          </h2>
+
+          <div
+            data-collapsible-target="item"
+            id="<%= "accordion-collapse-body-samples" %>"
+            class="hidden"
+            aria-labelledby="<%= "accordion-collapse-heading-samples" %>"
+          >
+            <div
+              class="
+                text-base leading-relaxed text-slate-500 dark:text-slate-400 p-2.5 border
+                border-t-0 border-slate-300
+              "
+            >
+              <span data-infinite-scroll-target="summary">
+                <%= t(:"data_exports.new.sample_description.zero") %>
+              </span>
+              <span><%= t(:"data_exports.new.after_submission_description_html") %></span>
+            </div>
+            <div
+              class="
+                overflow-y-auto max-h-[200px] border border-t-0 border-slate-300 rounded-b block
+                w-full p-2.5 dark:bg-slate-800 dark:border-slate-600
               "
               data-action="scroll->infinite-scroll#scroll"
               data-infinite-scroll-target="scrollable"
-              >
-                <%= turbo_frame_tag "list_selections" do %>
-                  <%= render partial: "shared/loading/samples_list_skeleton" %>
-                <% end %>
-              </div>
+            >
+              <%= turbo_frame_tag "list_selections" do %>
+                <%= render partial: "shared/loading/samples_list_skeleton" %>
+              <% end %>
             </div>
           </div>
-          <%= viral_sortable_lists(
+        </div>
+        <%= viral_sortable_lists(
             title: t(".select_formats"),
             description: t(".format_description", selected: t(".selected").downcase)
             ) do |sortable_lists| %>
-            <%= sortable_lists.with_list(
-              id: t(".available"),
-              title: t(".available"),
-              group: 'format_selection',
-              container_classes: 'block mb-1 pr-2 text-sm font-medium',
-              list_classes: 'overflow-y-auto max-w-[356px] min-w-[356px] w-full'
-              ) %>
-            <%= sortable_lists.with_list(
-              id: t(".selected"),
-              title: t(".selected"),
-              list_items: formats,
-              group: 'format_selection',
-              container_classes: 'block mb-1 text-sm font-medium',
-              list_classes: 'overflow-y-auto max-w-[356px] min-w-[356px] w-full'
-              ) %>
-          <% end %>
-          <%= form_for(:data_export, url: data_exports_path, method: :post,
+          <%= sortable_lists.with_list(
+            id: t(".available"),
+            title: t(".available"),
+            group: "format_selection",
+            container_classes: "block mb-1 pr-2 text-sm font-medium",
+            list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
+          ) %>
+          <%= sortable_lists.with_list(
+            id: t(".selected"),
+            title: t(".selected"),
+            list_items: formats,
+            group: "format_selection",
+            container_classes: "block mb-1 text-sm font-medium",
+            list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
+          ) %>
+        <% end %>
+        <%= form_for(:data_export, url: data_exports_path, method: :post,
               data: {
                 controller: "form--hidden-inputs",
                 "form--hidden-inputs-selection-outlet": '#samples-table',
                 "form--hidden-inputs-field-name-value": "data_export[export_parameters][ids][]"
               }
             ) do |form| %>
-            <div class="grid gap-4">
-              <%= render partial: "name_and_email", locals: {form:} %>
-              <div>
-                <%= form.hidden_field :export_type, value: "sample" %>
-                <input type="hidden" aria-hidden="true"
-                name="data_export[export_parameters][namespace_id]", value=<%= namespace_id %>>
-              </div>
-              <div class="hidden" data-viral--sortable-lists--two-lists-selection-target="field"></div>
-              <div>
-                <%= form.submit t("data_exports.new.submit_button"),
-                            data: {
-                              turbo_frame: "_top",
-                              action: %(click->form--hidden-inputs#clearSelection click->viral--sortable-lists--two-lists-selection#constructParams),
-                              "viral--sortable-lists--two-lists-selection-target": "submitBtn"
-                            },
-                            class: "button button--state-primary button--size-default" %>
-              </div>
+          <div class="grid gap-4">
+            <%= render partial: "name_and_email", locals: { form: } %>
+            <div>
+              <%= form.hidden_field :export_type, value: "sample" %>
+              <input type="hidden" aria-hidden="true"
+              name="data_export[export_parameters][namespace_id]", value=<%= namespace_id %>>
             </div>
-          <% end %>
-        </div>
+            <div
+              class="hidden"
+              data-viral--sortable-lists--two-lists-selection-target="field"
+            ></div>
+            <div>
+              <%= form.submit t("data_exports.new.submit_button"),
+                          data: {
+                            turbo_frame: "_top",
+                            action:
+                              "click->form--hidden-inputs#clearSelection click->viral--sortable-lists--two-lists-selection#constructParams",
+                            "viral--sortable-lists--two-lists-selection-target": "submitBtn",
+                          },
+                          class: "button button--state-primary button--size-default" %>
+            </div>
+          </div>
+        <% end %>
       </div>
-    <% end %>
+    </div>
   <% end %>
 <% end %>

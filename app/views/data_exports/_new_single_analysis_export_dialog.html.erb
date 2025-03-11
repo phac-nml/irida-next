@@ -1,103 +1,98 @@
 <%= viral_dialog(open: open, size: :large) do |dialog| %>
-  <%= dialog.with_header(title: t(:"data_exports.new_analysis_export_dialog.title")) %>
-  <%= dialog.with_section do %>
-    <div class="font-normal text-slate-500 dark:text-slate-400">
-      <div class="grid gap-4">
-        <div data-controller="collapsible">
-          <h2 id="<%= "accordion-collapse-heading-workflows" %>">
-            <button
-              type="button"
-              class="
-                flex
-                items-center
-                justify-between
-                w-full
-                p-3
-                font-medium
-                rtl:text-right
-                text-black
-                dark:text-white
-                border
-                border-slate-200
-                dark:border-slate-700
-                hover:bg-slate-100
-                dark:hover:bg-slate-800
-                gap-3
-                rounded-t
-              "
-              data-action="collapsible#toggle"
-              aria-expanded="true"
-              aria-controls="<%= "accordion-collapse-body-workflows" %>"
-            >
-              <span><%= t(".single_selection") %></span>
-              <%= viral_icon(
-                name: "chevron_down",
-                classes: "mr-0 w-4 h-4 rotate-0",
-                "data-collapsible-target": "icon"
-              ) %>
-            </button>
-          </h2>
-
-          <div
-            data-collapsible-target="item"
-            id="<%= "accordion-collapse-body-workflows" %>"
-            class="hidden"
-            aria-labelledby="<%= "accordion-collapse-heading-workflows" %>"
-          >
-            <div class="text-base leading-relaxed text-slate-500 dark:text-slate-400 p-2.5 border border-t-0 border-slate-300">
-              <span>
-                <%= t(:"data_exports.new_analysis_export_dialog.description.singular") %>
-              </span>
-              <span><%= t(:"data_exports.new.after_submission_description_html") %></span>
-            </div>
-            <div
+  <% dialog.with_header(title: t(:"data_exports.new_analysis_export_dialog.title")) %>
+  <div class="font-normal text-slate-500 dark:text-slate-400">
+    <div class="grid gap-4">
+      <div data-controller="collapsible">
+        <h2 id="<%= "accordion-collapse-heading-workflows" %>">
+          <button
+            type="button"
             class="
-              overflow-y-auto max-h-[200px] border border-t-0 border-slate-300 rounded-b block w-full
-              p-2.5 dark:bg-slate-800 dark:border-slate-600
+              flex items-center justify-between w-full p-3 font-medium rtl:text-right
+              text-black dark:text-white border border-slate-200 dark:border-slate-700
+              hover:bg-slate-100 dark:hover:bg-slate-800 gap-3 rounded-t
             "
-            >
-              <div class="font-semibold text-gray-900 dark:text-white"><%= t("data_exports.list_workflow_execution.id") %> <%= workflow_execution.id %></div>
-              <% unless workflow_execution.name.nil? || workflow_execution.name.empty? %>
-                <div class="font-normal text-gray-500 dark:text-gray-400"><%= t("data_exports.list_workflow_execution.name") %> <%= workflow_execution.name %></div>
-              <% end %>
-              <div class="font-normal text-gray-500 dark:text-gray-400"><%= t("data_exports.list_workflow_execution.run_id") %> <%= workflow_execution.run_id %></div>
-              <div class="font-normal text-gray-500 dark:text-gray-400"><%= t("data_exports.list_workflow_execution.workflow") %> <%= workflow_execution.metadata["workflow_name"] %> <%= workflow_execution.metadata["workflow_version"] %></div>
-            </div>
+            data-action="collapsible#toggle"
+            aria-expanded="true"
+            aria-controls="<%= "accordion-collapse-body-workflows" %>"
+          >
+            <span><%= t(".single_selection") %></span>
+            <%= viral_icon(
+              name: "chevron_down",
+              classes: "mr-0 w-4 h-4 rotate-0",
+              "data-collapsible-target": "icon",
+            ) %>
+          </button>
+        </h2>
+
+        <div
+          data-collapsible-target="item"
+          id="<%= "accordion-collapse-body-workflows" %>"
+          class="hidden"
+          aria-labelledby="<%= "accordion-collapse-heading-workflows" %>"
+        >
+          <div
+            class="
+              text-base leading-relaxed text-slate-500 dark:text-slate-400 p-2.5 border
+              border-t-0 border-slate-300
+            "
+          >
+            <span>
+              <%= t(:"data_exports.new_analysis_export_dialog.description.singular") %>
+            </span>
+            <span><%= t(:"data_exports.new.after_submission_description_html") %></span>
+          </div>
+          <div
+            class="
+              overflow-y-auto max-h-[200px] border border-t-0 border-slate-300 rounded-b block
+              w-full p-2.5 dark:bg-slate-800 dark:border-slate-600
+            "
+          >
+            <div class="font-semibold text-gray-900 dark:text-white"><%= t("data_exports.list_workflow_execution.id") %>
+              <%= workflow_execution.id %></div>
+            <% unless workflow_execution.name.nil? || workflow_execution.name.empty? %>
+              <div class="font-normal text-gray-500 dark:text-gray-400"><%= t("data_exports.list_workflow_execution.name") %>
+                <%= workflow_execution.name %></div>
+            <% end %>
+            <div class="font-normal text-gray-500 dark:text-gray-400"><%= t("data_exports.list_workflow_execution.run_id") %>
+              <%= workflow_execution.run_id %></div>
+            <div class="font-normal text-gray-500 dark:text-gray-400"><%= t("data_exports.list_workflow_execution.workflow") %>
+              <%= workflow_execution.metadata["workflow_name"] %>
+              <%= workflow_execution.metadata["workflow_version"] %></div>
           </div>
         </div>
-        <%= form_for(:data_export, url: data_exports_path, method: :post) do |form| %>
-          <div class="grid gap-4">
-            <%= render partial: "name_and_email", locals: {form:} %>
-            <div>
-              <%= form.hidden_field :export_type, value: "analysis" %>
-              <input
-                type="hidden"
-                name="data_export[export_parameters][analysis_type]"
-                value="<%= analysis_type %>"
-              >
-              <input
-                type="hidden"
-                name="data_export[export_parameters][ids][]"
-                value="<%= workflow_execution.id %>"
-              >
-              <% unless namespace_id.nil? %>
-                <input
-                  type="hidden"
-                  name="data_export[export_parameters][namespace_id]"
-                  value="<%= namespace_id %>"
-                >
-              <% end %>
-            </div>
-            <div>
-              <%= form.submit t(:"data_exports.new.submit_button"),
-                          data: {
-                            turbo_frame: "_top"
-                          },
-                          class: "button button--state-primary button--size-default" %>
-            </div>
-          </div>
-        <% end %>
       </div>
+      <%= form_for(:data_export, url: data_exports_path, method: :post) do |form| %>
+        <div class="grid gap-4">
+          <%= render partial: "name_and_email", locals: { form: } %>
+          <div>
+            <%= form.hidden_field :export_type, value: "analysis" %>
+            <input
+              type="hidden"
+              name="data_export[export_parameters][analysis_type]"
+              value="<%= analysis_type %>"
+            >
+            <input
+              type="hidden"
+              name="data_export[export_parameters][ids][]"
+              value="<%= workflow_execution.id %>"
+            >
+            <% unless namespace_id.nil? %>
+              <input
+                type="hidden"
+                name="data_export[export_parameters][namespace_id]"
+                value="<%= namespace_id %>"
+              >
+            <% end %>
+          </div>
+          <div>
+            <%= form.submit t(:"data_exports.new.submit_button"),
+                        data: {
+                          turbo_frame: "_top",
+                        },
+                        class: "button button--state-primary button--size-default" %>
+          </div>
+        </div>
+      <% end %>
     </div>
-  <% end %>
+  </div>
 <% end %>

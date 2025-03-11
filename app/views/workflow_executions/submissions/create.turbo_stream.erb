@@ -1,16 +1,13 @@
 <%= turbo_stream.update "samples_dialog" do %>
   <%= viral_dialog(open: true, size: :extra_large) do |dialog| %>
-    <%= dialog.with_header(title: t(:".title", workflow: @workflow.name)) %>
-    <%= dialog.with_section do %>
-
-      <%= render NextflowComponent.new(
-        workflow: @workflow,
-        url: workflow_executions_path,
-        samples: @samples,
-        allowed_to_update_samples: @allowed_to_update_samples,
-        namespace_id: @namespace_id,
-        fields: @fields,
-      ) %>
-    <% end %>
+    <% dialog.with_header(title: t(:".title", workflow: @workflow.name)) %>
+    <%= render NextflowComponent.new(
+      workflow: @workflow,
+      url: workflow_executions_path,
+      samples: @samples,
+      allowed_to_update_samples: @allowed_to_update_samples,
+      namespace_id: @namespace_id,
+      fields: @fields,
+    ) %>
   <% end %>
 <% end %>

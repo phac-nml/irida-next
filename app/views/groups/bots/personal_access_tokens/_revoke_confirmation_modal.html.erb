@@ -1,22 +1,21 @@
 <%= viral_dialog(open: open, id: 'revoke_confirmation_dialog') do |dialog| %>
-  <%= dialog.with_header(title: t("personal_access_tokens.revoke_confirmation.title")) %>
-  <%= dialog.with_section do %>
+  <% dialog.with_header(title: t("personal_access_tokens.revoke_confirmation.title")) %>
 
-    <%= turbo_frame_tag("deletion-alert") %>
+  <%= turbo_frame_tag("deletion-alert") %>
 
-    <div
-      class="
-        mb-4 font-normal text-slate-500 dark:text-slate-400 overflow-x-visible
-      "
-    >
-      <p class="mb-4">
-        <%= t(
-          "personal_access_tokens.revoke_confirmation.description",
-          token_name: personal_access_token.name,
-          bot_name: bot_account.user.email,
-        ) %>
-      </p>
-      <%= form_for(:deletion, url: revoke_group_bot_personal_access_token_path(
+  <div
+    class="
+      mb-4 font-normal text-slate-500 dark:text-slate-400 overflow-x-visible
+    "
+  >
+    <p class="mb-4">
+      <%= t(
+        "personal_access_tokens.revoke_confirmation.description",
+        token_name: personal_access_token.name,
+        bot_name: bot_account.user.email,
+      ) %>
+    </p>
+    <%= form_for(:deletion, url: revoke_group_bot_personal_access_token_path(
           bot_id: @bot_account.id,
           id: personal_access_token.id
         ), method: :delete,
@@ -26,13 +25,12 @@
               action:"turbo:submit-end->viral--dialog#close"
             }
           ) do |form| %>
-        <%= form.submit t("personal_access_tokens.revoke_confirmation.submit_button"),
-                    class:
-                      "button text-sm px-5 py-2.5 text-white bg-red-700 border-red-800 focus:outline-none hover:bg-red-800 focus:ring-red-300 dark:focus:ring-red-700 dark:bg-red-600 dark:text-white dark:border-red-600 dark:hover:bg-red-700",
-                    data: {
-                      action: "click->token#removeTokenPanel",
-                    } %>
-      <% end %>
-    </div>
-  <% end %>
+      <%= form.submit t("personal_access_tokens.revoke_confirmation.submit_button"),
+                  class:
+                    "button text-sm px-5 py-2.5 text-white bg-red-700 border-red-800 focus:outline-none hover:bg-red-800 focus:ring-red-300 dark:focus:ring-red-700 dark:bg-red-600 dark:text-white dark:border-red-600 dark:hover:bg-red-700",
+                  data: {
+                    action: "click->token#removeTokenPanel",
+                  } %>
+    <% end %>
+  </div>
 <% end %>
