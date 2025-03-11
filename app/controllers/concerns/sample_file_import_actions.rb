@@ -34,6 +34,6 @@ module SampleFileImportActions
   private
 
   def file_import_params
-    params.require(:file_import).permit(:file, :sample_id_column, :project_puid_column, :sample_description_column)
+    params.expect(file_import: %i[file sample_id_column project_puid_column sample_description_column])
   end
 end

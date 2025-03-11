@@ -17,7 +17,7 @@ module Projects
       end
 
       def ensure_enabled
-        render :not_found unless Flipper.enabled?(:batch_sample_file_import)
+        not_found unless Flipper.enabled?(:batch_sample_file_import)
       end
     end
   end
