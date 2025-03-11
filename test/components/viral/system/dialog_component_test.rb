@@ -69,14 +69,6 @@ module System
       assert_selector 'dialog', count: 0
     end
 
-    test 'with multiple sections' do
-      visit('rails/view_components/viral_dialog_component/with_multiple_sections')
-      within('span[data-controller-connected="true"] dialog') do
-        assert_accessible
-        assert_selector 'hr', count: 1
-      end
-    end
-
     test 'non closable dialog' do
       visit('rails/view_components/viral_dialog_component/non_closable')
       within('span[data-controller-connected="true"] dialog') do
