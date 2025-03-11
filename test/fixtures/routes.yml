@@ -32,6 +32,11 @@ jeff_doe_projectA_namespace_route_namespace_route:
   path: jeff.doe_at_localhost/project-a
   source: projectA_namespace (Namespace)
 
+jeff_doe_project_namespace_route_namespace_route:
+  name: jeff.doe@localhost / Project Uncounted
+  path: jeff.doe_at_localhost/project-uncounted
+  source: project_jeff_namespace (Namespace)
+
 jane_doe_namespace_route:
   name: jane.doe@localhost
   path: jane.doe_at_localhost

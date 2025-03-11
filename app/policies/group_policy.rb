@@ -14,7 +14,7 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
     return false if Current.token&.nil?
 
-    Current.token.active?
+    Current.token&.active?
   end
 
   def activity?
