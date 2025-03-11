@@ -1,12 +1,10 @@
 <%= viral_dialog(open: true) do |dialog| %>
-  <%= dialog.with_header(title: "Confirmation required") %>
-  <%= dialog.with_section do %>
-    <p class="text-base text-slate-900 dark:text-white">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua.
-    </p>
-  <% end %>
-  <%= dialog.with_primary_action { "Confirm" } %>
+  <% dialog.with_header(title: "Confirmation required") %>
+  <p class="text-base text-slate-900 dark:text-white">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+    tempor incididunt ut labore et dolore magna aliqua.
+  </p>
+  <% dialog.with_primary_action { "Confirm" } %>
   <% dialog.with_secondary_action do %>
     <%= viral_button(data: { action: 'click->viral--dialog#close' }) do %>
       Cancel

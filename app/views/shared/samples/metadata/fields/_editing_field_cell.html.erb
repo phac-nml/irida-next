@@ -14,33 +14,31 @@
                    action: "blur->inline-edit#blur keydown->inline-edit#keydown",
                  } %>
     <%= viral_dialog(open: false) do |dialog| %>
-      <%= dialog.with_header(
+      <% dialog.with_header(
         title: t("shared.samples.metadata.editing_field_cell.dialog.title"),
       ) %>
-      <%= dialog.with_section do %>
 
-        <p class="text-base leading-8 text-slate-900 dark:text-white text-wrap">
-          <span data-inline-edit-target="descriptionWith" class="hidden">
-            <% if @value.present? %>
-              <%= raw t(
-                "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value.with_original_value",
-                value: @value,
-              ) %>
-            <% else %>
-              <%= raw t(
-                "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value.without_original_value",
-                value: @value,
-              ) %>
-            <% end %>
-          </span>
-          <span data-inline-edit-target="descriptionWithout" class="hidden">
+      <p class="text-base leading-8 text-slate-900 dark:text-white text-wrap">
+        <span data-inline-edit-target="descriptionWith" class="hidden">
+          <% if @value.present? %>
             <%= raw t(
-              "shared.samples.metadata.editing_field_cell.dialog.description_without_new_value",
+              "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value.with_original_value",
               value: @value,
             ) %>
-          </span>
-        </p>
-      <% end %>
+          <% else %>
+            <%= raw t(
+              "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value.without_original_value",
+              value: @value,
+            ) %>
+          <% end %>
+        </span>
+        <span data-inline-edit-target="descriptionWithout" class="hidden">
+          <%= raw t(
+            "shared.samples.metadata.editing_field_cell.dialog.description_without_new_value",
+            value: @value,
+          ) %>
+        </span>
+      </p>
       <% dialog.with_secondary_action do %>
         <%= viral_button(value: "confirm", state: :primary) do
           t("shared.samples.metadata.editing_field_cell.dialog.confirm_button")

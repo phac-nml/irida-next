@@ -1,9 +1,19 @@
 <%= viral_dialog(open: true, size: :small, closable: false) do |dialog| %>
-  <%= dialog.with_header(title: "This dialog is not closable") %>
-  <%= dialog.with_section do %>
-    <div>
-      <label for="first_name" class="block mb-2 text-sm font-medium text-slate-900 dark:text-white">First name</label>
-      <input type="text" id="first_name" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
-    </div>
-  <% end %>
+  <% dialog.with_header(title: "This dialog is not closable") %>
+  <div>
+    <label
+      for="first_name"
+      class="block mb-2 text-sm font-medium text-slate-900 dark:text-white"
+    >First name</label>
+    <input
+      type="text"
+      id="first_name"
+      class="
+        bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg
+        focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5
+        dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400
+        dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500
+      "
+    />
+  </div>
 <% end %>

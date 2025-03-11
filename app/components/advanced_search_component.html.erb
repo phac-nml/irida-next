@@ -4,7 +4,7 @@
   data-advanced-search-list-filter-outlet=".list-filter"
 >
   <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open, header_system_arguments: {close_action: "advanced-search#close"}, data: { action: "keydown.esc->advanced-search#close"}) do |dialog| %>
-    <%= dialog.with_trigger do %>
+    <% dialog.with_trigger do %>
       <% if @status %>
         <div class="inline-flex rounded-md" role="group">
           <button
@@ -46,37 +46,35 @@
         ) { t(".title") } %>
       <% end %>
     <% end %>
-    <%= dialog.with_header(title: t(".title")) %>
-    <%= dialog.with_section do %>
-      <div class="space-y-4">
-        <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
-          <%= t(".description") %>
-        </p>
-        <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
-          <%= t(".rules") %>
-        </p>
-        <div class="space-y-4" data-advanced-search-target="searchGroupsContainer">
-        </div>
-        <div class="flex justify-end space-x-2">
-          <%= viral_button(data: { action: "advanced-search#addGroup" }) do %>
-            <%= t(".add_group_button") %>
-          <% end %>
-        </div>
-        <template data-advanced-search-target="searchGroupsTemplate">
-          <% @search.groups.each_with_index do |group, group_index| %>
-            <%= render AdvancedSearch::Group.new(
-              form: @form,
-              group: group,
-              group_index: group_index,
-              show_remove_group_button: @search.groups.count > 1,
-              fields: @fields,
-              operations: @operations,
-            ) %>
-          <% end %>
-        </template>
+    <% dialog.with_header(title: t(".title")) %>
+    <div class="space-y-4">
+      <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+        <%= t(".description") %>
+      </p>
+      <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
+        <%= t(".rules") %>
+      </p>
+      <div class="space-y-4" data-advanced-search-target="searchGroupsContainer">
       </div>
-    <% end %>
-    <%= dialog.with_primary_action("data-action": "filters#submit") do
+      <div class="flex justify-end space-x-2">
+        <%= viral_button(data: { action: "advanced-search#addGroup" }) do %>
+          <%= t(".add_group_button") %>
+        <% end %>
+      </div>
+      <template data-advanced-search-target="searchGroupsTemplate">
+        <% @search.groups.each_with_index do |group, group_index| %>
+          <%= render AdvancedSearch::Group.new(
+            form: @form,
+            group: group,
+            group_index: group_index,
+            show_remove_group_button: @search.groups.count > 1,
+            fields: @fields,
+            operations: @operations,
+          ) %>
+        <% end %>
+      </template>
+    </div>
+    <% dialog.with_primary_action("data-action": "filters#submit") do
       t(".apply_filter_button")
     end %>
     <% dialog.with_secondary_action do %>

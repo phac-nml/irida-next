@@ -8,7 +8,6 @@ module Viral
     renders_one :header, lambda { |title:|
       Viral::Dialog::HeaderComponent.new(title:, closable: @closable, **header_system_arguments)
     }
-    renders_many :sections, Viral::Dialog::SectionComponent
     renders_one :primary_action, lambda { |**system_arguments|
       Viral::ButtonComponent.new(state: :primary, **system_arguments)
     }

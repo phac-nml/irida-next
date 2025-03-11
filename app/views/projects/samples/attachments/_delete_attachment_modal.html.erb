@@ -1,7 +1,5 @@
 <%= viral_dialog(open: open, size: :large) do |dialog| %>
-  <%= dialog.with_header(title: t(".title")) %>
-  <%= dialog.with_section do %>
-
+  <% dialog.with_header(title: t(".title")) %>
     <%= turbo_frame_tag("deletion-alert") %>
 
     <div
@@ -38,5 +36,4 @@
         </div>
       <% end %>
     </div>
-  <% end %>
 <% end %>

@@ -13,14 +13,9 @@
         <%= header %>
       <% end %>
 
-      <% if sections.present? %>
-        <% sections.each_with_index do |section, index| %>
-          <%= section %>
-          <% if sections.length - 1 != index %>
-            <hr class="h-px my-4 border-0 bg-slate-200 dark:bg-slate-600"/>
-          <% end %>
-        <% end %>
-      <% end %>
+      <div class="dialog--section">
+        <%= content %>
+      </div>
 
       <% if render_footer? %>
         <div

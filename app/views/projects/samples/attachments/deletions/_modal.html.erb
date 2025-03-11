@@ -1,22 +1,20 @@
 <%= viral_dialog(open: open, size: :extra_large) do |dialog| %>
-  <%= dialog.with_header(title: t(".title")) %>
-  <%= dialog.with_section do %>
+  <% dialog.with_header(title: t(".title")) %>
+  <%= turbo_frame_tag("deletion-alert") %>
 
-    <%= turbo_frame_tag("deletion-alert") %>
-
+  <div
+    class="
+      mb-4 font-normal text-slate-500 dark:text-slate-400 overflow-x-visible
+    "
+  >
+    <p class="mb-4"><%= t(".description") %></p>
     <div
-      class="
-        mb-4 font-normal text-slate-500 dark:text-slate-400 overflow-x-visible
-      "
-    >
-      <p class="mb-4"><%= t(".description") %></p>
-      <div
-        data-controller="projects--samples--attachments--files"
-        data-projects--samples--attachments--files-target="field"
-      ></div>
-    </div>
+      data-controller="projects--samples--attachments--files"
+      data-projects--samples--attachments--files-target="field"
+    ></div>
+  </div>
 
-    <%= form_for(:deletion, url: namespace_project_sample_attachments_deletion_path,
+  <%= form_for(:deletion, url: namespace_project_sample_attachments_deletion_path,
     data: {
       controller: "projects--samples--attachments--selected-attachments",
       'projects--samples--attachments--selected-attachments-field-name-value':"deletion[attachment_ids]",
@@ -24,12 +22,11 @@
       action: 'turbo:submit-end->projects--samples--attachments--selected-attachments#clear'
     }, method: :delete) do |form| %>
 
-      <div data-projects--samples--attachments--selected-attachments-target="field"></div>
+    <div data-projects--samples--attachments--selected-attachments-target="field"></div>
 
-      <div>
-        <%= form.submit t(".submit_button"),
-                    class: "button button--size-default button--state-destructive" %>
-      </div>
-    <% end %>
+    <div>
+      <%= form.submit t(".submit_button"),
+                  class: "button button--size-default button--state-destructive" %>
+    </div>
   <% end %>
 <% end %>

@@ -1,84 +1,84 @@
 <%= viral_dialog(open: open, classes: ["overflow-visible"]) do |dialog| %>
-  <%= dialog.with_header(title: I18n.t("groups.group_links.new.title")) %>
-  <%= dialog.with_section do %>
-    <%= turbo_frame_tag("invite-group-alert") %>
-    <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
-      <p class="dark:text-slate-400">
-        <%= I18n.t(
-          "groups.group_links.new.sharing_namespace_with_group",
-          name: @namespace.human_name,
-        ) %>
-      </p>
-    </div>
+  <% dialog.with_header(title: I18n.t("groups.group_links.new.title")) %>
+  <%= turbo_frame_tag("invite-group-alert") %>
+  <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
+    <p class="dark:text-slate-400">
+      <%= I18n.t(
+        "groups.group_links.new.sharing_namespace_with_group",
+        name: @namespace.human_name,
+      ) %>
+    </p>
+  </div>
 
-    <%= form_with(model: new_group_link, url: group_group_links_path(@namespace, tab: @tab), data: {controller: "viral--select2"}) do |form| %>
-      <div class="grid gap-4">
-        <div class="form-field">
-          <%= form.label I18n.t("groups.group_links.new.label.group_id") %>
-          <%= viral_select2(form:, name: :group_id, placeholder: "Search for group to share namespace with") do |select| %>
-            <% @namespace_linkable_groups.each do |group| %>
-              <%= select.with_option(primary: group.name, secondary: group.puid, value: group.id) %>
-            <% end %>
-            <%= select.with_empty_state do %>
-              <%= t(:"groups.group_links.new.empty_state") %>
-            <% end %>
+  <%= form_with(model: new_group_link, url: group_group_links_path(@namespace, tab: @tab), data: {controller: "viral--select2"}) do |form| %>
+    <div class="grid gap-4">
+      <div class="form-field">
+        <%= form.label I18n.t("groups.group_links.new.label.group_id") %>
+        <%= viral_select2(form:, name: :group_id, placeholder: "Search for group to share namespace with") do |select| %>
+          <% @namespace_linkable_groups.each do |group| %>
+            <%= select.with_option(primary: group.name, secondary: group.puid, value: group.id) %>
           <% end %>
-        </div>
-        <div class="form-field">
-          <%= form.label I18n.t("groups.group_links.new.label.group_access_level") %>
-          <%= form.select :group_access_level,
-                      options_for_select(
-                        @access_levels,
-                        new_group_link.group_access_level,
-                      ),
-                      {
-                        prompt:
-                          I18n.t(
-                            "groups.group_links.new.placeholder.select_access_level",
-                          ),
-                      },
-                      {
-                        required: true,
-                        "aria-label":
-                          t(:"groups.group_links.index.aria_labels.group_access_level"),
-                      } %>
-        </div>
-        <div class="form-field datepicker" data-controller="datepicker">
-          <%= form.label I18n.t("groups.group_links.new.label.access_expiration") %>
-          <div class="relative max-w-sm">
-            <div
-              class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none "
-            >
-              <%= viral_icon(
-                name: :calendar_days,
-                classes: "w-5 h-5 text-slate-500 dark:text-slate-400",
-              ) %>
-            </div>
-            <%= form.text_field :expires_at,
-                            placeholder: I18n.t("date.formats.iso"),
-                            autocomplete: "off",
-                            "data-datepicker-target": "datePicker",
-                            "data-datepicker-dialog": "true",
-                            "aria-label":
-                              t(:"groups.group_links.index.aria_labels.expires_at") %>
-          </div>
-        </div>
-        <div class="my-4">
-          <%= form.submit I18n.t("groups.group_links.new.button.submit"),
-                      class: "button button--size-default button--state-primary",
-                      disabled: true,
-                      data: {
-                        "viral--select2-target": "submitButton"
-                      } %>
-          <button
-            type="button"
-            class="button button--size-default button--state-default"
-            data-action="click->viral--dialog#close"
+          <%= select.with_empty_state do %>
+            <%= t(:"groups.group_links.new.empty_state") %>
+          <% end %>
+        <% end %>
+      </div>
+      <div class="form-field">
+        <%= form.label I18n.t("groups.group_links.new.label.group_access_level") %>
+        <%= form.select :group_access_level,
+                    options_for_select(
+                      @access_levels,
+                      new_group_link.group_access_level,
+                    ),
+                    {
+                      prompt:
+                        I18n.t(
+                          "groups.group_links.new.placeholder.select_access_level",
+                        ),
+                    },
+                    {
+                      required: true,
+                      "aria-label":
+                        t(:"groups.group_links.index.aria_labels.group_access_level"),
+                    } %>
+      </div>
+      <div class="form-field datepicker" data-controller="datepicker">
+        <%= form.label I18n.t("groups.group_links.new.label.access_expiration") %>
+        <div class="relative max-w-sm">
+          <div
+            class="
+              absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
+            "
           >
-            <%= I18n.t("groups.group_links.new.button.cancel") %>
-          </button>
+            <%= viral_icon(
+              name: :calendar_days,
+              classes: "w-5 h-5 text-slate-500 dark:text-slate-400",
+            ) %>
+          </div>
+          <%= form.text_field :expires_at,
+                          placeholder: I18n.t("date.formats.iso"),
+                          autocomplete: "off",
+                          "data-datepicker-target": "datePicker",
+                          "data-datepicker-dialog": "true",
+                          "aria-label":
+                            t(:"groups.group_links.index.aria_labels.expires_at") %>
         </div>
       </div>
-    <% end %>
+      <div class="my-4">
+        <%= form.submit I18n.t("groups.group_links.new.button.submit"),
+                    class: "button button--size-default button--state-primary",
+                    disabled: true,
+                    data: {
+                      "viral--select2-target": "submitButton",
+                    } %>
+        <button
+          type="button"
+          class="button button--size-default button--state-default"
+          data-action="click->viral--dialog#close"
+        >
+          <%= I18n.t("groups.group_links.new.button.cancel") %>
+        </button>
+      </div>
+    </div>
   <% end %>
 <% end %>
