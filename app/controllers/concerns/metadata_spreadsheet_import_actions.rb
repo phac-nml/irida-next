@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# Common file import actions
-module MetadataFileImportActions
+# Common metadata spreadsheet import actions
+module MetadataSpreadsheetImportActions
   extend ActiveSupport::Concern
 
   included do
@@ -34,6 +34,6 @@ module MetadataFileImportActions
   private
 
   def file_import_params
-    params.require(:file_import).permit(:file, :sample_id_column, :ignore_empty_values, metadata_columns: [])
+    params.expect(file_import: [:file, :sample_id_column, :ignore_empty_values, {metadata_columns: []}])
   end
 end
