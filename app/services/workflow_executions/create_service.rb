@@ -54,6 +54,9 @@ module WorkflowExecutions
 
     def autoset_params
       params.merge!(@workflow.default_params)
+
+      return unless @workflow.default_workflow_params.key?(:workflow_params)
+
       params['workflow_params'].reverse_merge!(@workflow.default_workflow_params[:workflow_params])
     end
 
