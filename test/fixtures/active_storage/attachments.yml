@@ -238,7 +238,7 @@ group1_attachment2_file_test_file_A_fastq:
   record: group1Attachment2 (Attachment)
   blob: group1_attachment2_file_data_export_8_csv_blob
 
-gasclustering_file_test_file_json:
+gasclustering_test_file_json:
   name: file
   record: gasclusteringAttachment (Attachment)
-  blob: gasclustering_file_test_file_json_blob
+  blob: gasclustering_test_file_json_blob

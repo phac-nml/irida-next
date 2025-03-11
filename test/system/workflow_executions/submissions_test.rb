@@ -1226,7 +1226,7 @@ module WorkflowExecutions
           assert_selector 'span', text: sample34.metadata['metadatafield1']
         end
         within('div[id="3_metadata_1"]') do
-          # sample contains no metadata value for this field, stays text input
+          # sample contains no metadata value for this field, stays as text input
           assert_selector 'input[type="text"]'
         end
 
@@ -1240,7 +1240,7 @@ module WorkflowExecutions
           assert_selector 'span', text: sample34.metadata['metadatafield2']
         end
         within('div[id="3_metadata_2"]') do
-          # sample contains no metadata value for this field, stays text input
+          # sample contains no metadata value for this field, stays as text input
           assert_selector 'input[type="text"]'
         end
         ### VERIFY END ###
