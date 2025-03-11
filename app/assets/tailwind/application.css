@@ -835,7 +835,7 @@
 
   /* VIRAL DIALOG */
   dialog {
-    @apply focus:outline-hidden max-h-full w-full max-w-2xl rounded-lg bg-white p-0 shadow-sm dark:bg-slate-800;
+    @apply focus:outline-hidden max-h-full w-full max-w-2xl overflow-y-hidden rounded-lg bg-white p-0 shadow-sm dark:bg-slate-800;
     top: 50%;
     left: 50%;
     -webkit-transform: translateX(-50%) translateY(-50%);
@@ -846,6 +846,11 @@
 
   dialog::backdrop {
     @apply backdrop-blur-xs bg-slate-400/30 dark:bg-slate-900/40;
+  }
+
+  .dialog--section {
+    max-height: calc(80vh - 1.25rem - 2.5rem);
+    @apply overflow-y-auto p-5;
   }
 
   strong {
