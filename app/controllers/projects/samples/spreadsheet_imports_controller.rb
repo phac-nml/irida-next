@@ -4,7 +4,7 @@ module Projects
   module Samples
     # Controller actions for Project Samples Spreadsheet Import Controller
     class SpreadsheetImportsController < Projects::ApplicationController
-      include SampleFileImportActions
+      include SampleSpreadsheetImportActions
 
       before_action :ensure_enabled
 
@@ -17,7 +17,7 @@ module Projects
       end
 
       def ensure_enabled
-        not_found unless Flipper.enabled?(:batch_sample_file_import)
+        not_found unless Flipper.enabled?(:batch_sample_spreadsheet_import)
       end
     end
   end

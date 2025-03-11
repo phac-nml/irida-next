@@ -4,7 +4,7 @@ module Groups
   module Samples
     # Controller actions for Group Samples Spreadsheet Import Controller
     class SpreadsheetImportsController < Groups::ApplicationController
-      include SampleFileImportActions
+      include SampleSpreadsheetImportActions
 
       before_action :ensure_enabled
 
@@ -21,7 +21,7 @@ module Groups
       end
 
       def ensure_enabled
-        not_found unless Flipper.enabled?(:batch_sample_file_import)
+        not_found unless Flipper.enabled?(:batch_sample_spreadsheet_import)
       end
     end
   end
