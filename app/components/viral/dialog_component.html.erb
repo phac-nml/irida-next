@@ -13,12 +13,9 @@
         <%= header %>
       <% end %>
 
-      <% if content.present? %>
-
-        <%= render Viral::Dialog::SectionComponent.new do %>
-          <%= content %>
-        <% end %>
-      <% end %>
+      <div class="dialog--section">
+        <%= content %>
+      </div>
 
       <% if render_footer? %>
         <div
