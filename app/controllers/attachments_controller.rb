@@ -3,7 +3,7 @@
 # 🗂️ Controller for managing attachment previews and displays
 # Handles how attachments are shown based on their file type
 # Supports text, images, FASTA, FASTQ, GenBank, and more!
-class AttachmentController < ApplicationController
+class AttachmentsController < ApplicationController
   layout 'attachment'
 
   before_action :check_attachments_preview_enabled
@@ -34,7 +34,7 @@ class AttachmentController < ApplicationController
   # 🎬 Renders the appropriate preview template based on file format
   def handle_preview
     format = @attachment.metadata['format']
-    if lookup_context.template_exists?("attachment/#{format}_preview")
+    if lookup_context.template_exists?("attachments/#{format}_preview")
       render "#{format}_preview"
     else
       handle_not_found

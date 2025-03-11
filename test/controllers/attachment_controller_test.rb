@@ -8,7 +8,7 @@ require 'test_helper'
 # Testing the preview functionality would require setting up Active Storage test fixtures
 # with actual file content, which is complex in a test environment. The preview functionality
 # is better tested through system/integration tests where actual files can be uploaded.
-class AttachmentControllerTest < ActionDispatch::IntegrationTest
+class AttachmentsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
@@ -29,7 +29,7 @@ class AttachmentControllerTest < ActionDispatch::IntegrationTest
 
   test 'should redirect with alert when attachment not found' do
     # Mock the set_attachment method to return nil
-    AttachmentController.class_eval do
+    AttachmentsController.class_eval do
       alias_method :original_set_attachment, :set_attachment
       alias_method :original_set_context_crumbs, :set_context_crumbs
 
@@ -45,7 +45,7 @@ class AttachmentControllerTest < ActionDispatch::IntegrationTest
     get attachment_path(id: 'non-existent-id')
 
     # Restore the original methods
-    AttachmentController.class_eval do
+    AttachmentsController.class_eval do
       alias_method :set_attachment, :original_set_attachment
       alias_method :set_context_crumbs, :original_set_context_crumbs
       remove_method :original_set_attachment
