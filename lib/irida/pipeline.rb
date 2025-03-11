@@ -115,7 +115,7 @@ module Irida
 
         definition['properties'].each do |name, property|
           property.each do |key, value|
-            default_workflow_params.merge!({ workflow_params: { name => value } }) if key == 'default'
+            default_workflow_params.merge!({ name => value }) if key == 'default'
           end
         end
       end

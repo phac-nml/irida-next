@@ -55,9 +55,9 @@ module WorkflowExecutions
     def autoset_params
       params.merge!(@workflow.default_params)
 
-      return unless @workflow.default_workflow_params.key?(:workflow_params)
+      return if @workflow.default_workflow_params.empty?
 
-      params['workflow_params'].reverse_merge!(@workflow.default_workflow_params[:workflow_params])
+      params['workflow_params'].reverse_merge!(@workflow.default_workflow_params)
     end
 
     def sanitize_workflow_param(property, value)
