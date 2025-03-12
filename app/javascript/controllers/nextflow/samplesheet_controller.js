@@ -608,7 +608,7 @@ export default class extends Controller {
 
   setMetadataParam(event) {
     const metadataSamplesheetColumn = event.target.getAttribute(
-      "data-metadata-field",
+      "data-metadata-header",
     );
     const metadataField = event.target.value;
     let metadataParameter = document.querySelector(
