@@ -17,6 +17,12 @@ module Viral
           @required = required
           @value = value
         end
+
+        private
+
+        def metadata_header?(header)
+          /metadata_[0-9]+/.match?(header.to_s) && Flipper.enabled?(:update_nextflow_metadata_param)
+        end
       end
     end
   end

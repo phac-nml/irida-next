@@ -115,3 +115,5 @@ project1_attachment2_file_data_export_8_csv_blob: <%= ActiveStorage::FixtureSet.
 
 group1_attachment1_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file.fastq", service_name: "test" %>
 group1_attachment2_file_data_export_8_csv_blob: <%= ActiveStorage::FixtureSet.blob filename: "data_export_8.csv", service_name: "test" %>
+
+gasclustering_test_file_json_blob: <%= ActiveStorage::FixtureSet.blob filename: "s.mlst.json", service_name: "test" %>

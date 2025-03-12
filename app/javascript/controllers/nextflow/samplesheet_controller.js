@@ -58,6 +58,12 @@ export default class extends Controller {
     "cursor-pointer",
   ];
 
+  #metadata_parameter_updated_state = [
+    "ring-2",
+    "ring-primary-500",
+    "dark:ring-primary-600",
+  ];
+
   // The samplesheet will use FormData, allowing us to create the inputs of a form without the associated DOM elements.
   #formData = new FormData();
 
@@ -597,6 +603,29 @@ export default class extends Controller {
 
     if (this.#samplesheetProperties.hasOwnProperty("sample_name")) {
       this.#filterableColumns.push("sample_name");
+    }
+  }
+
+  setMetadataParam(event) {
+    const metadataSamplesheetColumn = event.target.getAttribute(
+      "data-metadata-header",
+    );
+    const metadataField = event.target.value;
+    let metadataParameter = document.querySelector(
+      `input[data-metadata-header-name="${metadataSamplesheetColumn}"]`,
+    );
+
+    if (metadataParameter) {
+      metadataParameter.value = metadataField;
+      metadataParameter.classList.add(
+        ...this.#metadata_parameter_updated_state,
+      );
+
+      setTimeout(() => {
+        metadataParameter.classList.remove(
+          ...this.#metadata_parameter_updated_state,
+        );
+      }, 1000);
     }
   }
 }
