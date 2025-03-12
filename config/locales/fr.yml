@@ -1868,6 +1868,9 @@ fr:
         templates:
           label: Modèles de métadonnées
         tooltip: Paramètres de visualisation des métadonnées
+      spreadsheet_imports:
+        dialog:
+          spinner_message: Importing samples, this might take a while...
   spreadsheet_helper:
     failed_parsing: 'Failed to parse spreadsheet file: %{error}'
     no_file: No file provided

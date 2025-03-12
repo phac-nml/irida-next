@@ -40,6 +40,7 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
       scope module: :samples, as: :samples do
         collection do
           resource :file_import, module: :metadata, only: %i[create new]
+          resource :spreadsheet_import, only: %i[create new]
         end
       end
       collection do
