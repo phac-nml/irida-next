@@ -5,14 +5,7 @@
 <% end %>
 
 <%= turbo_stream.append("list_selections") do %>
-  <% @deletable_workflow_executions.each do |workflow_execution| %>
-    <%= render "shared/workflow_executions/list_workflow_execution",
-    workflow_execution: workflow_execution %>
-  <% end %>
-<% end %>
-
-<%= turbo_stream.append("list_non_deletable_selections") do %>
-  <% @non_deletable_workflow_executions.each do |workflow_execution| %>
+  <% @workflow_executions.each do |workflow_execution| %>
     <%= render "shared/workflow_executions/list_workflow_execution",
     workflow_execution: workflow_execution %>
   <% end %>
