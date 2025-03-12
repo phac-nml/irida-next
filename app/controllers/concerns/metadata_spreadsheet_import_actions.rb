@@ -34,6 +34,6 @@ module MetadataSpreadsheetImportActions
   private
 
   def file_import_params
-    params.expect(file_import: [:file, :sample_id_column, :ignore_empty_values, {metadata_columns: []}])
+    params.expect(file_import: [:file, :sample_id_column, :ignore_empty_values, { metadata_columns: [] }])
   end
 end
