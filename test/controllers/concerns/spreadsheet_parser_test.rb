@@ -14,7 +14,9 @@ class SpreadsheetParserTest < ActionView::TestCase
   end
 
   test 'raises error when headers are missing in CSV file' do
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/spreadsheet_helper_test/missing_headers.csv'))
+    file = Rack::Test::UploadedFile.new(
+      Rails.root.join('test/fixtures/files/spreadsheet_helper_test/missing_headers.csv')
+    )
     blob = ActiveStorage::Blob.create_and_upload!(
       io: file,
       filename: file.original_filename,
@@ -54,7 +56,9 @@ class SpreadsheetParserTest < ActionView::TestCase
   end
 
   test 'handles rows with incorrect number of columns' do
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/spreadsheet_helper_test/incorrect_cols.csv'))
+    file = Rack::Test::UploadedFile.new(
+      Rails.root.join('test/fixtures/files/spreadsheet_helper_test/incorrect_cols.csv')
+    )
     blob = ActiveStorage::Blob.create_and_upload!(
       io: file,
       filename: file.original_filename,
@@ -124,7 +128,10 @@ class SpreadsheetParserTest < ActionView::TestCase
   end
 
   test 'raises error when Excel file is missing headers' do
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/spreadsheet_helper_test/missing_headers.xlsx'))
+    file = Rack::Test::UploadedFile.new(
+      Rails.root.join('test/fixtures/files/spreadsheet_helper_test/missing_headers.xlsx')
+    )
+
     blob = ActiveStorage::Blob.create_and_upload!(
       io: file,
       filename: file.original_filename,
@@ -137,7 +144,10 @@ class SpreadsheetParserTest < ActionView::TestCase
   end
 
   test 'raises error when Excel file has only headers' do
-    file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/spreadsheet_helper_test/only_headers.xlsx'))
+    file = Rack::Test::UploadedFile.new(
+      Rails.root.join('test/fixtures/files/spreadsheet_helper_test/only_headers.xlsx')
+    )
+
     blob = ActiveStorage::Blob.create_and_upload!(
       io: file,
       filename: file.original_filename,
