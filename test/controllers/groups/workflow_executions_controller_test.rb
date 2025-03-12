@@ -135,5 +135,36 @@ module Groups
       # A running workflow goes to the canceling state as ga4gh must be sent a cancel request
       assert_equal 'canceling', workflow_execution.reload.state
     end
+
+    test 'submitter should be able to update their shared workflow executions name post launch' do
+      update_params = { workflow_execution: { name: 'New Name' } }
+
+      put group_workflow_execution_path(@group, @workflow_execution, format: :turbo_stream),
+          params: update_params
+
+      assert_response :success
+    end
+
+    test 'non-submitter group member should not be able to update a shared workflow executions name post launch' do
+      sign_in users(:james_doe)
+
+      update_params = { workflow_execution: { name: 'New Name' } }
+
+      put group_workflow_execution_path(@group, @workflow_execution, format: :turbo_stream),
+          params: update_params
+
+      assert_response :unauthorized
+    end
+
+    test 'non-submitter non group member should not be able to update a shared workflow executions name post launch' do
+      sign_in users(:micha_doe)
+
+      update_params = { workflow_execution: { name: 'New Name' } }
+
+      put group_workflow_execution_path(@group, @workflow_execution, format: :turbo_stream),
+          params: update_params
+
+      assert_response :unauthorized
+    end
   end
 end
