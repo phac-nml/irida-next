@@ -29,7 +29,7 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
 
     if (Flipper.enabled?(:workflow_execution_sharing) || Rails.env.test?) &&
        Irida::Pipelines.instance.available_pipelines.any?
-      resources :workflow_executions, only: %i[index show] do
+      resources :workflow_executions, only: %i[index show edit update] do
         member do
           put :cancel
         end
