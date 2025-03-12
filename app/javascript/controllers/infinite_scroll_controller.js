@@ -9,7 +9,7 @@ export default class extends Controller {
     "pageFormContent",
     "scrollable",
     "summary",
-    "selectionCount"
+    "selectionCount",
   ];
   static values = {
     pagedFieldName: String,
@@ -22,11 +22,14 @@ export default class extends Controller {
 
   connect() {
     this.allIds = this.selectionOutlet.getStoredItems();
-    this.numSelected = this.selectionOutlet.getNumSelected()
+    this.numSelected = this.selectionOutlet.getNumSelected();
     this.#makePagedHiddenInputs();
     this.#replaceDescriptionPlaceholder();
     if (this.hasSelectionCountTarget) {
-      this.#replaceCountPlaceholder(this.selectionCountTarget, this.nonZeroHeaderValue);
+      this.#replaceCountPlaceholder(
+        this.selectionCountTarget,
+        this.nonZeroHeaderValue,
+      );
     }
   }
 
@@ -43,18 +46,22 @@ export default class extends Controller {
     if (this.numSelected === 1) {
       this.summaryTarget.innerHTML = this.singularDescriptionValue;
     } else {
-      this.#replaceCountPlaceholder(this.summaryTarget, this.pluralDescriptionValue);
+      this.#replaceCountPlaceholder(
+        this.summaryTarget,
+        this.pluralDescriptionValue,
+      );
     }
   }
 
   #replaceCountPlaceholder(textNode, countPlaceholderText) {
     textNode.innerHTML = countPlaceholderText.replace(
       "COUNT_PLACEHOLDER",
-      this.numSelected
+      this.numSelected,
     );
   }
 
   #makePagedHiddenInputs() {
+    console.log("make paged hidden");
     const itemsPerPage = 100;
     const start = (this.#page - 1) * itemsPerPage;
     const end = this.#page * itemsPerPage;
