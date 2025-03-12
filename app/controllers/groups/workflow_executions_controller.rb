@@ -25,6 +25,10 @@ module Groups
       raise ActiveRecord::RecordNotFound if @workflow_execution.nil?
     end
 
+    def workflow_execution_update_params
+      params.require(:workflow_execution).permit(:name)
+    end
+
     def load_workflows
       authorized_scope(WorkflowExecution, type: :relation, as: :group_shared,
                                           scope_options: { group: @group })
