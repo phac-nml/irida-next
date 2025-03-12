@@ -947,6 +947,12 @@ en:
     update:
       success: Group %{group_name} was successfully updated
     workflow_executions:
+      edit_dialog:
+        cancel_button: Cancel
+        description: You are editing workflow execution '%{workflow_execution_id}'
+        name_placeholder: Enter workflow execution name (optional)
+        submit_button: Submit
+        title: Edit workflow execution
       files:
         table_header:
           created_at: Created At
@@ -967,6 +973,7 @@ en:
         cancel_button: Cancel
         cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
         create_export_button: Create Export
+        edit_button: Edit
         remove_button: Remove
         remove_button_confirmation: Are you sure that you want to remove this workflow execution?
       summary:
