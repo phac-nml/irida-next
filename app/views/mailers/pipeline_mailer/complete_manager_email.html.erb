@@ -6,22 +6,22 @@ locals: {
       @workflow_execution.namespace.project,
       @workflow_execution,
     ),
-} %>
-<tr>
-  <td style="padding:0px 24px;">
-    <p style="color:#334155;line-height:24px;">
-      <%= t(
-        :"mailers.pipeline_mailer.complete_manager_email.body_html",
-        id: @workflow_execution.id,
-      ) %>
-    </p>
-  </td>
-</tr>
-<tr>
-  <td style="padding:0px 24px;">
-    <p style="color:#334155;line-height:24px;">
-      <%= t(:"mailers.pipeline_mailer.view_details") %>
-    </p>
-  </td>
-</tr>
+} do %>
+  <tr>
+    <td style="padding:0px 24px;">
+      <p style="color:#334155;line-height:24px;">
+        <%= t(
+          :"mailers.pipeline_mailer.complete_manager_email.body_html",
+          id: @workflow_execution.id,
+        ) %>
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:0px 24px;">
+      <p style="color:#334155;line-height:24px;">
+        <%= t(:"mailers.pipeline_mailer.view_details") %>
+      </p>
+    </td>
+  </tr>
 <% end %>
