@@ -35,6 +35,8 @@ class DataExportsTest < ApplicationSystemTestCase
     Project.reset_counters(@project1.id, :samples_count)
 
     login_as @user
+
+    Flipper.enable(:workflow_execution_sharing)
   end
 
   test 'can view data exports' do
