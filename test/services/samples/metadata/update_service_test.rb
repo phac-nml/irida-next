@@ -350,7 +350,7 @@ module Samples
         metadata_changes = Samples::Metadata::UpdateService.new(@project29, @sample32, @user, params).execute
 
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample32.metadata)
-        # timestamps should not update as the fields are unchanged
+        # timestamp should update as the field is updated
         assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user',
                                              'updated_at' => Time.current },
                        'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
