@@ -354,7 +354,7 @@ module Samples
         assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user',
                                              'updated_at' => Time.current },
                        'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
-                                             'updated_at' => '2000-01-01T00:00:00.000+00:00'  } },
+                                             'updated_at' => '2000-01-01T00:00:00.000+00:00' } },
                      @sample32.metadata_provenance)
         assert_equal({ added: [], updated: %w[metadatafield1], deleted: [], not_updated: [], unchanged: [] },
                      metadata_changes)
