@@ -8,6 +8,7 @@ Flipper.enable(:workflow_execution_sharing)
 Flipper.enable(:metadata_import_field_selection)
 Flipper.enable(:progress_bars)
 Flipper.enable(:update_nextflow_metadata_param)
+Flipper.enable(:attachments_preview)
 
 @namespace_group_link_expiry_date = (Time.zone.today + 14).strftime('%Y-%m-%d')
 
@@ -212,15 +213,22 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
     }
   )
 
-  filename = 'summary.txt'
-  attachment = workflow_execution_completed.outputs.build
-  attachment.file.attach(io: Rails.root.join('test/fixtures/files/blob_outputs/normal', filename).open, filename:)
-  attachment.save!
-
   SamplesWorkflowExecution.create(
     sample: Sample.first,
     workflow_execution: workflow_execution_completed
   )
+
+  # Iterate over all files in tes/fixtures/fils/blob_outputs/normal and attach them to the workflow_execution_completed
+  Dir.foreach(Rails.root.join('test/fixtures/files/blob_outputs/normal')) do |f|
+    next unless File.file?(File.join('test/fixtures/files/blob_outputs/normal', f))
+
+    blob = ActiveStorage::Blob.create_and_upload!(
+      io: Rails.root.join('test/fixtures/files/blob_outputs/normal', f).open,
+      filename: f.to_s
+    ).signed_id
+    attachment = workflow_execution_completed.outputs.build(file: blob)
+    attachment.save!
+  end
 end
 
 def seed_exports # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity

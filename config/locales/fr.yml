@@ -340,6 +340,17 @@ fr:
       access_denied: Access Denied.
       not_found_on_server: The requested resource could not be found on the server.
       resource_not_found: Resource Not Found.
+  attachment:
+    show:
+      copied: Copied
+      copy: Copy
+      download: Download
+      file_not_found: File not found.
+      image:
+        alt: Rendering of file %{filename}
+      not_available:
+        details: Please download to view the contents
+        title: Preview not available for this file type
   attachments:
     dialogs:
       delete_attachment_component:
@@ -1857,6 +1868,12 @@ fr:
         templates:
           label: Modèles de métadonnées
         tooltip: Paramètres de visualisation des métadonnées
+  spreadsheet_helper:
+    failed_parsing: 'Failed to parse spreadsheet file: %{error}'
+    no_file: No file provided
+    no_headers: No headers found in file
+    unexpected_error: 'An unexpected error occurred while parsing the file: %{error}'
+    unknown_file_format: 'Unknown file type: %{extension}'
   time:
     formats:
       abbreviated: "%a %b%e %Y %H:%M"
@@ -1896,6 +1913,9 @@ fr:
       no_template: Aucun modèle
       remove_all: Remove all
   workflow_executions:
+    attachment:
+      download: Download
+      preview: Preview
     create:
       error_message: 'The following errors prevented the Workflow Execution from being created:'
     edit_dialog:
@@ -1920,6 +1940,7 @@ fr:
         submit_button: Submit
     files:
       table_header:
+        actions: Actions
         created_at: Created At
         filename: Filename
         format: Format

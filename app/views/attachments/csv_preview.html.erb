@@ -1,0 +1,42 @@
+<div class="hidden" data-copy-target="source">
+  <%= contents %>
+</div>
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg" tabindex="0">
+  <table
+    class="
+      w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+    "
+  >
+    <thead
+      class="
+        text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
+        dark:text-slate-400
+      "
+    >
+      <tr>
+        <% headers = contents.headers %>
+        <% headers.each do |header| %>
+          <th scope="col" class="px-6 py-3">
+            <%= header %>
+          </th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% contents.each do |row| %>
+        <tr
+          class="
+            bg-white border-b dark:bg-slate-800 dark:border-slate-700 hover:bg-slate-50
+            dark:hover:bg-slate-600
+          "
+        >
+          <% row.each do |_header, value| %>
+            <td class="px-6 py-4">
+              <%= value %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

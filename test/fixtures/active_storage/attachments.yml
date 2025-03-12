@@ -242,3 +242,33 @@ gasclustering_test_file_json:
   name: file
   record: gasclusteringAttachment (Attachment)
   blob: gasclustering_test_file_json_blob
+
+attachment_csv:
+  name: file
+  record: attachmentCSV (Attachment)
+  blob: attachment_csv_blob
+
+attachment_text:
+  name: file
+  record: attachmentText (Attachment)
+  blob: attachment_text_blob
+
+attachment_json:
+  name: file
+  record: attachmentJSON (Attachment)
+  blob: attachment_json_blob
+
+attachment_spreadsheet:
+  name: file
+  record: attachmentSpreadsheet (Attachment)
+  blob: attachment_spreadsheet
+
+attachment_image:
+  name: file
+  record: attachmentImage (Attachment)
+  blob: attachment_image
+
+attachment_tsv:
+  name: file
+  record: attachmentTSV (Attachment)
+  blob: attachment_tsv_blob

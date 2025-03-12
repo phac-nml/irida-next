@@ -117,3 +117,12 @@ group1_attachment1_file_test_file_fastq_blob: <%= ActiveStorage::FixtureSet.blob
 group1_attachment2_file_data_export_8_csv_blob: <%= ActiveStorage::FixtureSet.blob filename: "data_export_8.csv", service_name: "test" %>
 
 gasclustering_test_file_json_blob: <%= ActiveStorage::FixtureSet.blob filename: "s.mlst.json", service_name: "test" %>
+
+# ⬇️ attachment_test.rb files ⬇️
+# --------------------------------
+attachment_csv_blob: <%= ActiveStorage::FixtureSet.blob filename: "attachment_preview.csv", service_name: "test" %>
+attachment_tsv_blob: <%= ActiveStorage::FixtureSet.blob filename: "attachment_preview.tsv", service_name: "test" %>
+attachment_text_blob: <%= ActiveStorage::FixtureSet.blob filename: "attachment_preview.txt", service_name: "test" %>
+attachment_json_blob: <%= ActiveStorage::FixtureSet.blob filename: "attachment_preview.json", service_name: "test" %>
+attachment_spreadsheet: <%= ActiveStorage::FixtureSet.blob filename: "attachment_preview.xlsx", service_name: "test" %>
+attachment_image: <%= ActiveStorage::FixtureSet.blob filename: "attachment_preview.webp", service_name: "test" %>

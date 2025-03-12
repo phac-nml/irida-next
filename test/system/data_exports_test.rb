@@ -304,7 +304,7 @@ class DataExportsTest < ApplicationSystemTestCase
         assert_no_selector 'li'
       end
       within("##{I18n.t('data_exports.new_sample_export_dialog.selected')}") do
-        assert_selector 'li', count: 9
+        assert_selector 'li', count: 10
         Attachment::FORMAT_REGEX.each_key do |format|
           assert_text format
         end
@@ -362,7 +362,7 @@ class DataExportsTest < ApplicationSystemTestCase
         assert_no_selector 'li'
       end
       within("##{I18n.t('data_exports.new_sample_export_dialog.selected')}") do
-        assert_selector 'li', count: 9
+        assert_selector 'li', count: 10
         Attachment::FORMAT_REGEX.each_key do |format|
           assert_text format
         end
@@ -997,7 +997,7 @@ class DataExportsTest < ApplicationSystemTestCase
         assert_no_selector 'li'
       end
       within("##{I18n.t('data_exports.new_sample_export_dialog.selected')}") do
-        assert_selector 'li', count: 9
+        assert_selector 'li', count: 10
         Attachment::FORMAT_REGEX.each_key do |format|
           assert_text format
         end
@@ -1015,7 +1015,7 @@ class DataExportsTest < ApplicationSystemTestCase
         assert_no_selector 'li'
       end
       within("##{I18n.t('data_exports.new_sample_export_dialog.available')}") do
-        assert_selector 'li', count: 9
+        assert_selector 'li', count: 10
         Attachment::FORMAT_REGEX.each_key do |format|
           assert_text format
         end
@@ -1033,7 +1033,7 @@ class DataExportsTest < ApplicationSystemTestCase
         assert_no_selector 'li'
       end
       within("##{I18n.t('data_exports.new_sample_export_dialog.selected')}") do
-        assert_selector 'li', count: 9
+        assert_selector 'li', count: 10
         Attachment::FORMAT_REGEX.each_key do |format|
           assert_text format
         end

@@ -281,4 +281,86 @@ class AttachmentTest < ActiveSupport::TestCase
     assert_equal attachment_rev, attachment_fwd.associated_attachment
     assert_nil @attachment1.associated_attachment
   end
+
+  test 'previewable? returns true for previewable formats' do
+    # Test a few sample formats from PREVIEWABLE_TYPES
+
+    # FASTQ file should be previewable
+    fastq_attachment = @sample.attachments.build(file:
+      { io: Rails.root.join('test/fixtures/files/test_file_1.fastq').open,
+        filename: 'test_file_1.fastq' })
+    fastq_attachment.save
+    assert fastq_attachment.previewable?
+
+    # Text file should be previewable
+    text_attachment = @sample.attachments.build(file:
+      { io: Rails.root.join('test/fixtures/files/test_file_14.txt').open,
+        filename: 'test_file_14.txt' })
+    text_attachment.save
+    assert text_attachment.previewable?
+
+    # JSON file should be previewable
+    json_attachment = @sample.attachments.build(file:
+      { io: Rails.root.join('test/fixtures/files/test_file_17.json').open,
+        filename: 'test_file_17.json' })
+    json_attachment.save
+    assert json_attachment.previewable?
+  end
+
+  test 'previewable? returns false for non-previewable formats' do
+    # PDF should not be previewable (unknown format)
+    pdf_attachment = @sample.attachments.build(file:
+      { io: Rails.root.join('test/fixtures/files/test_file_12.pdf').open,
+        filename: 'test_file_12.pdf' })
+    pdf_attachment.save
+    assert_not pdf_attachment.previewable?
+
+    # DOCX should not be previewable (unknown format)
+    docx_attachment = @sample.attachments.build(file:
+      { io: Rails.root.join('test/fixtures/files/test_file_11.docx').open,
+        filename: 'test_file_11.docx' })
+    docx_attachment.save
+    assert_not docx_attachment.previewable?
+  end
+
+  test 'copyable? returns true for copyable formats' do
+    # Test a few sample formats from COPYABLE_TYPES
+
+    # FASTQ file should be copyable
+    fastq_attachment = @sample.attachments.build(file:
+      { io: Rails.root.join('test/fixtures/files/test_file_1.fastq').open,
+        filename: 'test_file_1.fastq' })
+    fastq_attachment.save
+    assert fastq_attachment.copyable?
+
+    # Text file should be copyable
+    text_attachment = @sample.attachments.build(file:
+      { io: Rails.root.join('test/fixtures/files/test_file_14.txt').open,
+        filename: 'test_file_14.txt' })
+    text_attachment.save
+    assert text_attachment.copyable?
+
+    # JSON file should be copyable
+    json_attachment = @sample.attachments.build(file:
+      { io: Rails.root.join('test/fixtures/files/test_file_17.json').open,
+        filename: 'test_file_17.json' })
+    json_attachment.save
+    assert json_attachment.copyable?
+  end
+
+  test 'copyable? returns false for non-copyable formats' do
+    # PDF should not be copyable (not in COPYABLE_TYPES)
+    pdf_attachment = @sample.attachments.build(file:
+      { io: Rails.root.join('test/fixtures/files/test_file_12.pdf').open,
+        filename: 'test_file_12.pdf' })
+    pdf_attachment.save
+    assert_not pdf_attachment.copyable?
+
+    # Spreadsheet should not be copyable (not in COPYABLE_TYPES)
+    spreadsheet_attachment = @sample.attachments.build(file:
+      { io: Rails.root.join('test/fixtures/files/metadata/valid.xlsx').open,
+        filename: 'valid.xlsx' })
+    spreadsheet_attachment.save
+    assert_not spreadsheet_attachment.copyable?
+  end
 end
