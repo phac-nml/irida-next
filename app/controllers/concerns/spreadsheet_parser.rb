@@ -14,9 +14,29 @@ module SpreadsheetParser
   # @return [Array<Hash>] array of row data with headers as keys
   # @raise [SpreadsheetParsingError] if file is missing or invalid
   def parse_spreadsheet(file)
-    raise SpreadsheetParsingError, t('spreadsheet_helper.no_file') unless file.present?
-
+    validate_file_presence(file)
     extension = File.extname(file.filename.to_s).downcase
+    read_spreadsheet(file, extension)
+  rescue Roo::Error => e
+    handle_roo_error(e)
+  rescue StandardError => e
+    handle_standard_error(e)
+  end
+
+  private
+
+  # 📂 Validates the presence of the uploaded file
+  # @param file [ActionDispatch::Http::UploadedFile] the uploaded file to validate
+  # @raise [SpreadsheetParsingError] if file is missing
+  def validate_file_presence(file)
+    raise SpreadsheetParsingError, t('spreadsheet_helper.no_file') if file.blank?
+  end
+
+  # 📖 Reads the spreadsheet file and extracts data
+  # @param file [ActionDispatch::Http::UploadedFile] the uploaded file to read
+  # @param extension [String] the file extension
+  # @return [Array<Hash>] array of row data with headers as keys
+  def read_spreadsheet(file, extension)
     data = []
     file.open do |f|
       spreadsheet = open_spreadsheet(f.path, extension)
@@ -26,15 +46,7 @@ module SpreadsheetParser
     end
 
     data
-  rescue Roo::Error => e
-    Rails.logger.error "Spreadsheet parsing error: #{e.message}"
-  rescue StandardError => e
-    Rails.logger.error t('spreadsheet_helper.unexpected_error', error: "#{e.class} - #{e.message}")
-    Rails.logger.error e.backtrace.join("\n")
-    raise SpreadsheetParsingError, t('spreadsheet_helper.unexpected_error', error: e.message)
   end
-
-  private
 
   # 📂 Opens a spreadsheet file using the appropriate Roo class based on file extension
   # @param path [String] the full file path
