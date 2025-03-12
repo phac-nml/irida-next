@@ -53,14 +53,11 @@ module WorkflowExecutions
     end
 
     def autoset_params
-      params.merge!(
-        workflow_type: workflow.type,
-        workflow_type_version: workflow.type_version,
-        workflow_engine: workflow.engine,
-        workflow_engine_version: workflow.engine_version,
-        workflow_url: workflow.url,
-        workflow_engine_parameters: { '-r': workflow.version }
-      )
+      params.merge!(@workflow.default_params)
+
+      return if @workflow.default_workflow_params.empty?
+
+      params['workflow_params'].reverse_merge!(@workflow.default_workflow_params)
     end
 
     def sanitize_workflow_param(property, value)
