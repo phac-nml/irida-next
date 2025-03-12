@@ -8,6 +8,8 @@ module Groups
       sign_in users(:joan_doe)
       @group = groups(:group_one)
       @workflow_execution = workflow_executions(:workflow_execution_group_shared1)
+
+      Flipper.enable(:workflow_execution_sharing)
     end
 
     test 'should show a listing of workflow executions for the group' do
