@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-# 📊 SpreadsheetHelper module provides utility methods to read and parse Excel and CSV files.
+# 📊 SpreadsheetParser module provides utility methods to read and parse Excel and CSV files.
 # 🔍 Supported formats: .xlsx, .xls, and .csv
 # 🔢 Automatically converts numeric strings to their proper number types
-module SpreadsheetHelper
+module SpreadsheetParser
   SUPPORTED_FORMATS = %w[.xlsx .xls .csv].freeze
 
   # ⚠️ Custom exception for spreadsheet parsing failures

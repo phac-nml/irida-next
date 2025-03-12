@@ -4,6 +4,7 @@
 # Handles how attachments are shown based on their file type
 # Supports text, images, FASTA, FASTQ, GenBank, and more!
 class AttachmentsController < ApplicationController
+  include SpreadsheetParser
   layout 'attachment'
 
   before_action :check_attachments_preview_enabled
@@ -35,9 +36,29 @@ class AttachmentsController < ApplicationController
   def handle_preview
     format = @attachment.metadata['format']
     if lookup_context.template_exists?("attachments/#{format}_preview")
-      render "#{format}_preview"
+      render "#{format}_preview", locals: { contents: attachment_contents }
     else
       handle_not_found
+    end
+  end
+
+  # 📄 Retrieves the contents of the attachment based on its format
+  # Supports various formats and parses them accordingly
+  def attachment_contents
+    format = @attachment.metadata['format']
+    case format
+    when 'json', 'text'
+      # 📝 Directly download text-based files
+      @attachment.file.download
+    when 'csv'
+      # 📊 Parse CSV files with headers
+      CSV.parse(@attachment.file.download, headers: true)
+    when 'tsv'
+      # 📊 Parse TSV files with tab separator and headers
+      CSV.parse(@attachment.file.download, col_sep: "\t", headers: true)
+    when 'spreadsheet'
+      # 📈 Parse spreadsheet files using custom parser
+      parse_spreadsheet(@attachment.file)
     end
   end
 

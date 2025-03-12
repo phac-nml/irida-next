@@ -4,8 +4,8 @@ require 'test_helper'
 require 'tempfile'
 require 'csv'
 
-class SpreadsheetHelperTest < ActionView::TestCase
-  include SpreadsheetHelper
+class SpreadsheetParserTest < ActionView::TestCase
+  include SpreadsheetParser
 
   test 'raises error when no file is provided' do
     assert_raises(SpreadsheetParsingError, t('spreadsheet_helper.no_file')) do
