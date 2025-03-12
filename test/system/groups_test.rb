@@ -408,6 +408,14 @@ class GroupsTest < ApplicationSystemTestCase
     assert_text I18n.t('action_policy.policy.group.read?', name: group.name)
   end
 
+  test 'uploader access level cannot view group' do
+    login_as users(:groupJeff_bot)
+    group = groups(:group_jeff)
+    visit group_url(group)
+
+    assert_text I18n.t('action_policy.policy.group.read?', name: group.name)
+  end
+
   test 'visiting the show' do
     @group = groups(:group_one)
     visit group_url(@group)

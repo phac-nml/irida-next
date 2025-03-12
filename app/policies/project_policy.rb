@@ -16,7 +16,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   def token_active(access_level)
     return false unless access_level == Member::AccessLevel::UPLOADER
 
-    return false if Current.token&.nil?
+    return false if Current.token.nil?
 
     Current.token.active?
   end

@@ -172,6 +172,14 @@ class ProjectsTest < ApplicationSystemTestCase
     assert_selector 'h1', text: 'Project 1'
   end
 
+  test 'uploader access level cannot view project' do
+    login_as users(:projectJeff_bot)
+    project = projects(:projectJeff)
+    visit namespace_project_url(project.namespace.parent, project)
+
+    assert_text I18n.t(:'action_policy.policy.project.read?', name: project.name)
+  end
+
   test 'can not view project' do
     login_as users(:user_no_access)
 
