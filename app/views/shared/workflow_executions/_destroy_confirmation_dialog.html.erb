@@ -1,4 +1,4 @@
-<%= viral_dialog(open: true, size: :large) do |dialog| %>
+<%= viral_dialog(open: true) do |dialog| %>
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
     <%# TODO: maybe add broadcast target %>
@@ -10,6 +10,7 @@
         data-infinite-scroll-paged-field-name-value="workflow_execution_ids[]"
         data-infinite-scroll-singular-description-value="<%= t(".description.singular") %>"
         data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
+        data-infinite-scroll-non-zero-header-value="<%= t(".selection_count.non_zero") %>"
       >
         <%= form_with(
         url: list_workflow_executions_path(list_class: 'workflow_execution', list_action: 'destroy'),
@@ -19,75 +20,47 @@
         <% end %>
 
         <div class="grid gap-4">
-          <div data-controller="collapsible">
-            <h2 id="<%= "accordion-collapse-heading-workflows" %>">
-              <button
-                type="button"
-                class="
-                  flex items-center justify-between w-full p-3 font-medium rtl:text-right
-                  text-black dark:text-white border border-slate-200 dark:border-slate-700
-                  hover:bg-slate-100 dark:hover:bg-slate-800 gap-3 rounded-t
-                "
-                data-action="collapsible#toggle"
-                aria-expanded="true"
-                aria-controls="<%= "accordion-collapse-body-workflows" %>"
-              >
-                <span data-infinite-scroll-target="selectionCount">"<%= t(".selection_count.zero") %>"</span>
-                <%= viral_icon(
-                  name: "chevron_down",
-                  classes: "mr-0 w-4 h-4 rotate-0",
-                  "data-collapsible-target": "icon",
-                ) %>
-              </button>
-            </h2>
-
+          <p class=" text-base leading-relaxed text-slate-500 dark:text-slate-400 "><span data-infinite-scroll-target="summary">
+              <%= t(".description.zero") %>
+            </span>
+            <span><%= t(".state_warning_html") %></span>
+          </p>
+          <div>
+            <div class="block mb-1 text-sm font-medium text-slate-900 dark:text-white">
+              <%= t(".workflow_executions") %>
+            </div>
             <div
-              data-collapsible-target="item"
-              id="<%= "accordion-collapse-body-workflows" %>"
-              class="hidden"
-              aria-labelledby="<%= "accordion-collapse-heading-workflows" %>"
+              class="
+                overflow-y-auto max-h-[300px] border border-slate-300 rounded-md block w-full
+                p-2.5 dark:bg-slate-800 dark:border-slate-600
+              "
+              data-action="scroll->infinite-scroll#scroll"
+              data-infinite-scroll-target="scrollable"
             >
-              <div
-                class="
-                  text-base leading-relaxed text-slate-500 dark:text-slate-400 p-2.5 border
-                  border-t-0 border-slate-300
-                "
-              >
-                <span data-infinite-scroll-target="summary">
-                  <%= t(".description.zero") %>
-                </span>
-              </div>
-              <div
-                class="
-                  overflow-y-auto max-h-[200px] border border-t-0 border-slate-300 rounded-b block
-                  w-full p-2.5 dark:bg-slate-800 dark:border-slate-600
-                "
-                data-action="scroll->infinite-scroll#scroll"
-                data-infinite-scroll-target="scrollable"
-              >
-                <%= turbo_frame_tag "list_selections" do %>
-                  <%= render partial: "shared/loading/samples_list_skeleton" %>
-                <% end %>
-              </div>
+              <%= turbo_frame_tag "list_selections" do %>
+                <%= render partial: "shared/loading/samples_list_skeleton" %>
+              <% end %>
             </div>
           </div>
           <%= form_for(:destroy, url: destroy_multiple_workflow_executions_path, method: :delete,
           data: {
             controller: "form--hidden-inputs",
             "form--hidden-inputs-selection-outlet": '#workflow-executions-table',
-            "form--hidden-inputs-field-name-value": "destroy[workflow_execution_ids][]",
+            "form--hidden-inputs-field-name-value": "destroy_multiple[workflow_execution_ids][]",
           }
         ) do |form| %>
             <%# <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>
             <div class="grid gap-4">
 
               <div>
-                <%= form.submit t(".submit_button"),
-                            class: "button button--size-default button--state-primary",
-                            disabled: true,
-                            data: {
-                              action: "click->form--hidden-inputs#clearSelection",
-                            } %>
+                <div>
+                  <%= form.submit t(".submit_button"),
+                              class:
+                                "button text-sm px-5 py-2.5 text-white bg-red-700 border-red-800 focus:outline-none hover:bg-red-800 focus:ring-red-300 dark:focus:ring-red-700 dark:bg-red-600 dark:text-white dark:border-red-600 dark:hover:bg-red-700",
+                              data: {
+                                action: "click->form--hidden-inputs#clearSelection",
+                              } %>
+                </div>
               </div>
             </div>
           <% end %>
