@@ -200,5 +200,33 @@ module Groups
       assert_equal workflow_execution.reload.state, 'canceled'
       assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
     end
+
+    test 'submitter can edit workflow execution post launch from workflow execution page' do
+      login_as users(:joan_doe)
+      visit group_workflow_execution_path(@group, @workflow_execution_group_shared1)
+      dt_value = 'Name'
+      new_we_name = 'New Name'
+
+      assert_selector 'h1', text: @workflow_execution_group_shared1.name
+      assert_selector 'dt', text: dt_value
+
+      assert_selector 'a', text: I18n.t(:'groups.workflow_executions.show.edit_button'), count: 1
+      click_link I18n.t(:'groups.workflow_executions.show.edit_button')
+
+      within('dialog') do
+        assert_selector 'h1', text: I18n.t('groups.workflow_executions.edit_dialog.title')
+        assert_selector 'p', text: I18n.t('groups.workflow_executions.edit_dialog.description',
+                                          workflow_execution_id: @workflow_execution_group_shared1.id)
+        assert_selector 'label', text: dt_value
+        fill_in placeholder: I18n.t('groups.workflow_executions.edit_dialog.name_placeholder'),
+                with: new_we_name
+
+        click_button I18n.t(:'groups.workflow_executions.edit_dialog.submit_button')
+      end
+
+      assert_selector 'h1', text: @workflow_execution_group_shared1.name
+      assert_selector 'dt', text: dt_value
+      assert_selector 'dd', text: new_we_name
+    end
   end
 end
