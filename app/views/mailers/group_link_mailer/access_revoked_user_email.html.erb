@@ -1,18 +1,14 @@
-<%= render partial: "mailers/email_template", locals: { url: nil } %>
-
-<%= yield :header_and_greeting %>
-
-<tr>
-  <td style="padding:12px 24px;">
-    <p style="color:#334155;line-height:24px;">
-      <%= t(
-        :"mailers.group_link_mailer.access_revoked_user_email.body_html",
-        group_name: @group.name,
-        namespace_type: @namespace.type,
-        namespace_name: @namespace.name
-      ) %>
-    </p>
-  </td>
-</tr>
-
-<%= yield :sendoff_and_automated_message %>
+<%= render layout: "mailers/email_template", locals: { url: nil } do %>
+  <tr>
+    <td style="padding:0px 24px;">
+      <p style="color:#334155;line-height:24px;">
+        <%= t(
+          :"mailers.group_link_mailer.access_revoked_user_email.body_html",
+          group_name: @group.name,
+          namespace_type: @namespace.type,
+          namespace_name: @namespace.name,
+        ) %>
+      </p>
+    </td>
+  </tr>
+<% end %>
