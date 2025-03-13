@@ -29,7 +29,8 @@ module MetadataTemplates
 
     def row_arguments(metadata_template)
       { tag: 'tr' }.tap do |args|
-        args[:classes] = class_names('bg-white', 'border-b', 'dark:bg-slate-800', 'dark:border-slate-700')
+        args[:classes] =
+          class_names('bg-white', 'border-b', 'dark:bg-slate-800', 'border-slate-200 dark:border-slate-700')
         args[:id] = dom_id(metadata_template)
       end
     end
