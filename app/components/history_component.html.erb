@@ -3,27 +3,13 @@
     <li class="mb-10 ms-4">
       <div
         class="
-          absolute
-          w-3
-          h-3
-          bg-slate-200
-          rounded-full
-          mt-1.5
-          -start-1.5
-          border
-          border-white
-          dark:border-slate-700
-          dark:bg-slate-700
+          absolute w-3 h-3 bg-slate-200 rounded-full mt-1.5 -start-1.5 border border-white
+          dark:border-slate-700 dark:bg-slate-700
         "
       ></div>
       <time
         class="
-          mb-1
-          text-sm
-          font-normal
-          leading-none
-          text-slate-500
-          dark:text-slate-400
+          mb-1 text-sm font-normal leading-none text-slate-500 dark:text-slate-400
         "
       ><%= helpers.local_time(changes[:updated_at], :long) %></time>
       <h2 class=" text-lg font-semibold text-slate-900 dark:text-white ">
@@ -31,14 +17,14 @@
           <%= link_to t(:"components.history.link_text", version: changes[:version]),
           path_with_params(@url, { version: changes[:version] }),
           data: {
-            turbo_stream: true
+            turbo_stream: true,
           },
           class: "text-slate-800 dark:text-white hover:underline" %>
           <% if index == 0 %>
             <%= viral_pill(
               text: t(:"components.history.latest"),
               color: :green,
-              classes: "ml-2"
+              classes: "ml-2",
             ) %>
           <% end %>
         <% else %>

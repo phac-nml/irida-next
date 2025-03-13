@@ -2,6 +2,6 @@
   <%= render HistoryComponent.new(
     data: @log_data.reverse,
     type: "Project",
-    url: project_view_history_path(@project)
+    url: project_view_history_path(@project),
   ) %>
 <% end %>

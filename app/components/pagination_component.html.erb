@@ -2,15 +2,15 @@
   <div class="flex items-center justify-center space-x-4 mt-6">
     <% if prev_url %>
       <%= link_to t("viral.pagy.pagination_component.previous"),
-                  prev_url,
-                  **link_arguments,
-                  class: "button button--state-default button--size-default" %>
+      prev_url,
+      **link_arguments,
+      class: "button button--state-default button--size-default" %>
     <% end %>
     <% if next_url %>
       <%= link_to t("viral.pagy.pagination_component.next"),
-                  next_url,
-                  **link_arguments,
-                  class: "button button--state-default button--size-default" %>
+      next_url,
+      **link_arguments,
+      class: "button button--state-default button--size-default" %>
     <% end %>
   </div>
   <p class="text-center m-4 text-slate-500"><%== info %></p>

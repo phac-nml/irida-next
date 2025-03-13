@@ -1,4 +1,4 @@
 <%= viral_card(title: "Main Settings") do %>
-  <%= render 'form', user: @user if @user.provider == nil %>
-  <%= render 'domain_user', user: @user if @user.provider != nil %>
+  <%= render "form", user: @user if @user.provider == nil %>
+  <%= render "domain_user", user: @user if @user.provider != nil %>
 <% end %>

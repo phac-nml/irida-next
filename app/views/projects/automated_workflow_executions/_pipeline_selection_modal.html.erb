@@ -5,25 +5,30 @@
       <% available_automated_workflows.each do |key, workflow| %>
         <li>
           <%= link_to new_namespace_project_automated_workflow_execution_path(@project.parent, @project, workflow_name: workflow.name, workflow_version: workflow.version), class: "group w-full", data: { turbo_stream: true } do %>
-            <span class="flex items-center p-4 space-x-4  ws-default hover:bg-primary-600">
+            <span class="flex items-center p-4 space-x-4 ws-default hover:bg-primary-600">
               <span class="flex-shrink-0">
                 <%= viral_icon(
                   name: :rocket_launch,
                   classes:
-                    "ws-default dark:text-slate-500 group-hover:text-slate-100 group-hover:-rotate-45 transition-rotate-45 group-hover:duration-500 group-hover:ease-in-out"
+                    "ws-default dark:text-slate-500 group-hover:text-slate-100 group-hover:-rotate-45 transition-rotate-45 group-hover:duration-500 group-hover:ease-in-out",
                 ) %>
               </span>
               <span class="flex-1 min-w-0 text-left group-hover:stroke-slate-100">
                 <span class="flex items-center space-x-2">
                   <span
-                    class="font-medium truncate  text-slate-900 dark:text-white group-hover:text-slate-100"
+                    class="
+                      font-medium truncate text-slate-900 dark:text-white group-hover:text-slate-100
+                    "
                   >
                     <%= workflow.name %>
                   </span>
                   <%= viral_pill(text: workflow.version, color: :primary) %>
                 </span>
                 <span
-                  class="text-sm font-normal truncate  text-slate-500 dark:text-slate-400 group-hover:text-slate-200"
+                  class="
+                    text-sm font-normal truncate text-slate-500 dark:text-slate-400
+                    group-hover:text-slate-200
+                  "
                 >
                   <%= text_for(workflow.description) %>
                 </span>

@@ -2,8 +2,8 @@
   "sample_modal",
   partial: "modal",
   locals: {
-    open: @sample.errors.any?
-  }
+    open: @sample.errors.any?,
+  },
 ) %>
 
 <% if @sample.errors.any? %>
@@ -18,7 +18,7 @@
     "table-listing",
     partial: "projects/samples/attachments/table",
     locals: {
-      attachments: @sample.attachments
-    }
+      attachments: @sample.attachments,
+    },
   ) %>
 <% end %>

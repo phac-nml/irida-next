@@ -1,6 +1,8 @@
 <tr
   id="<%= dom_id(attachment) %>"
-  class="bg-white border-b  border-slate-200 dark:bg-slate-800 dark:border-slate-700"
+  class="
+    bg-white border-b border-slate-200 dark:bg-slate-800 dark:border-slate-700
+  "
 >
   <% if allowed_to?(:update_sample?, @project) %>
     <td class="px-6 py-4">
