@@ -1,6 +1,6 @@
 <tr
   id="<%= dom_id(attachment) %>"
-  class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
+  class="bg-white border-b  border-slate-200 dark:bg-slate-800 dark:border-slate-700"
 >
   <% if allowed_to?(:update_sample?, @project) %>
     <td class="px-6 py-4">
@@ -23,13 +23,13 @@
         "text-primary-600 bg-slate-100 border-slate-300 rounded-sm focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
     </td>
   <% end %>
-  <td class="px-6 py-4 text-slate-900 dark:text-slate-100 font-semibold">
+  <td class="px-6 py-4 font-semibold text-slate-900 dark:text-slate-100">
     <%= attachment.puid %>
   </td>
   <% if attachment.associated_attachment && attachment.metadata['direction'] == 'forward' %>
     <td class="px-6 py-4">
       <div>
-        <div class="flex mb-4 items-center">
+        <div class="flex items-center mb-4">
           <%= viral_icon(name: :arrow_right, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
           <span>
             <%= link_to attachment.file.filename,
