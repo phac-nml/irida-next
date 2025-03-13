@@ -20,11 +20,11 @@
 <%= turbo_stream.update "project_name_and_description_form",
                     partial: "edit_name_and_description_form",
                     locals: {
-                      project: @project
+                      project: @project,
                     } %>
 
 <%= turbo_stream.update "project_path_form",
                     partial: "change_path",
                     locals: {
-                      project: @project
+                      project: @project,
                     } %>

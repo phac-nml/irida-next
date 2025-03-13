@@ -4,13 +4,13 @@
                       locals: {
                         open: true,
                         available_automated_workflows:
-                          @available_automated_workflows
+                          @available_automated_workflows,
                       } %>
 <% else %>
   <%= turbo_stream.update "automated_workflow_execution_modal",
                       partial: "new_automated_workflow_execution_modal",
                       locals: {
                         open: true,
-                        workflow: @workflow
+                        workflow: @workflow,
                       } %>
 <% end %>

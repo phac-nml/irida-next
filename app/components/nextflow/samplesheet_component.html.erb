@@ -23,7 +23,9 @@
         type="search"
       />
       <div
-        class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none "
+        class="
+          absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
+        "
       >
         <%= viral_icon(
           name: "magnifying_glass",
@@ -34,7 +36,10 @@
   </div>
   <div
     role="alert"
-    class="flex items-center hidden p-4 mb-2 text-red-800 border-l-4 border-red-300 bg-red-50 dark:text-red-400 dark:bg-slate-800 dark:border-red-800"
+    class="
+      flex items-center hidden p-4 mb-2 text-red-800 border-l-4 border-red-300
+      bg-red-50 dark:text-red-400 dark:bg-slate-800 dark:border-red-800
+    "
     data-nextflow--samplesheet-target="error"
   >
     <span class="inline shrink-0">
@@ -49,7 +54,10 @@
   </div>
   <div
     data-nextflow--samplesheet-target="table"
-    class="relative flex mb-1 overflow-y-auto border samplesheet-table dark:border-slate-600 border-slate-100 max-h-72"
+    class="
+      relative flex mb-1 overflow-y-auto border samplesheet-table
+      dark:border-slate-600 border-slate-100 max-h-72
+    "
   >
     <% properties.each do |header, property| %>
       <%= render Nextflow::Samplesheet::HeaderComponent.new(
@@ -126,7 +134,12 @@ data: {
 } do %>
       <div
         id="<%="ATTACHABLE_ID_PLACEHOLDER_PROPERTY_PLACEHOLDER" %>"
-        class="w-full p-2 text-sm border-2 border-transparent cursor-pointer focus:ring-primary-500 focus:border-primary-500 dark:bg-inherit bg-inherit dark:placeholder-slate-400 text-inherit dark:focus:ring-primary-500 dark:focus:border-primary-500 hover:border-slate-300"
+        class="
+          w-full p-2 text-sm border-2 border-transparent cursor-pointer
+          focus:ring-primary-500 focus:border-primary-500 dark:bg-inherit bg-inherit
+          dark:placeholder-slate-400 text-inherit dark:focus:ring-primary-500
+          dark:focus:border-primary-500 hover:border-slate-300
+        "
       >
         FILENAME_PLACEHOLDER
       </div>
@@ -160,7 +173,11 @@ data: {
     <ul class="inline-flex h-10 text-base">
       <li><button
           type="button"
-          class="flex items-center justify-center h-10 px-4 leading-tight border cursor-default ms-0 border-slate-300 dark:border-slate-700 text-slate-600 bg-slate-50 dark:bg-slate-700 dark:text-slate-400 border-e-0 rounded-s-lg"
+          class="
+            flex items-center justify-center h-10 px-4 leading-tight border cursor-default
+            ms-0 border-slate-300 dark:border-slate-700 text-slate-600 bg-slate-50
+            dark:bg-slate-700 dark:text-slate-400 border-e-0 rounded-s-lg
+          "
           data-action="click->nextflow--samplesheet#previousPage"
           data-nextflow--samplesheet-target="previousBtn"
           disabled="disabled"
@@ -168,14 +185,25 @@ data: {
       </li>
       <li><select
           style="width: 80px;"
-          class="flex items-center justify-center h-10 px-4 leading-tight bg-white border cursor-pointer ms-0 border-slate-300 dark:border-slate-700 text-slate-500 hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white focus:ring-0 focus:border-primary-500 dark:focus:border-primary-500"
+          class="
+            flex items-center justify-center h-10 px-4 leading-tight bg-white border
+            cursor-pointer ms-0 border-slate-300 dark:border-slate-700 text-slate-500
+            hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
+            dark:hover:bg-slate-700 dark:hover:text-white focus:ring-0
+            focus:border-primary-500 dark:focus:border-primary-500
+          "
           data-nextflow--samplesheet-target="pageNum"
           data-action="change->nextflow--samplesheet#pageSelected"
           aria-label="<%= t(".page_selection.aria_label") %>"
         ><option value="1" selected="selected">1</option></select>
       </li>
       <li><button
-          class="flex items-center justify-center h-10 px-4 leading-tight bg-white border border-l-0 ms-0 border-slate-300 dark:border-slate-700 text-slate-500 hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white rounded-e-lg"
+          class="
+            flex items-center justify-center h-10 px-4 leading-tight bg-white border
+            border-l-0 ms-0 border-slate-300 dark:border-slate-700 text-slate-500
+            hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
+            dark:hover:bg-slate-700 dark:hover:text-white rounded-e-lg
+          "
           type="button"
           data-nextflow--samplesheet-target="nextBtn"
           data-action="click->nextflow--samplesheet#nextPage"

@@ -9,7 +9,7 @@
   <%= viral_card(title: t(:"profiles.personal_access_tokens.create.title"), subtitle: t(:"profiles.personal_access_tokens.create.subtitle")) do %>
     <%= render partial: "form",
     locals: {
-      personal_access_token: @personal_access_token
+      personal_access_token: @personal_access_token,
     } %>
   <% end %>
 
@@ -19,6 +19,6 @@
   ), title_id: "personal-access-tokens-header") do %>
     <%= turbo_frame_tag("personal-access-token-revoke-errors") %>
 
-    <%= render partial: 'table' %>
+    <%= render partial: "table" %>
   <% end %>
 </div>

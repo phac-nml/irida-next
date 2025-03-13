@@ -3,7 +3,7 @@
   <%= render "layouts/partials/head" %>
   <body class="bg-white dark:bg-slate-900">
     <%= render LayoutComponent.new(user: current_user, fixed: false) do |layout| %>
-    <% layout.with_sidebar(pipelines_enabled: @pipelines_enabled) do |navigation| %>
+      <% layout.with_sidebar(pipelines_enabled: @pipelines_enabled) do |navigation| %>
         <%= navigation.with_header(label: t(:"general.default_sidebar.title")) %>
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
@@ -18,20 +18,19 @@
             url: dashboard_groups_path,
             selected: @current_page == t(:"general.default_sidebar.groups"),
           ) %>
-        <% if @pipelines_enabled %>
-          <%= render section.with_item(
-            icon: "command_line",
-            label: t(:"general.default_sidebar.workflows"),
-            url: workflow_executions_path,
-            selected: @current_page == t(:"general.default_sidebar.workflows"),
-          ) %>
-        <% end %>
+          <% if @pipelines_enabled %>
+            <%= render section.with_item(
+              icon: "command_line",
+              label: t(:"general.default_sidebar.workflows"),
+              url: workflow_executions_path,
+              selected: @current_page == t(:"general.default_sidebar.workflows"),
+            ) %>
+          <% end %>
           <%= render section.with_item(
             icon: "arrow_up_on_square_stack",
             label: t(:"general.default_sidebar.data_exports"),
             url: data_exports_path,
-            selected:
-              @current_page == t(:"general.default_sidebar.data_exports"),
+            selected: @current_page == t(:"general.default_sidebar.data_exports"),
           ) %>
         <% end %>
         <% layout.with_breadcrumb(context_crumbs: @context_crumbs || []) %>
@@ -41,8 +40,8 @@
       <% end %>
     <% end %>
 
-  <% if Rails.env.development? and Rails.configuration.enable_web_console == true %>
-    <%= console %>
-  <% end %>
+    <% if Rails.env.development? and Rails.configuration.enable_web_console == true %>
+      <%= console %>
+    <% end %>
   </body>
 </html>

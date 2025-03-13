@@ -3,39 +3,39 @@
     <%= t(:"activerecord.attributes.user.email") %>
   </dt>
   <dd>
-    <%=@user.email%>
-    <%= t(:'profiles.show.missing') if @user.email == nil || @user.email == ""%>
+    <%= @user.email %>
+    <%= t(:"profiles.show.missing") if @user.email == nil || @user.email == "" %>
   </dd>
 
   <dt>
     <%= t(:"activerecord.attributes.user.provider") %>
   </dt>
   <dd>
-    <%=@user.provider%>
-    <%= t(:'profiles.show.missing') if @user.provider == nil || @user.provider == ""%>
+    <%= @user.provider %>
+    <%= t(:"profiles.show.missing") if @user.provider == nil || @user.provider == "" %>
   </dd>
 
   <dt>
     <%= t(:"activerecord.attributes.user.uid") %>
   </dt>
   <dd>
-    <%=@user.uid%>
-    <%= t(:'profiles.show.missing') if @user.uid == nil || @user.uid == ""%>
+    <%= @user.uid %>
+    <%= t(:"profiles.show.missing") if @user.uid == nil || @user.uid == "" %>
   </dd>
 
   <dt>
     <%= t(:"activerecord.attributes.user.first_name") %>
   </dt>
   <dd>
-    <%=@user.first_name%>
-    <%= t(:'profiles.show.missing') if @user.first_name == nil || @user.first_name == ""%>
+    <%= @user.first_name %>
+    <%= t(:"profiles.show.missing") if @user.first_name == nil || @user.first_name == "" %>
   </dd>
 
   <dt>
     <%= t(:"activerecord.attributes.user.last_name") %>
   </dt>
   <dd>
-    <%=@user.last_name%>
-    <%= t(:'profiles.show.missing') if @user.last_name == nil || @user.last_name == ""%>
+    <%= @user.last_name %>
+    <%= t(:"profiles.show.missing") if @user.last_name == nil || @user.last_name == "" %>
   </dd>
 </dl>

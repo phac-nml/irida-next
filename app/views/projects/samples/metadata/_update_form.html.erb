@@ -1,38 +1,37 @@
 <%= form_with(model: @sample, url: namespace_project_sample_metadata_field_path(sample_id: @sample.id), method: :patch) do |form| %>
-  <%= turbo_frame_tag 'update-alert' %>
+  <%= turbo_frame_tag "update-alert" %>
   <div class="grid gap-4">
-  <%= form.fields_for :update_field do |field| %>
-    <%= field.fields_for :key do |metadata_key| %>
-      <div class="form-field">
-        <%= metadata_key.label t("projects.samples.show.metadata.update.key"),
-                  class:
-                    "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
-        <%= metadata_key.text_field key,
-                        value: key,
-                        required: true,
-                        autofocus: true,
-                        class:
-                          "block w-full mb-2 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 focus:outline-hidden dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
-      </div>
-    <% end %>
-     <%= field.fields_for :value do |metadata_value| %>
-      <div class="form-field">
-        <%= metadata_value.label t("projects.samples.show.metadata.update.value"),
-                  class:
-                    "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
-        <%= metadata_value.text_field value,
-                        value: value,
-                        required: true,
-                        class:
-                          "block w-full mb-2 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 focus:outline-hidden dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
-      </div>
-    <% end %>
+    <%= form.fields_for :update_field do |field| %>
+      <%= field.fields_for :key do |metadata_key| %>
+        <div class="form-field">
+          <%= metadata_key.label t("projects.samples.show.metadata.update.key"),
+                             class:
+                               "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
+          <%= metadata_key.text_field key,
+                                  value: key,
+                                  required: true,
+                                  autofocus: true,
+                                  class:
+                                    "block w-full mb-2 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 focus:outline-hidden dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
+        </div>
+      <% end %>
+      <%= field.fields_for :value do |metadata_value| %>
+        <div class="form-field">
+          <%= metadata_value.label t("projects.samples.show.metadata.update.value"),
+                               class:
+                                 "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
+          <%= metadata_value.text_field value,
+                                    value: value,
+                                    required: true,
+                                    class:
+                                      "block w-full mb-2 text-xs text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 focus:outline-hidden dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
+        </div>
+      <% end %>
 
-    <div>
-      <%= field.submit t("projects.samples.show.metadata.update.update"),
-                  class: "button button--state-primary button--size-default"
-                  %>
-    </div>
+      <div>
+        <%= field.submit t("projects.samples.show.metadata.update.update"),
+                     class: "button button--state-primary button--size-default" %>
+      </div>
     <% end %>
   </div>
 <% end %>

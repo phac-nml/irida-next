@@ -1,7 +1,4 @@
-<div
-  data-action="keyup->viral--select2#keydown"
-  class="select2"
->
+<div data-action="keyup->viral--select2#keydown" class="select2">
   <label for="select2-input" class="sr-only"><%= name %></label>
   <input
     type="text"
@@ -26,7 +23,10 @@
 
   <div
     data-viral--select2-target="dropdown"
-    class="z-10 hidden w-full bg-white divide-y rounded-lg shadow-sm divide-slate-100 dark:bg-slate-700"
+    class="
+      z-10 hidden w-full bg-white divide-y rounded-lg shadow-sm divide-slate-100
+      dark:bg-slate-700
+    "
   >
     <ul
       data-viral--select2-target="scroller"
@@ -40,7 +40,10 @@
       <% end %>
       <% if empty_state? %>
         <li
-          class="hidden p-4 text-blue-800 border border-blue-300  bg-blue-50 dark:bg-slate-800 dark:text-blue-400 dark:border-blue-800"
+          class="
+            hidden p-4 text-blue-800 border border-blue-300 bg-blue-50 dark:bg-slate-800
+            dark:text-blue-400 dark:border-blue-800
+          "
           data-viral--select2-target="empty"
         >
           <%= empty_state %>

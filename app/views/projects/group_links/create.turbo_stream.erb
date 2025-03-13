@@ -12,7 +12,7 @@
                       partial: "invite_group_modal",
                       locals: {
                         open: @created_namespace_group_link.errors.any?,
-                        new_group_link: @created_namespace_group_link
+                        new_group_link: @created_namespace_group_link,
                       } %>
 
   <% if @created_namespace_group_link&.errors.any? %>

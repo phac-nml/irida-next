@@ -5,7 +5,9 @@
   <div
     data-controller="selection"
     data-selection-delete-id-param="<%= @sample.id %>"
-    class="mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400"
+    class="
+      mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400
+    "
   >
     <p class="mb-4">
       <%= t(".description", sample_name: @sample.name) %>
@@ -20,21 +22,21 @@
       <%= form.submit t(".submit_button"),
                   class:
                     "
-                                                                    button
-                                                                    text-sm
-                                                                    px-5
-                                                                    py-2.5
-                                                                    text-white
-                                                                    bg-red-700
-                                                                    border-red-800
-                                                                    focus:outline-none
-                                                                    hover:bg-red-800
-                                                                    focus:ring-red-300
-                                                                    dark:focus:ring-red-700
-                                                                    dark:bg-red-600
-                                                                    dark:text-white
-                                                                    dark:border-red-600
-                                                                    dark:hover:bg-red-700",
+                                                                                      button
+                                                                                      text-sm
+                                                                                      px-5
+                                                                                      py-2.5
+                                                                                      text-white
+                                                                                      bg-red-700
+                                                                                      border-red-800
+                                                                                      focus:outline-none
+                                                                                      hover:bg-red-800
+                                                                                      focus:ring-red-300
+                                                                                      dark:focus:ring-red-700
+                                                                                      dark:bg-red-600
+                                                                                      dark:text-white
+                                                                                      dark:border-red-600
+                                                                                      dark:hover:bg-red-700",
                   data: {
                     action: "click->selection#remove",
                     "selection-id-param": @sample.id,

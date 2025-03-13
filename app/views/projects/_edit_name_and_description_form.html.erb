@@ -16,7 +16,7 @@
       <%= builder.text_area :description,
                         {
                           :class => "form-control",
-                          "aria-label" => t(:"projects.new.description")
+                          "aria-label" => t(:"projects.new.description"),
                         } %>
       <%= render "shared/form/field_errors",
       errors: project.namespace.errors.full_messages_for(:description) %>

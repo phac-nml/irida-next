@@ -9,6 +9,6 @@
 <%= turbo_stream.update "table-listing" do %>
   <% render partial: "projects/samples/metadata/table",
   locals: {
-    sample_metadata: @sample.metadata_with_provenance
+    sample_metadata: @sample.metadata_with_provenance,
   } %>
 <% end %>

@@ -1,5 +1,5 @@
 <%= render PaginationComponent.new(
   info: pagy_info(@pagy),
   prev_url: (@pagy.prev ? group_members_url(@group, page: @pagy.prev) : nil),
-  next_url: (@pagy.next ? group_members_url(@group, page: @pagy.next) : nil)
+  next_url: (@pagy.next ? group_members_url(@group, page: @pagy.next) : nil),
 ) %>
