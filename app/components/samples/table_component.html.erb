@@ -1,11 +1,19 @@
 <% if @has_samples && @pagy.vars[:size].positive? %>
+  <% checkbox_styles =
+    "shrink-0 mt-0.5 border-slate-200 rounded-sm text-primary-600 focus:ring-primary-500 checked:border-primary-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-primary-500 dark:checked:border-primary-500 dark:focus:ring-offset-slate-800 mr-4" %>
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
       <table
-        class='w-full text-sm text-left border  rtl:text-right text-slate-500 dark:text-slate-400 whitespace-nowrap border-slate-200 dark:border-slate-700'
+        class='
+          w-full text-sm text-left border rtl:text-right text-slate-500
+          dark:text-slate-400 whitespace-nowrap border-slate-200 dark:border-slate-700
+        '
       >
         <thead
-          class='sticky top-0 z-10 text-xs uppercase border-b  text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700'
+          class='
+            sticky top-0 z-10 text-xs uppercase border-b text-slate-700 bg-slate-50
+            dark:bg-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700
+          '
         >
           <tr>
             <% @columns.each_with_index do |column, index| %>
@@ -23,8 +31,7 @@
                     controller: "filters",
                     selection_target: "selectPage",
                   },
-                  class:
-                    "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded-sm focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+                  class: checkbox_styles %>
                 <% end %>
 
                 <%= render SortComponent.new(
@@ -67,7 +74,10 @@
           </tr>
         </thead>
         <tbody
-          class='overflow-y-auto bg-white  border-slate-200 dark:bg-slate-800 dark:border-slate-700'
+          class='
+            overflow-y-auto bg-white border-slate-200 dark:bg-slate-800
+            dark:border-slate-700
+          '
         >
           <% @samples.each do |sample| %>
             <%= render Viral::BaseComponent.new(**row_arguments(sample)) do %>
@@ -87,8 +97,7 @@
                       action: "input->selection#toggle",
                       selection_target: "rowSelection",
                     },
-                    class:
-                      "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded-sm focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+                    class: checkbox_styles %>
                   <% end %>
                   <% if column == :puid || column == :name %>
                     <%= link_to(
@@ -179,7 +188,10 @@
           <tfoot class="sticky bottom-0 z-10">
             <tr class="border-t dark:border-slate-700 border-slate-200">
               <td
-                class="sticky left-0 z-10 px-6 py-3  text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-700"
+                class="
+                  sticky left-0 z-10 px-6 py-3 text-slate-700 dark:text-slate-300 bg-slate-50
+                  dark:bg-slate-700
+                "
                 colspan="3"
               >
                 <span>
