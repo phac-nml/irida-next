@@ -1152,3 +1152,67 @@ workflow_execution_group_shared_running:
   state: "running"
   cleaned: false
   shared_with_namespace: true
+
+workflow_execution_group_shared_error:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/group_workflow_example_error"
+  run_id: "my_run_id_group_shared"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  state: "error"
+  cleaned: true
+  shared_with_namespace: true
+
+workflow_execution_group_shared_canceling:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/workflow_execution_group_shared_canceling"
+  run_id: "my_run_id_group_shared"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  state: "canceling"
+  cleaned: false
+  shared_with_namespace: true
+
+workflow_execution_group_shared_canceled:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/group_workflow_example_canceled"
+  run_id: "my_run_id_group_shared"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  name: "Group Shared Canceled"
+  state: "canceled"
+  cleaned: true
+  shared_with_namespace: true
