@@ -9,7 +9,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     before_action :set_default_tab, only: :show
     before_action :current_page, only: %i[show index]
     before_action :workflow_execution, only: %i[show cancel destroy update edit]
-    before_action :destroy_multiple_urls, only: %i[destroy_multiple_confirmation destroy_multiple]
+    before_action :destroy_multiple_paths, only: %i[destroy_multiple_confirmation destroy_multiple]
   end
 
   TABS = %w[summary params samplesheet files].freeze
@@ -197,13 +197,13 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     }]
   end
 
-  def destroy_multiple_urls
+  def destroy_multiple_paths
     if @namespace.nil?
-      @list_url = list_workflow_executions_path(list_class: 'workflow_execution')
-      @destroy_url = destroy_multiple_workflow_executions_path
+      @list_path = list_workflow_executions_path(list_class: 'workflow_execution')
+      @destroy_path = destroy_multiple_workflow_executions_path
     else
-      @list_url = list_namespace_project_workflow_executions_path(list_class: 'workflow_execution')
-      @destroy_url = destroy_multiple_namespace_project_workflow_executions_path
+      @list_path = list_namespace_project_workflow_executions_path(list_class: 'workflow_execution')
+      @destroy_path = destroy_multiple_namespace_project_workflow_executions_path
     end
   end
 
