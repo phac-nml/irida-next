@@ -29,7 +29,7 @@ module Groups
       assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title')
       assert_selector 'p', text: I18n.t(:'groups.workflow_executions.index.subtitle')
 
-      assert_selector '#workflow-executions-table table tbody tr', count: 8
+      assert_selector '#workflow-executions-table table tbody tr', count: 11
     end
 
     test 'should sort a list of workflow executions' do
@@ -45,7 +45,7 @@ module Groups
       assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.icon-arrow_up"
 
       within('#workflow-executions-table table tbody') do
-        assert_selector 'tr', count: 8
+        assert_selector 'tr', count: 11
         assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution_running.run_id
         assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: workflow_execution_prepared.run_id
         assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: @workflow_execution_group_shared3.run_id
@@ -55,7 +55,7 @@ module Groups
       assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.icon-arrow_down"
 
       within('#workflow-executions-table table tbody') do
-        assert_selector 'tr', count: 8
+        assert_selector 'tr', count: 11
         assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: @workflow_execution_group_shared3.run_id
         assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: @workflow_execution_group_shared2.run_id
         assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution_running.run_id
@@ -65,7 +65,7 @@ module Groups
       assert_selector "#workflow-executions-table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_up"
 
       within('#workflow-executions-table table tbody') do
-        assert_selector 'tr', count: 8
+        assert_selector 'tr', count: 11
         assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
                         text: @workflow_execution_group_shared1.metadata['workflow_name']
         assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
@@ -78,7 +78,7 @@ module Groups
       assert_selector "#workflow-executions-table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_down"
 
       within('#workflow-executions-table table tbody') do
-        assert_selector 'tr', count: 8
+        assert_selector 'tr', count: 11
         assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
                         text: workflow_execution_running.metadata['workflow_name']
         assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
