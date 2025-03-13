@@ -512,7 +512,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       find("input[type='checkbox'][value='#{@workflow_execution2.id}']").click
     end
 
-    click_button I18n.t('workflow_executions.index.delete_workflows_button')
+    click_link I18n.t('workflow_executions.index.delete_workflows_button')
 
     assert_selector '#dialog'
     within('#dialog') do
@@ -550,7 +550,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       find("input[type='checkbox'][value='#{@workflow_execution3.id}']").click
     end
 
-    click_button I18n.t('workflow_executions.index.delete_workflows_button')
+    click_link I18n.t('workflow_executions.index.delete_workflows_button')
 
     assert_selector '#dialog'
     within('#dialog') do
@@ -576,7 +576,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
   test 'cannot delete non-deletable workflows' do
     # attempt to destroy deletable and non-deletable workflows
-    workflow1 = workflow_executions(:irida_next_example_completed_unclean)
+    workflow_execution1 = workflow_executions(:irida_next_example_completed_unclean)
     visit workflow_executions_path
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
@@ -588,7 +588,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       find("input[type='checkbox'][value='#{workflow_execution1.id}']").click
     end
 
-    click_button I18n.t('workflow_executions.index.delete_workflows_button')
+    click_link I18n.t('workflow_executions.index.delete_workflows_button')
 
     assert_selector '#dialog'
     within('#dialog') do
@@ -604,7 +604,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_no_selector '#dialog'
 
-    assert_text 'Displaying 18 items'
+    assert_text 'Displaying 20 items'
     assert_selector '#workflow-executions-table table tbody tr', count: 20
     assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.error')
   end
