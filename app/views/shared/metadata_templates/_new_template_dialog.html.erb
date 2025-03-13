@@ -34,39 +34,38 @@
             title: t("metadata_templates.new_template_dialog.metadata"),
             description: t("metadata_templates.new_template_dialog.description")
             ) do |sortable_lists| %>
-                <%= sortable_lists.with_list(
-                  id: "available",
-                  title: t("metadata_templates.new_template_dialog.available"),
-                  list_items: @available_metadata_fields,
-                  group: "metadata_selection",
-                  container_classes: "block mb-1 pr-2 text-sm font-medium",
-                  list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
-                ) %>
-                <%= sortable_lists.with_list(
-                  id: "selected",
-                  title: t("metadata_templates.new_template_dialog.selected"),
-                  list_items: @current_template_fields,
-                  group: "metadata_selection",
-                  container_classes: "block mb-1 text-sm font-medium",
-                  list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
-                ) %>
-              <% end %>
-              <div class="mt-4">
-                <%= form.submit t("metadata_templates.new_template_dialog.submit_button"),
-                            data: {
-                              turbo_frame: "_top",
-                              action:
-                                "click->viral--sortable-lists--two-lists-selection#constructParams",
-                              "viral--sortable-lists--two-lists-selection-target": "submitBtn",
-                            },
-                            class:
-                              "focus:outline-none text-sm text-white bg-primary-700 hover:bg-primary-800 focus:ring-0 rounded-md p-2 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed",
-                            disabled: true %>
-              </div>
+              <%= sortable_lists.with_list(
+                id: "available",
+                title: t("metadata_templates.new_template_dialog.available"),
+                list_items: @available_metadata_fields,
+                group: "metadata_selection",
+                container_classes: "block mb-1 pr-2 text-sm font-medium",
+                list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
+              ) %>
+              <%= sortable_lists.with_list(
+                id: "selected",
+                title: t("metadata_templates.new_template_dialog.selected"),
+                list_items: @current_template_fields,
+                group: "metadata_selection",
+                container_classes: "block mb-1 text-sm font-medium",
+                list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
+              ) %>
+            <% end %>
+            <div class="mt-4">
+              <%= form.submit t("metadata_templates.new_template_dialog.submit_button"),
+                          data: {
+                            turbo_frame: "_top",
+                            action:
+                              "click->viral--sortable-lists--two-lists-selection#constructParams",
+                            "viral--sortable-lists--two-lists-selection-target": "submitBtn",
+                          },
+                          class:
+                            "focus:outline-none text-sm text-white bg-primary-700 hover:bg-primary-800 focus:ring-0 rounded-md p-2 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed",
+                          disabled: true %>
             </div>
-          <% end %>
-        </div>
+          </div>
+        <% end %>
       </div>
-    <% end %>
+    </div>
   <% end %>
 <% end %>
