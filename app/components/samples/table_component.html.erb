@@ -1,17 +1,17 @@
 <% if @has_samples && @pagy.vars[:size].positive? %>
   <% checkbox_styles =
-    "shrink-0 mt-0.5 border-slate-200 rounded-sm text-primary-600 focus:ring-primary-500 checked:border-primary-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-primary-500 dark:checked:border-primary-500 dark:focus:ring-offset-slate-800 mr-4" %>
+    "shrink-0 mt-0.5 border-slate-200 rounded-sm text-primary-600 focus:ring-primary-500 checked:border-primary-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-700 dark:border-neutral-700 dark:checked:bg-primary-500 dark:checked:border-primary-500 dark:focus:ring-offset-slate-700 mr-4" %>
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
       <table
         class='
-          w-full text-sm text-left border rtl:text-right text-slate-500
-          dark:text-slate-400 whitespace-nowrap border-slate-200 dark:border-slate-700
+          w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+          whitespace-nowrap
         '
       >
         <thead
           class='
-            sticky top-0 z-10 text-xs uppercase border-b text-slate-700 bg-slate-50
+            sticky top-0 z-10 text-xs uppercase border-b text-slate-700 bg-slate-100
             dark:bg-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700
           '
         >
@@ -20,7 +20,7 @@
               <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-3 py-3', 'sticky left-0 min-w-56 max-w-56 z-10 bg-slate-50 dark:bg-slate-700': index.zero?, 'sticky left-56 z-10 bg-slate-50 dark:bg-slate-700': index == 1)
+              classes: class_names('px-3 py-3', 'sticky left-0 min-w-56 max-w-56 z-10 bg-slate-100 dark:bg-slate-700': index.zero?, 'sticky left-56 z-10 bg-slate-100 dark:bg-slate-700': index == 1)
                 ) do %>
                 <% if index.zero? and @abilities[:select_samples] %>
                   <%= check_box_tag "select-page",
@@ -75,7 +75,7 @@
         </thead>
         <tbody
           class='
-            overflow-y-auto bg-white border-slate-200 dark:bg-slate-800
+            overflow-y-auto bg-white border-slate-200 dark:bg-slate-700
             dark:border-slate-700
           '
         >
@@ -148,7 +148,7 @@
               <% if @renders_row_actions %>
                 <%= render_cell(
                 tag: 'td',
-                classes: class_names('px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 z-5 space-x-2')
+                classes: class_names('px-3 py-3 sticky right-0 bg-white dark:bg-slate-700 z-5 space-x-2')
               ) do %>
                   <% if @row_actions[:edit] %>
                     <%= link_to(
@@ -185,12 +185,11 @@
           <% end %>
         </tbody>
         <% if @abilities[:select_samples] && @has_samples %>
-          <tfoot class="sticky bottom-0 z-10">
-            <tr class="border-t dark:border-slate-700 border-slate-200">
+          <tfoot class="sticky bottom-0 z-10 bg-slate-100 dark:bg-slate-700">
+            <tr>
               <td
                 class="
-                  sticky left-0 z-10 px-6 py-3 text-slate-700 dark:text-slate-300 bg-slate-50
-                  dark:bg-slate-700
+                  sticky left-0 z-10 px-6 py-3 text-slate-700 dark:text-slate-300
                 "
                 colspan="3"
               >
@@ -208,7 +207,7 @@
                   >0</strong>
                 </span>
               </td>
-              <td colspan="100%" class="p-3 bg-slate-50 dark:bg-slate-700"></td>
+              <td colspan="100%" class="p-3 bg-slate-100 dark:bg-slate-700"></td>
             </tr>
           </tfoot>
         <% end %>
