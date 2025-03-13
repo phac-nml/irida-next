@@ -1,12 +1,18 @@
 <div class="relative overflow-x-auto table-container" data-turbo-temporary>
   <table
-    class="w-full text-sm text-left border  rtl:text-right text-slate-500 dark:text-slate-400 whitespace-nowrap border-slate-200 dark:border-slate-700"
+    class="
+      w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+      whitespace-nowrap
+    "
     data-controller="selection"
     data-selection-action-link-outlet=".action-link"
     data-selection-storage-key-value="files-<%=@sample.id%>"
   >
     <thead
-      class="text-xs uppercase border-b  text-slate-700 bg-slate-50 dark:bg-slate-900 dark:text-slate-400 border-slate-200 dark:border-slate-700"
+      class="
+        text-xs uppercase border-b text-slate-700 bg-slate-100 dark:bg-slate-900
+        dark:text-slate-400 border-slate-200 dark:border-slate-700
+      "
     >
       <tr>
         <% if allowed_to?(:update_sample?, @project) %>
