@@ -286,7 +286,7 @@ def seed_exports # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metric
       email_notification: index.even? && true
     )
 
-    DataExport.create(
+    linelist_export = DataExport.create(
       user: export_param[:user],
       name: index.even? ?  "Seeded linelist export #{index + 1}" : nil,
       export_parameters: { ids: [export_param[:sample].id],
@@ -310,7 +310,7 @@ def seed_exports # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metric
     )
     DataExports::CreateJob.perform_now(sample_export)
 
-    linelist_export = DataExport.create(
+    DataExport.create(
       user: export_param[:user],
       name: index.even? ?  nil : "Seeded linelist export #{index + 1}",
       export_parameters: { ids: [export_param[:sample].id],
