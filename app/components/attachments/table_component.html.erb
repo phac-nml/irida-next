@@ -2,16 +2,10 @@
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
       <table
-        class='
-          w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-          whitespace-nowrap
-        '
+        class='w-full text-sm text-left border  rtl:text-right text-slate-500 dark:text-slate-400 whitespace-nowrap border-slate-200 dark:border-slate-700'
       >
         <thead
-          class='
-            text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
-            dark:text-slate-300 sticky top-0 z-10
-          '
+          class='sticky top-0 z-10 text-xs uppercase border-b  text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-300 border-slate-200'
         >
           <tr>
             <% @columns.each_with_index do |column, index| %>
@@ -57,7 +51,10 @@
                     ransack_obj: @q,
                     label: column,
                     url:
-                      helpers.sorting_url(@q, URI.encode_www_form_component("metadata_#{column}")),
+                      helpers.sorting_url(
+                        @q,
+                        URI.encode_www_form_component("metadata_#{column}"),
+                      ),
                     field: "metadata_#{column}",
                     data: {
                       turbo_action: "replace",
@@ -88,10 +85,7 @@
           </tr>
         </thead>
         <tbody
-          class='
-            overflow-y-auto bg-white divide-y divide-slate-200 dark:bg-slate-800
-            dark:divide-slate-700
-          '
+          class='overflow-y-auto bg-white divide-y  divide-slate-200 dark:bg-slate-800 dark:divide-slate-700'
         >
           <% @attachments.each do |attachment| %>
             <%= render Viral::BaseComponent.new(**row_arguments(attachment)) do %>
@@ -140,7 +134,7 @@
                     <% else %>
                       <% if attachment.associated_attachment %>
                         <div>
-                          <div class="flex mb-4 items-center">
+                          <div class="flex items-center mb-4">
                             <%= viral_icon(name: :arrow_right, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
                             <span>
                               <%= link_to attachment.file.filename,
@@ -163,22 +157,22 @@
                             </span>
                           </div>
                         </div>
-                    <% else %>
-                      <div>
-                        <div class="flex items-center">
-                          <%= viral_icon(name: :document_text, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
-                          <span>
-                            <%= link_to attachment.file.filename,
-                            rails_blob_path(attachment.file),
-                            data: {
-                              turbo: false,
-                            },
-                            class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
-                          </span>
+                      <% else %>
+                        <div>
+                          <div class="flex items-center">
+                            <%= viral_icon(name: :document_text, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
+                            <span>
+                              <%= link_to attachment.file.filename,
+                              rails_blob_path(attachment.file),
+                              data: {
+                                turbo: false,
+                              },
+                              class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+                            </span>
+                          </div>
                         </div>
-                      </div>
+                      <% end %>
                     <% end %>
-                  <% end %>
                   <% elsif column == :format || column == :type %>
                     <%= viral_pill(
                       text: attachment.metadata[column.to_s],
@@ -186,7 +180,7 @@
                     ) %>
                   <% elsif column == :byte_size %>
                     <%= number_to_human_size(attachment.file.blob.byte_size) %>
-                  <% elsif column == :created_at%>
+                  <% elsif column == :created_at %>
                     <%= helpers.local_time_ago(attachment.created_at) %>
                   <% end %>
                 <% end %>
@@ -198,14 +192,14 @@
                 ) do %>
                   <% if @row_actions[:destroy] %>
                     <%= link_to(
-                    t(".delete"),
-                        destroy_path(attachment.id),
-                        data: {
-                          turbo_stream: true,
-                        },
-                        class:
-                          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                      ) %>
+                      t(".delete"),
+                      destroy_path(attachment.id),
+                      data: {
+                        turbo_stream: true,
+                      },
+                      class:
+                        "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                    ) %>
                   <% end %>
                 <% end %>
               <% end %>
@@ -216,9 +210,7 @@
           <tfoot class="sticky bottom-0 z-10">
             <tr class="border-t dark:border-slate-700 border-slate-200">
               <td
-                class="
-                  sticky left-0 z-10 px-6 py-3 bg-slate-50 dark:bg-slate-900
-                "
+                class="sticky left-0 z-10 px-6 py-3  bg-slate-50 dark:bg-slate-900"
                 colspan="3"
               >
                 <span>
@@ -241,10 +233,7 @@
         <% end %>
       </table>
     <% end %>
-     <%= render Viral::Pagy::FullComponent.new(
-      @pagy,
-      item: t(".limit.item"),
-    ) %>
+    <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".limit.item")) %>
 
   <% end %>
 <% else %>
