@@ -133,7 +133,8 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
       partial: 'shared/workflow_executions/destroy_multiple_confirmation_dialog',
       locals: {
         open: true
-      }), status: :ok
+      }
+    ), status: :ok
   end
 
   def destroy_multiple # rubocop:disable Metrics/MethodLength
@@ -198,13 +199,14 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
       {
         type: 'success',
         message: t('concerns.workflow_execution_actions.destroy_multiple.partial_success',
-          deleted: "#{deleted_workflows_count}/#{workflows_to_delete_count}")
+                   deleted: "#{deleted_workflows_count}/#{workflows_to_delete_count}")
       },
       {
         type: 'alert',
         message: t('concerns.workflow_execution_actions.destroy_multiple.partial_error',
-          not_deleted: "#{workflows_to_delete_count - deleted_workflows_count}/#{workflows_to_delete_count}")
-    }]
+                   not_deleted: "#{workflows_to_delete_count - deleted_workflows_count}/#{workflows_to_delete_count}")
+      }
+    ]
   end
 
   def destroy_multiple_paths

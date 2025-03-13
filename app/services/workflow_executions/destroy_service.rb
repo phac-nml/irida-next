@@ -24,7 +24,9 @@ module WorkflowExecutions
     end
 
     def destroy_multiple
-      workflows = WorkflowExecution.where(id: @workflow_execution_ids, state: ['completed', 'canceled', 'error'], cleaned: true)
+      workflows = WorkflowExecution.where(
+        id: @workflow_execution_ids, state: %w[completed canceled error], cleaned: true
+      )
       workflows_to_delete_count = workflows.count
 
       workflows.destroy_all
