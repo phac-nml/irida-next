@@ -1,3 +1,5 @@
+<% checkbox_styles =
+  "shrink-0 mt-0.5 border-slate-200 rounded-sm text-primary-600 focus:ring-primary-500 checked:border-primary-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-700 dark:border-neutral-700 dark:checked:bg-primary-500 dark:checked:border-primary-500 dark:focus:ring-offset-slate-700 mr-4" %>
 <%= viral_dialog(open: open,classes: ["overflow-visible"]) do |dialog| %>
   <% dialog.with_header(
     title: t("projects.bots.index.bot_listing.new_bot_modal.title"),
@@ -33,7 +35,10 @@
       </div>
 
       <div
-        class="grid gap-4 p-6 bg-white border rounded-lg shadow  border-slate-200 dark:bg-slate-800 dark:border-slate-700"
+        class="
+          grid gap-4 p-6 bg-white border rounded-lg shadow border-slate-200
+          dark:bg-slate-800 dark:border-slate-700
+        "
       >
         <p class="font-semibold dark:text-white"><%= t("projects.bots.index.bot_listing.new_bot_modal.token_details") %></p>
 
@@ -52,7 +57,9 @@
                      t("projects.bots.index.bot_listing.new_bot_modal.expires_at") %>
           <div class="relative max-w-sm">
             <div
-              class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none "
+              class="
+                absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
+              "
             >
               <%= viral_icon(
                 name: :calendar_days,
@@ -68,45 +75,50 @@
           </div>
         </div>
 
-          <div class="form-field">
-            <%= form.label :scopes, t("auth.scopes.label") %>
-            <% Irida::Auth.all_available_scopes.each do |scope| %>
-              <div class="flex">
-                <div class="flex items-center h-5">
-                  <%= check_box_tag "bot[scopes][]",
-                  scope,
-                  id: "bot_scopes_#{scope}",
-                  class:
-                    "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
-                </div>
-                <div class="ml-2 text-sm">
-                  <%= label_tag "bot_scopes_#{scope}",
-                  scope,
-                  class: "font-medium text-slate-900 dark:text-slate-300" %>
-                  <p
-                    id="<%= "bot_scopes_#{scope}_help-text" %>"
-                    class="text-xs font-normal  text-slate-500 dark:text-slate-300"
-                  ><%= t("auth.scopes.#{scope}") %></p>
-                </div>
+        <div class="form-field">
+          <%= form.label :scopes, t("auth.scopes.label") %>
+          <% Irida::Auth.all_available_scopes.each do |scope| %>
+            <div class="flex">
+              <div class="flex items-center h-5">
+                <%= check_box_tag "bot[scopes][]",
+                scope,
+                id: "bot_scopes_#{scope}",
+                class: checkbox_styles %>
               </div>
-            <% end %>
-          </div>
+              <div class="text-sm">
+                <%= label_tag "bot_scopes_#{scope}",
+                scope,
+                class: "font-medium text-slate-900 dark:text-slate-300" %>
+                <p
+                  id="<%= "bot_scopes_#{scope}_help-text" %>"
+                  class="
+                    text-xs font-normal text-slate-500 dark:text-slate-300
+                  "
+                ><%= t("auth.scopes.#{scope}") %></p>
+              </div>
+            </div>
+          <% end %>
+        </div>
 
       </div>
 
-      </div>
-      <div class="mt-4">
-        <%= form.submit t("projects.bots.index.bot_listing.new_bot_modal.submit"),
-                    class:
-                      "focus:outline-none text-sm text-white bg-primary-700 hover:bg-primary-800 focus:ring-0 rounded-md p-2 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 cursor-pointer" %>
-        <button
-          type="button"
-          class="p-2 text-sm bg-white border rounded-md  focus:outline-none text-slate-900 border-slate-200 hover:bg-slate-100 hover:text-slate-950 focus:ring-0 dark:text-white dark:bg-slate-600 dark:hover:bg-slate-700"
-          data-action="click->viral--dialog#close"
-        >
-          <%= t("projects.bots.index.bot_listing.new_bot_modal.cancel") %>
-        </button>
-      </div>
+    </div>
+    <div class="mt-4">
+      <%= form.submit t("projects.bots.index.bot_listing.new_bot_modal.submit"),
+                  class:
+                    "focus:outline-none text-sm text-white bg-primary-700 hover:bg-primary-800 focus:ring-0 rounded-md p-2 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 cursor-pointer" %>
+      <button
+        type="button"
+        class="
+          p-2 text-sm bg-white border rounded-md focus:outline-none text-slate-900
+          border-slate-200 hover:bg-slate-100 hover:text-slate-950 focus:ring-0
+          dark:text-white dark:bg-slate-600 dark:hover:bg-slate-700
+        "
+        data-action="click->viral--dialog#close"
+      >
+        <%= t("projects.bots.index.bot_listing.new_bot_modal.cancel") %>
+      </button>
+    </div>
 
   <% end %>
 <% end %>
