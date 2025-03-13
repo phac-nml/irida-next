@@ -246,6 +246,6 @@ class WorkflowExecutionPolicyTest < ActiveSupport::TestCase
     workflow_executions = @policy.apply_scope(WorkflowExecution, type: :relation, name: :group_shared,
                                                                  scope_options: { group: })
 
-    assert_equal 8, workflow_executions.count
+    assert_equal 11, workflow_executions.count
   end
 end
