@@ -586,6 +586,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'cannot delete non-deletable workflows' do
+    # attempt to destroy deletable and non-deletable workflows
     workflow_execution1 = workflow_executions(:irida_next_example_completed_unclean)
     visit workflow_executions_path
 
