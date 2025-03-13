@@ -1,66 +1,62 @@
 <%= viral_dialog(open: open) do |dialog| %>
-  <%= dialog.with_header(title: t(".title")) %>
-  <%= dialog.with_section do %>
-    <%= turbo_frame_tag "workflow_executions_dialog_content" do %>
-      <div
-        data-controller="infinite-scroll"
-        data-infinite-scroll-selection-outlet='#workflow-executions-table'
-        data-infinite-scroll-paged-field-name-value="workflow_execution_ids[]"
-        data-infinite-scroll-singular-description-value="<%= t(".description.singular") %>"
-        data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
-      >
-        <%= form_with(
+  <% dialog.with_header(title: t(".title")) %>
+  <div
+    data-controller="infinite-scroll"
+    data-infinite-scroll-selection-outlet='#workflow-executions-table'
+    data-infinite-scroll-paged-field-name-value="workflow_execution_ids[]"
+    data-infinite-scroll-singular-description-value="<%= t(".description.singular") %>"
+    data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
+  >
+    <%= form_with(
         url: @list_path,
         data: { "infinite-scroll-target": "pageForm" }
       ) do %>
-          <div data-infinite-scroll-target="pageFormContent"></div>
-        <% end %>
+      <div data-infinite-scroll-target="pageFormContent"></div>
+    <% end %>
 
-        <div class="grid gap-4">
-          <p class=" text-base leading-relaxed text-slate-500 dark:text-slate-400 "><span data-infinite-scroll-target="summary">
-              <%= t(".description.zero") %>
-            </span>
-            <span><%= t(".state_warning_html") %></span>
-          </p>
-          <div>
-            <div class="block mb-1 text-sm font-medium text-slate-900 dark:text-white">
-              <%= t(".workflow_executions") %>
-            </div>
-            <div
-              class="
-                overflow-y-auto max-h-[300px] border border-slate-300 rounded-md block w-full
-                p-2.5 dark:bg-slate-800 dark:border-slate-600
-              "
-              data-action="scroll->infinite-scroll#scroll"
-              data-infinite-scroll-target="scrollable"
-            >
-              <%= turbo_frame_tag "list_selections" do %>
-                <%= render partial: "shared/loading/samples_list_skeleton" %>
-              <% end %>
-            </div>
-          </div>
-          <%= form_for(:destroy, url: @destroy_path, method: :delete,
+    <div class="grid gap-4">
+      <p class=" text-base leading-relaxed text-slate-500 dark:text-slate-400 "><span data-infinite-scroll-target="summary">
+          <%= t(".description.zero") %>
+        </span>
+        <span><%= t(".state_warning_html") %></span>
+      </p>
+      <div>
+        <div class="block mb-1 text-sm font-medium text-slate-900 dark:text-white">
+          <%= t(".workflow_executions") %>
+        </div>
+        <div
+          class="
+            overflow-y-auto max-h-[300px] border border-slate-300 rounded-md block w-full
+            p-2.5 dark:bg-slate-800 dark:border-slate-600
+          "
+          data-action="scroll->infinite-scroll#scroll"
+          data-infinite-scroll-target="scrollable"
+        >
+          <%= turbo_frame_tag "list_selections" do %>
+            <%= render partial: "shared/loading/samples_list_skeleton" %>
+          <% end %>
+        </div>
+      </div>
+      <%= form_for(:destroy, url: @destroy_path, method: :delete,
           data: {
             controller: "form--hidden-inputs",
             "form--hidden-inputs-selection-outlet": '#workflow-executions-table',
             "form--hidden-inputs-field-name-value": "destroy_multiple[workflow_execution_ids][]",
           }
         ) do |form| %>
-            <div class="grid gap-4">
-              <div>
-                <div>
-                  <%= form.submit t(".submit_button"),
-                              class:
-                                "button text-sm px-5 py-2.5 text-white bg-red-700 border-red-800 focus:outline-none hover:bg-red-800 focus:ring-red-300 dark:focus:ring-red-700 dark:bg-red-600 dark:text-white dark:border-red-600 dark:hover:bg-red-700",
-                              data: {
-                                action: "click->form--hidden-inputs#clearSelection",
-                              } %>
-                </div>
-              </div>
+        <div class="grid gap-4">
+          <div>
+            <div>
+              <%= form.submit t(".submit_button"),
+                          class:
+                            "button text-sm px-5 py-2.5 text-white bg-red-700 border-red-800 focus:outline-none hover:bg-red-800 focus:ring-red-300 dark:focus:ring-red-700 dark:bg-red-600 dark:text-white dark:border-red-600 dark:hover:bg-red-700",
+                          data: {
+                            action: "click->form--hidden-inputs#clearSelection",
+                          } %>
             </div>
-          <% end %>
+          </div>
         </div>
-      </div>
-    <% end %>
-  <% end %>
+      <% end %>
+    </div>
+  </div>
 <% end %>

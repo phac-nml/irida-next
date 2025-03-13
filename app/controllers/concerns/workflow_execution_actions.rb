@@ -73,7 +73,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def destroy # rubocop:disable Metrics/MethodLength
-    WorkflowExecutions::DestroyService.new(current_user, {workflow_execution: @workflow_execution}).execute
+    WorkflowExecutions::DestroyService.new(current_user, { workflow_execution: @workflow_execution }).execute
 
     respond_to do |format|
       format.turbo_stream do
@@ -128,14 +128,15 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
   def destroy_multiple_confirmation
     authorize! @namespace, to: :destroy_workflow_executions? unless @namespace.nil?
-    render turbo_stream: turbo_stream.update('workflow_execution_dialog',
-                                            partial: "shared/workflow_executions/destroy_multiple_confirmation_dialog",
-                                              locals: {
-                                                open: true
-                                              }), status: :ok
+    render turbo_stream: turbo_stream.update(
+      'workflow_execution_dialog',
+      partial: 'shared/workflow_executions/destroy_multiple_confirmation_dialog',
+      locals: {
+        open: true
+      }), status: :ok
   end
 
-  def destroy_multiple
+  def destroy_multiple # rubocop:disable Metrics/MethodLength
     workflows_to_delete_count = destroy_multiple_params['workflow_execution_ids'].count
 
     deleted_workflows_count = ::WorkflowExecutions::DestroyService.new(current_user, destroy_multiple_params).execute
@@ -148,7 +149,9 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
           }
         # Partial workflow deletion
         elsif deleted_workflows_count.positive? && deleted_workflows_count != workflows_to_delete_count
-          multi_status_messages = set_multi_status_destroy_multiple_message(deleted_workflows_count, workflows_to_delete_count)
+          multi_status_messages = set_multi_status_destroy_multiple_message(
+            deleted_workflows_count, workflows_to_delete_count
+          )
           render status: :multi_status,
                  locals: { messages: multi_status_messages }
         # All workflows deleted successfully
@@ -191,9 +194,16 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def set_multi_status_destroy_multiple_message(deleted_workflows_count, workflows_to_delete_count)
-    [{ type: 'success',
-    message: t('concerns.workflow_execution_actions.destroy_multiple.partial_success', deleted: "#{deleted_workflows_count}/#{workflows_to_delete_count}") }, {
-      type: 'alert', message: t('concerns.workflow_execution_actions.destroy_multiple.partial_error', not_deleted: "#{workflows_to_delete_count - deleted_workflows_count}/#{workflows_to_delete_count}")
+    [
+      {
+        type: 'success',
+        message: t('concerns.workflow_execution_actions.destroy_multiple.partial_success',
+          deleted: "#{deleted_workflows_count}/#{workflows_to_delete_count}")
+      },
+      {
+        type: 'alert',
+        message: t('concerns.workflow_execution_actions.destroy_multiple.partial_error',
+          not_deleted: "#{workflows_to_delete_count - deleted_workflows_count}/#{workflows_to_delete_count}")
     }]
   end
 
