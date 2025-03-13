@@ -62,7 +62,8 @@ module Samples
 
     def row_arguments(sample)
       { tag: 'tr' }.tap do |args|
-        args[:classes] = class_names('bg-white', 'border-b', 'dark:bg-slate-800', 'dark:border-slate-700')
+        args[:classes] =
+          class_names('bg-white dark:bg-slate-800', 'border-b border-slate-200 dark:border-slate-700')
         args[:id] = sample.id
       end
     end
