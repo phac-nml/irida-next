@@ -378,10 +378,6 @@
   @apply max-w-7xl;
 }
 
-@utility dialog--header {
-  @apply flex items-start justify-between rounded-t border-b p-5 dark:border-slate-600;
-}
-
 @utility dialog--title {
   @apply text-xl font-semibold text-slate-900 dark:text-white;
 }
