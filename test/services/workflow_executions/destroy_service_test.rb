@@ -17,7 +17,7 @@ module WorkflowExecutions
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
         exception = assert_raises(ActionPolicy::Unauthorized) do
-          WorkflowExecutions::DestroyService.new(workflow_execution, user).execute
+          WorkflowExecutions::DestroyService.new(user, { workflow_execution: }).execute
         end
 
         assert_equal WorkflowExecutionPolicy, exception.policy
@@ -36,7 +36,7 @@ module WorkflowExecutions
 
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+        WorkflowExecutions::DestroyService.new(@user, { workflow_execution: }).execute
       end
     end
 
@@ -46,7 +46,7 @@ module WorkflowExecutions
 
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+        WorkflowExecutions::DestroyService.new(@user, { workflow_execution: }).execute
       end
     end
 
@@ -58,7 +58,7 @@ module WorkflowExecutions
       assert_difference -> { WorkflowExecution.count } => -1,
                         -> { SamplesWorkflowExecution.count } => -1,
                         -> { Sample.count } => 0 do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user_destroyable).execute
+        WorkflowExecutions::DestroyService.new(@user_destroyable, { workflow_execution: }).execute
       end
     end
 
@@ -69,7 +69,7 @@ module WorkflowExecutions
 
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+        WorkflowExecutions::DestroyService.new(@user, { workflow_execution: }).execute
       end
     end
 
@@ -81,7 +81,7 @@ module WorkflowExecutions
       assert_difference -> { WorkflowExecution.count } => -1,
                         -> { SamplesWorkflowExecution.count } => -1,
                         -> { Sample.count } => 0 do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user_destroyable).execute
+        WorkflowExecutions::DestroyService.new(@user_destroyable, { workflow_execution: }).execute
       end
     end
 
@@ -92,7 +92,7 @@ module WorkflowExecutions
 
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+        WorkflowExecutions::DestroyService.new(@user, { workflow_execution: }).execute
       end
     end
 
@@ -102,7 +102,7 @@ module WorkflowExecutions
 
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+        WorkflowExecutions::DestroyService.new(@user, { workflow_execution: }).execute
       end
     end
 
@@ -114,7 +114,7 @@ module WorkflowExecutions
       assert_difference -> { WorkflowExecution.count } => -1,
                         -> { SamplesWorkflowExecution.count } => -1,
                         -> { Sample.count } => 0 do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user_destroyable).execute
+        WorkflowExecutions::DestroyService.new(@user_destroyable, { workflow_execution: }).execute
       end
     end
 
@@ -125,7 +125,7 @@ module WorkflowExecutions
 
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+        WorkflowExecutions::DestroyService.new(@user, { workflow_execution: }).execute
       end
     end
 
@@ -135,7 +135,7 @@ module WorkflowExecutions
 
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+        WorkflowExecutions::DestroyService.new(@user, { workflow_execution: }).execute
       end
     end
 
@@ -145,7 +145,41 @@ module WorkflowExecutions
 
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+        WorkflowExecutions::DestroyService.new(@user, { workflow_execution: }).execute
+      end
+    end
+
+    test 'should destroy multiple workflow executions' do
+      error_workflow = workflow_executions(:irida_next_example_error)
+      canceled_workflow = workflow_executions(:irida_next_example_canceled)
+      completed_workflow = workflow_executions(:irida_next_example_completed_DELETE)
+
+      assert_difference -> { WorkflowExecution.count } => -3,
+                        -> { SamplesWorkflowExecution.count } => -3,
+                        -> { Sample.count } => 0 do
+        WorkflowExecutions::DestroyService.new(@user_destroyable, { workflow_execution_ids: [error_workflow.id, canceled_workflow.id, completed_workflow.id] }).execute
+      end
+    end
+
+    test 'should partially destroy multiple workflow executions' do
+      canceling_workflow = workflow_executions(:irida_next_example_canceling)
+      canceled_workflow = workflow_executions(:irida_next_example_canceled)
+      completed_workflow = workflow_executions(:irida_next_example_completed_DELETE)
+
+      assert_difference -> { WorkflowExecution.count } => -2,
+                        -> { SamplesWorkflowExecution.count } => -2,
+                        -> { Sample.count } => 0 do
+        WorkflowExecutions::DestroyService.new(@user_destroyable, { workflow_execution_ids: [canceling_workflow.id, canceled_workflow.id, completed_workflow.id] }).execute
+      end
+    end
+
+    test 'should not destroy multiple non-deletable workflow executions' do
+      canceling_workflow = workflow_executions(:irida_next_example_canceling)
+      unclean_workflow = workflow_executions(:irida_next_example_error_unclean)
+
+      assert_no_difference -> { WorkflowExecution.count },
+                           -> { SamplesWorkflowExecution.count } do
+        WorkflowExecutions::DestroyService.new(@user_destroyable, { workflow_execution_ids: [canceling_workflow.id, unclean_workflow.id] }).execute
       end
     end
   end
