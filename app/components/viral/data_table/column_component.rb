@@ -38,7 +38,7 @@ module Viral
       def header_cell_arguments
         {
           classes:
-          class_names('px-3 py-3',
+          class_names('px-3 py-3 bg-slate-100 dark:bg-slate-700  uppercase',
                       @system_arguments[:sticky_key] && STICKY_CLASSES[@system_arguments[:sticky_key]][:header])
         }
       end
@@ -51,9 +51,7 @@ module Viral
         }
       end
 
-      def call(row)
-        @block.call(row)
-      end
+      delegate :call, to: :@block
     end
   end
 end
