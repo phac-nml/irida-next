@@ -1,30 +1,27 @@
-<%= render partial: "mailers/email_template",
+<%= render layout: "mailers/email_template",
 locals: {
   url:
     namespace_project_workflow_execution_url(
       @workflow_execution.namespace.parent,
       @workflow_execution.namespace.project,
-      @workflow_execution
-    )
-} %>
-
-<%= yield :header_and_greeting %>
-<tr>
-  <td style="padding:12px 24px;">
-    <p style="color:#334155;line-height:24px;">
-      <%= t(
-        :"mailers.pipeline_mailer.error_manager_email.body_html",
-        id: @workflow_execution.id
-      ) %>
-    </p>
-  </td>
-</tr>
-<tr>
-  <td style="padding:12px 24px;">
-    <p style="color:#334155;line-height:24px;">
-      <%= t(:"mailers.pipeline_mailer.view_details") %>
-    </p>
-  </td>
-</tr>
-<%= yield :button_and_link %>
-<%= yield :sendoff_and_automated_message %>
+      @workflow_execution,
+    ),
+} do %>
+  <tr>
+    <td style="padding:12px 24px;">
+      <span style="color:#334155;line-height:24px;">
+        <%= t(
+          :"mailers.pipeline_mailer.error_manager_email.body_html",
+          id: @workflow_execution.id,
+        ) %>
+      </span>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:12px 24px;">
+      <span style="color:#334155;line-height:24px;">
+        <%= t(:"mailers.pipeline_mailer.view_details") %>
+      </span>
+    </td>
+  </tr>
+<% end %>

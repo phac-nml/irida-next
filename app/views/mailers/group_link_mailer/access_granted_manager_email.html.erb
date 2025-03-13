@@ -1,4 +1,4 @@
-<%= render partial: "mailers/email_template",
+<%= render layout: "mailers/email_template",
 locals: {
   url:
     (
@@ -7,35 +7,30 @@ locals: {
       else
         namespace_project_members_url(@namespace.parent, @namespace.project)
       end
-    )
-} %>
-
-<%= yield :header_and_greeting %>
-
-<tr>
-  <td style="padding:12px 24px;">
-    <p style="color:#334155;line-height:24px;">
-      <%= t(
-        :"mailers.group_link_mailer.access_granted_manager_email.body_html",
-        group_name: @group.name,
-        namespace_type: @namespace.type,
-        namespace_name: @namespace.name
-      ) %>
-    </p>
-  </td>
-</tr>
-<tr>
-  <td style="padding:12px 24px;">
-    <p style="color:#334155;line-height:24px;">
-      <%= t(
-        :"mailers.group_link_mailer.access_granted_manager_email.view_details",
-        group_name: @group.name,
-        namespace_type: @namespace.type,
-        namespace_name: @namespace.name
-      ) %>
-    </p>
-  </td>
-</tr>
-
-<%= yield :button_and_link %>
-<%= yield :sendoff_and_automated_message %>
+    ),
+} do %>
+  <tr>
+    <td style="padding:12px 24px;">
+      <span style="color:#334155;line-height:24px;">
+        <%= t(
+          :"mailers.group_link_mailer.access_granted_manager_email.body_html",
+          group_name: @group.name,
+          namespace_type: @namespace.type,
+          namespace_name: @namespace.name,
+        ) %>
+      </span>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:12px 24px;">
+      <span style="color:#334155;line-height:24px;">
+        <%= t(
+          :"mailers.group_link_mailer.access_granted_manager_email.view_details",
+          group_name: @group.name,
+          namespace_type: @namespace.type,
+          namespace_name: @namespace.name,
+        ) %>
+      </span>
+    </td>
+  </tr>
+<% end %>
