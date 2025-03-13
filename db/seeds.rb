@@ -161,7 +161,6 @@ def seed_group(group_params:, owner: nil, parent: nil) # rubocop:disable Metrics
 end
 
 def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-  300.times do |i|
   workflow_execution_basic = WorkflowExecution.create(
     metadata: { workflow_name: 'irida-next-example', workflow_version: '1.0dev' },
     namespace_id: Sample.first.project.namespace.id,
@@ -203,7 +202,7 @@ def seed_workflow_executions # rubocop:disable Metrics/MethodLength, Metrics/Abc
     workflow_url: 'https://github.com/phac-nml/iridanextexample',
     submitter: User.find_by(email: 'user1@email.com'),
     blob_run_directory: 'this should be a generated key',
-    state: i%2 == 0 ? :completed : :prepared,
+    state: :completed,
     samples_workflow_executions_attributes: {
       '0': {
         sample_id: Sample.first.id,
