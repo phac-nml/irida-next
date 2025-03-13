@@ -1,8 +1,6 @@
 <%= viral_dialog(open: open) do |dialog| %>
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
-    <%# TODO: maybe add broadcast target %>
-    <%# <%= turbo_stream_from @broadcast_target %>
     <%= turbo_frame_tag "workflow_executions_dialog_content" do %>
       <div
         data-controller="infinite-scroll"
@@ -10,7 +8,6 @@
         data-infinite-scroll-paged-field-name-value="workflow_execution_ids[]"
         data-infinite-scroll-singular-description-value="<%= t(".description.singular") %>"
         data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
-        data-infinite-scroll-non-zero-header-value="<%= t(".selection_count.non_zero") %>"
       >
         <%= form_with(
         url: @list_path,
@@ -49,9 +46,7 @@
             "form--hidden-inputs-field-name-value": "destroy_multiple[workflow_execution_ids][]",
           }
         ) do |form| %>
-            <%# <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>
             <div class="grid gap-4">
-
               <div>
                 <div>
                   <%= form.submit t(".submit_button"),
