@@ -168,5 +168,115 @@ module Groups
 
       assert_response :unauthorized
     end
+
+    test 'should not delete a prepared workflow' do
+      sign_in users(:james_doe)
+      workflow_execution = workflow_executions(:workflow_execution_group_shared_prepared)
+      assert workflow_execution.prepared?
+      assert_difference -> { WorkflowExecution.count } => 0,
+                        -> { SamplesWorkflowExecution.count } => 0 do
+        delete group_workflow_execution_path(@group, workflow_execution,
+                                             format: :turbo_stream)
+      end
+      assert_response :unprocessable_entity
+    end
+
+    test 'should not delete a submitted workflow' do
+      sign_in users(:james_doe)
+      workflow_execution = workflow_executions(:workflow_execution_group_shared_submitted)
+      assert workflow_execution.submitted?
+      assert_difference -> { WorkflowExecution.count } => 0,
+                        -> { SamplesWorkflowExecution.count } => 0 do
+        delete group_workflow_execution_path(@group, workflow_execution,
+                                             format: :turbo_stream)
+      end
+      assert_response :unprocessable_entity
+    end
+
+    test 'should delete a completed workflow' do
+      sign_in users(:james_doe)
+      workflow_execution = workflow_executions(:workflow_execution_group_shared_completed)
+      assert workflow_execution.completed?
+      assert_difference -> { WorkflowExecution.count } => -1,
+                        -> { SamplesWorkflowExecution.count } => -1 do
+        delete group_workflow_execution_path(@group, workflow_execution,
+                                             format: :turbo_stream)
+      end
+      assert_response :redirect
+      assert_redirected_to group_workflow_executions_path
+    end
+
+    test 'should delete an errored workflow' do
+      sign_in users(:james_doe)
+      workflow_execution = workflow_executions(:workflow_execution_group_shared_error)
+      assert workflow_execution.error?
+      assert_difference -> { WorkflowExecution.count } => -1,
+                        -> { SamplesWorkflowExecution.count } => -1 do
+        delete group_workflow_execution_path(@group, workflow_execution,
+                                             format: :turbo_stream)
+      end
+      assert_response :redirect
+      assert_redirected_to group_workflow_executions_path
+    end
+
+    test 'should not delete a canceling workflow' do
+      sign_in users(:james_doe)
+      workflow_execution = workflow_executions(:workflow_execution_group_shared_canceling)
+      assert workflow_execution.canceling?
+      assert_difference -> { WorkflowExecution.count } => 0,
+                        -> { SamplesWorkflowExecution.count } => 0 do
+        delete group_workflow_execution_path(@group, workflow_execution,
+                                             format: :turbo_stream)
+      end
+      assert_response :unprocessable_entity
+    end
+
+    test 'should delete a canceled workflow' do
+      sign_in users(:james_doe)
+      workflow_execution = workflow_executions(:workflow_execution_group_shared_canceled)
+      assert workflow_execution.canceled?
+      assert_difference -> { WorkflowExecution.count } => -1,
+                        -> { SamplesWorkflowExecution.count } => -1 do
+        delete group_workflow_execution_path(@group, workflow_execution,
+                                             format: :turbo_stream)
+      end
+      assert_response :redirect
+      assert_redirected_to group_workflow_executions_path
+    end
+
+    test 'should not delete a running workflow' do
+      sign_in users(:james_doe)
+      workflow_execution = workflow_executions(:workflow_execution_group_shared_running)
+      assert workflow_execution.running?
+      assert_difference -> { WorkflowExecution.count } => 0,
+                        -> { SamplesWorkflowExecution.count } => 0 do
+        delete group_workflow_execution_path(@group, workflow_execution,
+                                             format: :turbo_stream)
+      end
+      assert_response :unprocessable_entity
+    end
+
+    test 'should not delete a new workflow' do
+      sign_in users(:james_doe)
+      workflow_execution = workflow_executions(:workflow_execution_group_shared_new)
+      assert workflow_execution.initial?
+      assert_difference -> { WorkflowExecution.count } => 0,
+                        -> { SamplesWorkflowExecution.count } => 0 do
+        delete group_workflow_execution_path(@group, workflow_execution,
+                                             format: :turbo_stream)
+      end
+      assert_response :unprocessable_entity
+    end
+
+    test 'redirect to project workflow executions page when workflow execution is deleted' do
+      sign_in users(:james_doe)
+      workflow_execution = workflow_executions(:workflow_execution_group_shared_canceled)
+
+      delete group_workflow_execution_path(@group, workflow_execution, redirect: true,
+                                                                       format: :turbo_stream)
+      assert_response :redirect
+
+      assert_redirected_to group_workflow_executions_path(@group)
+    end
   end
 end
