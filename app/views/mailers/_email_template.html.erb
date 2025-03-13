@@ -18,8 +18,8 @@
         >
           <tbody>
             <tr>
-              <td style="padding:12px 24px;">
-                <h1 style="font-size:24px;color:#000;font-weight:600;">
+              <td style="padding:24px 24px;">
+                <h1 style="font-size:24px;color:#000;font-weight:600;margin:0;">
                   <%= defined?(name) ? t(".greeting_with_name", name:) : t(".greeting") %>
                 </h1>
               </td>
@@ -54,12 +54,12 @@
               </tr>
             <% end %>
             <tr>
-              <td style="padding:12px 24px;">
+              <td style="padding:0px 24px;">
                 <div style="border-bottom:1px solid #e2e8f0;">&nbsp;</div>
               </td>
             </tr>
             <tr>
-              <td style="padding:12px 24px;">
+              <td style="padding:24px 24px;">
                 <span style="color:#334155;line-height:24px;">
                   <%= t(".thanks") %>
                   <br><%= t(:"general.name") %>
