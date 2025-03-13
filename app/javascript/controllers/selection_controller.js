@@ -102,7 +102,6 @@ export default class extends Controller {
   }
 
   #updateUI(ids) {
-    console.log(ids);
     this.rowSelectionTargets.map((row) => {
       row.checked = ids.indexOf(row.value) > -1;
     });

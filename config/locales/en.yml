@@ -1953,9 +1953,6 @@ en:
           plural: The selected COUNT_PLACEHOLDER workflow executions will be deleted.
           singular: The selected workflow execution will be deleted.
           zero: The selected 0 workflow executions will be deleted.
-        selection_count:
-          non_zero: Workflow Executions (COUNT_PLACEHOLDER selected)
-          zero: Workflow Executions (0 selected)
         state_warning_html: Please note, only workflow executions that are in the <span class="bg-green-100 border border-green-800 dark:bg-green-900 dark:border-green-300 dark:text-green-300 font-medium px-2.5 py-0.5 rounded-full text-green-800 text-xs">Completed</span>, <span class="bg-yellow-100 border border-yellow-800 dark:bg-yellow-900 dark:border-yellow-300 dark:text-yellow-300 font-medium px-2.5 py-0.5 rounded-full text-xs text-yellow-800">Canceled</span>, and <span class="bg-red-100 border border-red-800 dark:bg-red-900 dark:border-red-300 dark:text-red-300 font-medium px-2.5 py-0.5 rounded-full text-red-800 text-xs">Error</span> states will be deleted.
         submit_button: Confirm
         title: Delete Workflow Executions

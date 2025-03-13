@@ -61,7 +61,6 @@ export default class extends Controller {
   }
 
   #makePagedHiddenInputs() {
-    console.log("make paged hidden");
     const itemsPerPage = 100;
     const start = (this.#page - 1) * itemsPerPage;
     const end = this.#page * itemsPerPage;
