@@ -1,3 +1,5 @@
+<% checkbox_styles =
+  "shrink-0 mt-0.5 border-slate-200 rounded-sm text-primary-600 focus:ring-primary-500 checked:border-primary-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-700 dark:border-neutral-700 dark:checked:bg-primary-500 dark:checked:border-primary-500 dark:focus:ring-offset-slate-700 mr-4" %>
 <%= viral_dialog(open: open,classes: ["overflow-visible"]) do |dialog| %>
   <% dialog.with_header(
     title: t("groups.bots.index.bot_listing.new_bot_modal.title"),
@@ -80,8 +82,7 @@
                 <%= check_box_tag "bot[scopes][]",
                 scope,
                 id: "bot_scopes_#{scope}",
-                class:
-                  "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+                class: checkbox_styles %>
               </div>
               <div class="ml-2 text-sm">
                 <%= label_tag "bot_scopes_#{scope}",
