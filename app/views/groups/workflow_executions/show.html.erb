@@ -63,6 +63,22 @@
           class: "button button--state-default button--size-default mr-1",
         ) %>
       <% end %>
+      <% if @workflow_execution.deletable? && allowed_to?(:destroy?, @workflow_execution) %>
+        <%= link_to(
+          t("groups.workflow_executions.show.remove_button"),
+          group_workflow_execution_path(
+            @namespace,
+            @workflow_execution,
+            redirect: true,
+          ),
+          data: {
+            turbo_method: :delete,
+            turbo_confirm:
+              t("groups.workflow_executions.show.remove_button_confirmation"),
+          },
+          class: "button button--state-default button--size-default mr-1",
+        ) %>
+      <% end %>
     </div>
   <% end %>
 <% end %>
