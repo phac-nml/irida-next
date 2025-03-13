@@ -2,17 +2,23 @@
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
       <table
-        class='w-full text-sm text-left border  rtl:text-right text-slate-500 dark:text-slate-400 whitespace-nowrap border-slate-200 dark:border-slate-700'
+        class='
+          w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+          whitespace-nowrap
+        '
       >
         <thead
-          class='sticky top-0 z-10 text-xs uppercase border-b  text-slate-700 bg-slate-50 dark:bg-slate-700 dark:text-slate-300 border-slate-200'
+          class='
+            sticky top-0 z-10 text-xs uppercase border-b text-slate-700 bg-slate-100
+            dark:bg-slate-700 dark:text-slate-300 border-slate-200
+          '
         >
           <tr>
             <% @columns.each_with_index do |column, index| %>
               <%= render_cell(
                 tag: 'th',
                 scope: 'col',
-                classes: class_names('px-3 py-3', 'sticky left-0 min-w-56 max-w-56 z-10 bg-slate-50 dark:bg-slate-700': index.zero?, 'sticky left-56 z-10 bg-slate-50 dark:bg-slate-700': index == 1)
+                classes: class_names('px-3 py-3', 'sticky left-0 min-w-56 max-w-56 z-10 bg-slate-100 dark:bg-slate-700': index.zero?, 'sticky left-56 z-10 bg-slate-100 dark:bg-slate-700': index == 1)
               ) do %>
                 <% if index.zero? and @abilities[:select_attachments] %>
                   <%= check_box_tag "select-page",
@@ -77,7 +83,7 @@
               <%= render_cell(
                 tag: 'th',
                 scope: 'col',
-                classes: class_names('px-3 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
+                classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-700 sticky right-0')
               ) do %>
                 <%= t(".actions") %>
               <% end %>
@@ -85,7 +91,10 @@
           </tr>
         </thead>
         <tbody
-          class='overflow-y-auto bg-white divide-y  divide-slate-200 dark:bg-slate-800 dark:divide-slate-700'
+          class='
+            overflow-y-auto bg-white divide-y divide-slate-200 dark:bg-slate-800
+            dark:divide-slate-700
+          '
         >
           <% @attachments.each do |attachment| %>
             <%= render Viral::BaseComponent.new(**row_arguments(attachment)) do %>
@@ -210,7 +219,9 @@
           <tfoot class="sticky bottom-0 z-10">
             <tr class="border-t dark:border-slate-700 border-slate-200">
               <td
-                class="sticky left-0 z-10 px-6 py-3  bg-slate-50 dark:bg-slate-900"
+                class="
+                  sticky left-0 z-10 px-6 py-3 bg-slate-50 dark:bg-slate-900
+                "
                 colspan="3"
               >
                 <span>
