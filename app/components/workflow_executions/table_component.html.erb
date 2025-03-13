@@ -8,7 +8,7 @@
     >
       <thead
         class='
-          text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
+          text-xs uppercase text-slate-700 bg-slate-100 dark:bg-slate-700
           dark:text-slate-400
         '
       >
@@ -17,7 +17,7 @@
             <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-3 py-3', 'sticky left-0 z-10 bg-slate-50 dark:bg-slate-700': index.zero?)
+              classes: class_names('px-3 py-3', 'sticky left-0 z-10 bg-slate-100 dark:bg-slate-700': index.zero?)
             ) do %>
               <% if index.zero? and @abilities[:select_workflow_executions] %>
                 <%= check_box_tag "select-page",
@@ -62,7 +62,7 @@
             <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-3 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
+              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-700 sticky right-0')
             ) do %>
               <%= t(".actions") %>
             <% end %>
@@ -183,7 +183,7 @@
           <tr class="border-t dark:border-slate-700 border-slate-200">
             <td
               class="
-                sticky left-0 z-10 px-6 py-3 bg-slate-50 dark:bg-slate-900
+                sticky left-0 z-10 px-6 py-3 bg-slate-100 dark:bg-slate-900
               "
               colspan="3"
             >
