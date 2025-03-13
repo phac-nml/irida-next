@@ -1,27 +1,12 @@
-<div class="table-container relative overflow-x-auto" data-turbo-temporary>
+<div class="relative overflow-x-auto table-container" data-turbo-temporary>
   <table
-    class="
-      w-full
-      text-sm
-      text-left
-      rtl:text-right
-      text-slate-500
-      dark:text-slate-400
-      whitespace-nowrap
-    "
+    class="w-full text-sm text-left border  rtl:text-right text-slate-500 dark:text-slate-400 whitespace-nowrap border-slate-200 dark:border-slate-700"
     data-controller="selection"
     data-selection-action-link-outlet=".action-link"
     id="metadata-table"
   >
     <thead
-      class="
-        text-xs
-        text-slate-700
-        uppercase
-        bg-slate-50
-        dark:bg-slate-900
-        dark:text-slate-400
-      "
+      class="text-xs uppercase border-b  text-slate-700 bg-slate-50 dark:bg-slate-900 dark:text-slate-400 border-slate-200 dark:border-slate-700"
     >
       <tr>
         <% if allowed_to?(:update_sample?, @project) %>
@@ -40,7 +25,7 @@
       <% sample_metadata.each do |metadata| %>
         <tr
           id="<%= metadata[:key] %>_field"
-          class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
+          class="bg-white border-b  border-slate-200 dark:bg-slate-800 dark:border-slate-700"
         >
           <% if allowed_to?(:update_sample?, @project) %>
             <td class="px-6 py-4">
@@ -51,7 +36,7 @@
               "aria-label": metadata[:key],
               data: {
                 selection_target: "rowSelection",
-                action: "input->selection#toggle"
+                action: "input->selection#toggle",
               },
               class:
                 "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 rounded-sm focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
@@ -69,10 +54,10 @@
                   edit_namespace_project_sample_metadata_path(
                     sample_id: @sample.id,
                     key: metadata[:key],
-                    value: metadata[:value]
+                    value: metadata[:value],
                   ),
                   class:
-                    "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
+                    "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
                 ) %>
               <% end %>
               <%= link_to(
@@ -81,20 +66,20 @@
                   sample_id: @sample.id,
                   sample: {
                     metadata: {
-                      metadata[:key] => ""
-                    }
-                  }
+                      metadata[:key] => "",
+                    },
+                  },
                 ),
                 data: {
                   turbo_method: :delete,
                   turbo_confirm:
                     t(
                       :"projects.samples.show.metadata.actions.delete_confirm",
-                      deleted_key: metadata[:key]
-                    )
+                      deleted_key: metadata[:key],
+                    ),
                 },
                 class:
-                  "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer"
+                  "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
               ) %>
             </td>
           <% end %>
@@ -106,7 +91,7 @@
     <%= viral_empty(
       title: t(:"projects.samples.show.no_metadata"),
       description: t(:"projects.samples.show.no_associated_metadata"),
-      icon_name: :document_text
+      icon_name: :document_text,
     ) %>
   </div>
 </div>
