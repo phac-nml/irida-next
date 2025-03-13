@@ -539,6 +539,11 @@ en:
       destroy:
         error: Could not delete workflow %{workflow_name}
         success: Workflow %{workflow_name} was successfully deleted
+      destroy_multiple:
+        error: Could not delete any selected workflows
+        partial_error: "%{not_deleted} workflows could not be deleted"
+        partial_success: "%{deleted} workflows were successfully deleted"
+        success: All selected workflows were successfully deleted
       update:
         error: Could not update workflow %{workflow_name}
         success: Workflow %{workflow_name} was successfully updated
@@ -1726,6 +1731,7 @@ en:
           type: Type
       index:
         create_export_button: Create Export
+        delete_workflows_button: Delete Workflows
         deselect_all_button: Deselect All
         search:
           placeholder: Filter by ID or name
@@ -1942,7 +1948,7 @@ en:
         dialog:
           spinner_message: Importing samples, this might take a while...
     workflow_executions:
-      destroy_confirmation_dialog:
+      destroy_multiple_confirmation_dialog:
         description:
           plural: The selected COUNT_PLACEHOLDER workflow executions will be deleted.
           singular: The selected workflow execution will be deleted.
@@ -2051,6 +2057,7 @@ en:
         delete_button: Delete
         delete_confirm: Are you sure you want to delete this workflow execution?
       create_export_button: Create Export
+      delete_workflows_button: Delete Workflows
       deselect_all_button: Deselect All
       search:
         placeholder: Filter by ID or name
