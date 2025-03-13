@@ -1,4 +1,4 @@
-<%= viral_dialog(open: true) do |dialog| %>
+<%= viral_dialog(open: open) do |dialog| %>
   <%= dialog.with_header(title: t(".title")) %>
   <%= dialog.with_section do %>
     <%# TODO: maybe add broadcast target %>
@@ -13,7 +13,7 @@
         data-infinite-scroll-non-zero-header-value="<%= t(".selection_count.non_zero") %>"
       >
         <%= form_with(
-        url: list_workflow_executions_path(list_class: 'workflow_execution', list_action: 'destroy'),
+        url: @list_url,
         data: { "infinite-scroll-target": "pageForm" }
       ) do %>
           <div data-infinite-scroll-target="pageFormContent"></div>
@@ -42,7 +42,7 @@
               <% end %>
             </div>
           </div>
-          <%= form_for(:destroy, url: destroy_multiple_workflow_executions_path, method: :delete,
+          <%= form_for(:destroy, url: @destroy_url, method: :delete,
           data: {
             controller: "form--hidden-inputs",
             "form--hidden-inputs-selection-outlet": '#workflow-executions-table',

@@ -11,6 +11,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     before_action :workflow_execution, only: %i[show cancel destroy update edit]
     before_action proc { view_authorizations }, only: %i[index]
     before_action proc { show_view_authorizations }, only: %i[show]
+    before_action :destroy_multiple_urls, only: %i[destroy_multiple_confirmation destroy_multiple]
   end
 
   TABS = %w[summary params samplesheet files].freeze
@@ -74,7 +75,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def destroy # rubocop:disable Metrics/MethodLength
-    WorkflowExecutions::DestroyService.new(@workflow_execution, current_user).execute
+    WorkflowExecutions::DestroyService.new(current_user, { workflow_execution: @workflow_execution }).execute
 
     respond_to do |format|
       format.turbo_stream do
@@ -127,19 +128,40 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def destroy_confirmation
-    # if params[:single_workflow]
-    #   render turbo_stream: turbo_stream.update('workflow_execution_dialog',
-    #                                            partial: 'new_single_analysis_export_dialog',
-    #                                            locals: new_locals), status: :ok
-    # else
-      render turbo_stream: turbo_stream.update('workflow_execution_dialog',
-                                               partial: "shared/workflow_executions/destroy_confirmation_dialog"),
-                                               status: :ok,
-                                               locals: {
-                                                open: true
-                                               }
-    # end
+  def destroy_multiple_confirmation
+    authorize! @namespace, to: :destroy_workflow_executions? unless @namespace.nil?
+    render turbo_stream: turbo_stream.update('workflow_execution_dialog',
+                                             partial: 'shared/workflow_executions/destroy_multiple_confirmation_dialog',
+                                             locals: {
+                                               open: true
+                                             }), status: :ok
+  end
+
+  def destroy_multiple
+    workflows_to_delete_count = destroy_multiple_params['workflow_execution_ids'].count
+
+    deleted_workflows_count = ::WorkflowExecutions::DestroyService.new(current_user, destroy_multiple_params).execute
+    respond_to do |format|
+      format.turbo_stream do
+        # No selected workflows deleted
+        if deleted_workflows_count.zero?
+          render status: :unprocessable_entity, locals: {
+            type: 'alert', message: t('concerns.workflow_execution_actions.destroy_multiple.error')
+          }
+        # Partial workflow deletion
+        elsif deleted_workflows_count.positive? && deleted_workflows_count != workflows_to_delete_count
+          multi_status_messages = set_multi_status_destroy_multiple_message(deleted_workflows_count,
+                                                                            workflows_to_delete_count)
+          render status: :multi_status,
+                 locals: { messages: multi_status_messages }
+        # All workflows deleted successfully
+        else
+          render status: :ok,
+                 locals: { type: 'success',
+                           message: t('concerns.workflow_execution_actions.destroy_multiple.success') }
+        end
+      end
+    end
   end
 
   private
@@ -165,6 +187,29 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
   def set_default_sort
     @q.sorts = 'updated_at desc' if @q.sorts.empty?
+  end
+
+  def destroy_multiple_params
+    params.require(:destroy_multiple).permit(workflow_execution_ids: [])
+  end
+
+  def set_multi_status_destroy_multiple_message(deleted_workflows_count, workflows_to_delete_count)
+    [{ type: 'success',
+       message: t('concerns.workflow_execution_actions.destroy_multiple.partial_success',
+                  deleted: "#{deleted_workflows_count}/#{workflows_to_delete_count}") }, {
+                    type: 'alert', message: t('concerns.workflow_execution_actions.destroy_multiple.partial_error',
+                                              not_deleted: "#{workflows_to_delete_count - deleted_workflows_count}/#{workflows_to_delete_count}")
+                  }]
+  end
+
+  def destroy_multiple_urls
+    if @namespace.nil?
+      @list_url = list_workflow_executions_path(list_class: 'workflow_execution')
+      @destroy_url = destroy_multiple_workflow_executions_path
+    else
+      @list_url = list_namespace_project_workflow_executions_path(list_class: 'workflow_execution')
+      @destroy_url = destroy_multiple_namespace_project_workflow_executions_path
+    end
   end
 
   protected
