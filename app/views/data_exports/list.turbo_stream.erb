@@ -11,7 +11,8 @@
     <% end %>
   <% elsif defined? @workflow_executions %>
     <% @workflow_executions.each do |workflow_execution| %>
-      <%= render "list_workflow_execution", workflow_execution: workflow_execution %>
+      <%= render "shared/workflow_executions/list_workflow_execution",
+      workflow_execution: workflow_execution %>
     <% end %>
   <% end %>
 <% end %>
