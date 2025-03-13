@@ -7,7 +7,7 @@ class DataExportMailerPreview < ActionMailer::Preview
   end
 
   def export_ready_without_name
-    data_export = DataExport.second
+    data_export = DataExport.where(status: 'ready', name: nil).first
     DataExportMailer.export_ready(data_export)
   end
 end
