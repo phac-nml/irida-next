@@ -240,4 +240,44 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :not_found
   end
+
+  test 'should open destroy_multiple_confirmation' do
+    get destroy_multiple_confirmation_workflow_executions_path(format: :turbo_stream)
+
+    assert_response :success
+  end
+
+  test 'should destroy multiple workflows at once' do
+    error_workflow = workflow_executions(:irida_next_example_error)
+    canceled_workflow = workflow_executions(:irida_next_example_canceled)
+    assert_difference -> { WorkflowExecution.count } => -2,
+                      -> { SamplesWorkflowExecution.count } => -2 do
+                        delete destroy_multiple_workflow_executions_path(format: :turbo_stream), params: {destroy_multiple: {workflow_execution_ids: [error_workflow.id, canceled_workflow.id]}}
+                      end
+    assert_response :success
+  end
+
+
+  test 'should partially destroy multiple workflows at once' do
+    error_workflow = workflow_executions(:irida_next_example_error)
+    canceled_workflow = workflow_executions(:irida_next_example_canceled)
+    new_workflow = workflow_executions(:irida_next_example_new)
+    assert_difference -> { WorkflowExecution.count } => -2,
+                      -> { SamplesWorkflowExecution.count } => -2 do
+    delete destroy_multiple_workflow_executions_path(format: :turbo_stream),
+    params: {destroy_multiple: {workflow_execution_ids: [error_workflow.id, canceled_workflow.id, new_workflow.id]}}
+                      end
+    assert_response :multi_status
+  end
+
+  test 'should not destroy multiple non-deletable workflows' do
+    running_workflow = workflow_executions(:irida_next_example_running)
+    new_workflow = workflow_executions(:irida_next_example_new)
+    assert_no_difference -> { WorkflowExecution.count },
+                      -> { SamplesWorkflowExecution.count } do
+    delete destroy_multiple_workflow_executions_path(format: :turbo_stream),
+    params: {destroy_multiple: {workflow_execution_ids: [running_workflow.id, new_workflow.id]}}
+                      end
+    assert_response :unprocessable_entity
+  end
 end
