@@ -27,7 +27,7 @@ module Groups
     end
 
     def workflow_execution_update_params
-      params.require(:workflow_execution).permit(:name)
+      params.expect(workflow_execution: [:name])
     end
 
     def load_workflows
