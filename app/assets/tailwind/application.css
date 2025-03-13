@@ -817,10 +817,6 @@
     @apply font-medium text-green-600 underline hover:no-underline dark:text-green-500;
   }
 
-  input[type="checkbox"] {
-    @apply focus:ring-primary-300 dark:focus:ring-primary-600 h-4 w-4 rounded-sm border border-slate-300 bg-slate-50 focus:ring-4 dark:border-slate-600 dark:bg-slate-800 dark:ring-offset-slate-800;
-  }
-
   input[type="search"]::-webkit-search-cancel-button {
     -webkit-appearance: none;
     cursor: pointer;
