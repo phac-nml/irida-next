@@ -10,27 +10,27 @@ locals: {
     )
 } do %>
   <tr>
-    <td style="padding:0px 24px;">
-      <p style="color:#334155;line-height:24px;">
+    <td style="padding:12px 24px;">
+      <span style="color:#334155;line-height:24px;">
         <%= t(
           :"mailers.group_link_mailer.access_granted_user_email.body_html",
           group_name: @group.name,
           namespace_type: @namespace.type,
           namespace_name: @namespace.name,
         ) %>
-      </p>
+      </span>
     </td>
   </tr>
   <tr>
-    <td style="padding:0px 24px;">
-      <p style="color:#334155;line-height:24px;">
+    <td style="padding:12px 24px;">
+      <span style="color:#334155;line-height:24px;">
         <%= t(
           :"mailers.group_link_mailer.access_granted_user_email.view_details",
           group_name: @group.name,
           namespace_type: @namespace.type,
           namespace_name: @namespace.name,
         ) %>
-      </p>
+      </span>
     </td>
   </tr>
 <% end %>

@@ -18,7 +18,7 @@
         >
           <tbody>
             <tr>
-              <td style="padding:0px 24px;">
+              <td style="padding:12px 24px;">
                 <h1 style="font-size:24px;color:#000;font-weight:600;">
                   <%= defined?(name) ? t(".greeting_with_name", name:) : t(".greeting") %>
                 </h1>
@@ -29,7 +29,7 @@
 
             <% if url.present? %>
               <tr>
-                <td style="padding:0px 24px;">
+                <td style="padding:12px 24px;">
                   <table>
                     <tbody>
                       <tr>
@@ -43,27 +43,27 @@
                 </td>
               </tr>
               <tr>
-                <td style="padding:0px 24px;">
-                  <p style="color:#334155;line-height:24px;">
+                <td style="padding:12px 24px;">
+                  <span style="color:#334155;line-height:24px;">
                     <%= t(".copy_paste") %>
                     <a href="<%= url %>" style="text-decoration:underline;">
                       <%= url %>
                     </a>
-                  </p>
+                  </span>
                 </td>
               </tr>
             <% end %>
             <tr>
-              <td style="padding:0px 24px;">
+              <td style="padding:12px 24px;">
                 <div style="border-bottom:1px solid #e2e8f0;">&nbsp;</div>
               </td>
             </tr>
             <tr>
-              <td style="padding:0px 24px;">
-                <p style="color:#334155;line-height:24px;">
+              <td style="padding:12px 24px;">
+                <span style="color:#334155;line-height:24px;">
                   <%= t(".thanks") %>
                   <br><%= t(:"general.name") %>
-                </p>
+                </span>
               </td>
             </tr>
           </tbody>

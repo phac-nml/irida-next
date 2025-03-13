@@ -10,8 +10,8 @@ locals: {
     ),
 } do %>
   <tr>
-    <td style="padding:0px 24px;">
-      <p style="color:#334155;line-height:24px;">
+    <td style="padding:12px 24px;">
+      <span style="color:#334155;line-height:24px;">
         <%= t(
           :"mailers.member_mailer.access_revoked_manager_email.body_html",
           first_name: @member.user.first_name.capitalize,
@@ -20,18 +20,18 @@ locals: {
           type: @namespace.type,
           name: @namespace.name,
         ) %>
-      </p>
+      </span>
     </td>
   </tr>
   <tr>
-    <td style="padding:0px 24px;">
-      <p style="color:#334155;line-height:24px;">
+    <td style="padding:12px 24px;">
+      <span style="color:#334155;line-height:24px;">
         <%= t(
           :"mailers.member_mailer.access_revoked_manager_email.view_details",
           type: @namespace.type,
           name: @namespace.name,
         ) %>
-      </p>
+      </span>
     </td>
   </tr>
 <% end %>

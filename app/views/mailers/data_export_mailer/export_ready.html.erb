@@ -3,30 +3,30 @@
   url: data_export_url(@data_export)
   } do %>
   <tr>
-    <td style="padding:0px 24px;">
-      <p style="color:#334155;line-height:24px;">
+    <td style="padding:12px 24px;">
+      <span style="color:#334155;line-height:24px;">
         <%= t(
           "mailers.data_export_mailer.export_ready.ready_for_download_html",
           name: @data_export.name || @data_export.id,
         ) %>
-      </p>
+      </span>
     </td>
   </tr>
   <tr>
-    <td style="padding:0px 24px;">
-      <p style="color:#334155;line-height:24px;">
+    <td style="padding:12px 24px;">
+      <span style="color:#334155;line-height:24px;">
         <%= t(
           "mailers.data_export_mailer.export_ready.download_before_html",
           date: @data_export.expires_at.strftime("%A, %B %d, %Y, 23:59 %Z"),
         ) %>
-      </p>
+      </span>
     </td>
   </tr>
   <tr>
-    <td style="padding:0px 24px;">
-      <p style="color:#334155;line-height:24px;">
+    <td style="padding:12px 24px;">
+      <span style="color:#334155;line-height:24px;">
         <%= t("mailers.data_export_mailer.export_ready.view_exports") %>
-      </p>
+      </span>
     </td>
   </tr>
 <% end %>
