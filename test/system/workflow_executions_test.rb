@@ -518,8 +518,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector '#dialog'
     within('#dialog') do
-      assert_text I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.description.plural').gsub! 'COUNT_PLACEHOLDER',
-                                                                                                                     '3'
+      assert_text I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.description.plural')
+                      .gsub! 'COUNT_PLACEHOLDER', '3'
       assert_text ActionController::Base.helpers.strip_tags(
         I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.state_warning_html')
       )
@@ -557,8 +557,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector '#dialog'
     within('#dialog') do
-      assert_text I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.description.plural').gsub! 'COUNT_PLACEHOLDER',
-                                                                                                                     '3'
+      assert_text I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.description.plural')
+                      .gsub! 'COUNT_PLACEHOLDER', '3'
       assert_text ActionController::Base.helpers.strip_tags(
         I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.state_warning_html')
       )
