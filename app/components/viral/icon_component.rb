@@ -8,12 +8,12 @@ module Viral
     COLOR_DEFAULT = :default
     COLOR_MAPPINGS = {
       COLOR_DEFAULT => '',
-      :base => 'Viral-Icon--colorBase',
-      :subdued => 'Viral-Icon--colorSubdued',
-      :critical => 'Viral-Icon--colorCritical',
-      :warning => 'Viral-Icon--colorWarning',
-      :success => 'Viral-Icon--colorSuccess',
-      :primary => 'Viral-Icon--colorPrimary'
+      :base => 'viral-icon--colorBase',
+      :subdued => 'viral-icon--colorSubdued',
+      :critical => 'viral-icon--colorCritical',
+      :warning => 'viral-icon--colorWarning',
+      :success => 'viral-icon--colorSuccess',
+      :primary => 'viral-icon--colorPrimary'
     }.freeze
     COLOR_OPTIONS = COLOR_MAPPINGS.keys
 
@@ -27,7 +27,7 @@ module Viral
       @system_arguments = system_arguments
       @system_arguments[:classes] = class_names(
         @system_arguments[:classes],
-        'Viral-Icon',
+        'viral-icon',
         COLOR_MAPPINGS[color]
       )
     end

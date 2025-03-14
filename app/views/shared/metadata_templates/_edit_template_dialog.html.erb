@@ -12,14 +12,14 @@
       <%= form_for(@metadata_template, url: update_path, method: :patch
             ) do |form| %>
         <div class="grid gap-4">
-          <div class="form-field mt-2">
+          <div class="mt-2 form-field">
             <%= form.label :name %>
             <%= form.text_field :name,
                             class: "form-control",
                             required: true,
                             value: @metadata_template.name %>
           </div>
-          <div class="form-field mt-2">
+          <div class="mt-2 form-field">
             <%= form.label :description %>
             <%= form.text_area :description,
                            class: "form-control",

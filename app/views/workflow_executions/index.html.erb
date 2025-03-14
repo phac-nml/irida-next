@@ -7,18 +7,15 @@
 
 <%= render Viral::PageHeaderComponent.new(title: t(".title")) do |component| %>
   <%= component.with_buttons do %>
-   <%= link_to t(".create_export_button"),
-      new_data_export_path(
-        export_type: "analysis",
-        analysis_type: "user"
-      ),
-      data: {
-        action: "turbo:morph-element->action-link#idempotentConnect",
-        turbo_stream: true,
-        controller: "action-link",
-        action_link_required_value: 1,
-      },
-      class: "button button--size-default button--state-default action-link" %>
+    <%= link_to t(".create_export_button"),
+    new_data_export_path(export_type: "analysis", analysis_type: "user"),
+    data: {
+      action: "turbo:morph-element->action-link#idempotentConnect",
+      turbo_stream: true,
+      controller: "action-link",
+      action_link_required_value: 1,
+    },
+    class: "button button--size-default button--state-default action-link" %>
   <% end %>
 <% end %>
 <div class="flow-root">
@@ -33,7 +30,7 @@
         <input type="hidden" name="format" value="turbo_stream"/>
         <input type="hidden" name="select" value="on"/>
         <%= f.submit t(".select_all_button"),
-                  class: "button button--state-default button--size-default" %>
+                 class: "button button--state-default button--size-default" %>
       <% end %>
       <%= search_form_for(
                 @q,
@@ -43,16 +40,16 @@
               ) do |f| %>
         <input type="hidden" name="format" value="turbo_stream"/>
         <%= f.submit t(".deselect_all_button"),
-                  class: "button button--state-default button--size-default" %>
+                 class: "button button--state-default button--size-default" %>
       <% end %>
     </div>
     <div class="grow-0">
-        <%= render SearchComponent.new(
-          query: @q,
-          url: workflow_executions_path,
-          search_attribute: :name_or_id_cont,
-          placeholder: t('.search.placeholder')
-        ) %>
+      <%= render SearchComponent.new(
+        query: @q,
+        url: workflow_executions_path,
+        search_attribute: :name_or_id_cont,
+        placeholder: t(".search.placeholder"),
+      ) %>
     </div>
   </div>
 </div>
@@ -60,5 +57,5 @@
 locals: {
   workflow_executions: @workflow_executions,
   pagy: @pagy,
-  q: @q
+  q: @q,
 } %>

@@ -1,21 +1,31 @@
 <%= render Viral::PageHeaderComponent.new(title: t(:'groups.new_subgroup.title'), subtitle: t(:'groups.new_subgroup.subtitle')) do |component| %>
-  <%= component.with_icon(name:"squares_plus", classes: "h-14 w-14 text-primary-700" ) %>
+  <%= component.with_icon(name: "squares_plus", classes: "h-14 w-14 text-primary-700") %>
 <% end %>
 
-<div data-controller="slugify" class="p-4 bg-white border border-slate-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-slate-700 sm:p-6 dark:bg-slate-800">
+<div
+  data-controller="slugify"
+  class="
+    p-4 bg-white border border-slate-200 rounded-lg shadow-xs 2xl:col-span-2
+    dark:border-slate-700 sm:p-6 dark:bg-slate-800
+  "
+>
   <%= form_with(model: @new_group, url: groups_path, method: :post, data: { controller: "viral--select2" }) do |form| %>
     <div class="grid gap-4">
 
-      <%= render partial: 'form_fields', locals: {
+      <%= render partial: "form_fields",
+      locals: {
         form: form,
         group: @new_group,
-        authorized_namespaces: @authorized_namespaces
+        authorized_namespaces: @authorized_namespaces,
       } %>
 
       <div class="flex">
-        <%= form.submit t(:'groups.new_subgroup.submit'), class: "button button--state-primary button--size-default mr-2" %>
-        <%= link_to t(:'groups.new_subgroup.cancel'), group_path(@group), class: "button button--state-default button--size-default" %>
+        <%= form.submit t(:"groups.new_subgroup.submit"),
+                    class: "button button--state-primary button--size-default mr-2" %>
+        <%= link_to t(:"groups.new_subgroup.cancel"),
+        group_path(@group),
+        class: "button button--state-default button--size-default" %>
       </div>
+    </div>
   <% end %>
-  </div>
 </div>

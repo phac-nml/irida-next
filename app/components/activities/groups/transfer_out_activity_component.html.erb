@@ -2,16 +2,29 @@
   <%= t(
     "#{@activity[:key]}",
     user: @activity[:user],
-    old_namespace: link_to(@activity[:old_namespace], "#",
-              class: "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
-              disabled: true),
-    new_namespace: link_to(@activity[:new_namespace], "#",
-              class: "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
-              disabled: true
-          ),
-    transferred_group_puid: link_to(@activity[:transferred_group_puid], "#",
-              class: "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
-              disabled: true
-          )
+    old_namespace:
+      link_to(
+        @activity[:old_namespace],
+        "#",
+        class:
+          "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
+        disabled: true,
+      ),
+    new_namespace:
+      link_to(
+        @activity[:new_namespace],
+        "#",
+        class:
+          "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
+        disabled: true,
+      ),
+    transferred_group_puid:
+      link_to(
+        @activity[:transferred_group_puid],
+        "#",
+        class:
+          "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
+        disabled: true,
+      ),
   ) %>
 </span>

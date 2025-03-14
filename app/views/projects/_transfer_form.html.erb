@@ -11,8 +11,8 @@
         class="
           border-slate-300 text-slate-800 sm:text-sm rounded-md block w-full p-2.5
           dark:bg-slate-800 dark:border-slate-600 dark:text-slate-50
-          "
-        >
+        "
+      >
     <% else %>
       <%= viral_select2(form:, name: :new_namespace_id, placeholder: t(:"projects.edit.advanced.transfer.select_namespace")) do |select| %>
         <% @authorized_namespaces.each do |namespace| %>
@@ -39,7 +39,7 @@
                 data: {
                   "viral--select2-target": "submitButton",
                   turbo_content: ".confirm-transfer",
-                  confirm_value: @project.name
+                  confirm_value: @project.name,
                 } %>
   </div>
 

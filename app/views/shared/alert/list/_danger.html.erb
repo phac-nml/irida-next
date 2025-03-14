@@ -1,22 +1,13 @@
 <div
   class="
-    flex
-    p-4
-    mb-4
-    text-sm
-    text-red-800
-    border
-    border-red-500
-    rounded-lg
-    bg-red-50
-    dark:bg-slate-800
-    dark:text-red-400
+    flex p-4 mb-4 text-sm text-red-800 border border-red-500 rounded-lg bg-red-50
+    dark:bg-slate-800 dark:text-red-400
   "
   role="alert"
 >
   <%= render Viral::IconComponent.new(
     name: "information_circle",
-    classes: "flex-shrink-0 inline w-5 h-5 mr-2"
+    classes: "shrink-0 inline w-5 h-5 mr-2",
   ) %>
   <span class="sr-only"><%= t("shared.alert.list.danger") %></span>
   <div>

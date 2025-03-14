@@ -2,19 +2,20 @@
   <% if @tab == 'metadata' %>
     <% render partial: "projects/samples/metadata/table",
     locals: {
-      sample_metadata: @sample_metadata
+      sample_metadata: @sample_metadata,
     } %>
   <% elsif @tab == 'files' %>
     <% render partial: "projects/samples/attachments/table",
     locals: {
-      attachments: @sample_attachments
+      attachments: @sample_attachments,
     } %>
   <% elsif @tab == 'history' %>
     <div class="grid gap-4 px-4 py-8">
       <%= render HistoryComponent.new(
         data: @log_data.reverse,
         type: "Sample",
-        url: namespace_project_sample_view_history_version_path(sample_id: @sample.id)
+        url:
+          namespace_project_sample_view_history_version_path(sample_id: @sample.id),
       ) %>
     </div>
   <% end %>

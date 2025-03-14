@@ -4,7 +4,9 @@
     children: @children,
     collapsed: @collapsed,
     path: "group_subgroups_path",
-    path_args: { group_id: @group.full_path },
-    type: [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
+    path_args: {
+      group_id: @group.full_path,
+    },
+    type: [Group.sti_name, Namespaces::ProjectNamespace.sti_name],
   ) %>
 <% end %>

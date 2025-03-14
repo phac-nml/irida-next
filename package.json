@@ -4,9 +4,9 @@
   "devDependencies": {
     "axe-core": "^4.10.2",
     "prettier": "^3.3.3",
-    "prettier-plugin-tailwindcss": "^0.6.8"
+    "prettier-plugin-tailwindcss": "^0.6.11"
   },
   "dependencies": {
-    "flowbite": "^2.5.2"
+    "flowbite": "^3.1.2"
   }
 }

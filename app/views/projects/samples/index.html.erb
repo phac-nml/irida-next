@@ -115,7 +115,7 @@
   <% end %>
 
   <div class="flex mb-2">
-    <div class="inline-flex flex-grow space-x-2">
+    <div class="inline-flex grow space-x-2">
       <% if allowed_to?(:submit_workflow?, @project) || allowed_to?(:clone_sample?, @project) || allowed_to?(:transfer_sample?, @project) || allowed_to?(:export_data?, @project) %>
         <%= form_with(
                   url: select_namespace_project_samples_url,

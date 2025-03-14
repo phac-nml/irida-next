@@ -4,7 +4,7 @@
     <% available_automated_workflows.each do |key, workflow| %>
       <li>
         <%= link_to new_namespace_project_automated_workflow_execution_path(@project.parent, @project, workflow_name: workflow.name, workflow_version: workflow.version), class: "group w-full", data: { turbo_stream: true } do %>
-          <span class=" ws-default flex items-center p-4 space-x-4 hover:bg-primary-600">
+          <span class="flex items-center p-4 space-x-4 ws-default hover:bg-primary-600">
             <span class="flex-shrink-0">
               <%= viral_icon(
                 name: :rocket_launch,
@@ -16,7 +16,7 @@
               <span class="flex items-center space-x-2">
                 <span
                   class="
-                    font-medium text-slate-900 truncate dark:text-white group-hover:text-slate-100
+                    font-medium truncate text-slate-900 dark:text-white group-hover:text-slate-100
                   "
                 >
                   <%= workflow.name %>

@@ -1,12 +1,7 @@
-<div class="table-container relative overflow-x-auto" data-turbo-temporary>
+<div class="relative overflow-x-auto table-container" data-turbo-temporary>
   <table
     class="
-      w-full
-      text-sm
-      text-left
-      rtl:text-right
-      text-slate-500
-      dark:text-slate-400
+      w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
       whitespace-nowrap
     "
     data-controller="selection"
@@ -15,12 +10,8 @@
   >
     <thead
       class="
-        text-xs
-        text-slate-700
-        uppercase
-        bg-slate-50
-        dark:bg-slate-900
-        dark:text-slate-400
+        text-xs uppercase border-b text-slate-700 bg-slate-100 dark:bg-slate-900
+        dark:text-slate-400 border-slate-200 dark:border-slate-700
       "
     >
       <tr>
@@ -36,21 +27,12 @@
         <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.action") %></th>
       </tr>
     </thead>
-    <tbody
-      id="attachments-table-body"
-      class="
-        bg-white
-        divide-y
-        divide-slate-200
-        dark:bg-slate-800
-        dark:divide-slate-700
-      "
-    >
+    <tbody id="attachments-table-body" class="bg-white dark:bg-slate-800">
       <% attachments.each do |attachment| %>
         <% unless attachment.associated_attachment && attachment.metadata['direction'] == 'reverse' %>
           <%= render partial: "projects/samples/attachments/attachment",
           locals: {
-            attachment: attachment
+            attachment: attachment,
           } %>
         <% end %>
       <% end %>
@@ -60,7 +42,7 @@
     <%= viral_empty(
       title: t(:"projects.samples.show.no_files"),
       description: t(:"projects.samples.show.no_associated_files"),
-      icon_name: :document_text
+      icon_name: :document_text,
     ) %>
   </div>
 </div>
