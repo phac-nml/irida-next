@@ -16,7 +16,7 @@ module System
         assert_selector 'tr:first-child th:nth-child(4)', text: 'DATE'
         assert_selector 'tr:first-child th:nth-child(5)', text: 'TIME AGO'
         assert_selector 'tr:first-child th:nth-child(6)',
-                        text: I18n.t('viral.data_table_component.header.action').upcase
+                        text: I18n.t('viral.data_table_component.header.actions').upcase
       end
 
       within('tbody') do
@@ -56,8 +56,8 @@ module System
                             'very very very very very very very very very very very very very long name'
 
       within('thead') do
-        assert_selector 'th[class="bg-slate-50 dark:bg-slate-700 px-3 py-3 right-0 sticky z-10"]',
-                        text: I18n.t('viral.data_table_component.header.action').upcase
+        assert_selector 'th[class="bg-slate-100 bg-slate-50 dark:bg-slate-700 px-3 py-3 right-0 sticky uppercase z-10"]',
+                        text: I18n.t('viral.data_table_component.header.actions').upcase
       end
 
       within('tbody') do
