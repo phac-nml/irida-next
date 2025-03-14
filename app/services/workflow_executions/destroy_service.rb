@@ -4,7 +4,7 @@ module WorkflowExecutions
   # Service used to delete a WorkflowExecution
   class DestroyService < BaseService
     def initialize(user = nil, params = {})
-      super(user, params)
+      super
       @workflow_execution = params[:workflow_execution] if params[:workflow_execution]
       @workflow_execution_ids = params[:workflow_execution_ids] if params[:workflow_execution_ids]
     end
@@ -27,6 +27,11 @@ module WorkflowExecutions
       workflows = WorkflowExecution.where(
         id: @workflow_execution_ids, state: %w[completed canceled error], cleaned: true
       )
+
+      workflows.each do |workflow|
+        authorize! workflow, to: :destroy?
+      end
+
       workflows_to_delete_count = workflows.count
 
       workflows.destroy_all

@@ -340,5 +340,25 @@ module Projects
       end
       assert_response :unprocessable_entity
     end
+
+    test 'should not destroy workflows if unauthorized' do
+      sign_in users(:ryan_doe)
+      canceled_workflow = workflow_executions(:automated_example_canceled)
+      error_workflow = workflow_executions(:automated_example_error)
+
+      assert_no_difference -> { WorkflowExecution.count },
+                           -> { SamplesWorkflowExecution.count } do
+        delete destroy_multiple_namespace_project_workflow_executions_path(
+          @namespace,
+          @project,
+          format: :turbo_stream
+        ),
+               params: {
+                 destroy_multiple: { workflow_execution_ids: [canceled_workflow.id, error_workflow.id] }
+               }
+      end
+
+      assert_response :unauthorized
+    end
   end
 end
