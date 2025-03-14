@@ -24,11 +24,25 @@ module Attachments
       assert_not_nil @sample.attachments_updated_at
 
       Timecop.travel(Time.zone.now + 5) do
+        destroyed_attachments = []
         assert_difference -> { Attachment.count } => -1 do
-          Attachments::DestroyService.new(@sample, @attachment1, @user).execute
+          destroyed_attachments = Attachments::DestroyService.new(@sample, @attachment1, @user).execute
         end
 
         assert_not_equal @sample.reload.attachments_updated_at, @sample_prev_timestamp
+
+        activity = PublicActivity::Activity.where(
+          trackable_id: @project1.namespace.id, key: 'namespaces_project_namespace.samples.attachment.destroy'
+        ).order(created_at: :desc).first
+
+        assert_equal 'namespaces_project_namespace.samples.attachment.destroy', activity.key
+        assert_equal @user, activity.owner
+
+        assert_equal 'attachment_destroy', activity.parameters[:action]
+        assert_equal @sample.puid, activity.parameters[:sample_puid]
+        assert_equal @sample.id, activity.parameters[:sample_id]
+        assert_equal destroyed_attachments.pluck(:puid), activity.parameters[:deleted_attachments_puids]
+        assert_equal destroyed_attachments.pluck(:id), activity.parameters[:deleted_attachments_ids]
       end
     end
 
@@ -79,11 +93,24 @@ module Attachments
     test 'delete project attachment with correct permissions' do
       assert_not_nil @project1.namespace.attachments_updated_at
       Timecop.travel(Time.zone.now + 5) do
+        destroyed_attachments = []
         assert_difference -> { Attachment.count } => -1 do
-          Attachments::DestroyService.new(@project1.namespace, @project1_attachment1, @user).execute
+          destroyed_attachments = Attachments::DestroyService.new(@project1.namespace, @project1_attachment1,
+                                                                  @user).execute
         end
 
         assert_not_equal @project1.namespace.reload.attachments_updated_at, @project_prev_timestamp
+
+        activity = PublicActivity::Activity.where(
+          trackable_id: @project1.namespace.id, key: 'namespaces_project_namespace.attachment.destroy'
+        ).order(created_at: :desc).first
+
+        assert_equal 'namespaces_project_namespace.attachment.destroy', activity.key
+        assert_equal @user, activity.owner
+
+        assert_equal 'project_attachment_destroy', activity.parameters[:action]
+        assert_equal destroyed_attachments.pluck(:puid), activity.parameters[:deleted_attachments_puids]
+        assert_equal destroyed_attachments.pluck(:id), activity.parameters[:deleted_attachments_ids]
       end
     end
 
@@ -108,11 +135,23 @@ module Attachments
     test 'delete group attachment with correct permissions' do
       assert_not_nil @group1.attachments_updated_at
       Timecop.travel(Time.zone.now + 5) do
+        destroyed_attachments = []
         assert_difference -> { Attachment.count } => -1 do
-          Attachments::DestroyService.new(@group1, @group1_attachment1, @user).execute
+          destroyed_attachments = Attachments::DestroyService.new(@group1, @group1_attachment1, @user).execute
         end
 
         assert_not_equal @group1.reload.attachments_updated_at, @group_prev_timestamp
+
+        activity = PublicActivity::Activity.where(
+          trackable_id: @group1.id, key: 'group.attachment.destroy'
+        ).order(created_at: :desc).first
+
+        assert_equal 'group.attachment.destroy', activity.key
+        assert_equal @user, activity.owner
+
+        assert_equal 'group_attachment_destroy', activity.parameters[:action]
+        assert_equal destroyed_attachments.pluck(:puid), activity.parameters[:deleted_attachments_puids]
+        assert_equal destroyed_attachments.pluck(:id), activity.parameters[:deleted_attachments_ids]
       end
     end
 
