@@ -1966,6 +1966,13 @@ en:
       add_all: Add all
       no_template: No template
       remove_all: Remove all
+    workflow_execution_samplesheet_params_validator:
+      attachment_format_error: property '%{property}' must match the expected file format of '%{file_format}'
+      attachment_gid_error: property '%{property}' must be a valid Attachment GID
+      blank_error: property '%{property}' is required and cannot be blank
+      sample_attachment_error: property '%{property}' must belong to the Sample
+      sample_name_error: property '%{property}' must match Sample Name
+      sample_puid_error: property '%{property}' must match Sample PUID
   workflow_executions:
     attachment:
       download: Download
