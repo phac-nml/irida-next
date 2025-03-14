@@ -295,8 +295,7 @@ module Projects
                             @namespace,
                             @project,
                             format: :turbo_stream
-                          ),
-                                 params: { destroy_multiple:
+                          ), params: { destroy_multiple:
                                           { workflow_execution_ids: [error_workflow.id, canceled_workflow.id] } }
                         end
       assert_response :success
@@ -313,13 +312,12 @@ module Projects
                             @namespace,
                             @project,
                             format: :turbo_stream
-                          ),
-                                 params: {
-                                   destroy_multiple: {
-                                     workflow_execution_ids: [error_workflow.id, canceled_workflow.id,
-                                                              running_workflow.id]
-                                   }
-                                 }
+                          ), params: {
+                            destroy_multiple: {
+                              workflow_execution_ids: [error_workflow.id, canceled_workflow.id,
+                                                       running_workflow.id]
+                            }
+                          }
                         end
       assert_response :multi_status
     end
@@ -333,10 +331,9 @@ module Projects
           @namespace,
           @project,
           format: :turbo_stream
-        ),
-               params: {
-                 destroy_multiple: { workflow_execution_ids: [running_workflow.id, new_workflow.id] }
-               }
+        ), params: {
+          destroy_multiple: { workflow_execution_ids: [running_workflow.id, new_workflow.id] }
+        }
       end
       assert_response :unprocessable_entity
     end
@@ -352,12 +349,10 @@ module Projects
           @namespace,
           @project,
           format: :turbo_stream
-        ),
-               params: {
-                 destroy_multiple: { workflow_execution_ids: [canceled_workflow.id, error_workflow.id] }
-               }
+        ), params: {
+          destroy_multiple: { workflow_execution_ids: [canceled_workflow.id, error_workflow.id] }
+        }
       end
-
       assert_response :unauthorized
     end
   end
