@@ -518,7 +518,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector '#dialog'
     within('#dialog') do
-      assert_text I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.description.plural').gsub! 'COUNT_PLACEHOLDER', '3'
+      assert_text I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.description.plural').gsub! 'COUNT_PLACEHOLDER',
+                                                                                                                     '3'
       assert_text ActionController::Base.helpers.strip_tags(
         I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.state_warning_html')
       )
@@ -556,7 +557,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector '#dialog'
     within('#dialog') do
-      assert_text I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.description.plural').gsub! 'COUNT_PLACEHOLDER', '3'
+      assert_text I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.description.plural').gsub! 'COUNT_PLACEHOLDER',
+                                                                                                                     '3'
       assert_text ActionController::Base.helpers.strip_tags(
         I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.state_warning_html')
       )
@@ -572,8 +574,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_text 'Displaying 18 items'
     assert_selector '#workflow-executions-table table tbody tr', count: 18
-    assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_error', not_deleted: "1/3")
-    assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_success', deleted: "2/3")
+    assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_error', not_deleted: '1/3')
+    assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_success', deleted: '2/3')
   end
 
   test 'cannot delete non-deletable workflows' do
