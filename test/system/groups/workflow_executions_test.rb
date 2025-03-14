@@ -88,6 +88,61 @@ module Groups
       end
     end
 
+    test 'can filter by ID and name on groups workflow execution index page' do
+      visit group_workflow_executions_path(@group)
+
+      assert_text 'Displaying 11 items'
+      assert_selector 'table tbody tr', count: 11
+
+      within('table tbody') do
+        assert_text @workflow_execution_group_shared1.id
+        assert_text @workflow_execution_group_shared1.name
+        assert_text @workflow_execution_group_shared2.id
+        assert_text @workflow_execution_group_shared2.name
+        assert_text @workflow_execution_group_shared3.id
+        assert_text @workflow_execution_group_shared3.name
+      end
+
+      fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
+              with: @workflow_execution_group_shared1.id
+      find('input.t-search-component').native.send_keys(:return)
+
+      assert_text 'Displaying 1 item'
+      assert_selector 'table tbody tr', count: 1
+
+      within('table tbody') do
+        assert_text @workflow_execution_group_shared1.id
+        assert_text @workflow_execution_group_shared1.name
+        assert_no_text @workflow_execution_group_shared2.id
+        assert_no_text @workflow_execution_group_shared2.name
+        assert_no_text @workflow_execution_group_shared3.id
+        assert_no_text @workflow_execution_group_shared3.name
+      end
+
+      fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
+              with: ''
+      find('input.t-search-component').native.send_keys(:return)
+
+      assert_text 'Displaying 11 items'
+      assert_selector 'table tbody tr', count: 11
+
+      fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
+              with: @workflow_execution_group_shared2.name
+      find('input.t-search-component').native.send_keys(:return)
+
+      assert_text 'Displaying 1 item'
+      assert_selector 'table tbody tr', count: 1
+
+      within('table tbody') do
+        assert_no_text @workflow_execution_group_shared1.id
+        assert_no_text @workflow_execution_group_shared1.name
+        assert_text @workflow_execution_group_shared2.id
+        assert_text @workflow_execution_group_shared2.name
+        assert_no_text @workflow_execution_group_shared3.id
+        assert_no_text @workflow_execution_group_shared3.name
+      end
+    end
+
     test 'should only include workflows that have been shared to the group' do
       workflow_execution1 = workflow_executions(:workflow_execution_shared1)
       workflow_execution2 = workflow_executions(:workflow_execution_shared2)
@@ -227,6 +282,123 @@ module Groups
       assert_selector 'h1', text: @workflow_execution_group_shared1.name
       assert_selector 'dt', text: dt_value
       assert_selector 'dd', text: new_we_name
+    end
+
+    test 'should not have any actions available for all workflow executions on the groups workflow executions page' do
+      visit group_workflow_executions_path(@group)
+
+      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title')
+      assert_selector 'p', text: I18n.t(:'groups.workflow_executions.index.subtitle')
+
+      within('#workflow-executions-table table tbody') do
+        assert_selector 'tr', count: 11
+        assert_no_link 'Cancel'
+        assert_no_link 'Delete'
+      end
+    end
+
+    test 'should not delete a prepared workflow' do
+      login_as users(:james_doe)
+      workflow_execution = workflow_executions(:workflow_execution_group_shared_prepared)
+
+      visit group_workflow_execution_path(@group, workflow_execution)
+
+      assert_text workflow_execution.id
+      assert_no_button I18n.t(:'groups.workflow_executions.show.remove_button')
+    end
+
+    test 'should not delete a submitted workflow' do
+      login_as users(:james_doe)
+      workflow_execution = workflow_executions(:workflow_execution_group_shared_submitted)
+
+      visit group_workflow_execution_path(@group, workflow_execution)
+
+      assert_text workflow_execution.id
+      assert_no_button I18n.t(:'groups.workflow_executions.show.remove_button')
+    end
+
+    test 'should delete a completed workflow' do
+      login_as users(:james_doe)
+      workflow_execution = workflow_executions(:workflow_execution_group_shared_completed)
+
+      visit group_workflow_execution_path(@group, workflow_execution)
+
+      click_link I18n.t(:'groups.workflow_executions.show.remove_button')
+
+      within('#turbo-confirm[open]') do
+        click_button I18n.t(:'components.confirmation.confirm')
+      end
+
+      within %(#workflow-executions-table table tbody) do
+        assert_selector 'tr', count: 10
+        assert_no_text workflow_execution.id
+      end
+    end
+
+    test 'should delete an errored workflow' do
+      login_as users(:james_doe)
+      workflow_execution = workflow_executions(:workflow_execution_group_shared_error)
+
+      visit group_workflow_execution_path(@group, workflow_execution)
+
+      click_link I18n.t(:'groups.workflow_executions.show.remove_button')
+
+      within('#turbo-confirm[open]') do
+        click_button I18n.t(:'components.confirmation.confirm')
+      end
+
+      within %(#workflow-executions-table table tbody) do
+        assert_selector 'tr', count: 10
+        assert_no_text workflow_execution.id
+      end
+    end
+
+    test 'should not delete a canceling workflow' do
+      login_as users(:james_doe)
+      workflow_execution = workflow_executions(:workflow_execution_group_shared_canceling)
+
+      visit group_workflow_execution_path(@group, workflow_execution)
+
+      assert_text workflow_execution.id
+      assert_no_button I18n.t(:'groups.workflow_executions.show.remove_button')
+    end
+
+    test 'should delete a canceled workflow' do
+      login_as users(:james_doe)
+      workflow_execution = workflow_executions(:workflow_execution_group_shared_canceled)
+
+      visit group_workflow_execution_path(@group, workflow_execution)
+
+      click_link I18n.t(:'groups.workflow_executions.show.remove_button')
+
+      within('#turbo-confirm[open]') do
+        click_button I18n.t(:'components.confirmation.confirm')
+      end
+
+      within %(#workflow-executions-table table tbody) do
+        assert_selector 'tr', count: 10
+        assert_no_text workflow_execution.id
+      end
+    end
+
+    test 'should not delete a running workflow' do
+      login_as users(:james_doe)
+      workflow_execution = workflow_executions(:workflow_execution_group_shared_running)
+
+      visit group_workflow_execution_path(@group, workflow_execution)
+
+      assert_text workflow_execution.id
+      assert_no_button I18n.t(:'groups.workflow_executions.show.remove_button')
+    end
+
+    test 'should not delete a new workflow' do
+      login_as users(:james_doe)
+      workflow_execution = workflow_executions(:workflow_execution_group_shared_new)
+
+      visit group_workflow_execution_path(@group, workflow_execution)
+
+      assert_text workflow_execution.id
+      assert_no_button I18n.t(:'groups.workflow_executions.show.remove_button')
     end
   end
 end
