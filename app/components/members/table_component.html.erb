@@ -5,13 +5,13 @@
       whitespace-nowrap
     "
   >
-    <thead
-      class="
-        text-xs text-slate-700 uppercase bg-slate-100 dark:bg-slate-700
-        dark:text-slate-400
-      "
-    >
-      <tr>
+    <thead class="text-xs uppercase text-slate-700 bg-slate-100 dark:bg-slate-900">
+      <tr
+        class='
+          border-y dark:border-slate-700 border-slate-200 dark:text-slate-400
+          text-slate-900
+        '
+      >
         <% @columns.each_with_index do |column, index| %>
           <%= render_cell(
               tag: 'th',

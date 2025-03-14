@@ -9,7 +9,7 @@
       >
         <thead
           class='
-            sticky top-0 z-10 text-xs uppercase border-b text-slate-700 bg-slate-100
+            sticky top-0 z-10 text-xs uppercase border-y text-slate-700 bg-slate-100
             dark:bg-slate-700 dark:text-slate-300 border-slate-200
           '
         >
@@ -217,7 +217,12 @@
         </tbody>
         <% if @abilities[:select_attachments] && !@attachments.empty? %>
           <tfoot class="sticky bottom-0 z-10">
-            <tr class="border-t dark:border-slate-700 border-slate-200">
+            <tr
+              class="
+                border-t dark:border-slate-700 border-slate-200 text-slate-800
+                dark:text-slate-300
+              "
+            >
               <td
                 class="
                   sticky left-0 z-10 px-6 py-3 bg-slate-50 dark:bg-slate-900

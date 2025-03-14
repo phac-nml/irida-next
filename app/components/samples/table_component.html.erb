@@ -11,16 +11,21 @@
       >
         <thead
           class='
-            sticky top-0 z-10 text-xs uppercase border-b text-slate-700 bg-slate-100
-            dark:bg-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700
+            sticky top-0 z-10 text-xs uppercase text-slate-700 bg-slate-100
+            dark:bg-slate-700 dark:text-slate-300
           '
         >
-          <tr>
+          <tr
+            class="
+              border-y dark:border-slate-700 border-slate-200 dark:text-slate-400
+              text-slate-900
+            "
+          >
             <% @columns.each_with_index do |column, index| %>
               <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-3 py-3', 'sticky left-0 min-w-56 max-w-56 z-10 bg-slate-100 dark:bg-slate-700': index.zero?, 'sticky left-56 z-10 bg-slate-100 dark:bg-slate-700': index == 1)
+              classes: class_names('sticky px-3 py-3 bg-slate-100 dark:bg-slate-700', 'left-0 min-w-56 max-w-56 z-10': index.zero?, 'left-56 z-10': index == 1)
                 ) do %>
                 <% if index.zero? and @abilities[:select_samples] %>
                   <%= check_box_tag "select-page",
@@ -66,7 +71,7 @@
               <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-3 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
+              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-700 sticky right-0')
             ) do %>
                 <%= t(".action") %>
               <% end %>
