@@ -247,6 +247,9 @@ fr:
         other: Échantillons
   activity:
     group:
+      attachment:
+        create_html: "%{user} attached files to group"
+        destroy_html: "%{user} removed files from group"
       create_html: "%{user} a créé le groupe"
       destroy_html: "%{user} a supprimé le groupe"
       import_samples:
@@ -280,6 +283,9 @@ fr:
       transfer_out_html: "%{user} a transféré le groupe %{transferred_group_puid} dans le groupe %{new_namespace}"
       update_html: "%{user} a mis à jour les attributs de groupe"
     namespaces_project_namespace:
+      attachment:
+        create_html: "%{user} attached files to project"
+        destroy_html: "%{user} removed files from project"
       create_html: "%{user} a créé le projet"
       destroy_html: "%{user} a supprimé le projet"
       import_samples:
