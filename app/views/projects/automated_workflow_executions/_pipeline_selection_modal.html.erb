@@ -1,5 +1,5 @@
 <%= viral_dialog(open: open) do |dialog| %>
-  <%= dialog.with_header(title: t(:".title")) %>
+  <% dialog.with_header(title: t(:".title")) %>
   <ul>
     <% available_automated_workflows.each do |key, workflow| %>
       <li>
