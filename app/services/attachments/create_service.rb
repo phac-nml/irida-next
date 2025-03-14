@@ -27,7 +27,7 @@ module Attachments
       @attachments
     end
 
-    def execute # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/MethodLength
+    def execute # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity
       attachable_authorization
 
       valid_fastq_attachments = @attachments.select { |attachment| attachment.valid? && attachment.fastq? }
@@ -42,16 +42,7 @@ module Attachments
 
       @attachments.each(&:save)
 
-      if @attachable.instance_of?(Sample) && @include_activity
-        @attachable.project.namespace.create_activity key: 'namespaces_project_namespace.samples.attachment.create',
-                                                      owner: current_user,
-                                                      trackable_id: @attachable.id,
-                                                      parameters: {
-                                                        sample_puid: @attachable.puid,
-                                                        sample_id: @attachable.id,
-                                                        action: 'attachment_create'
-                                                      }
-      end
+      create_activities if @include_activity
 
       if Irida::Pipelines.instance.available_pipelines.any? &&
          @attachable.instance_of?(Sample) &&
@@ -63,6 +54,37 @@ module Attachments
     end
 
     private
+
+    def create_activities # rubocop:disable Metrics/MethodLength
+      if @attachable.instance_of?(Sample)
+        attachable_object = @attachable.project.namespace
+        activity_key = 'namespaces_project_namespace.samples.attachment.create'
+        params = {
+          sample_puid: @attachable.puid,
+          sample_id: @attachable.id,
+          action: 'attachment_create'
+        }
+      elsif @attachable.instance_of?(Namespaces::ProjectNamespace)
+        attachable_object = @attachable
+        activity_key = 'namespaces_project_namespace.attachment.create'
+        params = {
+          action: 'project_attachment_create'
+        }
+      elsif @attachable.instance_of?(Group)
+        attachable_object = @attachable
+        activity_key = 'group.attachment.create'
+        params = {
+          action: 'group_attachment_create'
+        }
+      end
+
+      return unless attachable_object
+
+      attachable_object.create_activity key: activity_key,
+                                        owner: current_user,
+                                        trackable_id: @attachable.id,
+                                        parameters: params
+    end
 
     def attachable_authorization
       if @attachable.instance_of?(Sample)
