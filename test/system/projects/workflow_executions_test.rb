@@ -475,7 +475,8 @@ module Projects
 
       assert_selector '#dialog'
       within('#dialog') do
-        assert_text I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.description.plural').gsub! 'COUNT_PLACEHOLDER', '2'
+        assert_text I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.description.plural').gsub! 'COUNT_PLACEHOLDER',
+                                                                                                                       '2'
         assert_text ActionController::Base.helpers.strip_tags(
           I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.state_warning_html')
         )
@@ -513,7 +514,8 @@ module Projects
 
       assert_selector '#dialog'
       within('#dialog') do
-        assert_text I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.description.plural').gsub! 'COUNT_PLACEHOLDER', '3'
+        assert_text I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.description.plural').gsub! 'COUNT_PLACEHOLDER',
+                                                                                                                       '3'
         assert_text ActionController::Base.helpers.strip_tags(
           I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.state_warning_html')
         )
@@ -529,8 +531,8 @@ module Projects
 
       assert_text 'Displaying 10 items'
       assert_selector '#workflow-executions-table table tbody tr', count: 10
-      assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_error', not_deleted: "1/3")
-      assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_success', deleted: "2/3")
+      assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_error', not_deleted: '1/3')
+      assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_success', deleted: '2/3')
     end
 
     test 'cannot delete non-deletable workflows' do
@@ -578,12 +580,11 @@ module Projects
     end
 
     test 'user with access level Analyst cannot view delete workflows link' do
-      login_as users(:james_doe)
-      visit namespace_project_workflow_executions_path(@namespace, @project)
+      namespace = namespaces_user_namespaces(:john_doe_namespace)
+      project26 = projects(:project26)
+      login_as users(:user0)
+      visit namespace_project_workflow_executions_path(namespace, project26)
       assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
-
-      assert_text 'Displaying 12 items'
-      assert_selector '#workflow-executions-table table tbody tr', count: 12
 
       assert_no_selector 'a', text: I18n.t('workflow_executions.index.delete_workflows_button')
     end
