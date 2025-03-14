@@ -1,0 +1,18 @@
+<div
+  data-controller="projects--samples--complete"
+  data-projects--samples--metadata--complete-filters-outlet=".filters"
+>
+  <p class="mb-4 dark:text-white"><%= t(".description") %></p>
+
+  <% errors.each do |error| %>
+    <%= viral_alert(type:, message: error, classes: "mb-4") %>
+  <% end %>
+
+  <div>
+    <%= viral_button(state: :primary, data: { action: 'click->viral--dialog#close' }) do %>
+      <%= t(".ok_button") %>
+    <% end %>
+  </div>
+</div>
+
+<turbo-stream action="refresh"></turbo-stream>
