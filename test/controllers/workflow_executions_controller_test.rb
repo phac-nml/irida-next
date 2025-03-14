@@ -8,6 +8,7 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     @sample1 = samples(:sample1)
     @attachment1 = attachments(:attachment1)
     @workflow_execution = workflow_executions(:irida_next_example_completed)
+    Flipper.enable(:delete_multiple_workflows)
   end
 
   test 'should create workflow execution with valid params' do
@@ -252,7 +253,9 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     canceled_workflow = workflow_executions(:irida_next_example_canceled)
     assert_difference -> { WorkflowExecution.count } => -2,
                       -> { SamplesWorkflowExecution.count } => -2 do
-                        delete destroy_multiple_workflow_executions_path(format: :turbo_stream), params: {destroy_multiple: {workflow_execution_ids: [error_workflow.id, canceled_workflow.id]}}
+                        delete destroy_multiple_workflow_executions_path(format: :turbo_stream),
+                               params: { destroy_multiple: { workflow_execution_ids:
+                                                             [error_workflow.id, canceled_workflow.id] }}
                       end
     assert_response :success
   end
@@ -265,7 +268,8 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert_difference -> { WorkflowExecution.count } => -2,
                       -> { SamplesWorkflowExecution.count } => -2 do
     delete destroy_multiple_workflow_executions_path(format: :turbo_stream),
-    params: {destroy_multiple: {workflow_execution_ids: [error_workflow.id, canceled_workflow.id, new_workflow.id]}}
+           params: { destroy_multiple: { workflow_execution_ids:
+                                         [error_workflow.id, canceled_workflow.id, new_workflow.id] }}
                       end
     assert_response :multi_status
   end
@@ -276,7 +280,7 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference -> { WorkflowExecution.count },
                       -> { SamplesWorkflowExecution.count } do
     delete destroy_multiple_workflow_executions_path(format: :turbo_stream),
-    params: {destroy_multiple: {workflow_execution_ids: [running_workflow.id, new_workflow.id]}}
+           params: { destroy_multiple: { workflow_execution_ids: [running_workflow.id, new_workflow.id] }}
                       end
     assert_response :unprocessable_entity
   end

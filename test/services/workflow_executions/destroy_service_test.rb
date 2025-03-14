@@ -7,6 +7,8 @@ module WorkflowExecutions
     def setup
       @user = users(:john_doe)
       @user_destroyable = users(:janitor_doe)
+
+      Flipper.enable(:delete_multiple_workflows)
     end
 
     test 'should not destroy a workflow execution if the user is not the submitter' do
@@ -157,7 +159,9 @@ module WorkflowExecutions
       assert_difference -> { WorkflowExecution.count } => -3,
                         -> { SamplesWorkflowExecution.count } => -3,
                         -> { Sample.count } => 0 do
-        WorkflowExecutions::DestroyService.new(@user_destroyable, { workflow_execution_ids: [error_workflow.id, canceled_workflow.id, completed_workflow.id] }).execute
+        WorkflowExecutions::DestroyService.new(
+          @user_destroyable,
+          { workflow_execution_ids: [error_workflow.id, canceled_workflow.id, completed_workflow.id] }).execute
       end
     end
 
@@ -169,7 +173,9 @@ module WorkflowExecutions
       assert_difference -> { WorkflowExecution.count } => -2,
                         -> { SamplesWorkflowExecution.count } => -2,
                         -> { Sample.count } => 0 do
-        WorkflowExecutions::DestroyService.new(@user_destroyable, { workflow_execution_ids: [canceling_workflow.id, canceled_workflow.id, completed_workflow.id] }).execute
+        WorkflowExecutions::DestroyService.new(
+          @user_destroyable,
+          { workflow_execution_ids: [canceling_workflow.id, canceled_workflow.id, completed_workflow.id] }).execute
       end
     end
 
@@ -179,7 +185,9 @@ module WorkflowExecutions
 
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
-        WorkflowExecutions::DestroyService.new(@user_destroyable, { workflow_execution_ids: [canceling_workflow.id, unclean_workflow.id] }).execute
+        WorkflowExecutions::DestroyService.new(
+          @user_destroyable,
+          { workflow_execution_ids: [canceling_workflow.id, unclean_workflow.id] }).execute
       end
     end
   end

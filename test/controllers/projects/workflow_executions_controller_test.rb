@@ -11,6 +11,8 @@ module Projects
       @workflow_execution = workflow_executions(:automated_example_completed)
       @namespace = groups(:group_one)
       @project = projects(:project1)
+
+      Flipper.enable(:delete_multiple_workflows)
     end
 
     test 'should show a listing of workflow executions for the project' do
@@ -289,7 +291,13 @@ module Projects
 
       assert_difference -> { WorkflowExecution.count } => -2,
                         -> { SamplesWorkflowExecution.count } => -2 do
-                          delete destroy_multiple_namespace_project_workflow_executions_path(@namespace, @project, format: :turbo_stream), params: {destroy_multiple: {workflow_execution_ids: [error_workflow.id, canceled_workflow.id]}}
+                          delete destroy_multiple_namespace_project_workflow_executions_path(
+                                  @namespace,
+                                  @project,
+                                  format: :turbo_stream
+                                 ),
+                                 params: { destroy_multiple:
+                                          { workflow_execution_ids: [error_workflow.id, canceled_workflow.id] }}
                         end
       assert_response :success
     end
@@ -302,8 +310,15 @@ module Projects
 
       assert_difference -> { WorkflowExecution.count } => -2,
                         -> { SamplesWorkflowExecution.count } => -2 do
-      delete destroy_multiple_namespace_project_workflow_executions_path(@namespace, @project, format: :turbo_stream),
-      params: {destroy_multiple: {workflow_execution_ids: [error_workflow.id, canceled_workflow.id, running_workflow.id]}}
+                          delete destroy_multiple_namespace_project_workflow_executions_path(
+                            @namespace,
+                            @project,
+                            format: :turbo_stream
+                          ),
+                          params: {
+                            destroy_multiple: {
+                              workflow_execution_ids: [error_workflow.id, canceled_workflow.id, running_workflow.id]
+                            }}
                         end
       assert_response :multi_status
     end
@@ -313,8 +328,14 @@ module Projects
       new_workflow = workflow_executions(:automated_example_new)
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
-      delete destroy_multiple_namespace_project_workflow_executions_path(@namespace, @project, format: :turbo_stream),
-      params: {destroy_multiple: {workflow_execution_ids: [running_workflow.id, new_workflow.id]}}
+                            delete destroy_multiple_namespace_project_workflow_executions_path(
+                              @namespace,
+                              @project,
+                              format: :turbo_stream
+                            ),
+                            params: {
+                              destroy_multiple: { workflow_execution_ids: [running_workflow.id, new_workflow.id] }
+                            }
                         end
       assert_response :unprocessable_entity
     end

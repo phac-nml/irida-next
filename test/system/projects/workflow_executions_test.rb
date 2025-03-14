@@ -19,6 +19,8 @@ module Projects
       @workflow_name_col = '5'
       @workflow_version_col = '6'
       @created_at_col = '7'
+
+      Flipper.enable(:delete_multiple_workflows)
     end
 
     test 'should display a list of workflow executions' do
@@ -532,7 +534,6 @@ module Projects
     end
 
     test 'cannot delete non-deletable workflows' do
-      # attempt to destroy deletable and non-deletable workflows
       new_workflow = workflow_executions(:automated_example_new)
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
