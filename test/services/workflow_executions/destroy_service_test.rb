@@ -193,5 +193,28 @@ module WorkflowExecutions
         ).execute
       end
     end
+
+    test 'should not destroy workflow executions if a workflow deletion is unauthorized' do
+      user = users(:jane_doe)
+      invalid_to_delete_workflow = workflow_executions(:irida_next_example_completed)
+      valid_to_delete_workflow = workflow_executions(:irida_next_example_completed_with_output)
+
+      assert_no_difference -> { WorkflowExecution.count },
+                           -> { SamplesWorkflowExecution.count } do
+        exception = assert_raises(ActionPolicy::Unauthorized) do
+          WorkflowExecutions::DestroyService.new(user,
+                                                 { workflow_execution_ids: [invalid_to_delete_workflow.id,
+                                                                            valid_to_delete_workflow.id] }).execute
+        end
+
+        assert_equal WorkflowExecutionPolicy, exception.policy
+        assert_equal :destroy?, exception.rule
+        assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+        assert_equal I18n.t(:'action_policy.policy.workflow_execution.destroy?',
+                            namespace_type: invalid_to_delete_workflow.namespace.type,
+                            name: invalid_to_delete_workflow.namespace.name),
+                     exception.result.message
+      end
+    end
   end
 end
