@@ -26,7 +26,7 @@
       },
       class: "button button--size-default button--state-default action-link" %>
     <% end %>
-    <% if allowed_to?(:destroy_workflow_executions?, @project.namespace) %>
+    <% if allowed_to?(:destroy_workflow_executions?, @project.namespace) && Flipper.enabled?(:delete_multiple_workflows) %>
       <%= link_to t(".delete_workflows_button"),
       destroy_multiple_confirmation_namespace_project_workflow_executions_path,
       data: {

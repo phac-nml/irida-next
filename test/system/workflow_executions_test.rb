@@ -20,6 +20,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     @workflow_name_col = '5'
     @workflow_version_col = '6'
     @created_at_col = '7'
+
+    Flipper.enable(:delete_multiple_workflows)
   end
 
   test 'should display a list of workflow executions' do
@@ -575,7 +577,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'cannot delete non-deletable workflows' do
-    # attempt to destroy deletable and non-deletable workflows
     workflow_execution1 = workflow_executions(:irida_next_example_completed_unclean)
     visit workflow_executions_path
 
