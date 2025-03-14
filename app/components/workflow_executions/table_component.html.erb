@@ -6,18 +6,18 @@
         whitespace-nowrap
       '
     >
-      <thead
-        class='
-          text-xs uppercase text-slate-700 bg-slate-100 dark:bg-slate-700
-          dark:text-slate-400
-        '
-      >
-        <tr>
+      <thead class='text-xs uppercase text-slate-700 bg-slate-100 dark:bg-slate-900'>
+        <tr
+          class='
+            border-y dark:border-slate-700 border-slate-200 dark:text-slate-400
+            text-slate-900
+          '
+        >
           <% @columns.each_with_index do |column, index| %>
             <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-3 py-3', 'sticky left-0 z-10 bg-slate-100 dark:bg-slate-700': index.zero?)
+              classes: class_names('px-3 py-3', 'sticky left-0 z-10 bg-slate-100 dark:bg-slate-900 dark:text-slate-400': index.zero?)
             ) do %>
               <% if index.zero? and @abilities[:select_workflow_executions] %>
                 <%= check_box_tag "select-page",
@@ -29,7 +29,7 @@
                   selection_target: "selectPage",
                 },
                 class:
-                  "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded-sm focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+                  "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded-sm focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-400" %>
               <% end %>
               <% if column == :workflow_name || column == :workflow_version %>
                 <%= render Ransack::SortComponent.new(
@@ -62,7 +62,7 @@
             <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-700 sticky right-0')
+              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-700 dark:text-slate-400 sticky right-0')
             ) do %>
               <%= t(".actions") %>
             <% end %>
@@ -180,7 +180,12 @@
       </tbody>
       <% if @abilities[:select_workflow_executions] && !@workflow_executions.empty? %>
         <tfoot>
-          <tr class="border-t dark:border-slate-700 border-slate-200">
+          <tr
+            class="
+              border-t dark:border-slate-700 border-slate-200 text-slate-900
+              dark:text-slate-400
+            "
+          >
             <td
               class="
                 sticky left-0 z-10 px-6 py-3 bg-slate-100 dark:bg-slate-900
