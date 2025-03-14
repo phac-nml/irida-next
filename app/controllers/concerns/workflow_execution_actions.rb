@@ -192,7 +192,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def destroy_multiple_params
-    params.require(:destroy_multiple).permit(workflow_execution_ids: [])
+    params.expect(destroy_multiple: { workflow_execution_ids: [] })
   end
 
   def set_multi_status_destroy_multiple_message(deleted_workflows_count, workflows_to_delete_count)
