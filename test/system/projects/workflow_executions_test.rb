@@ -566,5 +566,26 @@ module Projects
       assert_selector '#workflow-executions-table table tbody tr', count: 12
       assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.error')
     end
+
+    test 'user with access level >= Maintainer can view delete workflows link' do
+      visit namespace_project_workflow_executions_path(@namespace, @project)
+      assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+
+      assert_text 'Displaying 12 items'
+      assert_selector '#workflow-executions-table table tbody tr', count: 12
+
+      assert_selector 'a', text: I18n.t('workflow_executions.index.delete_workflows_button')
+    end
+
+    test 'user with access level Analyst cannot view delete workflows link' do
+      login_as users(:james_doe)
+      visit namespace_project_workflow_executions_path(@namespace, @project)
+      assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+
+      assert_text 'Displaying 12 items'
+      assert_selector '#workflow-executions-table table tbody tr', count: 12
+
+      assert_no_selector 'a', text: I18n.t('workflow_executions.index.delete_workflows_button')
+    end
   end
 end

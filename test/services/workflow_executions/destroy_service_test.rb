@@ -161,7 +161,8 @@ module WorkflowExecutions
                         -> { Sample.count } => 0 do
         WorkflowExecutions::DestroyService.new(
           @user_destroyable,
-          { workflow_execution_ids: [error_workflow.id, canceled_workflow.id, completed_workflow.id] }).execute
+          { workflow_execution_ids: [error_workflow.id, canceled_workflow.id, completed_workflow.id] }
+        ).execute
       end
     end
 
@@ -175,7 +176,8 @@ module WorkflowExecutions
                         -> { Sample.count } => 0 do
         WorkflowExecutions::DestroyService.new(
           @user_destroyable,
-          { workflow_execution_ids: [canceling_workflow.id, canceled_workflow.id, completed_workflow.id] }).execute
+          { workflow_execution_ids: [canceling_workflow.id, canceled_workflow.id, completed_workflow.id] }
+        ).execute
       end
     end
 
@@ -187,7 +189,8 @@ module WorkflowExecutions
                            -> { SamplesWorkflowExecution.count } do
         WorkflowExecutions::DestroyService.new(
           @user_destroyable,
-          { workflow_execution_ids: [canceling_workflow.id, unclean_workflow.id] }).execute
+          { workflow_execution_ids: [canceling_workflow.id, unclean_workflow.id] }
+        ).execute
       end
     end
   end
