@@ -1,0 +1,22 @@
+<div
+  class="text-center"
+  data-projects-samples--complete-loaded-value="false"
+  data-controller="projects--samples--complete"
+  data-projects--samples--complete-filters-outlet=".filters"
+>
+  <div
+    class="
+      w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 p-2 flex items-center
+      justify-center mx-auto mb-3.5
+    "
+  >
+    <%= viral_icon(name: "check", classes: "w-8 h-8 text-green-500 dark:text-green-400") %>
+    <span class="sr-only"><%= t(".success") %></span>
+  </div>
+  <p class="mb-4 text-lg font-semibold text-slate-900 dark:text-white"><%= t(".description") %></p>
+  <%= viral_button(state: :primary, data: { action: 'click->viral--dialog#close' }) do %>
+    <%= t(".ok_button") %>
+  <% end %>
+</div>
+
+<turbo-stream action="refresh"></turbo-stream>
