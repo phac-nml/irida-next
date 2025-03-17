@@ -150,7 +150,7 @@ en:
         provider: Authentication Provider
         uid: Authentication Provider UID
       workflow_execution:
-        name: Nom
+        name: Name
     concerns:
       history:
         system: System
