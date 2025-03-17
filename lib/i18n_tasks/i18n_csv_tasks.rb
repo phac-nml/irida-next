@@ -27,7 +27,7 @@ module I18nCsvTasks # rubocop:disable Style/Documentation
       CSV.open(path, 'wb') do |csv|
         csv << (['key'] + i18n.locales)
 
-        translations_by_locale[i18n.base_locale].keys.each do |key|
+        translations_by_locale[i18n.base_locale].each_key do |key|
           values = i18n.locales.map do |locale|
             translations_by_locale[locale][key]
           end
@@ -50,7 +50,7 @@ module I18nCsvTasks # rubocop:disable Style/Documentation
         i18n.locales.each do |locale|
           next unless row.key?(locale)
           unless row.key?(locale)
-            raise "Locale missing for key #{key}! (locales in app: #{locales} / locales in file: #{row.headers.inspect})"
+            raise "Locale missing for key #{key}! (locales in app: #{locales} / locales in file: #{row.headers.inspect})" # rubocop:disable Layout/LineLength
           end
 
           translations << [[locale, key].join('.'), row[locale]]
