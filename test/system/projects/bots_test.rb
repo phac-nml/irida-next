@@ -447,7 +447,7 @@ module Projects
       assert_selector '#bots-table'
       assert_selector '#bots-table table tbody tr', count: 20
       assert_selector "#bots-table table tbody tr[id='#{@project_bot.id}']"
-      within('#bots-table table tbody tr:first-child td:nth-child(6)') do
+      within("#bots-table table tbody tr[id='#{@project_bot.id}'] td:nth-child(6)") do
         # destroy bot
         click_link I18n.t(:'bots.index.table.actions.destroy')
       end
