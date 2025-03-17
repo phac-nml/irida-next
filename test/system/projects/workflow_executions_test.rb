@@ -407,7 +407,7 @@ module Projects
       login_as user
       workflow_execution = workflow_executions(:automated_workflow_execution)
       visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
-      dt_value = 'Name'
+      dt_value = I18n.t('projects.workflow_executions.summary.name', locale: user.locale)
       new_we_name = 'New Name'
       ### SETUP END ###
 
