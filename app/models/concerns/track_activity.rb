@@ -15,7 +15,10 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
       trackable_type = activity.trackable_type
       activity[:parameters] = convert_activity_parameter_keys(activity)
-
+      puts activity
+      puts activity.key
+      puts activity[:parameters]
+      puts 'bybybyby'
       case trackable_type
       when 'Namespace'
         if activity.key.include?('project_namespace')
@@ -52,6 +55,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     params = member_activity_params(activity, activity_trackable, base_params)
     params = group_link_params(activity, params)
     params = transfer_activity_parameters(params, activity)
+    params = workflow_execution_activity_params(params, activity)
 
     namespace_project_sample_activity_parameters(params, activity)
   end
@@ -210,6 +214,19 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
                     })
     end
 
+    params
+  end
+
+  def workflow_execution_activity_params(params, activity)
+    if activity.parameters[:action] == 'workflow_execution_destroy'
+      params.merge!({
+                      workflow_execution_id: activity.parameters[:workflow_execution_id]
+                    })
+    elsif activity.parameters[:action] == 'workflow_execution_destroy_multiple'
+      params.merge!({
+                      workflow_execution_ids: activity.parameters[:workflow_execution_ids]
+                    })
+    end
     params
   end
 

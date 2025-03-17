@@ -22,6 +22,8 @@ module WorkflowExecutions
       authorize! @workflow_execution, to: :destroy?
 
       @workflow_execution.destroy
+
+      create_activity([@workflow_execution.id]) unless @namespace.nil?
     end
 
     def destroy_multiple
@@ -40,9 +42,33 @@ module WorkflowExecutions
       )
       workflows_to_delete_count = deletable_workflow_executions.count
 
+      workflow_executions_to_delete_ids = deletable_workflow_executions.pluck(:id)
+
       deletable_workflow_executions.destroy_all
 
+      create_activity(workflow_executions_to_delete_ids) if workflows_to_delete_count.positive? && !@namespace.nil?
+
       workflows_to_delete_count
+    end
+
+    def create_activity(deleted_ids) # rubocop:disable Metrics/MethodLength
+      if deleted_ids.count == 1
+        @namespace.create_activity key: 'namespaces_project_namespace.workflow_executions.destroy',
+                                   owner: current_user,
+                                   parameters:
+                                    {
+                                      workflow_execution_id: deleted_ids.first,
+                                      action: 'workflow_execution_destroy'
+                                    }
+      else
+        @namespace.create_activity key: 'namespaces_project_namespace.workflow_executions.destroy_multiple',
+                                   owner: current_user,
+                                   parameters:
+                                   {
+                                     workflow_execution_ids: deleted_ids,
+                                     action: 'workflow_execution_destroy_multiple'
+                                   }
+      end
     end
   end
 end

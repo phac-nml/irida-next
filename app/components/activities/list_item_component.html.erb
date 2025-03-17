@@ -60,6 +60,10 @@
         <%= render Activities::MemberActivityComponent.new(activity: activity) %>
       <% elsif project_namespace_transfer_action %>
         <%= render Activities::Projects::TransferActivityComponent.new(activity: activity) %>
+      <% elsif project_namespace_workflow_execution_action %>
+        <%= render Activities::Projects::WorkflowExecutionActivityComponent.new(
+          activity: activity,
+        ) %>
       <% else %>
         <%= render Activities::Projects::BaseActivityComponent.new(activity: activity) %>
       <% end %>
