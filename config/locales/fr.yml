@@ -276,7 +276,7 @@ fr:
       transfer_in_html: "%{user} a transféré le groupe %{href} dans le groupe %{new_namespace} de %{old_namespace}"
       transfer_in_no_exisiting_namespace_html: "%{user} a transféré le groupe %{href} dans le groupe %{new_namespace}"
       transfer_out_html: "%{user} a transféré le groupe %{transferred_group_puid} dans le groupe %{new_namespace}"
-      update_html: "%{User} a mis à jour les attributs de groupe"
+      update_html: "%{user} a mis à jour les attributs de groupe"
     namespaces_project_namespace:
       create_html: "%{user} a créé le projet"
       destroy_html: "%{user} a supprimé le projet"
@@ -503,7 +503,7 @@ fr:
         leave_success: Vous avez réussi à quitter %{name}
         success: Membre %{user} supprimé avec succès
       update:
-        success: "%{User_email} du membre mis à jour avec succès"
+        success: "%{user_email} du membre mis à jour avec succès"
     metadata_template_actions:
       create:
         success: Modèle de métadonnées %{template_name} créé avec succès
@@ -673,7 +673,7 @@ fr:
     messages:
       not_saved:
         one: '1 erreur a empêché cette %{resource} d’être sauvegardée :'
-        other: 'Les erreurs %{count} ont empêché cette %{ressource} d’être sauvegardée :'
+        other: 'Les erreurs %{count} ont empêché cette %{resource} d’être sauvegardée :'
   general:
     default_sidebar:
       data_exports: Exportations de données
@@ -1028,14 +1028,14 @@ fr:
   metadata_templates:
     edit_template_dialog:
       available: Disponible
-      description: Sélectionnez les champs de métadonnées du modèle en déplaçant les champs de métadonnées de la liste disponible à la liste sélectionnée et vice versa. L’ordre des champs du modèle sera déterminé par l’ordre de la liste %{selected}.
+      description: Sélectionnez les champs de métadonnées du modèle en déplaçant les champs de métadonnées de la liste disponible à la liste sélectionnée et vice versa. L’ordre des champs du modèle sera déterminé par l’ordre de la liste sélectionnée.
       metadata: Métadonnées
       selected: Sélectionné
       title: Modifier le modèle de métadonnées
       update_button: Mise à jour
     new_template_dialog:
       available: Disponible
-      description: Sélectionnez les champs de métadonnées du nouveau modèle en déplaçant les champs de métadonnées de la liste disponible à la liste sélectionnée. L’ordre des champs du modèle sera déterminé par l’ordre de la liste %{selected}.
+      description: Sélectionnez les champs de métadonnées du nouveau modèle en déplaçant les champs de métadonnées de la liste disponible à la liste sélectionnée. L’ordre des champs du modèle sera déterminé par l’ordre de la liste sélectionnée.
       metadata: Métadonnées
       selected: Sélectionné
       submit_button: Envoyer
@@ -1290,7 +1290,7 @@ fr:
           descriptions:
           - Transférer votre projet dans un autre espace de noms.
           - Lorsque vous transférez votre projet à un groupe, vous pouvez facilement gérer plusieurs projets et utilisateurs.
-          - Ce qu’il faut savoir avant de transférer votre projet : 
+          - Ce qu’il faut savoir avant de transférer votre projet:
           empty_state: Aucun espace de noms n’est associé à ce nom ou à cet identifiant
           new_namespace_id: Sélectionnez un nouvel espace de noms
           no_available_namespaces: Vous n’avez accès à aucun espace de noms de destination pour transférer ce projet
