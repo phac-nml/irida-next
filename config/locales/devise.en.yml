@@ -57,10 +57,13 @@ en:
         signed_up: Already signed up?
         submit_button: Sign up
     sessions:
+      already_signed_out: Signed out successfully.
       new_with_providers:
         local_button: Sign in with Local Account
         omniauth: Sign in with %{provider}
         return_button: Return to sign in selection
+      signed_in: Signed in successfully.
+      signed_out: Signed out successfully.
     shared:
       form:
         sign_in: Sign in
