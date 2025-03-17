@@ -448,8 +448,7 @@ module Groups
       end
 
       # confirm destroy bot
-      assert_selector '#dialog'
-      within('#dialog') do
+      within('dialog') do
         assert_text I18n.t('bots.destroy_confirmation.description', bot_name: @group_bot.user.email)
         click_button I18n.t('bots.destroy_confirmation.submit_button')
       end
