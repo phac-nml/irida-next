@@ -1,5 +1,3 @@
-<% radio_class =
-  "shrink-0 mt-0.5 border-slate-200 rounded-full text-primary-600 focus:ring-primary-500 checked:border-primary-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-primary-500 dark:checked:border-primary-500 dark:focus:ring-offset-slate-800" %>
 <%= form_with url: @url, method: :post,
 data: {
   turbo_stream: true,
@@ -35,7 +33,6 @@ data: {
           name="q[metadata_template]"
           onchange="this.form.requestSubmit()"
           <%= @current_metadata_template_id == "all" ? "checked" : "" %>
-          class="<%= radio_class %>"
         >
         <label
           for="rl-all"
@@ -59,7 +56,6 @@ data: {
           onchange="this.form.requestSubmit()"
           name="q[metadata_template]"
           <%= @current_metadata_template_id == "none" ? "checked" : "" %>
-          class="<%= radio_class %>"
         >
         <label
           for="rl-none"
@@ -93,7 +89,6 @@ data: {
               onchange="this.form.requestSubmit()"
               name="q[metadata_template]"
               <%= @current_metadata_template_id == metadata_template.id ? "checked" : "" %>
-              class="<%= radio_class %>"
             >
             <label
               for="rl-<%= metadata_template.id %>"
