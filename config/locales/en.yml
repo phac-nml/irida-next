@@ -50,6 +50,7 @@ en:
         destroy_bot_accounts?: You are not authorized to destroy bot accounts for project %{name} on this server.
         destroy_member?: You are not authorized to remove members from the project namespace %{name} on this server.
         destroy_metadata_templates?: You are not authorized to destroy metadata templates for project %{name} on this server.
+        destroy_workflow_executions?: You are not authorized to destroy workflow executions for project %{name} on this server.
         export_data?: You are not authorized to export data from project %{name} on this server.
         import_samples_and_metadata?: You are not authorized to import samples and metadata for group %{name} on this server.
         link_namespace_with_group?: You are not authorized to link project %{name} with other groups on this server.
