@@ -213,16 +213,6 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     ]
   end
 
-  def destroy_multiple_paths
-    if @namespace.nil?
-      @list_path = list_workflow_executions_path(list_class: 'workflow_execution')
-      @destroy_path = destroy_multiple_workflow_executions_path
-    else
-      @list_path = list_namespace_project_workflow_executions_path(list_class: 'workflow_execution')
-      @destroy_path = destroy_multiple_namespace_project_workflow_executions_path
-    end
-  end
-
   protected
 
   def redirect_path
