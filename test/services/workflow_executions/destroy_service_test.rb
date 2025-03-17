@@ -7,6 +7,9 @@ module WorkflowExecutions
     def setup
       @user = users(:john_doe)
       @user_destroyable = users(:janitor_doe)
+
+      @namespace = projects(:project1).namespace
+      Flipper.enable(:delete_multiple_workflows)
     end
 
     test 'should not destroy a workflow execution if the user is not the submitter' do
@@ -17,7 +20,7 @@ module WorkflowExecutions
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
         exception = assert_raises(ActionPolicy::Unauthorized) do
-          WorkflowExecutions::DestroyService.new(workflow_execution, user).execute
+          WorkflowExecutions::DestroyService.new(user, { workflow_execution: }).execute
         end
 
         assert_equal WorkflowExecutionPolicy, exception.policy
@@ -36,7 +39,7 @@ module WorkflowExecutions
 
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+        WorkflowExecutions::DestroyService.new(@user, { workflow_execution: }).execute
       end
     end
 
@@ -46,7 +49,7 @@ module WorkflowExecutions
 
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+        WorkflowExecutions::DestroyService.new(@user, { workflow_execution: }).execute
       end
     end
 
@@ -58,7 +61,7 @@ module WorkflowExecutions
       assert_difference -> { WorkflowExecution.count } => -1,
                         -> { SamplesWorkflowExecution.count } => -1,
                         -> { Sample.count } => 0 do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user_destroyable).execute
+        WorkflowExecutions::DestroyService.new(@user_destroyable, { workflow_execution: }).execute
       end
     end
 
@@ -69,7 +72,7 @@ module WorkflowExecutions
 
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+        WorkflowExecutions::DestroyService.new(@user, { workflow_execution: }).execute
       end
     end
 
@@ -81,7 +84,7 @@ module WorkflowExecutions
       assert_difference -> { WorkflowExecution.count } => -1,
                         -> { SamplesWorkflowExecution.count } => -1,
                         -> { Sample.count } => 0 do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user_destroyable).execute
+        WorkflowExecutions::DestroyService.new(@user_destroyable, { workflow_execution: }).execute
       end
     end
 
@@ -92,7 +95,7 @@ module WorkflowExecutions
 
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+        WorkflowExecutions::DestroyService.new(@user, { workflow_execution: }).execute
       end
     end
 
@@ -102,7 +105,7 @@ module WorkflowExecutions
 
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+        WorkflowExecutions::DestroyService.new(@user, { workflow_execution: }).execute
       end
     end
 
@@ -114,7 +117,7 @@ module WorkflowExecutions
       assert_difference -> { WorkflowExecution.count } => -1,
                         -> { SamplesWorkflowExecution.count } => -1,
                         -> { Sample.count } => 0 do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user_destroyable).execute
+        WorkflowExecutions::DestroyService.new(@user_destroyable, { workflow_execution: }).execute
       end
     end
 
@@ -125,7 +128,7 @@ module WorkflowExecutions
 
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+        WorkflowExecutions::DestroyService.new(@user, { workflow_execution: }).execute
       end
     end
 
@@ -135,7 +138,7 @@ module WorkflowExecutions
 
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+        WorkflowExecutions::DestroyService.new(@user, { workflow_execution: }).execute
       end
     end
 
@@ -145,7 +148,182 @@ module WorkflowExecutions
 
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
-        WorkflowExecutions::DestroyService.new(workflow_execution, @user).execute
+        WorkflowExecutions::DestroyService.new(@user, { workflow_execution: }).execute
+      end
+    end
+
+    test 'should destroy multiple workflow executions' do
+      error_workflow = workflow_executions(:irida_next_example_error)
+      canceled_workflow = workflow_executions(:irida_next_example_canceled)
+
+      assert_difference -> { WorkflowExecution.count } => -2,
+                        -> { SamplesWorkflowExecution.count } => -2,
+                        -> { Sample.count } => 0 do
+        WorkflowExecutions::DestroyService.new(
+          @user,
+          { workflow_execution_ids: [error_workflow.id, canceled_workflow.id] }
+        ).execute
+      end
+    end
+
+    test 'should partially destroy multiple workflow executions' do
+      canceling_workflow = workflow_executions(:irida_next_example_canceling)
+      canceled_workflow = workflow_executions(:irida_next_example_canceled)
+      error_workflow = workflow_executions(:irida_next_example_error)
+
+      assert_difference -> { WorkflowExecution.count } => -2,
+                        -> { SamplesWorkflowExecution.count } => -2,
+                        -> { Sample.count } => 0 do
+        WorkflowExecutions::DestroyService.new(
+          @user,
+          { workflow_execution_ids: [canceling_workflow.id, canceled_workflow.id, error_workflow.id] }
+        ).execute
+      end
+    end
+
+    test 'should not destroy multiple non-deletable workflow executions' do
+      canceling_workflow = workflow_executions(:irida_next_example_canceling)
+      unclean_workflow = workflow_executions(:irida_next_example_error_unclean)
+
+      assert_no_difference -> { WorkflowExecution.count },
+                           -> { SamplesWorkflowExecution.count } do
+        WorkflowExecutions::DestroyService.new(
+          @user_destroyable,
+          { workflow_execution_ids: [canceling_workflow.id, unclean_workflow.id] }
+        ).execute
+      end
+    end
+
+    test 'should not destroy project workflow executions if a workflow deletion is unauthorized' do
+      user = users(:jane_doe)
+      valid_deletable_workflow = workflow_executions(:automated_example_completed)
+      namespace = projects(:project1).namespace
+      assert_no_difference -> { WorkflowExecution.count },
+                           -> { SamplesWorkflowExecution.count } do
+        exception = assert_raises(ActionPolicy::Unauthorized) do
+          WorkflowExecutions::DestroyService.new(user,
+                                                 { workflow_execution_ids: [valid_deletable_workflow.id],
+                                                   namespace: }).execute
+        end
+
+        assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
+        assert_equal :destroy_workflow_executions?, exception.rule
+        assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+        assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.destroy_workflow_executions?',
+                            name: namespace.name),
+                     exception.result.message
+      end
+    end
+
+    test 'should create activity for single workflow deletion in destroy_multiple' do
+      # deletion of single workflow using Delete Workflows button
+      canceled_workflow = workflow_executions(:automated_example_canceled)
+
+      assert_difference -> { WorkflowExecution.count } => -1,
+                        -> { SamplesWorkflowExecution.count } => -1,
+                        -> { PublicActivity::Activity.count } => 1 do
+        WorkflowExecutions::DestroyService.new(@user,
+                                               { workflow_execution_ids: [canceled_workflow.id],
+                                                 namespace: @namespace }).execute
+      end
+
+      activity = PublicActivity::Activity.where(
+        key: 'namespaces_project_namespace.workflow_executions.destroy'
+      ).order(created_at: :desc).first
+      assert_equal 'namespaces_project_namespace.workflow_executions.destroy', activity.key
+      assert_equal @user, activity.owner
+      assert_equal canceled_workflow.id, activity.parameters[:workflow_execution_id]
+      assert_equal 'workflow_execution_destroy', activity.parameters[:action]
+    end
+
+    test 'should create activity for single workflow deletion in single destroy' do
+      # deletion of single workflow using row action
+      canceled_workflow = workflow_executions(:automated_example_canceled)
+
+      assert_difference -> { WorkflowExecution.count } => -1,
+                        -> { SamplesWorkflowExecution.count } => -1,
+                        -> { PublicActivity::Activity.count } => 1 do
+        WorkflowExecutions::DestroyService.new(@user,
+                                               { workflow_execution: canceled_workflow,
+                                                 namespace: @namespace }).execute
+      end
+
+      activity = PublicActivity::Activity.where(
+        key: 'namespaces_project_namespace.workflow_executions.destroy'
+      ).order(created_at: :desc).first
+      assert_equal 'namespaces_project_namespace.workflow_executions.destroy', activity.key
+      assert_equal @user, activity.owner
+      assert_equal canceled_workflow.id, activity.parameters[:workflow_execution_id]
+      assert_equal 'workflow_execution_destroy', activity.parameters[:action]
+    end
+
+    test 'should create activity for multiple workflow deletion' do
+      canceled_workflow = workflow_executions(:automated_example_canceled)
+      error_workflow = workflow_executions(:automated_example_error)
+
+      assert_difference -> { WorkflowExecution.count } => -2,
+                        -> { SamplesWorkflowExecution.count } => -2,
+                        -> { PublicActivity::Activity.count } => 1 do
+        WorkflowExecutions::DestroyService.new(@user,
+                                               { workflow_execution_ids: [canceled_workflow.id, error_workflow.id],
+                                                 namespace: @namespace }).execute
+      end
+
+      activity = PublicActivity::Activity.where(
+        key: 'namespaces_project_namespace.workflow_executions.destroy_multiple'
+      ).order(created_at: :desc).first
+      assert_equal 'namespaces_project_namespace.workflow_executions.destroy_multiple', activity.key
+      assert_equal @user, activity.owner
+      assert_equal [error_workflow.id, canceled_workflow.id], activity.parameters[:workflow_execution_ids]
+      assert_equal 'workflow_execution_destroy_multiple', activity.parameters[:action]
+    end
+
+    test 'should create activity with accurate deletion ids when non-deletable workflow is selected' do
+      canceled_workflow = workflow_executions(:automated_example_canceled)
+      error_workflow = workflow_executions(:automated_example_error)
+      canceling_workflow = workflow_executions(:automated_example_canceling)
+
+      assert_difference -> { WorkflowExecution.count } => -2,
+                        -> { SamplesWorkflowExecution.count } => -2,
+                        -> { PublicActivity::Activity.count } => 1 do
+        WorkflowExecutions::DestroyService.new(
+          @user,
+          { workflow_execution_ids: [canceled_workflow.id, error_workflow.id, canceling_workflow.id],
+            namespace: @namespace }
+        ).execute
+      end
+
+      activity = PublicActivity::Activity.where(
+        key: 'namespaces_project_namespace.workflow_executions.destroy_multiple'
+      ).order(created_at: :desc).first
+      assert_equal 'namespaces_project_namespace.workflow_executions.destroy_multiple', activity.key
+      assert_equal @user, activity.owner
+      assert_equal [error_workflow.id, canceled_workflow.id], activity.parameters[:workflow_execution_ids]
+      assert_equal 'workflow_execution_destroy_multiple', activity.parameters[:action]
+    end
+
+    test 'should not create activity if only non-deletable workflows were selected' do
+      canceling_workflow = workflow_executions(:automated_example_canceling)
+      submitted_workflow = workflow_executions(:automated_example_submitted)
+
+      assert_no_difference -> { PublicActivity::Activity.count } do
+        WorkflowExecutions::DestroyService.new(
+          @user,
+          { workflow_execution_ids: [submitted_workflow.id, canceling_workflow.id],
+            namespace: @namespace }
+        ).execute
+      end
+    end
+
+    test 'should not create activity if namespace is not declared' do
+      canceling_workflow = workflow_executions(:automated_example_canceling)
+      submitted_workflow = workflow_executions(:automated_example_submitted)
+
+      assert_no_difference -> { PublicActivity::Activity.count } do
+        WorkflowExecutions::DestroyService.new(
+          @user,
+          { workflow_execution_ids: [submitted_workflow.id, canceling_workflow.id] }
+        ).execute
       end
     end
   end

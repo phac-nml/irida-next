@@ -1,6 +1,7 @@
 <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 
 <%= turbo_frame_tag "export_dialog" %>
+<%= turbo_frame_tag "workflow_execution_dialog" %>
 <%= turbo_frame_tag "selected" %>
 
 <%= turbo_stream_from @namespace.automation_bot, :workflow_executions %>
@@ -10,11 +11,12 @@
   subtitle: t(".subtitle"),
 ) do |component| %>
   <%= component.with_buttons do %>
-   <%= link_to t(".create_export_button"),
+    <% if allowed_to?(:export_data?, @project.namespace) %>
+      <%= link_to t(".create_export_button"),
       new_data_export_path(
         export_type: "analysis",
         analysis_type: "project",
-        namespace_id: @namespace.id
+        namespace_id: @namespace.id,
       ),
       data: {
         action: "turbo:morph-element->action-link#idempotentConnect",
@@ -23,11 +25,23 @@
         action_link_required_value: 1,
       },
       class: "button button--size-default button--state-default action-link" %>
+    <% end %>
+    <% if allowed_to?(:destroy_workflow_executions?, @project.namespace) && Flipper.enabled?(:delete_multiple_workflows) %>
+      <%= link_to t(".delete_workflows_button"),
+      destroy_multiple_confirmation_namespace_project_workflow_executions_path,
+      data: {
+        action: "turbo:morph-element->action-link#idempotentConnect",
+        turbo_stream: true,
+        controller: "action-link",
+        action_link_required_value: 1,
+      },
+      class:
+        "button text-sm px-5 py-2.5 text-white bg-red-700 border-red-800 focus:outline-none hover:bg-red-800 focus:ring-red-300 dark:focus:ring-red-700 dark:bg-red-600 dark:text-white dark:border-red-600 dark:hover:bg-red-700 action-link" %>
+    <% end %>
   <% end %>
 <% end %>
 <div class="flow-root">
   <div class="flex mb-2">
-  <% if allowed_to?(:export_data?, @project.namespace) %>
     <div class="inline-flex grow space-x-2">
       <%= search_form_for(
                 @q,
@@ -38,7 +52,7 @@
         <input type="hidden" name="format" value="turbo_stream"/>
         <input type="hidden" name="select" value="on"/>
         <%= f.submit t(".select_all_button"),
-                  class: "button button--state-default button--size-default" %>
+                 class: "button button--state-default button--size-default" %>
       <% end %>
       <%= search_form_for(
                 @q,
@@ -48,17 +62,16 @@
               ) do |f| %>
         <input type="hidden" name="format" value="turbo_stream"/>
         <%= f.submit t(".deselect_all_button"),
-                  class: "button button--state-default button--size-default" %>
+                 class: "button button--state-default button--size-default" %>
       <% end %>
     </div>
-  <% end %>
     <div class="grow-0">
-        <%= render SearchComponent.new(
-          query: @q,
-          url: namespace_project_workflow_executions_path(**request.query_parameters),
-          search_attribute: :name_or_id_cont,
-          placeholder: t('.search.placeholder')
-        ) %>
+      <%= render SearchComponent.new(
+        query: @q,
+        url: namespace_project_workflow_executions_path(**request.query_parameters),
+        search_attribute: :name_or_id_cont,
+        placeholder: t(".search.placeholder"),
+      ) %>
     </div>
   </div>
 </div>
@@ -67,5 +80,5 @@ locals: {
   workflow_executions: @workflow_executions,
   pagy: @pagy,
   q: @q,
-  namespace: @namespace
+  namespace: @namespace,
 } %>

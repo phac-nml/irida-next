@@ -126,6 +126,13 @@ module Namespaces
       false
     end
 
+    def destroy_workflow_executions?
+      return true if Member::AccessLevel.manageable.include?(effective_access_level)
+
+      details[:name] = record.name
+      false
+    end
+
     def update_automated_workflow_executions?
       return true if Member::AccessLevel.manageable.include?(effective_access_level)
 

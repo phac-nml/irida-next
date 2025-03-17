@@ -78,4 +78,9 @@ class WorkflowExecutionsController < ApplicationController
   def redirect_path
     workflow_executions_path
   end
+
+  def destroy_multiple_paths
+    @list_path = list_workflow_executions_path(list_class: 'workflow_execution')
+    @destroy_path = destroy_multiple_workflow_executions_path
+  end
 end
