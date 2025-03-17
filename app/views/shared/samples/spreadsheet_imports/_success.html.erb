@@ -4,20 +4,25 @@
   data-controller="projects--samples--complete"
   data-projects--samples--complete-filters-outlet=".filters"
 >
-  <div
-    class="
-      w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 p-2 flex items-center
-      justify-center mx-auto mb-3.5
-    "
-  >
-    <%= viral_icon(name: "check", classes: "w-8 h-8 text-green-500 dark:text-green-400") %>
-    <span class="sr-only"><%= t(".success") %></span>
-  </div>
   <p class="mb-4 text-lg font-semibold text-slate-900 dark:text-white"><%= t(".description") %></p>
 
-  <% results.each do |result|
-    # <%= viral_alert(type: :info, message: result) %>
-    <p class="mb-4 text-slate-900 dark:text-white"><%= result %></p>
+  <%= viral_data_table(results, id: 'results_table') do |table| %>
+    <% table.with_column("Sample Name") do |row| %>
+      <%= row[:sample_name] %>
+    <% end %>
+    <% table.with_column("Completed") do |row| %>
+      <% if row[:completed] == true %>
+        <%= viral_icon(name: "check", classes: "w-4 h-4 text-green-500 dark:text-green-400") %>
+      <% else %>
+        <%= viral_icon(name: "x_mark", classes: "h-4 w-4 text-red-500 dark:text-red-400") %>
+      <% end %>
+    <% end %>
+    <% table.with_column("Sample ID") do |row| %>
+      <%= row[:sample_id] %>
+    <% end %>
+    <% table.with_column("message") do |row| %>
+      <%= row[:message] %>
+    <% end %>
   <% end %>
 
   <%= viral_button(state: :primary, data: { action: 'click->viral--dialog#close' }) do %>

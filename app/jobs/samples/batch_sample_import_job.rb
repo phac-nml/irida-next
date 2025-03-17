@@ -45,9 +45,15 @@ module Samples
       results = []
       response.each do |key, value|
         if value.is_a? Sample
-          results.push "#{key} created successfully."
+          results.push({ sample_name: key,
+                         sample_id: value.puid,
+                         completed: true,
+                         message: nil })
         else
-          results.push "#{key} failed with message: #{value}"
+          results.push({ sample_name: key,
+                         sample_id: nil,
+                         completed: false,
+                         message: value })
         end
       end
 
