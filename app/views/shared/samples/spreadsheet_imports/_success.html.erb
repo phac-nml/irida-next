@@ -14,6 +14,12 @@
     <span class="sr-only"><%= t(".success") %></span>
   </div>
   <p class="mb-4 text-lg font-semibold text-slate-900 dark:text-white"><%= t(".description") %></p>
+
+  <% results.each do |result|
+    # <%= viral_alert(type: :info, message: result) %>
+    <p class="mb-4 text-slate-900 dark:text-white"><%= result %></p>
+  <% end %>
+
   <%= viral_button(state: :primary, data: { action: 'click->viral--dialog#close' }) do %>
     <%= t(".ok_button") %>
   <% end %>

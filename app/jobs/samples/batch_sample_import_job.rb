@@ -6,18 +6,10 @@ module Samples
     queue_as :default
 
     def perform(namespace, current_user, broadcast_target, blob_id, params) # rubocop:disable Metrics/MethodLength
-      ::Samples::BatchFileImportService.new(namespace, current_user, blob_id, params).execute
+      response = ::Samples::BatchFileImportService.new(namespace, current_user, blob_id, params).execute
 
       if namespace.errors.empty?
-        Turbo::StreamsChannel.broadcast_replace_to(
-          broadcast_target,
-          target: 'import_spreadsheet_dialog_content',
-          partial: 'shared/samples/spreadsheet_imports/success',
-          locals: {
-            type: :success,
-            message: I18n.t('shared.samples.spreadsheet_imports.success.description')
-          }
-        )
+        handle_success(broadcast_target, response)
 
       elsif namespace.errors.include?(:sample)
         errors = namespace.errors.messages_for(:sample)
@@ -45,6 +37,30 @@ module Samples
           }
         )
       end
+    end
+
+    private
+
+    def handle_success(broadcast_target, response) # rubocop:disable Metrics/MethodLength
+      results = []
+      response.each do |key, value|
+        if value.is_a? Sample
+          results.push "#{key} created successfully."
+        else
+          results.push "#{key} failed with message: #{value}"
+        end
+      end
+
+      Turbo::StreamsChannel.broadcast_replace_to(
+        broadcast_target,
+        target: 'import_spreadsheet_dialog_content',
+        partial: 'shared/samples/spreadsheet_imports/success',
+        locals: {
+          type: :success,
+          message: I18n.t('shared.samples.spreadsheet_imports.success.description'),
+          results:
+        }
+      )
     end
   end
 end
