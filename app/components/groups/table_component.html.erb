@@ -20,7 +20,7 @@
           ) do %>
             <%= render Ransack::SortComponent.new(
               ransack_obj: @q,
-              label: NamespaceGroupLink.human_attribute_name(column),
+              label: t(".#{column}"),
               url: helpers.sorting_url(@q, column.to_s.gsub(".", "_")),
               field: column.to_s.gsub(".", "_").to_sym,
             ) %>
