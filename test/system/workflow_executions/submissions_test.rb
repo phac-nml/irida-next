@@ -83,10 +83,11 @@ module WorkflowExecutions
         find("input[type='checkbox'][value='#{@sample44.id}']").click
       end
 
-      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr', locale: user.locale)
 
       within %(turbo-frame[id="samples_dialog"]) do
-        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_selector '.dialog--header',
+                        text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title', locale: user.locale)
         assert_button text: 'phac-nml/iridanextexample', count: 3
         first('button', text: 'phac-nml/iridanextexample').click
       end
@@ -98,9 +99,9 @@ module WorkflowExecutions
           table.assert_selector '.table-column:first-child .table-td:nth-child(2)', text: @sample44.puid, count: 1
         end
 
-        assert_text I18n.t(:'components.nextflow.update_samples')
-        assert_text I18n.t(:'components.nextflow.email_notification')
-        assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}")
+        assert_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
+        assert_text I18n.t(:'components.nextflow.email_notification', locale: user.locale)
+        assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}", locale: user.locale)
       end
     end
 
@@ -118,10 +119,11 @@ module WorkflowExecutions
         find("input[type='checkbox'][value='#{@sample44.id}']").click
       end
 
-      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr', locale: user.locale)
 
       within %(turbo-frame[id="samples_dialog"]) do
-        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_selector '.dialog--header',
+                        text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title', locale: user.locale)
         assert_button text: 'phac-nml/iridanextexample', count: 3
         first('button', text: 'phac-nml/iridanextexample').click
       end
@@ -133,9 +135,9 @@ module WorkflowExecutions
           table.assert_selector '.table-column:first-child .table-td:nth-child(2)', text: @sample44.puid, count: 1
         end
 
-        assert_no_text I18n.t(:'components.nextflow.update_samples')
-        assert_text I18n.t(:'components.nextflow.email_notification')
-        assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}")
+        assert_no_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
+        assert_text I18n.t(:'components.nextflow.email_notification', locale: user.locale)
+        assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}", locale: user.locale)
       end
     end
 
@@ -234,10 +236,11 @@ module WorkflowExecutions
         find("input[type='checkbox'][value='#{@sample44.id}']").click
       end
 
-      click_on I18n.t(:'groups.samples.index.workflows.button_sr')
+      click_on I18n.t(:'groups.samples.index.workflows.button_sr', locale: user.locale)
 
       within %(turbo-frame[id="samples_dialog"]) do
-        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_selector '.dialog--header',
+                        text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title', locale: user.locale)
         assert_button text: 'phac-nml/iridanextexample', count: 3
         first('button', text: 'phac-nml/iridanextexample').click
       end
@@ -249,9 +252,9 @@ module WorkflowExecutions
           table.assert_selector '.table-column:first-child .table-td:nth-child(2)', text: @sample44.puid, count: 1
         end
 
-        assert_text I18n.t(:'components.nextflow.update_samples')
-        assert_text I18n.t(:'components.nextflow.email_notification')
-        assert_text I18n.t(:"components.nextflow.shared_with.#{@namespace.type.downcase}")
+        assert_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
+        assert_text I18n.t(:'components.nextflow.email_notification', locale: user.locale)
+        assert_text I18n.t(:"components.nextflow.shared_with.#{@namespace.type.downcase}", locale: user.locale)
       end
     end
 
@@ -269,10 +272,11 @@ module WorkflowExecutions
         find("input[type='checkbox'][value='#{@sample44.id}']").click
       end
 
-      click_on I18n.t(:'groups.samples.index.workflows.button_sr')
+      click_on I18n.t(:'groups.samples.index.workflows.button_sr', locale: user.locale)
 
       within %(turbo-frame[id="samples_dialog"]) do
-        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_selector '.dialog--header',
+                        text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title', locale: user.locale)
         assert_button text: 'phac-nml/iridanextexample', count: 3
         first('button', text: 'phac-nml/iridanextexample').click
       end
@@ -284,9 +288,9 @@ module WorkflowExecutions
           table.assert_selector '.table-column:first-child .table-td:nth-child(2)', text: @sample44.puid, count: 1
         end
 
-        assert_no_text I18n.t(:'components.nextflow.update_samples')
-        assert_text I18n.t(:'components.nextflow.email_notification')
-        assert_text I18n.t(:"components.nextflow.shared_with.#{@namespace.type.downcase}")
+        assert_no_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
+        assert_text I18n.t(:'components.nextflow.email_notification', locale: user.locale)
+        assert_text I18n.t(:"components.nextflow.shared_with.#{@namespace.type.downcase}", locale: user.locale)
       end
     end
 

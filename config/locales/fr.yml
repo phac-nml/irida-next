@@ -332,7 +332,7 @@ fr:
     operator: Opérateur
     remove_condition_aria_label: Supprimer la condition
     remove_group_button: Supprimer le groupe
-    rules: Les opérateurs ne peuvent pas être utilisés sur le même champ au sein d’un groupe plus d’une fois, à l’exception de « >= » et « <= ». Pour filtrer par plage de dates, la valeur doit être au format « AAAA-MM-JJ » et le champ de métadonnées doit se terminer par « _date ».
+    rules: Les opérateurs ne peuvent pas être utilisés sur le même champ au sein d’un groupe plus d’une fois, à l’exception de « >= » et « <= ». Pour filtrer par plage de dates, la valeur doit être au format « AAAA-MM-JJ » et le champ de métadonnées doit se terminer par « _date ».
     title: Recherche avancée
     value: Valeur
   application:
@@ -361,7 +361,7 @@ fr:
         title: Supprimer un fichier
       new_attachment_component:
         files: Fichiers
-        files_ignored: 'Les fichiers fasta et fastq doivent être compressés. Les fichiers suivants ne peuvent pas être téléchargés :'
+        files_ignored: 'Les fichiers fasta et fastq doivent être compressés. Les fichiers suivants ne peuvent pas être téléchargés :'
         upload: Télécharger
         upload_files: Télécharger des fichiers
         uploading: Téléchargement
@@ -446,7 +446,7 @@ fr:
       transferred_by: "%{type} transféré par %{user}"
     history_version:
       current_version: Actuel (Version %{version})
-      keys_deleted: 'Clés supprimées :'
+      keys_deleted: 'Clés supprimées :'
       previous_version: Précédent (Version %{version})
     list_filter:
       apply: Appliquer un filtre
@@ -485,7 +485,7 @@ fr:
   concerns:
     attachment_actions:
       destroy:
-        error: 'Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}'
+        error: 'Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}'
     bot_actions:
       create:
         success: Le compte de bot a été ajouté avec succès
@@ -600,14 +600,14 @@ fr:
       id: 'ID:'
       name: 'Nom:'
       run_id: 'Exécuter l’identifiant:'
-      workflow: 'Flux de travail :'
+      workflow: 'Flux de travail :'
     new:
-      after_submission_description_html: Après la soumission, vous serez redirigé vers la page d’exportation. Pendant que le statut de l’exportation est <span class="px-2.5 py-0.5 mr-1 ml-1 text-xs font-medium rounded-full bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300">en cours de traitement</span>, le contenu de l’exportation est créé. Une fois que le statut de l’exportation sera <span class="px-2.5 py-0.5 ml-1 text-xs font-medium text-green-800 bg-green-100 rounded-full dark:bg-green-900 dark:text-green-300">prêt</span>, il sera disponible pour téléchargement. Vous aurez 3 jours ouvrables pour télécharger l’exportation avant qu’elle ne soit supprimée.
+      after_submission_description_html: Après la soumission, vous serez redirigé vers la page d’exportation. Pendant que le statut de l’exportation est <span class="px-2.5 py-0.5 mr-1 ml-1 text-xs font-medium rounded-full bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300">en cours de traitement</span>, le contenu de l’exportation est créé. Une fois que le statut de l’exportation sera <span class="px-2.5 py-0.5 ml-1 text-xs font-medium text-green-800 bg-green-100 rounded-full dark:bg-green-900 dark:text-green-300">prêt</span>, il sera disponible pour téléchargement. Vous aurez 3 jours ouvrables pour télécharger l’exportation avant qu’elle ne soit supprimée.
       email_label: Vous recevez une notification par courriel lorsque votre exportation est prête à être téléchargée?
-      name_label: 'Nom d’exportation (facultatif) :'
+      name_label: 'Nom d’exportation (facultatif) :'
       sample_description:
         plural: Cette exportation contiendra les échantillons COUNT_PLACEHOLDER.
-        singular: Cette exportation contiendra 1 échantillon.
+        singular: Cette exportation contiendra 1 échantillon.
         zero: Cette exportation ne contiendra aucun échantillon.
       samples_count:
         non_zero: Échantillons (COUNT_PLACEHOLDER sélectionnés)
@@ -617,7 +617,7 @@ fr:
     new_analysis_export_dialog:
       description:
         plural: Cette exportation contiendra les exécutions de flux de travail COUNT_PLACEHOLDER.
-        singular: Cette exportation contiendra 1 exécution de flux de travail.
+        singular: Cette exportation contiendra 1 exécution de flux de travail.
         zero: Cette exportation ne contiendra aucune exécution de flux de travail.
       selection_count:
         non_zero: Exécutions de flux de travail (COUNT_PLACEHOLDER sélectionné)
@@ -672,8 +672,8 @@ fr:
   errors:
     messages:
       not_saved:
-        one: '1 erreur a empêché cette %{resource} d’être sauvegardée :'
-        other: 'Les erreurs %{count} ont empêché cette %{resource} d’être sauvegardée :'
+        one: '1 erreur a empêché cette %{resource} d’être sauvegardée :'
+        other: 'Les erreurs %{count} ont empêché cette %{resource} d’être sauvegardée :'
   general:
     default_sidebar:
       data_exports: Exportations de données
@@ -705,7 +705,7 @@ fr:
       title: Activité en groupe
     attachments:
       create:
-        failure: 'Le fichier %{filename} n’a pas été téléchargé en raison des erreurs suivantes : %{errors}'
+        failure: 'Le fichier %{filename} n’a pas été téléchargé en raison des erreurs suivantes : %{errors}'
         success: Le fichier %{filename} a été téléchargé avec succès.
       destroy:
         success: Le fichier %{filename} a été supprimé avec succès.
@@ -737,7 +737,7 @@ fr:
           new_bot_modal:
             access_level: Niveau d’accès
             cancel: Annuler
-            description: Cela créera un utilisateur de bot avec le format de courriel « inxt_grp_GROUP_PUID_bot_n@iridanext.com », l’ajoutera en tant que membre au groupe avec le rôle de « niveau d’accès », puis créera un jeton d’accès personnel pour le bot en utilisant les détails ci-dessous
+            description: Cela créera un utilisateur de bot avec le format de courriel « inxt_grp_GROUP_PUID_bot_n@iridanext.com », l’ajoutera en tant que membre au groupe avec le rôle de « niveau d’accès », puis créera un jeton d’accès personnel pour le bot en utilisant les détails ci-dessous
             expires_at: Date d’expiration du jeton (facultatif)
             select_access_level: Sélectionnez le niveau d’accès
             submit: Envoyer
@@ -755,7 +755,7 @@ fr:
         title: Comptes de bot
     create:
       cancel: Annuler
-      name_help: Le nom du groupe doit comporter au moins 3 lettres et commencer par une lettre, un chiffre ou un emoji. Pour plus d’informations, consultez <a class="font-medium hover:underline" href="https://phac-nml.github.io/irida-next/docs/user/organization/groups/reserved-names/">Noms de groupes réservés</a>
+      name_help: Le nom du groupe doit comporter au moins 3 lettres et commencer par une lettre, un chiffre ou un emoji. Pour plus d’informations, consultez <a class="font-medium hover:underline" href="https://phac-nml.github.io/irida-next/docs/user/organization/groups/reserved-names/">Noms de groupes réservés</a>
       name_placeholder: Nom de groupe génial
       path_help: Le chemin est utilisé dans les URL et ne peut contenir que des lettres, des chiffres, des tirets et des traits de soulignement
       submit: Créer un groupe
@@ -952,10 +952,10 @@ fr:
       export_ready:
         download_before_html: Veuillez télécharger l’exportation avant <strong>%{date}</strong>, car elle sera supprimée après cette période.
         ready_for_download_html: Votre exportation <strong>%{name}</strong> est prête à être téléchargée.
-        view_exports: 'Pour voir et télécharger l’exportation, cliquez sur le bouton ci-dessous :'
+        view_exports: 'Pour voir et télécharger l’exportation, cliquez sur le bouton ci-dessous :'
     email_template:
       automated_message: Ce courriel a été envoyé à partir d’un système automatisé. Veuillez ne pas répondre à ce courriel.
-      copy_paste: 'Ou copiez-collez ce lien dans votre navigateur :'
+      copy_paste: 'Ou copiez-collez ce lien dans votre navigateur :'
       greeting: Bonjour,
       greeting_with_name: Bonjour %{name},
       thanks: Merci,
@@ -963,11 +963,11 @@ fr:
       access_granted_manager_email:
         body_html: Le groupe '%{group_name}' a <strong>obtenu</strong> l’accès à %{namespace_type} '%{namespace_name}'
         subject: Le groupe '%{group_name}' a obtenu l’accès à %{namespace_type} '%{namespace_name}'
-        view_details: 'Pour voir tous les membres de %{namespace_type} ''%{namespace_name}'', cliquez sur le bouton ci-dessous :'
+        view_details: 'Pour voir tous les membres de %{namespace_type} ''%{namespace_name}'', cliquez sur le bouton ci-dessous :'
       access_granted_user_email:
         body_html: Group '%{group_name}' has been <strong>granted</strong> access to %{namespace_type} '%{namespace_name}'
         subject: Group '%{group_name}' has been granted access to %{namespace_type} '%{namespace_name}'
-        view_details: 'Pour voir %{namespace_type} ''%{namespace_name}'', cliquez sur le bouton ci-dessous :'
+        view_details: 'Pour voir %{namespace_type} ''%{namespace_name}'', cliquez sur le bouton ci-dessous :'
       access_revoked_manager_email:
         body_html: L’accès à %{namespace_type} '%{namespace_name}' a été <strong>révoqué</strong> pour le groupe '%{group_name}'
         subject: L’accès à %{namespace_type} '%{namespace_name}' a été révoqué pour le groupe '%{group_name}'
@@ -978,15 +978,15 @@ fr:
       access_granted_manager_email:
         body_html: L’utilisateur '%{first_name} %{last_name}' (%{email}) a obtenu <strong></strong> l’accès à %{type} '%{name}'
         subject: L’utilisateur '%{first_name} %{last_name}' (%{email}) a obtenu l’accès à %{type} '%{name}'
-        view_details: 'Pour voir tous les membres de %{type} ''%{name}'', cliquez sur le bouton ci-dessous :'
+        view_details: 'Pour voir tous les membres de %{type} ''%{name}'', cliquez sur le bouton ci-dessous :'
       access_granted_user_email:
         body_html: Vous avez <strong>obtenu</strong> l’accès à %{type} '%{name}'
         subject: Vous avez obtenu l’accès à %{type} '%{name}'
-        view_details: 'Pour voir %{type} ''%{name}'', cliquez sur le bouton ci-dessous :'
+        view_details: 'Pour voir %{type} ''%{name}'', cliquez sur le bouton ci-dessous :'
       access_revoked_manager_email:
         body_html: L’accès à %{type} '%{name}' a été <strong>révoqué</strong> pour l’utilisateur '%{first_name} %{last_name}' (%{email})
         subject: L’accès à %{type} '%{name}' a été révoqué pour l’utilisateur '%{first_name} %{last_name}' (%{email})
-        view_details: 'Pour voir tous les membres de %{type} ''%{name}'', cliquez sur le bouton ci-dessous :'
+        view_details: 'Pour voir tous les membres de %{type} ''%{name}'', cliquez sur le bouton ci-dessous :'
       access_revoked_user_email:
         body_html: Votre accès à %{type} '%{name}' a été <strong>révoqué</strong>
         subject: Votre accès à %{type} '%{name}' a été révoqué
@@ -1003,7 +1003,7 @@ fr:
       error_user_email:
         body_html: Votre pipeline <strong>%{id}</strong> n’a pas été complété avec succès en raison d’erreurs.
         subject: Pipeline erroné – %{id}
-      view_details: 'Pour consulter le résumé du pipeline, cliquez sur le bouton ci-dessous :'
+      view_details: 'Pour consulter le résumé du pipeline, cliquez sur le bouton ci-dessous :'
   members:
     access_levels:
       level_0: Pas d’accès
@@ -1082,7 +1082,7 @@ fr:
         aria_label: Sélecteur de page de pagination
       previous: Précédent
   nextflow_component:
-    data_missing_error: 'Les échantillons suivants manquent de données requises : '
+    data_missing_error: 'Les échantillons suivants manquent de données requises : '
     filtering_samples: Le filtrage des échantillons peut prendre un certain temps.
     name:
       helper: Un nom personnalisé facilitera la recherche à l’avenir.
@@ -1178,7 +1178,7 @@ fr:
       title: Activité du projet
     attachments:
       create:
-        failure: 'Le fichier %{filename} n’a pas été téléchargé en raison des erreurs suivantes : %{errors}'
+        failure: 'Le fichier %{filename} n’a pas été téléchargé en raison des erreurs suivantes : %{errors}'
         success: Le fichier %{filename} a été téléchargé avec succès.
       destroy:
         success: Le fichier %{filename} a été supprimé avec succès.
@@ -1206,7 +1206,7 @@ fr:
       edit:
         error: Impossible de modifier le pipeline automatisé %{workflow_name}
       edit_dialog:
-        title: 'Modification du pipeline automatisé : %{workflow_name}'
+        title: 'Modification du pipeline automatisé : %{workflow_name}'
       index:
         add_new_automated_workflow_execution: Nouveau pipeline automatisé
         subtitle: Configurer des pipelines automatisés à lancer lorsque les données jumelées sont téléchargées dans le projet
@@ -1248,7 +1248,7 @@ fr:
           new_bot_modal:
             access_level: Niveau d’accès
             cancel: Annuler
-            description: Cela créera un utilisateur de bot avec le format de courriel « inxt_prj_PROJECT_PUID_bot_n@iridanext.com », l’ajoutera en tant que membre au projet avec le rôle de « niveau d’accès », puis créera un jeton d’accès personnel pour le bot en utilisant les détails ci-dessous
+            description: Cela créera un utilisateur de bot avec le format de courriel « inxt_prj_PROJECT_PUID_bot_n@iridanext.com », l’ajoutera en tant que membre au projet avec le rôle de « niveau d’accès », puis créera un jeton d’accès personnel pour le bot en utilisant les détails ci-dessous
             expires_at: Date d’expiration du jeton (facultatif)
             select_access_level: Sélectionnez le niveau d’accès
             submit: Envoyer
@@ -1399,7 +1399,7 @@ fr:
     new:
       description: Description du projet, non requise
       empty_state: Aucun espace de noms n’est associé à ce nom ou à cet identifiant
-      help: Le chemin est utilisé dans les URL et doit comporter au moins 3 caractères et ne peut contenir que des lettres, des chiffres, des tirets et des traits de soulignement
+      help: Le chemin est utilisé dans les URL et doit comporter au moins 3 caractères et ne peut contenir que des lettres, des chiffres, des tirets et des traits de soulignement
       placeholder: Nom du projet génial
       select_namespace: Sélectionnez l’espace de noms
       submit: Créer un projet
@@ -1415,11 +1415,11 @@ fr:
             success: Les dossiers ont été concaténés avec succès.
           modal:
             basename: Nom du fichier
-            description: 'Les fichiers suivants ont été sélectionnés pour être concaténés :'
+            description: 'Les fichiers suivants ont été sélectionnés pour être concaténés :'
             submit_button: Concaténer
             title: Concaténer les fichiers
         create:
-          failure: 'Le fichier %{filename} n’a pas été téléchargé en raison des erreurs suivantes : %{errors}'
+          failure: 'Le fichier %{filename} n’a pas été téléchargé en raison des erreurs suivantes : %{errors}'
           success: Le fichier %{filename} a été téléchargé avec succès.
         delete_attachment_modal:
           description: Êtes-vous sûr de vouloir supprimer ce fichier de l’échantillon?
@@ -1427,20 +1427,20 @@ fr:
           title: Supprimer un fichier
         deletions:
           destroy:
-            error: 'Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}'
+            error: 'Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}'
             partial_success: Certains fichiers ont été supprimés avec succès.
             success: Les fichiers ont été supprimés avec succès.
           modal:
-            description: 'Les fichiers suivants ont été sélectionnés pour suppression :'
+            description: 'Les fichiers suivants ont été sélectionnés pour suppression :'
             submit_button: Supprimer
             title: Supprimer des fichiers
         destroy:
-          error: 'Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}'
+          error: 'Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}'
           success: Le fichier %{filename} a été supprimé avec succès.
       clones:
         create:
-          error: 'La liste suivante des échantillons n’a pas été copiée :'
-          no_samples_cloned_error: 'Les échantillons n’ont pas été copiés pour les raisons suivantes :'
+          error: 'La liste suivante des échantillons n’a pas été copiée :'
+          no_samples_cloned_error: 'Les échantillons n’ont pas été copiés pour les raisons suivantes :'
           success: Les échantillons ont été copiés avec succès.
         dialog:
           description:
@@ -1471,8 +1471,8 @@ fr:
           title: Supprimer l’échantillon
         new_multiple_deletions_dialog:
           description:
-            plural: 'Les échantillons COUNT_PLACEHOLDER suivants ont été sélectionnés aux fins de suppression :'
-            singular: 'L’échantillon suivant a été sélectionné aux fins de suppression :'
+            plural: 'Les échantillons COUNT_PLACEHOLDER suivants ont été sélectionnés aux fins de suppression :'
+            singular: 'L’échantillon suivant a été sélectionné aux fins de suppression :'
             zero: Aucun échantillon n’a été sélectionné pour être supprimer
           loading: Chargement...
           samples: Échantillons
@@ -1513,7 +1513,7 @@ fr:
             multi_success: Les clés de métadonnées '%{deleted_keys}' ont été supprimées avec succès.
             single_success: La clé de métadonnées '%{deleted_key}' a été supprimée avec succès.
           modal:
-            description: 'Champs de métadonnées sélectionnés pour suppression :'
+            description: 'Champs de métadonnées sélectionnés pour suppression :'
             key_header: Clé
             submit_button: Supprimer
             title: Supprimer les métadonnées
@@ -1553,7 +1553,7 @@ fr:
         delete_metadata_button: Supprimer les métadonnéesDelete Metadata
         edit_button: Modifier cet échantillon
         files: FichiersFiles
-        files_ignored: 'Les fichiers fasta et fastq doivent être compressés. Les fichiers suivants ne peuvent pas être téléchargés :'
+        files_ignored: 'Les fichiers fasta et fastq doivent être compressés. Les fichiers suivants ne peuvent pas être téléchargés :'
         history:
           modal:
             created_by: Échantillon créé par %{user}
@@ -1605,8 +1605,8 @@ fr:
           placeholder: Filtrer par ID ou nom
       transfers:
         create:
-          error: 'La liste suivante des échantillons n’a pas été transférée :'
-          no_samples_transferred_error: 'Les échantillons n’ont pas été transférés pour les raisons suivantes :'
+          error: 'La liste suivante des échantillons n’a pas été transférée :'
+          no_samples_transferred_error: 'Les échantillons n’ont pas été transférés pour les raisons suivantes :'
           success: Les échantillons ont été transférés avec succès.
         dialog:
           description:
@@ -1736,7 +1736,7 @@ fr:
       create:
         invalid_export_samples: Impossible de créer une exportation en raison des autorisations d’échantillonnage ou d’échantillons introuvables.
         invalid_export_workflow_executions: Impossible de créer une exportation en raison des autorisations d’exécution du flux de travail ou des exécutions de flux de travail introuvables.
-        non_completed_workflow_executions: Impossible de créer une exportation en raison des exécutions de flux de travail sélectionnées ayant un état autre que « Terminé ».
+        non_completed_workflow_executions: Impossible de créer une exportation en raison des exécutions de flux de travail sélectionnées ayant un état autre que « Terminé ».
     groups:
       share:
         group_not_found: Le groupe avec l’identifiant %{group_id} avec lequel partager l’espace de noms est introuvable.
@@ -1780,8 +1780,8 @@ fr:
         empty_new_project_id: Le projet de destination n’a pas été sélectionné.
         empty_sample_ids: Les identifiants de l’échantillon sont vides.
         same_project: Les projets sources et de destination sont les mêmes. Veuillez sélectionner un autre projet de destination.
-        sample_exists: 'Échantillon %{sample_puid} : Conflit avec l’échantillon nommé ''%{sample_name}'' dans le projet cible'
-        samples_not_found: 'Les échantillons avec les identifiants d’échantillon suivants n’ont pas pu être copiés puisqu’ils n’ont pas été trouvés dans le projet source : %{sample_ids}'
+        sample_exists: 'Échantillon %{sample_puid} : Conflit avec l’échantillon nommé ''%{sample_name}'' dans le projet cible'
+        samples_not_found: 'Les échantillons avec les identifiants d’échantillon suivants n’ont pas pu être copiés puisqu’ils n’ont pas été trouvés dans le projet source : %{sample_ids}'
       metadata:
         empty_metadata: Aucune métadonnée n’a été reçue pour mettre à jour l’échantillon '%{sample_name}'
         fields:
@@ -1804,8 +1804,8 @@ fr:
         empty_sample_ids: Les identifiants de l’échantillon sont vides.
         maintainer_transfer_not_allowed: Un responsable ne peut transférer des échantillons qu’à d’autres projets dans la même hiérarchie avec un ancêtre commun
         same_project: Les échantillons existent déjà dans le projet. Veuillez sélectionner un autre projet.
-        sample_exists: 'Échantillon %{sample_puid} : Conflit avec l’échantillon nommé ''%{sample_name}'' dans le projet cible'
-        samples_not_found: 'Les échantillons avec les identifiants d’échantillon suivants n’ont pas pu être transférés puisqu’ils n’ont pas été trouvés dans le projet source : %{sample_ids}'
+        sample_exists: 'Échantillon %{sample_puid} : Conflit avec l’échantillon nommé ''%{sample_name}'' dans le projet cible'
+        samples_not_found: 'Les échantillons avec les identifiants d’échantillon suivants n’ont pas pu être transférés puisqu’ils n’ont pas été trouvés dans le projet source : %{sample_ids}'
     spreadsheet_import:
       duplicate_column_names: Le fichier comporte des noms d’en-tête de colonne en double. Veuillez supprimer les colonnes avec des noms d’en-tête en double et réessayer de les télécharger.
       invalid_file_extension: Le fichier ne peut être qu’un fichier csv, tsv ou excel.
@@ -1855,7 +1855,7 @@ fr:
             submit_button: Import Metadata
             title: Télécharger des échantillons de métadonnées
           errors:
-            description: 'L’importation des échantillons de métadonnées s’est terminée avec les erreurs suivantes :'
+            description: 'L’importation des échantillons de métadonnées s’est terminée avec les erreurs suivantes :'
             ok_button: OK
           success:
             description: Les métadonnées ont été importées avec succès!
@@ -1904,9 +1904,12 @@ fr:
       sample_name_error: La propriété '%{property}' doit correspondre au nom de l’échantillon
       sample_puid_error: La propriété '%{property}' doit correspondre au PUID de l’échantillon
   viral:
+    data_table_component:
+      header:
+        action: Mesure
     pagy:
       limit_component:
-        items: "%{items} par page :"
+        items: "%{items} par page :"
         summary:
           one: Afficher l’élément <span class='font-bold'>%{count}</span>
           other: Afficher les éléments <span class='font-bold'>%{from}-%{to}</span> de <span class='font-bold'>%{count}</span>
@@ -1923,7 +1926,7 @@ fr:
       download: Télécharger
       preview: Aperçu
     create:
-      error_message: 'Les erreurs suivantes ont empêché la création de l’exécution du flux de travail :'
+      error_message: 'Les erreurs suivantes ont empêché la création de l’exécution du flux de travail :'
     edit_dialog:
       cancel_button: Annuler
       description: Vous modifiez l’exécution du flux de travail '%{workflow_execution_id}'

@@ -6,7 +6,7 @@ require 'i18n/tasks/commands'
 module I18nCsvTasks # rubocop:disable Style/Documentation
   include ::I18n::Tasks::Command::Collection
   cmd :csv_export, desc: 'export translations to CSV'
-  def csv_export(opts = {}) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  def csv_export(opts = {}) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Lint/UnusedMethodArgument
     translations_by_path = {}
     router = I18n::Tasks::Data::Router::PatternRouter.new(nil, write: i18n.config['csv']['export'])
 
@@ -38,9 +38,9 @@ module I18nCsvTasks # rubocop:disable Style/Documentation
   end
 
   cmd :csv_import, desc: 'import translations from CSV'
-  def csv_import(opts = {}) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  def csv_import(opts = {}) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Lint/UnusedMethodArgument
     i18n.config['csv']['import'].each do |file|
-      csv = open(file).read.force_encoding('UTF-8')
+      csv = open(file).read.force_encoding('UTF-8') # rubocop:disable Security/Open
 
       translations = []
       CSV.parse(csv, headers: true) do |row|

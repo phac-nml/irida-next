@@ -73,24 +73,26 @@ module Projects
     end
 
     test 'edit row action render for user with Maintainer role' do
-      login_as users(:joan_doe)
+      user = users(:joan_doe)
+      login_as user
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
+                                                                           locale: user.locale))
 
       within("tr[id='#{@sample1.id}'] td:last-child") do
-        assert_selector 'a', text: I18n.t('projects.samples.index.edit_button')
-        assert_no_selector 'a', text: I18n.t('projects.samples.index.remove_button')
+        assert_selector 'a', text: I18n.t('projects.samples.index.edit_button', locale: user.locale)
+        assert_no_selector 'a', text: I18n.t('projects.samples.index.remove_button', locale: user.locale)
       end
     end
 
     test 'no row actions for user with role < Maintainer' do
-      login_as users(:ryan_doe)
+      user = users(:ryan_doe)
+      login_as user
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
+                                                                           locale: user.locale))
       within('#samples-table table thead tr:first-child') do
         # attachments_updated_at is the last column, action column does not exist
         assert_selector 'th:last-child', text: I18n.t('samples.table_component.attachments_updated_at').upcase
@@ -145,41 +147,46 @@ module Projects
     end
 
     test 'User with role >= Analyst sees workflow execution link' do
-      login_as users(:james_doe)
+      user = users(:james_doe)
+      login_as user
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
+                                                                           locale: user.locale))
 
-      assert_selector 'span[class="sr-only"]', text: I18n.t('projects.samples.index.workflows.button_sr')
+      assert_selector 'span[class="sr-only"]',
+                      text: I18n.t('projects.samples.index.workflows.button_sr', locale: user.locale)
     end
 
     test 'User with role < Analyst does not see workflow execution link' do
-      login_as users(:ryan_doe)
+      user = users(:ryan_doe)
+      login_as user
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
+                                                                           locale: user.locale))
 
       assert_no_selector 'span[class="sr-only"]', text: I18n.t('projects.samples.index.workflows.button_sr')
     end
 
     test 'User with role >= Analyst sees create export button' do
-      login_as users(:james_doe)
+      user = users(:james_doe)
+      login_as user
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
+                                                                           locale: user.locale))
 
-      assert_selector 'button', text: I18n.t('projects.samples.index.create_export_button.label')
+      assert_selector 'button', text: I18n.t('projects.samples.index.create_export_button.label', locale: user.locale)
     end
 
     test 'User with role < Analyst does not see create export button' do
-      login_as users(:ryan_doe)
+      user = users(:ryan_doe)
+      login_as user
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
+                                                                           locale: user.locale))
 
       assert_no_selector 'button', text: I18n.t('projects.samples.index.create_export_button.label')
     end
@@ -211,11 +218,12 @@ module Projects
     end
 
     test 'User with role < Maintainer does not see new sample button' do
-      login_as users(:ryan_doe)
+      user = users(:ryan_doe)
+      login_as user
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
+                                                                           locale: user.locale))
 
       assert_no_selector 'a', text: I18n.t('projects.samples.index.new_button')
     end
@@ -230,11 +238,12 @@ module Projects
     end
 
     test 'User with role < Maintainer does not see delete samples button' do
-      login_as users(:ryan_doe)
+      user = users(:ryan_doe)
+      login_as user
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
+                                                                           locale: user.locale))
 
       assert_no_selector 'a', text: I18n.t('projects.samples.index.delete_samples_button')
     end

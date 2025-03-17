@@ -157,6 +157,7 @@ ignore_unused:
   - "time.formats.full_date"
   - "activity.*"
   - "devise.*"
+  - "viral.data_table_component.*"
 # - '{devise,kaminari,will_paginate}.*'
 # - 'simple_form.{yes,no}'
 # - 'simple_form.{placeholders,hints,labels}.*'

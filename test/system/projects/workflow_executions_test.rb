@@ -403,7 +403,8 @@ module Projects
 
     test 'analyst or higher access can edit workflow execution post launch from workflow execution page' do
       ### SETUP START ###
-      login_as users(:james_doe)
+      user = users(:james_doe)
+      login_as user
       workflow_execution = workflow_executions(:automated_workflow_execution)
       visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
       dt_value = 'Name'
@@ -417,18 +418,18 @@ module Projects
       ### VERIFY END ###
 
       ### ACTIONS START ###
-      assert_selector 'a', text: I18n.t(:'projects.workflow_executions.show.edit_button'), count: 1
-      click_link I18n.t(:'projects.workflow_executions.show.edit_button')
+      assert_selector 'a', text: I18n.t(:'projects.workflow_executions.show.edit_button', locale: user.locale), count: 1
+      click_link I18n.t(:'projects.workflow_executions.show.edit_button', locale: user.locale)
 
       within('dialog') do
-        assert_selector 'h1', text: I18n.t('projects.workflow_executions.edit_dialog.title')
+        assert_selector 'h1', text: I18n.t('projects.workflow_executions.edit_dialog.title', locale: user.locale)
         assert_selector 'p', text: I18n.t('projects.workflow_executions.edit_dialog.description',
-                                          workflow_execution_id: workflow_execution.id)
+                                          workflow_execution_id: workflow_execution.id, locale: user.locale)
         assert_selector 'label', text: dt_value
-        fill_in placeholder: I18n.t('projects.workflow_executions.edit_dialog.name_placeholder'),
+        fill_in placeholder: I18n.t('projects.workflow_executions.edit_dialog.name_placeholder', locale: user.locale),
                 with: new_we_name
 
-        click_button I18n.t(:'projects.workflow_executions.edit_dialog.submit_button')
+        click_button I18n.t(:'projects.workflow_executions.edit_dialog.submit_button', locale: user.locale)
       end
       ### ACTIONS END ###
 

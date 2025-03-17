@@ -1904,6 +1904,9 @@ en:
       sample_name_error: property '%{property}' must match Sample Name
       sample_puid_error: property '%{property}' must match Sample PUID
   viral:
+    data_table_component:
+      header:
+        action: Action
     pagy:
       limit_component:
         items: "%{items} per page:"
