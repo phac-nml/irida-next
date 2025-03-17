@@ -57,10 +57,13 @@ fr:
         signed_up: Vous êtes déjà connecté?
         submit_button: Inscription
     sessions:
+      already_signed_out: Fermeture de session réussie.
       new_with_providers:
         local_button: Connectez-vous avec un compte local
         omniauth: Connectez-vous avec %{provider}
         return_button: Retour à la sélection de connexion
+      signed_in: Ouverture de session réussie.
+      signed_out: Fermeture de session réussie.
     shared:
       form:
         sign_in: Connexion
