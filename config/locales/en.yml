@@ -1949,9 +1949,8 @@ en:
           description: 'The sample import completed with the following errors:'
           ok_button: OK
         success:
-          description: The samples were imported successfully!
+          description: The sample spreadsheet has been processed. See the response table for details.
           ok_button: OK
-          success: Success
   spreadsheet_helper:
     failed_parsing: 'Failed to parse spreadsheet file: %{error}'
     no_file: No file provided
