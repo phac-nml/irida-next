@@ -9,7 +9,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     before_action :set_default_tab, only: :show
     before_action :current_page, only: %i[show index]
     before_action :workflow_execution, only: %i[show cancel destroy update edit]
-    before_action :destroy_multiple_paths, only: %i[destroy_multiple_confirmation destroy_multiple]
+    before_action proc { destroy_multiple_paths }, only: %i[destroy_multiple_confirmation destroy_multiple]
   end
 
   TABS = %w[summary params samplesheet files].freeze
@@ -140,7 +140,10 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   def destroy_multiple # rubocop:disable Metrics/MethodLength
     workflows_to_delete_count = destroy_multiple_params['workflow_execution_ids'].count
 
-    deleted_workflows_count = ::WorkflowExecutions::DestroyService.new(current_user, destroy_multiple_params).execute
+    deleted_workflows_count = ::WorkflowExecutions::DestroyService.new(
+      current_user,
+      workflow_execution_ids: destroy_multiple_params[:workflow_execution_ids], namespace: @namespace
+    ).execute
     respond_to do |format|
       format.turbo_stream do
         # No selected workflows deleted
