@@ -296,7 +296,8 @@ module Projects
                             @project,
                             format: :turbo_stream
                           ), params: { destroy_multiple:
-                                          { workflow_execution_ids: [error_workflow.id, canceled_workflow.id] } }
+                                          { workflow_execution_ids: [error_workflow.id, canceled_workflow.id],
+                                            namespace: @namespace } }
                         end
       assert_response :success
     end
@@ -315,7 +316,7 @@ module Projects
                           ), params: {
                             destroy_multiple: {
                               workflow_execution_ids: [error_workflow.id, canceled_workflow.id,
-                                                       running_workflow.id]
+                                                       running_workflow.id], namespace: @namespace
                             }
                           }
                         end
@@ -332,7 +333,7 @@ module Projects
           @project,
           format: :turbo_stream
         ), params: {
-          destroy_multiple: { workflow_execution_ids: [running_workflow.id, new_workflow.id] }
+          destroy_multiple: { workflow_execution_ids: [running_workflow.id, new_workflow.id], namespace: @namespace }
         }
       end
       assert_response :unprocessable_entity
