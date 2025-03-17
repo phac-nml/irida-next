@@ -27,9 +27,7 @@
                   action: "input->selection#togglePage",
                   controller: "filters",
                   selection_target: "selectPage",
-                },
-                class:
-                  "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded-sm focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-400" %>
+                } %>
               <% end %>
               <% if column == :workflow_name || column == :workflow_version %>
                 <%= render Ransack::SortComponent.new(
@@ -91,9 +89,7 @@
                   data: {
                     action: "input->selection#toggle",
                     selection_target: "rowSelection",
-                  },
-                  class:
-                    "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded-sm focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+                  } %>
                 <% end %>
                 <% if column == :id %>
                   <%= link_to(

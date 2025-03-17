@@ -43,9 +43,7 @@
               <%= check_box_tag "personal_access_token[scopes][]",
               scope,
               personal_access_token.scopes.include?(scope),
-              id: "personal_access_token_scopes_#{scope}",
-              class:
-                "shrink-0 mt-0.5 border-slate-200 rounded-sm text-primary-600 focus:ring-primary-500 checked:border-primary-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-primary-500 dark:checked:border-primary-500 dark:focus:ring-offset-slate-800" %>
+              id: "personal_access_token_scopes_#{scope}" %>
             </div>
             <div class="ml-2 text-sm">
               <%= label_tag "personal_access_token_scopes_#{scope}",

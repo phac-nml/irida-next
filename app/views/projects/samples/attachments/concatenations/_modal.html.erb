@@ -40,13 +40,7 @@
       </div>
 
       <div class="flex items-center">
-        <%= form.check_box :delete_originals,
-                       {
-                         class:
-                           "w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600",
-                       },
-                       true,
-                       false %>
+        <%= form.check_box :delete_originals, {}, true, false %>
         <%= form.label :delete_originals,
                    class: "ml-2 text-sm font-medium text-slate-900 dark:text-slate-300" %>
       </div>
