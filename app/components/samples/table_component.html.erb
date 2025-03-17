@@ -1,6 +1,4 @@
 <% if @has_samples && @pagy.vars[:size].positive? %>
-  <% checkbox_styles =
-    "shrink-0 mt-0.5 border-slate-200 rounded-sm text-primary-600 focus:ring-primary-500 checked:border-primary-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-700 dark:border-neutral-700 dark:checked:bg-primary-500 dark:checked:border-primary-500 dark:focus:ring-offset-slate-700 mr-4" %>
   <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
     <%= render Viral::BaseComponent.new(**system_arguments) do %>
       <table
@@ -35,8 +33,7 @@
                     action: "input->selection#togglePage",
                     controller: "filters",
                     selection_target: "selectPage",
-                  },
-                  class: checkbox_styles %>
+                  } %>
                 <% end %>
 
                 <%= render SortComponent.new(
@@ -101,8 +98,7 @@
                     data: {
                       action: "input->selection#toggle",
                       selection_target: "rowSelection",
-                    },
-                    class: checkbox_styles %>
+                    } %>
                   <% end %>
                   <% if column == :puid || column == :name %>
                     <%= link_to(
