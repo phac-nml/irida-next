@@ -15,10 +15,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
       trackable_type = activity.trackable_type
       activity[:parameters] = convert_activity_parameter_keys(activity)
-      puts activity
-      puts activity.key
-      puts activity[:parameters]
-      puts 'bybybyby'
+
       case trackable_type
       when 'Namespace'
         if activity.key.include?('project_namespace')

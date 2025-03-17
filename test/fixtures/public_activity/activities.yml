@@ -338,3 +338,27 @@ group1_sample_import_create:
     }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
+
+project1_namespace_workflow_execution_destroy:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  key: "namespaces_project_namespace.workflow_executions.destroy"
+  parameters:
+    {
+      workflow_execution_id: ["a_workflow_id"],
+      action: "workflow_execution_destroy",
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+project1_namespace_workflow_execution_destroy_multiple:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  key: "namespaces_project_namespace.workflow_executions.destroy_multiple"
+  parameters:
+    {
+      workflow_execution_ids: ["first_workflow_id", "second_workflow_id"],
+      action: "workflow_execution_destroy_multiple",
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
