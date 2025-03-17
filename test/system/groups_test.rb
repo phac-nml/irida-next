@@ -345,14 +345,15 @@ class GroupsTest < ApplicationSystemTestCase
   end
 
   test 'user with maintainer access should not be able to see the transfer group section' do
-    login_as users(:joan_doe)
+    user = users(:joan_doe)
+    login_as user
 
     visit group_url(groups(:group_one))
 
-    click_on I18n.t('groups.sidebar.settings')
-    click_link I18n.t('groups.sidebar.general')
+    click_on I18n.t('groups.sidebar.settings', locale: user.locale)
+    click_link I18n.t('groups.sidebar.general', locale: user.locale)
 
-    assert_selector 'h3', text: I18n.t('groups.edit.advanced.transfer.title'), count: 0
+    assert_selector 'h3', text: I18n.t('groups.edit.advanced.transfer.title', locale: user.locale), count: 0
   end
 
   test 'cannot transfer group into same namespace' do
@@ -385,13 +386,14 @@ class GroupsTest < ApplicationSystemTestCase
   end
 
   test 'can view settings but cannot delete a group' do
-    login_as users(:joan_doe)
+    user = users(:joan_doe)
+    login_as user
     visit group_url(groups(:group_one))
 
-    click_on I18n.t('groups.sidebar.settings')
-    click_link I18n.t('groups.sidebar.general')
+    click_on I18n.t('groups.sidebar.settings', locale: user.locale)
+    click_link I18n.t('groups.sidebar.general', locale: user.locale)
 
-    assert_selector 'a', text: I18n.t('groups.edit.advanced.delete.submit'), count: 0
+    assert_selector 'a', text: I18n.t('groups.edit.advanced.delete.submit', locale: user.locale), count: 0
   end
 
   test 'can view group' do

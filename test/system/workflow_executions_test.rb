@@ -448,7 +448,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     ### SETUP START ###
     workflow_execution = workflow_executions(:irida_next_example_new)
     visit workflow_execution_path(workflow_execution)
-    dt_value = 'Name'
+    dt_value = I18n.t('projects.workflow_executions.summary.name', locale: @user.locale)
     new_we_name = 'New Name'
     ### SETUP END ###
 

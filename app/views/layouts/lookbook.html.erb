@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html
   class="<%= params.has_key?(:lookbook) ? params[:lookbook][:display][:theme] : 'light' %>"
+  lang="<%= params.has_key?(:lookbook) ? params[:lookbook][:display][:lang] : 'en' %>"
 >
   <head>
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
