@@ -922,9 +922,9 @@ div.field_with_errors > :is(select) {
 }
 
 input[type="checkbox"] {
-  @apply text-primary-600 checked:border-primary-500 focus:ring-primary-500 dark:checked:border-primary-500 dark:checked:bg-primary-500 mt-0.5 mr-2 shrink-0 rounded-sm border-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-800 dark:focus:ring-offset-slate-800;
+  @apply text-primary-600 checked:border-primary-500 focus:ring-primary-500 dark:checked:border-primary-500 dark:checked:bg-primary-500 mt-0.5 mr-2 shrink-0 rounded-sm border-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:focus:ring-offset-slate-800;
 }
 
 input[type="radio"] {
-  @apply text-primary-600 checked:border-primary-500 focus:ring-primary-500 dark:checked:border-primary-500 dark:checked:bg-primary-500 mt-0.5 shrink-0 rounded-full border-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-800 dark:focus:ring-offset-slate-800;
+  @apply text-primary-600 checked:border-primary-500 focus:ring-primary-500 dark:checked:border-primary-500 dark:checked:bg-primary-500 mt-0.5 shrink-0 rounded-full border-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:border-slate-700 dark:bg-slate-600 dark:focus:ring-offset-slate-800;
 }
