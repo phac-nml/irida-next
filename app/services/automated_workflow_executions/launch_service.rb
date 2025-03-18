@@ -48,9 +48,6 @@ module AutomatedWorkflowExecutions
       }.with_indifferent_access
     end
 
-    def samples_workflow_executions_attributes
-    end
-
     def name
       if @automated_workflow_execution.name.blank?
         @sample.puid
