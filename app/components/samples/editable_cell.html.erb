@@ -15,15 +15,13 @@
     <button
       type="submit"
       class="
-        w-full p-4 text-left cursor-pointer hover:bg-slate-50 focus:outline-hidden
-        dark:hover:bg-slate-600
+        w-full p-3 text-left cursor-pointer hover:bg-slate-50 focus:outline-hidden
+        dark:hover:bg-slate-600 truncate
       "
       aria-label="<%= t(:".aria_label", value: @sample.metadata[@field]) %> value"
       <%= "autofocus" if @autofocus %>
     >
-      <span class="block truncate">
-        <%= @sample.metadata.fetch(@field, "") %>
-      </span>
+      <%= @sample.metadata.fetch(@field, "") %>
     </button>
   <% end %>
 </td>
