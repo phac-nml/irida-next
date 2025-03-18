@@ -1325,9 +1325,11 @@ fr:
           confirm:
             points_html: '["To prevent accidental actions we ask you to confirm your intention.", "Please type <kbd>%{project}</kbd> to proceed or close this dialog to cancel"]'
             warning:
-              points_html: "%{samples_count} samples"
-              post_points_html: After you delete a project, you <strong>cannot</strong> restore it or its components.
-              pre_points_html: 'You are about to delete the project <strong>%{project_name}</strong>. This action will also delete:'
+              files_count: "%{count} file(s)"
+              post_html: After you delete a project, you <strong>cannot</strong> restore it or its components.
+              pre_html: 'You are about to delete the project <strong>%{project_name}</strong>. This action will also delete:'
+              samples_count: "%{count} sample(s)"
+              workflows_count: "%{count} workflow execution(s)"
           description: La suppression d’un projet est permanente et ne peut pas être annulée. Tous les échantillons et les membres directs seront supprimés en même temps que le projet.
           submit: Supprimer le projet
           title: Supprimer le projet
