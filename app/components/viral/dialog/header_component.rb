@@ -13,8 +13,7 @@ module Viral
 
         @system_arguments[:classes] =
           class_names(@system_arguments[:classes],
-                      'dialog--header flex items-start justify-between rounded-t',
-                      'border-b border-slate-200 p-5 dark:border-slate-600')
+                      'dialog--header flex items-start justify-between rounded-t p-5')
       end
     end
   end
