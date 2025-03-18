@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   draw :dashboard
   draw :user
   draw :project
+  draw :activities
 
   draw :development
 
