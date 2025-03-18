@@ -2,7 +2,7 @@
 @plugin 'flowbite/plugin';
 @source "../../../node_modules/flowbite/**/*.js";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   --color-primary-50: #f0fdf4;
@@ -459,6 +459,10 @@
     @apply border-l-2 border-slate-200 dark:border-slate-600;
   }
 
+  .dark & &::before {
+    @apply border-slate-600;
+  }
+
   & & .namespace-entry {
     position: relative;
   }
@@ -474,11 +478,19 @@
     @apply border-t-2 border-slate-200 dark:border-slate-600;
   }
 
+  .dark & & .namespace-entry::before {
+    @apply border-slate-600;
+  }
+
   & & .namespace-entry:last-child::before {
     height: auto;
     top: 30px;
     bottom: 0;
     @apply bg-white dark:bg-slate-800;
+  }
+
+  .dark & & .namespace-entry:last-child::before {
+    @apply bg-slate-800;
   }
 
   & & .namespace-entry.being-removed {
@@ -582,11 +594,23 @@
     @apply border-t-2 border-slate-200 dark:border-slate-600;
   }
 
+  .dark .namespace-list-tree .namespace-list-tree &::before {
+    @apply border-slate-600;
+  }
+
+  .namespace-list-tree .namespace-list-tree &::before {
+    @apply border-slate-600;
+  }
+
   .namespace-list-tree .namespace-list-tree &:last-child::before {
     height: auto;
     top: 30px;
     bottom: 0;
-    @apply bg-white dark:bg-slate-800;
+    @apply bg-white;
+  }
+
+  .dark .namespace-list-tree .namespace-list-tree &:last-child::before {
+    @apply bg-slate-800;
   }
 
   .namespace-list-tree .namespace-list-tree &.being-removed {
