@@ -1,0 +1,60 @@
+<%= viral_dialog(open: true,classes: ["overflow-visible"]) do |dialog| %>
+  <% dialog.with_header(title: "Cloned Samples") %>
+  <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
+    <p class="dark:text-slate-400">
+      These are the samples that were copied
+    </p>
+  </div>
+
+  <div>
+    <table
+      class="
+        w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+        whitespace-nowrap
+      "
+    >
+      <thead
+        class="
+          sticky top-0 z-10 text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
+          dark:text-slate-300
+        "
+      >
+        <tr>
+          <th class="px-3 py-3">Copied from
+            <%= activity_params[:source_project_puid] %></th>
+          <th class="px-3 py-3">Copied to
+            <%= activity_params[:target_project_puid] %></th>
+        </tr>
+      </thead>
+      <tbody
+        class="
+          overflow-y-auto bg-white divide-y divide-slate-200 dark:bg-slate-800
+          dark:divide-slate-700
+        "
+      >
+        <% activity_params[:cloned_samples_puids].each do |sample_puid| %>
+          <tr>
+            <td class="px-3 py-3"><%= sample_puid.first %></td>
+            <td class="px-3 py-3"><%= sample_puid.last %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+  </div>
+
+  <div class="mt-4">
+    <button
+      type="button"
+      class="
+        focus:outline-none text-sm text-slate-900 border border-slate-200 bg-white
+        hover:bg-slate-100 hover:text-slate-950 focus:ring-0 rounded-md p-2
+        dark:text-white dark:bg-slate-600 dark:hover:bg-slate-700
+      "
+      data-action="click->viral--dialog#close"
+    >
+      Close
+    </button>
+  </div>
+
+<% end %>

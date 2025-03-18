@@ -1,0 +1,31 @@
+<%= viral_dialog(open: true,classes: ["overflow-visible"]) do |dialog| %>
+  <% dialog.with_header(title: "Transferred Samples") %>
+  <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
+    <p class="dark:text-slate-400">
+      These are the samples that were transferred
+    </p>
+  </div>
+
+  <div>
+    <% activity_params[:transferred_samples_puids].each do |sample_puid| %>
+      <ul>
+        <li><%= sample_puid %></li>
+      </ul>
+    <% end %>
+  </div>
+
+  <div class="mt-4">
+    <button
+      type="button"
+      class="
+        focus:outline-none text-sm text-slate-900 border border-slate-200 bg-white
+        hover:bg-slate-100 hover:text-slate-950 focus:ring-0 rounded-md p-2
+        dark:text-white dark:bg-slate-600 dark:hover:bg-slate-700
+      "
+      data-action="click->viral--dialog#close"
+    >
+      Close
+    </button>
+  </div>
+
+<% end %>
