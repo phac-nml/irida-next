@@ -2,7 +2,7 @@
 
 module Activities
   module Dialogs
-    # Component for rendering project sample transfer activity dialog
+    # Component for rendering project sample destroy activity dialog
     class SampleDestroyActivityDialogComponent < Component
       attr_accessor :activity_params
 
