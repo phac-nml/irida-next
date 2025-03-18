@@ -35,10 +35,10 @@
     </p>
 
     <div class="mt-4">
-      <%= button_to "Delete project",
+      <%= button_to t(:"projects.edit.advanced.destroy.submit"),
       @project,
+      method: :delete,
       data: {
-        turbo_method: :delete,
         turbo_confirm: "",
         turbo_content: ".confirm-destroy",
         confirm_value: @project.name,
