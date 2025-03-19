@@ -2,12 +2,15 @@
   <% dialog.with_header(title: "Transferred Samples") %>
   <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
     <p class="dark:text-slate-400">
-      These are the samples that were transferred
+      These are the samples that were transferred by
+      <%= activity.owner.email %>
+      on
+      <%= helpers.local_time(activity[:created_at], :long) %>
     </p>
   </div>
 
   <div>
-    <% activity_params[:transferred_samples_puids].each do |sample_puid| %>
+    <% activity.parameters[:transferred_samples_puids].each do |sample_puid| %>
       <ul>
         <li><%= sample_puid %></li>
       </ul>
@@ -27,5 +30,4 @@
       Close
     </button>
   </div>
-
 <% end %>

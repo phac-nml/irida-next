@@ -9,7 +9,7 @@ class ActivitiesController < ApplicationController
     puts "\n\n----------------\n"
     puts @activity.inspect
     puts "\n----------------\n\n"
-    render dialog_component_type.new(**@activity.parameters)
+    render dialog_component_type.new(@activity)
   end
 
   protected
