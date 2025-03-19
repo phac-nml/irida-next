@@ -147,7 +147,7 @@
                 tag: 'td',
                 classes: class_names('sticky right-0')
               ) do %>
-                <div class="px-3 py-2 space-x-2 bg-white dark:bg-slate-800">
+                <div class="px-3 py-2.5 space-x-2 bg-white dark:bg-slate-800">
                   <% if !workflow_execution.shared_with_namespace || @namespace.nil? %>
                     <% if workflow_execution.cancellable? && @row_actions.key?(:cancel) %>
                       <%= link_to(
