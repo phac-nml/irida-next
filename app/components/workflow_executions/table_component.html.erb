@@ -3,10 +3,14 @@
     <table
       class='
         w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-        whitespace-nowrap
+        whitespace-nowrap border-collapse
       '
     >
-      <thead class='text-xs uppercase text-slate-700 bg-slate-100 dark:bg-slate-900'>
+      <thead
+        class='
+          text-xs uppercase text-slate-700 bg-slate-100 dark:bg-slate-900 relative
+        '
+      >
         <tr
           class='
             border-y dark:border-slate-700 border-slate-200 dark:text-slate-400
@@ -60,9 +64,11 @@
             <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-700 dark:text-slate-400 sticky right-0')
+              classes: class_names('border-b border-slate-200 dark:border-slate-700 sticky right-0')
             ) do %>
-              <%= t(".actions") %>
+              <div class="px-3 py-2.5 bg-slate-100 dark:bg-slate-900">
+                <%= t(".actions") %>
+              </div>
             <% end %>
           <% end %>
         </tr>
@@ -139,36 +145,38 @@
             <% if @renders_row_actions %>
               <%= render_cell(
                 tag: 'td',
-                classes: class_names('px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2')
+                classes: class_names('sticky right-0')
               ) do %>
-                <% if !workflow_execution.shared_with_namespace || @namespace.nil? %>
-                  <% if workflow_execution.cancellable? && @row_actions.key?(:cancel) %>
-                    <%= link_to(
-                      t(:"workflow_executions.index.actions.cancel_button"),
-                      cancel_path(workflow_execution),
-                      data: {
-                        turbo_stream: true,
-                        turbo_method: :put,
-                        turbo_confirm: t(:"workflow_executions.index.actions.cancel_confirm"),
-                      },
-                      class:
-                        "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                    ) %>
+                <div class="px-3 py-2 space-x-2 bg-white dark:bg-slate-800">
+                  <% if !workflow_execution.shared_with_namespace || @namespace.nil? %>
+                    <% if workflow_execution.cancellable? && @row_actions.key?(:cancel) %>
+                      <%= link_to(
+                        t(:"workflow_executions.index.actions.cancel_button"),
+                        cancel_path(workflow_execution),
+                        data: {
+                          turbo_stream: true,
+                          turbo_method: :put,
+                          turbo_confirm: t(:"workflow_executions.index.actions.cancel_confirm"),
+                        },
+                        class:
+                          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                      ) %>
+                    <% end %>
+                    <% if workflow_execution.deletable? && @row_actions.key?(:destroy) %>
+                      <%= link_to(
+                        t(:"workflow_executions.index.actions.delete_button"),
+                        individual_path(workflow_execution),
+                        data: {
+                          turbo_stream: true,
+                          turbo_method: :delete,
+                          turbo_confirm: t(:"workflow_executions.index.actions.delete_confirm"),
+                        },
+                        class:
+                          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                      ) %>
+                    <% end %>
                   <% end %>
-                  <% if workflow_execution.deletable? && @row_actions.key?(:destroy) %>
-                    <%= link_to(
-                      t(:"workflow_executions.index.actions.delete_button"),
-                      individual_path(workflow_execution),
-                      data: {
-                        turbo_stream: true,
-                        turbo_method: :delete,
-                        turbo_confirm: t(:"workflow_executions.index.actions.delete_confirm"),
-                      },
-                      class:
-                        "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                    ) %>
-                  <% end %>
-                <% end %>
+                </div>
               <% end %>
             <% end %>
           <% end %>
