@@ -775,7 +775,15 @@ fr:
     edit:
       advanced:
         delete:
-          confirm: Êtes-vous sûr de vouloir supprimer ce groupe?
+          confirm:
+            points_html: '["To prevent accidental actions we ask you to confirm your intention.", "Please type <kbd>%{group}</kbd> to proceed or close this dialog to cancel."]'
+            warning:
+              files_count: "%{count} file(s)"
+              post_html: After you delete a group, you <strong>cannot</strong> restore it or its components.
+              pre_html: 'You are about to delete the group <strong>%{group_name}</strong>. This action will also delete:'
+              projects_count: "%{count} project(s)"
+              samples_count: "%{count} sample(s)"
+              workflows_count: "%{count} workflow execution(s)"
           description: La suppression d’un groupe est permanente et ne peut pas être annulée. Tous les projets, sous-groupes et membres directs seront supprimés avec le groupe.
           submit: Supprimer le groupe
           title: Supprimer le groupe
