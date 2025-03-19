@@ -784,7 +784,7 @@ en:
               pre_html: 'You are about to delete the group <strong>%{group_name}</strong>. This action will also delete:'
               projects_count: "%{count} project(s)"
               samples_count: "%{count} sample(s)"
-              subgroups_count: "%{count} subgroups(s)"
+              subgroups_count: "%{count} subgroup(s)"
           description: Deleting a group is permanent and cannot be undone. All projects, subgroups, and direct members will be deleted along with the group.
           submit: Delete group
           title: Delete group
