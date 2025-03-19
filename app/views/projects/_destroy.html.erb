@@ -17,23 +17,15 @@
           <ul class="py-2 ml-4 max-w-md space-y-1 list-disc list-inside">
             <li><%= t(
                 :"projects.edit.advanced.destroy.confirm.warning.samples_count",
-                count: @project.samples.size,
+                count: @samples_count,
               ) %></li>
             <li><%= t(
                 :"projects.edit.advanced.destroy.confirm.warning.files_count",
-                count: @project.namespace.attachments.size,
+                count: @files_count,
               ) %></li>
             <li><%= t(
                 :"projects.edit.advanced.destroy.confirm.warning.workflows_count",
-                count:
-                  authorized_scope(
-                    WorkflowExecution,
-                    type: :relation,
-                    as: :automated_and_shared,
-                    scope_options: {
-                      project: @project,
-                    },
-                  ).size,
+                count: @workflows_count,
               ) %></li>
           </ul>
           <%= t(:"projects.edit.advanced.destroy.confirm.warning.post_html") %>

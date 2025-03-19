@@ -15,10 +15,22 @@
             group_name: @group.name,
           ) %>
           <ul class="py-2 ml-4 max-w-md space-y-1 list-disc list-inside">
-            <li><%= t(:"groups.edit.advanced.delete.confirm.warning.projects_count", count: 0) %></li>
-            <li><%= t(:"groups.edit.advanced.delete.confirm.warning.samples_count", count: 0) %></li>
-            <li><%= t(:"groups.edit.advanced.delete.confirm.warning.files_count", count: 0) %></li>
-            <li><%= t(:"groups.edit.advanced.delete.confirm.warning.workflows_count", count: 0) %></li>
+            <li><%= t(
+                :"groups.edit.advanced.delete.confirm.warning.subgroups_count",
+                count: @subgroups_count,
+              ) %></li>
+            <li><%= t(
+                :"groups.edit.advanced.delete.confirm.warning.projects_count",
+                count: @projects_count,
+              ) %></li>
+            <li><%= t(
+                :"groups.edit.advanced.delete.confirm.warning.samples_count",
+                count: @samples_count,
+              ) %></li>
+            <li><%= t(
+                :"groups.edit.advanced.delete.confirm.warning.files_count",
+                count: @files_count,
+              ) %></li>
           </ul>
           <%= t(:"groups.edit.advanced.delete.confirm.warning.post_html") %>
         </div>
