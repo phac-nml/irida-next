@@ -13,6 +13,7 @@ module Groups
     def index
       @timestamp = DateTime.current
       @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
+      @samples = @samples.includes(project: { namespace: :parent })
       @has_samples = @group.has_samples?
     end
 
