@@ -129,7 +129,7 @@
                 <% end %>
               <% end %>
               <% @metadata_fields.each do |field| %>
-                <% if helpers.allowed_to?(:update_sample?, sample.project) %>
+                <% if @abilities[:edit_sample_metadata] %>
                   <%= render Samples::EditableCell.new(field: field, sample: sample) %>
                 <% else %>
                   <%= render_cell(

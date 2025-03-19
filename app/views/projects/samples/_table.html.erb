@@ -10,6 +10,7 @@
         allowed_to?(:clone_sample?, project) ||
         allowed_to?(:transfer_sample?, project) ||
         allowed_to?(:export_data?, project),
+    edit_sample_metadata: allowed_to?(:update_sample?, project),
   },
   metadata_fields: @fields,
   search_params: @search_params,
