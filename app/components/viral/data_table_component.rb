@@ -41,7 +41,7 @@ module Viral
     def row_arguments(data)
       { tag: 'tr' }.tap do |args|
         args[:classes] =
-          class_names('bg-white', 'dark:bg-slate-800', 'border-b border-slate-200 dark:border-slate-700')
+          class_names('bg-white dark:bg-slate-800', 'border-b border-slate-200 dark:border-slate-700')
         args[:id] = data[:id]
       end
     end

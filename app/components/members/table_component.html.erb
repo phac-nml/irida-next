@@ -1,16 +1,16 @@
 <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
   <table
-    class="
+    class='
       w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
       whitespace-nowrap
-    "
+    '
   >
-    <thead class="text-xs uppercase text-slate-700 bg-slate-100 dark:bg-slate-900">
+    <thead class='sticky top-0 z-10 text-xs uppercase'>
       <tr
-        class='
-          border-y dark:border-slate-700 border-slate-200 dark:text-slate-400
-          text-slate-900
-        '
+        class="
+          border-b dark:border-slate-900 border-slate-200 dark:text-slate-400
+          text-slate-900 bg-slate-100 dark:bg-slate-900
+        "
       >
         <% @columns.each_with_index do |column, index| %>
           <%= render_cell(
@@ -65,7 +65,7 @@
               <% end %>
             </div>
           </td>
-          <td class="px-6 py-4">
+          <td class="px-3 py-3">
             <% if (member.user != @current_user && @abilities[:update_member] &&
 member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
               <turbo-frame id="<%="member-#{member.id}-access-level"%>">
@@ -80,7 +80,7 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
               <%= t("members.access_levels.level_#{member.access_level}") %>
             <% end %>
           </td>
-          <td class="px-6 py-4">
+          <td class="px-3 py-3">
             <% if !member_source.key?(:inherited_namespace_path) %>
               <div class="text-sm font-normal text-slate-500 dark:text-slate-400"><%= member_source[:label] %></div>
             <% else %>
@@ -141,20 +141,22 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
             <% end %>
           </td>
           <% if (@current_user == member.user || @abilities[:destroy_member]) && !member_source.key?(:inherited_namespace_path) %>
-            <td class="px-6 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2">
-              <% if @current_user == member.user %>
-                <%= render partial: current_user_is_member,
-                locals: {
-                  namespace: @namespace,
-                  member:,
-                } %>
-              <% else %>
-                <%= render partial: current_user_is_not_member,
-                locals: {
-                  namespace: @namespace,
-                  member:,
-                } %>
-              <% end %>
+            <td class="sticky right-0">
+              <div class="px-3 py-3 dark:bg-slate-800 z-10 space-x-2">
+                <% if @current_user == member.user %>
+                  <%= render partial: current_user_is_member,
+                  locals: {
+                    namespace: @namespace,
+                    member:,
+                  } %>
+                <% else %>
+                  <%= render partial: current_user_is_not_member,
+                  locals: {
+                    namespace: @namespace,
+                    member:,
+                  } %>
+                <% end %>
+              </div>
             </td>
           <% end %>
         <% end %>

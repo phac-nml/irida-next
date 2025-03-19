@@ -30,7 +30,7 @@ module Members
 
     def row_arguments(member)
       { tag: 'tr' }.tap do |args|
-        args[:classes] = class_names('bg-white', 'dark:bg-slate-800', 'border-b border-slate-200 dark:border-slate-700')
+        args[:classes] = class_names('bg-white dark:bg-slate-800', 'border-b border-slate-200 dark:border-slate-700')
         args[:id] = dom_id(member)
       end
     end
