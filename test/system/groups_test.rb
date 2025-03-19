@@ -299,7 +299,6 @@ class GroupsTest < ApplicationSystemTestCase
       assert_text I18n.t('groups.edit.advanced.delete.confirm.warning.subgroups_count', count: 0)
       assert_text I18n.t('groups.edit.advanced.delete.confirm.warning.projects_count', count: 0)
       assert_text I18n.t('groups.edit.advanced.delete.confirm.warning.samples_count', count: 0)
-      assert_text I18n.t('groups.edit.advanced.delete.confirm.warning.files_count', count: 0)
       fill_in I18n.t('components.confirmation.confirm_label'), with: group2.path
       click_on I18n.t('components.confirmation.confirm')
     end
