@@ -110,7 +110,7 @@ module Samples
     end
 
     def process_metadata_row(data)
-      metadata = data.except(*@required_headers)
+      metadata = data.except(*@required_headers, @sample_description_column)
       metadata.compact!
 
       metadata
