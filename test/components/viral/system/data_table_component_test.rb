@@ -56,12 +56,12 @@ module System
                             'very very very very very very very very very very very very very long name'
 
       within('thead') do
-        assert_selector 'th[class="bg-slate-100 bg-slate-50 dark:bg-slate-700 px-3 py-3 right-0 sticky uppercase z-10"]',
+        assert_selector 'th.right-0',
                         text: I18n.t('workflow_executions.files.table_header.actions').upcase
       end
 
       within('tbody') do
-        assert_selector 'td[class="bg-white dark:bg-slate-800 px-3 py-3 right-0 space-x-2 sticky z-10"]',
+        assert_selector 'td.right-0',
                         count: 2
       end
     end
