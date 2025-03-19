@@ -14,8 +14,9 @@ module Projects
 
       return unless project.namespace.deleted? && project.namespace.type != Namespaces::UserNamespace.sti_name
 
-      update_samples_count(deleted_samples_count) if @project.parent.type == 'Group'
+      return unless @project.parent.type == 'Group'
 
+      update_samples_count(deleted_samples_count) if @project.parent.type == 'Group'
       project.namespace.update_metadata_summary_by_namespace_deletion
     end
 
