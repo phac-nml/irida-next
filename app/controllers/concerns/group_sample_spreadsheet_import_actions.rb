@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Common Sample Spreadsheet import actions
-module SampleSpreadsheetImportActions
+module GroupSampleSpreadsheetImportActions
   extend ActiveSupport::Concern
 
   included do
@@ -34,6 +34,6 @@ module SampleSpreadsheetImportActions
   private
 
   def spreadsheet_import_params
-    params.expect(spreadsheet_import: %i[file sample_id_column project_puid_column sample_description_column])
+    params.expect(spreadsheet_import: %i[file sample_name_column project_puid_column sample_description_column])
   end
 end
