@@ -4,10 +4,10 @@ module Activities
   module Dialogs
     # Component for rendering project sample transfer activity dialog
     class SampleTransferActivityDialogComponent < Component
-      attr_accessor :activity_params
+      attr_accessor :activity
 
-      def initialize(activity_params = nil)
-        @activity_params = activity_params
+      def initialize(activity = nil)
+        @activity = activity
       end
     end
   end

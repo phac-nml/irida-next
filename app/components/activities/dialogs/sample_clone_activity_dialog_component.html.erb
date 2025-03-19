@@ -2,7 +2,10 @@
   <% dialog.with_header(title: "Cloned Samples") %>
   <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
     <p class="dark:text-slate-400">
-      These are the samples that were copied
+      These are the samples that were copied by
+      <%= activity.owner.email %>
+      on
+      <%= helpers.local_time(activity[:created_at], :long) %>
     </p>
   </div>
 
@@ -21,9 +24,9 @@
       >
         <tr>
           <th class="px-3 py-3">Copied from
-            <%= activity_params[:source_project_puid] %></th>
+            <%= activity.parameters[:source_project_puid] %></th>
           <th class="px-3 py-3">Copied to
-            <%= activity_params[:target_project_puid] %></th>
+            <%= activity.parameters[:target_project_puid] %></th>
         </tr>
       </thead>
       <tbody
@@ -32,7 +35,7 @@
           dark:divide-slate-700
         "
       >
-        <% activity_params[:cloned_samples_puids].each do |sample_puid| %>
+        <% activity.parameters[:cloned_samples_puids].each do |sample_puid| %>
           <tr>
             <td class="px-3 py-3"><%= sample_puid.first %></td>
             <td class="px-3 py-3"><%= sample_puid.last %></td>
