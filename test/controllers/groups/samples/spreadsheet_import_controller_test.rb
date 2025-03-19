@@ -8,7 +8,7 @@ module Groups
       setup do
         sign_in users(:john_doe)
         @group = groups(:group_one)
-        @csv = fixture_file_upload('test/fixtures/files/batch_sample_import_valid.csv')
+        @csv = fixture_file_upload('test/fixtures/files/batch_sample_import/group/valid.csv')
 
         Flipper.enable(:batch_sample_spreadsheet_import)
       end

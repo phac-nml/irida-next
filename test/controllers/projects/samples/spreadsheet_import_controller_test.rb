@@ -9,7 +9,7 @@ module Projects
         sign_in users(:john_doe)
         @namespace = groups(:group_one)
         @project = projects(:project1)
-        @csv = fixture_file_upload('test/fixtures/files/batch_sample_import_valid.csv')
+        @csv = fixture_file_upload('test/fixtures/files/batch_sample_import/project/valid.csv')
 
         Flipper.enable(:batch_sample_spreadsheet_import)
       end
@@ -20,8 +20,7 @@ module Projects
                params: {
                  spreadsheet_import: {
                    file: @csv,
-                   sample_id_column: 'sample_name',
-                   project_puid_column: 'project_puid'
+                   sample_id_column: 'sample_name'
                  }
                }
         end
