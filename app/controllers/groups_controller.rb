@@ -35,6 +35,10 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   def edit
     authorize! @group
     @authorized_namespaces -= [@group]
+    @subgroups_count = @group.self_and_descendants_of_type([Group.sti_name]).size - 1
+    @projects_count = @group.self_and_descendants_of_type([Namespaces::ProjectNamespace.sti_name]).size
+    @samples_count = @group.samples_count
+    @files_count = @group.attachments.size
   end
 
   def create

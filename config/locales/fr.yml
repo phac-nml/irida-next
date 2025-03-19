@@ -783,7 +783,7 @@ fr:
               pre_html: 'You are about to delete the group <strong>%{group_name}</strong>. This action will also delete:'
               projects_count: "%{count} project(s)"
               samples_count: "%{count} sample(s)"
-              workflows_count: "%{count} workflow execution(s)"
+              subgroups_count: "%{count} subgroups(s)"
           description: La suppression d’un groupe est permanente et ne peut pas être annulée. Tous les projets, sous-groupes et membres directs seront supprimés avec le groupe.
           submit: Supprimer le groupe
           title: Supprimer le groupe

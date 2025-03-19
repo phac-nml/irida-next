@@ -28,6 +28,16 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
 
   def edit
     authorize! @project
+    @samples_count = @project.samples.size
+    @files_count = @project.namespace.attachments.size
+    @workflows_count = authorized_scope(
+      WorkflowExecution,
+      type: :relation,
+      as: :automated_and_shared,
+      scope_options: {
+        project: @project
+      }
+    ).size
   end
 
   def create
