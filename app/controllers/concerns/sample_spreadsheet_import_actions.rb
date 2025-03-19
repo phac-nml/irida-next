@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 # Common Sample Spreadsheet import actions
-module GroupSampleSpreadsheetImportActions
+module SampleSpreadsheetImportActions
   extend ActiveSupport::Concern
 
   included do
     before_action proc { namespace }
+    before_action proc { spreadsheet_import_params }
   end
 
   def new
@@ -29,11 +30,5 @@ module GroupSampleSpreadsheetImportActions
     )
 
     render status: :ok
-  end
-
-  private
-
-  def spreadsheet_import_params
-    params.expect(spreadsheet_import: %i[file sample_name_column project_puid_column sample_description_column])
   end
 end
