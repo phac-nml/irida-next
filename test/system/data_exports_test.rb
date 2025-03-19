@@ -532,7 +532,8 @@ class DataExportsTest < ApplicationSystemTestCase
   end
 
   test 'create analysis export using users project shared workflow execution from user workflow execution show page' do
-    login_as users(:james_doe)
+    user = users(:james_doe)
+    login_as user
     visit workflow_execution_path(@shared_workflow_execution1)
 
     click_link I18n.t('workflow_executions.show.create_export_button', locale: user.locale), match: :first
@@ -571,29 +572,30 @@ class DataExportsTest < ApplicationSystemTestCase
   end
 
   test 'create analysis export using users group shared workflow execution from user workflow execution show page' do
-    login_as users(:james_doe)
+    user = users(:james_doe)
+    login_as user
     visit workflow_execution_path(@group_shared_workflow_execution1)
 
-    click_link I18n.t('workflow_executions.show.create_export_button'), match: :first
+    click_link I18n.t('workflow_executions.show.create_export_button', locale: user.locale), match: :first
 
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
-      assert_text I18n.t('data_exports.new_analysis_export_dialog.title')
-      assert_text I18n.t('data_exports.new_single_analysis_export_dialog.single_selection')
-      assert_text I18n.t('data_exports.new.name_label')
-      assert_text I18n.t('data_exports.new.email_label')
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.title', locale: user.locale)
+      assert_text I18n.t('data_exports.new_single_analysis_export_dialog.single_selection', locale: user.locale)
+      assert_text I18n.t('data_exports.new.name_label', locale: user.locale)
+      assert_text I18n.t('data_exports.new.email_label', locale: user.locale)
 
       assert_no_selector 'turbo-frame[id="list_selections"]'
       assert_no_text @group_shared_workflow_execution1.id
-      assert_no_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
+      assert_no_text I18n.t('data_exports.new_analysis_export_dialog.description.singular', locale: user.locale)
       assert_no_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new.after_submission_description_html')
+        I18n.t('data_exports.new.after_submission_description_html', locale: user.locale)
       )
 
-      click_button I18n.t('data_exports.new_single_analysis_export_dialog.single_selection')
-      assert_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
+      click_button I18n.t('data_exports.new_single_analysis_export_dialog.single_selection', locale: user.locale)
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.description.singular', locale: user.locale)
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new.after_submission_description_html')
+        I18n.t('data_exports.new.after_submission_description_html', locale: user.locale)
       )
       assert_text @group_shared_workflow_execution1.id
       assert_text @group_shared_workflow_execution1.run_id
@@ -602,7 +604,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
-      click_button I18n.t('data_exports.new.submit_button')
+      click_button I18n.t('data_exports.new.submit_button', locale: user.locale)
     end
 
     assert_selector 'dl', count: 1
@@ -650,29 +652,30 @@ class DataExportsTest < ApplicationSystemTestCase
   end
 
   test 'create analysis export using users group shared workflow execution from group workflow execution show page' do
-    login_as users(:james_doe)
+    user = users(:james_doe)
+    login_as user
     visit group_workflow_execution_path(@group5, @group_shared_workflow_execution1)
 
-    click_link I18n.t('workflow_executions.show.create_export_button'), match: :first
+    click_link I18n.t('workflow_executions.show.create_export_button', locale: user.locale), match: :first
 
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
-      assert_text I18n.t('data_exports.new_analysis_export_dialog.title')
-      assert_text I18n.t('data_exports.new_single_analysis_export_dialog.single_selection')
-      assert_text I18n.t('data_exports.new.name_label')
-      assert_text I18n.t('data_exports.new.email_label')
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.title', locale: user.locale)
+      assert_text I18n.t('data_exports.new_single_analysis_export_dialog.single_selection', locale: user.locale)
+      assert_text I18n.t('data_exports.new.name_label', locale: user.locale)
+      assert_text I18n.t('data_exports.new.email_label', locale: user.locale)
 
       assert_no_selector 'turbo-frame[id="list_selections"]'
       assert_no_text @group_shared_workflow_execution1.id
-      assert_no_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
+      assert_no_text I18n.t('data_exports.new_analysis_export_dialog.description.singular', locale: user.locale)
       assert_no_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new.after_submission_description_html')
+        I18n.t('data_exports.new.after_submission_description_html', locale: user.locale)
       )
 
-      click_button I18n.t('data_exports.new_single_analysis_export_dialog.single_selection')
-      assert_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
+      click_button I18n.t('data_exports.new_single_analysis_export_dialog.single_selection', locale: user.locale)
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.description.singular', locale: user.locale)
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new.after_submission_description_html')
+        I18n.t('data_exports.new.after_submission_description_html', locale: user.locale)
       )
       assert_text @group_shared_workflow_execution1.id
       assert_text @group_shared_workflow_execution1.run_id
@@ -681,7 +684,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
-      click_button I18n.t('data_exports.new.submit_button')
+      click_button I18n.t('data_exports.new.submit_button', locale: user.locale)
     end
 
     assert_selector 'dl', count: 1
@@ -729,29 +732,30 @@ class DataExportsTest < ApplicationSystemTestCase
   end
 
   test 'create analysis export from group shared workflow execution from group workflow execution show page' do
-    login_as users(:james_doe)
+    user = users(:james_doe)
+    login_as user
     visit group_workflow_execution_path(@group5, @group_shared_workflow_execution2)
 
-    click_link I18n.t('workflow_executions.show.create_export_button'), match: :first
+    click_link I18n.t('workflow_executions.show.create_export_button', locale: user.locale), match: :first
 
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
-      assert_text I18n.t('data_exports.new_analysis_export_dialog.title')
-      assert_text I18n.t('data_exports.new_single_analysis_export_dialog.single_selection')
-      assert_text I18n.t('data_exports.new.name_label')
-      assert_text I18n.t('data_exports.new.email_label')
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.title', locale: user.locale)
+      assert_text I18n.t('data_exports.new_single_analysis_export_dialog.single_selection', locale: user.locale)
+      assert_text I18n.t('data_exports.new.name_label', locale: user.locale)
+      assert_text I18n.t('data_exports.new.email_label', locale: user.locale)
 
       assert_no_selector 'turbo-frame[id="list_selections"]'
       assert_no_text @group_shared_workflow_execution2.id
-      assert_no_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
+      assert_no_text I18n.t('data_exports.new_analysis_export_dialog.description.singular', locale: user.locale)
       assert_no_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new.after_submission_description_html')
+        I18n.t('data_exports.new.after_submission_description_html', locale: user.locale)
       )
 
-      click_button I18n.t('data_exports.new_single_analysis_export_dialog.single_selection')
-      assert_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
+      click_button I18n.t('data_exports.new_single_analysis_export_dialog.single_selection', locale: user.locale)
+      assert_text I18n.t('data_exports.new_analysis_export_dialog.description.singular', locale: user.locale)
       assert_text ActionController::Base.helpers.strip_tags(
-        I18n.t('data_exports.new.after_submission_description_html')
+        I18n.t('data_exports.new.after_submission_description_html', locale: user.locale)
       )
       assert_text @group_shared_workflow_execution2.id
       assert_text @group_shared_workflow_execution2.run_id
@@ -760,7 +764,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
       find('input#data_export_name').fill_in with: 'test data export'
       find("input[type='checkbox'][id='data_export_email_notification']").click
-      click_button I18n.t('data_exports.new.submit_button')
+      click_button I18n.t('data_exports.new.submit_button', locale: user.locale)
     end
 
     assert_selector 'dl', count: 1

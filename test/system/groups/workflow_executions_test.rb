@@ -169,26 +169,29 @@ module Groups
     end
 
     test 'can view a workflow execution' do
-      login_as users(:joan_doe)
+      user = users(:joan_doe)
+      login_as user
       visit group_workflow_executions_path(@group)
 
-      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title')
+      assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title', locale: user.locale)
       within("tr[id='#{@workflow_execution_group_shared1.id}'] th") do
         click_link @workflow_execution_group_shared1.id
       end
 
       assert_text @workflow_execution_group_shared1.id
-      assert_text I18n.t(:"workflow_executions.state.#{@workflow_execution_group_shared1.state}")
+      assert_text I18n.t(:"workflow_executions.state.#{@workflow_execution_group_shared1.state}", locale: user.locale)
       assert_text @workflow_execution_group_shared1.metadata['workflow_name']
       assert_text @workflow_execution_group_shared1.metadata['workflow_version']
 
       within %(div[id="workflow-execution-tabs"]) do
-        click_on I18n.t('workflow_executions.show.tabs.files')
+        click_on I18n.t('workflow_executions.show.tabs.files', locale: user.locale)
       end
 
       assert_text 'FILENAME'
 
-      click_on I18n.t('workflow_executions.show.tabs.params')
+      within %(div[id="workflow-execution-tabs"]) do
+        click_on I18n.t('workflow_executions.show.tabs.params', locale: user.locale)
+      end
 
       assert_selector 'div.project_name-param > span', text: '--project_name'
       assert_selector 'div.project_name-param > input[value="assembly"]'
@@ -237,46 +240,49 @@ module Groups
     end
 
     test 'should be able to cancel a workflow' do
+      user = users(:joan_doe)
       login_as users(:joan_doe)
       workflow_execution = workflow_executions(:workflow_execution_group_shared1)
 
       visit group_workflow_execution_path(@group, workflow_execution)
 
       assert_text workflow_execution.id
-      assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
+      assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}", locale: user.locale)
 
-      click_link I18n.t(:'groups.workflow_executions.show.cancel_button')
+      click_link I18n.t(:'groups.workflow_executions.show.cancel_button', locale: user.locale)
 
       within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm')
+        click_button I18n.t(:'components.confirmation.confirm', locale: user.locale)
       end
 
       assert_text workflow_execution.id
       assert_equal workflow_execution.reload.state, 'canceled'
-      assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
+      assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}", locale: user.locale)
     end
 
     test 'submitter can edit workflow execution post launch from workflow execution page' do
+      user = users(:joan_doe)
       login_as users(:joan_doe)
       visit group_workflow_execution_path(@group, @workflow_execution_group_shared1)
-      dt_value = 'Name'
+      dt_value = 'Nom'
       new_we_name = 'New Name'
 
       assert_selector 'h1', text: @workflow_execution_group_shared1.name
       assert_selector 'dt', text: dt_value
 
-      assert_selector 'a', text: I18n.t(:'groups.workflow_executions.show.edit_button'), count: 1
-      click_link I18n.t(:'groups.workflow_executions.show.edit_button')
+      assert_selector 'a', text: I18n.t(:'groups.workflow_executions.show.edit_button', locale: user.locale), count: 1
+      click_link I18n.t(:'groups.workflow_executions.show.edit_button', locale: user.locale)
 
       within('dialog') do
-        assert_selector 'h1', text: I18n.t('groups.workflow_executions.edit_dialog.title')
+        assert_selector 'h1', text: I18n.t('groups.workflow_executions.edit_dialog.title', locale: user.locale)
         assert_selector 'p', text: I18n.t('groups.workflow_executions.edit_dialog.description',
-                                          workflow_execution_id: @workflow_execution_group_shared1.id)
+                                          workflow_execution_id: @workflow_execution_group_shared1.id,
+                                          locale: user.locale)
         assert_selector 'label', text: dt_value
-        fill_in placeholder: I18n.t('groups.workflow_executions.edit_dialog.name_placeholder'),
+        fill_in placeholder: I18n.t('groups.workflow_executions.edit_dialog.name_placeholder', locale: user.locale),
                 with: new_we_name
 
-        click_button I18n.t(:'groups.workflow_executions.edit_dialog.submit_button')
+        click_button I18n.t(:'groups.workflow_executions.edit_dialog.submit_button', locale: user.locale)
       end
 
       assert_selector 'h1', text: @workflow_execution_group_shared1.name
@@ -298,35 +304,38 @@ module Groups
     end
 
     test 'should not delete a prepared workflow' do
+      user = users(:james_doe)
       login_as users(:james_doe)
       workflow_execution = workflow_executions(:workflow_execution_group_shared_prepared)
 
       visit group_workflow_execution_path(@group, workflow_execution)
 
       assert_text workflow_execution.id
-      assert_no_button I18n.t(:'groups.workflow_executions.show.remove_button')
+      assert_no_button I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
     end
 
     test 'should not delete a submitted workflow' do
+      user = users(:james_doe)
       login_as users(:james_doe)
       workflow_execution = workflow_executions(:workflow_execution_group_shared_submitted)
 
       visit group_workflow_execution_path(@group, workflow_execution)
 
       assert_text workflow_execution.id
-      assert_no_button I18n.t(:'groups.workflow_executions.show.remove_button')
+      assert_no_button I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
     end
 
     test 'should delete a completed workflow' do
+      user = users(:james_doe)
       login_as users(:james_doe)
       workflow_execution = workflow_executions(:workflow_execution_group_shared_completed)
 
       visit group_workflow_execution_path(@group, workflow_execution)
 
-      click_link I18n.t(:'groups.workflow_executions.show.remove_button')
+      click_link I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
 
       within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm')
+        click_button I18n.t(:'components.confirmation.confirm', locale: user.locale)
       end
 
       within %(#workflow-executions-table table tbody) do
@@ -336,15 +345,16 @@ module Groups
     end
 
     test 'should delete an errored workflow' do
+      user = users(:james_doe)
       login_as users(:james_doe)
       workflow_execution = workflow_executions(:workflow_execution_group_shared_error)
 
       visit group_workflow_execution_path(@group, workflow_execution)
 
-      click_link I18n.t(:'groups.workflow_executions.show.remove_button')
+      click_link I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
 
       within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm')
+        click_button I18n.t(:'components.confirmation.confirm', locale: user.locale)
       end
 
       within %(#workflow-executions-table table tbody) do
@@ -354,25 +364,27 @@ module Groups
     end
 
     test 'should not delete a canceling workflow' do
+      user = users(:james_doe)
       login_as users(:james_doe)
       workflow_execution = workflow_executions(:workflow_execution_group_shared_canceling)
 
       visit group_workflow_execution_path(@group, workflow_execution)
 
       assert_text workflow_execution.id
-      assert_no_button I18n.t(:'groups.workflow_executions.show.remove_button')
+      assert_no_button I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
     end
 
     test 'should delete a canceled workflow' do
+      user = users(:james_doe)
       login_as users(:james_doe)
       workflow_execution = workflow_executions(:workflow_execution_group_shared_canceled)
 
       visit group_workflow_execution_path(@group, workflow_execution)
 
-      click_link I18n.t(:'groups.workflow_executions.show.remove_button')
+      click_link I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
 
       within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm')
+        click_button I18n.t(:'components.confirmation.confirm', locale: user.locale)
       end
 
       within %(#workflow-executions-table table tbody) do
@@ -382,23 +394,25 @@ module Groups
     end
 
     test 'should not delete a running workflow' do
+      user = users(:james_doe)
       login_as users(:james_doe)
       workflow_execution = workflow_executions(:workflow_execution_group_shared_running)
 
       visit group_workflow_execution_path(@group, workflow_execution)
 
       assert_text workflow_execution.id
-      assert_no_button I18n.t(:'groups.workflow_executions.show.remove_button')
+      assert_no_button I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
     end
 
     test 'should not delete a new workflow' do
+      user = users(:james_doe)
       login_as users(:james_doe)
       workflow_execution = workflow_executions(:workflow_execution_group_shared_new)
 
       visit group_workflow_execution_path(@group, workflow_execution)
 
       assert_text workflow_execution.id
-      assert_no_button I18n.t(:'groups.workflow_executions.show.remove_button')
+      assert_no_button I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
     end
   end
 end
