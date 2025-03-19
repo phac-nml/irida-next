@@ -99,6 +99,9 @@
   <%= tabs.with_tab(url: namespace_project_workflow_execution_path(@namespace.parent, @namespace.project, @workflow_execution, tab: "params"), selected: @tab == "params", controls: "workflow-execution-tabs") do %>
     <%= t(:"workflow_executions.show.tabs.params") %>
   <% end %>
+  <%= tabs.with_tab(url: namespace_project_workflow_execution_path(@namespace.parent, @namespace.project, @workflow_execution, tab: "samplesheet"), selected: @tab == "samplesheet", controls: "workflow-execution-tabs") do %>
+    <%= t(:"workflow_executions.show.tabs.samplesheet") %>
+  <% end %>
   <%= tabs.with_tab(url: namespace_project_workflow_execution_path(@namespace.parent, @namespace.project, @workflow_execution, tab: "files"), selected: @tab == "files", controls: "workflow-execution-tabs") do %>
     <%= t(:"workflow_executions.show.tabs.files") %>
   <% end %>
@@ -108,6 +111,8 @@
       <%= render partial: "summary" %>
     <% elsif @tab == "params" %>
       <%= render partial: "params" %>
+    <% elsif @tab == 'samplesheet' %>
+      <%= render partial: "samplesheet" %>
     <% elsif @tab == 'files' %>
       <%= render partial: "files" %>
     <% end %>
