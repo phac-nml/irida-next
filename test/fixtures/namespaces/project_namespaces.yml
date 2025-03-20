@@ -32,7 +32,6 @@ john_doe_project2_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   puid: INXT_PRJ_AAAAAAAAAC
-  metadata_summary: { "key": "value" }
 
 john_doe_project3_namespace:
   <<: *DEFAULTS
