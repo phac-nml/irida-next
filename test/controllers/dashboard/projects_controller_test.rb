@@ -11,6 +11,8 @@ module Dashboard
 
       get dashboard_projects_path
       assert_response :success
+
+      w3c_validate "Projects Dashboard"
     end
   end
 end
