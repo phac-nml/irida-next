@@ -6,7 +6,6 @@ module SampleSpreadsheetImportActions
 
   included do
     before_action proc { namespace }
-    before_action proc { spreadsheet_import_params }
   end
 
   def new
