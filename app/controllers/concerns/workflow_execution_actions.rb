@@ -145,7 +145,8 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
     deleted_workflows_count = ::WorkflowExecutions::DestroyService.new(
       current_user,
-      workflow_execution_ids: destroy_multiple_params[:workflow_execution_ids], namespace: @namespace
+      { workflow_execution_ids: destroy_multiple_params[:workflow_execution_ids],
+        namespace: @namespace }
     ).execute
     respond_to do |format|
       format.turbo_stream do
