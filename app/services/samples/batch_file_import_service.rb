@@ -51,11 +51,15 @@ module Samples
           next
         end
 
-        project = @static_project || Namespaces::ProjectNamespace.find_by(puid: project_puid)&.project
-        error = errors_with_project(project_puid, project)
-        unless error.nil?
-          response[sample_name] = error
-          next
+        if @static_project
+          project = @static_project
+        else
+          project = Namespaces::ProjectNamespace.find_by(puid: project_puid)&.project
+          error = errors_with_project(project_puid, project)
+          unless error.nil?
+            response[sample_name] = error
+            next
+          end
         end
 
         response[sample_name] = process_sample_row(sample_name, project, description, metadata)
