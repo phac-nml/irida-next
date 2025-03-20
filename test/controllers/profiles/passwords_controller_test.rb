@@ -11,6 +11,8 @@ module Profiles
 
       get edit_profile_password_url
       assert_response :success
+
+      w3c_validate "User Profile Password Edit Page"
     end
 
     test 'should update user password' do

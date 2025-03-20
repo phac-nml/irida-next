@@ -1,7 +1,7 @@
 <%= render Viral::BaseComponent.new(tag: 'div', **system_arguments) do %>
   <% if title_only? %>
     <h2
-      id="<%= title_id %>"
+      <%= title_id.present? ? id="#{title_id}" : nil %>
       class="text-lg font-semibold text-slate-800 dark:text-white"
     >
       <%= title %>
