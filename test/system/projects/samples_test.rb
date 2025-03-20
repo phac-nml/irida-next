@@ -3205,9 +3205,7 @@ module Projects
 
       within('table tbody tr:nth-child(1) td:nth-child(6)') do
         ### ACTIONS START ###
-        within('form[method="get"]') do
-          find('button').click
-        end
+        find('button[data-field="metadatafield1"]').click
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -3281,9 +3279,7 @@ module Projects
 
       within('table tbody tr:first-child td:nth-child(7)') do
         ### ACTIONS START ###
-        within('form[method="get"]') do
-          find('button').click
-        end
+        find('button[data-field="metadatafield2"]').click
         assert_selector "form[data-controller='inline-edit']"
 
         within('form[data-controller="inline-edit"]') do
@@ -3342,9 +3338,7 @@ module Projects
 
       within('table tbody tr:first-child td:nth-child(7)') do
         ### ACTIONS START ###
-        within('form[method="get"]') do
-          find('button').click
-        end
+        find('button[data-field="metadatafield2"]').click
         assert_selector "form[data-controller='inline-edit']"
 
         within('form[data-controller="inline-edit"]') do
