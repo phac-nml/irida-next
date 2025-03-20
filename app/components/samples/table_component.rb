@@ -56,7 +56,8 @@ module Samples
     def wrapper_arguments
       {
         tag: 'div',
-        classes: class_names('table-container flex flex-col shrink min-h-0')
+        classes: class_names('table-container flex flex-col shrink min-h-0'),
+        'data-controller' => 'projects--samples--metadata--editable-cell'
       }
     end
 
