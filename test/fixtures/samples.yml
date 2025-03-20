@@ -521,3 +521,32 @@ sample63:
     'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
     'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
 
+sample64:
+  name: Sample 64
+  description: Sample 64 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectMetadata2, :uuid) %>
+  puid: INXT_SAM_AAAAAAAADN
+  metadata: { 'example_date': '2023-10-17', 'example_float': '0.01', 'example_integer': '1' }
+  metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
+    'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
+    'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+
+sample65:
+  name: Sample 65
+  description: Sample 65 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectMetadata2, :uuid) %>
+  puid: INXT_SAM_AAAAAAAADO
+  metadata: { 'example_date': '2023-11-17', 'example_float': '0.25', 'example_integer': '25' }
+  metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
+    'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
+    'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+
+sample66:
+  name: Sample 66
+  description: Sample 66 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectMetadata2, :uuid) %>
+  puid: INXT_SAM_AAAAAAAADP
+  metadata: { 'example_date': '2023-12-17', 'example_float': '0.99', 'example_integer': '100' }
+  metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
+    'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
+    'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
