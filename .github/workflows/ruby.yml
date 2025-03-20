@@ -28,6 +28,13 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+      validator:
+        image: ghcr.io/validator/validator:latest
+        env:
+          VALIDATOR_HOST: validator
+        ports:
+          - 8888:8888
+
     steps:
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y curl libjemalloc2 libvips

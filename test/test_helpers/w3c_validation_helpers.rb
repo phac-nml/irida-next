@@ -44,7 +44,7 @@ module W3cValidationHelpers
   # @note For +validator_uri+, the trailing "/" is indispensable.
   DEF_W3C_VALIDATOR_PARAMS = {
     use_local: true,
-    validator_uri: "http://127.0.0.1:8888/",
+    validator_uri: "http://#{ENV.fetch("VALIDATOR_HOST", "127.0.0.1")}:8888/",
   }.with_indifferent_access
 
   #module ClassMethods
