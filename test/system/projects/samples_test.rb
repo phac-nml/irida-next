@@ -3161,9 +3161,7 @@ module Projects
 
       within('table tbody tr:first-child td:nth-child(7)') do
         ### ACTIONS START ###
-        within('form[method="get"]') do
-          find('button').click
-        end
+        find('button[data-field="metadatafield2"]').click
         assert_selector "form[data-controller='inline-edit']"
 
         within('form[data-controller="inline-edit"]') do
@@ -3174,7 +3172,7 @@ module Projects
 
         ### VERIFY START ###
         assert_no_selector "form[data-controller='inline-edit']"
-        assert_selector 'form[method="get"]'
+        assert_selector 'button[data-field="metadatafield2"]'
         assert_selector 'button', text: 'value2'
       end
       assert_text I18n.t('samples.editable_cell.update_success')
