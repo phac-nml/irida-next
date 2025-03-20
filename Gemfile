@@ -174,6 +174,7 @@ group :test do
   gem 'timecop'
 
   gem 'webmock'
+  gem 'w3c_validators'
 end
 
 gem 'activerecord-session_store', '~> 2.1'
