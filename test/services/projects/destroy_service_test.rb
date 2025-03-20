@@ -20,6 +20,18 @@ module Projects
       end
     end
 
+    test 'delete project with sample metadata within a user namespace' do
+      freeze_time
+      user = users(:metadata_doe)
+      project = projects(:projectMetadata2)
+
+      Projects::DestroyService.new(project, user).execute
+
+      assert_equal({ 'example_date' => 3, 'example_float' => 3, 'example_integer' => 3 },
+                   project.namespace.reload.metadata_summary)
+      assert_equal({}, project.parent.reload.metadata_summary)
+    end
+
     test 'delete project with incorrect permissions' do
       user = users(:joan_doe)
 

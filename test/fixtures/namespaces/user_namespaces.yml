@@ -132,3 +132,10 @@ user30_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user30, :uuid) %>
   puid: INXT_USR_AAAAAAAAAR
+
+metadata_doe_namespace:
+  name: metadata.doe@localhost
+  path: metadata.doe_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
+  puid: INXT_USR_AAAAAAAAAS
