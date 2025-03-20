@@ -21,7 +21,6 @@ module Projects
     end
 
     test 'delete project with sample metadata within a user namespace' do
-      freeze_time
       user = users(:metadata_doe)
       project = projects(:projectMetadata2)
 
