@@ -172,6 +172,7 @@ group :test do
   gem 'simplecov', require: false
   gem 'timecop'
 
+  gem 'w3c_validators'
   gem 'webmock'
 end
 

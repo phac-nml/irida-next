@@ -34,8 +34,8 @@ module Projects
         )
       )
 
-      assert_selector 'a[disabled="disabled"]', text: activity_to_render[:old_namespace]
-      assert_selector 'a[disabled="disabled"]', text: activity_to_render[:new_namespace]
+      assert_selector 'span', text: activity_to_render[:old_namespace]
+      assert_selector 'span', text: activity_to_render[:new_namespace]
     end
   end
 end

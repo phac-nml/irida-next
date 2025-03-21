@@ -14,6 +14,8 @@ module Groups
       get group_bots_path(namespace)
 
       assert_response :success
+
+      w3c_validate 'Group Bot Accounts Page'
     end
 
     test 'should not get bot accounts listing page for a user with incorrect permissions' do

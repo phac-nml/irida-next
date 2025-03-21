@@ -31,6 +31,7 @@ require_relative '../config/environment'
 require 'rails/test_help'
 require 'action_policy/test_helper'
 require 'test_helpers/array_helpers'
+require 'test_helpers/w3c_validation_helpers'
 
 module ActiveSupport
   class TestCase
@@ -60,6 +61,7 @@ module ActiveSupport
     include ArrayHelpers
     include ActiveJob::TestHelper
     include ActionMailer::TestHelper
+    include W3cValidationHelpers
 
     PublicActivity.enabled = true
   end

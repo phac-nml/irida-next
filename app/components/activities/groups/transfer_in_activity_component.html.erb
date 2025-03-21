@@ -8,9 +8,9 @@
       ) %>
   <% else %>
     <% href =
-      link_to(
+      content_tag(
+        :span,
         @activity[:transferred_group_puid],
-        "#",
         class: "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
         disabled: true,
       ) %>
@@ -21,20 +21,16 @@
       "#{@activity[:key]}",
       user: @activity[:user],
       old_namespace:
-        link_to(
+        content_tag(
+          :span,
           @activity[:old_namespace],
-          "#",
-          class:
-            "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
-          disabled: true,
+          class: "text-slate-800 dark:text-slate-300 font-medium",
         ),
       new_namespace:
-        link_to(
+        content_tag(
+          :span,
           @activity[:new_namespace],
-          "#",
-          class:
-            "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
-          disabled: true,
+          class: "text-slate-800 dark:text-slate-300 font-medium",
         ),
       href: href,
     ) %>
@@ -43,12 +39,10 @@
       "#{@activity[:key]}",
       user: @activity[:user],
       new_namespace:
-        link_to(
+        content_tag(
+          :span,
           @activity[:new_namespace],
-          "#",
-          class:
-            "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
-          disabled: true,
+          class: "text-slate-800 dark:text-slate-300 font-medium",
         ),
       href: href,
     ) %>

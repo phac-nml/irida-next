@@ -17,6 +17,8 @@ module Projects
       get namespace_project_workflow_executions_path(@namespace, @project)
 
       assert_response :success
+
+      w3c_validate 'Project Workflow Executions Page'
     end
 
     test 'should not show a listing of workflow executions for the project' do
@@ -41,6 +43,8 @@ module Projects
       get namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
 
       assert_response :success
+
+      w3c_validate 'Project Workflow Execution Show Page'
     end
 
     test 'should show shared workflow execution' do
@@ -49,6 +53,8 @@ module Projects
       get namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
 
       assert_response :success
+
+      w3c_validate 'Project Workflow Execution Show Page'
     end
 
     test 'should not show shared workflow execution for user with incorrect permissions' do

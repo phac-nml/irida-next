@@ -12,6 +12,8 @@ module Groups
     test 'should get index' do
       get group_samples_path(@group)
       assert_response :success
+
+      w3c_validate 'Group Samples Page'
     end
 
     test 'should search' do
@@ -50,25 +52,31 @@ module Groups
     end
 
     test 'should handle metadata template none' do
-      get group_samples_path(@group), params: { q: { metadata_template: 'none' } }
+      get group_samples_path(@group, params: { q: { metadata_template: 'none' } })
       assert_response :success
       doc = Nokogiri::HTML(response.body)
       assert doc.at_css('input[name="metadata_template"][value="none"]')
+
+      w3c_validate 'Group Samples Page'
     end
 
     test 'should handle metadata template all' do
-      get group_samples_path(@group), params: { q: { metadata_template: 'all' } }
+      get group_samples_path(@group, params: { q: { metadata_template: 'all' } })
       assert_response :success
       doc = Nokogiri::HTML(response.body)
       assert doc.at_css('input[name="metadata_template"][value="all"]')
+
+      w3c_validate 'Group Samples Page'
     end
 
     test 'should handle specific metadata template' do
       template = metadata_templates(:valid_group_metadata_template)
-      get group_samples_path(@group), params: { q: { metadata_template: template.id } }
+      get group_samples_path(@group, params: { q: { metadata_template: template.id } })
       assert_response :success
       doc = Nokogiri::HTML(response.body)
       assert doc.at_css("input[name='metadata_template'][value='#{template.id}']")
+
+      w3c_validate 'Group Samples Page'
     end
 
     test 'should not allow unauthorized access to index' do
@@ -79,8 +87,7 @@ module Groups
 
     test 'should store search params in session' do
       search_params = { name_or_puid_cont: 'test', sort: 'updated_at desc' }
-      post search_group_samples_url(@group),
-           params: { q: search_params },
+      post search_group_samples_url(@group, params: { q: search_params }),
            as: :turbo_stream
       assert_response :success
       assert_equal search_params.stringify_keys,

@@ -318,7 +318,7 @@ module Dashboard
       find("input[type='checkbox'][id='sample_#{@sample1.id}']").click
       click_link I18n.t('projects.samples.index.transfer_button')
 
-      within('span[data-controller-connected="true"] dialog') do
+      within('div[data-controller-connected="true"] dialog') do
         assert_text I18n.t('projects.samples.transfers.dialog.description.singular')
         within %(turbo-frame[id="list_selections"]) do
           assert_text @sample1.name
@@ -373,7 +373,7 @@ module Dashboard
       find("input[type='checkbox'][id='sample_#{@sample1.id}']").click
       click_link I18n.t('projects.samples.index.clone_button')
 
-      within('span[data-controller-connected="true"] dialog') do
+      within('div[data-controller-connected="true"] dialog') do
         assert_text I18n.t('projects.samples.clones.dialog.description.singular')
         within %(turbo-frame[id="list_selections"]) do
           assert_text @sample1.name

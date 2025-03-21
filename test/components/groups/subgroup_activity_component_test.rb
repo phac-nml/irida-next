@@ -52,7 +52,7 @@ module Groups
         I18n.t('activity.group.subgroups.destroy_html', user: @user.email,
                                                         href: @subgroup.puid)
       )
-      assert_selector 'a[disabled="disabled"]',
+      assert_selector 'span',
                       text: @subgroup.puid
     end
 
@@ -76,7 +76,7 @@ module Groups
                                                        href: @subgroup.puid)
       )
 
-      assert_selector 'a[disabled="disabled"]',
+      assert_selector 'span',
                       text: @subgroup.puid
     end
 
@@ -105,7 +105,7 @@ module Groups
                                                        href: @subgroup.puid)
       )
 
-      assert_selector 'a[disabled="disabled"]',
+      assert_selector 'span',
                       text: @subgroup.puid
     end
   end

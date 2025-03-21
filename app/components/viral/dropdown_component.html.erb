@@ -1,24 +1,22 @@
-<span
+<div
   data-controller="viral--dropdown"
   data-viral--dropdown-trigger-value="<%= trigger %>"
   data-viral--dropdown-skidding-value="<%= skidding %>"
   data-viral--dropdown-distance-value="<%= distance %>"
 >
   <%= render Viral::BaseComponent.new(tag: :button, **system_arguments) do %>
-    <div class="flex items-center w-full">
-      <% if icon_name.present? %>
-        <%= viral_icon(
-          name: icon_name,
-          classes: label.present? ? "w-6 h-6 flex-none mr-3" : "w-6 h-6 flex-none",
-        ) %>
-      <% end %>
-      <% if label.present? %>
-        <span class="text-left truncate grow"><%= label %></span>
-      <% end %>
-      <% if caret %>
-        <%= viral_icon(name: "chevron_down", classes: "w-4 h-4 ml-2 flex-none") %>
-      <% end %>
-    </div>
+    <% if icon_name.present? %>
+      <%= viral_icon(
+        name: icon_name,
+        classes: label.present? ? "w-6 h-6 flex-none mr-3" : "w-6 h-6 flex-none",
+      ) %>
+    <% end %>
+    <% if label.present? %>
+      <span class="text-left truncate grow"><%= label %></span>
+    <% end %>
+    <% if caret %>
+      <%= viral_icon(name: "chevron_down", classes: "w-4 h-4 ml-2 flex-none") %>
+    <% end %>
   <% end %>
   <!-- Dropdown menu -->
   <div
@@ -38,5 +36,4 @@
       <% end %>
     </ul>
   </div>
-
-</span>
+</div>

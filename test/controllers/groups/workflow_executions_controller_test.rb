@@ -16,6 +16,8 @@ module Groups
       get group_workflow_executions_path(@group)
 
       assert_response :success
+
+      w3c_validate 'Group Workflow Executions Page'
     end
 
     test 'should not show a listing of workflow executions for the group' do
@@ -38,6 +40,8 @@ module Groups
       get group_workflow_execution_path(@group, @workflow_execution)
 
       assert_response :success
+
+      w3c_validate 'Group Workflow Execution Show Page'
     end
 
     test 'should show workflow execution that shared to group but not by the user' do

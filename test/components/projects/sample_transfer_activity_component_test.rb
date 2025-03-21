@@ -93,7 +93,7 @@ module Projects
         )
       )
 
-      assert_selector 'a[disabled="disabled"]',
+      assert_selector 'span',
                       text: activity_to_render[:source_project_puid]
     end
 
@@ -124,7 +124,7 @@ module Projects
         )
       )
 
-      assert_selector 'a[disabled="disabled"]',
+      assert_selector 'span',
                       text: activity_to_render[:target_project_puid]
     end
   end

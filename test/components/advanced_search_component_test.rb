@@ -5,7 +5,7 @@ require 'application_system_test_case'
 class AdvancedSearchComponentTest < ApplicationSystemTestCase
   test 'default' do
     visit('rails/view_components/advanced_search_component/default')
-    within 'span[data-controller-connected="true"]' do
+    within 'div[data-controller-connected="true"]' do
       click_button I18n.t(:'advanced_search_component.title')
       within 'dialog' do
         # verify accessibility
@@ -58,7 +58,7 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
 
   test 'close dialog prompts for confirmation if filters have not been applied' do
     visit('rails/view_components/advanced_search_component/empty')
-    within 'span[data-controller-connected="true"]' do
+    within 'div[data-controller-connected="true"]' do
       click_button I18n.t(:'advanced_search_component.title')
       within 'dialog' do
         # verify accessibility

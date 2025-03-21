@@ -36,10 +36,10 @@
 
 <div class="bg-white dark:bg-slate-800">
   <%= viral_tabs(id: "project-members", label: t(:"projects.members.index.tabs.aria_label")) do |tabs| %>
-    <%= tabs.with_tab(url: namespace_project_members_path(), controls: "project-members", selected: @tab != "invited_groups") do %>
+    <%= tabs.with_tab(url: namespace_project_members_path(), selected: @tab != "invited_groups") do %>
       <%= t(:"projects.members.index.tabs.members") %>
     <% end %>
-    <%= tabs.with_tab(url: namespace_project_members_path(tab: "invited_groups"), controls: "project-members", selected: @tab == "invited_groups") do %>
+    <%= tabs.with_tab(url: namespace_project_members_path(tab: "invited_groups"), selected: @tab == "invited_groups") do %>
       <%= t(:"projects.members.index.tabs.groups") %>
     <% end %>
 

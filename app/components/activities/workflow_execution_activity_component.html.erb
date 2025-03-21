@@ -12,11 +12,10 @@
         ) %>
     <% else %>
       <% href =
-        link_to(
+        content_tag(
+          :span,
           @activity[:workflow_id],
-          "#",
-          class: "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
-          disabled: true,
+          class: "text-slate-800 dark:text-slate-300 font-medium",
         ) %>
     <% end %>
 
@@ -57,19 +56,17 @@
         ) %>
 
       <% sample_href =
-        link_to(
+        content_tag(
+          :span,
           @activity[:sample_puid],
-          "#",
-          class: "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
-          disabled: true,
+          class: "text-slate-800 dark:text-slate-300 font-medium",
         ) %>
     <% elsif workflow_execution_sample_exists %>
       <% href =
-        link_to(
+        content_tag(
+          :span,
           @activity[:workflow_id],
-          "#",
-          class: "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
-          disabled: true,
+          class: "text-slate-800 dark:text-slate-300 font-medium",
         ) %>
 
       <% sample_href =
@@ -84,19 +81,17 @@
         ) %>
     <% else %>
       <% href =
-        link_to(
+        content_tag(
+          :span,
           @activity[:workflow_id],
-          "#",
-          class: "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
-          disabled: true,
+          class: "text-slate-800 dark:text-slate-300 font-medium",
         ) %>
 
       <% sample_href =
-        link_to(
+        content_tag(
+          :span,
           @activity[:sample_puid],
-          "#",
-          class: "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
-          disabled: true,
+          class: "text-slate-800 dark:text-slate-300 font-medium",
         ) %>
     <% end %>
 

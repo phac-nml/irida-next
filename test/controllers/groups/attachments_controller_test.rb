@@ -13,6 +13,8 @@ module Groups
     test 'should get index' do
       get group_attachments_url(@namespace)
       assert_response :success
+
+      w3c_validate 'Group Files Page'
     end
 
     test 'should not get index without proper access' do

@@ -95,6 +95,8 @@ module Groups
       get group_metadata_templates_path(@group)
 
       assert_response :success
+
+      w3c_validate 'Group Metadata Templates Page'
     end
 
     test 'view metadata template' do

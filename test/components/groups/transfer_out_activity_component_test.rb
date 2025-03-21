@@ -43,7 +43,7 @@ module Groups
                                                    transferred_group_puid: @subgroup.puid)
       )
 
-      assert_selector 'a[disabled="disabled"]',
+      assert_selector 'span',
                       text: @subgroup.puid
 
       render_inline Activities::Groups::SubgroupActivityComponent.new(activity: activity_to_render)
@@ -53,7 +53,7 @@ module Groups
                                                        href: @subgroup.puid)
       )
 
-      assert_selector 'a[disabled="disabled"]',
+      assert_selector 'span',
                       text: @subgroup.puid
     end
   end

@@ -73,16 +73,16 @@
   <% end %>
 <% end %>
 <%= viral_tabs(id: "workflow-execution-tabs", label: "Tabs") do |tabs| %>
-  <% tabs.with_tab(url: workflow_execution_path(@workflow_execution, tab: "summary"), selected: @tab == "summary" || @tab == nil, controls: "workflow-execution-tabs") do %>
+  <% tabs.with_tab(url: workflow_execution_path(@workflow_execution, tab: "summary"), selected: @tab == "summary" || @tab == nil) do %>
     <%= t(:"workflow_executions.show.tabs.summary") %>
   <% end %>
-  <% tabs.with_tab(url: workflow_execution_path(@workflow_execution, tab: "params"), selected: @tab == "params", controls: "workflow-execution-tabs") do %>
+  <% tabs.with_tab(url: workflow_execution_path(@workflow_execution, tab: "params"), selected: @tab == "params") do %>
     <%= t(:"workflow_executions.show.tabs.params") %>
   <% end %>
-  <% tabs.with_tab(url: workflow_execution_path(@workflow_execution, tab: "samplesheet"), selected: @tab == "samplesheet", controls: "workflow-execution-tabs") do %>
+  <% tabs.with_tab(url: workflow_execution_path(@workflow_execution, tab: "samplesheet"), selected: @tab == "samplesheet") do %>
     <%= t(:"workflow_executions.show.tabs.samplesheet") %>
   <% end %>
-  <% tabs.with_tab(url: workflow_execution_path(@workflow_execution, tab: "files"), selected: @tab == "files", controls: "workflow-execution-tabs") do %>
+  <% tabs.with_tab(url: workflow_execution_path(@workflow_execution, tab: "files"), selected: @tab == "files") do %>
     <%= t(:"workflow_executions.show.tabs.files") %>
   <% end %>
 

@@ -8,7 +8,7 @@ module Viral
 
       renders_many :actions
 
-      def initialize(title_id: '', title: '', subtitle: nil, **system_arguments)
+      def initialize(title_id: nil, title: '', subtitle: nil, **system_arguments)
         @title = title
         @title_id = title_id
         @subtitle = subtitle

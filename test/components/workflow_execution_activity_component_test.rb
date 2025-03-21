@@ -53,7 +53,7 @@ class WorkflowExecutionActivityComponentTest < ViewComponentTestCase
       I18n.t('activity.workflow_execution.automated_workflow.destroy_html', user: @user.email,
                                                                             href: @automated_workflow_execution.id)
     )
-    assert_selector 'a[disabled="disabled"]',
+    assert_selector 'span',
                     text: @automated_workflow_execution.id
   end
 
@@ -102,7 +102,7 @@ class WorkflowExecutionActivityComponentTest < ViewComponentTestCase
     )
 
     assert_selector 'a', text: @workflow_execution.id
-    assert_selector 'a[disabled="disabled"]', text: @sample1.puid
+    assert_selector 'span', text: @sample1.puid
   end
 
   test 'workflow launched on sample and workflow execution deleted activity' do
@@ -126,7 +126,7 @@ class WorkflowExecutionActivityComponentTest < ViewComponentTestCase
                                                                            sample_href: @sample1.puid)
     )
 
-    assert_selector 'a[disabled="disabled"]', text: @workflow_execution.id
+    assert_selector 'span', text: @workflow_execution.id
     assert_selector 'a', text: @sample1.puid
   end
 
@@ -154,7 +154,7 @@ class WorkflowExecutionActivityComponentTest < ViewComponentTestCase
                                                                            sample_href: @sample1.puid)
     )
 
-    assert_selector 'a[disabled="disabled"]', text: @workflow_execution.id
-    assert_selector 'a[disabled="disabled"]', text: @sample1.puid
+    assert_selector 'span', text: @workflow_execution.id
+    assert_selector 'span', text: @sample1.puid
   end
 end

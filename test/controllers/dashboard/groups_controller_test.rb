@@ -3,16 +3,16 @@
 require 'test_helper'
 
 module Dashboard
-  class ProjectsControllerTest < ActionDispatch::IntegrationTest
+  class GroupsControllerTest < ActionDispatch::IntegrationTest
     include Devise::Test::IntegrationHelpers
 
     test 'should get index' do
       sign_in users(:john_doe)
 
-      get dashboard_projects_path
+      get dashboard_groups_path
       assert_response :success
 
-      w3c_validate 'Projects Dashboard'
+      w3c_validate 'Groups Dashboard'
     end
   end
 end

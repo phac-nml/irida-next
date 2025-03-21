@@ -14,6 +14,8 @@ module Projects
     test 'should get index' do
       get namespace_project_attachments_url(@namespace, @project1)
       assert_response :success
+
+      w3c_validate 'Project Files Page'
     end
 
     test 'should not get index without proper access' do

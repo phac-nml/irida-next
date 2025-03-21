@@ -15,6 +15,8 @@ module Groups
 
       get group_history_path(group)
       assert_response :success
+
+      w3c_validate 'Group History Page'
     end
 
     test 'should display project history version' do

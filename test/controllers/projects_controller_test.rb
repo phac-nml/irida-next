@@ -17,6 +17,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     get project_path(projects(:project1))
     assert_response :success
+
+    w3c_validate 'Project Show Page'
   end
 
   test 'should not show the project if member is expired' do

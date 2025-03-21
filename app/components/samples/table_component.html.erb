@@ -205,7 +205,10 @@
                   >0</strong>
                 </span>
               </td>
-              <td colspan="100%" class="p-3 bg-slate-100 dark:bg-slate-900"></td>
+              <td
+                colspan="<%= @columns.count + @metadata_fields.count - 3 + (@renders_row_actions ? 1 : 0) %>"
+                class="p-3 bg-slate-100 dark:bg-slate-900"
+              ></td>
             </tr>
           </tfoot>
         <% end %>

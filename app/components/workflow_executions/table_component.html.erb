@@ -199,7 +199,10 @@
                 >0</strong>
               </span>
             </td>
-            <td colspan="100%" class="px-3 py-3 bg-slate-50 dark:bg-slate-900"></td>
+            <td
+              colspan="<%= @columns.count - 3 + (@renders_row_actions ? 1 : 0) %>"
+              class="px-3 py-3 bg-slate-50 dark:bg-slate-900"
+            ></td>
           </tr>
         </tfoot>
       <% end %>

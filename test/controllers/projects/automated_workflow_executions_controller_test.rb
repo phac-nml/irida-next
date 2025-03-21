@@ -15,9 +15,11 @@ module Projects
     test 'can get the listing of automated workflow executions for a project' do
       sign_in users(:john_doe)
 
-      get namespace_project_automated_workflow_executions_path(@namespace, @project, format: :turbo_stream)
+      get namespace_project_automated_workflow_executions_path(@namespace, @project)
 
       assert_response :success
+
+      w3c_validate 'Project Automated Workflow Executions Page'
     end
 
     test 'can create a automated workflow execution for a project' do

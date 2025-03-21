@@ -18,6 +18,8 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     get group_metadata_templates_path(@group)
 
     assert_response :success
+
+    w3c_validate 'Group Metadata Templates Page'
   end
 
   test 'group metadata templates new' do
@@ -143,6 +145,8 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
     get namespace_project_metadata_templates_path(@project_namespace.parent, @project)
 
     assert_response :success
+
+    w3c_validate 'Project Metadata Templates Page'
   end
 
   test 'project metadata templates new' do

@@ -11,6 +11,8 @@ module Profiles
 
       get profile_account_url
       assert_response :success
+
+      w3c_validate 'User Profile Account Page'
     end
 
     test 'should delete users account' do

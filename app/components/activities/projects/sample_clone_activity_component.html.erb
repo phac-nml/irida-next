@@ -18,12 +18,10 @@
           class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
         ),
       cloned_samples_count:
-        link_to(
+        content_tag(
+          :span,
           @activity[:cloned_samples_ids]&.size,
-          "#",
-          class:
-            "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
-          disabled: true,
+          class: "text-slate-800 dark:text-slate-300 font-medium",
         ),
       cloned_samples_ids: @activity[:cloned_samples_ids],
       cloned_samples_puids: @activity[:cloned_samples_puids],
@@ -33,20 +31,16 @@
       "#{@activity[:key]}",
       user: @activity[:user],
       cloned_samples_count:
-        link_to(
+        content_tag(
+          :span,
           @activity[:cloned_samples_ids]&.size,
-          "#",
-          class:
-            "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
-          disabled: true,
+          class: "text-slate-800 dark:text-slate-300 font-medium",
         ),
       href:
-        link_to(
+        content_tag(
+          :span,
           namespace_puid(namespace),
-          "#",
-          class:
-            "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
-          disabled: true,
+          class: "text-slate-800 dark:text-slate-300 font-medium",
         ),
     ) %>
   <% end %>

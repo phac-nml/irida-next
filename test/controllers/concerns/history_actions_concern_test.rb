@@ -15,6 +15,8 @@ class HistoryActionsConcernTest < ActionDispatch::IntegrationTest
     get namespace_project_history_path(namespace, project)
 
     assert_response :success
+
+    w3c_validate 'Project History Page'
   end
 
   test 'view project history version' do
@@ -39,6 +41,8 @@ class HistoryActionsConcernTest < ActionDispatch::IntegrationTest
     get group_history_path(group)
 
     assert_response :success
+
+    w3c_validate 'Group History Page'
   end
 
   test 'view group history version' do

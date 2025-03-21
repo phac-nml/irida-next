@@ -29,8 +29,7 @@ module Groups
                user: 'System',
                href: 2)
       )
-      assert_selector 'a',
-                      text: 2
+      assert_selector 'span', text: 2
     end
   end
 end

@@ -17,6 +17,8 @@ class BotActionsConcernTest < ActionDispatch::IntegrationTest
     get namespace_project_bots_path(@namespace, @project)
 
     assert_response :success
+
+    w3c_validate 'Project Bot Accounts Page'
   end
 
   test 'new project bot account' do
@@ -64,6 +66,8 @@ class BotActionsConcernTest < ActionDispatch::IntegrationTest
     get group_bots_path(@namespace)
 
     assert_response :success
+
+    w3c_validate 'Group Bot Accounts Page'
   end
 
   test 'new group bot account' do

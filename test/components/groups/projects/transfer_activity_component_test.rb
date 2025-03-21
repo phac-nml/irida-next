@@ -58,7 +58,7 @@ module Groups
                                                              new_namespace: @group.puid,
                                                              href: @project.namespace.puid)
         )
-        assert_selector 'a[disabled="disabled"]',
+        assert_selector 'span',
                         text: @project.namespace.puid
       end
     end

@@ -6,7 +6,7 @@ module System
   class DialogComponentTest < ApplicationSystemTestCase
     test 'confirmation' do
       visit('rails/view_components/viral_dialog_component/confirmation')
-      within('span[data-controller-connected="true"] dialog') do
+      within('div[data-controller-connected="true"] dialog') do
         assert_accessible
         assert_text 'Confirmation required'
         assert_selector 'button.button--state-primary', count: 1
@@ -16,7 +16,7 @@ module System
 
     test 'default' do
       visit('rails/view_components/viral_dialog_component/default')
-      within('span[data-controller-connected="true"] dialog') do
+      within('div[data-controller-connected="true"] dialog') do
         assert_accessible
 
         assert_text 'This is the default dialog'
@@ -25,7 +25,7 @@ module System
 
     test 'small' do
       visit('rails/view_components/viral_dialog_component/small')
-      within('span[data-controller-connected="true"] dialog.dialog--size-sm') do
+      within('div[data-controller-connected="true"] dialog.dialog--size-sm') do
         assert_accessible
         assert_text 'This is the small dialog'
       end
@@ -33,7 +33,7 @@ module System
 
     test 'large' do
       visit('rails/view_components/viral_dialog_component/large')
-      within('span[data-controller-connected="true"] dialog.dialog--size-lg') do
+      within('div[data-controller-connected="true"] dialog.dialog--size-lg') do
         assert_accessible
         assert_text 'This is the large dialog'
       end
@@ -41,7 +41,7 @@ module System
 
     test 'extra large' do
       visit('rails/view_components/viral_dialog_component/extra_large')
-      within('span[data-controller-connected="true"] dialog.dialog--size-xl') do
+      within('div[data-controller-connected="true"] dialog.dialog--size-xl') do
         assert_accessible
         assert_text 'This is the extra large dialog'
       end
@@ -49,7 +49,7 @@ module System
 
     test 'with action buttons' do
       visit('rails/view_components/viral_dialog_component/with_action_buttons')
-      within('span[data-controller-connected="true"] dialog') do
+      within('div[data-controller-connected="true"] dialog') do
         assert_accessible
         assert_selector 'button.button--state-primary', count: 1
         assert_selector 'button.button--state-default', count: 1
@@ -58,7 +58,7 @@ module System
 
     test 'with trigger' do
       visit('rails/view_components/viral_dialog_component/with_trigger')
-      within('span[data-controller-connected="true"]') do
+      within('div[data-controller-connected="true"]') do
         click_button('Open dialog')
       end
       within('dialog') do
@@ -71,12 +71,12 @@ module System
 
     test 'non closable dialog' do
       visit('rails/view_components/viral_dialog_component/non_closable')
-      within('span[data-controller-connected="true"] dialog') do
+      within('div[data-controller-connected="true"] dialog') do
         assert_accessible
         assert_selector 'input[type="text"]', count: 1
         find('input[type="text"]').send_keys :escape
       end
-      assert_selector 'span[data-controller-connected="true"] dialog'
+      assert_selector 'div[data-controller-connected="true"] dialog'
     end
   end
 end
