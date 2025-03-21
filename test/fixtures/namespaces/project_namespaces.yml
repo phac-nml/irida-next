@@ -573,3 +573,14 @@ projectMetadata_namespace:
   metadata_summary:
     { "example_date": 3, "example_float": 3, "example_integer": 3 }
   puid: INXT_PRJ_AAAAAAAACA
+
+metadata_doe_projectMetadata2_namespace:
+  <<: *DEFAULTS
+  name: Project Metadata 2
+  path: project-metadata-2
+  description: Project Metadata 2 description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe_namespace, :uuid) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
+  metadata_summary:
+    { "example_date": 3, "example_float": 3, "example_integer": 3 }
+  puid: INXT_PRJ_AAAAAAAACB
