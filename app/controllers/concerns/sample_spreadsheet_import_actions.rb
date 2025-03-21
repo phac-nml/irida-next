@@ -30,10 +30,4 @@ module SampleSpreadsheetImportActions
 
     render status: :ok
   end
-
-  private
-
-  def spreadsheet_import_params
-    params.expect(spreadsheet_import: %i[file sample_id_column project_puid_column sample_description_column])
-  end
 end

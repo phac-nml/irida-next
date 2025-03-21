@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module Samples
-  class BatchFileImportServiceTest < ActiveSupport::TestCase
+  class GroupBatchSampleImportServiceTest < ActiveSupport::TestCase
     def setup # rubocop:disable Metrics/MethodLength
       @john_doe = users(:john_doe)
       @jane_doe = users(:jane_doe)
@@ -12,7 +12,7 @@ module Samples
       @project = projects(:project1)
       @project2 = projects(:project2)
 
-      file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/batch_sample_import_valid.csv'))
+      file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/batch_sample_import/group/valid.csv'))
       @blob = ActiveStorage::Blob.create_and_upload!(
         io: file,
         filename: file.original_filename,
@@ -23,20 +23,6 @@ module Samples
         project_puid_column: 'project_puid',
         sample_description_column: 'description'
       }
-    end
-
-    test 'import samples with permission for project namespace' do
-      assert_equal 3, @project.samples.count
-
-      assert_authorized_to(:import_samples_and_metadata?, @project.namespace,
-                           with: Namespaces::ProjectNamespacePolicy,
-                           context: { user: @john_doe }) do
-        Samples::BatchFileImportService.new(@project.namespace, @john_doe, @blob.id, @default_params).execute
-      end
-
-      assert_equal 5, @project.samples.count
-      assert_equal 1, @project.samples.where(name: 'my new sample').count
-      assert_equal 1, @project.samples.where(name: 'my new sample 2').count
     end
 
     test 'import samples with permission for group' do
@@ -51,21 +37,6 @@ module Samples
       assert_equal 5, @project.samples.count
       assert_equal 1, @project.samples.where(name: 'my new sample').count
       assert_equal 1, @project.samples.where(name: 'my new sample 2').count
-    end
-
-    test 'import samples without permission for project namespace' do
-      assert_equal 3, @project.samples.count
-
-      exception = assert_raises(ActionPolicy::Unauthorized) do
-        Samples::BatchFileImportService.new(@project.namespace, @jane_doe, @blob.id, @default_params).execute
-      end
-      assert_equal Namespaces::ProjectNamespacePolicy, exception.policy
-      assert_equal :import_samples_and_metadata?, exception.rule
-      assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-      assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.import_samples_and_metadata?',
-                          name: @project.name), exception.result.message
-
-      assert_equal 3, @project.samples.count
     end
 
     test 'import samples without permission for group' do
@@ -90,30 +61,10 @@ module Samples
         content_type: file.content_type
       )
 
-      Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id, @default_params).execute
-      assert_equal(@project.namespace.errors.full_messages_for(:base).first,
-                   I18n.t('services.spreadsheet_import.missing_header',
-                          header_title: 'sample_name,project_puid'))
-    end
-
-    test 'import samples into a project that does not belong to project namespace' do
-      assert_equal 3, @project.samples.count
-      assert_equal 20, @project2.samples.count
-
-      response = Samples::BatchFileImportService.new(@project2.namespace, @john_doe, @blob.id,
-                                                     @default_params).execute
-
-      assert_equal 3, @project.samples.count
-      assert_equal 20, @project2.samples.count
-
-      assert_equal I18n.t('services.samples.batch_import.project_puid_not_in_namespace',
-                          project_puid: @project.puid,
-                          namespace: @project2.namespace.full_path),
-                   response['my new sample'][:message]
-      assert_equal I18n.t('services.samples.batch_import.project_puid_not_in_namespace',
-                          project_puid: @project.puid,
-                          namespace: @project2.namespace.full_path),
-                   response['my new sample 2'][:message]
+      Samples::BatchFileImportService.new(@group, @john_doe, blob.id, @default_params).execute
+      assert_equal(I18n.t('services.spreadsheet_import.missing_header',
+                          header_title: 'sample_name,project_puid'),
+                   @group.errors.full_messages.to_sentence)
     end
 
     test 'import samples into a project that does not belong to group namespace' do
@@ -139,7 +90,7 @@ module Samples
       assert_equal 3, @project.samples.count
 
       file = Rack::Test::UploadedFile.new(
-        Rails.root.join('test/fixtures/files/batch_sample_import_invalid_project.csv')
+        Rails.root.join('test/fixtures/files/batch_sample_import/group/invalid_project.csv')
       )
       blob = ActiveStorage::Blob.create_and_upload!(
         io: file,
@@ -147,7 +98,7 @@ module Samples
         content_type: file.content_type
       )
 
-      response = Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id,
+      response = Samples::BatchFileImportService.new(@group, @john_doe, blob.id,
                                                      @default_params).execute
 
       assert_equal 4, @project.samples.count
@@ -161,7 +112,7 @@ module Samples
       assert_equal 3, @project.samples.count
 
       file = Rack::Test::UploadedFile.new(
-        Rails.root.join('test/fixtures/files/batch_sample_import_invalid_missing_puid.csv')
+        Rails.root.join('test/fixtures/files/batch_sample_import/group/invalid_missing_puid.csv')
       )
       blob = ActiveStorage::Blob.create_and_upload!(
         io: file,
@@ -169,7 +120,7 @@ module Samples
         content_type: file.content_type
       )
 
-      response = Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id,
+      response = Samples::BatchFileImportService.new(@group, @john_doe, blob.id,
                                                      @default_params).execute
 
       assert_equal 4, @project.samples.count
@@ -183,7 +134,7 @@ module Samples
       assert_equal 3, @project.samples.count
 
       file = Rack::Test::UploadedFile.new(
-        Rails.root.join('test/fixtures/files/batch_sample_import_invalid_blank_line.csv')
+        Rails.root.join('test/fixtures/files/batch_sample_import/group/invalid_blank_line.csv')
       )
       blob = ActiveStorage::Blob.create_and_upload!(
         io: file,
@@ -191,7 +142,7 @@ module Samples
         content_type: file.content_type
       )
 
-      response = Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id,
+      response = Samples::BatchFileImportService.new(@group, @john_doe, blob.id,
                                                      @default_params).execute
 
       assert_equal 5, @project.samples.count
@@ -205,7 +156,7 @@ module Samples
       assert_equal 3, @project.samples.count
 
       file = Rack::Test::UploadedFile.new(
-        Rails.root.join('test/fixtures/files/batch_sample_import_invalid_short_sample_name.csv')
+        Rails.root.join('test/fixtures/files/batch_sample_import/group/invalid_short_sample_name.csv')
       )
       blob = ActiveStorage::Blob.create_and_upload!(
         io: file,
@@ -213,7 +164,7 @@ module Samples
         content_type: file.content_type
       )
 
-      response = Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id,
+      response = Samples::BatchFileImportService.new(@group, @john_doe, blob.id,
                                                      @default_params).execute
 
       assert_equal 4, @project.samples.count
@@ -226,7 +177,7 @@ module Samples
       assert_equal 3, @project.samples.count
 
       file = Rack::Test::UploadedFile.new(
-        Rails.root.join('test/fixtures/files/batch_sample_import_invalid_sample_exists.csv')
+        Rails.root.join('test/fixtures/files/batch_sample_import/group/invalid_sample_exists.csv')
       )
       blob = ActiveStorage::Blob.create_and_upload!(
         io: file,
@@ -234,7 +185,7 @@ module Samples
         content_type: file.content_type
       )
 
-      response = Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id,
+      response = Samples::BatchFileImportService.new(@group, @john_doe, blob.id,
                                                      @default_params).execute
 
       assert_equal 4, @project.samples.count
@@ -247,7 +198,7 @@ module Samples
       assert_equal 3, @project.samples.count
 
       file = Rack::Test::UploadedFile.new(
-        Rails.root.join('test/fixtures/files/batch_sample_import_invalid_sample_dup_in_file.csv')
+        Rails.root.join('test/fixtures/files/batch_sample_import/group/invalid_sample_dup_in_file.csv')
       )
       blob = ActiveStorage::Blob.create_and_upload!(
         io: file,
@@ -255,7 +206,7 @@ module Samples
         content_type: file.content_type
       )
 
-      response = Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id,
+      response = Samples::BatchFileImportService.new(@group, @john_doe, blob.id,
                                                      @default_params).execute
 
       assert_equal 4, @project.samples.count
@@ -269,7 +220,7 @@ module Samples
       assert_equal 3, @project.samples.count
 
       file = Rack::Test::UploadedFile.new(
-        Rails.root.join('test/fixtures/files/batch_sample_import_with_metadata_valid.csv')
+        Rails.root.join('test/fixtures/files/batch_sample_import/group/with_metadata_valid.csv')
       )
       blob = ActiveStorage::Blob.create_and_upload!(
         io: file,
@@ -277,7 +228,7 @@ module Samples
         content_type: file.content_type
       )
 
-      response = Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id, @default_params).execute
+      response = Samples::BatchFileImportService.new(@group, @john_doe, blob.id, @default_params).execute
 
       assert_equal 5, @project.samples.count
 
@@ -299,7 +250,7 @@ module Samples
       assert_equal 3, @project.samples.count
 
       file = Rack::Test::UploadedFile.new(
-        Rails.root.join('test/fixtures/files/batch_sample_import_with_metadata_with_empty.csv')
+        Rails.root.join('test/fixtures/files/batch_sample_import/group/with_metadata_with_empty.csv')
       )
       blob = ActiveStorage::Blob.create_and_upload!(
         io: file,
@@ -307,7 +258,7 @@ module Samples
         content_type: file.content_type
       )
 
-      response = Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id, @default_params).execute
+      response = Samples::BatchFileImportService.new(@group, @john_doe, blob.id, @default_params).execute
 
       assert_equal 5, @project.samples.count
 

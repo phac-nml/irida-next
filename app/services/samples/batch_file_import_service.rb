@@ -7,9 +7,15 @@ module Samples
   class BatchFileImportService < BaseSpreadsheetImportService # rubocop:disable Metrics/ClassLength
     def initialize(namespace, user = nil, blob_id = nil, params = {})
       @sample_name_column = params[:sample_name_column]
-      @project_puid_column = params[:project_puid_column]
       @sample_description_column = params[:sample_description_column]
-      required_headers = [@sample_name_column, @project_puid_column]
+      required_headers = [@sample_name_column]
+      if namespace.group_namespace?
+        @project_puid_column = params[:project_puid_column]
+        required_headers.push @project_puid_column
+        @static_project = nil
+      else
+        @static_project = namespace.project
+      end
       @project_samples_count = {}
       @project_puid_map = {}
       super(namespace, user, blob_id, required_headers, 0, params)
@@ -26,7 +32,7 @@ module Samples
 
     protected
 
-    def perform_file_import # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    def perform_file_import # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
       response = {}
       parse_settings = @headers.zip(@headers).to_h
 
@@ -34,7 +40,8 @@ module Samples
         next unless index.positive?
 
         sample_name = data[@sample_name_column]
-        project_puid = data[@project_puid_column]
+
+        project_puid = @static_project&.puid || data[@project_puid_column]
         description = data[@sample_description_column]
         metadata = process_metadata_row(data)
 
@@ -44,11 +51,15 @@ module Samples
           next
         end
 
-        project = Namespaces::ProjectNamespace.find_by(puid: project_puid)&.project
-        error = errors_with_project(project_puid, project)
-        unless error.nil?
-          response[sample_name] = error
-          next
+        if @static_project
+          project = @static_project
+        else
+          project = Namespaces::ProjectNamespace.find_by(puid: project_puid)&.project
+          error = errors_with_project(project_puid, project)
+          unless error.nil?
+            response[sample_name] = error
+            next
+          end
         end
 
         response[sample_name] = process_sample_row(sample_name, project, description, metadata)
@@ -103,7 +114,7 @@ module Samples
     end
 
     def process_metadata_row(data)
-      metadata = data.except(@sample_name_column, @project_puid_column, @sample_description_column)
+      metadata = data.except(*@required_headers, @sample_description_column)
       metadata.compact!
 
       metadata
