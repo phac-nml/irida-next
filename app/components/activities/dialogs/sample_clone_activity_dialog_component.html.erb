@@ -4,8 +4,6 @@
     <p class="dark:text-slate-400">
       These are the samples that were copied by
       <%= activity.owner.email %>
-      on
-      <%= helpers.local_time(activity[:created_at], :long) %>
     </p>
   </div>
 
@@ -18,7 +16,7 @@
     >
       <thead
         class="
-          sticky top-0 z-10 text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
+          text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
           dark:text-slate-300
         "
       >
