@@ -37,7 +37,7 @@ module Groups
 
     def row_arguments(namespace_group_link)
       { tag: 'tr' }.tap do |args|
-        args[:classes] = class_names('bg-white', 'border-b', 'dark:bg-slate-800', 'dark:border-slate-700')
+        args[:classes] = class_names('bg-white dark:bg-slate-800', 'border-b border-slate-200 dark:border-slate-700')
         args[:id] = dom_id(namespace_group_link)
       end
     end

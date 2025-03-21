@@ -11,7 +11,9 @@ module Viral
         @closable = closable
         @system_arguments = system_arguments
 
-        @system_arguments[:classes] = class_names(@system_arguments[:classes], 'dialog--header')
+        @system_arguments[:classes] =
+          class_names(@system_arguments[:classes],
+                      'dialog--header flex items-start justify-between rounded-t p-5')
       end
     end
   end

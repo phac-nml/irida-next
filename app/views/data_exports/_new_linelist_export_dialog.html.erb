@@ -52,7 +52,7 @@
             <div
               class="
                 text-base leading-relaxed text-slate-500 dark:text-slate-400 p-2.5 border
-                border-t-0 border-slate-300
+                border-t-0 border-slate-200 dark:border-slate-700
               "
             >
               <span data-infinite-scroll-target="summary">
@@ -62,8 +62,8 @@
             </div>
             <div
               class="
-                overflow-y-auto max-h-[200px] border border-t-0 border-slate-300 rounded-b block
-                w-full p-2.5 dark:bg-slate-800 dark:border-slate-600
+                overflow-y-auto max-h-[200px] border border-t-0 border-slate-200 rounded-b block
+                w-full p-2.5 dark:bg-slate-800 dark:border-slate-700
               "
               data-action="scroll->infinite-scroll#scroll"
               data-infinite-scroll-target="scrollable"
@@ -127,11 +127,6 @@
                     value="csv"
                     name="data_export[export_parameters][linelist_format]"
                     checked="true"
-                    class="
-                      w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500
-                      dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2
-                      dark:bg-slate-700 dark:border-slate-600
-                    "
                   >
                   <label
                     for="csv-format"
@@ -146,11 +141,6 @@
                     type="radio"
                     value="xlsx"
                     name="data_export[export_parameters][linelist_format]"
-                    class="
-                      w-4 h-4 text-primary-600 bg-slate-100 border-slate-300 focus:ring-primary-500
-                      dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2
-                      dark:bg-slate-700 dark:border-slate-600
-                    "
                   >
                   <label
                     for="xlsx-format"

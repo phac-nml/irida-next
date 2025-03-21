@@ -24,17 +24,19 @@
 
     </div>
 
-    <div class="mt-4">
+    <div class="mt-4 space-x-2">
       <%= form.submit t("workflow_executions.edit_dialog.submit_button"),
                   class:
-                    "focus:outline-none text-sm text-white bg-primary-700 hover:bg-primary-800 focus:ring-0 rounded-md p-2 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 cursor-pointer" %>
+                    "inline-flex w-1/2 cursor-pointer items-center justify-center rounded-md border focus:z-10 sm:w-auto px-5 py-2.5 text-sm border-primary-800 bg-primary-700 hover:bg-primary-800 focus:ring-primary-300 dark:focus:ring-primary-700 dark:bg-primary-800 dark:border-primary-900 dark:hover:bg-primary-700 text-white focus:outline-hidden dark:text-white" %>
 
       <button
         type="button"
         class="
-          focus:outline-none text-sm text-slate-900 border border-slate-200 bg-white
-          hover:bg-slate-100 hover:text-slate-950 focus:ring-0 rounded-md p-2
-          dark:text-white dark:bg-slate-600 dark:hover:bg-slate-700
+          inline-flex w-1/2 cursor-pointer items-center justify-center rounded-md border
+          text-sm focus:z-10 sm:w-auto px-5 py-2.5 border-slate-200 bg-white
+          text-slate-900 hover:bg-slate-100 hover:text-slate-950 focus:ring-slate-200
+          focus:outline-hidden dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400
+          dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700
         "
         data-action="click->viral--dialog#close"
       >

@@ -1,13 +1,5 @@
 <% if defined? errors %>
-  <ul
-    class="
-      max-w-md
-      text-sm
-      text-slate-500
-      list-inside
-      dark:text-slate-400
-    "
-  >
+  <ul class=" max-w-md text-sm text-slate-500 list-inside dark:text-slate-400 ">
     <% errors.each do |error_message| %>
       <li>
         <%= viral_help_text(state: :error) do %>

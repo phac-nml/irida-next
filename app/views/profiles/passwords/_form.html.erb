@@ -29,7 +29,7 @@
     </div>
 
     <% invalid_password_confirmation = user.errors.include?(:password_confirmation) %>
-    <div class="form-field <%= 'invalid' if invalid_password_confirmation %>">
+    <div class="form-field mt-2 <%= 'invalid' if invalid_password_confirmation %>">
       <%= form.label :password_confirmation %>
       <%= form.password_field :password_confirmation,
                           required: true,

@@ -13,7 +13,7 @@ module Viral
 
         test 'with_icon' do
           render_preview(:with_icon)
-          assert_selector 'span.Viral-Icon.Viral-Icon--colorWarning', count: 1
+          assert_selector 'span.viral-icon.viral-icon--colorWarning', count: 1
         end
       end
     end

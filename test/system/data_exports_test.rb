@@ -441,8 +441,8 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_text attachment1.file.filename.to_s
     assert_text attachment2.file.filename.to_s
 
-    assert_selector 'svg.Viral-Icon__Svg.icon-folder_open', count: 4
-    assert_selector 'svg.Viral-Icon__Svg.icon-document_text', count: 3
+    assert_selector 'svg.viral-icon__Svg.icon-folder_open', count: 4
+    assert_selector 'svg.viral-icon__Svg.icon-document_text', count: 3
   end
 
   test 'clicking links in preview tab for sample data export' do
@@ -882,8 +882,8 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_text sample46.puid
     assert_text @workflow_execution1.id
 
-    assert_selector 'svg.Viral-Icon__Svg.icon-folder_open', count: 2
-    assert_selector 'svg.Viral-Icon__Svg.icon-document_text', count: 3
+    assert_selector 'svg.viral-icon__Svg.icon-folder_open', count: 2
+    assert_selector 'svg.viral-icon__Svg.icon-document_text', count: 3
   end
 
   test 'projects with samples containing no metadata should have linelist export link disabled' do

@@ -26,7 +26,7 @@ class ViewHelperTest < ActionView::TestCase
   test 'should load override icons' do
     %w[developer saml entra_id].each do |provider|
       source = viral_icon_source("#{provider}_icon")
-      assert source.include? %(class="Viral-Icon__Svg icon-#{provider}_icon")
+      assert source.include? %(class="viral-icon__Svg icon-#{provider}_icon")
       assert source.include? 'viewbox="0 0 1140 1012"'
     end
   end

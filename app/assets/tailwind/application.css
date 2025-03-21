@@ -1,0 +1,954 @@
+@import "tailwindcss";
+@plugin 'flowbite/plugin';
+@source "../../../node_modules/flowbite/**/*.js";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-primary-50: #f0fdf4;
+  --color-primary-100: #dcfce7;
+  --color-primary-200: #bbf7d0;
+  --color-primary-300: #86efac;
+  --color-primary-400: #4ade80;
+  --color-primary-500: #22c55e;
+  --color-primary-600: #16a34a;
+  --color-primary-700: #15803d;
+  --color-primary-800: #166534;
+  --color-primary-900: #14532d;
+  --color-primary-950: #052e16;
+  --color-primary: #16a34a;
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-slate-200, currentColor);
+  }
+}
+
+@utility layout-body {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  grid-template-rows: 1fr;
+  @apply h-screen w-screen transition-all;
+
+  &.collapsed {
+    grid-template-columns: 0 1fr;
+  }
+}
+
+@utility collapsed {
+  &.layout-body {
+    grid-template-columns: 0 1fr;
+  }
+}
+
+@utility sidebar {
+  grid-template-areas: "navigation" "collapse";
+  grid-template-rows: 1fr 40px;
+  overflow-x: hidden;
+}
+
+@utility navbar-button {
+  @apply rounded-md p-1 text-sm text-slate-500 hover:bg-slate-300 focus:ring-4 focus:ring-slate-200 focus:outline-hidden dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+
+  & button.viral-dropdown--icon {
+    @apply rounded-md p-1 text-sm text-slate-500 hover:bg-slate-300 focus:ring-4 focus:ring-slate-200 focus:outline-hidden dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+  }
+}
+
+@utility viral-dropdown--icon {
+  & button.navbar-button {
+    @apply rounded-md p-1 text-sm text-slate-500 hover:bg-slate-300 focus:ring-4 focus:ring-slate-200 focus:outline-hidden dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+  }
+  @apply rounded-md p-2.5 text-sm text-slate-500 hover:bg-slate-100 focus:ring-4 focus:ring-slate-200 focus:outline-hidden dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+}
+
+@utility link {
+  @apply font-medium text-green-700 hover:underline dark:text-green-500;
+}
+
+@utility card {
+  @apply rounded-md border border-slate-200 bg-slate-50 p-4 shadow-xs sm:p-6 dark:border-slate-700 dark:bg-slate-800;
+}
+
+@utility form-field {
+  & label {
+    @apply mb-1 block text-sm font-medium text-slate-900 dark:text-white;
+  }
+
+  & div.field_with_errors {
+    @apply block w-full;
+  }
+
+  & input[type="text"] {
+    @apply focus:ring-primary-600 focus:border-primary-600 block w-full rounded-md border border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-green-500 dark:focus:ring-green-500;
+  }
+
+  & input[type="search"] {
+    @apply focus:ring-primary-600 focus:border-primary-600 block w-full rounded-md border border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-green-500 dark:focus:ring-green-500;
+  }
+
+  & input[type="password"] {
+    @apply focus:ring-primary-600 focus:border-primary-600 block w-full rounded-md border border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-green-500 dark:focus:ring-green-500;
+  }
+
+  & input[type="email"] {
+    @apply focus:ring-primary-600 focus:border-primary-600 block w-full rounded-md border border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-green-500 dark:focus:ring-green-500;
+  }
+
+  & input[type="text"].prefixed {
+    @apply rounded-l-none rounded-r-md;
+  }
+
+  & input[type="search"].prefixed {
+    @apply rounded-l-none rounded-r-md;
+  }
+
+  & input[type="password"].prefixed {
+    @apply rounded-l-none rounded-r-md;
+  }
+
+  & input[type="email"].prefixed {
+    @apply rounded-l-none rounded-r-md;
+  }
+
+  &.datepicker input[type="text"] {
+    @apply focus:ring-primary-700 focus:border-primary-700 dark:focus:border-primary-500 dark:focus:ring-primary-500 block w-full rounded-md border border-slate-300 p-2.5 pl-10 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
+  }
+
+  & .select2 input[type="text"] {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' aria-hidden='true' viewBox='0 0 10 6'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 1 4 4 4-4'/%3E%3C/svg%3E");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 0.75em 0.75em;
+    padding-right: 2.5rem;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  & select {
+    @apply focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-md border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
+  }
+
+  & select option {
+    @apply focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-md border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
+  }
+
+  & select:has(option[value=""]:checked) {
+    @apply text-slate-500 dark:text-slate-400;
+  }
+
+  & select.error {
+    @apply block w-full rounded-md border-red-500 p-2.5 text-slate-900 focus:border-red-500 focus:ring-red-500 sm:text-sm dark:border-red-400 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-red-500 dark:focus:ring-red-500;
+  }
+
+  & select.prefixed {
+    appearance: none;
+    padding: 0 1em 0 1em;
+    margin: 0;
+    width: 100%;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: inherit;
+    line-height: inherit;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    @apply block w-full rounded-r-md border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-green-500 focus:ring-green-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:drop-shadow-sm dark:focus:border-green-500 dark:focus:ring-green-500;
+  }
+
+  &.invalid label {
+    @apply text-red-700 dark:text-red-500;
+  }
+
+  &.invalid input[type="text"] {
+    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
+  }
+
+  &.invalid input[type="file"] {
+    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
+  }
+
+  &.invalid textarea {
+    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
+  }
+
+  & textarea {
+    @apply block w-full rounded-md border border-slate-300 p-2.5 text-sm text-slate-900 focus:border-green-500 focus:ring-green-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-green-500 dark:focus:ring-green-500;
+  }
+}
+
+@utility field_with_errors {
+  .form-field &div {
+    @apply block w-full;
+  }
+}
+
+@utility prefixed {
+  .form-field &input[type="text"] {
+    @apply rounded-l-none rounded-r-md;
+  }
+
+  .form-field &input[type="search"] {
+    @apply rounded-l-none rounded-r-md;
+  }
+
+  .form-field &input[type="password"] {
+    @apply rounded-l-none rounded-r-md;
+  }
+
+  .form-field &input[type="email"] {
+    @apply rounded-l-none rounded-r-md;
+  }
+
+  .form-field &select {
+    appearance: none;
+    padding: 0 1em 0 1em;
+    margin: 0;
+    width: 100%;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: inherit;
+    line-height: inherit;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    @apply block w-full rounded-r-md border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-green-500 focus:ring-green-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:drop-shadow-sm dark:focus:border-green-500 dark:focus:ring-green-500;
+  }
+}
+
+@utility datepicker {
+  &.form-field input[type="text"] {
+    @apply focus:ring-primary-700 focus:border-primary-700 dark:focus:border-primary-500 dark:focus:ring-primary-500 block w-full rounded-md border border-slate-300 p-2.5 pl-10 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
+  }
+}
+
+@utility select2 {
+  .form-field & input[type="text"] {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' aria-hidden='true' viewBox='0 0 10 6'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 1 4 4 4-4'/%3E%3C/svg%3E");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 0.75em 0.75em;
+    padding-right: 2.5rem;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+@utility error {
+  .form-field &select {
+    @apply block w-full rounded-md border-red-500 p-2.5 text-slate-900 focus:border-red-500 focus:ring-red-500 sm:text-sm dark:border-red-400 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-red-500 dark:focus:ring-red-500;
+  }
+}
+
+@utility invalid {
+  &.form-field label {
+    @apply text-red-700 dark:text-red-500;
+  }
+
+  &.form-field input[type="text"] {
+    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
+  }
+
+  &.form-field input[type="file"] {
+    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
+  }
+
+  &.form-field textarea {
+    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
+  }
+}
+
+@utility field-hint {
+  @apply mt-1 text-sm text-slate-500 dark:text-slate-400;
+}
+
+@utility row-btn {
+  @apply px-1 py-0 text-sm text-slate-500 hover:bg-slate-100 focus:ring-4 focus:ring-slate-200 focus:outline-hidden dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+
+  & svg {
+    @apply h-5 w-5;
+  }
+}
+
+@utility viral-icon {
+  height: 2rem;
+  width: 2rem;
+  max-height: 100%;
+  max-width: 100%;
+  margin: auto;
+  @apply flex justify-center align-middle;
+}
+
+@utility viral-icon__Svg {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+@utility viral-icon--colorBase {
+  @apply text-slate-900;
+}
+
+@utility viral-icon--colorSubdued {
+  @apply text-slate-400;
+}
+
+@utility viral-icon--colorCritical {
+  @apply text-red-500;
+}
+
+@utility viral-icon--colorWarning {
+  @apply text-yellow-500;
+}
+
+@utility viral-icon--colorSuccess {
+  @apply text-green-500;
+}
+
+@utility viral-icon--colorPrimary {
+  @apply text-primary-500;
+}
+
+@utility viral-dropdown--button {
+  @apply hover:text-primary-700 flex items-center rounded-md border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-900 hover:bg-slate-100 focus:z-10 focus:ring-4 focus:ring-slate-200 focus:outline-hidden dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700;
+}
+
+@utility button {
+  @apply inline-flex w-1/2 cursor-pointer items-center justify-center rounded-md border text-sm focus:z-10 sm:w-auto;
+
+  &:disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+}
+
+@utility button--size-default {
+  @apply px-5 py-2.5 text-sm;
+}
+
+@utility button--size-small {
+  @apply px-3 py-2 text-xs;
+}
+
+@utility button--size-large {
+  @apply px-7 py-3 text-lg;
+}
+
+@utility button--state-default {
+  @apply border-slate-200 bg-white text-slate-900 hover:bg-slate-100 hover:text-slate-950 focus:ring-slate-200 focus:outline-hidden dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700;
+}
+
+@utility button--state-destructive {
+  @apply border-red-800 bg-red-700 text-white hover:bg-red-800 focus:ring-red-300 focus:outline-hidden dark:border-red-600 dark:bg-red-600 dark:text-white dark:hover:bg-red-700 dark:focus:ring-red-700;
+}
+
+@utility button--state-primary {
+  @apply border-primary-800 bg-primary-700 hover:bg-primary-800 focus:ring-primary-300 dark:focus:ring-primary-700 dark:bg-primary-800 dark:border-primary-900 dark:hover:bg-primary-700 text-white focus:outline-hidden dark:text-white;
+}
+
+@utility dialog--size {
+  @apply relative max-h-full w-full;
+}
+
+@utility dialog--size-sm {
+  @apply max-w-md;
+}
+
+@utility dialog--size-md {
+  @apply max-w-xl;
+}
+
+@utility dialog--size-lg {
+  @apply max-w-3xl;
+}
+
+@utility dialog--size-xl {
+  @apply max-w-7xl;
+}
+
+@utility dialog--title {
+  @apply text-xl font-semibold text-slate-900 dark:text-white;
+}
+
+@utility dialog--close {
+  @apply ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-slate-400 hover:bg-slate-200 hover:text-slate-900 focus:ring-4 focus:ring-slate-200 focus:outline-hidden dark:hover:bg-slate-600 dark:hover:text-white dark:focus:ring-slate-700;
+}
+
+@utility dialog--section {
+  @apply p-5;
+}
+
+@utility avatar {
+  @apply relative inline-flex flex-none items-center justify-center overflow-hidden rounded-md text-slate-800 dark:text-slate-300;
+  --tw-avatar-bg-lightness: 35%;
+  --tw-avatar-border-lightness: 35%;
+  --tw-avatar-bg-alpha: 0.3;
+
+  .dark & {
+    --tw-avatar-bg-lightness: 25%;
+    --tw-avatar-border-lightness: 90%;
+    --tw-avatar-bg-alpha: 0.4;
+  }
+}
+
+@utility dark {
+  & .avatar {
+    --tw-avatar-bg-lightness: 25%;
+    --tw-avatar-border-lightness: 90%;
+    --tw-avatar-bg-alpha: 0.4;
+  }
+}
+
+@utility namespace-tree-container {
+  /*GROUPS LIST TREE*/
+  & > .namespace-list-tree > .namespace-entry.has-children:first-child {
+    border-top: 0;
+  }
+}
+
+@utility namespace-list-tree {
+  /*GROUPS LIST TREE*/
+  .namespace-tree-container > & > .namespace-entry.has-children:first-child {
+    border-top: 0;
+  }
+
+  & .folder-toggle-wrap {
+    font-size: 0;
+    flex-shrink: 0;
+  }
+
+  & .folder-toggle-wrap span {
+    font-size: 12px;
+  }
+
+  & .item-type-icon {
+    margin-top: 2px;
+    width: 20px;
+  }
+
+  & > .namespace-entry:not(.has-children) .folder-caret {
+    opacity: 0;
+  }
+
+  & & {
+    margin-bottom: 0;
+    margin-left: 30px;
+    position: relative;
+  }
+
+  & &::before {
+    content: "";
+    display: block;
+    width: 0;
+    position: absolute;
+    top: 5px;
+    bottom: 0;
+    left: -16px;
+    @apply border-l-2 border-slate-200 dark:border-slate-600;
+  }
+
+  .dark & &::before {
+    @apply border-slate-600;
+  }
+
+  & & .namespace-entry {
+    position: relative;
+  }
+
+  & & .namespace-entry::before {
+    content: "";
+    display: block;
+    width: 10px;
+    height: 0;
+    position: absolute;
+    top: 30px;
+    left: -16px;
+    @apply border-t-2 border-slate-200 dark:border-slate-600;
+  }
+
+  .dark & & .namespace-entry::before {
+    @apply border-slate-600;
+  }
+
+  & & .namespace-entry:last-child::before {
+    height: auto;
+    top: 30px;
+    bottom: 0;
+    @apply bg-white dark:bg-slate-800;
+  }
+
+  .dark & & .namespace-entry:last-child::before {
+    @apply bg-slate-800;
+  }
+
+  & & .namespace-entry.being-removed {
+    opacity: 0.5;
+  }
+
+  & .namespace-entry {
+    padding: 0;
+  }
+
+  & .namespace-entry.has-children {
+    border-top: 0;
+  }
+
+  & .namespace-entry:first-child {
+    @apply border-t border-slate-200 dark:border-slate-600;
+  }
+
+  & .namespace-entry.has-children > .namespace-entry-contents:hover {
+    @apply cursor-pointer border-slate-50 bg-slate-50 dark:border-slate-600 dark:bg-slate-600;
+  }
+
+  & .namespace-entry-contents .namespace-text-container {
+    min-width: 0;
+  }
+
+  & .namespace-entry-contents .namespace-text {
+    min-width: 0;
+  }
+
+  & .namespace-entry-contents .namespace-text {
+    flex-basis: 100%;
+  }
+
+  & .namespace-entry-contents .avatar-container {
+    flex-shrink: 0;
+  }
+
+  & .namespace-entry-contents .avatar-container > a {
+    width: 100%;
+    text-decoration: none;
+  }
+
+  & .namespace-entry-contents .title {
+    @apply text-base font-medium text-slate-900 dark:text-white;
+  }
+
+  & .namespace-entry-contents.has-more-items {
+    display: block;
+    padding: 20px 10px;
+  }
+
+  & .namespace-entry-contents .description p {
+    max-width: 100%;
+    @apply text-sm text-slate-700 dark:text-slate-400;
+  }
+
+  & .namespace-entry-contents .stats {
+    position: relative;
+    line-height: normal;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  & .namespace-entry-contents .stats > span {
+    display: inline-flex;
+    align-items: center;
+    height: 16px;
+    min-width: 30px;
+  }
+
+  & .namespace-entry-contents .stats .stat-value {
+    margin: 2px 0 0 5px;
+  }
+}
+
+@utility namespace-entry {
+  /*GROUPS LIST TREE*/
+  .namespace-tree-container
+    > .namespace-list-tree
+    > &.has-children:first-child {
+    border-top: 0;
+  }
+
+  .namespace-list-tree > &:not(.has-children) .folder-caret {
+    opacity: 0;
+  }
+
+  .namespace-list-tree .namespace-list-tree & {
+    position: relative;
+  }
+
+  .namespace-list-tree .namespace-list-tree &::before {
+    content: "";
+    display: block;
+    width: 10px;
+    height: 0;
+    position: absolute;
+    top: 30px;
+    left: -16px;
+    @apply border-t-2 border-slate-200 dark:border-slate-600;
+  }
+
+  .dark .namespace-list-tree .namespace-list-tree &::before {
+    @apply border-slate-600;
+  }
+
+  .namespace-list-tree .namespace-list-tree &::before {
+    @apply border-slate-600;
+  }
+
+  .namespace-list-tree .namespace-list-tree &:last-child::before {
+    height: auto;
+    top: 30px;
+    bottom: 0;
+    @apply bg-white;
+  }
+
+  .dark .namespace-list-tree .namespace-list-tree &:last-child::before {
+    @apply bg-slate-800;
+  }
+
+  .namespace-list-tree .namespace-list-tree &.being-removed {
+    opacity: 0.5;
+  }
+
+  .namespace-list-tree & {
+    padding: 0;
+  }
+
+  .namespace-list-tree &.has-children {
+    border-top: 0;
+  }
+
+  .namespace-list-tree &:first-child {
+    @apply border-t border-slate-200 dark:border-slate-600;
+  }
+
+  .namespace-list-tree &.has-children > .namespace-entry-contents:hover {
+    @apply cursor-pointer border-slate-50 bg-slate-50 dark:border-slate-600 dark:bg-slate-600;
+  }
+}
+
+@utility has-children {
+  /*GROUPS LIST TREE*/
+  .namespace-tree-container
+    > .namespace-list-tree
+    > &.namespace-entry:first-child {
+    border-top: 0;
+  }
+
+  .namespace-list-tree &.namespace-entry {
+    border-top: 0;
+  }
+
+  .namespace-list-tree &.namespace-entry > .namespace-entry-contents:hover {
+    @apply cursor-pointer border-slate-50 bg-slate-50 dark:border-slate-600 dark:bg-slate-600;
+  }
+}
+
+@utility folder-toggle-wrap {
+  .namespace-list-tree & {
+    font-size: 0;
+    flex-shrink: 0;
+  }
+
+  .namespace-list-tree & span {
+    font-size: 12px;
+  }
+}
+
+@utility item-type-icon {
+  .namespace-list-tree & {
+    margin-top: 2px;
+    width: 20px;
+  }
+}
+
+@utility folder-caret {
+  .namespace-list-tree > .namespace-entry:not(.has-children) & {
+    opacity: 0;
+  }
+}
+
+@utility being-removed {
+  .namespace-list-tree .namespace-list-tree &.namespace-entry {
+    opacity: 0.5;
+  }
+}
+
+@utility namespace-entry-contents {
+  .namespace-list-tree .namespace-entry.has-children > &:hover {
+    @apply cursor-pointer border-slate-50 bg-slate-50 dark:border-slate-600 dark:bg-slate-600;
+  }
+
+  .namespace-list-tree & .namespace-text-container {
+    min-width: 0;
+  }
+
+  .namespace-list-tree & .namespace-text {
+    min-width: 0;
+  }
+
+  .namespace-list-tree & .namespace-text {
+    flex-basis: 100%;
+  }
+
+  .namespace-list-tree & .avatar-container {
+    flex-shrink: 0;
+  }
+
+  .namespace-list-tree & .avatar-container > a {
+    width: 100%;
+    text-decoration: none;
+  }
+
+  .namespace-list-tree & .title {
+    @apply text-base font-medium text-slate-900 dark:text-white;
+  }
+
+  .namespace-list-tree &.has-more-items {
+    display: block;
+    padding: 20px 10px;
+  }
+
+  .namespace-list-tree & .description p {
+    max-width: 100%;
+    @apply text-sm text-slate-700 dark:text-slate-400;
+  }
+
+  .namespace-list-tree & .stats {
+    position: relative;
+    line-height: normal;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .namespace-list-tree & .stats > span {
+    display: inline-flex;
+    align-items: center;
+    height: 16px;
+    min-width: 30px;
+  }
+
+  .namespace-list-tree & .stats .stat-value {
+    margin: 2px 0 0 5px;
+  }
+}
+
+@utility namespace-text-container {
+  .namespace-list-tree .namespace-entry-contents & {
+    min-width: 0;
+  }
+}
+
+@utility namespace-text {
+  .namespace-list-tree .namespace-entry-contents & {
+    min-width: 0;
+  }
+
+  .namespace-list-tree .namespace-entry-contents & {
+    flex-basis: 100%;
+  }
+}
+
+@utility avatar-container {
+  .namespace-list-tree .namespace-entry-contents & {
+    flex-shrink: 0;
+  }
+
+  .namespace-list-tree .namespace-entry-contents & > a {
+    width: 100%;
+    text-decoration: none;
+  }
+}
+
+@utility title {
+  .namespace-list-tree .namespace-entry-contents & {
+    @apply text-base font-medium text-slate-900 dark:text-white;
+  }
+}
+
+@utility has-more-items {
+  .namespace-list-tree &.namespace-entry-contents {
+    display: block;
+    padding: 20px 10px;
+  }
+}
+
+@utility description {
+  .namespace-list-tree .namespace-entry-contents & p {
+    max-width: 100%;
+    @apply text-sm text-slate-700 dark:text-slate-400;
+  }
+}
+
+@utility stats {
+  .namespace-list-tree .namespace-entry-contents & {
+    position: relative;
+    line-height: normal;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .namespace-list-tree .namespace-entry-contents & > span {
+    display: inline-flex;
+    align-items: center;
+    height: 16px;
+    min-width: 30px;
+  }
+
+  .namespace-list-tree .namespace-entry-contents & .stat-value {
+    margin: 2px 0 0 5px;
+  }
+}
+
+@utility stat-value {
+  .namespace-list-tree .namespace-entry-contents .stats & {
+    margin: 2px 0 0 5px;
+  }
+}
+
+@layer utilities {
+  body {
+    height: 100vh;
+    overflow: hidden;
+  }
+}
+
+@layer components {
+  kbd {
+    @apply rounded-lg border border-slate-200 bg-slate-100 px-2 py-1.5 text-sm font-semibold text-slate-800 dark:border-slate-500 dark:bg-slate-600 dark:text-slate-100;
+  }
+
+  dt {
+    @apply text-base font-medium text-slate-900 dark:text-white;
+  }
+
+  dd {
+    @apply text-slate-500 dark:text-slate-400;
+  }
+
+  dd:not(:last-child) {
+    @apply mb-4;
+  }
+
+  p link {
+    @apply font-medium text-green-600 underline hover:no-underline dark:text-green-500;
+  }
+
+  input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor' class='w-5 h-5'%3E%3Cpath d='M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z' /%3E%3C/svg%3E%0A");
+  }
+
+  /* VIRAL DIALOG */
+  dialog {
+    @apply max-h-full w-full max-w-2xl overflow-y-hidden rounded-lg bg-white p-0 shadow-sm focus:outline-hidden dark:bg-slate-800;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -ms-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+  }
+
+  dialog::backdrop {
+    @apply bg-slate-400/30 backdrop-blur-xs dark:bg-slate-900/40;
+  }
+
+  .dialog--section {
+    max-height: calc(80vh - 1.25rem - 2.5rem);
+    @apply overflow-y-auto p-5;
+  }
+
+  strong {
+    @apply font-semibold;
+  }
+}
+
+.pagy-nav.pagination {
+  @apply isolate inline-flex -space-x-px rounded-md shadow-xs;
+}
+
+.page.next a {
+  @apply flex h-full items-center justify-center rounded-r-lg border border-slate-300 bg-white px-3 py-1.5 leading-tight text-slate-500 hover:bg-slate-100 hover:text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white;
+}
+
+.page.prev a {
+  @apply ml-0 flex h-full items-center justify-center rounded-l-lg border border-slate-300 bg-white px-3 py-1.5 text-slate-500 hover:bg-slate-100 hover:text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white;
+}
+
+.page.next.disabled {
+  @apply ml-0 flex h-full cursor-not-allowed items-center justify-center rounded-r-lg border border-slate-300 bg-slate-50 px-3 py-1.5 text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400;
+}
+
+.page.prev.disabled {
+  @apply ml-0 flex h-full cursor-not-allowed items-center justify-center rounded-l-lg border border-slate-300 bg-slate-50 px-3 py-1.5 text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400;
+}
+
+.page a,
+.page.gap {
+  @apply hover:text-primary-700 relative inline-flex items-center border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-100 focus:z-10 focus:ring-4 focus:ring-slate-200 focus:outline-hidden dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700;
+}
+
+.page.active {
+  @apply text-primary-600 bg-primary-50 border-primary-300 hover:bg-primary-100 hover:text-primary-700 z-10 flex items-center justify-center border px-3 py-2 text-sm leading-tight dark:border-slate-700 dark:bg-slate-800 dark:text-white;
+}
+
+.pagy-info {
+  @apply text-sm font-normal text-slate-500 dark:text-slate-400;
+}
+
+div.field_with_errors > :is(select) {
+  @apply border-red-700 text-red-900 placeholder-red-300;
+}
+
+.table-container table:not(:has(tbody td)) {
+  display: none;
+}
+
+.table-container:not(:has(td)) .empty_state_message {
+  display: block;
+}
+
+.table-container .empty_state_message {
+  display: none;
+}
+
+.fixed-table-component {
+  height: calc(100vh - 50px - 32px);
+  max-height: calc(100vh - 50px - 32px);
+  display: flex;
+  flex-direction: column;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  --tw-bg-opacity: 1 !important;
+  @apply bg-slate-300 dark:bg-slate-600;
+  border-radius: 0.25rem;
+}
+
+.scrollbar::-webkit-scrollbar-corner {
+  display: none;
+}
+
+input[type="checkbox"] {
+  @apply text-primary-600 checked:border-primary-500 focus:ring-primary-500 dark:checked:border-primary-500 dark:checked:bg-primary-500 mt-0.5 mr-2 shrink-0 rounded-sm border-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:focus:ring-offset-slate-800;
+}
+
+input[type="radio"] {
+  @apply text-primary-600 checked:border-primary-500 focus:ring-primary-500 dark:checked:border-primary-500 dark:checked:bg-primary-500 mt-0.5 shrink-0 rounded-full border-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:border-slate-700 dark:bg-slate-600 dark:focus:ring-offset-slate-800;
+}

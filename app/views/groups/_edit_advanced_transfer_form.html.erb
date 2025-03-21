@@ -11,8 +11,8 @@ data: { turbo_confirm: "", controller: "viral--select2" }) do |form| %>
         class="
           border-slate-300 text-slate-800 sm:text-sm rounded-md block w-full p-2.5
           dark:bg-slate-800 dark:border-slate-600 dark:text-slate-50
-          "
-        >
+        "
+      >
     <% else %>
       <%= viral_select2(form:, name: :new_namespace_id, placeholder: t(:"groups.edit.advanced.transfer.select_group")) do |select| %>
         <% @authorized_namespaces.each do |namespace| %>
@@ -33,13 +33,13 @@ data: { turbo_confirm: "", controller: "viral--select2" }) do |form| %>
   </div>
   <div>
     <%= form.submit t("groups.edit.advanced.transfer.submit"),
-      class:
-        "button button--state-destructive button--size-default inline-block",
-      disabled: true,
-      data: {
-        "viral--select2-target": "submitButton",
-        turbo_content: ".confirm-transfer",
-        confirm_value: confirm_value
-      } %>
+                class:
+                  "button button--state-destructive button--size-default inline-block",
+                disabled: true,
+                data: {
+                  "viral--select2-target": "submitButton",
+                  turbo_content: ".confirm-transfer",
+                  confirm_value: confirm_value,
+                } %>
   </div>
 <% end %>

@@ -9,8 +9,8 @@
     >
       <thead
         class="
-          text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700
-          dark:text-slate-400
+          text-xs text-slate-700 uppercase bg-slate-100 dark:bg-slate-700
+          dark:text-slate-400 border-b border-slate-200 dark:border-slate-700
         "
       >
         <tr>
@@ -18,7 +18,7 @@
             <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-3 py-3', 'sticky left-0 bg-slate-50 dark:bg-slate-900': index === 0, 'min-w-40': index === 1 || index === 2, 'min-w-48': index === 4)
+              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', 'sticky left-0': index === 0, 'min-w-40': index === 1 || index === 2, 'min-w-48': index === 4)
             ) do %>
               <%= render Ransack::SortComponent.new(
                 ransack_obj: @q,
@@ -32,7 +32,7 @@
             <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-3 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
+              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-700 sticky right-0')
             ) do %>
               <%= t(".actions") %>
             <% end %>

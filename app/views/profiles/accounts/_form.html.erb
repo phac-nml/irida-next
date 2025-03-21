@@ -7,12 +7,7 @@
       <%= t(:"profiles.accounts.delete.description") %>:</p>
     <ul
       class="
-        pb-4
-        space-y-1
-        text-slate-500
-        list-disc
-        list-inside
-        dark:text-slate-400
+        pb-4 space-y-1 text-slate-500 list-disc list-inside dark:text-slate-400
       "
     >
       <% t(:'profiles.accounts.delete.effects').each do |val| %>
@@ -20,11 +15,11 @@
       <% end %>
     </ul>
     <%= link_to t(:"profiles.accounts.delete.button"),
-                profile_account_path,
-                data: {
-                  turbo_method: :delete,
-                  turbo_confirm: t(:"profiles.accounts.delete.confirm")
-                },
-                class: "button button--state-destructive button--size-default" %>
+    profile_account_path,
+    data: {
+      turbo_method: :delete,
+      turbo_confirm: t(:"profiles.accounts.delete.confirm"),
+    },
+    class: "button button--state-destructive button--size-default" %>
   </div>
 </div>

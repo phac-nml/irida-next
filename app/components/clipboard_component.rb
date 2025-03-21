@@ -4,7 +4,7 @@
 class ClipboardComponent < Viral::Component
   def initialize(value:, button_classes: '')
     @value = value
-    @button_classes = button_classes
+    @button_classes = class_names(button_classes, 'cursor-pointer ml-1')
   end
 
   private

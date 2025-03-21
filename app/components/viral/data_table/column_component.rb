@@ -21,7 +21,7 @@ module Viral
         },
         right: {
           header: 'sticky right-0 bg-slate-50 dark:bg-slate-700 z-10',
-          body: 'sticky right-0 bg-white dark:bg-slate-800 space-x-2 z-10'
+          body: 'sticky right-0 space-x-2 z-10 border-b border-slate-200 dark:border-slate-700'
         }
       }.freeze
 
@@ -32,13 +32,14 @@ module Viral
       )
         @title = title
         @system_arguments = system_arguments
+        @system_arguments[:padding] = system_arguments[:padding] == false ? '' : 'py-3 px-3'
         @block = block
       end
 
       def header_cell_arguments
         {
           classes:
-          class_names('px-3 py-3',
+          class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900 uppercase',
                       @system_arguments[:sticky_key] && STICKY_CLASSES[@system_arguments[:sticky_key]][:header])
         }
       end
@@ -46,14 +47,12 @@ module Viral
       def body_cell_arguments
         {
           classes:
-          class_names('px-3 py-3',
+          class_names(@system_arguments[:padding],
                       @system_arguments[:sticky_key] && STICKY_CLASSES[@system_arguments[:sticky_key]][:body])
         }
       end
 
-      def call(row)
-        @block.call(row)
-      end
+      delegate :call, to: :@block
     end
   end
 end

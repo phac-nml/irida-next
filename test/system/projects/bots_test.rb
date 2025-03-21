@@ -447,14 +447,14 @@ module Projects
       assert_selector '#bots-table'
       assert_selector '#bots-table table tbody tr', count: 20
       assert_selector "#bots-table table tbody tr[id='#{@project_bot.id}']"
-      within("#bots-table table tbody tr[id='#{@project_bot.id}'] td:last-child") do
+      within("#bots-table table tbody tr[id='#{@project_bot.id}'] td:nth-child(6)") do
         # destroy bot
         click_link I18n.t(:'bots.index.table.actions.destroy')
       end
 
       # confirm destroy bot
-      assert_selector '#dialog'
-      within('#dialog') do
+      assert_selector 'dialog[open]'
+      within('dialog[open]') do
         assert_text I18n.t('bots.destroy_confirmation.description', bot_name: @project_bot.user.email)
         click_button I18n.t('bots.destroy_confirmation.submit_button')
       end

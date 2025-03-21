@@ -9,7 +9,7 @@
       },
       type: [Group.sti_name, Namespaces::ProjectNamespace.sti_name],
       render_flat_list: @render_flat_list,
-      search_params: @search_params
+      search_params: @search_params,
     ) %>
     <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".pagy.item")) %>
   <% else %>

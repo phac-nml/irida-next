@@ -20,7 +20,7 @@ module Viral
       @system_arguments[:tag] = 'section'
       @system_arguments[:classes] = class_names(
         @system_arguments[:classes],
-        'Viral-Card bg-white border border-slate-200 rounded-md shadow-sm dark:border-slate-700 dark:bg-slate-800'
+        'viral-card bg-white border border-slate-200 rounded-md shadow-xs dark:border-slate-700 dark:bg-slate-800'
       )
       @system_arguments
     end

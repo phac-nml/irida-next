@@ -8,12 +8,12 @@
     <%= trigger %>
   <% end %>
   <div style="height: 0px">
-    <%= render Viral::BaseComponent.new(tag: :dialog, id: id, classes: [dialog_size], **system_arguments) do %>
+    <%= render Viral::BaseComponent.new(tag: :dialog, id: id, classes: [dialog_size, "overflow-visible"], **system_arguments) do %>
       <% if header.present? %>
         <%= header %>
       <% end %>
 
-      <div class="dialog--section">
+      <div class="dialog--section border-t border-slate-200 dark:border-slate-600">
         <%= content %>
       </div>
 

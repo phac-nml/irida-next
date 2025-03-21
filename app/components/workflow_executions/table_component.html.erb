@@ -6,18 +6,18 @@
         whitespace-nowrap
       '
     >
-      <thead
-        class='
-          text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
-          dark:text-slate-400
-        '
-      >
-        <tr>
+      <thead class='sticky top-0 z-10 text-xs uppercase '>
+        <tr
+          class='
+            border-b dark:border-slate-900 border-slate-200 dark:text-slate-400
+            text-slate-900 bg-slate-100 dark:bg-slate-900
+          '
+        >
           <% @columns.each_with_index do |column, index| %>
             <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-3 py-3', 'sticky left-0 z-10 bg-slate-50 dark:bg-slate-700': index.zero?)
+              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900 dark:text-slate-400', 'sticky left-0 z-10': index.zero?)
             ) do %>
               <% if index.zero? and @abilities[:select_workflow_executions] %>
                 <%= check_box_tag "select-page",
@@ -27,9 +27,7 @@
                   action: "input->selection#togglePage",
                   controller: "filters",
                   selection_target: "selectPage",
-                },
-                class:
-                  "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+                } %>
               <% end %>
               <% if column == :workflow_name || column == :workflow_version %>
                 <%= render Ransack::SortComponent.new(
@@ -62,7 +60,7 @@
             <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-3 py-3 bg-slate-50 dark:bg-slate-700 sticky right-0')
+              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900 sticky right-0')
             ) do %>
               <%= t(".actions") %>
             <% end %>
@@ -71,7 +69,7 @@
       </thead>
       <tbody
         class='
-          bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
+          bg-white border-y border-slate-200 dark:bg-slate-800 dark:border-slate-700
         '
       >
         <% @workflow_executions.each do |workflow_execution| %>
@@ -80,7 +78,7 @@
               <%= render_cell(
                 tag: index.zero? ? 'th' :'td',
                 scope: index.zero? ? 'row' : nil,
-                classes: class_names('px-3 py-3', 'sticky left-0 bg-slate-50 dark:bg-slate-900': index.zero?)
+                classes: class_names('px-3 py-3', 'sticky left-0 z-5 bg-slate-50 dark:bg-slate-900': index.zero?)
               ) do %>
                 <% if index.zero? && @abilities[:select_workflow_executions] %>
                   <%= check_box_tag "workflow_execution_ids[]",
@@ -91,9 +89,7 @@
                   data: {
                     action: "input->selection#toggle",
                     selection_target: "rowSelection",
-                  },
-                  class:
-                    "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" %>
+                  } %>
                 <% end %>
                 <% if column == :id %>
                   <%= link_to(
@@ -143,47 +139,49 @@
             <% if @renders_row_actions %>
               <%= render_cell(
                 tag: 'td',
-                classes: class_names('px-3 py-3 sticky right-0 bg-white dark:bg-slate-800 z-10 space-x-2')
+                classes: class_names('sticky right-0')
               ) do %>
-                <% if !workflow_execution.shared_with_namespace || @namespace.nil? %>
-                  <% if workflow_execution.cancellable? && @row_actions.key?(:cancel) %>
-                    <%= link_to(
-                      t(:"workflow_executions.index.actions.cancel_button"),
-                      cancel_path(workflow_execution),
-                      data: {
-                        turbo_stream: true,
-                        turbo_method: :put,
-                        turbo_confirm: t(:"workflow_executions.index.actions.cancel_confirm"),
-                      },
-                      class:
-                        "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                    ) %>
+                <div class="px-3 py-2.5 space-x-2 bg-white dark:bg-slate-800">
+                  <% if !workflow_execution.shared_with_namespace || @namespace.nil? %>
+                    <% if workflow_execution.cancellable? && @row_actions.key?(:cancel) %>
+                      <%= link_to(
+                        t(:"workflow_executions.index.actions.cancel_button"),
+                        cancel_path(workflow_execution),
+                        data: {
+                          turbo_stream: true,
+                          turbo_method: :put,
+                          turbo_confirm: t(:"workflow_executions.index.actions.cancel_confirm"),
+                        },
+                        class:
+                          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                      ) %>
+                    <% end %>
+                    <% if workflow_execution.deletable? && @row_actions.key?(:destroy) %>
+                      <%= link_to(
+                        t(:"workflow_executions.index.actions.delete_button"),
+                        individual_path(workflow_execution),
+                        data: {
+                          turbo_stream: true,
+                          turbo_method: :delete,
+                          turbo_confirm: t(:"workflow_executions.index.actions.delete_confirm"),
+                        },
+                        class:
+                          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                      ) %>
+                    <% end %>
                   <% end %>
-                  <% if workflow_execution.deletable? && @row_actions.key?(:destroy) %>
-                    <%= link_to(
-                      t(:"workflow_executions.index.actions.delete_button"),
-                      individual_path(workflow_execution),
-                      data: {
-                        turbo_stream: true,
-                        turbo_method: :delete,
-                        turbo_confirm: t(:"workflow_executions.index.actions.delete_confirm"),
-                      },
-                      class:
-                        "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                    ) %>
-                  <% end %>
-                <% end %>
+                </div>
               <% end %>
             <% end %>
           <% end %>
         <% end %>
       </tbody>
       <% if @abilities[:select_workflow_executions] && !@workflow_executions.empty? %>
-        <tfoot>
-          <tr class="border-t dark:border-slate-700 border-slate-200">
+        <tfoot class="sticky bottom-0 z-10 bg-slate-100 dark:bg-slate-900">
+          <tr>
             <td
               class="
-                sticky left-0 z-10 px-6 py-3 bg-slate-50 dark:bg-slate-900
+                sticky left-0 z-10 px-6 py-3 text-slate-700 dark:text-slate-300
               "
               colspan="3"
             >

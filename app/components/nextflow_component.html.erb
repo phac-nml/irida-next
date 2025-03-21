@@ -99,11 +99,7 @@
       <%- if @allowed_to_update_samples %>
         <div class="flex items-center h-5 mb-4">
           <%= workflow.check_box :update_samples,
-                             {
-                               checked: instance.present? && instance["update_samples"],
-                               class:
-                                 "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600",
-                             } %>
+                             { checked: instance.present? && instance["update_samples"] } %>
           <%= workflow.label :update_samples,
                          t(:"components.nextflow.update_samples"),
                          class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
@@ -114,8 +110,6 @@
                            {
                              checked:
                                instance.present? && instance["email_notification"],
-                             class:
-                               "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600",
                            } %>
         <%= workflow.label :email_notification,
                        t(:"components.nextflow.email_notification"),
@@ -128,8 +122,6 @@
                              {
                                checked:
                                  instance.present? && instance["shared_with_namespace"],
-                               class:
-                                 "w-4 h-4 mr-2.5 text-primary-600 bg-slate-100 border-slate-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600",
                              } %>
           <%= workflow.label :shared_with_namespace,
                          t(

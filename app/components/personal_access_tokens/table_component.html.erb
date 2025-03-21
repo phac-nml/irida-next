@@ -24,14 +24,15 @@
       <% end %>
     <% end %>
     <% table.with_column(t("personal_access_tokens.table.header.action"),
-        sticky_key: :right
+        sticky_key: :right,
+        padding: false
       ) do |row| %>
       <%= link_to(
         t("personal_access_tokens.table.revoke"),
         revoke_path(row),
         data: revoke_data_attributes,
         class:
-          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+          "px-3 py-2 bg-white dark:bg-slate-800 font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
       ) %>
     <% end %>
   <% end %>
