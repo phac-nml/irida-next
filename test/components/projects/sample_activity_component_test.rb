@@ -86,7 +86,7 @@ module Projects
         I18n.t('activity.namespaces_project_namespace.samples.update_html', user: @user.email,
                                                                             href: sample.puid)
       )
-      assert_selector 'a[disabled="disabled"]',
+      assert_selector 'span',
                       text: sample.puid
     end
 
@@ -113,7 +113,7 @@ module Projects
         I18n.t('activity.namespaces_project_namespace.samples.destroy_html', user: @user.email,
                                                                              href: sample.puid)
       )
-      assert_selector 'a[disabled="disabled"]',
+      assert_selector 'span',
                       text: sample.puid
     end
 
@@ -141,7 +141,7 @@ module Projects
         I18n.t('activity.namespaces_project_namespace.samples.destroy_multiple_html', user: @user.email,
                                                                                       href: 2)
       )
-      assert_selector 'a[disabled="disabled"]', text: 2
+      assert_selector 'span', text: 2
     end
 
     test 'sample metadata update activity' do
@@ -247,7 +247,7 @@ module Projects
         I18n.t('activity.namespaces_project_namespace.samples.attachment.create_html', user: 'System',
                                                                                        href: sample.puid)
       )
-      assert_selector 'a[disabled="disabled"]',
+      assert_selector 'span',
                       text: sample.puid
     end
 
@@ -270,7 +270,7 @@ module Projects
                user: 'System',
                href: 2)
       )
-      assert_selector 'a',
+      assert_selector 'span',
                       text: 2
     end
   end

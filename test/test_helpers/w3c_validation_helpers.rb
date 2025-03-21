@@ -73,7 +73,7 @@ module W3cValidationHelpers
   # @option name [String] Identifier for the error message.
   # @param use_local: #see setup_w3c_validator!
   # @param validator_uri: #see setup_w3c_validator!
-  def w3c_validate(name="caller", use_local: nil, validator_uri: DEF_W3C_VALIDATOR_PARAMS[:validator_uri])
+  def w3c_validate(name="caller", use_local: nil, validator_uri: DEF_W3C_VALIDATOR_PARAMS[:validator_uri], content: response.body)
     return if is_env_set_positive?('SKIP_W3C_VALIDATE')
 
     bind = caller_locations(1,1)[0]  # Ruby 2.0+
@@ -82,7 +82,7 @@ module W3cValidationHelpers
 
     ## W3C HTML validation (Costly operation)
     setup_w3c_validator!(use_local: use_local, validator_uri: validator_uri) if !instance_variable_defined?(:@validator)
-    arerr = @validator.validate_text(response.body).errors
+    arerr = @validator.validate_text(content).errors
     arerr = _may_ignore_autocomplete_errors_for_hidden(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
     assert_empty arerr, "Failed for #{name} (#{caller_info}): W3C-HTML-validation-Errors(Size=#{arerr.size}): ("+arerr.map(&:to_s).join(") (")+")"
   end

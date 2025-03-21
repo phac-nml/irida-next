@@ -85,7 +85,7 @@ module GroupLinks
           href: @namespace_group_link.group.puid
         )
       )
-      assert_selector 'a[disabled="disabled"]',
+      assert_selector 'span',
                       text: @namespace_group_link.group.puid
     end
 
@@ -111,7 +111,7 @@ module GroupLinks
           href: @namespace_group_link.group.puid
         )
       )
-      assert_selector 'a[disabled="disabled"]',
+      assert_selector 'span',
                       text: @namespace_group_link.group.puid
     end
 
@@ -186,7 +186,7 @@ module GroupLinks
           href: @group_namespace_group_link.group.puid
         )
       )
-      assert_selector 'a[disabled="disabled"]',
+      assert_selector 'span',
                       text: @group_namespace_group_link.group.puid
     end
 
@@ -212,7 +212,7 @@ module GroupLinks
           href: @group_namespace_group_link.group.puid
         )
       )
-      assert_selector 'a[disabled="disabled"]',
+      assert_selector 'span',
                       text: @group_namespace_group_link.group.puid
 
       group = groups(:david_doe_group_four)
@@ -236,7 +236,7 @@ module GroupLinks
           namespace_type: 'group'
         )
       )
-      assert_selector 'a[disabled="disabled"]',
+      assert_selector 'span',
                       text: @group_namespace_group_link.namespace.puid
     end
 

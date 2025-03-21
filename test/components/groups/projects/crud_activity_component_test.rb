@@ -53,7 +53,7 @@ module Groups
           I18n.t('activity.group.projects.destroy_html', user: @user.email,
                                                          href: @project.namespace.puid)
         )
-        assert_selector 'a[disabled="disabled"]',
+        assert_selector 'span',
                         text: @project.namespace.puid
       end
 
@@ -76,7 +76,7 @@ module Groups
           I18n.t('activity.group.projects.create_html', user: 'System',
                                                         href: @project.namespace.puid)
         )
-        assert_selector 'a[disabled="disabled"]',
+        assert_selector 'span',
                         text: @project.namespace.puid
       end
     end
