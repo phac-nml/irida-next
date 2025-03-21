@@ -75,6 +75,17 @@ module Attachments
       assert created_attachments[3].metadata['associated_attachment_id'] == created_attachments[2].id
 
       assert_not_nil @sample.attachments_updated_at
+
+      activity = PublicActivity::Activity.where(
+        trackable_id: @project1.namespace.id, key: 'namespaces_project_namespace.samples.attachment.create'
+      ).order(created_at: :desc).first
+
+      assert_equal 'namespaces_project_namespace.samples.attachment.create', activity.key
+      assert_equal @user, activity.owner
+
+      assert_equal 'attachment_create', activity.parameters[:action]
+      assert_equal @sample.puid, activity.parameters[:sample_puid]
+      assert_equal @sample.id, activity.parameters[:sample_id]
     end
 
     test 'create attachments with valid paired end forward and reverse fastq filenames' do
@@ -240,6 +251,15 @@ module Attachments
       end
 
       assert_not_equal original_updated_time, @project1.namespace.attachments_updated_at
+
+      activity = PublicActivity::Activity.where(
+        trackable_id: @project1.namespace.id, key: 'namespaces_project_namespace.attachment.create'
+      ).order(created_at: :desc).first
+
+      assert_equal 'namespaces_project_namespace.attachment.create', activity.key
+      assert_equal @user, activity.owner
+
+      assert_equal 'project_attachment_create', activity.parameters[:action]
     end
 
     test 'cannot create project attachment with valid params and invalid authorization' do
@@ -270,6 +290,15 @@ module Attachments
       end
 
       assert_not_equal original_updated_time, @group1.attachments_updated_at
+
+      activity = PublicActivity::Activity.where(
+        trackable_id: @group1.id, key: 'group.attachment.create'
+      ).order(created_at: :desc).first
+
+      assert_equal 'group.attachment.create', activity.key
+      assert_equal @user, activity.owner
+
+      assert_equal 'group_attachment_create', activity.parameters[:action]
     end
 
     test 'cannot create group attachment with valid params and invalid authorization' do
