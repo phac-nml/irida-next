@@ -1142,9 +1142,7 @@ module Groups
 
       ### ACTIONS START ###
       within('table tbody tr:first-child td:nth-child(7)') do
-        within('form[method="get"]') do
-          find('button').click
-        end
+        find('button[data-field="metadatafield1"]').click
         assert_selector "form[data-controller='inline-edit']"
 
         within('form[data-controller="inline-edit"]') do
@@ -1155,7 +1153,7 @@ module Groups
 
         ### VERIFY START ###
         assert_no_selector "form[data-controller='inline-edit']"
-        assert_selector 'form[method="get"]'
+        assert_selector 'button[data-field="metadatafield1"]'
         assert_selector 'button', text: 'value2'
         ### VERIFY END ###
       end

@@ -129,7 +129,7 @@
                 <% end %>
               <% end %>
               <% @metadata_fields.each do |field| %>
-                <% if helpers.allowed_to?(:update_sample?, sample.project) %>
+                <% if @abilities[:edit_sample_metadata] %>
                   <%= render Samples::EditableCell.new(field: field, sample: sample) %>
                 <% else %>
                   <%= render_cell(
@@ -212,7 +212,21 @@
       </table>
     <% end %>
     <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".limit.item")) %>
+    <% if @abilities[:edit_sample_metadata] %>
+      <template data-projects--samples--metadata--editable-cell-target="formTemplate">
+        <%= form_with(
+              url: "URL_PLACEHOLDER",
+              method: :get,
+              class: "w-full"
+            ) do |form| %>
+
+          <%= form.hidden_field :field, value: "FIELD_PLACEHOLDER" %>
+          <%= form.hidden_field :format, value: "turbo_stream" %>
+        <% end %>
+      </template>
+    <% end %>
   <% end %>
+
 <% else %>
   <div class="empty_state_message">
     <%= viral_empty(

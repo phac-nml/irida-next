@@ -15,6 +15,7 @@ module Projects
     def index
       @timestamp = DateTime.current
       @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
+      @samples = @samples.includes(project: { namespace: :parent })
       @has_samples = @project.samples.size.positive?
     end
 

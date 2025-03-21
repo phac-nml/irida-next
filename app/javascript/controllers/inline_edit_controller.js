@@ -5,7 +5,12 @@ import { Controller } from "@hotwired/stimulus";
  * @extends Controller
  */
 export default class extends Controller {
-  static targets = ["input", "newValue", "descriptionWith", "descriptionWithout"];
+  static targets = [
+    "input",
+    "newValue",
+    "descriptionWith",
+    "descriptionWithout",
+  ];
   static values = {
     original: String,
   };
@@ -53,8 +58,6 @@ export default class extends Controller {
   }
 
   async showConfirmDialog(dialog) {
-    console.log(this.descriptionWithTarget, this.descriptionWithoutTarget);
-
     dialog.showModal();
     if (this.inputTarget.value.trim() === "") {
       this.descriptionWithoutTarget.classList.remove("hidden");
