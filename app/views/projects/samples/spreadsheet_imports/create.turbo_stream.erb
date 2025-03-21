@@ -1,5 +1,19 @@
-<%= turbo_stream.append "import_spreadsheet_dialog_content" do %>
-  <%= render SpinnerComponent.new(
-    message: t("shared.samples.spreadsheet_imports.dialog.spinner_message"),
-  ) %>
+<% if Flipper.enabled?(:progress_bars) %>
+  <%= turbo_stream.update "samples_dialog",
+                      partial: "shared/samples/spreadsheet_imports/dialog",
+                      locals: {
+                        open: true,
+                        url: namespace_project_samples_spreadsheet_import_path,
+                        closable: false,
+                      } %>
+
+  <%= turbo_stream.update "import_spreadsheet_dialog_content" do %>
+    <%= render partial: "shared/progress_bar", locals: { percentage: 0 } %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.append "import_spreadsheet_dialog_content" do %>
+    <%= render SpinnerComponent.new(
+      message: t("shared.samples.spreadsheet_imports.dialog.spinner_message"),
+    ) %>
+  <% end %>
 <% end %>

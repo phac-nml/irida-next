@@ -4,7 +4,7 @@ import * as XLSX from "xlsx";
 export default class extends Controller {
   static targets = [
     "sampleNameColumn",
-    // "projectPUIDColumn",
+    "projectPUIDColumn",
     "sampleDescriptionColumn",
     "sortableListsTemplate",
     "sortableListsItemTemplate",
@@ -16,6 +16,7 @@ export default class extends Controller {
   #headers = [];
 
   #curr_sample_name = null;
+  #curr_project_puid = null;
   #curr_sample_description = null;
 
   #disabled_classes = [
@@ -40,7 +41,7 @@ export default class extends Controller {
 
   connect() {
     this.#disableTarget(this.sampleNameColumnTarget);
-    // this.#disableTarget(this.projectPUIDColumnTarget);
+    this.#disableTarget(this.projectPUIDColumnTarget);
     this.#disableTarget(this.sampleDescriptionColumnTarget);
   }
 
@@ -49,6 +50,15 @@ export default class extends Controller {
     const { value } = event.target;
     this.#curr_sample_name = value.toLowerCase();
     this.#header_map[this.#curr_sample_name] = true;
+    this.#refreshInputOptionsForAllFields();
+    this.#checkFormInputsReadyForSubmit();
+  }
+
+  changeProjectPUIDInput(event) {
+    this.#header_map[this.#curr_project_puid] = false;
+    const { value } = event.target;
+    this.#curr_project_puid = value.toLowerCase();
+    this.#header_map[this.#curr_project_puid] = true;
     this.#refreshInputOptionsForAllFields();
     this.#checkFormInputsReadyForSubmit();
   }
@@ -88,7 +98,8 @@ export default class extends Controller {
   #clearFormOptions() {
     this.#removeInputOptions(this.sampleNameColumnTarget);
     this.#disableTarget(this.sampleNameColumnTarget);
-    // this.#removeProjectPUIDInputOptions();
+    this.#removeInputOptions(this.projectPUIDColumnTarget);
+    this.#disableTarget(this.projectPUIDColumnTarget);
     this.#removeInputOptions(this.sampleDescriptionColumnTarget);
     this.#disableTarget(this.sampleDescriptionColumnTarget);
     // this.#removeMetadataColumns();
@@ -105,11 +116,13 @@ export default class extends Controller {
 
   #initSelection() {
     this.#curr_sample_name = null;
+    this.#curr_project_puid = null;
     this.#curr_sample_description = null;
   }
 
   #refreshInputOptionsForAllFields() {
     this.#refreshInputOptions(this.sampleNameColumnTarget, this.#curr_sample_name)
+    this.#refreshInputOptions(this.projectPUIDColumnTarget, this.#curr_project_puid)
     this.#refreshInputOptions(this.sampleDescriptionColumnTarget, this.#curr_sample_description)
   }
 
@@ -168,8 +181,9 @@ export default class extends Controller {
   // }
 
   #checkFormInputsReadyForSubmit() {
-    if (this.hasSampleNameColumnTarget ){//&& this.hasProjectPUIDColumnTarget){
-      this.submitButtonTarget.disabled = false;
+    if (this.hasSampleNameColumnTarget && this.hasProjectPUIDColumnTarget){
+    // if (this.hasSampleNameColumnTarget ){
+        this.submitButtonTarget.disabled = false;
     } else {
       this.submitButtonTarget.disabled = true;
     }
