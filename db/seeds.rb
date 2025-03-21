@@ -10,6 +10,7 @@ Flipper.enable(:progress_bars)
 Flipper.enable(:update_nextflow_metadata_param)
 Flipper.enable(:attachments_preview)
 Flipper.enable(:delete_multiple_workflows)
+Flipper.enable(:batch_sample_spreadsheet_import)
 
 @namespace_group_link_expiry_date = (Time.zone.today + 14).strftime('%Y-%m-%d')
 

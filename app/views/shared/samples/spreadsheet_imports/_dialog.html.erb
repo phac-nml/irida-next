@@ -54,21 +54,21 @@
                             "change->spreadsheet-import#changeSampleNameInput viral--sortable-lists--two-lists-selection#idempotentConnect",
                         } %>
           </div>
-          <%# <div class="form-field"> %>
-            <%# <%= form.label :project_puid_column, %>
-                       <%# t(".project_puid_column"), %>
-                       <%# class: %>
-                         <%# "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %> %>
-            <%# <%= form.select :project_puid_column, %>
-                        <%# {}, %>
-                        <%# { prompt: t(".select_project_puid_column") }, %>
-                        <%# required: true, %>
-                        <%# data: { %>
-                          <%# "spreadsheet-import-target": "projectPUIDColumn", %>
-                          <%# action: %>
-                            <%# "change->spreadsheet-import#changeProjectPUIDInput viral--sortable-lists--two-lists-selection#idempotentConnect", %>
-                        <%# } %> %>
-          <%# </div> %>
+          <div class="form-field">
+            <%= form.label :project_puid_column,
+                       t(".project_puid_column"),
+                       class:
+                         "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
+            <%= form.select :project_puid_column,
+                        {},
+                        { prompt: t(".select_project_puid_column") },
+                          required: true,
+                        data: {
+                          "spreadsheet-import-target": "projectPUIDColumn",
+                          action:
+                            "change->spreadsheet-import#changeProjectPUIDInput viral--sortable-lists--two-lists-selection#idempotentConnect",
+                        } %>
+          </div>
           <div class="form-field">
             <%= form.label :sample_description_column,
                        t(".sample_description_column"),
