@@ -1,17 +1,53 @@
 <%= viral_card do |card| %>
   <% card.with_header(title: t(:"projects.edit.advanced.destroy.title")) %>
   <% card.with_section do %>
+    <div class="hidden confirm-destroy">
+      <div
+        class="
+          flex p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-slate-800
+          dark:text-red-400
+        "
+      >
+        <%= viral_icon(name: "exclamation_circle", classes: "h-6 w-6 flex-none") %>
+        <div class="flex-1 ml-4">
+          <%= t(
+            :"projects.edit.advanced.destroy.confirm.warning.pre_html",
+            project_name: @project.human_name,
+          ) %>
+          <ul class="py-2 ml-4 max-w-md space-y-1 list-disc list-inside">
+            <li><%= t(
+                :"projects.edit.advanced.destroy.confirm.warning.samples_count",
+                count: @samples_count,
+              ) %></li>
+            <li><%= t(
+                :"projects.edit.advanced.destroy.confirm.warning.automated_workflows_count",
+                count: @automated_workflows_count,
+              ) %></li>
+          </ul>
+          <%= t(:"projects.edit.advanced.destroy.confirm.warning.post_html") %>
+        </div>
+      </div>
+      <div class="mb-4">
+        <% t(:"projects.edit.advanced.destroy.confirm.points_html", project: @project.name).each do |item| %>
+          <p class="mb-2 text-base text-slate-900 dark:text-white"><%= item %></p>
+        <% end %>
+      </div>
+    </div>
+
     <p class="text-slate-600 dark:text-slate-400">
       <%= t(:"projects.edit.advanced.destroy.description") %>
     </p>
+
     <div class="mt-4">
-      <%= link_to t(:"projects.edit.advanced.destroy.submit"),
-      namespace_project_path,
+      <%= button_to t(:"projects.edit.advanced.destroy.submit"),
+      @project,
+      method: :delete,
       data: {
-        turbo_method: :delete,
-        turbo_confirm: t(:"projects.edit.advanced.destroy.confirm"),
+        turbo_confirm: "",
+        turbo_content: ".confirm-destroy",
+        confirm_value: @project.name,
       },
-      class: "button button--state-destructive button--size-default inline-block" %>
+      class: "button button--state-destructive button--size-default" %>
     </div>
   <% end %>
 <% end %>

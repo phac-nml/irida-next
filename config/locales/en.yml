@@ -775,7 +775,16 @@ en:
     edit:
       advanced:
         delete:
-          confirm: Are you sure you want to delete this group?
+          confirm:
+            points_html:
+            - To prevent accidental actions we ask you to confirm your intention.
+            - Please type <kbd>%{group}</kbd> to proceed or close this dialog to cancel.
+            warning:
+              post_html: After you delete a group, you <strong>cannot</strong> restore it or its components.
+              pre_html: 'You are about to delete the group <strong>%{group_name}</strong>. This action will also delete:'
+              projects_count: "%{count} project(s)"
+              samples_count: "%{count} sample(s)"
+              subgroups_count: "%{count} subgroup(s)"
           description: Deleting a group is permanent and cannot be undone. All projects, subgroups, and direct members will be deleted along with the group.
           submit: Delete group
           title: Delete group
@@ -1322,7 +1331,15 @@ en:
     edit:
       advanced:
         destroy:
-          confirm: Are you sure you want to delete this project?
+          confirm:
+            points_html:
+            - To prevent accidental actions we ask you to confirm your intention.
+            - Please type <kbd>%{project}</kbd> to proceed or close this dialog to cancel.
+            warning:
+              automated_workflows_count: "%{count} automated workflow execution(s)"
+              post_html: After you delete a project, you <strong>cannot</strong> restore it or its components.
+              pre_html: 'You are about to delete the project <strong>%{project_name}</strong>. This action will also delete:'
+              samples_count: "%{count} sample(s)"
           description: Deleting a project is permanent and cannot be undone. All samples and direct members will be deleted along with the project.
           submit: Delete project
           title: Delete project
@@ -1336,7 +1353,7 @@ en:
           confirm:
             points_html:
             - To prevent accidental actions we ask you to confirm your intention.
-            - Please type <kbd>%{project}</kbd> to proceed or close this dialog to cancel
+            - Please type <kbd>%{project}</kbd> to proceed or close this dialog to cancel.
             warning_html: You are going to transfer <strong>%{project_name}</strong> to another namespace. Once you confirm, this action cannot be undone.
           descriptions:
           - Transfer your project into another namespace.

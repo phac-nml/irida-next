@@ -28,6 +28,8 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
 
   def edit
     authorize! @project
+    @samples_count = @project.samples.size
+    @automated_workflows_count = WorkflowExecution.where(submitter: @project.namespace.automation_bot).size
   end
 
   def create
