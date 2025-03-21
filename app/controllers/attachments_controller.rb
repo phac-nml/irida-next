@@ -73,7 +73,7 @@ class AttachmentsController < ApplicationController
   # Ensures the attachment exists and is authorized for the current user
   def set_attachment
     @attachment = Attachment.find_by(id: params[:id])
-    return if attachment_authorization?
+    return if attachable_authorization
 
     @attachment = nil
   end
