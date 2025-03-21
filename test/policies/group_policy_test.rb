@@ -81,6 +81,10 @@ class GroupPolicyTest < ActiveSupport::TestCase
     assert @policy.apply(:submit_workflow?)
   end
 
+  test '#view_workflow_executions?' do
+    assert @policy.apply(:view_workflow_executions?)
+  end
+
   test '#update_sample_metadata?' do
     assert @policy.apply(:update_sample_metadata?)
   end

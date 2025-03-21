@@ -461,8 +461,8 @@ en:
       email_notification: Receive an email notification when your analysis has completed?
       required: Required
       shared_with:
-        group: Share results with Group members?
-        project: Share results with Project members?
+        group: Share results with group members?
+        project: Share results with project members?
       update_samples: Update samples with analysis results
     project_dashboard:
       activity_title: Latest Activity
@@ -930,6 +930,7 @@ en:
       metadata_templates: Metadata Templates
       samples: Samples
       settings: Settings
+      workflow_executions: Workflow Executions
     subgroups:
       index:
         pagy:
@@ -945,6 +946,48 @@ en:
       success: Group transferred successfully
     update:
       success: Group %{group_name} was successfully updated
+    workflow_executions:
+      edit_dialog:
+        cancel_button: Cancel
+        description: You are editing workflow execution '%{workflow_execution_id}'
+        name_placeholder: Enter workflow execution name (optional)
+        submit_button: Submit
+        title: Edit workflow execution
+      files:
+        table_header:
+          created_at: Created At
+          filename: Filename
+          format: Format
+          puid: ID
+          size: Size
+          type: Type
+      index:
+        create_export_button: Create Export
+        deselect_all_button: Deselect All
+        search:
+          placeholder: Filter by ID or name
+        select_all_button: Select All
+        subtitle: These are the workflow executions that have been shared within this group
+        title: Workflow Executions
+      show:
+        cancel_button: Cancel
+        cancel_button_confirmation: Are you sure that you want to cancel this workflow execution?
+        create_export_button: Create Export
+        edit_button: Edit
+        remove_button: Remove
+        remove_button_confirmation: Are you sure that you want to remove this workflow execution?
+      summary:
+        created_at: Created
+        name: Name
+        run_id: Run ID
+        state: State
+        updated_at: Last Updated
+        workflow_name: Workflow Name
+        workflow_version: Workflow Version
+      table:
+        empty:
+          description: There are no workflow executions associated with this group.
+          title: No workflow executions.
   layouts:
     application:
       site_title: IRIDA Next

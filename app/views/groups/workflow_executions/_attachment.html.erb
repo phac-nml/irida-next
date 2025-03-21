@@ -1,0 +1,78 @@
+<tr
+  id="<%= dom_id(attachment) %>"
+  class="bg-white border-b dark:bg-slate-800 dark:border-slate-700"
+>
+  <td class="px-6 py-4">
+    <%= attachment.puid %>
+  </td>
+  <% if attachment.associated_attachment && attachment.metadata['direction'] == 'forward' %>
+    <td class="px-6 py-4">
+      <div>
+        <div class="flex mb-4 items-center">
+          <%= viral_icon(name: :arrow_right, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
+          <span>
+            <%= link_to attachment.file.filename,
+            rails_blob_path(attachment),
+            data: {
+              turbo: false,
+            },
+            class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+          </span>
+        </div>
+        <div class="flex items-center">
+          <%= viral_icon(name: :arrow_left, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
+          <span>
+            <%= link_to attachment.associated_attachment.file.filename,
+            rails_blob_path(attachment.associated_attachment),
+            data: {
+              turbo: false,
+            },
+            class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+          </span>
+        </div>
+      </div>
+    </td>
+  <% else %>
+    <td class="px-6 py-4">
+      <div>
+        <div class="flex items-center">
+          <%= viral_icon(name: :document_text, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
+          <span>
+            <%= link_to attachment.file.filename,
+            rails_blob_path(attachment.file),
+            data: {
+              turbo: false,
+            },
+            class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+          </span>
+        </div>
+      </div>
+    </td>
+  <% end %>
+
+  <td class="px-6 py-4"><%= viral_pill(
+      text: attachment.metadata["format"],
+      color: find_pill_color_for_attachment(attachment, "format"),
+    ) %></td>
+  <td class="px-6 py-4"><%= viral_pill(
+      text: attachment.metadata["type"],
+      color: find_pill_color_for_attachment(attachment, "type"),
+    ) %></td>
+
+  <% if attachment.associated_attachment %>
+    <td class="px-6 py-4">
+      <div class="mb-4">
+        <%= number_to_human_size(attachment.file.blob.byte_size) %>
+      </div>
+      <div>
+        <%= number_to_human_size(attachment.associated_attachment.file.blob.byte_size) %>
+      </div>
+    </td>
+  <% else %>
+    <td class="px-6 py-4"><%= number_to_human_size(attachment.file.blob.byte_size) %></td>
+  <% end %>
+
+  <td class="px-6 py-4">
+    <%= local_time_ago(attachment.created_at) %>
+  </td>
+</tr>

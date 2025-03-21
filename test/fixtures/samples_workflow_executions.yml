@@ -253,6 +253,87 @@ sample47_workflow_execution_completed_shared2:
     "fastq_2": ""
   }
 
+sample47_workflow_execution_completed_group_shared2:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample47, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_group_shared2, :uuid) %>
+  samplesheet_params: {
+    "sample": <%= "Sample_#{ActiveRecord::FixtureSet.identify(:sample47, :uuid)}" %>,
+    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:samples_group_shared_workflow_execution_completed_output, :uuid)}" %>,
+    "fastq_2": ""
+  }
+
+sample1_workflow_execution_group_shared_canceled:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_group_shared_canceled, :uuid) %>
+  samplesheet_params: {
+    "sample": INXT_SAM_AAAAAAAAAA,
+    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
+    "fastq_2": ""
+  }
+
+sample1_workflow_execution_group_shared_prepared:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_group_shared_prepared, :uuid) %>
+  samplesheet_params: {
+    "sample": INXT_SAM_AAAAAAAAAA,
+    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
+    "fastq_2": ""
+  }
+
+sample1_workflow_execution_group_shared_submitted:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_group_shared_submitted, :uuid) %>
+  samplesheet_params: {
+    "sample": INXT_SAM_AAAAAAAAAA,
+    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
+    "fastq_2": ""
+  }
+
+sample1_workflow_execution_group_shared_completed:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_group_shared_completed, :uuid) %>
+  samplesheet_params: {
+    "sample": INXT_SAM_AAAAAAAAAA,
+    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
+    "fastq_2": ""
+  }
+
+sample1_workflow_execution_group_shared_error:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_group_shared_error, :uuid) %>
+  samplesheet_params: {
+    "sample": INXT_SAM_AAAAAAAAAA,
+    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
+    "fastq_2": ""
+  }
+
+sample1_workflow_execution_group_shared_canceling:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_group_shared_canceling, :uuid) %>
+  samplesheet_params: {
+    "sample": INXT_SAM_AAAAAAAAAA,
+    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
+    "fastq_2": ""
+  }
+
+sample1_workflow_execution_group_shared_running:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_group_shared_running, :uuid) %>
+  samplesheet_params: {
+    "sample": INXT_SAM_AAAAAAAAAA,
+    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
+    "fastq_2": ""
+  }
+
+sample1_workflow_execution_group_shared_new:
+  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
+  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_group_shared_new, :uuid) %>
+  samplesheet_params: {
+    "sample": INXT_SAM_AAAAAAAAAA,
+    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
+    "fastq_2": ""
+  }
+
 sample1_automated_example_submitted:
   sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
   workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:automated_example_submitted, :uuid) %>

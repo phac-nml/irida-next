@@ -984,3 +984,235 @@ workflow_execution_completed_shared2:
   blob_run_directory: "not a run dir"
   cleaned: false
   shared_with_namespace: true
+
+workflow_execution_group_shared1:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
+    }
+  workflow_params: {
+    "assembler": "stub",
+    "project_name": "assembly",
+    "random_seed": "1",
+  }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "my_run_id_group_shared_1"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  name: "Group Shared Example1"
+  shared_with_namespace: true
+
+workflow_execution_group_shared2:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
+    }
+  workflow_params: {
+    "assembler": "stub",
+    "project_name": "assembly",
+    "random_seed": "1",
+  }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "my_run_id_group_shared_2"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  name: "Group Shared Example2"
+  shared_with_namespace: true
+
+workflow_execution_group_shared3:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "wn1", "workflow_version": "wv1" }
+  workflow_params: { "key_a": "value_a" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "my_run_id_group_shared_3"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  name: "Group Shared Example3"
+  shared_with_namespace: true
+
+workflow_execution_completed_group_shared1:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.3",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/irida_next_shared_example_completed_with_output"
+  run_id: "my_run_id_group_shared_1"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
+  name: "irida_next_user_group_shared_example_completed_with_output"
+  state: "completed"
+  blob_run_directory: "not a run dir"
+  cleaned: false
+  shared_with_namespace: true
+
+workflow_execution_completed_group_shared2:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.3",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/irida_next_shared_example_completed_with_output"
+  run_id: "my_run_id_group_shared_2"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:micha_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
+  name: "irida_next_user_group_shared_example_completed_with_output"
+  state: "completed"
+  blob_run_directory: "not a run dir"
+  cleaned: false
+  shared_with_namespace: true
+
+workflow_execution_group_shared_new:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "wn1", "workflow_version": "wv1" }
+  workflow_params: { "key_a": "value_a" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "my_run_id_group_shared"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  name: "Group Shared New"
+  state: "initial"
+  cleaned: false
+  shared_with_namespace: true
+
+workflow_execution_group_shared_prepared:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "wn1", "workflow_version": "wv1" }
+  workflow_params: { "key_a": "value_a" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "my_run_id_group_shared"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  name: "Group Shared Prepared"
+  state: "prepared"
+  cleaned: false
+  shared_with_namespace: true
+
+workflow_execution_group_shared_submitted:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "wn1", "workflow_version": "wv1" }
+  workflow_params: { "key_a": "value_a" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "my_run_id_group_shared"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  name: "Group Shared Submitted"
+  state: "submitted"
+  cleaned: false
+  shared_with_namespace: true
+
+workflow_execution_group_shared_completed:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "wn1", "workflow_version": "wv1" }
+  workflow_params: { "key_a": "value_a" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "my_run_id_group_shared"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  name: "Group Shared Completed"
+  state: "completed"
+  cleaned: true
+  shared_with_namespace: true
+
+workflow_execution_group_shared_running:
+  <<: *DEFAULTS
+  metadata: { "workflow_name": "wn1", "workflow_version": "wv1" }
+  workflow_params: { "key_a": "value_a" }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "my_workflow_url"
+  run_id: "my_run_id_group_shared"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  name: "Group Shared Running"
+  state: "running"
+  cleaned: false
+  shared_with_namespace: true
+
+workflow_execution_group_shared_error:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/group_workflow_example_error"
+  run_id: "my_run_id_group_shared"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  state: "error"
+  cleaned: true
+  shared_with_namespace: true
+
+workflow_execution_group_shared_canceling:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/workflow_execution_group_shared_canceling"
+  run_id: "my_run_id_group_shared"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  state: "canceling"
+  cleaned: false
+  shared_with_namespace: true
+
+workflow_execution_group_shared_canceled:
+  <<: *DEFAULTS
+  metadata:
+    {
+      "workflow_name": "phac-nml/iridanextexample",
+      "workflow_version": "1.0.2",
+    }
+  workflow_params:
+    {
+      "input": "/blah/samplesheet.csv",
+      "outdir": "/blah/output",
+    }
+  workflow_engine_parameters: { "-r": "dev" }
+  workflow_url: "https://github.com/phac-nml/group_workflow_example_canceled"
+  run_id: "my_run_id_group_shared"
+  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  name: "Group Shared Canceled"
+  state: "canceled"
+  cleaned: true
+  shared_with_namespace: true

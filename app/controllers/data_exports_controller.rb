@@ -163,7 +163,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   def analysis_locals
     local = { open: true,
               analysis_type: params['analysis_type'],
-              namespace_id: params['analysis_type'] == 'project' ? params[:namespace_id] : nil }
+              namespace_id: %w[group project].include?(params['analysis_type']) ? params[:namespace_id] : nil }
     local[:workflow_execution] = WorkflowExecution.find(params[:workflow_execution_id]) if params[:single_workflow]
     local
   end
@@ -186,7 +186,11 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
       redirect_to workflow_execution_path(workflow_execution)
     else
       namespace = workflow_execution.namespace
-      redirect_to namespace_project_workflow_execution_path(namespace.parent, namespace.project, workflow_execution)
+      if namespace.type == 'Group'
+        redirect_to group_workflow_execution_path(namespace, workflow_execution)
+      else
+        redirect_to namespace_project_workflow_execution_path(namespace.parent, namespace.project, workflow_execution)
+      end
     end
   end
 end

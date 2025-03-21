@@ -84,6 +84,8 @@ module WorkflowExecutions
           @namespace.project,
           workflow_execution
         )
+      elsif @namespace && @namespace.type == 'Group'
+        group_workflow_execution_path(@namespace, workflow_execution)
       else
         workflow_execution_path(workflow_execution)
       end

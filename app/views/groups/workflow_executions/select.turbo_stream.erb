@@ -1,0 +1,9 @@
+<turbo-stream action="update" target="selected">
+  <template>
+    <div
+      data-controller="table-selection"
+      data-table-selection-ids-value="<%= @workflow_executions.map { |we| we.id.to_s } %>"
+      data-table-selection-selection-outlet="#workflow-executions-table"
+    ></div>
+  </template>
+</turbo-stream>

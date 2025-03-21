@@ -1,0 +1,54 @@
+<% if @samplesheet_headers.blank? || @samplesheet_rows.blank? %>
+  <%= viral_alert(message: t(:"workflow_executions.samples.empty"), type: :info) %>
+<% else %>
+  <div class="relative overflow-x-auto">
+    <table
+      class="
+        w-full text-sm text-left text-slate-500 rtl:text-right dark:text-slate-400
+      "
+    >
+      <thead
+        class="
+          text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
+          dark:text-slate-400
+        "
+      >
+        <tr>
+          <% @samplesheet_headers.each do |header| %>
+            <th scope="col" class="px-6 py-3">
+              <%= header %>
+            </th>
+          <% end %>
+
+        </tr>
+      </thead>
+      <tbody>
+        <% @samplesheet_rows.each do |sample| %>
+          <tr class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
+            <% @samplesheet_headers.each do |header| %>
+              <% if header == "sample" %>
+                <th class="px-6 py-4">
+                  <div class="font-semibold text-slate-900 dark:text-white"><%= sample[header] %></div>
+                </th>
+
+              <% else %>
+                <% if sample[header].is_a?(Hash) %>
+                  <td class="px-6 py-4">
+                    <% unless sample[header].blank? %>
+                      <div class="font-semibold text-slate-900 dark:text-white"><%= sample[header][:puid] %></div>
+                      <div class="font-normal text-slate-500 dark:text-slate-400"><%= sample[header][:name] %></div>
+                    <% end %>
+                  </td>
+                <% else %>
+                  <td class="px-6 py-4">
+                    <%= sample[header] %>
+                  </td>
+                <% end %>
+              <% end %>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
