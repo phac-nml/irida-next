@@ -16,6 +16,8 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
   test 'should view exports' do
     get data_exports_path(@data_export1)
     assert_response :success
+
+    w3c_validate 'Data Exports Page'
   end
 
   test 'should create new sample export with viable params' do
@@ -107,6 +109,8 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
   test 'should view data export page' do
     get data_export_path(@data_export1)
     assert_response :success
+
+    w3c_validate 'Data Export Show Page'
   end
 
   test 'should not view data export page without proper authorization' do

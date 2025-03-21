@@ -12,6 +12,8 @@ module Projects
       project = projects(:john_doe_project2)
       get namespace_project_members_path(namespace, project)
       assert_response :success
+
+      w3c_validate 'Project Members Page'
     end
 
     test 'should display add new member to project page' do
