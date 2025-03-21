@@ -30,14 +30,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     authorize! @project
     @samples_count = @project.samples.size
     @files_count = @project.namespace.attachments.size
-    @workflows_count = authorized_scope(
-      WorkflowExecution,
-      type: :relation,
-      as: :automated_and_shared,
-      scope_options: {
-        project: @project
-      }
-    ).size
+    @workflows_count = WorkflowExecution.where(submitter: @project.namespace.automation_bot).size
   end
 
   def create
