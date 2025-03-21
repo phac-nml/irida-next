@@ -95,7 +95,4 @@ Rails.application.configure do
   }
 
   config.enable_web_console = ENV['RAILS_ENABLE_WEB_CONSOLE'].present?
-
-  # ⬇️ HOTWIRE SPARK ⬇️
-  config.hotwire.spark.html_paths += %w[app/components]
 end
