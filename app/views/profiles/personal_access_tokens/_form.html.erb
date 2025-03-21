@@ -36,25 +36,28 @@
 
       <% invalid = personal_access_token.errors.include?(:scopes) %>
       <div class="form-field <%= 'invalid' if invalid %>">
-        <%= f.label :scopes, t("auth.scopes.label") %>
-        <% Irida::Auth.all_available_scopes.each do |scope| %>
-          <div class="flex">
-            <div class="flex items-center h-5">
-              <%= check_box_tag "personal_access_token[scopes][]",
-              scope,
-              personal_access_token.scopes.include?(scope),
-              id: "personal_access_token_scopes_#{scope}" %>
+        <%= field_set_tag(I18n.t(:'activerecord.attributes.personal_access_token.scopes')) do %>
+          <% Irida::Auth.all_available_scopes.each do |scope| %>
+            <div class="flex">
+              <div class="flex items-center h-5">
+                <%= check_box_tag "personal_access_token[scopes][]",
+                scope,
+                personal_access_token.scopes.include?(scope),
+                id: "personal_access_token_scopes_#{scope}" %>
+              </div>
+              <div class="ml-2 text-sm">
+                <%= label_tag "personal_access_token_scopes_#{scope}",
+                scope,
+                class: "font-medium text-slate-900 dark:text-slate-300" %>
+                <p
+                  id="<%= "personal_access_token_scopes_#{scope}_help-text" %>"
+                  class="
+                    text-xs font-normal text-slate-500 dark:text-slate-300
+                  "
+                ><%= t("auth.scopes.#{scope}") %></p>
+              </div>
             </div>
-            <div class="ml-2 text-sm">
-              <%= label_tag "personal_access_token_scopes_#{scope}",
-              scope,
-              class: "font-medium text-slate-900 dark:text-slate-300" %>
-              <p
-                id="<%= "personal_access_token_scopes_#{scope}_help-text" %>"
-                class="text-xs font-normal text-slate-500 dark:text-slate-300"
-              ><%= t("auth.scopes.#{scope}") %></p>
-            </div>
-          </div>
+          <% end %>
         <% end %>
         <%= render "shared/form/field_errors",
         errors: personal_access_token.errors.full_messages_for(:scopes) %>
