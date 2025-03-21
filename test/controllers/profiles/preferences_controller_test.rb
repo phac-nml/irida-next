@@ -12,7 +12,7 @@ module Profiles
       get profile_preferences_url
       assert_response :success
 
-      w3c_validate "User Profile Preferences Page"
+      w3c_validate 'User Profile Preferences Page'
     end
 
     test 'should update the users locale with a valid locale' do

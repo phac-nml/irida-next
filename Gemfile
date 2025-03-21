@@ -173,8 +173,8 @@ group :test do
   gem 'simplecov', require: false
   gem 'timecop'
 
-  gem 'webmock'
   gem 'w3c_validators'
+  gem 'webmock'
 end
 
 gem 'activerecord-session_store', '~> 2.1'

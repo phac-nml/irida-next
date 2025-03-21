@@ -12,7 +12,7 @@ module Profiles
       get profile_personal_access_tokens_path
       assert_response :success
 
-      w3c_validate "User Profile Personal Access Tokens Page"
+      w3c_validate 'User Profile Personal Access Tokens Page'
     end
 
     test 'should create personal access token' do

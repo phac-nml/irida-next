@@ -13,7 +13,7 @@ module Groups
       get group_members_path(group)
       assert_response :success
 
-      w3c_validate "Group Members Listing Page"
+      w3c_validate 'Group Members Listing Page'
     end
 
     test 'should display add new member to group page' do

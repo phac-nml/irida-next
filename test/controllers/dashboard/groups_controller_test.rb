@@ -12,7 +12,7 @@ module Dashboard
       get dashboard_groups_path
       assert_response :success
 
-      w3c_validate "Groups Dashboard"
+      w3c_validate 'Groups Dashboard'
     end
   end
 end

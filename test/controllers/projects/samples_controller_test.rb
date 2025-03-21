@@ -16,7 +16,7 @@ module Projects
       get namespace_project_samples_url(@namespace, @project)
       assert_response :success
 
-      w3c_validate "Project Samples Page"
+      w3c_validate 'Project Samples Page'
     end
 
     test 'should get index where project is under user\'s namespace' do

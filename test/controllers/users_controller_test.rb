@@ -11,7 +11,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     get user_path(users(:john_doe))
     assert_response :success
 
-    w3c_validate "User Profile Page"
+    w3c_validate 'User Profile Page'
   end
 
   test 'should not show the user' do
