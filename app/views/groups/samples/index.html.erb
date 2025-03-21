@@ -55,6 +55,14 @@
             },
             class: "button button--size-default button--state-default" %>
           <% end %>
+          <% if allowed_to?(:import_samples_and_metadata?, @group) %>
+            <%= link_to t("projects.samples.index.import_samples_button"),
+            new_group_samples_spreadsheet_import_path,
+            data: {
+              turbo_stream: true,
+            },
+            class: "button button--size-default button--state-default" %>
+          <% end %>
         <% end %>
       </div>
     <% end %>
