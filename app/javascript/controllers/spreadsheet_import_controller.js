@@ -86,9 +86,11 @@ export default class extends Controller {
   }
 
   #clearFormOptions() {
-    this.#removeSampleNameInputOptions();
+    this.#removeInputOptions(this.sampleNameColumnTarget);
+    this.#disableTarget(this.sampleNameColumnTarget);
     // this.#removeProjectPUIDInputOptions();
-    this.#removeSampleDescriptionInputOptions();
+    this.#removeInputOptions(this.sampleDescriptionColumnTarget);
+    this.#disableTarget(this.sampleDescriptionColumnTarget);
     // this.#removeMetadataColumns();
     this.submitButtonTarget.disabled = true;
   }
@@ -106,24 +108,21 @@ export default class extends Controller {
     this.#curr_sample_description = null;
   }
 
-  #removeSampleNameInputOptions() {
-    this.#removeInputOptions(this.sampleNameColumnTarget);
-    this.#disableTarget(this.sampleNameColumnTarget);
-  }
-
   #refreshInputOptionsForAllFields() {
     this.#refreshInputOptions(this.sampleNameColumnTarget, this.#curr_sample_name)
     this.#refreshInputOptions(this.sampleDescriptionColumnTarget, this.#curr_sample_description)
   }
 
   #refreshInputOptions(columnTarget, current_selection) {
+    // filter out fields other headers are using, but not this target's own selection
     let headers = this.#headers.filter( (header) =>
-      // !(this.#header_map[header.toLowerCase()])
       (header.toLowerCase() != current_selection) &&  !(this.#header_map[header.toLowerCase()])
     );
 
+    // delete the old input options, except for one that is currently selected
     this.#removeInputOptions(columnTarget, current_selection);
 
+    // build a list of new input options based on above filtering
     for (let header of headers) {
       const option = document.createElement("option");
       option.value = header;
@@ -131,11 +130,6 @@ export default class extends Controller {
       columnTarget.append(option);
     }
     this.#enableTarget(columnTarget);
-  }
-
-  #removeSampleDescriptionInputOptions() {
-    this.#removeInputOptions(this.sampleDescriptionColumnTarget);
-    this.#disableTarget(this.sampleDescriptionColumnTarget);
   }
 
   // #removeMetadataColumns() {
@@ -182,7 +176,7 @@ export default class extends Controller {
   }
 
   #removeInputOptions(target, current = null) {
-    // When a current selection is passed it, it does not get removed.
+    // When a current selection is passed in, it does not get removed.
     var post_length = 1
     if (current == null){
       post_length = 0
