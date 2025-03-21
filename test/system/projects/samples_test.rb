@@ -851,7 +851,7 @@ module Projects
       end
 
       # verify limit is set to 10
-      assert_selector 'div#limit-component button div span', text: '10'
+      assert_selector 'div#limit-component button span', text: '10'
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 10, count: 20,
                                                                            locale: @user.locale))
       within('#samples-table table tbody') do
@@ -868,14 +868,14 @@ module Projects
       assert_no_selector 'div#spinner'
 
       # verify limit is still 10
-      assert_selector 'div#limit-component button div span', text: '10'
+      assert_selector 'div#limit-component button span', text: '10'
 
       # apply sort
       click_on I18n.t('samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
 
       # verify limit is still 10
-      assert_selector 'div#limit-component button div span', text: '10'
+      assert_selector 'div#limit-component button span', text: '10'
       ### actions and VERIFY END ###
     end
 

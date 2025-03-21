@@ -23,7 +23,7 @@ module Groups
 
       click_link I18n.t(:'groups.members.index.invite_group')
 
-      within('span[data-controller-connected="true"] dialog') do
+      within('div[data-controller-connected="true"] dialog') do
         assert_selector 'h1', text: I18n.t(:'groups.group_links.new.title')
         assert_selector 'p', text: I18n.t(
           :'groups.group_links.new.sharing_namespace_with_group',

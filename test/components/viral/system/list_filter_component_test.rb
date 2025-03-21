@@ -9,7 +9,7 @@ module System
 
     test 'default' do
       visit('rails/view_components/list_filter_component/default')
-      within 'span[data-controller-connected="true"]' do
+      within 'div[data-controller-connected="true"]' do
         click_button I18n.t(:'components.list_filter.title')
         within 'dialog' do
           assert_accessible
