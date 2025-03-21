@@ -1,19 +1,17 @@
 <span>
   <% if sample_destroy_multiple_action %>
     <% href =
-      link_to(
+      content_tag(
+        :span,
         @activity[:deleted_count],
-        "#",
-        class: "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
-        disabled: true,
+        class: "text-slate-800 dark:text-slate-300 font-medium",
       ) %>
   <% elsif import_samples_action %>
     <% href =
-      link_to(
+      content_tag(
+        :span,
         @activity[:imported_samples_count],
-        "#",
-        class: "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
-        disabled: true,
+        class: "text-slate-800 dark:text-slate-300 font-medium",
       ) %>
   <% else %>
     <% if sample_exists(@activity[:sample]) %>
@@ -31,11 +29,10 @@
         ) %>
     <% else %>
       <% href =
-        link_to(
+        content_tag(
+          :span,
           @activity[:sample_puid],
-          "#",
-          class: "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
-          disabled: true,
+          class: "text-slate-800 dark:text-slate-300 font-medium",
         ) %>
     <% end %>
   <% end %>

@@ -189,6 +189,8 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
   test 'should show the workflow' do
     get workflow_execution_path(@workflow_execution)
     assert_response :success
+
+    w3c_validate 'Workflow Execution Show Page'
   end
 
   test 'should not show the workflow' do

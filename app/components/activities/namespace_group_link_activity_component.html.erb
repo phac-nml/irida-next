@@ -17,19 +17,17 @@
 <% else %>
   <% if link_to_shared_group %>
     <% href =
-      link_to(
+      content_tag(
+        :span,
         @activity[:namespace_puid],
-        "#",
-        class: "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
-        disabled: true,
+        class: "text-slate-800 dark:text-slate-300 font-medium",
       ) %>
   <% else %>
     <% href =
-      link_to(
+      content_tag(
+        :span,
         @activity[:group_puid],
-        "#",
-        class: "text-slate-800 dark:text-slate-300 font-medium cursor-not-allowed",
-        disabled: true,
+        class: "text-slate-800 dark:text-slate-300 font-medium",
       ) %>
   <% end %>
 <% end %>

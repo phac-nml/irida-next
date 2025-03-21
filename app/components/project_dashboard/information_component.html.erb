@@ -8,36 +8,36 @@
 
 <hr class="h-px my-4 border-0 bg-slate-200 dark:bg-slate-600"/>
 
-<span class="flex items-center dark:text-slate-300">
+<div class="flex items-center dark:text-slate-300">
   <%= viral_tooltip(title: t(:"components.project_dashboard.information.number_of_samples")) do %>
     <span class="flex items-center">
       <%= viral_icon(name: :beaker, color: :subdued, classes: "h-5 w-5 m-0 mr-2") %>
       <%= @project.samples.count %>
     </span>
   <% end %>
-</span>
+</div>
 
-<span class="flex items-center dark:text-slate-300">
+<div class="flex items-center dark:text-slate-300">
   <%= viral_tooltip(title: t(:"components.project_dashboard.information.number_of_automated_workflow_executions")) do %>
     <span class="flex items-center">
       <%= viral_icon(name: :command_line, color: :subdued, classes: "h-5 w-5 m-0 mr-2") %>
       <%= @project.namespace.automated_workflow_executions.count %>
     </span>
   <% end %>
-</span>
+</div>
 
-<span class="flex items-center dark:text-slate-300">
+<div class="flex items-center dark:text-slate-300">
   <%= viral_tooltip(title: t(:"components.project_dashboard.information.number_of_members")) do %>
     <span class="flex items-center">
       <%= viral_icon(name: :users, color: :subdued, classes: "h-5 w-5 m-0 mr-2") %>
       <%= @project.namespace.project_members.without_automation_bots.count %>
     </span>
   <% end %>
-</span>
+</div>
 
 <hr class="h-px my-4 border-0 bg-slate-200 dark:bg-slate-600"/>
 
-<span class="py-2 dark:text-slate-300">
-  <p class="font-semibold"><%= t(:"components.project_dashboard.information.created_on") %></p>
-  <p><%= helpers.local_time(@project.created_at, :full_date) %></p>
-</span>
+<p class="py-2 dark:text-slate-300">
+  <span class="font-semibold"><%= t(:"components.project_dashboard.information.created_on") %></span>
+  <span><%= helpers.local_time(@project.created_at, :full_date) %></span>
+</p>
