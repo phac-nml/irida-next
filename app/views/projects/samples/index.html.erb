@@ -98,7 +98,7 @@
           class: "button button--size-default button--state-primary",
           "aria-label": t(".actions.button_add_aria_label") %>
         <% end %>
-        <% if allowed_to?(:import_samples_and_metadata?, @project.namespace) %>
+        <% if Flipper.enabled?(:batch_sample_spreadsheet_import) && allowed_to?(:import_samples_and_metadata?, @project.namespace) %>
           <%= link_to t("projects.samples.index.import_samples_button"),
           new_namespace_project_samples_spreadsheet_import_path,
           data: {
