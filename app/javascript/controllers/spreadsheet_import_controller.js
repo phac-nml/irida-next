@@ -11,6 +11,10 @@ export default class extends Controller {
     "submitButton",
   ];
 
+  static values = {
+    group: Boolean
+  }
+
   #header_map = {};
 
   #headers = [];
@@ -41,7 +45,10 @@ export default class extends Controller {
 
   connect() {
     this.#disableTarget(this.sampleNameColumnTarget);
-    this.#disableTarget(this.projectPUIDColumnTarget);
+    console.log("Has group value: " + this.groupValue)
+    if (this.groupValue) {
+      this.#disableTarget(this.projectPUIDColumnTarget);
+    }
     this.#disableTarget(this.sampleDescriptionColumnTarget);
   }
 
@@ -98,8 +105,10 @@ export default class extends Controller {
   #clearFormOptions() {
     this.#removeInputOptions(this.sampleNameColumnTarget);
     this.#disableTarget(this.sampleNameColumnTarget);
-    this.#removeInputOptions(this.projectPUIDColumnTarget);
-    this.#disableTarget(this.projectPUIDColumnTarget);
+    if (this.groupValue) {
+      this.#removeInputOptions(this.projectPUIDColumnTarget);
+      this.#disableTarget(this.projectPUIDColumnTarget);
+    }
     this.#removeInputOptions(this.sampleDescriptionColumnTarget);
     this.#disableTarget(this.sampleDescriptionColumnTarget);
     // this.#removeMetadataColumns();
@@ -121,8 +130,12 @@ export default class extends Controller {
   }
 
   #refreshInputOptionsForAllFields() {
+    console.log("in refresh fields")
     this.#refreshInputOptions(this.sampleNameColumnTarget, this.#curr_sample_name)
-    this.#refreshInputOptions(this.projectPUIDColumnTarget, this.#curr_project_puid)
+    if (this.groupValue) {
+      console.log("refreshing puid fields")
+      this.#refreshInputOptions(this.projectPUIDColumnTarget, this.#curr_project_puid)
+    }
     this.#refreshInputOptions(this.sampleDescriptionColumnTarget, this.#curr_sample_description)
   }
 
@@ -181,8 +194,12 @@ export default class extends Controller {
   // }
 
   #checkFormInputsReadyForSubmit() {
-    if (this.hasSampleNameColumnTarget && this.hasProjectPUIDColumnTarget){
-    // if (this.hasSampleNameColumnTarget ){
+    var puid_value = true
+    if (this.groupValue) {
+      puid_value = this.hasProjectPUIDColumnTarget;
+    }
+
+    if (this.hasSampleNameColumnTarget && puid_value ){
         this.submitButtonTarget.disabled = false;
     } else {
       this.submitButtonTarget.disabled = true;
