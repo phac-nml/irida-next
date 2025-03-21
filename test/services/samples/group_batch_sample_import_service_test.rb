@@ -64,7 +64,7 @@ module Samples
       Samples::BatchFileImportService.new(@group, @john_doe, blob.id, @default_params).execute
       assert_equal(I18n.t('services.spreadsheet_import.missing_header',
                           header_title: 'sample_name,project_puid'),
-                   @group.errors.full_messages_for(:base).first)
+                   @group.errors.full_messages.to_sentence)
     end
 
     test 'import samples into a project that does not belong to group namespace' do

@@ -62,9 +62,9 @@ module Samples
       )
 
       Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id, @default_params).execute
-      assert_equal(@project.namespace.errors.full_messages_for(:base).first,
-                   I18n.t('services.spreadsheet_import.missing_header',
-                          header_title: 'sample_name'))
+      assert_equal(I18n.t('services.spreadsheet_import.missing_header',
+                          header_title: 'sample_name'),
+                   @project.namespace.errors.full_messages.to_sentence)
     end
 
     test 'import with bad data blank line' do
