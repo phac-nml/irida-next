@@ -4,14 +4,20 @@ import * as XLSX from "xlsx";
 export default class extends Controller {
   static targets = [
     "sampleNameColumn",
-    "projectPUIDColumn",
+    // "projectPUIDColumn",
     "sampleDescriptionColumn",
     "sortableListsTemplate",
     "sortableListsItemTemplate",
     "submitButton",
   ];
 
+  #header_map = {};
+
   #headers = [];
+
+  #curr_sample_name = null;
+  #curr_sample_description = null;
+
   #disabled_classes = [
     "bg-slate-50",
     "border",
@@ -34,47 +40,32 @@ export default class extends Controller {
 
   connect() {
     this.#disableTarget(this.sampleNameColumnTarget);
-    this.#disableTarget(this.projectPUIDColumnTarget);
+    // this.#disableTarget(this.projectPUIDColumnTarget);
     this.#disableTarget(this.sampleDescriptionColumnTarget);
   }
 
   changeSampleNameInput(event) {
+    this.#header_map[this.#curr_sample_name] = false;
     const { value } = event.target;
-    this.#checkFormInputs();
-
-    // if (value) {
-    //   if (this.hasMetadataColumnsTarget) {
-    //     this.#addMetadataColumns();
-    //   } else {
-    //     this.submitButtonTarget.disabled = false;
-    //   }
-    // } else {
-    //   if (this.hasMetadataColumnsTarget) {
-    //     this.#removeMetadataColumns();
-    //   } else {
-    //     this.submitButtonTarget.disabled = true;
-    //   }
-    // }
-  }
-
-  changeProjectPUIDInput(event) {
-    const { value } = event.target;
-    this.#checkFormInputs();
+    this.#curr_sample_name = value.toLowerCase();
+    this.#header_map[this.#curr_sample_name] = true;
+    this.#refreshInputOptionsForAllFields();
+    this.#checkFormInputsReadyForSubmit();
   }
 
   changeSampleDescriptionInput(event) {
+    this.#header_map[this.#curr_sample_description] = false;
     const { value } = event.target;
-    this.#checkFormInputs();
+    this.#curr_sample_description = value.toLowerCase();
+    this.#header_map[this.#curr_sample_description] = true;
+    this.#refreshInputOptionsForAllFields();
+    this.#checkFormInputsReadyForSubmit();
   }
 
   readFile(event) {
     const { files } = event.target;
 
-    this.#removeSampleNameInputOptions();
-    this.#removeProjectPUIDInputOptions();
-    this.#removeSampleDescriptionInputOptions();
-    // this.#removeMetadataColumns();
-    this.submitButtonTarget.disabled = true;
+    this.#clearFormOptions();
 
     if (!files.length) {
       return;
@@ -88,10 +79,31 @@ export default class extends Controller {
       const worksheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[worksheetName];
       this.#headers = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
-      this.#addSampleNameInputOptions();
-      this.#addProjectPUIDInputOptions();
-      this.#addSampleDescriptionInputOptions();
+      this.#buildHeaderMap();
+      this.#initSelection();
+      this.#refreshInputOptionsForAllFields()
     };
+  }
+
+  #clearFormOptions() {
+    this.#removeSampleNameInputOptions();
+    // this.#removeProjectPUIDInputOptions();
+    this.#removeSampleDescriptionInputOptions();
+    // this.#removeMetadataColumns();
+    this.submitButtonTarget.disabled = true;
+  }
+
+
+  #buildHeaderMap() {
+    this.#header_map = {}
+    this.#headers.forEach(h => {
+      this.#header_map[h.toLowerCase()] = false;
+    })
+  }
+
+  #initSelection() {
+    this.#curr_sample_name = null;
+    this.#curr_sample_description = null;
   }
 
   #removeSampleNameInputOptions() {
@@ -99,44 +111,31 @@ export default class extends Controller {
     this.#disableTarget(this.sampleNameColumnTarget);
   }
 
-  #addSampleNameInputOptions() {
-    for (let header of this.#headers) {
+  #refreshInputOptionsForAllFields() {
+    this.#refreshInputOptions(this.sampleNameColumnTarget, this.#curr_sample_name)
+    this.#refreshInputOptions(this.sampleDescriptionColumnTarget, this.#curr_sample_description)
+  }
+
+  #refreshInputOptions(columnTarget, current_selection) {
+    let headers = this.#headers.filter( (header) =>
+      // !(this.#header_map[header.toLowerCase()])
+      (header.toLowerCase() != current_selection) &&  !(this.#header_map[header.toLowerCase()])
+    );
+
+    this.#removeInputOptions(columnTarget, current_selection);
+
+    for (let header of headers) {
       const option = document.createElement("option");
       option.value = header;
       option.text = header;
-      this.sampleNameColumnTarget.append(option);
+      columnTarget.append(option);
     }
-    this.#enableTarget(this.sampleNameColumnTarget);
-  }
-
-  #removeProjectPUIDInputOptions() {
-    this.#removeInputOptions(this.projectPUIDColumnTarget);
-    this.#disableTarget(this.projectPUIDColumnTarget);
-  }
-
-  #addProjectPUIDInputOptions() {
-    for (let header of this.#headers) {
-      const option = document.createElement("option");
-      option.value = header;
-      option.text = header;
-      this.projectPUIDColumnTarget.append(option);
-    }
-    this.#enableTarget(this.projectPUIDColumnTarget);
+    this.#enableTarget(columnTarget);
   }
 
   #removeSampleDescriptionInputOptions() {
     this.#removeInputOptions(this.sampleDescriptionColumnTarget);
     this.#disableTarget(this.sampleDescriptionColumnTarget);
-  }
-
-  #addSampleDescriptionInputOptions() {
-    for (let header of this.#headers) {
-      const option = document.createElement("option");
-      option.value = header;
-      option.text = header;
-      this.sampleDescriptionColumnTarget.append(option);
-    }
-    this.#enableTarget(this.sampleDescriptionColumnTarget);
   }
 
   // #removeMetadataColumns() {
@@ -174,17 +173,27 @@ export default class extends Controller {
   //   this.submitButtonTarget.disabled = !columns.length;
   // }
 
-  #checkFormInputs() {
-    if (this.hasSampleNameColumnTarget && this.hasProjectPUIDColumnTarget){
+  #checkFormInputsReadyForSubmit() {
+    if (this.hasSampleNameColumnTarget ){//&& this.hasProjectPUIDColumnTarget){
       this.submitButtonTarget.disabled = false;
     } else {
       this.submitButtonTarget.disabled = true;
     }
   }
 
-  #removeInputOptions(target) {
-    while (target.options.length > 1) {
-      target.remove(target.options.length - 1);
+  #removeInputOptions(target, current = null) {
+    // When a current selection is passed it, it does not get removed.
+    var post_length = 1
+    if (current == null){
+      post_length = 0
+    }
+
+    var rev_index = target.options.length - 1;
+    while (target.options.length > post_length + 1){
+      if(current != target.options[rev_index].value){
+        target.remove(rev_index);
+      }
+      rev_index = rev_index - 1;
     }
   }
 
