@@ -4,18 +4,26 @@
     <p class="dark:text-slate-400">
       These are the samples that were transferred by
       <%= activity.owner.email %>
-      on
-      <%= helpers.local_time(activity[:created_at], :long) %>
     </p>
   </div>
 
-  <div>
+  <ul class="max-w-md divide-y divide-gray-200 dark:divide-gray-700">
     <% activity.parameters[:transferred_samples_puids].each do |sample_puid| %>
-      <ul>
-        <li><%= sample_puid %></li>
-      </ul>
+      <li class="pt-3 pb-3 sm:pb-4 sm:pt-4">
+        <div class="flex items-center space-x-4 rtl:space-x-reverse">
+          <div class="shrink-0">
+            <%= viral_icon(name: :beaker, color: :subdued, classes: "w-5 h-5 rounded-full") %>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+              <%= sample_puid %>
+            </p>
+          </div>
+
+        </div>
+      </li>
     <% end %>
-  </div>
+  </ul>
 
   <div class="mt-4">
     <button
