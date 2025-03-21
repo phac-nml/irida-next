@@ -1336,11 +1336,11 @@ en:
             - To prevent accidental actions we ask you to confirm your intention.
             - Please type <kbd>%{project}</kbd> to proceed or close this dialog to cancel.
             warning:
+              automated_workflows_count: "%{count} automated workflow execution(s)"
               files_count: "%{count} file(s)"
               post_html: After you delete a project, you <strong>cannot</strong> restore it or its components.
               pre_html: 'You are about to delete the project <strong>%{project_name}</strong>. This action will also delete:'
               samples_count: "%{count} sample(s)"
-              workflows_count: "%{count} workflow execution(s)"
           description: Deleting a project is permanent and cannot be undone. All samples and direct members will be deleted along with the project.
           submit: Delete project
           title: Delete project
