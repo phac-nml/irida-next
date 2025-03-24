@@ -26,6 +26,9 @@ export default class extends Controller {
   #enabledClasses = ["underline", "hover:no-underline"];
   #originalAvailableList;
 
+  #optionSelected = null;
+  #optionSelectedClasses = ["bg-primary-600", "dark:bg-primary-500"];
+
   connect() {
     this.idempotentConnect();
   }
@@ -50,6 +53,24 @@ export default class extends Controller {
       this.selectedList.addEventListener("drop", this.buttonStateListener);
       this.availableList.addEventListener("drop", this.buttonStateListener);
     }
+
+    window.addEventListener("click", () => {
+      if (this.#optionSelected) {
+        this.#optionSelected.classList.remove(...this.#optionSelectedClasses);
+        this.#optionSelected.setAttribute("aria-selected", "false");
+        this.#optionSelected = null;
+      }
+    });
+  }
+
+  disconnect() {
+    window.removeEventListener("click", () => {
+      if (this.#optionSelected) {
+        this.#optionSelected.classList.remove(...this.#optionSelectedClasses);
+        this.#optionSelected.setAttribute("aria-selected", "false");
+        this.#optionSelected = null;
+      }
+    });
   }
 
   addAll(event) {
@@ -237,6 +258,75 @@ export default class extends Controller {
       this.#checkButtonStates();
     } catch (error) {
       console.error("Error setting template:", error);
+    }
+  }
+
+  navigateList(event) {
+    if (event.key === " " || event.key === "Enter") {
+      event.preventDefault();
+      if (this.#optionSelected === event.target) {
+        this.#optionSelected.classList.remove(...this.#optionSelectedClasses);
+        this.#optionSelected.setAttribute("aria-selected", "false");
+        this.#optionSelected = null;
+      } else if (this.#optionSelected) {
+        this.#optionSelected.classList.remove(...this.#optionSelectedClasses);
+        this.#optionSelected.setAttribute("aria-selected", "false");
+        this.#optionSelected = event.target;
+        this.#optionSelected.classList.add(...this.#optionSelectedClasses);
+        this.#optionSelected.setAttribute("aria-selected", "true");
+      } else {
+        this.#optionSelected = event.target;
+        this.#optionSelected.classList.add(...this.#optionSelectedClasses);
+        this.#optionSelected.setAttribute("aria-selected", "true");
+      }
+      this.#checkStates();
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      let selectedListFirstChild = this.selectedList.firstElementChild;
+      if (event.target.parentNode === this.availableList) {
+        if (this.#optionSelected) {
+          this.#optionSelected.remove();
+          this.selectedList.prepend(this.#optionSelected);
+          this.#optionSelected.focus();
+        } else if (selectedListFirstChild) {
+          selectedListFirstChild.focus();
+        }
+      }
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      let availableListFirstChild = this.availableList.firstElementChild;
+      if (event.target.parentNode === this.selectedList) {
+        if (this.#optionSelected) {
+          this.#optionSelected.remove();
+          this.availableList.prepend(this.#optionSelected);
+          this.#optionSelected.focus();
+        } else if (availableListFirstChild) {
+          availableListFirstChild.focus();
+        }
+      }
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      let previousOption = event.target.previousElementSibling;
+      if (previousOption && this.#optionSelected) {
+        this.#optionSelected.remove();
+        previousOption.insertAdjacentElement(
+          "beforebegin",
+          this.#optionSelected,
+        );
+        this.#optionSelected.focus();
+      } else if (previousOption) {
+        previousOption.focus();
+      }
+    } else if (event.key === "ArrowDown") {
+      event.preventDefault();
+      let nextOption = event.target.nextElementSibling;
+      if (nextOption && this.#optionSelected) {
+        this.#optionSelected.remove();
+        nextOption.insertAdjacentElement("afterend", this.#optionSelected);
+        this.#optionSelected.focus();
+      } else if (nextOption) {
+        nextOption.focus();
+      }
     }
   }
 }
