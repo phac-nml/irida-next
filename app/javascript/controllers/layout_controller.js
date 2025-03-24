@@ -43,10 +43,10 @@ export default class extends Controller {
   }
 
   expand(event) {
-    this.layoutContainerTarget.classList.remove(
-      "max-xl:collapsed",
-      "collapsed",
-    );
+    this.layoutContainerTarget.classList.remove("collapsed");
+    if (window.innerWidth < this.#convertRemToPixels(80)) {
+      this.layoutContainerTarget.classList.remove("max-xl:collapsed");
+    }
     this.expandButtonTarget.classList.add("xl:hidden");
     if (typeof event !== "undefined") {
       this.logoTarget.focus();
