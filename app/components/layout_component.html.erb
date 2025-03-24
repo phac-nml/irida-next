@@ -1,29 +1,35 @@
 <div
-  class="layout-body bg-white dark:bg-slate-800"
+  class="
+    xl:grid-cols-(--layout-body-columns) max-xl:collapsed grid h-screen w-screen
+    transition-all xl:grid-rows-1 bg-white dark:bg-slate-800
+  "
   data-controller="layout"
   data-layout-target="layoutContainer"
   data-turbo-prefetch="false"
 >
   <%= sidebar %>
-  <div class="relative content">
+  <div class="relative content" data-layout-target="content">
     <nav class="flex px-5" style="height: 50px">
-      <button
-        data-layout-target="expandButton"
-        data-action="click->layout#expand"
-        class="hidden text-slate-500"
-      >
-        <%= viral_icon(name: "sidebar", classes: "w-6 h-6") %>
-      </button>
+      <div class=" flex flex-row shrink-0 justify-end items-center space-x-1">
+        <button
+          data-layout-target="expandButton"
+          data-action="click->layout#expand"
+          class="
+            max-xl:visible xl:hidden text-slate-500 navbar-button cursor-pointer
+          "
+        >
+          <%= viral_icon(name: "sidebar", classes: "w-6 h-6") %>
+        </button>
+      </div>
       <turbo-frame id="breadcrumb">
         <%= breadcrumb %>
       </turbo-frame>
     </nav>
     <main
       class="
-        absolute bottom-0 left-0 right-0 p-4 overflow-y-auto top-12 border-t
-        border-slate-200 dark:border-slate-950
+        max-xl:fixed xl:absolute bottom-0 left-0 right-0 p-4 overflow-y-auto top-12
+        border-t border-slate-200 dark:border-slate-950
       "
-      tabindex="0"
     >
       <div class="<%= @layout %>"><%= body %></div>
     </main>

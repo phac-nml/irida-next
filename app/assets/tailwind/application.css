@@ -17,6 +17,7 @@
   --color-primary-900: #14532d;
   --color-primary-950: #052e16;
   --color-primary: #16a34a;
+  --layout-body-columns: 280px 1fr;
 }
 
 /*
@@ -37,20 +38,17 @@
   }
 }
 
-@utility layout-body {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  grid-template-rows: 1fr;
-  @apply h-screen w-screen transition-all;
-
-  &.collapsed {
-    grid-template-columns: 0 1fr;
-  }
-}
-
 @utility collapsed {
-  &.layout-body {
-    grid-template-columns: 0 1fr;
+  & {
+    grid-template-columns: 0 1fr !important;
+  }
+
+  & .sidebar {
+    @apply invisible;
+  }
+
+  & .sidebar-overlay {
+    @apply invisible;
   }
 }
 
@@ -58,21 +56,22 @@
   grid-template-areas: "navigation" "collapse";
   grid-template-rows: 1fr 40px;
   overflow-x: hidden;
+  width: 280px;
 }
 
 @utility navbar-button {
-  @apply focus:outline-hidden rounded-md p-1 text-sm text-slate-500 hover:bg-slate-300 focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+  @apply rounded-md p-1 text-sm text-slate-500 hover:bg-slate-300 focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
 
   & button.viral-dropdown--icon {
-    @apply focus:outline-hidden rounded-md p-1 text-sm text-slate-500 hover:bg-slate-300 focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+    @apply rounded-md p-1 text-sm text-slate-500 hover:bg-slate-300 focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
   }
 }
 
 @utility viral-dropdown--icon {
   & button.navbar-button {
-    @apply focus:outline-hidden rounded-md p-1 text-sm text-slate-500 hover:bg-slate-300 focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+    @apply rounded-md p-1 text-sm text-slate-500 hover:bg-slate-300 focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
   }
-  @apply focus:outline-hidden rounded-md p-2.5 text-sm text-slate-500 hover:bg-slate-100 focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+  @apply rounded-md p-2.5 text-sm text-slate-500 hover:bg-slate-100 focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
 }
 
 @utility link {
@@ -275,7 +274,7 @@
 }
 
 @utility row-btn {
-  @apply focus:outline-hidden px-1 py-0 text-sm text-slate-500 hover:bg-slate-100 focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+  @apply px-1 py-0 text-sm text-slate-500 hover:bg-slate-100 focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
 
   & svg {
     @apply h-5 w-5;
@@ -324,11 +323,11 @@
 }
 
 @utility viral-dropdown--button {
-  @apply hover:text-primary-700 focus:outline-hidden flex items-center rounded-md border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-900 hover:bg-slate-100 focus:z-10 focus:ring-4 focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700;
+  @apply hover:text-primary-700 flex items-center rounded-md border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-900 hover:bg-slate-100 focus:z-10 focus:ring-4 focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700;
 }
 
 @utility button {
-  @apply inline-flex w-1/2 cursor-pointer items-center justify-center rounded-md border text-sm focus:z-10 sm:w-auto;
+  @apply inline-flex cursor-pointer items-center justify-center rounded-md border text-sm focus:z-10 sm:w-auto;
 
   &:disabled {
     @apply cursor-not-allowed opacity-50;
@@ -348,15 +347,15 @@
 }
 
 @utility button--state-default {
-  @apply focus:outline-hidden border-slate-200 bg-white text-slate-900 hover:bg-slate-100 hover:text-slate-950 focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700;
+  @apply border-slate-200 bg-white text-slate-900 hover:bg-slate-100 hover:text-slate-950 focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700;
 }
 
 @utility button--state-destructive {
-  @apply focus:outline-hidden border-red-800 bg-red-700 text-white hover:bg-red-800 focus:ring-red-300 dark:border-red-600 dark:bg-red-600 dark:text-white dark:hover:bg-red-700 dark:focus:ring-red-700;
+  @apply border-red-800 bg-red-700 text-white hover:bg-red-800 focus:ring-red-300 dark:border-red-600 dark:bg-red-600 dark:text-white dark:hover:bg-red-700 dark:focus:ring-red-700;
 }
 
 @utility button--state-primary {
-  @apply border-primary-800 bg-primary-700 hover:bg-primary-800 focus:ring-primary-300 dark:focus:ring-primary-700 dark:bg-primary-800 dark:border-primary-900 dark:hover:bg-primary-700 focus:outline-hidden text-white dark:text-white;
+  @apply border-primary-800 bg-primary-700 hover:bg-primary-800 focus:ring-primary-300 dark:focus:ring-primary-700 dark:bg-primary-800 dark:border-primary-900 dark:hover:bg-primary-700 text-white dark:text-white;
 }
 
 @utility dialog--size {
@@ -384,7 +383,7 @@
 }
 
 @utility dialog--close {
-  @apply focus:outline-hidden ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-slate-400 hover:bg-slate-200 hover:text-slate-900 focus:ring-4 focus:ring-slate-200 dark:hover:bg-slate-600 dark:hover:text-white dark:focus:ring-slate-700;
+  @apply ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-slate-400 hover:bg-slate-200 hover:text-slate-900 focus:ring-4 focus:ring-slate-200 dark:hover:bg-slate-600 dark:hover:text-white dark:focus:ring-slate-700;
 }
 
 @utility dialog--section {
@@ -862,7 +861,11 @@
   }
 
   dialog::backdrop {
-    @apply backdrop-blur-xs bg-slate-400/30 dark:bg-slate-900/40;
+    @apply backdrop-blur-xs bg-slate-200/40;
+  }
+
+  .dark dialog::backdrop {
+    @apply backdrop-blur-xs bg-slate-600/40;
   }
 
   .dialog--section {
@@ -897,7 +900,7 @@
 
 .page a,
 .page.gap {
-  @apply hover:text-primary-700 focus:outline-hidden relative inline-flex items-center border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-100 focus:z-10 focus:ring-4 focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700;
+  @apply hover:text-primary-700 relative inline-flex items-center border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-100 focus:z-10 focus:ring-4 focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700;
 }
 
 .page.active {
