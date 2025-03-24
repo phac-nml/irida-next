@@ -92,7 +92,7 @@ module Projects
         I18n.t('activity.namespaces_project_namespace.metadata_template.update_html', user: @user.email,
                                                                                       href: template.name)
       )
-      assert_selector 'a[disabled="disabled"]', text: template.name
+      assert_selector 'span', text: template.name
     end
 
     test 'soft deleted template activity' do
@@ -119,7 +119,7 @@ module Projects
                                                                                        href: template.name)
       )
 
-      assert_selector 'a[disabled="disabled"]', text: template.name
+      assert_selector 'span', text: template.name
     end
 
     test 'permanently deleted template activity' do
@@ -148,7 +148,7 @@ module Projects
                                                                                        href: template.name)
       )
 
-      assert_selector 'a[disabled="disabled"]', text: template.name
+      assert_selector 'span', text: template.name
     end
   end
 end

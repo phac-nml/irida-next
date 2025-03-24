@@ -158,7 +158,7 @@ module Projects
 
       click_on I18n.t('projects.metadata_templates.index.new_button')
 
-      within('span[data-controller-connected="true"] dialog') do
+      within('div[data-controller-connected="true"] dialog') do
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.new_template_dialog.description')
 
@@ -211,7 +211,7 @@ module Projects
 
       assert_selector '#dialog'
 
-      within('span[data-controller-connected="true"] dialog') do
+      within('div[data-controller-connected="true"] dialog') do
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.new_template_dialog.description')
 
@@ -251,7 +251,7 @@ module Projects
 
       assert_selector '#dialog'
 
-      within('span[data-controller-connected="true"] dialog') do
+      within('div[data-controller-connected="true"] dialog') do
         assert_accessible
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.new_template_dialog.description')
@@ -293,7 +293,7 @@ module Projects
 
       assert_selector '#dialog'
 
-      within('span[data-controller-connected="true"] dialog') do
+      within('div[data-controller-connected="true"] dialog') do
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.new_template_dialog.description')
 
@@ -335,7 +335,7 @@ module Projects
 
       assert_selector '#dialog'
 
-      within('span[data-controller-connected="true"] dialog') do
+      within('div[data-controller-connected="true"] dialog') do
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.new_template_dialog.description')
 
@@ -377,7 +377,7 @@ module Projects
 
       assert_selector '#dialog'
 
-      within('span[data-controller-connected="true"] dialog') do
+      within('div[data-controller-connected="true"] dialog') do
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.new_template_dialog.description')
 
@@ -452,7 +452,7 @@ module Projects
 
       assert_selector '#dialog'
 
-      within('span[data-controller-connected="true"] dialog') do
+      within('div[data-controller-connected="true"] dialog') do
         assert_text I18n.t('metadata_templates.edit_template_dialog.title')
 
         within "ul[id='available']" do

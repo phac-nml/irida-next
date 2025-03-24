@@ -13,6 +13,8 @@ class GroupsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_equal 5, group.group_members.count
+
+    w3c_validate 'Group Members Page'
   end
 
   test 'group members index invalid route get' do

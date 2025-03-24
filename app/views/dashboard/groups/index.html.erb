@@ -23,7 +23,7 @@
           "data-turbo-permanent": "true",
         },
       ) %>
-      <%= search_form_for @q, url: dashboard_groups_url, method: :post, html: { method: :post, "data-controller": "filters", "data-turbo": false } do %>
+      <%= form_for @q, url: dashboard_groups_url, method: :post, html: { method: :post, "data-controller": "filters", "data-turbo": false } do %>
         <div class="flex flex-row items-center ml-auto space-x-2 font-normal py-1.5">
           <%= render Ransack::SortDropdownComponent.new(
             @q,

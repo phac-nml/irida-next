@@ -1,15 +1,14 @@
 <%= render Viral::BaseComponent.new(tag: 'div', classes: class_names('hidden': hidden)) do %>
   <label
-    for="<%= name %>"
+    for="<%= @name %>"
     class="block mb-2 text-sm font-medium text-slate-900 dark:text-white"
   >
     <%= label %>
   </label>
-  <%= render Viral::BaseComponent.new(**system_arguments) do %>
-    <% if help_text.present? %>
-      <%= viral_help_text do %>
-        <%= help_text %>
-      <% end %>
+  <%= file_field_tag @name, **system_arguments %>
+  <% if help_text.present? %>
+    <%= viral_help_text do %>
+      <%= help_text %>
     <% end %>
   <% end %>
 <% end %>

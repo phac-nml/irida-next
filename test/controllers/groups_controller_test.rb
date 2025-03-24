@@ -18,6 +18,8 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
     group = groups(:group_one)
     get group_path(group)
     assert_response :success
+
+    w3c_validate 'Group Show Page'
   end
 
   test 'should not show the group if member is expired' do

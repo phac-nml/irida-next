@@ -14,6 +14,8 @@ class ProjectsMembershipActionsConcernTest < ActionDispatch::IntegrationTest
     get namespace_project_members_path(namespace, project)
 
     assert_response :success
+
+    w3c_validate 'Project Members Page'
   end
 
   test 'project members index invalid route get' do

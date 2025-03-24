@@ -94,7 +94,7 @@ module Groups
                                                   href: subgroup.puid)
       )
 
-      assert_selector 'a[disabled="disabled"]',
+      assert_selector 'span',
                       text: subgroup.puid
     end
   end

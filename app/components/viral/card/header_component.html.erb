@@ -1,11 +1,8 @@
 <%= render Viral::BaseComponent.new(tag: 'div', **system_arguments) do %>
   <% if title_only? %>
-    <h2
-      id="<%= title_id %>"
-      class="text-lg font-semibold text-slate-800 dark:text-white"
-    >
+    <%= render Viral::BaseComponent.new(tag: 'h2', id: title_id, classes: 'text-lg font-semibold text-slate-800 dark:text-white') do %>
       <%= title %>
-    </h2>
+    <% end %>
     <% if subtitle.present? %>
       <p class="text-slate-500 dark:text-slate-400">
         <%= subtitle %>

@@ -276,7 +276,7 @@ module Groups
         click_link '10'
       end
 
-      assert_selector 'div#limit-component button div span', text: '10'
+      assert_selector 'div#limit-component button span', text: '10'
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
                                                                            locale: @user.locale))
       within('table tbody') do
@@ -298,7 +298,7 @@ module Groups
         assert_text @sample1.name
         assert_no_text @sample2.name
       end
-      assert_selector 'div#limit-component button div span', text: '10'
+      assert_selector 'div#limit-component button span', text: '10'
     end
 
     test 'can change pagination and then toggle metadata' do
@@ -309,7 +309,7 @@ module Groups
         click_link '10'
       end
 
-      assert_selector 'div#limit-component button div span', text: '10'
+      assert_selector 'div#limit-component button span', text: '10'
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
                                                                            locale: @user.locale))
       within('table tbody') do
@@ -336,7 +336,7 @@ module Groups
       within('table thead tr') do
         assert_selector 'th', count: 9
       end
-      assert_selector 'div#limit-component button div span', text: '10'
+      assert_selector 'div#limit-component button span', text: '10'
     end
 
     test 'can sort and then filter the list of samples by name' do

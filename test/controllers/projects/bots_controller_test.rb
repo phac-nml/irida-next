@@ -15,6 +15,8 @@ module Projects
       get namespace_project_bots_path(namespace, project)
 
       assert_response :success
+
+      w3c_validate 'Project Bot Accounts Page'
     end
 
     test 'should not get bot accounts listing page for a user with incorrect permissions' do

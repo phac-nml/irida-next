@@ -15,6 +15,8 @@ module Projects
 
       get namespace_project_history_path(namespace, project)
       assert_response :success
+
+      w3c_validate 'Project History Page'
     end
 
     test 'should display project history version' do

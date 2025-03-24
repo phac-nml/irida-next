@@ -19,10 +19,10 @@
 <% end %>
 
 <%= viral_tabs(id: "group-details", label: t(:'.tabs.label')) do |tabs| %>
-  <%= tabs.with_tab(url: group_path(@group), controls: "group-details", selected: @tab != "shared_namespaces") do %>
+  <%= tabs.with_tab(url: group_path(@group), selected: @tab != "shared_namespaces") do %>
     <%= t(:".tabs.subgroups_and_projects") %>
   <% end %>
-  <%= tabs.with_tab(url: group_path(@group, tab: "shared_namespaces"), controls: "group-projects", selected: @tab == "shared_namespaces") do %>
+  <%= tabs.with_tab(url: group_path(@group, tab: "shared_namespaces"), selected: @tab == "shared_namespaces") do %>
     <%= t(:".tabs.shared_namespaces") %>
   <% end %>
 
