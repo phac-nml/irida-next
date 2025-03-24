@@ -15,24 +15,24 @@ export default class extends Controller {
       this.collapse();
     }
 
-    this.contentTarget.addEventListener(
-      "click",
-      this.handleContentClick.bind(this),
-    );
+    this.boundHandleContentClick = this.handleContentClick.bind(this);
+    this.boundHandleContentFocus = this.handleContentFocus.bind(this);
+
+    this.contentTarget.addEventListener("click", this.boundHandleContentClick);
     this.expandButtonTarget.addEventListener(
       "focus",
-      this.handleContentFocus.bind(this),
+      this.boundHandleContentFocus,
     );
   }
 
   disconnect() {
     this.contentTarget.removeEventListener(
       "click",
-      this.handleContentClick.bind(this),
+      this.boundHandleContentClick,
     );
     this.expandButtonTarget.removeEventListener(
       "focus",
-      this.handleContentFocus.bind(this),
+      this.boundHandleContentFocus,
     );
   }
 
