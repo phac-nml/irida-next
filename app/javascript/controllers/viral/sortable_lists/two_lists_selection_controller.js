@@ -23,7 +23,7 @@ export default class extends Controller {
     "text-slate-300",
     "dark:text-slate-700",
   ];
-  #enabledClasses = ["underline", "hover:no-underline"];
+  #enabledClasses = ["underline", "hover:no-underline", "cursor-pointer"];
   #originalAvailableList;
 
   #selectedOption;
@@ -48,6 +48,11 @@ export default class extends Controller {
 
       this.#setInitialSelectAllState(this.availableList, this.addAllTarget);
       this.#setInitialSelectAllState(this.selectedList, this.removeAllTarget);
+
+      // require specific submit button logic for edit metadata template
+      if (this.selectedList.querySelectorAll("li").length > 0) {
+        this.#setSubmitButtonDisableState(false);
+      }
 
       this.buttonStateListener = this.#checkStates.bind(this);
       this.selectedList.addEventListener("drop", this.buttonStateListener);
