@@ -16,6 +16,15 @@ module Projects
       @timestamp = DateTime.current
       @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
       @samples = @samples.includes(project: { namespace: :parent })
+      @allowed_to = {
+        submit_workflow: allowed_to?(:submit_workflow?, @project),
+        clone_sample: allowed_to?(:clone_sample?, @project),
+        transfer_sample: allowed_to?(:transfer_sample?, @project),
+        export_data: allowed_to?(:export_data?, @project),
+        update_sample_metadata: allowed_to?(:update_sample_metadata?, @project.namespace),
+        create_sample: allowed_to?(:create_sample?, @project),
+        destroy_sample: allowed_to?(:destroy_sample?, @project)
+      }
       @has_samples = @project.samples.size.positive?
     end
 
