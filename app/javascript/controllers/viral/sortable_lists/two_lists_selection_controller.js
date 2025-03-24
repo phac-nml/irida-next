@@ -26,8 +26,8 @@ export default class extends Controller {
   #enabledClasses = ["underline", "hover:no-underline"];
   #originalAvailableList;
 
-  #selectedOption = null;
-  #selectedOptionClasses = ["bg-primary-600", "dark:bg-primary-500"];
+  #selectedOption;
+  #selectedOptionClasses = ["bg-primary-400", "dark:bg-primary-500"];
 
   connect() {
     this.idempotentConnect();
@@ -52,27 +52,11 @@ export default class extends Controller {
       this.buttonStateListener = this.#checkStates.bind(this);
       this.selectedList.addEventListener("drop", this.buttonStateListener);
       this.availableList.addEventListener("drop", this.buttonStateListener);
+
+      this.windowClickListener = this.#removeSelectedAttributes.bind(this);
+      window.addEventListener("click", this.windowClickListener);
     }
-
-    window.addEventListener("click", () => {
-      if (this.#selectedOption) {
-        this.#selectedOption.classList.remove(...this.#selectedOptionClasses);
-        this.#selectedOption.setAttribute("aria-selected", "false");
-        this.#selectedOption = null;
-      }
-    });
   }
-
-  disconnect() {
-    window.removeEventListener("click", () => {
-      if (this.#selectedOption) {
-        this.#selectedOption.classList.remove(...this.#selectedOptionClasses);
-        this.#selectedOption.setAttribute("aria-selected", "false");
-        this.#selectedOption = null;
-      }
-    });
-  }
-
   addAll(event) {
     event.preventDefault();
     this.availableList.innerHTML = "";
@@ -198,6 +182,8 @@ export default class extends Controller {
       "mouseover",
       this.buttonStateListener,
     );
+
+    window.removeEventListener("click", this.windowClickListener);
   }
 
   /**
@@ -263,24 +249,22 @@ export default class extends Controller {
 
   navigateList(event) {
     if (event.key === " " || event.key === "Enter") {
+      // sets selection
       event.preventDefault();
       if (this.#selectedOption === event.target) {
-        this.#selectedOption.classList.remove(...this.#selectedOptionClasses);
-        this.#selectedOption.setAttribute("aria-selected", "false");
-        this.#selectedOption = null;
+        // de-select option
+        this.#removeSelectedAttributes();
       } else if (this.#selectedOption) {
-        this.#selectedOption.classList.remove(...this.#selectedOptionClasses);
-        this.#selectedOption.setAttribute("aria-selected", "false");
-        this.#selectedOption = event.target;
-        this.#selectedOption.classList.add(...this.#selectedOptionClasses);
-        this.#selectedOption.setAttribute("aria-selected", "true");
+        // replace current option with new option
+        this.#removeSelectedAttributes();
+        this.#setSelectedOption(event.target);
       } else {
-        this.#selectedOption = event.target;
-        this.#selectedOption.classList.add(...this.#selectedOptionClasses);
-        this.#selectedOption.setAttribute("aria-selected", "true");
+        // set option when no option was selected
+        this.#setSelectedOption(event.target);
       }
       this.#checkStates();
     } else if (event.key === "ArrowRight") {
+      // navigate to right side list
       event.preventDefault();
       let selectedListFirstChild = this.selectedList.firstElementChild;
       if (event.target.parentNode === this.availableList) {
@@ -290,6 +274,7 @@ export default class extends Controller {
         );
       }
     } else if (event.key === "ArrowLeft") {
+      // navigate to left side list
       event.preventDefault();
       let availableListFirstChild = this.availableList.firstElementChild;
       if (event.target.parentNode === this.selectedList) {
@@ -299,6 +284,7 @@ export default class extends Controller {
         );
       }
     } else if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+      // navigate up and down current list
       event.preventDefault();
       let nextOption =
         event.key === "ArrowUp"
@@ -310,6 +296,7 @@ export default class extends Controller {
 
   #navigateListUpAndDown(eventKey, nextOption) {
     if (nextOption && this.#selectedOption) {
+      // if an option is currently selected, move the option up and down list
       this.#selectedOption.remove();
       if (eventKey === "ArrowUp") {
         nextOption.insertAdjacentElement("beforebegin", this.#selectedOption);
@@ -318,17 +305,34 @@ export default class extends Controller {
       }
       this.#selectedOption.focus();
     } else if (nextOption) {
+      // if no option is selected, move focus/cursor up and down list
       nextOption.focus();
     }
   }
 
   #navigateListLeftAndRight(targetList, targetListFirstChild) {
     if (this.#selectedOption) {
+      // if option is currently selected, move it to the target list
       this.#selectedOption.remove();
       targetList.prepend(this.#selectedOption);
       this.#selectedOption.focus();
     } else if (targetListFirstChild) {
+      // if no option is selected, move cursor to target list if target list has options
       targetListFirstChild.focus();
+    }
+  }
+
+  #setSelectedOption(option) {
+    this.#selectedOption = option;
+    this.#selectedOption.classList.add(...this.#selectedOptionClasses);
+    this.#selectedOption.setAttribute("aria-selected", "true");
+  }
+
+  #removeSelectedAttributes() {
+    if (this.#selectedOption) {
+      this.#selectedOption.classList.remove(...this.#selectedOptionClasses);
+      this.#selectedOption.setAttribute("aria-selected", "false");
+      this.#selectedOption = null;
     }
   }
 }
