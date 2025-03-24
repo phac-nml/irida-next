@@ -7,6 +7,7 @@ export default class extends Controller {
     "link",
     "content",
     "logo",
+    "sidebarOverlay",
   ];
 
   connect() {
@@ -15,10 +16,14 @@ export default class extends Controller {
       this.collapse();
     }
 
-    this.boundHandleContentClick = this.handleContentClick.bind(this);
+    this.boundHandleSidebarOverlayClick =
+      this.handleSidebarOverlayClick.bind(this);
     this.boundHandleContentFocus = this.handleContentFocus.bind(this);
 
-    this.contentTarget.addEventListener("click", this.boundHandleContentClick);
+    this.sidebarOverlayTarget.addEventListener(
+      "click",
+      this.boundHandleSidebarOverlayClick,
+    );
     this.expandButtonTarget.addEventListener(
       "focus",
       this.boundHandleContentFocus,
@@ -28,7 +33,7 @@ export default class extends Controller {
   disconnect() {
     this.contentTarget.removeEventListener(
       "click",
-      this.boundHandleContentClick,
+      this.boundHandleSidebarOverlayClick,
     );
     this.expandButtonTarget.removeEventListener(
       "focus",
@@ -54,10 +59,8 @@ export default class extends Controller {
     localStorage.setItem("layout", "expanded");
   }
 
-  handleContentClick(event) {
-    if (this.expandButtonTarget.contains(event.target)) {
-      return;
-    } else if (window.innerWidth < this.#convertRemToPixels(80)) {
+  handleSidebarOverlayClick() {
+    if (window.innerWidth < this.#convertRemToPixels(80)) {
       if (
         !this.layoutContainerTarget.classList.contains(
           "max-xl:collapsed",

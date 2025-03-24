@@ -46,6 +46,10 @@
   & .sidebar {
     @apply invisible;
   }
+
+  & .sidebar-overlay {
+    @apply invisible;
+  }
 }
 
 @utility sidebar {
@@ -857,7 +861,11 @@
   }
 
   dialog::backdrop {
-    @apply backdrop-blur-xs bg-slate-400/30 dark:bg-slate-900/40;
+    @apply backdrop-blur-xs bg-slate-200/40;
+  }
+
+  .dark dialog::backdrop {
+    @apply backdrop-blur-xs bg-slate-600/40;
   }
 
   .dialog--section {
