@@ -12,14 +12,10 @@ module MetadataSpreadsheetImportActions
     @broadcast_target = "metadata_import_#{SecureRandom.uuid}"
   end
 
-  def create # rubocop:disable Metrics/AbcSize
+  def create
     @broadcast_target = params[:broadcast_target]
 
-    blob = ActiveStorage::Blob.create_and_upload!(
-      io: file_import_params[:file],
-      filename: file_import_params[:file].original_filename,
-      content_type: file_import_params[:file].content_type
-    )
+    blob = ActiveStorage::Blob.find_signed!(file_import_params[:file])
 
     ::Samples::MetadataImportJob.set(
       wait_until: 1.second.from_now

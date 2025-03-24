@@ -15,7 +15,6 @@
       data-controller="metadata--file-import"
       <% end%>
     >
-
       <%= form_for(:file_import, url: url, method: :post) do |form| %>
         <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>"/>
         <div class="grid gap-4">
@@ -37,6 +36,7 @@
                          "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
             <%= form.file_field :file,
                             required: true,
+                            direct_upload: true,
                             accept:
                               # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
                               "text/csv,.tsv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
