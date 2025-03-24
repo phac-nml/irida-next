@@ -26,8 +26,8 @@ export default class extends Controller {
   #enabledClasses = ["underline", "hover:no-underline"];
   #originalAvailableList;
 
-  #optionSelected = null;
-  #optionSelectedClasses = ["bg-primary-600", "dark:bg-primary-500"];
+  #selectedOption = null;
+  #selectedOptionClasses = ["bg-primary-600", "dark:bg-primary-500"];
 
   connect() {
     this.idempotentConnect();
@@ -55,20 +55,20 @@ export default class extends Controller {
     }
 
     window.addEventListener("click", () => {
-      if (this.#optionSelected) {
-        this.#optionSelected.classList.remove(...this.#optionSelectedClasses);
-        this.#optionSelected.setAttribute("aria-selected", "false");
-        this.#optionSelected = null;
+      if (this.#selectedOption) {
+        this.#selectedOption.classList.remove(...this.#selectedOptionClasses);
+        this.#selectedOption.setAttribute("aria-selected", "false");
+        this.#selectedOption = null;
       }
     });
   }
 
   disconnect() {
     window.removeEventListener("click", () => {
-      if (this.#optionSelected) {
-        this.#optionSelected.classList.remove(...this.#optionSelectedClasses);
-        this.#optionSelected.setAttribute("aria-selected", "false");
-        this.#optionSelected = null;
+      if (this.#selectedOption) {
+        this.#selectedOption.classList.remove(...this.#selectedOptionClasses);
+        this.#selectedOption.setAttribute("aria-selected", "false");
+        this.#selectedOption = null;
       }
     });
   }
@@ -264,69 +264,71 @@ export default class extends Controller {
   navigateList(event) {
     if (event.key === " " || event.key === "Enter") {
       event.preventDefault();
-      if (this.#optionSelected === event.target) {
-        this.#optionSelected.classList.remove(...this.#optionSelectedClasses);
-        this.#optionSelected.setAttribute("aria-selected", "false");
-        this.#optionSelected = null;
-      } else if (this.#optionSelected) {
-        this.#optionSelected.classList.remove(...this.#optionSelectedClasses);
-        this.#optionSelected.setAttribute("aria-selected", "false");
-        this.#optionSelected = event.target;
-        this.#optionSelected.classList.add(...this.#optionSelectedClasses);
-        this.#optionSelected.setAttribute("aria-selected", "true");
+      if (this.#selectedOption === event.target) {
+        this.#selectedOption.classList.remove(...this.#selectedOptionClasses);
+        this.#selectedOption.setAttribute("aria-selected", "false");
+        this.#selectedOption = null;
+      } else if (this.#selectedOption) {
+        this.#selectedOption.classList.remove(...this.#selectedOptionClasses);
+        this.#selectedOption.setAttribute("aria-selected", "false");
+        this.#selectedOption = event.target;
+        this.#selectedOption.classList.add(...this.#selectedOptionClasses);
+        this.#selectedOption.setAttribute("aria-selected", "true");
       } else {
-        this.#optionSelected = event.target;
-        this.#optionSelected.classList.add(...this.#optionSelectedClasses);
-        this.#optionSelected.setAttribute("aria-selected", "true");
+        this.#selectedOption = event.target;
+        this.#selectedOption.classList.add(...this.#selectedOptionClasses);
+        this.#selectedOption.setAttribute("aria-selected", "true");
       }
       this.#checkStates();
     } else if (event.key === "ArrowRight") {
       event.preventDefault();
       let selectedListFirstChild = this.selectedList.firstElementChild;
       if (event.target.parentNode === this.availableList) {
-        if (this.#optionSelected) {
-          this.#optionSelected.remove();
-          this.selectedList.prepend(this.#optionSelected);
-          this.#optionSelected.focus();
-        } else if (selectedListFirstChild) {
-          selectedListFirstChild.focus();
-        }
+        this.#navigateListLeftAndRight(
+          this.selectedList,
+          selectedListFirstChild,
+        );
       }
     } else if (event.key === "ArrowLeft") {
       event.preventDefault();
       let availableListFirstChild = this.availableList.firstElementChild;
       if (event.target.parentNode === this.selectedList) {
-        if (this.#optionSelected) {
-          this.#optionSelected.remove();
-          this.availableList.prepend(this.#optionSelected);
-          this.#optionSelected.focus();
-        } else if (availableListFirstChild) {
-          availableListFirstChild.focus();
-        }
-      }
-    } else if (event.key === "ArrowUp") {
-      event.preventDefault();
-      let previousOption = event.target.previousElementSibling;
-      if (previousOption && this.#optionSelected) {
-        this.#optionSelected.remove();
-        previousOption.insertAdjacentElement(
-          "beforebegin",
-          this.#optionSelected,
+        this.#navigateListLeftAndRight(
+          this.availableList,
+          availableListFirstChild,
         );
-        this.#optionSelected.focus();
-      } else if (previousOption) {
-        previousOption.focus();
       }
-    } else if (event.key === "ArrowDown") {
+    } else if (event.key === "ArrowUp" || event.key === "ArrowDown") {
       event.preventDefault();
-      let nextOption = event.target.nextElementSibling;
-      if (nextOption && this.#optionSelected) {
-        this.#optionSelected.remove();
-        nextOption.insertAdjacentElement("afterend", this.#optionSelected);
-        this.#optionSelected.focus();
-      } else if (nextOption) {
-        nextOption.focus();
+      let nextOption =
+        event.key === "ArrowUp"
+          ? event.target.previousElementSibling
+          : event.target.nextElementSibling;
+      this.#navigateListUpAndDown(event.key, nextOption);
+    }
+  }
+
+  #navigateListUpAndDown(eventKey, nextOption) {
+    if (nextOption && this.#selectedOption) {
+      this.#selectedOption.remove();
+      if (eventKey === "ArrowUp") {
+        nextOption.insertAdjacentElement("beforebegin", this.#selectedOption);
+      } else {
+        nextOption.insertAdjacentElement("afterend", this.#selectedOption);
       }
+      this.#selectedOption.focus();
+    } else if (nextOption) {
+      nextOption.focus();
+    }
+  }
+
+  #navigateListLeftAndRight(targetList, targetListFirstChild) {
+    if (this.#selectedOption) {
+      this.#selectedOption.remove();
+      targetList.prepend(this.#selectedOption);
+      this.#selectedOption.focus();
+    } else if (targetListFirstChild) {
+      targetListFirstChild.focus();
     }
   }
 }
