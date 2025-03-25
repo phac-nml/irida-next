@@ -73,19 +73,7 @@ class AttachmentsController < ApplicationController
   # Ensures the attachment exists and is authorized for the current user
   def set_attachment
     @attachment = Attachment.find_by(id: params[:id])
-    return if attachable_authorization
-
-    @attachment = nil
-  end
-
-  # 🔒 Authorizes access to the attachable resource
-  # Handles different attachable types like Sample, ProjectNamespace, and Group
-  def attachable_authorization
-    if @attachment.attachable.instance_of?(Sample) || @attachment.attachable.instance_of?(Namespaces::ProjectNamespace)
-      authorize! @attachment.attachable.project, to: :read?
-    elsif @attachment.attachable.instance_of?(Group)
-      authorize! @attachment.attachable, to: :read?
-    end
+    authorize! @attachment, to: :read?
   end
 
   # ⬇️ Public interface methods ⬇️
