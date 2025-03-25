@@ -1,6 +1,6 @@
-<div class="justify-between w-full mb-4 page-header sm:flex">
-  <div class="flex items-start">
-    <% if icon.present? %>
+<div class="justify-between w-full mb-4 page-header flex @max-md:flex-col">
+  <div class="flex items-center">
+    <% if icon? %>
       <span class="mr-2"><%= icon %></span>
     <% end %>
 
@@ -26,7 +26,7 @@
       <% end %>
     </div>
   </div>
-  <div class="flex ml-auto space-x-2 whitespace-nowrap sm:space-x-3">
+  <div class=" flex @md:ml-auto space-x-2 whitespace-nowrap @max-md:mt-2">
     <div class="flex-none"><%= buttons %></div>
   </div>
 </div>

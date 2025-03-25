@@ -1,6 +1,7 @@
-<%= render Viral::PageHeaderComponent.new(title: t(:"groups.create.title"), subtitle: t(:"groups.create.subtitle")) do |component| %>
-  <%= component.with_icon(name: "squares_plus", classes: "h-14 w-14 text-primary-700") %>
-<% end %>
+<%= render Viral::PageHeaderComponent.new(
+  title: t(:"groups.create.title"),
+  subtitle: t(:"groups.create.subtitle"),
+) %>
 <div data-controller="slugify" class="card">
   <%= form_with(model: @new_group, url: groups_path, method: :post) do |form| %>
     <div class="grid gap-4">

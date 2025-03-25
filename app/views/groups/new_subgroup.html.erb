@@ -1,6 +1,7 @@
-<%= render Viral::PageHeaderComponent.new(title: t(:'groups.new_subgroup.title'), subtitle: t(:'groups.new_subgroup.subtitle')) do |component| %>
-  <%= component.with_icon(name: "squares_plus", classes: "h-14 w-14 text-primary-700") %>
-<% end %>
+<%= render Viral::PageHeaderComponent.new(
+  title: t(:"groups.new_subgroup.title"),
+  subtitle: t(:"groups.new_subgroup.subtitle"),
+) %>
 
 <div
   data-controller="slugify"

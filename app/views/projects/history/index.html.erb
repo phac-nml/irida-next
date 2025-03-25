@@ -1,6 +1,7 @@
-<%= render Viral::PageHeaderComponent.new(title: t(:".title"), subtitle: t(:".subtitle")) do |component| %>
-  <%= component.with_icon(name: "list_bullet", classes: "h-14 w-14 text-primary-700") %>
-<% end %>
+<%= render Viral::PageHeaderComponent.new(
+  title: t(:".title"),
+  subtitle: t(:".subtitle"),
+) %>
 
 <div class="px-4">
   <%= turbo_frame_tag "history_modal" %>
