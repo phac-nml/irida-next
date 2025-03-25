@@ -24,7 +24,7 @@
     <% @pagy.series.each do |item| %>
       <li>
         <% if item.is_a?(Integer) %>
-          <%== a.(item, classes: active_link_classes) %>
+          <%== a.(item, classes: class_names(active_link_classes, invisible_link_classes)) %>
         <% elsif item.is_a?(String) %>
           <%= button_to item,
           nil,
@@ -38,7 +38,7 @@
           <%= button_to "...",
           nil,
           disabled: true,
-          class: disabled_link_classes,
+          class: class_names(disabled_link_classes, invisible_link_classes),
           data: {
             "aria-disabled": true,
           } %>

@@ -945,6 +945,7 @@ div.field_with_errors > :is(select) {
   --tw-bg-opacity: 1 !important;
   @apply bg-slate-300 dark:bg-slate-600;
   border-radius: 0.25rem;
+  min-width: 60px;
 }
 
 .scrollbar::-webkit-scrollbar-corner {

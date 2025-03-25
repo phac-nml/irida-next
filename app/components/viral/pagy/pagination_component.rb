@@ -21,6 +21,10 @@ module Viral
         "#{default_link_classes} text-primary-800 bg-primary-50 hover:bg-primary-100 hover:text-primary-700 dark:bg-slate-700 dark:text-white" # rubocop:disable Layout/LineLength
       end
 
+      def invisible_link_classes
+        '@max-md:invisible @max-md:w-0 @max-md:p-0 @max-md:border-none'
+      end
+
       private
 
       def default_link_classes
