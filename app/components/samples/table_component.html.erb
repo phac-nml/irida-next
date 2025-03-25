@@ -7,7 +7,7 @@
           whitespace-nowrap
         '
       >
-        <thead class='sticky top-0 z-10 text-xs uppercase'>
+        <thead class='@2xl:sticky @2xl:top-0 z-10 text-xs uppercase'>
           <tr
             class="
               border-b dark:border-slate-900 border-slate-200 dark:text-slate-400
@@ -18,7 +18,7 @@
               <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('sticky px-3 py-3 bg-slate-100 dark:bg-slate-900', 'left-0 min-w-56 max-w-56 z-10': index.zero?, 'left-56 z-10': index == 1)
+              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', '@2xl:sticky left-0 min-w-56 max-w-56 z-10': index.zero?, '@4xl:sticky left-56 z-10': index == 1)
                 ) do %>
                 <% if index.zero? and @abilities[:select_samples] %>
                   <%= check_box_tag "select-page",
@@ -63,7 +63,7 @@
               <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900 sticky right-0')
+              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900 @4xl:sticky right-0')
             ) do %>
                 <%= t(".action") %>
               <% end %>
@@ -82,7 +82,7 @@
                 <%= render_cell(
                 tag: index.zero? ? 'th' :'td',
                 scope: index.zero? ? 'row' : nil,
-                classes: class_names('px-3 py-3', 'sticky left-0 z-5 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-900': index.zero?, 'sticky z-5 left-56 bg-slate-50 dark:bg-slate-900': index == 1)
+                classes: class_names('px-3 py-3', '@2xl:sticky left-0 z-5 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-900': index.zero?, '@4xl:sticky z-5 left-56 bg-slate-50 dark:bg-slate-900': index == 1)
               ) do %>
                   <% if index.zero? && @abilities[:select_samples] %>
                     <%= check_box_tag "sample_ids[]",
@@ -144,7 +144,7 @@
               <% if @renders_row_actions %>
                 <%= render_cell(
                 tag: 'td',
-                classes: class_names('sticky right-0')
+                classes: class_names('@4xl:sticky right-0')
               ) do %>
                   <div class="px-3 py-2.5 bg-white dark:bg-slate-800 z-5 space-x-2 w-full">
                     <% if @row_actions[:edit] %>
@@ -183,7 +183,7 @@
           <% end %>
         </tbody>
         <% if @abilities[:select_samples] && @has_samples %>
-          <tfoot class="sticky bottom-0 z-10 bg-slate-100 dark:bg-slate-900">
+          <tfoot class="@2xl:sticky bottom-0 z-10 bg-slate-100 dark:bg-slate-900">
             <tr>
               <td
                 class="

@@ -813,6 +813,15 @@
   }
 }
 
+@utility fixed-table-component {
+  @media screen and (min-height: 500px) {
+    height: calc(100vh - 50px - 32px);
+    max-height: calc(100vh - 50px - 32px);
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 @layer utilities {
   body {
     height: 100vh;
@@ -925,13 +934,6 @@ div.field_with_errors > :is(select) {
 
 .table-container .empty_state_message {
   display: none;
-}
-
-.fixed-table-component {
-  height: calc(100vh - 50px - 32px);
-  max-height: calc(100vh - 50px - 32px);
-  display: flex;
-  flex-direction: column;
 }
 
 .scrollbar::-webkit-scrollbar {
