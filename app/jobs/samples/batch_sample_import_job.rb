@@ -42,19 +42,14 @@ module Samples
     private
 
     def handle_success(broadcast_target, response) # rubocop:disable Metrics/MethodLength
-      results = []
+      problems = []
       response.each do |key, value|
-        if value.is_a? Sample
-          results.push({ sample_name: key,
-                         sample_id: value.puid,
-                         completed: true,
-                         message: nil })
-        else
-          results.push({ sample_name: key,
-                         sample_id: nil,
-                         completed: false,
-                         message: value })
-        end
+        next if value.is_a? Sample
+
+        problems.push({ sample_name: key,
+                        sample_id: nil,
+                        completed: false,
+                        message: value })
       end
 
       Turbo::StreamsChannel.broadcast_replace_to(
@@ -64,7 +59,7 @@ module Samples
         locals: {
           type: :success,
           message: I18n.t('shared.samples.spreadsheet_imports.success.description'),
-          results:
+          problems:
         }
       )
     end

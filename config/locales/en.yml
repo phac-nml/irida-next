@@ -1973,7 +1973,9 @@ en:
           description: 'The sample import completed with the following errors:'
           ok_button: OK
         success:
-          description: The sample spreadsheet has been processed. See the response table for details.
+          description: The sample spreadsheet has been processed.
+          problems: The following samples had problems while processing.
+          problem_message: '%{path} %{message}'
           ok_button: OK
           success: Success
     workflow_executions:

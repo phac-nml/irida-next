@@ -6,23 +6,20 @@
 >
   <p class="mb-4 text-lg font-semibold text-slate-900 dark:text-white"><%= t(".description") %></p>
 
-  <%= viral_data_table(results, id: 'results_table') do |table| %>
-    <% table.with_column("Sample Name") do |row| %>
-      <%= row[:sample_name] %>
-    <% end %>
-    <% table.with_column("Completed") do |row| %>
-      <% if row[:completed] == true %>
-        <%= viral_icon(name: "check", classes: "w-2 h-2 text-green-500 dark:text-green-400") %>
-      <% else %>
-        <%= viral_icon(name: "x_mark", classes: "h-2 w-2 text-red-500 dark:text-red-400") %>
+  <% unless problems.empty? %>
+    <p class="mb-4 text-lg font-semibold text-slate-900 dark:text-white"><%= t(".problems") %></p>
+
+    <%= viral_data_table(problems, id: 'problems_table') do |table| %>
+      <% table.with_column("Sample Name") do |row| %>
+        <%= row[:sample_name] %>
+      <% end %>
+      <% table.with_column("Messages") do |row| %>
+        <% row[:message].each do |msg| %>
+          <%= t(".problem_message", path: msg[:path].join(" "), message: msg[:message]) %>
+        <% end %>
       <% end %>
     <% end %>
-    <% table.with_column("Sample ID") do |row| %>
-      <%= row[:sample_id] %>
-    <% end %>
-    <% table.with_column("message") do |row| %>
-      <%= row[:message] %>
-    <% end %>
+
   <% end %>
 
   <%= viral_button(state: :primary, data: { action: 'click->viral--dialog#close' }) do %>

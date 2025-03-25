@@ -45,7 +45,6 @@ export default class extends Controller {
 
   connect() {
     this.#disableTarget(this.sampleNameColumnTarget);
-    console.log("Has group value: " + this.groupValue)
     if (this.groupValue) {
       this.#disableTarget(this.projectPUIDColumnTarget);
     }
@@ -115,7 +114,6 @@ export default class extends Controller {
     this.submitButtonTarget.disabled = true;
   }
 
-
   #buildHeaderMap() {
     this.#header_map = {}
     this.#headers.forEach(h => {
@@ -130,10 +128,8 @@ export default class extends Controller {
   }
 
   #refreshInputOptionsForAllFields() {
-    console.log("in refresh fields")
     this.#refreshInputOptions(this.sampleNameColumnTarget, this.#curr_sample_name)
     if (this.groupValue) {
-      console.log("refreshing puid fields")
       this.#refreshInputOptions(this.projectPUIDColumnTarget, this.#curr_project_puid)
     }
     this.#refreshInputOptions(this.sampleDescriptionColumnTarget, this.#curr_sample_description)
