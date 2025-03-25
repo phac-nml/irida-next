@@ -82,9 +82,9 @@ class AttachmentsController < ApplicationController
   # Handles different attachable types like Sample, ProjectNamespace, and Group
   def attachable_authorization
     if @attachment.attachable.instance_of?(Sample) || @attachment.attachable.instance_of?(Namespaces::ProjectNamespace)
-      authorize! @attachment.attachable.project, to: :read
+      authorize! @attachment.attachable.project, to: :read?
     elsif @attachment.attachable.instance_of?(Group)
-      authorize! @attachment.attachable, to: :read
+      authorize! @attachment.attachable, to: :read?
     end
   end
 
