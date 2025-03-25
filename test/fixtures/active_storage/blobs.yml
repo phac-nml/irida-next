@@ -122,6 +122,8 @@ group1_attachment2_file_data_export_8_csv_blob: <%= ActiveStorage::FixtureSet.bl
 
 gasclustering_test_file_json_blob: <%= ActiveStorage::FixtureSet.blob filename: "s.mlst.json", service_name: "test" %>
 
+metadata_valid_csv_blob: <%= ActiveStorage::FixtureSet.blob filename: "valid.csv", service_name: "test" %>
+
 # ⬇️ attachment_test.rb files ⬇️
 # --------------------------------
 attachment_csv_blob: <%= ActiveStorage::FixtureSet.blob filename: "attachment_preview.csv", service_name: "test" %>

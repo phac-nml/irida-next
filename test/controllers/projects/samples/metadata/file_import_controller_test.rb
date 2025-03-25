@@ -10,7 +10,7 @@ module Projects
           sign_in users(:john_doe)
           @namespace = groups(:group_one)
           @project = projects(:project1)
-          @csv = fixture_file_upload('test/fixtures/files/metadata/valid.csv')
+          @blob_file = active_storage_blobs(:metadata_valid_csv_blob)
         end
 
         test 'should enqueue a Samples::MetadataImportJob' do
@@ -18,7 +18,7 @@ module Projects
             post namespace_project_samples_file_import_path(@namespace, @project, format: :turbo_stream),
                  params: {
                    file_import: {
-                     file: @csv,
+                     file: @blob_file.signed_id,
                      sample_id_column: 'sample_name'
                    },
                    broadcast_target: 'a_broadcast_target'
