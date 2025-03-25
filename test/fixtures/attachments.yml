@@ -250,7 +250,7 @@ samples_shared_workflow_execution_completed_output_attachment:
   puid: INXT_ATT_AAAAAAAAAV
 
 samples_group_shared_workflow_execution_completed_output_attachment:
-  metadata: {"type": "assembly", "format": "fasta", "compression": "gzip"}
+  metadata: { "type": "assembly", "format": "fasta", "compression": "gzip" }
   attachable: sample47_workflow_execution_completed_group_shared2 (SamplesWorkflowExecution)
   puid: INXT_ATT_AAAAAAAAAW
 
@@ -391,38 +391,39 @@ gasclusteringAttachment:
   attachable: sample32 (Sample)
   puid: INXT_ATT_ABAAAAAAAN
   created_at: <%= 2.hours.ago %>
+
 attachmentCSV:
   metadata: { "compression": "none", "format": "csv" }
-  attachable: project2_namespace (Namespace)
+  attachable: project1_namespace (Namespace)
   puid: INXT_ATT_ABAAAAAABA
   created_at: <%= 2.hours.ago %>
 
 attachmentText:
   metadata: { "compression": "none", "format": "text" }
-  attachable: project2_namespace (Namespace)
+  attachable: project1_namespace (Namespace)
   puid: INXT_ATT_ABAAAAAABB
   created_at: <%= 2.hours.ago %>
 
 attachmentJSON:
   metadata: { "compression": "none", "format": "json" }
-  attachable: project2_namespace (Namespace)
+  attachable: project1_namespace (Namespace)
   puid: INXT_ATT_ABAAAAAABC
   created_at: <%= 2.hours.ago %>
 
 attachmentSpreadsheet:
   metadata: { "compression": "none", "format": "spreadsheet" }
-  attachable: project2_namespace (Namespace)
+  attachable: project1_namespace (Namespace)
   puid: INXT_ATT_ABAAAAAABD
   created_at: <%= 2.hours.ago %>
 
 attachmentImage:
   metadata: { "compression": "none", "format": "image" }
-  attachable: project2_namespace (Namespace)
+  attachable: project1_namespace (Namespace)
   puid: INXT_ATT_ABAAAAAABE
   created_at: <%= 2.hours.ago %>
 
 attachmentTSV:
   metadata: { "compression": "none", "format": "tsv" }
-  attachable: project2_namespace (Namespace)
+  attachable: project1_namespace (Namespace)
   puid: INXT_ATT_ABAAAAAABF
   created_at: <%= 2.hours.ago %>
