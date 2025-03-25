@@ -1950,7 +1950,6 @@ en:
         tooltip: Metadata display settings
       spreadsheet_imports:
         dialog:
-          available: Available
           description: Importing a sample spreadsheet allows multiple samples with or without metadata fields to be added at once.
           file: File
           file_help: CSV, TSV, XLS or XLSX.
@@ -1965,7 +1964,6 @@ en:
           select_project_puid_column: Select a Project ID Column
           select_sample_description_column: Select a Sample Description Column
           select_sample_name_column: Select a Sample Name Column
-          selected: Selected
           spinner_message: Importing samples, this might take a while...
           submit_button: Import Samples
           title: Upload Samples
