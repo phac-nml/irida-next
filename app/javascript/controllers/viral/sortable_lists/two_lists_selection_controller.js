@@ -49,9 +49,12 @@ export default class extends Controller {
       this.#setInitialSelectAllState(this.availableList, this.addAllTarget);
       this.#setInitialSelectAllState(this.selectedList, this.removeAllTarget);
 
-      // require specific submit button logic for edit metadata template
+      // require specific submit button logic for lists that can vary
+      // between states upon loading (such as edit metadata template)
       if (this.selectedList.querySelectorAll("li").length > 0) {
         this.#setSubmitButtonDisableState(false);
+      } else {
+        this.#setSubmitButtonDisableState(true);
       }
 
       this.buttonStateListener = this.#checkStates.bind(this);
@@ -267,7 +270,6 @@ export default class extends Controller {
         // set option when no option was selected
         this.#setSelectedOption(event.target);
       }
-      this.#checkStates();
     } else if (event.key === "ArrowRight") {
       // navigate to right side list
       event.preventDefault();
@@ -296,7 +298,13 @@ export default class extends Controller {
           ? event.target.previousElementSibling
           : event.target.nextElementSibling;
       this.#navigateListUpAndDown(event.key, nextOption);
+    } else if (event.key === "Tab" && this.#selectedOption) {
+      // de-select option and allow tab to function as expected
+      event.preventDefault();
+      this.#removeSelectedAttributes();
     }
+    console.log("hi?");
+    this.#checkStates();
   }
 
   #navigateListUpAndDown(eventKey, nextOption) {
