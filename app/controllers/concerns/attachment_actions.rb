@@ -127,6 +127,6 @@ module AttachmentActions # rubocop:disable Metrics/ModuleLength
   end
 
   def attachment_params
-    params.require(:attachment).permit(:attachable_id, :attachable_type, files: [])
+    params.expect(attachment: [:attachable_id, :attachable_type, { files: [] }])
   end
 end
