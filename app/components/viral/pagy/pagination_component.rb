@@ -18,11 +18,11 @@ module Viral
       end
 
       def disabled_link_classes
-        "#{default_link_classes} cursor-not-allowed opacity-50 text-slate-600 bg-slate-50 dark:bg-slate-700 dark:text-slate-400"
+        "#{default_link_classes} cursor-not-allowed opacity-50 text-slate-600 bg-slate-50 dark:bg-slate-700 dark:text-slate-400" # rubocop:disable Layout/LineLength
       end
 
       def current_link_classes
-        "#{default_link_classes} cursor-not-allowed text-primary-800 bg-primary-50 hover:bg-primary-100 hover:text-primary-700 dark:bg-slate-700 dark:text-white" # rubocop:disable Layout/LineLength
+        "#{default_link_classes} cursor-not-allowed text-primary-800 bg-primary-50 dark:bg-slate-700 dark:text-white"
       end
 
       def invisible_link_classes
