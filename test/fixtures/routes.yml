@@ -618,3 +618,13 @@ projectMetadata_namespace_route:
   name: Group Metadata / Project Metadata
   path: group-metadata/project-metadata
   source: projectMetadata_namespace (Namespace)
+
+metadata_doe_namespace_route:
+  name: metadata.doe@localhost
+  path: metadata.doe_at_localhost
+  source: metadata_doe_namespace (Namespace)
+
+metadata_doe_projectMetadata2_namespace_route:
+  name: metadata.doe@localhost / Project Metadata 2
+  path: metadata.doe_at_localhost/project-metadata-2
+  source: metadata_doe_projectMetadata2_namespace (Namespace)

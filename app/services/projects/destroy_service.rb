@@ -12,10 +12,9 @@ module Projects
 
       create_activities if project.namespace.deleted?
 
-      return unless project.namespace.deleted? && project.namespace.type != Namespaces::UserNamespace.sti_name
+      return unless project.namespace.deleted? && @project.parent.type == 'Group'
 
-      update_samples_count(deleted_samples_count) if @project.parent.type == 'Group'
-
+      update_samples_count(deleted_samples_count)
       project.namespace.update_metadata_summary_by_namespace_deletion
     end
 
