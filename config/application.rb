@@ -66,8 +66,8 @@ module Irida
     config.auth_config = config_for(Rails.root.join('config/authentication/auth_config.yml'))
 
     # GA4GH WES Configuration
-    config.ga4gh_wes_server_endpoint = if Rails.application.credentials.ga4gh_wes.nil?
-                                         nil
+    config.ga4gh_wes_server_endpoint = if Rails.application.credentials.ga4gh_wes.nil? || ENV.key?('GA4GH_WES_URL')
+                                         ENV.fetch('GA4GH_WES_URL', nil)
                                        else
                                          Rails.application.credentials.dig(:ga4gh_wes, :server_url_endpoint)
                                        end

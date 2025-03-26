@@ -4,6 +4,10 @@
 
 Capybara.server = :puma, { Silent: true }
 
+Capybara.server_host = '0.0.0.0' if ENV.key?('BROWSERLESS_HOST')
+
+Capybara.app_host = 'http://rails-app' if ENV.key?('BROWSERLESS_HOST')
+
 # Don't wait too long in `have_xyz` matchers
 Capybara.default_max_wait_time = 20.seconds
 
