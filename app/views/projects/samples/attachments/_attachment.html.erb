@@ -4,7 +4,7 @@
     bg-white border-b border-slate-200 dark:bg-slate-800 dark:border-slate-700
   "
 >
-  <% if allowed_to?(:update_sample?, @project) %>
+  <% if @allowed_to[:update_sample] %>
     <td class="px-6 py-4">
       <%= check_box_tag "attachment_ids[]",
       (
@@ -98,7 +98,7 @@
   </td>
 
   <td class="px-6 py-4">
-    <% if allowed_to?(:destroy_attachment?, @sample) %>
+    <% if @allowed_to[:destroy_attachment] %>
       <%= link_to(
         t(".delete"),
         namespace_project_sample_attachment_new_destroy_path(

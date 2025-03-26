@@ -8,6 +8,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   before_action :group, only: %i[activity edit show destroy update transfer]
   before_action :authorized_namespaces, except: %i[index show destroy]
   before_action :current_page
+  before_action :group_edit_view_authorizations, only: %i[edit]
 
   def index
     redirect_to dashboard_groups_path
@@ -113,6 +114,13 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   end
 
   private
+
+  def group_edit_view_authorizations
+    @allowed_to = {
+      destroy: allowed_to?(:destroy?, @group),
+      transfer: allowed_to?(:transfer?, @group)
+    }
+  end
 
   def set_default_sort
     @q.sorts = 'created_at desc' if @q.sorts.empty?

@@ -19,11 +19,11 @@
       <%= render "change_path", project: @project %>
     <% end %>
 
-    <% if allowed_to?(:transfer?, @project) %>
+    <% if @allowed_to[:transfer] %>
       <%= render "transfer", project: @project %>
     <% end %>
 
-    <% if allowed_to?(:destroy?, @project) %>
+    <% if @allowed_to[:destroy] %>
       <%= render "destroy", project: @project %>
     <% end %>
   </div>

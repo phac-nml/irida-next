@@ -8,8 +8,8 @@
     select_workflow_executions: true,
   },
   row_actions: {
-    cancel: true,
-    destroy: true,
+    cancel: @allowed_to[:cancel],
+    destroy: @allowed_to[:destroy],
   },
   empty: {
     title: t(:".empty.title"),

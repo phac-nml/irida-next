@@ -15,7 +15,7 @@
       "
     >
       <tr>
-        <% if allowed_to?(:update_sample?, @project) %>
+        <% if @allowed_to[:update_sample] %>
           <th aria-hidden="true" class="px-6 py-3"></th>
         <% end %>
         <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.puid") %></th>

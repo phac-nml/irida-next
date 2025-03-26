@@ -26,7 +26,7 @@ module Projects
     end
 
     def workflow_execution_update_params
-      params.require(:workflow_execution).permit(:name)
+      params.expect(workflow_execution: [:name])
     end
 
     def load_workflows
@@ -62,6 +62,15 @@ module Projects
 
     def redirect_path
       namespace_project_workflow_executions_path
+    end
+
+    private
+
+    def set_authorizations
+      @allowed_to = {
+        cancel: allowed_to?(:update?, namespace),
+        destroy: allowed_to?(:update?, namespace)
+      }
     end
   end
 end

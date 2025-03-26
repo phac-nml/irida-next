@@ -10,6 +10,7 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
     before_action proc { metadata_template }, only: %i[destroy edit show update]
     before_action proc { metadata_template_fields }, only: %i[create new edit update]
     before_action proc { metadata_templates_ancestral }, only: %i[list]
+    before_action proc { set_authorizations }, only: %i[index]
   end
 
   def index
@@ -127,6 +128,15 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
   end
 
   private
+
+  def set_authorizations
+    @allowed_to = {
+      update_metadata_templates:
+      allowed_to?(:update_metadata_templates?, @namespace),
+      destroy_metadata_templates:
+      allowed_to?(:destroy_metadata_templates?, @namespace)
+    }
+  end
 
   def load_namespace_metadata_templates
     authorized_scope(MetadataTemplate, type: :relation, scope_options: { namespace: @namespace })

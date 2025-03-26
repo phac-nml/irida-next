@@ -6,6 +6,7 @@ module Projects
     class AttachmentsController < Projects::Samples::ApplicationController
       before_action :attachment, only: %i[destroy]
       before_action :new_destroy_params, only: %i[new_destroy]
+      before_action :set_authorizations, only: %i[destroy create]
 
       def new
         authorize! @project, to: :update_sample?
@@ -52,6 +53,7 @@ module Projects
         authorize! @sample, to: :destroy_attachment?
 
         @destroyed_attachments = ::Attachments::DestroyService.new(@sample, @attachment, current_user).execute
+
         respond_to do |format|
           if @destroyed_attachments.count.positive?
             status = destroy_status(@attachment, @destroyed_attachments.length)
@@ -72,8 +74,15 @@ module Projects
 
       private
 
+      def set_authorizations
+        @allowed_to = {
+          destroy_attachment: allowed_to?(:destroy_attachment?, @sample),
+          update_sample: allowed_to?(:update_sample?, @project)
+        }
+      end
+
       def attachment_params
-        params.require(:attachment).permit(:attachable_id, :attachable_type, files: [])
+        params.expect(attachment: [:attachable_id, :attachable_type, { files: [] }])
       end
 
       def attachment

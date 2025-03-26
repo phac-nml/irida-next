@@ -28,11 +28,11 @@ class WorkflowExecutionsController < ApplicationController
   end
 
   def workflow_execution_params
-    params.require(:workflow_execution).permit(workflow_execution_params_attributes)
+    params.expect(workflow_execution: workflow_execution_params_attributes)
   end
 
   def workflow_execution_update_params
-    params.require(:workflow_execution).permit(:name)
+    params.expect(workflow_execution: [:name])
   end
 
   def workflow_execution_params_attributes
@@ -77,5 +77,12 @@ class WorkflowExecutionsController < ApplicationController
 
   def redirect_path
     workflow_executions_path
+  end
+
+  def set_authorizations
+    @allowed_to = {
+      cancel: true,
+      destroy: true
+    }
   end
 end

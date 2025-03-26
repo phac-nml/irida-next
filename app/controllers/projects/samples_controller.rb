@@ -11,20 +11,13 @@ module Projects
     before_action :current_page
     before_action :query, only: %i[index search select]
     before_action :current_metadata_template, only: %i[index]
+    before_action :samples_index_view_authorizations, only: %i[index]
+    before_action :sample_show_view_authorizations, only: %i[show]
 
     def index
       @timestamp = DateTime.current
       @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
       @samples = @samples.includes(project: { namespace: :parent })
-      @allowed_to = {
-        submit_workflow: allowed_to?(:submit_workflow?, @project),
-        clone_sample: allowed_to?(:clone_sample?, @project),
-        transfer_sample: allowed_to?(:transfer_sample?, @project),
-        export_data: allowed_to?(:export_data?, @project),
-        update_sample_metadata: allowed_to?(:update_sample_metadata?, @project.namespace),
-        create_sample: allowed_to?(:create_sample?, @project),
-        destroy_sample: allowed_to?(:destroy_sample?, @project)
-      }
       @has_samples = @project.samples.size.positive?
     end
 
@@ -109,6 +102,27 @@ module Projects
     end
 
     private
+
+    def samples_index_view_authorizations
+      @allowed_to = {
+        submit_workflow: allowed_to?(:submit_workflow?, @project),
+        clone_sample: allowed_to?(:clone_sample?, @project),
+        transfer_sample: allowed_to?(:transfer_sample?, @project),
+        export_data: allowed_to?(:export_data?, @project),
+        update_sample_metadata: allowed_to?(:update_sample_metadata?, @project.namespace),
+        create_sample: allowed_to?(:create_sample?, @project),
+        destroy_sample: allowed_to?(:destroy_sample?, @project),
+        update_sample: allowed_to?(:update_sample?, @project)
+      }
+    end
+
+    def sample_show_view_authorizations
+      @allowed_to = {
+        destroy_sample: allowed_to?(:destroy_sample?, @project),
+        destroy_attachment: allowed_to?(:destroy_attachment?, @sample),
+        update_sample: allowed_to?(:update_sample?, @project)
+      }
+    end
 
     def sample
       @sample = Sample.find_by(id: params[:id] || params[:sample_id], project_id: project.id) || not_found

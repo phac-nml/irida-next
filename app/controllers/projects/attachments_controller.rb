@@ -8,6 +8,13 @@ module Projects
 
     private
 
+    def set_authorizations
+      @allowed_to = {
+        create_attachment: allowed_to?(:create_attachment?, @project),
+        destroy_attachment: allowed_to?(:destroy_attachment?, @project)
+      }
+    end
+
     def set_namespace
       @namespace = @project.namespace
     end

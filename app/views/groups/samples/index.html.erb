@@ -9,7 +9,7 @@
   <%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @group.class.model_name.human, namespace_name: @group.name)) do |component| %>
     <% component.with_buttons do %>
       <div class="flex items-center space-x-2">
-        <% if allowed_to?(:submit_workflow?, @group) && @pipelines_enabled %>
+        <% if @allowed_to[:submit_workflow] && @pipelines_enabled %>
           <%= link_to pipeline_selection_workflow_executions_submissions_path(namespace_id: @group.id),
         data: { turbo_stream: true, controller: "action-link", action_link_required_value: 1, action: "turbo:morph-element->action-link#idempotentConnect", },
                   class: "button button--size-default button--state-default action-link" do %>
@@ -17,7 +17,7 @@
             <span class="sr-only"><%= t(".workflows.button_sr") %></span>
           <% end %>
         <% end %>
-        <% if allowed_to?(:export_data?, @group) %>
+        <% if @allowed_to[:export_data] %>
           <%= viral_dropdown(label: t(".create_export_button.label"), aria: { label: t('.create_export_button.label') }, caret: true, action_link: true, action_link_value: 1, classes: "font-normal button button--size-default button--state-default action-link") do |dropdown| %>
             <% if @group.metadata_fields.empty? %>
               <% dropdown.with_item(
@@ -28,7 +28,7 @@
                 },
                 class:
                   "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
+                                 border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
               ) %>
             <% else %>
               <% dropdown.with_item(
@@ -47,7 +47,7 @@
               },
             ) %>
           <% end %>
-          <% if allowed_to?(:update_sample_metadata?, @group) && @has_samples %>
+          <% if @allowed_to[:update_sample_metadata] && @has_samples %>
             <%= link_to t("groups.samples.index.import_metadata_button"),
             new_group_samples_file_import_path,
             data: {
@@ -63,7 +63,7 @@
   <% if @has_samples %>
     <div class="flex @max-2xl:flex-col @max-2xl:space-y-2 mb-2">
       <div class="inline-flex grow space-x-2">
-        <% if allowed_to?(:submit_workflow?, @group) || allowed_to?(:export_data?, @group) %>
+        <% if @allowed_to[:submit_workflow] || @allowed_to[:export_data] %>
           <%= form_with(
                   url: select_group_samples_url,
                   method: :get,

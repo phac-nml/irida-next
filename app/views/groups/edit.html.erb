@@ -27,11 +27,11 @@
       <%= render "edit_advanced_path", group: @group %>
     <% end %>
 
-    <% if allowed_to?(:transfer?, @group) %>
+    <% if @allowed_to[:transfer] %>
       <%= render "edit_advanced_transfer", group: @group %>
     <% end %>
 
-    <% if allowed_to?(:destroy?, @group) %>
+    <% if @allowed_to[:destroy] %>
       <%= render "edit_advanced_delete", group: @group %>
     <% end %>
   </div>

@@ -8,6 +8,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     before_action :set_default_tab, only: :show
     before_action :current_page, only: %i[show index]
     before_action :workflow_execution, only: %i[show cancel destroy update edit]
+    before_action proc { set_authorizations }, only: %i[index]
   end
 
   TABS = %w[summary params samplesheet files].freeze

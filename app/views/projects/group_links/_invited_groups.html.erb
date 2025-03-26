@@ -4,8 +4,7 @@
   @access_levels,
   @q,
   abilities: {
-    update_namespace:
-      allowed_to?(:update_namespace_with_group_link?, @namespace),
-    unlink_group: allowed_to?(:unlink_namespace_with_group?, @namespace),
+    update_namespace: @allowed_to[:update_namespace_with_group_link],
+    unlink_group: @allowed_to[:unlink_group],
   },
 ) %>

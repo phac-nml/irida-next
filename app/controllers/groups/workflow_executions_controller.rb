@@ -68,5 +68,14 @@ module Groups
     def redirect_path
       group_workflow_executions_path
     end
+
+    private
+
+    def set_authorizations
+      @allowed_to = {
+        cancel: allowed_to?(:update?, namespace),
+        destroy: allowed_to?(:update?, namespace)
+      }
+    end
   end
 end
