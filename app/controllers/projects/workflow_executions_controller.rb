@@ -11,6 +11,24 @@ module Projects
 
     private
 
+    def set_authorizations
+      @allowed_to = {
+        export_data: allowed_to?(:export_data?, @project),
+        cancel: allowed_to?(:update?, namespace),
+        destroy: allowed_to?(:update?, namespace),
+        update: allowed_to?(:update?, namespace)
+      }
+    end
+
+    def set_show_view_authorizations
+      @allowed_to = {
+        export_data: allowed_to?(:export_data?, @project),
+        cancel: allowed_to?(:cancel?, @workflow_execution),
+        destroy: allowed_to?(:destroy?, @workflow_execution),
+        update: allowed_to?(:update?, @workflow_execution)
+      }
+    end
+
     def namespace
       @namespace = @project.namespace
     end
@@ -62,15 +80,6 @@ module Projects
 
     def redirect_path
       namespace_project_workflow_executions_path
-    end
-
-    private
-
-    def set_authorizations
-      @allowed_to = {
-        cancel: allowed_to?(:update?, namespace),
-        destroy: allowed_to?(:update?, namespace)
-      }
     end
   end
 end

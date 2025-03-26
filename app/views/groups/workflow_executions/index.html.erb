@@ -25,7 +25,7 @@
 <% end %>
 <div class="flow-root">
   <div class="flex mb-2">
-    <% if allowed_to?(:export_data?, @namespace) %>
+    <% if @allowed_to[:export_data] %>
       <div class="inline-flex grow space-x-2">
         <%= search_form_for(
                 @q,

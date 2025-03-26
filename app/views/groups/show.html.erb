@@ -7,7 +7,7 @@
     ) %>
   <% end %>
   <%= component.with_buttons do %>
-    <% if allowed_to?(:new?, @group) %>
+    <% if @allowed_to[:create_subgroup_or_project] %>
       <%= link_to t(:"groups.show.create_subgroup_button"),
       new_group_path(parent_id: @group.id),
       class: "button button--size-default button--state-default" %>

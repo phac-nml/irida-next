@@ -47,7 +47,7 @@
           class: "button button--state-default button--size-default mr-1",
         ) %>
       <% end %>
-      <% if allowed_to?(:update?, @workflow_execution) %>
+      <% if @allowed_to[:update] %>
         <%= link_to(
           t("workflow_executions.show.edit_button"),
           edit_workflow_execution_path(id: @workflow_execution.id),

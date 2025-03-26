@@ -134,7 +134,9 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
       update_metadata_templates:
       allowed_to?(:update_metadata_templates?, @namespace),
       destroy_metadata_templates:
-      allowed_to?(:destroy_metadata_templates?, @namespace)
+      allowed_to?(:destroy_metadata_templates?, @namespace),
+      create_metadata_templates:
+      allowed_to?(:create_metadata_templates?, @namespace)
     }
   end
 

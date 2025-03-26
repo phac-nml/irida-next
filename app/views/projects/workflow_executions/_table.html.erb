@@ -6,7 +6,7 @@
   namespace: namespace,
   search_params: @search_params,
   abilities: {
-    select_workflow_executions: allowed_to?(:export_data?, namespace),
+    select_workflow_executions: @allowed_to[:export_data],
   },
   row_actions: {
     cancel: @allowed_to[:cancel],
