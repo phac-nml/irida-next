@@ -79,7 +79,7 @@ class WorkflowExecutionsController < ApplicationController
     workflow_executions_path
   end
 
-  def set_authorizations
+  def view_authorizations
     @allowed_to = {
       export_data: true,
       cancel: true,
@@ -88,7 +88,7 @@ class WorkflowExecutionsController < ApplicationController
     }
   end
 
-  def set_show_view_authorizations
-    set_authorizations
+  def show_view_authorizations
+    view_authorizations
   end
 end

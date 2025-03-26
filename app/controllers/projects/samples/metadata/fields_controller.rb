@@ -7,7 +7,7 @@ module Projects
       class FieldsController < Projects::Samples::ApplicationController # rubocop:disable Metrics/ClassLength
         respond_to :turbo_stream
 
-        before_action :set_authorizations, only: %i[create update]
+        before_action :view_authorizations, only: %i[create update]
 
         # Param received as:
         # params: {sample: {create_fields: {key1: value1, key2: value2, ...}}}
@@ -79,18 +79,18 @@ module Projects
 
         private
 
-        def set_authorizations
+        def view_authorizations
           @allowed_to = { update_sample: allowed_to?(
             :update_sample_metadata?, @project
           ) }
         end
 
         def create_field_params
-          params.require(:sample).permit(create_fields: {})
+          params.expect(sample: [create_fields: {}])
         end
 
         def update_field_params
-          params.require(:sample).permit(update_field: { key: {}, value: {} })
+          params.expect(sample: [update_field: { key: {}, value: {} }])
         end
 
         def get_create_status(added_keys, existing_keys)

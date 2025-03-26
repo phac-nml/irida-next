@@ -12,7 +12,7 @@ module Projects
     private
 
     def bot_params
-      params.require(:bot).permit(:id, :token_name, :access_level, :expires_at, scopes: [])
+      params.expect(bot: [:id, :token_name, :access_level, :expires_at, { scopes: [] }])
     end
 
     protected

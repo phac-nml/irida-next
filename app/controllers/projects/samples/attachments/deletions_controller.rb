@@ -7,7 +7,7 @@ module Projects
       class DeletionsController < Projects::Samples::ApplicationController
         respond_to :turbo_stream
 
-        before_action :set_authorizations, only: %i[destroy]
+        before_action :view_authorizations, only: %i[destroy]
 
         def new
           authorize! @sample, to: :destroy_attachment?
@@ -45,7 +45,7 @@ module Projects
 
         private
 
-        def set_authorizations
+        def view_authorizations
           @allowed_to = {
             destroy_attachment: allowed_to?(:destroy_attachment?, @sample),
             update_sample: allowed_to?(:update_sample?, @project)

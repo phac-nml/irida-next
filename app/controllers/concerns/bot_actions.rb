@@ -10,7 +10,7 @@ module BotActions
     before_action proc { bot_account }, only: %i[destroy destroy_confirmation]
     before_action proc { bot_type }, only: %i[create]
     before_action proc { bot_accounts }
-    before_action proc { set_authorizations }, only: %i[index]
+    before_action proc { view_authorizations }, only: %i[index]
   end
 
   def index
@@ -84,7 +84,7 @@ module BotActions
 
   private
 
-  def set_authorizations
+  def view_authorizations
     @allowed_to = {
       generate_bot_personal_access_token:
       allowed_to?(:generate_bot_personal_access_token?, @namespace),

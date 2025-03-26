@@ -6,7 +6,7 @@ module Projects
     class AttachmentsController < Projects::Samples::ApplicationController
       before_action :attachment, only: %i[destroy]
       before_action :new_destroy_params, only: %i[new_destroy]
-      before_action :set_authorizations, only: %i[destroy create]
+      before_action :view_authorizations, only: %i[destroy create]
 
       def new
         authorize! @project, to: :update_sample?
@@ -74,7 +74,7 @@ module Projects
 
       private
 
-      def set_authorizations
+      def view_authorizations
         @allowed_to = {
           destroy_attachment: allowed_to?(:destroy_attachment?, @sample),
           update_sample: allowed_to?(:update_sample?, @project)

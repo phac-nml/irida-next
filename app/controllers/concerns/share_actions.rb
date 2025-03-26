@@ -10,7 +10,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
     before_action proc { namespace_group_link }, only: %i[destroy update]
     before_action proc { tab }, only: %i[index new create]
     before_action proc { namespace_linkable_groups }, only: %i[new create]
-    before_action :set_authorizations, only: %i[index]
+    before_action :view_authorizations, only: %i[index]
   end
 
   def index
@@ -132,7 +132,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
 
   private
 
-  def set_authorizations
+  def view_authorizations
     @allowed_to = {
       update_namespace_with_group_link: allowed_to?(:update_namespace_with_group_link?, @namespace),
       unlink_group: allowed_to?(:unlink_namespace_with_group?, @namespace)

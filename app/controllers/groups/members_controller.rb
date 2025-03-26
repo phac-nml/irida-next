@@ -8,7 +8,7 @@ module Groups
     before_action :current_page
 
     def member_params
-      params.require(:member).permit(:user_id, :access_level, :type, :namespace_id, :created_by_id, :expires_at)
+      params.expect(member: %i[user_id access_level type namespace_id created_by_id expires_at])
     end
 
     private

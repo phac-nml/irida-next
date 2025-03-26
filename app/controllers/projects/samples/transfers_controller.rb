@@ -26,7 +26,7 @@ module Projects
       private
 
       def transfer_params
-        params.require(:transfer).permit(:new_project_id, sample_ids: [])
+        params.expect(transfer: [:new_project_id, { sample_ids: [] }])
       end
 
       def projects

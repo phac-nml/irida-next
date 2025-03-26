@@ -6,7 +6,7 @@ module Groups
     include ShareActions
 
     def group_link_params
-      params.require(:namespace_group_link).permit(:group_id, :group_access_level, :expires_at)
+      params.expect(namespace_group_link: %i[group_id group_access_level expires_at])
     end
 
     private

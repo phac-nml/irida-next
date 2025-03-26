@@ -7,7 +7,7 @@ module Projects
       class ConcatenationsController < Projects::Samples::ApplicationController
         respond_to :turbo_stream
 
-        before_action :set_authorizations, only: %i[create]
+        before_action :view_authorizations, only: %i[create]
 
         def new
           authorize! @project, to: :update_sample?
@@ -35,7 +35,7 @@ module Projects
 
         private
 
-        def set_authorizations
+        def view_authorizations
           @allowed_to = { update_sample: allowed_to?(:update_sample?, @project),
                           destroy_attachment: allowed_to?(:destroy_attachment?, @sample) }
         end

@@ -12,7 +12,7 @@ module Groups
 
     private
 
-    def set_authorizations
+    def view_authorizations
       @allowed_to = {
         export_data: allowed_to?(:export_data?, namespace),
         cancel: allowed_to?(:update?, namespace),
@@ -20,7 +20,7 @@ module Groups
       }
     end
 
-    def set_show_view_authorizations
+    def show_view_authorizations
       @allowed_to = {
         export_data: allowed_to?(:export_data?, namespace),
         cancel: allowed_to?(:update?, @workflow_execution),

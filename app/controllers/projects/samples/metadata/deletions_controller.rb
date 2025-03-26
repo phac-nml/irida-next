@@ -7,7 +7,7 @@ module Projects
       class DeletionsController < Projects::Samples::ApplicationController
         respond_to :turbo_stream
 
-        before_action :set_authorizations, only: %i[destroy]
+        before_action :view_authorizations, only: %i[destroy]
 
         def new
           authorize! @sample.project, to: :update_sample?
@@ -30,14 +30,14 @@ module Projects
 
         private
 
-        def set_authorizations
+        def view_authorizations
           @allowed_to = {
             update_sample: allowed_to?(:update_sample?, @project)
           }
         end
 
         def deletion_params
-          params.require(:sample).permit(metadata: {})
+          params.expect(sample: [metadata: {}])
         end
 
         def get_destroy_status(deleted_keys)

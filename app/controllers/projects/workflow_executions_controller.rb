@@ -11,7 +11,7 @@ module Projects
 
     private
 
-    def set_authorizations
+    def view_authorizations
       @allowed_to = {
         export_data: allowed_to?(:export_data?, @project),
         cancel: allowed_to?(:update?, namespace),
@@ -20,7 +20,7 @@ module Projects
       }
     end
 
-    def set_show_view_authorizations
+    def show_view_authorizations
       @allowed_to = {
         export_data: allowed_to?(:export_data?, @project),
         cancel: allowed_to?(:cancel?, @workflow_execution),

@@ -8,8 +8,8 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   before_action :group, only: %i[activity edit show destroy update transfer]
   before_action :authorized_namespaces, except: %i[index show destroy]
   before_action :current_page
-  before_action :group_edit_view_authorizations, only: %i[edit]
-  before_action :group_show_view_authorizations, only: %i[show]
+  before_action :edit_view_authorizations, only: %i[edit]
+  before_action :show_view_authorizations, only: %i[show]
 
   def index
     redirect_to dashboard_groups_path
@@ -116,14 +116,14 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   private
 
-  def group_edit_view_authorizations
+  def edit_view_authorizations
     @allowed_to = {
       destroy: allowed_to?(:destroy?, @group),
       transfer: allowed_to?(:transfer?, @group)
     }
   end
 
-  def group_show_view_authorizations
+  def show_view_authorizations
     @allowed_to = {
       create_subgroup_or_project: allowed_to?(:new?, @group)
     }

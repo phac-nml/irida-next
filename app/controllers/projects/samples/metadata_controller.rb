@@ -4,7 +4,7 @@ module Projects
   module Samples
     # Controller actions for Project Samples Metadata
     class MetadataController < Projects::Samples::ApplicationController
-      before_action :set_authorizations, only: %i[destroy]
+      before_action :view_authorizations, only: %i[destroy]
 
       def new
         render turbo_stream: turbo_stream.update('sample_modal',
@@ -47,7 +47,7 @@ module Projects
 
       private
 
-      def set_authorizations
+      def view_authorizations
         @allowed_to = { update_sample: allowed_to?(:update_sample?, @project) }
       end
 

@@ -11,7 +11,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
     before_action proc { access_levels }
     before_action proc { context_crumbs }, only: %i[index new]
     before_action proc { tab }, only: %i[index new create]
-    before_action proc { set_authorizations }, only: %i[index]
+    before_action proc { view_authorizations }, only: %i[index]
   end
 
   def index
@@ -115,7 +115,7 @@ module MembershipActions # rubocop:disable Metrics/ModuleLength
 
   private
 
-  def set_authorizations
+  def view_authorizations
     @allowed_to = {
       link_namespace_with_group: allowed_to?(:link_namespace_with_group?, @namespace),
       create_member: allowed_to?(:create_member?, @namespace),

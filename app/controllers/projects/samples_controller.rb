@@ -11,8 +11,8 @@ module Projects
     before_action :current_page
     before_action :query, only: %i[index search select]
     before_action :current_metadata_template, only: %i[index]
-    before_action :samples_index_view_authorizations, only: %i[index]
-    before_action :sample_show_view_authorizations, only: %i[show]
+    before_action :index_view_authorizations, only: %i[index]
+    before_action :show_view_authorizations, only: %i[show]
 
     def index
       @timestamp = DateTime.current
@@ -103,7 +103,7 @@ module Projects
 
     private
 
-    def samples_index_view_authorizations
+    def index_view_authorizations
       @allowed_to = {
         submit_workflow: allowed_to?(:submit_workflow?, @project),
         clone_sample: allowed_to?(:clone_sample?, @project),
@@ -116,7 +116,7 @@ module Projects
       }
     end
 
-    def sample_show_view_authorizations
+    def show_view_authorizations
       @allowed_to = {
         destroy_sample: allowed_to?(:destroy_sample?, @project),
         destroy_attachment: allowed_to?(:destroy_attachment?, @sample),
@@ -129,7 +129,7 @@ module Projects
     end
 
     def sample_params
-      params.require(:sample).permit(:name, :description)
+      params.expect(sample: %i[name description])
     end
 
     def context_crumbs

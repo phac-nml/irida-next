@@ -46,7 +46,7 @@ module Profiles
     private
 
     def personal_access_token_params
-      params.require(:personal_access_token).permit(:name, :expires_at, scopes: [])
+      params.expect(personal_access_token: [:name, :expires_at, { scopes: [] }])
     end
 
     def active_access_tokens

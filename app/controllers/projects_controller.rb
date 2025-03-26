@@ -6,7 +6,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   layout :resolve_layout
   before_action :authorized_namespaces, only: %i[edit new update create transfer]
   before_action :current_page
-  before_action :project_edit_view_authorizations, only: %i[edit]
+  before_action :edit_view_authorizations, only: %i[edit]
 
   def index
     redirect_to dashboard_projects_path
@@ -108,7 +108,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
 
   private
 
-  def project_edit_view_authorizations
+  def edit_view_authorizations
     @allowed_to = {
       destroy: allowed_to?(:destroy?, @project),
       transfer: allowed_to?(:transfer?, @project)
