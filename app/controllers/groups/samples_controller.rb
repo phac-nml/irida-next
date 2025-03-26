@@ -9,7 +9,7 @@ module Groups
     before_action :group, :current_page
     before_action :query, only: %i[index search select]
     before_action :current_metadata_template, only: %i[index]
-    before_action :samples_index_view_authorizations, only: %i[index]
+    before_action :index_view_authorizations, only: %i[index]
 
     def index
       @timestamp = DateTime.current
@@ -45,7 +45,7 @@ module Groups
 
     private
 
-    def samples_index_view_authorizations
+    def index_view_authorizations
       @allowed_to = {
         submit_workflow: allowed_to?(:submit_workflow?, @group),
         export_data: allowed_to?(:export_data?, @group),
