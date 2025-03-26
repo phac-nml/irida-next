@@ -55,7 +55,7 @@ module Viral
     def system_arguments_for_button
       {
         classes: class_names(
-          'viral-dropdown--button cursor-pointer flex items-center w-full',
+          'viral-dropdown--button flex items-center w-full',
           system_arguments[:classes]
         )
       }
@@ -64,7 +64,7 @@ module Viral
     def system_arguments_for_icon
       {
         classes: class_names(
-          'viral-dropdown--icon cursor-pointer',
+          'viral-dropdown--icon',
           system_arguments[:classes]
         )
       }

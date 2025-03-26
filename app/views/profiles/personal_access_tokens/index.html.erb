@@ -1,7 +1,8 @@
 <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
-<%= render Viral::PageHeaderComponent.new(title: t("profiles.personal_access_tokens.index.title"), subtitle: t("profiles.personal_access_tokens.index.subtitle")) do |component| %>
-  <%= component.with_icon(name: "ticket", classes: "h-14 w-14 text-primary-700") %>
-<% end %>
+<%= render Viral::PageHeaderComponent.new(
+  title: t("profiles.personal_access_tokens.index.title"),
+  subtitle: t("profiles.personal_access_tokens.index.subtitle"),
+) %>
 
 <div class="grid gap-4 grid-cols-1">
   <%= turbo_frame_tag "access-token-section" %>

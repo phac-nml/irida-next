@@ -9,8 +9,7 @@
 
 <div class="fixed-table-component">
   <%= render Viral::PageHeaderComponent.new(title: t('.title')) do |component| %>
-    <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
-    <%= component.with_buttons do %>
+    <% component.with_buttons do %>
       <div class="flex items-center space-x-2">
         <% if allowed_to?(:submit_workflow?, @project) && @pipelines_enabled %>
           <%= link_to pipeline_selection_workflow_executions_submissions_path(namespace_id: @project.namespace.id),
@@ -114,7 +113,7 @@
     <% end %>
   <% end %>
 
-  <div class="flex mb-2">
+  <div class="flex @max-2xl:flex-col @max-2xl:space-y-2 mb-2">
     <div class="inline-flex grow space-x-2">
       <% if allowed_to?(:submit_workflow?, @project) || allowed_to?(:clone_sample?, @project) || allowed_to?(:transfer_sample?, @project) || allowed_to?(:export_data?, @project) %>
         <%= form_with(

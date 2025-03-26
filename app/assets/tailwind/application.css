@@ -813,6 +813,15 @@
   }
 }
 
+@utility fixed-table-component {
+  @media screen and (min-height: 500px) {
+    height: calc(100vh - 50px - 32px);
+    max-height: calc(100vh - 50px - 32px);
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 @layer utilities {
   body {
     height: 100vh;
@@ -927,13 +936,6 @@ div.field_with_errors > :is(select) {
   display: none;
 }
 
-.fixed-table-component {
-  height: calc(100vh - 50px - 32px);
-  max-height: calc(100vh - 50px - 32px);
-  display: flex;
-  flex-direction: column;
-}
-
 .scrollbar::-webkit-scrollbar {
   width: 0.75rem;
   height: 0.75rem;
@@ -943,6 +945,7 @@ div.field_with_errors > :is(select) {
   --tw-bg-opacity: 1 !important;
   @apply bg-slate-300 dark:bg-slate-600;
   border-radius: 0.25rem;
+  min-width: 60px;
 }
 
 .scrollbar::-webkit-scrollbar-corner {

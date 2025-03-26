@@ -1,14 +1,17 @@
 <div
   id="limit-component"
   class="
-    inline-flex items-center mt-4 space-x-2 text-slate-500 dark:text-slate-400
+    @md:inline-flex @max-md:flex @max-md:flex-col items-center @md:space-x-2
+    text-slate-500 dark:text-slate-400
   "
 >
-  <span><%= t(".items", items: @item) %></span>
-  <%= viral_dropdown(label: @pagy.limit) do |dropdown| %>
-    <% Pagy::DEFAULT[:limits].each do |limit| %>
-      <% dropdown.with_item(label: limit, url: current_url_with_limit(limit)) %>
+  <div class="inline-flex items-center space-x-2">
+    <span><%= t(".items", items: @item) %></span>
+    <%= viral_dropdown(label: @pagy.limit) do |dropdown| %>
+      <% Pagy::DEFAULT[:limits].each do |limit| %>
+        <% dropdown.with_item(label: limit, url: current_url_with_limit(limit)) %>
+      <% end %>
     <% end %>
-  <% end %>
+  </div>
   <span><%== t(".summary", to: @pagy.to, from: @pagy.from, count: @pagy.count) %></span>
 </div>

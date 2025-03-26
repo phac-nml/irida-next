@@ -2,8 +2,7 @@
 
 <%= render Viral::PageHeaderComponent.new(title: @sample.name, id: @sample.puid, subtitle: @sample.description) do |component| %>
   <%= viral_pill(text: @sample.puid, color: :blue) %>
-  <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
-  <%= component.with_buttons do %>
+  <% component.with_buttons do %>
     <div class="flex flex-row">
       <% if allowed_to?(:new?, @project) %>
         <%= link_to(

@@ -1,6 +1,7 @@
-<%= render Viral::PageHeaderComponent.new(title: t("projects.samples.edit.title"), subtitle: t("projects.samples.edit.subtitle")) do |component| %>
-  <%= component.with_icon(name: "beaker", classes: "h-14 w-14 text-primary-700") %>
-<% end %>
+<%= render Viral::PageHeaderComponent.new(
+  title: t("projects.samples.edit.title"),
+  subtitle: t("projects.samples.edit.subtitle"),
+) %>
 <div class="p-4">
   <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
     <div

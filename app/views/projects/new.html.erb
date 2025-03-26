@@ -1,9 +1,7 @@
-<%= render Viral::PageHeaderComponent.new(title: t(:".title"), subtitle: t(:".subtitle")) do |component| %>
-  <%= component.with_icon(
-    name: "rectangle_stack",
-    classes: "h-14 w-14 text-primary-700",
-  ) %>
-<% end %>
+<%= render Viral::PageHeaderComponent.new(
+  title: t(:".title"),
+  subtitle: t(:".subtitle"),
+) %>
 
 <div class="p-4">
   <div class="mb-4 card" data-controller="slugify">
