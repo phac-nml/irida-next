@@ -292,16 +292,20 @@ class GroupsTest < ApplicationSystemTestCase
     click_link I18n.t('groups.sidebar.general')
 
     assert_selector 'h2', text: I18n.t('groups.sidebar.general')
+    click_on I18n.t('groups.edit.advanced.delete.submit')
 
-    assert_selector 'a', text: I18n.t('groups.edit.advanced.delete.submit'), count: 1
-    click_link I18n.t('groups.edit.advanced.delete.submit')
+    within('#turbo-confirm') do
+      assert_text I18n.t('components.confirmation.title')
+      assert_text I18n.t('groups.edit.advanced.delete.confirm.warning.subgroups_count', count: 0)
+      assert_text I18n.t('groups.edit.advanced.delete.confirm.warning.projects_count', count: 0)
+      assert_text I18n.t('groups.edit.advanced.delete.confirm.warning.samples_count', count: 0)
+      fill_in I18n.t('components.confirmation.confirm_label'), with: group2.path
+      click_on I18n.t('components.confirmation.confirm')
+    end
 
-    assert_text I18n.t('groups.edit.advanced.delete.confirm')
-    assert_button I18n.t('components.confirmation.confirm')
-    click_button I18n.t('components.confirmation.confirm')
-
+    assert_text I18n.t('groups.destroy.success', group_name: group2.name)
     assert_selector 'h1', text: I18n.t('dashboard.groups.index.title')
-    assert_no_text groups(:group_two).name
+    assert_no_text group2.name
   end
 
   test 'can transfer a group' do
