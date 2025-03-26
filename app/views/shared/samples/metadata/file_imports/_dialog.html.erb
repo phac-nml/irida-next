@@ -7,13 +7,14 @@
 
     <div
       <% if Flipper.enabled?(:metadata_import_field_selection) %>
-      data-controller="metadata--file-import viral--sortable-lists--two-lists-selection"
+      data-controller="attachment-upload metadata--file-import viral--sortable-lists--two-lists-selection"
       data-viral--sortable-lists--two-lists-selection-selected-list-value="selected"
       data-viral--sortable-lists--two-lists-selection-available-list-value="available"
       data-viral--sortable-lists--two-lists-selection-field-name-value="file_import[metadata_columns][]"
       <% else %>
-      data-controller="metadata--file-import"
+      data-controller="attachment-upload metadata--file-import"
       <% end%>
+      data-attachment-upload-button-text-value='<%=t(".uploading") %>'
     >
       <%= form_for(:file_import, url: url, method: :post) do |form| %>
         <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>"/>
@@ -42,6 +43,7 @@
                               "text/csv,.tsv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                             data: {
                               action: "change->metadata--file-import#readFile",
+                              "attachment-upload-target": "attachmentsInput",
                             },
                             class:
                               "block w-full text-sm text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 focus:outline-hidden dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
@@ -120,6 +122,7 @@
                             "click->viral--sortable-lists--two-lists-selection#constructParams",
                           "viral--sortable-lists--two-lists-selection-target": "submitBtn",
                           "metadata--file-import-target": "submitButton",
+                          "attachment-upload-target": "submitButton",
                         },
                         disabled: true %>
           </div>

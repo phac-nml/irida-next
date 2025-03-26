@@ -1918,6 +1918,7 @@ fr:
             spinner_message: L’importation d’échantillons de métadonnées, cela peut prendre un certain temps...
             submit_button: Import Metadata
             title: Télécharger des échantillons de métadonnées
+            uploading: Uploading
           errors:
             description: 'L’importation des échantillons de métadonnées s’est terminée avec les erreurs suivantes :'
             ok_button: OK
