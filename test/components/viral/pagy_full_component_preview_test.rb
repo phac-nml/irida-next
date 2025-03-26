@@ -7,10 +7,10 @@ class PagyFullComponentPreviewTest < ApplicationSystemTestCase
     visit('/rails/view_components/viral_pagy_full_component/default')
 
     assert_selector 'nav.pagy.nav'
-    assert_selector 'li button[disabled]', text: 'Previous'
+    assert_selector 'li a[aria-disabled="true"]', text: 'Previous'
     assert_selector 'li > a', text: 'Next'
-    assert_selector 'li button[disabled]', text: '1'
-    assert_selector 'li > a:not([data-aria-disabled="true"])', count: '5'
+    assert_selector 'li a[aria-disabled="true"]', text: '1'
+    assert_selector 'li > a:not([aria-disabled="true"])', count: '5'
   end
 
   test 'renders empty state' do
