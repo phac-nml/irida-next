@@ -1922,6 +1922,7 @@ en:
             spinner_message: Importing sample metadata, this might take a while...
             submit_button: Import Metadata
             title: Upload Sample Metadata
+            uploading: Uploading
           errors:
             description: 'The sample metadata import completed with the following errors:'
             ok_button: OK
