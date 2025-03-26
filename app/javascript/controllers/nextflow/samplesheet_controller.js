@@ -417,7 +417,7 @@ export default class extends Controller {
           "attachment_id"
         ],
       )
-      .replace(/PATTERN_PLACEHOLDER/g, pattern)
+      .replace(/PATTERN_PLACEHOLDER/g, encodeURIComponent(pattern))
       .replace(
         /FILENAME_PLACEHOLDER/g,
         this.#samplesheetAttributes[index]["samplesheet_params"][columnName][

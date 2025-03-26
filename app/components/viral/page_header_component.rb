@@ -5,7 +5,7 @@ module Viral
   class PageHeaderComponent < Component
     attr_reader :title, :subtitle, :id, :id_color
 
-    renders_one :icon, Viral::IconComponent
+    renders_one :icon
     renders_one :buttons
 
     def initialize(title:, id: nil, subtitle: nil, id_color: :primary)
