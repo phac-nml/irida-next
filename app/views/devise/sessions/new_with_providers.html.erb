@@ -14,18 +14,18 @@
                       turbo: false
                     },
                     class: "button button--state-default button--size-default w-full" do %>
-        <div class="inline-flex items-center text-center">
+        <span class="inline-flex items-center text-center">
           <% if Rails.configuration.auth_config["#{provider}_icon"] %>
             <%= viral_icon(name: "#{provider}_icon", classes: "w-4 h-4 mr-2 -ml-1") %>
           <% else %>
             <%= viral_icon(name: provider, classes: "w-4 h-4 mr-2 -ml-1") %>
           <% end %>
           <% if Rails.configuration.auth_config["#{provider}_text"] %>
-            <%= t(".omniauth", provider: Rails.configuration.auth_config["#{provider}_text"] ) %>
+            <%= t(".omniauth", provider: Rails.configuration.auth_config["#{provider}_text"]) %>
           <% else %>
             <%= t(".omniauth", provider: OmniAuth::Utils.camelize(provider)) %>
           <% end %>
-        </div>
+        </span>
       <% end %>
     <% end %>
     <%= link_to t(".local_button"),

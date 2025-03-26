@@ -1,9 +1,9 @@
 <%= viral_pageheader(title: 'Page header with Icons', subtitle: 'This is a page header') do |header| %>
-  <%= header.with_icon do %>
+  <% header.with_icon do %>
     <%= viral_avatar(
-          name: "Outbreak 2021",
-          colour_string: "Streptococcus / Streptococcus pyogenes / Outbreak 2021",
-          size: :large
-        ) %>
+      name: "Outbreak 2021",
+      colour_string: "Streptococcus / Streptococcus pyogenes / Outbreak 2021",
+      size: :large,
+    ) %>
   <% end %>
 <% end %>

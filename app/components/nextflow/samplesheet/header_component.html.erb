@@ -22,8 +22,7 @@
         <% samples.each do |sample| %>
           <%= f.hidden_field :sample_ids,
                          value: sample.id,
-                         id: "sample-#{sample.id}-#{header}",
-                         multiple: true %>
+                         id: "sample-#{sample.id}-#{header}" %>
         <% end %>
         <%= f.select :field,
                  options_for_select(metadata_fields_for_field(header), header),
