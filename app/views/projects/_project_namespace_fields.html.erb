@@ -19,10 +19,8 @@
       <%= t(:"projects.new.select_namespace") %>
     </label>
     <div class="flex items-center whitespace-nowrap">
-      <% params.has_key?(:group_id) ?
-        selected_value = params[:group_id] :
-        selected_value = current_user.namespace.id %>
-      <%= viral_prefixed_select2(form: builder, name: :parent_id, id: form_id, selected_value: , placeholder: t(:"projects.new.select_namespace")) do |select| %>
+      <% selected_value = params.has_key?(:group_id) ? params[:group_id] : current_user.namespace.id %>
+      <%= viral_prefixed_select2(form: builder, name: :parent_id, id: form_id, selected_value: selected_value, placeholder: t(:"projects.new.select_namespace")) do |select| %>
         <% authorized_namespaces.each do |namespace| %>
           <% select.with_option(
             primary: namespace.full_path,
