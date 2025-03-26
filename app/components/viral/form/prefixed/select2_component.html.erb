@@ -9,10 +9,9 @@
 </div>
 <div class="flex-1">
   <div data-action="keyup->viral--select2#keydown" class="select2">
-    <label for="select2-input" class="sr-only"><%= name %></label>
     <input
       type="text"
-      id="select2-input"
+      id="<%= id %>"
       data-action="
         focus->viral--select2#focus
         keydown.enter->viral--select2#keyboardQuery
