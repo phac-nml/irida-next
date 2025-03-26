@@ -151,11 +151,11 @@
     </button>
   <% end %>
   <% unless @samples.empty? %>
-    <span
+    <div
       class="flex items-center p-4 space-x-4"
       data-nextflow--samplesheet-target="spinner"
     >
       <%= render SpinnerComponent.new(message: t(".processing_samplesheet")) %>
-    </span>
+    </div>
   <% end %>
 </div>

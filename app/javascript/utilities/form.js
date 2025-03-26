@@ -3,6 +3,5 @@ export function createHiddenInput(name, value) {
   element.type = "hidden";
   element.name = name;
   element.value = value;
-  element.ariaHidden = "true";
   return element;
 }
