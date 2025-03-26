@@ -70,9 +70,10 @@ class AttachmentsController < ApplicationController
   end
 
   # 🔍 Finds and sets the attachment by ID
-  # Called automatically before controller actions
+  # Ensures the attachment exists and is authorized for the current user
   def set_attachment
     @attachment = Attachment.find_by(id: params[:id])
+    authorize! @attachment, to: :read?
   end
 
   # ⬇️ Public interface methods ⬇️
