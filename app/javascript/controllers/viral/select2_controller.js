@@ -15,7 +15,7 @@ export default class extends Controller {
 
   connect() {
     this.dropdown = new Dropdown(this.dropdownTarget, this.inputTarget, {
-      triggerType: "none",
+      triggerType: "click",
       offsetSkidding: 0,
       offsetDistance: 0,
       placement: "bottom-start",
@@ -32,6 +32,18 @@ export default class extends Controller {
     this.#setDefault();
     this.element.setAttribute("data-controller-connected", "true");
     this.currentIndex = -1; // Initialize the index for navigation
+
+    this.dropdownTarget.addEventListener(
+      "focusout",
+      this.handleTriggerFocusOut.bind(this),
+    );
+  }
+
+  disconnect() {
+    this.dropdownTarget.removeEventListener(
+      "focusout",
+      this.handleTriggerFocusOut.bind(this),
+    );
   }
 
   focus() {
@@ -74,11 +86,14 @@ export default class extends Controller {
     );
     if (visible.length === 1) {
       this.select({
+        
         params: {
           primary: visible[0].dataset["viral-Select2PrimaryParam"],
           value: visible[0].dataset["viral-Select2ValueParam"],
         },
       });
+      this.inputTarget.focus();
+      this.inputTarget.select();
     }
   }
 
@@ -159,6 +174,12 @@ export default class extends Controller {
           this.hiddenTarget.value = value["viral-Select2ValueParam"];
         }
       });
+    }
+  }
+
+  handleTriggerFocusOut(event) {
+    if (!this.dropdownTarget.contains(event.relatedTarget)) {
+      this.dropdown.hide();
     }
   }
 }
