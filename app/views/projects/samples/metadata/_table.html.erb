@@ -58,7 +58,9 @@
                 <%= link_to(
                   t(:"projects.samples.show.metadata.actions.dropdown.update"),
                   edit_namespace_project_sample_metadata_path(
-                    sample_id: @sample.id,
+                    @project.namespace.parent,
+                    @project,
+                    @sample,
                     key: metadata[:key],
                     value: metadata[:value],
                   ),
@@ -69,7 +71,9 @@
               <%= link_to(
                 t(:"projects.samples.show.metadata.actions.dropdown.delete"),
                 namespace_project_sample_metadata_path(
-                  sample_id: @sample.id,
+                  @project.namespace.parent,
+                  @project,
+                  @sample,
                   sample: {
                     metadata: {
                       metadata[:key] => "",

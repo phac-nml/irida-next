@@ -97,7 +97,7 @@
                   <% end %>
                   <% if column == :puid || column == :name %>
                     <%= link_to(
-                    namespace_project_sample_path(sample.project.namespace.parent, sample.project, sample),
+                    sample_path(sample),
                     data: { turbo: false },
                     class: "text-slate-700 dark:text-slate-300 font-semibold hover:underline"
                   ) do %>
@@ -150,11 +150,7 @@
                     <% if @row_actions[:edit] %>
                       <%= link_to(
                         t(:"projects.samples.index.edit_button"),
-                        edit_namespace_project_sample_path(
-                          sample.project.namespace.parent,
-                          sample.project,
-                          sample,
-                        ),
+                        edit_sample_path(sample),
                         data: {
                           turbo: false,
                         },

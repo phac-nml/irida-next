@@ -5,10 +5,9 @@
     "
     data-action="click->projects--samples--metadata--editable-cell#submit"
     data-field="<%= @field %>"
-    data-url="<%= editable_namespace_project_sample_metadata_field_path(
-                @sample.project.namespace.parent,
-                @sample.project,
-                @sample
+    data-url="<%= edit_sample_metadatum_path(
+                @sample,
+                @field
               ) %>"
     aria-label="<%= t(:".aria_label", value: @sample.metadata[@field]) %> value"
     <%= "autofocus" if @autofocus %>

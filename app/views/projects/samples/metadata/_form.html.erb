@@ -1,4 +1,4 @@
-<%= form_with(model: @sample, url: namespace_project_sample_metadata_field_path(sample_id: @sample.id), method: :post) do |form| %>
+<%= form_with(model: @sample, url: sample_metadata_path(@sample), method: :post) do |form| %>
 
   <div class="grid gap-2" data-controller="projects--samples--metadata--create">
     <div data-projects--samples--metadata--create-target="metadataToAdd"></div>
