@@ -11,7 +11,7 @@
   <%= render Viral::PageHeaderComponent.new(title: t('.title')) do |component| %>
     <% component.with_buttons do %>
       <div class="flex items-center space-x-2">
-        <% if allowed_to?(:submit_workflow?, @project) && @pipelines_enabled %>
+        <% if @allowed_to[:submit_workflow] && @pipelines_enabled %>
           <%= link_to pipeline_selection_workflow_executions_submissions_path(namespace_id: @project.namespace.id),
         data: { action: "turbo:morph-element->action-link#idempotentConnect", turbo_stream: true, controller: "action-link", action_link_required_value: 1 },
                   class: "button button--size-default button--state-default action-link" do %>
@@ -20,7 +20,7 @@
           <% end %>
         <% end %>
 
-        <% if allowed_to?(:clone_sample?, @project) %>
+        <% if @allowed_to[:clone_sample] %>
           <%= link_to t("projects.samples.index.clone_button"),
           new_namespace_project_samples_clone_path,
           data: {
@@ -31,7 +31,7 @@
           },
           class: "button button--size-default button--state-default action-link" %>
         <% end %>
-        <% if allowed_to?(:transfer_sample?, @project) %>
+        <% if @allowed_to[:transfer_sample] %>
           <%= link_to t("projects.samples.index.transfer_button"),
           new_namespace_project_samples_transfer_path,
           data: {
@@ -42,7 +42,7 @@
           },
           class: "button button--size-default button--state-default action-link" %>
         <% end %>
-        <% if allowed_to?(:export_data?, @project) %>
+        <% if @allowed_to[:export_data] %>
           <%= viral_dropdown(label: t(".create_export_button.label"), aria: { label: t('.create_export_button.label') }, caret: true, action_link: true, action_link_value: 1, classes: "font-normal button button--size-default button--state-default action-link") do |dropdown| %>
             <% if @project.namespace.metadata_fields.empty? %>
               <% dropdown.with_item(
@@ -84,7 +84,7 @@
             ) %>
           <% end %>
         <% end %>
-        <% if allowed_to?(:update_sample_metadata?, @project.namespace) && @has_samples %>
+        <% if @allowed_to[:update_sample_metadata] && @has_samples %>
           <%= link_to t("projects.samples.index.import_metadata_button"),
           new_namespace_project_samples_file_import_path,
           data: {
@@ -92,13 +92,13 @@
           },
           class: "button button--size-default button--state-default" %>
         <% end %>
-        <% if allowed_to?(:create_sample?, @project) %>
+        <% if @allowed_to[:create_sample] %>
           <%= link_to t("projects.samples.index.new_button"),
           new_namespace_project_sample_path,
           class: "button button--size-default button--state-primary",
           "aria-label": t(".actions.button_add_aria_label") %>
         <% end %>
-        <% if allowed_to?(:destroy_sample?, @project) %>
+        <% if @allowed_to[:destroy_sample] %>
           <%= link_to t(".delete_samples_button"),
           new_namespace_project_samples_deletion_path(deletion_type: "multiple"),
           data: {
@@ -115,7 +115,7 @@
 
   <div class="flex @max-2xl:flex-col @max-2xl:space-y-2 mb-2">
     <div class="inline-flex grow space-x-2">
-      <% if allowed_to?(:submit_workflow?, @project) || allowed_to?(:clone_sample?, @project) || allowed_to?(:transfer_sample?, @project) || allowed_to?(:export_data?, @project) %>
+      <% if @allowed_to[:submit_workflow] || @allowed_to[:clone_sample] || @allowed_to[:transfer_sample] || @allowed_to[:export_data] %>
         <%= form_with(
                   url: select_namespace_project_samples_url,
                   method: :get,

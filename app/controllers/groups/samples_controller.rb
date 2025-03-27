@@ -9,6 +9,7 @@ module Groups
     before_action :group, :current_page
     before_action :query, only: %i[index search select]
     before_action :current_metadata_template, only: %i[index]
+    before_action :index_view_authorizations, only: %i[index]
 
     def index
       @timestamp = DateTime.current
@@ -43,6 +44,14 @@ module Groups
     end
 
     private
+
+    def index_view_authorizations
+      @allowed_to = {
+        submit_workflow: allowed_to?(:submit_workflow?, @group),
+        export_data: allowed_to?(:export_data?, @group),
+        update_sample_metadata: allowed_to?(:update_sample_metadata?, @group)
+      }
+    end
 
     def group
       @group = Group.find_by_full_path(params[:group_id]) # rubocop:disable Rails/DynamicFindBy

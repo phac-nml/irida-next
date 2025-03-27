@@ -7,6 +7,8 @@ module Projects
       class DeletionsController < Projects::Samples::ApplicationController
         respond_to :turbo_stream
 
+        before_action :view_authorizations, only: %i[destroy]
+
         def new
           authorize! @sample, to: :destroy_attachment?
           render turbo_stream: turbo_stream.update('sample_modal',
@@ -43,8 +45,15 @@ module Projects
 
         private
 
+        def view_authorizations
+          @allowed_to = {
+            destroy_attachment: allowed_to?(:destroy_attachment?, @sample),
+            update_sample: allowed_to?(:update_sample?, @project)
+          }
+        end
+
         def deletion_params
-          params.require(:deletion).permit(attachment_ids: {})
+          params.expect(deletion: [attachment_ids: {}])
         end
 
         def get_attachments(attachment_ids)

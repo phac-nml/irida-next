@@ -27,7 +27,7 @@ module Profiles
     private
 
     def update_password_params
-      params.require(:user).permit(:password, :password_confirmation, :current_password)
+      params.expect(user: %i[password password_confirmation current_password])
     end
 
     def current_page

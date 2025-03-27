@@ -67,7 +67,7 @@ module Projects
       end
 
       def destroy_multiple_params
-        params.require(:multiple_deletion).permit(sample_ids: [])
+        params.expect(multiple_deletion: [sample_ids: []])
       end
 
       def set_multi_status_destroy_multiple_message(deleted_samples_count, samples_to_delete_count)

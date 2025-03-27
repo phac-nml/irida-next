@@ -25,7 +25,7 @@ module Projects
       private
 
       def clone_params
-        params.require(:clone).permit(:new_project_id, sample_ids: [])
+        params.expect(clone: [:new_project_id, { sample_ids: [] }])
       end
 
       def projects

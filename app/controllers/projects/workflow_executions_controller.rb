@@ -11,6 +11,24 @@ module Projects
 
     private
 
+    def view_authorizations
+      @allowed_to = {
+        export_data: allowed_to?(:export_data?, @project),
+        cancel: allowed_to?(:update?, namespace),
+        destroy: allowed_to?(:update?, namespace),
+        update: allowed_to?(:update?, namespace)
+      }
+    end
+
+    def show_view_authorizations
+      @allowed_to = {
+        export_data: allowed_to?(:export_data?, @project),
+        cancel: allowed_to?(:cancel?, @workflow_execution),
+        destroy: allowed_to?(:destroy?, @workflow_execution),
+        update: allowed_to?(:update?, @workflow_execution)
+      }
+    end
+
     def namespace
       @namespace = @project.namespace
     end
@@ -26,7 +44,7 @@ module Projects
     end
 
     def workflow_execution_update_params
-      params.require(:workflow_execution).permit(:name)
+      params.expect(workflow_execution: [:name])
     end
 
     def load_workflows

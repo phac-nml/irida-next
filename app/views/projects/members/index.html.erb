@@ -3,7 +3,7 @@
 
 <%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @namespace.class.model_name.human, namespace_name: @namespace.name)) do |component| %>
   <% component.with_buttons do %>
-    <% if allowed_to?(:link_namespace_with_group?, @namespace) %>
+    <% if @allowed_to[:link_namespace_with_group] %>
       <%= link_to I18n.t("projects.members.index.invite_group"),
       new_namespace_project_group_link_path(
         @namespace.parent,
@@ -16,7 +16,7 @@
       },
       class: "button button--state-default button--size-default" %>
     <% end %>
-    <% if allowed_to?(:create_member?, @namespace) %>
+    <% if @allowed_to[:create_member] %>
       <%= link_to t(:".add"),
       new_namespace_project_member_path(
         @namespace.parent,

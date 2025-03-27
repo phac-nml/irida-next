@@ -7,19 +7,26 @@ module Projects
       class FieldsController < Projects::Samples::ApplicationController # rubocop:disable Metrics/ClassLength
         respond_to :turbo_stream
 
+        before_action :view_authorizations, only: %i[create update]
+
         # Param received as:
         # params: {sample: {create_fields: {key1: value1, key2: value2, ...}}}
-        def create
+        def create # rubocop:disable Metrics/MethodLength
           authorize! @project, to: :update_sample?
           create_metadata_fields =
             ::Samples::Metadata::Fields::CreateService.new(@project, @sample, current_user,
                                                            create_field_params['create_fields']).execute
 
           if @sample.errors.any?
-            render status: :unprocessable_entity, locals: { type: 'error', message: error_message(@sample) }
+            render status: :unprocessable_entity,
+                   locals: { type: 'error', message: error_message(@sample) }
           else
-            status = get_create_status(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
-            messages = get_create_messages(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
+            status = get_create_status(
+              create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys]
+            )
+            messages = get_create_messages(
+              create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys]
+            )
             render status:, locals: { messages: }
           end
         end
@@ -72,12 +79,18 @@ module Projects
 
         private
 
+        def view_authorizations
+          @allowed_to = { update_sample: allowed_to?(
+            :update_sample_metadata?, @project
+          ) }
+        end
+
         def create_field_params
-          params.require(:sample).permit(create_fields: {})
+          params.expect(sample: [create_fields: {}])
         end
 
         def update_field_params
-          params.require(:sample).permit(update_field: { key: {}, value: {} })
+          params.expect(sample: [update_field: { key: {}, value: {} }])
         end
 
         def get_create_status(added_keys, existing_keys)

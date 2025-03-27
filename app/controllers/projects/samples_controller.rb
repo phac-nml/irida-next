@@ -11,6 +11,8 @@ module Projects
     before_action :current_page
     before_action :query, only: %i[index search select]
     before_action :current_metadata_template, only: %i[index]
+    before_action :index_view_authorizations, only: %i[index]
+    before_action :show_view_authorizations, only: %i[show]
 
     def index
       @timestamp = DateTime.current
@@ -101,12 +103,33 @@ module Projects
 
     private
 
+    def index_view_authorizations
+      @allowed_to = {
+        submit_workflow: allowed_to?(:submit_workflow?, @project),
+        clone_sample: allowed_to?(:clone_sample?, @project),
+        transfer_sample: allowed_to?(:transfer_sample?, @project),
+        export_data: allowed_to?(:export_data?, @project),
+        update_sample_metadata: allowed_to?(:update_sample_metadata?, @project.namespace),
+        create_sample: allowed_to?(:create_sample?, @project),
+        destroy_sample: allowed_to?(:destroy_sample?, @project),
+        update_sample: allowed_to?(:update_sample?, @project)
+      }
+    end
+
+    def show_view_authorizations
+      @allowed_to = {
+        destroy_sample: allowed_to?(:destroy_sample?, @project),
+        destroy_attachment: allowed_to?(:destroy_attachment?, @sample),
+        update_sample: allowed_to?(:update_sample?, @project)
+      }
+    end
+
     def sample
       @sample = Sample.find_by(id: params[:id] || params[:sample_id], project_id: project.id) || not_found
     end
 
     def sample_params
-      params.require(:sample).permit(:name, :description)
+      params.expect(sample: %i[name description])
     end
 
     def context_crumbs

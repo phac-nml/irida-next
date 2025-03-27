@@ -11,7 +11,7 @@ module Projects
 
     def metadata_template_params
       defaults = { fields: [] }
-      params.require(:metadata_template).permit(:name, :description, fields: []).reverse_merge(defaults)
+      params.expect(metadata_template: [:name, :description, { fields: [] }]).reverse_merge(defaults)
     end
 
     protected

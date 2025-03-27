@@ -4,9 +4,7 @@
   @pagy,
   @q,
   {
-    update_metadata_templates:
-      allowed_to?(:update_metadata_templates?, @namespace),
-    destroy_metadata_templates:
-      allowed_to?(:destroy_metadata_templates?, @namespace),
+    update_metadata_templates: @allowed_to[:update_metadata_templates],
+    destroy_metadata_templates: @allowed_to[:destroy_metadata_templates],
   },
 ) %>

@@ -28,11 +28,11 @@ class WorkflowExecutionsController < ApplicationController
   end
 
   def workflow_execution_params
-    params.require(:workflow_execution).permit(workflow_execution_params_attributes)
+    params.require(:workflow_execution).permit(workflow_execution_params_attributes) # rubocop:disable Rails/StrongParametersExpect
   end
 
   def workflow_execution_update_params
-    params.require(:workflow_execution).permit(:name)
+    params.expect(workflow_execution: [:name])
   end
 
   def workflow_execution_params_attributes
@@ -77,5 +77,18 @@ class WorkflowExecutionsController < ApplicationController
 
   def redirect_path
     workflow_executions_path
+  end
+
+  def view_authorizations
+    @allowed_to = {
+      export_data: true,
+      cancel: true,
+      destroy: true,
+      update: true
+    }
+  end
+
+  def show_view_authorizations
+    view_authorizations
   end
 end

@@ -10,6 +10,13 @@ module Groups
 
     private
 
+    def view_authorizations
+      @allowed_to = {
+        create_attachment: allowed_to?(:create_attachment?, @group),
+        destroy_attachment: allowed_to?(:destroy_attachment?, @group)
+      }
+    end
+
     def group
       @group = Group.find_by_full_path(params[:group_id]) # rubocop:disable Rails/DynamicFindBy
     end

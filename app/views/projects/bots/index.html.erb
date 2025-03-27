@@ -1,7 +1,7 @@
 <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 <%= turbo_frame_tag "token_dialog" %>
 <%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t('.subtitle')) do |component| %>
-  <% if allowed_to?(:create_bot_accounts?, @namespace) %>
+  <% if @allowed_to[:create_bot_accounts] %>
     <%= component.with_buttons do %>
       <%= link_to t(".add_new_bot"),
       new_namespace_project_bot_path(@namespace.parent, @namespace.project),

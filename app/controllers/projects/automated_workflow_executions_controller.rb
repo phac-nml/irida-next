@@ -116,8 +116,8 @@ module Projects
     end
 
     def automated_workflow_execution_params
-      params.require(:workflow_execution).permit(
-        :name, :email_notification, :update_samples, metadata: {}, workflow_params: {}
+      params.expect(
+        workflow_execution: [:name, :email_notification, :update_samples, { metadata: {}, workflow_params: {} }]
       )
     end
 

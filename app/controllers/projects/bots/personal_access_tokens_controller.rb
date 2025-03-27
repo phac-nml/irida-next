@@ -19,7 +19,7 @@ module Projects
       private
 
       def bot_personal_access_token_params
-        params.require(:personal_access_token).permit(:name, :expires_at, scopes: [])
+        params.expect(personal_access_token: [:name, :expires_at, { scopes: [] }])
       end
     end
   end

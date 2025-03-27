@@ -227,7 +227,7 @@ class MetadataTemplateActionsConcernTest < ActionDispatch::IntegrationTest
       @project, format: :turbo_stream
     ), params: metadata_template_params
 
-    assert_response :unprocessable_entity
+    assert_response :bad_request
   end
 
   test 'project metadata templates create unauthorized' do

@@ -4,14 +4,14 @@
   <%= viral_pill(text: @sample.puid, color: :blue) %>
   <% component.with_buttons do %>
     <div class="flex flex-row">
-      <% if allowed_to?(:new?, @project) %>
+      <% if @allowed_to[:update_sample] %>
         <%= link_to(
           t("projects.samples.show.edit_button"),
           edit_namespace_project_sample_path(id: @sample.id),
           class: "button button--state-primary button--size-default mr-1",
         ) %>
       <% end %>
-      <% if allowed_to?(:destroy?, @project) %>
+      <% if @allowed_to[:destroy_sample] %>
         <%= link_to(
           t("projects.samples.show.remove_button"),
           namespace_project_samples_deletion_path(sample_id: @sample.id, format: :html),
@@ -81,7 +81,7 @@
         } %>
       </li>
     </ul>
-    <% if allowed_to?(:update_sample?, @project) %>
+    <% if @allowed_to[:update_sample] %>
       <% if @tab == 'files' || @tab == nil %>
         <div class="flex flex-row items-center ml-auto space-x-2 font-normal">
           <%= link_to t(".new_attachment_button"),

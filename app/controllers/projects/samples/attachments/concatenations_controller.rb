@@ -7,6 +7,8 @@ module Projects
       class ConcatenationsController < Projects::Samples::ApplicationController
         respond_to :turbo_stream
 
+        before_action :view_authorizations, only: %i[create]
+
         def new
           authorize! @project, to: :update_sample?
           render turbo_stream: turbo_stream.update('sample_modal',
@@ -33,8 +35,13 @@ module Projects
 
         private
 
+        def view_authorizations
+          @allowed_to = { update_sample: allowed_to?(:update_sample?, @project),
+                          destroy_attachment: allowed_to?(:destroy_attachment?, @sample) }
+        end
+
         def concatenation_params
-          params.require(:concatenation).permit(:basename, :delete_originals, attachment_ids: {})
+          params.expect(concatenation: [:basename, :delete_originals, { attachment_ids: {} }])
         end
       end
     end

@@ -1,6 +1,6 @@
 <%= render Viral::PageHeaderComponent.new(title: title, subtitle: subtitle) do |component| %>
   <% component.with_buttons do %>
-    <% if namespace.metadata_fields.length.positive? && allowed_to?(:create_metadata_templates?, namespace) %>
+    <% if namespace.metadata_fields.length.positive? && @allowed_to[:create_metadata_templates] %>
       <%= link_to new_template_button_text,
       new_template_url,
       data: {

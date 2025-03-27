@@ -71,7 +71,8 @@ module BotPersonalAccessTokenActions
         if @personal_access_token.revoke!
           render status: :ok, locals: {
             personal_access_token: @personal_access_token, type: 'success',
-            message: t('concerns.bot_personal_access_token_actions.revoke.success', pat_name: @personal_access_token.name)
+            message: t('concerns.bot_personal_access_token_actions.revoke.success',
+                       pat_name: @personal_access_token.name)
           }
         else
           render status: :unprocessable_entity, locals: { type: 'alert',

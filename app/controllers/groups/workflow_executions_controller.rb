@@ -12,6 +12,23 @@ module Groups
 
     private
 
+    def view_authorizations
+      @allowed_to = {
+        export_data: allowed_to?(:export_data?, namespace),
+        cancel: allowed_to?(:update?, namespace),
+        destroy: allowed_to?(:update?, namespace)
+      }
+    end
+
+    def show_view_authorizations
+      @allowed_to = {
+        export_data: allowed_to?(:export_data?, namespace),
+        cancel: allowed_to?(:update?, @workflow_execution),
+        destroy: allowed_to?(:destroy?, @workflow_execution),
+        update: allowed_to?(:cancel?, @workflow_execution)
+      }
+    end
+
     def group
       @group ||= Group.find_by_full_path(request.params[:group_id] || request.params[:id]) # rubocop:disable Rails/DynamicFindBy
     end

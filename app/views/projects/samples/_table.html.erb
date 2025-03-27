@@ -6,17 +6,15 @@
   has_samples: @has_samples,
   abilities: {
     select_samples:
-      allowed_to?(:submit_workflow?, project) ||
-        allowed_to?(:clone_sample?, project) ||
-        allowed_to?(:transfer_sample?, project) ||
-        allowed_to?(:export_data?, project),
-    edit_sample_metadata: allowed_to?(:update_sample?, project),
+      @allowed_to[:submit_workflow] || @allowed_to[:clone_sample] ||
+        @allowed_to[:transfer_sample] || @allowed_to[:export_data],
+    edit_sample_metadata: @allowed_to[:update_sample],
   },
   metadata_fields: @fields,
   search_params: @search_params,
   row_actions: {
-    destroy: allowed_to?(:destroy_sample?, project),
-    edit: allowed_to?(:update_sample?, project),
+    destroy: @allowed_to[:destroy_sample],
+    edit: @allowed_to[:update_sample],
   },
   empty: {
     title: t(:"projects.samples.index.no_samples"),

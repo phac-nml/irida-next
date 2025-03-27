@@ -3,8 +3,7 @@
   @namespace,
   @pagy,
   abilities: {
-    generate_token:
-      allowed_to?(:generate_bot_personal_access_token?, @namespace),
-    destroy_bot: allowed_to?(:destroy_bot_accounts?, @namespace),
+    generate_token: @allowed_to[:generate_bot_personal_access_token],
+    destroy_bot: @allowed_to[:destroy_bot_accounts],
   },
 ) %>

@@ -32,8 +32,8 @@ module Profiles
     private
 
     def update_params
-      params.require(:user).permit(
-        :locale
+      params.expect(
+        user: [:locale]
       )
     end
   end

@@ -8,7 +8,7 @@
     subtitle: t(".subtitle", group_name: @group.name),
   ) do |component| %>
     <%= component.with_buttons do %>
-      <% if allowed_to?(:create_attachment?, @group) %>
+      <% if @allowed_to[:create_attachment] %>
         <%= link_to t(".upload_files"),
         new_group_attachment_path(id: @group.id),
         data: {

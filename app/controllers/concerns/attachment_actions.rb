@@ -10,6 +10,7 @@ module AttachmentActions # rubocop:disable Metrics/ModuleLength
     before_action proc { set_authorization_object }
     before_action :new_destroy_params, only: %i[new_destroy]
     before_action :attachment, only: %i[destroy]
+    before_action proc { view_authorizations }, only: %i[index]
   end
 
   def index
@@ -126,6 +127,6 @@ module AttachmentActions # rubocop:disable Metrics/ModuleLength
   end
 
   def attachment_params
-    params.require(:attachment).permit(:attachable_id, :attachable_type, files: [])
+    params.expect(attachment: [:attachable_id, :attachable_type, { files: [] }])
   end
 end

@@ -26,7 +26,7 @@ class WorkflowExecutionPolicy < ApplicationPolicy
 
     # submitted by automation bot and user has managable access
     if (record.namespace.type == Namespaces::ProjectNamespace.sti_name) &&
-       (record.submitter.id == record.namespace.automation_bot.id) &&
+       record.namespace.automation_bot && (record.submitter.id == record.namespace.automation_bot.id) &&
        Member::AccessLevel.manageable.include?(effective_access_level)
       return true
     end

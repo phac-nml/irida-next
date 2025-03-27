@@ -11,7 +11,7 @@
     # select_attachments: allowed_to?(:destroy_attachment?, namespace.project)
   },
   row_actions: {
-    destroy: allowed_to?(:destroy_attachment?, namespace.project),
+    destroy: @allowed_to[:destroy_attachment],
   },
   empty: {
     title: t(:".empty.title"),
