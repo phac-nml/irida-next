@@ -212,14 +212,12 @@
     <% end %>
     <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".limit.item")) %>
     <% if @abilities[:edit_sample_metadata] %>
-      <template data-projects--samples--metadata--editable-cell-target="formTemplate">
+      <template data-samples--metadata--editable-cell-target="formTemplate">
         <%= form_with(
-              url: "URL_PLACEHOLDER",
+              url: edit_sample_metadatum_path(sample_id: 'SAMPLE_ID_PLACEHOLDER', id: 'FIELD_ID_PLACEHOLDER'),
               method: :get,
               class: "w-full"
             ) do |form| %>
-
-          <%= form.hidden_field :field, value: "FIELD_PLACEHOLDER" %>
           <%= form.hidden_field :format, value: "turbo_stream" %>
         <% end %>
       </template>

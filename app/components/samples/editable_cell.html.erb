@@ -3,12 +3,9 @@
     class="
       w-full p-3 text-left cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-600
     "
-    data-action="click->projects--samples--metadata--editable-cell#submit"
+    data-action="click->samples--metadata--editable-cell#submit"
     data-field="<%= @field %>"
-    data-url="<%= edit_sample_metadatum_path(
-                @sample,
-                @field
-              ) %>"
+    data-sample-id="<%= @sample.id %>"
     aria-label="<%= t(:".aria_label", value: @sample.metadata[@field]) %> value"
     <%= "autofocus" if @autofocus %>
   >
