@@ -1,23 +1,19 @@
 <div class="flex grow">
   <div
     class="
-      inline-flex items-center px-3 py-2.5 text-sm text-slate-600 bg-slate-200 border
-      border-r-0 border-slate-300 rounded-l-lg dark:bg-slate-600 dark:text-slate-400
-      dark:border-slate-600
+      inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700
+      bg-slate-100 border border-r-0 border-slate-300 rounded-l-md dark:bg-slate-700
+      dark:text-slate-300 dark:border-slate-600
     "
   >
     <%= root_url %>
   </div>
   <div class="flex-1">
-    <div data-action="keyup->viral--select2#keydown" class="select2">
+    <div data-action="keydown->viral--select2#keydown" class="relative">
       <input
         type="text"
         id="<%= id %>"
-        data-action="
-          focus->viral--select2#focus
-          keydown.enter->viral--select2#keyboardQuery
-          input->viral--select2#validateInput
-        "
+        data-action="focus->viral--select2#focus"
         data-viral--select2-target="input"
         placeholder="<%= placeholder %>"
         required="<%= required %>"
@@ -35,15 +31,15 @@
       <div
         data-viral--select2-target="dropdown"
         class="
-          z-10 hidden w-full bg-white divide-y rounded-lg shadow divide-slate-100
-          dark:bg-slate-700
+          absolute z-10 hidden w-full bg-white border border-slate-300 rounded-md
+          shadow-lg dark:bg-slate-800 dark:border-slate-700
         "
       >
         <ul
           data-viral--select2-target="scroller"
           class="
-            max-h-[300px] w-full py-2 overflow-y-auto divide-y divide-slate-200
-            dark:divide-slate-800
+            max-h-60 w-full py-2 overflow-y-auto divide-y divide-slate-200
+            dark:divide-slate-700
           "
         >
           <% options.each do |option| %>
