@@ -40,6 +40,7 @@ module Samples
     # params: {sample: {create_fields: {key1: value1, key2: value2, ...}}}
     def bulk_create
       authorize! @project, to: :update_sample?
+      @allowed_to = { update_sample: true }
       create_metadata_fields =
         ::Samples::Metadata::Fields::CreateService.new(@project, @sample, current_user,
                                                        create_field_params['create_fields']).execute
@@ -58,6 +59,7 @@ module Samples
     # Fields that have not been changed will have equal old and new
     def bulk_update # rubocop:disable Metrics/AbcSize
       authorize! @project, to: :update_sample?
+      @allowed_to = { update_sample: true }
       updated_metadata_field = ::Samples::Metadata::Fields::UpdateService.new(@project, @sample, current_user,
                                                                               update_field_params).execute
       if @sample.errors.any?
