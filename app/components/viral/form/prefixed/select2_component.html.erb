@@ -13,7 +13,6 @@
       <input
         type="text"
         id="<%= id %>"
-        data-action="focus->viral--select2#focus"
         data-viral--select2-target="input"
         placeholder="<%= placeholder %>"
         required="<%= required %>"
@@ -25,6 +24,7 @@
           dark:text-slate-50 dark:focus:ring-primary-500 dark:focus:border-primary-500
         "
         value="<%= selected_value %>"
+        data-action="input->viral--select2#input"
       >
       <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
 
