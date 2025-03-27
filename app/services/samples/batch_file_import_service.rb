@@ -21,10 +21,10 @@ module Samples
       super(namespace, user, blob_id, required_headers, 0, params)
     end
 
-    def execute
+    def execute(broadcast_target = nil)
       authorize! @namespace, to: :import_samples_and_metadata?
       validate_file
-      perform_file_import
+      perform_file_import(broadcast_target)
     rescue FileImportError => e
       @namespace.errors.add(:base, e.message)
       {}
@@ -32,12 +32,16 @@ module Samples
 
     protected
 
-    def perform_file_import # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+    def perform_file_import(broadcast_target) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
       response = {}
       parse_settings = @headers.zip(@headers).to_h
 
+      # minus 1 to exclude header
+      total_sample_count = @spreadsheet.count - 1
       @spreadsheet.each_with_index(parse_settings) do |data, index|
         next unless index.positive?
+
+        update_progress_bar(index, total_sample_count, broadcast_target)
 
         sample_name = data[@sample_name_column]
 
