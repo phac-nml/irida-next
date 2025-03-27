@@ -89,31 +89,31 @@ module Samples
 
     def errors_on_sample_row(sample_name, project_puid, response, index)
       if sample_name.nil? || project_puid.nil?
-        {
+        [{
           path: ['sample'],
           message: I18n.t('services.spreadsheet_import.missing_field', index:)
-        }
+        }]
       elsif response.key?(sample_name)
-        {
+        [{
           path: ['sample'],
           message: I18n.t('services.samples.batch_import.duplicate_sample_name', index:)
-        }
+        }]
       end
     end
 
     def errors_with_project(project_puid, project)
       if project.nil?
-        {
+        [{
           path: ['project'],
           message: I18n.t('services.samples.batch_import.project_puid_not_found', project_puid: project_puid)
-        }
+        }]
       elsif !accessible_from_namespace?(project)
-        {
+        [{
           path: ['project'],
           message: I18n.t('services.samples.batch_import.project_puid_not_in_namespace',
                           project_puid: project_puid,
                           namespace: @namespace.full_path)
-        }
+        }]
       end
     end
 
