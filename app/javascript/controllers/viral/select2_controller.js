@@ -516,8 +516,5 @@ export default class Select2Controller extends Controller {
   #handleError(error, source) {
     // Log error to console
     console.error(`❌ Select2Controller error in ${source}:`, error);
-
-    // Add error class to controller element
-    this.element.classList.add("select2-error");
   }
 }
