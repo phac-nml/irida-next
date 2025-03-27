@@ -3,7 +3,7 @@
   subtitle: t(:".subtitle"),
 ) %>
 
-<div class="mb-4 card" data-controller="slugify">
+<div class="@xl:container" data-controller="slugify">
   <%= form_with(model: @project, url: projects_path(namespace_id: params[:group_id]), method: :post,
   data: { controller: "viral--select2" }) do |form| %>
     <%= turbo_frame_tag "project_form" do %>
