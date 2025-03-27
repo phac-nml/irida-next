@@ -2,7 +2,7 @@
   title: t(:"groups.create.title"),
   subtitle: t(:"groups.create.subtitle"),
 ) %>
-<div data-controller="slugify" class="card">
+<div data-controller="slugify" class="@xl:container">
   <%= form_with(model: @new_group, url: groups_path, method: :post) do |form| %>
     <div class="grid gap-4">
 

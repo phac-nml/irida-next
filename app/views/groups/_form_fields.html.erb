@@ -19,11 +19,17 @@
 
 <% if group.new_record? %>
   <% if group.parent_id.present? %>
-    <div class="grid grid-cols-2 gap-4">
-      <div class="form-field">
-        <%= form.label :parent_id %>
-        <div class="flex items-center whitespace-nowrap">
-          <%= viral_prefixed_select2(form:, name: :parent_id, selected_value: group.parent.id, placeholder: t(:"groups.new_subgroup.select_group")) do |select| %>
+    <div class="grid @xs:grid-cols-1 @5xl:grid-cols-2 gap-4">
+      <div>
+        <% form_id = "namespace-select" %>
+        <label
+          for="<%= form_id %>"
+          class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
+        >
+          <%= t("activerecord.attributes.group.parent_id") %>
+        </label>
+        <div class="flex items-center">
+          <%= viral_prefixed_select2(form:, name: :parent_id, id: form_id, selected_value: group.parent.id, placeholder: t(:"groups.new_subgroup.select_group")) do |select| %>
             <% authorized_namespaces.each do |namespace| %>
               <% select.with_option(
                 primary: namespace.full_path,
