@@ -86,7 +86,7 @@ module Samples
 
       assert_equal I18n.t('services.spreadsheet_import.missing_field',
                           index: 2),
-                   response['index 2'][:message]
+                   response['index 2'][0][:message]
     end
 
     test 'import with bad data short sample name' do
@@ -150,7 +150,7 @@ module Samples
 
       assert_equal I18n.t('services.samples.batch_import.duplicate_sample_name',
                           index: 2),
-                   response['index 2'][:message]
+                   response['index 2'][0][:message]
     end
 
     test 'import samples with metadata' do
