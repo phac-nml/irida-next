@@ -107,7 +107,7 @@
           class: "button button--size-default button--state-default" %>
         <% end %>
         <% if @allowed_to[:destroy_sample] %>
-          <%=  t(".delete_samples_button"),
+          <%= link_to t(".delete_samples_button"),
           new_namespace_project_samples_deletion_path(deletion_type: "multiple"),
           data: {
             action: "turbo:morph-element->action-link#idempotentConnect",
