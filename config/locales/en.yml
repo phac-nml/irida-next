@@ -978,6 +978,7 @@ en:
         title: Edit workflow execution
       files:
         table_header:
+          actions: Actions
           created_at: Created At
           filename: Filename
           format: Format
@@ -1725,6 +1726,7 @@ en:
         title: Edit automated workflow execution
       files:
         table_header:
+          actions: Actions
           created_at: Created At
           filename: Filename
           format: Format

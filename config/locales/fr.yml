@@ -976,6 +976,7 @@ fr:
         title: Edit workflow execution
       files:
         table_header:
+          actions: Actions
           created_at: Created At
           filename: Filename
           format: Format
@@ -1721,6 +1722,7 @@ fr:
         title: Modifier l’exécution automatisée du flux de travail
       files:
         table_header:
+          actions: Actions
           created_at: Créé à
           filename: Nom du fichier
           format: Format

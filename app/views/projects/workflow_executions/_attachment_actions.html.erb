@@ -1,0 +1,17 @@
+<div
+  class="<%= class_names('flex justify-end', 'mb-4': attachment.metadata['direction'] == 'forward') %>"
+>
+  <% if Flipper.enabled?(:attachments_preview) && attachment.previewable? %>
+    <%= link_to attachment_path(attachment), class: "text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer" do %>
+      <%= t("workflow_executions.attachment.preview") %>
+    <% end %>
+  <% end %>
+
+  <%= link_to t("workflow_executions.attachment.download"),
+  rails_blob_path(attachment.file),
+  data: {
+    turbo: false,
+  },
+  class:
+    "text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer ml-2" %>
+</div>
