@@ -1,24 +1,17 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = [
-    "input",
-    "hidden",
-    "dropdown",
-    "scroller",
-    "item",
-    "empty",
-    "submitButton",
-  ];
+  static targets = ["input", "hidden", "dropdown", "scroller", "item", "empty"];
   #found = false;
   #storedInputvalue = "";
 
   connect() {
     this.dropdown = new Dropdown(this.dropdownTarget, this.inputTarget, {
+      placement: "bottom",
       triggerType: "click",
       offsetSkidding: 0,
-      offsetDistance: 0,
-      placement: "bottom-start",
+      offsetDistance: 10,
+      delay: 300,
       onShow: () => {
         this.dropdownTarget.style.width = `${this.inputTarget.offsetWidth}px`;
       },
@@ -51,15 +44,34 @@ export default class extends Controller {
   }
 
   select(event) {
+    if (event.params.primary) {
+      // This handles when the item is clicked
+      this.inputTarget.value = event.params.primary;
+      this.#storedInputvalue = event.params.primary;
+      this.hiddenTarget.value = event.params.value;
+    } else {
+      // This handles when enter is pressed on a list item
+      this.inputTarget.value =
+        event.target.dataset["viral-Select2PrimaryParam"];
+      this.#storedInputvalue =
+        event.target.dataset["viral-Select2PrimaryParam"];
+      this.hiddenTarget.value = event.target.dataset["viral-Select2ValueParam"];
+    }
     this.#found = true;
-    this.inputTarget.value = event.params.primary;
-    this.#storedInputvalue = event.params.primary;
-    this.hiddenTarget.value = event.params.value;
     this.dropdown.hide();
-    this.submitButtonTarget.removeAttribute("disabled");
+    this.inputTarget.focus();
   }
 
   keydown(event) {
+    if (event.key === "Tab") {
+      // Allow Tab to work normally
+      return;
+    }
+
+    // For all other keys, prevent default behavior
+    event.preventDefault();
+    event.stopPropagation();
+
     switch (event.key) {
       case "ArrowDown":
         this.#navigate(1);
@@ -67,10 +79,18 @@ export default class extends Controller {
       case "ArrowUp":
         this.#navigate(-1);
         break;
+      case "Escape":
+        this.dropdown.hide();
+        this.inputTarget.value = this.#storedInputvalue;
+        this.inputTarget.focus();
+        this.inputTarget.select();
+        break;
       case "Enter":
-        if (this.currentIndex >= 0) {
-          this.select({ target: this.itemTargets[this.currentIndex] });
-          this.#found = true;
+        if (!this.dropdown.isVisible()) {
+          this.dropdown.show();
+          return;
+        } else if (this.currentIndex >= 0) {
+          this.select(event);
         }
         break;
       default:
@@ -80,13 +100,12 @@ export default class extends Controller {
   }
 
   keyboardQuery(event) {
-    event.preventDefault();
+    console.log("keyboardQuery");
     const visible = this.itemTargets.filter(
       (item) => !item.parentNode.classList.contains("hidden"),
     );
     if (visible.length === 1) {
       this.select({
-        
         params: {
           primary: visible[0].dataset["viral-Select2PrimaryParam"],
           value: visible[0].dataset["viral-Select2ValueParam"],
@@ -94,12 +113,6 @@ export default class extends Controller {
       });
       this.inputTarget.focus();
       this.inputTarget.select();
-    }
-  }
-
-  validateInput() {
-    if (this.inputTarget.value != this.#storedInputvalue) {
-      this.submitButtonTarget.setAttribute("disabled", "disabled");
     }
   }
 
@@ -123,32 +136,29 @@ export default class extends Controller {
   }
 
   #filterItems() {
-    const query = this.inputTarget.value.toLowerCase();
-    let count = 0;
-
-    this.itemTargets.forEach((item) => {
-      const value = item.dataset;
-      if (
-        value["viral-Select2PrimaryParam"].toLowerCase().includes(query) ||
-        value["viral-Select2SecondaryParam"].toLowerCase().includes(query)
-      ) {
-        item.parentNode.classList.remove("hidden");
-        count++;
-      } else {
-        item.parentNode.classList.add("hidden");
-      }
-    });
-
-    // Reset the index if the items are filtered
-    this.currentIndex = -1;
-
-    if (count > 0) {
-      this.dropdown.show();
-      this.emptyTarget.classList.add("hidden");
-      this.scrollerTarget.scrollTop = 0;
-    } else {
-      this.emptyTarget.classList.remove("hidden");
-    }
+    // const query = this.inputTarget.value.toLowerCase();
+    // let count = 0;
+    // this.itemTargets.forEach((item) => {
+    //   const value = item.dataset;
+    //   if (
+    //     value["viral-Select2PrimaryParam"].toLowerCase().includes(query) ||
+    //     value["viral-Select2SecondaryParam"].toLowerCase().includes(query)
+    //   ) {
+    //     item.parentNode.classList.remove("hidden");
+    //     count++;
+    //   } else {
+    //     item.parentNode.classList.add("hidden");
+    //   }
+    // });
+    // // Reset the index if the items are filtered
+    // this.currentIndex = -1;
+    // if (count > 0) {
+    //   this.dropdown.show();
+    //   this.emptyTarget.classList.add("hidden");
+    //   this.scrollerTarget.scrollTop = 0;
+    // } else {
+    //   this.emptyTarget.classList.remove("hidden");
+    // }
   }
 
   #newIndex(direction) {
