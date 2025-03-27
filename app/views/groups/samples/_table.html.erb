@@ -1,15 +1,15 @@
-<%# locals: (group:, pagy:, samples:) -%>
+<%# locals: (allowed_to:, fields:, group:, has_samples:, pagy:, samples:, search_params:) -%>
 <%= render Samples::TableComponent.new(
   samples,
   group,
   pagy,
-  has_samples: @has_samples,
+  has_samples: has_samples,
   abilities: {
-    select_samples: @allowed_to[:submit_workflow] || @allowed_to[:export_data],
-    edit_sample_metadata: @allowed_to[:update_sample_metadata],
+    select_samples: allowed_to[:submit_workflow] || allowed_to[:export_data],
+    edit_sample_metadata: allowed_to[:update_sample_metadata],
   },
-  metadata_fields: @fields,
-  search_params: @search_params,
+  metadata_fields: fields,
+  search_params: search_params,
   empty: {
     title: t(:"groups.samples.table.no_samples"),
     description: t(:"groups.samples.table.no_associated_samples"),
