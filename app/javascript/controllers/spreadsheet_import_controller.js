@@ -54,7 +54,7 @@ export default class extends Controller {
   changeSampleNameInput(event) {
     this.#header_map[this.#curr_sample_name] = false;
     const { value } = event.target;
-    this.#curr_sample_name = value.toLowerCase();
+    this.#curr_sample_name = value;
     this.#header_map[this.#curr_sample_name] = true;
     this.#refreshInputOptionsForAllFields();
     this.#checkFormInputsReadyForSubmit();
@@ -63,7 +63,7 @@ export default class extends Controller {
   changeProjectPUIDInput(event) {
     this.#header_map[this.#curr_project_puid] = false;
     const { value } = event.target;
-    this.#curr_project_puid = value.toLowerCase();
+    this.#curr_project_puid = value;
     this.#header_map[this.#curr_project_puid] = true;
     this.#refreshInputOptionsForAllFields();
     this.#checkFormInputsReadyForSubmit();
@@ -72,7 +72,7 @@ export default class extends Controller {
   changeSampleDescriptionInput(event) {
     this.#header_map[this.#curr_sample_description] = false;
     const { value } = event.target;
-    this.#curr_sample_description = value.toLowerCase();
+    this.#curr_sample_description = value;
     this.#header_map[this.#curr_sample_description] = true;
     this.#refreshInputOptionsForAllFields();
     this.#checkFormInputsReadyForSubmit();
@@ -117,7 +117,7 @@ export default class extends Controller {
   #buildHeaderMap() {
     this.#header_map = {}
     this.#headers.forEach(h => {
-      this.#header_map[h.toLowerCase()] = false;
+      this.#header_map[h] = false;
     })
   }
 
@@ -138,7 +138,7 @@ export default class extends Controller {
   #refreshInputOptions(columnTarget, current_selection) {
     // filter out fields other headers are using, but not this target's own selection
     let headers = this.#headers.filter( (header) =>
-      (header.toLowerCase() != current_selection) &&  !(this.#header_map[header.toLowerCase()])
+      (header != current_selection) &&  !(this.#header_map[header])
     );
 
     // delete the old input options, except for one that is currently selected
