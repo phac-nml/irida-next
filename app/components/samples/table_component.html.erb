@@ -45,6 +45,9 @@
             <% @metadata_fields.each do |field| %>
               <%= render_cell(
               tag: 'th',
+              data: {
+                "field-id": field
+              },
               scope: 'col',
               classes: class_names('px-3 py-3')
             ) do %>

@@ -8,13 +8,16 @@ export default class extends Controller {
     "confirmDialogContainer",
     "confirmDialogTemplate",
   ];
+  #originalCellContent;
 
   initialize() {
     this.boundBlur = this.blur.bind(this);
     this.boundKeydown = this.keydown.bind(this);
+    this.#originalCellContent = {};
   }
 
   editableCellTargetConnected(element) {
+    this.#originalCellContent[element.id] = element.innerText;
     element.addEventListener("blur", this.boundBlur);
     element.addEventListener("keydown", this.boundKeydown);
   }
@@ -25,19 +28,20 @@ export default class extends Controller {
   }
 
   submit(element) {
+    let field = element
+      .closest("table")
+      .querySelector(`th:nth-child(${element.cellIndex + 1})`).dataset.fieldId;
+    let sampleId = element.parentNode.id;
     let form = this.formTemplateTarget.innerHTML
-      .replace(/SAMPLE_ID_PLACEHOLDER/g, element.dataset.sampleId)
-      .replace(
-        /FIELD_ID_PLACEHOLDER/g,
-        encodeURIComponent(element.dataset.field),
-      )
+      .replace(/SAMPLE_ID_PLACEHOLDER/g, sampleId)
+      .replace(/FIELD_ID_PLACEHOLDER/g, encodeURIComponent(field))
       .replace(/FIELD_VALUE_PLACEHOLDER/g, element.innerText);
     this.formContainerTarget.innerHTML = form;
     this.formContainerTarget.getElementsByTagName("form")[0].requestSubmit();
   }
 
   reset(element) {
-    element.innerText = element.dataset.originalValue;
+    element.innerText = this.#originalCellContent[element.id];
   }
 
   async blur(event) {
@@ -49,7 +53,7 @@ export default class extends Controller {
   }
 
   keydown(event) {
-    if (event.key !== "Enter") return;
+    if (event.key !== "Enter" || this.#unchanged(event.target)) return;
 
     event.preventDefault();
     this.submit(event.target);
@@ -57,7 +61,7 @@ export default class extends Controller {
 
   async showConfirmDialog(editableCell) {
     let confirmDialog = this.confirmDialogTemplateTarget.innerHTML
-      .replace(/ORIGINAL_VALUE/g, editableCell.dataset.originalValue)
+      .replace(/ORIGINAL_VALUE/g, this.#originalCellContent[editableCell.id])
       .replace(/NEW_VALUE/g, editableCell.innerText);
     this.confirmDialogContainerTarget.innerHTML = confirmDialog;
 
@@ -107,6 +111,6 @@ export default class extends Controller {
   }
 
   #unchanged(target) {
-    return target.dataset.originalValue === target.innerText;
+    return target.innerText === this.#originalCellContent[target.id];
   }
 }
