@@ -23,8 +23,6 @@
           @activity[:transferred_samples_ids]&.size,
           class: "text-slate-800 dark:text-slate-300 font-medium",
         ),
-      transferred_samples_ids: @activity[:transferred_samples_ids],
-      transferred_samples_puids: @activity[:transferred_samples_puids],
     ) %>
   <% else %>
     <%= t(
@@ -44,4 +42,14 @@
         ),
     ) %>
   <% end %>
+  <br/>
+  <%= link_to(
+    t(:"components.activity.more_details"),
+    activity_path(@activity[:id], dialog_type: "samples_transfer"),
+    data: {
+      turbo_stream: true,
+    },
+    class:
+      "inline-flex items-center justify-center button button--state-default button--size-small",
+  ) %>
 </span>

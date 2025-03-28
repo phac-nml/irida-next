@@ -1,13 +1,41 @@
 <%= viral_dialog(open: true,classes: ["overflow-visible"]) do |dialog| %>
   <% dialog.with_header(title: "Cloned Samples") %>
   <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
-    <p class="dark:text-slate-400">
-      These are the samples that were copied by
-      <%= activity.owner.email %>
+    <%= viral_pill(
+      text: helpers.local_time(activity[:created_at], :long),
+      color: :green,
+    ) %>
+
+    <% project_type =
+      @activity.parameters[:source_project].present? ? "source" : "target" %>
+
+    <p class="dark:text-slate-400 mt-2">
+      <% if project_type == "source" %>
+        <%= t(
+          :"components.activity.dialog.sample_clone.source_project_description",
+          user: activity.owner.email,
+          count: activity.parameters[:cloned_samples_ids]&.size,
+          source_project_puid: @activity.parameters[:source_project_puid],
+        ) %>
+      <% else %>
+        <%= t(
+          :"components.activity.dialog.sample_clone.target_project_description",
+          user: activity.owner.email,
+          count: activity.parameters[:cloned_samples_ids]&.size,
+          target_project_puid: @activity.parameters[:target_project_puid],
+        ) %>
+      <% end %>
     </p>
   </div>
 
-  <div>
+  <div
+    class="
+      overflow-y-auto max-h-[300px] border border-slate-300 rounded-md block w-full
+      p-2.5 dark:bg-slate-800 dark:border-slate-600
+    "
+    data-action="scroll->infinite-scroll#scroll"
+    data-infinite-scroll-target="scrollable"
+  >
     <table
       class="
         w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
@@ -21,10 +49,8 @@
         "
       >
         <tr>
-          <th class="px-3 py-3">Copied from
-            <%= activity.parameters[:source_project_puid] %></th>
-          <th class="px-3 py-3">Copied to
-            <%= activity.parameters[:target_project_puid] %></th>
+          <th class="px-3 py-3"><%= t(:"components.activity.dialog.sample_clone.copied_from") %></th>
+          <th class="px-3 py-3"><%= t(:"components.activity.dialog.sample_clone.copied_to") %></th>
         </tr>
       </thead>
       <tbody
@@ -53,7 +79,7 @@
       "
       data-action="click->viral--dialog#close"
     >
-      Close
+      <%= t(:"components.activity.dialog.close") %>
     </button>
   </div>
 <% end %>

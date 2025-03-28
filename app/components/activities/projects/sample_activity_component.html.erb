@@ -38,4 +38,17 @@
   <% end %>
 
   <%= t("#{@activity[:key]}", user: @activity[:user], href: href) %>
+
+  <% if sample_destroy_multiple_action %>
+    <br/>
+    <%= link_to(
+      t(:"components.activity.more_details"),
+      activity_path(@activity[:id], dialog_type: "samples_destroy"),
+      data: {
+        turbo_stream: true,
+      },
+      class:
+        "inline-flex items-center justify-center button button--state-default button--size-small",
+    ) %>
+  <% end %>
 </span>
