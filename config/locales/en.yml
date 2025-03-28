@@ -1764,8 +1764,6 @@ en:
         updated_at_desc: Updated At
   samples:
     editable_cell:
-      aria_label: Click to edit %{value}
-      not_editable: The field "%{field}" is not editable
       update_success: Metadata was successfully updated
     table_component:
       action: Action

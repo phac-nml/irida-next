@@ -1760,8 +1760,6 @@ fr:
         updated_at_desc: Mis à jour à
   samples:
     editable_cell:
-      aria_label: Cliquez pour modifier %{value}
-      not_editable: Le champ "%{field}" n’est pas modifiable
       update_success: Metadata was successfully updated
     table_component:
       action: Mesure
