@@ -323,7 +323,7 @@ module Dashboard
         within %(turbo-frame[id="list_selections"]) do
           assert_text @sample1.name
         end
-        find('input#select2-input').click
+        find('input.select2-input').click
         find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
@@ -378,7 +378,7 @@ module Dashboard
         within %(turbo-frame[id="list_selections"]) do
           assert_text @sample1.name
         end
-        find('input#select2-input').click
+        find('input.select2-input').click
         find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
 
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
