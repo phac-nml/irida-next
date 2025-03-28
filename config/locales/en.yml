@@ -802,7 +802,6 @@ en:
           descriptions:
           - Transfer group to another parent group.
           empty_state: No namespaces are associated with that name or ID
-          new_namespace_id: Select a parent group
           no_available_namespaces: You do not have access to any destination namespaces to transfer this group
           points:
           - Be careful. Changing a group's parent can have unintended side effects.
