@@ -32,7 +32,7 @@ module Projects
           :'projects.group_links.new.sharing_namespace_with_group',
           name: @namespace.human_name
         )
-        find('input#select2-input').click
+        find('input.select2-input').click
         find('button[data-viral--select2-primary-param="Subgroup 2"]').click
         find('#namespace_group_link_group_access_level').find(:xpath, 'option[3]').select_option
 

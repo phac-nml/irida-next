@@ -99,7 +99,7 @@ module Groups
 
       within('dialog') do
         assert_selector 'h1', text: I18n.t(:'groups.members.new.title')
-        find('input#select2-input').click
+        find('input.select2-input').click
         find("button[data-viral--select2-primary-param='#{user_to_add.email}']").click
         find('#member_access_level').find('option',
                                           text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
@@ -266,7 +266,7 @@ module Groups
 
       within('dialog') do
         assert_selector 'h1', text: I18n.t(:'groups.members.new.title')
-        find('input#select2-input').click
+        find('input.select2-input').click
         find("button[data-viral--select2-primary-param='#{user_to_add.email}']").click
         find('#member_access_level').find('option',
                                           text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
@@ -298,7 +298,7 @@ module Groups
       within('dialog') do
         assert_selector 'h1', text: I18n.t(:'groups.members.new.title')
 
-        find('input#select2-input').click
+        find('input.select2-input').click
         assert_no_selector "button[data-viral--select2-primary-param='#{user_to_add.email}']"
       end
     end

@@ -441,7 +441,7 @@ module Projects
           end
         end
         # select destination project
-        find('input#select2-input').click
+        find('input.select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
@@ -495,7 +495,7 @@ module Projects
           end
         end
         # select destination project
-        find('input#select2-input').click
+        find('input.select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
 
@@ -535,7 +535,7 @@ module Projects
       assert_selector '#dialog'
       within('#dialog') do
         assert_text I18n.t('projects.samples.transfers.dialog.title')
-        find('input#select2-input').click
+        find('input.select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
@@ -590,7 +590,7 @@ module Projects
             assert_text sample[1]
           end
         end
-        find('input#select2-input').click
+        find('input.select2-input').click
         find("button[data-viral--select2-value-param='#{project25.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
@@ -692,7 +692,7 @@ module Projects
           assert_text @sample1.name
           assert_text @sample1.puid
         end
-        find('input#select2-input').click
+        find('input.select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
@@ -745,7 +745,7 @@ module Projects
       assert_selector '#dialog'
       within('#dialog') do
         # fill destination input
-        find('input#select2-input').fill_in with: 'invalid project name or puid'
+        find('input.select2-input').fill_in with: 'invalid project name or puid'
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -1973,7 +1973,7 @@ module Projects
           assert_text @sample2.name
           assert_text @sample2.puid
         end
-        find('input#select2-input').click
+        find('input.select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
@@ -2031,7 +2031,7 @@ module Projects
           assert_text @sample2.name
           assert_text @sample2.puid
         end
-        find('input#select2-input').click
+        find('input.select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
 
@@ -2071,7 +2071,7 @@ module Projects
       assert_selector '#dialog'
       within('#dialog') do
         assert_text I18n.t('projects.samples.clones.dialog.title')
-        find('input#select2-input').click
+        find('input.select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
@@ -2129,7 +2129,7 @@ module Projects
             assert_text sample[1]
           end
         end
-        find('input#select2-input').click
+        find('input.select2-input').click
         find("button[data-viral--select2-value-param='#{project25.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
@@ -2177,7 +2177,7 @@ module Projects
       click_link I18n.t('projects.samples.index.clone_button')
       assert_selector '#dialog'
       within('#dialog') do
-        find('input#select2-input').fill_in with: 'invalid project name or puid'
+        find('input.select2-input').fill_in with: 'invalid project name or puid'
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -2253,7 +2253,7 @@ module Projects
           assert_text @sample1.name
           assert_text @sample1.puid
         end
-        find('input#select2-input').click
+        find('input.select2-input').click
         find("button[data-viral--select2-value-param='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
