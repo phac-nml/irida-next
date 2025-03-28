@@ -111,8 +111,6 @@ module Samples
 
     test 'cannot update metadata key originally added by an analysis' do
       sample34 = samples(:sample34)
-      project31 = projects(:project31)
-      namespace = groups(:subgroup_twelve_a_a)
 
       patch sample_metadata_path(sample34),
             params: { 'sample' => { 'update_field' => {
