@@ -23,7 +23,6 @@ export default class extends Controller {
     "text-slate-300",
     "dark:text-slate-700",
   ];
-  #enabledClasses = ["underline", "hover:no-underline", "cursor-pointer"];
   #originalAvailableList;
 
   #selectedOption;
@@ -46,16 +45,7 @@ export default class extends Controller {
       ];
       Object.freeze(this.#originalAvailableList);
 
-      this.#setInitialSelectAllState(this.availableList, this.addAllTarget);
-      this.#setInitialSelectAllState(this.selectedList, this.removeAllTarget);
-
-      // require specific submit button logic for lists that can vary
-      // between states upon loading (such as edit metadata template)
-      if (this.selectedList.querySelectorAll("li").length > 0) {
-        this.#setSubmitButtonDisableState(false);
-      } else {
-        this.#setSubmitButtonDisableState(true);
-      }
+      this.#checkStates();
 
       this.buttonStateListener = this.#checkStates.bind(this);
       this.selectedList.addEventListener("drop", this.buttonStateListener);
@@ -77,16 +67,6 @@ export default class extends Controller {
     this.availableList.append(...this.#originalAvailableList);
     this.selectedList.innerHTML = "";
     this.#checkStates();
-  }
-
-  #setInitialSelectAllState(list, button) {
-    const list_values = list.querySelectorAll("li");
-    if (list_values.length === 0) {
-      button.classList.add(...this.#disabledClasses);
-      button.setAttribute("aria-disabled", "true");
-    } else {
-      button.classList.add(...this.#enabledClasses);
-    }
   }
 
   #checkStates() {
@@ -157,7 +137,6 @@ export default class extends Controller {
 
   #setAddOrRemoveButtonDisableState(button, disableState) {
     if (disableState && !button.classList.contains("pointer-events-none")) {
-      button.classList.remove(...this.#enabledClasses);
       button.classList.add(...this.#disabledClasses);
       button.setAttribute("aria-disabled", "true");
     } else if (
@@ -165,7 +144,6 @@ export default class extends Controller {
       button.classList.contains("pointer-events-none")
     ) {
       button.classList.remove(...this.#disabledClasses);
-      button.classList.add(...this.#enabledClasses);
       button.removeAttribute("aria-disabled");
     }
   }
@@ -256,81 +234,88 @@ export default class extends Controller {
   }
 
   navigateList(event) {
-    if (event.key === " " || event.key === "Enter") {
-      // sets selection
-      event.preventDefault();
-      if (this.#selectedOption === event.target) {
-        // de-select option
-        this.#removeSelectedAttributes();
-      } else if (this.#selectedOption) {
-        // replace current option with new option
-        this.#removeSelectedAttributes();
-        this.#setSelectedOption(event.target);
-      } else {
-        // set option when no option was selected
-        this.#setSelectedOption(event.target);
-      }
-    } else if (event.key === "ArrowRight") {
-      // navigate to right side list
-      event.preventDefault();
-      let selectedListFirstChild = this.selectedList.firstElementChild;
-      if (event.target.parentNode === this.availableList) {
-        this.#navigateListLeftAndRight(
-          this.selectedList,
-          selectedListFirstChild,
-        );
-      }
-    } else if (event.key === "ArrowLeft") {
-      // navigate to left side list
-      event.preventDefault();
-      let availableListFirstChild = this.availableList.firstElementChild;
-      if (event.target.parentNode === this.selectedList) {
-        this.#navigateListLeftAndRight(
-          this.availableList,
-          availableListFirstChild,
-        );
-      }
-    } else if (event.key === "ArrowUp" || event.key === "ArrowDown") {
-      // navigate up and down current list
-      event.preventDefault();
-      let nextOption =
-        event.key === "ArrowUp"
-          ? event.target.previousElementSibling
-          : event.target.nextElementSibling;
-      this.#navigateListUpAndDown(event.key, nextOption);
-    } else if (event.key === "Tab" && this.#selectedOption) {
-      // de-select option and allow tab to function as expected
-      event.preventDefault();
-      this.#removeSelectedAttributes();
+    const handler = this.#getKeyboardHandler(event.key);
+    if (handler) {
+      if (event.key !== "Tab") event.preventDefault();
+      handler.call(this, event);
+      this.#checkStates();
     }
-    console.log("hi?");
-    this.#checkStates();
   }
 
-  #navigateListUpAndDown(eventKey, nextOption) {
-    if (nextOption && this.#selectedOption) {
-      // if an option is currently selected, move the option up and down list
+  #getKeyboardHandler(key) {
+    const handlers = {
+      " ": this.#handleSelection.bind(this),
+      Enter: this.#handleSelection.bind(this),
+      ArrowRight: this.#handleRightNavigation.bind(this),
+      ArrowLeft: this.#handleLeftNavigation.bind(this),
+      ArrowUp: (event) => this.#handleVerticalNavigation(event, "up", "single"),
+      ArrowDown: (event) =>
+        this.#handleVerticalNavigation(event, "down", "single"),
+      Tab: this.#removeSelectedAttributes.bind(this),
+      Home: (event) => this.#handleVerticalNavigation(event, "up", "fullList"),
+      End: (event) => this.#handleVerticalNavigation(event, "down", "fullList"),
+    };
+    return handlers[key];
+  }
+
+  #handleSelection(event) {
+    if (this.#selectedOption === event.target) {
+      this.#removeSelectedAttributes();
+    } else {
+      if (this.#selectedOption) this.#removeSelectedAttributes();
+      this.#setSelectedOption(event.target);
+    }
+  }
+
+  #handleRightNavigation(event) {
+    if (event.target.parentNode !== this.availableList) return;
+    const selectedListFirstChild = this.selectedList.firstElementChild;
+
+    this.#navigateListLeftAndRight(this.selectedList, selectedListFirstChild);
+  }
+  #handleLeftNavigation(event) {
+    if (event.target.parentNode !== this.selectedList) return;
+
+    const availableListFirstChild = this.availableList.firstElementChild;
+    this.#navigateListLeftAndRight(this.availableList, availableListFirstChild);
+  }
+
+  #handleVerticalNavigation(event, direction, navigateSize) {
+    const targetOption =
+      navigateSize === "single"
+        ? direction === "up"
+          ? event.target.previousElementSibling
+          : event.target.nextElementSibling
+        : direction === "up"
+          ? event.target.parentNode.firstElementChild
+          : event.target.parentNode.lastElementChild;
+    this.#navigateListUpAndDown(
+      direction === "up" ? "up" : "down",
+      targetOption,
+    );
+  }
+
+  #navigateListUpAndDown(direction, targetOption) {
+    if (!targetOption) return;
+
+    if (this.#selectedOption) {
       this.#selectedOption.remove();
-      if (eventKey === "ArrowUp") {
-        nextOption.insertAdjacentElement("beforebegin", this.#selectedOption);
-      } else {
-        nextOption.insertAdjacentElement("afterend", this.#selectedOption);
-      }
+      targetOption.insertAdjacentElement(
+        direction === "up" ? "beforebegin" : "afterend",
+        this.#selectedOption,
+      );
       this.#selectedOption.focus();
-    } else if (nextOption) {
-      // if no option is selected, move focus/cursor up and down list
-      nextOption.focus();
+    } else {
+      targetOption.focus();
     }
   }
 
   #navigateListLeftAndRight(targetList, targetListFirstChild) {
     if (this.#selectedOption) {
-      // if option is currently selected, move it to the target list
       this.#selectedOption.remove();
       targetList.prepend(this.#selectedOption);
       this.#selectedOption.focus();
     } else if (targetListFirstChild) {
-      // if no option is selected, move cursor to target list if target list has options
       targetListFirstChild.focus();
     }
   }

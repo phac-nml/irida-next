@@ -41,14 +41,18 @@
 </div>
 <div class="flex -mt-3 font-medium text-slate-900 dark:text-white">
   <button
-    class="mr-2 text-sm"
+    class="
+      mr-2 text-sm underline enabled:hover:no-underline enabled:cursor-pointer
+    "
     data-action="click->viral--sortable-lists--two-lists-selection#addAll"
     data-viral--sortable-lists--two-lists-selection-target="addAll"
   >
     <%= t(".add_all") %>
   </button>
   <button
-    class="ml-2 text-sm"
+    class="
+      ml-2 text-sm underline enabled:hover:no-underline enabled:cursor-pointer
+    "
     data-action="click->viral--sortable-lists--two-lists-selection#removeAll"
     data-viral--sortable-lists--two-lists-selection-target="removeAll"
   >
