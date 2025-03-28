@@ -6,7 +6,7 @@
     data-action="keydown->viral--select2#keydown"
     data-viral--select2-target="input"
     placeholder="<%= placeholder %>"
-    <%= required ? "required" : "" %>
+    <%= "required" if required %>
     autocomplete="off"
     class="
       border-slate-300 text-slate-800 sm:text-sm rounded-md focus:ring-primary-500
