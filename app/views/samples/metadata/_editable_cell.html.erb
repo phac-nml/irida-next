@@ -1,10 +1,14 @@
 <%= render Viral::BaseComponent.new(
   tag: "td",
+  id: dom_id(sample, field),
   classes: class_names("px-3 py-3"),
   contenteditable: true,
   data: {
     "editable-cell-target": "editableCell",
+    field: field,
+    "original-value": sample.metadata[field],
+    "sample-id": sample.id,
   },
 ) do %>
-  <%= @sample.metadata.fetch(@field, "") %>
+  <%= sample.metadata[field] %>
 <% end %>

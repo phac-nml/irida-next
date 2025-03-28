@@ -156,8 +156,12 @@
 
   <%= render partial: "table",
   locals: {
+    allowed_to: @allowed_to,
+    fields: @fields,
+    has_samples: @has_samples,
+    pagy: @pagy,
     project: @project,
     samples: @samples,
-    pagy: @pagy,
+    search_params: @search_params,
   } %>
 </div>

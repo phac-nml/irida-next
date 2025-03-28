@@ -28,7 +28,7 @@
                 },
                 class:
                   "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300
-                                 border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
+                                               border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
               ) %>
             <% else %>
               <% dropdown.with_item(
@@ -102,9 +102,13 @@
 
     <%= render partial: "table",
     locals: {
-      samples: @samples,
+      allowed_to: @allowed_to,
+      fields: @fields,
       group: @group,
+      has_samples: @has_samples,
       pagy: @pagy,
+      samples: @samples,
+      search_params: @search_params,
     } %>
   <% end %>
 </div>
