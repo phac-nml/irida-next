@@ -52,7 +52,15 @@
           <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>"/>
           <div class="grid gap-4">
             <div class="form-field">
-              <%= form.label :new_project_id, t(".new_project_id") %>
+              <% form_id = "transfer-project-select" %>
+              <label
+                for="<%= form_id %>"
+                class="
+                  mb-1 block text-sm font-medium text-slate-900 dark:text-white
+                "
+              >
+                <%= t(".new_project_id") %>
+              </label>
               <% if @projects.empty? %>
                 <input
                   disabled
@@ -64,7 +72,7 @@
                   "
                 >
               <% else %>
-                <%= viral_select2(form:, name: :new_project_id, placeholder: t(".select_project")) do |select| %>
+                <%= viral_select2(form:, name: :new_project_id, id: form_id, placeholder: t(".select_project")) do |select| %>
                   <% @projects.each do |project| %>
                     <% select.with_option(
                       primary: project.full_path,
@@ -81,7 +89,6 @@
             <div>
               <%= form.submit t(".submit_button"),
                           class: "button button--size-default button--state-primary",
-                          disabled: true,
                           data: {
                             action: "click->form--hidden-inputs#clearSelection",
                             "viral--select2-target": "submitButton",

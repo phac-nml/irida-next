@@ -14,7 +14,7 @@ data: { turbo_confirm: "", controller: "viral--select2" }) do |form| %>
         "
       >
     <% else %>
-      <%= viral_select2(form:, name: :new_namespace_id, placeholder: t(:"groups.edit.advanced.transfer.select_group")) do |select| %>
+      <%= viral_select2(form:, name: :new_namespace_id, id: :new_namespace_id, placeholder: t(:"groups.edit.advanced.transfer.select_group")) do |select| %>
         <% @authorized_namespaces.each do |namespace| %>
           <% select.with_option(
             primary: namespace.full_path,

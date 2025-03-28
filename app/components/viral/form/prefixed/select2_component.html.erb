@@ -15,7 +15,7 @@
         id="<%= id %>"
         data-viral--select2-target="input"
         placeholder="<%= placeholder %>"
-        required="<%= required %>"
+        <%= required ? "required" : "" %>
         autocomplete="off"
         class="
           border-slate-300 text-slate-800 sm:text-sm rounded-r-md !rounded-l-none
