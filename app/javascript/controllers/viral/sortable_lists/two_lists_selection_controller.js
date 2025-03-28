@@ -17,12 +17,6 @@ export default class extends Controller {
     fieldName: String,
   };
 
-  #disabledClasses = [
-    "pointer-events-none",
-    "cursor-not-allowed",
-    "text-slate-300",
-    "dark:text-slate-700",
-  ];
   #originalAvailableList;
 
   #selectedOption;
@@ -136,14 +130,11 @@ export default class extends Controller {
   }
 
   #setAddOrRemoveButtonDisableState(button, disableState) {
-    if (disableState && !button.classList.contains("pointer-events-none")) {
-      button.classList.add(...this.#disabledClasses);
+    if (disableState && !button.disabled) {
+      button.disabled = true;
       button.setAttribute("aria-disabled", "true");
-    } else if (
-      !disableState &&
-      button.classList.contains("pointer-events-none")
-    ) {
-      button.classList.remove(...this.#disabledClasses);
+    } else if (!disableState && button.disabled) {
+      button.disabled = false;
       button.removeAttribute("aria-disabled");
     }
   }
