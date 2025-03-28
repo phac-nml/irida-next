@@ -800,7 +800,6 @@ fr:
           descriptions:
           - Transférer le groupe à un autre groupe parent
           empty_state: Aucun espace de noms n’est associé à ce nom ou à cet identifiant
-          new_namespace_id: Choisissez un groupe parent
           no_available_namespaces: Vous n’avez accès à aucun espace de noms de destination pour transférer ce groupe
           points:
           - Soyez prudent. Changer le parent d’un groupe peut avoir des effets secondaires involontaires.
