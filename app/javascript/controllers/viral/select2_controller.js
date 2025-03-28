@@ -43,11 +43,11 @@ export default class Select2Controller extends Controller {
    * ⌨️ Keyboard Navigation Constants
    * Defining key codes for better readability
    */
-  static #KEYS = {
-    ARROW_DOWN: 40,
-    ARROW_UP: 38,
-    ENTER: 13,
-    ESCAPE: 27,
+  static #KEY_CODES = {
+    ARROW_DOWN: "ArrowDown",
+    ARROW_UP: "ArrowUp",
+    ENTER: "Enter",
+    ESCAPE: "Escape",
   };
 
   /**
@@ -173,27 +173,29 @@ export default class Select2Controller extends Controller {
   keydown(event) {
     try {
       // Only process navigation keys
-      if (!Object.values(Select2Controller.#KEYS).includes(event.keyCode))
+      if (!Object.values(Select2Controller.#KEY_CODES).includes(event.key)) {
+        this.input();
         return;
+      }
 
       // Prevent default browser behavior for these keys
       event.preventDefault();
       event.stopPropagation();
 
-      switch (event.keyCode) {
-        case Select2Controller.#KEYS.ARROW_DOWN:
+      switch (event.key) {
+        case Select2Controller.#KEY_CODES.ARROW_DOWN:
           this.#navigateItems(1);
           break;
 
-        case Select2Controller.#KEYS.ARROW_UP:
+        case Select2Controller.#KEY_CODES.ARROW_UP:
           this.#navigateItems(-1);
           break;
 
-        case Select2Controller.#KEYS.ESCAPE:
+        case Select2Controller.#KEY_CODES.ESCAPE:
           this.#resetInput();
           break;
 
-        case Select2Controller.#KEYS.ENTER:
+        case Select2Controller.#KEY_CODES.ENTER:
           if (event.target.nodeName === "INPUT") {
             // Show dropdown when pressing enter in input field
             if (this.#dropdown) this.#dropdown.show();
