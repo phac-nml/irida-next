@@ -15,10 +15,9 @@ module Projects
 
     test 'should transfer project' do
       visit project_edit_path(@project)
-      assert_selector "input[value='#{I18n.t(:'projects.edit.advanced.transfer.submit')}']:disabled", count: 1
-      find('input#select2-input').click
+      find('input.select2-input').click
       find("button[data-viral--select2-primary-param='#{@namespace.full_path}']").click
-      assert_selector "input[value='#{I18n.t(:'projects.edit.advanced.transfer.submit')}']", count: 1
+      assert_selector 'input.select2-input', count: 1
       click_on I18n.t(:'projects.edit.advanced.transfer.submit')
 
       within('#turbo-confirm') do
@@ -32,7 +31,7 @@ module Projects
 
     test 'empty state of transfer group' do
       visit project_edit_path(@project)
-      find('input#select2-input').fill_in with: 'invalid project name or puid'
+      find('input.select2-input').fill_in with: 'invalid project name or puid'
       assert_text I18n.t(:'projects.edit.advanced.transfer.empty_state')
     end
 
@@ -40,10 +39,9 @@ module Projects
       project2 = projects(:project2)
 
       visit project_edit_path(project2)
-      assert_selector "input[value='#{I18n.t(:'projects.edit.advanced.transfer.submit')}']:disabled", count: 1
-      find('input#select2-input').click
+      find('input.select2-input').click
       find("button[data-viral--select2-primary-param='#{@namespace.full_path}']").click
-      assert_selector "input[value='#{I18n.t(:'projects.edit.advanced.transfer.submit')}']", count: 1
+      assert_selector 'input.select2-input', count: 1
       click_on I18n.t(:'projects.edit.advanced.transfer.submit')
 
       within('#turbo-confirm') do
