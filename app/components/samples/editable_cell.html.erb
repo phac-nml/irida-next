@@ -6,9 +6,9 @@
   data: {
     "editable-cell-target": "editableCell",
     field: @field,
-    "original-value": @sample.metadata[@field],
+    "original-value": @sample.metadata.fetch(@field, ""),
     "sample-id": @sample.id,
   },
 ) do %>
-  <%= @sample.metadata[@field] %>
+  <%= @sample.metadata.fetch(@field, "") %>
 <% end %>
