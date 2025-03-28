@@ -3159,21 +3159,17 @@ module Projects
       end
       ### SETUP END ###
 
-      within('table tbody tr:first-child td:nth-child(7)') do
+      within('table tbody tr:first-child') do
         ### ACTIONS START ###
-        find('button[data-field="metadatafield2"]').click
-        assert_selector "form[data-controller='inline-edit']"
+        assert_selector 'td:nth-child(7)[contenteditable="true"]'
+        find('td:nth-child(7)').click
 
-        within('form[data-controller="inline-edit"]') do
-          find('input[name="value"]').send_keys 'value2'
-          find('input[name="value"]').send_keys :return
-        end
+        find('td:nth-child(7)').send_keys('value2')
+        find('td:nth-child(7)').native.send_keys(:return)
         ### ACTIONS END ###
 
         ### VERIFY START ###
-        assert_no_selector "form[data-controller='inline-edit']"
-        assert_selector 'button[data-field="metadatafield2"]'
-        assert_selector 'button', text: 'value2'
+        assert_selector 'td:nth-child(7)[contenteditable="true"]', text: 'value2'
       end
       assert_text I18n.t('samples.editable_cell.update_success')
       ### VERIFY END ###
@@ -3203,13 +3199,9 @@ module Projects
 
       ### SETUP END ###
 
-      within('table tbody tr:nth-child(1) td:nth-child(6)') do
-        ### ACTIONS START ###
-        find('button[data-field="metadatafield1"]').click
-        ### ACTIONS END ###
-
+      within('table tbody tr:nth-child(1)') do
         ### VERIFY START ###
-        assert_no_selector "form[data-controller='inline-edit']"
+        assert_no_selector 'td:nth-child(6)[contenteditable="true"]'
         ### VERIFY END ###
       end
     end
@@ -3277,14 +3269,12 @@ module Projects
       end
       ### SETUP END ###
 
-      within('table tbody tr:first-child td:nth-child(7)') do
+      within('table tbody tr:first-child') do
         ### ACTIONS START ###
-        find('button[data-field="metadatafield2"]').click
-        assert_selector "form[data-controller='inline-edit']"
+        assert_selector 'td:nth-child(7)[contenteditable="true"]'
+        find('td:nth-child(7)').click
 
-        within('form[data-controller="inline-edit"]') do
-          find('input[name="value"]').send_keys 'New Value'
-        end
+        find('td:nth-child(7)').send_keys('New Value')
       end
       find('body').click
 
@@ -3298,7 +3288,7 @@ module Projects
       ### VERIFY START ###
       assert_no_selector 'dialog[open]'
       within('table tbody tr:first-child td:nth-child(7)') do
-        assert_selector 'button', text: 'New Value'
+        assert_text 'New Value'
       end
       ### VERIFY END ###
     end
@@ -3336,14 +3326,12 @@ module Projects
       end
       ### SETUP END ###
 
-      within('table tbody tr:first-child td:nth-child(7)') do
+      within('table tbody tr:first-child') do
         ### ACTIONS START ###
-        find('button[data-field="metadatafield2"]').click
-        assert_selector "form[data-controller='inline-edit']"
+        assert_selector 'td:nth-child(7)[contenteditable="true"]'
+        find('td:nth-child(7)').click
 
-        within('form[data-controller="inline-edit"]') do
-          find('input[name="value"]').send_keys 'New Value'
-        end
+        find('td:nth-child(7)').send_keys('New Value')
       end
       find('body').click
 

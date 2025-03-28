@@ -57,7 +57,7 @@ module Samples
       {
         tag: 'div',
         classes: class_names('table-container @2xl:flex @2xl:flex-col @3xl:shrink @3xl:min-h-0'),
-        'data-controller' => 'samples--metadata--editable-cell'
+        'data-controller' => 'editable-cell'
       }
     end
 

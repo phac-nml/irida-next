@@ -9,30 +9,15 @@ module Samples
     before_action :project
     before_action :field
 
-    def edit
-      authorize! @project, to: :update_sample?
-
-      @value = @sample.metadata[@field]
-
-      if @sample.updatable_field?(@field)
-        render_editable_field
-      else
-        render_non_editable_error
-      end
-    end
-
     def update
       authorize! @project, to: :update_sample?
 
       value = params[:value]
-      original_value = params[:original_value]
 
-      if value == original_value
-        render_unchanged_field
-      elsif !@sample.field?(@field)
-        create_metadata_field(@field, value)
+      if @sample.field?(@field)
+        update_field_value(@sample.metadata[@field], value)
       else
-        update_field_value(original_value, value)
+        create_metadata_field(@field, value)
       end
     end
 
@@ -105,22 +90,6 @@ module Samples
       end
     end
 
-    def render_editable_field
-      render status: :partial_content, turbo_stream: turbo_stream.replace(
-        helpers.dom_id(@sample, @field),
-        partial: 'shared/samples/metadata/fields/editing_field_cell',
-        locals: { sample: @sample, field: @field, value: @value }
-      )
-    end
-
-    def render_non_editable_error
-      render status: :unprocessable_entity, turbo_stream: turbo_stream.append(
-        'flashes',
-        partial: 'shared/flash',
-        locals: { type: 'error', message: t('samples.editable_cell.not_editable', field: @field) }
-      )
-    end
-
     def get_create_messages(added_keys, existing_keys) # rubocop:disable Metrics/MethodLength
       messages = []
       if added_keys.count == 1
@@ -170,14 +139,6 @@ module Samples
       end
     end
 
-    def render_unchanged_field
-      render turbo_stream: turbo_stream.replace(
-        helpers.dom_id(@sample, @field),
-        partial: 'shared/samples/metadata/fields/editable_field_cell',
-        locals: { sample: @sample, field: @field }
-      )
-    end
-
     def update_field_value(original_value, new_value)
       perform_field_update(original_value, new_value)
 
@@ -207,8 +168,19 @@ module Samples
     end
 
     def render_update_error
-      render status: :unprocessable_entity,
-             locals: { type: 'error', message: error_message(@sample) }
+      # render status: :unprocessable_entity,
+      #       locals: { type: 'error', message: error_message(@sample) }
+      render turbo_stream: [
+        turbo_stream.update(
+          helpers.dom_id(@sample, @field), @sample.metadata[@field]
+        ),
+        turbo_stream.append(
+          'flashes',
+          partial: 'shared/flash',
+          locals: { type: 'error',
+                    message: error_message(@sample) }
+        )
+      ]
     end
 
     def render_update_success
@@ -216,18 +188,18 @@ module Samples
       # issues for selecting current samples.  To fix this, we are adding a second to the timestamp so that the
       # timestamp is always greater than the current time.
       @timestamp = @sample.updated_at + 1.second
-      render turbo_stream: [turbo_stream.replace(
-        helpers.dom_id(@sample, @field),
-        partial: 'shared/samples/metadata/fields/editable_field_cell',
-        locals: { sample: @sample, field: @field }
-      ),
-                            turbo_stream.append(
-                              'flashes',
-                              partial: 'shared/flash',
-                              locals: { type: 'success',
-                                        message: t('samples.editable_cell.update_success') }
-                            ),
-                            turbo_stream.replace('timestamp', partial: 'shared/samples/timestamp_input')]
+      render turbo_stream: [
+        turbo_stream.replace(
+          helpers.dom_id(@sample, @field), Samples::EditableCell.new(field: @field, sample: @sample)
+        ),
+        turbo_stream.append(
+          'flashes',
+          partial: 'shared/flash',
+          locals: { type: 'success',
+                    message: t('samples.editable_cell.update_success') }
+        ),
+        turbo_stream.replace('timestamp', partial: 'shared/samples/timestamp_input')
+      ]
     end
   end
 end

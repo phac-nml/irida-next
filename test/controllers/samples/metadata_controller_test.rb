@@ -131,25 +131,6 @@ module Samples
       assert_response :unprocessable_entity
     end
 
-    test 'check to edit a metadata field' do
-      get edit_sample_metadatum_path(
-        @sample32, 'metadatafield1'
-      ), params: {
-        'format' => :turbo_stream
-      }
-      assert_response :partial_content
-    end
-
-    test 'checking to see if a field can be edited fails if it belongs to an analysis' do
-      sample34 = samples(:sample34)
-      get edit_sample_metadatum_path(
-        sample34, 'metadatafield1'
-      ), params: {
-        'format' => :turbo_stream
-      }
-      assert_response :unprocessable_entity
-    end
-
     test 'builds correct update params for updating a value' do
       controller = MetadataController.new
       controller.instance_variable_set(:@field, @field)

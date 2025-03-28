@@ -21,7 +21,7 @@ Rails.application.routes.draw do
     resources :groups, only: %i[index new create]
     resources :projects, only: %i[index new create]
     resources :samples, only: %i[show edit] do
-      resources :metadata, module: :samples, only: %i[edit update] do
+      resources :metadata, module: :samples, only: %i[update] do
         collection do
           post '/', action: :bulk_create
           patch '/', action: :bulk_update

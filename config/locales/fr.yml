@@ -1892,9 +1892,9 @@ fr:
           dialog:
             confirm_button: Enregistrer
             description_with_new_value:
-              with_original_value: Cliquez sur <kbd>Enregistrer<kbd> pour mettre à jour la valeur <span class='font-bold underline' data-inline-edit-target="newValue"></span> ou sur <kbd>Abandonner</kbd> pour annuler et revenir à la valeur précédente de <span class='font-bold underline'>%{value}</span>.
-              without_original_value: Cliquez sur <kbd>Enregistrer<kbd> pour mettre à jour la valeur <span class='font-bold underline' data-inline-edit-target="newValue"></span> ou sur <kbd>Abandonner</kbd> pour annuler et revenir à la valeur vide précédente.
-            description_without_new_value: Cliquez sur <kbd>Enregistrer</kbd> pour supprimer la valeur actuelle ou sur <kbd>Abandonner</kbd> pour annuler et revenir à la valeur précédente de <span class='font-bold underline'>%{value}</span>.
+              with_original_value: Cliquez sur <kbd>Enregistrer<kbd> pour mettre à jour la valeur <span class='font-bold underline'>NEW_VALUE</span> ou sur <kbd>Abandonner</kbd> pour annuler et revenir à la valeur précédente de <span class='font-bold underline'>ORIGINAL_VALUE</span>.
+              without_original_value: Cliquez sur <kbd>Enregistrer<kbd> pour mettre à jour la valeur <span class='font-bold underline'>NEW_VALUE</span> ou sur <kbd>Abandonner</kbd> pour annuler et revenir à la valeur vide précédente.
+            description_without_new_value: Cliquez sur <kbd>Enregistrer</kbd> pour supprimer la valeur actuelle ou sur <kbd>Abandonner</kbd> pour annuler et revenir à la valeur précédente de <span class='font-bold underline'>ORIGINAL_VALUE</span>.
             discard_button: Abandonner
             title: Confirmation requise
         file_imports:

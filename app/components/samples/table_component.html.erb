@@ -129,13 +129,10 @@
                 <% end %>
               <% end %>
               <% @metadata_fields.each do |field| %>
-                <% if @abilities[:edit_sample_metadata] %>
+                <% if @abilities[:edit_sample_metadata] && sample.updatable_field?(field) %>
                   <%= render Samples::EditableCell.new(field: field, sample: sample) %>
                 <% else %>
-                  <%= render_cell(
-                tag: 'td',
-                classes: class_names('px-3 py-3')
-              ) do %>
+                  <%= render_cell(tag: 'td', classes: class_names('px-3 py-3')) do %>
                     <%= sample.metadata[field] %>
                   <% end %>
                 <% end %>
@@ -212,15 +209,57 @@
     <% end %>
     <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".limit.item")) %>
     <% if @abilities[:edit_sample_metadata] %>
-      <template data-samples--metadata--editable-cell-target="formTemplate">
+      <template data-editable-cell-target="formTemplate">
         <%= form_with(
-              url: edit_sample_metadatum_path(sample_id: 'SAMPLE_ID_PLACEHOLDER', id: 'FIELD_ID_PLACEHOLDER'),
-              method: :get,
+              url: sample_metadatum_path(sample_id: 'SAMPLE_ID_PLACEHOLDER', id: 'FIELD_ID_PLACEHOLDER'),
+              method: :patch,
               class: "w-full"
             ) do |form| %>
           <%= form.hidden_field :format, value: "turbo_stream" %>
+          <%= form.hidden_field :value, value: "FIELD_VALUE_PLACEHOLDER" %>
         <% end %>
       </template>
+      <div
+        id="editable-cell-form-container"
+        class="invisible"
+        data-editable-cell-target="formContainer"
+      >
+      </div>
+      <template data-editable-cell-target="confirmDialogTemplate">
+        <%= viral_dialog(open: false) do |dialog| %>
+          <% dialog.with_header(
+            title: t("shared.samples.metadata.editing_field_cell.dialog.title"),
+          ) %>
+
+          <p class="text-base leading-8 text-slate-900 dark:text-white text-wrap">
+            <span data-message-type="wov" class="hidden">
+              <%= raw t(
+                "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value.with_original_value",
+              ) %>
+            </span>
+            <span data-message-type="woov" class="hidden">
+              <%= raw t(
+                "shared.samples.metadata.editing_field_cell.dialog.description_with_new_value.without_original_value",
+              ) %>
+            </span>
+            <span data-message-type="wonv" class="hidden">
+              <%= raw t(
+                "shared.samples.metadata.editing_field_cell.dialog.description_without_new_value",
+              ) %>
+            </span>
+          </p>
+          <% dialog.with_secondary_action do %>
+            <%= viral_button(value: "confirm", state: :primary) do
+              t("shared.samples.metadata.editing_field_cell.dialog.confirm_button")
+            end %>
+            <%= viral_button(value: "cancel", state: :default) do
+              t("shared.samples.metadata.editing_field_cell.dialog.discard_button")
+            end %>
+          <% end %>
+        <% end %>
+      </template>
+      <div data-editable-cell-target="confirmDialogContainer">
+      </div>
     <% end %>
   <% end %>
 
