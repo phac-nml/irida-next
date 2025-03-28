@@ -428,7 +428,19 @@ fr:
         never: Jamais
   components:
     activity:
+      dialog:
+        close: Close
+        sample_clone:
+          copied_from: Copied from
+          copied_to: Copied to
+          source_project_description: "%{user} copied %{count} samples from project %{source_project_puid}"
+          target_project_description: "%{user} copied %{count} samples to project %{target_project_puid}"
+        sample_destroy: "%{user} removed %{count} samples from the project"
+        sample_transfer:
+          source_project_description: "%{user} transferred %{count} samples from project %{source_project_puid}"
+          target_project_description: "%{user} transferred %{count} samples to project %{target_project_puid}"
       load_more: Charger plus
+      more_details: More details
     clipboard:
       copied: Copié!
       title: Copier dans le presse-papiers
