@@ -31,14 +31,12 @@ export default class extends Controller {
     let field = element
       .closest("table")
       .querySelector(`th:nth-child(${element.cellIndex + 1})`).dataset.fieldId;
-    let sampleId = element.parentNode.id;
-    let cellId = this.#elementId(element);
-    element.id = cellId;
+    element.id = this.#elementId(element);
     let form = this.formTemplateTarget.innerHTML
-      .replace(/SAMPLE_ID_PLACEHOLDER/g, sampleId)
+      .replace(/SAMPLE_ID_PLACEHOLDER/g, element.parentNode.id)
       .replace(/FIELD_ID_PLACEHOLDER/g, encodeURIComponent(field))
       .replace(/FIELD_VALUE_PLACEHOLDER/g, element.innerText)
-      .replace(/CELL_ID_PLACEHOLDER/g, cellId);
+      .replace(/CELL_ID_PLACEHOLDER/g, element.id);
     this.formContainerTarget.innerHTML = form;
     this.formContainerTarget.getElementsByTagName("form")[0].requestSubmit();
   }
