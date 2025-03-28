@@ -1,8 +1,14 @@
 <%= form_with(url: group_transfer_path, method: :put, class: "grid gap-4", id: "edit_advanced_transfer_form",
 data: { turbo_confirm: "", controller: "viral--select2" }) do |form| %>
   <div class="form-field">
-    <%= form.label :new_namespace_id,
-               t("groups.edit.advanced.transfer.new_namespace_id") %>
+    <% form_id = "edit_advanced_transfer_form" %>
+    <label
+      for="<%= form_id %>"
+      class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
+    >
+
+      <%= t("groups.edit.advanced.transfer.new_group_id") %>
+    </label>
     <% if @authorized_namespaces.empty? %>
       <input
         disabled
@@ -14,7 +20,7 @@ data: { turbo_confirm: "", controller: "viral--select2" }) do |form| %>
         "
       >
     <% else %>
-      <%= viral_select2(form:, name: :new_namespace_id, id: :new_namespace_id, placeholder: t(:"groups.edit.advanced.transfer.select_group")) do |select| %>
+      <%= viral_select2(form:, name: :new_namespace_id, id: form_id, placeholder: t(:"groups.edit.advanced.transfer.select_group")) do |select| %>
         <% @authorized_namespaces.each do |namespace| %>
           <% select.with_option(
             primary: namespace.full_path,
