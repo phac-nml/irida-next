@@ -1456,6 +1456,7 @@ fr:
         select_access_level: Sélectionnez le niveau d’accès
         select_user: Sélectionner un utilisateur
         title: Ajouter un nouveau membre
+        user_select: User
     metadata_templates:
       index:
         new_button: Ajouter un nouveau modèle

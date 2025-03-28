@@ -1460,6 +1460,7 @@ en:
         select_access_level: Select Access Level
         select_user: Select a User
         title: Add New Member
+        user_select: User
     metadata_templates:
       index:
         new_button: Add New Template
