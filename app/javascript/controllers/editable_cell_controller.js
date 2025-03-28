@@ -17,7 +17,7 @@ export default class extends Controller {
   }
 
   editableCellTargetConnected(element) {
-    this.#originalCellContent[element.id] = element.innerText;
+    this.#originalCellContent[this.#elementId(element)] = element.innerText;
     element.addEventListener("blur", this.boundBlur);
     element.addEventListener("keydown", this.boundKeydown);
   }
@@ -32,10 +32,13 @@ export default class extends Controller {
       .closest("table")
       .querySelector(`th:nth-child(${element.cellIndex + 1})`).dataset.fieldId;
     let sampleId = element.parentNode.id;
+    let cellId = this.#elementId(element);
+    element.id = cellId;
     let form = this.formTemplateTarget.innerHTML
       .replace(/SAMPLE_ID_PLACEHOLDER/g, sampleId)
       .replace(/FIELD_ID_PLACEHOLDER/g, encodeURIComponent(field))
-      .replace(/FIELD_VALUE_PLACEHOLDER/g, element.innerText);
+      .replace(/FIELD_VALUE_PLACEHOLDER/g, element.innerText)
+      .replace(/CELL_ID_PLACEHOLDER/g, cellId);
     this.formContainerTarget.innerHTML = form;
     this.formContainerTarget.getElementsByTagName("form")[0].requestSubmit();
   }
@@ -110,7 +113,13 @@ export default class extends Controller {
     );
   }
 
-  #unchanged(target) {
-    return target.innerText === this.#originalCellContent[target.id];
+  #unchanged(element) {
+    return (
+      element.innerText === this.#originalCellContent[this.#elementId(element)]
+    );
+  }
+
+  #elementId(element) {
+    return `${element.cellIndex}_${element.parentNode.rowIndex}`;
   }
 }

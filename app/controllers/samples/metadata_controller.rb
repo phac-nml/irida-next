@@ -13,11 +13,12 @@ module Samples
       authorize! @project, to: :update_sample?
 
       value = params[:value]
+      cell_id = params[:cell_id]
 
       if @sample.field?(@field)
-        update_field_value(@sample.metadata[@field], value)
+        update_field_value(@sample.metadata[@field], value, cell_id)
       else
-        create_metadata_field(@field, value)
+        create_metadata_field(@field, value, cell_id)
       end
     end
 
@@ -128,24 +129,24 @@ module Samples
       update_render_params
     end
 
-    def create_metadata_field(field, value)
+    def create_metadata_field(field, value, cell_id)
       create_params = { field => value }
       ::Samples::Metadata::Fields::CreateService.new(@project, @sample, current_user, create_params).execute
 
       if @sample.errors.any?
-        render_update_error
+        render_update_error(cell_id)
       else
-        render_update_success
+        render_update_success(cell_id)
       end
     end
 
-    def update_field_value(original_value, new_value)
+    def update_field_value(original_value, new_value, cell_id)
       perform_field_update(original_value, new_value)
 
       if @sample.errors.any?
-        render_update_error
+        render_update_error(cell_id)
       else
-        render_update_success
+        render_update_success(cell_id)
       end
     end
 
@@ -167,12 +168,12 @@ module Samples
       }
     end
 
-    def render_update_error
+    def render_update_error(cell_id)
       # render status: :unprocessable_entity,
       #       locals: { type: 'error', message: error_message(@sample) }
       render turbo_stream: [
         turbo_stream.update(
-          helpers.dom_id(@sample, @field), @sample.metadata[@field]
+          cell_id, @sample.metadata[@field]
         ),
         turbo_stream.append(
           'flashes',
@@ -183,14 +184,14 @@ module Samples
       ]
     end
 
-    def render_update_success
+    def render_update_success(cell_id)
       # When the timestamp is rendered to the form, it only renders down to the second, this was causing timing
       # issues for selecting current samples.  To fix this, we are adding a second to the timestamp so that the
       # timestamp is always greater than the current time.
       @timestamp = @sample.updated_at + 1.second
       render turbo_stream: [
         turbo_stream.replace(
-          helpers.dom_id(@sample, @field), Samples::EditableCell.new(field: @field, sample: @sample)
+          cell_id, Samples::EditableCell.new(field: @field, sample: @sample)
         ),
         turbo_stream.append(
           'flashes',
