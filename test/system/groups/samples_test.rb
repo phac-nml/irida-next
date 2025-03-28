@@ -457,9 +457,11 @@ module Groups
 
       within('table tbody tr:first-child') do
         assert_text @sample30.name
-        assert_selector 'td:nth-child(7) button', text: 'value1'
-        assert_selector 'td:nth-child(8) button', text: 'value2'
-        assert_selector 'td:nth-child(9) button', text: ''
+        assert_no_selector 'td:nth-child(7)[contenteditable="true"]'
+        assert_selector 'td:nth-child(7)', text: 'value1'
+        assert_no_selector 'td:nth-child(8)[contenteditable="true"]'
+        assert_selector 'td:nth-child(8)', text: 'value2'
+        assert_selector 'td:nth-child(9)[contenteditable="true"]', text: ''
       end
 
       click_button I18n.t('shared.samples.metadata_templates.label')

@@ -3345,7 +3345,7 @@ module Projects
       ### VERIFY START ###
       assert_no_selector 'dialog[open]'
       within('table tbody tr:first-child td:nth-child(7)') do
-        assert_selector 'button', text: ''
+        assert_no_text 'New Value'
       end
       ### VERIFY END ###
     end
