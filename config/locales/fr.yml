@@ -1982,6 +1982,9 @@ fr:
         aria-label: Pagination
         next: Suivant
         previous: Précédent
+    sortable_list:
+      list_component:
+        aria_role_description: "%{list} listbox drag and drop"
     sortable_lists_component:
       add_all: Ajouter tout
       no_template: Pas de modèle

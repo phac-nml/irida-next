@@ -17,14 +17,10 @@ export default class extends Controller {
     fieldName: String,
   };
 
-  #disabledClasses = [
-    "pointer-events-none",
-    "cursor-not-allowed",
-    "text-slate-300",
-    "dark:text-slate-700",
-  ];
-  #enabledClasses = ["underline", "hover:no-underline"];
   #originalAvailableList;
+
+  #selectedOption;
+  #selectedOptionClasses = ["bg-primary-400", "dark:bg-primary-500"];
 
   connect() {
     this.idempotentConnect();
@@ -43,15 +39,16 @@ export default class extends Controller {
       ];
       Object.freeze(this.#originalAvailableList);
 
-      this.#setInitialSelectAllState(this.availableList, this.addAllTarget);
-      this.#setInitialSelectAllState(this.selectedList, this.removeAllTarget);
+      this.#checkStates();
 
       this.buttonStateListener = this.#checkStates.bind(this);
       this.selectedList.addEventListener("drop", this.buttonStateListener);
       this.availableList.addEventListener("drop", this.buttonStateListener);
+
+      this.windowClickListener = this.#removeSelectedAttributes.bind(this);
+      window.addEventListener("click", this.windowClickListener);
     }
   }
-
   addAll(event) {
     event.preventDefault();
     this.availableList.innerHTML = "";
@@ -64,16 +61,6 @@ export default class extends Controller {
     this.availableList.append(...this.#originalAvailableList);
     this.selectedList.innerHTML = "";
     this.#checkStates();
-  }
-
-  #setInitialSelectAllState(list, button) {
-    const list_values = list.querySelectorAll("li");
-    if (list_values.length === 0) {
-      button.classList.add(...this.#disabledClasses);
-      button.setAttribute("aria-disabled", "true");
-    } else {
-      button.classList.add(...this.#enabledClasses);
-    }
   }
 
   #checkStates() {
@@ -143,16 +130,11 @@ export default class extends Controller {
   }
 
   #setAddOrRemoveButtonDisableState(button, disableState) {
-    if (disableState && !button.classList.contains("pointer-events-none")) {
-      button.classList.remove(...this.#enabledClasses);
-      button.classList.add(...this.#disabledClasses);
+    if (disableState && !button.disabled) {
+      button.disabled = true;
       button.setAttribute("aria-disabled", "true");
-    } else if (
-      !disableState &&
-      button.classList.contains("pointer-events-none")
-    ) {
-      button.classList.remove(...this.#disabledClasses);
-      button.classList.add(...this.#enabledClasses);
+    } else if (!disableState && button.disabled) {
+      button.disabled = false;
       button.removeAttribute("aria-disabled");
     }
   }
@@ -177,6 +159,8 @@ export default class extends Controller {
       "mouseover",
       this.buttonStateListener,
     );
+
+    window.removeEventListener("click", this.windowClickListener);
   }
 
   /**
@@ -237,6 +221,107 @@ export default class extends Controller {
       this.#checkButtonStates();
     } catch (error) {
       console.error("Error setting template:", error);
+    }
+  }
+
+  navigateList(event) {
+    const handler = this.#getKeyboardHandler(event.key);
+    if (handler) {
+      if (event.key !== "Tab") event.preventDefault();
+      handler.call(this, event);
+      this.#checkStates();
+    }
+  }
+
+  #getKeyboardHandler(key) {
+    const handlers = {
+      " ": this.#handleSelection.bind(this),
+      Enter: this.#handleSelection.bind(this),
+      ArrowRight: this.#handleRightNavigation.bind(this),
+      ArrowLeft: this.#handleLeftNavigation.bind(this),
+      ArrowUp: (event) => this.#handleVerticalNavigation(event, "up", "single"),
+      ArrowDown: (event) =>
+        this.#handleVerticalNavigation(event, "down", "single"),
+      Tab: this.#removeSelectedAttributes.bind(this),
+      Home: (event) => this.#handleVerticalNavigation(event, "up", "fullList"),
+      End: (event) => this.#handleVerticalNavigation(event, "down", "fullList"),
+    };
+    return handlers[key];
+  }
+
+  #handleSelection(event) {
+    if (this.#selectedOption === event.target) {
+      this.#removeSelectedAttributes();
+    } else {
+      if (this.#selectedOption) this.#removeSelectedAttributes();
+      this.#setSelectedOption(event.target);
+    }
+  }
+
+  #handleRightNavigation(event) {
+    if (event.target.parentNode !== this.availableList) return;
+    const selectedListFirstChild = this.selectedList.firstElementChild;
+
+    this.#navigateListLeftAndRight(this.selectedList, selectedListFirstChild);
+  }
+  #handleLeftNavigation(event) {
+    if (event.target.parentNode !== this.selectedList) return;
+
+    const availableListFirstChild = this.availableList.firstElementChild;
+    this.#navigateListLeftAndRight(this.availableList, availableListFirstChild);
+  }
+
+  #handleVerticalNavigation(event, direction, navigateSize) {
+    const targetOption =
+      navigateSize === "single"
+        ? direction === "up"
+          ? event.target.previousElementSibling
+          : event.target.nextElementSibling
+        : direction === "up"
+          ? event.target.parentNode.firstElementChild
+          : event.target.parentNode.lastElementChild;
+    this.#navigateListUpAndDown(
+      direction === "up" ? "up" : "down",
+      targetOption,
+    );
+  }
+
+  #navigateListUpAndDown(direction, targetOption) {
+    if (!targetOption) return;
+
+    if (this.#selectedOption) {
+      this.#selectedOption.remove();
+      targetOption.insertAdjacentElement(
+        direction === "up" ? "beforebegin" : "afterend",
+        this.#selectedOption,
+      );
+      this.#selectedOption.focus();
+    } else {
+      targetOption.focus();
+    }
+  }
+
+  #navigateListLeftAndRight(targetList, targetListFirstChild) {
+    if (this.#selectedOption) {
+      this.#selectedOption.remove();
+      targetList.prepend(this.#selectedOption);
+      this.#selectedOption.focus();
+    } else if (targetListFirstChild) {
+      targetListFirstChild.focus();
+    }
+  }
+
+  #setSelectedOption(option) {
+    this.#selectedOption = option;
+    this.#selectedOption.classList.add(...this.#selectedOptionClasses);
+    this.#selectedOption.setAttribute("aria-selected", "true");
+  }
+
+  #removeSelectedAttributes() {
+    if (this.#selectedOption) {
+      this.#selectedOption.classList.remove(...this.#selectedOptionClasses);
+      this.#selectedOption.setAttribute("aria-selected", "false");
+      this.#selectedOption = null;
     }
   }
 }
