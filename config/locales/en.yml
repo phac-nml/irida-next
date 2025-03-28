@@ -834,6 +834,7 @@ en:
           group_access_level: Maximum group access level
           group_id: Group to share namespace with
         placeholder:
+          search_for_group: Search for group to share namespace with
           select_access_level: Select access level
         sharing_namespace_with_group: You're sharing group %{name} with a group
         title: Share namespace

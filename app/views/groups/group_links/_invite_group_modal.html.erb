@@ -13,8 +13,14 @@
   <%= form_with(model: new_group_link, url: group_group_links_path(@namespace, tab: @tab), data: {controller: "viral--select2"}) do |form| %>
     <div class="grid gap-4">
       <div class="form-field">
-        <%= form.label I18n.t("groups.group_links.new.label.group_id") %>
-        <%= viral_select2(form:, name: :group_id, placeholder: "Search for group to share namespace with") do |select| %>
+        <% form_id = "invite-group-select2" %>
+        <label
+          for="<%= form_id %>"
+          class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
+        >
+          <%= t("groups.group_links.new.label.group_id") %>
+        </label>
+        <%= viral_select2(form:, name: :group_id, id: form_id, placeholder: t("groups.group_links.new.placeholder.search_for_group")) do |select| %>
           <% @namespace_linkable_groups.each do |group| %>
             <%= select.with_option(primary: group.name, secondary: group.puid, value: group.id) %>
           <% end %>
