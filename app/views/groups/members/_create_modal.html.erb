@@ -8,8 +8,15 @@
   <%= form_with(model: @new_member, url: group_members_path(tab: @tab), data: {controller: "viral--select2"}, method: :post) do |form| %>
     <div class="grid gap-4">
       <div class="form-field">
-        <%= form.label :user_id %>
-        <%= viral_select2(form:, name: :user_id, placeholder: t("groups.members.new.select_user")) do |select| %>
+        <% form_id = "group-add-member-select2" %>
+        <label
+          for="<%= form_id %>"
+          class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
+        >
+
+          <%= t("groups.members.new.select_user") %>
+        </label>
+        <%= viral_select2(form:, name: :user_id, id: form_id, placeholder: t("groups.members.new.select_user")) do |select| %>
           <% @available_users.each do |user| %>
             <% select.with_option(
               primary: user.email,
@@ -57,11 +64,7 @@
 
       <div>
         <%= form.submit t(:"groups.members.new.add_member_to_group"),
-                    class: "button button--state-primary button--size-default mr-1",
-                    disabled: true,
-                    data: {
-                      "viral--select2-target": "submitButton",
-                    } %>
+                    class: "button button--state-primary button--size-default mr-1" %>
       </div>
     </div>
   <% end %>
