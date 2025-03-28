@@ -12,14 +12,19 @@
   <%= render "shared/form/field_errors",
   errors: @project.namespace.errors.full_messages_for(:name) %>
 </div>
-<div class="grid grid-cols-2 gap-4">
-  <div class="form-field">
-    <%= builder.label :parent_id %>
-    <div class="flex items-center whitespace-nowrap">
-      <% params.has_key?(:group_id) ?
-        selected_value = params[:group_id] :
-        selected_value = current_user.namespace.id %>
-      <%= viral_prefixed_select2(form: builder, name: :parent_id, selected_value: , placeholder: t(:"projects.new.select_namespace")) do |select| %>
+<div class="grid @xs:grid-cols-1 @5xl:grid-cols-2 gap-4">
+  <div>
+    <% form_id = "namespace-select" %>
+    <label
+      for="<%= form_id %>"
+      class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
+    >
+      <%= t("activerecord.attributes.namespaces/project_namespace.parent_id") %>
+    </label>
+    <div class="flex items-center">
+      <% selected_value =
+        params.has_key?(:group_id) ? params[:group_id] : current_user.namespace.id %>
+      <%= viral_prefixed_select2(form: builder, name: :parent_id, id: form_id, selected_value: selected_value, placeholder: t(:"projects.new.select_namespace")) do |select| %>
         <% authorized_namespaces.each do |namespace| %>
           <% select.with_option(
             primary: namespace.full_path,

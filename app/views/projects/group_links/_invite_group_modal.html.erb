@@ -13,8 +13,15 @@
   <%= form_with(model: new_group_link, url: namespace_project_group_links_path(@namespace.parent, @namespace.project, tab: @tab), method: :post, data: {remote: true, controller: "viral--select2"}) do |form| %>
     <div class="grid gap-4">
       <div class="form-field">
-        <%= form.label I18n.t("projects.group_links.new.label.shared_group") %>
-        <%= viral_select2(form:, name: :group_id, placeholder: t("projects.group_links.new.placeholder.select_group")) do |select| %>
+        <% form_id = "edit_advanced_transfer_form" %>
+        <label
+          for="<%= form_id %>"
+          class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
+        >
+
+          <%= t("projects.group_links.new.label.shared_group") %>
+        </label>
+        <%= viral_select2(form:, name: :group_id, id: form_id, placeholder: t("projects.group_links.new.placeholder.select_group")) do |select| %>
           <% @namespace_linkable_groups.each do |group| %>
             <%= select.with_option(primary: group.name, secondary: group.puid, value: group.id) %>
           <% end %>
