@@ -898,7 +898,7 @@ fr:
           sample_export: Exportation d’échantillons
         deselect_all_button: Désélectionner tout
         import_metadata_button: Importer des métadonnées
-        import_samples_button: Import samples # TODO: translate section
+        import_samples_button: Import samples
         select_all_button: Tout sélectionner
         subtitle: Voici les échantillons dans %{namespace_type} %{namespace_name}
         title: Échantillons
@@ -1563,7 +1563,7 @@ fr:
         deselect_all_button: Désélectionner tout
         edit_button: Modifier
         import_metadata_button: Importer des métadonnées
-        import_samples_button: Import samples # TODO: translate section
+        import_samples_button: Import samples
         new_button: Nouvel échantillon
         no_associated_samples: Il n’y a aucun échantillon associé à ce projet.
         no_samples: Aucun échantillon
@@ -1938,7 +1938,7 @@ fr:
         templates:
           label: Modèles de métadonnées
         tooltip: Paramètres d’affichage des métadonnées
-      spreadsheet_imports: # TODO: translate section
+      spreadsheet_imports:
         dialog:
           description: Importing a sample spreadsheet allows multiple samples with or without metadata fields to be added at once.
           file: File
