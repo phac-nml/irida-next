@@ -92,7 +92,7 @@
           <% if allowed_to?(:export_data?, @project) %>
             <% if @project.namespace.metadata_fields.empty? %>
               <% dropdown.with_item(
-                label: t(".create_export_button.linelist_export"),
+                label: t(".sample_actions_button.linelist_export"),
                 url:
                   new_data_export_path(
                     export_type: "linelist",
@@ -106,7 +106,7 @@
               ) %>
             <% else %>
               <% dropdown.with_item(
-                label: t(".create_export_button.linelist_export"),
+                label: t(".sample_actions_button.linelist_export"),
                 url:
                   new_data_export_path(
                     export_type: "linelist",
@@ -123,7 +123,7 @@
               ) %>
             <% end %>
             <% dropdown.with_item(
-              label: t(".create_export_button.sample_export"),
+              label: t(".sample_actions_button.sample_export"),
               url:
                 new_data_export_path(
                   export_type: "sample",
