@@ -11,9 +11,6 @@ import { Controller } from "@hotwired/stimulus";
  * - Search filtering
  * - Accessible focus management
  * - Dropdown positioning
- *
- * @author IRIDA Team
- * @version 1.0.0
  */
 export default class Select2Controller extends Controller {
   /**
