@@ -19,6 +19,7 @@ fr:
         destroy_bot_accounts?: Vous n’êtes pas autorisé à détruire des comptes de bots pour le groupe %{name} sur ce serveur.
         destroy_member?: Vous n’êtes pas autorisé à supprimer des membres sous le groupe %{name} sur ce serveur.
         destroy_metadata_templates?: Vous n’êtes pas autorisé à détruire les modèles de métadonnées pour le groupe %{name} sur ce serveur.
+        destroy_workflow_executions?: You are not authorized to destroy workflow executions for group %{name} on this server.
         edit?: Vous n’êtes pas autorisé à modifier le groupe %{name} de ce serveur.
         export_data?: Vous n’êtes pas autorisé à exporter des données du projet %{name} sur ce serveur.
         import_samples_and_metadata?: Vous n’êtes pas autorisé à importer des échantillons et des métadonnées pour le groupe %{name} sur ce serveur.
@@ -1728,7 +1729,7 @@ fr:
           type: Type
       index:
         create_export_button: Créer une exportation
-        delete_workflows_button: Delete Workflows
+        delete_workflows_button: Delete Workflow Executions
         deselect_all_button: Désélectionner tout
         search:
           placeholder: Filtrer par ID ou nom
@@ -2051,7 +2052,7 @@ fr:
         delete_button: Supprimer
         delete_confirm: Êtes-vous sûr de vouloir supprimer cette exécution de flux de travail?
       create_export_button: Créer une exportation
-      delete_workflows_button: Delete Workflows
+      delete_workflows_button: Delete Workflow Executions
       deselect_all_button: Désélectionner tout
       search:
         placeholder: Filtrer par ID ou nom

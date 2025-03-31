@@ -27,9 +27,15 @@ module WorkflowExecutions
     def destroy_multiple
       authorize! @namespace, to: :destroy_workflow_executions? unless @namespace.nil?
 
-      workflow_executions = WorkflowExecution.where(
-        id: @workflow_execution_ids, state: %w[completed canceled error], cleaned: true
-      )
+      workflow_executions = if @namespace
+                              authorized_scope(WorkflowExecution, type: :relation, as: :automated,
+                                                                  scope_options: { project: @namespace.project })
+                                .where(id: @workflow_execution_ids, state: %w[completed canceled error], cleaned: true)
+                            else
+                              authorized_scope(WorkflowExecution, type: :relation, as: :user,
+                                                                  scope_options: { user: current_user })
+                                .where(id: @workflow_execution_ids, state: %w[completed canceled error], cleaned: true)
+                            end
 
       workflows_to_delete_count = workflow_executions.count
 

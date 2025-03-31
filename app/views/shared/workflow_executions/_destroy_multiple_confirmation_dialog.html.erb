@@ -32,9 +32,11 @@
           data-action="scroll->infinite-scroll#scroll"
           data-infinite-scroll-target="scrollable"
         >
-          <%= turbo_frame_tag "list_selections" do %>
-            <%= render partial: "shared/loading/samples_list_skeleton" %>
-          <% end %>
+          <ul class="max-w-md divide-y divide-gray-200 dark:divide-gray-700">
+            <%= turbo_frame_tag "list_selections" do %>
+              <%= render partial: "shared/loading/samples_list_skeleton" %>
+            <% end %>
+          </ul>
         </div>
       </div>
       <%= form_for(:destroy, url: @destroy_path, method: :delete,

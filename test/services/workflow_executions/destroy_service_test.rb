@@ -193,7 +193,7 @@ module WorkflowExecutions
       end
     end
 
-    test 'should not destroy project workflow executions if a workflow deletion is unauthorized' do
+    test 'should not destroy project workflow executions if user is unauthorized' do
       user = users(:jane_doe)
       valid_deletable_workflow = workflow_executions(:automated_example_completed)
       namespace = projects(:project1).namespace
@@ -211,6 +211,44 @@ module WorkflowExecutions
         assert_equal I18n.t(:'action_policy.policy.namespaces/project_namespace.destroy_workflow_executions?',
                             name: namespace.name),
                      exception.result.message
+      end
+    end
+
+    test 'unauthorized response if group namespace is passed' do
+      completed_workflow_execution = workflow_executions(:automated_example_completed)
+      error_workflow_execution = workflow_executions(:automated_example_error)
+      namespace = groups(:group_one)
+
+      assert_no_difference -> { WorkflowExecution.count },
+                           -> { SamplesWorkflowExecution.count } do
+        exception = assert_raises(ActionPolicy::Unauthorized) do
+          WorkflowExecutions::DestroyService.new(
+            @user,
+            { workflow_execution_ids: [completed_workflow_execution.id, error_workflow_execution.id], namespace: }
+          ).execute
+        end
+        assert_equal GroupPolicy, exception.policy
+        assert_equal :destroy_workflow_executions?, exception.rule
+        assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
+        assert_equal I18n.t(:'action_policy.policy.group.destroy_workflow_executions?',
+                            name: namespace.name),
+                     exception.result.message
+      end
+    end
+
+    test 'should not destroy shared workflow executions if selected' do
+      error_workflow = workflow_executions(:automated_example_error)
+      canceled_workflow = workflow_executions(:automated_example_canceled)
+      shared_workflow = workflow_executions(:workflow_execution_shared1)
+      namespace = projects(:project1).namespace
+
+      assert_difference -> { WorkflowExecution.count } => -2,
+                        -> { SamplesWorkflowExecution.count } => -2,
+                        -> { Sample.count } => 0 do
+        WorkflowExecutions::DestroyService.new(
+          @user,
+          { workflow_execution_ids: [error_workflow.id, canceled_workflow.id, shared_workflow.id], namespace: }
+        ).execute
       end
     end
   end

@@ -221,6 +221,10 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     raise NotImplementedError
   end
 
+  def destroy_multiple_paths
+    raise NotImplementedError
+  end
+
   def format_samplesheet_params
     workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
                                                           @workflow_execution.metadata['workflow_version'],

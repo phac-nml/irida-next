@@ -916,6 +916,8 @@ workflow_execution_shared1:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   shared_with_namespace: true
+  state: "completed"
+  cleaned: true
 
 workflow_execution_shared2:
   <<: *DEFAULTS
