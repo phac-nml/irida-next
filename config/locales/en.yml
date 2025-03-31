@@ -1640,6 +1640,8 @@ en:
           clone: Copy samples
           import_metadata: Import metadata
           label: Sample Actions
+          linelist_export: Linelist Export
+          sample_export: Sample Export
           transfer:  Transfer samples
         select_all_button: Select All
         title: Samples
