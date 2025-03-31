@@ -221,7 +221,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     visit data_export_path(@data_export2)
 
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_selector 'button[disabled]',
                     text: I18n.t(:'data_exports.show.download')
     assert_no_text I18n.t(:'data_exports.show.tabs.preview')
   end
@@ -278,14 +278,14 @@ class DataExportsTest < ApplicationSystemTestCase
     end
     # project samples page
     visit namespace_project_samples_url(@group1, @project1)
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_selector 'button[disabled]',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{@sample1.id}']").click
     end
 
-    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_no_selector 'button[disabled]',
                        text: I18n.t('projects.samples.index.create_export_button.label')
     click_button I18n.t('projects.samples.index.create_export_button.label')
     assert_accessible
@@ -335,7 +335,7 @@ class DataExportsTest < ApplicationSystemTestCase
     # project samples page
     visit group_samples_url(@group1)
     assert_text '1-20 of 26'
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_selector 'button[disabled]',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
     within %(#samples-table) do
@@ -343,7 +343,7 @@ class DataExportsTest < ApplicationSystemTestCase
       find("input[type='checkbox'][value='#{@sample2.id}']").click
     end
 
-    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_no_selector 'button[disabled]',
                        text: I18n.t('projects.samples.index.create_export_button.label')
     click_button I18n.t('projects.samples.index.create_export_button.label')
     click_link I18n.t('projects.samples.index.create_export_button.sample_export'), match: :first
@@ -391,25 +391,25 @@ class DataExportsTest < ApplicationSystemTestCase
     sample32 = samples(:sample32)
 
     visit namespace_project_samples_url(subgroup12a, project29)
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_selector 'button[disabled]',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{sample32.id}']").click
     end
 
-    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_no_selector 'button[disabled]',
                        text: I18n.t('projects.samples.index.create_export_button.label')
 
     visit namespace_project_samples_url(@group1, @project1)
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_selector 'button[disabled]',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{@sample1.id}']").click
     end
 
-    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_no_selector 'button[disabled]',
                        text: I18n.t('projects.samples.index.create_export_button.label')
 
     click_button I18n.t('projects.samples.index.create_export_button.label')
@@ -892,14 +892,14 @@ class DataExportsTest < ApplicationSystemTestCase
     sample3 = samples(:sample3)
 
     visit namespace_project_samples_url(@group1, project)
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_selector 'button[disabled]',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{sample3.id}']").click
     end
 
-    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_no_selector 'button[disabled]',
                        text: I18n.t('projects.samples.index.create_export_button.label')
     click_button I18n.t('projects.samples.index.create_export_button.label')
 
@@ -912,14 +912,14 @@ class DataExportsTest < ApplicationSystemTestCase
     sample43 = samples(:sample43)
 
     visit group_samples_url(group)
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_selector 'button[disabled]',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{sample43.id}']").click
     end
 
-    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_no_selector 'button[disabled]',
                        text: I18n.t('projects.samples.index.create_export_button.label')
     click_button I18n.t('projects.samples.index.create_export_button.label')
 
@@ -929,14 +929,14 @@ class DataExportsTest < ApplicationSystemTestCase
 
   test 'new linelist export dialog' do
     visit namespace_project_samples_url(@group1, @project1)
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_selector 'button[disabled]',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{@sample30.id}']").click
     end
 
-    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_no_selector 'button[disabled]',
                        text: I18n.t('projects.samples.index.create_export_button.label')
     click_button I18n.t('projects.samples.index.create_export_button.label')
     click_link I18n.t('projects.samples.index.create_export_button.linelist_export')
@@ -951,9 +951,9 @@ class DataExportsTest < ApplicationSystemTestCase
                          selected: I18n.t('data_exports.new_linelist_export_dialog.selected').downcase)
       assert_text I18n.t('data_exports.new_linelist_export_dialog.available')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.selected')
-      assert_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_selector 'bbutton[disabled]',
                       text: I18n.t('viral.sortable_lists_component.remove_all')
-      assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_no_selector 'bbutton[disabled]',
                          text: I18n.t('viral.sortable_lists_component.add_all')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.format')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.csv')
@@ -997,14 +997,14 @@ class DataExportsTest < ApplicationSystemTestCase
 
   test 'add all and remove all buttons in new linelist export dialog' do
     visit namespace_project_samples_url(@group1, @project1)
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_selector 'button[disabled]',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{@sample30.id}']").click
     end
 
-    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_no_selector 'button[disabled]',
                        text: I18n.t('projects.samples.index.create_export_button.label')
     click_button I18n.t('projects.samples.index.create_export_button.label')
     click_link I18n.t('projects.samples.index.create_export_button.linelist_export')
@@ -1023,9 +1023,9 @@ class DataExportsTest < ApplicationSystemTestCase
       end
 
       assert_selector 'input[disabled]'
-      assert_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_selector 'button[disabled]',
                       text: I18n.t('viral.sortable_lists_component.remove_all')
-      assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_no_selector 'button[disabled]',
                          text: I18n.t('viral.sortable_lists_component.add_all')
 
       click_button I18n.t('viral.sortable_lists_component.add_all')
@@ -1043,9 +1043,9 @@ class DataExportsTest < ApplicationSystemTestCase
       end
 
       assert_no_selector 'input[disabled]'
-      assert_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_selector 'button[disabled]',
                       text: I18n.t('viral.sortable_lists_component.add_all')
-      assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_no_selector 'button[disabled]',
                          text: I18n.t('viral.sortable_lists_component.remove_all')
 
       click_button I18n.t('viral.sortable_lists_component.remove_all')
@@ -1063,23 +1063,23 @@ class DataExportsTest < ApplicationSystemTestCase
       end
 
       assert_selector 'input[disabled]'
-      assert_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_selector 'button[disabled]',
                       text: I18n.t('viral.sortable_lists_component.remove_all')
-      assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_no_selector 'button[disabled]',
                          text: I18n.t('viral.sortable_lists_component.add_all')
     end
   end
 
   test 'create csv export from project samples page' do
     visit namespace_project_samples_url(@group1, @project1)
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_selector 'button[disabled]',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
     within('tbody') do
       find("input[type='checkbox'][value='#{@sample30.id}']").click
     end
 
-    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_no_selector 'button[disabled]',
                        text: I18n.t('projects.samples.index.create_export_button.label')
     click_button I18n.t('projects.samples.index.create_export_button.label')
     click_link I18n.t('projects.samples.index.create_export_button.linelist_export')
@@ -1098,14 +1098,14 @@ class DataExportsTest < ApplicationSystemTestCase
 
   test 'create xlsx export from group samples page' do
     visit group_samples_url(@group1)
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_selector 'button[disabled]',
                     text: I18n.t('projects.samples.index.create_export_button.label')
 
     within('tbody') do
       find("input[type='checkbox'][value='#{@sample1.id}']").click
     end
 
-    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_no_selector 'button[disabled]',
                        text: I18n.t('projects.samples.index.create_export_button.label')
     click_button I18n.t('projects.samples.index.create_export_button.label')
     click_link I18n.t('projects.samples.index.create_export_button.linelist_export')
@@ -1154,9 +1154,9 @@ class DataExportsTest < ApplicationSystemTestCase
       end
 
       assert_no_selector 'input[disabled]'
-      assert_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_selector 'button[disabled]',
                       text: I18n.t('viral.sortable_lists_component.add_all')
-      assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_no_selector 'bbutton[disabled]',
                          text: I18n.t('viral.sortable_lists_component.remove_all')
 
       click_button I18n.t('viral.sortable_lists_component.remove_all')
@@ -1172,9 +1172,9 @@ class DataExportsTest < ApplicationSystemTestCase
       end
 
       assert_selector 'input[disabled]'
-      assert_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_selector 'bbutton[disabled]',
                       text: I18n.t('viral.sortable_lists_component.remove_all')
-      assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_no_selector 'bbutton[disabled]',
                          text: I18n.t('viral.sortable_lists_component.add_all')
 
       click_button I18n.t('viral.sortable_lists_component.add_all')
@@ -1190,9 +1190,9 @@ class DataExportsTest < ApplicationSystemTestCase
       end
 
       assert_no_selector 'input[disabled]'
-      assert_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_selector 'bbutton[disabled]',
                       text: I18n.t('viral.sortable_lists_component.add_all')
-      assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_no_selector 'bbutton[disabled]',
                          text: I18n.t('viral.sortable_lists_component.remove_all')
     end
   end
