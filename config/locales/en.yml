@@ -1635,6 +1635,11 @@ en:
         new_button: New sample
         no_associated_samples: There are no samples associated with this project.
         no_samples: No Samples
+        remove_button: Remove
+        sample_actions_button:
+          clone: Copy samples
+          label: Sample Actions
+          transfer:  Transfer samples
         select_all_button: Select All
         title: Samples
         transfer_button: Transfer samples
