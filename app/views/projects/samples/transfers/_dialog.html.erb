@@ -89,9 +89,11 @@
             <div>
               <%= form.submit t(".submit_button"),
                           class: "button button--size-default button--state-primary",
+                          disabled: true,
                           data: {
                             action: "click->form--hidden-inputs#clearSelection",
-                           } %>
+                            "viral--select2-target": "submitButton",
+                          } %>
             </div>
           </div>
         <% end %>
