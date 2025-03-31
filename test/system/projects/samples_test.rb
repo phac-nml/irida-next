@@ -1869,7 +1869,8 @@ module Projects
       within '#samples-table table tbody' do
         all('input[type="checkbox"]')[0].click
       end
-      click_link I18n.t('projects.samples.index.clone_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.clone')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -1896,7 +1897,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_link I18n.t('projects.samples.index.clone_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.clone')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -1926,7 +1928,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_link I18n.t('projects.samples.index.clone_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.clone')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -1963,7 +1966,8 @@ module Projects
         find("input#sample_#{@sample1.id}").click
         find("input#sample_#{@sample2.id}").click
       end
-      click_link I18n.t('projects.samples.index.clone_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.clone')
       assert_selector '#dialog'
       within('#dialog') do
         within('#list_selections') do
@@ -2019,7 +2023,8 @@ module Projects
         find("input#sample_#{@sample1.id}").click
         find("input#sample_#{@sample2.id}").click
       end
-      click_link I18n.t('projects.samples.index.clone_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.clone')
       assert_selector '#dialog'
       within('#dialog') do
         # close button available before confirming cloning
@@ -2066,7 +2071,8 @@ module Projects
       end
       # clear localstorage
       Capybara.execute_script 'sessionStorage.clear()'
-      click_link I18n.t('projects.samples.index.clone_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.clone')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -2119,7 +2125,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_link I18n.t('projects.samples.index.clone_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.clone')
       assert_selector '#dialog'
       within('#dialog') do
         within('#list_selections') do
@@ -2174,7 +2181,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_link I18n.t('projects.samples.index.clone_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.clone')
       assert_selector '#dialog'
       within('#dialog') do
         find('input.select2-input').fill_in with: 'invalid project name or puid'
@@ -2204,7 +2212,8 @@ module Projects
         assert_text 'Samples: 1'
         assert_selector 'strong[data-selection-target="selected"]', text: '1'
       end
-      click_link I18n.t('projects.samples.index.clone_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.clone')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -2244,7 +2253,8 @@ module Projects
       end
 
       # clone sample
-      click_link I18n.t('projects.samples.index.clone_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.clone')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -2452,7 +2462,8 @@ module Projects
                                           project_id: projects(:empty_project).path)
       assert_text I18n.t('projects.samples.index.no_associated_samples')
       assert_text I18n.t('projects.samples.index.no_samples')
-      assert_no_button I18n.t(:'projects.samples.index.clone_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      assert_no_button I18n.t(:'projects.samples.index.sample_actions_button.clone')
       assert_no_button I18n.t(:'projects.samples.index.transfer_button')
       assert_text I18n.t('projects.samples.index.create_export_button.label')
       assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
