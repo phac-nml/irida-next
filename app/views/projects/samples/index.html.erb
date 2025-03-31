@@ -81,7 +81,7 @@
 
           <% if allowed_to?(:update_sample_metadata?, @project.namespace) && @has_samples %>
             <% dropdown.with_item(
-              label: t("projects.samples.index.import_metadata_button"),
+              label: t("projects.samples.index.sample_actions_button.import_metadata"),
               url: new_namespace_project_samples_file_import_path,
               data: {
                 turbo_stream: true,

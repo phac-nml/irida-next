@@ -1638,6 +1638,7 @@ en:
         remove_button: Remove
         sample_actions_button:
           clone: Copy samples
+          import_metadata: Import metadata
           label: Sample Actions
           transfer:  Transfer samples
         select_all_button: Select All
