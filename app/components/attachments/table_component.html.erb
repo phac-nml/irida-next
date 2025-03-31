@@ -8,12 +8,7 @@
         '
       >
         <thead class='sticky top-0 z-10 text-xs uppercase'>
-          <tr
-            class="
-              border-b dark:border-slate-900 border-slate-200 dark:text-slate-400
-              text-slate-900 bg-slate-100 dark:bg-slate-900
-            "
-          >
+          <tr class=" dark:text-slate-400 text-slate-900 bg-slate-100 dark:bg-slate-900 ">
             <% @columns.each_with_index do |column, index| %>
               <%= render_cell(
                 tag: 'th',
@@ -193,21 +188,19 @@
               <% if @renders_row_actions %>
                 <%= render_cell(
                   tag: 'td',
-                  classes: class_names('sticky right-0')
+                  classes: class_names('sticky right-0 px-3 py-3 bg-white dark:bg-slate-800 z-5 space-x-2 w-full')
                 ) do %>
-                  <div class="px-3 py-2.5 bg-white dark:bg-slate-800 z-5 space-x-2 w-full">
-                    <% if @row_actions[:destroy] %>
-                      <%= link_to(
-                        t(".delete"),
-                        destroy_path(attachment.id),
-                        data: {
-                          turbo_stream: true,
-                        },
-                        class:
-                          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                      ) %>
-                    <% end %>
-                  </div>
+                  <% if @row_actions[:destroy] %>
+                    <%= link_to(
+                      t(".delete"),
+                      destroy_path(attachment.id),
+                      data: {
+                        turbo_stream: true,
+                      },
+                      class:
+                        "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                    ) %>
+                  <% end %>
                 <% end %>
               <% end %>
             <% end %>
