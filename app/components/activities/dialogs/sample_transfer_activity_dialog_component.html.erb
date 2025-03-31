@@ -1,5 +1,7 @@
 <%= viral_dialog(open: true,classes: ["overflow-visible"]) do |dialog| %>
-  <% dialog.with_header(title: "Transferred Samples") %>
+  <% dialog.with_header(
+    title: t(:"components.activity.dialog.sample_transfer.title"),
+  ) %>
   <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
     <%= viral_pill(
       text: helpers.local_time(activity[:created_at], :long),
@@ -14,14 +16,14 @@
         <%= t(
           :"components.activity.dialog.sample_transfer.source_project_description",
           user: activity.owner.email,
-          count: activity.parameters[:cloned_samples_ids]&.size,
+          count: activity.parameters[:transferred_samples_ids]&.size,
           source_project_puid: @activity.parameters[:source_project_puid],
         ) %>
       <% else %>
         <%= t(
           :"components.activity.dialog.sample_transfer.target_project_description",
           user: activity.owner.email,
-          count: activity.parameters[:cloned_samples_ids]&.size,
+          count: activity.parameters[:transferred_samples_ids]&.size,
           target_project_puid: @activity.parameters[:target_project_puid],
         ) %>
       <% end %>

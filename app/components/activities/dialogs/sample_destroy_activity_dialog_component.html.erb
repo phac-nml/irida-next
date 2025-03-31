@@ -1,5 +1,5 @@
 <%= viral_dialog(open: true,classes: ["overflow-visible"]) do |dialog| %>
-  <% dialog.with_header(title: "Deleted Samples") %>
+  <% dialog.with_header(title: t(:"components.activity.dialog.sample_destroy.title")) %>
   <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
     <%= viral_pill(
       text: helpers.local_time(activity[:created_at], :long),
@@ -8,7 +8,7 @@
 
     <p class="dark:text-slate-400 mt-2">
       <%= t(
-        :"components.activity.dialog.sample_destroy",
+        :"components.activity.dialog.sample_destroy.description",
         user: activity.owner.email,
         count: activity.parameters[:samples_deleted_puids]&.size,
       ) %>

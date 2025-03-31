@@ -435,10 +435,14 @@ en:
           copied_to: Copied to
           source_project_description: "%{user} copied %{count} samples from project %{source_project_puid}"
           target_project_description: "%{user} copied %{count} samples to project %{target_project_puid}"
-        sample_destroy: "%{user} removed %{count} samples from the project"
+          title: "Copied Samples"
+        sample_destroy:
+          description: "%{user} removed %{count} samples from the project"
+          title: "Deleted Samples"
         sample_transfer:
           source_project_description: "%{user} transferred %{count} samples from project %{source_project_puid}"
           target_project_description: "%{user} transferred %{count} samples to project %{target_project_puid}"
+          title: "Transferred Samples"
       load_more: Load more
       more_details: More details
     clipboard:

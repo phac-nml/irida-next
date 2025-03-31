@@ -36,6 +36,8 @@ module Projects
 
       assert_selector 'a',
                       text: activity_to_render[:target_project_puid]
+
+      assert_selector 'a', text: I18n.t(:'components.activity.more_details')
     end
 
     test 'sample clone target project actvity' do
@@ -64,6 +66,8 @@ module Projects
 
       assert_selector 'a',
                       text: activity_to_render[:source_project_puid]
+
+      assert_selector 'a', text: I18n.t(:'components.activity.more_details')
     end
 
     test 'sample clone source project deleted actvity' do
@@ -95,6 +99,8 @@ module Projects
 
       assert_selector 'span',
                       text: activity_to_render[:source_project_puid]
+
+      assert_selector 'a', text: I18n.t(:'components.activity.more_details')
     end
 
     test 'sample clone target project deleted actvity' do
@@ -126,6 +132,8 @@ module Projects
 
       assert_selector 'span',
                       text: activity_to_render[:target_project_puid]
+
+      assert_selector 'a', text: I18n.t(:'components.activity.more_details')
     end
   end
 end
