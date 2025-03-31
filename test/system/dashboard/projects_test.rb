@@ -371,7 +371,8 @@ module Dashboard
       visit namespace_project_samples_url(@group1, @project)
 
       find("input[type='checkbox'][id='#{dom_id(@sample1, :checkbox)}']").click
-      click_link I18n.t('projects.samples.index.clone_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.clone')
 
       within('div[data-controller-connected="true"] dialog') do
         assert_text I18n.t('projects.samples.clones.dialog.description.singular')
