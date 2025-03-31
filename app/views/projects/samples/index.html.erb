@@ -20,30 +20,76 @@
           <% end %>
         <% end %>
 
-        <% if @allowed_to[:clone_sample] %>
-          <%= link_to t("projects.samples.index.clone_button"),
-          new_namespace_project_samples_clone_path,
-          data: {
-            action: "turbo:morph-element->action-link#idempotentConnect",
-            turbo_stream: true,
-            controller: "action-link",
-            action_link_required_value: 1,
-          },
-          class: "button button--size-default button--state-default action-link" %>
-        <% end %>
-        <% if @allowed_to[:transfer_sample] %>
-          <%= link_to t("projects.samples.index.transfer_button"),
-          new_namespace_project_samples_transfer_path,
-          data: {
-            action: "turbo:morph-element->action-link#idempotentConnect",
-            turbo_stream: true,
-            controller: "action-link",
-            action_link_required_value: 1,
-          },
-          class: "button button--size-default button--state-default action-link" %>
-        <% end %>
-        <% if @allowed_to[:export_data] %>
-          <%= viral_dropdown(label: t(".create_export_button.label"), aria: { label: t('.create_export_button.label') }, caret: true, action_link: true, action_link_value: 1, classes: "font-normal button button--size-default button--state-default action-link") do |dropdown| %>
+        <%= viral_dropdown(label: t(".sample_actions_button.label"), aria: { label: t('.sample_actions_button.label') }, caret: true, classes: "font-normal button button--size-default button--state-default") do |dropdown| %>
+          <% if allowed_to?(:create_sample?, @project) %>
+            <% dropdown.with_item(
+              label: t("projects.samples.index.new_button"),
+              url: new_namespace_project_sample_path,
+              data: {
+                turbo_stream: true,
+              },
+            ) %>
+          <% end %>
+          <% if allowed_to?(:destroy_sample?, @project) %>
+            <% dropdown.with_item(
+              label: t(".delete_samples_button"),
+              url: new_namespace_project_samples_deletion_path(deletion_type: "multiple"),
+              data: {
+                turbo_stream: true,
+              },
+            ) %>
+          <% end %>
+
+          <% if allowed_to?(:clone_sample?, @project) %>
+            <% dropdown.with_item(
+              label: t("projects.samples.index.sample_actions_button.clone"),
+              url: new_namespace_project_samples_clone_path,
+              data: {
+                action: "turbo:morph-element->action-link#idempotentConnect",
+                turbo_stream: true,
+                controller: "action-link",
+                action_link_required_value: 1,
+              },
+              class:
+                "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300 border-slate-100 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-link",
+            ) %>
+          <% end %>
+          <% if allowed_to?(:transfer_sample?, @project) %>
+            <% dropdown.with_item(
+              label: t("projects.samples.index.sample_actions_button.transfer"),
+              url: new_namespace_project_samples_transfer_path,
+              data: {
+                action: "turbo:morph-element->action-link#idempotentConnect",
+                turbo_stream: true,
+                controller: "action-link",
+                action_link_required_value: 1,
+              },
+              class:
+                "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300 border-slate-100 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-link",
+            ) %>
+          <% end %>
+
+          <% if Flipper.enabled?(:batch_sample_spreadsheet_import) && allowed_to?(:import_samples_and_metadata?, @project.namespace) %>
+            <% dropdown.with_item(
+              label: t("projects.samples.index.import_samples_button"),
+              url: new_namespace_project_samples_spreadsheet_import_path,
+              data: {
+                turbo_stream: true,
+              },
+            ) %>
+          <% end %>
+
+          <% if allowed_to?(:update_sample_metadata?, @project.namespace) && @has_samples %>
+            <% dropdown.with_item(
+              label: t("projects.samples.index.import_metadata_button"),
+              url: new_namespace_project_samples_file_import_path,
+              data: {
+                turbo_stream: true,
+              },
+            ) %>
+          <% end %>
+
+          <% if allowed_to?(:export_data?, @project) %>
             <% if @project.namespace.metadata_fields.empty? %>
               <% dropdown.with_item(
                 label: t(".create_export_button.linelist_export"),
@@ -67,8 +113,13 @@
                     namespace_id: @project.namespace.id,
                   ),
                 data: {
+                  action: "turbo:morph-element->action-link#idempotentConnect",
                   turbo_stream: true,
+                  controller: "action-link",
+                  action_link_required_value: 1,
                 },
+                class:
+                  "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300 border-slate-100 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-link",
               ) %>
             <% end %>
             <% dropdown.with_item(
@@ -79,43 +130,15 @@
                   namespace_id: @project.namespace.id,
                 ),
               data: {
+                action: "turbo:morph-element->action-link#idempotentConnect",
                 turbo_stream: true,
+                controller: "action-link",
+                action_link_required_value: 1,
               },
+              class:
+                "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300 border-slate-100 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-link",
             ) %>
           <% end %>
-        <% end %>
-        <% if @allowed_to[:update_sample_metadata] && @has_samples %>
-          <%= link_to t("projects.samples.index.import_metadata_button"),
-          new_namespace_project_samples_file_import_path,
-          data: {
-            turbo_stream: true,
-          },
-          class: "button button--size-default button--state-default" %>
-        <% end %>
-        <% if @allowed_to[:create_sample] %>
-          <%= link_to t("projects.samples.index.new_button"),
-          new_namespace_project_sample_path,
-          class: "button button--size-default button--state-primary",
-          "aria-label": t(".actions.button_add_aria_label") %>
-        <% end %>
-        <% if Flipper.enabled?(:batch_sample_spreadsheet_import) && allowed_to?(:import_samples_and_metadata?, @project.namespace) %>
-          <%= link_to t("projects.samples.index.import_samples_button"),
-          new_namespace_project_samples_spreadsheet_import_path,
-          data: {
-            turbo_stream: true,
-          },
-          class: "button button--size-default button--state-default" %>
-        <% end %>
-        <% if @allowed_to[:destroy_sample] %>
-          <%= link_to t(".delete_samples_button"),
-          new_namespace_project_samples_deletion_path(deletion_type: "multiple"),
-          data: {
-            action: "turbo:morph-element->action-link#idempotentConnect",
-            turbo_stream: true,
-            controller: "action-link",
-            action_link_required_value: 1,
-          },
-          class: "button button--size-default button--state-destructive action-link" %>
         <% end %>
       </div>
     <% end %>
