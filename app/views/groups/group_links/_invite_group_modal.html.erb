@@ -72,7 +72,11 @@
       </div>
       <div class="my-4">
         <%= form.submit I18n.t("groups.group_links.new.button.submit"),
-                    class: "button button--size-default button--state-primary" %>
+                    class: "button button--size-default button--state-primary"
+                    disabled: true,
+                    data: {
+                      "viral--select2-target": "submitButton",
+                    } %>
         <button
           type="button"
           class="button button--size-default button--state-default"
