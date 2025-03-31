@@ -239,7 +239,7 @@ module WorkflowExecutions
     test 'should not destroy shared workflow executions if selected' do
       error_workflow = workflow_executions(:automated_example_error)
       canceled_workflow = workflow_executions(:automated_example_canceled)
-      shared_workflow = workflow_executions(:workflow_execution_shared1)
+      shared_workflow = workflow_executions(:workflow_execution_shared2)
       namespace = projects(:project1).namespace
 
       assert_difference -> { WorkflowExecution.count } => -2,
