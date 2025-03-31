@@ -42,14 +42,15 @@
         ),
     ) %>
   <% end %>
-  <br/>
-  <%= link_to(
-    t(:"components.activity.more_details"),
-    activity_path(@activity[:id], dialog_type: "samples_clone"),
-    data: {
-      turbo_stream: true,
-    },
-    class:
-      "inline-flex items-center justify-center button button--state-default button--size-small",
-  ) %>
+  <span class="block">
+    <%= link_to(
+      t(:"components.activity.more_details"),
+      activity_path(@activity[:id], dialog_type: "samples_clone"),
+      data: {
+        turbo_stream: true,
+      },
+      class:
+        "inline-flex items-center justify-center button button--state-default button--size-small",
+    ) %>
+  </span>
 </span>
