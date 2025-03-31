@@ -27,6 +27,7 @@ export default class Select2Controller extends Controller {
     "scroller", // 📜 Scrollable container for items
     "item", // 🔘 Individual selectable items
     "empty", // 🕸️ Empty state message when no results found
+    "submitButton", // 🖱️ Submit button for form submission
   ];
 
   /**
@@ -152,6 +153,9 @@ export default class Select2Controller extends Controller {
       // Update selection and UI state
       this.#updateSelection(primary, value);
       this.#isItemSelected = true;
+      if (this.hasSubmitButtonTarget) {
+        this.submitButtonTarget.disabled = false;
+      }
 
       // Hide dropdown and focus input
       if (this.#dropdown) {
@@ -174,7 +178,6 @@ export default class Select2Controller extends Controller {
     try {
       // Only process navigation keys
       if (!Object.values(Select2Controller.#KEY_CODES).includes(event.key)) {
-        this.input();
         return;
       }
 
@@ -222,6 +225,9 @@ export default class Select2Controller extends Controller {
 
       // Reset selection state when input changes
       this.#isItemSelected = false;
+      if (this.hasSubmitButtonTarget) {
+        this.submitButtonTarget.disabled = true;
+      }
 
       // Filter items based on query
       this.itemTargets.forEach((item) => {
