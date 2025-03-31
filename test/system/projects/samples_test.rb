@@ -160,7 +160,7 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
 
-      assert_no_selector 'a', text: I18n.t('projects.samples.index.import_metadata_button')
+      assert_no_selector 'a', text: I18n.t('projects.samples.index.sample_actions_button.transfer')
     end
 
     test 'User with role >= Maintainer sees new sample button' do
@@ -1150,7 +1150,8 @@ module Projects
 
       ### ACTIONS START ###
       # start import
-      click_link I18n.t('projects.samples.index.import_metadata_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1227,7 +1228,8 @@ module Projects
 
       ### ACTIONS START ###
       # start import
-      click_link I18n.t('projects.samples.index.import_metadata_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1314,7 +1316,8 @@ module Projects
 
       ### ACTIONS START ###
       # start import
-      click_link I18n.t('projects.samples.index.import_metadata_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xls')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1405,7 +1408,8 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_link I18n.t('projects.samples.index.import_metadata_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xlsx')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1463,7 +1467,8 @@ module Projects
 
     test 'dialog close button is hidden during metadata import' do
       visit namespace_project_samples_url(@namespace, @project)
-      click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         # dialog close button available when selecting params
         assert_selector 'button.dialog--close'
@@ -1488,7 +1493,8 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_link I18n.t('projects.samples.index.import_metadata_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1536,7 +1542,8 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_link I18n.t('projects.samples.index.import_metadata_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_empty_values.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1597,7 +1604,8 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_link I18n.t('projects.samples.index.import_metadata_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_empty_values.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1642,7 +1650,8 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_link I18n.t('projects.samples.index.import_metadata_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/duplicate_headers.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1680,7 +1689,8 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_link I18n.t('projects.samples.index.import_metadata_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_rows.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1718,7 +1728,8 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_link I18n.t('projects.samples.index.import_metadata_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1758,7 +1769,8 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_link I18n.t('projects.samples.index.import_metadata_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/mixed_project_samples.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1828,7 +1840,8 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_link I18n.t('projects.samples.index.import_metadata_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_analysis_values.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
