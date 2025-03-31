@@ -1,5 +1,5 @@
 <div class="<%= @system_arguments[:container_classes] %>">
-  <p id="<%= id %>label"><%= title %></p>
+  <p id="<%= id %>-list-label"><%= title %></p>
   <ul
     id="<%= id %>"
     data-controller="viral--sortable-lists--list"
@@ -8,7 +8,7 @@
     tabindex="0"
     aria-label="<%= title %>"
     role="listbox"
-    aria-labelledby="<%= id %>label"
+    aria-labelledby="<%= id %>-list-label"
     aria-roledescription="<%= t('.aria_role_description', list: title)%>"
   >
     <%= render Viral::SortableList::ListItemComponent.with_collection(list_items) %>
