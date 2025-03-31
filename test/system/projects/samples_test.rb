@@ -344,7 +344,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_link I18n.t('projects.samples.index.transfer_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.transfer')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -374,7 +375,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_link I18n.t('projects.samples.index.transfer_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.transfer')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -397,7 +399,8 @@ module Projects
       within '#samples-table table tbody' do
         all('input[type="checkbox"]')[0].click
       end
-      click_link I18n.t('projects.samples.index.transfer_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.transfer')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -430,7 +433,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_link I18n.t('projects.samples.index.transfer_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.transfer')
       assert_selector '#dialog'
       within('#dialog') do
         within('#list_selections') do
@@ -482,7 +486,8 @@ module Projects
       ### ACTIONS START ###
       # select all 3 samples
       click_button I18n.t(:'projects.samples.index.select_all_button')
-      click_link I18n.t('projects.samples.index.transfer_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.transfer')
       assert_selector '#dialog'
       within('#dialog') do
         # close button available before confirming
@@ -530,7 +535,8 @@ module Projects
       # clear localstorage
       Capybara.execute_script 'sessionStorage.clear()'
       # launch transfer dialog
-      click_link I18n.t('projects.samples.index.transfer_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.transfer')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -579,7 +585,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_link I18n.t('projects.samples.index.transfer_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.transfer')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -644,7 +651,8 @@ module Projects
         assert_text 'Samples: 1'
         assert_selector 'strong[data-selection-target="selected"]', text: '1'
       end
-      click_link I18n.t('projects.samples.index.transfer_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.transfer')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -683,7 +691,8 @@ module Projects
       end
 
       # transfer sample
-      click_link I18n.t('projects.samples.index.transfer_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.transfer')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -741,7 +750,8 @@ module Projects
       end
 
       # launch dialog
-      click_link I18n.t('projects.samples.index.transfer_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_link I18n.t('projects.samples.index.sample_actions_button.transfer')
       assert_selector '#dialog'
       within('#dialog') do
         # fill destination input
@@ -2464,7 +2474,7 @@ module Projects
       assert_text I18n.t('projects.samples.index.no_samples')
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
       assert_no_button I18n.t(:'projects.samples.index.sample_actions_button.clone')
-      assert_no_button I18n.t(:'projects.samples.index.transfer_button')
+      assert_no_button I18n.t(:'projects.samples.index.sample_actions_button.transfer')
       assert_text I18n.t('projects.samples.index.create_export_button.label')
       assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                       text: I18n.t('projects.samples.index.create_export_button.label')
