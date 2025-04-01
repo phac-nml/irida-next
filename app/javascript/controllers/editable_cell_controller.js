@@ -42,7 +42,7 @@ export default class extends Controller {
   }
 
   reset(element) {
-    element.innerText = this.#originalCellContent[element.id];
+    element.innerText = this.#originalCellContent[this.#elementId(element)];
   }
 
   async blur(event) {
@@ -62,7 +62,10 @@ export default class extends Controller {
 
   async showConfirmDialog(editableCell) {
     let confirmDialog = this.confirmDialogTemplateTarget.innerHTML
-      .replace(/ORIGINAL_VALUE/g, this.#originalCellContent[editableCell.id])
+      .replace(
+        /ORIGINAL_VALUE/g,
+        this.#originalCellContent[this.#elementId(editableCell)],
+      )
       .replace(/NEW_VALUE/g, editableCell.innerText);
     this.confirmDialogContainerTarget.innerHTML = confirmDialog;
 
@@ -72,7 +75,9 @@ export default class extends Controller {
     let messageType = "wov";
     if (editableCell.innerText === "") {
       messageType = "wonv";
-    } else if (editableCell.dataset.originalValue === "") {
+    } else if (
+      this.#originalCellContent[this.#elementId(editableCell)] === ""
+    ) {
       messageType = "woov";
     }
     dialog
