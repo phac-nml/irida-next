@@ -345,11 +345,11 @@ module WorkflowExecutions
         # verify samples samplesheet loaded
         assert_selector 'div.sample-sheet'
         # verify auto selected attachments
-        assert_selector "div[id='#{@sample_a.id}_fastq_1']", text: @attachment_c.file.filename.to_s
-        assert_selector "div[id='#{@sample_a.id}_fastq_2']",
+        assert_selector "a[id='#{@sample_a.id}_fastq_1']", text: @attachment_c.file.filename.to_s
+        assert_selector "a[id='#{@sample_a.id}_fastq_2']",
                         text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
-        assert_selector "div[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
-        assert_selector "div[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev3.file.filename.to_s
+        assert_selector "a[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
+        assert_selector "a[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev3.file.filename.to_s
       end
       ### VERIFY END ###
     end
@@ -380,9 +380,9 @@ module WorkflowExecutions
         # verify samples samplesheet loaded
         assert_selector 'div.sample-sheet'
         # verify auto selected attachments
-        assert_selector "div[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
-        assert_selector "div[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev3.file.filename.to_s
-        find("div[id='#{@sample_b.id}_fastq_1']").click
+        assert_selector "a[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
+        assert_selector "a[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev3.file.filename.to_s
+        find("a[id='#{@sample_b.id}_fastq_1']").click
       end
 
       # verify file selector rendered
@@ -400,8 +400,8 @@ module WorkflowExecutions
       ### VERIFY START ###
       within '#dialog' do
         # both attachment fwd and rev3 were replaced with fwd and rev2
-        assert_selector "div[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd2.file.filename.to_s
-        assert_selector "div[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev2.file.filename.to_s
+        assert_selector "a[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd2.file.filename.to_s
+        assert_selector "a[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev2.file.filename.to_s
         assert_no_text @attachment_fwd3.file.filename.to_s
         assert_no_text @attachment_rev3.file.filename.to_s
       end
@@ -435,9 +435,9 @@ module WorkflowExecutions
         # verify samples samplesheet loaded
         assert_selector 'div.sample-sheet'
         # verify auto selected attachments
-        assert_selector "div[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
-        assert_selector "div[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev3.file.filename.to_s
-        find("div[id='#{@sample_b.id}_fastq_1']").click
+        assert_selector "a[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
+        assert_selector "a[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev3.file.filename.to_s
+        find("a[id='#{@sample_b.id}_fastq_1']").click
       end
 
       # verify file selector rendered
@@ -455,8 +455,8 @@ module WorkflowExecutions
       ### VERIFY START ###
       within '#dialog' do
         # fastq_1 field changed to single-end fastq file, fastq_2 autopopulates to no selected file
-        assert_selector "div[id='#{@sample_b.id}_fastq_1']", text: attachment_d.file.filename.to_s
-        assert_selector "div[id='#{@sample_b.id}_fastq_2']",
+        assert_selector "a[id='#{@sample_b.id}_fastq_1']", text: attachment_d.file.filename.to_s
+        assert_selector "a[id='#{@sample_b.id}_fastq_2']",
                         text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
         assert_no_text @attachment_fwd3.file.filename.to_s
         assert_no_text @attachment_rev3.file.filename.to_s
@@ -491,11 +491,11 @@ module WorkflowExecutions
         # verify samples samplesheet loaded
         assert_selector 'div.sample-sheet'
         # verify auto selected attachments
-        assert_selector "div[id='#{@sample_a.id}_fastq_1']", text: @attachment_c.file.filename.to_s
-        assert_selector "div[id='#{@sample_a.id}_fastq_2']",
+        assert_selector "a[id='#{@sample_a.id}_fastq_1']", text: @attachment_c.file.filename.to_s
+        assert_selector "a[id='#{@sample_a.id}_fastq_2']",
                         text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
         # launch file selector
-        find("div[id='#{@sample_a.id}_fastq_1']").click
+        find("a[id='#{@sample_a.id}_fastq_1']").click
       end
 
       # verify file selector rendered
@@ -513,8 +513,8 @@ module WorkflowExecutions
       ### VERIFY START ###
       within '#dialog' do
         # only fastq_1 field was changed, fastq_2 remains empty
-        assert_selector "div[id='#{@sample_a.id}_fastq_1']", text: attachment_b.file.filename.to_s
-        assert_selector "div[id='#{@sample_a.id}_fastq_2']",
+        assert_selector "a[id='#{@sample_a.id}_fastq_1']", text: attachment_b.file.filename.to_s
+        assert_selector "a[id='#{@sample_a.id}_fastq_2']",
                         text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
         assert_no_text @attachment_c.file.filename.to_s
       end
@@ -548,11 +548,11 @@ module WorkflowExecutions
         # verify samples samplesheet loaded
         assert_selector 'div.sample-sheet'
         # verify auto selected attachments
-        assert_selector "div[id='#{@sample_a.id}_fastq_1']", text: @attachment_c.file.filename.to_s
-        assert_selector "div[id='#{@sample_a.id}_fastq_2']",
+        assert_selector "a[id='#{@sample_a.id}_fastq_1']", text: @attachment_c.file.filename.to_s
+        assert_selector "a[id='#{@sample_a.id}_fastq_2']",
                         text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
         # launch file selector
-        find("div[id='#{@sample_a.id}_fastq_1']").click
+        find("a[id='#{@sample_a.id}_fastq_1']").click
       end
       ### ACTIONS END ###
 
@@ -597,9 +597,9 @@ module WorkflowExecutions
         # verify samples samplesheet loaded
         assert_selector 'div.sample-sheet'
         # verify auto selected attachments
-        assert_selector "div[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
-        assert_selector "div[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev3.file.filename.to_s
-        find("div[id='#{@sample_b.id}_fastq_2']").click
+        assert_selector "a[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
+        assert_selector "a[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev3.file.filename.to_s
+        find("a[id='#{@sample_b.id}_fastq_2']").click
       end
       ### ACTIONS END ###
 
@@ -617,8 +617,8 @@ module WorkflowExecutions
       end
       within('#dialog') do
         # sample_b fastq2 selection is now no file selected
-        assert_selector "div[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
-        assert_selector "div[id='#{@sample_b.id}_fastq_2']",
+        assert_selector "a[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
+        assert_selector "a[id='#{@sample_b.id}_fastq_2']",
                         text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
         assert_no_text @attachment_rev3.file.filename.to_s
       end
@@ -651,10 +651,10 @@ module WorkflowExecutions
         # verify samples samplesheet loaded
         assert_selector 'div.sample-sheet'
         # verify auto selected attachments
-        assert_selector "div[id='#{@sample_a.id}_fastq_1']", text: @attachment_c.file.filename.to_s
-        assert_selector "div[id='#{@sample_a.id}_fastq_2']",
+        assert_selector "a[id='#{@sample_a.id}_fastq_1']", text: @attachment_c.file.filename.to_s
+        assert_selector "a[id='#{@sample_a.id}_fastq_2']",
                         text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
-        find("div[id='#{@sample_a.id}_fastq_2']").click
+        find("a[id='#{@sample_a.id}_fastq_2']").click
       end
       ### ACTIONS END ###
 
@@ -706,18 +706,18 @@ module WorkflowExecutions
         # verify samples samplesheet loaded
         assert_selector 'div.sample-sheet'
         # verify auto selected attachments
-        assert_selector "div[id='#{@sample43.id}_fastq_1']",
+        assert_selector "a[id='#{@sample43.id}_fastq_1']",
                         text: fwd_attachment.file.filename.to_s
-        assert_selector "div[id='#{@sample43.id}_fastq_2']", text: rev_attachment.file.filename.to_s
+        assert_selector "a[id='#{@sample43.id}_fastq_2']", text: rev_attachment.file.filename.to_s
 
-        assert_selector "div[id='#{@sample44.id}_fastq_1']",
+        assert_selector "a[id='#{@sample44.id}_fastq_1']",
                         text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
-        assert_selector "div[id='#{@sample44.id}_fastq_2']",
+        assert_selector "a[id='#{@sample44.id}_fastq_2']",
                         text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
 
-        assert_selector "div[id='#{@sample46.id}_fastq_1']",
+        assert_selector "a[id='#{@sample46.id}_fastq_1']",
                         text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
-        assert_selector "div[id='#{@sample46.id}_fastq_2']",
+        assert_selector "a[id='#{@sample46.id}_fastq_2']",
                         text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
         # verify error msg has not rendered
         assert_no_text I18n.t('nextflow.samplesheet_component.data_missing_error')
@@ -845,9 +845,9 @@ module WorkflowExecutions
         assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '4'
 
         # verify attachment to test initially has a selection
-        assert_selector "div[id='#{@sample22.id}_fastq_2']",
+        assert_selector "a[id='#{@sample22.id}_fastq_2']",
                         text: rev_attachment.file.filename.to_s
-        find("div[id='#{@sample22.id}_fastq_2']").click
+        find("a[id='#{@sample22.id}_fastq_2']").click
       end
 
       # select 'No file' option
@@ -867,20 +867,20 @@ module WorkflowExecutions
       ### VERIFY START ###
       within('#dialog') do
         # file selection is now no file selected
-        assert_selector "div[id='#{@sample22.id}_fastq_2']",
+        assert_selector "a[id='#{@sample22.id}_fastq_2']",
                         text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
         # previously selected file no longer exists in table
         assert_no_text rev_attachment.file.filename.to_s
         # change page
         click_button I18n.t('nextflow.samplesheet_component.previous')
         assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '3'
-        assert_no_selector "div[id='#{@sample22.id}_fastq_2']"
+        assert_no_selector "a[id='#{@sample22.id}_fastq_2']"
 
         # navigate back to original page
         click_button I18n.t('nextflow.samplesheet_component.next')
         assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '4'
         # verify attachment selection is still 'No file' and original attachment does not exist in table
-        assert_selector "div[id='#{@sample22.id}_fastq_2']",
+        assert_selector "a[id='#{@sample22.id}_fastq_2']",
                         text: I18n.t('nextflow.samplesheet.file_cell_component.no_selected_file')
         assert_no_text rev_attachment.file.filename.to_s
       end
