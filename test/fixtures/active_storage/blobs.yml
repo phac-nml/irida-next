@@ -124,6 +124,9 @@ gasclustering_test_file_json_blob: <%= ActiveStorage::FixtureSet.blob filename: 
 
 metadata_valid_csv_blob: <%= ActiveStorage::FixtureSet.blob filename: "valid.csv", service_name: "test" %>
 
+workflow_execution_group_shared_output_attachment_blob: <%= ActiveStorage::FixtureSet.blob filename: "summary.txt.gz", service_name: "test" %>
+workflow_execution_shared_with_project_output_attachment_blob: <%= ActiveStorage::FixtureSet.blob filename: "summary.txt.gz", service_name: "test" %>
+
 # ⬇️ attachment_test.rb files ⬇️
 # --------------------------------
 attachment_csv_blob: <%= ActiveStorage::FixtureSet.blob filename: "attachment_preview.csv", service_name: "test" %>
