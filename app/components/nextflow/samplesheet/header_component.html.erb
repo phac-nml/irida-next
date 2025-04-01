@@ -11,6 +11,7 @@
         dark:bg-slate-700 bg-slate-50
       "
     >
+      <label class="sr-only" for="field-<%= header %>"><%= header %></label>
       <%= select_tag :field,
       options_for_select(metadata_fields_for_field(header), header),
       include_blank: !@required_properties.include?(header),

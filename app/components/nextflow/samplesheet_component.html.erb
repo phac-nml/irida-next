@@ -8,6 +8,7 @@
   <div class="flex justify-between mb-2">
     <label class="mt-auto text-sm font-medium text-slate-900 dark:text-white"><%= t(".label") %></label>
     <div class="relative">
+      <label class="sr-only" for="samplesheet-filter"><%= t(".filter_placeholder") %></label>
       <input
         id="samplesheet-filter"
         data-nextflow--samplesheet-target="filter"
@@ -174,7 +175,9 @@
           disabled="disabled"
         ><%= t(".previous") %></button>
       </li>
-      <li><select
+      <li>
+        <label class="sr-only" for="pagination-page-selector"><%= t(".page_selection.aria_label") %></label>
+        <select
           style="width: 80px;"
           class="
             flex items-center justify-center h-10 px-4 leading-tight bg-white border
@@ -186,6 +189,7 @@
           data-nextflow--samplesheet-target="pageNum"
           data-action="change->nextflow--samplesheet#pageSelected"
           aria-label="<%= t(".page_selection.aria_label") %>"
+          id="pagination-page-selector"
         ><option value="1" selected="selected">1</option></select>
       </li>
       <li><button
