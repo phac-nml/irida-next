@@ -147,7 +147,7 @@ export default class extends Controller {
   #removeInputOptions(target, current = null) {
     // When a current selection is passed in, it does not get removed.
     var post_length = 1
-    if (current == null){
+    if (current == null || current == ""){
       post_length = 0
     }
 
