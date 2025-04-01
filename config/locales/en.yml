@@ -1986,6 +1986,9 @@ en:
         aria-label: Pagination
         next: Next
         previous: Previous
+    sortable_list:
+      list_component:
+        aria_role_description: "%{list} listbox drag and drop"
     sortable_lists_component:
       add_all: Add all
       no_template: No template

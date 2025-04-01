@@ -951,9 +951,9 @@ class DataExportsTest < ApplicationSystemTestCase
                          selected: I18n.t('data_exports.new_linelist_export_dialog.selected').downcase)
       assert_text I18n.t('data_exports.new_linelist_export_dialog.available')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.selected')
-      assert_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_selector 'button[disabled]',
                       text: I18n.t('viral.sortable_lists_component.remove_all')
-      assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_no_selector 'button[disabled]',
                          text: I18n.t('viral.sortable_lists_component.add_all')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.format')
       assert_text I18n.t('data_exports.new_linelist_export_dialog.csv')
@@ -1023,9 +1023,9 @@ class DataExportsTest < ApplicationSystemTestCase
       end
 
       assert_selector 'input[disabled]'
-      assert_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_selector 'button[disabled]',
                       text: I18n.t('viral.sortable_lists_component.remove_all')
-      assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_no_selector 'button[disabled]',
                          text: I18n.t('viral.sortable_lists_component.add_all')
 
       click_button I18n.t('viral.sortable_lists_component.add_all')
@@ -1043,9 +1043,9 @@ class DataExportsTest < ApplicationSystemTestCase
       end
 
       assert_no_selector 'input[disabled]'
-      assert_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_selector 'button[disabled]',
                       text: I18n.t('viral.sortable_lists_component.add_all')
-      assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_no_selector 'button[disabled]',
                          text: I18n.t('viral.sortable_lists_component.remove_all')
 
       click_button I18n.t('viral.sortable_lists_component.remove_all')
@@ -1063,9 +1063,9 @@ class DataExportsTest < ApplicationSystemTestCase
       end
 
       assert_selector 'input[disabled]'
-      assert_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_selector 'button[disabled]',
                       text: I18n.t('viral.sortable_lists_component.remove_all')
-      assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_no_selector 'button[disabled]',
                          text: I18n.t('viral.sortable_lists_component.add_all')
     end
   end
@@ -1154,9 +1154,9 @@ class DataExportsTest < ApplicationSystemTestCase
       end
 
       assert_no_selector 'input[disabled]'
-      assert_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_selector 'button[disabled]',
                       text: I18n.t('viral.sortable_lists_component.add_all')
-      assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_no_selector 'button[disabled]',
                          text: I18n.t('viral.sortable_lists_component.remove_all')
 
       click_button I18n.t('viral.sortable_lists_component.remove_all')
@@ -1172,9 +1172,9 @@ class DataExportsTest < ApplicationSystemTestCase
       end
 
       assert_selector 'input[disabled]'
-      assert_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_selector 'button[disabled]',
                       text: I18n.t('viral.sortable_lists_component.remove_all')
-      assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_no_selector 'button[disabled]',
                          text: I18n.t('viral.sortable_lists_component.add_all')
 
       click_button I18n.t('viral.sortable_lists_component.add_all')
@@ -1190,9 +1190,9 @@ class DataExportsTest < ApplicationSystemTestCase
       end
 
       assert_no_selector 'input[disabled]'
-      assert_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_selector 'button[disabled]',
                       text: I18n.t('viral.sortable_lists_component.add_all')
-      assert_no_selector 'button.pointer-events-none.cursor-not-allowed',
+      assert_no_selector 'button[disabled]',
                          text: I18n.t('viral.sortable_lists_component.remove_all')
     end
   end
