@@ -14,7 +14,7 @@ module Viral
             data-action="click->viral--select2#select"
             class="
               flex-col w-full border-2 border-transparent text-left p-2.5 bg-slate-50 hover:bg-slate-100
-              dark:bg-slate-700 dark:hover:bg-slate-600 focus:bg-slate-100
+              dark:bg-slate-700 dark:hover:bg-slate-600 focus:bg-slate-100 dark:focus:bg-slate-600
             "
           >
             <span
