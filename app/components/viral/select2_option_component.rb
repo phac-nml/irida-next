@@ -18,12 +18,12 @@ module Viral
             "
           >
             <span
-              class="block text-base truncate text-slate-900 dark:text-white"
+              class="block text-base font-semibold truncate text-slate-900 dark:text-white"
             >
               <%= @primary %>
             </span>
             <% if @secondary %>
-            <span class="text-base truncate text-slate-500 dark:text-slate-400">
+            <span class="text-sm truncate text-slate-500 dark:text-slate-400">
               <%= @secondary %>
             </span>
             <% end %>
