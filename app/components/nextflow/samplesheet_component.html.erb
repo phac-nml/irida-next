@@ -120,30 +120,21 @@
 
 <template data-nextflow--samplesheet-target="fileCell">
   <div>
-    <%= link_to new_workflow_executions_file_selector_path(
-  "file_selector[attachable_id]": "ATTACHABLE_ID_PLACEHOLDER",
-  "file_selector[attachable_type]": "ATTACHABLE_TYPE_PLACEHOLDER",
-  "file_selector[index]": "INDEX_PLACEHOLDER",
-  "file_selector[selected_id]": "SELECTED_ID_PLACEHOLDER",
-  "file_selector[property]": "PROPERTY_PLACEHOLDER",
-  "file_selector[pattern]": "PATTERN_PLACEHOLDER",
-  "file_selector[required_properties]": @required_properties,
-),
-data: {
-  turbo_stream: "true",
-} do %>
-      <div
-        id="<%="ATTACHABLE_ID_PLACEHOLDER_PROPERTY_PLACEHOLDER" %>"
-        class="
-          w-full p-2 text-sm border-2 border-transparent cursor-pointer
-          focus:ring-primary-500 focus:border-primary-500 dark:bg-inherit bg-inherit
-          dark:placeholder-slate-400 text-inherit dark:focus:ring-primary-500
-          dark:focus:border-primary-500 hover:border-slate-300
-        "
-      >
-        FILENAME_PLACEHOLDER
-      </div>
-    <% end %>
+    <%= link_to "FILENAME_PLACEHOLDER",
+    new_workflow_executions_file_selector_path(
+      "file_selector[attachable_id]": "ATTACHABLE_ID_PLACEHOLDER",
+      "file_selector[attachable_type]": "ATTACHABLE_TYPE_PLACEHOLDER",
+      "file_selector[index]": "INDEX_PLACEHOLDER",
+      "file_selector[selected_id]": "SELECTED_ID_PLACEHOLDER",
+      "file_selector[property]": "PROPERTY_PLACEHOLDER",
+      "file_selector[pattern]": "PATTERN_PLACEHOLDER",
+      "file_selector[required_properties]": @required_properties,
+    ),
+    data: {
+      turbo_stream: "true",
+    },
+    class:
+      "block p-2 text-sm border-2 border-transparent focus:ring-primary-500 focus:border-primary-500 cursor-pointer bg-inherit text-inherit dark:focus:border-primary-500 hover:border-slate-300" %>
   </div>
 </template>
 
