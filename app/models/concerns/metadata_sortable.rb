@@ -9,7 +9,7 @@ module MetadataSortable
       metadata_field = Arel::Nodes::InfixOperation.new(
         '->',
         arel_table[:metadata],
-        Arel::Nodes.build_quoted(URI.decode_www_form_component(field))
+        Arel::Nodes.build_quoted(field)
       )
 
       if dir.to_sym == :asc
