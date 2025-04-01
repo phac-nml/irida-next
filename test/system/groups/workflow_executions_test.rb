@@ -187,7 +187,12 @@ module Groups
         click_on I18n.t('workflow_executions.show.tabs.files', locale: user.locale)
       end
 
-      assert_text 'FILENAME'
+      attachment = attachments(:workflow_execution_group_shared_output_attachment)
+      within('table tbody') do
+        assert_text attachment.puid
+        assert_text attachment.file.filename.to_s
+        assert I18n.t('workflow_executions.attachment.preview', locale: user.locale)
+      end
 
       within %(div[id="workflow-execution-tabs"]) do
         click_on I18n.t('workflow_executions.show.tabs.params', locale: user.locale)
