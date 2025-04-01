@@ -6,8 +6,6 @@ export default class extends Controller {
     "sampleNameColumn",
     "projectPUIDColumn",
     "sampleDescriptionColumn",
-    "sortableListsTemplate",
-    "sortableListsItemTemplate",
     "submitButton",
   ];
 
@@ -110,7 +108,6 @@ export default class extends Controller {
     }
     this.#removeInputOptions(this.sampleDescriptionColumnTarget);
     this.#disableTarget(this.sampleDescriptionColumnTarget);
-    // this.#removeMetadataColumns();
     this.submitButtonTarget.disabled = true;
   }
 
@@ -153,41 +150,6 @@ export default class extends Controller {
     }
     this.#enableTarget(columnTarget);
   }
-
-  // #removeMetadataColumns() {
-  //   if (this.hasMetadataColumnsTarget) {
-  //     this.metadataColumnsTarget.innerHTML = "";
-  //   }
-  // }
-
-  // #addMetadataColumns() {
-  //   const ignoreList = [
-  //     "sample name",
-  //     "project id",
-  //     "description",
-  //     "created_at",
-  //     "updated_at",
-  //     "last_updated_at",
-  //   ];
-
-  //   let columns = this.#headers.filter(
-  //     (header) =>
-  //       !ignoreList.includes(header.toLowerCase()) &&
-  //       header.toLowerCase() != this.sampleNameColumnTarget.value.toLowerCase(),
-  //   );
-
-  //   this.metadataColumnsTarget.innerHTML =
-  //     this.sortableListsTemplateTarget.innerHTML;
-
-  //   columns.forEach((column) => {
-  //     const template =
-  //       this.sortableListsItemTemplateTarget.content.cloneNode(true);
-  //     template.querySelector("li").innerText = column;
-  //     template.querySelector("li").id = column.replace(/\s+/g, "-");
-  //     this.metadataColumnsTarget.querySelector("#selected").append(template);
-  //   });
-  //   this.submitButtonTarget.disabled = !columns.length;
-  // }
 
   #checkFormInputsReadyForSubmit() {
     var puid_value = true
