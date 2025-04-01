@@ -11,35 +11,17 @@
         dark:bg-slate-700 bg-slate-50
       "
     >
-      <%= form_with url: fields_workflow_executions_metadata_path do |f| %>
-        <%= f.hidden_field :format, value: "turbo_stream", id: "field_#{header}_turbo" %>
-        <%= f.hidden_field :namespace_id, value: namespace_id, id: "namespace_#{header}" %>
-        <%= f.hidden_field :header, value: header, id: "header_#{header}" %>
-        <%= f.hidden_field :name_format,
-                       value:
-                         "workflow_execution[samples_workflow_executions_attributes][INDEX][samplesheet_params]",
-                       id: "format_#{header}" %>
-        <% samples.each do |sample| %>
-          <%= f.hidden_field :sample_ids,
-                         value: sample.id,
-                         id: "sample-#{sample.id}-#{header}",
-                         multiple: true %>
-        <% end %>
-        <%= f.select :field,
-                 options_for_select(metadata_fields_for_field(header), header),
-                 { include_blank: !@required_properties.include?(header) },
-                 {
-                   id: "field-#{header}",
-                   "aria-label": header,
-                   class:
-                     "bg-slate-50 text-slate-900 text-sm border-none focus:ring-primary-500 focus:border-primary-500 block min-w-56 w-full p-2.5 dark:bg-slate-700 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 font-semibold tracking-wider uppercase",
-                   onchange: "Turbo.navigator.submitForm(this.form)",
-                   data: {
-                     action: "change->nextflow--samplesheet#setMetadataParam",
-                     "metadata-header": header,
-                   },
-                 } %>
-      <% end %>
+      <%= select_tag :field,
+      options_for_select(metadata_fields_for_field(header), header),
+      include_blank: !@required_properties.include?(header),
+      id: "field-#{header}",
+      "aria-label": header,
+      class:
+        "bg-slate-50 text-slate-900 text-sm border-none focus:ring-primary-500 focus:border-primary-500 block min-w-56 w-full p-2.5 dark:bg-slate-700 dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 font-semibold tracking-wider uppercase",
+      data: {
+        action: "change->nextflow--samplesheet#handleMetadataSelection",
+        "metadata-header": header,
+      } %>
     </div>
   <% else %>
     <div

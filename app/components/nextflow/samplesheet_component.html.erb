@@ -212,3 +212,28 @@ data: {
     </ul>
   </nav>
 </template>
+
+<template data-nextflow--samplesheet-target="metadataHeaderForm">
+  <%= form_with url: fields_workflow_executions_metadata_path do |f| %>
+    <%= f.hidden_field :format,
+                   value: "turbo_stream",
+                   id: "field_HEADER_PLACEHOLDER_turbo" %>
+    <%= f.hidden_field :namespace_id,
+                   value: namespace_id,
+                   id: "namespace_HEADER_PLACEHOLDER" %>
+    <%= f.hidden_field :header,
+                   value: "HEADER_PLACEHOLDER",
+                   id: "header_HEADER_PLACEHOLDER" %>
+    <%= f.hidden_field :name_format,
+                   value:
+                     "workflow_execution[samples_workflow_executions_attributes][INDEX][samplesheet_params]",
+                   id: "format_HEADER_PLACEHOLDER" %>
+    <% @samples.each do |sample| %>
+      <%= f.hidden_field :sample_ids,
+                     value: sample.id,
+                     id: "sample-#{sample.id}-HEADER_PLACEHOLDER",
+                     multiple: true %>
+    <% end %>
+    <%= f.hidden_field :field, value: "FIELD_PLACEHOLDER" %>
+  <% end %>
+</template>

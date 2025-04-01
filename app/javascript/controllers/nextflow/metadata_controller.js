@@ -12,6 +12,8 @@ export default class extends Controller {
   }
 
   sendMetadata() {
+    console.log(this.metadataValue);
+    console.log(this.propertyValue);
     this.dispatch("sendMetadata", {
       detail: {
         content: { metadata: this.metadataValue, property: this.propertyValue },
