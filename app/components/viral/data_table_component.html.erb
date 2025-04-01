@@ -1,10 +1,10 @@
 <%= render Viral::BaseComponent.new(**wrapper_arguments) do %>
   <%= render Viral::BaseComponent.new(**system_arguments) do %>
     <table
-      class='
+      class="
         w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
         whitespace-nowrap
-      '
+      "
     >
       <thead class='sticky top-0 z-10 text-xs uppercase'>
         <tr
@@ -25,10 +25,10 @@
         </tr>
       </thead>
       <tbody
-        class='
-          overflow-y-auto bg-white dark:bg-slate-800
-          dark:divide-slate-700
-        '
+        class="
+          overflow-y-auto bg-white border-slate-200 dark:bg-slate-800
+          dark:border-slate-700
+        "
       >
         <% @data.each do |row| %>
           <%= render Viral::BaseComponent.new(**row_arguments(row)) do %>
