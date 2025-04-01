@@ -102,7 +102,7 @@ module Samples
       )
 
       Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id,
-                                                     @default_params).execute
+                                          @default_params).execute
 
       assert_equal 3, @project.samples.count
 

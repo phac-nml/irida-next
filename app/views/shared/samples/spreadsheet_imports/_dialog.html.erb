@@ -56,7 +56,7 @@
                         data: {
                           "spreadsheet-import-target": "sampleNameColumn",
                           action:
-                            "change->spreadsheet-import#changeSampleNameInput viral--sortable-lists--two-lists-selection#idempotentConnect",
+                            "change->spreadsheet-import#changeSampleNameInput",
                         } %>
           </div>
           <% if @namespace.type == 'Group' %>
@@ -72,7 +72,7 @@
                           data: {
                             "spreadsheet-import-target": "projectPUIDColumn",
                             action:
-                              "change->spreadsheet-import#changeProjectPUIDInput viral--sortable-lists--two-lists-selection#idempotentConnect",
+                              "change->spreadsheet-import#changeProjectPUIDInput",
                           } %>
             </div>
           <% end %>
@@ -88,12 +88,9 @@
                         data: {
                           "spreadsheet-import-target": "sampleDescriptionColumn",
                           action:
-                            "change->spreadsheet-import#changeSampleDescriptionInput viral--sortable-lists--two-lists-selection#idempotentConnect",
+                            "change->spreadsheet-import#changeSampleDescriptionInput",
                         } %>
           </div>
-          <%# <div class="flex items-center"> %>
-            <%# ????metadata stuff %>
-          <%# </div> %>
           <div>
             <%= form.submit t(".submit_button"),
                         class: "button button--size-default button--state-primary",

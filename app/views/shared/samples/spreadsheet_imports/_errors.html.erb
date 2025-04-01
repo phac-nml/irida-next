@@ -8,7 +8,7 @@
     <%= viral_alert(type:, message: error, classes: "mb-4") %>
   <% end %>
 
-  <div>
+  <div class="mt-2">
     <%= viral_button(state: :primary, data: { action: 'click->viral--dialog#close' }) do %>
       <%= t(".ok_button") %>
     <% end %>
