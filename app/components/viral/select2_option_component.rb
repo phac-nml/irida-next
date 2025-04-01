@@ -4,29 +4,26 @@ module Viral
   # Search component for rendering a searchable dropdown
   class Select2OptionComponent < Viral::Component
     erb_template <<~ERB
-      <% option_id = "select2-option-#{SecureRandom.hex(4)}" %>
-      <li class="w-full" role="option">
+      <li class="w-full">
           <button
-            id="<%= option_id %>"
             type="button"
             data-viral--select2-target="item"
             data-viral--select2-primary-param="<%= @primary %>"
             data-viral--select2-secondary-param="<%= @secondary %>"
             data-viral--select2-value-param="<%= @value %>"
             data-action="click->viral--select2#select"
-            aria-selected="false"
             class="
               flex-col w-full border-2 border-transparent text-left p-2.5 bg-slate-50 hover:bg-slate-100
               dark:bg-slate-700 dark:hover:bg-slate-600 focus:bg-slate-100
             "
           >
             <span
-              class="block text-base truncate font-semibold text-slate-900 dark:text-white"
+              class="block text-base truncate text-slate-900 dark:text-white"
             >
               <%= @primary %>
             </span>
             <% if @secondary %>
-            <span class="text-sm truncate text-slate-500 dark:text-slate-400">
+            <span class="text-base truncate text-slate-500 dark:text-slate-400">
               <%= @secondary %>
             </span>
             <% end %>

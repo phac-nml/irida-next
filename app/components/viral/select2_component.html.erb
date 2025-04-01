@@ -1,14 +1,9 @@
-<div data-action="keydown->viral--select2#keydown" class="select2 relative">
-  <% listbox_id = "select2-listbox-#{SecureRandom.hex(4)}" %>
+<div data-action="keydown->viral--select2#keydown" class="select2">
   <input
     type="text"
     id="<%= id %>"
     name="<%= id %>"
-    role="combobox"
-    aria-haspopup="listbox"
-    aria-expanded="false"
-    aria-controls="<%= listbox_id %>"
-    data-action="viral--select2#input focus->viral--select2#show blur->viral--select2#hideIfNeeded"
+    data-action="viral--select2#input"
     data-viral--select2-target="input"
     placeholder="<%= placeholder %>"
     <%= "required" if required %>
@@ -25,13 +20,11 @@
   <div
     data-viral--select2-target="dropdown"
     class="
-      absolute z-10 hidden w-full mt-1 bg-white divide-y rounded-lg shadow-sm divide-slate-100
+      z-10 hidden w-full bg-white divide-y rounded-lg shadow-sm divide-slate-100
       dark:bg-slate-700
     "
   >
     <ul
-      id="<%= listbox_id %>"
-      role="listbox"
       data-viral--select2-target="scroller"
       class="
         max-h-[300px] w-full py-2 overflow-y-auto divide-y divide-slate-200
