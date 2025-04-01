@@ -62,15 +62,6 @@
                 ) %>
               <% end %>
             <% end %>
-            <% if @renders_row_actions %>
-              <%= render_cell(
-              tag: 'th',
-              scope: 'col',
-              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900 @4xl:sticky right-0')
-            ) do %>
-                <%= t(".action") %>
-              <% end %>
-            <% end %>
           </tr>
         </thead>
         <tbody
@@ -140,39 +131,6 @@
                   <% end %>
                 <% end %>
               <% end %>
-
-              <% if @renders_row_actions %>
-                <%= render_cell(
-                tag: 'td',
-                classes: class_names('@4xl:sticky right-0 px-3 py-3 bg-white dark:bg-slate-800 z-5 space-x-2')
-              ) do %>
-                  <% if @row_actions[:edit] %>
-                    <%= link_to(
-                      t(:"projects.samples.index.edit_button"),
-                      edit_sample_path(sample),
-                      data: {
-                        turbo: false,
-                      },
-                      class:
-                        "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                    ) %>
-                  <% end %>
-                  <% if @row_actions[:destroy] %>
-                    <%= link_to(
-                      t(:"projects.samples.index.remove_button"),
-                      new_namespace_project_samples_deletion_path(
-                        sample_id: sample.id,
-                        deletion_type: "single",
-                      ),
-                      data: {
-                        "turbo-stream": true,
-                      },
-                      class:
-                        "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                    ) %>
-                  <% end %>
-                <% end %>
-              <% end %>
             <% end %>
           <% end %>
         </tbody>
@@ -200,7 +158,7 @@
                 </span>
               </td>
               <td
-                colspan="<%= @columns.count + @metadata_fields.count - 3 + (@renders_row_actions ? 1 : 0) %>"
+                colspan="<%= @columns.count + @metadata_fields.count - 3 %>"
                 class="p-3 bg-slate-100 dark:bg-slate-900"
               ></td>
             </tr>

@@ -1560,12 +1560,10 @@ fr:
           sample_export: Exportation d’échantillons
         delete_samples_button: Supprimer les échantillons
         deselect_all_button: Désélectionner tout
-        edit_button: Modifier
         import_metadata_button: Importer des métadonnées
         new_button: Nouvel échantillon
         no_associated_samples: Il n’y a aucun échantillon associé à ce projet.
         no_samples: Aucun échantillon
-        remove_button: Retirer
         select_all_button: Tout sélectionner
         title: Échantillons
         transfer_button: Transférer des échantillons

@@ -42,7 +42,6 @@ module Projects
           assert_selector 'th:nth-child(3)', text: I18n.t('samples.table_component.created_at').upcase
           assert_selector 'th:nth-child(4)', text: I18n.t('samples.table_component.updated_at').upcase
           assert_selector 'th:nth-child(5)', text: I18n.t('samples.table_component.attachments_updated_at').upcase
-          assert_selector 'th:last-child', text: I18n.t('samples.table_component.action').upcase
         end
         within('tbody') do
           # rows
@@ -57,50 +56,6 @@ module Projects
             # actions tested by role in separate test
           end
         end
-      end
-    end
-
-    test 'edit and delete row actions render for user with Owner role' do
-      visit namespace_project_samples_url(@namespace, @project)
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
-
-      within("tr[id='#{@sample1.id}'] td:last-child") do
-        assert_selector 'a', text: I18n.t('projects.samples.index.edit_button')
-        assert_selector 'a', text: I18n.t('projects.samples.index.remove_button')
-      end
-    end
-
-    test 'edit row action render for user with Maintainer role' do
-      user = users(:joan_doe)
-      login_as user
-      visit namespace_project_samples_url(@namespace, @project)
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: user.locale))
-
-      within("tr[id='#{@sample1.id}'] td:last-child") do
-        assert_selector 'a', text: I18n.t('projects.samples.index.edit_button', locale: user.locale)
-        assert_no_selector 'a', text: I18n.t('projects.samples.index.remove_button', locale: user.locale)
-      end
-    end
-
-    test 'no row actions for user with role < Maintainer' do
-      user = users(:ryan_doe)
-      login_as user
-      visit namespace_project_samples_url(@namespace, @project)
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: user.locale))
-      within('#samples-table table thead tr:first-child') do
-        # attachments_updated_at is the last column, action column does not exist
-        assert_selector 'th:last-child', text: I18n.t('samples.table_component.attachments_updated_at').upcase
-        assert_no_selector 'th:last-child', text: I18n.t('samples.table_component.action').upcase
-      end
-      within("tr[id='#{@sample1.id}'] td:last-child") do
-        assert_no_selector 'a', text: I18n.t('projects.samples.index.edit_button')
-        assert_no_selector 'a', text: I18n.t('projects.samples.index.remove_button')
       end
     end
 
@@ -346,7 +301,7 @@ module Projects
 
       ### ACTIONS START ##
       # remove sample
-      click_link I18n.t(:'projects.samples.index.remove_button')
+      click_link I18n.t(:'projects.samples.show.remove_button')
 
       within('#turbo-confirm[open]') do
         click_button I18n.t(:'components.confirmation.confirm')
@@ -368,41 +323,6 @@ module Projects
         # deleted sample row no longer exists
         assert_no_selector "tr[id='#{@sample1.id}']"
       end
-      ### VERIFY END ###
-    end
-
-    test 'should destroy Sample from samples table' do
-      ### SETUP START ###
-      visit namespace_project_samples_url(@namespace, @project)
-
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      within("tr[id='#{@sample1.id}']") do
-        # click remove action
-        click_link I18n.t('projects.samples.index.remove_button')
-      end
-
-      # confirm destroy action
-      within('#dialog') do
-        assert_text I18n.t('projects.samples.deletions.new_deletion_dialog.description', sample_name: @sample1.name)
-        click_button I18n.t('projects.samples.deletions.new_deletion_dialog.submit_button')
-      end
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      # success flash msg
-      assert_text I18n.t('projects.samples.deletions.destroy.success', sample_name: @sample1.name,
-                                                                       project_name: @project.namespace.human_name)
-      # still on samples index page
-      assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
-      # remaining samples still in table
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
-                                                                           locale: @user.locale))
-      # sample no longer exists
-      assert_no_selector "tr[id='#{@sample1.id}']"
       ### VERIFY END ###
     end
 
@@ -856,8 +776,7 @@ module Projects
                                                                            locale: @user.locale))
       within('#samples-table table tbody') do
         # verify table consists of 10 samples per page
-        assert_selector 'tr',
-                        count: 10
+        assert_selector 'tr', count: 10
       end
 
       # apply filter
@@ -1198,7 +1117,7 @@ module Projects
       assert_no_selector 'div#spinner'
 
       within('#samples-table table thead tr') do
-        assert_selector 'th', count: 8
+        assert_selector 'th', count: 7
       end
       within('#samples-table table') do
         within('thead') do
@@ -1240,7 +1159,7 @@ module Projects
 
       # metadatafield3 added to header
       within('#samples-table table thead tr') do
-        assert_selector 'th', count: 9
+        assert_selector 'th', count: 8
       end
       within('#samples-table table') do
         within('thead') do
@@ -1275,7 +1194,7 @@ module Projects
       assert_no_selector 'div#spinner'
 
       within('#samples-table table thead tr') do
-        assert_selector 'th', count: 8
+        assert_selector 'th', count: 7
       end
       within('#samples-table table') do
         within('thead') do
@@ -1328,7 +1247,7 @@ module Projects
 
       # metadatafield3 added to header
       within('#samples-table table thead tr') do
-        assert_selector 'th', count: 9
+        assert_selector 'th', count: 8
       end
       within('#samples-table table') do
         within('thead') do
@@ -1363,7 +1282,7 @@ module Projects
       assert_no_selector 'div#spinner'
 
       within('#samples-table table thead tr') do
-        assert_selector 'th', count: 8
+        assert_selector 'th', count: 7
       end
       within('#samples-table table') do
         within('thead') do
@@ -1419,7 +1338,7 @@ module Projects
 
       within('#samples-table table thead tr') do
         # metadatafield3 and 4 added to header
-        assert_selector 'th', count: 10
+        assert_selector 'th', count: 9
       end
       within('#samples-table table') do
         within('thead') do
@@ -1456,7 +1375,7 @@ module Projects
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
 
-      assert_selector '#samples-table table thead tr th', count: 8
+      assert_selector '#samples-table table thead tr th', count: 7
       within('#samples-table table') do
         within('thead') do
           # metadatafield 3 and 4 will be added by import
@@ -1508,7 +1427,7 @@ module Projects
 
       # metadatafield3 and 4 added to header
       within('#samples-table table thead tr') do
-        assert_selector 'th', count: 10
+        assert_selector 'th', count: 9
       end
       within('#samples-table table') do
         within('thead') do
@@ -1814,7 +1733,7 @@ module Projects
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
 
-      assert_selector '#samples-table table thead tr th', count: 8
+      assert_selector '#samples-table table thead tr th', count: 7
       within('#samples-table table thead') do
         # metadatafield1 and 2 already exist, 3 does not and will be added by the import
         assert_text 'METADATAFIELD1'
@@ -1859,7 +1778,7 @@ module Projects
       click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
 
       # metadata still imported
-      assert_selector '#samples-table table thead tr th', count: 9
+      assert_selector '#samples-table table thead tr th', count: 8
       within('#samples-table table') do
         within('thead') do
           assert_text 'METADATAFIELD3'
@@ -1891,7 +1810,7 @@ module Projects
 
       # metadata that does not overwriting analysis values will still be added
       within('#samples-table table thead tr') do
-        assert_selector 'th', count: 8
+        assert_selector 'th', count: 7
       end
       within('#samples-table table thead') do
         assert_no_text 'METADATAFIELD3'
@@ -1925,7 +1844,7 @@ module Projects
                          sample_name: samples(:sample34).name, metadata_fields: 'metadatafield1')
       click_on I18n.t('shared.samples.metadata.file_imports.errors.ok_button')
       # metadatafield3 still added
-      assert_selector '#samples-table table thead tr th', count: 9
+      assert_selector '#samples-table table thead tr th', count: 8
       within('#samples-table table') do
         within('thead') do
           assert_text 'METADATAFIELD3'
@@ -2663,72 +2582,6 @@ module Projects
       end
     end
 
-    test 'delete single sample with remove link while all samples selected followed by multiple deletion' do
-      # tests that localstorage does not contain a selected sample after it's destroyed
-      ### SETUP START ###
-      visit namespace_project_samples_url(@namespace, @project)
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
-      assert_selector "tr[id='#{@sample1.id}']"
-      assert_selector "tr[id='#{@sample2.id}']"
-      assert_selector "tr[id='#{@sample30.id}']"
-      ### SETUP END ###
-
-      ### ACTIONS START ###
-      # select all samples
-      click_button I18n.t(:'projects.samples.index.select_all_button')
-      within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
-      end
-      within 'tfoot' do
-        assert_text 'Samples: 3'
-        assert_selector 'strong[data-selection-target="selected"]', text: '3'
-      end
-
-      # destroy sample1 with remove action link
-      within '#samples-table table tbody tr:first-child' do
-        click_link I18n.t('projects.samples.index.remove_button')
-      end
-
-      within '#dialog' do
-        click_button I18n.t('projects.samples.deletions.new_deletion_dialog.submit_button')
-      end
-
-      # sample 1 no longer exists and both remaining samples are still selected
-      within '#samples-table table tbody' do
-        assert_no_selector "tr[id='#{@sample1.id}']"
-        assert_selector "tr[id='#{@sample2.id}']"
-        assert_selector "tr[id='#{@sample30.id}']"
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 2
-      end
-
-      # click delete samples button
-      click_link I18n.t('projects.samples.index.delete_samples_button')
-      within('#dialog') do
-        # verify sample2 and 30 are still in localstorage, and sample1 is not
-        assert_text I18n.t(
-          'projects.samples.deletions.new_multiple_deletions_dialog.description.plural'
-        ).gsub! 'COUNT_PLACEHOLDER', '2'
-        within('#list_selections') do
-          assert_text @sample2.name
-          assert_text @sample30.name
-          assert_no_text @sample1.name
-        end
-        click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
-      end
-      ### ACTIONS END ###
-
-      ### VERIFY START ###
-      assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
-
-      within 'div[role="alert"]' do
-        assert_text I18n.t('projects.samples.index.no_samples')
-        assert_text I18n.t('projects.samples.index.no_associated_samples')
-      end
-      ### VERIFY END ###
-    end
-
     test 'filter samples with advanced search' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
@@ -3131,7 +2984,7 @@ module Projects
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       within('table thead tr') do
-        assert_selector 'th', count: 6
+        assert_selector 'th', count: 5
       end
 
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
@@ -3147,15 +3000,15 @@ module Projects
       assert_no_selector 'div#spinner'
 
       within('table thead tr') do
-        assert_selector 'th', count: 8
+        assert_selector 'th', count: 7
       end
 
-      within 'div.overflow-auto.scrollbar' do |div|
+      within '.table-container' do |div|
         div.scroll_to div.find('table thead th:nth-child(7)')
       end
 
       within('table thead tr') do
-        assert_selector 'th', count: 8
+        assert_selector 'th', count: 7
       end
       ### SETUP END ###
 
@@ -3180,7 +3033,7 @@ module Projects
       subgroup12aa = groups(:subgroup_twelve_a_a)
       project31 = projects(:project31)
       visit namespace_project_samples_url(subgroup12aa, project31)
-      assert_selector 'table thead tr th', count: 6
+      assert_selector 'table thead tr th', count: 5
 
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'all'
@@ -3188,13 +3041,13 @@ module Projects
       assert_selector 'div#spinner'
       assert_no_selector 'div#spinner'
 
-      assert_selector 'table thead tr th', count: 8
+      assert_selector 'table thead tr th', count: 7
 
       click_on I18n.t('projects.samples.show.table_header.last_updated')
       assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
 
-      within 'div.overflow-auto.scrollbar' do |div|
-        div.scroll_to div.find('table thead th:nth-child(8)')
+      within '.table-container' do |div|
+        div.scroll_to div.find('table thead th:nth-child(7)')
       end
 
       ### SETUP END ###
@@ -3241,7 +3094,7 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
 
       within('table thead tr') do
-        assert_selector 'th', count: 6
+        assert_selector 'th', count: 5
       end
 
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
@@ -3257,15 +3110,11 @@ module Projects
       assert_no_selector 'div#spinner'
 
       within('table thead tr') do
-        assert_selector 'th', count: 8
+        assert_selector 'th', count: 7
       end
 
-      within 'div.overflow-auto.scrollbar' do |div|
+      within '.table-container' do |div|
         div.scroll_to div.find('table thead th:nth-child(7)')
-      end
-
-      within('table thead tr') do
-        assert_selector 'th', count: 8
       end
       ### SETUP END ###
 
@@ -3297,7 +3146,7 @@ module Projects
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       within('table thead tr') do
-        assert_selector 'th', count: 6
+        assert_selector 'th', count: 5
       end
 
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
@@ -3314,15 +3163,15 @@ module Projects
       assert_no_selector 'div#spinner'
 
       within('table thead tr') do
-        assert_selector 'th', count: 8
+        assert_selector 'th', count: 7
       end
 
-      within 'div.overflow-auto.scrollbar' do |div|
+      within '.table-container' do |div|
         div.scroll_to div.find('table thead th:nth-child(7)')
       end
 
       within('table thead tr') do
-        assert_selector 'th', count: 8
+        assert_selector 'th', count: 7
       end
       ### SETUP END ###
 

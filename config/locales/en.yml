@@ -1564,12 +1564,10 @@ en:
           sample_export: Sample Export
         delete_samples_button: Delete Samples
         deselect_all_button: Deselect All
-        edit_button: Edit
         import_metadata_button: Import metadata
         new_button: New sample
         no_associated_samples: There are no samples associated with this project.
         no_samples: No Samples
-        remove_button: Remove
         select_all_button: Select All
         title: Samples
         transfer_button: Transfer samples

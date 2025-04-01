@@ -939,22 +939,6 @@ div.field_with_errors > :is(select) {
   display: none;
 }
 
-.scrollbar::-webkit-scrollbar {
-  width: 0.75rem;
-  height: 0.75rem;
-}
-
-.scrollbar::-webkit-scrollbar-thumb {
-  --tw-bg-opacity: 1 !important;
-  @apply bg-slate-300 dark:bg-slate-600;
-  border-radius: 0.25rem;
-  min-width: 60px;
-}
-
-.scrollbar::-webkit-scrollbar-corner {
-  display: none;
-}
-
 input[type="checkbox"] {
   @apply text-primary-600 checked:border-primary-500 focus:ring-primary-500 dark:checked:border-primary-500 dark:checked:bg-primary-500 mr-2 mt-0.5 shrink-0 rounded-sm border-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:focus:ring-offset-slate-800;
 }

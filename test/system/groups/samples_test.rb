@@ -1137,7 +1137,7 @@ module Groups
         assert_selector 'th', count: 9
       end
 
-      within 'div.overflow-auto.scrollbar' do |div|
+      within '.table-container' do |div|
         div.scroll_to div.find('table thead th:nth-child(7)')
       end
       ### SETUP END ###
