@@ -21,26 +21,6 @@ export default class extends Controller {
   #curr_project_puid = null;
   #curr_sample_description = null;
 
-  #disabled_classes = [
-    "bg-slate-50",
-    "border",
-    "border-slate-300",
-    "text-slate-900",
-    "text-sm",
-    "rounded-lg",
-    "focus:ring-blue-500",
-    "focus:border-blue-500",
-    "block",
-    "w-full",
-    "p-2.5",
-    "dark:bg-slate-700",
-    "dark:border-slate-600",
-    "dark:placeholder-slate-400",
-    "dark:text-white",
-    "dark:focus:ring-blue-500",
-    "dark:focus:border-blue-500",
-  ];
-
   connect() {
     this.#disableTarget(this.sampleNameColumnTarget);
     if (this.groupValue) {
@@ -182,11 +162,9 @@ export default class extends Controller {
 
   #disableTarget(target) {
     target.disabled = true;
-    target.classList.add(...this.#disabled_classes);
   }
 
   #enableTarget(target) {
     target.disabled = false;
-    target.classList.remove(...this.#disabled_classes);
   }
 }
