@@ -1,4 +1,4 @@
-<%= form_with(model: @sample, url: namespace_project_sample_metadata_field_path(sample_id: @sample.id), method: :patch) do |form| %>
+<%= form_with(model: @sample, url: sample_metadata_path(@sample), method: :patch) do |form| %>
   <%= turbo_frame_tag "update-alert" %>
   <div class="grid gap-4">
     <%= form.fields_for :update_field do |field| %>

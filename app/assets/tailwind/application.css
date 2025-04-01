@@ -36,6 +36,9 @@
   ::file-selector-button {
     border-color: var(--color-slate-200, currentColor);
   }
+  td[contenteditable="true"]:focus-visible {
+    outline-offset: -2px;
+  }
 }
 
 @utility collapsed {
@@ -933,22 +936,6 @@ div.field_with_errors > :is(select) {
 }
 
 .table-container .empty_state_message {
-  display: none;
-}
-
-.scrollbar::-webkit-scrollbar {
-  width: 0.75rem;
-  height: 0.75rem;
-}
-
-.scrollbar::-webkit-scrollbar-thumb {
-  --tw-bg-opacity: 1 !important;
-  @apply bg-slate-300 dark:bg-slate-600;
-  border-radius: 0.25rem;
-  min-width: 60px;
-}
-
-.scrollbar::-webkit-scrollbar-corner {
   display: none;
 }
 

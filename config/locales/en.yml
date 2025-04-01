@@ -1564,12 +1564,10 @@ en:
           sample_export: Sample Export
         delete_samples_button: Delete Samples
         deselect_all_button: Deselect All
-        edit_button: Edit
         import_metadata_button: Import metadata
         new_button: New sample
         no_associated_samples: There are no samples associated with this project.
         no_samples: No Samples
-        remove_button: Remove
         select_all_button: Select All
         title: Samples
         transfer_button: Transfer samples
@@ -1764,8 +1762,6 @@ en:
         updated_at_desc: Updated At
   samples:
     editable_cell:
-      aria_label: Click to edit %{value}
-      not_editable: The field "%{field}" is not editable
       update_success: Metadata was successfully updated
     table_component:
       action: Action
@@ -1896,9 +1892,9 @@ en:
           dialog:
             confirm_button: Save
             description_with_new_value:
-              with_original_value: Click <kbd>Save</kbd> to update the value to <span class='font-bold underline' data-inline-edit-target="newValue"></span>, or <kbd>Discard</kbd> to cancel and return to the previous value of <span class='font-bold underline'>%{value}</span>.
-              without_original_value: Click <kbd>Save</kbd> to update the value to <span class='font-bold underline' data-inline-edit-target="newValue"></span>, or <kbd>Discard</kbd> to cancel and return to the previous empty value.
-            description_without_new_value: Click <kbd>Save</kbd> to remove the current value, or <kbd>Discard</kbd> to cancel and return to the previous value of <span class='font-bold underline'>%{value}</span>.
+              with_original_value: Click <kbd>Save</kbd> to update the value to <span class='font-bold underline'>NEW_VALUE</span>, or <kbd>Discard</kbd> to cancel and return to the previous value of <span class='font-bold underline'>ORIGINAL_VALUE</span>.
+              without_original_value: Click <kbd>Save</kbd> to update the value to <span class='font-bold underline'>NEW_VALUE</span>, or <kbd>Discard</kbd> to cancel and return to the previous empty value.
+            description_without_new_value: Click <kbd>Save</kbd> to remove the current value, or <kbd>Discard</kbd> to cancel and return to the previous value of <span class='font-bold underline'>ORIGINAL_VALUE</span>.
             discard_button: Discard
             title: Confirmation required
         file_imports:

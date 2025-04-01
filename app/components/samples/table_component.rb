@@ -16,7 +16,6 @@ module Samples
       abilities: {},
       metadata_fields: [],
       search_params: {},
-      row_actions: {},
       empty: {},
       **system_arguments
     )
@@ -27,9 +26,7 @@ module Samples
       @abilities = abilities
       @metadata_fields = metadata_fields
       @search_params = search_params
-      @row_actions = row_actions
       @empty = empty
-      @renders_row_actions = @row_actions.select { |_key, value| value }.count.positive?
       @system_arguments = system_arguments
 
       # use rpartition to split on the first space encountered from the right side
@@ -43,7 +40,7 @@ module Samples
     def system_arguments
       { tag: 'div' }.deep_merge(@system_arguments).tap do |args|
         args[:id] = 'samples-table'
-        args[:classes] = class_names(args[:classes], 'overflow-auto scrollbar relative')
+        args[:classes] = class_names(args[:classes], 'overflow-auto relative')
         if @abilities[:select_samples]
           args[:data] ||= {}
           args[:data][:controller] = 'selection'
@@ -57,7 +54,7 @@ module Samples
       {
         tag: 'div',
         classes: class_names('table-container @2xl:flex @2xl:flex-col @3xl:shrink @3xl:min-h-0'),
-        'data-controller' => 'projects--samples--metadata--editable-cell'
+        'data-controller' => 'editable-cell'
       }
     end
 

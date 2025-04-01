@@ -457,9 +457,11 @@ module Groups
 
       within('table tbody tr:first-child') do
         assert_text @sample30.name
-        assert_selector 'td:nth-child(7) button', text: 'value1'
-        assert_selector 'td:nth-child(8) button', text: 'value2'
-        assert_selector 'td:nth-child(9) button', text: ''
+        assert_no_selector 'td:nth-child(7)[contenteditable="true"]'
+        assert_selector 'td:nth-child(7)', text: 'value1'
+        assert_no_selector 'td:nth-child(8)[contenteditable="true"]'
+        assert_selector 'td:nth-child(8)', text: 'value2'
+        assert_selector 'td:nth-child(9)[contenteditable="true"]', text: ''
       end
 
       click_button I18n.t('shared.samples.metadata_templates.label')
@@ -1135,28 +1137,26 @@ module Groups
         assert_selector 'th', count: 9
       end
 
-      within 'div.overflow-auto.scrollbar' do |div|
+      within '.table-container' do |div|
         div.scroll_to div.find('table thead th:nth-child(7)')
       end
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within('table tbody tr:first-child td:nth-child(7)') do
-        find('button[data-field="metadatafield1"]').click
-        assert_selector "form[data-controller='inline-edit']"
+      within('table tbody tr:first-child') do
+        assert_selector 'td:nth-child(7)[contenteditable="true"]'
+        find('td:nth-child(7)').click
 
-        within('form[data-controller="inline-edit"]') do
-          find('input[name="value"]').send_keys 'value2'
-          find('input[name="value"]').send_keys :return
-        end
+        find('td:nth-child(7)').send_keys('value2')
+        find('td:nth-child(7)').native.send_keys(:return)
         ### ACTIONS END ###
 
         ### VERIFY START ###
-        assert_no_selector "form[data-controller='inline-edit']"
-        assert_selector 'button[data-field="metadatafield1"]'
-        assert_selector 'button', text: 'value2'
-        ### VERIFY END ###
+        assert_selector 'td:nth-child(7)[contenteditable="true"]', text: 'value2'
       end
+
+      assert_text I18n.t('samples.editable_cell.update_success')
+      ### VERIFY END ###
     end
 
     test 'project analysts should not be able to edit samples' do
