@@ -19,6 +19,8 @@ module Projects
       @workflow_name_col = '5'
       @workflow_version_col = '6'
       @created_at_col = '7'
+
+      Flipper.enable(:attachments_preview)
     end
 
     test 'should display a list of workflow executions' do
@@ -463,7 +465,7 @@ module Projects
       within('table tbody') do
         assert_text attachment.puid
         assert_text attachment.file.filename.to_s
-        assert I18n.t('workflow_executions.attachment.preview')
+        assert_text I18n.t('workflow_executions.attachment.preview')
       end
     end
   end
