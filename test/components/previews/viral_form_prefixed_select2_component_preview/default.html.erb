@@ -1,4 +1,4 @@
-<%= form_with(url: "", data: {controller: "viral--select2"}) do |form| %>
+<%= form_with(url: "#", data: {controller: "viral--select2"}) do |form| %>
   <div class="flex items-center whitespace-nowrap">
     <label for="unique_id">Select User</label>
     <%= viral_prefixed_select2(form:, name: :user, id: "unique_id", selected_value: 1, placeholder: 'Select User') do |select| %>
