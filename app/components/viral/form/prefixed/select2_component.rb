@@ -5,17 +5,18 @@ module Viral
     module Prefixed
       # Select2 component with a prefix
       class Select2Component < ViewComponent::Base
-        attr_reader :form, :name, :selected_value, :placeholder, :required
+        attr_reader :form, :id, :name, :selected_value, :placeholder, :required
 
         renders_many :options, Viral::Select2OptionComponent
         renders_one :empty_state
 
-        def initialize(form:, name:, selected_value: false, placeholder: '', required: true)
+        def initialize(form:, id:, name:, selected_value: false, **options)
           @form = form
           @name = name
+          @id = id
           @selected_value = selected_value
-          @placeholder = placeholder
-          @required = required
+          @placeholder = options[:placeholder]
+          @required = options[:required]
         end
       end
     end

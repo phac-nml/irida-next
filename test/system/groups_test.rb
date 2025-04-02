@@ -319,7 +319,7 @@ class GroupsTest < ApplicationSystemTestCase
     assert_selector 'h2', text: I18n.t('groups.edit.advanced.transfer.title')
     within %(form[action="/group-1/transfer"]) do
       assert_selector 'input[type=submit]:disabled'
-      find('input#select2-input').click
+      find('input.select2-input').click
       find("button[data-viral--select2-primary-param='#{group3.full_path}']").click
       assert_selector 'input[type=submit]:not(:disabled)'
       click_on I18n.t('groups.edit.advanced.transfer.submit')
@@ -343,7 +343,7 @@ class GroupsTest < ApplicationSystemTestCase
 
     assert_selector 'h2', text: I18n.t('groups.edit.advanced.transfer.title')
     within %(form[action="/group-1/transfer"]) do
-      find('input#select2-input').fill_in with: 'invalid project name or puid'
+      find('input.select2-input').fill_in with: 'invalid project name or puid'
       assert_text I18n.t(:'groups.edit.advanced.transfer.empty_state')
     end
   end

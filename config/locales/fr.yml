@@ -832,6 +832,7 @@ fr:
           group_access_level: Niveau maximal d’accès du groupe
           group_id: Groupe avec lequel partager l’espace de noms
         placeholder:
+          search_for_group: Search for group to share namespace with
           select_access_level: Sélectionnez le niveau d’accès
         sharing_namespace_with_group: Vous partagez le %{name} de groupe avec un groupe
         title: Partager l’espace de noms
@@ -1455,6 +1456,7 @@ fr:
         select_access_level: Sélectionnez le niveau d’accès
         select_user: Sélectionner un utilisateur
         title: Ajouter un nouveau membre
+        user_select: User
     metadata_templates:
       index:
         new_button: Ajouter un nouveau modèle

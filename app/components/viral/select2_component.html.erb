@@ -1,18 +1,14 @@
-<div data-action="keyup->viral--select2#keydown" class="select2">
-  <label for="select2-input" class="sr-only"><%= name %></label>
+<div data-action="keydown->viral--select2#keydown" class="select2">
   <input
     type="text"
-    id="select2-input"
-    data-action="
-      focus->viral--select2#focus
-      keydown.enter->viral--select2#keyboardQuery
-      input->viral--select2#validateInput
-    "
+    id="<%= id %>"
+    name="<%= id %>"
+    data-action="viral--select2#input"
     data-viral--select2-target="input"
     placeholder="<%= placeholder %>"
-    required="<%= required %>"
+    <%= "required" if required %>
     autocomplete="off"
-    class="
+    class="select2-input
       border-slate-300 text-slate-800 sm:text-sm rounded-md focus:ring-primary-500
       focus:border-primary-500 block w-full p-2.5 dark:bg-slate-800
       dark:border-slate-600 dark:placeholder-slate-400 dark:text-slate-50

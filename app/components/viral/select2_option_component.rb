@@ -14,16 +14,16 @@ module Viral
             data-action="click->viral--select2#select"
             class="
               flex-col w-full border-2 border-transparent text-left p-2.5 bg-slate-50 hover:bg-slate-100
-              dark:bg-slate-700 dark:hover:bg-slate-600 focus:outline-hidden focus:bg-slate-100
+              dark:bg-slate-700 dark:hover:bg-slate-600 focus:bg-slate-100 dark:focus:bg-slate-600
             "
           >
             <span
-              class="block text-base truncate text-slate-900 dark:text-white"
+              class="block text-base font-semibold truncate text-slate-900 dark:text-white"
             >
               <%= @primary %>
             </span>
             <% if @secondary %>
-            <span class="text-base truncate text-slate-500 dark:text-slate-400">
+            <span class="text-sm truncate text-slate-500 dark:text-slate-400">
               <%= @secondary %>
             </span>
             <% end %>
