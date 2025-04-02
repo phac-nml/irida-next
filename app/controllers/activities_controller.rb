@@ -6,13 +6,14 @@ class ActivitiesController < ApplicationController
   before_action :activity
 
   def show
-    render dialog_component_type.new(@activity)
+    render dialog_component_type.new(activity: @activity, activity_owner: @activity_owner)
   end
 
   protected
 
   def activity
     @activity ||= PublicActivity::Activity.find_by(id: params[:id])
+    @activity_owner = activity_owner
   end
 
   def dialog_component_type
@@ -26,5 +27,16 @@ class ActivitiesController < ApplicationController
     when 'samples_destroy'
       Activities::Dialogs::SampleDestroyActivityDialogComponent
     end
+  end
+
+  def activity_owner
+    return @activity.owner.email unless @activity.owner.nil?
+
+    if activity_owner.deleted?
+      user = User.find_by(id: @activity.owner_id)
+      return user.email unless user.nil?
+    end
+
+    I18n.t('activerecord.concerns.track_activity.system')
   end
 end

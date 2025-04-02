@@ -9,8 +9,8 @@
     <p class="dark:text-slate-400 mt-2">
       <%= t(
         :"components.activity.dialog.sample_destroy.description",
-        user: activity.owner.email,
-        count: activity.parameters[:samples_deleted_puids]&.size,
+        user: @activity_owner,
+        count: activity.parameters[:samples_deleted_puids].size,
       ) %>
     </p>
   </div>
