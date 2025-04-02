@@ -222,10 +222,9 @@
                      "workflow_execution[samples_workflow_executions_attributes][INDEX][samplesheet_params]",
                    id: "format_HEADER_PLACEHOLDER" %>
     <% @samples.each do |sample| %>
-      <%= f.hidden_field :sample_ids,
+      <%= f.hidden_field "sample_ids[]",
                      value: sample.id,
-                     id: "sample-#{sample.id}-HEADER_PLACEHOLDER",
-                     multiple: true %>
+                     id: "sample-#{sample.id}-HEADER_PLACEHOLDER" %>
     <% end %>
     <%= f.hidden_field :field, value: "FIELD_PLACEHOLDER" %>
   <% end %>
