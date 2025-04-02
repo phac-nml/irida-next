@@ -28,6 +28,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   def new
     authorize! @group, to: :create_subgroup? if params[:parent_id]
 
+    @fixed = false
     @new_group = Group.new(parent_id: @group&.id)
     respond_to do |format|
       format.html { render_new }
