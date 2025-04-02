@@ -10,7 +10,7 @@ module FileSelector
     @sorted_files || sort_files
   end
 
-  def sort_files # rubocop:disable Metrics/MethodLength
+  def sort_files # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     singles = []
     pe_forward = []
     pe_reverse = []
