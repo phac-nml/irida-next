@@ -429,11 +429,11 @@ attachmentTSV:
   created_at: <%= 2.hours.ago %>
 
 workflow_execution_group_shared_output_attachment:
-  metadata: { "compression": "gzip", "format": "unknown" }
+  metadata: { "compression": "none", "format": "csv" }
   attachable: workflow_execution_group_shared1 (WorkflowExecution)
   puid: INXT_ATT_ABAAAAAABG
 
 workflow_execution_shared_with_project_output_attachment:
-  metadata: { "compression": "gzip", "format": "unknown" }
+  metadata: { "compression": "none", "format": "csv" }
   attachable: workflow_execution_shared2 (WorkflowExecution)
   puid: INXT_ATT_ABAAAAAABH
