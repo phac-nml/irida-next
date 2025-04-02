@@ -1,7 +1,5 @@
 <div class="relative overflow-hidden rounded-lg" tabindex="0">
   <%= image_tag @attachment.file,
   class: "w-full h-auto rounded-lg shadow-lg",
-  alt: t("attachment.show.image.alt", filename: @attachment.file.filename.to_s),
-  loading: "lazy",
-  sizes: "(max-width: 600px) 100vw, 600px" %>
+  alt: t("attachment.show.image.alt", filename: @attachment.file.filename.to_s) %>
 </div>
