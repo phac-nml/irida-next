@@ -14,28 +14,33 @@ module FileSelector
     singles = []
     pe_forward = []
     pe_reverse = []
+    node = Arel::Nodes::InfixOperation.new('->>', Attachment.arel_table[:metadata],
+                                           Arel::Nodes::Quoted.new('direction'))
+    non_reverse_attachments = attachments.where(node.eq(nil).or(node.not_eq('reverse')))
 
-    attachments.each do |attachment|
-      item = {
-        filename: attachment.file.filename.to_s,
-        global_id: attachment.to_global_id,
-        id: attachment.id,
-        byte_size: attachment.byte_size,
-        created_at: attachment.created_at,
-        metadata: attachment.metadata
-      }
+    non_reverse_attachments.each do |attachment|
       case attachment.metadata['direction']
       when nil
-        singles << item
+        singles << retrieve_attachment_attributes(attachment)
       when 'forward'
-        pe_forward << item
-      else
-        pe_reverse << item
+        pe_forward << retrieve_attachment_attributes(attachment)
+        pe_reverse << retrieve_attachment_attributes(attachment.associated_attachment)
       end
     end
 
     @sorted_files = { singles:, pe_forward:, pe_reverse: }
     @sorted_files
+  end
+
+  def retrieve_attachment_attributes(attachment)
+    {
+      filename: attachment.file.filename.to_s,
+      global_id: attachment.to_global_id,
+      id: attachment.id,
+      byte_size: attachment.byte_size,
+      created_at: attachment.created_at,
+      metadata: attachment.metadata
+    }
   end
 
   def samplesheet_fastq_files(property, pattern)
