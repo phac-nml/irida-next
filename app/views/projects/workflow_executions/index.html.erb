@@ -42,23 +42,21 @@
 <div class="flow-root">
   <div class="flex mb-2">
     <div class="inline-flex grow space-x-2">
-      <%= search_form_for(
-                @q,
-                url: select_namespace_project_workflow_executions_url(**request.query_parameters),
-                html: { id: "select-all-form" },
-                class: "filters align-middle"
-              ) do |f| %>
+      <%= form_with(
+                  url: select_namespace_project_workflow_executions_url,
+                  method: :get,
+                  id: "select-all-form",
+                ) do |f| %>
         <input type="hidden" name="format" value="turbo_stream"/>
         <input type="hidden" name="select" value="on"/>
         <%= f.submit t(".select_all_button"),
                  class: "button button--state-default button--size-default" %>
       <% end %>
-      <%= search_form_for(
-                @q,
-                url: select_namespace_project_workflow_executions_url(**request.query_parameters),
-                html: { id: "deselect-all-form" },
-                class: "filters align-middle"
-              ) do |f| %>
+      <%= form_with(
+                  url: select_namespace_project_workflow_executions_url,
+                  method: :get,
+                  id: "deselect-all-form" ,
+                ) do |f| %>
         <input type="hidden" name="format" value="turbo_stream"/>
         <%= f.submit t(".deselect_all_button"),
                  class: "button button--state-default button--size-default" %>
