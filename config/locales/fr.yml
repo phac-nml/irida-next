@@ -477,6 +477,8 @@ fr:
       current_version: Actuel (Version %{version})
       keys_deleted: 'Clés supprimées :'
       previous_version: Précédent (Version %{version})
+    layout:
+      main_content_link: Skip to main content
     list_filter:
       apply: Appliquer un filtre
       title: Filtrer par nom d’échantillon ou identifiant
