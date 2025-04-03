@@ -29,8 +29,9 @@ export default class extends Controller {
   }
 
   submit(element) {
-    this.#originalCellContent[this.#elementId(element)] = element.innerText;
-    element.removeAttribute("contenteditable");
+    // Remove event listeners on submission, they will be re-added on succesfull update
+    element.removeEventListener("blur", this.boundBlur);
+    element.removeEventListener("keydown", this.boundKeydown);
 
     let field = element
       .closest("table")
