@@ -17,7 +17,7 @@
             <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900 dark:text-slate-400', 'sticky left-0 z-10': index.zero?)
+              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900 dark:text-slate-400', '@2xl:sticky left-0 z-10': index.zero?)
             ) do %>
               <% if index.zero? and @abilities[:select_workflow_executions] %>
                 <%= check_box_tag "select-page",
@@ -60,7 +60,7 @@
             <%= render_cell(
               tag: 'th',
               scope: 'col',
-              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900 sticky right-0')
+              classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900 @2xl:sticky right-0')
             ) do %>
               <%= t(".actions") %>
             <% end %>
@@ -78,7 +78,7 @@
               <%= render_cell(
                 tag: index.zero? ? 'th' :'td',
                 scope: index.zero? ? 'row' : nil,
-                classes: class_names('px-3 py-3', 'sticky left-0 z-5 bg-slate-50 dark:bg-slate-900': index.zero?)
+                classes: class_names('px-3 py-3', '@2xl:sticky left-0 z-5 bg-slate-50 dark:bg-slate-900': index.zero?)
               ) do %>
                 <% if index.zero? && @abilities[:select_workflow_executions] %>
                   <%= check_box_tag "workflow_execution_ids[]",
@@ -139,7 +139,7 @@
             <% if @renders_row_actions %>
               <%= render_cell(
                 tag: 'td',
-                classes: class_names('sticky right-0 px-3 py-3 space-x-2 bg-white dark:bg-slate-800')
+                classes: class_names('@2xl:sticky right-0 px-3 py-3 space-x-2 bg-white dark:bg-slate-800')
               ) do %>
                 <% if !workflow_execution.shared_with_namespace || @namespace.nil? %>
                   <% if workflow_execution.cancellable? && @row_actions.key?(:cancel) %>
@@ -178,8 +178,8 @@
         <tfoot class="sticky bottom-0 z-10 bg-slate-100 dark:bg-slate-900">
           <tr>
             <td
-              class="
-                sticky left-0 z-10 px-6 py-3 text-slate-700 dark:text-slate-300
+              class=" 
+                @2xl:sticky left-0 z-10 px-6 py-3 text-slate-700 dark:text-slate-300
               "
               colspan="3"
             >
