@@ -1621,31 +1621,23 @@ en:
         subtitle: Update the name and description of the current sample
         title: Edit sample
       index:
-        actions:
-          button_add_aria_label: Add new sample button
-        clone_button: Copy samples
-        create_export_button:
-          label: Create Export
-          linelist_export: Linelist Export
-          sample_export: Sample Export
         delete_samples_button: Delete Samples
         deselect_all_button: Deselect All
-        import_metadata_button: Import metadata
-        import_samples_button: Import samples
         new_button: New sample
         no_associated_samples: There are no samples associated with this project.
         no_samples: No Samples
-        remove_button: Remove
         sample_actions_button:
           clone: Copy samples
+          export: Export
+          import: Import
           import_metadata: Import metadata
+          import_samples: Import samples
           label: Sample Actions
           linelist_export: Linelist Export
           sample_export: Sample Export
-          transfer:  Transfer samples
+          transfer: Transfer samples
         select_all_button: Select All
         title: Samples
-        transfer_button: Transfer samples
         workflows:
           button_sr: Launch workflow
       metadata:
