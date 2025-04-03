@@ -32,6 +32,7 @@ export default class extends Controller {
     // Remove event listeners on submission, they will be re-added on succesfull update
     element.removeEventListener("blur", this.boundBlur);
     element.removeEventListener("keydown", this.boundKeydown);
+    element.removeAttribute("contenteditable");
 
     let field = element
       .closest("table")
