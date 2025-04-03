@@ -245,6 +245,9 @@ en:
       sample:
         one: Sample
         other: Samples
+  activities:
+    show:
+      error: "Unable to find activity dialog type %{dialog_type}"
   activity:
     group:
       attachment:
