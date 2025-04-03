@@ -611,7 +611,7 @@ module WorkflowExecutions
         within('#file_selector_form') do
           # verify no file option exists in non-required field
           assert_selector '#attachment_id_no_attachment'
-          find('#attachment_id_no_attachment').click
+          find('label[for="attachment_id_no_attachment"]').click
         end
         click_button I18n.t('workflow_executions.file_selector.file_selector_dialog.submit_button')
       end
