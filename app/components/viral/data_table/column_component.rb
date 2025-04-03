@@ -8,20 +8,21 @@ module Viral
 
       STICKY_CLASSES = {
         left: {
-          header: 'sticky left-0 bg-slate-50 dark:bg-slate-700 z-10 ',
-          body: 'sticky left-0 bg-slate-50 dark:bg-slate-900 z-10'
+          header: '@2xl:sticky left-0 bg-slate-50 dark:bg-slate-700 z-10 ',
+          body: '@2xl:sticky left-0 bg-slate-50 dark:bg-slate-900 z-10'
         },
         left_fixed_index_zero: {
-          header: 'sticky left-0 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-700 z-10',
-          body: 'sticky left-0 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-800 z-10'
+          header: '@2xl:sticky left-0 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-700 z-10',
+          body: '@2xl:sticky left-0 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-800 z-10'
         },
         left_fixed_index_one: {
           header: 'sticky left-56 bg-slate-50 dark:bg-slate-700 z-10',
           body: 'sticky left-56 bg-slate-50 dark:bg-slate-800 z-10'
         },
         right: {
-          header: 'sticky right-0 bg-slate-50 dark:bg-slate-700 z-10',
-          body: 'sticky right-0 space-x-2 z-10 border-b border-slate-200 dark:border-slate-700'
+          header: '@2xl:sticky right-0 bg-slate-50 dark:bg-slate-700 z-10',
+          body: '@2xl:sticky right-0 space-x-2 z-10 border-b ' \
+                'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800'
         }
       }.freeze
 
