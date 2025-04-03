@@ -1,5 +1,5 @@
-<%= form_with(url: "", data: {controller: "viral--select2"}) do |form| %>
-    <label for="unique_id">Select User</label>
+<%= form_with(url: "#", data: {controller: "viral--select2"}) do |form| %>
+  <label for="unique_id">Select User</label>
   <%= viral_select2(form:, name: :user, id: "unique_id") do |select| %>
     <% (1..50).each do |num| %>
       <% select.with_option(

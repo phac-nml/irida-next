@@ -40,7 +40,7 @@ module FileSelector
 
   def samplesheet_fastq_files(property, pattern)
     direction = fastq_direction(property)
-    singles = filter_files_by_pattern(sorted_files[:singles] || [], pattern || "/^\S+.f(ast)?q(.gz)?$/")
+    singles = filter_files_by_pattern(sorted_files[:singles] || [], pattern || /^\S+\.f(ast)?q(\.gz)?$/)
     files = sorted_files.fetch(direction, [])
 
     files.concat(singles) if (direction == :pe_forward && property['pe_only'].blank?) || direction == :none
@@ -55,7 +55,7 @@ module FileSelector
     if sorted_files[direction].present?
       sorted_files[direction].last
     elsif %i[pe_forward none].include?(direction)
-      last_single = filter_files_by_pattern(sorted_files[:singles] || [], pattern || "/^\S+.f(ast)?q(.gz)?$/").last
+      last_single = filter_files_by_pattern(sorted_files[:singles] || [], pattern || /^\S+\.f(ast)?q(\.gz)?$/).last
       last_single.nil? ? {} : last_single
     else
       {}

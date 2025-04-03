@@ -13,7 +13,7 @@
   <%= form_with(model: new_group_link, url: namespace_project_group_links_path(@namespace.parent, @namespace.project, tab: @tab), method: :post, data: {remote: true, controller: "viral--select2"}) do |form| %>
     <div class="grid gap-4">
       <div class="form-field">
-        <% form_id = "edit_advanced_transfer_form" %>
+        <% form_id = "share_group_id_input" %>
         <label
           for="<%= form_id %>"
           class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"

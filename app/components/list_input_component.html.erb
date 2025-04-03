@@ -1,11 +1,6 @@
 <template data-list-filter-target="template">
   <%= viral_pill(color: :blue, classes: "search-tag inline-flex items-center filter-item mb-1 mr-1 py-1.5") do %>
-    <input
-      multiple="multiple"
-      class="hidden"
-      data="turbo-temporary"
-      name="<%= list_input_form_name %>"
-    >
+    <input type="hidden" data-turbo-temporary name="<%= list_input_form_name %>">
     <span class="mr-1 font-mono text-base font-semibold label"></span>
     <button
       type="button"
