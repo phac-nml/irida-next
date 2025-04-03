@@ -138,7 +138,14 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   end
 
   def activity_creator(activity)
-    activity.owner.nil? ? I18n.t('activerecord.concerns.track_activity.system') : activity.owner.email
+    return activity.owner.email unless activity.owner.nil?
+
+    unless activity.owner_id.nil?
+      user = get_object_by_id(activity.owner_id, User)
+      return user.email unless user.nil?
+    end
+
+    I18n.t('activerecord.concerns.track_activity.system')
   end
 
   def activity_trackable(activity, relation)
