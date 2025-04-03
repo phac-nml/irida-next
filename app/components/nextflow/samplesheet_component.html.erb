@@ -8,6 +8,7 @@
   <div class="flex justify-between mb-2">
     <label class="mt-auto text-sm font-medium text-slate-900 dark:text-white"><%= t(".label") %></label>
     <div class="relative">
+      <label class="sr-only" for="samplesheet-filter"><%= t(".filter_placeholder") %></label>
       <input
         id="samplesheet-filter"
         data-nextflow--samplesheet-target="filter"
@@ -119,32 +120,22 @@
 </template>
 
 <template data-nextflow--samplesheet-target="fileCell">
-  <div>
-    <%= link_to new_workflow_executions_file_selector_path(
-  "file_selector[attachable_id]": "ATTACHABLE_ID_PLACEHOLDER",
-  "file_selector[attachable_type]": "ATTACHABLE_TYPE_PLACEHOLDER",
-  "file_selector[index]": "INDEX_PLACEHOLDER",
-  "file_selector[selected_id]": "SELECTED_ID_PLACEHOLDER",
-  "file_selector[property]": "PROPERTY_PLACEHOLDER",
-  "file_selector[pattern]": "PATTERN_PLACEHOLDER",
-  "file_selector[required_properties]": @required_properties,
-),
-data: {
-  turbo_stream: "true",
-} do %>
-      <div
-        id="<%="ATTACHABLE_ID_PLACEHOLDER_PROPERTY_PLACEHOLDER" %>"
-        class="
-          w-full p-2 text-sm border-2 border-transparent cursor-pointer
-          focus:ring-primary-500 focus:border-primary-500 dark:bg-inherit bg-inherit
-          dark:placeholder-slate-400 text-inherit dark:focus:ring-primary-500
-          dark:focus:border-primary-500 hover:border-slate-300
-        "
-      >
-        FILENAME_PLACEHOLDER
-      </div>
-    <% end %>
-  </div>
+  <%= link_to "FILENAME_PLACEHOLDER",
+  new_workflow_executions_file_selector_path(
+    "file_selector[attachable_id]": "ATTACHABLE_ID_PLACEHOLDER",
+    "file_selector[attachable_type]": "ATTACHABLE_TYPE_PLACEHOLDER",
+    "file_selector[index]": "INDEX_PLACEHOLDER",
+    "file_selector[selected_id]": "SELECTED_ID_PLACEHOLDER",
+    "file_selector[property]": "PROPERTY_PLACEHOLDER",
+    "file_selector[pattern]": "PATTERN_PLACEHOLDER",
+    "file_selector[required_properties]": @required_properties,
+  ),
+  data: {
+    turbo_stream: "true",
+  },
+  id: "ATTACHABLE_ID_PLACEHOLDER_PROPERTY_PLACEHOLDER",
+  class:
+    "block p-2 text-sm border-2 border-transparent focus:ring-primary-500 focus:border-primary-500 cursor-pointer bg-inherit text-inherit dark:focus:border-primary-500 hover:border-slate-300" %>
 </template>
 
 <template data-nextflow--samplesheet-target="metadataCell">
@@ -183,7 +174,9 @@ data: {
           disabled="disabled"
         ><%= t(".previous") %></button>
       </li>
-      <li><select
+      <li>
+        <label class="sr-only" for="pagination-page-selector"><%= t(".page_selection.aria_label") %></label>
+        <select
           style="width: 80px;"
           class="
             flex items-center justify-center h-10 px-4 leading-tight bg-white border
@@ -194,7 +187,7 @@ data: {
           "
           data-nextflow--samplesheet-target="pageNum"
           data-action="change->nextflow--samplesheet#pageSelected"
-          aria-label="<%= t(".page_selection.aria_label") %>"
+          id="pagination-page-selector"
         ><option value="1" selected="selected">1</option></select>
       </li>
       <li><button
@@ -211,4 +204,28 @@ data: {
       </li>
     </ul>
   </nav>
+</template>
+
+<template data-nextflow--samplesheet-target="metadataHeaderForm">
+  <%= form_with url: fields_workflow_executions_metadata_path do |f| %>
+    <%= f.hidden_field :format,
+                   value: "turbo_stream",
+                   id: "field_HEADER_PLACEHOLDER_turbo" %>
+    <%= f.hidden_field :namespace_id,
+                   value: namespace_id,
+                   id: "namespace_HEADER_PLACEHOLDER" %>
+    <%= f.hidden_field :header,
+                   value: "HEADER_PLACEHOLDER",
+                   id: "header_HEADER_PLACEHOLDER" %>
+    <%= f.hidden_field :name_format,
+                   value:
+                     "workflow_execution[samples_workflow_executions_attributes][INDEX][samplesheet_params]",
+                   id: "format_HEADER_PLACEHOLDER" %>
+    <% @samples.each do |sample| %>
+      <%= f.hidden_field "sample_ids[]",
+                     value: sample.id,
+                     id: "sample-#{sample.id}-HEADER_PLACEHOLDER" %>
+    <% end %>
+    <%= f.hidden_field :field, value: "FIELD_PLACEHOLDER" %>
+  <% end %>
 </template>

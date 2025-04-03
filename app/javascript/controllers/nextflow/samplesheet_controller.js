@@ -26,6 +26,7 @@ export default class extends Controller {
     "pagination",
     "paginationContainer",
     "emptyState",
+    "metadataHeaderForm",
   ];
 
   static values = {
@@ -606,7 +607,7 @@ export default class extends Controller {
     }
   }
 
-  setMetadataParam(event) {
+  handleMetadataSelection(event) {
     const metadataSamplesheetColumn = event.target.getAttribute(
       "data-metadata-header",
     );
@@ -627,5 +628,13 @@ export default class extends Controller {
         );
       }, 1000);
     }
+
+    const metadataForm = this.metadataHeaderFormTarget.innerHTML
+      .replace(/HEADER_PLACEHOLDER/g, metadataSamplesheetColumn)
+      .replace(/FIELD_PLACEHOLDER/g, metadataField);
+
+    this.element.insertAdjacentHTML("beforeend", metadataForm);
+    this.element.lastElementChild.requestSubmit();
+    this.element.lastElementChild.remove();
   }
 }
