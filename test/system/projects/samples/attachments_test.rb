@@ -67,6 +67,9 @@ module Projects
           attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
           click_on I18n.t('projects.samples.show.upload')
         end
+
+        assert_text I18n.t('projects.samples.attachments.create.success', filename: 'test_file_2.fastq.gz')
+
         click_on I18n.t('projects.samples.show.upload_files')
 
         within('dialog') do
@@ -74,7 +77,8 @@ module Projects
           click_on I18n.t('projects.samples.show.upload')
         end
 
-        assert_text 'checksum matches existing file'
+        assert_text I18n.t('projects.samples.attachments.create.failure', filename: 'test_file_2.fastq.gz',
+                                                                          errors: 'File checksum matches existing file')
       end
 
       test 'user with role >= Maintainer not be able to upload uncompressed files to a Sample' do

@@ -73,6 +73,9 @@ module Groups
         attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
         click_on I18n.t('attachments.dialogs.new_attachment_component.upload')
       end
+
+      assert_text I18n.t('groups.attachments.create.success', filename: 'test_file_2.fastq.gz')
+
       assert_selector '#attachments-table table tbody tr', count: 3
       click_on I18n.t('groups.attachments.index.upload_files')
 
@@ -81,7 +84,8 @@ module Groups
         click_on I18n.t('attachments.dialogs.new_attachment_component.upload')
       end
 
-      assert_text 'checksum matches existing file'
+      assert_text I18n.t('groups.attachments.create.failure', filename: 'test_file_2.fastq.gz',
+                                                              errors: 'File checksum matches existing file')
       assert_selector '#attachments-table table tbody tr', count: 3
     end
 
