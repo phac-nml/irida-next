@@ -20,9 +20,8 @@ module Viral
           body: 'sticky left-56 bg-slate-50 dark:bg-slate-800 z-10'
         },
         right: {
-          header: '@2xl:sticky right-0 bg-slate-50 dark:bg-slate-700 z-10',
-          body: '@2xl:sticky right-0 space-x-2 z-10 border-b ' \
-                'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800'
+          header: '@4xl:sticky right-0 bg-slate-50 dark:bg-slate-700 z-10',
+          body: '@4xl:sticky right-0 space-x-2 z-5 '
         }
       }.freeze
 
