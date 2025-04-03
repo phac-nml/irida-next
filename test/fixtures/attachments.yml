@@ -423,13 +423,13 @@ attachmentImage:
   created_at: <%= 2.hours.ago %>
 
 attachmentTSV:
-  metadata: { "compression": "none", "format": "tsv" }
+  metadata: { "compression": "none", "format": "json" }
   attachable: project2_namespace (Namespace)
   puid: INXT_ATT_ABAAAAAABF
   created_at: <%= 2.hours.ago %>
 
 workflow_execution_group_shared_output_attachment:
-  metadata: { "compression": "none", "format": "csv" }
+  metadata: { "compression": "none", "format": "json" }
   attachable: workflow_execution_group_shared1 (WorkflowExecution)
   puid: INXT_ATT_ABAAAAAABG
 
