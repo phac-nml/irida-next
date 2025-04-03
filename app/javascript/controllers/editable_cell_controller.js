@@ -20,6 +20,7 @@ export default class extends Controller {
     this.#originalCellContent[this.#elementId(element)] = element.innerText;
     element.addEventListener("blur", this.boundBlur);
     element.addEventListener("keydown", this.boundKeydown);
+    element.setAttribute("contenteditable", true);
   }
 
   editableCellTargetDisconnected(element) {
@@ -28,6 +29,11 @@ export default class extends Controller {
   }
 
   submit(element) {
+    // Remove event listeners on submission, they will be re-added on succesfull update
+    element.removeEventListener("blur", this.boundBlur);
+    element.removeEventListener("keydown", this.boundKeydown);
+    element.removeAttribute("contenteditable");
+
     let field = element
       .closest("table")
       .querySelector(`th:nth-child(${element.cellIndex + 1})`).dataset.fieldId;
@@ -54,9 +60,12 @@ export default class extends Controller {
   }
 
   keydown(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+
     if (event.key !== "Enter" || this.#unchanged(event.target)) return;
 
-    event.preventDefault();
     this.submit(event.target);
   }
 
