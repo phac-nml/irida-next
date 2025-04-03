@@ -401,8 +401,8 @@ export default class extends Controller {
   #generateFileCell(container, columnName, index) {
     let pattern = this.#samplesheetProperties[columnName]["pattern"];
     if (pattern) {
-      // '+' becomes a space in url, so we have to encode with %2B
-      pattern = pattern.replace("+", "%2B");
+      // Need to encode pattern so that + is not interpreted as a space, etc.
+      pattern = encodeURIComponent(pattern);
     }
     let childNode = this.fileCellTarget.innerHTML
       .replace(/INDEX_PLACEHOLDER/g, index)
@@ -418,7 +418,7 @@ export default class extends Controller {
           "attachment_id"
         ],
       )
-      .replace(/PATTERN_PLACEHOLDER/g, encodeURIComponent(pattern))
+      .replace(/PATTERN_PLACEHOLDER/g, pattern)
       .replace(
         /FILENAME_PLACEHOLDER/g,
         this.#samplesheetAttributes[index]["samplesheet_params"][columnName][
