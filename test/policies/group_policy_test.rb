@@ -121,6 +121,10 @@ class GroupPolicyTest < ActiveSupport::TestCase
     assert @policy.apply(:view_metadata_templates?)
   end
 
+  test '#destroy_workflow_executions?' do
+    assert_not @policy.apply(:destroy_workflow_executions?)
+  end
+
   test 'scope' do
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 

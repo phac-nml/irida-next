@@ -1,0 +1,17 @@
+<div
+  class="<%= class_names('py-1', 'border-t dark:border-slate-400 border-slate-200': !index.zero?) %>"
+>
+  <div class="font-semibold text-slate-900 dark:text-white"><%= t(".id") %>
+    <%= workflow_execution.id %></div>
+  <% unless workflow_execution.name.nil? || workflow_execution.name.empty? %>
+    <div class="font-normal text-slate-500 dark:text-slate-400"><%= t(".name") %>
+      <%= workflow_execution.name %></div>
+  <% end %>
+  <div class="font-normal text-slate-500 dark:text-slate-400"><%= t(".run_id") %>
+    <%= workflow_execution.run_id %></div>
+  <div class="font-normal text-slate-500 dark:text-slate-400">
+    <%= t(".workflow") %>
+    <%= workflow_execution.metadata["workflow_name"] %>
+    <%= workflow_execution.metadata["workflow_version"] %>
+  </div>
+</div>

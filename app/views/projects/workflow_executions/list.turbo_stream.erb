@@ -1,0 +1,13 @@
+<% if @page == 1 %>
+  <%= turbo_stream.replace "list_selections" do %>
+    <%= turbo_frame_tag "list_selections" %>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.append("list_selections") do %>
+  <% @workflow_executions.each_with_index do |workflow_execution, index| %>
+    <%= render "shared/workflow_executions/list_workflow_execution",
+    workflow_execution:,
+    index: %>
+  <% end %>
+<% end %>
