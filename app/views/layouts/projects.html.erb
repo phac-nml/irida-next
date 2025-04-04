@@ -7,7 +7,7 @@
         <%= navigation.with_header(label: t("projects.sidebar.label"), item: @project) %>
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
-            url: project_path(@project),
+            url: namespace_project_path,
             icon: "clipboard_document",
             label: t("projects.sidebar.details"),
             selected: @current_page == t(:"projects.sidebar.details"),
@@ -19,14 +19,14 @@
             selected: @current_page == t(:"projects.sidebar.members"),
           ) %>
           <%= render section.with_item(
-            url: project_samples_path(@project),
+            url: namespace_project_samples_path,
             icon: "beaker",
             label: t(:"projects.sidebar.samples"),
             selected: @current_page == t(:"projects.sidebar.samples"),
           ) %>
           <% if allowed_to?(:view_attachments?, @project) %>
             <%= render section.with_item(
-              url: namespace_project_attachments_path(@project.parent, @project),
+              url: namespace_project_attachments_path,
               icon: "document_text",
               label: t(:"projects.sidebar.files"),
               selected: @current_page == t(:"projects.sidebar.files"),
@@ -34,7 +34,7 @@
           <% end %>
           <% if allowed_to?(:view_history?, @project) %>
             <%= render section.with_item(
-              url: project_activity_path(@project),
+              url: namespace_project_activity_path,
               icon: "list_bullet",
               label: t(:"projects.sidebar.activity"),
               selected: @current_page == t(:"projects.sidebar.activity"),
@@ -42,7 +42,7 @@
           <% end %>
           <% if allowed_to?(:view_workflow_executions?, @project.namespace) && @pipelines_enabled %>
             <%= render section.with_item(
-              url: project_workflow_executions_path(@project),
+              url: namespace_project_workflow_executions_path,
               icon: "command_line",
               label: t(:"projects.sidebar.workflow_executions"),
               selected: @current_page == t(:"projects.sidebar.workflow_executions"),
@@ -62,30 +62,30 @@
               current_page: @current_page
             ) do |multi_level_menu| %>
               <% multi_level_menu.with_menu_item(
-                url: project_edit_path(@project),
+                url: namespace_project_edit_path,
                 label: t(:"projects.sidebar.general"),
                 selected: @current_page == t(:"projects.sidebar.general"),
               ) %>
               <% multi_level_menu.with_menu_item(
-                url: project_bots_path(@project),
+                url: namespace_project_bots_path,
                 label: t(:"projects.sidebar.bot_accounts"),
                 selected: @current_page == t(:"projects.sidebar.bot_accounts"),
               ) %>
               <% if @pipelines_enabled %>
                 <% multi_level_menu.with_menu_item(
-                  url: project_automated_workflow_executions_path(@project),
+                  url: namespace_project_automated_workflow_executions_path,
                   label: t(:"projects.sidebar.automated_workflow_executions"),
                   selected:
                     @current_page == t(:"projects.sidebar.automated_workflow_executions"),
                 ) %>
               <% end %>
               <% multi_level_menu.with_menu_item(
-                url: project_history_path(@project),
+                url: namespace_project_history_path,
                 label: t(:"projects.sidebar.history"),
                 selected: @current_page == t(:"projects.sidebar.history"),
               ) %>
               <% multi_level_menu.with_menu_item(
-                url: project_metadata_templates_path(@project),
+                url: namespace_project_metadata_templates_path,
                 label: t(:"projects.sidebar.metadata_templates"),
                 selected: @current_page == t(:"projects.sidebar.metadata_templates"),
               ) %>
