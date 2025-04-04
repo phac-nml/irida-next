@@ -27,7 +27,7 @@ module Pathogen
     # 📏 Predefined icon size mappings for consistent scaling
     ICON_SIZE_MAPPINGS = {
       sm: 'w-4 h-4', # 12x12 pixels
-      base: 'w-5 h-5', # 16x16 pixels
+      base: 'w-4 h-4', # 16x16 pixels
       lg: 'w-6 h-6' # 20x20 pixels
     }.freeze
 
@@ -38,31 +38,28 @@ module Pathogen
     #
     # @param base [Class] The including class
     def self.included(base)
-      base.renders_one :leading_visual, types: visual_types(name: :leading_visual)
-      base.renders_one :trailing_visual, types: visual_types(name: :trailing_visual)
+      base.renders_one :leading_visual, types: visual_types
+      base.renders_one :trailing_visual, types: visual_types
     end
 
     # 🎨 Defines available visual element types
     #
-    # @param name [Symbol] The name of the visual slot (:leading_visual or :trailing_visual)
     # @return [Hash] Mapping of visual types to their rendering functions
-    def self.visual_types(name:)
+    def self.visual_types
       {
-        icon: ->(**args) { icon_visual(args, name) },
-        svg: ->(**args) { svg_visual(args, name) }
+        icon: ->(**args) { icon_visual(args) },
+        svg: ->(**args) { svg_visual(args) }
       }
     end
 
     # 🖼️ Creates an icon visual component
     #
     # @param args [Hash] Icon component arguments
-    # @param name [Symbol] The name of the visual slot
     # @return [Pathogen::Icon] Configured icon component
-    def icon_visual(args, name)
+    def icon_visual(args)
       args[:class] = class_names(
         args[:class],
-        ICON_SIZE_MAPPINGS[@size],
-        "#{name}_icon"
+        ICON_SIZE_MAPPINGS[@size]
       )
       Pathogen::Icon.new(**args)
     end
@@ -70,14 +67,13 @@ module Pathogen
     # ⚡ Creates an SVG visual component
     #
     # @param args [Hash] SVG component arguments
-    # @param name [Symbol] The name of the visual slot
     # @return [Pathogen::BaseComponent] Configured SVG component
-    def svg_visual(args, name)
+    def svg_visual(args)
       Pathogen::BaseComponent.new(
         tag: :svg,
         width: '16',
         height: '16',
-        classes: "#{name}_svg fill-current",
+        classes: 'fill-current',
         **args
       )
     end
