@@ -34,9 +34,14 @@ module Pathogen
       @disabled = disabled
       return unless @disabled
 
+      # Update aria-disabled attribute
+      @system_arguments[:'aria-disabled'] = true
+
       # Convert disabled anchors to buttons since a tags cannot be disabled
       @system_arguments[:tag] = :button
       @system_arguments[:disabled] = true
+      # Remove an href if there is one
+      @system_arguments.delete(:href)
     end
 
     # Render the button using the BaseComponent

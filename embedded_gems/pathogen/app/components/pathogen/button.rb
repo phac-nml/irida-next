@@ -1,84 +1,98 @@
 # frozen_string_literal: true
 
 module Pathogen
-  # This file defines the Pathogen::Button component, which is a customizable button
-  # with various schemes, sizes, and styling options. It's part of the Pathogen
-  # component library and provides a flexible way to create buttons with consistent
-  # styling across the application.
+  # 🔘 Button Component
   #
+  # A highly customizable button component that provides consistent styling and behavior
+  # across your application. Built with accessibility and flexibility in mind.
+  #
+  # Features:
+  # - 🎨 Multiple color schemes (primary, default, danger)
+  # - 📏 Various sizes (xs, sm, base, lg, xl)
+  # - 🔧 Configurable width (inline or full-width)
+  # - ♿ Accessible by default
+  # - 🌙 Dark mode support
+  #
+  # @example Basic usage
+  #   = render(Pathogen::Button.new(scheme: :primary)) { "Click me" }
+  #
+  # @example With custom styling
+  #   = render(Pathogen::Button.new(
+  #       scheme: :danger,
+  #       size: :lg,
+  #       block: true,
+  #       class: "my-custom-class"
+  #     )) { "Delete" }
+  #
+  # @example Disabled state
+  #   = render(Pathogen::Button.new(
+  #       scheme: :primary,
+  #       disabled: true
+  #     )) { "Processing..." }
   class Button < Pathogen::Component
-    include Pathogen::ButtonSizes
     include Pathogen::ButtonVisuals
+    include Pathogen::ButtonStyles
 
-    SCHEME_OPTIONS = %i[primary default danger].freeze
-    DEFAULT_SCHEME = :default
-    # rubocop:disable Layout/LineLength
-    DEFAULT_CLASSES = 'relative pointer select-none transition ease-in-out delay-150 duration-300 rounded-lg font-medium focus:outline-hidden focus:ring-4 focus:z-10 disabled:opacity-70 disabled:cursor-not-allowed'
-    # rubocop:enable Layout/LineLength
+    # 🎨 Style configuration inherited from ButtonStyles
+    SCHEME_OPTIONS = Pathogen::ButtonStyles::SCHEME_OPTIONS
+    DEFAULT_SCHEME = Pathogen::ButtonStyles::DEFAULT_SCHEME
+    SIZE_OPTIONS = Pathogen::ButtonStyles::SIZE_OPTIONS
+    DEFAULT_SIZE = Pathogen::ButtonStyles::DEFAULT_SIZE
 
-    # rubocop:disable Metrics/ParameterLists
-    def initialize(base_button_class: Pathogen::BaseButton, scheme: DEFAULT_SCHEME, size: DEFAULT_SIZE, block: false,
-                   disabled: false, **system_arguments)
+    # 🏗️ Initializes a new button component
+    #
+    # @param base_button_class [Class] The base button class to extend from (default: Pathogen::BaseButton)
+    # @param scheme [Symbol] Color scheme for the button (:primary, :default, :danger)
+    # @param size [Symbol] Button size (:xs, :sm, :base, :lg, :xl)
+    # @param block [Boolean] Whether the button should be full width
+    # @param system_arguments [Hash] Additional HTML attributes (class, disabled, etc.)
+    # @option system_arguments [String] :id HTML ID attribute
+    # @option system_arguments [String] :class Additional CSS classes
+    # @option system_arguments [Boolean] :disabled Whether the button is disabled
+    def initialize(
+      base_button_class: Pathogen::BaseButton,
+      scheme: DEFAULT_SCHEME,
+      size: DEFAULT_SIZE,
+      block: false,
+      **system_arguments
+    )
       @base_button_class = base_button_class
       @scheme = scheme
       @size = size
       @block = block
-
       @system_arguments = system_arguments
-      @system_arguments[:disabled] = disabled
-
       @id = @system_arguments[:id]
 
-      @system_arguments[:classes] = class_names(
-        system_arguments[:class],
-        generate_scheme_mapping(fetch_or_fallback(SCHEME_OPTIONS, scheme, DEFAULT_SCHEME)),
-        SIZE_MAPPINGS[fetch_or_fallback(SIZE_OPTIONS, size, DEFAULT_SIZE)],
-        DEFAULT_CLASSES,
-        'block w-full' => block
-      )
-    end
-
-    # rubocop:enable Metrics/ParameterLists
-
-    def before_render
-      return unless leading_visual.present? || trailing_visual.present?
-
-      @system_arguments[:classes] = class_names(
-        @system_arguments[:classes],
-        'text-center inline-flex items-center'
-      )
+      apply_button_styles
     end
 
     private
 
-    # Trims the content by removing leading and trailing whitespace.
-    # If the content is blank, returns nil.
-    # If the content is marked as HTML safe, ensures the trimmed content remains HTML safe.
+    # 🎨 Applies the button's visual styles based on configuration
+    def apply_button_styles
+      @system_arguments[:classes] = generate_classes(
+        scheme: fetch_or_fallback(SCHEME_OPTIONS, @scheme, DEFAULT_SCHEME),
+        size: fetch_or_fallback(SIZE_OPTIONS, @size, DEFAULT_SIZE),
+        block: @block,
+        disabled: @system_arguments[:disabled],
+        custom_classes: @system_arguments[:class]
+      )
+    end
+
+    # ✂️ Processes and sanitizes the button content
     #
-    # @return [String, nil] The trimmed content, or nil if the content is blank.
+    # Handles content trimming and HTML safety while preserving
+    # the original HTML safety status of the content.
+    #
+    # @return [String, nil] Processed content or nil if blank
     def trimmed_content
       return if content.blank?
 
-      trimmed_content = content.strip
+      trimmed = content.strip
+      return trimmed unless content.html_safe?
 
-      return trimmed_content unless content.html_safe?
-
-      # strip unsets `html_safe`, so we have to set it back again to guarantee that HTML blocks won't break
-      trimmed_content.html_safe # rubocop:disable Rails/OutputSafety
-    end
-
-    # Generates the appropriate CSS classes for the button's color scheme and tag type.
-    #
-    # @param scheme [Symbol] The color scheme of the button (:primary, :default, or :danger).
-    # @return [String] A string of CSS classes corresponding to the specified scheme.
-    def generate_scheme_mapping(scheme)
-      # rubocop:disable Layout/LineLength
-      {
-        primary: 'bg-primary-700 text-white enabled:hover:bg-primary-800 focus:ring-primary-100 dark:focus:ring-primary-600',
-        default: 'text-slate-900 bg-white border border-slate-200 enabled:hover:bg-slate-100 enabled:hover:text-primary-700 focus:ring-4 focus:ring-slate-100 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:enabled:hover:text-white dark:enabled:hover:bg-slate-700',
-        danger: 'border border-red-100 bg-slate-50 text-red-500 enabled:hover:text-red-50 dark:enabled:hover:text-red-50 enabled:hover:bg-red-800 focus:ring-red-300 dark:border-red-800 dark:bg-slate-900 dark:text-red-500 dark:focus:ring-red-900'
-      }[scheme]
-      # rubocop:enable Layout/LineLength
+      # Preserve HTML safety after string manipulation
+      trimmed.html_safe # rubocop:disable Rails/OutputSafety
     end
   end
 end
