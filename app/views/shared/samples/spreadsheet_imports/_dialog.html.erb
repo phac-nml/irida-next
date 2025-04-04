@@ -7,7 +7,7 @@
 
     <div
       data-controller="spreadsheet-import"
-      <% if @namespace.type == 'Group' %>
+      <% if @namespace.group_namespace? %>
         data-spreadsheet-import-group-value=1
       <% else %>
         data-spreadsheet-import-group-value=0
@@ -21,7 +21,7 @@
             <%= t(".description") %>
           </p>
           <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400">
-            <% if @namespace.type == 'Group' %>
+            <% if @namespace.group_namespace? %>
               <%= t(".namespace.group.description_html") %>
             <% else %>
               <%= t(".namespace.project.description_html") %>
@@ -60,7 +60,7 @@
                             "change->spreadsheet-import#changeSampleNameInput",
                         } %>
           </div>
-          <% if @namespace.type == 'Group' %>
+          <% if @namespace.group_namespace? %>
             <div class="form-field">
               <%= form.label :project_puid_column,
                         t(".project_puid_column"),

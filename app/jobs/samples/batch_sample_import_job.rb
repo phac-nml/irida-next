@@ -11,7 +11,7 @@ module Samples
       )
 
       if namespace.errors.empty?
-        handle_success(broadcast_target, response)
+        handle_response(broadcast_target, response)
 
       elsif namespace.errors.include?(:sample)
         errors = namespace.errors.messages_for(:sample)
@@ -43,7 +43,7 @@ module Samples
 
     private
 
-    def handle_success(broadcast_target, response) # rubocop:disable Metrics/MethodLength
+    def handle_response(broadcast_target, response) # rubocop:disable Metrics/MethodLength
       problems = []
       response.each do |key, value|
         next if value.is_a? Sample
