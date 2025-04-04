@@ -142,6 +142,8 @@ module Projects
                                                                                       href: 2)
       )
       assert_selector 'span', text: 2
+
+      assert_selector 'a', text: I18n.t(:'components.activity.more_details')
     end
 
     test 'sample metadata update activity' do

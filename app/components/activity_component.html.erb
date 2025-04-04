@@ -1,10 +1,11 @@
 <div>
-  <ol class="relative border-s border-slate-200 dark:border-slate-700">
-    <div id="activities">
-      <% activities.each do |activity| %>
-        <%= render Activities::ListItemComponent.new(activity: activity) %>
-      <% end %>
-    </div>
+  <ol
+    id="activities"
+    class="relative border-s border-slate-200 dark:border-slate-700"
+  >
+    <% activities.each do |activity| %>
+      <%= render Activities::ListItemComponent.new(activity: activity) %>
+    <% end %>
   </ol>
 
   <div id="next_link">
