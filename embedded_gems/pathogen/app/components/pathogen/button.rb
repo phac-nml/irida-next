@@ -12,40 +12,28 @@ module Pathogen
 
     SCHEME_OPTIONS = %i[primary default danger].freeze
     DEFAULT_SCHEME = :default
-    # rubocop:disable Layout/LineLength
-    DEFAULT_CLASSES = 'relative pointer select-none transition ease-in-out delay-150 duration-300 rounded-lg font-medium focus:outline-hidden focus:ring-4 focus:z-10 disabled:opacity-70 disabled:cursor-not-allowed'
-    # rubocop:enable Layout/LineLength
+    DEFAULT_CLASSES = 'relative cursor-pointer font-medium text-center items-center ' \
+                      'inline-flex gap-2 select-none rounded ' \
+                      'disabled:opacity-70 disabled:cursor-not-allowed transition ease-in ' \
+                      'active:transition-none border border-1'
 
-    # rubocop:disable Metrics/ParameterLists
     def initialize(base_button_class: Pathogen::BaseButton, scheme: DEFAULT_SCHEME, size: DEFAULT_SIZE, block: false,
-                   disabled: false, **system_arguments)
+                   **system_arguments)
       @base_button_class = base_button_class
       @scheme = scheme
       @size = size
       @block = block
 
       @system_arguments = system_arguments
-      @system_arguments[:disabled] = disabled
 
       @id = @system_arguments[:id]
 
       @system_arguments[:classes] = class_names(
         system_arguments[:class],
+        DEFAULT_CLASSES,
         generate_scheme_mapping(fetch_or_fallback(SCHEME_OPTIONS, scheme, DEFAULT_SCHEME)),
         SIZE_MAPPINGS[fetch_or_fallback(SIZE_OPTIONS, size, DEFAULT_SIZE)],
-        DEFAULT_CLASSES,
         'block w-full' => block
-      )
-    end
-
-    # rubocop:enable Metrics/ParameterLists
-
-    def before_render
-      return unless leading_visual.present? || trailing_visual.present?
-
-      @system_arguments[:classes] = class_names(
-        @system_arguments[:classes],
-        'text-center inline-flex items-center'
       )
     end
 
@@ -74,9 +62,10 @@ module Pathogen
     def generate_scheme_mapping(scheme)
       # rubocop:disable Layout/LineLength
       {
-        primary: 'bg-primary-700 text-white enabled:hover:bg-primary-800 focus:ring-primary-100 dark:focus:ring-primary-600',
-        default: 'text-slate-900 bg-white border border-slate-200 enabled:hover:bg-slate-100 enabled:hover:text-primary-700 focus:ring-4 focus:ring-slate-100 dark:focus:ring-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:enabled:hover:text-white dark:enabled:hover:bg-slate-700',
-        danger: 'border border-red-100 bg-slate-50 text-red-500 enabled:hover:text-red-50 dark:enabled:hover:text-red-50 enabled:hover:bg-red-800 focus:ring-red-300 dark:border-red-800 dark:bg-slate-900 dark:text-red-500 dark:focus:ring-red-900'
+        primary: 'bg-primary-700 text-white enabled:hover:bg-primary-800',
+        default: 'text-slate-900 bg-white border-slate-200 hover:bg-slate-100 disabled:hover:bg-white ' \
+                 'dark:text-slate-100 dark:bg-slate-800 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-800 dark:enabled:hover:text-red-100',
+        danger: 'bg-slate-50 text-red-500 enabled:hover:text-red-50 dark:enabled:hover:text-red-50 enabled:hover:bg-red-800 dark:text-red-500 '
       }[scheme]
       # rubocop:enable Layout/LineLength
     end
