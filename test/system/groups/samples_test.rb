@@ -8,6 +8,7 @@ module Groups
 
     def setup
       Flipper.enable(:metadata_import_field_selection)
+      Flipper.enable(:batch_sample_spreadsheet_import)
 
       @user = users(:john_doe)
       login_as @user
@@ -1192,6 +1193,112 @@ module Groups
       ### VERIFY START ###
       within('table tbody tr:first-child td:nth-child(7)') do
         assert_no_selector "form[method='get']"
+      end
+      ### VERIFY END ###
+    end
+
+    test 'should import samples' do
+      ### SETUP START ###
+      visit group_samples_url(@group)
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      within('table tbody') do
+        assert_selector 'tr', count: 20
+        assert_no_text 'my new sample'
+        assert_no_text 'my new sample 2'
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # start import
+      click_link I18n.t('groups.samples.index.import_samples_button')
+      within('#dialog') do
+        attach_file('spreadsheet_import[file]',
+                    Rails.root.join('test/fixtures/files/batch_sample_import/group/valid.csv'))
+        find('#spreadsheet_import_sample_name_column', wait: 1).find(:xpath, 'option[2]').select_option
+        # sample name column is "consumed" by first selection,
+        # so select option 2 again for project puid and sample description
+        find('#spreadsheet_import_project_puid_column', wait: 1).find(:xpath, 'option[2]').select_option
+        find('#spreadsheet_import_sample_description_column', wait: 1).find(:xpath, 'option[2]').select_option
+
+        click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
+        ### ACTIONS END ###
+      end
+
+      ### VERIFY START ###
+      assert_text I18n.t('shared.progress_bar.in_progress')
+      perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+
+      # success msg
+      assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
+      click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
+
+      # refresh to see new samples
+      visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
+                                                                           locale: @user.locale))
+      within('table tbody') do
+        # added 2 new samples
+        assert_text 'my new sample'
+        assert_text 'my new sample 2'
+      end
+      ### VERIFY END ###
+    end
+
+    test 'should not import sample missing project puid' do
+      ### SETUP START ###
+      visit group_samples_url(@group)
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      within('table tbody') do
+        assert_selector 'tr', count: 20
+        assert_no_text 'my new sample'
+        assert_no_text 'my new sample 2'
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # start import
+      click_link I18n.t('groups.samples.index.import_samples_button')
+      within('#dialog') do
+        attach_file('spreadsheet_import[file]',
+                    Rails.root.join('test/fixtures/files/batch_sample_import/group/invalid_missing_puid.csv'))
+        find('#spreadsheet_import_sample_name_column', wait: 1).find(:xpath, 'option[2]').select_option
+        # sample name column is "consumed" by first selection,
+        # so select option 2 again for project puid and sample description
+        find('#spreadsheet_import_project_puid_column', wait: 1).find(:xpath, 'option[2]').select_option
+        find('#spreadsheet_import_sample_description_column', wait: 1).find(:xpath, 'option[2]').select_option
+
+        click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
+        ### ACTIONS END ###
+      end
+
+      ### VERIFY START ###
+      assert_text I18n.t('shared.progress_bar.in_progress')
+      perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+
+      # success msg
+      assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
+      # problem message
+      assert_text I18n.t('shared.samples.spreadsheet_imports.success.problems')
+      # problem table
+      within('#problems_table table tbody') do
+        # has 1 problem
+        assert_selector 'tr', count: 1
+        assert_text "Row with index '2' is missing required fields"
+      end
+      click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
+
+      # refresh to see new samples
+      visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 27,
+                                                                           locale: @user.locale))
+      within('table tbody') do
+        # added 2 new samples
+        assert_text 'my new sample'
+        assert_no_text 'my new sample 2'
       end
       ### VERIFY END ###
     end

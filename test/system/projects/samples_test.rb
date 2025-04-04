@@ -8,6 +8,7 @@ module Projects
 
     setup do
       Flipper.enable(:metadata_import_field_selection)
+      Flipper.enable(:batch_sample_spreadsheet_import)
 
       @user = users(:john_doe)
       login_as @user
@@ -1855,6 +1856,141 @@ module Projects
         end
         ### VERIFY END ###
       end
+    end
+
+    test 'should import samples' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+
+      within('#samples-table table tbody') do
+        assert_selector 'tr', count: 3
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # start import
+      click_link I18n.t('projects.samples.index.import_samples_button')
+      within('#dialog') do
+        attach_file('spreadsheet_import[file]',
+                    Rails.root.join('test/fixtures/files/batch_sample_import/project/valid.csv'))
+        find('#spreadsheet_import_sample_name_column', wait: 1).find(:xpath, 'option[2]').select_option
+        # sample name column is "consumed" by first selection, so select option 2 again for sample description
+        find('#spreadsheet_import_sample_description_column', wait: 1).find(:xpath, 'option[2]').select_option
+
+        click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
+        ### ACTIONS END ###
+      end
+
+      ### VERIFY START ###
+      assert_text I18n.t('shared.progress_bar.in_progress')
+      perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+
+      # success msg
+      assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
+      click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
+
+      within('#samples-table table tbody') do
+        # added 2 new samples
+        assert_selector 'tr', count: 5
+        assert_text 'my new sample'
+        assert_text 'my new sample 2'
+      end
+      ### VERIFY END ###
+    end
+
+    test 'should import partial data when some rows are invalid' do
+      # Using short sample name to test this.
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(
+        I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3, locale: @user.locale)
+      )
+
+      within('#samples-table table tbody') do
+        assert_selector 'tr', count: 3
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # start import
+      click_link I18n.t('projects.samples.index.import_samples_button')
+      within('#dialog') do
+        attach_file('spreadsheet_import[file]',
+                    Rails.root.join('test/fixtures/files/batch_sample_import/project/invalid_short_sample_name.csv'))
+        find('#spreadsheet_import_sample_name_column', wait: 1).find(:xpath, 'option[2]').select_option
+
+        click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
+        ### ACTIONS END ###
+      end
+
+      ### VERIFY START ###
+      assert_text I18n.t('shared.progress_bar.in_progress')
+      perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+
+      # success msg
+      assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
+      # problem message
+      assert_text I18n.t('shared.samples.spreadsheet_imports.success.problems')
+      # problem table
+      within('#problems_table table tbody') do
+        # has 1 problem
+        assert_selector 'tr', count: 1
+        assert_text 'm sample name is too short (minimum is 3 characters)'
+      end
+      click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
+
+      within('#samples-table table tbody') do
+        # added 1 new sample
+        assert_selector 'tr', count: 4
+        assert_text 'my new sample'
+      end
+      ### VERIFY END ###
+    end
+
+    test 'should not import samples when file malformed' do
+      # Using duplicate file header to test this.
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(
+        I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3, locale: @user.locale)
+      )
+
+      within('#samples-table table tbody') do
+        assert_selector 'tr', count: 3
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # start import
+      click_link I18n.t('projects.samples.index.import_samples_button')
+      within('#dialog') do
+        attach_file('spreadsheet_import[file]',
+                    Rails.root.join('test/fixtures/files/batch_sample_import/project/invalid_duplicate_header.csv'))
+        find('#spreadsheet_import_sample_name_column', wait: 1).find(:xpath, 'option[2]').select_option
+
+        click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
+        ### ACTIONS END ###
+      end
+
+      ### VERIFY START ###
+      assert_text I18n.t('shared.progress_bar.in_progress')
+      perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+
+      # error msg
+      assert_text I18n.t('shared.samples.spreadsheet_imports.errors.description')
+      click_on I18n.t('shared.samples.spreadsheet_imports.errors.ok_button')
+
+      within('#samples-table table tbody') do
+        # added 0 new sample
+        assert_selector 'tr', count: 3
+        assert_no_text 'my new sample'
+      end
+      ### VERIFY END ###
     end
 
     test 'singular clone dialog description' do
