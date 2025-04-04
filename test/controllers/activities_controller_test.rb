@@ -72,4 +72,18 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
     assert_equal I18n.t('activities.show.error', dialog_type: 'samples_newtransfer'), flash[:alert]
   end
+
+  test 'should not display activity dialog for an unauthorized user' do
+    sign_in users(:metadata_doe)
+
+    activities = @namespace.human_readable_activity(@namespace.retrieve_project_activity).reverse
+
+    activity_to_render = activities.find do |a|
+      a[:key] == 'activity.namespaces_project_namespace.samples.transfer_html'
+    end
+
+    get activity_path(activity_to_render[:id], dialog_type: 'samples_transfer', format: :turbo_stream)
+
+    assert_response :unauthorized
+  end
 end

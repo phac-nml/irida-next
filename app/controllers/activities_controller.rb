@@ -7,6 +7,8 @@ class ActivitiesController < ApplicationController
   before_action :activity_owner
 
   def show
+    authorize! trackable, to: :read?
+
     dialog_component = dialog_component_type
     if dialog_component
       render dialog_component.new(activity: @activity, activity_owner: @activity_owner)
@@ -19,7 +21,7 @@ class ActivitiesController < ApplicationController
 
   def handle_not_found
     redirect_back fallback_location: request.referer || root_path,
-                  alert: I18n.t('activities.show.error', dialog_type: params[:dialog_type])
+                  alert: I18n.t('activities.show.error')
   end
 
   def activity
@@ -48,5 +50,11 @@ class ActivitiesController < ApplicationController
     when 'samples_destroy'
       Activities::Dialogs::SampleDestroyActivityDialogComponent
     end
+  end
+
+  def trackable
+    return @activity.trackable if @activity.trackable.group_namespace?
+
+    @activity.trackable.project
   end
 end
