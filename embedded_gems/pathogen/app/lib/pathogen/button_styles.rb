@@ -1,65 +1,84 @@
 # frozen_string_literal: true
 
 module Pathogen
-  # This module contains all the styling logic for Pathogen buttons.
-  # It provides a consistent way to generate button styles across the application.
+  # 🎨 ButtonStyles: A comprehensive styling system for Pathogen buttons
+  #
+  # This module provides a consistent and maintainable approach to button styling
+  # across the application. It leverages TailwindCSS classes to create beautiful,
+  # accessible, and responsive buttons.
+  #
+  # @example Basic usage
+  #   generate_classes(scheme: :primary, size: :base) # => "... tailwind classes ..."
+  #
+  # @example With block and custom classes
+  #   generate_classes(
+  #     scheme: :danger,
+  #     size: :lg,
+  #     block: true,
+  #     custom_classes: "my-custom-class"
+  #   )
   module ButtonStyles
     extend ActiveSupport::Concern
     include ActionView::Helpers::TagHelper
 
-    # Default classes applied to all buttons
-    DEFAULT_CLASSES = 'relative cursor-pointer font-medium text-center items-center ' \
-                      'inline-flex gap-2 select-none rounded ' \
-                      'disabled:opacity-70 disabled:cursor-not-allowed transition ease-in ' \
-                      'active:transition-none border border-1'
+    # 🎯 Core button styles applied to all variants
+    DEFAULT_CLASSES = [
+      'relative cursor-pointer font-medium text-center',
+      'inline-flex items-center gap-2 select-none rounded',
+      'disabled:opacity-70 disabled:cursor-not-allowed',
+      'transition ease-in active:transition-none',
+      'border border-1'
+    ].join(' ').freeze
 
-    # Available color schemes for buttons
+    # 🎨 Available button color schemes
     SCHEME_OPTIONS = %i[primary default danger].freeze
     DEFAULT_SCHEME = :default
 
-    # Default size for buttons
+    # 📏 Button size configuration
     DEFAULT_SIZE = :base
 
-    # A hash of predefined button size mappings
+    # 📐 Size-specific padding and text styles
     SIZE_MAPPINGS = {
-      xs: 'px-2.5 py-1.5 text-xs',
-      sm: 'px-3 py-2 text-sm leading-4',
-      base: 'px-4 py-2 text-sm',
-      lg: 'px-4 py-2 text-base',
-      xl: 'px-6 py-3 text-base'
+      xs: 'px-2.5 py-1.5 text-xs',        # Extra small
+      sm: 'px-3 py-2 text-sm leading-4',  # Small
+      base: 'px-4 py-2 text-sm',          # Base/Default
+      lg: 'px-4 py-2 text-base',          # Large
+      xl: 'px-6 py-3 text-base'           # Extra large
     }.freeze
-    SIZE_OPTIONS = SIZE_MAPPINGS.keys
+    SIZE_OPTIONS = SIZE_MAPPINGS.keys.freeze
 
-    # A hash of predefined icon size mappings
+    # 🖼️ Icon size mappings for each button size
     ICON_SIZES = {
-      xs: 'w-3 h-3',
-      sm: 'w-3.5 h-3.5',
-      base: 'w-4 h-4',
-      lg: 'w-5 h-5',
-      xl: 'w-6 h-6'
+      xs: 'w-3 h-3',      # Extra small icons
+      sm: 'w-3.5 h-3.5',  # Small icons
+      base: 'w-4 h-4',    # Base/Default icons
+      lg: 'w-5 h-5',      # Large icons
+      xl: 'w-6 h-6'       # Extra large icons
     }.freeze
 
-    # Generate all classes for a button based on its configuration
-    # @param scheme [Symbol] The button's color scheme
-    # @param size [Symbol] The button's size
-    # @param block [Boolean] Whether the button is full-width
+    # 🎯 Generates the complete set of classes for a button
+    #
+    # @param scheme [Symbol] Button color scheme (:primary, :default, :danger)
+    # @param size [Symbol] Button size (:xs, :sm, :base, :lg, :xl)
+    # @param block [Boolean] Whether the button should be full-width
     # @param disabled [Boolean] Whether the button is disabled
-    # @param custom_classes [String] Additional custom classes to add
-    # @return [String] All CSS classes for the button
+    # @param custom_classes [String] Additional custom classes to append
+    # @return [String] Complete set of Tailwind CSS classes
     def generate_classes(scheme:, size:, block: false, disabled: false, custom_classes: nil)
-      classes = []
-      classes << DEFAULT_CLASSES
-      classes << scheme_classes(scheme, disabled: disabled)
-      classes << size_classes(size)
-      classes << 'w-full' if block
-      classes << custom_classes if custom_classes.present?
-      classes.compact.join(' ')
+      [
+        DEFAULT_CLASSES,
+        scheme_classes(scheme, disabled: disabled),
+        size_classes(size),
+        ('w-full' if block),
+        custom_classes
+      ].compact.join(' ')
     end
 
-    # Generate classes for a specific color scheme
-    # @param scheme [Symbol] The button's color scheme
+    # 🎨 Generates scheme-specific classes
+    #
+    # @param scheme [Symbol] The color scheme to use
     # @param disabled [Boolean] Whether the button is disabled
-    # @return [String] CSS classes for the color scheme
+    # @return [String] Scheme-specific Tailwind CSS classes
     def scheme_classes(scheme, disabled: false)
       case scheme.to_sym
       when :primary then primary_style(disabled: disabled)
@@ -70,10 +89,18 @@ module Pathogen
 
     private
 
+    # 📏 Retrieves size-specific classes
+    #
+    # @param size [Symbol] The desired button size
+    # @return [String] Size-specific Tailwind CSS classes
     def size_classes(size)
       SIZE_MAPPINGS[size]
     end
 
+    # 🔘 Default/Secondary button style
+    #
+    # @param disabled [Boolean] Whether the button is disabled
+    # @return [String] Tailwind CSS classes for default style
     def default_style(disabled: false)
       class_names(
         'text-slate-950 bg-slate-50 border-slate-200',
@@ -84,6 +111,10 @@ module Pathogen
       )
     end
 
+    # 🔵 Primary button style
+    #
+    # @param disabled [Boolean] Whether the button is disabled
+    # @return [String] Tailwind CSS classes for primary style
     def primary_style(disabled: false)
       class_names(
         'border-transparent text-white bg-primary-600 border-primary-600',
@@ -94,6 +125,10 @@ module Pathogen
       )
     end
 
+    # 🔴 Danger/Destructive button style
+    #
+    # @param disabled [Boolean] Whether the button is disabled
+    # @return [String] Tailwind CSS classes for danger style
     def danger_style(disabled: false)
       class_names(
         'border-transparent text-white bg-red-600',
