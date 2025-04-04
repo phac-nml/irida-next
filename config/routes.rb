@@ -51,16 +51,4 @@ Rails.application.routes.draw do
   draw :project
 
   draw :development
-
-  project_routes = Irida::Application.routes.set.filter_map do |route|
-    route.name if route.name&.include?('namespace_project')
-  end
-
-  project_routes.each do |name|
-    short_name = name.sub('namespace_project', 'project')
-
-    direct(short_name) do |project, *args|
-      send("#{name}_url", project&.namespace&.parent, project, *args)
-    end
-  end
 end

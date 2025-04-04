@@ -39,7 +39,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     if @project.persisted?
       flash[:success] = t('.success', project_name: @project.name)
       redirect_to(
-        project_path(@project)
+        namespace_project_path(@project.namespace.parent, @project)
       )
     else
       render :new, status: :unprocessable_entity
@@ -52,7 +52,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
       if @updated
         if project_params[:namespace_attributes][:path]
           flash[:success] = t('.success', project_name: @project.name)
-          format.turbo_stream { redirect_to(project_edit_path(@project)) }
+          format.turbo_stream { redirect_to(namespace_project_edit_path(@project.namespace.parent, @project)) }
         else
           format.turbo_stream do
             render status: :ok, locals: { type: 'success', message: t('.success', project_name: @project.name) }
@@ -81,11 +81,11 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
     end
   end
 
-  def transfer
+  def transfer # rubocop:disable Metrics/AbcSize
     if Projects::TransferService.new(@project, current_user).execute(new_namespace)
       flash[:success] = t('.success', project_name: @project.name)
       respond_to do |format|
-        format.turbo_stream { redirect_to project_path(@project) }
+        format.turbo_stream { redirect_to namespace_project_path(@project.namespace.parent, @project) }
       end
     else
       @error = @project.errors.messages.values.flatten.first
@@ -102,7 +102,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
       redirect_to dashboard_projects_path(format: :html)
     else
       flash[:error] = error_message(@project)
-      redirect_to project_path(@project)
+      redirect_to namespace_project_path(@project.namespace.parent, @project)
     end
   end
 

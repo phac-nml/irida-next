@@ -28,6 +28,7 @@ class NamespaceGroupLink < ApplicationRecord
   after_save :send_access_granted_emails, if: :previously_new_record?
 
   scope :not_expired, -> { where('expires_at IS NULL OR expires_at > ?', Time.zone.now.beginning_of_day) }
+  scope :with_access, -> { where.not(group_access_level: Member::AccessLevel::NO_ACCESS) }
   scope :for_namespace_and_ancestors, lambda { |namespace = nil|
                                         where(namespace:).or(where(namespace: namespace.parent&.self_and_ancestors))
                                       }

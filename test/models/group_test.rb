@@ -203,7 +203,7 @@ class GroupTest < ActiveSupport::TestCase
   end
 
   test '#metadata_summary incorporates fields from shared groups' do
-    assert_equal %w[unique.metadata.field metadatafield1 metadatafield2], groups(:david_doe_group_four).metadata_fields
+    assert_equal %w[metadatafield1 metadatafield2 unique.metadata.field], groups(:david_doe_group_four).metadata_fields
   end
 
   test '#metadata_summary incorporates fields from shared projects' do

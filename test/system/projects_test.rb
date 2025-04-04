@@ -146,7 +146,7 @@ class ProjectsTest < ApplicationSystemTestCase
     project_name = 'New Project'
     project_description = 'New Project Description'
 
-    visit project_edit_path(projects(:project1))
+    visit namespace_project_edit_path(projects(:project1).namespace.parent, projects(:project1))
     assert_text I18n.t(:'projects.edit.general.title')
 
     fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
@@ -191,7 +191,7 @@ class ProjectsTest < ApplicationSystemTestCase
   end
 
   test 'can access edit project' do
-    visit project_edit_path(projects(:project1))
+    visit namespace_project_edit_path(projects(:project1).namespace.parent, projects(:project1))
 
     assert_text I18n.t(:'projects.edit.general.title')
   end
@@ -200,14 +200,14 @@ class ProjectsTest < ApplicationSystemTestCase
     login_as users(:david_doe)
 
     project = projects(:project1)
-    visit project_edit_path(project)
+    visit namespace_project_edit_path(project.namespace.parent, project)
 
     assert_text I18n.t(:'action_policy.policy.project.edit?', name: project.name)
   end
 
   test 'can delete a project' do
     project = projects(:project1)
-    visit project_edit_path(project)
+    visit namespace_project_edit_path(project.namespace.parent, project)
     click_on I18n.t(:'projects.edit.advanced.destroy.submit')
 
     within('#turbo-confirm') do
@@ -223,7 +223,7 @@ class ProjectsTest < ApplicationSystemTestCase
 
   test 'can edit a project path' do
     project = projects(:project1)
-    visit project_edit_path(project)
+    visit namespace_project_edit_path(project.namespace.parent, project)
 
     fill_in 'Path', with: 'project-1-edited'
     click_on I18n.t(:'projects.edit.advanced.path.submit')
@@ -242,7 +242,7 @@ class ProjectsTest < ApplicationSystemTestCase
 
   test 'show error when editing a project path to an existing namespace' do
     project = projects(:project1)
-    visit project_edit_path(project)
+    visit namespace_project_edit_path(project.namespace.parent, project)
 
     fill_in 'Path', with: 'project-2'
     click_on I18n.t(:'projects.edit.advanced.path.submit')
@@ -262,7 +262,7 @@ class ProjectsTest < ApplicationSystemTestCase
   test 'show error when editing a project with a short name' do
     project_name = 'a'
     project = projects(:project1)
-    visit project_edit_path(project)
+    visit namespace_project_edit_path(project.namespace.parent, project)
 
     fill_in 'Name', with: project_name
     click_on I18n.t('projects.edit.general.submit')
@@ -282,7 +282,7 @@ class ProjectsTest < ApplicationSystemTestCase
   test 'show error when editing a project with a same name' do
     project1 = projects(:project1)
     project2 = projects(:project2)
-    visit project_edit_path(project1)
+    visit namespace_project_edit_path(project1.namespace.parent, project1)
 
     fill_in 'Name', with: project2.name
     click_on I18n.t('projects.edit.general.submit')
@@ -302,7 +302,7 @@ class ProjectsTest < ApplicationSystemTestCase
   test 'show error when editing a project with a long description' do
     project_description = 'a' * 256
     project = projects(:project1)
-    visit project_edit_path(project)
+    visit namespace_project_edit_path(project.namespace.parent, project)
 
     fill_in 'Description', with: project_description
     click_on I18n.t('projects.edit.general.submit')
