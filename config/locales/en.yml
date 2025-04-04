@@ -478,7 +478,7 @@ en:
       keys_deleted: 'Keys deleted:'
       previous_version: Previous (Version %{version})
     layout:
-      main_content_link: Skip to main content
+      main_content_link: Skip to content
     list_filter:
       apply: Apply filter
       title: Filter by sample names or Id
