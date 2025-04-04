@@ -1970,7 +1970,7 @@ fr:
           description: The sample spreadsheet has been processed.
           ok_button: OK
           problem_message: "%{path} %{message}"
-          problems: The following samples had problems while processing.
+          problems: Errors were encountered while importing the following samples.
     workflow_executions:
       destroy_multiple_confirmation_dialog:
         description:
