@@ -7,17 +7,20 @@ module Pathogen
   # styling across the application.
   #
   class Button < Pathogen::Component
-    include Pathogen::ButtonSizes
     include Pathogen::ButtonVisuals
+    include Pathogen::ButtonStyles
 
-    SCHEME_OPTIONS = %i[primary default danger].freeze
-    DEFAULT_SCHEME = :default
-    DEFAULT_CLASSES = 'relative cursor-pointer font-medium text-center items-center ' \
-                      'inline-flex gap-2 select-none rounded ' \
-                      'disabled:opacity-70 disabled:cursor-not-allowed transition ease-in ' \
-                      'active:transition-none border border-1'
+    SCHEME_OPTIONS = Pathogen::ButtonStyles::SCHEME_OPTIONS
+    DEFAULT_SCHEME = Pathogen::ButtonStyles::DEFAULT_SCHEME
+    SIZE_OPTIONS = Pathogen::ButtonStyles::SIZE_OPTIONS
+    DEFAULT_SIZE = Pathogen::ButtonStyles::DEFAULT_SIZE
 
-    def initialize(base_button_class: Pathogen::BaseButton, scheme: DEFAULT_SCHEME, size: DEFAULT_SIZE, block: false,
+    # @param base_button_class [Class] The base button class to use
+    # @param scheme [Symbol] The color scheme for the button
+    # @param size [Symbol] The size of the button
+    # @param block [Boolean] Whether the button should be full width
+    # @param system_arguments [Hash] Additional HTML attributes
+    def initialize(base_button_class: Pathogen::BaseButton, scheme: :base, size: DEFAULT_SIZE, block: false,
                    **system_arguments)
       @base_button_class = base_button_class
       @scheme = scheme
@@ -28,12 +31,12 @@ module Pathogen
 
       @id = @system_arguments[:id]
 
-      @system_arguments[:classes] = class_names(
-        system_arguments[:class],
-        DEFAULT_CLASSES,
-        generate_scheme_mapping(fetch_or_fallback(SCHEME_OPTIONS, scheme, DEFAULT_SCHEME)),
-        SIZE_MAPPINGS[fetch_or_fallback(SIZE_OPTIONS, size, DEFAULT_SIZE)],
-        'block w-full' => block
+      @system_arguments[:classes] = generate_classes(
+        scheme: fetch_or_fallback(SCHEME_OPTIONS, scheme, DEFAULT_SCHEME),
+        size: fetch_or_fallback(SIZE_OPTIONS, size, DEFAULT_SIZE),
+        block: block,
+        disabled: @system_arguments[:disabled],
+        custom_classes: system_arguments[:class]
       )
     end
 
@@ -53,21 +56,6 @@ module Pathogen
 
       # strip unsets `html_safe`, so we have to set it back again to guarantee that HTML blocks won't break
       trimmed_content.html_safe # rubocop:disable Rails/OutputSafety
-    end
-
-    # Generates the appropriate CSS classes for the button's color scheme and tag type.
-    #
-    # @param scheme [Symbol] The color scheme of the button (:primary, :default, or :danger).
-    # @return [String] A string of CSS classes corresponding to the specified scheme.
-    def generate_scheme_mapping(scheme)
-      # rubocop:disable Layout/LineLength
-      {
-        primary: 'bg-primary-700 text-white enabled:hover:bg-primary-800',
-        default: 'text-slate-900 bg-white border-slate-200 hover:bg-slate-100 disabled:hover:bg-white ' \
-                 'dark:text-slate-100 dark:bg-slate-800 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-800 dark:enabled:hover:text-red-100',
-        danger: 'bg-slate-50 text-red-500 enabled:hover:text-red-50 dark:enabled:hover:text-red-50 enabled:hover:bg-red-800 dark:text-red-500 '
-      }[scheme]
-      # rubocop:enable Layout/LineLength
     end
   end
 end

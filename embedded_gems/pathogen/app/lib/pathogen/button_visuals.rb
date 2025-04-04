@@ -40,8 +40,7 @@ module Pathogen
 
     def icon_classes
       [
-        ICON_SIZE_MAPPINGS[fetch_or_fallback(Pathogen::ButtonSizes::SIZE_OPTIONS, @size,
-                                             Pathogen::ButtonSizes::DEFAULT_SIZE)]
+        Pathogen::ButtonStyles::ICON_SIZES[@size]
       ].compact
     end
   end
