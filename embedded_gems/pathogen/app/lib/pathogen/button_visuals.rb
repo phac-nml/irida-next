@@ -26,8 +26,9 @@ module Pathogen
   module ButtonVisuals
     # 📏 Predefined icon size mappings for consistent scaling
     ICON_SIZE_MAPPINGS = {
-      small: 'w-3 h-3',   # 12x12 pixels
-      medium: 'w-4 h-4'   # 16x16 pixels
+      sm: 'w-4 h-4', # 12x12 pixels
+      base: 'w-5 h-5', # 16x16 pixels
+      lg: 'w-6 h-6' # 20x20 pixels
     }.freeze
 
     # 🔌 Module inclusion hook
@@ -60,7 +61,7 @@ module Pathogen
     def icon_visual(args, name)
       args[:class] = class_names(
         args[:class],
-        icon_classes,
+        ICON_SIZE_MAPPINGS[@size],
         "#{name}_icon"
       )
       Pathogen::Icon.new(**args)
@@ -79,17 +80,6 @@ module Pathogen
         classes: "#{name}_svg fill-current",
         **args
       )
-    end
-
-    private
-
-    # 📐 Generates size-specific classes for icons
-    #
-    # @return [Array<String>] Array of Tailwind CSS classes for icon sizing
-    def icon_classes
-      [
-        Pathogen::ButtonStyles::ICON_SIZES[@size]
-      ].compact
     end
   end
 end

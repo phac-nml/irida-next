@@ -39,22 +39,11 @@ module Pathogen
 
     # 📐 Size-specific padding and text styles
     SIZE_MAPPINGS = {
-      xs: 'px-2.5 py-1.5 text-xs',        # Extra small
-      sm: 'px-3 py-2 text-sm leading-4',  # Small
-      base: 'px-4 py-2 text-sm',          # Base/Default
-      lg: 'px-4 py-2 text-base',          # Large
-      xl: 'px-6 py-3 text-base'           # Extra large
+      sm: 'px-2.5 py-1.5 text-xs',          # Small
+      base: 'px-3 py-2 text-sm leading-4',  # Base/Default
+      lg: 'px-4 py-2 text-sm'               # Large
     }.freeze
     SIZE_OPTIONS = SIZE_MAPPINGS.keys.freeze
-
-    # 🖼️ Icon size mappings for each button size
-    ICON_SIZES = {
-      xs: 'w-3 h-3',      # Extra small icons
-      sm: 'w-3.5 h-3.5',  # Small icons
-      base: 'w-4 h-4',    # Base/Default icons
-      lg: 'w-5 h-5',      # Large icons
-      xl: 'w-6 h-6'       # Extra large icons
-    }.freeze
 
     # 🎯 Generates the complete set of classes for a button
     #
