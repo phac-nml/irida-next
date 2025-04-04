@@ -427,3 +427,13 @@ attachmentTSV:
   attachable: project2_namespace (Namespace)
   puid: INXT_ATT_ABAAAAAABF
   created_at: <%= 2.hours.ago %>
+
+workflow_execution_group_shared_output_attachment:
+  metadata: { "compression": "none", "format": "json" }
+  attachable: workflow_execution_group_shared1 (WorkflowExecution)
+  puid: INXT_ATT_ABAAAAAABG
+
+workflow_execution_shared_with_project_output_attachment:
+  metadata: { "compression": "none", "format": "json" }
+  attachable: workflow_execution_shared2 (WorkflowExecution)
+  puid: INXT_ATT_ABAAAAAABH
