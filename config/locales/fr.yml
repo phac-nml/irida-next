@@ -247,6 +247,9 @@ fr:
       sample:
         one: Échantillon
         other: Échantillons
+  activities:
+    show:
+      error: Unable to open dialog
   activity:
     group:
       attachment:
@@ -430,7 +433,23 @@ fr:
         never: Jamais
   components:
     activity:
+      dialog:
+        close: Close
+        sample_clone:
+          copied_from: Copied from
+          copied_to: Copied to
+          source_project_description: "%{user} copied %{count} samples from project %{source_project_puid}"
+          target_project_description: "%{user} copied %{count} samples to project %{target_project_puid}"
+          title: Copied Samples
+        sample_destroy:
+          description: "%{user} removed %{count} samples from the project"
+          title: Deleted Samples
+        sample_transfer:
+          source_project_description: "%{user} transferred %{count} samples from project %{source_project_puid}"
+          target_project_description: "%{user} transferred %{count} samples to project %{target_project_puid}"
+          title: Transferred Samples
       load_more: Charger plus
+      more_details: More details
     clipboard:
       copied: Copié!
       title: Copier dans le presse-papiers

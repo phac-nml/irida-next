@@ -1,0 +1,88 @@
+<%= viral_dialog(open: true,classes: ["overflow-visible"]) do |dialog| %>
+  <% dialog.with_header(title: t(:"components.activity.dialog.sample_clone.title")) %>
+  <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
+    <%= viral_pill(
+      text: helpers.local_time(activity[:created_at], :long),
+      color: :green,
+    ) %>
+
+    <% project_type =
+      @activity.parameters[:source_project].present? ? "source" : "target" %>
+
+    <p class="dark:text-slate-400 mt-2">
+      <% if project_type == "source" %>
+        <%= t(
+          :"components.activity.dialog.sample_clone.source_project_description",
+          user: @activity_owner,
+          count: activity.parameters[:cloned_samples_ids].size,
+          source_project_puid: @activity.parameters[:source_project_puid],
+        ) %>
+      <% else %>
+        <%= t(
+          :"components.activity.dialog.sample_clone.target_project_description",
+          user: @activity_owner,
+          count: activity.parameters[:cloned_samples_ids].size,
+          target_project_puid: @activity.parameters[:target_project_puid],
+        ) %>
+      <% end %>
+    </p>
+  </div>
+
+  <div
+    class="
+      overflow-y-auto max-h-[300px] border border-slate-300 rounded-md block w-full
+      p-2.5 dark:bg-slate-800 dark:border-slate-600
+    "
+    data-action="scroll->infinite-scroll#scroll"
+    data-infinite-scroll-target="scrollable"
+  >
+    <table
+      class="
+        w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+        whitespace-nowrap
+      "
+    >
+      <thead
+        class="
+          text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
+          dark:text-slate-300
+        "
+      >
+        <tr>
+          <th class="px-3 py-3"><%= t(:"components.activity.dialog.sample_clone.copied_from") %></th>
+          <th class="px-3 py-3"><%= t(:"components.activity.dialog.sample_clone.copied_to") %></th>
+        </tr>
+      </thead>
+      <tbody
+        class="
+          overflow-y-auto bg-white divide-y divide-slate-200 dark:bg-slate-800
+          dark:divide-slate-700
+        "
+      >
+        <% activity.parameters[:cloned_samples_puids].each do |sample_puid| %>
+          <tr>
+            <td class="px-3 py-3"><%= sample_puid.first %></td>
+            <td class="px-3 py-3"><%= sample_puid.last %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-4">
+    <button
+      type="button"
+      class="
+        inline-flex items-center justify-center w-1/2 text-sm border rounded-md
+        cursor-pointer sm:w-auto focus:z-10 px-5 py-2.5 bg-white text-slate-900
+        border-slate-200 hover:bg-slate-100 hover:text-slate-950 focus:ring-slate-200
+        dark:focus:ring-slate-200 dark:bg-slate-800 dark:text-slate-400
+        dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700
+        dark:focus:outline-ring-4
+      "
+      data-action="click->viral--dialog#close"
+    >
+      <%= t(:"components.activity.dialog.close") %>
+    </button>
+  </div>
+<% end %>

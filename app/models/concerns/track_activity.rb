@@ -33,10 +33,11 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
   private
 
-  def project_activity(activity)
+  def project_activity(activity) # rubocop:disable Metrics/MethodLength
     activity_trackable = activity_trackable(activity, Project)
 
     base_params = {
+      id: activity.id,
       created_at: format_created_at(activity.created_at),
       key: "activity.#{activity.key}_html",
       user: activity_creator(activity),
@@ -59,6 +60,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     activity_trackable = activity_trackable(activity, Group)
 
     base_params = {
+      id: activity.id,
       created_at: format_created_at(activity.created_at),
       key: "activity.#{activity.key}_html",
       user: activity_creator(activity),
@@ -83,6 +85,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     activity_trackable = activity_trackable(activity, Namespace)
 
     base_params = {
+      id: activity.id,
       created_at: format_created_at(activity.created_at),
       key: "activity.#{activity.key}_html",
       user: activity_creator(activity),
@@ -135,7 +138,14 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   end
 
   def activity_creator(activity)
-    activity.owner.nil? ? I18n.t('activerecord.concerns.track_activity.system') : activity.owner.email
+    return activity.owner.email unless activity.owner.nil?
+
+    unless activity.owner_id.nil?
+      user = get_object_by_id(activity.owner_id, User)
+      return user.email unless user.nil?
+    end
+
+    I18n.t('activerecord.concerns.track_activity.system')
   end
 
   def activity_trackable(activity, relation)
