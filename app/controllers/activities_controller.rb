@@ -49,6 +49,8 @@ class ActivitiesController < ApplicationController
       Activities::Dialogs::SampleCloneActivityDialogComponent
     when 'samples_destroy'
       Activities::Dialogs::SampleDestroyActivityDialogComponent
+    when 'workflows_destroy'
+      Activities::Dialogs::WorkflowExecutionDestroyActivityDialogComponent
     end
   end
 
