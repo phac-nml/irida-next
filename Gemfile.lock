@@ -527,6 +527,9 @@ GEM
     rails-i18n (8.0.1)
       i18n (>= 0.7, < 2)
       railties (>= 8.0.0, < 9)
+    rails_icons (1.2.0)
+      nokogiri (~> 1.16, >= 1.16.4)
+      rails (> 6.1)
     railties (8.0.1)
       actionpack (= 8.0.1)
       activesupport (= 8.0.1)
@@ -727,7 +730,6 @@ DEPENDENCIES
   google-cloud-storage (~> 1.11)
   graphiql-rails
   graphql
-  heroicon-rails (>= 0.2.9)
   holidays
   i18n-tasks (~> 1.0.15)
   importmap-rails
@@ -756,6 +758,7 @@ DEPENDENCIES
   public_activity
   puma (~> 6.6)
   rails (~> 8.0.1)
+  rails_icons (~> 1.2)
   ransack (~> 4.2.1)
   requestjs-rails
   roo (~> 2.10.0)
