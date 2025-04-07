@@ -261,6 +261,9 @@ module Groups
         click_button I18n.t(:'components.confirmation.confirm', locale: user.locale)
       end
 
+      assert_text I18n.t(:'concerns.workflow_execution_actions.cancel.success',
+                         workflow_name: workflow_execution.metadata['workflow_name'], locale: user.locale)
+
       assert_text workflow_execution.id
       assert_equal workflow_execution.reload.state, 'canceled'
       assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}", locale: user.locale)
