@@ -71,7 +71,7 @@
                   </td>
                   <td class="px-3 py-3">
                     <label
-                      class="hover:underline hover:cursor-pointer"
+                      class="hover:underline cursor-pointer"
                       for="attachment_id_<%= attachment[:id] %>"
                     ><%= attachment[:filename] %></label>
                   </td>
@@ -100,10 +100,7 @@
 
                   </td>
                   <td class="px-3 py-3">
-                    <label
-                      class="hover:underline hover:cursor-pointer"
-                      for="attachment_id_no_attachment"
-                    >
+                    <label class="hover:underline cursor-pointer" for="attachment_id_no_attachment">
                       <%= t(".no_file") %>
                     </label>
                   </td>
@@ -116,7 +113,7 @@
       <% unless @listing_attachments.empty? %>
         <%= form.submit t(".submit_button"),
                     class:
-                      "inline-flex items-center justify-center text-sm border rounded-md cursor-pointer sm:w-auto focus:z-10 text-white bg-primary-700 hover:bg-primary-800 rounded-md px-5 py-3 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 dark:border-primary-900 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-700" %>
+                      "inline-flex items-center justify-center text-sm border rounded-md cursor-pointer sm:w-auto text-white bg-primary-700 hover:bg-primary-800 rounded-md px-5 py-3 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 dark:border-primary-900 dark:hover:bg-primary-700" %>
 
       <% end %>
     <% end %>

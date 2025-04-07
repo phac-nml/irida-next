@@ -272,7 +272,8 @@ export default class extends Controller {
 
   // handles changes to file cells; triggered by nextflow/file_controller.js
   updateFileData({ detail: { content } }) {
-    content["files"].forEach((file) => {
+    content["files"].forEach((file, index) => {
+      console.log(index);
       this.#setFormData(
         `workflow_execution[samples_workflow_executions_attributes][${content["index"]}][samplesheet_params][${file["property"]}]`,
         file["global_id"],
@@ -293,7 +294,12 @@ export default class extends Controller {
         file["property"]
       ]["attachment_id"] = file["id"];
 
-      this.#updateCell(file["property"], content["index"], "file_cell");
+      this.#updateCell(
+        file["property"],
+        content["index"],
+        "file_cell",
+        index === 0,
+      );
     });
     this.#clearPayload();
   }
@@ -305,7 +311,7 @@ export default class extends Controller {
         `workflow_execution[samples_workflow_executions_attributes][${index}][samplesheet_params][${content["property"]}]`,
         content["metadata"][index],
       );
-      this.#updateCell(content["property"], index, "metadata_cell");
+      this.#updateCell(content["property"], index, "metadata_cell", false);
     }
     this.#clearPayload();
   }
@@ -539,7 +545,7 @@ export default class extends Controller {
     }
   }
 
-  #updateCell(columnName, index, cell_type) {
+  #updateCell(columnName, index, cell_type, focusCell) {
     let container = document.getElementById(`${index}_${columnName}`);
     if (container) {
       container.innerHTML = "";
@@ -547,6 +553,9 @@ export default class extends Controller {
         this.#generateFileCell(container, columnName, index);
       } else {
         this.#generateMetadataCell(container, columnName, index);
+      }
+      if (focusCell) {
+        container.firstElementChild.focus();
       }
     }
   }

@@ -15,10 +15,8 @@
         data-action="search->nextflow--samplesheet#filter"
         class="
           t-search-component block w-full p-2.5 pl-10 text-sm text-slate-900 border
-          border-slate-300 rounded-lg bg-slate-50 focus:ring-primary-500
-          focus:border-primary-500 dark:bg-slate-700 dark:border-slate-600
-          dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500
-          dark:focus:border-primary-500
+          border-slate-300 rounded-lg bg-slate-50 dark:bg-slate-700 dark:border-slate-600
+          dark:placeholder-slate-400 dark:text-white
         "
         placeholder="<%= t('.filter_placeholder')%>"
         type="search"
@@ -107,9 +105,8 @@
   <select
     aria-label="COLUMN_NAME_PLACEHOLDER"
     class="
-      w-full focus:ring-primary-500 focus:border-primary-500 p-2.5 dark:bg-slate-700
-      bg-slate-50 border-none dark:border-none dark:placeholder-slate-400 text-inherit
-      text-sm dark:focus:ring-primary-500 dark:focus:border-primary-500 cursor-pointer
+      w-full p-2.5 dark:bg-slate-700 bg-slate-50 border-none dark:border-none
+      dark:placeholder-slate-400 text-inherit text-sm cursor-pointer
     "
     data-action="change->nextflow--samplesheet#updateEditableSamplesheetData"
     name="workflow_execution[samples_workflow_executions_attributes][INDEX_PLACEHOLDER][samplesheet_params][COLUMN_NAME_PLACEHOLDER]"
@@ -135,7 +132,7 @@
   },
   id: "ATTACHABLE_ID_PLACEHOLDER_PROPERTY_PLACEHOLDER",
   class:
-    "block p-2 text-sm border-2 border-transparent focus:ring-primary-500 focus:border-primary-500 cursor-pointer bg-inherit text-inherit dark:focus:border-primary-500 hover:border-slate-300" %>
+    "block p-2.5 text-sm cursor-pointer bg-inherit text-inherit focus:underline hover:underline" %>
 </template>
 
 <template data-nextflow--samplesheet-target="metadataCell">
@@ -148,9 +145,8 @@
   <label for="ID_PLACEHOLDER" class="sr-only">NAME_PLACEHOLDER</label>
   <input
     class="
-      bg-slate-50 border-0 text-slate-900 text-sm focus:ring-primary-500 block w-full
-      p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400
-      dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500
+      bg-slate-50 border-0 text-slate-900 text-sm block w-full p-2.5 dark:bg-slate-700
+      dark:border-slate-600 dark:placeholder-slate-400 dark:text-white
     "
     data-action="change->nextflow--samplesheet#updateEditableSamplesheetData"
     type="text"
@@ -182,8 +178,7 @@
             flex items-center justify-center h-10 px-4 leading-tight bg-white border
             cursor-pointer ms-0 border-slate-300 dark:border-slate-700 text-slate-500
             hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
-            dark:hover:bg-slate-700 dark:hover:text-white focus:ring-0
-            focus:border-primary-500 dark:focus:border-primary-500
+            dark:hover:bg-slate-700 dark:hover:text-white
           "
           data-nextflow--samplesheet-target="pageNum"
           data-action="change->nextflow--samplesheet#pageSelected"
