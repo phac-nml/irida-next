@@ -18,6 +18,7 @@
               <%= render_cell(
               tag: 'th',
               scope: 'col',
+              **aria_sort(column, @sort_key, @sort_direction),
               classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', '@2xl:sticky left-0 min-w-56 max-w-56 z-10': index.zero?, '@4xl:sticky left-56 z-10': index == 1)
                 ) do %>
                 <% if index.zero? and @abilities[:select_samples] %>
@@ -45,6 +46,7 @@
             <% @metadata_fields.each do |field| %>
               <%= render_cell(
               tag: 'th',
+              **aria_sort("metadata_#{field}", @sort_key, @sort_direction),
               data: {
                 "field-id": field
               },
