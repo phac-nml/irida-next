@@ -86,4 +86,16 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unauthorized
   end
+
+  test 'render workflow executions destroy' do
+    activities = @namespace.human_readable_activity(@namespace.retrieve_project_activity).reverse
+
+    activity_to_render = activities.find do |a|
+      a[:key] == 'activity.namespaces_project_namespace.workflow_executions.destroy_html'
+    end
+
+    get activity_path(activity_to_render[:id], dialog_type: 'workflow_executions_destroy', format: :turbo_stream)
+
+    assert_response :success
+  end
 end

@@ -253,27 +253,6 @@ module WorkflowExecutions
       end
     end
 
-    test 'should create activity for single workflow deletion in destroy_multiple' do
-      # deletion of single workflow using Delete Workflows button
-      canceled_workflow = workflow_executions(:automated_example_canceled)
-
-      assert_difference -> { WorkflowExecution.count } => -1,
-                        -> { SamplesWorkflowExecution.count } => -1,
-                        -> { PublicActivity::Activity.count } => 1 do
-        WorkflowExecutions::DestroyService.new(@user,
-                                               { workflow_execution_ids: [canceled_workflow.id],
-                                                 namespace: @namespace }).execute
-      end
-
-      activity = PublicActivity::Activity.where(
-        key: 'namespaces_project_namespace.workflow_executions.destroy'
-      ).order(created_at: :desc).first
-      assert_equal 'namespaces_project_namespace.workflow_executions.destroy', activity.key
-      assert_equal @user, activity.owner
-      assert_equal canceled_workflow.id, activity.parameters[:workflow_execution_id]
-      assert_equal 'workflow_execution_destroy', activity.parameters[:action]
-    end
-
     test 'should create activity for single workflow deletion in single destroy' do
       # deletion of single workflow using row action
       canceled_workflow = workflow_executions(:automated_example_canceled)
@@ -291,7 +270,8 @@ module WorkflowExecutions
       ).order(created_at: :desc).first
       assert_equal 'namespaces_project_namespace.workflow_executions.destroy', activity.key
       assert_equal @user, activity.owner
-      assert_equal canceled_workflow.id, activity.parameters[:workflow_execution_id]
+      assert_equal [{ id: canceled_workflow.id, name: canceled_workflow.name }],
+                   activity.parameters[:workflow_executions]
       assert_equal 'workflow_execution_destroy', activity.parameters[:action]
     end
 
@@ -308,15 +288,17 @@ module WorkflowExecutions
       end
 
       activity = PublicActivity::Activity.where(
-        key: 'namespaces_project_namespace.workflow_executions.destroy_multiple'
+        key: 'namespaces_project_namespace.workflow_executions.destroy'
       ).order(created_at: :desc).first
-      assert_equal 'namespaces_project_namespace.workflow_executions.destroy_multiple', activity.key
+      assert_equal 'namespaces_project_namespace.workflow_executions.destroy', activity.key
       assert_equal @user, activity.owner
-      assert_equal [error_workflow.id, canceled_workflow.id], activity.parameters[:workflow_execution_ids]
-      assert_equal 'workflow_execution_destroy_multiple', activity.parameters[:action]
+      assert_equal [{ id: error_workflow.id, name: error_workflow.name },
+                    { id: canceled_workflow.id, name: canceled_workflow.name }],
+                   activity.parameters[:workflow_executions]
+      assert_equal 'workflow_execution_destroy', activity.parameters[:action]
     end
 
-    test 'should create activity with accurate deletion ids when non-deletable workflow is selected' do
+    test 'should create activity with accurate deletion params when non-deletable workflow is selected' do
       canceled_workflow = workflow_executions(:automated_example_canceled)
       error_workflow = workflow_executions(:automated_example_error)
       canceling_workflow = workflow_executions(:automated_example_canceling)
@@ -332,12 +314,14 @@ module WorkflowExecutions
       end
 
       activity = PublicActivity::Activity.where(
-        key: 'namespaces_project_namespace.workflow_executions.destroy_multiple'
+        key: 'namespaces_project_namespace.workflow_executions.destroy'
       ).order(created_at: :desc).first
-      assert_equal 'namespaces_project_namespace.workflow_executions.destroy_multiple', activity.key
+      assert_equal 'namespaces_project_namespace.workflow_executions.destroy', activity.key
       assert_equal @user, activity.owner
-      assert_equal [error_workflow.id, canceled_workflow.id], activity.parameters[:workflow_execution_ids]
-      assert_equal 'workflow_execution_destroy_multiple', activity.parameters[:action]
+      assert_equal [{ id: error_workflow.id, name: error_workflow.name },
+                    { id: canceled_workflow.id, name: canceled_workflow.name }],
+                   activity.parameters[:workflow_executions]
+      assert_equal 'workflow_execution_destroy', activity.parameters[:action]
     end
 
     test 'should not create activity if only non-deletable workflows were selected' do
