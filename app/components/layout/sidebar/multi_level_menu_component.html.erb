@@ -11,15 +11,15 @@
   >
     <%= menu_icon %>
     <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap"><%= title %></span>
-    <%= viral_icon(
-      name: "chevron_down",
-      classes:
-        class_names(
-          "mr-0 w-4 h-4",
-          { "rotate-180": selectable_pages.include?(current_page) },
-        ),
-      "data-collapsible-target": "icon",
-    ) %>
+    <%= icon "caret-down",
+    class:
+      class_names(
+        "size-4 mr-0",
+        { "rotate-180" => selectable_pages.include?(current_page) },
+      ),
+    data: {
+      "collapsible-target": "icon",
+    } %>
   </button>
   <ul
     id="<%= control_id %>"
