@@ -1,0 +1,22 @@
+<% if defined?(messages) %>
+  <% messages.each do |message| %>
+    <%= turbo_stream.append "flashes" do %>
+      <%= viral_flash(type: message[:type], data: message[:message]) %>
+    <% end %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= viral_flash(type:, data: message) %>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.update "workflow_execution_dialog",
+                    partial:
+                      "shared/workflow_executions/destroy_multiple_confirmation_dialog",
+                    locals: {
+                      open: false,
+                      list_path: @list_path,
+                      destroy_path: @destroy_path,
+                    } %>
+
+<turbo-stream action="refresh"></turbo-stream>

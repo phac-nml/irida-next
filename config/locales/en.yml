@@ -19,6 +19,7 @@ en:
         destroy_bot_accounts?: You are not authorized to destroy bot accounts for group %{name} on this server.
         destroy_member?: You are not authorized to remove members for group %{name} on this server.
         destroy_metadata_templates?: You are not authorized to destroy metadata templates for group %{name} on this server.
+        destroy_workflow_executions?: You are not authorized to destroy workflow executions for group %{name} on this server.
         edit?: You are not authorized to modify group %{name} on this server.
         export_data?: You are not authorized to export data from project %{name} on this server.
         import_samples_and_metadata?: You are not authorized to import samples and metadata for group %{name} on this server.
@@ -50,6 +51,7 @@ en:
         destroy_bot_accounts?: You are not authorized to destroy bot accounts for project %{name} on this server.
         destroy_member?: You are not authorized to remove members from the project namespace %{name} on this server.
         destroy_metadata_templates?: You are not authorized to destroy metadata templates for project %{name} on this server.
+        destroy_workflow_executions?: You are not authorized to destroy workflow executions for project %{name} on this server.
         export_data?: You are not authorized to export data from project %{name} on this server.
         import_samples_and_metadata?: You are not authorized to import samples and metadata for group %{name} on this server.
         link_namespace_with_group?: You are not authorized to link project %{name} with other groups on this server.
@@ -539,6 +541,11 @@ en:
       destroy:
         error: Could not delete workflow %{workflow_name}
         success: Workflow %{workflow_name} was successfully deleted
+      destroy_multiple:
+        error: Could not delete any selected workflows
+        partial_error: "%{not_deleted} workflows could not be deleted"
+        partial_success: "%{deleted} workflows were successfully deleted"
+        success: All selected workflows were successfully deleted
       update:
         error: Could not update workflow %{workflow_name}
         success: Workflow %{workflow_name} was successfully updated
@@ -1726,6 +1733,7 @@ en:
           type: Type
       index:
         create_export_button: Create Export
+        delete_workflows_button: Delete Workflow Executions
         deselect_all_button: Deselect All
         search:
           placeholder: Filter by ID or name
@@ -1941,6 +1949,21 @@ en:
       spreadsheet_imports:
         dialog:
           spinner_message: Importing samples, this might take a while...
+    workflow_executions:
+      destroy_multiple_confirmation_dialog:
+        description:
+          plural: The selected COUNT_PLACEHOLDER workflow executions will be deleted.
+          singular: The selected workflow execution will be deleted.
+          zero: The selected 0 workflow executions will be deleted.
+        state_warning_html: Please note, only non-shared workflow executions that are in the <span class="bg-green-100 border border-green-800 dark:bg-green-900 dark:border-green-300 dark:text-green-300 font-medium px-2.5 py-0.5 rounded-full text-green-800 text-xs">Completed</span>, <span class="bg-yellow-100 border border-yellow-800 dark:bg-yellow-900 dark:border-yellow-300 dark:text-yellow-300 font-medium px-2.5 py-0.5 rounded-full text-xs text-yellow-800">Canceled</span>, and <span class="bg-red-100 border border-red-800 dark:bg-red-900 dark:border-red-300 dark:text-red-300 font-medium px-2.5 py-0.5 rounded-full text-red-800 text-xs">Error</span> states will be deleted.
+        submit_button: Confirm
+        title: Delete Workflow Executions
+        workflow_executions: Workflow Executions
+      list_workflow_execution:
+        id: 'ID:'
+        name: 'Name:'
+        run_id: 'Run ID:'
+        workflow: 'Workflow:'
   spreadsheet_helper:
     failed_parsing: 'Failed to parse spreadsheet file: %{error}'
     no_file: No file provided
@@ -2033,6 +2056,7 @@ en:
         delete_button: Delete
         delete_confirm: Are you sure you want to delete this workflow execution?
       create_export_button: Create Export
+      delete_workflows_button: Delete Workflow Executions
       deselect_all_button: Deselect All
       search:
         placeholder: Filter by ID or name

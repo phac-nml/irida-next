@@ -20,6 +20,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     @workflow_name_col = '5'
     @workflow_version_col = '6'
     @created_at_col = '7'
+
+    Flipper.enable(:delete_multiple_workflows)
   end
 
   test 'should display a list of workflow executions' do
@@ -494,5 +496,119 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_link I18n.t(:'workflow_executions.show.cancel_button')
     assert_link I18n.t(:'workflow_executions.show.edit_button')
     assert_no_link I18n.t(:'workflow_executions.show.remove_button')
+  end
+
+  test 'can successfully delete multiple workflows at once' do
+    error_workflow = workflow_executions(:irida_next_example_error)
+    canceled_workflow = workflow_executions(:irida_next_example_canceled)
+    visit workflow_executions_path
+
+    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+
+    assert_text 'Displaying 20 items'
+    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+
+    within 'table' do
+      find("input[type='checkbox'][value='#{error_workflow.id}']").click
+      find("input[type='checkbox'][value='#{canceled_workflow.id}']").click
+      find("input[type='checkbox'][value='#{@workflow_execution2.id}']").click
+    end
+
+    click_link I18n.t('workflow_executions.index.delete_workflows_button')
+
+    assert_selector '#dialog'
+    within('#dialog') do
+      assert_text I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.description.plural')
+                      .gsub! 'COUNT_PLACEHOLDER', '3'
+      assert_text ActionController::Base.helpers.strip_tags(
+        I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.state_warning_html')
+      )
+      within('#list_selections') do
+        assert_text "ID: #{error_workflow.id}"
+        assert_text "ID: #{canceled_workflow.id}"
+        assert_text "ID: #{@workflow_execution2.id}"
+      end
+      click_button I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.submit_button')
+    end
+
+    assert_no_selector '#dialog'
+
+    assert_text 'Displaying 17 items'
+    assert_selector '#workflow-executions-table table tbody tr', count: 17
+    assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.success')
+  end
+
+  test 'can partially delete multiple workflows at once' do
+    # attempt to destroy deletable and non-deletable workflows
+    visit workflow_executions_path
+
+    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+
+    assert_text 'Displaying 20 items'
+    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+
+    within 'table' do
+      find("input[type='checkbox'][value='#{@workflow_execution1.id}']").click
+      find("input[type='checkbox'][value='#{@workflow_execution2.id}']").click
+      find("input[type='checkbox'][value='#{@workflow_execution3.id}']").click
+    end
+
+    click_link I18n.t('workflow_executions.index.delete_workflows_button')
+
+    assert_selector '#dialog'
+    within('#dialog') do
+      assert_text I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.description.plural')
+                      .gsub! 'COUNT_PLACEHOLDER', '3'
+      assert_text ActionController::Base.helpers.strip_tags(
+        I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.state_warning_html')
+      )
+      within('#list_selections') do
+        assert_text "ID: #{@workflow_execution1.id}"
+        assert_text "ID: #{@workflow_execution2.id}"
+        assert_text "ID: #{@workflow_execution2.id}"
+      end
+      click_button I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.submit_button')
+    end
+
+    assert_no_selector '#dialog'
+
+    assert_text 'Displaying 18 items'
+    assert_selector '#workflow-executions-table table tbody tr', count: 18
+    assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_error', not_deleted: '1/3')
+    assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_success', deleted: '2/3')
+  end
+
+  test 'cannot delete non-deletable workflows' do
+    workflow_execution1 = workflow_executions(:irida_next_example_completed_unclean)
+    visit workflow_executions_path
+
+    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+
+    assert_text 'Displaying 20 items'
+    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
+
+    within 'table' do
+      find("input[type='checkbox'][value='#{workflow_execution1.id}']").click
+    end
+
+    click_link I18n.t('workflow_executions.index.delete_workflows_button')
+
+    assert_selector '#dialog'
+    within('#dialog') do
+      assert_text I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.description.singular')
+      assert_text ActionController::Base.helpers.strip_tags(
+        I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.state_warning_html')
+      )
+      within('#list_selections') do
+        assert_text "ID: #{workflow_execution1.id}"
+      end
+      click_button I18n.t('shared.workflow_executions.destroy_multiple_confirmation_dialog.submit_button')
+    end
+
+    assert_no_selector '#dialog'
+
+    assert_text 'Displaying 20 items'
+    assert_selector '#workflow-executions-table table tbody tr', count: 20
+    assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.error')
   end
 end

@@ -10,8 +10,10 @@
       <%= render "list_sample", sample: sample %>
     <% end %>
   <% elsif defined? @workflow_executions %>
-    <% @workflow_executions.each do |workflow_execution| %>
-      <%= render "list_workflow_execution", workflow_execution: workflow_execution %>
+    <% @workflow_executions.each_with_index do |workflow_execution, index| %>
+      <%= render "shared/workflow_executions/list_workflow_execution",
+      workflow_execution:,
+      index: %>
     <% end %>
   <% end %>
 <% end %>

@@ -19,6 +19,7 @@ fr:
         destroy_bot_accounts?: Vous n’êtes pas autorisé à détruire des comptes de bots pour le groupe %{name} sur ce serveur.
         destroy_member?: Vous n’êtes pas autorisé à supprimer des membres sous le groupe %{name} sur ce serveur.
         destroy_metadata_templates?: Vous n’êtes pas autorisé à détruire les modèles de métadonnées pour le groupe %{name} sur ce serveur.
+        destroy_workflow_executions?: You are not authorized to destroy workflow executions for group %{name} on this server.
         edit?: Vous n’êtes pas autorisé à modifier le groupe %{name} de ce serveur.
         export_data?: Vous n’êtes pas autorisé à exporter des données du projet %{name} sur ce serveur.
         import_samples_and_metadata?: Vous n’êtes pas autorisé à importer des échantillons et des métadonnées pour le groupe %{name} sur ce serveur.
@@ -50,6 +51,7 @@ fr:
         destroy_bot_accounts?: Vous n’êtes pas autorisé à détruire des comptes de bots pour le projet %{name} sur ce serveur.
         destroy_member?: Vous n’êtes pas autorisé à supprimer des membres de l’espace de noms du projet %{name} sur ce serveur.
         destroy_metadata_templates?: Vous n’êtes pas autorisé à détruire les modèles de métadonnées pour le projet %{name} sur ce serveur.
+        destroy_workflow_executions?: You are not authorized to destroy workflow executions for project %{name} on this server.
         export_data?: You are not authorized to export data from project %{name} on this server.
         import_samples_and_metadata?: You are not authorized to import samples and metadata for group %{name} on this server.
         link_namespace_with_group?: Vous n’êtes pas autorisé à lier le projet %{name} à d’autres groupes sur ce serveur.
@@ -539,6 +541,11 @@ fr:
       destroy:
         error: Impossible de supprimer le flux de travail %{workflow_name}
         success: Le flux de travail %{workflow_name} a été supprimé avec succès
+      destroy_multiple:
+        error: Could not delete any selected workflows
+        partial_error: "%{not_deleted} workflows could not be deleted"
+        partial_success: "%{deleted} workflows were successfully deleted"
+        success: All selected workflows were successfully deleted
       update:
         error: Impossible de mettre à jour le flux de travail %{workflow_name}
         success: Le flux de travail %{workflow_name} a été mis à jour avec succès
@@ -1355,7 +1362,7 @@ fr:
           descriptions:
           - Transférer votre projet dans un autre espace de noms.
           - Lorsque vous transférez votre projet à un groupe, vous pouvez facilement gérer plusieurs projets et utilisateurs.
-          - Ce qu’il faut savoir avant de transférer votre projet:
+          - 'Ce qu’il faut savoir avant de transférer votre projet:'
           empty_state: Aucun espace de noms n’est associé à ce nom ou à cet identifiant
           new_namespace_id: Sélectionnez un nouvel espace de noms
           no_available_namespaces: Vous n’avez accès à aucun espace de noms de destination pour transférer ce projet
@@ -1722,6 +1729,7 @@ fr:
           type: Type
       index:
         create_export_button: Créer une exportation
+        delete_workflows_button: Delete Workflow Executions
         deselect_all_button: Désélectionner tout
         search:
           placeholder: Filtrer par ID ou nom
@@ -1937,6 +1945,21 @@ fr:
       spreadsheet_imports:
         dialog:
           spinner_message: Importing samples, this might take a while...
+    workflow_executions:
+      destroy_multiple_confirmation_dialog:
+        description:
+          plural: The selected COUNT_PLACEHOLDER workflow executions will be deleted.
+          singular: The selected workflow execution will be deleted.
+          zero: The selected 0 workflow executions will be deleted.
+        state_warning_html: Please note, only non-shared workflow executions that are in the <span class="bg-green-100 border border-green-800 dark:bg-green-900 dark:border-green-300 dark:text-green-300 font-medium px-2.5 py-0.5 rounded-full text-green-800 text-xs">Completed</span>, <span class="bg-yellow-100 border border-yellow-800 dark:bg-yellow-900 dark:border-yellow-300 dark:text-yellow-300 font-medium px-2.5 py-0.5 rounded-full text-xs text-yellow-800">Canceled</span>, and <span class="bg-red-100 border border-red-800 dark:bg-red-900 dark:border-red-300 dark:text-red-300 font-medium px-2.5 py-0.5 rounded-full text-red-800 text-xs">Error</span> states will be deleted.
+        submit_button: Confirm
+        title: Delete Workflow Executions
+        workflow_executions: Workflow Executions
+      list_workflow_execution:
+        id: 'ID:'
+        name: 'Name:'
+        run_id: 'Run ID:'
+        workflow: 'Workflow:'
   spreadsheet_helper:
     failed_parsing: 'Failed to parse spreadsheet file: %{error}'
     no_file: No file provided
@@ -2029,6 +2052,7 @@ fr:
         delete_button: Supprimer
         delete_confirm: Êtes-vous sûr de vouloir supprimer cette exécution de flux de travail?
       create_export_button: Créer une exportation
+      delete_workflows_button: Delete Workflow Executions
       deselect_all_button: Désélectionner tout
       search:
         placeholder: Filtrer par ID ou nom

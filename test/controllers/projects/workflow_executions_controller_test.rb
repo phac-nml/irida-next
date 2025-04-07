@@ -11,6 +11,8 @@ module Projects
       @workflow_execution = workflow_executions(:automated_example_completed)
       @namespace = groups(:group_one)
       @project = projects(:project1)
+
+      Flipper.enable(:delete_multiple_workflows)
     end
 
     test 'should show a listing of workflow executions for the project' do
@@ -263,6 +265,95 @@ module Projects
       put namespace_project_workflow_execution_path(@namespace, @project, @workflow_execution, format: :turbo_stream),
           params: update_params
 
+      assert_response :unauthorized
+    end
+
+    test 'should open destroy_multiple_confirmation' do
+      get destroy_multiple_confirmation_namespace_project_workflow_executions_path(
+        @namespace, @project, format: :turbo_stream
+      )
+
+      assert_response :success
+    end
+
+    test 'should not open destroy_multiple_confirmation due to unauthorized access' do
+      sign_in users(:ryan_doe)
+      get destroy_multiple_confirmation_namespace_project_workflow_executions_path(
+        @namespace, @project, format: :turbo_stream
+      )
+
+      assert_response :unauthorized
+    end
+
+    test 'should destroy multiple workflows at once' do
+      canceled_workflow = workflow_executions(:automated_example_canceled)
+      error_workflow = workflow_executions(:automated_example_error)
+
+      assert_difference -> { WorkflowExecution.count } => -2,
+                        -> { SamplesWorkflowExecution.count } => -2 do
+                          delete destroy_multiple_namespace_project_workflow_executions_path(
+                            @namespace,
+                            @project,
+                            format: :turbo_stream
+                          ), params: { destroy_multiple:
+                                          { workflow_execution_ids: [error_workflow.id, canceled_workflow.id],
+                                            namespace: @namespace } }
+                        end
+      assert_response :success
+    end
+
+    test 'should partially destroy multiple workflows at once' do
+      canceled_workflow = workflow_executions(:automated_example_canceled)
+      error_workflow = workflow_executions(:automated_example_error)
+      running_workflow = workflow_executions(:automated_example_running)
+
+      assert_difference -> { WorkflowExecution.count } => -2,
+                        -> { SamplesWorkflowExecution.count } => -2 do
+                          delete destroy_multiple_namespace_project_workflow_executions_path(
+                            @namespace,
+                            @project,
+                            format: :turbo_stream
+                          ), params: {
+                            destroy_multiple: {
+                              workflow_execution_ids: [error_workflow.id, canceled_workflow.id,
+                                                       running_workflow.id], namespace: @namespace
+                            }
+                          }
+                        end
+      assert_response :multi_status
+    end
+
+    test 'should not destroy multiple non-deletable workflows' do
+      running_workflow = workflow_executions(:automated_example_running)
+      new_workflow = workflow_executions(:automated_example_new)
+      assert_no_difference -> { WorkflowExecution.count },
+                           -> { SamplesWorkflowExecution.count } do
+        delete destroy_multiple_namespace_project_workflow_executions_path(
+          @namespace,
+          @project,
+          format: :turbo_stream
+        ), params: {
+          destroy_multiple: { workflow_execution_ids: [running_workflow.id, new_workflow.id], namespace: @namespace }
+        }
+      end
+      assert_response :unprocessable_entity
+    end
+
+    test 'should not destroy workflows if unauthorized' do
+      sign_in users(:ryan_doe)
+      canceled_workflow = workflow_executions(:automated_example_canceled)
+      error_workflow = workflow_executions(:automated_example_error)
+
+      assert_no_difference -> { WorkflowExecution.count },
+                           -> { SamplesWorkflowExecution.count } do
+        delete destroy_multiple_namespace_project_workflow_executions_path(
+          @namespace,
+          @project,
+          format: :turbo_stream
+        ), params: {
+          destroy_multiple: { workflow_execution_ids: [canceled_workflow.id, error_workflow.id] }
+        }
+      end
       assert_response :unauthorized
     end
   end
