@@ -1975,7 +1975,6 @@ en:
           ok_button: OK
           problem_message: "%{path} %{message}"
           problems: Errors were encountered while importing the following samples.
-          success: Success
     workflow_executions:
       destroy_multiple_confirmation_dialog:
         description:
