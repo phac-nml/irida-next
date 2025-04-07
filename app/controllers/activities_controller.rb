@@ -48,6 +48,8 @@ class ActivitiesController < ApplicationController
       Activities::Dialogs::SampleActivityTableListingDialogComponent
     when 'samples_transfer', 'samples_destroy'
       Activities::Dialogs::SampleActivityListDialogComponent
+    when 'workflows_destroy'
+      Activities::Dialogs::WorkflowExecutionDestroyActivityDialogComponent
     end
   end
 

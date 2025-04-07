@@ -217,11 +217,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   def workflow_execution_activity_params(params, activity)
     if activity.parameters[:action] == 'workflow_execution_destroy'
       params.merge!({
-                      workflow_execution_id: activity.parameters[:workflow_execution_id]
-                    })
-    elsif activity.parameters[:action] == 'workflow_execution_destroy_multiple'
-      params.merge!({
-                      workflow_execution_ids: activity.parameters[:workflow_execution_ids]
+                      workflow_executions: activity.parameters[:workflow_executions]
                     })
     end
     params
