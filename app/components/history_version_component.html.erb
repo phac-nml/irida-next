@@ -50,11 +50,16 @@
                 aria-controls="<%= "accordion-collapse-body-#{index + 1}" %>"
               >
                 <span><%= key.to_s %></span>
-                <%= viral_icon(
-                  name: "chevron_down",
-                  classes: index == 0 ? "mr-0 w-4 h-4 rotate-180" : "mr-0 w-4 h-4 rotate-0",
+                <%= icon "caret-down",
+                class:
+                  class_names(
+                    "mr-0 size-4",
+                    "rotate-180" => index == 0,
+                    "rotate-0" => index != 0,
+                  ),
+                data: {
                   "data-collapsible-target": "icon",
-                ) %>
+                } %>
               </button>
             </h2>
             <div
