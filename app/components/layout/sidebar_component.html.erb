@@ -30,7 +30,7 @@
           "
           aria-label="<%= t(:'general.navbar.collapse.aria_label') %>"
         >
-          <%= viral_icon(name: "sidebar", classes: "w-6 h-6") %>
+          <%= icon "sidebar", class: "size-6" %>
         </button>
         <!-- Add new items -->
         <%= viral_dropdown(icon: "plus", skidding: -300, dropdown_styles: "width: 276px;", aria: { label: t(:'general.navbar.new_dropdown.aria_label') }, classes: "p-1 navbar-button dark:text-slate-100") do |dropdown| %>
@@ -126,7 +126,7 @@
   </div>
   <div class="p-2">
     <%= link_to "https://phac-nml.github.io/irida-next/docs/intro", target: :_blank, class: "flex-inline button button--state-default button--size-small" do %>
-      <%= viral_icon(name: :question_mark, classes: "w-4 h-4 mr-1") %>
+      <%= icon "question", class: "size-4 mr-1" %>
       <%= t("general.help") %>
     <% end %>
   </div>
