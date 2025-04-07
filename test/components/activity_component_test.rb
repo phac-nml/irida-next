@@ -15,7 +15,7 @@ class ActivityComponentTest < ViewComponentTestCase
     # Limit set to 10 per page
     @pagy = Pagy.new(count: 13, page: 1, limit: 10)
 
-    assert_equal 13, @activities.length
+    assert_equal 14, @activities.length
     assert_equal 3, @project2_activities.length
 
     assert_equal(1, @activities.count { |activity| activity[:key].include?('project_namespace.create') })
@@ -33,6 +33,10 @@ class ActivityComponentTest < ViewComponentTestCase
 
     assert_equal(1, @activities.count do |activity|
       activity[:key].include?('namespaces_project_namespace.transfer')
+    end)
+
+    assert_equal(1, @activities.count do |activity|
+      activity[:key].include?('namespaces_project_namespace.workflow_executions.destroy')
     end)
 
     assert_equal(1, @project2_activities.count { |activity| activity[:key].include?('project_namespace.create') })
