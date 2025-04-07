@@ -21,6 +21,7 @@ module Groups
       @created_at_col = '7'
 
       Flipper.enable(:workflow_execution_sharing)
+      Flipper.enable(:attachments_preview)
     end
 
     test 'should display a list of workflow executions' do
@@ -187,7 +188,12 @@ module Groups
         click_on I18n.t('workflow_executions.show.tabs.files', locale: user.locale)
       end
 
-      assert_text 'FILENAME'
+      attachment = attachments(:workflow_execution_group_shared_output_attachment)
+      within('table tbody') do
+        assert_text attachment.puid
+        assert_text attachment.file.filename.to_s
+        assert_text I18n.t('workflow_executions.attachment.preview', locale: user.locale)
+      end
 
       within %(div[id="workflow-execution-tabs"]) do
         click_on I18n.t('workflow_executions.show.tabs.params', locale: user.locale)
@@ -254,6 +260,9 @@ module Groups
       within('#turbo-confirm[open]') do
         click_button I18n.t(:'components.confirmation.confirm', locale: user.locale)
       end
+
+      assert_text I18n.t(:'concerns.workflow_execution_actions.cancel.success',
+                         workflow_name: workflow_execution.metadata['workflow_name'], locale: user.locale)
 
       assert_text workflow_execution.id
       assert_equal workflow_execution.reload.state, 'canceled'

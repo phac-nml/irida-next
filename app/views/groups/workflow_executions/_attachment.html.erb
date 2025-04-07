@@ -75,4 +75,14 @@
   <td class="px-6 py-4">
     <%= local_time_ago(attachment.created_at) %>
   </td>
+
+  <td class="px-6 py-4">
+    <%= render partial: "attachment_actions", locals: { attachment: attachment } %>
+    <% if attachment.associated_attachment %>
+      <%= render partial: "attachment_actions",
+      locals: {
+        attachment: attachment.associated_attachment,
+      } %>
+    <% end %>
+  </td>
 </tr>

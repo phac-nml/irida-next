@@ -21,6 +21,7 @@ module Projects
       @created_at_col = '7'
 
       Flipper.enable(:delete_multiple_workflows)
+      Flipper.enable(:attachments_preview)
     end
 
     test 'should display a list of workflow executions' do
@@ -456,6 +457,17 @@ module Projects
       assert_no_link I18n.t(:'workflow_executions.show.cancel_button')
       assert_no_link I18n.t(:'workflow_executions.show.edit_button')
       assert_no_link I18n.t(:'workflow_executions.show.remove_button')
+
+      within %(div[id="workflow-execution-tabs"]) do
+        click_on I18n.t('workflow_executions.show.tabs.files')
+      end
+
+      attachment = attachments(:workflow_execution_shared_with_project_output_attachment)
+      within('table tbody') do
+        assert_text attachment.puid
+        assert_text attachment.file.filename.to_s
+        assert_text I18n.t('workflow_executions.attachment.preview')
+      end
     end
 
     test 'can successfully delete multiple workflows at once' do
