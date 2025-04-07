@@ -345,20 +345,8 @@ project1_namespace_workflow_execution_destroy:
   key: "namespaces_project_namespace.workflow_executions.destroy"
   parameters:
     {
-      workflow_execution_id: ["a_workflow_id"],
+      workflow_executions: [{id: "first_workflow_id", name: "first_workflow_name"}, {id: "second_workflow_id", name: "second_workflow_name"}, {id: "third_workflow_id", name: "third_workflow_name"}],
       action: "workflow_execution_destroy",
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
-project1_namespace_workflow_execution_destroy_multiple:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  key: "namespaces_project_namespace.workflow_executions.destroy_multiple"
-  parameters:
-    {
-      workflow_execution_ids: ["first_workflow_id", "second_workflow_id"],
-      action: "workflow_execution_destroy_multiple",
     }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>

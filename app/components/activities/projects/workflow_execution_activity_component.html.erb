@@ -13,7 +13,7 @@
     <span class="block">
       <%= link_to(
         t(:"components.activity.more_details"),
-        activity_path(@activity[:id], dialog_type: "workflows_destroy"),
+        activity_path(@activity[:id], dialog_type: "workflow_executions_destroy"),
         data: {
           turbo_stream: true,
         },

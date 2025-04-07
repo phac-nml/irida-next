@@ -511,6 +511,7 @@ en:
           description: "%{user} removed %{count} workflow executions from the project"
           id: ID
           name: Name
+          title: Deleted Workflow Executions
       load_more: Load more
       more_details: More details
     breadcrumb:
