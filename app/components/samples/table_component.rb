@@ -6,7 +6,6 @@ module Samples
   # Component for rendering a table of Samples
   class TableComponent < Component
     include Ransack::Helpers::FormHelper
-    include TableHelper
 
     # rubocop:disable Metrics/ParameterLists
     def initialize(
