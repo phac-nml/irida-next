@@ -12,13 +12,13 @@
   <div class="grid place-items-start">
     <div
       class="
-        flex items-center w-full max-w-xs p-4 space-x-4 text-gray-500 bg-white
+        flex items-center w-full max-w-xs p-4 space-x-2 text-gray-500 bg-white
         rounded-lg shadow-sm rtl:space-x-reverse rtl:divide-x-reverse dark:text-gray-400
         dark:divide-gray-700 dark:bg-gray-800
       "
       role="status"
     >
-      <%= viral_icon(name: :loading, classes: "animate-spin text-primary-500") %>
+      <%= icon "circle-notch", class: "animate-spin text-primary-500" %>
       <span
         <% if id %>
         id="<%= id %>-message"
