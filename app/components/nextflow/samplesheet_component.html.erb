@@ -26,10 +26,7 @@
           absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
         "
       >
-        <%= viral_icon(
-          name: "magnifying_glass",
-          classes: "w-4 h-4 text-slate-500 dark:text-slate-400",
-        ) %>
+        <%= icon "magnifying-glass", class: "size-4 text-slate-500 dark:text-slate-400" %>
       </div>
     </div>
   </div>
@@ -42,7 +39,7 @@
     data-nextflow--samplesheet-target="error"
   >
     <span class="inline shrink-0">
-      <%= viral_icon(name: "exclamation_circle", classes: "w-5 h-5 mr-3 stroke-2") %>
+      <%= icon "warning-circle", class: "size-5 mr-3 stroke-2" %>
     </span>
     <div>
       <div
