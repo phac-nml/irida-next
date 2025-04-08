@@ -12,6 +12,7 @@
   <body class="bg-slate-50 dark:bg-slate-900">
     <main class="grid h-screen place-items-center" data-turbo="false">
       <div class="flex flex-col space-y-2">
+
         <section
           class="
             w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:w-lg xl:p-0
@@ -19,6 +20,26 @@
           "
         >
           <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+            <div class="relative">
+              <div class="absolute right-0">
+                <%= viral_dropdown(icon: "language", label: t(:"locales.#{locale}", locale: locale), aria: { label: I18n.t(:'layouts.application.language_selection.aria_label')}, classes: "flex items-center text-slate-950 dark:text-slate-300" ) do |dropdown| %>
+                  <%- I18n.available_locales.each do |locale| %>
+                    <%= dropdown.with_item(
+                      label: t(:"locales.#{locale}", locale: locale),
+                      url:
+                        url_for(
+                          locale: locale,
+                          **(params[:local].present? ? { local: params[:local] } : {}),
+                        ),
+                      lang: locale,
+                      hreflang: locale,
+                      classes: "text-sm font-medium text-slate-900 dark:text-slate-300",
+                    ) %>
+                  <%- end %>
+                <% end %>
+              </div>
+            </div>
+
             <div class="flex flex-col items-center justify-between">
               <%= render Viral::IconComponent.new(
                 name: "beaker",
@@ -31,30 +52,13 @@
                 "
               ><%= t("devise.layout.title") %></h1>
             </div>
+
             <% flash.each do |type, msg| %>
               <%= viral_alert(type: type, message: msg) %>
             <% end %>
             <%= yield %>
           </div>
         </section>
-        <div class="flex flex-row">
-          <div class="flex-grow"></div>
-          <%= viral_dropdown(icon: "language", label: t(:"locales.#{locale}", locale: locale), aria: { label: I18n.t(:'layouts.application.language_selection.aria_label')}, classes: "flex items-center text-slate-950 dark:text-slate-300" ) do |dropdown| %>
-            <%- I18n.available_locales.each do |locale| %>
-              <%= dropdown.with_item(
-                label: t(:"locales.#{locale}", locale: locale),
-                url:
-                  url_for(
-                    locale: locale,
-                    **(params[:local].present? ? { local: params[:local] } : {}),
-                  ),
-                lang: locale,
-                hreflang: locale,
-                classes: "text-sm font-medium text-slate-900 dark:text-slate-300",
-              ) %>
-            <%- end %>
-          <% end %>
-        </div>
       </div>
     </main>
   </body>
