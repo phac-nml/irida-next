@@ -23,12 +23,13 @@ module Ransack
       end
     end
 
-    def icon
+    def sort_icon
       unless @ransack_obj&.sorts.present? && @ransack_obj.sorts[0].name == URI.encode_www_form_component(@field.to_s)
         return
       end
 
-      @ransack_obj.sorts[0].dir == 'asc' ? 'arrow_up' : 'arrow_down'
+      icon_name = @ransack_obj.sorts[0].dir == 'asc' ? 'arrow-up' : 'arrow-down'
+      icon icon_name, class: 'size-4', aria: { hidden: true }
     end
   end
 end
