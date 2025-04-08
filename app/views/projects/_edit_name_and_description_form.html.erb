@@ -5,7 +5,6 @@
       <%= builder.label :name %>
       <%= builder.text_field :name,
                          required: true,
-                         autofocus: true,
                          placeholder: t(:"projects.new.placeholder") %>
       <%= render "shared/form/field_errors",
       errors: project.namespace.errors.full_messages_for(:name) %>

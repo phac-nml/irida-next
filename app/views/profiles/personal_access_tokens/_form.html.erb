@@ -4,7 +4,7 @@
       <% invalid = personal_access_token.errors.include?(:name) %>
       <div class="form-field <%= 'invalid' if invalid %>">
         <%= f.label :name %>
-        <%= f.text_field :name, required: true, autofocus: true %>
+        <%= f.text_field :name, required: true %>
         <%= render "shared/form/field_errors",
         errors: personal_access_token.errors.full_messages_for(:name) %>
       </div>
