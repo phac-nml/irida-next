@@ -240,7 +240,7 @@ export default class extends Controller {
   }
 
   #enableProcessingState(message) {
-    document.getElementById("spinner-message").innerHTML = message;
+    document.getElementById("nextflow-spinner-message").innerHTML = message;
     this.submitTarget.disabled = true;
     this.spinnerTarget.classList.remove("hidden");
   }

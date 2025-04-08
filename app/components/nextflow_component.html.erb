@@ -155,7 +155,10 @@
       class="flex items-center p-4 space-x-4"
       data-nextflow--samplesheet-target="spinner"
     >
-      <%= render SpinnerComponent.new(message: t(".processing_samplesheet")) %>
+      <%= render SpinnerComponent.new(
+        message: t(".processing_samplesheet"),
+        id: "nextflow-spinner",
+      ) %>
     </div>
   <% end %>
 </div>

@@ -2,9 +2,10 @@
 
 # Component for displaying spinner when loading
 class SpinnerComponent < Component
-  attr_reader :message
+  attr_reader :message, :id
 
-  def initialize(message:)
+  def initialize(message:, id: nil)
     @message = message
+    @id = id
   end
 end

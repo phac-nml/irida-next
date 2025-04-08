@@ -129,8 +129,8 @@ module Groups
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: 'Sample 1'
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div#spinner'
-      assert_no_selector 'div#spinner'
+      assert_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-testid="spinner"]'
 
       assert_text 'Samples: 13'
       within('table tbody') do
@@ -210,8 +210,8 @@ module Groups
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: 'Sample 1'
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div#spinner'
-      assert_no_selector 'div#spinner'
+      assert_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-testid="spinner"]'
 
       assert_text 'Samples: 13'
       within('table tbody') do
@@ -248,8 +248,8 @@ module Groups
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.puid
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div#spinner'
-      assert_no_selector 'div#spinner'
+      assert_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-testid="spinner"]'
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
@@ -288,8 +288,8 @@ module Groups
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.puid
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div#spinner'
-      assert_no_selector 'div#spinner'
+      assert_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-testid="spinner"]'
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
@@ -323,8 +323,8 @@ module Groups
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'all'
 
-      assert_selector 'div#spinner'
-      assert_no_selector 'div#spinner'
+      assert_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-testid="spinner"]'
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 10, count: 26,
                                                                            locale: @user.locale))
@@ -372,8 +372,8 @@ module Groups
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: 'Sample 1'
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div#spinner'
-      assert_no_selector 'div#spinner'
+      assert_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-testid="spinner"]'
 
       assert_text '1-13 of 13'
       within('table tbody') do
@@ -419,8 +419,8 @@ module Groups
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.puid
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div#spinner'
-      assert_no_selector 'div#spinner'
+      assert_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-testid="spinner"]'
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 1, count: 1,
                                                                            locale: @user.locale))
@@ -448,8 +448,8 @@ module Groups
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'all'
 
-      assert_selector 'div#spinner'
-      assert_no_selector 'div#spinner'
+      assert_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-testid="spinner"]'
 
       within('table thead tr') do
         assert_selector 'th', count: 9
@@ -467,8 +467,8 @@ module Groups
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'none'
 
-      assert_selector 'div#spinner'
-      assert_no_selector 'div#spinner'
+      assert_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-testid="spinner"]'
 
       assert_selector 'table thead tr th', count: 6
     end
@@ -484,8 +484,8 @@ module Groups
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'all'
 
-      assert_selector 'div#spinner'
-      assert_no_selector 'div#spinner'
+      assert_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-testid="spinner"]'
 
       within('table thead tr') do
         assert_selector 'th', count: 9
@@ -506,8 +506,8 @@ module Groups
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'none'
 
-      assert_selector 'div#spinner'
-      assert_no_selector 'div#spinner'
+      assert_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-testid="spinner"]'
 
       within('table thead tr') do
         assert_selector 'th', count: 6
@@ -761,8 +761,8 @@ module Groups
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div#spinner'
-      assert_no_selector 'div#spinner'
+      assert_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-testid="spinner"]'
 
       assert_text 'Samples: 1'
       assert_selector 'table tbody tr', count: 1
@@ -785,8 +785,8 @@ module Groups
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: ' '
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div#spinner'
-      assert_no_selector 'div#spinner'
+      assert_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-testid="spinner"]'
 
       assert_text 'Samples: 26'
       assert_selector 'tfoot strong[data-selection-target="selected"]', text: '0'
@@ -1031,8 +1031,8 @@ module Groups
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'all'
 
-      assert_selector 'div#spinner'
-      assert_no_selector 'div#spinner'
+      assert_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-testid="spinner"]'
 
       assert_selector '#samples-table table thead tr th', count: 9
       click_link I18n.t('groups.samples.index.import_metadata_button'), match: :first
@@ -1124,14 +1124,14 @@ module Groups
       fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div#spinner'
-      assert_no_selector 'div#spinner'
+      assert_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-testid="spinner"]'
 
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'all'
 
-      assert_selector 'div#spinner'
-      assert_no_selector 'div#spinner'
+      assert_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-testid="spinner"]'
 
       within('table thead tr') do
         assert_selector 'th', count: 9
@@ -1174,8 +1174,8 @@ module Groups
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'all'
 
-      assert_selector 'div#spinner'
-      assert_no_selector 'div#spinner'
+      assert_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-testid="spinner"]'
 
       within('table thead tr') do
         assert_selector 'th', count: 9
@@ -1184,8 +1184,8 @@ module Groups
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample28.name
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div#spinner'
-      assert_no_selector 'div#spinner'
+      assert_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-testid="spinner"]'
 
       ### SETUP END ###
 

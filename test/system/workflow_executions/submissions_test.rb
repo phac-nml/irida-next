@@ -1057,8 +1057,8 @@ module WorkflowExecutions
         ### ACTIONS END ###
 
         ### VERIFY START ###
-        assert_selector 'div#spinner'
-        assert_no_selector 'div#spinner'
+        assert_selector 'div#nextflow-spinner'
+        assert_no_selector 'div#nextflow-spinner'
         assert_selector %(input#samplesheet-filter) do |input|
           assert_equal 'inxt_sam_', input['value']
         end
