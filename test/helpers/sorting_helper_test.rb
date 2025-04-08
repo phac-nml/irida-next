@@ -1,34 +1,42 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'ostruct'
 
 class SortingHelperTest < ActionView::TestCase
   include SortingHelper
 
-  setup do
-    @ransack_obj = OpenStruct.new(sorts: [])
+  Sort = Struct.new(:name, :dir)
+  RansackObj = Struct.new(:sorts)
+
+  Dropdown = Struct.new(:item) do
+    def with_item(args)
+      self.item = args
+    end
   end
 
-  def sort_url(ransack_obj, sort_string)
+  setup do
+    @ransack_obj = RansackObj.new([])
+  end
+
+  def sort_url(_, sort_string)
     "/sort/#{sort_string.to_s.gsub(' ', '/')}"
   end
 
   test 'active_sort returns true when field and direction match' do
-    @ransack_obj.sorts << OpenStruct.new(name: 'email', dir: 'asc')
+    @ransack_obj.sorts << Sort.new('email', 'asc')
 
     assert active_sort(@ransack_obj, :email, :asc)
     assert active_sort(@ransack_obj, 'email', 'asc')
   end
 
   test 'active_sort returns false when field does not match' do
-    @ransack_obj.sorts << OpenStruct.new(name: 'email', dir: 'asc')
+    @ransack_obj.sorts << Sort.new('email', 'asc')
 
     assert_not active_sort(@ransack_obj, :name, :asc)
   end
 
   test 'active_sort returns false when direction does not match' do
-    @ransack_obj.sorts << OpenStruct.new(name: 'email', dir: 'asc')
+    @ransack_obj.sorts << Sort.new('email', 'asc')
 
     assert_not active_sort(@ransack_obj, :email, :desc)
   end
@@ -38,7 +46,7 @@ class SortingHelperTest < ActionView::TestCase
   end
 
   test 'sorting_item creates dropdown item with correct attributes' do
-    dropdown = OpenStruct.new
+    dropdown = Dropdown.new
     dropdown.define_singleton_method(:with_item) do |args|
       @item = args
     end
@@ -47,7 +55,7 @@ class SortingHelperTest < ActionView::TestCase
       { '.sorting.email_asc' => 'Email (A-Z)' }[key]
     end
 
-    @ransack_obj.sorts << OpenStruct.new(name: 'email', dir: 'asc')
+    @ransack_obj.sorts << Sort.new('email', 'asc')
 
     sorting_item(dropdown, @ransack_obj, :email, :asc)
 
@@ -58,7 +66,7 @@ class SortingHelperTest < ActionView::TestCase
   end
 
   test 'sorting_item uses blank icon when not actively sorted' do
-    dropdown = OpenStruct.new
+    dropdown = Dropdown.new
     dropdown.define_singleton_method(:with_item) do |args|
       @item = args
     end
