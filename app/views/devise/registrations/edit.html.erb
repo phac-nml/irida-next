@@ -8,7 +8,7 @@
     <%= f.hidden_field :locale, value: params[:locale] %>
   <% end %>
 
-  <div class="field">
+  <div class="form-field">
     <%= f.label :email %><br/>
     <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
   </div>
@@ -17,7 +17,7 @@
     <div><%= t(".confirmation_message", email: @resource.unconfirmed_email) %></div>
   <% end %>
 
-  <div class="field">
+  <div class="form-field">
     <%= f.label :password %>
     <i><%= t(".password_blank_hint") %></i><br/>
     <%= f.password_field :password, autocomplete: "new-password" %>
@@ -27,12 +27,12 @@
     <% end %>
   </div>
 
-  <div class="field">
+  <div class="form-field">
     <%= f.label :password_confirmation %><br/>
     <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
   </div>
 
-  <div class="field">
+  <div class="form-field">
     <%= f.label :current_password %>
     <i><%= t(".current_password_hint") %></i><br/>
     <%= f.password_field :current_password, autocomplete: "current-password" %>
