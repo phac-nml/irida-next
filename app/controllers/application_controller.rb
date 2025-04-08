@@ -30,10 +30,6 @@ class ApplicationController < ActionController::Base
     Logidze.with_responsible(current_user&.id, transactional: false, &)
   end
 
-  def after_sign_out_path_for(_resource_or_scope)
-    new_user_session_path
-  end
-
   def not_found(err_msg = 'Resource not found')
     if defined?(err_msg.message)
       match_data = err_msg.message.match(/Couldn't find (\w+) with 'id'=(\d+)/)
@@ -75,10 +71,8 @@ class ApplicationController < ActionController::Base
   private
 
   # Overwriting the sign_out redirect path method
-  def after_sign_out_path_for(resource_or_scope)
-    if I18n.locale != I18n.default_locale
-      params = { locale: I18n.locale }
-    end
+  def after_sign_out_path_for(_resource_or_scope)
+    params = { locale: I18n.locale } if I18n.locale != I18n.default_locale
     new_user_session_path(params)
   end
 end
