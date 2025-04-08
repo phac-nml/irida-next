@@ -237,9 +237,9 @@ fr:
         user:
           attributes:
             password:
-              confirmation: ne correspond pas à la confirmation
-              confirmation_mismatch: ne correspond pas au mot de passe
               too_short: est trop court (le minimum est de 6 caractères)
+            password_confirmation:
+              confirmation: ne correspond pas au mot de passe
         workflow_execution:
           invalid_namespace: Ne peut être qu’un groupe ou un projet
           invalid_workflow: Impossible de trouver le flux de travail avec le nom '%{workflow_name}' et la version '%{workflow_version}'

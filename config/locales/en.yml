@@ -237,9 +237,9 @@ en:
         user:
           attributes:
             password:
-              confirmation: doesn't match confirmation
-              confirmation_mismatch: doesn't match password
               too_short: is too short (minimum is 6 characters)
+            password_confirmation:
+              confirmation: doesn't match password
         workflow_execution:
           invalid_namespace: can only be Group or Project
           invalid_workflow: unable to find workflow with name '%{workflow_name}' and version '%{workflow_version}'
