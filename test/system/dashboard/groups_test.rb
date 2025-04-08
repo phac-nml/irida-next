@@ -260,10 +260,10 @@ module Dashboard
 
       assert_css '#main-content-link', visible: false
       find('#main-content-link').trigger('focus')
-      # find('html').send_keys(:tab)
       assert_css '#main-content-link', visible: true
       find('#main-content-link').trigger('click')
       assert_current_path "#{dashboard_groups_url}#main-content"
+      assert_selector '#main-content:focus'
     end
   end
 end
