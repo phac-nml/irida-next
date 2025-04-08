@@ -15,14 +15,16 @@
           data: {
             turbo_frame: "_top",
           },
-          class: "ml-1 text-sm font-normal text-slate-500 md:ml-2 dark:text-slate-400" %>
+          class:
+            "ml-1 text-sm font-normal text-slate-500 md:ml-2 dark:text-slate-400 hover:underline" %>
         <% else %>
           <%= link_to link[:name],
           URI.join(root_url, link[:path]).to_s,
           data: {
             turbo_frame: "_top",
           },
-          class: "ml-1 text-sm font-medium text-slate-600 md:ml-2 dark:text-slate-400" %>
+          class:
+            "ml-1 text-sm font-medium text-slate-600 md:ml-2 dark:text-slate-400 hover:underline" %>
         <% end %>
 
       </div>
