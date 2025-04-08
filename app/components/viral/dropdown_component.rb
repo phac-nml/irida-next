@@ -4,7 +4,7 @@ module Viral
   # Dropdown component
   class DropdownComponent < Viral::Component
     renders_many :items, Dropdown::ItemComponent
-    attr_reader :distance, :dropdown_styles, :label, :icon_name, :caret, :skidding, :trigger, :tooltip
+    attr_reader :distance, :dropdown_styles, :label, :caret, :skidding, :trigger, :tooltip
 
     TRIGGER_DEFAULT = :click
     TRIGGER_MAPPINGS = {
@@ -68,6 +68,12 @@ module Viral
           system_arguments[:classes]
         )
       }
+    end
+
+    def dropdown_icon
+      return unless @icon_name
+
+      icon @icon_name, class: class_names('size-6 flex-none', 'mr-3' => @label.present?)
     end
   end
 end

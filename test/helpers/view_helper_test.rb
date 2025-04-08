@@ -18,7 +18,7 @@ class ViewHelperTest < ActionView::TestCase
   end
 
   test 'should add assigned classes' do
-    source = viral_icon_source('bars_3')
+    source = viral_icon_source('list')
     assert source.include? 'focusable="false"'
     assert source.include? 'aria-hidden="true"'
   end
