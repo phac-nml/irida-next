@@ -33,7 +33,11 @@
               <%- I18n.available_locales.each do |locale| %>
                 <%= dropdown.with_item(
                   label: t(:"locales.#{locale}", locale: locale),
-                  url: url_for(locale: locale),
+                  url:
+                    url_for(
+                      locale: locale,
+                      **(params[:local].present? ? { local: params[:local] } : {}),
+                    ),
                   lang: locale,
                   hreflang: locale,
                   classes: "text-sm font-medium text-slate-900 dark:text-slate-300",
