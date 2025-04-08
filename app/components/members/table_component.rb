@@ -17,7 +17,6 @@ module Members
       @current_user = current_user
       @abilities = abilities
       @columns = columns
-      puts "q: #{@q.sorts[0].name} #{@q.sorts[0].dir}"
     end
     # rubocop:enable Naming/MethodParameterName, Metrics/ParameterLists
 
