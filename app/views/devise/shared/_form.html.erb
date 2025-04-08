@@ -1,6 +1,9 @@
 <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-4" }) do |f| %>
 
   <input type="hidden" name="local" value="<%=params[:local]%>"/>
+  <% if params[:locale].present? %>
+    <input type="hidden" name="locale" value="<%=params[:locale]%>"/>
+  <% end %>
 
   <div class="form-field">
     <%= f.label :email %>

@@ -30,6 +30,9 @@ fr:
         instructions: 'Suivez ce lien pour débloquer votre compte:'
         locked_info: Votre compte a été bloqué suite à un nombre d'essais de connexions manquées trop important
         unlock_button: Débloquer mon compte
+    omniauth_callbacks:
+      failure: 'Nous ne pouvons pas vous authentifier depuis %{kind} pour la raison suivante : ''%{reason}''.'
+      success: Autorisé avec succès par votre compte %{kind}.
     passwords:
       edit:
         password_confirmation_label: Confirmez votre nouveau mot de passe
@@ -56,6 +59,13 @@ fr:
         password_hint: "(%{minimum_password_length} caractères minimums)"
         signed_up: Vous êtes déjà connecté?
         submit_button: Inscription
+      signed_up: Bienvenue ! Vous vous êtes enregistré(e) avec succès.
+      signed_up_but_inactive: Vous vous êtes enregistré(e) avec succès. Cependant, nous n’avons pas pu vous connecter car votre compte n’a pas encore été activé.
+      signed_up_but_locked: Vous vous êtes enregistré(e) avec succès. Cependant, nous n’avons pas pu vous connecter car votre compte est verrouillé.
+      signed_up_but_unconfirmed: Un message avec un lien de confirmation vous a été envoyé par mail. Veuillez suivre ce lien pour activer votre compte.
+      update_needs_confirmation: Vous avez modifié votre compte avec succès, mais nous devons vérifier votre nouvelle adresse de courriel. Veuillez consulter vos courriels et cliquer sur le lien de confirmation pour confirmer votre nouvelle adresse.
+      updated: Votre compte a été modifié avec succès.
+      updated_but_not_signed_in: Votre compte a été mis à jour avec succès. Vous devez vous reconnecter car votre mot de passe a été modifié.
     sessions:
       already_signed_out: Fermeture de session réussie.
       new_with_providers:

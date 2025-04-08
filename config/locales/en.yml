@@ -144,13 +144,33 @@ en:
         description: Description
         name: Name
       user:
+        confirmation_sent_at: Confirmation sent at
+        confirmation_token: Confirmation token
+        confirmed_at: Confirmed at
+        created_at: Created at
+        current_password: Current password
+        current_sign_in_at: Current sign in at
+        current_sign_in_ip: Current sign in IP
         email: Email
+        encrypted_password: Encrypted password
+        failed_attempts: Failed attempts
         first_name: First Name
         last_name: Last Name
+        last_sign_in_at: Last sign in at
+        last_sign_in_ip: Last sign in IP
+        locked_at: Locked at
         password: Password
         password_confirmation: Password confirmation
         provider: Authentication Provider
+        remember_created_at: Remember created at
+        remember_me: Remember me
+        reset_password_sent_at: Reset password sent at
+        reset_password_token: Reset password token
+        sign_in_count: Sign in count
         uid: Authentication Provider UID
+        unconfirmed_email: Unconfirmed email
+        unlock_token: Unlock token
+        updated_at: Updated at
       workflow_execution:
         name: Name
     concerns:
@@ -1033,7 +1053,12 @@ en:
           title: No workflow executions.
   layouts:
     application:
+      language_selection:
+        aria_label: 'Selected language: English'
       site_title: IRIDA Next
+  locales:
+    en: English
+    fr: French
   mailers:
     data_export_mailer:
       email_subject: Export Ready - %{name}
@@ -1232,9 +1257,6 @@ en:
           description: You currently have no active personal access tokens.
           title: No Active Personal Access Tokens
     preferences:
-      locale_form:
-        en: English
-        fr: French
       show:
         dark_theme: Dark
         light_theme: Light

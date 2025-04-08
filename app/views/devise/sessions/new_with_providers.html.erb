@@ -1,3 +1,5 @@
+<% params = I18n.locale != I18n.default_locale ? { locale: I18n.locale } : {} %>
+
 <% if @local_account %>
   <%= render "devise/shared/form" %>
 <% end %>
@@ -5,7 +7,7 @@
   <% if @local_account %>
     <%= render "devise/shared/links" %>
     <%= link_to t(".return_button"),
-    new_user_session_path,
+    new_user_session_path(**params),
     class: "button button--state-default button--size-default w-full" %>
   <% else %>
     <%- resource_class.omniauth_providers.each do |provider| %>
@@ -13,6 +15,7 @@
                     data: {
                       turbo: false
                     },
+                    params: params,
                     class: "button button--state-default button--size-default w-full" do %>
         <span class="inline-flex items-center text-center">
           <% if Rails.configuration.auth_config["#{provider}_icon"] %>
@@ -29,7 +32,7 @@
       <% end %>
     <% end %>
     <%= link_to t(".local_button"),
-    new_user_session_path(local: true),
+    new_user_session_path(local: true, **params),
     class: "button button--state-default button--size-default w-full" %>
   <% end %>
 </div>

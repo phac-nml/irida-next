@@ -1,6 +1,8 @@
+<% params = I18n.locale != I18n.default_locale ? { locale: I18n.locale } : {} %>
+
 <%- if controller_name != 'sessions' %>
   <%= link_to t(".sign_in_link"),
-  new_session_path(resource_name),
+  new_session_path(resource_name, **params),
   class:
     "font-medium text-primary-700 underline dark:text-primary-500 hover:no-underline" %>
 <% end %>
@@ -9,7 +11,7 @@
   <span>
     <%= t(".create_an_account") %>
     <%= link_to t(".create_an_account_link"),
-    new_registration_path(resource_name),
+    new_registration_path(resource_name, **params),
     class:
       "font-medium text-primary-700 underline dark:text-primary-500 hover:no-underline ml-1" %>
   </span>
@@ -17,21 +19,21 @@
 
 <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
   <%= link_to t(".forgot_password_link"),
-  new_password_path(resource_name),
+  new_password_path(resource_name, **params),
   class:
     "font-medium text-primary-700 underline dark:text-primary-500 hover:no-underline" %>
 <% end %>
 
 <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
   <%= link_to t(".confirmation_link"),
-  new_confirmation_path(resource_name),
+  new_confirmation_path(resource_name, **params),
   class:
     "font-medium text-primary-700 underline dark:text-primary-500 hover:no-underline" %>
 <% end %>
 
 <%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
   <%= link_to t(".unlock_link"),
-  new_unlock_path(resource_name),
+  new_unlock_path(resource_name, **params),
   class:
     "font-medium text-primary-700 underline dark:text-primary-500 hover:no-underline" %>
 <% end %>

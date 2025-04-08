@@ -1,6 +1,11 @@
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-4" }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
+  <% if params[:locale].present? %>
+    <input type="hidden" name="locale" value="<%=params[:locale]%>"/>
+    <%= f.hidden_field :locale, value: params[:locale] %>
+  <% end %><%= f.hidden_field :locale, value: I18n.locale %>
+
   <div class="form-field">
     <%= f.label :email %>
     <%= f.email_field :email, autofocus: true, required: true, autocomplete: "email" %>

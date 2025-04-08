@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
   end
 
   def switch_locale(&)
-    locale = current_user.try(:locale) || I18n.default_locale
+    locale = params[:locale] || current_user.try(:locale) || I18n.default_locale
     I18n.with_locale(locale, &)
   end
 
@@ -70,5 +70,15 @@ class ApplicationController < ActionController::Base
 
   def error_message(object)
     object.errors.full_messages.to_sentence
+  end
+
+  private
+
+  # Overwriting the sign_out redirect path method
+  def after_sign_out_path_for(resource_or_scope)
+    if I18n.locale != I18n.default_locale
+      params = { locale: I18n.locale }
+    end
+    new_user_session_path(params)
   end
 end
