@@ -1,7 +1,7 @@
 <script>
   // On page load or when changing themes, best to add inline in `head` to avoid FOUC
   function isSystemTheme() {
-    return localStorage.getItem("theme") === "system";
+    return localStorage.getItem("theme") !== "dark" && localStorage.getItem("theme") !== "light";
   }
 
   function isDarkTheme() {

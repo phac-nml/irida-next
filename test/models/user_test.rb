@@ -91,7 +91,7 @@ class UserTest < ActiveSupport::TestCase
                current_password: 'password1' }
 
     assert_not @user.update_password_with_password(params)
-    assert_equal "Password confirmation doesn't match Password", @user.errors.full_messages.to_sentence
+    assert_equal "Password confirmation doesn't match password", @user.errors.full_messages.to_sentence
   end
 
   test 'unable to update password with blank password' do

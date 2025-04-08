@@ -49,10 +49,11 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
     %w[]
   end
 
-  def self.from_omniauth(auth)
+  def self.from_omniauth(auth, locale: I18n.default_locale)
     user = find_or_initialize_by(provider: auth.provider, uid: auth.uid)
     user.email = auth.info.email
     user.password = Devise.friendly_token[0, 20] if user.password.blank?
+    user.locale = locale
 
     # provider specific attributes are configured here
     case auth.provider

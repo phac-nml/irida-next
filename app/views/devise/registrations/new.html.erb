@@ -1,6 +1,11 @@
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-4" }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
+  <% if params[:locale].present? %>
+    <input type="hidden" name="locale" value="<%=params[:locale]%>"/>
+    <%= f.hidden_field :locale, value: params[:locale] %>
+  <% end %><%= f.hidden_field :locale, value: I18n.locale %>
+
   <div class="form-field">
     <%= f.label :email %>
     <%= f.email_field :email, autofocus: true, required: true, autocomplete: "email" %>
@@ -35,7 +40,7 @@
            class: "button button--state-primary button--size-default w-full" %>
 <% end %>
 
-<div class="flex"><span class="mr-2"><%= t(".signed_up") %></span>
+<div class="flex"><span class="mr-2 dark:text-white"><%= t(".signed_up") %></span>
   <div class="grid gap-2">
     <%= render "devise/shared/links" %>
   </div>

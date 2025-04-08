@@ -7,11 +7,12 @@ module Users
     protect_from_forgery with: :exception, except: %i[saml developer]
 
     def all
-      @user = User.from_omniauth(request.env['omniauth.auth'])
+      locale = locale_from_omniauth_origin
+      @user = User.from_omniauth(request.env['omniauth.auth'], locale: locale)
 
       if @user.persisted?
         sign_in_and_redirect @user, event: :authentication # this will throw if @user is not activated
-        set_flash_message(:notice, :success, kind: action_kind)
+        set_flash_message(:notice, :success, kind: action_kind, locale: locale)
       else
         # Removing extra and credentials as it can overflow some session stores
         session['devise.omniauth_data'] = request.env['omniauth.auth'].except(:extra, :credentials)
@@ -34,6 +35,14 @@ module Users
 
     def action_kind
       Rails.configuration.auth_config["#{action_name}_text"] || OmniAuth::Utils.camelize(action_name)
+    end
+
+    def locale_from_omniauth_origin
+      if request.env['omniauth.origin'] =~ URI::DEFAULT_PARSER.make_regexp
+        ::Rack::Utils.parse_query(URI(request.env['omniauth.origin']).query)['locale'] || I18n.default_locale
+      else
+        I18n.default_locale
+      end
     end
   end
 end

@@ -21,9 +21,11 @@ class SessionsController < Devise::SessionsController
   end
 
   # POST /resource/sign_in
-  # def create
-  #   super
-  # end
+  def create
+    super do
+      resource.update!(locale: params[:locale]) if params[:locale].present?
+    end
+  end
 
   # DELETE /resource/sign_out
   # def destroy

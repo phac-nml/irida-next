@@ -82,7 +82,7 @@
 }
 
 @utility card {
-  @apply rounded-md border border-slate-200 bg-slate-50 p-4 shadow-xs sm:p-6 dark:border-slate-700 dark:bg-slate-800;
+  @apply shadow-xs rounded-md border border-slate-200 bg-slate-50 p-4 sm:p-6 dark:border-slate-700 dark:bg-slate-800;
 }
 
 @utility form-field {
@@ -326,7 +326,7 @@
 }
 
 @utility viral-dropdown--button {
-  @apply hover:text-primary-700 flex items-center rounded-md border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-900 hover:bg-slate-100 focus:z-10 focus:ring-4 focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700;
+  @apply hover:text-primary-700 flex items-center rounded-md border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-900 hover:bg-slate-100 focus:z-10 focus:ring-4 focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700;
 }
 
 @utility button {
@@ -350,7 +350,7 @@
 }
 
 @utility button--state-default {
-  @apply border-slate-200 bg-white text-slate-900 hover:bg-slate-100 hover:text-slate-950 focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700;
+  @apply border-slate-200 bg-white text-slate-900 hover:bg-slate-100 hover:text-slate-950 focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700;
 }
 
 @utility button--state-destructive {
@@ -871,7 +871,7 @@
 
   /* VIRAL DIALOG */
   dialog {
-    @apply max-h-full w-full max-w-2xl overflow-y-hidden rounded-lg bg-white p-0 shadow-sm focus:outline-hidden dark:bg-slate-800;
+    @apply focus:outline-hidden max-h-full w-full max-w-2xl overflow-y-hidden rounded-lg bg-white p-0 shadow-sm dark:bg-slate-800;
     top: 50%;
     left: 50%;
     -webkit-transform: translateX(-50%) translateY(-50%);
@@ -881,11 +881,11 @@
   }
 
   dialog::backdrop {
-    @apply bg-slate-200/40 backdrop-blur-xs;
+    @apply backdrop-blur-xs bg-slate-200/40;
   }
 
   .dark dialog::backdrop {
-    @apply bg-slate-600/40 backdrop-blur-xs;
+    @apply backdrop-blur-xs bg-slate-600/40;
   }
 
   .dialog--section {
@@ -899,7 +899,7 @@
 }
 
 .pagy-nav.pagination {
-  @apply isolate inline-flex -space-x-px rounded-md shadow-xs;
+  @apply shadow-xs isolate inline-flex -space-x-px rounded-md;
 }
 
 .page.next a {
@@ -948,7 +948,7 @@ div.field_with_errors > :is(select) {
 }
 
 input[type="checkbox"] {
-  @apply text-primary-600 checked:border-primary-500 focus:ring-primary-500 dark:checked:border-primary-500 dark:checked:bg-primary-500 mt-0.5 mr-2 shrink-0 rounded-sm border-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:focus:ring-offset-slate-800;
+  @apply text-primary-600 checked:border-primary-500 focus:ring-primary-500 dark:checked:border-primary-500 dark:checked:bg-primary-500 mr-2 mt-0.5 shrink-0 rounded-sm border-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:focus:ring-offset-slate-800;
 }
 
 input[type="radio"] {
