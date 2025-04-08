@@ -17,9 +17,9 @@ module NamespaceTree
 
       def avatar_icon
         if @namespace.type == 'Group'
-          :squares_2x2
+          'stack'
         elsif @namespace.type == 'Project'
-          :rectangle_stack
+          'cards-three'
         end
       end
 
