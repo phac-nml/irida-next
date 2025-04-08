@@ -22,6 +22,8 @@ class LayoutComponentTest < ViewComponent::TestCase
         end
       end
 
+      assert_link I18n.t('components.layout.main_content_link'), count: 1, href: '#main-content'
+
       assert_selector 'aside' do
         assert_text I18n.t('general.default_sidebar.title')
         assert_selector '.Layout-Sidebar__Section' do

@@ -254,5 +254,16 @@ module Dashboard
         assert_text group.aggregated_samples_count
       end
     end
+
+    test 'can skip to content' do
+      visit dashboard_groups_url
+
+      assert_css '#main-content-link', visible: false
+      find('#main-content-link').trigger('focus')
+      assert_css '#main-content-link', visible: true
+      find('#main-content-link').trigger('click')
+      assert_current_path "#{dashboard_groups_url}#main-content"
+      assert_selector '#main-content:focus'
+    end
   end
 end

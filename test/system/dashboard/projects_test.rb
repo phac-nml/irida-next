@@ -413,5 +413,16 @@ module Dashboard
         assert_text @project2.samples.size
       end
     end
+
+    test 'can skip to content' do
+      visit dashboard_projects_url
+
+      assert_css '#main-content-link', visible: false
+      find('#main-content-link').trigger('focus')
+      assert_css '#main-content-link', visible: true
+      find('#main-content-link').trigger('click')
+      assert_current_path "#{dashboard_projects_url}#main-content"
+      assert_selector '#main-content:focus'
+    end
   end
 end

@@ -13,7 +13,6 @@
       <%= form.label :current_password %>
       <%= form.password_field :current_password,
                           required: true,
-                          autofocus: true,
                           autocomplete: "current-password" %>
       <p class="field-hint"><%= t :"profiles.passwords.update.hint" %></p>
       <%= render "shared/form/field_errors",
