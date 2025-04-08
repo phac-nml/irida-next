@@ -6,11 +6,12 @@
   <% if disclosure.present? %>
     <% case disclosure %>
     <% when :down %>
-      <%= viral_icon(name: "chevron_down", classes: "ml-2 w-4 h-4") %>
+
+      <%= icon "caret-down", class: "size-4 ml-2" %>
     <% when :up %>
-      <%= viral_icon(name: "chevron_up", classes: "ml-2 w-4 h-4") %>
+      <%= icon "caret-up", class: "size-4 ml-2" %>
     <% when :right %>
-      <%= viral_icon(name: "chevron_right", classes: "ml-2 w-4 h-4") %>
+      <%= icon "caret-right", class: "size-4 ml-2" %>
     <% end %>
   <% end %>
 <% end %>
