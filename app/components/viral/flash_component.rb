@@ -3,7 +3,7 @@
 module Viral
   # View Component for UI flash messages
   class FlashComponent < Component
-    attr_reader :type, :data, :timeout, :icon, :classes
+    attr_reader :type, :data, :timeout, :classes
 
     DEFAULT_TIMEOUT = 3500
 
