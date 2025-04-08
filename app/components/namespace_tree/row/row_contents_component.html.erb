@@ -1,78 +1,78 @@
-<%= viral_icon(name: avatar_icon(), classes: "h-5 w-5 text-slate-400 mr-2") %>
-<%= viral_avatar(
-  name: @namespace.name,
-  size: @icon_size,
-  colour_string: "#{@namespace.name}-#{@namespace.id}",
-  data: {
-    turbo: false,
-  },
-  classes: "@max-2xl:invisible @max-2xl:hidden",
-) %>
+<%= icon avatar_icon(), class: "size-5 text-slate-400 mr-2") %>
+  <%= viral_avatar(
+    name: @namespace.name,
+    size: @icon_size,
+    colour_string: "#{@namespace.name}-#{@namespace.id}",
+    data: {
+      turbo: false,
+    },
+    classes: "@max-2xl:invisible @max-2xl:hidden",
+  ) %>
 
-<div class="flex items-center ml-2 namespace-text-container grow">
-  <div class="flex flex-col namespace-text">
-    <div class="flex flex-wrap items-center space-x-2 font-semibold title">
-      <%= link_to namespace_path, data: { turbo: false }, class: "hover:underline" do %>
-        <%= highlight(
-          @namespace.name,
-          defined?(@search_params[:name_or_puid_cont]) &&
-            @search_params[:name_or_puid_cont],
-          highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
-        ) %>
-      <% end %>
-      <div class="flex flex-wrap space-x-2 items-center">
-        <%= render PuidComponent.new(puid: @namespace.puid) %>
-        <%= viral_pill(
-          text:
-            t(
-              :"members.access_levels.level_#{Member.effective_access_level(@namespace, Current.user)}",
-            ),
-          color: "transparent",
-          border: true,
-        ) %>
+  <div class="flex items-center ml-2 namespace-text-container grow">
+    <div class="flex flex-col namespace-text">
+      <div class="flex flex-wrap items-center space-x-2 font-semibold title">
+        <%= link_to namespace_path, data: { turbo: false }, class: "hover:underline" do %>
+          <%= highlight(
+            @namespace.name,
+            defined?(@search_params[:name_or_puid_cont]) &&
+              @search_params[:name_or_puid_cont],
+            highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+          ) %>
+        <% end %>
+        <div class="flex flex-wrap space-x-2 items-center">
+          <%= render PuidComponent.new(puid: @namespace.puid) %>
+          <%= viral_pill(
+            text:
+              t(
+                :"members.access_levels.level_#{Member.effective_access_level(@namespace, Current.user)}",
+              ),
+            color: "transparent",
+            border: true,
+          ) %>
+        </div>
       </div>
+      <p class="text-sm text-gray-500 dark:text-gray-400">
+        <%= @namespace.description %>
+      </p>
     </div>
-    <p class="text-sm text-gray-500 dark:text-gray-400">
-      <%= @namespace.description %>
-    </p>
   </div>
-</div>
 
-<div
-  class="
-    flex flex-row-reverse gap-x-3 text-slate-500 dark:text-slate-400
-    @max-4xl:invisible @max-4xl:hidden
-  "
->
-  <% if @namespace.type == "Group" %>
-    <%= viral_tooltip(title: t(:'.stats.samples')) do %>
-      <span
-        id="<%= "#{dom_id(@namespace)}-samples-count" %>"
-        class="flex items-center text-sm samples-count"
-      >
-        <%= viral_icon(name: :beaker, color: :subdued, classes: "h-5 w-5 mr-1") %><%= @namespace.aggregated_samples_count %>
-      </span>
+  <div
+    class="
+      flex flex-row-reverse gap-x-3 text-slate-500 dark:text-slate-400
+      @max-4xl:invisible @max-4xl:hidden
+    "
+  >
+    <% if @namespace.type == "Group" %>
+      <%= viral_tooltip(title: t(:'.stats.samples')) do %>
+        <span
+          id="<%= "#{dom_id(@namespace)}-samples-count" %>"
+          class="flex items-center text-sm samples-count"
+        >
+          <%= icon "flask", class: "size-5 text-slate-500 dark:text-slate-300" %><%= @namespace.aggregated_samples_count %>
+        </span>
+      <% end %>
+      <%= viral_tooltip(title: t(:'.stats.projects')) do %>
+        <span class="flex items-center text-sm">
+          <%= viral_icon(name: :rectangle_stack, color: :subdued, classes: "h-5 w-5 mr-1") %>
+          <%= @namespace.project_namespaces.count %>
+        </span>
+      <% end %>
+      <%= viral_tooltip(title: t(:'.stats.subnamespaces')) do %>
+        <span class="flex items-center text-sm">
+          <%= viral_icon(name: :squares_2x2, color: :subdued, classes: "h-5 w-5 mr-1") %><%= @namespace.children.count %>
+        </span>
+      <% end %>
     <% end %>
-    <%= viral_tooltip(title: t(:'.stats.projects')) do %>
-      <span class="flex items-center text-sm">
-        <%= viral_icon(name: :rectangle_stack, color: :subdued, classes: "h-5 w-5 mr-1") %>
-        <%= @namespace.project_namespaces.count %>
-      </span>
+    <% if @namespace.type == "Project" %>
+      <%= viral_tooltip(title: t(:'.stats.samples')) do %>
+        <span
+          id="<%= "#{dom_id(@namespace.project)}-samples-count" %>"
+          class="flex items-center text-sm"
+        >
+          <%= viral_icon(name: :beaker, color: :subdued, classes: "h-5 w-5") %><%= @namespace.project.samples.size %>
+        </span>
+      <% end %>
     <% end %>
-    <%= viral_tooltip(title: t(:'.stats.subnamespaces')) do %>
-      <span class="flex items-center text-sm">
-        <%= viral_icon(name: :squares_2x2, color: :subdued, classes: "h-5 w-5 mr-1") %><%= @namespace.children.count %>
-      </span>
-    <% end %>
-  <% end %>
-  <% if @namespace.type == "Project" %>
-    <%= viral_tooltip(title: t(:'.stats.samples')) do %>
-      <span
-        id="<%= "#{dom_id(@namespace.project)}-samples-count" %>"
-        class="flex items-center text-sm"
-      >
-        <%= viral_icon(name: :beaker, color: :subdued, classes: "h-5 w-5") %><%= @namespace.project.samples.size %>
-      </span>
-    <% end %>
-  <% end %>
-</div>
+  </div>
