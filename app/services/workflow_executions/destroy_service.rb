@@ -29,27 +29,33 @@ module WorkflowExecutions
     def destroy_multiple
       authorize! @namespace, to: :destroy_workflow_executions? unless @namespace.nil?
 
-      workflow_executions_scope = if @namespace
-                                    authorized_scope(WorkflowExecution, type: :relation, as: :automated,
-                                                                        scope_options: { project: @namespace.project })
-                                  else
-                                    authorized_scope(WorkflowExecution, type: :relation, as: :user,
-                                                                        scope_options: { user: current_user })
-                                  end
+      workflow_executions_scope = query_workflow_executions
       deletable_workflow_executions = workflow_executions_scope.where(
         id: @workflow_execution_ids,
         state: %w[completed canceled error], cleaned: true
       )
 
-      deleted_workflow_executions = deletable_workflow_executions.pluck(:id, :name).map do |id, name|
+      deletable_workflow_params_for_activity = deletable_workflow_executions.pluck(:id, :name).map do |id, name|
         { id: id, name: name }
       end
 
       deletable_workflow_executions.destroy_all
 
-      create_activity(deleted_workflow_executions) if deleted_workflow_executions.count.positive? && !@namespace.nil?
+      if deletable_workflow_params_for_activity.count.positive? && !@namespace.nil?
+        create_activity(deletable_workflow_params_for_activity)
+      end
 
-      deleted_workflow_executions.count
+      deletable_workflow_params_for_activity.count
+    end
+
+    def query_workflow_executions
+      if @namespace
+        authorized_scope(WorkflowExecution, type: :relation, as: :automated,
+                                            scope_options: { project: @namespace.project })
+      else
+        authorized_scope(WorkflowExecution, type: :relation, as: :user,
+                                            scope_options: { user: current_user })
+      end
     end
 
     def create_activity(deleted_workflow_executions)
