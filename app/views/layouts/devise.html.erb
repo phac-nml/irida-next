@@ -29,7 +29,7 @@
                 md:text-2xl dark:text-white
               "
             ><%= t("devise.layout.title") %></h1>
-            <%= viral_dropdown(icon: "language", label: locale.to_s.upcase, aria: { label: I18n.t(:'layouts.application.language_selection.aria_label')}, classes: "viral-dropdown--button flex items-center text-slate-500" ) do |dropdown| %>
+            <%= viral_dropdown(icon: "language", label: locale.to_s.upcase, aria: { label: I18n.t(:'layouts.application.language_selection.aria_label')}, classes: "viral-dropdown--button flex items-center text-slate-950 dark:text-slate-300" ) do |dropdown| %>
               <%- I18n.available_locales.each do |locale| %>
                 <%= dropdown.with_item(
                   label: t(:"locales.#{locale}", locale: locale),
