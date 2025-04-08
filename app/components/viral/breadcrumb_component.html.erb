@@ -7,7 +7,7 @@
     <li class="max-md:hidden md:visible inline-flex items-center">
       <div class="flex items-center">
         <% if index > 0 %>
-          <%= viral_icon(name: "chevron_right", classes: "w-3 h-3 text-slate-300") %>
+          <%= icon "caret-right", class: "size-3 text-slate-300" %>
         <% end %>
         <%= link_to link[:name],
         URI.join(root_url, link[:path]).to_s,
