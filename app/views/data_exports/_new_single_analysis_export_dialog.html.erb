@@ -16,11 +16,11 @@
             aria-controls="<%= "accordion-collapse-body-workflows" %>"
           >
             <span><%= t(".single_selection") %></span>
-            <%= viral_icon(
-              name: "chevron_down",
-              classes: "mr-0 w-4 h-4 rotate-0",
-              "data-collapsible-target": "icon",
-            ) %>
+            <%= icon "caret-down",
+            class: "mr-0 size-4 rotate-0",
+            data: {
+              collapsible_target: "icon",
+            } %>
           </button>
         </h2>
 
