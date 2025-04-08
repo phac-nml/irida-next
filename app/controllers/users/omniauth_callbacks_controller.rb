@@ -7,7 +7,7 @@ module Users
     protect_from_forgery with: :exception, except: %i[saml developer]
 
     def all
-      locale = ::Rack::Utils.parse_query(URI(request.env['omniauth.origin']).query)['locale'] || I18n.default_locale
+      locale = locale_from_omniauth_origin
       @user = User.from_omniauth(request.env['omniauth.auth'], locale: locale)
 
       if @user.persisted?
@@ -35,6 +35,14 @@ module Users
 
     def action_kind
       Rails.configuration.auth_config["#{action_name}_text"] || OmniAuth::Utils.camelize(action_name)
+    end
+
+    def locale_from_omniauth_origin
+      if request.env['omniauth.origin'] =~ URI::DEFAULT_PARSER.make_regexp
+        ::Rack::Utils.parse_query(URI(request.env['omniauth.origin']).query)['locale'] || I18n.default_locale
+      else
+        I18n.default_locale
+      end
     end
   end
 end
