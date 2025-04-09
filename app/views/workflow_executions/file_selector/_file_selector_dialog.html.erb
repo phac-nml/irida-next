@@ -26,12 +26,7 @@
               '
             >
               <tr>
-                <th
-                  class="sticky left-0 px-3 py-3 bg-slate-50 dark:bg-slate-700"
-                  aria-hidden="true"
-                >
-                </th>
-                <th class="px-3 py-3">
+                <th class="pr-3 pl-10.5 py-3 bg-slate-50 dark:bg-slate-700">
                   <%= t(".headers.filename") %>
                 </th>
                 <th class="px-3 py-3">
@@ -61,19 +56,13 @@
                     bg-white border-b border-slate-200 dark:bg-slate-800 dark:border-slate-700
                   "
                 >
-                  <td class="sticky left-0 px-3 py-3 bg-white dark:bg-slate-800">
+                  <td class="px-3 py-3 bg-white dark:bg-slate-800">
                     <%= form.radio_button "attachment_id",
                                       attachment[:id],
                                       checked:
                                         file_selector_params["selected_id"] &&
                                           file_selector_params["selected_id"] == attachment[:id] %>
-
-                  </td>
-                  <td class="px-3 py-3">
-                    <label
-                      class="hover:underline cursor-pointer"
-                      for="attachment_id_<%= attachment[:id] %>"
-                    ><%= attachment[:filename] %></label>
+                    <label class="cursor-pointer ml-2.5" for="attachment_id_<%= attachment[:id] %>"><%= attachment[:filename] %></label>
                   </td>
                   <td class="px-3 py-3"><%= viral_pill(
                       text: attachment[:metadata]["format"],
@@ -93,14 +82,12 @@
               <% end %>
               <% unless file_selector_params["required_properties"].present? && file_selector_params["required_properties"].include?(file_selector_params["property"]) %>
                 <tr class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
-                  <td class="sticky left-0 px-3 py-3 bg-white dark:bg-slate-800">
+                  <td class="px-3 py-3 bg-white dark:bg-slate-800">
                     <%= form.radio_button "attachment_id",
                                       "no_attachment",
                                       checked: file_selector_params["selected_id"].empty? %>
 
-                  </td>
-                  <td class="px-3 py-3">
-                    <label class="hover:underline cursor-pointer" for="attachment_id_no_attachment">
+                    <label class="cursor-pointer ml-2.5" for="attachment_id_no_attachment">
                       <%= t(".no_file") %>
                     </label>
                   </td>
