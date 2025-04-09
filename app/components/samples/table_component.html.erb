@@ -84,7 +84,7 @@
                     <%= check_box_tag "sample_ids[]",
                     sample.id,
                     nil,
-                    id: dom_id(sample),
+                    id: dom_id(sample, :checkbox),
                     "aria-label": sample.name,
                     data: {
                       action: "input->selection#toggle",
