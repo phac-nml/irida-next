@@ -14,7 +14,7 @@ module Projects
     end
 
     test 'should transfer project' do
-      visit project_edit_path(@project)
+      visit namespace_project_edit_path(@project.namespace.parent, @project)
       find('input.select2-input').click
       find("button[data-viral--select2-primary-param='#{@namespace.full_path}']").click
       assert_selector 'input.select2-input', count: 1
@@ -30,7 +30,7 @@ module Projects
     end
 
     test 'empty state of transfer group' do
-      visit project_edit_path(@project)
+      visit namespace_project_edit_path(@project.namespace.parent, @project)
       find('input.select2-input').fill_in with: 'invalid project name or puid'
       assert_text I18n.t(:'projects.edit.advanced.transfer.empty_state')
     end
@@ -38,7 +38,7 @@ module Projects
     test 'should display error message when user attempts to transfer to namespace with same project name' do
       project2 = projects(:project2)
 
-      visit project_edit_path(project2)
+      visit namespace_project_edit_path(project2.namespace.parent, project2)
       find('input.select2-input').click
       find("button[data-viral--select2-primary-param='#{@namespace.full_path}']").click
       assert_selector 'input.select2-input', count: 1

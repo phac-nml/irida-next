@@ -15,7 +15,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'should show the project' do
     sign_in users(:john_doe)
 
-    get project_path(projects(:project1))
+    get namespace_project_path(projects(:project1).namespace.parent, projects(:project1))
     assert_response :success
 
     w3c_validate 'Project Show Page'
@@ -30,14 +30,14 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project_member = members(:project_one_member_john_doe)
     project_member.expires_at = 10.days.ago.to_date
     project_member.save
-    get project_path(projects(:project1))
+    get namespace_project_path(projects(:project1).namespace.parent, projects(:project1))
     assert_response :unauthorized
   end
 
   test 'should not show the project' do
     sign_in users(:micha_doe)
 
-    get project_path(projects(:project1))
+    get namespace_project_path(projects(:project1).namespace.parent, projects(:project1))
     assert_response :unauthorized
   end
 
@@ -66,7 +66,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
                                                         parent_id: parent_namespace.id } } }
     end
 
-    assert_redirected_to project_path(Project.last)
+    assert_redirected_to namespace_project_path(Project.last.namespace.parent, Project.last)
   end
 
   test 'should not create a new project under another user\'s namespace' do
@@ -105,11 +105,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'should update a project which is a part of a parent group and of which the user is a member' do
     sign_in users(:john_doe)
 
-    patch project_path(projects(:project2)),
+    patch namespace_project_path(projects(:project2).namespace.parent, projects(:project2)),
           params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } },
                     format: :turbo_stream }
 
-    assert_redirected_to project_edit_path(projects(:project2).reload)
+    assert_redirected_to namespace_project_edit_path(projects(:project2).namespace.parent, projects(:project2).reload)
   end
 
   test 'should update a project which which is under the user\'s namespace' do
@@ -117,11 +117,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     project = projects(:john_doe_project2)
 
-    patch project_path(project),
+    patch namespace_project_path(project.namespace.parent, project),
           params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } },
                     format: :turbo_stream }
 
-    assert_redirected_to project_edit_path(project.reload)
+    assert_redirected_to namespace_project_edit_path(project.namespace.parent, project.reload)
   end
 
   test 'should not update a project which which is under another user\'s namespace' do
@@ -129,7 +129,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     project = projects(:john_doe_project2)
 
-    patch project_path(project),
+    patch namespace_project_path(project.namespace.parent, project),
           params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'awesome-project-2' } } }
 
     assert_response :unauthorized
@@ -140,7 +140,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     project = projects(:john_doe_project2)
 
-    patch project_path(project),
+    patch namespace_project_path(project.namespace.parent, project),
           params: { project: { namespace_attributes: { name: 'Awesome Project 2', path: 'VERY BAD PATH' } } }
 
     assert_response :unauthorized

@@ -191,7 +191,7 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def children_allowed?
-    false if project_namespace?
+    return false if project_namespace?
 
     ancestors.count >= Namespace::MAX_ANCESTORS - 2
   end

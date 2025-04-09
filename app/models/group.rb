@@ -58,6 +58,7 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
   has_many :shared_project_namespaces, through: :shared_project_namespace_links,
                                        class_name: 'Namespaces::ProjectNamespace', source: :namespace
   has_many :shared_namespaces, through: :shared_namespace_links, source: :namespace
+  has_many :active_shared_namespaces, -> { not_expired }, through: :shared_namespace_links, source: :namespace
   has_many :shared_projects, through: :shared_project_namespaces, class_name: 'Project', source: :project
   has_many :shared_with_groups, through: :shared_with_group_links, source: :group
 
@@ -72,46 +73,34 @@ class Group < Namespace # rubocop:disable Metrics/ClassLength
   def metadata_fields
     metadata_fields = metadata_summary.keys
 
-    metadata_fields.concat shared_namespace_metadata_keys(self)
+    # add metadata fields from shared namespaces
+    metadata_fields.concat(
+      Namespace
+      .where(
+        id: NamespaceGroupLink
+          .not_expired
+          .with_access
+          .where(
+            group_id: self_and_descendant_ids
+          ).select(:namespace_id)
+      ).pluck(:metadata_summary).map(&:keys).reduce(:+) || []
+    )
 
-    descendants.each do |descendant|
-      metadata_fields.concat shared_namespace_metadata_keys(descendant)
-    end
-    metadata_fields.uniq
+    metadata_fields.sort.uniq
   end
 
-  def shared_namespace_metadata_keys(namespace)
-    metadata_fields = []
-    namespace.shared_groups.each do |shared_group|
-      metadata_fields.concat shared_group.metadata_summary.keys
-    end
-
-    namespace.shared_project_namespaces.each do |shared_project_namespace|
-      metadata_fields.concat shared_project_namespace.metadata_summary.keys
-    end
-    metadata_fields
-  end
-
-  def aggregated_samples_count # rubocop:disable Metrics/AbcSize
-    minimum_access_level = Member::AccessLevel::GUEST
-
+  def aggregated_samples_count
     active_shared_namespaces = Namespace
                                .where(
                                  id: NamespaceGroupLink
                                    .not_expired
-                                   .where(group_id: self_and_descendant_ids, group_access_level: minimum_access_level..)
+                                   .with_access
+                                   .where(group_id: self_and_descendant_ids)
                                    .select(:namespace_id)
                                ).self_and_descendants.where(type: [Namespaces::ProjectNamespace.sti_name])
                                .where.not(id: self_and_descendants_of_type([Namespaces::ProjectNamespace.sti_name]).ids)
 
-    return samples_count unless active_shared_namespaces.any?
-
-    aggregated_samples_count = samples_count
-    active_shared_namespaces.find_each do |project_namespace|
-      aggregated_samples_count += project_namespace.project.samples.size
-    end
-
-    aggregated_samples_count
+    samples_count + Project.where(namespace_id: active_shared_namespaces).sum(:samples_count)
   end
 
   def retrieve_group_activity
