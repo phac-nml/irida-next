@@ -20,6 +20,7 @@
         <% @columns.each_with_index do |column, index| %>
           <%= render_cell(
             tag: 'th',
+            **(@q.sorts&.first ? helpers.aria_sort(column, @q.sorts.first.name, @q.sorts.first.dir) : {}),
             scope: 'col',
             classes: class_names('px-6 py-3 bg-slate-100 dark:bg-slate-900 dark:text-slate-400', 'sticky left-0 z-10 flex': index.zero?)
           ) do %>
