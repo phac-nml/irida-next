@@ -477,6 +477,7 @@ fr:
       load_more: Charger plus
       more_details: More details
     breadcrumb:
+      aria_label: Breadcrumb
       dropdown:
         aria_label: Breadcrumb dropdown
     clipboard:
