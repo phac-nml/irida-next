@@ -1,0 +1,9 @@
+<%# Define a hash mapping providers to their icons %>
+<% provider_icons = {
+  :entra_id => render(EntraIdIconComponent.new(classes: "w-4 h-4 mr-2 -ml-1")),
+  :developer => icon("terminal-window", class: "w-4 h-4 mr-2 -ml-1"),
+  :saml => icon("lock", class: "w-4 h-4 mr-2 -ml-1")
+} %>
+
+<%# Render the appropriate icon based on the provider %>
+<%= provider_icons[@provider] %>
