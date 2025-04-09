@@ -783,8 +783,8 @@ module Projects
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: sample3.puid
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       # verify limit is still 10
       assert_selector 'div#limit-component button span', text: '10'
@@ -864,8 +864,8 @@ module Projects
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.puid
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       # verify sort is still applied
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
@@ -888,8 +888,8 @@ module Projects
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -916,8 +916,8 @@ module Projects
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample2.puid
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -939,8 +939,8 @@ module Projects
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: 'sample'
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -963,8 +963,8 @@ module Projects
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.puid
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -993,8 +993,8 @@ module Projects
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: filter_text
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       assert_selector "tr[id='#{@sample1.id}']"
       assert_no_selector "tr[id='#{@sample2.id}']"
@@ -1046,8 +1046,8 @@ module Projects
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: filter_text
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -1113,8 +1113,8 @@ module Projects
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'all'
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       within('#samples-table table thead tr') do
         assert_selector 'th', count: 7
@@ -1190,8 +1190,8 @@ module Projects
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'all'
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       within('#samples-table table thead tr') do
         assert_selector 'th', count: 7
@@ -1278,8 +1278,8 @@ module Projects
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'all'
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       within('#samples-table table thead tr') do
         assert_selector 'th', count: 7
@@ -1372,8 +1372,8 @@ module Projects
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'all'
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       assert_selector '#samples-table table thead tr th', count: 7
       within('#samples-table table') do
@@ -1516,8 +1516,8 @@ module Projects
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'all'
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       within("tr[id='#{@sample32.id}']") do
         # value for metadatafield1, which is blank on the csv to import and will be left unchanged after import
@@ -1577,8 +1577,8 @@ module Projects
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'all'
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       within("tr[id='#{@sample32.id}']") do
         # value for metadatafield1, which is blank on the csv to import and will be deleted by the import
@@ -1730,8 +1730,8 @@ module Projects
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'all'
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       assert_selector '#samples-table table thead tr th', count: 7
       within('#samples-table table thead') do
@@ -1805,8 +1805,8 @@ module Projects
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'all'
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       # metadata that does not overwriting analysis values will still be added
       within('#samples-table table thead tr') do
@@ -2414,8 +2414,8 @@ module Projects
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: samples(:sample1).name
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 1
@@ -2436,8 +2436,8 @@ module Projects
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: ' '
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       within 'tfoot' do
         assert_text "#{I18n.t('samples.table_component.counts.samples')}: 3"
@@ -2990,14 +2990,14 @@ module Projects
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'all'
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       within('table thead tr') do
         assert_selector 'th', count: 7
@@ -3044,8 +3044,8 @@ module Projects
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'all'
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       assert_selector 'table thead tr th', count: 7
 
@@ -3074,8 +3074,8 @@ module Projects
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'all'
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       within('table thead tr') do
         assert_selector 'th', count: 7
@@ -3084,8 +3084,8 @@ module Projects
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample2.name
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
       ### SETUP END ###
 
       ### VERIFY START ###
@@ -3106,14 +3106,14 @@ module Projects
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'all'
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       within('table thead tr') do
         assert_selector 'th', count: 7
@@ -3158,15 +3158,15 @@ module Projects
       fill_in placeholder: I18n.t(:'projects.samples.table_filter.search.placeholder'), with: @sample1.name
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       # toggle metadata on for samples table
       click_button I18n.t('shared.samples.metadata_templates.label')
       choose 'q[metadata_template]', option: 'all'
 
-      assert_selector 'div[data-testid="spinner"]'
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       within('table thead tr') do
         assert_selector 'th', count: 7

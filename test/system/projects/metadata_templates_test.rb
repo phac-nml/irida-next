@@ -186,9 +186,9 @@ module Projects
         )
       end
 
-      assert_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
       assert_text I18n.t('metadata_templates.table_component.spinner_message')
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       table_row = find(:table_row, ['Project Template011'])
 
@@ -233,7 +233,7 @@ module Projects
       end
 
       assert_no_selector "div[data-controller='viral--flash']"
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
       assert_no_text I18n.t('metadata_templates.table_component.spinner_message')
     end
 
@@ -275,7 +275,7 @@ module Projects
       end
 
       assert_no_selector "div[data-controller='viral--flash']"
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
       assert_no_text I18n.t('metadata_templates.table_component.spinner_message')
     end
 
@@ -321,9 +321,9 @@ module Projects
         )
       end
 
-      assert_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
       assert_text I18n.t('metadata_templates.table_component.spinner_message')
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       table_row = find(:table_row, ['Project Template011'])
 
@@ -359,7 +359,7 @@ module Projects
       end
 
       assert_no_selector "div[data-controller='viral--flash']"
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
       assert_no_text I18n.t('metadata_templates.table_component.spinner_message')
     end
 
@@ -499,9 +499,9 @@ module Projects
         )
       end
 
-      assert_selector 'div[data-testid="spinner"]'
+      assert_selector 'div[data-test-selector="spinner"]'
       assert_text I18n.t('metadata_templates.table_component.spinner_message')
-      assert_no_selector 'div[data-testid="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
 
       assert_equal 5, metadata_template.reload.fields.length
       assert_equal 'Project Template011', metadata_template.name
