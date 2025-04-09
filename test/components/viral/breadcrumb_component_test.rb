@@ -16,8 +16,8 @@ module Viral
 
       render_inline(Viral::BreadcrumbComponent.new(context_crumbs:))
       assert_text groups(:group_one).name
-      assert_selector 'a', count: 2
-      assert_selector 'svg', count: 1
+      assert_selector 'li[class~="md:visible"] a', count: 2
+      assert_selector 'li[class~="md:visible"] svg', count: 1
     end
 
     test 'compound path' do
@@ -32,8 +32,8 @@ module Viral
       render_inline(Viral::BreadcrumbComponent.new(context_crumbs:))
       assert_text groups(:group_one).name
       assert_text I18n.t('groups.edit.title', raise: true)
-      assert_selector 'a', count: 2
-      assert_selector 'svg', count: 1
+      assert_selector 'li[class~="md:visible"] a', count: 2
+      assert_selector 'li[class~="md:visible"] svg', count: 1
     end
 
     test 'route with no extra crumbs' do
@@ -44,7 +44,7 @@ module Viral
 
       render_inline(Viral::BreadcrumbComponent.new(context_crumbs:))
       assert_text groups(:group_one).name
-      assert_selector 'a', count: 1
+      assert_selector 'li[class~="md:visible"] a', count: 1
     end
 
     test 'compound path with missing translation' do
@@ -58,8 +58,8 @@ module Viral
 
       render_inline(Viral::BreadcrumbComponent.new(context_crumbs:))
       assert_text groups(:group_one).name
-      assert_selector 'a', count: 2
-      assert_selector 'svg', count: 1
+      assert_selector 'li[class~="md:visible"] a', count: 2
+      assert_selector 'li[class~="md:visible"] svg', count: 1
     end
 
     test 'context crumbs not an array' do
