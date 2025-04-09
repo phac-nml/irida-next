@@ -22,7 +22,7 @@
           <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
             <div class="relative">
               <div class="absolute right-0">
-                <%= viral_dropdown(icon: "language", label: t(:"locales.#{locale}", locale: locale), aria: { label: I18n.t(:'layouts.application.language_selection.aria_label')}, classes: "flex items-center text-slate-950 dark:text-slate-300" ) do |dropdown| %>
+                <%= viral_dropdown(icon: "translate", label: t(:"locales.#{locale}", locale: locale), aria: { label: I18n.t(:'layouts.application.language_selection.aria_label')}, classes: "flex items-center text-slate-950 dark:text-slate-300" ) do |dropdown| %>
                   <%- I18n.available_locales.each do |locale| %>
                     <%= dropdown.with_item(
                       label: t(:"locales.#{locale}", locale: locale),
@@ -40,10 +40,7 @@
             </div>
 
             <div class="flex flex-col items-center justify-between">
-              <%= render Viral::IconComponent.new(
-                name: "beaker",
-                classes: "w-20 h-20 text-green-500 rotate-12",
-              ) %>
+              <%= icon "flask", class: "size-20 text-green-500 rotate-12" %>
               <h1
                 class="
                   text-xl font-bold leading-tight tracking-tight text-center text-slate-900
