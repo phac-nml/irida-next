@@ -11,25 +11,29 @@
   <% component.with_buttons do %>
     <div class="flex flex-row">
       <% if @workflow_execution.completed? %>
-        <%= link_to t(".create_export_button"),
-        new_data_export_path(
+        <%= button_to t(".create_export_button"),
+        new_data_export_path,
+        params: {
           export_type: "analysis",
           analysis_type: "user",
           workflow_execution_id: @workflow_execution.id,
           single_workflow: true,
-        ),
+        },
+        method: :get,
         data: {
           turbo_stream: true,
         },
         class: "button button--size-default button--state-default mr-2" %>
       <% else %>
-        <%= link_to t(".create_export_button"),
-        new_data_export_path(
+        <%= button_to t(".create_export_button"),
+        new_data_export_path,
+        params: {
           export_type: "analysis",
           analysis_type: "user",
           workflow_execution_id: @workflow_execution.id,
           single_workflow: true,
-        ),
+        },
+        method: :get,
         data: {
           turbo_stream: true,
         },

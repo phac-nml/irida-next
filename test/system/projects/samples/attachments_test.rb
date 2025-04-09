@@ -19,8 +19,8 @@ module Projects
       test 'user with role >= Maintainer should be able to see upload, concatenate and delete files buttons' do
         visit namespace_project_sample_url(@namespace, @project, @sample2)
         assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
-        assert_selector 'a', text: I18n.t('projects.samples.show.concatenate_button'), count: 1
-        assert_selector 'a', text: I18n.t('projects.samples.show.delete_files_button'), count: 1
+        assert_selector 'button', text: I18n.t('projects.samples.show.concatenate_button'), count: 1
+        assert_selector 'button', text: I18n.t('projects.samples.show.delete_files_button'), count: 1
       end
 
       test 'user with role < Maintainer should not be able to see upload, concatenate and delete files buttons' do
@@ -196,7 +196,7 @@ module Projects
           assert_selector 'table #attachments-table-body tr', count: 2
           all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
         end
-        click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
+        click_button I18n.t('projects.samples.show.concatenate_button'), match: :first
         within('div[data-controller-connected="true"] dialog') do
           assert_text 'test_file_A.fastq'
           assert_text 'test_file_B.fastq'
@@ -222,7 +222,7 @@ module Projects
           find('table #attachments-table-body tr', text: 'test_file_fwd_2.fastq').find('input').click
           find('table #attachments-table-body tr', text: 'test_file_fwd_3.fastq').find('input').click
         end
-        click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
+        click_button I18n.t('projects.samples.show.concatenate_button'), match: :first
         within('div[data-controller-connected="true"] dialog') do
           assert_text 'test_file_fwd_1.fastq'
           assert_text 'test_file_rev_1.fastq'
@@ -246,7 +246,7 @@ module Projects
           assert_selector 'table #attachments-table-body tr', count: 2
           all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
         end
-        click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
+        click_button I18n.t('projects.samples.show.concatenate_button'), match: :first
         within('div[data-controller-connected="true"] dialog') do
           assert_text 'test_file_A.fastq'
           assert_text 'test_file_B.fastq'
@@ -273,7 +273,7 @@ module Projects
           find('table #attachments-table-body tr', text: 'test_file_fwd_2.fastq').find('input').click
           find('table #attachments-table-body tr', text: 'test_file_fwd_3.fastq').find('input').click
         end
-        click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
+        click_button I18n.t('projects.samples.show.concatenate_button'), match: :first
         within('div[data-controller-connected="true"] dialog') do
           assert_text 'test_file_fwd_1.fastq'
           assert_text 'test_file_rev_1.fastq'
@@ -306,7 +306,7 @@ module Projects
           find('table #attachments-table-body tr', text: 'test_file_fwd_3.fastq').find('input').click
           find('table #attachments-table-body tr', text: 'test_file_D.fastq').find('input').click
         end
-        click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
+        click_button I18n.t('projects.samples.show.concatenate_button'), match: :first
         within('div[data-controller-connected="true"] dialog') do
           assert_text 'test_file_fwd_1.fastq'
           assert_text 'test_file_rev_1.fastq'
@@ -335,7 +335,7 @@ module Projects
           find('table #attachments-table-body tr', text: 'test_file_D.fastq').find('input').click
           find('table #attachments-table-body tr', text: 'test_file_2.fastq').find('input').click
         end
-        click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
+        click_button I18n.t('projects.samples.show.concatenate_button'), match: :first
         within('div[data-controller-connected="true"] dialog') do
           assert_text 'test_file_D.fastq'
           assert_text 'test_file_2.fastq.gz'
@@ -369,7 +369,7 @@ module Projects
           find('table #attachments-table-body tr', text: 'test_file_fwd_2.fastq').find('input').click
           find('table #attachments-table-body tr', text: 'test_file_fwd_3.fastq').find('input').click
         end
-        click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
+        click_button I18n.t('projects.samples.show.concatenate_button'), match: :first
         within('div[data-controller-connected="true"] dialog') do
           assert_text 'test_file_fwd_1.fastq'
           assert_text 'test_file_rev_1.fastq'
@@ -396,7 +396,7 @@ module Projects
           find('table #attachments-table-body tr', text: 'test_file_fwd_2.fastq').find('input').click
           find('table #attachments-table-body tr', text: 'test_file_fwd_3.fastq').find('input').click
         end
-        click_link I18n.t('projects.samples.show.concatenate_button'), match: :first
+        click_button I18n.t('projects.samples.show.concatenate_button'), match: :first
         within('div[data-controller-connected="true"] dialog') do
           assert_text 'test_file_fwd_1.fastq'
           assert_text 'test_file_rev_1.fastq'
@@ -425,7 +425,7 @@ module Projects
           find('table #attachments-table-body tr', text: 'test_file_A.fastq').find('input').click
           find('table #attachments-table-body tr', text: 'test_file_B.fastq').find('input').click
         end
-        click_link I18n.t('projects.samples.show.delete_files_button'), match: :first
+        click_button I18n.t('projects.samples.show.delete_files_button'), match: :first
         within('div[data-controller-connected="true"] dialog') do
           assert_text 'test_file_A.fastq'
           assert_text 'test_file_B.fastq'
@@ -455,7 +455,7 @@ module Projects
           find('table #attachments-table-body tr', text: 'test_file_fwd_3.fastq').find('input').click
           find('table #attachments-table-body tr', text: 'test_file_D.fastq').find('input').click
         end
-        click_link I18n.t('projects.samples.show.delete_files_button'), match: :first
+        click_button I18n.t('projects.samples.show.delete_files_button'), match: :first
         within('div[data-controller-connected="true"] dialog') do
           assert_text 'test_file_fwd_1.fastq'
           assert_text 'test_file_rev_1.fastq'
@@ -562,7 +562,7 @@ module Projects
           assert_text 'test_file_B.fastq'
         end
 
-        click_link I18n.t('projects.samples.show.delete_files_button'), match: :first
+        click_button I18n.t('projects.samples.show.delete_files_button'), match: :first
 
         within('dialog') do
           assert_text 'test_file_B.fastq'
@@ -574,7 +574,7 @@ module Projects
         assert_no_text 'test_file_A.fastq'
         assert_no_text 'test_file_B.fastq'
         assert_text I18n.t('projects.samples.show.no_files')
-        assert_selector 'a.cursor-not-allowed.pointer-events-none', count: 2
+        assert_selector 'button.cursor-not-allowed.pointer-events-none', count: 2
       end
     end
   end

@@ -40,10 +40,12 @@
           <%= dropdown.with_item(
             label: t(:"general.navbar.new_dropdown.project"),
             url: new_project_path,
+            disableable: false,
           ) %>
           <%= dropdown.with_item(
             label: t(:"general.navbar.new_dropdown.group"),
             url: new_group_path,
+            disableable: false,
           ) %>
         <% end %>
         <!-- Profile menu -->

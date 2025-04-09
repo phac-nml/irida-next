@@ -274,7 +274,7 @@ module Groups
 
       within('div#limit-component') do
         find('button').click
-        click_link '10'
+        click_button '10'
       end
 
       assert_selector 'div#limit-component button span', text: '10'
@@ -307,7 +307,7 @@ module Groups
 
       within('div#limit-component') do
         find('button').click
-        click_link '10'
+        click_button '10'
       end
 
       assert_selector 'div#limit-component button span', text: '10'

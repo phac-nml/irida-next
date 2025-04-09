@@ -133,7 +133,11 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: user.locale))
 
-      assert_selector 'button', text: I18n.t('projects.samples.index.create_export_button.label', locale: user.locale)
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      assert_selector 'button',
+                      text: I18n.t('projects.samples.index.sample_actions_button.linelist_export', locale: user.locale)
+      assert_selector 'button',
+                      text: I18n.t('projects.samples.index.sample_actions_button.sample_export', locale: user.locale)
     end
 
     test 'User with role < Analyst does not see create export button' do
@@ -161,7 +165,8 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
 
-      assert_no_selector 'a', text: I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      assert_no_selector 'button', text: I18n.t('projects.samples.index.sample_actions_button.transfer')
     end
 
     test 'User with role >= Maintainer sees new sample button' do
@@ -170,7 +175,8 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
 
-      assert_selector 'a', text: I18n.t('projects.samples.index.new_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      assert_selector 'button', text: I18n.t('projects.samples.index.sample_actions_button.new_sample')
     end
 
     test 'User with role < Maintainer does not see new sample button' do
@@ -181,7 +187,7 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: user.locale))
 
-      assert_no_selector 'a', text: I18n.t('projects.samples.index.new_button')
+      assert_no_selector 'button', text: I18n.t('projects.samples.index.sample_actions_button.new_sample')
     end
 
     test 'User with role >= Maintainer sees delete samples button' do
@@ -190,7 +196,8 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
 
-      assert_selector 'a', text: I18n.t('projects.samples.index.delete_samples_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      assert_selector 'button', text: I18n.t('projects.samples.index.delete_samples_button')
     end
 
     test 'User with role < Maintainer does not see delete samples button' do
@@ -226,7 +233,8 @@ module Projects
 
       ### ACTIONS START ###
       # launch dialog
-      click_on I18n.t('projects.samples.index.new_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_button I18n.t('projects.samples.index.sample_actions_button.new_sample')
 
       # fill new sample fields
       fill_in I18n.t('activerecord.attributes.sample.description'), with: 'A sample description'
@@ -346,7 +354,7 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('projects.samples.index.sample_actions_button.transfer')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -377,7 +385,7 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('projects.samples.index.sample_actions_button.transfer')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -401,7 +409,7 @@ module Projects
         all('input[type="checkbox"]')[0].click
       end
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('projects.samples.index.sample_actions_button.transfer')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -435,7 +443,7 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('projects.samples.index.sample_actions_button.transfer')
       assert_selector '#dialog'
       within('#dialog') do
         within('#list_selections') do
@@ -488,7 +496,7 @@ module Projects
       # select all 3 samples
       click_button I18n.t(:'projects.samples.index.select_all_button')
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('projects.samples.index.sample_actions_button.transfer')
       assert_selector '#dialog'
       within('#dialog') do
         # close button available before confirming
@@ -537,7 +545,7 @@ module Projects
       Capybara.execute_script 'sessionStorage.clear()'
       # launch transfer dialog
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('projects.samples.index.sample_actions_button.transfer')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -587,7 +595,7 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('projects.samples.index.sample_actions_button.transfer')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -653,7 +661,7 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '1'
       end
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('projects.samples.index.sample_actions_button.transfer')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -693,7 +701,7 @@ module Projects
 
       # transfer sample
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('projects.samples.index.sample_actions_button.transfer')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -752,7 +760,7 @@ module Projects
 
       # launch dialog
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('projects.samples.index.sample_actions_button.transfer')
       assert_selector '#dialog'
       within('#dialog') do
         # fill destination input
@@ -778,7 +786,7 @@ module Projects
       within('div#limit-component') do
         # set table limit to 10
         find('button').click
-        click_link '10'
+        click_button '10'
       end
 
       # verify limit is set to 10
@@ -865,7 +873,7 @@ module Projects
       # set limit
       within('div#limit-component') do
         find('button').click
-        click_link '10'
+        click_button '10'
       end
 
       # verify sort is still applied
@@ -1028,7 +1036,7 @@ module Projects
       # set limit
       within('div#limit-component') do
         find('button').click
-        click_link '10'
+        click_button '10'
       end
 
       # verify table still only contains sample1
@@ -1152,7 +1160,7 @@ module Projects
       ### ACTIONS START ###
       # start import
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1230,7 +1238,7 @@ module Projects
       ### ACTIONS START ###
       # start import
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1318,7 +1326,7 @@ module Projects
       ### ACTIONS START ###
       # start import
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xls')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1410,7 +1418,7 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xlsx')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1469,7 +1477,7 @@ module Projects
     test 'dialog close button is hidden during metadata import' do
       visit namespace_project_samples_url(@namespace, @project)
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         # dialog close button available when selecting params
         assert_selector 'button.dialog--close'
@@ -1495,7 +1503,7 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1544,7 +1552,7 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_empty_values.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1606,7 +1614,7 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_empty_values.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1652,7 +1660,7 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/duplicate_headers.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1691,7 +1699,7 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_rows.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1730,7 +1738,7 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1771,7 +1779,7 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/mixed_project_samples.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1842,7 +1850,7 @@ module Projects
 
       ### ACTIONS START ###
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_analysis_values.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -2029,7 +2037,7 @@ module Projects
         all('input[type="checkbox"]')[0].click
       end
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.clone')
+      click_button I18n.t('projects.samples.index.sample_actions_button.clone')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -2057,7 +2065,7 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.clone')
+      click_button I18n.t('projects.samples.index.sample_actions_button.clone')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -2088,7 +2096,7 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.clone')
+      click_button I18n.t('projects.samples.index.sample_actions_button.clone')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -2126,7 +2134,7 @@ module Projects
         find("input##{dom_id(@sample2, :checkbox)}").click
       end
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.clone')
+      click_button I18n.t('projects.samples.index.sample_actions_button.clone')
       assert_selector '#dialog'
       within('#dialog') do
         within('#list_selections') do
@@ -2183,7 +2191,7 @@ module Projects
         find("input##{dom_id(@sample2, :checkbox)}").click
       end
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.clone')
+      click_button I18n.t('projects.samples.index.sample_actions_button.clone')
       assert_selector '#dialog'
       within('#dialog') do
         # close button available before confirming cloning
@@ -2231,7 +2239,7 @@ module Projects
       # clear localstorage
       Capybara.execute_script 'sessionStorage.clear()'
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.clone')
+      click_button I18n.t('projects.samples.index.sample_actions_button.clone')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -2285,7 +2293,7 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.clone')
+      click_button I18n.t('projects.samples.index.sample_actions_button.clone')
       assert_selector '#dialog'
       within('#dialog') do
         within('#list_selections') do
@@ -2341,7 +2349,7 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.clone')
+      click_button I18n.t('projects.samples.index.sample_actions_button.clone')
       assert_selector '#dialog'
       within('#dialog') do
         find('input.select2-input').fill_in with: 'invalid project name or puid'
@@ -2372,7 +2380,7 @@ module Projects
         assert_selector 'strong[data-selection-target="selected"]', text: '1'
       end
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.clone')
+      click_button I18n.t('projects.samples.index.sample_actions_button.clone')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -2413,7 +2421,7 @@ module Projects
 
       # clone sample
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_link I18n.t('projects.samples.index.sample_actions_button.clone')
+      click_button I18n.t('projects.samples.index.sample_actions_button.clone')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -2516,7 +2524,7 @@ module Projects
       within('div#limit-component') do
         # set table limit to 10 to split samples table into two pages
         find('button').click
-        click_link '10'
+        click_button '10'
       end
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 10
@@ -2622,11 +2630,10 @@ module Projects
       assert_text I18n.t('projects.samples.index.no_associated_samples')
       assert_text I18n.t('projects.samples.index.no_samples')
       click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      assert_no_button I18n.t(:'projects.samples.index.sample_actions_button.clone')
-      assert_no_button I18n.t(:'projects.samples.index.sample_actions_button.transfer')
-      assert_text I18n.t('projects.samples.index.create_export_button.label')
-      assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                      text: I18n.t('projects.samples.index.create_export_button.label')
+      assert_selector '[aria-disabled="true"]',
+                      text: I18n.t(:'projects.samples.index.sample_actions_button.clone')
+      assert_selector '[aria-disabled="true"]',
+                      text: I18n.t(:'projects.samples.index.sample_actions_button.transfer')
     end
 
     test 'singular description within delete samples dialog' do
@@ -2642,7 +2649,8 @@ module Projects
         # select sample1
         all('input[type="checkbox"]')[0].click
       end
-      click_link I18n.t('projects.samples.index.delete_samples_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_button I18n.t('projects.samples.index.delete_samples_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -2670,7 +2678,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_link I18n.t('projects.samples.index.delete_samples_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_button I18n.t('projects.samples.index.delete_samples_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -2700,7 +2709,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_link I18n.t('projects.samples.index.delete_samples_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_button I18n.t('projects.samples.index.delete_samples_button')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -2735,7 +2745,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_link I18n.t('projects.samples.index.delete_samples_button')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_button I18n.t('projects.samples.index.delete_samples_button')
       within('#dialog') do
         click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
@@ -3380,7 +3391,9 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
 
       # Assert that the Export button is disabled when no samples are selected
-      assert_selector '[aria-disabled="true"]', text: I18n.t('projects.samples.index.create_export_button.label')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      assert_selector '[aria-disabled="true"]',
+                      text: I18n.t('projects.samples.index.sample_actions_button.linelist_export')
 
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
@@ -3396,8 +3409,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_button I18n.t('projects.samples.index.create_export_button.label')
-      click_link I18n.t('projects.samples.index.create_export_button.linelist_export')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_button I18n.t('projects.samples.index.sample_actions_button.linelist_export')
       assert_selector "div[data-controller='infinite-scroll viral--sortable-lists--two-lists-selection']"
       assert_no_selector 'ul#Selected li', text: 'metadatafield1'
       select 'Project Template with existing fields', from: I18n.t('data_exports.new.template_select_label')
