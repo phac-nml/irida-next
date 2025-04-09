@@ -85,7 +85,7 @@
                   <%= check_box_tag "workflow_execution_ids[]",
                   workflow_execution.id,
                   nil,
-                  id: dom_id(workflow_execution),
+                  id: dom_id(workflow_execution, "checkbox"),
                   "aria-label": workflow_execution.name || workflow_execution.id,
                   data: {
                     action: "input->selection#toggle",
