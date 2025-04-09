@@ -257,7 +257,9 @@ class DataExportsTest < ApplicationSystemTestCase
 
     # group samples page
     visit group_samples_url(@group1)
-    assert_selector 'button', text: I18n.t('groups.samples.index.create_export_button.label')
+    click_button I18n.t('groups.samples.index.sample_actions_button.label')
+    assert_selector 'button', text: I18n.t('groups.samples.index.sample_actions_button.linelist_export')
+    assert_selector 'button', text: I18n.t('groups.samples.index.sample_actions_button.sample_export')
   end
 
   test 'user with access level == guest cannot see create export button on sample pages' do
@@ -343,18 +345,21 @@ class DataExportsTest < ApplicationSystemTestCase
     # project samples page
     visit group_samples_url(@group1)
     assert_text '1-20 of 26'
+
+    click_button I18n.t('groups.samples.index.sample_actions_button.label')
     assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('groups.samples.index.create_export_button.label')
+                    text: I18n.t('groups.samples.index.sample_actions_button.linelist_export')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{@sample1.id}']").click
       find("input[type='checkbox'][value='#{@sample2.id}']").click
     end
 
+    click_button I18n.t('groups.samples.index.sample_actions_button.label')
     assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                        text: I18n.t('groups.samples.index.create_export_button.label')
-    click_button I18n.t('groups.samples.index.create_export_button.label')
-    click_button I18n.t('groups.samples.index.create_export_button.sample_export'), match: :first
+
+    click_button I18n.t('groups.samples.index.sample_actions_button.sample_export')
 
     within 'dialog[open].dialog--size-lg' do
       click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '2'
@@ -933,19 +938,19 @@ class DataExportsTest < ApplicationSystemTestCase
     sample43 = samples(:sample43)
 
     visit group_samples_url(group)
+    click_button I18n.t('groups.samples.index.sample_actions_button.label')
     assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('groups.samples.index.create_export_button.label')
+                    text: I18n.t('groups.samples.index.sample_actions_button.linelist_export')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{sample43.id}']").click
     end
 
+    click_button I18n.t('groups.samples.index.sample_actions_button.label')
     assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                        text: I18n.t('groups.samples.index.create_export_button.label')
-    click_button I18n.t('groups.samples.index.create_export_button.label')
-
     assert_selector 'button',
-                    text: I18n.t('groups.samples.index.create_export_button.linelist_export')
+                    text: I18n.t('groups.samples.index.sample_actions_button.linelist_export')
   end
 
   test 'new linelist export dialog' do
@@ -1123,17 +1128,19 @@ class DataExportsTest < ApplicationSystemTestCase
 
   test 'create xlsx export from group samples page' do
     visit group_samples_url(@group1)
+    click_button I18n.t('groups.samples.index.sample_actions_button.label')
     assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('groups.samples.index.create_export_button.label')
+                    text: I18n.t('groups.samples.index.sample_actions_button.linelist_export')
 
     within('tbody') do
       find("input[type='checkbox'][value='#{@sample1.id}']").click
     end
 
+    click_button I18n.t('groups.samples.index.sample_actions_button.label')
     assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('groups.samples.index.create_export_button.label')
-    click_button I18n.t('groups.samples.index.create_export_button.label')
-    click_button I18n.t('groups.samples.index.create_export_button.linelist_export')
+                       text: I18n.t('groups.samples.index.sample_actions_button.linelist_export')
+
+    click_button I18n.t('groups.samples.index.sample_actions_button.linelist_export')
 
     within 'dialog[open].dialog--size-lg' do
       click_button I18n.t('viral.sortable_lists_component.add_all')

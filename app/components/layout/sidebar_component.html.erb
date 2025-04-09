@@ -53,6 +53,7 @@
           <%= dropdown.with_item(
             label: t(:"general.navbar.account_dropdown.profile"),
             url: profile_path,
+            disableable: false,
           ) %>
           <%= dropdown.with_item(
             label: t(:"general.navbar.account_dropdown.sign_out"),
@@ -60,6 +61,7 @@
             data: {
               turbo_method: :delete,
             },
+            disableable: false,
           ) %>
         <% end %>
       </div>

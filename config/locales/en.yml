@@ -955,13 +955,15 @@ en:
       title: Create subgroup
     samples:
       index:
-        create_export_button:
-          label: Create Export
+        deselect_all_button: Deselect All
+        sample_actions_button:
+          export: Export
+          import: Import
+          import_metadata: Import metadata
+          import_samples: Import samples
+          label: Sample Actions
           linelist_export: Linelist Export
           sample_export: Sample Export
-        deselect_all_button: Deselect All
-        import_metadata_button: Import metadata
-        import_samples_button: Import samples
         select_all_button: Select All
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
         title: Samples

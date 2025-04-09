@@ -953,13 +953,15 @@ fr:
       title: Créer un sous-groupe
     samples:
       index:
-        create_export_button:
-          label: Créer une exportation
+        deselect_all_button: Désélectionner tout
+        sample_actions_button:
+          export: Export
+          import: Import
+          import_metadata: Importer des métadonnées
+          import_samples: Import samples
+          label: Sample Actions
           linelist_export: Exportation de liste détaillée
           sample_export: Exportation d’échantillons
-        deselect_all_button: Désélectionner tout
-        import_metadata_button: Importer des métadonnées
-        import_samples_button: Import samples
         select_all_button: Tout sélectionner
         subtitle: Voici les échantillons dans %{namespace_type} %{namespace_name}
         title: Échantillons
