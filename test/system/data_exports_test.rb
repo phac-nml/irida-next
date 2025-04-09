@@ -45,39 +45,39 @@ class DataExportsTest < ApplicationSystemTestCase
 
     within('tbody') do
       assert_selector 'tr', count: 7
-      assert_selector "tr[id='#{@data_export1.id}'] td:first-child ", text: @data_export1.id
-      assert_selector "tr[id='#{@data_export1.id}'] td:nth-child(2)", text: @data_export1.name
+      assert_selector "tr[id='#{dom_id(@data_export1)}'] td:first-child ", text: @data_export1.id
+      assert_selector "tr[id='#{dom_id(@data_export1)}'] td:nth-child(2)", text: @data_export1.name
 
-      assert_selector "tr[id='#{@data_export1.id}'] td:nth-child(3)",
+      assert_selector "tr[id='#{dom_id(@data_export1)}'] td:nth-child(3)",
                       text: I18n.t(:"data_exports.types.#{@data_export1.export_type}")
-      assert_selector "tr[id='#{@data_export1.id}'] td:nth-child(4)",
+      assert_selector "tr[id='#{dom_id(@data_export1)}'] td:nth-child(4)",
                       text: I18n.t(:"data_exports.status.#{@data_export1.status}")
-      assert_selector "tr[id='#{@data_export1.id}'] td:nth-child(6)",
+      assert_selector "tr[id='#{dom_id(@data_export1)}'] td:nth-child(6)",
                       text: I18n.l(@data_export1.expires_at.localtime, format: :full_date)
 
-      assert_selector "tr[id='#{@data_export2.id}'] td:first-child", text: @data_export2.id
-      assert find("tr[id='#{@data_export2.id}'] td:nth-child(2)").text.blank?
-      assert_selector "tr[id='#{@data_export2.id}'] td:nth-child(3)",
+      assert_selector "tr[id='#{dom_id(@data_export2)}'] td:first-child", text: @data_export2.id
+      assert find("tr[id='#{dom_id(@data_export2)}'] td:nth-child(2)").text.blank?
+      assert_selector "tr[id='#{dom_id(@data_export2)}'] td:nth-child(3)",
                       text: I18n.t(:"data_exports.types.#{@data_export2.export_type}")
-      assert_selector "tr[id='#{@data_export2.id}'] td:nth-child(4)",
+      assert_selector "tr[id='#{dom_id(@data_export2)}'] td:nth-child(4)",
                       text: I18n.t(:"data_exports.status.#{@data_export2.status}")
-      assert find("tr[id='#{@data_export2.id}'] td:nth-child(6)").text.blank?
+      assert find("tr[id='#{dom_id(@data_export2)}'] td:nth-child(6)").text.blank?
 
-      assert_selector "tr[id='#{@data_export6.id}'] td:first-child", text: @data_export6.id
-      assert_selector "tr[id='#{@data_export6.id}'] td:nth-child(2)", text: @data_export6.name
-      assert_selector "tr[id='#{@data_export6.id}'] td:nth-child(3)",
+      assert_selector "tr[id='#{dom_id(@data_export6)}'] td:first-child", text: @data_export6.id
+      assert_selector "tr[id='#{dom_id(@data_export6)}'] td:nth-child(2)", text: @data_export6.name
+      assert_selector "tr[id='#{dom_id(@data_export6)}'] td:nth-child(3)",
                       text: I18n.t(:"data_exports.types.#{@data_export6.export_type}")
-      assert_selector "tr[id='#{@data_export6.id}'] td:nth-child(4)",
+      assert_selector "tr[id='#{dom_id(@data_export6)}'] td:nth-child(4)",
                       text: I18n.t(:"data_exports.status.#{@data_export6.status}")
-      assert find("tr[id='#{@data_export6.id}'] td:nth-child(6)").text.blank?
+      assert find("tr[id='#{dom_id(@data_export6)}'] td:nth-child(6)").text.blank?
 
-      assert_selector "tr[id='#{@data_export7.id}'] td:first-child", text: @data_export7.id
-      assert_selector "tr[id='#{@data_export7.id}'] td:nth-child(2)", text: @data_export7.name
-      assert_selector "tr[id='#{@data_export7.id}'] td:nth-child(3)",
+      assert_selector "tr[id='#{dom_id(@data_export7)}'] td:first-child", text: @data_export7.id
+      assert_selector "tr[id='#{dom_id(@data_export7)}'] td:nth-child(2)", text: @data_export7.name
+      assert_selector "tr[id='#{dom_id(@data_export7)}'] td:nth-child(3)",
                       text: I18n.t(:"data_exports.types.#{@data_export7.export_type}")
-      assert_selector "tr[id='#{@data_export7.id}'] td:nth-child(4)",
+      assert_selector "tr[id='#{dom_id(@data_export7)}'] td:nth-child(4)",
                       text: I18n.t(:"data_exports.status.#{@data_export7.status}")
-      assert_selector "tr[id='#{@data_export7.id}'] td:nth-child(6)",
+      assert_selector "tr[id='#{dom_id(@data_export7)}'] td:nth-child(6)",
                       text: I18n.l(@data_export7.expires_at.localtime, format: :full_date)
     end
   end
@@ -86,11 +86,11 @@ class DataExportsTest < ApplicationSystemTestCase
     visit data_exports_path
 
     within('tbody') do
-      within %(tr[id='#{@data_export6.id}'] td:last-child) do
+      within %(tr[id='#{dom_id(@data_export6)}'] td:last-child) do
         assert_text I18n.t('data_exports.index.actions.delete')
       end
 
-      within %(tr[id='#{@data_export1.id}'] td:last-child) do
+      within %(tr[id='#{dom_id(@data_export1)}'] td:last-child) do
         assert_text I18n.t('data_exports.index.actions.download')
         assert_text I18n.t('data_exports.index.actions.delete')
       end

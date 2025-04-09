@@ -153,20 +153,20 @@ module Groups
       assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title')
       assert_selector '#workflow-executions-table'
 
-      assert_selector "tr[id='#{@workflow_execution_group_shared1.id}']"
-      within("tr[id='#{@workflow_execution_group_shared1.id}'] td:last-child") do
+      assert_selector "tr[id='#{dom_id(@workflow_execution_group_shared1)}']"
+      within("tr[id='#{dom_id(@workflow_execution_group_shared1)}'] td:last-child") do
         assert_no_link I18n.t(:'workflow_executions.index.actions.cancel_button')
         assert_no_link I18n.t(:'workflow_executions.index.actions.delete_button')
       end
 
-      assert_selector "tr[id='#{@workflow_execution_group_shared2.id}']"
-      within("tr[id='#{@workflow_execution_group_shared2.id}'] td:last-child") do
+      assert_selector "tr[id='#{dom_id(@workflow_execution_group_shared2)}']"
+      within("tr[id='#{dom_id(@workflow_execution_group_shared2)}'] td:last-child") do
         assert_no_link I18n.t(:'workflow_executions.index.actions.cancel_button')
         assert_no_link I18n.t(:'workflow_executions.index.actions.delete_button')
       end
 
-      assert_no_selector "tr[id='#{workflow_execution1.id}']"
-      assert_no_selector "tr[id='#{workflow_execution2.id}']"
+      assert_no_selector "tr[id='#{dom_id(workflow_execution1)}']"
+      assert_no_selector "tr[id='#{dom_id(workflow_execution2)}']"
     end
 
     test 'can view a workflow execution' do
@@ -175,7 +175,7 @@ module Groups
       visit group_workflow_executions_path(@group)
 
       assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title', locale: user.locale)
-      within("tr[id='#{@workflow_execution_group_shared1.id}'] th") do
+      within("tr[id='#{dom_id(@workflow_execution_group_shared1)}'] th") do
         click_link @workflow_execution_group_shared1.id
       end
 
@@ -213,7 +213,7 @@ module Groups
       visit group_workflow_executions_path(@group)
 
       assert_selector 'h1', text: I18n.t(:'groups.workflow_executions.index.title')
-      within("tr[id='#{@workflow_execution_group_shared2.id}'] th") do
+      within("tr[id='#{dom_id(@workflow_execution_group_shared2)}'] th") do
         click_link @workflow_execution_group_shared2.id
       end
 
