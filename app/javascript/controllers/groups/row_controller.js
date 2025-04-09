@@ -1,15 +1,16 @@
 import { Controller } from "@hotwired/stimulus";
+import { get } from "@rails/request.js";
 
 export default class extends Controller {
-  static targets = ["toggle"];
+  static values = { url: { type: String } };
 
   /**
    * Toggle the group row to expose children content
    * @param event
    */
-  toggle(event) {
-    if (event.target.tagName !== "A") {
-      this.toggleTarget.click();
-    }
+  toggle() {
+    get(this.urlValue, {
+      responseKind: "turbo-stream",
+    });
   }
 }
