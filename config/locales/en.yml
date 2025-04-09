@@ -1623,7 +1623,6 @@ en:
       index:
         delete_samples_button: Delete Samples
         deselect_all_button: Deselect All
-        new_button: New sample
         no_associated_samples: There are no samples associated with this project.
         no_samples: No Samples
         sample_actions_button:
@@ -1634,6 +1633,7 @@ en:
           import_samples: Import samples
           label: Sample Actions
           linelist_export: Linelist Export
+          new_sample: New Sample
           sample_export: Sample Export
           transfer: Transfer samples
         select_all_button: Select All

@@ -12,27 +12,31 @@
     <div class="flex flex-row">
       <% if @allowed_to[:export_data] %>
         <% if @workflow_execution.completed? %>
-          <%= link_to t("groups.workflow_executions.show.create_export_button"),
-          new_data_export_path(
+          <%= button_to t("groups.workflow_executions.show.create_export_button"),
+          new_data_export_path,
+          params: {
             export_type: "analysis",
             analysis_type: "group",
             namespace_id: @namespace.id,
             workflow_execution_id: @workflow_execution.id,
             single_workflow: true,
-          ),
+          },
+          method: :get,
           data: {
             turbo_stream: true,
           },
           class: "button button--size-default button--state-default mr-2" %>
         <% else %>
-          <%= link_to t("groups.workflow_executions.show.create_export_button"),
-          new_data_export_path(
+          <%= button_to t("groups.workflow_executions.show.create_export_button"),
+          new_data_export_path,
+          params: {
             export_type: "analysis",
             analysis_type: "group",
             namespace_id: @namespace.id,
             workflow_execution_id: @workflow_execution.id,
             single_workflow: true,
-          ),
+          },
+          method: :get,
           data: {
             turbo_stream: true,
           },

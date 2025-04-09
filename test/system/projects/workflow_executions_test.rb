@@ -453,7 +453,7 @@ module Projects
       assert_text workflow_execution.metadata['workflow_name']
       assert_text workflow_execution.metadata['workflow_version']
 
-      assert_link I18n.t(:'workflow_executions.show.create_export_button')
+      assert_button I18n.t(:'workflow_executions.show.create_export_button')
       assert_no_link I18n.t(:'workflow_executions.show.cancel_button')
       assert_no_link I18n.t(:'workflow_executions.show.edit_button')
       assert_no_link I18n.t(:'workflow_executions.show.remove_button')

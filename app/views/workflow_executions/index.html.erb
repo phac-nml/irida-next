@@ -8,10 +8,16 @@
 
 <%= render Viral::PageHeaderComponent.new(title: t(".title")) do |component| %>
   <%= component.with_buttons do %>
-    <%= link_to t(".create_export_button"),
-    new_data_export_path(export_type: "analysis", analysis_type: "user"),
+    <%= button_to t(".create_export_button"),
+    new_data_export_path,
+    params: {
+      export_type: "analysis",
+      analysis_type: "user",
+    },
+    method: :get,
     data: {
-      action: "turbo:morph-element->action-link#idempotentConnect",
+      action:
+        "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
       turbo_stream: true,
       controller: "action-link",
       action_link_required_value: 1,

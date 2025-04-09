@@ -1619,7 +1619,6 @@ fr:
       index:
         delete_samples_button: Supprimer les échantillons
         deselect_all_button: Désélectionner tout
-        new_button: Nouvel échantillon
         no_associated_samples: Il n’y a aucun échantillon associé à ce projet.
         no_samples: Aucun échantillon
         sample_actions_button:
@@ -1630,6 +1629,7 @@ fr:
           import_samples: Import samples
           label: Sample Actions
           linelist_export: Exportation de liste détaillée
+          new_sample: Nouvel échantillon
           sample_export: Exportation d’échantillons
           transfer: Transférer des échantillons
         select_all_button: Tout sélectionner

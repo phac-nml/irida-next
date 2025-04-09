@@ -1,6 +1,12 @@
 <%= viral_dropdown(label: t(".sorting.#{@ransack_obj.sorts[0].name}_#{@ransack_obj.sorts[0].dir}"),
                    caret: true) do |dropdown| %>
   <% @sort_options.each do |sort| %>
-    <%= helpers.sorting_item(dropdown, @ransack_obj, sort[:name], sort[:dir]) %>
+    <%= helpers.sorting_item(
+      dropdown,
+      @ransack_obj,
+      sort[:name],
+      sort[:dir],
+      disableable,
+    ) %>
   <% end %>
 <% end %>

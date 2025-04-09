@@ -39,4 +39,13 @@ export default class extends Controller {
       }
     }
   }
+
+  handleSubmit(event) {
+    const elementClassList = Array.from(this.element.classList)
+    // Prevent default action if button is tabbed to via keyboard and the enter key is pressed
+    if (this.#event_classes.some(r=> elementClassList.includes(r)))
+    {
+      event.preventDefault();
+    }
+  }
 }
