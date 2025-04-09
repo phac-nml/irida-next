@@ -107,7 +107,7 @@
                     <%= check_box_tag "attachment_ids[]",
                     attachment.id,
                     nil,
-                    id: dom_id(attachment),
+                    id: dom_id(attachment, "checkbox"),
                     "aria-label": attachment.file.filename.to_s,
                     data: {
                       action: "input->selection#toggle",
