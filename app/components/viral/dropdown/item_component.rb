@@ -22,7 +22,7 @@ module Viral
       def item_icon
         return if @icon_name.blank?
 
-        icon @icon_name, class: 'size-5'
+        icon @icon_name, class: 'size-3'
       end
     end
   end
