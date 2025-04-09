@@ -52,7 +52,8 @@
           id="<%= "#{dom_id(project)}-samples-count" %>"
           class="flex items-center text-sm"
         >
-          <%= viral_icon(name: :beaker, color: :subdued, classes: "h-5 w-5") %><%= project.samples.size %>
+          <%= icon "flask", class: "size-4 text-slate-400" %>
+          <%= project.samples.size %>
         </span>
       <% end %>
     </div>
