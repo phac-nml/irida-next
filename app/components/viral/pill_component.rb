@@ -21,7 +21,7 @@ module Viral
       sky: 'bg-sky-100 text-sky-800 dark:bg-sky-900 dark:text-sky-300',
       amber: 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300',
       primary: 'bg-primary-100 text-primary-800 dark:bg-primary-800 dark:text-primary-400',
-      transparent: 'text-slate-500 dark:text-slate-400'
+      transparent: 'text-slate-500 dark:text-slate-300'
     }.freeze
 
     BORDER_COLORS = {

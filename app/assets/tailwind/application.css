@@ -306,7 +306,7 @@
 }
 
 @utility viral-icon--colorSubdued {
-  @apply text-slate-400;
+  @apply text-slate-500 dark:text-slate-300;
 }
 
 @utility viral-icon--colorCritical {
@@ -394,7 +394,7 @@
 }
 
 @utility avatar {
-  @apply relative inline-flex flex-none items-center justify-center overflow-hidden rounded-md text-slate-800 dark:text-slate-300;
+  @apply relative inline-flex flex-none items-center justify-center overflow-hidden rounded-md text-slate-800 dark:text-white;
   --tw-avatar-bg-lightness: 35%;
   --tw-avatar-border-lightness: 35%;
   --tw-avatar-bg-alpha: 0.3;
