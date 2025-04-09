@@ -5,24 +5,28 @@
   "
   style="height: 50px"
 >
-  <%= viral_dropdown(icon: "ellipsis_horizontal", aria: { label: "Organism dropdown list" }) do |dropdown| %>
-    <% links.each_with_index do |link, index| %>
-      <% if index < links.length - 1 %>
-        <%= link_to link[:name],
-        URI.join(root_url, link[:path]).to_s,
-        data: {
-          turbo_frame: "_top",
-        },
-        class:
-          "ml-1 text-sm font-normal text-slate-500 md:ml-2 dark:text-slate-400 hover:underline" %>
-
-        <% dropdown.with_item(
-          label: link[:name],
-          url: URI.join(root_url, link[:path]).to_s,
-        ) %>
+  <li class="inline-flex items-center">
+    <%= viral_dropdown(icon: "ellipsis_horizontal", aria: { label: I18n.t(:'components.breadcrumb.dropdown.aria_label') }) do |dropdown| %>
+      <% links.each_with_index do |link, index| %>
+        <% if index < links.length - 1 %>
+          <%= link_to link[:name],
+          URI.join(root_url, link[:path]).to_s,
+          data: {
+            turbo_frame: "_top",
+          },
+          class:
+            "ml-1 text-sm font-normal text-slate-500 md:ml-2 dark:text-slate-400 hover:underline" %>
+          <% dropdown.with_item(
+            label: link[:name],
+            url: URI.join(root_url, link[:path]).to_s,
+            data: {
+              turbo_frame: "_top",
+            },
+          ) %>
+        <% end %>
       <% end %>
     <% end %>
-  <% end %>
+  </li>
 
   <li class="inline-flex items-center">
     <div class="flex items-center">
