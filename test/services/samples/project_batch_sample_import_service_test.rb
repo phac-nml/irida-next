@@ -86,7 +86,28 @@ module Samples
 
       assert_equal I18n.t('services.spreadsheet_import.missing_field',
                           index: 2),
-                   response['index 2'][:message]
+                   response['index 2'][0][:message]
+    end
+
+    test 'import with bad data duplicate header' do
+      assert_equal 3, @project.samples.count
+
+      file = Rack::Test::UploadedFile.new(
+        Rails.root.join('test/fixtures/files/batch_sample_import/project/invalid_duplicate_header.csv')
+      )
+      blob = ActiveStorage::Blob.create_and_upload!(
+        io: file,
+        filename: file.original_filename,
+        content_type: file.content_type
+      )
+
+      Samples::BatchFileImportService.new(@project.namespace, @john_doe, blob.id,
+                                          @default_params).execute
+
+      assert_equal 3, @project.samples.count
+
+      assert_equal I18n.t('services.spreadsheet_import.duplicate_column_names'),
+                   @project.namespace.errors.errors[0].type
     end
 
     test 'import with bad data short sample name' do
@@ -150,7 +171,7 @@ module Samples
 
       assert_equal I18n.t('services.samples.batch_import.duplicate_sample_name',
                           index: 2),
-                   response['index 2'][:message]
+                   response['index 2'][0][:message]
     end
 
     test 'import samples with metadata' do

@@ -79,11 +79,11 @@ module Samples
       assert_equal I18n.t('services.samples.batch_import.project_puid_not_in_namespace',
                           project_puid: @project.puid,
                           namespace: @group2.full_path),
-                   response['my new sample'][:message]
+                   response['my new sample'][0][:message]
       assert_equal I18n.t('services.samples.batch_import.project_puid_not_in_namespace',
                           project_puid: @project.puid,
                           namespace: @group2.full_path),
-                   response['my new sample 2'][:message]
+                   response['my new sample 2'][0][:message]
     end
 
     test 'import with bad data invalid project' do
@@ -105,7 +105,7 @@ module Samples
 
       assert_equal I18n.t('services.samples.batch_import.project_puid_not_found',
                           project_puid: 'invalid_puid'),
-                   response['my new sample 2'][:message]
+                   response['my new sample 2'][0][:message]
     end
 
     test 'import with bad data missing puid' do
@@ -127,7 +127,7 @@ module Samples
 
       assert_equal I18n.t('services.spreadsheet_import.missing_field',
                           index: 2),
-                   response['index 2'][:message]
+                   response['index 2'][0][:message]
     end
 
     test 'import with bad data blank line' do
@@ -149,7 +149,7 @@ module Samples
 
       assert_equal I18n.t('services.spreadsheet_import.missing_field',
                           index: 2),
-                   response['index 2'][:message]
+                   response['index 2'][0][:message]
     end
 
     test 'import with bad data short sample name' do
@@ -213,7 +213,7 @@ module Samples
 
       assert_equal I18n.t('services.samples.batch_import.duplicate_sample_name',
                           index: 2),
-                   response['index 2'][:message]
+                   response['index 2'][0][:message]
     end
 
     test 'import samples with metadata' do

@@ -1,0 +1,31 @@
+<div
+  class="text-center"
+  data-projects-samples--complete-loaded-value="false"
+  data-controller="projects--samples--complete"
+  data-projects--samples--complete-filters-outlet=".filters"
+>
+  <p class="mb-4 text-lg font-semibold text-slate-900 dark:text-white"><%= t(".description") %></p>
+
+  <% unless problems.empty? %>
+    <p class="mb-4 text-lg font-semibold text-slate-900 dark:text-white"><%= t(".problems") %></p>
+
+    <%= viral_data_table(problems, id: 'problems_table') do |table| %>
+      <% table.with_column("Sample Name") do |row| %>
+        <%= row[:sample_name] %>
+      <% end %>
+      <% table.with_column("Messages") do |row| %>
+        <% row[:message].each do |msg| %>
+          <%= t(".problem_message", path: msg[:path].join(" "), message: msg[:message]) %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+  <% end %>
+  <div class="mt-2">
+    <%= viral_button(state: :primary, data: { action: 'click->viral--dialog#close' }) do %>
+      <%= t(".ok_button") %>
+    <% end %>
+  </div>
+</div>
+
+<turbo-stream action="refresh"></turbo-stream>

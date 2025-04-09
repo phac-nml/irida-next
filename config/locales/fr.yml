@@ -953,6 +953,7 @@ fr:
           sample_export: Exportation d’échantillons
         deselect_all_button: Désélectionner tout
         import_metadata_button: Importer des métadonnées
+        import_samples_button: Import samples
         select_all_button: Tout sélectionner
         subtitle: Voici les échantillons dans %{namespace_type} %{namespace_name}
         title: Échantillons
@@ -1620,6 +1621,7 @@ fr:
         delete_samples_button: Supprimer les échantillons
         deselect_all_button: Désélectionner tout
         import_metadata_button: Importer des métadonnées
+        import_samples_button: Import samples
         new_button: Nouvel échantillon
         no_associated_samples: Il n’y a aucun échantillon associé à ce projet.
         no_samples: Aucun échantillon
@@ -1995,7 +1997,31 @@ fr:
         tooltip: Paramètres d’affichage des métadonnées
       spreadsheet_imports:
         dialog:
+          description: Importing a sample spreadsheet allows multiple samples with or without metadata fields to be added at once.
+          file: File
+          file_help: CSV, TSV, XLS or XLSX.
+          namespace:
+            group:
+              description_html: The spreadsheet is required to have columns for <b>Sample Name</b> and <b>Project PUID</b>, and optionally <b>Sample Description</b>.
+            project:
+              description_html: The spreadsheet is required to have a column for <b>Sample Name</b>, and optionally <b>Sample Description</b>.
+          project_puid_column: Project ID Column
+          sample_description_column: Sample Description Column (Optional)
+          sample_name_column: Sample Name Column
+          select_project_puid_column: Select a Project ID Column
+          select_sample_description_column: Select a Sample Description Column
+          select_sample_name_column: Select a Sample Name Column
           spinner_message: Importing samples, this might take a while...
+          submit_button: Import Samples
+          title: Upload Samples
+        errors:
+          description: 'The sample import completed with the following errors:'
+          ok_button: OK
+        success:
+          description: The sample spreadsheet has been processed.
+          ok_button: OK
+          problem_message: "%{path} %{message}"
+          problems: Errors were encountered while importing the following samples.
     workflow_executions:
       destroy_multiple_confirmation_dialog:
         description:
