@@ -1,5 +1,6 @@
-<li
+<div
   class="namespace-entry <%= @namespace.description.present? ? "has-description" : nil %>"
+  role="treeitem"
 >
   <div class="flex items-center py-3 pr-3 namespace-entry-contents">
     <span class="flex items-center mr-2 folder-toggle-wrap">
@@ -13,4 +14,4 @@
       search_params: @search_params,
     ) %>
   </div>
-</li>
+</div>
