@@ -11,13 +11,13 @@
   <% if attachment.associated_attachment && attachment.metadata['direction'] == 'forward' %>
     <td class="px-6 py-4">
       <div class="flex items-center mb-4">
-        <%= viral_icon(name: :arrow_right, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
+        <%= icon "arrow-right", class: "text-slate-400 size-6 ml-0 mr-2" %>
         <span>
           <%= attachment.file.filename %>
         </span>
       </div>
       <div class="flex items-center">
-        <%= viral_icon(name: :arrow_left, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
+        <%= icon "arrow-left", class: "text-slate-400 size-6 ml-0 mr-2" %>
         <span>
           <%= attachment.associated_attachment.file.filename %>
         </span>
@@ -26,7 +26,7 @@
   <% else %>
     <td class="px-6 py-4">
       <div class="flex items-center">
-        <%= viral_icon(name: :document_text, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
+        <%= icon "file-text", class: "text-slate-400 size-6 ml-0 mr-2" %>
         <%= attachment.file.filename %>
       </div>
     </td>
