@@ -63,18 +63,18 @@
 }
 
 @utility navbar-button {
-  @apply rounded-md p-1 text-sm text-slate-500 hover:bg-slate-300 focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+  @apply rounded-md p-1 text-sm text-slate-500 hover:bg-slate-300 dark:text-slate-400 dark:hover:bg-slate-700;
 
   & button.viral-dropdown--icon {
-    @apply rounded-md p-1 text-sm text-slate-500 hover:bg-slate-300 focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+    @apply rounded-md p-1 text-sm text-slate-500 hover:bg-slate-300 dark:text-slate-400 dark:hover:bg-slate-700;
   }
 }
 
 @utility viral-dropdown--icon {
   & button.navbar-button {
-    @apply rounded-md p-1 text-sm text-slate-500 hover:bg-slate-300 focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+    @apply rounded-md p-1 text-sm text-slate-500 hover:bg-slate-300 dark:text-slate-400 dark:hover:bg-slate-700;
   }
-  @apply rounded-md p-1 text-sm text-slate-500 hover:bg-slate-300 focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+  @apply rounded-md p-1 text-sm text-slate-500 hover:bg-slate-300 dark:text-slate-400 dark:hover:bg-slate-700;
 }
 
 @utility link {
@@ -82,7 +82,7 @@
 }
 
 @utility card {
-  @apply shadow-xs rounded-md border border-slate-200 bg-slate-50 p-4 sm:p-6 dark:border-slate-700 dark:bg-slate-800;
+  @apply rounded-md border border-slate-200 bg-slate-50 p-4 shadow-xs sm:p-6 dark:border-slate-700 dark:bg-slate-800;
 }
 
 @utility form-field {
@@ -96,19 +96,19 @@
   }
 
   & input[type="text"] {
-    @apply focus:ring-primary-600 focus:border-primary-600 block w-full rounded-md border border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply block w-full rounded-md border border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 
   & input[type="search"] {
-    @apply focus:ring-primary-600 focus:border-primary-600 block w-full rounded-md border border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply block w-full rounded-md border border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 
   & input[type="password"] {
-    @apply focus:ring-primary-600 focus:border-primary-600 block w-full rounded-md border border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply block w-full rounded-md border border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 
   & input[type="email"] {
-    @apply focus:ring-primary-600 focus:border-primary-600 block w-full rounded-md border border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply block w-full rounded-md border border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 
   & input[type="text"].prefixed {
@@ -128,7 +128,7 @@
   }
 
   &.datepicker input[type="text"] {
-    @apply focus:ring-primary-700 focus:border-primary-700 dark:focus:border-primary-500 dark:focus:ring-primary-500 block w-full rounded-md border border-slate-300 p-2.5 pl-10 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
+    @apply block w-full rounded-md border border-slate-300 p-2.5 pl-10 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 
   & .select2 input[type="text"] {
@@ -142,11 +142,11 @@
   }
 
   & select {
-    @apply focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-md border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
+    @apply block w-full rounded-md border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 
   & select option {
-    @apply focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-md border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
+    @apply block w-full rounded-md border-slate-300 p-2.5 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 
   & select:has(option[value=""]:checked) {
@@ -154,7 +154,7 @@
   }
 
   & select.error {
-    @apply block w-full rounded-md border-red-500 p-2.5 text-slate-900 focus:border-red-500 focus:ring-red-500 sm:text-sm dark:border-red-400 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-red-500 dark:focus:ring-red-500;
+    @apply block w-full rounded-md border-red-500 p-2.5 text-slate-900 sm:text-sm dark:border-red-400 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 
   & select.prefixed {
@@ -168,7 +168,7 @@
     line-height: inherit;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
-    @apply block w-full rounded-r-md border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-green-500 focus:ring-green-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:drop-shadow-sm dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply block w-full rounded-r-md border border-slate-300 bg-white p-2.5 text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:drop-shadow-sm;
   }
 
   &.invalid label {
@@ -176,19 +176,19 @@
   }
 
   &.invalid input[type="text"] {
-    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
+    @apply block w-full rounded-md border-red-500 p-2.5 text-slate-900 sm:text-sm dark:border-red-400 dark:bg-red-800 dark:text-white dark:placeholder-red-300;
   }
 
   &.invalid input[type="file"] {
-    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
+    @apply block w-full rounded-md border-red-500 p-2.5 text-slate-900 sm:text-sm dark:border-red-400 dark:bg-red-800 dark:text-white dark:placeholder-red-300;
   }
 
   &.invalid textarea {
-    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
+    @apply block w-full rounded-md border-red-500 p-2.5 text-slate-900 sm:text-sm dark:border-red-400 dark:bg-red-800 dark:text-white dark:placeholder-red-300;
   }
 
   & textarea {
-    @apply block w-full rounded-md border border-slate-300 p-2.5 text-sm text-slate-900 focus:border-green-500 focus:ring-green-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply block w-full rounded-md border border-slate-300 p-2.5 text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 }
 
@@ -226,13 +226,13 @@
     line-height: inherit;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
-    @apply block w-full rounded-r-md border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-green-500 focus:ring-green-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:drop-shadow-sm dark:focus:border-green-500 dark:focus:ring-green-500;
+    @apply block w-full rounded-r-md border border-slate-300 bg-white p-2.5 text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:drop-shadow-sm;
   }
 }
 
 @utility datepicker {
   &.form-field input[type="text"] {
-    @apply focus:ring-primary-700 focus:border-primary-700 dark:focus:border-primary-500 dark:focus:ring-primary-500 block w-full rounded-md border border-slate-300 p-2.5 pl-10 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
+    @apply block w-full rounded-md border border-slate-300 p-2.5 pl-10 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 }
 
@@ -250,7 +250,7 @@
 
 @utility error {
   .form-field &select {
-    @apply block w-full rounded-md border-red-500 p-2.5 text-slate-900 focus:border-red-500 focus:ring-red-500 sm:text-sm dark:border-red-400 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-red-500 dark:focus:ring-red-500;
+    @apply block w-full rounded-md border-red-500 p-2.5 text-slate-900 sm:text-sm dark:border-red-400 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 }
 
@@ -260,15 +260,15 @@
   }
 
   &.form-field input[type="text"] {
-    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
+    @apply border-red-500 bg-red-50 placeholder-red-700 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
   }
 
   &.form-field input[type="file"] {
-    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
+    @apply border-red-500 bg-red-50 placeholder-red-700 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
   }
 
   &.form-field textarea {
-    @apply border-red-500 bg-red-50 placeholder-red-700 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
+    @apply border-red-500 bg-red-50 placeholder-red-700 dark:border-red-400 dark:bg-red-800 dark:placeholder-red-300;
   }
 }
 
@@ -277,7 +277,7 @@
 }
 
 @utility row-btn {
-  @apply px-1 py-0 text-sm text-slate-500 hover:bg-slate-100 focus:ring-4 focus:ring-slate-200 dark:text-slate-400 dark:hover:bg-slate-700 dark:focus:ring-slate-700;
+  @apply px-1 py-0 text-sm text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-700;
 
   & svg {
     @apply h-5 w-5;
@@ -326,7 +326,7 @@
 }
 
 @utility viral-dropdown--button {
-  @apply hover:text-primary-700 flex items-center rounded-md border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-900 hover:bg-slate-100 focus:z-10 focus:ring-4 focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700;
+  @apply hover:text-primary-700 flex items-center rounded-md border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-900 hover:bg-slate-100 focus:z-10 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white;
 }
 
 @utility button {
@@ -350,15 +350,15 @@
 }
 
 @utility button--state-default {
-  @apply border-slate-200 bg-white text-slate-900 hover:bg-slate-100 hover:text-slate-950 focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700;
+  @apply border-slate-200 bg-white text-slate-900 hover:bg-slate-100 hover:text-slate-950 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white;
 }
 
 @utility button--state-destructive {
-  @apply border-red-800 bg-red-700 text-white hover:bg-red-800 focus:ring-red-300 dark:border-red-600 dark:bg-red-600 dark:text-white dark:hover:bg-red-700 dark:focus:ring-red-700;
+  @apply border-red-800 bg-red-700 text-white hover:bg-red-800 dark:border-red-600 dark:bg-red-600 dark:text-white dark:hover:bg-red-700;
 }
 
 @utility button--state-primary {
-  @apply border-primary-800 bg-primary-700 hover:bg-primary-800 focus:ring-primary-300 dark:focus:ring-primary-700 dark:bg-primary-800 dark:border-primary-900 dark:hover:bg-primary-700 text-white dark:text-white;
+  @apply border-primary-800 bg-primary-700 hover:bg-primary-800 dark:bg-primary-800 dark:border-primary-900 dark:hover:bg-primary-700 text-white dark:text-white;
 }
 
 @utility dialog--size {
@@ -386,7 +386,7 @@
 }
 
 @utility dialog--close {
-  @apply ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-slate-400 hover:bg-slate-200 hover:text-slate-900 focus:ring-4 focus:ring-slate-200 dark:hover:bg-slate-600 dark:hover:text-white dark:focus:ring-slate-700;
+  @apply ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-slate-400 hover:bg-slate-200 hover:text-slate-900 dark:hover:bg-slate-600 dark:hover:text-white;
 }
 
 @utility dialog--section {
@@ -871,7 +871,7 @@
 
   /* VIRAL DIALOG */
   dialog {
-    @apply focus:outline-hidden max-h-full w-full max-w-2xl overflow-y-hidden rounded-lg bg-white p-0 shadow-sm dark:bg-slate-800;
+    @apply max-h-full w-full max-w-2xl overflow-y-hidden rounded-lg bg-white p-0 shadow-sm dark:bg-slate-800;
     top: 50%;
     left: 50%;
     -webkit-transform: translateX(-50%) translateY(-50%);
@@ -881,11 +881,11 @@
   }
 
   dialog::backdrop {
-    @apply backdrop-blur-xs bg-slate-200/40;
+    @apply bg-slate-200/40 backdrop-blur-xs;
   }
 
   .dark dialog::backdrop {
-    @apply backdrop-blur-xs bg-slate-600/40;
+    @apply bg-slate-600/40 backdrop-blur-xs;
   }
 
   .dialog--section {
@@ -899,7 +899,7 @@
 }
 
 .pagy-nav.pagination {
-  @apply shadow-xs isolate inline-flex -space-x-px rounded-md;
+  @apply isolate inline-flex -space-x-px rounded-md shadow-xs;
 }
 
 .page.next a {
@@ -920,7 +920,7 @@
 
 .page a,
 .page.gap {
-  @apply hover:text-primary-700 relative inline-flex items-center border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-100 focus:z-10 focus:ring-4 focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white dark:focus:ring-slate-700;
+  @apply hover:text-primary-700 relative inline-flex items-center border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white;
 }
 
 .page.active {
@@ -948,9 +948,9 @@ div.field_with_errors > :is(select) {
 }
 
 input[type="checkbox"] {
-  @apply text-primary-600 checked:border-primary-500 focus:ring-primary-500 dark:checked:border-primary-500 dark:checked:bg-primary-500 mr-2 mt-0.5 shrink-0 rounded-sm border-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:focus:ring-offset-slate-800;
+  @apply text-primary-600 checked:border-primary-500 dark:checked:border-primary-500 dark:checked:bg-primary-500 mt-0.5 mr-2 shrink-0 rounded-sm border-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800;
 }
 
 input[type="radio"] {
-  @apply text-primary-600 checked:border-primary-500 focus:ring-primary-500 dark:checked:border-primary-500 dark:checked:bg-primary-500 mt-0.5 shrink-0 rounded-full border-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:border-slate-700 dark:bg-slate-600 dark:focus:ring-offset-slate-800;
+  @apply text-primary-600 checked:border-primary-500 dark:checked:border-primary-500 dark:checked:bg-primary-500 mt-0.5 shrink-0 rounded-full border-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:border-slate-700 dark:bg-slate-600;
 }
