@@ -13,8 +13,23 @@ module NamespaceTree
         @icon_size = icon_size
         @search_params = search_params
       end
-
       # rubocop:enable Metrics/ParameterLists
+
+      def avatar_icon
+        if @namespace.type == 'Group'
+          :squares_2x2
+        elsif @namespace.type == 'Project'
+          :rectangle_stack
+        end
+      end
+
+      def namespace_path
+        if @namespace.type == 'Group'
+          group_path(@namespace)
+        elsif @namespace.type == 'Project'
+          namespace_project_path(@namespace.parent, @namespace.project)
+        end
+      end
     end
   end
 end
