@@ -13,7 +13,7 @@
           <%= link_to pipeline_selection_workflow_executions_submissions_path(namespace_id: @group.id),
         data: { turbo_stream: true, controller: "action-link", action_link_required_value: 1, action: "turbo:morph-element->action-link#idempotentConnect", },
                   class: "button button--size-default button--state-default action-link" do %>
-            <%= viral_icon(name: :rocket_launch, classes: "w-5 h-5 inline-block") %>
+            <%= icon "rocket-launch", class: "size-5 inline-block" %>
             <span class="sr-only"><%= t(".workflows.button_sr") %></span>
           <% end %>
         <% end %>
@@ -28,7 +28,7 @@
                 },
                 class:
                   "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300
-                                               border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
+                                                             border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
               ) %>
             <% else %>
               <% dropdown.with_item(
