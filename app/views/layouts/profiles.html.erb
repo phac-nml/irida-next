@@ -15,7 +15,7 @@
           <% if allowed_to?(:edit_password?, @user) %>
             <%= render section.with_item(
               url: edit_profile_password_path,
-              icon: "lock_closed",
+              icon: "lock",
               label: t(:"profiles.sidebar.password"),
               selected: @current_page == t(:"profiles.sidebar.password"),
             ) %>
@@ -28,13 +28,13 @@
           ) %>
           <%= render section.with_item(
             url: profile_preferences_path,
-            icon: :adjustment_horizontal,
+            icon: "faders-horizontal",
             label: t(:"profiles.sidebar.preferences"),
             selected: @current_page == t(:"profiles.sidebar.preferences"),
           ) %>
           <%= render section.with_item(
             url: profile_account_path,
-            icon: "building_library",
+            icon: "user-gear",
             label: t(:"profiles.sidebar.account"),
             selected: @current_page == t(:"profiles.sidebar.account"),
           ) %>
