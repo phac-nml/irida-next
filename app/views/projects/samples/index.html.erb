@@ -98,7 +98,7 @@
 
           <% if Flipper.enabled?(:batch_sample_spreadsheet_import) && allowed_to?(:import_samples_and_metadata?, @project.namespace) %>
             <% dropdown.with_item(
-              label: t("projects.samples.index.import_samples_button"),
+              label: t("projects.samples.index.sample_actions_button.import_samples"),
               url: new_namespace_project_samples_spreadsheet_import_path,
               data: {
                 turbo_stream: true,
