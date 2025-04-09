@@ -5,11 +5,12 @@ export default class extends Controller {
 
   connect() {
     let theme = localStorage.getItem("theme");
-    if (theme === null || theme === "light") {
+    if (theme === "light") {
       this.lightTarget.checked = "checked";
     } else if (theme === "dark") {
       this.darkTarget.checked = "checked";
     } else {
+      // no setting or value set to "system"
       this.systemTarget.checked = "checked";
     }
   }
