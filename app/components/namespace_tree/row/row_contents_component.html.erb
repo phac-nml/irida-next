@@ -50,18 +50,18 @@
           id="<%= "#{dom_id(@namespace)}-samples-count" %>"
           class="flex items-center text-sm samples-count"
         >
-          <%= icon "flask", class: "size-5 text-slate-500 dark:text-slate-300" %><%= @namespace.aggregated_samples_count %>
+          <%= icon "flask", class: "size-4 text-slate-500 dark:text-slate-300" %><%= @namespace.aggregated_samples_count %>
         </span>
       <% end %>
       <%= viral_tooltip(title: t(:'.stats.projects')) do %>
         <span class="flex items-center text-sm">
-          <%= viral_icon(name: :rectangle_stack, color: :subdued, classes: "h-5 w-5 mr-1") %>
+          <%= icon "cards-three", class: "size-4 text-slate-500 dark:text-slate-300" %>
           <%= @namespace.project_namespaces.count %>
         </span>
       <% end %>
       <%= viral_tooltip(title: t(:'.stats.subnamespaces')) do %>
         <span class="flex items-center text-sm">
-          <%= viral_icon(name: :squares_2x2, color: :subdued, classes: "h-5 w-5 mr-1") %><%= @namespace.children.count %>
+          <%= icon "stack", class: "size-4" %><%= @namespace.children.count %>
         </span>
       <% end %>
     <% end %>
@@ -71,7 +71,7 @@
           id="<%= "#{dom_id(@namespace.project)}-samples-count" %>"
           class="flex items-center text-sm"
         >
-          <%= viral_icon(name: :beaker, color: :subdued, classes: "h-5 w-5") %><%= @namespace.project.samples.size %>
+          <%= icon "flask", class: "size-4") %><%= @namespace.project.samples.size %>
         </span>
       <% end %>
     <% end %>
