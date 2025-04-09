@@ -112,23 +112,44 @@
               section_header: true,
             ) %>
 
-            <% dropdown.with_item(
-              label: t(".sample_actions_button.linelist_export"),
-              url: new_data_export_path,
-              params: {
-                export_type: "linelist",
-                namespace_id: @project.namespace.id,
-              },
-              data: {
-                action:
-                  "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
-                turbo_stream: true,
-                controller: "action-link",
-                action_link_required_value: 1,
-              },
-              class:
-                "flex w-full items-center border-b border-slate-200 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-link",
-            ) %>
+            <% if @project.namespace.metadata_fields.empty? %>
+              <% dropdown.with_item(
+                label: t(".sample_actions_button.linelist_export"),
+                url: new_data_export_path,
+                params: {
+                  export_type: "linelist",
+                  namespace_id: @project.namespace.id,
+                },
+                data: {
+                  action:
+                    "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
+                  turbo_stream: true,
+                  controller: "action-link",
+                  action_link_required_value: 1,
+                },
+                class:
+                  "flex w-full items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300 border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
+              ) %>
+            <% else %>
+              <% dropdown.with_item(
+                label: t(".sample_actions_button.linelist_export"),
+                url: new_data_export_path,
+                params: {
+                  export_type: "linelist",
+                  namespace_id: @project.namespace.id,
+                },
+                data: {
+                  action:
+                    "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
+                  turbo_stream: true,
+                  controller: "action-link",
+                  action_link_required_value: 1,
+                },
+                class:
+                  "flex w-full items-center border-b border-slate-200 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-link",
+              ) %>
+            <% end %>
+
             <% dropdown.with_item(
               label: t(".sample_actions_button.sample_export"),
               url: new_data_export_path,
