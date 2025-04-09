@@ -1,7 +1,7 @@
 <%= form_with url: '#' do |form| %>
   <%= viral_prefixed_text_input(form: form, name: "prefixed") do |input| %>
     <%= input.with_prefix do %>
-      <%= viral_icon(name: :exclamation_circle, color: :warning, classes: "h-5 w-5") %>
+      <%= icon "warning-circle", class: "text-yellow-500 size-5" %>
     <% end %>
   <% end %>
 <% end %>
