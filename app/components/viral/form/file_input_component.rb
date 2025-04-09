@@ -28,7 +28,7 @@ module Viral
           args[:pattern] = @pattern if @pattern.present?
           args[:class] = class_names(
             'block w-full text-sm text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50',
-            'dark:text-slate-400 focus:outline-hidden dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400',
+            'dark:text-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400',
             args[:class]
           )
         end

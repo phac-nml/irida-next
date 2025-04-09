@@ -19,9 +19,9 @@ module Viral
         @options.tap do |opts|
           opts[:id] = @id
           opts[:class] = class_names(
-            'border border-slate-300 text-slate-900 sm:text-sm rounded-md focus:ring-primary-700',
-            'focus:border-primary-700 block w-full pl-10 p-2.5 dark:bg-slate-800 dark:border-slate-600',
-            'dark:placeholder-slate-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'
+            'border border-slate-300 text-slate-900 sm:text-sm rounded-md',
+            'block w-full pl-10 p-2.5 dark:bg-slate-800 dark:border-slate-600',
+            'dark:placeholder-slate-400 dark:text-white'
           )
           opts[:data] = {
             datepicker_target: 'datePicker'
