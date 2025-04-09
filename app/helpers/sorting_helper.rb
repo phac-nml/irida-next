@@ -13,7 +13,7 @@ module SortingHelper
   def sorting_item(dropdown, ransack_obj, field, dir)
     dropdown.with_item(label: t(format('.sorting.%<field>s_%<dir>s', field:, dir:)),
                        url: sorting_url(ransack_obj, field, dir:),
-                       icon_name: active_sort(ransack_obj, field, dir) ? 'check' : 'blank',
+                       icon_name: active_sort(ransack_obj, field, dir) ? 'check' : nil,
                        data: {
                          turbo_stream: true
                        })
