@@ -17,7 +17,6 @@ module ViewHelper
     file_input: 'Viral::Form::FileInputComponent',
     flash: 'Viral::FlashComponent',
     help_text: 'Viral::Form::HelpTextComponent',
-    icon: 'Viral::IconComponent',
     pageheader: 'Viral::PageHeaderComponent',
     prefixed_boolean: 'Viral::Form::Prefixed::BooleanComponent',
     prefixed_select: 'Viral::Form::Prefixed::SelectComponent',
@@ -37,22 +36,5 @@ module ViewHelper
     define_method "viral_#{name}" do |*args, **kwargs, &block|
       render component.constantize.new(*args, **kwargs), &block
     end
-  end
-
-  def viral_icon_source(name)
-    path = if Rails.configuration.auth_config[name]
-             Rails.root.join(
-               'config', 'authentication', 'icons', Rails.configuration.auth_config[name]
-             ) # Auth Icon Overrides
-           else
-             Rails.root.join('app', 'assets', 'icons', 'heroicons', "#{name}.svg")
-           end
-    file = File.read(path)
-    doc = Nokogiri::HTML::DocumentFragment.parse(file)
-    svg = doc.at_css 'svg'
-    svg[:class] = "viral-icon__Svg icon-#{name}"
-    svg[:focusable] = false
-    svg[:'aria-hidden'] = true
-    doc.to_html.html_safe # rubocop:disable Rails/OutputSafety
   end
 end
