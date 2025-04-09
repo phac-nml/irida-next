@@ -428,9 +428,9 @@ class GroupsTest < ApplicationSystemTestCase
     assert_selector 'h1', text: @group.name
 
     assert_selector 'a.active', text: I18n.t(:'groups.show.tabs.subgroups_and_projects')
-    assert_selector 'li.namespace-entry', count: 20
+    assert_selector 'div.namespace-entry', count: 20
     click_on I18n.t(:'viral.pagy.pagination_component.next')
-    assert_selector 'li.namespace-entry', count: 1
+    assert_selector 'div.namespace-entry', count: 1
 
     click_on I18n.t(:'groups.show.tabs.shared_namespaces')
     assert_selector 'a.active', text: I18n.t(:'groups.show.tabs.shared_namespaces')
@@ -452,7 +452,7 @@ class GroupsTest < ApplicationSystemTestCase
     fill_in I18n.t('groups.show.search.placeholder'), with: 'project 2'
     find('input.t-search-component').native.send_keys(:return)
 
-    assert_selector 'li.namespace-entry', count: 5
+    assert_selector 'div.namespace-entry', count: 5
   end
 
   test 'filtering renders flat list for subgroups and projects' do
@@ -464,7 +464,7 @@ class GroupsTest < ApplicationSystemTestCase
     visit group_url(group12)
 
     within('div.namespace-tree-container') do
-      assert_selector 'li', count: 2
+      assert_selector 'div.namespace-entry', count: 2
       within("#group_#{subgroup12a.id}") do
         assert_text subgroup12a.name
         assert_selector 'svg[class="viral-icon__Svg icon-chevron_right"]'
@@ -482,7 +482,7 @@ class GroupsTest < ApplicationSystemTestCase
     find('input.t-search-component').native.send_keys(:return)
 
     within('div.namespace-tree-container') do
-      assert_selector 'li', count: 3
+      assert_selector 'div.namespace-entry', count: 3
       assert_text subgroup12a.name
       assert_text subgroup12b.name
       assert_text subgroup12aa.name
@@ -497,13 +497,13 @@ class GroupsTest < ApplicationSystemTestCase
     click_on I18n.t(:'groups.show.tabs.shared_namespaces')
 
     within('div.namespace-tree-container') do
-      assert_selector 'li', count: 1
+      assert_selector 'div.namespace-entry', count: 1
       within("#group_#{@subgroup2.id}") do
         assert_text @subgroup2.name
         assert_selector 'svg[class="viral-icon__Svg icon-chevron_right"]'
       end
       assert_no_text subgroup3.name
-      assert_no_selector "li#group_#{subgroup3.id}"
+      assert_no_selector "div.namespace-entry#group_#{subgroup3.id}"
     end
 
     input_field = find('input.t-search-component')
@@ -511,7 +511,7 @@ class GroupsTest < ApplicationSystemTestCase
     input_field.native.send_keys(:return)
 
     within('div.namespace-tree-container') do
-      assert_selector 'li', count: 1
+      assert_selector 'div.namespace-entry', count: 1
       assert_text subgroup3.name
       assert_no_selector 'svg[class="viral-icon__Svg icon-chevron_right"]'
     end
@@ -523,7 +523,7 @@ class GroupsTest < ApplicationSystemTestCase
     click_on I18n.t(:'groups.show.tabs.shared_namespaces')
 
     within('div.namespace-tree-container') do
-      assert_selector 'li', count: 1
+      assert_selector 'div.namespace-entry', count: 1
       within("#group_#{@subgroup2.id}") do
         assert_text @subgroup2.name
         assert_selector 'svg[class="viral-icon__Svg icon-chevron_right"]'
@@ -541,7 +541,7 @@ class GroupsTest < ApplicationSystemTestCase
     input_field.native.send_keys(:return)
 
     within('div.namespace-tree-container') do
-      assert_selector 'li', count: 9
+      assert_selector 'div.namespace-entry', count: 9
       assert_text @subgroup2.name
 
       subgroup_num = 3
