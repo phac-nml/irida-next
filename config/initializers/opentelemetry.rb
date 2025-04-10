@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'opentelemetry/sdk'
-require 'opentelemetry/instrumentation/active_job'
 require 'opentelemetry-exporter-otlp'
 
 require 'opentelemetry-metrics-sdk'
