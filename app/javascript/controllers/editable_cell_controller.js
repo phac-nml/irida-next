@@ -38,8 +38,14 @@ export default class extends Controller {
       .closest("table")
       .querySelector(`th:nth-child(${element.cellIndex + 1})`).dataset.fieldId;
     element.id = this.#elementId(element);
+
+    // Get the parent DOM ID to extract the item ID
+    // required because we use dom_id as the id of the parent element
+    const parent_dom_id = element.parentNode.id;
+    const item_id = parent_dom_id.split("_")[1];
+
     let form = this.formTemplateTarget.innerHTML
-      .replace(/SAMPLE_ID_PLACEHOLDER/g, element.parentNode.id)
+      .replace(/SAMPLE_ID_PLACEHOLDER/g, item_id)
       .replace(/FIELD_ID_PLACEHOLDER/g, encodeURIComponent(field))
       .replace(/FIELD_VALUE_PLACEHOLDER/g, element.innerText)
       .replace(/CELL_ID_PLACEHOLDER/g, element.id);
