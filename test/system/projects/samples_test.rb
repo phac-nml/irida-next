@@ -87,7 +87,7 @@ module Projects
                                                                            locale: @user.locale))
 
       assert_selector 'input#select-page'
-      assert_selector "input#sample_#{@sample1.id}"
+      assert_selector "input##{dom_id(@sample1, :checkbox)}"
     end
 
     test 'User with role < Analyst does not see sample table checkboxes' do
@@ -98,7 +98,7 @@ module Projects
                                                                            locale: @user.locale))
 
       assert_no_selector 'input#select-page'
-      assert_no_selector "input#sample_#{@sample1.id}"
+      assert_no_selector "input##{dom_id(@sample1, :checkbox)}"
     end
 
     test 'User with role >= Analyst sees workflow execution link' do
@@ -2016,8 +2016,8 @@ module Projects
       ### ACTIONS START ###
       # select samples 1 and 2 for cloning
       within '#samples-table table tbody' do
-        find("input#sample_#{@sample1.id}").click
-        find("input#sample_#{@sample2.id}").click
+        find("input##{dom_id(@sample1, :checkbox)}").click
+        find("input##{dom_id(@sample2, :checkbox)}").click
       end
       click_link I18n.t('projects.samples.index.clone_button')
       assert_selector '#dialog'
