@@ -427,24 +427,6 @@
     border-top: 0;
   }
 
-  & .folder-toggle-wrap {
-    font-size: 0;
-    flex-shrink: 0;
-  }
-
-  & .folder-toggle-wrap span {
-    font-size: 12px;
-  }
-
-  & .item-type-icon {
-    margin-top: 2px;
-    width: 20px;
-  }
-
-  & > .namespace-entry:not(.has-children) .folder-caret {
-    opacity: 0;
-  }
-
   & & {
     margin-bottom: 0;
     margin-left: 30px;
@@ -457,7 +439,7 @@
     width: 0;
     position: absolute;
     top: 5px;
-    bottom: 0;
+    bottom: 5px;
     left: -16px;
     @apply border-l-2 border-slate-200;
   }
@@ -477,6 +459,7 @@
     height: 0;
     position: absolute;
     top: 30px;
+    bottom: 5px;
     left: -16px;
     @apply border-t-2 border-slate-200;
   }
@@ -488,7 +471,7 @@
   & & .namespace-entry:last-child::before {
     height: auto;
     top: 30px;
-    bottom: 0;
+    bottom: 5px;
     @apply bg-white;
   }
 
@@ -586,10 +569,6 @@
     border-top: 0;
   }
 
-  .namespace-list-tree > &:not(.has-children) .folder-caret {
-    opacity: 0;
-  }
-
   .namespace-list-tree .namespace-list-tree & {
     position: relative;
   }
@@ -601,6 +580,7 @@
     height: 0;
     position: absolute;
     top: 30px;
+    bottom: 5px;
     left: -16px;
     @apply border-t-2 border-slate-200;
   }
@@ -616,7 +596,7 @@
   .namespace-list-tree .namespace-list-tree &:last-child::before {
     height: auto;
     top: 30px;
-    bottom: 0;
+    bottom: 5px;
     @apply bg-white;
   }
 
@@ -659,30 +639,6 @@
 
   .namespace-list-tree &.namespace-entry > .namespace-entry-contents:hover {
     @apply cursor-pointer border-slate-50 bg-slate-50 dark:border-slate-600 dark:bg-slate-600;
-  }
-}
-
-@utility folder-toggle-wrap {
-  .namespace-list-tree & {
-    font-size: 0;
-    flex-shrink: 0;
-  }
-
-  .namespace-list-tree & span {
-    font-size: 12px;
-  }
-}
-
-@utility item-type-icon {
-  .namespace-list-tree & {
-    margin-top: 2px;
-    width: 20px;
-  }
-}
-
-@utility folder-caret {
-  .namespace-list-tree > .namespace-entry:not(.has-children) & {
-    opacity: 0;
   }
 }
 
