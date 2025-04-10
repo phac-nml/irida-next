@@ -926,10 +926,7 @@ class DataExportsTest < ApplicationSystemTestCase
     end
 
     click_button I18n.t('projects.samples.index.sample_actions_button.label')
-    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.samples.index.sample_actions_button.linelist_export')
-
-    assert_selector 'button',
+    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
                     text: I18n.t('projects.samples.index.sample_actions_button.linelist_export')
   end
 

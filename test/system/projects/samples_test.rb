@@ -1903,7 +1903,7 @@ module Projects
 
       ### ACTIONS START ###
       # start import
-      click_link I18n.t('projects.samples.index.import_samples_button')
+      click_link I18n.t('projects.samples.index.sample_actions_button.import_samples')
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/project/valid.csv'))
@@ -1948,7 +1948,7 @@ module Projects
 
       ### ACTIONS START ###
       # start import
-      click_link I18n.t('projects.samples.index.import_samples_button')
+      click_link I18n.t('projects.samples.index.sample_actions_button.import_samples')
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/project/invalid_short_sample_name.csv'))
@@ -1998,7 +1998,7 @@ module Projects
 
       ### ACTIONS START ###
       # start import
-      click_link I18n.t('projects.samples.index.import_samples_button')
+      click_link I18n.t('projects.samples.index.sample_actions_button.import_samples')
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/project/invalid_duplicate_header.csv'))
