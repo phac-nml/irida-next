@@ -1,17 +1,17 @@
-<div class=" w-full border-t border-slate-200 dark:border-slate-700">
-  <div class="flex items-center justify-center space-x-4 mt-6">
-    <% if prev_url %>
-      <%= link_to t("viral.pagy.pagination_component.previous"),
-      prev_url,
-      **link_arguments,
-      class: "button button--state-default button--size-default" %>
-    <% end %>
-    <% if next_url %>
-      <%= link_to t("viral.pagy.pagination_component.next"),
-      next_url,
-      **link_arguments,
-      class: "button button--state-default button--size-default" %>
-    <% end %>
-  </div>
-  <p class="text-center m-4 text-slate-500"><%== info %></p>
+<div class="flex items-center justify-center space-x-4 mt-6">
+  <% if prev_url %>
+    <%= link_to t("viral.pagy.pagination_component.previous"),
+    prev_url,
+    **link_arguments,
+    class:
+      "text-slate-800 bg-white border border-slate-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-600 dark:hover:bg-slate-700 dark:hover:border-slate-600" %>
+  <% end %>
+  <% if next_url %>
+    <%= link_to t("viral.pagy.pagination_component.next"),
+    next_url,
+    **link_arguments,
+    class:
+      "text-slate-800 bg-white border border-slate-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-600 dark:hover:bg-slate-700 dark:hover:border-slate-600" %>
+  <% end %>
 </div>
+<p class="text-center m-4 text-slate-800 dark:text-slate-300"><%== info %></p>
