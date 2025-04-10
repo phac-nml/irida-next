@@ -588,7 +588,7 @@ module Projects
       assert_text 'Displaying 12 items'
       assert_selector '#workflow-executions-table table tbody tr', count: 12
 
-      assert_selector 'a', text: I18n.t('workflow_executions.index.delete_workflows_button')
+      assert_selector 'button', text: I18n.t('workflow_executions.index.delete_workflows_button')
     end
 
     test 'user with access level Analyst cannot view delete workflows link' do

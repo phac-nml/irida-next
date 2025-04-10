@@ -1223,7 +1223,7 @@ module Groups
 
       ### ACTIONS START ###
       # start import
-      click_link I18n.t('groups.samples.index.import_samples_button')
+      click_link I18n.t('groups.samples.index.sample_actions_button.import_samples')
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/group/valid.csv'))
@@ -1272,7 +1272,7 @@ module Groups
 
       ### ACTIONS START ###
       # start import
-      click_link I18n.t('groups.samples.index.import_samples_button')
+      click_link I18n.t('groups.samples.index.sample_actions_button.import_samples')
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/group/invalid_missing_puid.csv'))
