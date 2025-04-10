@@ -25,6 +25,7 @@
             <% dropdown.with_item(
               label: t("projects.samples.index.sample_actions_button.new_sample"),
               url: new_namespace_project_sample_path,
+              disableable: true,
               data: {
                 turbo_stream: true,
               },
@@ -35,6 +36,7 @@
             <% dropdown.with_item(
               label: t("projects.samples.index.sample_actions_button.clone"),
               url: new_namespace_project_samples_clone_path,
+              disableable: true,
               data: {
                 action:
                   "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
@@ -50,6 +52,7 @@
             <% dropdown.with_item(
               label: t("projects.samples.index.sample_actions_button.transfer"),
               url: new_namespace_project_samples_transfer_path,
+              disableable: true,
               data: {
                 action:
                   "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
@@ -69,6 +72,7 @@
               params: {
                 deletion_type: "multiple",
               },
+              disableable: true,
               data: {
                 action:
                   "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
@@ -90,6 +94,7 @@
             <% dropdown.with_item(
               label: t("projects.samples.index.sample_actions_button.import_metadata"),
               url: new_namespace_project_samples_file_import_path,
+              disableable: true,
               data: {
                 turbo_stream: true,
               },
@@ -100,6 +105,7 @@
             <% dropdown.with_item(
               label: t("projects.samples.index.sample_actions_button.import_samples"),
               url: new_namespace_project_samples_spreadsheet_import_path,
+              disableable: true,
               data: {
                 turbo_stream: true,
               },
@@ -120,6 +126,7 @@
                   export_type: "linelist",
                   namespace_id: @project.namespace.id,
                 },
+                disableable: true,
                 data: {
                   action:
                     "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
@@ -138,6 +145,7 @@
                   export_type: "linelist",
                   namespace_id: @project.namespace.id,
                 },
+                disableable: true,
                 data: {
                   action:
                     "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
@@ -157,6 +165,7 @@
                 export_type: "sample",
                 namespace_id: @project.namespace.id,
               },
+              disableable: true,
               data: {
                 action:
                   "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",

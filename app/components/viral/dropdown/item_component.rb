@@ -7,7 +7,7 @@ module Viral
       attr_reader :label, :icon, :url, :section_header, :params, :disableable
 
       # rubocop:disable Metrics/ParameterLists
-      def initialize(label:, url: nil, params: nil, disableable: true, icon_name: nil, section_header: false,
+      def initialize(label:, url: nil, params: nil, disableable: false, icon_name: nil, section_header: false,
                      **system_arguments)
         @label = label
         @icon = icon_name

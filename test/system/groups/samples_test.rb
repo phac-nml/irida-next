@@ -274,7 +274,7 @@ module Groups
 
       within('div#limit-component') do
         find('button').click
-        click_button '10'
+        click_link '10'
       end
 
       assert_selector 'div#limit-component button span', text: '10'
@@ -307,7 +307,7 @@ module Groups
 
       within('div#limit-component') do
         find('button').click
-        click_button '10'
+        click_link '10'
       end
 
       assert_selector 'div#limit-component button span', text: '10'
@@ -1223,7 +1223,8 @@ module Groups
 
       ### ACTIONS START ###
       # start import
-      click_link I18n.t('groups.samples.index.sample_actions_button.import_samples')
+      click_button I18n.t('groups.samples.index.sample_actions_button.label')
+      click_button I18n.t('groups.samples.index.sample_actions_button.import_samples')
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/group/valid.csv'))
@@ -1272,7 +1273,8 @@ module Groups
 
       ### ACTIONS START ###
       # start import
-      click_link I18n.t('groups.samples.index.sample_actions_button.import_samples')
+      click_button I18n.t('groups.samples.index.sample_actions_button.label')
+      click_button I18n.t('groups.samples.index.sample_actions_button.import_samples')
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/group/invalid_missing_puid.csv'))

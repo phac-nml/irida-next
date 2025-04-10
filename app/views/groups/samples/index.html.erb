@@ -27,6 +27,7 @@
             <% dropdown.with_item(
               label: t("groups.samples.index.sample_actions_button.import_metadata"),
               url: new_group_samples_file_import_path,
+              disableable: true,
               data: {
                 turbo_stream: true,
               },
@@ -37,6 +38,7 @@
             <% dropdown.with_item(
               label: t("groups.samples.index.sample_actions_button.import_samples"),
               url: new_group_samples_spreadsheet_import_path,
+              disableable: true,
               data: {
                 turbo_stream: true,
               },
@@ -57,6 +59,7 @@
                   export_type: "linelist",
                   namespace_id: @group.id,
                 },
+                disableable: true,
                 data: {
                   action:
                     "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
@@ -75,6 +78,7 @@
                   export_type: "linelist",
                   namespace_id: @group.id,
                 },
+                disableable: true,
                 data: {
                   action:
                     "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
@@ -93,6 +97,7 @@
                 export_type: "sample",
                 namespace_id: @group.id,
               },
+              disableable: true,
               data: {
                 action:
                   "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
