@@ -1,4 +1,4 @@
-<ul class="flex flex-col groups-list namespace-list-tree">
+<div class="flex flex-col groups-list namespace-list-tree" role="<%= @role %>">
   <%= render NamespaceTree::RowComponent.with_collection(
     namespaces,
     path: path,
@@ -9,4 +9,4 @@
     search_params: search_params,
     icon_size: icon_size,
   ) %>
-</ul>
+</div>

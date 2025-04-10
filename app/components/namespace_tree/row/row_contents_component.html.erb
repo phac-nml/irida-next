@@ -1,93 +1,67 @@
-<% if @namespace.type == "Group" %>
-  <%= viral_icon(name: :squares_2x2, classes: "h-5 w-5 text-slate-400 mr-2") %>
-  <%= viral_avatar(
-    name: @namespace.name,
-    size: @icon_size,
-    colour_string: "#{@namespace.name}-#{@namespace.id}",
-    data: {
-      turbo: false,
-    },
-    url: group_path(@namespace),
-  ) %>
-<% else %>
-  <%= viral_icon(name: :rectangle_stack, classes: "h-5 w-5 text-slate-400 mr-2") %>
-  <%= viral_avatar(
-    name: @namespace.name,
-    size: @icon_size,
-    colour_string: "#{@namespace.name}-#{@namespace.id}",
-    data: {
-      turbo: false,
-    },
-    url: namespace_project_path(@namespace.parent, @namespace.project),
-  ) %>
-<% end %>
+<%= viral_icon(name: avatar_icon(), classes: "h-5 w-5 text-slate-400 mr-2") %>
+<%= viral_avatar(
+  name: @namespace.name,
+  size: @icon_size,
+  colour_string: "#{@namespace.name}-#{@namespace.id}",
+  data: {
+    turbo: false,
+  },
+  classes: "@max-2xl:invisible @max-2xl:hidden",
+) %>
 
 <div class="flex items-center ml-2 namespace-text-container grow">
   <div class="flex flex-col namespace-text">
-    <div class="namespace-text grow shrink">
-      <div class="flex flex-wrap items-center mr-3 font-semibold title">
-        <div class="flex items-center space-x-2">
-          <% if @namespace.type == "Group" %>
-            <%= link_to group_path(@namespace), data: { turbo: false } do %>
-              <%= highlight(
-                @namespace.name,
-                defined?(@search_params[:name_or_puid_cont]) &&
-                  @search_params[:name_or_puid_cont],
-                highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
-              ) %>
-            <% end %>
-          <% else %>
-            <%= link_to namespace_project_path(@namespace.parent, @namespace.project),
-            data: {
-              turbo: false,
-            } do %>
-              <%= highlight(
-                @namespace.name,
-                defined?(@search_params[:name_or_puid_cont]) &&
-                  @search_params[:name_or_puid_cont],
-                highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
-              ) %>
-            <% end %>
-          <% end %>
-          <%= render PuidComponent.new(puid: @namespace.puid) %>
-          <%= viral_pill(
-            text:
-              t(
-                :"members.access_levels.level_#{Member.effective_access_level(@namespace, Current.user)}",
-              ),
-            color: "transparent",
-            border: true,
-            classes: "ml-2",
-          ) %>
-        </div>
-
+    <div class="flex flex-wrap items-center space-x-2 font-semibold title">
+      <%= link_to namespace_path, data: { turbo: false }, class: "hover:underline" do %>
+        <%= highlight(
+          @namespace.name,
+          defined?(@search_params[:name_or_puid_cont]) &&
+            @search_params[:name_or_puid_cont],
+          highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+        ) %>
+      <% end %>
+      <div class="flex flex-wrap space-x-2 items-center">
+        <%= render PuidComponent.new(puid: @namespace.puid) %>
+        <%= viral_pill(
+          text:
+            t(
+              :"members.access_levels.level_#{Member.effective_access_level(@namespace, Current.user)}",
+            ),
+          color: "transparent",
+          border: true,
+        ) %>
       </div>
-      <p class="text-sm text-gray-500 dark:text-gray-400">
-        <%= @namespace.description %>
-      </p>
     </div>
+    <p class="text-sm text-gray-500 dark:text-gray-400">
+      <%= @namespace.description %>
+    </p>
   </div>
 </div>
 
-<div class="flex flex-row-reverse gap-x-3 text-slate-500">
+<div
+  class="
+    flex flex-row-reverse gap-x-3 text-slate-500 dark:text-slate-300
+    @max-4xl:invisible @max-4xl:hidden
+  "
+>
   <% if @namespace.type == "Group" %>
     <%= viral_tooltip(title: t(:'.stats.samples')) do %>
       <span
         id="<%= "#{dom_id(@namespace)}-samples-count" %>"
         class="flex items-center text-sm samples-count"
       >
-        <%= viral_icon(name: :beaker, color: :subdued, classes: "h-5 w-5") %><%= @namespace.aggregated_samples_count %>
+        <%= viral_icon(name: :beaker, color: :subdued, classes: "h-5 w-5 mr-1") %><%= @namespace.aggregated_samples_count %>
       </span>
     <% end %>
     <%= viral_tooltip(title: t(:'.stats.projects')) do %>
       <span class="flex items-center text-sm">
-        <%= viral_icon(name: :rectangle_stack, color: :subdued, classes: "h-5 w-5") %>
+        <%= viral_icon(name: :rectangle_stack, color: :subdued, classes: "h-5 w-5 mr-1") %>
         <%= @namespace.project_namespaces.count %>
       </span>
     <% end %>
     <%= viral_tooltip(title: t(:'.stats.subnamespaces')) do %>
       <span class="flex items-center text-sm">
-        <%= viral_icon(name: :squares_2x2, color: :subdued, classes: "h-5 w-5") %><%= @namespace.children.count %>
+        <%= viral_icon(name: :squares_2x2, color: :subdued, classes: "h-5 w-5 mr-1") %><%= @namespace.children.count %>
       </span>
     <% end %>
   <% end %>

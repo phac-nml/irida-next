@@ -17,8 +17,12 @@ module NamespaceTree
       @render_flat_list = render_flat_list
       @search_params = search_params
       @icon_size = icon_size
+      @role = parent.nil? ? 'tree' : 'group'
     end
-
     # rubocop: enable Metrics/ParameterLists
+
+    def render?
+      @namespaces.present?
+    end
   end
 end

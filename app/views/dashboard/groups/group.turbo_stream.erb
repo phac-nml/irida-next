@@ -1,4 +1,4 @@
-<%= turbo_stream.replace dom_id(@group) do %>
+<%= turbo_stream.replace dom_id(@group), method: :morph do %>
   <%= render NamespaceTree::Row::WithChildrenComponent.new(
     namespace: @group,
     children: @children,

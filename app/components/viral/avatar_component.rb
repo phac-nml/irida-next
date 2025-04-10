@@ -42,7 +42,8 @@ module Viral
         opts[:aria] = { label: @name }
         opts[:classes] = class_names(
           'avatar',
-          SIZE_MAPPINGS[@size]
+          SIZE_MAPPINGS[@size],
+          opts[:classes]
         )
       end
     end

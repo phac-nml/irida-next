@@ -422,7 +422,7 @@ module Dashboard
       assert_css '#main-content-link', visible: true
       find('#main-content-link').trigger('click')
       assert_current_path "#{dashboard_projects_url}#main-content"
-      assert_selector '#main-content:focus'
+      assert_css '#main-content', focused: true
     end
   end
 end

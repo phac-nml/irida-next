@@ -1,26 +1,28 @@
-<li
+<div
   id="<%= dom_id(@namespace) %>"
-  class="namespace-entry has-children <%= @namespace.description.present? ? 'has-description' : nil %>"
+  class="<%= class_names("namespace-entry has-children", "has-description": @namespace.description.present?) %>"
+  data-action="click->groups--row#toggle keypress.enter->groups--row#toggle"
   data-controller="groups--row"
+  data-groups--row-url-value="<%= public_send(@path, @path_args.merge({ parent_id: @namespace.id, collapse: !@collapsed })) %>"
+  data-groups--row-target="row"
+  role="treeitem"
+  aria-expanded="<%= !@collapsed %>"
+  aria-label="<%= t(:'dashboard.groups.index.row_aria_label', name: @namespace.name) %>"
+  tabindex="0"
 >
   <div
     class="
       flex items-center w-full py-3 pr-3 text-left namespace-entry-contents
     "
-    data-action="click->groups--row#toggle"
-    aria-label="<%= t(:'dashboard.groups.index.row_aria_label', name: @namespace.name) %>"
   >
-    <%= link_to public_send(@path, @path_args.merge({ parent_id: @namespace.id, collapse: !@collapsed })), data: { turbo_stream: '', "groups--row-target": "toggle" },
-                aria: { label: t(:'dashboard.groups.index.row_aria_label', name: @namespace.name) }, class: "folder-toggle-wrap mr-2 flex items-center" do %>
-      <span class="inline-block folder-caret text-slate-400">
-        <% if @collapsed %>
-          <%= viral_icon(name: :chevron_right, classes: "h-3 w-3") %>
-        <% else %>
-          <%= viral_icon(name: :chevron_down, classes: "h-3 w-3") %>
-        <% end %>
-      </span>
+    <span class="inline-block folder-caret text-slate-400">
+      <% if @collapsed %>
+        <%= viral_icon(name: :chevron_right, classes: "h-3 w-3") %>
+      <% else %>
+        <%= viral_icon(name: :chevron_down, classes: "h-3 w-3") %>
+      <% end %>
+    </span>
 
-    <% end %>
     <%= render NamespaceTree::Row::RowContentsComponent.new(
       namespace: @namespace,
       path: @path,
@@ -39,4 +41,4 @@
       icon_size: @icon_size,
     ) %>
   <% end %>
-</li>
+</div>
