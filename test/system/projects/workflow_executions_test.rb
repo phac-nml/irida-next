@@ -483,7 +483,7 @@ module Projects
         find("input[type='checkbox'][value='#{@workflow_execution2.id}']").click
       end
 
-      click_link I18n.t('workflow_executions.index.delete_workflows_button')
+      click_button I18n.t('workflow_executions.index.delete_workflows_button')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -522,7 +522,7 @@ module Projects
         find("input[type='checkbox'][value='#{@workflow_execution2.id}']").click
       end
 
-      click_link I18n.t('workflow_executions.index.delete_workflows_button')
+      click_button I18n.t('workflow_executions.index.delete_workflows_button')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -560,7 +560,7 @@ module Projects
         find("input[type='checkbox'][value='#{new_workflow.id}']").click
       end
 
-      click_link I18n.t('workflow_executions.index.delete_workflows_button')
+      click_button I18n.t('workflow_executions.index.delete_workflows_button')
 
       assert_selector '#dialog'
       within('#dialog') do

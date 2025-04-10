@@ -10,7 +10,7 @@ module SortingHelper
     true
   end
 
-  def sorting_item(dropdown, ransack_obj, field, dir, disableable = true)
+  def sorting_item(dropdown, ransack_obj, field, dir, disableable = false)
     dropdown.with_item(label: t(format('.sorting.%<field>s_%<dir>s', field:, dir:)),
                        url: sorting_url(ransack_obj, field, dir:),
                        disableable: disableable,

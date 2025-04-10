@@ -786,7 +786,7 @@ module Projects
       within('div#limit-component') do
         # set table limit to 10
         find('button').click
-        click_button '10'
+        click_link '10'
       end
 
       # verify limit is set to 10
@@ -873,7 +873,7 @@ module Projects
       # set limit
       within('div#limit-component') do
         find('button').click
-        click_button '10'
+        click_link '10'
       end
 
       # verify sort is still applied
@@ -1036,7 +1036,7 @@ module Projects
       # set limit
       within('div#limit-component') do
         find('button').click
-        click_button '10'
+        click_link '10'
       end
 
       # verify table still only contains sample1
@@ -1903,7 +1903,8 @@ module Projects
 
       ### ACTIONS START ###
       # start import
-      click_link I18n.t('projects.samples.index.sample_actions_button.import_samples')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_button I18n.t('projects.samples.index.sample_actions_button.import_samples')
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/project/valid.csv'))
@@ -1948,7 +1949,8 @@ module Projects
 
       ### ACTIONS START ###
       # start import
-      click_link I18n.t('projects.samples.index.sample_actions_button.import_samples')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_button I18n.t('projects.samples.index.sample_actions_button.import_samples')
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/project/invalid_short_sample_name.csv'))
@@ -1998,7 +2000,8 @@ module Projects
 
       ### ACTIONS START ###
       # start import
-      click_link I18n.t('projects.samples.index.sample_actions_button.import_samples')
+      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_button I18n.t('projects.samples.index.sample_actions_button.import_samples')
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/project/invalid_duplicate_header.csv'))
@@ -2524,7 +2527,7 @@ module Projects
       within('div#limit-component') do
         # set table limit to 10 to split samples table into two pages
         find('button').click
-        click_button '10'
+        click_link '10'
       end
       within 'tbody' do
         assert_selector 'input[name="sample_ids[]"]', count: 10

@@ -5,9 +5,9 @@
       dark:bg-slate-700 text-slate-700 dark:text-slate-200
     "
   ><%= label %></li>
-<% elsif !disableable %>
+<% elsif disableable %>
   <li>
-    <%= link_to url, class: "flex w-full items-center border-b border-slate-200 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white", **system_arguments do %>
+    <%= button_to url, method: :get, params: params, class: "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white", **system_arguments do %>
       <% if icon.present? %>
         <span class="grow-0 mr-2"><%= viral_icon(name: icon, color: :subdued, classes: "w-5 h-5") %></span>
       <% end %>
@@ -16,7 +16,7 @@
   </li>
 <% else %>
   <li>
-    <%= button_to url, method: :get, params: params, class: "flex w-full items-center border-b border-slate-200 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white", **system_arguments do %>
+    <%= link_to url, class: "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white", **system_arguments do %>
       <% if icon.present? %>
         <span class="grow-0 mr-2"><%= viral_icon(name: icon, color: :subdued, classes: "w-5 h-5") %></span>
       <% end %>
