@@ -48,7 +48,8 @@
         <%= render Viral::BaseComponent.new(**row_arguments(member)) do %>
           <td
             class="
-              px-6 py-3 @2xl:sticky left-0 z-5 w-56 truncate bg-slate-50 dark:bg-slate-900
+              px-6 py-3 @2xl:sticky left-0 z-5 min-w-56 max-w-56 truncate bg-slate-50
+              dark:bg-slate-900
             "
           >
             <div class="text-slate-900 dark:text-slate-100 font-semibold"><%= member.user.email %>
