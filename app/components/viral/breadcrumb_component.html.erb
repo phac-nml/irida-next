@@ -30,9 +30,9 @@
     </li>
   <% end %>
 
-  <% unless links.empty? %>
+  <% if links.length > 1 %>
     <li class="max-md:visible md:hidden inline-flex items-center">
-      <%= viral_dropdown(icon: "ellipsis_horizontal", aria: { label: I18n.t(:'components.breadcrumb.dropdown.aria_label') }, classes: "cursor-pointer") do |dropdown| %>
+      <%= viral_dropdown(icon: "ellipsis_horizontal", aria: { label: I18n.t(:'components.breadcrumb.dropdown.aria_label') }, classes: "text-slate-500 cursor-pointer") do |dropdown| %>
         <% links.each_with_index do |link, index| %>
           <% if index < links.length - 1 %>
             <%= link_to link[:name],
@@ -53,10 +53,14 @@
         <% end %>
       <% end %>
     </li>
+  <% end %>
 
+  <% if links.length > 0 %>
     <li class="max-md:visible md:hidden inline-flex items-center">
       <div class="flex items-center">
-        <%= viral_icon(name: "chevron_right", classes: "w-3 h-3 text-slate-300") %>
+        <% if links.length > 1 %>
+          <%= viral_icon(name: "chevron_right", classes: "w-3 h-3 text-slate-300") %>
+        <% end %>
         <% link = links.last %>
         <%= link_to link[:name],
         URI.join(root_url, link[:path]).to_s,
