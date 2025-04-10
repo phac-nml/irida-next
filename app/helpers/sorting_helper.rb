@@ -10,11 +10,9 @@ module SortingHelper
     true
   end
 
-  def sorting_item(dropdown, ransack_obj, field, dir, disableable = false)
+  def sorting_item(dropdown, ransack_obj, field, dir)
     dropdown.with_item(label: t(format('.sorting.%<field>s_%<dir>s', field:, dir:)),
                        url: sorting_url(ransack_obj, field, dir:),
-                       disableable: disableable,
-                       params: disableable ? set_params(field, dir) : {},
                        icon_name: active_sort(ransack_obj, field, dir) ? 'check' : 'blank',
                        data: {
                          turbo_stream: true
@@ -52,19 +50,5 @@ module SortingHelper
     return {} unless sort_key.present? && sort_key == column.to_s
 
     { 'aria-sort': sort_direction == 'desc' ? 'descending' : 'ascending' }
-  end
-
-  # Add the params for the button_to get request
-  def set_params(field, dir)
-    button_to_params = {}
-
-    params['q']&.each do |k, v|
-      next if k == 's' || v.blank?
-
-      button_to_params["q[#{k}]"] = v.to_s
-    end
-
-    button_to_params['q[s]'] = "#{field} #{dir}"
-    button_to_params
   end
 end
