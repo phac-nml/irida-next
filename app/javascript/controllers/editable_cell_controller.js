@@ -40,9 +40,14 @@ export default class extends Controller {
     element.id = this.#elementId(element);
 
     // Get the parent DOM ID to extract the item ID
-    // required because we use dom_id as the id of the parent element
+    // Use a regular expression to match the part after the underscore
     const parent_dom_id = element.parentNode.id;
-    const item_id = parent_dom_id.split("_")[1];
+    const item_id = parent_dom_id.match(/_(.+)$/)?.[1];
+
+    if (!item_id) {
+      console.error("Unable to extract item ID from DOM ID:", parent_dom_id);
+      return;
+    }
 
     let form = this.formTemplateTarget.innerHTML
       .replace(/SAMPLE_ID_PLACEHOLDER/g, item_id)
