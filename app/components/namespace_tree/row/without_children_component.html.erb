@@ -1,5 +1,5 @@
 <div
-  class="namespace-entry <%= @namespace.description.present? ? "has-description" : nil %>"
+  class="<%= class_names("namespace-entry", "has-description": @namespace.description.present?) %>"
   role="treeitem"
 >
   <div class="flex items-center py-3 pr-3 namespace-entry-contents">

@@ -159,9 +159,9 @@ module Dashboard
       subgroup1 = groups(:subgroup1)
       visit dashboard_groups_url
 
-      within("div#group_#{group1.id}") do
+      within('div.namespace-tree-container') do
         assert_text group1.name
-        assert_no_selector 'div.groups-list.namespace-list-tree'
+        assert_no_selector "div##{dom_id(group1)} div.groups-list.namespace-list-tree"
         assert_no_text subgroup1.name
         find("div[aria-label=\"#{I18n.t(:'dashboard.groups.index.row_aria_label', name: group1.name)}\"]").click
       end
@@ -220,12 +220,12 @@ module Dashboard
       visit dashboard_groups_url
 
       within('#groups_tree') do
-        within("#group_#{group1.id}") do
+        within("##{dom_id(group1)}") do
           assert_text group1.name
           assert_selector 'svg[class="viral-icon__Svg icon-chevron_right"]'
         end
 
-        within("#group_#{group3.id}") do
+        within("##{dom_id(group3)}") do
           assert_text group3.name
           assert_selector 'svg[class="viral-icon__Svg icon-chevron_right"]'
         end
