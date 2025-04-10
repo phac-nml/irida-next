@@ -19,7 +19,7 @@
                 tag: 'th',
                 **helpers.aria_sort("file_blob_#{column.to_s}", @q.sorts[0].name, @q.sorts[0].dir),
                 scope: 'col',
-                classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', '@2xl:sticky left-0 min-w-56 max-w-56 truncate z-10': index.zero?, '@2xl:sticky left-56 z-10 bg-slate-100 dark:bg-slate-900': index == 1)
+                classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', '@2xl:sticky left-0 min-w-56 max-w-56 z-10': index.zero?, '@2xl:sticky left-56 z-10 bg-slate-100 dark:bg-slate-900': index == 1)
               ) do %>
                 <% if index.zero? and @abilities[:select_attachments] %>
                   <%= check_box_tag "select-page",
