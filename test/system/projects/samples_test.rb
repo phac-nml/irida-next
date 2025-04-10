@@ -1960,8 +1960,8 @@ module Projects
       ### ACTIONS START ###
       # select samples 1 and 2 for cloning
       within '#samples-table table tbody' do
-        find("input#sample_#{@sample1.id}").click
-        find("input#sample_#{@sample2.id}").click
+        find("input##{dom_id(@sample1, :checkbox)}").click
+        find("input##{dom_id(@sample2, :checkbox)}").click
       end
       click_link I18n.t('projects.samples.index.clone_button')
       assert_selector '#dialog'
