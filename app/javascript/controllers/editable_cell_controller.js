@@ -40,9 +40,9 @@ export default class extends Controller {
     element.id = this.#elementId(element);
 
     // Get the parent DOM ID to extract the item ID
-    // Use a regular expression to match the part after the underscore
+    // Use a regular expression to match the part after the last underscore
     const parent_dom_id = element.parentNode.id;
-    const item_id = parent_dom_id.match(/_(.+)$/)?.[1];
+    const item_id = parent_dom_id.match(/_([^_]+)$/)?.[1];
 
     if (!item_id) {
       console.error("Unable to extract item ID from DOM ID:", parent_dom_id);
