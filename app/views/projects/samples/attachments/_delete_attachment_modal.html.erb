@@ -16,7 +16,7 @@
     <%= form_for(:deletion, url: namespace_project_sample_attachment_path(id: @attachment.id), method: :delete) do |form| %>
       <%= form.submit t(".submit_button"),
                   class:
-                    "button text-sm px-5 py-2.5 text-white bg-red-700 border-red-800 focus:outline-hidden hover:bg-red-800 focus:ring-red-300 dark:focus:ring-red-700 dark:bg-red-600 dark:text-white dark:border-red-600 dark:hover:bg-red-700",
+                    "button text-sm px-5 py-2.5 text-white bg-red-700 border-red-800 hover:bg-red-800 dark:bg-red-600 dark:text-white dark:border-red-600 dark:hover:bg-red-700",
                   data: {
                     turbo_frame: "_top",
                     action: "click->selection#remove",

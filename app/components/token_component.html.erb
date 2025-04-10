@@ -7,9 +7,8 @@
       data-token-target="input"
       class="
         w-full font-mono text-sm border rounded-md text-slate-900 border-slate-300
-        bg-slate-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-700
-        dark:border-slate-600 dark:placeholder-slate-400 dark:text-white
-        dark:focus:ring-primary-500 dark:focus:border-primary-500
+        bg-slate-50 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400
+        dark:text-white
       "
       value="<%= '*' * value.length %>"
       readonly
@@ -17,9 +16,7 @@
     >
     <button
       type="button"
-      class="
-        absolute inset-y-0 bottom-0 right-0 p-2 rounded-r-md focus:outline-hidden
-      "
+      class="absolute inset-y-0 bottom-0 right-0 p-2 rounded-r-md"
       data-action="click->token#toggleVisibility"
       aria-label="<%= t(:'components.token.toggle_visible') %>"
     >
@@ -35,9 +32,8 @@
     type="submit"
     data-action="click->token#copyToClipboard"
     class="
-      px-4 py-2 text-sm text-white rounded-md focus:outline-hidden bg-primary-700
-      hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:text-white
-      dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800
+      px-4 py-2 text-sm text-white rounded-md bg-primary-700 hover:bg-primary-800
+      dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700
     "
   >
     <span data-token-target="initial"><%= t("components.token.copy") %></span>

@@ -25,10 +25,8 @@
   <div
     class="
       relative flex flex-wrap font-mono bg-slate-50 border border-slate-300
-      text-slate-900 text-sm rounded-lg focus-within:ring-primary-500
-      focus-within:border-primary-500 w-full p-2.5 dark:bg-slate-700
-      dark:border-slate-600 dark:placeholder-slate-400 dark:text-white
-      dark:focus-within:ring-primary-500 dark:focus-within:border-primary-500k
+      text-slate-900 text-sm rounded-lg w-full p-2.5 dark:bg-slate-700
+      dark:placeholder-slate-400 dark:text-white
     "
     data-list-filter-target="tags"
     data-action="click->list-filter#focus"
@@ -36,7 +34,7 @@
     <input
       type="text"
       name="<%= list_input_form_name %>"
-      class="bg-transparent border-none focus:outline-hidden focus:ring-0 grow"
+      class="bg-transparent border-none grow"
       autofocus
       aria-label="<%= t(:'components.list_input.description') %>"
       data-action='

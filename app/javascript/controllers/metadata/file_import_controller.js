@@ -1,5 +1,6 @@
-import { Controller } from "@hotwired/stimulus";
 import * as XLSX from "xlsx";
+
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = [
@@ -18,8 +19,6 @@ export default class extends Controller {
     "text-slate-900",
     "text-sm",
     "rounded-lg",
-    "focus:ring-blue-500",
-    "focus:border-blue-500",
     "block",
     "w-full",
     "p-2.5",
@@ -27,8 +26,6 @@ export default class extends Controller {
     "dark:border-slate-600",
     "dark:placeholder-slate-400",
     "dark:text-white",
-    "dark:focus:ring-blue-500",
-    "dark:focus:border-blue-500",
   ];
 
   connect() {

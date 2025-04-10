@@ -8,11 +8,10 @@
     placeholder="<%= placeholder %>"
     <%= "required" if required %>
     autocomplete="off"
-    class="select2-input
-      border-slate-300 text-slate-800 sm:text-sm rounded-md focus:ring-primary-500
-      focus:border-primary-500 block w-full p-2.5 dark:bg-slate-800
-      dark:border-slate-600 dark:placeholder-slate-400 dark:text-slate-50
-      dark:focus:ring-primary-500 dark:focus:border-primary-500
+    class="
+      select2-input border-slate-300 text-slate-800 sm:text-sm rounded-md block w-full
+      p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:placeholder-slate-400
+      dark:text-slate-50
     "
   >
   <%= form.hidden_field name, data: { "viral--select2-target": "hidden" } %>
