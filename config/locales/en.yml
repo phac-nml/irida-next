@@ -368,6 +368,16 @@ en:
     confirm_close_text: Are you sure that you want to discard your filter modifications and close the advanced search dialog?
     description: This advanced search uses fields, operators and values to filter samples. Add groups with conditions to define the search criteria.
     field: Field
+    operation:
+      contains: contains
+      equals: "="
+      exists: exists
+      greater_than: ">="
+      in: in
+      less_than: "<="
+      not_equals: "!="
+      not_exists: not exists
+      not_in: not in
     operator: Operator
     remove_condition_aria_label: Remove condition
     remove_group_button: Remove group
