@@ -38,8 +38,19 @@ export default class extends Controller {
       .closest("table")
       .querySelector(`th:nth-child(${element.cellIndex + 1})`).dataset.fieldId;
     element.id = this.#elementId(element);
+
+    // Get the parent DOM ID to extract the item ID
+    // Use a regular expression to match the part after the last underscore
+    const parent_dom_id = element.parentNode.id;
+    const item_id = parent_dom_id.match(/_([^_]+)$/)?.[1];
+
+    if (!item_id) {
+      console.error("Unable to extract item ID from DOM ID:", parent_dom_id);
+      return;
+    }
+
     let form = this.formTemplateTarget.innerHTML
-      .replace(/SAMPLE_ID_PLACEHOLDER/g, element.parentNode.id)
+      .replace(/SAMPLE_ID_PLACEHOLDER/g, item_id)
       .replace(/FIELD_ID_PLACEHOLDER/g, encodeURIComponent(field))
       .replace(/FIELD_VALUE_PLACEHOLDER/g, element.innerText)
       .replace(/CELL_ID_PLACEHOLDER/g, element.id);

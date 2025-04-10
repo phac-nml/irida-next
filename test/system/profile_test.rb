@@ -107,7 +107,7 @@ class ProfileTest < ApplicationSystemTestCase
     within('#access-tokens-table') do
       assert_text token_to_revoke.name
     end
-    within %(tr[id=#{token_to_revoke.id}]) do
+    within %(tr[id="#{dom_id(token_to_revoke)}"]) do
       click_link I18n.t(:'personal_access_tokens.table.revoke')
     end
 

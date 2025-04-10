@@ -17,6 +17,7 @@
             <% @columns.each_with_index do |column, index| %>
               <%= render_cell(
                 tag: 'th',
+                **helpers.aria_sort("file_blob_#{column.to_s}", @q.sorts[0].name, @q.sorts[0].dir),
                 scope: 'col',
                 classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', '@2xl:sticky left-0 min-w-56 max-w-56 z-10': index.zero?, '@2xl:sticky left-56 z-10 bg-slate-100 dark:bg-slate-900': index == 1)
               ) do %>
@@ -100,13 +101,13 @@
                 <%= render_cell(
                   tag: index.zero? ? 'th' :'td',
                   scope: index.zero? ? 'row' : nil,
-                  classes: class_names('px-3 py-3', '@2xl:sticky left-0 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-900': index.zero?, '@2xl:sticky left-56 bg-slate-50 dark:bg-slate-900': index == 1)
+                  classes: class_names('px-3 py-3', '@2xl:sticky left-0 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-900': index.zero?, '@2xl:sticky left-56 bg-slate-50 dark:bg-slate-900 truncate': index == 1)
                 ) do %>
                   <% if index.zero? && @abilities[:select_attachments] %>
                     <%= check_box_tag "attachment_ids[]",
                     attachment.id,
                     nil,
-                    id: dom_id(attachment),
+                    id: dom_id(attachment, "checkbox"),
                     "aria-label": attachment.file.filename.to_s,
                     data: {
                       action: "input->selection#toggle",

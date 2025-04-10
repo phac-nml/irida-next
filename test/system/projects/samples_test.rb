@@ -48,7 +48,7 @@ module Projects
           # rows
           assert_selector '#samples-table table tbody tr', count: 3
           # row contents
-          within("tr[id='#{@sample1.id}']") do
+          within("tr[id='#{dom_id(@sample1)}']") do
             assert_selector 'th:first-child', text: @sample1.puid
             assert_selector 'td:nth-child(2)', text: @sample1.name
             assert_selector 'td:nth-child(3)', text: I18n.l(@sample1.created_at.localtime, format: :full_date)
@@ -88,7 +88,7 @@ module Projects
                                                                            locale: @user.locale))
 
       assert_selector 'input#select-page'
-      assert_selector "input#sample_#{@sample1.id}"
+      assert_selector "input##{dom_id(@sample1, :checkbox)}"
     end
 
     test 'User with role < Analyst does not see sample table checkboxes' do
@@ -99,7 +99,7 @@ module Projects
                                                                            locale: @user.locale))
 
       assert_no_selector 'input#select-page'
-      assert_no_selector "input#sample_#{@sample1.id}"
+      assert_no_selector "input##{dom_id(@sample1, :checkbox)}"
     end
 
     test 'User with role >= Analyst sees workflow execution link' do
@@ -290,7 +290,7 @@ module Projects
                                                                            locale: @user.locale))
 
       within('#samples-table table tbody') do
-        assert_selector "tr[id='#{@sample1.id}']"
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
         assert_selector 'tr', count: 3
       end
 
@@ -322,7 +322,7 @@ module Projects
         # remaining samples still appear on table
         assert_selector 'tr', count: 2
         # deleted sample row no longer exists
-        assert_no_selector "tr[id='#{@sample1.id}']"
+        assert_no_selector "tr[id='#{dom_id(@sample1)}']"
       end
       ### VERIFY END ###
     end
@@ -611,17 +611,17 @@ module Projects
 
       # verify sample1 and 2 transferred, sample 30 did not
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 1, locale: @user.locale))
-      assert_no_selector "tr[id='#{@sample1.id}']"
-      assert_no_selector "tr[id='#{@sample2.id}']"
-      assert_selector "tr[id='#{@sample30.id}']"
+      assert_no_selector "tr[id='#{dom_id(@sample1)}']"
+      assert_no_selector "tr[id='#{dom_id(@sample2)}']"
+      assert_selector "tr[id='#{dom_id(@sample30)}']"
 
       # destination project
       visit namespace_project_samples_url(namespace, project25)
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 4, count: 4,
                                                                            locale: @user.locale))
-      assert_selector "tr[id='#{@sample1.id}']"
-      assert_selector "tr[id='#{@sample2.id}']"
-      assert_no_selector "tr[id='#{@sample30.id}']"
+      assert_selector "tr[id='#{dom_id(@sample1)}']"
+      assert_selector "tr[id='#{dom_id(@sample2)}']"
+      assert_no_selector "tr[id='#{dom_id(@sample30)}']"
       ### VERIFY END ###
     end
 
@@ -879,9 +879,9 @@ module Projects
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      assert_selector "tr[id='#{@sample1.id}']"
-      assert_selector "tr[id='#{@sample2.id}']"
-      assert_selector "tr[id='#{@sample30.id}']"
+      assert_selector "tr[id='#{dom_id(@sample1)}']"
+      assert_selector "tr[id='#{dom_id(@sample2)}']"
+      assert_selector "tr[id='#{dom_id(@sample30)}']"
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -895,9 +895,9 @@ module Projects
 
       ### VERIFY START ###
       # only sample1 exists within table
-      assert_selector "tr[id='#{@sample1.id}']"
-      assert_no_selector "tr[id='#{@sample2.id}']"
-      assert_no_selector "tr[id='#{@sample30.id}']"
+      assert_selector "tr[id='#{dom_id(@sample1)}']"
+      assert_no_selector "tr[id='#{dom_id(@sample2)}']"
+      assert_no_selector "tr[id='#{dom_id(@sample30)}']"
       ### VERIFY END ###
     end
 
@@ -907,9 +907,9 @@ module Projects
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      assert_selector "tr[id='#{@sample1.id}']"
-      assert_selector "tr[id='#{@sample2.id}']"
-      assert_selector "tr[id='#{@sample30.id}']"
+      assert_selector "tr[id='#{dom_id(@sample1)}']"
+      assert_selector "tr[id='#{dom_id(@sample2)}']"
+      assert_selector "tr[id='#{dom_id(@sample30)}']"
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -923,9 +923,9 @@ module Projects
 
       ### VERIFY START ###
       # only sample2 exists within table
-      assert_selector "tr[id='#{@sample2.id}']"
-      assert_no_selector "tr[id='#{@sample1.id}']"
-      assert_no_selector "tr[id='#{@sample30.id}']"
+      assert_selector "tr[id='#{dom_id(@sample2)}']"
+      assert_no_selector "tr[id='#{dom_id(@sample1)}']"
+      assert_no_selector "tr[id='#{dom_id(@sample30)}']"
       ### VERIFY END ###
     end
 
@@ -984,9 +984,9 @@ module Projects
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
-      assert_selector "tr[id='#{@sample1.id}']"
-      assert_selector "tr[id='#{@sample2.id}']"
-      assert_selector "tr[id='#{@sample30.id}']"
+      assert_selector "tr[id='#{dom_id(@sample1)}']"
+      assert_selector "tr[id='#{dom_id(@sample2)}']"
+      assert_selector "tr[id='#{dom_id(@sample30)}']"
       ### SETUP END ###
 
       ### ACTIONS and VERIFY START ###
@@ -997,18 +997,18 @@ module Projects
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
 
-      assert_selector "tr[id='#{@sample1.id}']"
-      assert_no_selector "tr[id='#{@sample2.id}']"
-      assert_no_selector "tr[id='#{@sample30.id}']"
+      assert_selector "tr[id='#{dom_id(@sample1)}']"
+      assert_no_selector "tr[id='#{dom_id(@sample2)}']"
+      assert_no_selector "tr[id='#{dom_id(@sample30)}']"
 
       # apply sort
       click_on I18n.t('samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
 
       # verify table still only contains sample1
-      assert_selector "tr[id='#{@sample1.id}']"
-      assert_no_selector "tr[id='#{@sample2.id}']"
-      assert_no_selector "tr[id='#{@sample30.id}']"
+      assert_selector "tr[id='#{dom_id(@sample1)}']"
+      assert_no_selector "tr[id='#{dom_id(@sample2)}']"
+      assert_no_selector "tr[id='#{dom_id(@sample30)}']"
 
       # verify filter text is still in filter input
       assert_selector %(input.t-search-component) do |input|
@@ -1022,9 +1022,9 @@ module Projects
       end
 
       # verify table still only contains sample1
-      assert_selector "tr[id='#{@sample1.id}']"
-      assert_no_selector "tr[id='#{@sample2.id}']"
-      assert_no_selector "tr[id='#{@sample30.id}']"
+      assert_selector "tr[id='#{dom_id(@sample1)}']"
+      assert_no_selector "tr[id='#{dom_id(@sample2)}']"
+      assert_no_selector "tr[id='#{dom_id(@sample30)}']"
 
       # verify filter text is still in filter input
       assert_selector %(input.t-search-component) do |input|
@@ -1052,9 +1052,9 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_selector "tr[id='#{@sample1.id}']"
-      assert_no_selector "tr[id='#{@sample2.id}']"
-      assert_no_selector "tr[id='#{@sample30.id}']"
+      assert_selector "tr[id='#{dom_id(@sample1)}']"
+      assert_no_selector "tr[id='#{dom_id(@sample2)}']"
+      assert_no_selector "tr[id='#{dom_id(@sample30)}']"
 
       # refresh
       visit namespace_project_samples_url(@namespace, @project)
@@ -1065,9 +1065,9 @@ module Projects
       assert_selector %(input.t-search-component) do |input|
         assert_equal filter_text, input['value']
       end
-      assert_selector "tr[id='#{@sample1.id}']"
-      assert_no_selector "tr[id='#{@sample2.id}']"
-      assert_no_selector "tr[id='#{@sample30.id}']"
+      assert_selector "tr[id='#{dom_id(@sample1)}']"
+      assert_no_selector "tr[id='#{dom_id(@sample2)}']"
+      assert_no_selector "tr[id='#{dom_id(@sample30)}']"
       ### VERIFY END ###
     end
 
@@ -1128,11 +1128,11 @@ module Projects
           assert_no_text 'METADATAFIELD3'
         end
         # sample 1 and 2 have no current value for metadatafield 1 and 2
-        within("tr[id='#{@sample1.id}']") do
+        within("tr[id='#{dom_id(@sample1)}']") do
           assert_selector 'td:nth-child(6)', text: ''
           assert_selector 'td:nth-child(7)', text: ''
         end
-        within("tr[id='#{@sample2.id}']") do
+        within("tr[id='#{dom_id(@sample2)}']") do
           assert_selector 'td:nth-child(6)', text: ''
           assert_selector 'td:nth-child(7)', text: ''
         end
@@ -1167,12 +1167,12 @@ module Projects
           assert_text 'METADATAFIELD3'
         end
         # sample 1 and 2 metadata is updated
-        within("tr[id='#{@sample1.id}']") do
+        within("tr[id='#{dom_id(@sample1)}']") do
           assert_selector 'td:nth-child(6)', text: '10'
           assert_selector 'td:nth-child(7)', text: '20'
           assert_selector 'td:nth-child(8)', text: '30'
         end
-        within("tr[id='#{@sample2.id}']") do
+        within("tr[id='#{dom_id(@sample2)}']") do
           assert_selector 'td:nth-child(6)', text: '15'
           assert_selector 'td:nth-child(7)', text: '25'
           assert_selector 'td:nth-child(8)', text: '35'
@@ -1205,11 +1205,11 @@ module Projects
           assert_no_text 'METADATAFIELD3'
         end
         # sample 1 and 2 have no current value for metadatafield 1 and 2
-        within("tr[id='#{@sample1.id}']") do
+        within("tr[id='#{dom_id(@sample1)}']") do
           assert_selector 'td:nth-child(6)', text: ''
           assert_selector 'td:nth-child(7)', text: ''
         end
-        within("tr[id='#{@sample2.id}']") do
+        within("tr[id='#{dom_id(@sample2)}']") do
           assert_selector 'td:nth-child(6)', text: ''
           assert_selector 'td:nth-child(7)', text: ''
         end
@@ -1255,12 +1255,12 @@ module Projects
           assert_text 'METADATAFIELD3'
         end
         # sample 1 and 2 metadata is updated
-        within("tr[id='#{@sample1.id}']") do
+        within("tr[id='#{dom_id(@sample1)}']") do
           assert_selector 'td:nth-child(6)', text: '10'
           assert_selector 'td:nth-child(7)', text: '20'
           assert_selector 'td:nth-child(8)', text: '30'
         end
-        within("tr[id='#{@sample2.id}']") do
+        within("tr[id='#{dom_id(@sample2)}']") do
           assert_selector 'td:nth-child(6)', text: '15'
           assert_selector 'td:nth-child(7)', text: '25'
           assert_selector 'td:nth-child(8)', text: '35'
@@ -1292,11 +1292,11 @@ module Projects
           assert_no_text 'METADATAFIELD4'
         end
         # sample 1 and 2 have no current value for metadatafield 1 and 2
-        within("tr[id='#{@sample1.id}']") do
+        within("tr[id='#{dom_id(@sample1)}']") do
           assert_selector 'td:nth-child(6)', text: ''
           assert_selector 'td:nth-child(7)', text: ''
         end
-        within("tr[id='#{@sample2.id}']") do
+        within("tr[id='#{dom_id(@sample2)}']") do
           assert_selector 'td:nth-child(6)', text: ''
           assert_selector 'td:nth-child(7)', text: ''
         end
@@ -1347,13 +1347,13 @@ module Projects
           assert_text 'METADATAFIELD4'
         end
         # new metadata values for sample 1 and 2
-        within("tr[id='#{@sample1.id}']") do
+        within("tr[id='#{dom_id(@sample1)}']") do
           assert_selector 'td:nth-child(6)', text: '10'
           assert_selector 'td:nth-child(7)', text: '2024-01-04'
           assert_selector 'td:nth-child(8)', text: 'true'
           assert_selector 'td:nth-child(9)', text: 'A Test'
         end
-        within("tr[id='#{@sample2.id}']") do
+        within("tr[id='#{dom_id(@sample2)}']") do
           assert_selector 'td:nth-child(6)', text: '15'
           assert_selector 'td:nth-child(7)', text: '2024-12-31'
           assert_selector 'td:nth-child(8)', text: 'false'
@@ -1384,11 +1384,11 @@ module Projects
           assert_no_text 'METADATAFIELD4'
         end
         # sample 1 and 2 have no current value for metadatafield 1 and 2
-        within("tr[id='#{@sample1.id}']") do
+        within("tr[id='#{dom_id(@sample1)}']") do
           assert_selector 'td:nth-child(6)', text: ''
           assert_selector 'td:nth-child(7)', text: ''
         end
-        within("tr[id='#{@sample2.id}']") do
+        within("tr[id='#{dom_id(@sample2)}']") do
           assert_selector 'td:nth-child(6)', text: ''
           assert_selector 'td:nth-child(7)', text: ''
         end
@@ -1436,13 +1436,13 @@ module Projects
           assert_text 'METADATAFIELD4'
         end
         # new metadata values for sample 1 and 2
-        within("tr[id='#{@sample1.id}']") do
+        within("tr[id='#{dom_id(@sample1)}']") do
           assert_selector 'td:nth-child(6)', text: '10'
           assert_selector 'td:nth-child(7)', text: '2024-01-04'
           assert_selector 'td:nth-child(8)', text: 'true'
           assert_selector 'td:nth-child(9)', text: 'A Test'
         end
-        within("tr[id='#{@sample2.id}']") do
+        within("tr[id='#{dom_id(@sample2)}']") do
           assert_selector 'td:nth-child(6)', text: '15'
           assert_selector 'td:nth-child(7)', text: '2024-12-31'
           assert_selector 'td:nth-child(8)', text: 'false'
@@ -1520,7 +1520,7 @@ module Projects
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
 
-      within("tr[id='#{@sample32.id}']") do
+      within("tr[id='#{dom_id(@sample32)}']") do
         # value for metadatafield1, which is blank on the csv to import and will be left unchanged after import
         assert_selector 'td:nth-child(6)', text: 'value1'
       end
@@ -1560,7 +1560,7 @@ module Projects
       end
       ### VERIFY END ###
 
-      within("tr[id='#{@sample32.id}']") do
+      within("tr[id='#{dom_id(@sample32)}']") do
         # unchanged value
         assert_selector 'td:nth-child(6)', text: 'value1'
       end
@@ -1581,7 +1581,7 @@ module Projects
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
 
-      within("tr[id='#{@sample32.id}']") do
+      within("tr[id='#{dom_id(@sample32)}']") do
         # value for metadatafield1, which is blank on the csv to import and will be deleted by the import
         assert_selector 'td:nth-child(6)', text: 'value1'
       end
@@ -1617,7 +1617,7 @@ module Projects
       assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
       click_on I18n.t('shared.samples.metadata.file_imports.success.ok_button')
 
-      within("tr[id='#{@sample32.id}']") do
+      within("tr[id='#{dom_id(@sample32)}']") do
         # value is deleted for metadatafield1
         assert_selector 'td:nth-child(6)', text: ''
       end
@@ -1742,7 +1742,7 @@ module Projects
         assert_no_text 'METADATAFIELD3'
       end
       # sample 1 has no current value for metadatafield 1 and 2
-      within("tr[id='#{@sample1.id}']") do
+      within("tr[id='#{dom_id(@sample1)}']") do
         assert_selector 'td:nth-child(6)', text: ''
         assert_selector 'td:nth-child(7)', text: ''
       end
@@ -1785,7 +1785,7 @@ module Projects
           assert_text 'METADATAFIELD3'
         end
         # sample 1 still imported even though sample3 (from import) does not exist
-        within("tr[id='#{@sample1.id}']") do
+        within("tr[id='#{dom_id(@sample1)}']") do
           assert_selector 'td:nth-child(6)', text: '10'
           assert_selector 'td:nth-child(7)', text: '20'
           assert_selector 'td:nth-child(8)', text: '30'
@@ -1851,7 +1851,7 @@ module Projects
           assert_text 'METADATAFIELD3'
         end
         # new metadata value
-        within("tr[id='#{samples(:sample34).id}']") do
+        within("tr[id='#{dom_id(samples(:sample34))}']") do
           assert_selector 'td:nth-child(8)', text: '20'
         end
         ### VERIFY END ###
@@ -2096,8 +2096,8 @@ module Projects
       ### ACTIONS START ###
       # select samples 1 and 2 for cloning
       within '#samples-table table tbody' do
-        find("input#sample_#{@sample1.id}").click
-        find("input#sample_#{@sample2.id}").click
+        find("input##{dom_id(@sample1, :checkbox)}").click
+        find("input##{dom_id(@sample2, :checkbox)}").click
       end
       click_link I18n.t('projects.samples.index.clone_button')
       assert_selector '#dialog'
@@ -2152,8 +2152,8 @@ module Projects
       ### ACTIONS START ###
       # select samples 1 and 2 for cloning
       within '#samples-table table tbody' do
-        find("input#sample_#{@sample1.id}").click
-        find("input#sample_#{@sample2.id}").click
+        find("input##{dom_id(@sample1, :checkbox)}").click
+        find("input##{dom_id(@sample2, :checkbox)}").click
       end
       click_link I18n.t('projects.samples.index.clone_button')
       assert_selector '#dialog'
@@ -2686,9 +2686,9 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
       within '#samples-table table tbody' do
-        assert_selector "tr[id='#{@sample1.id}']"
-        assert_selector "tr[id='#{@sample2.id}']"
-        assert_selector "tr[id='#{@sample30.id}']"
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample30)}']"
       end
       ### SETUP END ###
 
@@ -2725,9 +2725,9 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
       within '#samples-table table tbody' do
-        assert_selector "tr[id='#{@sample1.id}']"
-        assert_selector "tr[id='#{@sample2.id}']"
-        assert_selector "tr[id='#{@sample30.id}']"
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample30)}']"
       end
       ### SETUP END ###
 
@@ -2747,10 +2747,10 @@ module Projects
 
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 1
-        assert_no_selector "tr[id='#{@sample1.id}']"
-        assert_no_selector "tr[id='#{@sample2.id}']"
+        assert_no_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_no_selector "tr[id='#{dom_id(@sample2)}']"
         # sample30 found
-        assert_selector "tr[id='#{@sample30.id}']"
+        assert_selector "tr[id='#{dom_id(@sample30)}']"
       end
 
       click_button I18n.t(:'advanced_search_component.title')
@@ -2761,9 +2761,9 @@ module Projects
 
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 3
-        assert_selector "tr[id='#{@sample1.id}']"
-        assert_selector "tr[id='#{@sample2.id}']"
-        assert_selector "tr[id='#{@sample30.id}']"
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample30)}']"
       end
       ### actions and VERIFY END ###
     end
@@ -2782,9 +2782,9 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: user.locale))
       within '#samples-table table tbody' do
-        assert_selector "tr[id='#{sample61.id}']"
-        assert_selector "tr[id='#{sample62.id}']"
-        assert_selector "tr[id='#{sample63.id}']"
+        assert_selector "tr[id='#{dom_id(sample61)}']"
+        assert_selector "tr[id='#{dom_id(sample62)}']"
+        assert_selector "tr[id='#{dom_id(sample63)}']"
       end
       ### SETUP END ###
 
@@ -2813,10 +2813,10 @@ module Projects
 
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 1
-        assert_no_selector "tr[id='#{sample61.id}']"
-        assert_no_selector "tr[id='#{sample63.id}']"
+        assert_no_selector "tr[id='#{dom_id(sample61)}']"
+        assert_no_selector "tr[id='#{dom_id(sample63)}']"
         # sample62 found
-        assert_selector "tr[id='#{sample62.id}']"
+        assert_selector "tr[id='#{dom_id(sample62)}']"
       end
 
       click_button I18n.t(:'advanced_search_component.title')
@@ -2827,9 +2827,9 @@ module Projects
 
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 3
-        assert_selector "tr[id='#{sample61.id}']"
-        assert_selector "tr[id='#{sample62.id}']"
-        assert_selector "tr[id='#{sample63.id}']"
+        assert_selector "tr[id='#{dom_id(sample61)}']"
+        assert_selector "tr[id='#{dom_id(sample62)}']"
+        assert_selector "tr[id='#{dom_id(sample63)}']"
       end
       ### actions and VERIFY END ###
     end
@@ -2848,9 +2848,9 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: user.locale))
       within '#samples-table table tbody' do
-        assert_selector "tr[id='#{sample61.id}']"
-        assert_selector "tr[id='#{sample62.id}']"
-        assert_selector "tr[id='#{sample63.id}']"
+        assert_selector "tr[id='#{dom_id(sample61)}']"
+        assert_selector "tr[id='#{dom_id(sample62)}']"
+        assert_selector "tr[id='#{dom_id(sample63)}']"
       end
       ### SETUP END ###
 
@@ -2877,10 +2877,10 @@ module Projects
 
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 1
-        assert_no_selector "tr[id='#{sample61.id}']"
-        assert_no_selector "tr[id='#{sample63.id}']"
+        assert_no_selector "tr[id='#{dom_id(sample61)}']"
+        assert_no_selector "tr[id='#{dom_id(sample63)}']"
         # sample62 found
-        assert_selector "tr[id='#{sample62.id}']"
+        assert_selector "tr[id='#{dom_id(sample62)}']"
       end
 
       click_button I18n.t(:'advanced_search_component.title')
@@ -2891,9 +2891,9 @@ module Projects
 
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 3
-        assert_selector "tr[id='#{sample61.id}']"
-        assert_selector "tr[id='#{sample62.id}']"
-        assert_selector "tr[id='#{sample63.id}']"
+        assert_selector "tr[id='#{dom_id(sample61)}']"
+        assert_selector "tr[id='#{dom_id(sample62)}']"
+        assert_selector "tr[id='#{dom_id(sample63)}']"
       end
       ### actions and VERIFY END ###
     end
@@ -2912,9 +2912,9 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: user.locale))
       within '#samples-table table tbody' do
-        assert_selector "tr[id='#{sample61.id}']"
-        assert_selector "tr[id='#{sample62.id}']"
-        assert_selector "tr[id='#{sample63.id}']"
+        assert_selector "tr[id='#{dom_id(sample61)}']"
+        assert_selector "tr[id='#{dom_id(sample62)}']"
+        assert_selector "tr[id='#{dom_id(sample63)}']"
       end
       ### SETUP END ###
 
@@ -2941,10 +2941,10 @@ module Projects
 
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 1
-        assert_no_selector "tr[id='#{sample61.id}']"
-        assert_no_selector "tr[id='#{sample63.id}']"
+        assert_no_selector "tr[id='#{dom_id(sample61)}']"
+        assert_no_selector "tr[id='#{dom_id(sample63)}']"
         # sample62 found
-        assert_selector "tr[id='#{sample62.id}']"
+        assert_selector "tr[id='#{dom_id(sample62)}']"
       end
 
       click_button I18n.t(:'advanced_search_component.title')
@@ -2955,9 +2955,9 @@ module Projects
 
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 3
-        assert_selector "tr[id='#{sample61.id}']"
-        assert_selector "tr[id='#{sample62.id}']"
-        assert_selector "tr[id='#{sample63.id}']"
+        assert_selector "tr[id='#{dom_id(sample61)}']"
+        assert_selector "tr[id='#{dom_id(sample62)}']"
+        assert_selector "tr[id='#{dom_id(sample63)}']"
       end
       ### actions and VERIFY END ###
     end
@@ -2969,9 +2969,9 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
       within '#samples-table table tbody' do
-        assert_selector "tr[id='#{@sample1.id}']"
-        assert_selector "tr[id='#{@sample2.id}']"
-        assert_selector "tr[id='#{@sample30.id}']"
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample30)}']"
       end
       ### SETUP END ###
 
@@ -2998,10 +2998,10 @@ module Projects
 
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 1
-        assert_no_selector "tr[id='#{@sample1.id}']"
-        assert_no_selector "tr[id='#{@sample2.id}']"
+        assert_no_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_no_selector "tr[id='#{dom_id(@sample2)}']"
         # sample30 found
-        assert_selector "tr[id='#{@sample30.id}']"
+        assert_selector "tr[id='#{dom_id(@sample30)}']"
       end
 
       click_button I18n.t(:'advanced_search_component.title')
@@ -3012,9 +3012,9 @@ module Projects
 
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 3
-        assert_selector "tr[id='#{@sample1.id}']"
-        assert_selector "tr[id='#{@sample2.id}']"
-        assert_selector "tr[id='#{@sample30.id}']"
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample30)}']"
       end
       ### actions and VERIFY END ###
     end
@@ -3026,9 +3026,9 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
       within '#samples-table table tbody' do
-        assert_selector "tr[id='#{@sample1.id}']"
-        assert_selector "tr[id='#{@sample2.id}']"
-        assert_selector "tr[id='#{@sample30.id}']"
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample30)}']"
       end
       ### SETUP END ###
 
@@ -3064,9 +3064,9 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
       within '#samples-table table tbody' do
-        assert_selector "tr[id='#{@sample1.id}']"
-        assert_selector "tr[id='#{@sample2.id}']"
-        assert_selector "tr[id='#{@sample30.id}']"
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample30)}']"
       end
       ### SETUP END ###
 
@@ -3096,9 +3096,9 @@ module Projects
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 2
         # sample1 & sample2 found
-        assert_selector "tr[id='#{@sample1.id}']"
-        assert_selector "tr[id='#{@sample2.id}']"
-        assert_no_selector "tr[id='#{@sample30.id}']"
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_no_selector "tr[id='#{dom_id(@sample30)}']"
       end
 
       click_button I18n.t(:'advanced_search_component.title')
@@ -3109,9 +3109,9 @@ module Projects
 
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 3
-        assert_selector "tr[id='#{@sample1.id}']"
-        assert_selector "tr[id='#{@sample2.id}']"
-        assert_selector "tr[id='#{@sample30.id}']"
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample30)}']"
       end
       ### actions and VERIFY END ###
     end

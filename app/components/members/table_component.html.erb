@@ -15,6 +15,7 @@
         <% @columns.each_with_index do |column, index| %>
           <%= render_cell(
               tag: 'th',
+              **(@q.sorts&.first ? helpers.aria_sort(column, @q.sorts.first.name, @q.sorts.first.dir) : {}),
               scope: 'col',
               classes: class_names('px-6 py-3', '@2xl:sticky left-0 bg-slate-100 dark:bg-slate-900': index === 0, 'min-w-40': index === 1 || index === 2, 'min-w-48': index === 4)
             ) do %>
@@ -47,7 +48,8 @@
         <%= render Viral::BaseComponent.new(**row_arguments(member)) do %>
           <td
             class="
-              px-6 py-3 @2xl:sticky left-0 z-5 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-900
+              px-6 py-3 @2xl:sticky left-0 z-5 min-w-56 max-w-56 truncate bg-slate-50
+              dark:bg-slate-900
             "
           >
             <div class="text-slate-900 dark:text-slate-100 font-semibold"><%= member.user.email %>

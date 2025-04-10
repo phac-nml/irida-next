@@ -198,7 +198,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within "tr[id='#{@project_bot.id}']" do
+      within "tr[id='#{dom_id(@project_bot)}']" do
         click_link @project_bot_active_tokens.count.to_s
       end
       ### ACTIONS END ###
@@ -216,7 +216,7 @@ module Projects
         within('table') do
           assert_selector 'tr', count: 2
 
-          within "tr[id='#{token.id}']" do
+          within "tr[id='#{dom_id(token)}']" do
             assert_equal 'Valid PAT0', token.name
             assert_equal 'read_api, api', token.scopes.join(', ')
 
@@ -249,7 +249,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within "tr[id='#{@project_bot.id}']" do
+      within "tr[id='#{dom_id(@project_bot)}']" do
         click_link I18n.t('bots.index.table.actions.generate_new_token')
       end
 
@@ -276,7 +276,7 @@ module Projects
         assert_selector 'button', text: I18n.t('components.token.copy')
       end
       # verify token count increased
-      within "tr[id='#{@project_bot.id}'] td:nth-child(2)" do
+      within "tr[id='#{dom_id(@project_bot)}'] td:nth-child(2)" do
         assert_text (initial_token_count + 1).to_s
       end
       ### VERIFY END ###
@@ -295,7 +295,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      within "tr[id='#{@project_bot.id}'] td:nth-child(2)" do
+      within "tr[id='#{dom_id(@project_bot)}'] td:nth-child(2)" do
         assert_text initial_token_count.to_s
         # open bot PAT dialog
         click_link initial_token_count.to_s
@@ -310,7 +310,7 @@ module Projects
           assert_selector 'tr', count: 1
         end
         # revoke PAT
-        within("table tbody tr[id='#{token.id}']") do
+        within("table tbody tr[id='#{dom_id(token)}']") do
           click_link I18n.t('personal_access_tokens.table.revoke')
         end
       end
@@ -332,7 +332,7 @@ module Projects
       end
 
       # verify token count decreased
-      within "tr[id='#{@project_bot.id}'] td:nth-child(2)" do
+      within "tr[id='#{dom_id(@project_bot)}'] td:nth-child(2)" do
         assert_text (initial_token_count - 1).to_s
       end
       ### VERIFY END ###
@@ -347,7 +347,7 @@ module Projects
       assert_selector '#access-token-section'
       assert_no_selector '#access-token-section div'
       # create new PAT to render PAT panel
-      within "tr[id='#{@project_bot.id}']" do
+      within "tr[id='#{dom_id(@project_bot)}']" do
         click_link I18n.t('bots.index.table.actions.generate_new_token')
       end
 
@@ -376,7 +376,7 @@ module Projects
       # additional asserts to prevent flakes
       assert_selector '#bots-table'
       assert_selector '#bots-table table tbody tr', count: 20
-      within "tr[id='#{@project_bot.id}']" do
+      within "tr[id='#{dom_id(@project_bot)}']" do
         # click active tokens number
         click_link @project_bot_active_tokens.count.to_s
       end
@@ -389,7 +389,7 @@ module Projects
           assert_selector 'tr', count: 2
         end
         # revoke a PAT
-        within("table tbody tr[id='#{@project_bot_active_tokens.first.id}']") do
+        within("table tbody tr[id='#{dom_id(@project_bot_active_tokens.first)}']") do
           click_link I18n.t('personal_access_tokens.table.revoke')
         end
       end
@@ -417,7 +417,7 @@ module Projects
       assert_selector '#access-token-section'
       assert_no_selector '#access-token-section div'
       # create new PAT to render PAT panel
-      within "table tbody tr[id='#{@project_bot.id}']" do
+      within "table tbody tr[id='#{dom_id(@project_bot)}']" do
         click_link I18n.t('bots.index.table.actions.generate_new_token')
       end
 
@@ -446,8 +446,8 @@ module Projects
       # additional asserts to prevent flakes
       assert_selector '#bots-table'
       assert_selector '#bots-table table tbody tr', count: 20
-      assert_selector "#bots-table table tbody tr[id='#{@project_bot.id}']"
-      within("#bots-table table tbody tr[id='#{@project_bot.id}'] td:nth-child(6)") do
+      assert_selector "#bots-table table tbody tr[id='#{dom_id(@project_bot)}']"
+      within("#bots-table table tbody tr[id='#{dom_id(@project_bot)}'] td:nth-child(6)") do
         # destroy bot
         click_link I18n.t(:'bots.index.table.actions.destroy')
       end

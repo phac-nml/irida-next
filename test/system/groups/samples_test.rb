@@ -529,9 +529,9 @@ module Groups
                                                                            locale: @user.locale))
 
       within '#samples-table table tbody' do
-        assert_selector "tr[id='#{@sample1.id}']"
-        assert_selector "tr[id='#{@sample2.id}']"
-        assert_selector "tr[id='#{@sample9.id}']"
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample9)}']"
       end
 
       click_button I18n.t(:'advanced_search_component.title')
@@ -550,9 +550,9 @@ module Groups
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 2
         # sample1 & sample2 found
-        assert_selector "tr[id='#{@sample1.id}']"
-        assert_selector "tr[id='#{@sample2.id}']"
-        assert_no_selector "tr[id='#{@sample9.id}']"
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_no_selector "tr[id='#{dom_id(@sample9)}']"
       end
 
       click_button I18n.t(:'advanced_search_component.title')
@@ -562,9 +562,9 @@ module Groups
       end
 
       within '#samples-table table tbody' do
-        assert_selector "tr[id='#{@sample1.id}']"
-        assert_selector "tr[id='#{@sample2.id}']"
-        assert_selector "tr[id='#{@sample9.id}']"
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample9)}']"
       end
     end
 
@@ -574,9 +574,9 @@ module Groups
                                                                            locale: @user.locale))
 
       within '#samples-table table tbody' do
-        assert_selector "tr[id='#{@sample1.id}']"
-        assert_selector "tr[id='#{@sample2.id}']"
-        assert_selector "tr[id='#{@sample3.id}']"
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample3)}']"
       end
 
       click_button I18n.t(:'advanced_search_component.title')
@@ -596,10 +596,10 @@ module Groups
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 1
         # sample28 found
-        assert_no_selector "tr[id='#{@sample1.id}']"
-        assert_no_selector "tr[id='#{@sample2.id}']"
-        assert_no_selector "tr[id='#{@sample3.id}']"
-        assert_selector "tr[id='#{@sample28.id}']"
+        assert_no_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_no_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_no_selector "tr[id='#{dom_id(@sample3)}']"
+        assert_selector "tr[id='#{dom_id(@sample28)}']"
       end
 
       click_button I18n.t(:'advanced_search_component.title')
@@ -609,9 +609,9 @@ module Groups
       end
 
       within '#samples-table table tbody' do
-        assert_selector "tr[id='#{@sample1.id}']"
-        assert_selector "tr[id='#{@sample2.id}']"
-        assert_selector "tr[id='#{@sample3.id}']"
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample3)}']"
       end
     end
 
@@ -621,9 +621,9 @@ module Groups
                                                                            locale: @user.locale))
 
       within '#samples-table table tbody' do
-        assert_selector "tr[id='#{@sample1.id}']"
-        assert_selector "tr[id='#{@sample2.id}']"
-        assert_selector "tr[id='#{@sample3.id}']"
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample3)}']"
       end
 
       click_button I18n.t(:'advanced_search_component.title')
@@ -641,10 +641,10 @@ module Groups
       within '#samples-table table tbody' do
         assert_selector 'tr', count: 1
         # sample28 found
-        assert_no_selector "tr[id='#{@sample1.id}']"
-        assert_no_selector "tr[id='#{@sample2.id}']"
-        assert_no_selector "tr[id='#{@sample3.id}']"
-        assert_selector "tr[id='#{@sample28.id}']"
+        assert_no_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_no_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_no_selector "tr[id='#{dom_id(@sample3)}']"
+        assert_selector "tr[id='#{dom_id(@sample28)}']"
       end
 
       click_button I18n.t(:'advanced_search_component.title')
@@ -654,9 +654,9 @@ module Groups
       end
 
       within '#samples-table table tbody' do
-        assert_selector "tr[id='#{@sample1.id}']"
-        assert_selector "tr[id='#{@sample2.id}']"
-        assert_selector "tr[id='#{@sample3.id}']"
+        assert_selector "tr[id='#{dom_id(@sample1)}']"
+        assert_selector "tr[id='#{dom_id(@sample2)}']"
+        assert_selector "tr[id='#{dom_id(@sample3)}']"
       end
     end
 

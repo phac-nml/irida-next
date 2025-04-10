@@ -41,7 +41,7 @@ module Viral
       { tag: 'tr' }.tap do |args|
         args[:classes] =
           class_names('bg-white dark:bg-slate-800', 'border-b border-slate-200 dark:border-slate-700')
-        args[:id] = data[:id]
+        args[:id] = data.respond_to?(:to_key) ? dom_id(data) : "non_ar_#{data.object_id}"
       end
     end
 

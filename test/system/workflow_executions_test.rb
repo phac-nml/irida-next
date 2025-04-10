@@ -120,8 +120,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    assert_selector "tr[id='#{workflow_execution.id}']"
-    within("tr[id='#{workflow_execution.id}'] td:last-child") do
+    assert_selector "tr[id='#{dom_id(workflow_execution)}']"
+    within("tr[id='#{dom_id(workflow_execution)}'] td:last-child") do
       assert_link I18n.t(:'workflow_executions.index.actions.cancel_button')
     end
   end
@@ -132,7 +132,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     visit workflow_executions_path
 
     assert_selector '#workflow-executions-table'
-    assert_no_selector "tr[id='#{workflow_execution.id}']"
+    assert_no_selector "tr[id='#{dom_id(workflow_execution)}']"
   end
 
   test 'should be able to cancel a workflow' do

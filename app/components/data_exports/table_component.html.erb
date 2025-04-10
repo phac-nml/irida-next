@@ -17,6 +17,7 @@
             <% @columns.each_with_index do |column, index| %>
               <%= render_cell(
               tag: 'th',
+              **helpers.aria_sort(column, @q.sorts[0].name, @q.sorts[0].dir),
               scope: 'col',
               classes: class_names('px-3 py-3')
             ) do %>

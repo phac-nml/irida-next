@@ -44,7 +44,7 @@ module DataExports
     def row_arguments(data_export)
       { tag: 'tr' }.tap do |args|
         args[:classes] = class_names('bg-white', 'border-b', 'dark:bg-slate-800', 'dark:border-slate-700')
-        args[:id] = data_export.id
+        args[:id] = dom_id(data_export)
       end
     end
 
