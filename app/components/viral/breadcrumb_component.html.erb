@@ -1,10 +1,10 @@
 <ol
-  aria-label="Breadcrumb"
+  aria-label="<%=I18n.t(:'components.breadcrumb.aria_label')%>"
   class="inline-flex items-center space-x-1 md:space-x-3"
   style="height: 50px"
 >
   <% links.each_with_index do |link, index| %>
-    <li class="inline-flex items-center">
+    <li class="max-md:hidden md:visible inline-flex items-center">
       <div class="flex items-center">
         <% if index > 0 %>
           <%= viral_icon(name: "chevron_right", classes: "w-3 h-3 text-slate-300") %>
@@ -15,16 +15,60 @@
           data: {
             turbo_frame: "_top",
           },
-          class: "ml-1 text-sm font-normal text-slate-500 md:ml-2 dark:text-slate-400" %>
+          class:
+            "ml-1 text-sm font-normal text-slate-500 md:ml-2 dark:text-slate-400 hover:underline" %>
         <% else %>
           <%= link_to link[:name],
           URI.join(root_url, link[:path]).to_s,
           data: {
             turbo_frame: "_top",
           },
-          class: "ml-1 text-sm font-medium text-slate-600 md:ml-2 dark:text-slate-400" %>
+          class:
+            "ml-1 text-sm font-medium text-slate-600 md:ml-2 dark:text-slate-400 hover:underline" %>
         <% end %>
+      </div>
+    </li>
+  <% end %>
 
+  <% if links.length > 1 %>
+    <li class="max-md:visible md:hidden inline-flex items-center">
+      <%= viral_dropdown(icon: "ellipsis_horizontal", aria: { label: I18n.t(:'components.breadcrumb.dropdown.aria_label') }, classes: "text-slate-500 cursor-pointer") do |dropdown| %>
+        <% links.each_with_index do |link, index| %>
+          <% if index < links.length - 1 %>
+            <%= link_to link[:name],
+            URI.join(root_url, link[:path]).to_s,
+            data: {
+              turbo_frame: "_top",
+            },
+            class:
+              "ml-1 text-sm font-normal text-slate-500 md:ml-2 dark:text-slate-400 hover:underline" %>
+            <% dropdown.with_item(
+              label: link[:name],
+              url: URI.join(root_url, link[:path]).to_s,
+              data: {
+                turbo_frame: "_top",
+              },
+            ) %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </li>
+  <% end %>
+
+  <% if links.length > 0 %>
+    <li class="max-md:visible md:hidden inline-flex items-center">
+      <div class="flex items-center">
+        <% if links.length > 1 %>
+          <%= viral_icon(name: "chevron_right", classes: "w-3 h-3 text-slate-300") %>
+        <% end %>
+        <% link = links.last %>
+        <%= link_to link[:name],
+        URI.join(root_url, link[:path]).to_s,
+        data: {
+          turbo_frame: "_top",
+        },
+        class:
+          "ml-1 text-sm font-medium text-slate-600 md:ml-2 dark:text-slate-400 hover:underline" %>
       </div>
     </li>
   <% end %>

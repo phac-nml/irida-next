@@ -476,6 +476,10 @@ fr:
           title: Transferred Samples
       load_more: Charger plus
       more_details: More details
+    breadcrumb:
+      aria_label: Breadcrumb
+      dropdown:
+        aria_label: Breadcrumb dropdown
     clipboard:
       copied: Copié!
       title: Copier dans le presse-papiers

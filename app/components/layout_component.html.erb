@@ -20,8 +20,11 @@
 >
   <%= sidebar %>
   <div class="relative content" data-layout-target="content">
-    <nav class="flex px-5" style="height: 50px">
-      <div class=" flex flex-row shrink-0 justify-end items-center space-x-1">
+    <nav
+      class="flex px-4 max-xl:fixed xl:absolute top-0 left-0 right-0 z-20"
+      style="height: 50px"
+    >
+      <div class="flex flex-row shrink-0 justify-end items-center space-x-1">
         <button
           data-layout-target="expandButton"
           data-action="click->layout#expand"
