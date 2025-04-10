@@ -101,7 +101,7 @@
                 <%= render_cell(
                   tag: index.zero? ? 'th' :'td',
                   scope: index.zero? ? 'row' : nil,
-                  classes: class_names('px-3 py-3', '@2xl:sticky left-0 min-w-56 max-w-56 truncate bg-slate-50 dark:bg-slate-900': index.zero?, '@2xl:sticky left-56 bg-slate-50 dark:bg-slate-900': index == 1)
+                  classes: class_names('px-3 py-3', '@2xl:sticky left-0 min-w-56 max-w-56 bg-slate-50 dark:bg-slate-900': index.zero?, '@2xl:sticky left-56 bg-slate-50 dark:bg-slate-900 truncate': index == 1)
                 ) do %>
                   <% if index.zero? && @abilities[:select_attachments] %>
                     <%= check_box_tag "attachment_ids[]",
