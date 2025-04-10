@@ -797,8 +797,8 @@ module Groups
     test 'should import metadata with disabled feature flag' do
       Flipper.disable(:metadata_import_field_selection)
       visit group_samples_url(@group)
-      click_button I18n.t('groups.samples.index.sample_actions_button.label')
-      click_button I18n.t('groups.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
@@ -816,8 +816,8 @@ module Groups
 
     test 'should import metadata via csv' do
       visit group_samples_url(@group)
-      click_button I18n.t('groups.samples.index.sample_actions_button.label')
-      click_button I18n.t('groups.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
         find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
@@ -846,8 +846,8 @@ module Groups
 
     test 'should not import metadata via invalid file type' do
       visit group_samples_url(@group)
-      click_button I18n.t('groups.samples.index.sample_actions_button.label')
-      click_button I18n.t('groups.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -875,8 +875,8 @@ module Groups
       project = projects(:project29)
       sample = samples(:sample32)
       visit group_samples_url(group)
-      click_button I18n.t('groups.samples.index.sample_actions_button.label')
-      click_button I18n.t('groups.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]',
                     Rails.root.join('test/fixtures/files/metadata/contains_empty_values_with_puid.csv')
@@ -924,8 +924,8 @@ module Groups
       project = projects(:project29)
       sample = samples(:sample32)
       visit group_samples_url(group)
-      click_button I18n.t('groups.samples.index.sample_actions_button.label')
-      click_button I18n.t('groups.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]',
                     Rails.root.join('test/fixtures/files/metadata/contains_empty_values_with_puid.csv')
@@ -965,8 +965,8 @@ module Groups
 
     test 'should not import metadata with duplicate header errors' do
       visit group_samples_url(@group)
-      click_button I18n.t('groups.samples.index.sample_actions_button.label')
-      click_button I18n.t('groups.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/duplicate_headers.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -995,8 +995,8 @@ module Groups
 
     test 'should not import metadata with missing metadata row errors' do
       visit group_samples_url(@group)
-      click_button I18n.t('groups.samples.index.sample_actions_button.label')
-      click_button I18n.t('groups.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_rows.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1025,8 +1025,8 @@ module Groups
 
     test 'should not import metadata with missing metadata column errors' do
       visit group_samples_url(@group)
-      click_button I18n.t('groups.samples.index.sample_actions_button.label')
-      click_button I18n.t('groups.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1044,8 +1044,8 @@ module Groups
       assert_no_selector 'div[data-test-selector="spinner"]'
 
       assert_selector '#samples-table table thead tr th', count: 9
-      click_button I18n.t('groups.samples.index.sample_actions_button.label')
-      click_button I18n.t('groups.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]',
                     Rails.root.join('test/fixtures/files/metadata/mixed_project_samples_with_puid.csv')
@@ -1078,8 +1078,8 @@ module Groups
     test 'should not import metadata with analysis values' do
       group = groups(:group_twelve)
       visit group_samples_url(group)
-      click_button I18n.t('groups.samples.index.sample_actions_button.label')
-      click_button I18n.t('groups.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]',
                     Rails.root.join('test/fixtures/files/metadata/contains_analysis_values_with_puid.csv')
@@ -1108,8 +1108,8 @@ module Groups
 
     test 'dialog close button is hidden during metadata import' do
       visit group_samples_url(@group)
-      click_button I18n.t('groups.samples.index.sample_actions_button.label')
-      click_button I18n.t('groups.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         # dialog close button available when selecting params
         assert_selector 'button.dialog--close'
@@ -1223,8 +1223,8 @@ module Groups
 
       ### ACTIONS START ###
       # start import
-      click_button I18n.t('groups.samples.index.sample_actions_button.label')
-      click_button I18n.t('groups.samples.index.sample_actions_button.import_samples')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_samples')
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/group/valid.csv'))
@@ -1273,8 +1273,8 @@ module Groups
 
       ### ACTIONS START ###
       # start import
-      click_button I18n.t('groups.samples.index.sample_actions_button.label')
-      click_button I18n.t('groups.samples.index.sample_actions_button.import_samples')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_samples')
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/group/invalid_missing_puid.csv'))

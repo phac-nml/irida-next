@@ -956,14 +956,6 @@ en:
     samples:
       index:
         deselect_all_button: Deselect All
-        sample_actions_button:
-          export: Export
-          import: Import
-          import_metadata: Import metadata
-          import_samples: Import samples
-          label: Sample Actions
-          linelist_export: Linelist Export
-          sample_export: Sample Export
         select_all_button: Select All
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
         title: Samples
@@ -1623,21 +1615,9 @@ en:
         subtitle: Update the name and description of the current sample
         title: Edit sample
       index:
-        delete_samples_button: Delete Samples
         deselect_all_button: Deselect All
         no_associated_samples: There are no samples associated with this project.
         no_samples: No Samples
-        sample_actions_button:
-          clone: Copy samples
-          export: Export
-          import: Import
-          import_metadata: Import metadata
-          import_samples: Import samples
-          label: Sample Actions
-          linelist_export: Linelist Export
-          new_sample: New Sample
-          sample_export: Sample Export
-          transfer: Transfer samples
         select_all_button: Select All
         title: Samples
         workflows:
@@ -1958,6 +1938,18 @@ en:
     progress_bar:
       in_progress: Action in progress. Please do not refresh the page.
     samples:
+      actions_dropdown:
+        clone: Copy samples
+        delete_samples: Delete Samples
+        export: Export
+        import: Import
+        import_metadata: Import metadata
+        import_samples: Import samples
+        label: Sample Actions
+        linelist_export: Linelist Export
+        new_sample: New Sample
+        sample_export: Sample Export
+        transfer: Transfer samples
       metadata:
         editing_field_cell:
           dialog:

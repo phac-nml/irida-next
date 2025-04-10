@@ -133,11 +133,11 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: user.locale))
 
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
       assert_selector 'button',
-                      text: I18n.t('projects.samples.index.sample_actions_button.linelist_export', locale: user.locale)
+                      text: I18n.t('shared.samples.actions_dropdown.linelist_export', locale: user.locale)
       assert_selector 'button',
-                      text: I18n.t('projects.samples.index.sample_actions_button.sample_export', locale: user.locale)
+                      text: I18n.t('shared.samples.actions_dropdown.sample_export', locale: user.locale)
     end
 
     test 'User with role < Analyst does not see create export button' do
@@ -165,8 +165,8 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
 
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      assert_no_selector 'button', text: I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      assert_no_selector 'button', text: I18n.t('shared.samples.actions_dropdown.transfer')
     end
 
     test 'User with role >= Maintainer sees new sample button' do
@@ -175,8 +175,8 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
 
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      assert_selector 'button', text: I18n.t('projects.samples.index.sample_actions_button.new_sample')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      assert_selector 'button', text: I18n.t('shared.samples.actions_dropdown.new_sample')
     end
 
     test 'User with role < Maintainer does not see new sample button' do
@@ -187,7 +187,7 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: user.locale))
 
-      assert_no_selector 'button', text: I18n.t('projects.samples.index.sample_actions_button.new_sample')
+      assert_no_selector 'button', text: I18n.t('shared.samples.actions_dropdown.new_sample')
     end
 
     test 'User with role >= Maintainer sees delete samples button' do
@@ -196,8 +196,8 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
 
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      assert_selector 'button', text: I18n.t('projects.samples.index.delete_samples_button')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      assert_selector 'button', text: I18n.t('shared.samples.actions_dropdown.delete_samples')
     end
 
     test 'User with role < Maintainer does not see delete samples button' do
@@ -208,7 +208,7 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: user.locale))
 
-      assert_no_selector 'a', text: I18n.t('projects.samples.index.delete_samples_button')
+      assert_no_selector 'a', text: I18n.t('shared.samples.actions_dropdown.delete_samples')
     end
 
     test 'cannot access project samples' do
@@ -233,8 +233,8 @@ module Projects
 
       ### ACTIONS START ###
       # launch dialog
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.new_sample')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.new_sample')
 
       # fill new sample fields
       fill_in I18n.t('activerecord.attributes.sample.description'), with: 'A sample description'
@@ -353,8 +353,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -384,8 +384,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -408,8 +408,8 @@ module Projects
       within '#samples-table table tbody' do
         all('input[type="checkbox"]')[0].click
       end
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -442,8 +442,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
       assert_selector '#dialog'
       within('#dialog') do
         within('#list_selections') do
@@ -495,8 +495,8 @@ module Projects
       ### ACTIONS START ###
       # select all 3 samples
       click_button I18n.t(:'projects.samples.index.select_all_button')
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
       assert_selector '#dialog'
       within('#dialog') do
         # close button available before confirming
@@ -544,8 +544,8 @@ module Projects
       # clear localstorage
       Capybara.execute_script 'sessionStorage.clear()'
       # launch transfer dialog
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -594,8 +594,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -660,8 +660,8 @@ module Projects
         assert_text 'Samples: 1'
         assert_selector 'strong[data-selection-target="selected"]', text: '1'
       end
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -700,8 +700,8 @@ module Projects
       end
 
       # transfer sample
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -759,8 +759,8 @@ module Projects
       end
 
       # launch dialog
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
       assert_selector '#dialog'
       within('#dialog') do
         # fill destination input
@@ -1159,8 +1159,8 @@ module Projects
 
       ### ACTIONS START ###
       # start import
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1237,8 +1237,8 @@ module Projects
 
       ### ACTIONS START ###
       # start import
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1325,8 +1325,8 @@ module Projects
 
       ### ACTIONS START ###
       # start import
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xls')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1417,8 +1417,8 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid.xlsx')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1476,8 +1476,8 @@ module Projects
 
     test 'dialog close button is hidden during metadata import' do
       visit namespace_project_samples_url(@namespace, @project)
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         # dialog close button available when selecting params
         assert_selector 'button.dialog--close'
@@ -1502,8 +1502,8 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/invalid.txt')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1551,8 +1551,8 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_empty_values.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1613,8 +1613,8 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_empty_values.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1659,8 +1659,8 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/duplicate_headers.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1698,8 +1698,8 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_rows.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1737,8 +1737,8 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/missing_metadata_columns.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1778,8 +1778,8 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/mixed_project_samples.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1849,8 +1849,8 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.import_metadata')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/contains_analysis_values.csv')
         find('#file_import_sample_id_column', wait: 1).find(:xpath, 'option[2]').select_option
@@ -1903,8 +1903,8 @@ module Projects
 
       ### ACTIONS START ###
       # start import
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.import_samples')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_samples')
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/project/valid.csv'))
@@ -1949,8 +1949,8 @@ module Projects
 
       ### ACTIONS START ###
       # start import
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.import_samples')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_samples')
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/project/invalid_short_sample_name.csv'))
@@ -2000,8 +2000,8 @@ module Projects
 
       ### ACTIONS START ###
       # start import
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.import_samples')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_samples')
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/project/invalid_duplicate_header.csv'))
@@ -2039,8 +2039,8 @@ module Projects
       within '#samples-table table tbody' do
         all('input[type="checkbox"]')[0].click
       end
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.clone')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.clone')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -2067,8 +2067,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.clone')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.clone')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -2098,8 +2098,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.clone')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.clone')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -2136,8 +2136,8 @@ module Projects
         find("input##{dom_id(@sample1, :checkbox)}").click
         find("input##{dom_id(@sample2, :checkbox)}").click
       end
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.clone')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.clone')
       assert_selector '#dialog'
       within('#dialog') do
         within('#list_selections') do
@@ -2193,8 +2193,8 @@ module Projects
         find("input##{dom_id(@sample1, :checkbox)}").click
         find("input##{dom_id(@sample2, :checkbox)}").click
       end
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.clone')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.clone')
       assert_selector '#dialog'
       within('#dialog') do
         # close button available before confirming cloning
@@ -2241,8 +2241,8 @@ module Projects
       end
       # clear localstorage
       Capybara.execute_script 'sessionStorage.clear()'
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.clone')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.clone')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -2295,8 +2295,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.clone')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.clone')
       assert_selector '#dialog'
       within('#dialog') do
         within('#list_selections') do
@@ -2351,8 +2351,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.clone')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.clone')
       assert_selector '#dialog'
       within('#dialog') do
         find('input.select2-input').fill_in with: 'invalid project name or puid'
@@ -2382,8 +2382,8 @@ module Projects
         assert_text 'Samples: 1'
         assert_selector 'strong[data-selection-target="selected"]', text: '1'
       end
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.clone')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.clone')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -2423,8 +2423,8 @@ module Projects
       end
 
       # clone sample
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.clone')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.clone')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -2632,11 +2632,11 @@ module Projects
                                           project_id: projects(:empty_project).path)
       assert_text I18n.t('projects.samples.index.no_associated_samples')
       assert_text I18n.t('projects.samples.index.no_samples')
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
       assert_selector '[aria-disabled="true"]',
-                      text: I18n.t(:'projects.samples.index.sample_actions_button.clone')
+                      text: I18n.t(:'shared.samples.actions_dropdown.clone')
       assert_selector '[aria-disabled="true"]',
-                      text: I18n.t(:'projects.samples.index.sample_actions_button.transfer')
+                      text: I18n.t(:'shared.samples.actions_dropdown.transfer')
     end
 
     test 'singular description within delete samples dialog' do
@@ -2652,8 +2652,8 @@ module Projects
         # select sample1
         all('input[type="checkbox"]')[0].click
       end
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.delete_samples_button')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -2681,8 +2681,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.delete_samples_button')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -2712,8 +2712,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.delete_samples_button')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
       ### ACTIONS END ###
 
       ### VERIFY START ###
@@ -2748,8 +2748,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.delete_samples_button')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
       within('#dialog') do
         click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
@@ -3394,9 +3394,9 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
 
       # Assert that the Export button is disabled when no samples are selected
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
       assert_selector '[aria-disabled="true"]',
-                      text: I18n.t('projects.samples.index.sample_actions_button.linelist_export')
+                      text: I18n.t('shared.samples.actions_dropdown.linelist_export')
 
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
@@ -3412,8 +3412,8 @@ module Projects
         assert_text 'Samples: 3'
         assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.linelist_export')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.linelist_export')
       assert_selector "div[data-controller='infinite-scroll viral--sortable-lists--two-lists-selection']"
       assert_no_selector 'ul#Selected li', text: 'metadatafield1'
       select 'Project Template with existing fields', from: I18n.t('data_exports.new.template_select_label')

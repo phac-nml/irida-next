@@ -954,14 +954,6 @@ fr:
     samples:
       index:
         deselect_all_button: Désélectionner tout
-        sample_actions_button:
-          export: Export
-          import: Import
-          import_metadata: Importer des métadonnées
-          import_samples: Import samples
-          label: Sample Actions
-          linelist_export: Exportation de liste détaillée
-          sample_export: Exportation d’échantillons
         select_all_button: Tout sélectionner
         subtitle: Voici les échantillons dans %{namespace_type} %{namespace_name}
         title: Échantillons
@@ -1619,21 +1611,9 @@ fr:
         subtitle: Mettre à jour le nom et la description de l’échantillon actuel
         title: Modifier l’échantillon
       index:
-        delete_samples_button: Supprimer les échantillons
         deselect_all_button: Désélectionner tout
         no_associated_samples: Il n’y a aucun échantillon associé à ce projet.
         no_samples: Aucun échantillon
-        sample_actions_button:
-          clone: Copier des échantillons
-          export: Export
-          import: Import
-          import_metadata: Importer des métadonnées
-          import_samples: Import samples
-          label: Sample Actions
-          linelist_export: Exportation de liste détaillée
-          new_sample: Nouvel échantillon
-          sample_export: Exportation d’échantillons
-          transfer: Transférer des échantillons
         select_all_button: Tout sélectionner
         title: Échantillons
         workflows:
@@ -1954,6 +1934,18 @@ fr:
     progress_bar:
       in_progress: Action in progress. Please do not refresh the page.
     samples:
+      actions_dropdown:
+        clone: Copier des échantillons
+        delete_samples: Supprimer les échantillons
+        export: Export
+        import: Import
+        import_metadata: Importer des métadonnées
+        import_samples: Import samples
+        label: Sample Actions
+        linelist_export: Exportation de liste détaillée
+        new_sample: Nouvel échantillon
+        sample_export: Exportation d’échantillons
+        transfer: Transférer des échantillons
       metadata:
         editing_field_cell:
           dialog:
