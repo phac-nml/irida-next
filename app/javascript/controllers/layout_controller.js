@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = [
     "layoutContainer",
-    "expandButton",
+    "expandButtonContainer",
     "link",
     "content",
     "logo",
@@ -24,10 +24,6 @@ export default class extends Controller {
       "click",
       this.boundHandleSidebarOverlayClick,
     );
-    this.expandButtonTarget.addEventListener(
-      "focus",
-      this.boundHandleContentFocus,
-    );
   }
 
   disconnect() {
@@ -35,15 +31,11 @@ export default class extends Controller {
       "click",
       this.boundHandleSidebarOverlayClick,
     );
-    this.expandButtonTarget.removeEventListener(
-      "focus",
-      this.boundHandleContentFocus,
-    );
   }
 
   collapse() {
     this.layoutContainerTarget.classList.add("max-xl:collapsed", "collapsed");
-    this.expandButtonTarget.classList.remove("xl:hidden");
+    this.expandButtonContainerTarget.classList.remove("xl:hidden");
     localStorage.setItem("layout", "collapsed");
   }
 
@@ -52,7 +44,7 @@ export default class extends Controller {
     if (window.innerWidth < this.#convertRemToPixels(80)) {
       this.layoutContainerTarget.classList.remove("max-xl:collapsed");
     }
-    this.expandButtonTarget.classList.add("xl:hidden");
+    this.expandButtonContainerTarget.classList.add("xl:hidden");
     if (typeof event !== "undefined") {
       this.logoTarget.focus();
     }
@@ -61,22 +53,6 @@ export default class extends Controller {
 
   handleSidebarOverlayClick() {
     if (window.innerWidth < this.#convertRemToPixels(80)) {
-      if (
-        !this.layoutContainerTarget.classList.contains(
-          "max-xl:collapsed",
-          "collapsed",
-        )
-      ) {
-        this.collapse();
-      }
-    }
-  }
-
-  handleContentFocus(event) {
-    if (
-      this.expandButtonTarget.contains(event.target) &&
-      window.innerWidth < this.#convertRemToPixels(80)
-    ) {
       if (
         !this.layoutContainerTarget.classList.contains(
           "max-xl:collapsed",

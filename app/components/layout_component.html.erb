@@ -24,13 +24,17 @@
       class="flex px-4 max-xl:fixed xl:absolute top-0 left-0 right-0 z-20"
       style="height: 50px"
     >
-      <div class="flex flex-row shrink-0 justify-end items-center space-x-1">
+      <div
+        class="
+          flex flex-row shrink-0 justify-end items-center space-x-1 max-xl:visible
+          xl:hidden mr-1 md:mr-2
+        "
+        data-layout-target="expandButtonContainer"
+      >
         <button
-          data-layout-target="expandButton"
           data-action="click->layout#expand"
-          class="
-            max-xl:visible xl:hidden text-slate-500 navbar-button cursor-pointer
-          "
+          class="text-slate-500 navbar-button cursor-pointer"
+          aria-label="<%= t(:'general.navbar.expand.aria_label') %>"
         >
           <%= viral_icon(name: "sidebar", classes: "w-6 h-6") %>
         </button>

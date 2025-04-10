@@ -9,23 +9,19 @@
         <% if index > 0 %>
           <%= viral_icon(name: "chevron_right", classes: "w-3 h-3 text-slate-300") %>
         <% end %>
-        <% if index < links.length - 1 %>
-          <%= link_to link[:name],
-          URI.join(root_url, link[:path]).to_s,
-          data: {
-            turbo_frame: "_top",
-          },
-          class:
-            "ml-1 text-sm font-normal text-slate-500 md:ml-2 dark:text-slate-400 hover:underline" %>
-        <% else %>
-          <%= link_to link[:name],
-          URI.join(root_url, link[:path]).to_s,
-          data: {
-            turbo_frame: "_top",
-          },
-          class:
-            "ml-1 text-sm font-medium text-slate-600 md:ml-2 dark:text-slate-400 hover:underline" %>
-        <% end %>
+        <%= link_to link[:name],
+        URI.join(root_url, link[:path]).to_s,
+        data: {
+          turbo_frame: "_top",
+        },
+        class:
+          class_names(
+            "text-sm text-slate-600 dark:text-slate-400 hover:underline",
+            "font-normal": index < links.length - 1,
+            "font-medium": index === links.length - 1,
+            "ml-1 md:ml-2": !index.zero?,
+          ) %>
+
       </div>
     </li>
   <% end %>
