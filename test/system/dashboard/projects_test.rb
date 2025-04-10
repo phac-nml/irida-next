@@ -282,8 +282,8 @@ module Dashboard
 
       visit namespace_project_samples_url(@group1, @project)
 
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.new_sample')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.new_sample')
 
       find('input#sample_name').fill_in with: 'Test Sample'
       click_button I18n.t('projects.samples.new.submit_button')
@@ -317,8 +317,8 @@ module Dashboard
       visit namespace_project_samples_url(@group1, @project)
 
       find("input[type='checkbox'][id='#{dom_id(@sample1, :checkbox)}']").click
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.transfer')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
 
       within('div[data-controller-connected="true"] dialog') do
         assert_text I18n.t('projects.samples.transfers.dialog.description.singular')
@@ -373,8 +373,8 @@ module Dashboard
       visit namespace_project_samples_url(@group1, @project)
 
       find("input[type='checkbox'][id='#{dom_id(@sample1, :checkbox)}']").click
-      click_button I18n.t('projects.samples.index.sample_actions_button.label')
-      click_button I18n.t('projects.samples.index.sample_actions_button.clone')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.clone')
 
       within('div[data-controller-connected="true"] dialog') do
         assert_text I18n.t('projects.samples.clones.dialog.description.singular')

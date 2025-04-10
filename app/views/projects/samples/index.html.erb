@@ -20,10 +20,10 @@
           <% end %>
         <% end %>
 
-        <%= viral_dropdown(label: t(".sample_actions_button.label"), aria: { label: t('.sample_actions_button.label') }, caret: true, classes: "font-normal button button--size-default button--state-default") do |dropdown| %>
+        <%= viral_dropdown(label: t("shared.samples.actions_dropdown.label"), aria: { label: t('shared.samples.actions_dropdown.label') }, caret: true, classes: "font-normal button button--size-default button--state-default") do |dropdown| %>
           <% if allowed_to?(:create_sample?, @project) %>
             <% dropdown.with_item(
-              label: t("projects.samples.index.sample_actions_button.new_sample"),
+              label: t("shared.samples.actions_dropdown.new_sample"),
               url: new_namespace_project_sample_path,
               disableable: true,
               data: {
@@ -34,7 +34,7 @@
 
           <% if allowed_to?(:clone_sample?, @project) %>
             <% dropdown.with_item(
-              label: t("projects.samples.index.sample_actions_button.clone"),
+              label: t("shared.samples.actions_dropdown.clone"),
               url: new_namespace_project_samples_clone_path,
               disableable: true,
               data: {
@@ -50,7 +50,7 @@
           <% end %>
           <% if allowed_to?(:transfer_sample?, @project) %>
             <% dropdown.with_item(
-              label: t("projects.samples.index.sample_actions_button.transfer"),
+              label: t("shared.samples.actions_dropdown.transfer"),
               url: new_namespace_project_samples_transfer_path,
               disableable: true,
               data: {
@@ -67,7 +67,7 @@
 
           <% if allowed_to?(:destroy_sample?, @project) %>
             <% dropdown.with_item(
-              label: t(".delete_samples_button"),
+              label: t("shared.samples.actions_dropdown.delete_samples"),
               url: new_namespace_project_samples_deletion_path,
               params: {
                 deletion_type: "multiple",
@@ -81,18 +81,18 @@
                 action_link_required_value: 1,
               },
               class:
-                "flex w-full items-center text-red-500 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white dark:text-red-300 action-link",
+                "flex w-full items-center text-red-600 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white dark:text-red-300 action-link",
             ) %>
           <% end %>
 
           <% if allowed_to?(:update_sample_metadata?, @project.namespace) && @has_samples %>
             <% dropdown.with_item(
-              label: t(".sample_actions_button.import"),
+              label: t("shared.samples.actions_dropdown.import"),
               section_header: true,
             ) %>
 
             <% dropdown.with_item(
-              label: t("projects.samples.index.sample_actions_button.import_metadata"),
+              label: t("shared.samples.actions_dropdown.import_metadata"),
               url: new_namespace_project_samples_file_import_path,
               disableable: true,
               data: {
@@ -103,7 +103,7 @@
 
           <% if Flipper.enabled?(:batch_sample_spreadsheet_import) && allowed_to?(:import_samples_and_metadata?, @project.namespace) %>
             <% dropdown.with_item(
-              label: t("projects.samples.index.sample_actions_button.import_samples"),
+              label: t("shared.samples.actions_dropdown.import_samples"),
               url: new_namespace_project_samples_spreadsheet_import_path,
               disableable: true,
               data: {
@@ -114,13 +114,13 @@
 
           <% if allowed_to?(:export_data?, @project) %>
             <% dropdown.with_item(
-              label: t(".sample_actions_button.export"),
+              label: t("shared.samples.actions_dropdown.export"),
               section_header: true,
             ) %>
 
             <% if @project.namespace.metadata_fields.empty? %>
               <% dropdown.with_item(
-                label: t(".sample_actions_button.linelist_export"),
+                label: t("shared.samples.actions_dropdown.linelist_export"),
                 url: new_data_export_path,
                 params: {
                   export_type: "linelist",
@@ -139,7 +139,7 @@
               ) %>
             <% else %>
               <% dropdown.with_item(
-                label: t(".sample_actions_button.linelist_export"),
+                label: t("shared.samples.actions_dropdown.linelist_export"),
                 url: new_data_export_path,
                 params: {
                   export_type: "linelist",
@@ -159,7 +159,7 @@
             <% end %>
 
             <% dropdown.with_item(
-              label: t(".sample_actions_button.sample_export"),
+              label: t("shared.samples.actions_dropdown.sample_export"),
               url: new_data_export_path,
               params: {
                 export_type: "sample",
