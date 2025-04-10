@@ -4,11 +4,7 @@
 >
   <thead
     class="
-      text-xs
-      text-slate-700
-      uppercase
-      bg-slate-50
-      dark:bg-slate-700
+      text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700
       dark:text-slate-400
     "
   >
@@ -21,7 +17,7 @@
   </thead>
   <tbody>
     <% (0...3).each do |index| %>
-    <tr class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
+      <tr class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
         <td class="w-4 p-4">
           <div class="flex items-center">
             <input
@@ -32,18 +28,7 @@
               data-action="input->selection#toggle"
               data-selection-target="rowSelection"
               class="
-                w-4
-                h-4
-                text-blue-600
-                bg-slate-100
-                border-slate-300
-                rounded
-                focus:ring-blue-500
-                dark:focus:ring-blue-600
-                dark:ring-offset-slate-800
-                dark:focus:ring-offset-slate-800
-                focus:ring-2
-                dark:bg-slate-700
+                w-4 h-4 text-blue-600 bg-slate-100 border-slate-300 rounded dark:bg-slate-700
                 dark:border-slate-600
               "
             >
@@ -53,12 +38,7 @@
         <th
           scope="row"
           class="
-            px-6
-            py-4
-            font-medium
-            text-slate-900
-            whitespace-nowrap
-            dark:text-white
+            px-6 py-4 font-medium text-slate-900 whitespace-nowrap dark:text-white
           "
         ><%= "Row #{index}" %></th>
       </tr>
