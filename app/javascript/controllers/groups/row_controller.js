@@ -11,8 +11,9 @@ export default class extends Controller {
    */
   toggle(event) {
     if (
-      this.rowTarget.children.length == 1 ||
-      !this.rowTarget.lastElementChild.contains(event.target)
+      !["A", "BUTTON"].includes(event.target.tagName) &&
+      (this.rowTarget.children.length == 1 ||
+        !this.rowTarget.lastElementChild.contains(event.target))
     ) {
       get(this.urlValue, {
         responseKind: "turbo-stream",
