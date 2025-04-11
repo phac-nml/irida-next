@@ -10,7 +10,7 @@
 <div class="fixed-table-component">
   <%= render Viral::PageHeaderComponent.new(title: t('.title')) do |component| %>
     <% component.with_buttons do %>
-      <div class="flex items-center space-x-2">
+      <div class="flex space-x-2">
         <% if @allowed_to[:submit_workflow] && @pipelines_enabled %>
           <%= button_to pipeline_selection_workflow_executions_submissions_path, params: { namespace_id: @project.namespace.id }, method: :get,
         data: { action: "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit", turbo_stream: true, controller: "action-link", action_link_required_value: 1 },

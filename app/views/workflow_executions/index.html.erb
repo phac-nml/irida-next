@@ -7,33 +7,36 @@
 <%= turbo_stream_from current_user, :workflow_executions %>
 
 <%= render Viral::PageHeaderComponent.new(title: t(".title")) do |component| %>
+
   <%= component.with_buttons do %>
-    <%= button_to t(".create_export_button"),
-    new_data_export_path,
-    params: {
-      export_type: "analysis",
-      analysis_type: "user",
-    },
-    method: :get,
-    data: {
-      action:
-        "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
-      turbo_stream: true,
-      controller: "action-link",
-      action_link_required_value: 1,
-    },
-    class: "button button--size-default button--state-default action-link" %>
-    <% if Flipper.enabled?(:delete_multiple_workflows) %>
-      <%= link_to t(".delete_workflows_button"),
-      destroy_multiple_confirmation_workflow_executions_path,
+    <div class="flex items-center space-x-2">
+      <%= button_to t(".create_export_button"),
+      new_data_export_path,
+      params: {
+        export_type: "analysis",
+        analysis_type: "user",
+      },
+      method: :get,
       data: {
-        action: "turbo:morph-element->action-link#idempotentConnect",
+        action:
+          "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
         turbo_stream: true,
         controller: "action-link",
         action_link_required_value: 1,
       },
-      class: "button button--size-default button--state-destructive action-link" %>
-    <% end %>
+      class: "button button--size-default button--state-default action-link" %>
+      <% if Flipper.enabled?(:delete_multiple_workflows) %>
+        <%= link_to t(".delete_workflows_button"),
+        destroy_multiple_confirmation_workflow_executions_path,
+        data: {
+          action: "turbo:morph-element->action-link#idempotentConnect",
+          turbo_stream: true,
+          controller: "action-link",
+          action_link_required_value: 1,
+        },
+        class: "button button--size-default button--state-destructive action-link" %>
+      <% end %>
+    </div>
   <% end %>
 <% end %>
 <div class="flow-root">

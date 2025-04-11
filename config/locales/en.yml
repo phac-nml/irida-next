@@ -1940,15 +1940,15 @@ en:
     samples:
       actions_dropdown:
         clone: Copy samples
-        delete_samples: Delete Samples
+        delete_samples: Delete samples
         export: Export
         import: Import
         import_metadata: Import metadata
         import_samples: Import samples
         label: Sample Actions
-        linelist_export: Linelist Export
-        new_sample: New Sample
-        sample_export: Sample Export
+        linelist_export: Linelist export
+        new_sample: New sample
+        sample_export: Sample export
         transfer: Transfer samples
       metadata:
         editing_field_cell:
