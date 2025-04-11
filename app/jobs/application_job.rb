@@ -7,7 +7,7 @@ class ApplicationJob < ActiveJob::Base
   # Most jobs are safe to ignore if the underlying records are no longer available
   # discard_on ActiveJob::DeserializationError
 
-  if Flipper.enabled?(:telemetry)
+  if Flipper.enabled?(:telemetry) && ENV['OTEL_EXPORTER_OTLP_METRICS_ENDPOINT']
     after_enqueue do |job|
       Irida::JobQueueMetrics.instance.update_job_queue_count(job.queue_name, 1) if job.successfully_enqueued?
     end
