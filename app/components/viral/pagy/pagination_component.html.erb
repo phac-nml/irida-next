@@ -26,7 +26,13 @@
         <% if item.is_a?(Integer) %>
           <%== a.(item, classes: class_names(active_link_classes, invisible_link_classes)) %>
         <% elsif item.is_a?(String) %>
-          <%= content_tag(:a, item, class: current_link_classes, aria: { disabled: true }) %>
+          <span
+            class="
+              flex items-center justify-center px-4 h-10 ms-0 leading-tight border
+              border-slate-300 dark:border-slate-600 text-slate-400 bg-slate-100
+              dark:bg-slate-800 cursor-not-allowed
+            "
+          ><%= item %></span>
         <% elsif item == :gap %>
           <span
             class="
