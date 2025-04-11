@@ -23,10 +23,21 @@ data: { turbo_confirm: "", controller: "viral--select2" }) do |form| %>
       <%= viral_select2(form:, name: :new_namespace_id, id: form_id, placeholder: t(:"groups.edit.advanced.transfer.select_group")) do |select| %>
         <% @authorized_namespaces.each do |namespace| %>
           <% select.with_option(
-            primary: namespace.full_path,
-            secondary: namespace.puid,
-            value: namespace.id,
-          ) %>
+                      value: namespace.id,
+                      label: namespace.name,
+                    ) do %>
+            <span
+              class="
+                text-slate-900 dark:text-slate-400 font-semibold block pointer-events-none
+              "
+            >
+              <%= namespace.name %>
+              <%= render PuidComponent.new(puid: namespace.puid, show_clipboard: false) %>
+            </span>
+            <span class="text-slate-500 dark:text-white block pointer-events-none">
+              <%= namespace.full_path %>
+            </span>
+          <% end %>
         <% end %>
         <%= select.with_empty_state do %>
           <%= t(:"groups.edit.advanced.transfer.empty_state") %>
