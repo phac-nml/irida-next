@@ -75,10 +75,21 @@
                 <%= viral_select2(form:, name: :new_project_id, id: form_id, placeholder: t(".select_project")) do |select| %>
                   <% @projects.each do |project| %>
                     <% select.with_option(
-                      primary: project.full_path,
-                      secondary: project.puid,
                       value: project.id,
-                    ) %>
+                      label: project.name,
+                    ) do %>
+                      <span
+                        class="
+                          text-slate-900 dark:text-slate-400 font-semibold block pointer-events-none
+                        "
+                      >
+                        <%= project.name %>
+                        <%= render PuidComponent.new(puid: project.puid, show_clipboard: false) %>
+                      </span>
+                      <span class="text-slate-500 dark:text-white block pointer-events-none">
+                        <%= project.full_path %>
+                      </span>
+                    <% end %>
                   <% end %>
                   <%= select.with_empty_state do %>
                     <%= t(:".empty_state") %>
