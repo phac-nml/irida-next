@@ -3,10 +3,17 @@
   <%= viral_select2(form:, name: :user, id: "unique_id") do |select| %>
     <% (1..50).each do |num| %>
       <% select.with_option(
-        primary: "User #{num}",
-        secondary: "Another fact goes here",
-        value: num,
-      ) %>
+                      value: num,
+                      label: "User #{num}",
+                    ) do %>
+        <span
+          class="
+            text-slate-900 dark:text-slate-400 font-semibold block pointer-events-none
+          "
+        >
+          <%= "User #{num}" %>
+        </span>
+      <% end %>
       <%= select.with_empty_state do %>
         No users found
       <% end %>
