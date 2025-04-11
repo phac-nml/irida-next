@@ -8,9 +8,8 @@ require 'opentelemetry-exporter-otlp-metrics'
 
 require 'irida/metrics_reporter'
 
-if Flipper.enabled?(:telemetry)
-  # Metrics
-  ENV['OTEL_EXPORTER_OTLP_METRICS_ENDPOINT'] = 'http://localhost:4318/v1/metrics' # TODO: make this configurable
+if Flipper.enabled?(:telemetry) && ENV['OTEL_EXPORTER_OTLP_METRICS_ENDPOINT']
+  # Metrics endpoint is set by ENV['OTEL_EXPORTER_OTLP_METRICS_ENDPOINT']
   ENV['OTEL_METRICS_EXPORTER'] = 'none'
 
   OpenTelemetry::SDK.configure
@@ -20,7 +19,8 @@ if Flipper.enabled?(:telemetry)
 
   Rails.application.config.after_initialize do
     # start the metrics reporting thread
-    Irida::MetricsReporter.instance.run
+    send_interval = ENV['OTEL_METRICS_SEND_INTERVAL']&.to_i || 10
+    Irida::MetricsReporter.instance.run(send_interval)
   end
 
   at_exit do
