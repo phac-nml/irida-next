@@ -18,8 +18,10 @@ if Flipper.enabled?(:telemetry)
   otlp_metric_exporter = OpenTelemetry::Exporter::OTLP::Metrics::MetricsExporter.new
   OpenTelemetry.meter_provider.add_metric_reader(otlp_metric_exporter)
 
-  # start the metrics reporting thread
-  Irida::MetricsReporter.run
+  Rails.application.config.after_initialize do
+    # start the metrics reporting thread
+    Irida::MetricsReporter.run
+  end
 
   at_exit do
     Irida::MetricsReporter.stop

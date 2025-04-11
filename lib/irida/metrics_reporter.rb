@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'irida/job_queue_metrics'
+
 require 'singleton'
 
 module Irida
@@ -19,35 +21,6 @@ module Irida
       instance.run!
     end
 
-    def run!
-      @proc_id = Process.pid
-      Rails.logger.debug { "Starting TelemetryReporter on process #{@proc_id}" }
-      @count = 1
-
-      # Do setup for metrics reporting
-
-      # start the reporting loop
-      proc_loop
-    end
-
-    def running?
-      @proc_id == Process.pid
-    end
-
-    def proc_loop
-      @reporter_thread = Thread.new do
-        # TODO: do we need this line?
-        # Thread.current.thread_variable_set(:fork_safe, true)
-
-        loop do
-          report
-
-          # TODO: make this configurable
-          sleep 10
-        end
-      end
-    end
-
     def self.stop
       unless instance.running?
         Rails.logger.debug { 'TelemetryReporter cannot be stopped as it is not running.' }
@@ -61,6 +34,14 @@ module Irida
       instance.stop!
     end
 
+    def run!
+      @proc_id = Process.pid
+      Rails.logger.debug { "Starting TelemetryReporter on process #{@proc_id}" }
+
+      # start the reporting loop
+      proc_loop
+    end
+
     def stop!
       Rails.logger.debug { 'Stopping metrics telemetry thread.' }
 
@@ -68,6 +49,25 @@ module Irida
       @reporter_thread = nil
       @proc_id = nil
       OpenTelemetry.meter_provider.shutdown
+    end
+
+    def running?
+      @proc_id == Process.pid
+    end
+
+    def proc_loop
+      @reporter_thread = Thread.new do
+        loop do
+          # run updates for metrics that are collected once per cycle instead of per action
+          Irida::JobQueueMetrics.instance.update_minimum_queue_times
+
+          # Batch send all telemetry data
+          report
+
+          # TODO: make this configurable
+          sleep 10
+        end
+      end
     end
 
     # verifies that the current runner is a main process and not a console/runner
