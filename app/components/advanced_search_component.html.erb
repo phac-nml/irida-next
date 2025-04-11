@@ -125,9 +125,7 @@
           name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][operator]"
         >
           <option value="" selected><%= t(".operator") %></option>
-          <% @operations.each do |operation| %>
-            <option value="<%=operation%>"><%= operation %></option>
-          <% end %>
+          <%= options_for_select(@operations) %>
         </select>
       </div>
       <div class="form-field w-6/12 value invisible">

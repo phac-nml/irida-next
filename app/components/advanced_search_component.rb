@@ -6,14 +6,14 @@ class AdvancedSearchComponent < Component
     @form = form
     @search = search
     @fields = fields
-    @operations = operations
+    @operations = operation_options
     @open = open
     @status = status
   end
 
   private
 
-  def operations
+  def operation_options
     {
       I18n.t('advanced_search_component.operation.equals') => '=',
       I18n.t('advanced_search_component.operation.not_equals') => '!=',
