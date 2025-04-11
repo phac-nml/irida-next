@@ -8,14 +8,20 @@ require 'opentelemetry-exporter-otlp-metrics'
 
 require 'irida/metrics_reporter'
 
-# Metrics
-ENV['OTEL_EXPORTER_OTLP_METRICS_ENDPOINT'] = 'http://localhost:4318/v1/metrics'
-ENV['OTEL_METRICS_EXPORTER'] = 'none'
+if Flipper.enabled?(:telemetry)
+  # Metrics
+  ENV['OTEL_EXPORTER_OTLP_METRICS_ENDPOINT'] = 'http://localhost:4318/v1/metrics' # TODO: make this configurable
+  ENV['OTEL_METRICS_EXPORTER'] = 'none'
 
-OpenTelemetry::SDK.configure
+  OpenTelemetry::SDK.configure
 
-otlp_metric_exporter = OpenTelemetry::Exporter::OTLP::Metrics::MetricsExporter.new
-OpenTelemetry.meter_provider.add_metric_reader(otlp_metric_exporter)
+  otlp_metric_exporter = OpenTelemetry::Exporter::OTLP::Metrics::MetricsExporter.new
+  OpenTelemetry.meter_provider.add_metric_reader(otlp_metric_exporter)
 
-# start the metrics reporting thread
-Irida::MetricsReporter.run
+  # start the metrics reporting thread
+  Irida::MetricsReporter.run
+
+  at_exit do
+    Irida::MetricsReporter.stop
+  end
+end
