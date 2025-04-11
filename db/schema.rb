@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_19_172718) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_10_194644) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "pg_catalog.plpgsql"
@@ -57,6 +57,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_19_172718) do
     t.uuid "recipient_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "extended_details_id"
     t.index ["owner_id", "owner_type"], name: "index_activities_on_owner_id_and_owner_type"
     t.index ["owner_type", "owner_id"], name: "index_activities_on_owner"
     t.index ["recipient_id", "recipient_type"], name: "index_activities_on_recipient_id_and_recipient_type"
@@ -110,6 +111,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_19_172718) do
     t.jsonb "manifest", default: {}, null: false
     t.index ["created_at"], name: "index_data_exports_on_created_at"
     t.index ["user_id"], name: "index_data_exports_on_user_id"
+  end
+
+  create_table "extended_details", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.jsonb "details", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "flipper_features", force: :cascade do |t|

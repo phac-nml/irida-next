@@ -89,28 +89,38 @@ module Samples
       create_activities(cloned_sample_ids, cloned_sample_puids)
     end
 
-    def create_activities(cloned_sample_ids, cloned_sample_puids) # rubocop:disable Metrics/MethodLength
-      @project.namespace.create_activity key: 'namespaces_project_namespace.samples.clone',
-                                         owner: current_user,
-                                         parameters:
-                                          {
-                                            target_project_puid: @new_project.puid,
-                                            target_project: @new_project.id,
-                                            cloned_samples_ids: cloned_sample_ids,
-                                            cloned_samples_puids: cloned_sample_puids,
-                                            action: 'sample_clone'
-                                          }
+    def create_activities(cloned_sample_ids, cloned_sample_puids) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      ext_details = ExtendedDetails.create!(details: { cloned_samples_count: cloned_sample_ids.size,
+                                                       cloned_samples_ids: cloned_sample_ids,
+                                                       cloned_samples_puids: cloned_sample_puids })
 
-      @new_project.namespace.create_activity key: 'namespaces_project_namespace.samples.cloned_from',
-                                             owner: current_user,
-                                             parameters:
-                                              {
-                                                source_project_puid: @project.puid,
-                                                source_project: @project.id,
-                                                cloned_samples_ids: cloned_sample_ids,
-                                                cloned_samples_puids: cloned_sample_puids,
-                                                action: 'sample_clone'
-                                              }
+      activity = @project.namespace.create_activity key: 'namespaces_project_namespace.samples.clone',
+                                                    owner: current_user,
+                                                    parameters:
+                                                    {
+                                                      ext_id: ext_details.id,
+                                                      target_project_puid: @new_project.puid,
+                                                      target_project: @new_project.id,
+                                                      cloned_samples_count: cloned_sample_ids.size,
+                                                      action: 'sample_clone'
+                                                    }
+
+      activity[:extended_details_id] = ext_details.id
+      activity.save
+
+      activity = @new_project.namespace.create_activity key: 'namespaces_project_namespace.samples.cloned_from',
+                                                        owner: current_user,
+                                                        parameters:
+                                                        {
+                                                          ext_id: ext_details.id,
+                                                          source_project_puid: @project.puid,
+                                                          source_project: @project.id,
+                                                          cloned_samples_count: cloned_sample_ids.size,
+                                                          action: 'sample_clone'
+                                                        }
+
+      activity[:extended_details_id] = ext_details.id
+      activity.save
     end
   end
 end
