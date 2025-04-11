@@ -10,50 +10,54 @@ export default class extends Controller {
   ];
 
   static values = {
-    group: Boolean
-  }
+    group: Boolean,
+    selectSample: String,
+    selectDescription: String,
+    selectProject: String,
+  };
 
-  #header_map = {};
-
-  #headers = [];
-
-  #curr_sample_name = null;
-  #curr_project_puid = null;
-  #curr_sample_description = null;
+  #allHeaders;
+  #selectedHeaders = { sampleColumn: null, descriptionColumn: null };
+  #blankValues = {
+    sampleColumn: this.selectSampleValue,
+    descriptionColumn: this.selectDescriptionValue,
+  };
 
   connect() {
     this.#disableTarget(this.sampleNameColumnTarget);
     if (this.groupValue) {
       this.#disableTarget(this.projectPUIDColumnTarget);
+      this.#selectedHeaders["projectColumn"] = null;
+      this.#blankValues["projectColumn"] = this.selectProjectValue;
     }
     this.#disableTarget(this.sampleDescriptionColumnTarget);
   }
 
-  changeSampleNameInput(event) {
-    this.#header_map[this.#curr_sample_name] = false;
-    const { value } = event.target;
-    this.#curr_sample_name = value;
-    this.#header_map[this.#curr_sample_name] = true;
-    this.#refreshInputOptionsForAllFields();
-    this.#checkFormInputsReadyForSubmit();
+  changeInputValue(event) {
+    switch (event.target.id) {
+      case "sampleColumn":
+        this.#updateInputValue(this.sampleNameColumnTarget, event.target.value);
+        this.#refreshInputOptionsForAllFields();
+        break;
+      case "projectColumn":
+        this.#updateInputValue(
+          this.projectPUIDColumnTarget,
+          event.target.value,
+        );
+        this.#refreshInputOptionsForAllFields();
+        break;
+      case "descriptionColumn":
+        this.#updateInputValue(
+          this.sampleDescriptionColumnTarget,
+          event.target.value,
+        );
+        this.#refreshInputOptionsForAllFields();
+        break;
+    }
   }
 
-  changeProjectPUIDInput(event) {
-    this.#header_map[this.#curr_project_puid] = false;
-    const { value } = event.target;
-    this.#curr_project_puid = value;
-    this.#header_map[this.#curr_project_puid] = true;
-    this.#refreshInputOptionsForAllFields();
-    this.#checkFormInputsReadyForSubmit();
-  }
-
-  changeSampleDescriptionInput(event) {
-    this.#header_map[this.#curr_sample_description] = false;
-    const { value } = event.target;
-    this.#curr_sample_description = value;
-    this.#header_map[this.#curr_sample_description] = true;
-    this.#refreshInputOptionsForAllFields();
-    this.#checkFormInputsReadyForSubmit();
+  #updateInputValue(target, value) {
+    this.#selectedHeaders[target.id] = value;
   }
 
   readFile(event) {
@@ -72,58 +76,95 @@ export default class extends Controller {
       const workbook = XLSX.read(reader.result, { sheetRows: 1 });
       const worksheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[worksheetName];
-      this.#headers = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
-      this.#buildHeaderMap();
-      this.#initSelection();
-      this.#refreshInputOptionsForAllFields()
+      this.#allHeaders = XLSX.utils
+        .sheet_to_json(worksheet, {
+          header: 1,
+        })[0]
+        .sort();
+      this.#setAutoSelections();
+      // this.#refreshInputOptionsForAllFields();
+      this.#checkFormInputsReadyForSubmit();
     };
   }
 
   #clearFormOptions() {
-    this.#removeInputOptions(this.sampleNameColumnTarget);
+    this.#selectedHeaders = { sampleColumn: null, descriptionColumn: null };
+    this.sampleNameColumnTarget.innerHTML = "";
     this.#disableTarget(this.sampleNameColumnTarget);
     if (this.groupValue) {
-      this.#removeInputOptions(this.projectPUIDColumnTarget);
+      this.#selectedHeaders["projectColumn"] = null;
+      this.projectPUIDColumnTarget.innerHTML = "";
       this.#disableTarget(this.projectPUIDColumnTarget);
     }
-    this.#removeInputOptions(this.sampleDescriptionColumnTarget);
+    this.sampleDescriptionColumnTarget.innerHTML = "";
     this.#disableTarget(this.sampleDescriptionColumnTarget);
     this.submitButtonTarget.disabled = true;
   }
 
-  #buildHeaderMap() {
-    this.#header_map = {}
-    this.#headers.forEach(h => {
-      this.#header_map[h] = false;
-    })
-  }
+  #setAutoSelections() {
+    if (this.#allHeaders.includes("sample_name")) {
+      this.#updateInputValue(this.sampleNameColumnTarget, "sample_name");
+    } else if (this.#allHeaders.includes("sample")) {
+      this.#updateInputValue(this.sampleNameColumnTarget, "sample");
+    }
 
-  #initSelection() {
-    this.#curr_sample_name = null;
-    this.#curr_project_puid = null;
-    this.#curr_sample_description = null;
+    if (this.#allHeaders.includes("description")) {
+      this.#updateInputValue(this.sampleDescriptionColumnTarget, "description");
+    }
+
+    if (this.#allHeaders.includes("project_puid") && this.groupValue) {
+      this.#updateInputValue(this.projectPUIDColumnTarget, "project_puid");
+    }
+
+    this.#refreshInputOptionsForAllFields();
   }
 
   #refreshInputOptionsForAllFields() {
-    this.#refreshInputOptions(this.sampleNameColumnTarget, this.#curr_sample_name)
+    this.#refreshInputOptions(
+      this.sampleNameColumnTarget,
+      this.#selectedHeaders["sampleColumn"],
+    );
     if (this.groupValue) {
-      this.#refreshInputOptions(this.projectPUIDColumnTarget, this.#curr_project_puid)
+      this.#refreshInputOptions(
+        this.projectPUIDColumnTarget,
+        this.#selectedHeaders["projectColumn"],
+      );
     }
-    this.#refreshInputOptions(this.sampleDescriptionColumnTarget, this.#curr_sample_description)
-  }
-
-  #refreshInputOptions(columnTarget, current_selection) {
-    // filter out fields other headers are using, but not this target's own selection
-    let headers = this.#headers.filter( (header) =>
-      (header != current_selection) &&  !(this.#header_map[header])
+    this.#refreshInputOptions(
+      this.sampleDescriptionColumnTarget,
+      this.#selectedHeaders["descriptionColumn"],
     );
 
+    this.#checkFormInputsReadyForSubmit();
+  }
+
+  #refreshInputOptions(columnTarget, currentSelection) {
+    // filter out fields other headers are using, but not this target's own selection
+    let unselectedHeaders = this.#allHeaders.filter(
+      (item) => !Object.values(this.#selectedHeaders).includes(item),
+    );
     // delete the old input options, except for one that is currently selected
-    this.#removeInputOptions(columnTarget, current_selection);
+    // this.#removeInputOptions(columnTarget, current_selection);
 
     // build a list of new input options based on above filtering
-    for (let header of headers) {
-      const option = document.createElement("option");
+
+    columnTarget.innerHTML = "";
+
+    let option = document.createElement("option");
+    option.value = "";
+    option.text = this.#blankValues[columnTarget.id];
+    columnTarget.append(option);
+
+    if (currentSelection) {
+      let option = document.createElement("option");
+      option.value = currentSelection;
+      option.text = currentSelection;
+      columnTarget.append(option);
+      columnTarget.value = currentSelection;
+    }
+
+    for (let header of unselectedHeaders) {
+      let option = document.createElement("option");
       option.value = header;
       option.text = header;
       columnTarget.append(option);
@@ -132,31 +173,15 @@ export default class extends Controller {
   }
 
   #checkFormInputsReadyForSubmit() {
-    var puid_value = true
+    let projectSelected = true;
     if (this.groupValue) {
-      puid_value = this.hasProjectPUIDColumnTarget;
+      projectSelected = this.projectPUIDColumnTarget.value;
     }
 
-    if (this.hasSampleNameColumnTarget && puid_value ){
-        this.submitButtonTarget.disabled = false;
+    if (this.sampleNameColumnTarget.value && projectSelected) {
+      this.submitButtonTarget.disabled = false;
     } else {
       this.submitButtonTarget.disabled = true;
-    }
-  }
-
-  #removeInputOptions(target, current = null) {
-    // When a current selection is passed in, it does not get removed.
-    var post_length = 1
-    if (current == null || current == ""){
-      post_length = 0
-    }
-
-    var rev_index = target.options.length - 1;
-    while (target.options.length > post_length + 1){
-      if(current != target.options[rev_index].value){
-        target.remove(rev_index);
-      }
-      rev_index = rev_index - 1;
     }
   }
 
