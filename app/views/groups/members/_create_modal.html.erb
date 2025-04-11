@@ -19,10 +19,20 @@
         <%= viral_select2(form:, name: :user_id, id: form_id, placeholder: t("groups.members.new.select_user")) do |select| %>
           <% @available_users.each do |user| %>
             <% select.with_option(
-              primary: user.email,
-              secondary: user.full_name,
-              value: user.id,
-            ) %>
+                      value: user.id,
+                      label: user.email,
+                    ) do %>
+              <span
+                class="
+                  text-slate-900 dark:text-slate-400 font-semibold block pointer-events-none
+                "
+              >
+                <%= user.email %>
+              </span>
+              <span class="text-slate-500 dark:text-white block pointer-events-none">
+                <%= user.full_name %>
+              </span>
+            <% end %>
           <% end %>
           <%= select.with_empty_state do %>
             <%= t(:"groups.members.new.empty_state") %>
