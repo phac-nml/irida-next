@@ -1,5 +1,5 @@
 <div
-  class="<%= class_names('py-1', 'border-t dark:border-slate-400 border-slate-200': !index.zero?) %>"
+  class="<%= class_names('pb-2.5', 'border-t dark:border-slate-400 border-slate-200 pt-2.5': index.positive?) %>"
 >
   <div class="font-semibold text-slate-900 dark:text-white"><%= t(".id") %>
     <%= workflow_execution.id %></div>
