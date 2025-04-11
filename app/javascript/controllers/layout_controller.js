@@ -8,6 +8,7 @@ export default class extends Controller {
     "content",
     "logo",
     "sidebarOverlay",
+    "sidebarNavContainer",
   ];
 
   connect() {
@@ -16,14 +17,24 @@ export default class extends Controller {
       this.collapse();
     }
 
+    this.handleSidebarNavContainerScroll();
+
     this.boundHandleSidebarOverlayClick =
       this.handleSidebarOverlayClick.bind(this);
-    this.boundHandleContentFocus = this.handleContentFocus.bind(this);
+    this.boundHandleSidebarNavContainerScroll =
+      this.handleSidebarNavContainerScroll.bind(this);
 
     this.sidebarOverlayTarget.addEventListener(
       "click",
       this.boundHandleSidebarOverlayClick,
     );
+
+    this.sidebarNavContainerTarget.addEventListener(
+      "scroll",
+      this.boundHandleSidebarNavContainerScroll,
+    );
+
+    addEventListener("resize", this.boundHandleSidebarNavContainerScroll);
   }
 
   disconnect() {
@@ -31,6 +42,11 @@ export default class extends Controller {
       "click",
       this.boundHandleSidebarOverlayClick,
     );
+    this.sidebarNavContainerTarget.removeEventListener(
+      "scroll",
+      this.boundHandleSidebarNavContainerScroll,
+    );
+    removeEventListener("resize", this.boundHandleSidebarNavContainerScroll);
   }
 
   collapse() {
@@ -61,6 +77,26 @@ export default class extends Controller {
       ) {
         this.collapse();
       }
+    }
+  }
+
+  handleSidebarNavContainerScroll() {
+    const boundingClientRect =
+      this.sidebarNavContainerTarget.getBoundingClientRect();
+    if (this.sidebarNavContainerTarget.scrollTop > 0) {
+      this.sidebarNavContainerTarget.classList.add("border-t", "scrim-t");
+    } else {
+      this.sidebarNavContainerTarget.classList.remove("border-t", "scrim-t");
+    }
+
+    if (
+      this.sidebarNavContainerTarget.scrollHeight -
+        this.sidebarNavContainerTarget.scrollTop >
+      boundingClientRect.height
+    ) {
+      this.sidebarNavContainerTarget.classList.add("border-b", "scrim-b");
+    } else {
+      this.sidebarNavContainerTarget.classList.remove("border-b", "scrim-b");
     }
   }
 
