@@ -81,8 +81,6 @@ export default class extends Controller {
   }
 
   handleSidebarNavContainerScroll() {
-    const boundingClientRect =
-      this.sidebarNavContainerTarget.getBoundingClientRect();
     if (this.sidebarNavContainerTarget.scrollTop > 0) {
       this.sidebarNavContainerTarget.classList.add("border-t", "scrim-t");
     } else {
@@ -92,7 +90,7 @@ export default class extends Controller {
     if (
       this.sidebarNavContainerTarget.scrollHeight -
         this.sidebarNavContainerTarget.scrollTop >
-      boundingClientRect.height
+      this.sidebarNavContainerTarget.clientHeight
     ) {
       this.sidebarNavContainerTarget.classList.add("border-b", "scrim-b");
     } else {
