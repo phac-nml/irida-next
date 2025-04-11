@@ -35,11 +35,11 @@
               aria-controls="<%= "accordion-collapse-body-samples" %>"
             >
               <span data-infinite-scroll-target="selectionCount"><%= t(:"data_exports.new.samples_count.zero") %></span>
-              <%= viral_icon(
-                name: "chevron_down",
-                classes: "mr-0 w-4 h-4 rotate-0",
-                "data-collapsible-target": "icon",
-              ) %>
+              <%= icon "caret-down",
+              class: "mr-- size-4 rotate-0",
+              data: {
+                collapsible_target: "icon",
+              } %>
             </button>
           </h2>
 

@@ -16,10 +16,7 @@
       style="height: 50px;"
     >
       <a href="<%= root_path %>" class="whitespace-nowrap" data-layout-target="logo">
-        <%= viral_icon(
-          name: "beaker",
-          classes: "w-8 h-8 text-green-500 rotate-12 inline-block",
-        ) %>
+        <%= icon "flask", class: "size-8 text-green-500 rotate-12 inline-block" %>
         <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">
           <%= t(:"general.name") %>
         </span>
@@ -33,7 +30,7 @@
           "
           aria-label="<%= t(:'general.navbar.collapse.aria_label') %>"
         >
-          <%= viral_icon(name: "sidebar", classes: "w-6 h-6") %>
+          <%= icon "sidebar", class: "size-6" %>
         </button>
         <!-- Add new items -->
         <%= viral_dropdown(icon: "plus", skidding: -300, dropdown_styles: "width: 276px;", aria: { label: t(:'general.navbar.new_dropdown.aria_label') }, classes: "p-1 navbar-button dark:text-slate-100") do |dropdown| %>
@@ -47,7 +44,7 @@
           ) %>
         <% end %>
         <!-- Profile menu -->
-        <%= viral_dropdown(icon: "user_circle", skidding: -300, dropdown_styles: "width: 276px;", aria: { label: t(:'general.navbar.account_dropdown.aria_label') }, classes: "p-1 navbar-button dark:text-slate-100") do |dropdown| %>
+        <%= viral_dropdown(icon: "user-circle", skidding: -300, dropdown_styles: "width: 276px;", aria: { label: t(:'general.navbar.account_dropdown.aria_label') }, classes: "p-1 navbar-button dark:text-slate-100") do |dropdown| %>
           <%= dropdown.with_item(
             label: t(:"general.navbar.account_dropdown.profile"),
             url: profile_path,
@@ -129,7 +126,7 @@
   </div>
   <div class="p-2">
     <%= link_to "https://phac-nml.github.io/irida-next/docs/intro", target: :_blank, class: "flex-inline button button--state-default button--size-small" do %>
-      <%= viral_icon(name: :question_mark, classes: "w-4 h-4 mr-1") %>
+      <%= icon "question", class: "size-4 mr-1" %>
       <%= t("general.help") %>
     <% end %>
   </div>

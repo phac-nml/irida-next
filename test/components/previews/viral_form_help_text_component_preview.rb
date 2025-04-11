@@ -6,4 +6,6 @@ class ViralFormHelpTextComponentPreview < ViewComponent::Preview
   def success; end
 
   def error; end
+
+  def with_icon; end
 end
