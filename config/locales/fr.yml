@@ -757,6 +757,8 @@ fr:
         sign_out: Se déconnecter
       collapse:
         aria_label: Réduire le menu de navigation
+      expand:
+        aria_label: Développer le menu de navigation
       new_dropdown:
         aria_label: Nouvel élément de menu
         group: Créer un nouveau groupe
