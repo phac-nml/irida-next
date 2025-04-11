@@ -3124,7 +3124,7 @@ module Projects
         assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
         within all("div[data-advanced-search-target='groupsContainer']")[0] do
           within all("div[data-advanced-search-target='conditionsContainer']")[0] do
-            find("select[name$='[field]']").find("option[value='name").select_option
+            find("select[name$='[field]']").find("option[value='name']").select_option
             find("select[name$='[operator]']").find("option[value='=']").select_option
             find("input[name$='[value]']").fill_in with: @sample1.name
           end
@@ -3133,7 +3133,7 @@ module Projects
         assert_selector "div[data-advanced-search-target='groupsContainer']", count: 2
         within all("div[data-advanced-search-target='groupsContainer']")[1] do
           within all("div[data-advanced-search-target='conditionsContainer']")[0] do
-            find("select[name$='[field]']").find("option[value='name").select_option
+            find("select[name$='[field]']").find("option[value='name']").select_option
             find("select[name$='[operator]']").find("option[value='=']").select_option
             find("input[name$='[value]']").fill_in with: @sample2.name
           end
