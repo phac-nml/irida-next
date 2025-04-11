@@ -10,8 +10,8 @@ class PaginationComponentTest < ViewComponent::TestCase
       info: '<span class="pagy-info">Displaying items <b>1-20</b> of <b>114</b> in total</span>'
     )
 
-    assert_no_text I18n.t('viral.pagy.pagination_component.previous')
-    assert_text I18n.t('viral.pagy.pagination_component.next')
+    assert_no_selector 'button.cursor-not-allowed', text: I18n.t('viral.pagy.pagination_component.previous')
+    assert_selector 'a', text: I18n.t('viral.pagy.pagination_component.next')
   end
 
   test 'renders previous link only' do
@@ -21,8 +21,8 @@ class PaginationComponentTest < ViewComponent::TestCase
       info: '<span class="pagy-info">Displaying items <b>101-114</b> of <b>114</b> in total</span>'
     )
 
-    assert_text I18n.t('viral.pagy.pagination_component.previous')
-    assert_no_text I18n.t('viral.pagy.pagination_component.next')
+    assert_selector 'a', text: I18n.t('viral.pagy.pagination_component.previous')
+    assert_no_selector 'button.cursor-not-allowed', text: I18n.t('viral.pagy.pagination_component.next')
   end
 
   test 'renders both links' do
@@ -31,7 +31,30 @@ class PaginationComponentTest < ViewComponent::TestCase
       next_url: '/-/projects?page=2',
       info: '<span class="pagy-info">Displaying items <b>101-114</b> of <b>114</b> in total</span>'
     )
-    assert_text I18n.t('viral.pagy.pagination_component.previous')
-    assert_text I18n.t('viral.pagy.pagination_component.next')
+
+    assert_selector 'a', text: I18n.t('viral.pagy.pagination_component.previous')
+    assert_selector 'a', text: I18n.t('viral.pagy.pagination_component.next')
+  end
+
+  test 'renders disabled previous link' do
+    render_inline PaginationComponent.new(
+      prev_url: nil,
+      next_url: '/-/projects?page=2',
+      info: '<span class="pagy-info">Displaying items <b>1-20</b> of <b>114</b> in total</span>'
+    )
+
+    assert_selector 'span.cursor-not-allowed.text-slate-600.bg-slate-100',
+                    text: I18n.t('viral.pagy.pagination_component.previous')
+  end
+
+  test 'renders disabled next link' do
+    render_inline PaginationComponent.new(
+      prev_url: '/-/projects?page=6',
+      next_url: nil,
+      info: '<span class="pagy-info">Displaying items <b>101-114</b> of <b>114</b> in total</span>'
+    )
+
+    assert_selector 'span.cursor-not-allowed.text-slate-600.bg-slate-100',
+                    text: I18n.t('viral.pagy.pagination_component.next')
   end
 end

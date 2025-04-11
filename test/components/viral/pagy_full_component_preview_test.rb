@@ -7,10 +7,10 @@ class PagyFullComponentPreviewTest < ApplicationSystemTestCase
     visit('/rails/view_components/viral_pagy_full_component/default')
 
     assert_selector 'nav.pagy.nav'
-    assert_selector 'li a[aria-disabled="true"]', text: 'Previous'
-    assert_selector 'li > a', text: 'Next'
-    assert_selector 'li a[aria-disabled="true"]', text: '1'
-    assert_selector 'li > a:not([aria-disabled="true"])', count: '5'
+    assert_selector 'li span.cursor-not-allowed', text: I18n.t('viral.pagy.pagination_component.previous')
+    assert_selector 'li > a', text: I18n.t('viral.pagy.pagination_component.next')
+    assert_selector 'li span.cursor-not-allowed', text: '1'
+    assert_selector 'li > a', count: '5'
   end
 
   test 'renders empty state' do

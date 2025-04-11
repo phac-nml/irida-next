@@ -1,17 +1,33 @@
-<div class=" w-full border-t border-slate-200 dark:border-slate-700">
-  <div class="flex items-center justify-center space-x-4 mt-6">
-    <% if prev_url %>
-      <%= link_to t("viral.pagy.pagination_component.previous"),
-      prev_url,
-      **link_arguments,
-      class: "button button--state-default button--size-default" %>
-    <% end %>
-    <% if next_url %>
-      <%= link_to t("viral.pagy.pagination_component.next"),
-      next_url,
-      **link_arguments,
-      class: "button button--state-default button--size-default" %>
-    <% end %>
-  </div>
-  <p class="text-center m-4 text-slate-500"><%== info %></p>
+<div class="flex items-center justify-center space-x-2 mt-4">
+  <% if prev_url %>
+    <%= link_to t("viral.pagy.pagination_component.previous"),
+    prev_url,
+    **link_arguments,
+    class:
+      "flex items-center justify-center text-slate-700 bg-slate-200 border border-slate-300 font-medium rounded text-sm px-4 h-10 hover:bg-slate-300 hover:text-slate-900 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600 dark:hover:text-white" %>
+  <% else %>
+    <span
+      class="
+        flex items-center justify-center px-4 h-10 ms-0 leading-tight rounded border
+        border-slate-300 dark:border-slate-600 text-slate-600 bg-slate-100
+        dark:bg-slate-800 cursor-not-allowed
+      "
+    ><%= t("viral.pagy.pagination_component.previous") %></span>
+  <% end %>
+  <% if next_url %>
+    <%= link_to t("viral.pagy.pagination_component.next"),
+    next_url,
+    **link_arguments,
+    class:
+      "flex items-center justify-center text-slate-700 bg-slate-200 border border-slate-300 font-medium rounded text-sm px-4 h-10 hover:bg-slate-300 hover:text-slate-900 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600 dark:hover:text-white" %>
+  <% else %>
+    <span
+      class="
+        flex items-center justify-center px-4 h-10 leading-tight rounded border
+        border-slate-300 dark:border-slate-600 text-slate-600 bg-slate-100
+        dark:bg-slate-800 cursor-not-allowed
+      "
+    ><%= t("viral.pagy.pagination_component.next") %></span>
+  <% end %>
 </div>
+<p class="text-center m-4 text-slate-700 dark:text-slate-200"><%== info %></p>

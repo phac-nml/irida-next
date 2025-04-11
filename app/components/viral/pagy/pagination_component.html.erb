@@ -1,5 +1,5 @@
 <% a = helpers.pagy_anchor(@pagy, anchor_string: @data_string) %>
-<nav class="pagy nav" aria-label="<%= t(".aria-label")%>">
+<nav class="pagy nav" aria-label="<%= t(".aria-label") %>">
   <ul class="inline-flex h-10 -space-x-px text-base">
     <%# Previous page link %>
     <li>
@@ -11,14 +11,13 @@
           classes: "#{active_link_classes} border-e-0 rounded-s-lg",
         ) %>
       <% else %>
-        <%= content_tag(
-          :a,
-          t(".previous"),
-          class: "#{disabled_link_classes} border-e-0 rounded-s-lg",
-          aria: {
-            disabled: true,
-          },
-        ) %>
+        <span
+          class="
+            flex items-center justify-center px-4 h-10 ms-0 leading-tight border
+            border-slate-300 dark:border-slate-600 text-slate-600 bg-slate-100
+            dark:bg-slate-800 cursor-not-allowed rounded-s-lg
+          "
+        ><%= t(".previous") %></span>
       <% end %>
     </li>
     <%# Page links (series example: [1, :gap, 7, 8, "9", 10, 11, :gap, 36]) %>
@@ -27,16 +26,21 @@
         <% if item.is_a?(Integer) %>
           <%== a.(item, classes: class_names(active_link_classes, invisible_link_classes)) %>
         <% elsif item.is_a?(String) %>
-          <%= content_tag(:a, item, class: current_link_classes, aria: { disabled: true }) %>
+          <span
+            class="
+              flex items-center justify-center px-4 h-10 ms-0 leading-tight border
+              border-slate-300 dark:border-slate-600 text-slate-400 bg-slate-100
+              dark:bg-slate-800 cursor-not-allowed
+            "
+          ><%= item %></span>
         <% elsif item == :gap %>
-          <%= content_tag(
-            :a,
-            "...",
-            class: class_names(disabled_link_classes, invisible_link_classes),
-            aria: {
-              disabled: true,
-            },
-          ) %>
+          <span
+            class="
+              flex items-center justify-center px-4 h-10 ms-0 leading-tight border
+              border-slate-300 dark:border-slate-600 text-slate-400 bg-slate-100
+              dark:bg-slate-800 cursor-not-allowed
+            "
+          >...</span>
         <% end %>
       </li>
     <% end %>
@@ -45,14 +49,13 @@
       <% if @pagy.next %>
         <%== a.(@pagy.next, t(".next"), classes: "#{active_link_classes} rounded-e-lg") %>
       <% else %>
-        <%= content_tag(
-          :a,
-          t(".next"),
-          class: "#{disabled_link_classes} rounded-e-lg cursor-default",
-          aria: {
-            disabled: true,
-          },
-        ) %>
+        <span
+          class="
+            flex items-center justify-center px-4 h-10 ms-0 leading-tight border
+            border-slate-300 dark:border-slate-600 text-slate-600 bg-slate-100
+            dark:bg-slate-800 cursor-not-allowed rounded-e-lg
+          "
+        ><%= t(".next") %></span>
       <% end %>
     </li>
   </ul>

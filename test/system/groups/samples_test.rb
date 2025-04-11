@@ -44,7 +44,7 @@ module Groups
       assert_selector 'tbody > tr', count: 20
       assert_text samples(:sample3).name
       assert_selector 'a', text: I18n.t(:'viral.pagy.pagination_component.next', locale: @user.locale)
-      assert_selector 'a[aria-disabled="true"]',
+      assert_selector 'span.cursor-not-allowed',
                       text: I18n.t(:'viral.pagy.pagination_component.previous', locale: @user.locale)
 
       click_on I18n.t(:'viral.pagy.pagination_component.next', locale: @user.locale)
@@ -73,7 +73,7 @@ module Groups
       assert_text samples(:sample1).name
       assert_text samples(:sample3).name
       assert_selector 'a', text: I18n.t(:'viral.pagy.pagination_component.next', locale: @user.locale)
-      assert_selector 'a[aria-disabled="true"]',
+      assert_selector 'span.cursor-not-allowed',
                       text: I18n.t(:'viral.pagy.pagination_component.previous', locale: @user.locale)
 
       click_on I18n.t(:'viral.pagy.pagination_component.next', locale: @user.locale)
@@ -97,7 +97,7 @@ module Groups
       visit group_samples_url(group)
 
       assert_selector 'a', text: I18n.t(:'viral.pagy.pagination_component.next', locale: @user.locale)
-      assert_selector 'a[aria-disabled="true"]',
+      assert_selector 'span.cursor-not-allowed',
                       text: I18n.t(:'viral.pagy.pagination_component.previous', locale: @user.locale)
 
       click_on I18n.t(:'viral.pagy.pagination_component.next', locale: @user.locale)
