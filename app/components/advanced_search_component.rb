@@ -5,13 +5,21 @@ class AdvancedSearchComponent < Component
   def initialize(form:, search:, fields: [], open: false, status: true)
     @form = form
     @search = search
-    @fields = fields
+    @fields = field_options(fields)
     @operations = operation_options
     @open = open
     @status = status
   end
 
   private
+
+  def field_options(fields)
+    metadata_fields, sample_fields = fields.partition { |field| field.start_with?('metadata.') }
+    {
+      I18n.t('advanced_search_component.operation.sample_fields') => sample_fields,
+      I18n.t('advanced_search_component.operation.metadata_fields') => metadata_fields
+    }
+  end
 
   def operation_options
     {

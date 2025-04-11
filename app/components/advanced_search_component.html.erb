@@ -113,8 +113,12 @@
           name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][field]"
         >
           <option value="" selected><%= t(".field") %></option>
-          <% @fields.each do |field| %>
-            <option value="<%=field%>"><%= field %></option>
+          <% @fields.each do |key, array| %>
+            <optgroup label="<%=key%>">
+              <% array.each do |field| %>
+                <option value="<%=field%>"><%= field %></option>
+              <% end %>
+            </optgroup>
           <% end %>
         </select>
       </div>

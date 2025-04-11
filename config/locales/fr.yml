@@ -375,9 +375,11 @@ fr:
       greater_than: ">="
       in: in
       less_than: "<="
+      metadata_fields: Metadata fields
       not_equals: "!="
       not_exists: not exists
       not_in: not in
+      sample_fields: Sample fields
     operator: Opérateur
     remove_condition_aria_label: Supprimer la condition
     remove_group_button: Supprimer le groupe
