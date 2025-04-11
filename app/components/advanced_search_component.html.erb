@@ -116,6 +116,7 @@
           <% @fields.each do |fields_key, fields_value| %>
             <optgroup label="<%=fields_key%>">
               <% fields_value.each do |field_key, field_value| %>
+                <% field_value = field_key if field_value.nil? %>
                 <option value="<%=field_value%>"><%= field_key %></option>
               <% end %>
             </optgroup>
