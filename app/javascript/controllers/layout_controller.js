@@ -18,7 +18,6 @@ export default class extends Controller {
 
     this.boundHandleSidebarOverlayClick =
       this.handleSidebarOverlayClick.bind(this);
-    this.boundHandleContentFocus = this.handleContentFocus.bind(this);
 
     this.sidebarOverlayTarget.addEventListener(
       "click",
