@@ -14,7 +14,7 @@ module Layout
       end
 
       def item_icon
-        icon @icon_name, class: 'size-4', style: 'width: 27px;'
+        icon @icon_name, class: 'size-5 m-1', style: 'width: 27px;'
       end
     end
   end
