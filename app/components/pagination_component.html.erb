@@ -1,17 +1,33 @@
-<div class="flex items-center justify-center space-x-4 mt-6">
+<div class="flex items-center justify-center space-x-2 mt-4">
   <% if prev_url %>
     <%= link_to t("viral.pagy.pagination_component.previous"),
     prev_url,
     **link_arguments,
     class:
-      "text-slate-800 bg-white border border-slate-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-600 dark:hover:bg-slate-700 dark:hover:border-slate-600" %>
+      "flex items-center justify-center text-slate-700 bg-slate-200 border border-slate-300 font-medium rounded text-sm px-4 h-10 hover:bg-slate-300 hover:text-slate-900 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600 dark:hover:text-white" %>
+  <% else %>
+    <span
+      class="
+        flex items-center justify-center px-4 h-10 ms-0 leading-tight rounded border
+        border-slate-300 dark:border-slate-600 text-slate-400 bg-slate-100
+        dark:bg-slate-800 cursor-not-allowed
+      "
+    ><%= t("viral.pagy.pagination_component.previous") %></span>
   <% end %>
   <% if next_url %>
     <%= link_to t("viral.pagy.pagination_component.next"),
     next_url,
     **link_arguments,
     class:
-      "text-slate-800 bg-white border border-slate-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-600 dark:hover:bg-slate-700 dark:hover:border-slate-600" %>
+      "flex items-center justify-center text-slate-700 bg-slate-200 border border-slate-300 font-medium rounded text-sm px-4 h-10 hover:bg-slate-300 hover:text-slate-900 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600 dark:hover:text-white" %>
+  <% else %>
+    <span
+      class="
+        flex items-center justify-center px-4 h-10 leading-tight rounded border
+        border-slate-300 dark:border-slate-600 text-slate-400 bg-slate-100
+        dark:bg-slate-800 cursor-not-allowed
+      "
+    ><%= t("viral.pagy.pagination_component.next") %></span>
   <% end %>
 </div>
-<p class="text-center m-4 text-slate-800 dark:text-slate-300"><%== info %></p>
+<p class="text-center m-4 text-slate-700 dark:text-slate-200"><%== info %></p>
