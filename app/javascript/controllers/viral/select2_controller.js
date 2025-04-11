@@ -127,28 +127,17 @@ export default class Select2Controller extends Controller {
    */
   select(event) {
     try {
-      let primary, value;
-
-      if (event.type === "click") {
-        // Handle click selection
-        primary = event.params.primary;
-        value = event.params.value;
-      } else if (event.type === "keydown" && event.key === "Enter") {
-        // Handle keyboard selection
-        primary = event.target.dataset["viral-Select2PrimaryParam"];
-        value = event.target.dataset["viral-Select2ValueParam"];
-      } else {
-        // Invalid event type
-        return;
-      }
+      const { label, value } = event.target.dataset;
 
       // Validate selection data
-      if (!primary || !value) {
-        throw new Error("Invalid selection: missing primary or value data");
+      if (!label || !value) {
+        throw new Error(
+          "Invalid selection: missing primary or value data.  Ensure tailwind class `pointer-events-none` is not applied to any element in option.",
+        );
       }
 
       // Update selection and UI state
-      this.#updateSelection(primary, value);
+      this.#updateSelection(label, value);
       this.#isItemSelected = true;
       if (this.hasSubmitButtonTarget) {
         this.submitButtonTarget.disabled = false;
@@ -229,15 +218,10 @@ export default class Select2Controller extends Controller {
       // Filter items based on query
       this.itemTargets.forEach((item) => {
         // Get search data from item
-        const primary = (
-          item.dataset["viral-Select2PrimaryParam"] || ""
-        ).toLowerCase();
-        const secondary = (
-          item.dataset["viral-Select2SecondaryParam"] || ""
-        ).toLowerCase();
+        const text = item.textContent.toLowerCase() || "";
 
         // Show item if it matches query
-        if (primary.includes(query) || secondary.includes(query)) {
+        if (text.includes(query)) {
           item.parentNode.classList.remove("hidden");
           visibleItemCount++;
         } else {

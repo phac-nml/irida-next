@@ -8,33 +8,22 @@ module Viral
           <button
             type="button"
             data-viral--select2-target="item"
-            data-viral--select2-primary-param="<%= @primary %>"
-            data-viral--select2-secondary-param="<%= @secondary %>"
-            data-viral--select2-value-param="<%= @value %>"
+            data-label="<%= @label %>"
+            data-value="<%= @value %>"
             data-action="click->viral--select2#select"
             class="
               flex-col w-full border-2 border-transparent text-left p-2.5 bg-slate-50 hover:bg-slate-100
               dark:bg-slate-700 dark:hover:bg-slate-600
             "
           >
-            <span
-              class="block text-base font-semibold truncate text-slate-900 dark:text-white"
-            >
-              <%= @primary %>
-            </span>
-            <% if @secondary %>
-            <span class="text-sm truncate text-slate-500 dark:text-slate-300">
-              <%= @secondary %>
-            </span>
-            <% end %>
+            <%= content %>
           </button>
         </li>
     ERB
 
-    def initialize(primary:, value:, secondary: nil)
-      @primary = primary
-      @secondary = secondary
+    def initialize(value:, label:)
       @value = value
+      @label = label
     end
   end
 end
