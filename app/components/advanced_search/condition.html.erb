@@ -15,7 +15,7 @@
     <% invalid_operator = @condition.errors.include?(:operator) %>
     <div class="form-field w-1/6 <%= 'invalid' if invalid_operator %>">
       <%= conditions_form.select :operator,
-                             @operations,
+                             options_for_select(@operations),
                              {
                                include_blank: t("advanced_search_component.operator"),
                              },
