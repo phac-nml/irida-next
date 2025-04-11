@@ -7,11 +7,13 @@ class ApplicationJob < ActiveJob::Base
   # Most jobs are safe to ignore if the underlying records are no longer available
   # discard_on ActiveJob::DeserializationError
 
-  after_enqueue do |job|
-    Irida::JobQueueMetrics.instance.update_job_queue_count(job.queue_name, 1) if job.successfully_enqueued?
-  end
+  if Flipper.enabled?(:telemetry)
+    after_enqueue do |job|
+      Irida::JobQueueMetrics.instance.update_job_queue_count(job.queue_name, 1) if job.successfully_enqueued?
+    end
 
-  before_perform do |job|
-    Irida::JobQueueMetrics.instance.update_job_queue_count(job.queue_name, -1)
+    before_perform do |job|
+      Irida::JobQueueMetrics.instance.update_job_queue_count(job.queue_name, -1)
+    end
   end
 end

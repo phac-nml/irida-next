@@ -7,8 +7,14 @@ module Irida
     include Singleton
 
     def self.run
-      return if instance.running?
-      return unless instance.caller_can_run_reporter?
+      if instance.running?
+        Rails.logger.debug { "TelemetryReporter is already running on process #{@proc_id}" }
+        return
+      end
+      unless instance.caller_can_control_reporter?
+        Rails.logger.debug { 'TelemetryReporter cannot be run by non primary thread.' }
+        return
+      end
 
       instance.run!
     end
@@ -42,8 +48,22 @@ module Irida
       end
     end
 
-    # TODO: where do we call this?
+    def self.stop
+      unless instance.running?
+        Rails.logger.debug { 'TelemetryReporter cannot be stopped as it is not running.' }
+        return
+      end
+      unless instance.caller_can_control_reporter?
+        Rails.logger.debug { 'TelemetryReporter cannot be stopped by non primary thread.' }
+        return
+      end
+
+      instance.stop!
+    end
+
     def stop!
+      Rails.logger.debug { 'Stopping metrics telemetry thread.' }
+
       @reporter_thread&.terminate
       @reporter_thread = nil
       @proc_id = nil
@@ -51,7 +71,7 @@ module Irida
     end
 
     # verifies that the current runner is a main process and not a console/runner
-    def caller_can_run_reporter?
+    def caller_can_control_reporter?
       console = caller.any? { |call| call.include?('console_command.rb') }
       runner = caller.any? { |call| call.include?('runner_command.rb') }
 
