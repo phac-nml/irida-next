@@ -16,17 +16,24 @@ module Irida
 
       time_by_queue.each do |queue_name, queue_time|
         latency = queue_time ? (now - queue_time).ceil : 0 # seconds
-        update_queue_min_latency(queue_name, latency)
+        metric_update_queue_min_latency(queue_name, latency)
       end
+    end
+
+    def update_job_queue_count(queue_name, value)
+      metric_update_job_queue_count(queue_name, value)
     end
 
     # def update_queue_counts
     #   queue_counts = ::GoodJob::Job.running.group(:queue_name).count
+    #
     #   queue_counts.each do |queue_name, count|
     #     # For this to work, we would need to change from an updown to a guage
-    #     update_job_queue_count(queue_name, count)
+    #     metric_update_job_queue_count(queue_name, count)
     #   end
     # end
+
+    private
 
     def meter
       @meter ||= OpenTelemetry.meter_provider.meter("JOB_QUEUE_METER")
@@ -56,13 +63,13 @@ module Irida
       end
     end
 
-    def update_job_queue_count(queue_name, value)
+    def metric_update_job_queue_count(queue_name, value)
       job_queue_count_instrument_name = "#{queue_name}_queue_count"
       instrument = get_instrument(job_queue_count_instrument_name, :up_down)
       instrument.add(value)
     end
 
-    def update_queue_min_latency(queue_name, value)
+    def metric_update_queue_min_latency(queue_name, value)
       job_queue_latency_instrument_name = "#{queue_name}_queue_min_wait_time"
       instrument = get_instrument(job_queue_latency_instrument_name, :gauge)
       instrument.record(value)

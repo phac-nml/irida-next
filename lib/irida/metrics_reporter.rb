@@ -8,35 +8,40 @@ module Irida
   class MetricsReporter # rubocop:disable Style/Documentation
     include Singleton
 
-    def self.run
-      if instance.running?
+    def run
+      if running?
         Rails.logger.debug { "TelemetryReporter is already running on process #{@proc_id}" }
         return
       end
-      unless instance.caller_can_control_reporter?
+      unless caller_can_control_reporter?
         Rails.logger.debug { 'TelemetryReporter cannot be run by non primary thread.' }
         return
       end
 
-      instance.run!
+      run!
     end
 
-    def self.stop
-      unless instance.running?
+    def stop
+      unless running?
         Rails.logger.debug { 'TelemetryReporter cannot be stopped as it is not running.' }
         return
       end
-      unless instance.caller_can_control_reporter?
+      unless caller_can_control_reporter?
         Rails.logger.debug { 'TelemetryReporter cannot be stopped by non primary thread.' }
         return
       end
 
-      instance.stop!
+      stop!
     end
+
+    private
 
     def run!
       @proc_id = Process.pid
       Rails.logger.debug { "Starting TelemetryReporter on process #{@proc_id}" }
+
+      # TODO: make this configurable
+      @sleep_time = 10
 
       # start the reporting loop
       proc_loop
@@ -64,8 +69,7 @@ module Irida
           # Batch send all telemetry data
           report
 
-          # TODO: make this configurable
-          sleep 10
+          sleep @sleep_time
         end
       end
     end
@@ -77,8 +81,6 @@ module Irida
 
       !(console || runner)
     end
-
-    private
 
     def report
       Rails.logger.debug { 'Reporting metrics to telemetry' }

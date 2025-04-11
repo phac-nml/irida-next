@@ -20,10 +20,10 @@ if Flipper.enabled?(:telemetry)
 
   Rails.application.config.after_initialize do
     # start the metrics reporting thread
-    Irida::MetricsReporter.run
+    Irida::MetricsReporter.instance.run
   end
 
   at_exit do
-    Irida::MetricsReporter.stop
+    Irida::MetricsReporter.instance.stop
   end
 end
