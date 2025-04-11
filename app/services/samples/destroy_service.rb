@@ -38,7 +38,7 @@ module Samples
       update_metadata_summary(sample)
     end
 
-    def destroy_multiple # rubocop:disable Metrics/MethodLength
+    def destroy_multiple
       samples = Sample.where(id: sample_ids).where(project_id: project.id)
       samples_deleted_puids = []
 
@@ -54,16 +54,24 @@ module Samples
       deleted_samples_count = samples_deleted_puids.count
       update_samples_count(deleted_samples_count) if @project.parent.type == 'Group'
 
-      @project.namespace.create_activity key: 'namespaces_project_namespace.samples.destroy_multiple',
-                                         owner: current_user,
-                                         parameters:
-                                         {
-                                           deleted_count: deleted_samples_count,
-                                           samples_deleted_puids:,
-                                           action: 'sample_destroy_multiple'
-                                         }
+      create_activities(samples_deleted_puids) if samples_deleted_puids.size.positive?
 
       deleted_samples_count
+    end
+
+    def create_activities(samples_deleted_puids)
+      ext_details = ExtendedDetails.create!(details: { samples_deleted_puids: })
+
+      activity = @project.namespace.create_activity key: 'namespaces_project_namespace.samples.destroy_multiple',
+                                                    owner: current_user,
+                                                    parameters:
+                                                    {
+                                                      samples_deleted_count: samples_deleted_puids.size,
+                                                      action: 'sample_destroy_multiple'
+                                                    }
+
+      activity[:extended_details_id] = ext_details.id
+      activity.save
     end
 
     def update_metadata_summary(sample)
