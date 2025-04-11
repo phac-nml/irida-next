@@ -14,10 +14,14 @@ class AdvancedSearchComponent < Component
   private
 
   def field_options(fields)
-    metadata_fields, sample_fields = fields.partition { |field| field.start_with?('metadata.') }
+    prefix = 'metadata.'
+    metadata_fields, sample_fields = fields.partition { |field| field.start_with?(prefix) }
+    metadata_field_options = metadata_fields.map do |metadata_field|
+      [metadata_field.delete_prefix(prefix), metadata_field]
+    end
     {
       I18n.t('advanced_search_component.operation.sample_fields') => sample_fields,
-      I18n.t('advanced_search_component.operation.metadata_fields') => metadata_fields
+      I18n.t('advanced_search_component.operation.metadata_fields') => metadata_field_options
     }
   end
 
