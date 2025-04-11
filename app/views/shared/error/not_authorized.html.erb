@@ -1,6 +1,10 @@
 <div>
-  <h1><%= t("application.errors.access_denied") %></h1>
-  <p>
+  <h1
+    class="
+      inline text-2xl font-medium leading-tight text-slate-900 dark:text-white
+    "
+  ><%= t("application.errors.access_denied") %></h1>
+  <p class="text-slate-500 dark:text-slate-400">
     <%= authorization_message %>
   </p>
 </div>

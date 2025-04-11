@@ -23,7 +23,7 @@ module Viral
               <%= @primary %>
             </span>
             <% if @secondary %>
-            <span class="text-sm truncate text-slate-500 dark:text-slate-400">
+            <span class="text-sm truncate text-slate-500 dark:text-slate-300">
               <%= @secondary %>
             </span>
             <% end %>
