@@ -2,14 +2,8 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = [
-    "table",
-    "spinner",
     "previousBtn",
     "nextBtn",
-    "pageNum",
-    "indexStart",
-    "indexEnd",
-    "dataPayload",
     "pagination",
     "paginationContainer",
     "sampleAttributes",
@@ -123,11 +117,6 @@ export default class extends Controller {
 
   nextPage() {
     this.#currentPage += 1;
-    this.#updatePageData();
-  }
-
-  pageSelected() {
-    this.#currentPage = parseInt(this.pageNumTarget.value);
     this.#updatePageData();
   }
 
