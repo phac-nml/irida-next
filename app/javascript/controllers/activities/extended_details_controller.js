@@ -17,6 +17,9 @@ export default class extends Controller {
     "listContainer"
   ];
 
+  static values = {
+    numCols: { type: Number, default: 2 }
+  };
 
   #pagination_button_disabled_state = [
     "cursor-default",
@@ -155,7 +158,6 @@ export default class extends Controller {
     }
   }
 
-
   #disablePaginationButton(button) {
     button.disabled = true;
     button.classList.remove(...this.#pagination_button_enabled_state);
@@ -171,22 +173,20 @@ export default class extends Controller {
   #generateTableRows(data) {
     for (let i = 0; i < data.length; i++) {
       let tr = document.createElement("tr");
-      let td1= document.createElement("td");
-      let td2= document.createElement("td");
 
-      td1.className = "px-3 py-3";
-      td2.className = "px-3 py-3";
-      td1.innerText = data[i][0];
-      td2.innerText = data[i][1];
+      for(let j = 0; j < this.numColsValue; j++)
+      {
+        let td= document.createElement("td");
+        td.className = "px-3 py-3";
+        td.innerText = data[i][j];
+        tr.appendChild(td);
+      }
 
-      tr.appendChild(td1);
-      tr.appendChild(td2);
       this.tbodyTarget.appendChild(tr);
     }
   }
 
   #generateListItems(data) {
-
     for (let i = 0; i < data.length; i++) {
       let li = document.createElement("li");
       let containerDiv = document.createElement("div");
