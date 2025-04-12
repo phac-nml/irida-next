@@ -45,12 +45,10 @@ class ActivitiesController < ApplicationController
     type = params[:dialog_type]
 
     case type
-    when 'samples_transfer'
-      Activities::Dialogs::SampleTransferActivityDialogComponent
     when 'samples_clone'
-      Activities::Dialogs::SampleCloneActivityDialogComponent
-    when 'samples_destroy'
-      Activities::Dialogs::SampleDestroyActivityDialogComponent
+      Activities::Dialogs::SampleActivityTableListingDialogComponent
+    else
+      Activities::Dialogs::SampleActivityListDialogComponent
     end
   end
 

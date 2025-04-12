@@ -1,0 +1,86 @@
+<%= viral_dialog(open: true,classes: ["overflow-visible"]) do |dialog| %>
+  <% dialog.with_header(title: @title) %>
+  <div data-controller="activities--extended_details">
+    <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
+      <%= viral_pill(
+        text: helpers.local_time(activity[:created_at], :long),
+        color: :green,
+      ) %>
+
+      <p class="dark:text-slate-400 mt-2">
+        <%= @description %>
+      </p>
+    </div>
+
+    <div
+      class="
+        overflow-y-auto max-h-[300px] border border-slate-300 rounded-md block w-full
+        p-2.5 dark:bg-slate-800 dark:border-slate-600
+      "
+    >
+      <div class="hidden" data-activities--extended_details-target="sampleAttributes">
+        <%= @table_data %>
+      </div>
+
+      <ul
+        class="divide-y divide-gray-200 dark:divide-gray-700"
+        data-activities--extended_details-target="listContainer"
+      >
+
+      </ul>
+    </div>
+
+    <div
+      data-activities--extended_details-target="paginationContainer"
+      class="flex items-center justify-end mt-4"
+    >
+    </div>
+
+    <div class="mt-4">
+      <button
+        type="button"
+        class="
+          inline-flex items-center justify-center w-1/2 text-sm border rounded-md
+          cursor-pointer sm:w-auto focus:z-10 px-5 py-2.5 bg-white text-slate-900
+          border-slate-200 hover:bg-slate-100 hover:text-slate-950 focus:ring-slate-200
+          dark:focus:ring-slate-200 dark:bg-slate-800 dark:text-slate-400
+          dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700
+          dark:focus:outline-ring-4
+        "
+        data-action="click->viral--dialog#close"
+      >
+        <%= t(:"components.activity.dialog.close") %>
+      </button>
+    </div>
+    <template data-activities--extended_details-target="pagination">
+      <nav aria-label="">
+        <ul class="inline-flex h-10 text-base">
+          <li><button
+              type="button"
+              class="
+                flex items-center justify-center h-10 px-4 leading-tight border cursor-default
+                ms-0 border-slate-300 dark:border-slate-700 text-slate-600 bg-slate-50
+                dark:bg-slate-700 dark:text-slate-400 border-e-0 rounded-s-lg
+              "
+              data-action="click->activities--extended_details#previousPage"
+              data-activities--extended_details-target="previousBtn"
+              disabled="disabled"
+            >Previous</button>
+          </li>
+          <li><button
+              class="
+                flex items-center justify-center h-10 px-4 leading-tight bg-white border
+                border-l-0 ms-0 border-slate-300 dark:border-slate-700 text-slate-500
+                hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
+                dark:hover:bg-slate-700 dark:hover:text-white rounded-e-lg
+              "
+              type="button"
+              data-activities--extended_details-target="nextBtn"
+              data-action="click->activities--extended_details#nextPage"
+            >Next</button>
+          </li>
+        </ul>
+      </nav>
+    </template>
+  </div>
+<% end %>
