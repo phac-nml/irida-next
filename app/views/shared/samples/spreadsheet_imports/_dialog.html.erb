@@ -10,11 +10,6 @@
       data-spreadsheet-import-select-sample-value='<%= t(".select_sample_name_column") %>'
       data-spreadsheet-import-select-description-value='<%= t(".select_sample_description_column") %>'
       data-spreadsheet-import-select-project-value='<%= t(".select_project_puid_column") %>'
-      <% if @namespace.group_namespace? %>
-      data-spreadsheet-import-group-value="1"
-      <% else %>
-      data-spreadsheet-import-group-value="0"
-      <% end %>
     >
 
       <%= form_for(:spreadsheet_import, url: url, method: :post) do |form| %>

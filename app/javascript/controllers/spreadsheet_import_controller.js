@@ -11,7 +11,6 @@ export default class extends Controller {
   ];
 
   static values = {
-    group: Boolean,
     selectSample: String,
     selectDescription: String,
     selectProject: String,
@@ -25,7 +24,7 @@ export default class extends Controller {
   };
 
   connect() {
-    if (this.groupValue) {
+    if (this.hasProjectPUIDColumnTarget) {
       this.#selectedHeaders["projectColumn"] = null;
       this.#blankValues["projectColumn"] = this.selectProjectValue;
     }
@@ -91,7 +90,7 @@ export default class extends Controller {
     this.#selectedHeaders = { sampleColumn: null, descriptionColumn: null };
     this.sampleNameColumnTarget.innerHTML = "";
     this.#disableTarget(this.sampleNameColumnTarget);
-    if (this.groupValue) {
+    if (this.hasProjectPUIDColumnTarget) {
       this.#selectedHeaders["projectColumn"] = null;
       this.projectPUIDColumnTarget.innerHTML = "";
       this.#disableTarget(this.projectPUIDColumnTarget);
@@ -112,7 +111,10 @@ export default class extends Controller {
       this.#updateInputValue(this.sampleDescriptionColumnTarget, "description");
     }
 
-    if (this.#allHeaders.includes("project_puid") && this.groupValue) {
+    if (
+      this.#allHeaders.includes("project_puid") &&
+      this.hasProjectPUIDColumnTarget
+    ) {
       this.#updateInputValue(this.projectPUIDColumnTarget, "project_puid");
     }
 
@@ -124,7 +126,7 @@ export default class extends Controller {
       this.sampleNameColumnTarget,
       this.#selectedHeaders["sampleColumn"],
     );
-    if (this.groupValue) {
+    if (this.hasProjectPUIDColumnTarget) {
       this.#refreshInputOptions(
         this.projectPUIDColumnTarget,
         this.#selectedHeaders["projectColumn"],
@@ -174,7 +176,7 @@ export default class extends Controller {
   checkFormInputsReadyForSubmit() {
     let projectSelected;
     let staticProjectSelected;
-    if (this.groupValue) {
+    if (this.hasProjectPUIDColumnTarget) {
       projectSelected = this.projectPUIDColumnTarget.value;
       staticProjectSelected = this.staticProjectTarget.value;
     }
