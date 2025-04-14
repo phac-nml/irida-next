@@ -124,7 +124,6 @@ module Samples
                                                      @default_params).execute
 
       assert_equal 4, @project.samples.count
-      puts response['index 2'][0][:message]
       assert_equal I18n.t('services.spreadsheet_import.missing_field',
                           index: 2),
                    response['index 2'][0][:message]
