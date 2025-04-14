@@ -174,8 +174,9 @@ export default class extends Controller {
   }
 
   checkFormInputsReadyForSubmit() {
-    let projectSelected;
-    let staticProjectSelected;
+    // set default to true so project imports can by pass project selection validation
+    let projectSelected = true;
+    let staticProjectSelected = true;
     if (this.hasProjectPUIDColumnTarget) {
       projectSelected = this.projectPUIDColumnTarget.value;
       staticProjectSelected = this.staticProjectTarget.value;
