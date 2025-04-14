@@ -1342,7 +1342,7 @@ module Groups
 
       # refresh to see new samples
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 27,
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
                                                                            locale: @user.locale))
       within('table tbody') do
         # sample 1 with valid spreadsheet project puid added to said project
