@@ -2006,9 +2006,9 @@ en:
           file_help: CSV, TSV, XLS or XLSX.
           namespace:
             group:
-              description_html: The spreadsheet is required to have columns for <b>Sample Name</b>, and optionally for <b>Sample Description</b> and <b>Project PUID</b>.
+              description_html: The spreadsheet is required to have a column for <b>Sample Name</b>, and optionally for <b>Sample Description</b> and <b>Project PUID</b>.
             project:
-              description_html: The spreadsheet is required to have a column for <b>Sample Name</b>, and optionally <b>Sample Description</b>.
+              description_html: The spreadsheet is required to have a column for <b>Sample Name</b>, and optionally for <b>Sample Description</b>.
           project_puid_column: Project ID Column
           project_puid_column_description: Assigns each sample to the associated project within the imported spreadsheet
           project_selection: Project Selection
@@ -2023,7 +2023,7 @@ en:
           static_project: Static Project
           static_project_description: Assigns each sample to the static project if either the Project ID column isn't assigned, or if the Project ID column is assigned but the project value within the spreadsheet is empty
           submit_button: Import Samples
-          title: Upload Samples
+          title: Import Samples
         errors:
           description: 'The sample import completed with the following errors:'
           ok_button: OK
