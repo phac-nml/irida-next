@@ -102,7 +102,6 @@ module Samples
         trackable: @project.namespace,
         parameters:
         {
-          ext_id: ext_details.id,
           target_project_puid: @new_project.puid,
           target_project: @new_project.id,
           cloned_samples_count: cloned_samples_count,
@@ -119,7 +118,6 @@ module Samples
         trackable: @new_project.namespace,
         parameters:
         {
-          ext_id: ext_details.id,
           source_project_puid: @project.puid,
           source_project: @project.id,
           cloned_samples_count: cloned_samples_count,
