@@ -473,8 +473,8 @@ en:
       dialog:
         close: Close
         sample_clone:
-          copied_from: Copied from
-          copied_to: Copied to
+          copied_from: COPIED FROM
+          copied_to: COPIED TO
           source_project_description: "%{user} copied %{count} samples from project %{source_project_puid}"
           target_project_description: "%{user} copied %{count} samples to project %{target_project_puid}"
           title: Copied Samples

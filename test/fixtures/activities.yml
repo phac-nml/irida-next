@@ -53,10 +53,10 @@ project1_namespace_sample_clone:
       target_project_puid: INXT_PRJ_AAAAAAAAAB,
       target_project: <%= ActiveRecord::FixtureSet.identify(:project2,
       :uuid) %>,
-      cloned_samples_ids: {<%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>: 'A154-EED3-986A-PX5D'},
-      cloned_samples_puids: {INXT_SAM_AAAAAAAAAA: 'INXT_SAM_XAAAATAAAA'},
+      cloned_samples_count: 1,
       action: "sample_clone",
     }
+  extended_details_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace_sample_clone_extended_details, :uuid) %>
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -83,10 +83,10 @@ project2_namespace_sample_cloned_from_project1:
       source_project_puid: INXT_PRJ_AAAAAAAAAA,
       source_project: <%= ActiveRecord::FixtureSet.identify(:project1,
       :uuid) %>,
-      cloned_samples_ids: {<%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>: 'A154-EED3-986A-PX5D'},
-      cloned_samples_puids: {INXT_SAM_AAAAAAAAAA: 'INXT_SAM_XAAAATAAAA'},
+      cloned_samples_count: 1,
       action: "sample_clone",
     }
+  extended_details_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace_sample_clone_extended_details, :uuid) %>
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -99,10 +99,10 @@ project1_namespace_sample_transfer:
       target_project_puid: INXT_PRJ_AAAAAAAAAB,
       target_project: <%= ActiveRecord::FixtureSet.identify(:project2,
       :uuid) %>,
-      transferred_samples_ids: [<%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>],
-      transferred_samples_puids: ["INXT_SAM_AAAAAAAAAA"],
+      transferred_samples_count: 1,
       action: "sample_transfer",
     }
+  extended_details_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace_sample_transfer_extended_details, :uuid) %>
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -115,10 +115,10 @@ project2_namespace_sample_transferred_from_project1:
       source_project_puid: INXT_PRJ_AAAAAAAAAA,
       source_project: <%= ActiveRecord::FixtureSet.identify(:project1,
       :uuid) %>,
-      transferred_samples_ids: [<%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>],
-      transferred_samples_puids: ["INXT_SAM_AAAAAAAAAA"],
+      transferred_samples_count: 1,
       action: "sample_transfer",
     }
+  extended_details_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace_sample_transfer_extended_details, :uuid) %>
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 

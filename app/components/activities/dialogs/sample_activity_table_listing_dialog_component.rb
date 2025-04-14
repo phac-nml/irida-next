@@ -37,7 +37,7 @@ module Activities
                          )
                        end
 
-        @table_data = @extended_details.details['cloned_samples_puids'].to_json
+        @table_data = @extended_details.details['cloned_samples_data'].to_json
       end
     end
   end

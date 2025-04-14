@@ -49,6 +49,7 @@ export default class extends Controller {
   connect() {
     if (this.hasSampleAttributesTarget) {
       this.#setInitialData();
+      this.element.setAttribute("data-controller-connected", "true");
     }
   }
 
@@ -57,12 +58,7 @@ export default class extends Controller {
       this.sampleAttributesTarget.innerText,
      );
 
-     if(this.hasTbodyTarget) {
-      let objectEntries = Object.entries(this.#sampleAttributes);
-      for(let entry in objectEntries) this.#sampleData.push(objectEntries[entry]);
-     } else {
-      this.#sampleData = this.#sampleAttributes
-     }
+    this.#sampleData = this.#sampleAttributes
 
     // set initial sample indexes to include all samples
     this.#setAllSamples();
@@ -166,8 +162,14 @@ export default class extends Controller {
       for(let j = 0; j < this.numColsValue; j++)
       {
         let td= document.createElement("td");
+        let span = document.createElement("span");
         td.className = "px-3 py-3";
-        td.innerText = data[i][j];
+        span.className = "bg-green-100 ml-2 dark:bg-green-900 dark:text-green-300 font-medium px-2.5 py-0.5 rounded-full text-green-800 text-xs";
+
+        // Sample Name - (Existing [copied from] or New Puid [copied to])
+        td.innerText = data[i][0];
+        span.innerHTML = data[i][j+1];
+        td.appendChild(span);
         tr.appendChild(td);
       }
 
@@ -182,16 +184,21 @@ export default class extends Controller {
       let iconDiv = document.createElement("div");
       let paragraphDiv = document.createElement("div");
       let paragraph = document.createElement("p");
+      let span = document.createElement("span");
 
       li.className = "pt-3 pb-3 sm:pb-4 sm:pt-4";
       containerDiv.className = "flex items-center space-x-4 rtl:space-x-reverse"
       iconDiv.className = "shrink-0"
       paragraphDiv.className = "flex-1 min-w-0"
       paragraph.className = "text-sm text-gray-500 truncate dark:text-gray-400"
+      span.className = "bg-green-100 ml-2 dark:bg-green-900 dark:text-green-300 font-medium px-2.5 py-0.5 rounded-full text-green-800 text-xs";
 
       containerDiv.appendChild(iconDiv);
+      span.innerHTML = data[i][1];
       paragraphDiv.appendChild(paragraph);
-      paragraph.innerHTML = data[i];
+      // Sample Name - Sample Puid
+      paragraph.innerHTML = data[i][0];
+      paragraph.appendChild(span);
       containerDiv.appendChild(paragraphDiv)
       li.appendChild(containerDiv)
       this.listContainerTarget.appendChild(li);

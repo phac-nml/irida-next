@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 
-require 'view_component_test_case'
+require 'application_system_test_case'
 
 module Activities
   module Dialogs
-    class SampleCloneActivityDialogComponentTest < ViewComponentTestCase
+    class SampleActivityTableListingDialogComponentTest < ApplicationSystemTestCase
       include ActionView::Helpers::SanitizeHelper
 
       setup do
         @user = users(:john_doe)
+        login_as @user
       end
 
       test 'sample clone activity dialog source project' do
@@ -20,30 +21,34 @@ module Activities
           activity[:key].include?('project_namespace.samples.clone')
         end)
 
-        @activity_owner = I18n.t('activerecord.concerns.track_activity.system')
-
         activity_to_render = activities.find do |a|
           a[:key] == 'activity.namespaces_project_namespace.samples.clone_html'
         end
 
-        activity_to_render = PublicActivity::Activity.find(activity_to_render[:id])
+        visit namespace_project_activity_path(project_namespace.parent, project_namespace.project)
 
-        render_inline Activities::Dialogs::SampleCloneActivityDialogComponent.new(activity: activity_to_render,
-                                                                                  activity_owner: @activity_owner)
+        load_more_button = find('button', text: 'Load more')
+        click_button 'Load more' if load_more_button
+
+        click_link(I18n.t('components.activity.more_details'),
+                   href: activity_path(activity_to_render[:id], dialog_type: 'samples_clone').to_s)
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.sample_clone.title')
 
-        assert_selector 'p',
-                        text: I18n.t(:'components.activity.dialog.sample_clone.target_project_description',
-                                     user: 'System', count: 1,
-                                     target_project_puid: 'INXT_PRJ_AAAAAAAAAB')
-        assert_selector 'table', count: 1
-        assert_selector 'th', count: 2
-        assert_selector 'tr', count: 2
-        assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.sample_clone.copied_from')
-        assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.sample_clone.copied_to')
-        assert_selector 'tr > td', text: 'INXT_SAM_AAAAAAAAAA'
-        assert_selector 'tr > td', text: 'INXT_SAM_XAAAATAAAA'
+        within %(div[data-controller="activities--extended_details"][data-controller-connected="true"]) do
+          assert_selector 'p',
+                          text: I18n.t(:'components.activity.dialog.sample_clone.target_project_description',
+                                       user: 'System', count: 1,
+                                       target_project_puid: 'INXT_PRJ_AAAAAAAAAB')
+
+          assert_selector 'table', count: 1
+          assert_selector 'th', count: 2
+          assert_selector 'tr', count: 2
+          assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.sample_clone.copied_from')
+          assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.sample_clone.copied_to')
+          assert_selector 'tr > td', text: 'INXT_SAM_AAAAAAAAAA'
+          assert_selector 'tr > td', text: 'INXT_SAM_XAAAATAAAA'
+        end
       end
 
       test 'sample clone activity dialog target project' do
@@ -55,16 +60,14 @@ module Activities
           activity[:key].include?('project_namespace.samples.cloned_from')
         end)
 
-        @activity_owner = I18n.t('activerecord.concerns.track_activity.system')
-
         activity_to_render = activities.find do |a|
           a[:key] == 'activity.namespaces_project_namespace.samples.cloned_from_html'
         end
 
-        activity_to_render = PublicActivity::Activity.find(activity_to_render[:id])
+        visit namespace_project_activity_path(project_namespace.parent, project_namespace.project)
 
-        render_inline Activities::Dialogs::SampleCloneActivityDialogComponent.new(activity: activity_to_render,
-                                                                                  activity_owner: @activity_owner)
+        click_link(I18n.t('components.activity.more_details'),
+                   href: activity_path(activity_to_render[:id], dialog_type: 'samples_clone').to_s)
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.sample_clone.title')
 

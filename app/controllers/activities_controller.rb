@@ -27,7 +27,7 @@ class ActivitiesController < ApplicationController
 
   def activity
     @activity ||= PublicActivity::Activity.find_by(id: params[:id])
-    @extended_details = ExtendedDetails.find_by(id: @activity.extended_details_id)
+    @extended_details = ExtendedDetail.find_by(id: @activity.extended_details_id)
   end
 
   def activity_owner
@@ -47,7 +47,7 @@ class ActivitiesController < ApplicationController
     case type
     when 'samples_clone'
       Activities::Dialogs::SampleActivityTableListingDialogComponent
-    else
+    when 'samples_transfer', 'samples_destroy'
       Activities::Dialogs::SampleActivityListDialogComponent
     end
   end

@@ -32,7 +32,8 @@ module Samples
 
     def clone_samples(sample_ids, broadcast_target) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       cloned_sample_ids = {}
-      cloned_sample_puids = {}
+      cloned_samples_data = []
+
       not_found_sample_ids = []
       total_sample_count = sample_ids.count
       sample_ids.each.with_index(1) do |sample_id, index|
@@ -40,7 +41,8 @@ module Samples
         sample = Sample.find_by!(id: sample_id, project_id: @project.id)
         cloned_sample = clone_sample(sample)
         cloned_sample_ids[sample_id] = cloned_sample.id unless cloned_sample.nil?
-        cloned_sample_puids[sample.puid] = cloned_sample.puid unless cloned_sample.nil?
+
+        cloned_samples_data << [sample.name, sample.puid, cloned_sample.puid] unless cloned_sample.nil?
       rescue ActiveRecord::RecordNotFound
         not_found_sample_ids << sample_id
         next
@@ -52,7 +54,10 @@ module Samples
                                    sample_ids: not_found_sample_ids.join(', ')))
       end
 
-      update_namespace_attributes(cloned_sample_ids, cloned_sample_puids) if cloned_sample_ids.count.positive?
+      if cloned_sample_ids.count.positive?
+        update_namespace_attributes(cloned_sample_ids)
+        create_activities(cloned_samples_data, cloned_sample_ids.count)
+      end
 
       cloned_sample_ids
     end
@@ -83,16 +88,13 @@ module Samples
       @new_project.parent.update_samples_count_by_addition_services(cloned_samples_count)
     end
 
-    def update_namespace_attributes(cloned_sample_ids, cloned_sample_puids)
+    def update_namespace_attributes(cloned_sample_ids)
       update_samples_count(cloned_sample_ids.count) if @new_project.parent.type == 'Group'
-
-      create_activities(cloned_sample_ids, cloned_sample_puids)
     end
 
-    def create_activities(cloned_sample_ids, cloned_sample_puids) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-      ext_details = ExtendedDetails.create!(details: { cloned_samples_count: cloned_sample_ids.size,
-                                                       cloned_samples_ids: cloned_sample_ids,
-                                                       cloned_samples_puids: cloned_sample_puids })
+    def create_activities(cloned_samples_data, cloned_samples_count) # rubocop:disable Metrics/MethodLength
+      ext_details = ExtendedDetail.create!(details: { cloned_samples_count: cloned_samples_count,
+                                                      cloned_samples_data: cloned_samples_data })
 
       activity = @project.namespace.create_activity key: 'namespaces_project_namespace.samples.clone',
                                                     owner: current_user,
@@ -101,7 +103,7 @@ module Samples
                                                       ext_id: ext_details.id,
                                                       target_project_puid: @new_project.puid,
                                                       target_project: @new_project.id,
-                                                      cloned_samples_count: cloned_sample_ids.size,
+                                                      cloned_samples_count: cloned_samples_count,
                                                       action: 'sample_clone'
                                                     }
 
@@ -115,7 +117,7 @@ module Samples
                                                           ext_id: ext_details.id,
                                                           source_project_puid: @project.puid,
                                                           source_project: @project.id,
-                                                          cloned_samples_count: cloned_sample_ids.size,
+                                                          cloned_samples_count: cloned_samples_count,
                                                           action: 'sample_clone'
                                                         }
 

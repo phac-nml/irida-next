@@ -255,8 +255,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     return params unless activity.parameters[:action] == 'sample_destroy_multiple'
 
     params.merge(
-      deleted_count: activity.parameters[:deleted_count],
-      samples_deleted_puids: activity.parameters[:samples_deleted_puids]
+      samples_deleted_count: activity.parameters[:samples_deleted_count]
     )
   end
 

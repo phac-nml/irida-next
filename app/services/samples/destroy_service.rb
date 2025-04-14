@@ -38,10 +38,10 @@ module Samples
       update_metadata_summary(sample)
     end
 
-    def destroy_multiple
+    def destroy_multiple # rubocop:disable Metrics/AbcSize
       samples = Sample.where(id: sample_ids).where(project_id: project.id)
       samples_deleted_puids = []
-
+      deleted_samples_data = []
       samples = samples.destroy_all
 
       samples.each do |sample|
@@ -49,24 +49,26 @@ module Samples
 
         update_metadata_summary(sample)
         samples_deleted_puids << sample.puid
+        deleted_samples_data << [sample.name, sample.puid]
       end
 
       deleted_samples_count = samples_deleted_puids.count
       update_samples_count(deleted_samples_count) if @project.parent.type == 'Group'
 
-      create_activities(samples_deleted_puids) if samples_deleted_puids.size.positive?
+      create_activities(deleted_samples_data) if deleted_samples_data.size.positive?
 
       deleted_samples_count
     end
 
-    def create_activities(samples_deleted_puids)
-      ext_details = ExtendedDetails.create!(details: { samples_deleted_puids: })
+    def create_activities(deleted_samples_data)
+      ext_details = ExtendedDetail.create!(details: { samples_deleted_count: deleted_samples_data.size,
+                                                      deleted_samples_data: deleted_samples_data })
 
       activity = @project.namespace.create_activity key: 'namespaces_project_namespace.samples.destroy_multiple',
                                                     owner: current_user,
                                                     parameters:
                                                     {
-                                                      samples_deleted_count: samples_deleted_puids.size,
+                                                      samples_deleted_count: deleted_samples_data.size,
                                                       action: 'sample_destroy_multiple'
                                                     }
 
