@@ -108,11 +108,11 @@ module Samples
                    response['my new sample 2'][0][:message]
     end
 
-    test 'import with bad data missing puid' do
+    test 'import with bad data missing puid and missing static_project_id' do
       assert_equal 3, @project.samples.count
 
       file = Rack::Test::UploadedFile.new(
-        Rails.root.join('test/fixtures/files/batch_sample_import/group/invalid_missing_puid.csv')
+        Rails.root.join('test/fixtures/files/batch_sample_import/group/missing_puid.csv')
       )
       blob = ActiveStorage::Blob.create_and_upload!(
         io: file,
@@ -124,10 +124,31 @@ module Samples
                                                      @default_params).execute
 
       assert_equal 4, @project.samples.count
-
+      puts response['index 2'][0][:message]
       assert_equal I18n.t('services.spreadsheet_import.missing_field',
                           index: 2),
                    response['index 2'][0][:message]
+    end
+
+    test 'valid import with missing puid but with static_project_id' do
+      assert_equal 3, @project.samples.count
+      assert_equal 20, @project2.samples.count
+      @default_params[:static_project_id] = @project2.id
+
+      file = Rack::Test::UploadedFile.new(
+        Rails.root.join('test/fixtures/files/batch_sample_import/group/missing_puid.csv')
+      )
+      blob = ActiveStorage::Blob.create_and_upload!(
+        io: file,
+        filename: file.original_filename,
+        content_type: file.content_type
+      )
+
+      Samples::BatchFileImportService.new(@group, @john_doe, blob.id,
+                                          @default_params).execute
+
+      assert_equal 4, @project.samples.count
+      assert_equal 21, @project2.samples.count
     end
 
     test 'import with bad data blank line' do

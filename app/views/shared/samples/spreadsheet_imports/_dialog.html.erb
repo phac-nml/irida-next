@@ -113,7 +113,7 @@
                            "block mt-2 text-sm font-medium text-slate-900 dark:text-white" %>
               <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-400"><%= t(".static_project_description") %></p>
               <%= form.select :static_project_id,
-                          @static_projects,
+                          @group_projects,
                           { prompt: t(".select_static_project") },
                           required: false,
                           data: {

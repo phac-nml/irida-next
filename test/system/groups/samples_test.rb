@@ -1258,7 +1258,7 @@ module Groups
       ### VERIFY END ###
     end
 
-    test 'should not import sample missing project puid' do
+    test 'should import sample missing project puid' do
       ### SETUP START ###
       visit group_samples_url(@group)
 
@@ -1277,12 +1277,8 @@ module Groups
       click_button I18n.t('shared.samples.actions_dropdown.import_samples')
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
-                    Rails.root.join('test/fixtures/files/batch_sample_import/group/invalid_missing_puid.csv'))
-        find('#spreadsheet_import_sample_name_column', wait: 1).find(:xpath, 'option[2]').select_option
-        # sample name column is "consumed" by first selection,
-        # so select option 2 again for project puid and sample description
-        find('#spreadsheet_import_project_puid_column', wait: 1).find(:xpath, 'option[2]').select_option
-        find('#spreadsheet_import_sample_description_column', wait: 1).find(:xpath, 'option[2]').select_option
+                    Rails.root.join('test/fixtures/files/batch_sample_import/group/missing_puid.csv'))
+        find('#spreadsheet_import_static_project_id', wait: 1).find(:xpath, 'option[3]').select_option
 
         click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
         ### ACTIONS END ###
@@ -1294,24 +1290,17 @@ module Groups
 
       # success msg
       assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
-      # problem message
-      assert_text I18n.t('shared.samples.spreadsheet_imports.success.problems')
-      # problem table
-      within('#problems_table table tbody') do
-        # has 1 problem
-        assert_selector 'tr', count: 1
-        assert_text "Row with index '2' is missing required fields"
-      end
+
       click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
 
       # refresh to see new samples
       visit group_samples_url(@group)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 27,
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
                                                                            locale: @user.locale))
       within('table tbody') do
         # added 2 new samples
         assert_text 'my new sample'
-        assert_no_text 'my new sample 2'
+        assert_text 'my new sample 2'
       end
       ### VERIFY END ###
     end
