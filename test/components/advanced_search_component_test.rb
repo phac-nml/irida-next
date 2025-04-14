@@ -21,6 +21,25 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           assert_selector "div[data-advanced-search-target='conditionsContainer']", count: 1
         end
 
+        # verify the field list option group elements are localized
+        within first("select[name$='[field]']") do
+          assert_selector "optgroup[label='#{I18n.t('advanced_search_component.operation.sample_fields')}']", count: 1
+          assert_selector "optgroup[label='#{I18n.t('advanced_search_component.operation.metadata_fields')}']", count: 1
+        end
+
+        # verify the operator list is localized
+        within first("select[name$='[operator]']") do
+          assert_text I18n.t('advanced_search_component.operation.equals')
+          assert_text I18n.t('advanced_search_component.operation.not_equals')
+          assert_text I18n.t('advanced_search_component.operation.less_than')
+          assert_text I18n.t('advanced_search_component.operation.greater_than')
+          assert_text I18n.t('advanced_search_component.operation.contains')
+          assert_text I18n.t('advanced_search_component.operation.exists')
+          assert_text I18n.t('advanced_search_component.operation.not_exists')
+          assert_text I18n.t('advanced_search_component.operation.in')
+          assert_text I18n.t('advanced_search_component.operation.not_in')
+        end
+
         # verify removing a condition
         within all("div[data-advanced-search-target='groupsContainer']")[0] do
           within all("div[data-advanced-search-target='conditionsContainer']")[0] do
