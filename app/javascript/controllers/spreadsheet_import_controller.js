@@ -173,9 +173,6 @@ export default class extends Controller {
       this.#selectedHeaders["spreadsheet_import_sample_description_column"],
       unselectedHeaders,
     );
-    if (this.hasStaticProjectTarget) {
-      this.#enableTarget(this.staticProjectTarget);
-    }
     this.checkFormInputsReadyForSubmit();
   }
 
