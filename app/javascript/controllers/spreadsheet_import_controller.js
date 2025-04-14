@@ -80,6 +80,9 @@ export default class extends Controller {
         })[0]
         .sort();
       this.#setAutoSelections();
+      if (this.hasStaticProjectTarget) {
+        this.#enableTarget(this.staticProjectTarget);
+      }
       this.checkFormInputsReadyForSubmit();
     };
   }
@@ -131,29 +134,25 @@ export default class extends Controller {
       this.sampleDescriptionColumnTarget,
       this.#selectedHeaders["descriptionColumn"],
     );
-    if (this.hasStaticProjectTarget) {
-      this.#enableTarget(this.staticProjectTarget);
-    }
     this.checkFormInputsReadyForSubmit();
   }
 
   #refreshInputOptions(columnTarget, currentSelection) {
-    // filter out fields other headers are using, but not this target's own selection
+    // filter out used options
     let unselectedHeaders = this.#allHeaders.filter(
       (item) => !Object.values(this.#selectedHeaders).includes(item),
     );
-    // delete the old input options, except for one that is currently selected
-    // this.#removeInputOptions(columnTarget, current_selection);
 
-    // build a list of new input options based on above filtering
-
+    // rebuild select options list
     columnTarget.innerHTML = "";
 
+    // add blank value
     let option = document.createElement("option");
     option.value = "";
     option.text = this.#blankValues[columnTarget.id];
     columnTarget.append(option);
 
+    // add currently selected option
     if (currentSelection) {
       let option = document.createElement("option");
       option.value = currentSelection;
@@ -162,6 +161,7 @@ export default class extends Controller {
       columnTarget.value = currentSelection;
     }
 
+    // add unused options
     for (let header of unselectedHeaders) {
       let option = document.createElement("option");
       option.value = header;
@@ -172,8 +172,8 @@ export default class extends Controller {
   }
 
   checkFormInputsReadyForSubmit() {
-    let projectSelected = true;
-    let staticProjectSelected = true;
+    let projectSelected;
+    let staticProjectSelected;
     if (this.groupValue) {
       projectSelected = this.projectPUIDColumnTarget.value;
       staticProjectSelected = this.staticProjectTarget.value;

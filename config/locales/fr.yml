@@ -400,7 +400,7 @@ fr:
         title: Supprimer un fichier
       new_attachment_component:
         files: Fichiers
-        files_ignored: "Les fichiers fasta et fastq doivent être compressés. Les fichiers suivants ne peuvent pas être téléchargés :"
+        files_ignored: 'Les fichiers fasta et fastq doivent être compressés. Les fichiers suivants ne peuvent pas être téléchargés :'
         upload: Télécharger
         upload_files: Télécharger des fichiers
         uploading: Téléchargement
@@ -505,7 +505,7 @@ fr:
       transferred_by: "%{type} transféré par %{user}"
     history_version:
       current_version: Actuel (Version %{version})
-      keys_deleted: "Clés supprimées :"
+      keys_deleted: 'Clés supprimées :'
       previous_version: Précédent (Version %{version})
     layout:
       main_content_link: Skip to content
@@ -546,7 +546,7 @@ fr:
   concerns:
     attachment_actions:
       destroy:
-        error: "Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}"
+        error: 'Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}'
     bot_actions:
       create:
         success: Le compte de bot a été ajouté avec succès
@@ -663,14 +663,14 @@ fr:
         status: Statut
       title: Exportations de données
     list_workflow_execution:
-      id: "ID:"
-      name: "Nom:"
-      run_id: "Exécuter l’identifiant:"
-      workflow: "Flux de travail :"
+      id: 'ID:'
+      name: 'Nom:'
+      run_id: 'Exécuter l’identifiant:'
+      workflow: 'Flux de travail :'
     new:
       after_submission_description_html: Après la soumission, vous serez redirigé vers la page d’exportation. Pendant que le statut de l’exportation est <span class="px-2.5 py-0.5 mr-1 ml-1 text-xs font-medium rounded-full bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300">en cours de traitement</span>, le contenu de l’exportation est créé. Une fois que le statut de l’exportation sera <span class="px-2.5 py-0.5 ml-1 text-xs font-medium text-green-800 bg-green-100 rounded-full dark:bg-green-900 dark:text-green-300">prêt</span>, il sera disponible pour téléchargement. Vous aurez 3 jours ouvrables pour télécharger l’exportation avant qu’elle ne soit supprimée.
       email_label: Vous recevez une notification par courriel lorsque votre exportation est prête à être téléchargée?
-      name_label: "Nom d’exportation (facultatif) :"
+      name_label: 'Nom d’exportation (facultatif) :'
       sample_description:
         plural: Cette exportation contiendra les échantillons COUNT_PLACEHOLDER.
         singular: Cette exportation contiendra 1 échantillon.
@@ -738,8 +738,8 @@ fr:
   errors:
     messages:
       not_saved:
-        one: "1 erreur a empêché cette %{resource} d’être sauvegardée :"
-        other: "Les erreurs %{count} ont empêché cette %{resource} d’être sauvegardée :"
+        one: '1 erreur a empêché cette %{resource} d’être sauvegardée :'
+        other: 'Les erreurs %{count} ont empêché cette %{resource} d’être sauvegardée :'
   general:
     default_sidebar:
       data_exports: Exportations de données
@@ -773,7 +773,7 @@ fr:
       title: Activité en groupe
     attachments:
       create:
-        failure: "Le fichier %{filename} n’a pas été téléchargé en raison des erreurs suivantes : %{errors}"
+        failure: 'Le fichier %{filename} n’a pas été téléchargé en raison des erreurs suivantes : %{errors}'
         success: Le fichier %{filename} a été téléchargé avec succès.
       destroy:
         success: Le fichier %{filename} a été supprimé avec succès.
@@ -839,7 +839,7 @@ fr:
             points_html: '["To prevent accidental actions we ask you to confirm your intention.", "Please type <kbd>%{group}</kbd> to proceed or close this dialog to cancel."]'
             warning:
               post_html: After you delete a group, you <strong>cannot</strong> restore it or its components.
-              pre_html: "You are about to delete the group <strong>%{group_name}</strong>. This action will also delete:"
+              pre_html: 'You are about to delete the group <strong>%{group_name}</strong>. This action will also delete:'
               projects_count: "%{count} project(s)"
               samples_count: "%{count} sample(s)"
               subgroups_count: "%{count} subgroup(s)"
@@ -854,18 +854,18 @@ fr:
         transfer:
           confirm:
             points_html:
-              - Pour éviter les actions accidentelles, nous vous demandons de confirmer votre intention.
-              - Veuillez taper <kbd>%{group}</kbd> pour continuer ou fermer cette boîte de dialogue pour annuler.
+            - Pour éviter les actions accidentelles, nous vous demandons de confirmer votre intention.
+            - Veuillez taper <kbd>%{group}</kbd> pour continuer ou fermer cette boîte de dialogue pour annuler.
             warning_html: Vous allez transférer <strong>%{group_name}</strong> vers un autre espace de noms. Une fois que vous avez confirmé, cette action ne peut pas être annulée.
           descriptions:
-            - Transférer le groupe à un autre groupe parent
+          - Transférer le groupe à un autre groupe parent
           empty_state: Aucun espace de noms n’est associé à ce nom ou à cet identifiant
           new_namespace_id: Choisissez un groupe parent
           no_available_namespaces: Vous n’avez accès à aucun espace de noms de destination pour transférer ce groupe
           points:
-            - Soyez prudent. Changer le parent d’un groupe peut avoir des effets secondaires involontaires.
-            - Vous ne pouvez transférer des groupes que si vous avez suffisamment d’autorisations.
-            - Si la visibilité du groupe parent est inférieure à la visibilité actuelle du groupe, les niveaux de visibilité des sous-groupes et des projets seront modifiés pour correspondre à la visibilité du nouveau groupe parent.
+          - Soyez prudent. Changer le parent d’un groupe peut avoir des effets secondaires involontaires.
+          - Vous ne pouvez transférer des groupes que si vous avez suffisamment d’autorisations.
+          - Si la visibilité du groupe parent est inférieure à la visibilité actuelle du groupe, les niveaux de visibilité des sous-groupes et des projets seront modifiés pour correspondre à la visibilité du nouveau groupe parent.
           select_group: Sélectionner un groupe
           submit: Groupe de transfert
           title: Groupe de transfert
@@ -1061,7 +1061,7 @@ fr:
   layouts:
     application:
       language_selection:
-        aria_label: "Langue sélectionnée : Français"
+        aria_label: 'Langue sélectionnée : Français'
       site_title: IRIDA Next
   locales:
     en: Anglais
@@ -1072,10 +1072,10 @@ fr:
       export_ready:
         download_before_html: Veuillez télécharger l’exportation avant <strong>%{date}</strong>, car elle sera supprimée après cette période.
         ready_for_download_html: Votre exportation <strong>%{name}</strong> est prête à être téléchargée.
-        view_exports: "Pour voir et télécharger l’exportation, cliquez sur le bouton ci-dessous :"
+        view_exports: 'Pour voir et télécharger l’exportation, cliquez sur le bouton ci-dessous :'
     email_template:
       automated_message: Ce courriel a été envoyé à partir d’un système automatisé. Veuillez ne pas répondre à ce courriel.
-      copy_paste: "Ou copiez-collez ce lien dans votre navigateur :"
+      copy_paste: 'Ou copiez-collez ce lien dans votre navigateur :'
       greeting: Bonjour,
       greeting_with_name: Bonjour %{name},
       thanks: Merci,
@@ -1083,11 +1083,11 @@ fr:
       access_granted_manager_email:
         body_html: Le groupe '%{group_name}' a <strong>obtenu</strong> l’accès à %{namespace_type} '%{namespace_name}'
         subject: Le groupe '%{group_name}' a obtenu l’accès à %{namespace_type} '%{namespace_name}'
-        view_details: "Pour voir tous les membres de %{namespace_type} '%{namespace_name}', cliquez sur le bouton ci-dessous :"
+        view_details: 'Pour voir tous les membres de %{namespace_type} ''%{namespace_name}'', cliquez sur le bouton ci-dessous :'
       access_granted_user_email:
         body_html: Group '%{group_name}' has been <strong>granted</strong> access to %{namespace_type} '%{namespace_name}'
         subject: Group '%{group_name}' has been granted access to %{namespace_type} '%{namespace_name}'
-        view_details: "Pour voir %{namespace_type} '%{namespace_name}', cliquez sur le bouton ci-dessous :"
+        view_details: 'Pour voir %{namespace_type} ''%{namespace_name}'', cliquez sur le bouton ci-dessous :'
       access_revoked_manager_email:
         body_html: L’accès à %{namespace_type} '%{namespace_name}' a été <strong>révoqué</strong> pour le groupe '%{group_name}'
         subject: L’accès à %{namespace_type} '%{namespace_name}' a été révoqué pour le groupe '%{group_name}'
@@ -1098,15 +1098,15 @@ fr:
       access_granted_manager_email:
         body_html: L’utilisateur '%{first_name} %{last_name}' (%{email}) a obtenu <strong></strong> l’accès à %{type} '%{name}'
         subject: L’utilisateur '%{first_name} %{last_name}' (%{email}) a obtenu l’accès à %{type} '%{name}'
-        view_details: "Pour voir tous les membres de %{type} '%{name}', cliquez sur le bouton ci-dessous :"
+        view_details: 'Pour voir tous les membres de %{type} ''%{name}'', cliquez sur le bouton ci-dessous :'
       access_granted_user_email:
         body_html: Vous avez <strong>obtenu</strong> l’accès à %{type} '%{name}'
         subject: Vous avez obtenu l’accès à %{type} '%{name}'
-        view_details: "Pour voir %{type} '%{name}', cliquez sur le bouton ci-dessous :"
+        view_details: 'Pour voir %{type} ''%{name}'', cliquez sur le bouton ci-dessous :'
       access_revoked_manager_email:
         body_html: L’accès à %{type} '%{name}' a été <strong>révoqué</strong> pour l’utilisateur '%{first_name} %{last_name}' (%{email})
         subject: L’accès à %{type} '%{name}' a été révoqué pour l’utilisateur '%{first_name} %{last_name}' (%{email})
-        view_details: "Pour voir tous les membres de %{type} '%{name}', cliquez sur le bouton ci-dessous :"
+        view_details: 'Pour voir tous les membres de %{type} ''%{name}'', cliquez sur le bouton ci-dessous :'
       access_revoked_user_email:
         body_html: Votre accès à %{type} '%{name}' a été <strong>révoqué</strong>
         subject: Votre accès à %{type} '%{name}' a été révoqué
@@ -1123,7 +1123,7 @@ fr:
       error_user_email:
         body_html: Votre pipeline <strong>%{id}</strong> n’a pas été complété avec succès en raison d’erreurs.
         subject: Pipeline erroné – %{id}
-      view_details: "Pour consulter le résumé du pipeline, cliquez sur le bouton ci-dessous :"
+      view_details: 'Pour consulter le résumé du pipeline, cliquez sur le bouton ci-dessous :'
   members:
     access_levels:
       level_0: Pas d’accès
@@ -1202,7 +1202,7 @@ fr:
         aria_label: Sélecteur de page de pagination
       previous: Précédent
   nextflow_component:
-    data_missing_error: "Les échantillons suivants manquent de données requises : "
+    data_missing_error: 'Les échantillons suivants manquent de données requises : '
     filtering_samples: Le filtrage des échantillons peut prendre un certain temps.
     name:
       helper: Un nom personnalisé facilitera la recherche à l’avenir.
@@ -1233,8 +1233,8 @@ fr:
         confirm: Êtes-vous sûr de vouloir supprimer votre compte?
         description: La suppression de votre compte a les effets suivants
         effects:
-          - Tous les projets et groupes dont vous êtes propriétaire seront supprimés
-          - Tous les projets et groupes dont vous êtes membre seront laissés intacts
+        - Tous les projets et groupes dont vous êtes propriétaire seront supprimés
+        - Tous les projets et groupes dont vous êtes membre seront laissés intacts
     passwords:
       update:
         forgot: Vous avez oublié votre mot de passe?
@@ -1295,7 +1295,7 @@ fr:
       title: Activité du projet
     attachments:
       create:
-        failure: "Le fichier %{filename} n’a pas été téléchargé en raison des erreurs suivantes : %{errors}"
+        failure: 'Le fichier %{filename} n’a pas été téléchargé en raison des erreurs suivantes : %{errors}'
         success: Le fichier %{filename} a été téléchargé avec succès.
       destroy:
         success: Le fichier %{filename} a été supprimé avec succès.
@@ -1323,7 +1323,7 @@ fr:
       edit:
         error: Impossible de modifier le pipeline automatisé %{workflow_name}
       edit_dialog:
-        title: "Modification du pipeline automatisé : %{workflow_name}"
+        title: 'Modification du pipeline automatisé : %{workflow_name}'
       index:
         add_new_automated_workflow_execution: Nouveau pipeline automatisé
         subtitle: Configurer des pipelines automatisés à lancer lorsque les données jumelées sont téléchargées dans le projet
@@ -1393,7 +1393,7 @@ fr:
             warning:
               automated_workflows_count: "%{count} automated workflow execution(s)"
               post_html: After you delete a project, you <strong>cannot</strong> restore it or its components.
-              pre_html: "You are about to delete the project <strong>%{project_name}</strong>. This action will also delete:"
+              pre_html: 'You are about to delete the project <strong>%{project_name}</strong>. This action will also delete:'
               samples_count: "%{count} sample(s)"
           description: La suppression d’un projet est permanente et ne peut pas être annulée. Tous les échantillons et les membres directs seront supprimés en même temps que le projet.
           submit: Supprimer le projet
@@ -1407,20 +1407,20 @@ fr:
         transfer:
           confirm:
             points_html:
-              - Pour éviter les actions accidentelles, nous vous demandons de confirmer votre intention.
-              - Veuillez taper <kbd>%{project}</kbd> pour continuer ou fermer cette boîte de dialogue pour annuler.
+            - Pour éviter les actions accidentelles, nous vous demandons de confirmer votre intention.
+            - Veuillez taper <kbd>%{project}</kbd> pour continuer ou fermer cette boîte de dialogue pour annuler.
             warning_html: Vous allez transférer <strong>%{project_name}</strong> vers un autre espace de noms. Une fois que vous avez confirmé, cette action ne peut pas être annulée.
           descriptions:
-            - Transférer votre projet dans un autre espace de noms.
-            - Lorsque vous transférez votre projet à un groupe, vous pouvez facilement gérer plusieurs projets et utilisateurs.
-            - "Ce qu’il faut savoir avant de transférer votre projet:"
+          - Transférer votre projet dans un autre espace de noms.
+          - Lorsque vous transférez votre projet à un groupe, vous pouvez facilement gérer plusieurs projets et utilisateurs.
+          - 'Ce qu’il faut savoir avant de transférer votre projet:'
           empty_state: Aucun espace de noms n’est associé à ce nom ou à cet identifiant
           new_namespace_id: Sélectionnez un nouvel espace de noms
           no_available_namespaces: Vous n’avez accès à aucun espace de noms de destination pour transférer ce projet
           points:
-            - Soyez prudent! La modification de l’espace de noms d’un projet peut avoir des effets secondaires involontaires.
-            - Vous ne pouvez transférer des projets que vers des groupes où vous avez suffisamment d’autorisations.
-            - Le niveau de visibilité du projet changera pour correspondre aux règles de l’espace de noms lors du transfert vers un groupe.
+          - Soyez prudent! La modification de l’espace de noms d’un projet peut avoir des effets secondaires involontaires.
+          - Vous ne pouvez transférer des projets que vers des groupes où vous avez suffisamment d’autorisations.
+          - Le niveau de visibilité du projet changera pour correspondre aux règles de l’espace de noms lors du transfert vers un groupe.
           select_namespace: Sélectionnez l’espace de noms
           submit: Projet de transfert
           title: Projet de transfert
@@ -1539,11 +1539,11 @@ fr:
             success: Les dossiers ont été concaténés avec succès.
           modal:
             basename: Nom du fichier
-            description: "Les fichiers suivants ont été sélectionnés pour être concaténés :"
+            description: 'Les fichiers suivants ont été sélectionnés pour être concaténés :'
             submit_button: Concaténer
             title: Concaténer les fichiers
         create:
-          failure: "Le fichier %{filename} n’a pas été téléchargé en raison des erreurs suivantes : %{errors}"
+          failure: 'Le fichier %{filename} n’a pas été téléchargé en raison des erreurs suivantes : %{errors}'
           success: Le fichier %{filename} a été téléchargé avec succès.
         delete_attachment_modal:
           description: Êtes-vous sûr de vouloir supprimer ce fichier de l’échantillon?
@@ -1551,20 +1551,20 @@ fr:
           title: Supprimer un fichier
         deletions:
           destroy:
-            error: "Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}"
+            error: 'Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}'
             partial_success: Certains fichiers ont été supprimés avec succès.
             success: Les fichiers ont été supprimés avec succès.
           modal:
-            description: "Les fichiers suivants ont été sélectionnés pour suppression :"
+            description: 'Les fichiers suivants ont été sélectionnés pour suppression :'
             submit_button: Supprimer
             title: Supprimer des fichiers
         destroy:
-          error: "Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}"
+          error: 'Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}'
           success: Le fichier %{filename} a été supprimé avec succès.
       clones:
         create:
-          error: "La liste suivante des échantillons n’a pas été copiée :"
-          no_samples_cloned_error: "Les échantillons n’ont pas été copiés pour les raisons suivantes :"
+          error: 'La liste suivante des échantillons n’a pas été copiée :'
+          no_samples_cloned_error: 'Les échantillons n’ont pas été copiés pour les raisons suivantes :'
           success: Les échantillons ont été copiés avec succès.
         dialog:
           description:
@@ -1595,8 +1595,8 @@ fr:
           title: Supprimer l’échantillon
         new_multiple_deletions_dialog:
           description:
-            plural: "Les échantillons COUNT_PLACEHOLDER suivants ont été sélectionnés aux fins de suppression :"
-            singular: "L’échantillon suivant a été sélectionné aux fins de suppression :"
+            plural: 'Les échantillons COUNT_PLACEHOLDER suivants ont été sélectionnés aux fins de suppression :'
+            singular: 'L’échantillon suivant a été sélectionné aux fins de suppression :'
             zero: Aucun échantillon n’a été sélectionné pour être supprimer
           loading: Chargement...
           samples: Échantillons
@@ -1624,7 +1624,7 @@ fr:
             multi_success: Les clés de métadonnées '%{deleted_keys}' ont été supprimées avec succès.
             single_success: La clé de métadonnées '%{deleted_key}' a été supprimée avec succès.
           modal:
-            description: "Champs de métadonnées sélectionnés pour suppression :"
+            description: 'Champs de métadonnées sélectionnés pour suppression :'
             key_header: Clé
             submit_button: Supprimer
             title: Supprimer les métadonnées
@@ -1664,7 +1664,7 @@ fr:
         delete_metadata_button: Supprimer les métadonnéesDelete Metadata
         edit_button: Modifier cet échantillon
         files: FichiersFiles
-        files_ignored: "Les fichiers fasta et fastq doivent être compressés. Les fichiers suivants ne peuvent pas être téléchargés :"
+        files_ignored: 'Les fichiers fasta et fastq doivent être compressés. Les fichiers suivants ne peuvent pas être téléchargés :'
         history:
           modal:
             created_by: Échantillon créé par %{user}
@@ -1716,8 +1716,8 @@ fr:
           placeholder: Filtrer par ID ou nom
       transfers:
         create:
-          error: "La liste suivante des échantillons n’a pas été transférée :"
-          no_samples_transferred_error: "Les échantillons n’ont pas été transférés pour les raisons suivantes :"
+          error: 'La liste suivante des échantillons n’a pas été transférée :'
+          no_samples_transferred_error: 'Les échantillons n’ont pas été transférés pour les raisons suivantes :'
           success: Les échantillons ont été transférés avec succès.
         dialog:
           description:
@@ -1891,8 +1891,8 @@ fr:
         empty_new_project_id: Le projet de destination n’a pas été sélectionné.
         empty_sample_ids: Les identifiants de l’échantillon sont vides.
         same_project: Les projets sources et de destination sont les mêmes. Veuillez sélectionner un autre projet de destination.
-        sample_exists: "Échantillon %{sample_puid} : Conflit avec l’échantillon nommé '%{sample_name}' dans le projet cible"
-        samples_not_found: "Les échantillons avec les identifiants d’échantillon suivants n’ont pas pu être copiés puisqu’ils n’ont pas été trouvés dans le projet source : %{sample_ids}"
+        sample_exists: 'Échantillon %{sample_puid} : Conflit avec l’échantillon nommé ''%{sample_name}'' dans le projet cible'
+        samples_not_found: 'Les échantillons avec les identifiants d’échantillon suivants n’ont pas pu être copiés puisqu’ils n’ont pas été trouvés dans le projet source : %{sample_ids}'
       metadata:
         empty_metadata: Aucune métadonnée n’a été reçue pour mettre à jour l’échantillon '%{sample_name}'
         fields:
@@ -1915,8 +1915,8 @@ fr:
         empty_sample_ids: Les identifiants de l’échantillon sont vides.
         maintainer_transfer_not_allowed: Un responsable ne peut transférer des échantillons qu’à d’autres projets dans la même hiérarchie avec un ancêtre commun
         same_project: Les échantillons existent déjà dans le projet. Veuillez sélectionner un autre projet.
-        sample_exists: "Échantillon %{sample_puid} : Conflit avec l’échantillon nommé '%{sample_name}' dans le projet cible"
-        samples_not_found: "Les échantillons avec les identifiants d’échantillon suivants n’ont pas pu être transférés puisqu’ils n’ont pas été trouvés dans le projet source : %{sample_ids}"
+        sample_exists: 'Échantillon %{sample_puid} : Conflit avec l’échantillon nommé ''%{sample_name}'' dans le projet cible'
+        samples_not_found: 'Les échantillons avec les identifiants d’échantillon suivants n’ont pas pu être transférés puisqu’ils n’ont pas été trouvés dans le projet source : %{sample_ids}'
     spreadsheet_import:
       duplicate_column_names: Le fichier comporte des noms d’en-tête de colonne en double. Veuillez supprimer les colonnes avec des noms d’en-tête en double et réessayer de les télécharger.
       invalid_file_extension: Le fichier ne peut être qu’un fichier csv, tsv ou excel.
@@ -1966,7 +1966,7 @@ fr:
               description: Si cette option est sélectionnée, les champs de métadonnées sans valeur associée seront ignorés et ces clés de métadonnées ne seront pas supprimées de l’échantillon si elles sont présentes. Cependant, si cette option n’est pas sélectionnée, tous les échantillons avec la clé de métadonnées et la valeur vide seront supprimés.
             metadata_columns: Metadata Columns
             namespace:
-              description: "La feuille de calcul doit comporter une colonne contenant un exemple d’identificateur. "
+              description: 'La feuille de calcul doit comporter une colonne contenant un exemple d’identificateur. '
               group:
                 description_html: L’identificateur est sensible à la casse et doit contenir l’<b>identifiant de l’échantillon</b>.
               project:
@@ -1979,7 +1979,7 @@ fr:
             title: Télécharger des échantillons de métadonnées
             uploading: Uploading
           errors:
-            description: "L’importation des échantillons de métadonnées s’est terminée avec les erreurs suivantes :"
+            description: 'L’importation des échantillons de métadonnées s’est terminée avec les erreurs suivantes :'
             ok_button: OK
           success:
             description: Les métadonnées ont été importées avec succès!
@@ -2017,11 +2017,11 @@ fr:
           select_static_project: Select Static Project
           spinner_message: Importing samples, this might take a while...
           static_project: Static Project
-          static_project_description: Assigns each sample to the selected project if a Project ID column was is selected, or if a Project ID column is selected but the project value is empty
+          static_project_description: Assigns each sample to the static project if either the Project ID column isn't assigned, or if the Project ID column is assigned but the project value within the spreadsheet is empty
           submit_button: Import Samples
           title: Upload Samples
         errors:
-          description: "The sample import completed with the following errors:"
+          description: 'The sample import completed with the following errors:'
           ok_button: OK
         success:
           description: The sample spreadsheet has been processed.
@@ -2039,16 +2039,16 @@ fr:
         title: Delete Workflow Executions
         workflow_executions: Workflow Executions
       list_workflow_execution:
-        id: "ID:"
-        name: "Name:"
-        run_id: "Run ID:"
-        workflow: "Workflow:"
+        id: 'ID:'
+        name: 'Name:'
+        run_id: 'Run ID:'
+        workflow: 'Workflow:'
   spreadsheet_helper:
-    failed_parsing: "Failed to parse spreadsheet file: %{error}"
+    failed_parsing: 'Failed to parse spreadsheet file: %{error}'
     no_file: No file provided
     no_headers: No headers found in file
-    unexpected_error: "An unexpected error occurred while parsing the file: %{error}"
-    unknown_file_format: "Unknown file type: %{extension}"
+    unexpected_error: 'An unexpected error occurred while parsing the file: %{error}'
+    unknown_file_format: 'Unknown file type: %{extension}'
   time:
     formats:
       abbreviated: "%a %b%e %Y %H:%M"
@@ -2098,7 +2098,7 @@ fr:
       download: Télécharger
       preview: Aperçu
     create:
-      error_message: "Les erreurs suivantes ont empêché la création de l’exécution du flux de travail :"
+      error_message: 'Les erreurs suivantes ont empêché la création de l’exécution du flux de travail :'
     edit_dialog:
       cancel_button: Annuler
       description: Vous modifiez l’exécution du flux de travail '%{workflow_execution_id}'
