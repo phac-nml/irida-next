@@ -472,6 +472,9 @@ fr:
     activity:
       dialog:
         close: Close
+        pagination:
+          next: Next
+          previous: Previous
         sample_clone:
           copied_from: COPIED FROM
           copied_to: COPIED TO
