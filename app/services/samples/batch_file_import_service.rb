@@ -11,8 +11,7 @@ module Samples
       required_headers = [@sample_name_column]
       if namespace.group_namespace?
         @project_puid_column = params[:project_puid_column]
-        required_headers.push @project_puid_column
-        @static_project = nil
+        @static_project = params[:static_project_id].nil? ? nil : Project.find(params[:static_project_id])
       else
         @static_project = namespace.project
       end
@@ -45,7 +44,7 @@ module Samples
 
         sample_name = data[@sample_name_column]
 
-        project_puid = @static_project&.puid || data[@project_puid_column]
+        project_puid = data[@project_puid_column]
         description = data[@sample_description_column]
         metadata = process_metadata_row(data)
 
@@ -55,15 +54,17 @@ module Samples
           next
         end
 
-        if @static_project
-          project = @static_project
-        else
+        if project_puid
           project = Namespaces::ProjectNamespace.find_by(puid: project_puid)&.project
           error = errors_with_project(project_puid, project)
           unless error.nil?
             response[sample_name] = error
             next
           end
+        elsif @static_project
+          project = @static_project
+        else
+          next
         end
 
         response[sample_name] = process_sample_row(sample_name, project, description, metadata)
@@ -88,7 +89,7 @@ module Samples
     end
 
     def errors_on_sample_row(sample_name, project_puid, response, index)
-      if sample_name.nil? || project_puid.nil?
+      if sample_name.nil? || (project_puid.nil? && @static_project.nil?)
         [{
           path: ['sample'],
           message: I18n.t('services.spreadsheet_import.missing_field', index:)

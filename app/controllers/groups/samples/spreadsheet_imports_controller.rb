@@ -7,6 +7,7 @@ module Groups
       include SampleSpreadsheetImportActions
 
       before_action :ensure_enabled
+      before_action :projects
 
       respond_to :turbo_stream
 
@@ -24,8 +25,18 @@ module Groups
         not_found unless Flipper.enabled?(:batch_sample_spreadsheet_import)
       end
 
+      def projects
+        @projects =
+          authorized_scope(Project, type: :relation, as: :group_projects, scope_options: { group: @group })
+        @test = []
+        @projects.each do |p|
+          @test << ["#{p.full_path} (#{p.puid})", p.id]
+        end
+      end
+
       def spreadsheet_import_params
-        params.expect(spreadsheet_import: %i[file sample_name_column project_puid_column sample_description_column])
+        params.expect(spreadsheet_import: %i[file sample_name_column project_puid_column sample_description_column
+                                             static_project_id])
       end
     end
   end

@@ -6,6 +6,7 @@ export default class extends Controller {
     "sampleNameColumn",
     "projectPUIDColumn",
     "sampleDescriptionColumn",
+    "staticProject",
     "submitButton",
   ];
 
@@ -24,13 +25,10 @@ export default class extends Controller {
   };
 
   connect() {
-    this.#disableTarget(this.sampleNameColumnTarget);
     if (this.groupValue) {
-      this.#disableTarget(this.projectPUIDColumnTarget);
       this.#selectedHeaders["projectColumn"] = null;
       this.#blankValues["projectColumn"] = this.selectProjectValue;
     }
-    this.#disableTarget(this.sampleDescriptionColumnTarget);
   }
 
   changeInputValue(event) {
@@ -82,8 +80,7 @@ export default class extends Controller {
         })[0]
         .sort();
       this.#setAutoSelections();
-      // this.#refreshInputOptionsForAllFields();
-      this.#checkFormInputsReadyForSubmit();
+      this.checkFormInputsReadyForSubmit();
     };
   }
 
@@ -135,7 +132,8 @@ export default class extends Controller {
       this.#selectedHeaders["descriptionColumn"],
     );
 
-    this.#checkFormInputsReadyForSubmit();
+    this.#enableTarget(this.staticProjectTarget);
+    this.checkFormInputsReadyForSubmit();
   }
 
   #refreshInputOptions(columnTarget, currentSelection) {
@@ -172,13 +170,16 @@ export default class extends Controller {
     this.#enableTarget(columnTarget);
   }
 
-  #checkFormInputsReadyForSubmit() {
+  checkFormInputsReadyForSubmit() {
     let projectSelected = true;
     if (this.groupValue) {
       projectSelected = this.projectPUIDColumnTarget.value;
     }
 
-    if (this.sampleNameColumnTarget.value && projectSelected) {
+    if (
+      this.sampleNameColumnTarget.value &&
+      (projectSelected || this.staticProjectTarget.value)
+    ) {
       this.submitButtonTarget.disabled = false;
     } else {
       this.submitButtonTarget.disabled = true;
