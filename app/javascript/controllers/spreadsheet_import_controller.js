@@ -131,8 +131,9 @@ export default class extends Controller {
       this.sampleDescriptionColumnTarget,
       this.#selectedHeaders["descriptionColumn"],
     );
-
-    this.#enableTarget(this.staticProjectTarget);
+    if (this.hasStaticProjectTarget) {
+      this.#enableTarget(this.staticProjectTarget);
+    }
     this.checkFormInputsReadyForSubmit();
   }
 
@@ -172,13 +173,15 @@ export default class extends Controller {
 
   checkFormInputsReadyForSubmit() {
     let projectSelected = true;
+    let staticProjectSelected = true;
     if (this.groupValue) {
       projectSelected = this.projectPUIDColumnTarget.value;
+      staticProjectSelected = this.staticProjectTarget.value;
     }
 
     if (
       this.sampleNameColumnTarget.value &&
-      (projectSelected || this.staticProjectTarget.value)
+      (projectSelected || staticProjectSelected)
     ) {
       this.submitButtonTarget.disabled = false;
     } else {
