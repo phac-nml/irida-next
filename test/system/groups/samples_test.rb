@@ -1228,12 +1228,6 @@ module Groups
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/group/valid.csv'))
-        find('#spreadsheet_import_sample_name_column', wait: 1).find(:xpath, 'option[2]').select_option
-        # sample name column is "consumed" by first selection,
-        # so select option 2 again for project puid and sample description
-        find('#spreadsheet_import_project_puid_column', wait: 1).find(:xpath, 'option[2]').select_option
-        find('#spreadsheet_import_sample_description_column', wait: 1).find(:xpath, 'option[2]').select_option
-
         click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
         ### ACTIONS END ###
       end

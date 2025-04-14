@@ -11,7 +11,8 @@ module Samples
       required_headers = [@sample_name_column]
       if namespace.group_namespace?
         @project_puid_column = params[:project_puid_column]
-        @static_project = params[:static_project_id].nil? ? nil : Project.find(params[:static_project_id])
+        required_headers.push @project_puid_column if params[:project_puid_column]
+        @static_project = params[:static_project_id].blank? ? nil : Project.find(params[:static_project_id])
       else
         @static_project = namespace.project
       end

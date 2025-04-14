@@ -284,7 +284,7 @@ module Samples
 
       m1 = { 'metadata1' => 'a', 'metadata2' => 'b' }
       m2 = { 'metadata2' => 'd' }
-
+      puts response
       assert_equal m1, response['my new sample'].metadata
       assert_equal m1, @project.samples.where(name: 'my new sample')[0].metadata
       assert_equal m2, response['my new sample 2'].metadata
