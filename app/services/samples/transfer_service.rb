@@ -95,7 +95,7 @@ module Samples
       activity = PublicActivity::Activity.new(
         key: 'namespaces_project_namespace.samples.transfer',
         owner: current_user,
-        trackable: @project_namespace,
+        trackable: @project.namespace,
         parameters:
         {
           target_project_puid: @new_project.puid,
@@ -109,7 +109,7 @@ module Samples
       activity.save
 
       activity = PublicActivity::Activity.new(
-        key: 'namespaces_project_namespace.samples.transfer',
+        key: 'namespaces_project_namespace.samples.transferred_from',
         owner: current_user,
         trackable: @new_project.namespace,
         parameters:

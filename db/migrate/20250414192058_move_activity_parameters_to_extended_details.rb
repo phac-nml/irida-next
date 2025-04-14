@@ -86,7 +86,7 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
         transferred_samples_data << if sample
                                       [sample.name, sample.puid]
                                     else
-                                      ['deleted sample', 'deleted sample']
+                                      ['deleted sample', puid]
                                     end
       end
 
@@ -147,7 +147,7 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
         deleted_samples_data << if sample
                                   [sample.name, sample.puid]
                                 else
-                                  ['deleted sample', 'deleted sample']
+                                  ['deleted sample', puid]
                                 end
       end
 
