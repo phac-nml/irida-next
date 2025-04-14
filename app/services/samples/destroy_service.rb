@@ -64,13 +64,16 @@ module Samples
       ext_details = ExtendedDetail.create!(details: { samples_deleted_count: deleted_samples_data.size,
                                                       deleted_samples_data: deleted_samples_data })
 
-      activity = @project.namespace.create_activity key: 'namespaces_project_namespace.samples.destroy_multiple',
-                                                    owner: current_user,
-                                                    parameters:
-                                                    {
-                                                      samples_deleted_count: deleted_samples_data.size,
-                                                      action: 'sample_destroy_multiple'
-                                                    }
+      activity = PublicActivity::Activity.new(
+        key: 'namespaces_project_namespace.samples.destroy_multiple',
+        owner: current_user,
+        trackable: @project.namespace,
+        parameters:
+        {
+          samples_deleted_count: deleted_samples_data.size,
+          action: 'sample_destroy_multiple'
+        }
+      )
 
       activity[:extended_details_id] = ext_details.id
       activity.save

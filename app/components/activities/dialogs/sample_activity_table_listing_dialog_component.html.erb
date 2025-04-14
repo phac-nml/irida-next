@@ -2,7 +2,7 @@
   <% dialog.with_header(title: @title) %>
   <div
     data-controller="activities--extended_details"
-    data-activities--extended_details-num-cols-value="2"
+    data-activities--extended_details-num-cols-value="<%= @column_headers.length %>"
   >
     <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
       <%= viral_pill(
@@ -38,8 +38,9 @@
           "
         >
           <tr>
-            <th class="px-3 py-3"><%= t(:"components.activity.dialog.sample_clone.copied_from") %></th>
-            <th class="px-3 py-3"><%= t(:"components.activity.dialog.sample_clone.copied_to") %></th>
+            <% @column_headers.each do |column_header| %>
+              <th class="px-3 py-3"><%= column_header %></th>
+            <% end %>
           </tr>
         </thead>
         <tbody
@@ -49,7 +50,6 @@
             dark:divide-slate-700
           "
         >
-
         </tbody>
       </table>
     </div>
@@ -90,7 +90,7 @@
               data-action="click->activities--extended_details#previousPage"
               data-activities--extended_details-target="previousBtn"
               disabled="disabled"
-            >Previous</button>
+            ><%= I18n.t(:"components.activity.dialog.pagination.previous") %></button>
           </li>
           <li><button
               class="
@@ -102,7 +102,7 @@
               type="button"
               data-activities--extended_details-target="nextBtn"
               data-action="click->activities--extended_details#nextPage"
-            >Next</button>
+            ><%= I18n.t(:"components.activity.dialog.pagination.next") %></button>
           </li>
         </ul>
       </nav>

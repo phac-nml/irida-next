@@ -96,30 +96,36 @@ module Samples
       ext_details = ExtendedDetail.create!(details: { cloned_samples_count: cloned_samples_count,
                                                       cloned_samples_data: cloned_samples_data })
 
-      activity = @project.namespace.create_activity key: 'namespaces_project_namespace.samples.clone',
-                                                    owner: current_user,
-                                                    parameters:
-                                                    {
-                                                      ext_id: ext_details.id,
-                                                      target_project_puid: @new_project.puid,
-                                                      target_project: @new_project.id,
-                                                      cloned_samples_count: cloned_samples_count,
-                                                      action: 'sample_clone'
-                                                    }
+      activity = PublicActivity::Activity.new(
+        key: 'namespaces_project_namespace.samples.clone',
+        owner: current_user,
+        trackable: @project.namespace,
+        parameters:
+        {
+          ext_id: ext_details.id,
+          target_project_puid: @new_project.puid,
+          target_project: @new_project.id,
+          cloned_samples_count: cloned_samples_count,
+          action: 'sample_clone'
+        }
+      )
 
       activity[:extended_details_id] = ext_details.id
       activity.save
 
-      activity = @new_project.namespace.create_activity key: 'namespaces_project_namespace.samples.cloned_from',
-                                                        owner: current_user,
-                                                        parameters:
-                                                        {
-                                                          ext_id: ext_details.id,
-                                                          source_project_puid: @project.puid,
-                                                          source_project: @project.id,
-                                                          cloned_samples_count: cloned_samples_count,
-                                                          action: 'sample_clone'
-                                                        }
+      activity = PublicActivity::Activity.new(
+        key: 'namespaces_project_namespace.samples.cloned_from',
+        owner: current_user,
+        trackable: @new_project.namespace,
+        parameters:
+        {
+          ext_id: ext_details.id,
+          source_project_puid: @project.puid,
+          source_project: @project.id,
+          cloned_samples_count: cloned_samples_count,
+          action: 'sample_clone'
+        }
+      )
 
       activity[:extended_details_id] = ext_details.id
       activity.save

@@ -38,6 +38,10 @@ module Activities
                        end
 
         @table_data = @extended_details.details['cloned_samples_data'].to_json
+        @column_headers = [
+          I18n.t(:'components.activity.dialog.sample_clone.copied_from'),
+          I18n.t(:'components.activity.dialog.sample_clone.copied_to')
+        ]
       end
     end
   end

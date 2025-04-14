@@ -29,7 +29,6 @@
         class="divide-y divide-gray-200 dark:divide-gray-700"
         data-activities--extended_details-target="listContainer"
       >
-
       </ul>
     </div>
 
@@ -68,7 +67,7 @@
               data-action="click->activities--extended_details#previousPage"
               data-activities--extended_details-target="previousBtn"
               disabled="disabled"
-            >Previous</button>
+            ><%= I18n.t(:"components.activity.dialog.pagination.previous") %></button>
           </li>
           <li><button
               class="
@@ -80,7 +79,7 @@
               type="button"
               data-activities--extended_details-target="nextBtn"
               data-action="click->activities--extended_details#nextPage"
-            >Next</button>
+            ><%= I18n.t(:"components.activity.dialog.pagination.next") %></button>
           </li>
         </ul>
       </nav>

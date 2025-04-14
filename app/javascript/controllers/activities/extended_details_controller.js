@@ -43,7 +43,6 @@ export default class extends Controller {
   #currentSampleIndexes = [];
   #sampleData = [];
 
-
   #sampleAttributes;
 
   connect() {
@@ -61,7 +60,7 @@ export default class extends Controller {
     this.#sampleData = this.#sampleAttributes
 
     // set initial sample indexes to include all samples
-    this.#setAllSamples();
+    this.#setAllSampleIndexes();
     this.#setPagination();
     this.#loadData();
   }
@@ -87,7 +86,7 @@ export default class extends Controller {
     }
   }
 
-  #setAllSamples() {
+  #setAllSampleIndexes() {
     this.#currentSampleIndexes = [
       ...Array(Object.keys(this.#sampleAttributes).length).keys(),
     ];
@@ -166,7 +165,7 @@ export default class extends Controller {
         td.className = "px-3 py-3";
         span.className = "bg-green-100 ml-2 dark:bg-green-900 dark:text-green-300 font-medium px-2.5 py-0.5 rounded-full text-green-800 text-xs";
 
-        // Sample Name - (Existing [copied from] or New Puid [copied to])
+        // Sample Name - (Existing PUID [copied from] or New Puid [copied to])
         td.innerText = data[i][0];
         span.innerHTML = data[i][j+1];
         td.appendChild(span);
