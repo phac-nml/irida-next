@@ -2017,7 +2017,7 @@ fr:
           select_static_project: Select Static Project
           spinner_message: Importing samples, this might take a while...
           static_project: Static Project
-          static_project_description: Assigns each sample to the static project if either the Project ID column isn't assigned, or if the Project ID column is assigned but the project value within the spreadsheet is empty
+          static_project_description: Assigns each sample to the static project if either the Project ID column isn't assigned, or if the Project ID column is assigned but the project value within the spreadsheet is either empty or invalid
           submit_button: Import Samples
           title: Import Samples
         errors:
