@@ -115,8 +115,8 @@ module Dashboard
         assert_text @project.human_name
       end
 
-      click_on I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
-      click_on I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
+      click_button I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
+      click_link I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
       assert_no_text I18n.t(:'dashboard.projects.index.sorting.updated_at_desc')
       assert_text I18n.t(:'dashboard.projects.index.sorting.namespace_name_desc')
 
@@ -282,7 +282,8 @@ module Dashboard
 
       visit namespace_project_samples_url(@group1, @project)
 
-      click_link I18n.t('projects.samples.index.new_button')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.new_sample')
 
       find('input#sample_name').fill_in with: 'Test Sample'
       click_button I18n.t('projects.samples.new.submit_button')
@@ -316,7 +317,8 @@ module Dashboard
       visit namespace_project_samples_url(@group1, @project)
 
       find("input[type='checkbox'][id='#{dom_id(@sample1, :checkbox)}']").click
-      click_link I18n.t('projects.samples.index.transfer_button')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
 
       within('div[data-controller-connected="true"] dialog') do
         assert_text I18n.t('projects.samples.transfers.dialog.description.singular')
@@ -371,7 +373,8 @@ module Dashboard
       visit namespace_project_samples_url(@group1, @project)
 
       find("input[type='checkbox'][id='#{dom_id(@sample1, :checkbox)}']").click
-      click_link I18n.t('projects.samples.index.clone_button')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.clone')
 
       within('div[data-controller-connected="true"] dialog') do
         assert_text I18n.t('projects.samples.clones.dialog.description.singular')

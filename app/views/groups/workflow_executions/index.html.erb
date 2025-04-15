@@ -8,19 +8,21 @@
   subtitle: t(".subtitle"),
 ) do |component| %>
   <%= component.with_buttons do %>
-    <%= link_to t(".create_export_button"),
-    new_data_export_path(
+    <%= button_to t(".create_export_button"),
+    new_data_export_path,
+    params: {
       export_type: "analysis",
       analysis_type: "group",
       namespace_id: @namespace.id,
-    ),
-    data: {
-      action: "turbo:morph-element->action-link#idempotentConnect",
-      turbo_stream: true,
-      controller: "action-link",
-      action_link_required_value: 1,
     },
-    class: "button button--size-default button--state-default action-link" %>
+    method: :get,
+    data: {
+      action: "turbo:morph-element->action-button#idempotentConnect ",
+      turbo_stream: true,
+      controller: "action-button",
+      action_button_required_value: 1,
+    },
+    class: "button button--size-default button--state-default action-button" %>
   <% end %>
 <% end %>
 <div class="flow-root">

@@ -955,13 +955,7 @@ en:
       title: Create subgroup
     samples:
       index:
-        create_export_button:
-          label: Create Export
-          linelist_export: Linelist Export
-          sample_export: Sample Export
         deselect_all_button: Deselect All
-        import_metadata_button: Import metadata
-        import_samples_button: Import samples
         select_all_button: Select All
         subtitle: These are the samples in %{namespace_type} %{namespace_name}
         title: Samples
@@ -1621,23 +1615,11 @@ en:
         subtitle: Update the name and description of the current sample
         title: Edit sample
       index:
-        actions:
-          button_add_aria_label: Add new sample button
-        clone_button: Copy samples
-        create_export_button:
-          label: Create Export
-          linelist_export: Linelist Export
-          sample_export: Sample Export
-        delete_samples_button: Delete Samples
         deselect_all_button: Deselect All
-        import_metadata_button: Import metadata
-        import_samples_button: Import samples
-        new_button: New sample
         no_associated_samples: There are no samples associated with this project.
         no_samples: No Samples
         select_all_button: Select All
         title: Samples
-        transfer_button: Transfer samples
         workflows:
           button_sr: Launch workflow
       metadata:
@@ -1956,6 +1938,18 @@ en:
     progress_bar:
       in_progress: Action in progress. Please do not refresh the page.
     samples:
+      actions_dropdown:
+        clone: Copy samples
+        delete_samples: Delete samples
+        export: Export
+        import: Import
+        import_metadata: Import metadata
+        import_samples: Import samples
+        label: Sample Actions
+        linelist_export: Linelist export
+        new_sample: New sample
+        sample_export: Sample export
+        transfer: Transfer samples
       metadata:
         editing_field_cell:
           dialog:

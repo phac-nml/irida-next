@@ -215,13 +215,13 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'hidden preview tab and disabled download btn when status is processing' do
     visit data_export_path(@data_export1)
 
-    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t(:'data_exports.show.download')
+    assert_selector 'button',
+                    text: I18n.t(:'data_exports.show.download')
     assert_text I18n.t(:'data_exports.show.tabs.preview')
 
     visit data_export_path(@data_export2)
 
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_selector 'button[disabled]',
                     text: I18n.t(:'data_exports.show.download')
     assert_no_text I18n.t(:'data_exports.show.tabs.preview')
   end
@@ -236,7 +236,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     visit data_export_path(@data_export2)
 
-    click_link I18n.t(:'data_exports.show.remove_button')
+    click_button I18n.t(:'data_exports.show.remove_button')
 
     within('#turbo-confirm[open]') do
       click_button I18n.t(:'components.confirmation.confirm')
@@ -251,11 +251,15 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'member with access level >= analyst can see create export button on samples pages' do
     # project samples page
     visit namespace_project_samples_url(@group1, @project1)
-    assert_selector 'button', text: I18n.t('projects.samples.index.create_export_button.label'), count: 1
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_selector 'button', text: I18n.t('shared.samples.actions_dropdown.linelist_export')
+    assert_selector 'button', text: I18n.t('shared.samples.actions_dropdown.sample_export')
 
     # group samples page
     visit group_samples_url(@group1)
-    assert_selector 'button', text: I18n.t('projects.samples.index.create_export_button.label'), count: 1
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_selector 'button', text: I18n.t('shared.samples.actions_dropdown.linelist_export')
+    assert_selector 'button', text: I18n.t('shared.samples.actions_dropdown.sample_export')
   end
 
   test 'user with access level == guest cannot see create export button on sample pages' do
@@ -263,11 +267,15 @@ class DataExportsTest < ApplicationSystemTestCase
 
     # project samples page
     visit namespace_project_samples_url(@group1, @project1)
-    assert_no_selector 'a', text: I18n.t('projects.samples.index.create_export_button')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_no_selector 'button',
+                       text: I18n.t('shared.samples.actions_dropdown.linelist_export')
+    assert_no_selector 'button',
+                       text: I18n.t('shared.samples.actions_dropdown.sample_export')
 
     # group samples page
     visit group_samples_url(@group1)
-    assert_no_selector 'a', text: I18n.t('projects.samples.index.create_export_button'), count: 1
+    assert_no_selector 'button', text: I18n.t('groups.samples.index.create_export_button.label')
   end
 
   test 'create export from project samples page' do
@@ -278,18 +286,20 @@ class DataExportsTest < ApplicationSystemTestCase
     end
     # project samples page
     visit namespace_project_samples_url(@group1, @project1)
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button.label')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_selector 'button[disabled]',
+                    text: I18n.t('shared.samples.actions_dropdown.sample_export')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{@sample1.id}']").click
     end
 
-    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.samples.index.create_export_button.label')
-    click_button I18n.t('projects.samples.index.create_export_button.label')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_no_selector 'button[disabled]',
+                       text: I18n.t('shared.samples.actions_dropdown.sample_export')
+
     assert_accessible
-    click_link I18n.t('projects.samples.index.create_export_button.sample_export'), match: :first
+    click_button I18n.t('shared.samples.actions_dropdown.sample_export')
 
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
@@ -335,18 +345,21 @@ class DataExportsTest < ApplicationSystemTestCase
     # project samples page
     visit group_samples_url(@group1)
     assert_text '1-20 of 26'
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button.label')
+
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_selector 'button[disabled]',
+                    text: I18n.t('shared.samples.actions_dropdown.linelist_export')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{@sample1.id}']").click
       find("input[type='checkbox'][value='#{@sample2.id}']").click
     end
 
-    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.samples.index.create_export_button.label')
-    click_button I18n.t('projects.samples.index.create_export_button.label')
-    click_link I18n.t('projects.samples.index.create_export_button.sample_export'), match: :first
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_no_selector 'button[disabled]',
+                       text: I18n.t('groups.samples.index.create_export_button.label')
+
+    click_button I18n.t('shared.samples.actions_dropdown.sample_export')
 
     within 'dialog[open].dialog--size-lg' do
       click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '2'
@@ -391,29 +404,41 @@ class DataExportsTest < ApplicationSystemTestCase
     sample32 = samples(:sample32)
 
     visit namespace_project_samples_url(subgroup12a, project29)
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button.label')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_selector 'button[disabled]',
+                    text: I18n.t('shared.samples.actions_dropdown.linelist_export')
+    assert_selector 'button[disabled]',
+                    text: I18n.t('shared.samples.actions_dropdown.sample_export')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{sample32.id}']").click
     end
 
-    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.samples.index.create_export_button.label')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_no_selector 'button[disabled]',
+                       text: I18n.t('shared.samples.actions_dropdown.linelist_export')
+    assert_no_selector 'button[disabled]',
+                       text: I18n.t('shared.samples.actions_dropdown.sample_export')
 
     visit namespace_project_samples_url(@group1, @project1)
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button.label')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_selector 'button[disabled]',
+                    text: I18n.t('shared.samples.actions_dropdown.linelist_export')
+    assert_selector 'button[disabled]',
+                    text: I18n.t('shared.samples.actions_dropdown.sample_export')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{@sample1.id}']").click
     end
 
-    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.samples.index.create_export_button.label')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_selector 'button',
+                    text: I18n.t('shared.samples.actions_dropdown.linelist_export')
+    assert_selector 'button',
+                    text: I18n.t('shared.samples.actions_dropdown.sample_export')
 
-    click_button I18n.t('projects.samples.index.create_export_button.label')
-    click_link I18n.t('projects.samples.index.create_export_button.sample_export'), match: :first
+    click_button I18n.t('shared.samples.actions_dropdown.sample_export')
+
     within 'dialog[open].dialog--size-lg' do
       click_button I18n.t('data_exports.new.samples_count.non_zero').gsub! 'COUNT_PLACEHOLDER', '1'
       within %(turbo-frame[id="list_selections"]) do
@@ -496,7 +521,7 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'create analysis export from show page' do
     visit workflow_execution_path(@workflow_execution1)
 
-    click_link I18n.t('workflow_executions.show.create_export_button'), match: :first
+    click_button I18n.t('workflow_executions.show.create_export_button')
 
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
@@ -536,7 +561,7 @@ class DataExportsTest < ApplicationSystemTestCase
     login_as user
     visit workflow_execution_path(@shared_workflow_execution1)
 
-    click_link I18n.t('workflow_executions.show.create_export_button', locale: user.locale), match: :first
+    click_button I18n.t('workflow_executions.show.create_export_button', locale: user.locale)
 
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
@@ -576,7 +601,7 @@ class DataExportsTest < ApplicationSystemTestCase
     login_as user
     visit workflow_execution_path(@group_shared_workflow_execution1)
 
-    click_link I18n.t('workflow_executions.show.create_export_button', locale: user.locale), match: :first
+    click_button I18n.t('workflow_executions.show.create_export_button', locale: user.locale)
 
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
@@ -616,7 +641,7 @@ class DataExportsTest < ApplicationSystemTestCase
     login_as user
     visit namespace_project_workflow_execution_path(@group5, @project22, @shared_workflow_execution1)
 
-    click_link I18n.t('workflow_executions.show.create_export_button', locale: user.locale), match: :first
+    click_button I18n.t('workflow_executions.show.create_export_button', locale: user.locale)
 
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
@@ -656,7 +681,7 @@ class DataExportsTest < ApplicationSystemTestCase
     login_as user
     visit group_workflow_execution_path(@group5, @group_shared_workflow_execution1)
 
-    click_link I18n.t('workflow_executions.show.create_export_button', locale: user.locale), match: :first
+    click_button I18n.t('workflow_executions.show.create_export_button', locale: user.locale)
 
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
@@ -696,7 +721,7 @@ class DataExportsTest < ApplicationSystemTestCase
     login_as user
     visit namespace_project_workflow_execution_path(@group5, @project22, @shared_workflow_execution2)
 
-    click_link I18n.t('workflow_executions.show.create_export_button', locale: user.locale), match: :first
+    click_button I18n.t('workflow_executions.show.create_export_button', locale: user.locale)
 
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
@@ -736,7 +761,7 @@ class DataExportsTest < ApplicationSystemTestCase
     login_as user
     visit group_workflow_execution_path(@group5, @group_shared_workflow_execution2)
 
-    click_link I18n.t('workflow_executions.show.create_export_button', locale: user.locale), match: :first
+    click_button I18n.t('workflow_executions.show.create_export_button', locale: user.locale)
 
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
@@ -847,12 +872,12 @@ class DataExportsTest < ApplicationSystemTestCase
     submitted_workflow_execution = workflow_executions(:irida_next_example_submitted)
     visit workflow_execution_path(submitted_workflow_execution)
 
-    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button.label')
+    assert_selector 'button[disabled]',
+                    text: I18n.t('workflow_executions.index.create_export_button')
 
     visit workflow_execution_path(@workflow_execution1)
-    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.samples.index.create_export_button.label')
+    assert_no_selector 'button[disabled]',
+                       text: I18n.t('workflow_executions.index.create_export_button')
   end
 
   test 'data export type analysis on summary tab' do
@@ -892,19 +917,17 @@ class DataExportsTest < ApplicationSystemTestCase
     sample3 = samples(:sample3)
 
     visit namespace_project_samples_url(@group1, project)
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button.label')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_selector 'button[disabled]',
+                    text: I18n.t('shared.samples.actions_dropdown.linelist_export')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{sample3.id}']").click
     end
 
-    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.samples.index.create_export_button.label')
-    click_button I18n.t('projects.samples.index.create_export_button.label')
-
-    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button.linelist_export')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_selector 'button[disabled]',
+                    text: I18n.t('shared.samples.actions_dropdown.linelist_export')
   end
 
   test 'groups with samples containing no metadata should have linelist export link disabled' do
@@ -912,34 +935,35 @@ class DataExportsTest < ApplicationSystemTestCase
     sample43 = samples(:sample43)
 
     visit group_samples_url(group)
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button.label')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_selector 'button[disabled]',
+                    text: I18n.t('shared.samples.actions_dropdown.linelist_export')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{sample43.id}']").click
     end
 
-    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.samples.index.create_export_button.label')
-    click_button I18n.t('projects.samples.index.create_export_button.label')
-
-    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button.linelist_export')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_no_selector 'button[disabled]',
+                       text: I18n.t('groups.samples.index.create_export_button.label')
+    assert_selector 'button',
+                    text: I18n.t('shared.samples.actions_dropdown.linelist_export')
   end
 
   test 'new linelist export dialog' do
     visit namespace_project_samples_url(@group1, @project1)
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button.label')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_selector 'button[disabled]',
+                    text: I18n.t('shared.samples.actions_dropdown.linelist_export')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{@sample30.id}']").click
     end
 
-    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.samples.index.create_export_button.label')
-    click_button I18n.t('projects.samples.index.create_export_button.label')
-    click_link I18n.t('projects.samples.index.create_export_button.linelist_export')
+    assert_no_selector 'button[disabled]',
+                       text: I18n.t('shared.samples.actions_dropdown.linelist_export')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    click_button I18n.t('shared.samples.actions_dropdown.linelist_export')
 
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
@@ -997,17 +1021,18 @@ class DataExportsTest < ApplicationSystemTestCase
 
   test 'add all and remove all buttons in new linelist export dialog' do
     visit namespace_project_samples_url(@group1, @project1)
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button.label')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_selector 'button[disabled]',
+                    text: I18n.t('shared.samples.actions_dropdown.linelist_export')
 
     within %(#samples-table) do
       find("input[type='checkbox'][value='#{@sample30.id}']").click
     end
 
-    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.samples.index.create_export_button.label')
-    click_button I18n.t('projects.samples.index.create_export_button.label')
-    click_link I18n.t('projects.samples.index.create_export_button.linelist_export')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_no_selector 'button[disabled]',
+                       text: I18n.t('shared.samples.actions_dropdown.linelist_export')
+    click_button I18n.t('shared.samples.actions_dropdown.linelist_export')
 
     within 'dialog[open].dialog--size-lg' do
       within "ul[id='#{I18n.t('data_exports.new_linelist_export_dialog.available')}']" do
@@ -1072,17 +1097,19 @@ class DataExportsTest < ApplicationSystemTestCase
 
   test 'create csv export from project samples page' do
     visit namespace_project_samples_url(@group1, @project1)
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button.label')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_selector 'button[disabled]',
+                    text: I18n.t('shared.samples.actions_dropdown.linelist_export')
 
     within('tbody') do
       find("input[type='checkbox'][value='#{@sample30.id}']").click
     end
 
-    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.samples.index.create_export_button.label')
-    click_button I18n.t('projects.samples.index.create_export_button.label')
-    click_link I18n.t('projects.samples.index.create_export_button.linelist_export')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_no_selector 'button[disabled]',
+                       text: I18n.t('shared.samples.actions_dropdown.linelist_export')
+
+    click_button I18n.t('shared.samples.actions_dropdown.linelist_export')
 
     within 'dialog[open].dialog--size-lg' do
       click_button I18n.t('viral.sortable_lists_component.add_all')
@@ -1098,17 +1125,19 @@ class DataExportsTest < ApplicationSystemTestCase
 
   test 'create xlsx export from group samples page' do
     visit group_samples_url(@group1)
-    assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.samples.index.create_export_button.label')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_selector 'button[disabled]',
+                    text: I18n.t('shared.samples.actions_dropdown.linelist_export')
 
     within('tbody') do
       find("input[type='checkbox'][value='#{@sample1.id}']").click
     end
 
-    assert_no_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.samples.index.create_export_button.label')
-    click_button I18n.t('projects.samples.index.create_export_button.label')
-    click_link I18n.t('projects.samples.index.create_export_button.linelist_export')
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    assert_no_selector 'button[disabled]',
+                       text: I18n.t('shared.samples.actions_dropdown.linelist_export')
+
+    click_button I18n.t('shared.samples.actions_dropdown.linelist_export')
 
     within 'dialog[open].dialog--size-lg' do
       click_button I18n.t('viral.sortable_lists_component.add_all')
@@ -1139,8 +1168,8 @@ class DataExportsTest < ApplicationSystemTestCase
       find("input[type='checkbox'][value='#{@sample1.id}']").click
     end
 
-    click_button I18n.t('projects.samples.index.create_export_button.label')
-    click_link I18n.t('projects.samples.index.create_export_button.sample_export'), match: :first
+    click_button I18n.t('shared.samples.actions_dropdown.label')
+    click_button I18n.t('shared.samples.actions_dropdown.sample_export'), match: :first
 
     within 'dialog[open].dialog--size-lg' do
       within("##{I18n.t('data_exports.new_sample_export_dialog.available')}") do
@@ -1199,7 +1228,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
   test 'new analysis export with multiple workflow executions from user workflow executions index page' do
     visit workflow_executions_path
-    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_selector 'button[disabled]',
                     text: I18n.t('workflow_executions.index.create_export_button')
 
     within %(#workflow-executions-table) do
@@ -1207,9 +1236,9 @@ class DataExportsTest < ApplicationSystemTestCase
       find("input[type='checkbox'][value='#{@workflow_execution2.id}']").click
     end
 
-    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_no_selector 'button[disabled]',
                        text: I18n.t('workflow_executions.index.create_export_button')
-    click_link I18n.t('workflow_executions.index.create_export_button')
+    click_button I18n.t('workflow_executions.index.create_export_button')
 
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
@@ -1255,16 +1284,16 @@ class DataExportsTest < ApplicationSystemTestCase
 
   test 'new analysis export with single workflow execution from project workflow executions index page' do
     visit namespace_project_workflow_executions_path(@group1, @project1)
-    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_selector 'button[disabled]',
                     text: I18n.t('projects.workflow_executions.index.create_export_button')
 
     within %(#workflow-executions-table) do
       find("input[type='checkbox'][value='#{@workflow_execution4.id}']").click
     end
 
-    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_no_selector 'button[disabled]',
                        text: I18n.t('projects.workflow_executions.index.create_export_button')
-    click_link I18n.t('projects.workflow_executions.index.create_export_button')
+    click_button I18n.t('projects.workflow_executions.index.create_export_button')
 
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
@@ -1307,16 +1336,16 @@ class DataExportsTest < ApplicationSystemTestCase
     user = users(:james_doe)
     login_as user
     visit workflow_executions_path
-    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_selector 'button[disabled]',
                     text: I18n.t('workflow_executions.index.create_export_button', locale: user.locale)
 
     within %(#workflow-executions-table) do
       find("input[type='checkbox'][value='#{@shared_workflow_execution1.id}']").click
     end
 
-    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_no_selector 'button[disabled]',
                        text: I18n.t('workflow_executions.index.create_export_button', locale: user.locale)
-    click_link I18n.t('workflow_executions.index.create_export_button', locale: user.locale)
+    click_button I18n.t('workflow_executions.index.create_export_button', locale: user.locale)
 
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
@@ -1362,7 +1391,7 @@ class DataExportsTest < ApplicationSystemTestCase
     user = users(:james_doe)
     login_as user
     visit namespace_project_workflow_executions_path(@group5, @project22)
-    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_selector 'button[disabled]',
                     text: I18n.t('projects.workflow_executions.index.create_export_button', locale: user.locale)
 
     within %(#workflow-executions-table) do
@@ -1370,9 +1399,9 @@ class DataExportsTest < ApplicationSystemTestCase
       find("input[type='checkbox'][value='#{@shared_workflow_execution2.id}']").click
     end
 
-    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_no_selector 'button[disabled]',
                        text: I18n.t('projects.workflow_executions.index.create_export_button', locale: user.locale)
-    click_link I18n.t('projects.workflow_executions.index.create_export_button', locale: user.locale)
+    click_button I18n.t('projects.workflow_executions.index.create_export_button', locale: user.locale)
 
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
@@ -1425,16 +1454,16 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'new analysis export with single workflow execution from group workflow executions index page' do
     login_as users(:micha_doe)
     visit group_workflow_executions_path(@group5)
-    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_selector 'button[disabled]',
                     text: I18n.t('projects.workflow_executions.index.create_export_button')
 
     within %(#workflow-executions-table) do
       find("input[type='checkbox'][value='#{@group_shared_workflow_execution1.id}']").click
     end
 
-    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_no_selector 'button[disabled]',
                        text: I18n.t('projects.workflow_executions.index.create_export_button')
-    click_link I18n.t('projects.workflow_executions.index.create_export_button')
+    click_button I18n.t('projects.workflow_executions.index.create_export_button')
 
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
@@ -1476,17 +1505,17 @@ class DataExportsTest < ApplicationSystemTestCase
   test 'create analysis export with multiple shared workflow executions from group workflow executions index page' do
     login_as users(:micha_doe)
     visit group_workflow_executions_path(@group5)
-    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                    text: I18n.t('projects.workflow_executions.index.create_export_button')
+    assert_selector 'button[disabled]',
+                    text: I18n.t('workflow_executions.index.create_export_button')
 
     within %(#workflow-executions-table) do
       find("input[type='checkbox'][value='#{@group_shared_workflow_execution1.id}']").click
       find("input[type='checkbox'][value='#{@group_shared_workflow_execution2.id}']").click
     end
 
-    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
-                       text: I18n.t('projects.workflow_executions.index.create_export_button')
-    click_link I18n.t('projects.workflow_executions.index.create_export_button')
+    assert_no_selector 'button[disabled]',
+                       text: I18n.t('workflow_executions.index.create_export_button')
+    click_button I18n.t('workflow_executions.index.create_export_button')
 
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
@@ -1532,7 +1561,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
   test 'cannot create analysis export with non-completed workflow executions from user WE index page' do
     visit workflow_executions_path
-    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_selector 'button[disabled]',
                     text: I18n.t('workflow_executions.index.create_export_button')
 
     within %(#workflow-executions-table) do
@@ -1540,9 +1569,9 @@ class DataExportsTest < ApplicationSystemTestCase
       find("input[type='checkbox'][value='#{@workflow_execution3.id}']").click
     end
 
-    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_no_selector 'button[disabled]',
                        text: I18n.t('workflow_executions.index.create_export_button')
-    click_link I18n.t('workflow_executions.index.create_export_button')
+    click_button I18n.t('workflow_executions.index.create_export_button')
 
     within 'dialog[open].dialog--size-lg' do
       assert_accessible
@@ -1587,7 +1616,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
   test 'cannot create analysis export with non-completed workflow execution from project WE index page' do
     visit namespace_project_workflow_executions_path(@group1, @project1)
-    assert_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_selector 'button[disabled]',
                     text: I18n.t('projects.workflow_executions.index.create_export_button')
 
     within %(#workflow-executions-table) do
@@ -1595,9 +1624,9 @@ class DataExportsTest < ApplicationSystemTestCase
       find("input[type='checkbox'][value='#{@workflow_execution5.id}']").click
     end
 
-    assert_no_selector 'a.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+    assert_no_selector 'button[disabled]',
                        text: I18n.t('projects.workflow_executions.index.create_export_button')
-    click_link I18n.t('projects.workflow_executions.index.create_export_button')
+    click_button I18n.t('projects.workflow_executions.index.create_export_button')
 
     within 'dialog[open].dialog--size-lg' do
       assert_accessible

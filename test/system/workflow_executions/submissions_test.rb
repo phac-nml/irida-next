@@ -308,7 +308,8 @@ module WorkflowExecutions
       visit namespace_project_samples_url(namespace_id: groups(:empty_group).path,
                                           project_id: projects(:empty_project).path)
 
-      assert_no_button I18n.t(:'projects.samples.index.workflows.button_sr')
+      assert_selector 'button[disabled]',
+                      text: I18n.t(:'projects.samples.index.workflows.button_sr')
     end
 
     test 'launch pipeline button is disabled when a group does not contain any projects with samples' do
@@ -316,7 +317,8 @@ module WorkflowExecutions
 
       visit group_samples_url(groups(:empty_group))
 
-      assert_no_button I18n.t(:'projects.samples.index.workflows.button_sr')
+      assert_selector 'button[disabled]',
+                      text: I18n.t(:'projects.samples.index.workflows.button_sr')
     end
 
     test 'default attachment selections' do

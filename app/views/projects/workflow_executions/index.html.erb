@@ -11,32 +11,37 @@
   subtitle: t(".subtitle"),
 ) do |component| %>
   <%= component.with_buttons do %>
-    <% if allowed_to?(:export_data?, @project.namespace) %>
-      <%= link_to t(".create_export_button"),
-      new_data_export_path(
-        export_type: "analysis",
-        analysis_type: "project",
-        namespace_id: @namespace.id,
-      ),
-      data: {
-        action: "turbo:morph-element->action-link#idempotentConnect",
-        turbo_stream: true,
-        controller: "action-link",
-        action_link_required_value: 1,
-      },
-      class: "button button--size-default button--state-default action-link" %>
-    <% end %>
-    <% if allowed_to?(:destroy_workflow_executions?, @project.namespace) && Flipper.enabled?(:delete_multiple_workflows) %>
-      <%= link_to t(".delete_workflows_button"),
-      destroy_multiple_confirmation_namespace_project_workflow_executions_path,
-      data: {
-        action: "turbo:morph-element->action-link#idempotentConnect",
-        turbo_stream: true,
-        controller: "action-link",
-        action_link_required_value: 1,
-      },
-      class: "button button--size-default button--state-destructive action-link" %>
-    <% end %>
+    <div class="flex items-center space-x-2">
+      <% if allowed_to?(:export_data?, @project.namespace) %>
+        <%= button_to t(".create_export_button"),
+        new_data_export_path,
+        params: {
+          export_type: "analysis",
+          analysis_type: "project",
+          namespace_id: @namespace.id,
+        },
+        method: :get,
+        data: {
+          action: "turbo:morph-element->action-button#idempotentConnect ",
+          turbo_stream: true,
+          controller: "action-button",
+          action_button_required_value: 1,
+        },
+        class: "button button--size-default button--state-default action-button" %>
+      <% end %>
+      <% if allowed_to?(:destroy_workflow_executions?, @project.namespace) && Flipper.enabled?(:delete_multiple_workflows) %>
+        <%= button_to t(".delete_workflows_button"),
+        destroy_multiple_confirmation_namespace_project_workflow_executions_path,
+        method: :get,
+        data: {
+          action: "turbo:morph-element->action-button#idempotentConnect ",
+          turbo_stream: true,
+          controller: "action-button",
+          action_button_required_value: 1,
+        },
+        class: "button button--size-default button--state-destructive action-button" %>
+      <% end %>
+    </div>
   <% end %>
 <% end %>
 <div class="flow-root">

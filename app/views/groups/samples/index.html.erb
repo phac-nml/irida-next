@@ -10,58 +10,101 @@
     <% component.with_buttons do %>
       <div class="flex items-center space-x-2">
         <% if @allowed_to[:submit_workflow] && @pipelines_enabled %>
-          <%= link_to pipeline_selection_workflow_executions_submissions_path(namespace_id: @group.id),
-        data: { turbo_stream: true, controller: "action-link", action_link_required_value: 1, action: "turbo:morph-element->action-link#idempotentConnect", },
-                  class: "button button--size-default button--state-default action-link" do %>
+          <%= button_to pipeline_selection_workflow_executions_submissions_path, params: { namespace_id: @group.id }, method: :get,
+        data: { turbo_stream: true, controller: "action-button", action_button_required_value: 1, action: "turbo:morph-element->action-button#idempotentConnect " },
+                  class: "button button--size-default button--state-default action-button" do %>
             <%= viral_icon(name: :rocket_launch, classes: "w-5 h-5 inline-block") %>
             <span class="sr-only"><%= t(".workflows.button_sr") %></span>
           <% end %>
         <% end %>
-        <% if @allowed_to[:export_data] %>
-          <%= viral_dropdown(label: t(".create_export_button.label"), aria: { label: t('.create_export_button.label') }, caret: true, action_link: true, action_link_value: 1, classes: "font-normal button button--size-default button--state-default action-link") do |dropdown| %>
-            <% if @group.metadata_fields.empty? %>
-              <% dropdown.with_item(
-                label: t(".create_export_button.linelist_export"),
-                url: new_data_export_path(export_type: "linelist", namespace_id: @group.id),
-                data: {
-                  turbo_stream: true,
-                },
-                class:
-                  "flex items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300
-                                               border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
-              ) %>
-            <% else %>
-              <% dropdown.with_item(
-                label: t(".create_export_button.linelist_export"),
-                url: new_data_export_path(export_type: "linelist", namespace_id: @group.id),
-                data: {
-                  turbo_stream: true,
-                },
-              ) %>
-            <% end %>
+        <%= viral_dropdown(label: t("shared.samples.actions_dropdown.label"), aria: { label: t('shared.samples.actions_dropdown.label') }, caret: true, classes: "font-normal button button--size-default button--state-default") do |dropdown| %>
+          <% if @allowed_to[:update_sample_metadata] && @has_samples %>
             <% dropdown.with_item(
-              label: t(".create_export_button.sample_export"),
-              url: new_data_export_path(export_type: "sample", namespace_id: @group.id),
+              label: t("shared.samples.actions_dropdown.import"),
+              section_header: true,
+            ) %>
+
+            <% dropdown.with_item(
+              label: t("shared.samples.actions_dropdown.import_metadata"),
+              url: new_group_samples_file_import_path,
+              disableable: true,
               data: {
                 turbo_stream: true,
               },
             ) %>
           <% end %>
-          <% if @allowed_to[:update_sample_metadata] && @has_samples %>
-            <%= link_to t("groups.samples.index.import_metadata_button"),
-            new_group_samples_file_import_path,
-            data: {
-              turbo_stream: true,
-            },
-            class: "button button--size-default button--state-default" %>
-          <% end %>
+
           <% if Flipper.enabled?(:batch_sample_spreadsheet_import) && allowed_to?(:import_samples_and_metadata?, @group) %>
-            <%= link_to t("groups.samples.index.import_samples_button"),
-            new_group_samples_spreadsheet_import_path,
-            data: {
-              turbo_stream: true,
-            },
-            class: "button button--size-default button--state-default" %>
+            <% dropdown.with_item(
+              label: t("shared.samples.actions_dropdown.import_samples"),
+              url: new_group_samples_spreadsheet_import_path,
+              disableable: true,
+              data: {
+                turbo_stream: true,
+              },
+            ) %>
+          <% end %>
+
+          <% if @allowed_to[:export_data] %>
+            <% dropdown.with_item(
+              label: t("shared.samples.actions_dropdown.export"),
+              section_header: true,
+            ) %>
+
+            <% if @group.metadata_fields.empty? %>
+              <% dropdown.with_item(
+                label: t("shared.samples.actions_dropdown.linelist_export"),
+                url: new_data_export_path,
+                params: {
+                  export_type: "linelist",
+                  namespace_id: @group.id,
+                },
+                disableable: true,
+                data: {
+                  action: "turbo:morph-element->action-button#idempotentConnect ",
+                  turbo_stream: true,
+                  controller: "action-button",
+                  action_button_required_value: 1,
+                },
+                class:
+                  "flex w-full items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300 border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
+              ) %>
+            <% else %>
+              <% dropdown.with_item(
+                label: t("shared.samples.actions_dropdown.linelist_export"),
+                url: new_data_export_path,
+                params: {
+                  export_type: "linelist",
+                  namespace_id: @group.id,
+                },
+                disableable: true,
+                data: {
+                  action: "turbo:morph-element->action-button#idempotentConnect ",
+                  turbo_stream: true,
+                  controller: "action-button",
+                  action_button_required_value: 1,
+                },
+                class:
+                  "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button",
+              ) %>
+            <% end %>
+            <% dropdown.with_item(
+              label: t("shared.samples.actions_dropdown.sample_export"),
+              url: new_data_export_path,
+              params: {
+                export_type: "sample",
+                namespace_id: @group.id,
+              },
+              disableable: true,
+              data: {
+                action: "turbo:morph-element->action-button#idempotentConnect ",
+                turbo_stream: true,
+                controller: "action-button",
+                action_button_required_value: 1,
+              },
+              class:
+                "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button",
+            ) %>
           <% end %>
         <% end %>
       </div>

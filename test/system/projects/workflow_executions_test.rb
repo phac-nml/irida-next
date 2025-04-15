@@ -453,7 +453,7 @@ module Projects
       assert_text workflow_execution.metadata['workflow_name']
       assert_text workflow_execution.metadata['workflow_version']
 
-      assert_link I18n.t(:'workflow_executions.show.create_export_button')
+      assert_button I18n.t(:'workflow_executions.show.create_export_button')
       assert_no_link I18n.t(:'workflow_executions.show.cancel_button')
       assert_no_link I18n.t(:'workflow_executions.show.edit_button')
       assert_no_link I18n.t(:'workflow_executions.show.remove_button')
@@ -483,7 +483,7 @@ module Projects
         find("input[type='checkbox'][value='#{@workflow_execution2.id}']").click
       end
 
-      click_link I18n.t('workflow_executions.index.delete_workflows_button')
+      click_button I18n.t('workflow_executions.index.delete_workflows_button')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -522,7 +522,7 @@ module Projects
         find("input[type='checkbox'][value='#{@workflow_execution2.id}']").click
       end
 
-      click_link I18n.t('workflow_executions.index.delete_workflows_button')
+      click_button I18n.t('workflow_executions.index.delete_workflows_button')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -560,7 +560,7 @@ module Projects
         find("input[type='checkbox'][value='#{new_workflow.id}']").click
       end
 
-      click_link I18n.t('workflow_executions.index.delete_workflows_button')
+      click_button I18n.t('workflow_executions.index.delete_workflows_button')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -588,7 +588,7 @@ module Projects
       assert_text 'Displaying 12 items'
       assert_selector '#workflow-executions-table table tbody tr', count: 12
 
-      assert_selector 'a', text: I18n.t('workflow_executions.index.delete_workflows_button')
+      assert_selector 'button', text: I18n.t('workflow_executions.index.delete_workflows_button')
     end
 
     test 'user with access level Analyst cannot view delete workflows link' do

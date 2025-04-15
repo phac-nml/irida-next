@@ -91,26 +91,28 @@
             turbo_stream: true,
           },
           class: "button button--size-default button--state-default" %>
-          <%= link_to t(".concatenate_button"),
+          <%= button_to t(".concatenate_button"),
           new_namespace_project_sample_attachments_concatenation_path(
             sample_id: @sample.id,
           ),
+          method: :get,
           data: {
             turbo_frame: "sample_modal",
             turbo_stream: false,
-            controller: "action-link",
-            action_link_required_value: 2,
+            controller: "action-button",
+            action_button_required_value: 2,
           },
-          class: "button button--size-default button--state-default action-link" %>
-          <%= link_to t(".delete_files_button"),
+          class: "button button--size-default button--state-default action-button" %>
+          <%= button_to t(".delete_files_button"),
           new_namespace_project_sample_attachments_deletion_path(sample_id: @sample.id),
+          method: :get,
           data: {
             turbo_frame: "sample_modal",
             turbo_stream: false,
-            controller: "action-link",
-            action_link_required_value: 1,
+            controller: "action-button",
+            action_button_required_value: 1,
           },
-          class: "button button--size-default button--state-destructive action-link" %>
+          class: "button button--size-default button--state-destructive action-button" %>
         </div>
       <% elsif @tab == 'metadata' %>
         <div class="flex flex-row items-center ml-auto space-x-2 font-normal">
@@ -121,15 +123,16 @@
             turbo_stream: true,
           },
           class: "button button--size-default button--state-default" %>
-          <%= link_to t(".delete_metadata_button"),
+          <%= button_to t(".delete_metadata_button"),
           new_namespace_project_sample_metadata_deletion_path(sample_id: @sample.id),
+          method: :get,
           data: {
             turbo_frame: "sample_modal",
             turbo_stream: false,
-            controller: "action-link",
-            action_link_required_value: 1,
+            controller: "action-button",
+            action_button_required_value: 1,
           },
-          class: "button button--size-default button--state-destructive action-link" %>
+          class: "button button--size-default button--state-destructive action-button" %>
         </div>
       <% end %>
     <% end %>

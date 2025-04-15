@@ -25,7 +25,7 @@ module Viral
         #   args[:data] ||= {}
         #   args[:data][:controller] = 'selection'
         #   args[:data][:'selection-total-value'] = @pagy.count
-        #   args[:data][:'selection-action-link-outlet'] = '.action-link'
+        #   args[:data][:'selection-action-button-outlet'] = '.action-button'
         # end
       end
     end
