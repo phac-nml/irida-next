@@ -1453,6 +1453,9 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                            locale: @user.locale))
+      within('table tbody') do
+        assert_selector 'tr', count: 20
+      end
       ### SETUP END ###
 
       ### ACTIONS AND VERIFY START ###
@@ -1517,6 +1520,9 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                            locale: @user.locale))
+      within('table tbody') do
+        assert_selector 'tr', count: 20
+      end
       ### SETUP END ###
 
       ### ACTIONS AND VERIFY START ###
@@ -1553,6 +1559,9 @@ module Groups
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                            locale: @user.locale))
+      within('table tbody') do
+        assert_selector 'tr', count: 20
+      end
       ### SETUP END ###
 
       ### ACTIONS START ###
