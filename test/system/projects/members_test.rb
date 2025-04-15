@@ -105,7 +105,7 @@ module Projects
         assert_selector 'h1', text: I18n.t(:'projects.members.new.title')
 
         find('input.select2-input').click
-        find("button[data-viral--select2-primary-param='#{user_to_add.email}']").click
+        find("button[data-value='#{user_to_add.id}']").click
         find('#member_access_level').find('option',
                                           text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
 
