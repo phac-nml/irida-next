@@ -404,7 +404,7 @@ module Projects
         assert_selector 'h1', text: I18n.t(:'projects.members.new.title')
 
         find('input.select2-input').click
-        assert_no_selector "button[data-viral--select2-primary-param='#{user_to_add.email}']"
+        assert_no_selector "button[data-value='#{user_to_add.id}']"
       end
     end
 
