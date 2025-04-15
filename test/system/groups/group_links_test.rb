@@ -293,12 +293,12 @@ module Groups
       assert_selector 'table tbody tr', count: 2
       assert_selector 'table thead th:first-child svg.icon-arrow_up'
       within('tbody') do
-        assert_selector 'tr:first-child td:first-child', text: @group_link14.group.name
+        assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
-                        text: Member::AccessLevel.human_access(@group_link14.group_access_level)
-        assert_selector 'tr:last-child td:first-child', text: @group_link5.group.name
-        assert_selector 'tr:last-child td:nth-child(4)',
                         text: Member::AccessLevel.human_access(@group_link5.group_access_level)
+        assert_selector 'tr:last-child td:first-child', text: @group_link14.group.name
+        assert_selector 'tr:last-child td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link14.group_access_level)
       end
 
       within('thead') do
@@ -307,12 +307,12 @@ module Groups
       wait_for_network_idle
       assert_selector 'table thead th:first-child svg.icon-arrow_down'
       within('tbody') do
-        assert_selector 'tr:first-child td:first-child', text: @group_link5.group.name
+        assert_selector 'tr:first-child td:first-child', text: @group_link14.group.name
         assert_selector 'tr:first-child td:nth-child(4)',
-                        text: Member::AccessLevel.human_access(@group_link5.group_access_level)
-        assert_selector 'tr:last-child td:first-child', text: @group_link14.group.name
-        assert_selector 'tr:last-child td:nth-child(4)',
                         text: Member::AccessLevel.human_access(@group_link14.group_access_level)
+        assert_selector 'tr:last-child td:first-child', text: @group_link5.group.name
+        assert_selector 'tr:last-child td:nth-child(4)',
+                        text: Member::AccessLevel.human_access(@group_link5.group_access_level)
       end
 
       within('thead') do
