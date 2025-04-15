@@ -309,7 +309,7 @@
 }
 
 @utility viral-icon--colorSubdued {
-  @apply text-slate-500 dark:text-slate-300;
+  @apply text-slate-500 dark:text-slate-400;
 }
 
 @utility viral-icon--colorCritical {
