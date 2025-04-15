@@ -35,7 +35,7 @@ module Samples
       end
 
       assert_equal 5, @project.samples.count
-      assert_equal 1, @project.samples.where(name: 'my new sample').count
+      assert_equal 1, @project.samples.where(name: 'my new sample 1').count
       assert_equal 1, @project.samples.where(name: 'my new sample 2').count
     end
 
@@ -79,7 +79,7 @@ module Samples
       assert_equal I18n.t('services.samples.batch_import.project_puid_not_in_namespace',
                           project_puid: @project.puid,
                           namespace: @group2.full_path),
-                   response['my new sample'][0][:message]
+                   response['my new sample 1'][0][:message]
       assert_equal I18n.t('services.samples.batch_import.project_puid_not_in_namespace',
                           project_puid: @project.puid,
                           namespace: @group2.full_path),
@@ -255,13 +255,13 @@ module Samples
       m1 = { 'metadata1' => 'a', 'metadata2' => 'b' }
       m2 = { 'metadata1' => 'c', 'metadata2' => 'd' }
 
-      assert_equal m1, response['my new sample'].metadata
-      assert_equal m1, @project.samples.where(name: 'my new sample')[0].metadata
+      assert_equal m1, response['my new sample 1'].metadata
+      assert_equal m1, @project.samples.where(name: 'my new sample 1')[0].metadata
       assert_equal m2, response['my new sample 2'].metadata
       assert_equal m2, @project.samples.where(name: 'my new sample 2')[0].metadata
 
-      assert_equal 'user', @project.samples.where(name: 'my new sample')[0].metadata_provenance['metadata1']['source']
-      assert_equal 'user', @project.samples.where(name: 'my new sample')[0].metadata_provenance['metadata2']['source']
+      assert_equal 'user', @project.samples.where(name: 'my new sample 1')[0].metadata_provenance['metadata1']['source']
+      assert_equal 'user', @project.samples.where(name: 'my new sample 1')[0].metadata_provenance['metadata2']['source']
       assert_equal 'user', @project.samples.where(name: 'my new sample 2')[0].metadata_provenance['metadata1']['source']
       assert_equal 'user', @project.samples.where(name: 'my new sample 2')[0].metadata_provenance['metadata2']['source']
     end
@@ -285,13 +285,13 @@ module Samples
       m1 = { 'metadata1' => 'a', 'metadata2' => 'b' }
       m2 = { 'metadata2' => 'd' }
 
-      assert_equal m1, response['my new sample'].metadata
-      assert_equal m1, @project.samples.where(name: 'my new sample')[0].metadata
+      assert_equal m1, response['my new sample 1'].metadata
+      assert_equal m1, @project.samples.where(name: 'my new sample 1')[0].metadata
       assert_equal m2, response['my new sample 2'].metadata
       assert_equal m2, @project.samples.where(name: 'my new sample 2')[0].metadata
 
-      assert_equal 'user', @project.samples.where(name: 'my new sample')[0].metadata_provenance['metadata1']['source']
-      assert_equal 'user', @project.samples.where(name: 'my new sample')[0].metadata_provenance['metadata2']['source']
+      assert_equal 'user', @project.samples.where(name: 'my new sample 1')[0].metadata_provenance['metadata1']['source']
+      assert_equal 'user', @project.samples.where(name: 'my new sample 1')[0].metadata_provenance['metadata2']['source']
       assert_equal 'user', @project.samples.where(name: 'my new sample 2')[0].metadata_provenance['metadata2']['source']
     end
   end
