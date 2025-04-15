@@ -14,7 +14,7 @@
         data: { turbo_stream: true, controller: "action-button", action_button_required_value: 1, action: "turbo:morph-element->action-button#idempotentConnect " },
                   class: "button button--size-default button--state-default action-button" do %>
             <%= viral_icon(name: :rocket_launch, classes: "w-5 h-5 inline-block") %>
-            <span><%= t(".workflows.button_sr") %></span>
+            <span class="ml-2"><%= t(".workflows.button_sr") %></span>
           <% end %>
         <% end %>
         <%= viral_dropdown(label: t("shared.samples.actions_dropdown.label"), aria: { label: t('shared.samples.actions_dropdown.label') }, caret: true, classes: "font-normal button button--size-default button--state-default") do |dropdown| %>
