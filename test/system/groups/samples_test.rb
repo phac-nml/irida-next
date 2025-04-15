@@ -1254,7 +1254,7 @@ module Groups
       ### VERIFY END ###
     end
 
-    test 'should import sample missing project puid' do
+    test 'should import sample including missing project puid if static project selected' do
       ### SETUP START ###
       visit group_samples_url(@group)
 
@@ -1294,12 +1294,60 @@ module Groups
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
                                                                            locale: @user.locale))
       within('table tbody') do
-        # sample 2 with blank puid added to static project
+        # sample 2 with blank spreadsheet project puid added to static project
         assert_selector 'tr:first-child td:nth-child(2)', text: 'my new sample 2'
         assert_selector 'tr:first-child td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAB'
         # sample 1 with valid spreadsheet project puid added to said project
         assert_selector 'tr:nth-child(2) td:nth-child(2)', text: 'my new sample 1'
         assert_selector 'tr:nth-child(2) td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAA'
+      end
+      ### VERIFY END ###
+    end
+
+    test 'should not import sample with missing project puid if static project is not selected' do
+      ### SETUP START ###
+      visit group_samples_url(@group)
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      within('table tbody') do
+        assert_selector 'tr', count: 20
+        assert_no_text 'my new sample 1'
+        assert_no_text 'my new sample 2'
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # start import
+      click_link I18n.t('groups.samples.index.import_samples_button')
+      within('#dialog') do
+        attach_file('spreadsheet_import[file]',
+                    Rails.root.join('test/fixtures/files/batch_sample_import/group/missing_puid.csv'))
+
+        click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
+        ### ACTIONS END ###
+      end
+
+      ### VERIFY START ###
+      assert_text I18n.t('shared.progress_bar.in_progress')
+      perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+
+      # success msg
+      assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
+
+      click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
+
+      # refresh to see new samples
+      visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 27,
+                                                                           locale: @user.locale))
+      within('table tbody') do
+        # sample 1 with valid spreadsheet project puid added to said project
+        assert_selector 'tr:first-child td:nth-child(2)', text: 'my new sample 1'
+        assert_selector 'tr:first-child td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAA'
+
+        # sample 2 with blank spreadsheet project puid is not added
+        assert_no_text 'my new sample 2'
       end
       ### VERIFY END ###
     end
