@@ -24,6 +24,18 @@
 
     </div>
 
+    <% if Flipper.enabled?(:workflow_execution_sharing) %>
+      <div class="flex items-center h-5">
+        <%= form.check_box :shared_with_namespace,
+                       { checked: @workflow_execution["shared_with_namespace"] } %>
+        <%= form.label :shared_with_namespace,
+                   t(
+                     :"workflow_executions.edit_dialog.shared_with_namespace.#{@workflow_execution.namespace.type.downcase}",
+                   ),
+                   class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
+      </div>
+    <% end %>
+
     <div class="mt-4 space-x-2">
       <%= form.submit t("workflow_executions.edit_dialog.submit_button"),
                   class:

@@ -32,7 +32,7 @@ class WorkflowExecutionsController < ApplicationController
   end
 
   def workflow_execution_update_params
-    params.expect(workflow_execution: [:name])
+    params.expect(workflow_execution: [:name, :shared_with_namespace])
   end
 
   def workflow_execution_params_attributes

@@ -2108,6 +2108,9 @@ fr:
       cancel_button: Annuler
       description: Vous modifiez l’exécution du flux de travail '%{workflow_execution_id}'
       name_placeholder: Entrez le nom d’exécution du flux de travail (facultatif)
+      shared_with_namespace:
+        group: Share results with group members?
+        project: Share results with project members?
       submit_button: Envoyer
       title: Modifier l’exécution du flux de travail
     file_selector:
