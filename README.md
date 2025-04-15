@@ -15,7 +15,7 @@
 Install requirements:
 
 ```bash
-asdf install
+POSTGRES_EXTRA_CONFIGURE_OPTIONS="--with-icu" asdf install
 ```
 
 Verify requirements:
@@ -40,19 +40,7 @@ gem install bundler
 Install dependencies:
 
 ```bash
-bundle && pnpm install
-```
-
-Note: If an error is encountered building the `pg` gem you will need to run this command. The version can be located in the .tool-versions file.
-
-```bash
-asdf shell postgres VERSION
-```
-
-After running this command to set the postgres version for the shell, you will need to re-run this command:
-
-```bash
-bundle && pnpm install
+BUNDLE_BUILD__PG="--with-pg-config=$(asdf which pg_config)" bundle && pnpm install
 ```
 
 Generate credentials:
@@ -72,7 +60,7 @@ bin/rails db:create db:migrate db:seed
 Start:
 
 ```bash
-/home/USERNAME/.asdf/installs/postgres/14.6/bin/pg_ctl -D /home/USERNAME/.asdf/installs/postgres/14.6/data -l logfile start
+/home/USERNAME/.asdf/installs/postgres/14.17/bin/pg_ctl -D /home/USERNAME/.asdf/installs/postgres/14.17/data -l logfile start
 ```
 
 Create a new role(user) and set the password

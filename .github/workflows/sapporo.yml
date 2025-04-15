@@ -13,7 +13,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:14.6
+        image: postgres:14.17
         env:
           POSTGRES_DB: irida_next_test
           POSTGRES_PASSWORD: test
