@@ -112,7 +112,8 @@ module Projects
         update_sample_metadata: allowed_to?(:update_sample_metadata?, @project.namespace),
         create_sample: allowed_to?(:create_sample?, @project),
         destroy_sample: allowed_to?(:destroy_sample?, @project),
-        update_sample: allowed_to?(:update_sample?, @project)
+        update_sample: allowed_to?(:update_sample?, @project),
+        import_samples_and_metadata: allowed_to?(:import_samples_and_metadata?, @project.namespace)
       }
     end
 

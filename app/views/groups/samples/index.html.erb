@@ -14,35 +14,39 @@
         data: { turbo_stream: true, controller: "action-button", action_button_required_value: 1, action: "turbo:morph-element->action-button#idempotentConnect " },
                   class: "button button--size-default button--state-default action-button" do %>
             <%= viral_icon(name: :rocket_launch, classes: "w-5 h-5 inline-block") %>
-            <span class="sr-only"><%= t(".workflows.button_sr") %></span>
+            <span><%= t(".workflows.button_sr") %></span>
           <% end %>
         <% end %>
         <%= viral_dropdown(label: t("shared.samples.actions_dropdown.label"), aria: { label: t('shared.samples.actions_dropdown.label') }, caret: true, classes: "font-normal button button--size-default button--state-default") do |dropdown| %>
-          <% if @allowed_to[:update_sample_metadata] && @has_samples %>
+
+          <% if @allowed_to[:update_sample_metadata] || @allowed_to[:import_samples_and_metadata] %>
+
             <% dropdown.with_item(
               label: t("shared.samples.actions_dropdown.import"),
               section_header: true,
             ) %>
 
-            <% dropdown.with_item(
-              label: t("shared.samples.actions_dropdown.import_metadata"),
-              url: new_group_samples_file_import_path,
-              disableable: true,
-              data: {
-                turbo_stream: true,
-              },
-            ) %>
-          <% end %>
+            <% if @allowed_to[:update_sample_metadata] && @has_samples %>
+              <% dropdown.with_item(
+                label: t("shared.samples.actions_dropdown.import_metadata"),
+                url: new_group_samples_file_import_path,
+                disableable: true,
+                data: {
+                  turbo_stream: true,
+                },
+              ) %>
+            <% end %>
 
-          <% if Flipper.enabled?(:batch_sample_spreadsheet_import) && allowed_to?(:import_samples_and_metadata?, @group) %>
-            <% dropdown.with_item(
-              label: t("shared.samples.actions_dropdown.import_samples"),
-              url: new_group_samples_spreadsheet_import_path,
-              disableable: true,
-              data: {
-                turbo_stream: true,
-              },
-            ) %>
+            <% if Flipper.enabled?(:batch_sample_spreadsheet_import) && @allowed_to[:import_samples_and_metadata] %>
+              <% dropdown.with_item(
+                label: t("shared.samples.actions_dropdown.import_samples"),
+                url: new_group_samples_spreadsheet_import_path,
+                disableable: true,
+                data: {
+                  turbo_stream: true,
+                },
+              ) %>
+            <% end %>
           <% end %>
 
           <% if @allowed_to[:export_data] %>

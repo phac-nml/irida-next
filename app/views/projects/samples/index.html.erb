@@ -16,12 +16,12 @@
         data: { action: "turbo:morph-element->action-button#idempotentConnect ", turbo_stream: true, controller: "action-button", action_button_required_value: 1 },
                   class: "button button--size-default button--state-default action-button" do %>
             <%= viral_icon(name: :rocket_launch, classes: "w-5 h-5 inline-block") %>
-            <span class="sr-only"><%= t(:".workflows.button_sr") %></span>
+            <span><%= t(:".workflows.button_sr") %></span>
           <% end %>
         <% end %>
 
         <%= viral_dropdown(label: t("shared.samples.actions_dropdown.label"), aria: { label: t('shared.samples.actions_dropdown.label') }, caret: true, classes: "font-normal button button--size-default button--state-default") do |dropdown| %>
-          <% if allowed_to?(:create_sample?, @project) %>
+          <% if @allowed_to[:create_sample] %>
             <% dropdown.with_item(
               label: t("shared.samples.actions_dropdown.new_sample"),
               url: new_namespace_project_sample_path,
@@ -32,7 +32,7 @@
             ) %>
           <% end %>
 
-          <% if allowed_to?(:clone_sample?, @project) %>
+          <% if @allowed_to[:clone_sample] %>
             <% dropdown.with_item(
               label: t("shared.samples.actions_dropdown.clone"),
               url: new_namespace_project_samples_clone_path,
@@ -47,7 +47,7 @@
                 "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button",
             ) %>
           <% end %>
-          <% if allowed_to?(:transfer_sample?, @project) %>
+          <% if @allowed_to[:transfer_sample] %>
             <% dropdown.with_item(
               label: t("shared.samples.actions_dropdown.transfer"),
               url: new_namespace_project_samples_transfer_path,
@@ -63,7 +63,7 @@
             ) %>
           <% end %>
 
-          <% if allowed_to?(:destroy_sample?, @project) %>
+          <% if @allowed_to[:destroy_sample] %>
             <% dropdown.with_item(
               label: t("shared.samples.actions_dropdown.delete_samples"),
               url: new_namespace_project_samples_deletion_path,
@@ -82,34 +82,36 @@
             ) %>
           <% end %>
 
-          <% if allowed_to?(:update_sample_metadata?, @project.namespace) && @has_samples %>
-            <% dropdown.with_item(
-              label: t("shared.samples.actions_dropdown.import"),
-              section_header: true,
-            ) %>
+          <% dropdown.with_item(
+            label: t("shared.samples.actions_dropdown.import"),
+            section_header: true,
+          ) %>
 
-            <% dropdown.with_item(
-              label: t("shared.samples.actions_dropdown.import_metadata"),
-              url: new_namespace_project_samples_file_import_path,
-              disableable: true,
-              data: {
-                turbo_stream: true,
-              },
-            ) %>
+          <% if @allowed_to[:update_sample_metadata] || @allowed_to[:import_samples_and_metadata] %>
+            <% if @allowed_to[:update_sample_metadata] && @has_samples %>
+              <% dropdown.with_item(
+                label: t("shared.samples.actions_dropdown.import_metadata"),
+                url: new_namespace_project_samples_file_import_path,
+                disableable: true,
+                data: {
+                  turbo_stream: true,
+                },
+              ) %>
+            <% end %>
+
+            <% if Flipper.enabled?(:batch_sample_spreadsheet_import) && @allowed_to[:import_samples_and_metadata] %>
+              <% dropdown.with_item(
+                label: t("shared.samples.actions_dropdown.import_samples"),
+                url: new_namespace_project_samples_spreadsheet_import_path,
+                disableable: true,
+                data: {
+                  turbo_stream: true,
+                },
+              ) %>
+            <% end %>
           <% end %>
 
-          <% if Flipper.enabled?(:batch_sample_spreadsheet_import) && allowed_to?(:import_samples_and_metadata?, @project.namespace) %>
-            <% dropdown.with_item(
-              label: t("shared.samples.actions_dropdown.import_samples"),
-              url: new_namespace_project_samples_spreadsheet_import_path,
-              disableable: true,
-              data: {
-                turbo_stream: true,
-              },
-            ) %>
-          <% end %>
-
-          <% if allowed_to?(:export_data?, @project) %>
+          <% if @allowed_to[:export_data] %>
             <% dropdown.with_item(
               label: t("shared.samples.actions_dropdown.export"),
               section_header: true,
