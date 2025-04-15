@@ -110,7 +110,7 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: user.locale))
 
-      assert_selector 'span[class="sr-only"]',
+      assert_selector 'span',
                       text: I18n.t('projects.samples.index.workflows.button_sr', locale: user.locale)
     end
 
@@ -122,7 +122,7 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: user.locale))
 
-      assert_no_selector 'span[class="sr-only"]', text: I18n.t('projects.samples.index.workflows.button_sr')
+      assert_no_selector 'span', text: I18n.t('projects.samples.index.workflows.button_sr')
     end
 
     test 'User with role >= Analyst sees create export button' do
