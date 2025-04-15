@@ -17,19 +17,17 @@ module HasPuid
     # override create_or_update so that we can retry when puid conflict is encountered.
     # This should only occur when >1 record are created within 0.0817795224076 milliseconds of each other.
     def create_or_update(**options, &)
-      if new_record?
-        until persisted?
-          begin
-            super
-          rescue ActiveRecord::RecordNotUnique => e
-            raise e unless e.message.match(/Key \(puid\)=\(.*\) already exists./)
+      return super unless new_record?
 
-            Rails.logger.info("PUID conflict encountered for #{self.class}, regenerating PUID and attempting to save again.")
-            generate_puid(force: true)
-          end
+      until persisted?
+        begin
+          return super
+        rescue ActiveRecord::RecordNotUnique => e
+          raise e unless e.message.match(/Key \(puid\)=\(.*\) already exists./)
+
+          Rails.logger.info("PUID conflict encountered for #{self.class}, regenerating PUID and attempting to save again.")
+          generate_puid(force: true)
         end
-      else
-        super
       end
     end
   end
