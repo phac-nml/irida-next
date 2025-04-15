@@ -483,6 +483,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector 'h1', text: new_we_name
     assert_selector 'dt', text: dt_value
     assert_selector 'dd', text: new_we_name
+    assert_selector 'dt', text: I18n.t(:"workflow_executions.summary.shared_with_namespace.#{workflow_execution.namespace.type.downcase}") # rubocop:disable Layout/LineLength
+    assert_selector 'dd', text: workflow_execution.namespace.name
 
     ### VERIFY END ###
   end

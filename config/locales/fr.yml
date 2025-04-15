@@ -2185,6 +2185,9 @@ fr:
       created_at: Créé
       name: Nom
       run_id: Exécuter l’identifiant
+      shared_with_namespace:
+        group: Shared with Group
+        project: Shared with Project
       state: État
       updated_at: Dernière mise à jour
       workflow_name: Nom du flux de travail

@@ -2189,6 +2189,9 @@ en:
       created_at: Created
       name: Name
       run_id: Run ID
+      shared_with_namespace:
+        group: Shared with Group
+        project: Shared with Project
       state: State
       updated_at: Last Updated
       workflow_name: Workflow Name
