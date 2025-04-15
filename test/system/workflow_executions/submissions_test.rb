@@ -308,7 +308,7 @@ module WorkflowExecutions
       visit namespace_project_samples_url(namespace_id: groups(:empty_group).path,
                                           project_id: projects(:empty_project).path)
 
-      assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+      assert_selector 'button[disabled]',
                       text: I18n.t(:'projects.samples.index.workflows.button_sr')
     end
 
@@ -317,7 +317,7 @@ module WorkflowExecutions
 
       visit group_samples_url(groups(:empty_group))
 
-      assert_selector 'button.pointer-events-none.cursor-not-allowed.bg-slate-100.text-slate-600',
+      assert_selector 'button[disabled]',
                       text: I18n.t(:'projects.samples.index.workflows.button_sr')
     end
 

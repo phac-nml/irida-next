@@ -10,11 +10,11 @@
 <div class="fixed-table-component">
   <%= render Viral::PageHeaderComponent.new(title: t('.title')) do |component| %>
     <% component.with_buttons do %>
-      <div class="flex space-x-2">
+      <div class="flex items-center space-x-2">
         <% if @allowed_to[:submit_workflow] && @pipelines_enabled %>
           <%= button_to pipeline_selection_workflow_executions_submissions_path, params: { namespace_id: @project.namespace.id }, method: :get,
-        data: { action: "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit", turbo_stream: true, controller: "action-link", action_link_required_value: 1 },
-                  class: "button button--size-default button--state-default action-link" do %>
+        data: { action: "turbo:morph-element->action-button#idempotentConnect ", turbo_stream: true, controller: "action-button", action_button_required_value: 1 },
+                  class: "button button--size-default button--state-default action-button" do %>
             <%= viral_icon(name: :rocket_launch, classes: "w-5 h-5 inline-block") %>
             <span class="sr-only"><%= t(:".workflows.button_sr") %></span>
           <% end %>
@@ -38,14 +38,13 @@
               url: new_namespace_project_samples_clone_path,
               disableable: true,
               data: {
-                action:
-                  "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
+                action: "turbo:morph-element->action-button#idempotentConnect ",
                 turbo_stream: true,
-                controller: "action-link",
-                action_link_required_value: 1,
+                controller: "action-button",
+                action_button_required_value: 1,
               },
               class:
-                "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-link",
+                "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button",
             ) %>
           <% end %>
           <% if allowed_to?(:transfer_sample?, @project) %>
@@ -54,14 +53,13 @@
               url: new_namespace_project_samples_transfer_path,
               disableable: true,
               data: {
-                action:
-                  "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
+                action: "turbo:morph-element->action-button#idempotentConnect ",
                 turbo_stream: true,
-                controller: "action-link",
-                action_link_required_value: 1,
+                controller: "action-button",
+                action_button_required_value: 1,
               },
               class:
-                "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-link",
+                "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button",
             ) %>
           <% end %>
 
@@ -74,14 +72,13 @@
               },
               disableable: true,
               data: {
-                action:
-                  "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
+                action: "turbo:morph-element->action-button#idempotentConnect ",
                 turbo_stream: true,
-                controller: "action-link",
-                action_link_required_value: 1,
+                controller: "action-button",
+                action_button_required_value: 1,
               },
               class:
-                "flex w-full items-center text-red-600 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white dark:text-red-300 action-link",
+                "flex w-full items-center text-red-600 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white dark:text-red-300 action-button",
             ) %>
           <% end %>
 
@@ -128,11 +125,10 @@
                 },
                 disableable: true,
                 data: {
-                  action:
-                    "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
+                  action: "turbo:morph-element->action-button#idempotentConnect ",
                   turbo_stream: true,
-                  controller: "action-link",
-                  action_link_required_value: 1,
+                  controller: "action-button",
+                  action_button_required_value: 1,
                 },
                 class:
                   "flex w-full items-center px-4 py-2 bg-slate-100 text-slate-600 dark:bg-slate-600 dark:text-slate-300 border-slate-100 dark:border-slate-600 pointer-events-none cursor-not-allowed",
@@ -147,14 +143,13 @@
                 },
                 disableable: true,
                 data: {
-                  action:
-                    "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
+                  action: "turbo:morph-element->action-button#idempotentConnect ",
                   turbo_stream: true,
-                  controller: "action-link",
-                  action_link_required_value: 1,
+                  controller: "action-button",
+                  action_button_required_value: 1,
                 },
                 class:
-                  "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-link",
+                  "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button",
               ) %>
             <% end %>
 
@@ -167,14 +162,13 @@
               },
               disableable: true,
               data: {
-                action:
-                  "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
+                action: "turbo:morph-element->action-button#idempotentConnect ",
                 turbo_stream: true,
-                controller: "action-link",
-                action_link_required_value: 1,
+                controller: "action-button",
+                action_button_required_value: 1,
               },
               class:
-                "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-link",
+                "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button",
             ) %>
           <% end %>
         <% end %>

@@ -22,26 +22,24 @@
         },
         method: :get,
         data: {
-          action:
-            "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
+          action: "turbo:morph-element->action-button#idempotentConnect ",
           turbo_stream: true,
-          controller: "action-link",
-          action_link_required_value: 1,
+          controller: "action-button",
+          action_button_required_value: 1,
         },
-        class: "button button--size-default button--state-default action-link" %>
+        class: "button button--size-default button--state-default action-button" %>
       <% end %>
       <% if allowed_to?(:destroy_workflow_executions?, @project.namespace) && Flipper.enabled?(:delete_multiple_workflows) %>
         <%= button_to t(".delete_workflows_button"),
         destroy_multiple_confirmation_namespace_project_workflow_executions_path,
         method: :get,
         data: {
-          action:
-            "turbo:morph-element->action-link#idempotentConnect click->action-link#handleSubmit",
+          action: "turbo:morph-element->action-button#idempotentConnect ",
           turbo_stream: true,
-          controller: "action-link",
-          action_link_required_value: 1,
+          controller: "action-button",
+          action_button_required_value: 1,
         },
-        class: "button button--size-default button--state-destructive action-link" %>
+        class: "button button--size-default button--state-destructive action-button" %>
       <% end %>
     </div>
   <% end %>

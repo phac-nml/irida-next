@@ -574,7 +574,7 @@ module Projects
         assert_no_text 'test_file_A.fastq'
         assert_no_text 'test_file_B.fastq'
         assert_text I18n.t('projects.samples.show.no_files')
-        assert_selector 'button.cursor-not-allowed.pointer-events-none', count: 2
+        assert_selector 'button[disabled]', count: 2
       end
     end
   end

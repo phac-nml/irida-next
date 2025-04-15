@@ -7,7 +7,7 @@ export default class extends Controller {
   #numSelected = 0;
 
   static targets = ["rowSelection", "selectPage", "selected"];
-  static outlets = ["action-link"];
+  static outlets = ["action-button"];
 
   static values = {
     storageKey: {
@@ -105,13 +105,13 @@ export default class extends Controller {
     this.rowSelectionTargets.map((row) => {
       row.checked = ids.indexOf(row.value) > -1;
     });
-    this.#updateActionLinks(ids.length);
+    this.#updateactionButtons(ids.length);
     this.#updateCounts(ids.length);
     this.#setSelectPageCheckboxValue();
   }
 
-  #updateActionLinks(count) {
-    this.actionLinkOutlets.forEach((outlet) => {
+  #updateactionButtons(count) {
+    this.actionButtonOutlets.forEach((outlet) => {
       outlet.setDisabled(count);
     });
   }

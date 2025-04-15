@@ -38,7 +38,8 @@
           turbo_stream: true,
         },
         class:
-          "button button--size-default button--state-default pointer-events-none cursor-not-allowed bg-slate-100 text-slate-600 mr-2 dark:bg-slate-600 dark:text-slate-300" %>
+          "button button--size-default button--state-default pointer-events-none cursor-not-allowed bg-slate-100 text-slate-600 mr-2 dark:bg-slate-600 dark:text-slate-300",
+        disabled: true %>
       <% end %>
       <% if @workflow_execution.cancellable? %>
         <%= link_to(

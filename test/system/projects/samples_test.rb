@@ -2633,9 +2633,9 @@ module Projects
       assert_text I18n.t('projects.samples.index.no_associated_samples')
       assert_text I18n.t('projects.samples.index.no_samples')
       click_button I18n.t('shared.samples.actions_dropdown.label')
-      assert_selector '[aria-disabled="true"]',
+      assert_selector 'button[disabled]',
                       text: I18n.t(:'shared.samples.actions_dropdown.clone')
-      assert_selector '[aria-disabled="true"]',
+      assert_selector 'button[disabled]',
                       text: I18n.t(:'shared.samples.actions_dropdown.transfer')
     end
 
@@ -3395,7 +3395,7 @@ module Projects
 
       # Assert that the Export button is disabled when no samples are selected
       click_button I18n.t('shared.samples.actions_dropdown.label')
-      assert_selector '[aria-disabled="true"]',
+      assert_selector 'button[disabled]',
                       text: I18n.t('shared.samples.actions_dropdown.linelist_export')
 
       # verify samples table has loaded to prevent flakes

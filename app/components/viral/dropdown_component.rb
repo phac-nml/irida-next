@@ -38,9 +38,9 @@ module Viral
 
       if @action_link
         data = data.merge({
-                            action: 'turbo:morph-element->action-link#idempotentConnect',
+                            action: 'turbo:morph-element->action-button#idempotentConnect',
                             turbo_stream: true,
-                            controller: 'action-link',
+                            controller: 'action-button',
                             action_link_required_value: @action_link_value
                           })
       end

@@ -492,7 +492,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_text workflow_execution.metadata['workflow_name']
     assert_text workflow_execution.metadata['workflow_version']
 
-    assert_button I18n.t(:'workflow_executions.show.create_export_button')
+    assert_selector 'button[disabled]', text: I18n.t(:'workflow_executions.show.create_export_button')
     assert_link I18n.t(:'workflow_executions.show.cancel_button')
     assert_link I18n.t(:'workflow_executions.show.edit_button')
     assert_no_link I18n.t(:'workflow_executions.show.remove_button')
@@ -514,7 +514,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       find("input[type='checkbox'][value='#{@workflow_execution2.id}']").click
     end
 
-    click_link I18n.t('workflow_executions.index.delete_workflows_button')
+    click_button I18n.t('workflow_executions.index.delete_workflows_button')
 
     assert_selector '#dialog'
     within('#dialog') do
@@ -553,7 +553,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       find("input[type='checkbox'][value='#{@workflow_execution3.id}']").click
     end
 
-    click_link I18n.t('workflow_executions.index.delete_workflows_button')
+    click_button I18n.t('workflow_executions.index.delete_workflows_button')
 
     assert_selector '#dialog'
     within('#dialog') do
@@ -591,7 +591,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       find("input[type='checkbox'][value='#{workflow_execution1.id}']").click
     end
 
-    click_link I18n.t('workflow_executions.index.delete_workflows_button')
+    click_button I18n.t('workflow_executions.index.delete_workflows_button')
 
     assert_selector '#dialog'
     within('#dialog') do

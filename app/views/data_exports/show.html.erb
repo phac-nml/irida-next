@@ -5,9 +5,10 @@
   <%= component.with_buttons do %>
     <div class="flex flex-row">
       <% if @data_export.status == 'ready' %>
-        <%= link_to(
+        <%= button_to(
           t("data_exports.show.download"),
           rails_blob_path(@data_export.file),
+          method: :get,
           class: "button button--state-primary button--size-default",
         ) %>
       <% else %>
@@ -17,10 +18,11 @@
             cursor-not-allowed bg-slate-100 text-slate-600 dark:bg-slate-600
             dark:text-slate-300 border-slate-100 dark:border-slate-600
           "
+          disabled
         ><%= t("data_exports.show.download") %>
         </button>
       <% end %>
-      <%= link_to(
+      <%= button_to(
         t("data_exports.show.remove_button"),
         data_export_path(@data_export),
         data: {
