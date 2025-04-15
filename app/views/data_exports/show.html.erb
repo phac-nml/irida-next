@@ -24,7 +24,11 @@
       <% end %>
       <%= button_to(
         t("data_exports.show.remove_button"),
-        data_export_path(@data_export),
+        data_export_path,
+        params: {
+          id: @data_export.id,
+        },
+        method: :delete,
         data: {
           turbo_method: :delete,
           turbo_confirm:
