@@ -112,6 +112,81 @@ project4_namespace_route:
   path: group-3/subgroup-1-group-3/project-4
   source: project4_namespace (Namespace)
 
+project5_namespace_route:
+  name: Group 1 / Project 5
+  path: group-1/project-5
+  source: project5_namespace (Namespace)
+
+project6_namespace_route:
+  name: Group 1 / Project 6
+  path: group-1/project-6
+  source: project6_namespace (Namespace)
+
+project7_namespace_route:
+  name: Group 1 / Project 7
+  path: group-1/project-7
+  source: project7_namespace (Namespace)
+
+project8_namespace_route:
+  name: Group 1 / Project 8
+  path: group-1/project-8
+  source: project8_namespace (Namespace)
+
+project9_namespace_route:
+  name: Group 1 / Project 9
+  path: group-1/project-9
+  source: project9_namespace (Namespace)
+
+project10_namespace_route:
+  name: Group 1 / Project 10
+  path: group-1/project-10
+  source: project10_namespace (Namespace)
+
+project11_namespace_route:
+  name: Group 1 / Project 11
+  path: group-1/project-11
+  source: project11_namespace (Namespace)
+
+project12_namespace_route:
+  name: Group 1 / Project 12
+  path: group-1/project-12
+  source: project12_namespace (Namespace)
+
+project13_namespace_route:
+  name: Group 1 / Project 13
+  path: group-1/project-13
+  source: project13_namespace (Namespace)
+
+project14_namespace_route:
+  name: Group 1 / Project 14
+  path: group-1/project-14
+  source: project14_namespace (Namespace)
+
+project15_namespace_route:
+  name: Group 1 / Project 15
+  path: group-1/project-15
+  source: project15_namespace (Namespace)
+
+project16_namespace_route:
+  name: Group 1 / Project 16
+  path: group-1/project-16
+  source: project16_namespace (Namespace)
+
+project17_namespace_route:
+  name: Group 1 / Project 17
+  path: group-1/project-17
+  source: project17_namespace (Namespace)
+
+project18_namespace_route:
+  name: Group 1 / Project 18
+  path: group-1/project-18
+  source: project18_namespace (Namespace)
+
+project19_namespace_route:
+  name: Group 1 / Project 19
+  path: group-1/project-19
+  source: project19_namespace (Namespace)
+
 group_two_route:
   name: Group 2
   path: group-2

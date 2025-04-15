@@ -1216,7 +1216,7 @@ module Groups
                                                                            locale: @user.locale))
       within('table tbody') do
         assert_selector 'tr', count: 20
-        assert_no_text 'my new sample'
+        assert_no_text 'my new sample 1'
         assert_no_text 'my new sample 2'
       end
       ### SETUP END ###
@@ -1246,8 +1246,10 @@ module Groups
                                                                            locale: @user.locale))
       within('table tbody') do
         # added 2 new samples
-        assert_text 'my new sample'
-        assert_text 'my new sample 2'
+        assert_selector 'tr:first-child td:nth-child(2)', text: 'my new sample 2'
+        assert_selector 'tr:first-child td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAA'
+        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: 'my new sample 1'
+        assert_selector 'tr:nth-child(2) td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAA'
       end
       ### VERIFY END ###
     end
@@ -1260,7 +1262,7 @@ module Groups
                                                                            locale: @user.locale))
       within('table tbody') do
         assert_selector 'tr', count: 20
-        assert_no_text 'my new sample'
+        assert_no_text 'my new sample 1'
         assert_no_text 'my new sample 2'
       end
       ### SETUP END ###
@@ -1292,9 +1294,12 @@ module Groups
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
                                                                            locale: @user.locale))
       within('table tbody') do
-        # added 2 new samples
-        assert_text 'my new sample'
-        assert_text 'my new sample 2'
+        # sample 2 with blank puid added to static project
+        assert_selector 'tr:first-child td:nth-child(2)', text: 'my new sample 2'
+        assert_selector 'tr:first-child td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAB'
+        # sample 1 with valid spreadsheet project puid added to said project
+        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: 'my new sample 1'
+        assert_selector 'tr:nth-child(2) td:nth-child(3)', text: 'INXT_PRJ_AAAAAAAAAA'
       end
       ### VERIFY END ###
     end

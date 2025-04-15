@@ -1923,8 +1923,8 @@ module Projects
       within('#samples-table table tbody') do
         # added 2 new samples
         assert_selector 'tr', count: 5
-        assert_text 'my new sample'
-        assert_text 'my new sample 2'
+        assert_selector 'tr:first-child td:nth-child(2)', text: 'my new sample 2'
+        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: 'my new sample 1'
       end
       ### VERIFY END ###
     end
@@ -1940,6 +1940,7 @@ module Projects
 
       within('#samples-table table tbody') do
         assert_selector 'tr', count: 3
+        assert_no_text 'my new sample'
       end
       ### SETUP END ###
 
@@ -1973,7 +1974,7 @@ module Projects
       within('#samples-table table tbody') do
         # added 1 new sample
         assert_selector 'tr', count: 4
-        assert_text 'my new sample'
+        assert_selector 'tr:first-child td:nth-child(2)', text: 'my new sample'
       end
       ### VERIFY END ###
     end
