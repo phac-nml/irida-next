@@ -2017,7 +2017,6 @@ en:
           file: File
           file_help: CSV, TSV, XLS or XLSX.
           metadata: Metadata
-          metadata_description: Select the metadata fields for export by moving the metadata fields from the %{available} list to the %{selected} list. The export's metadata ordering will be determined by the ordering of the %{selected} list.
           namespace:
             group:
               description_html: The spreadsheet is required to have a column for <b>Sample Name</b>, and optionally for <b>Sample Description</b> and <b>Project PUID</b>.

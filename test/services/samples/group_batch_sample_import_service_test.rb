@@ -21,7 +21,8 @@ module Samples
       @default_params = {
         sample_name_column: 'sample_name',
         project_puid_column: 'project_puid',
-        sample_description_column: 'description'
+        sample_description_column: 'description',
+        metadata_fields: %w[metadata1 metadata2]
       }
     end
 
@@ -238,7 +239,6 @@ module Samples
 
     test 'import samples with metadata' do
       assert_equal 3, @project.samples.count
-
       file = Rack::Test::UploadedFile.new(
         Rails.root.join('test/fixtures/files/batch_sample_import/group/with_metadata_valid.csv')
       )
@@ -293,6 +293,34 @@ module Samples
       assert_equal 'user', @project.samples.where(name: 'my new sample 1')[0].metadata_provenance['metadata1']['source']
       assert_equal 'user', @project.samples.where(name: 'my new sample 1')[0].metadata_provenance['metadata2']['source']
       assert_equal 'user', @project.samples.where(name: 'my new sample 2')[0].metadata_provenance['metadata2']['source']
+    end
+
+    test 'import samples with partial metadata' do
+      assert_equal 3, @project.samples.count
+      @default_params[:metadata_fields].delete('metadata2')
+      file = Rack::Test::UploadedFile.new(
+        Rails.root.join('test/fixtures/files/batch_sample_import/group/with_metadata_valid.csv')
+      )
+      blob = ActiveStorage::Blob.create_and_upload!(
+        io: file,
+        filename: file.original_filename,
+        content_type: file.content_type
+      )
+
+      response = Samples::BatchFileImportService.new(@group, @john_doe, blob.id, @default_params).execute
+
+      assert_equal 5, @project.samples.count
+
+      m1 = { 'metadata1' => 'a' }
+      m2 = { 'metadata1' => 'c' }
+
+      assert_equal m1, response['my new sample 1'].metadata
+      assert_equal m1, @project.samples.where(name: 'my new sample 1')[0].metadata
+      assert_equal m2, response['my new sample 2'].metadata
+      assert_equal m2, @project.samples.where(name: 'my new sample 2')[0].metadata
+
+      assert_equal 'user', @project.samples.where(name: 'my new sample 1')[0].metadata_provenance['metadata1']['source']
+      assert_equal 'user', @project.samples.where(name: 'my new sample 2')[0].metadata_provenance['metadata1']['source']
     end
   end
 end
