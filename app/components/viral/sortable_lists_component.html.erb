@@ -62,3 +62,21 @@
     <%= t(".remove_all") %>
   </button>
 </div>
+
+<template
+  data-viral--sortable-lists--two-lists-selection-target="listItemTemplate"
+>
+  <li
+    data-action="
+      keydown->viral--sortable-lists--two-lists-selection#navigateList
+    "
+    tabindex="0"
+    role="option"
+    aria-selected="false"
+    class="
+      block w-full px-4 py-2 border-b cursor-move border-slate-200
+      dark:border-slate-600
+    "
+  ></li>
+
+</template>

@@ -9,7 +9,7 @@
       data-controller="spreadsheet-import viral--sortable-lists--two-lists-selection"
       data-viral--sortable-lists--two-lists-selection-selected-list-value="<%= t(".selected") %>"
       data-viral--sortable-lists--two-lists-selection-available-list-value="<%= t(".available") %>"
-      data-viral--sortable-lists--two-lists-selection-field-name-value="data_export[export_parameters][metadata_fields][]"
+      data-viral--sortable-lists--two-lists-selection-field-name-value="spreadsheet_import[metadata_fields][]"
       data-spreadsheet-import-select-sample-value='<%= t(".select_sample_name_column") %>'
       data-spreadsheet-import-select-description-value='<%= t(".select_sample_description_column") %>'
       data-spreadsheet-import-select-project-value='<%= t(".select_project_puid_column") %>'
@@ -132,10 +132,6 @@
           <div class="grid gap-4 hidden" data-spreadsheet-import-target="metadata">
             <%= viral_sortable_lists(
             title: t(".metadata"),
-            description: t(".metadata_description",
-              available: t(".available").downcase,
-              selected: t(".selected").downcase
-            )
             ) do |sortable_lists| %>
               <%= sortable_lists.with_list(
                 id: t(".available"),
@@ -153,6 +149,10 @@
               ) %>
             <% end %>
           </div>
+          <div
+            class="hidden"
+            data-viral--sortable-lists--two-lists-selection-target="field"
+          ></div>
           <div>
             <%= form.submit t(".submit_button"),
                         class: "button button--size-default button--state-primary",

@@ -36,8 +36,8 @@ module Groups
       end
 
       def spreadsheet_import_params
-        params.expect(spreadsheet_import: %i[file sample_name_column project_puid_column sample_description_column
-                                             static_project_id])
+        params.expect(spreadsheet_import: [:file, :sample_name_column, :project_puid_column, :sample_description_column,
+                                           :static_project_id, { metadata_fields: [] }])
       end
     end
   end
