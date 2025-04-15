@@ -2012,9 +2012,12 @@ en:
         tooltip: Metadata display settings
       spreadsheet_imports:
         dialog:
+          available: Available
           description: Importing a sample spreadsheet allows multiple samples with or without metadata fields to be added at once.
           file: File
           file_help: CSV, TSV, XLS or XLSX.
+          metadata: Metadata
+          metadata_description: Select the metadata fields for export by moving the metadata fields from the %{available} list to the %{selected} list. The export's metadata ordering will be determined by the ordering of the %{selected} list.
           namespace:
             group:
               description_html: The spreadsheet is required to have a column for <b>Sample Name</b>, and optionally for <b>Sample Description</b> and <b>Project PUID</b>.
@@ -2030,6 +2033,7 @@ en:
           select_sample_description_column: Select a Sample Description Column
           select_sample_name_column: Select a Sample Name Column
           select_static_project: Select Static Project
+          selected: Selected
           spinner_message: Importing samples, this might take a while...
           static_project: Static Project
           static_project_description: Assigns each sample to the static project if either the Project ID column isn't assigned, or if the Project ID column is assigned but the project value within the spreadsheet is either empty or invalid

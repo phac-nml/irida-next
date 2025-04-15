@@ -8,6 +8,7 @@ export default class extends Controller {
     "sampleDescriptionColumn",
     "staticProject",
     "submitButton",
+    "metadata",
   ];
 
   static values = {
@@ -173,7 +174,21 @@ export default class extends Controller {
       this.#selectedHeaders["spreadsheet_import_sample_description_column"],
       unselectedHeaders,
     );
+
+    if (unselectedHeaders.length > 0) {
+      this.sendMetadata(unselectedHeaders);
+      this.metadataTarget.classList.remove("hidden");
+    } else {
+      this.metadataTarget.classList.add("hidden");
+    }
     this.checkFormInputsReadyForSubmit();
+  }
+
+  #processUnselectedHeaders() {
+    // filter out used options
+    return this.#allHeaders.filter(
+      (item) => !Object.values(this.#selectedHeaders).includes(item),
+    );
   }
 
   #refreshInputOptions(columnTarget, currentSelection, unselectedHeaders) {
