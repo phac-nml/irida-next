@@ -27,7 +27,7 @@
         <% authorized_namespaces.each do |namespace| %>
           <% select.with_option(
                       value: namespace.id,
-                      label: namespace.name,
+                      label: namespace.full_path,
                     ) do %>
             <span
               class="
