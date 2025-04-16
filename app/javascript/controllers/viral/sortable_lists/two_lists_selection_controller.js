@@ -324,18 +324,16 @@ export default class extends Controller {
     // check which values already exist in lists; prevents moving metadata between lists that have already been moved
     // by user
     this.availableList.querySelectorAll("li").forEach((availableMetadata) => {
-      if (newMetadata.includes(availableMetadata.id)) {
-        existingMetadata["available"].push(availableMetadata.id);
-        const index = newMetadata.indexOf(availableMetadata.id);
-        newMetadata.splice(index, 1);
+      if (newMetadata.includes(availableMetadata.innerText)) {
+        existingMetadata["available"].push(availableMetadata.innerText);
+        newMetadata.splice(newMetadata.indexOf(availableMetadata.innerText), 1);
       }
     });
 
     this.selectedList.querySelectorAll("li").forEach((selectedMetadata) => {
-      if (newMetadata.includes(selectedMetadata.id)) {
-        existingMetadata["selected"].push(selectedMetadata.id);
-        const index = newMetadata.indexOf(selectedMetadata.id);
-        newMetadata.splice(index, 1);
+      if (newMetadata.includes(selectedMetadata.innerText)) {
+        existingMetadata["selected"].push(selectedMetadata.innerText);
+        newMetadata.splice(newMetadata.indexOf(selectedMetadata.innerText), 1);
       }
     });
 
