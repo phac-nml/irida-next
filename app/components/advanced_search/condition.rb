@@ -3,7 +3,9 @@
 module AdvancedSearch
   # Component for rendering an advanced search condition
   class Condition < Component
-    def initialize(groups_form:, group_index:, condition:, condition_index:, sample_fields: [], metadata_fields: [], operations: []) # rubocop:disable Metrics/ParameterLists
+    # rubocop:disable Metrics/ParameterLists
+    def initialize(groups_form:, group_index:, condition:, condition_index:, sample_fields: [], metadata_fields: [],
+                   operations: [])
       @groups_form = groups_form
       @group_index = group_index
       @condition = condition
@@ -12,5 +14,6 @@ module AdvancedSearch
       @metadata_fields = metadata_fields
       @operations = operations
     end
+    # rubocop:enable Metrics/ParameterLists
   end
 end
