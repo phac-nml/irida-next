@@ -118,5 +118,29 @@ module Samples
         Samples::CreateService.new(@user, project31, valid_params).execute
       end
     end
+
+    test 'samples count does not update if sample is not saved due to same name' do
+      project1 = projects(:project1)
+      group1 = groups(:group_one)
+      same_name_params = { name: 'Project 1 Sample 1', description: 'sample with already existing name' }
+
+      assert_difference -> { Sample.count } => 0,
+                        -> { project1.reload.samples_count } => 0,
+                        -> { group1.reload.aggregated_samples_count } => 0 do
+        Samples::CreateService.new(@user, project1, same_name_params).execute
+      end
+    end
+
+    test 'samples count does not update if sample is not saved due too short name' do
+      project1 = projects(:project1)
+      group1 = groups(:group_one)
+      short_name_params = { name: 'a', description: 'sample with already existing name' }
+
+      assert_difference -> { Sample.count } => 0,
+                        -> { project1.reload.samples_count } => 0,
+                        -> { group1.reload.aggregated_samples_count } => 0 do
+        Samples::CreateService.new(@user, project1, short_name_params).execute
+      end
+    end
   end
 end

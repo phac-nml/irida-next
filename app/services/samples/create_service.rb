@@ -24,9 +24,9 @@ module Samples
                                                sample_puid: sample.puid,
                                                action: 'sample_create'
                                              }
-      end
 
-      update_samples_count if @project.parent.type == 'Group'
+        update_samples_count if @project.parent.type == 'Group'
+      end
 
       sample
     end
