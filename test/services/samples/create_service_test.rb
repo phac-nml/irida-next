@@ -151,7 +151,8 @@ module Samples
 
       assert_difference -> { Sample.count } => 1,
                         -> { project1.reload.samples_count } => 1,
-                        -> { group1.reload.aggregated_samples_count } => 1 do
+                        -> { group1.reload.aggregated_samples_count } => 1,
+                        -> { PublicActivity::Activity.count } => 0 do
         Samples::CreateService.new(@user, project1, valid_params).execute
       end
     end
