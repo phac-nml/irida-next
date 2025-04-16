@@ -2746,7 +2746,7 @@ module Projects
 
       within('#multiple-deletions-dialog') do
         assert_selector 'div[data-connected="true"]'
-        click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
+        click_button I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
       ### ACTIONS END ###
 
