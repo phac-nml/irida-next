@@ -157,7 +157,7 @@ module Samples
       end
     end
 
-    test 'activity increases when sample is created' do
+    test 'activity occurs when sample is created' do
       project1 = projects(:project1)
       group1 = groups(:group_one)
       valid_params = { name: 'a new sample', description: 'sample with already existing name',
