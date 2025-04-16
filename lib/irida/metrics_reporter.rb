@@ -73,12 +73,13 @@ module Irida
       end
     end
 
-    # verifies that the current runner is a main process and not a console/runner
+    # verifies that the current runner is a main process and not a console/runner/good_job instance
     def caller_can_control_reporter?
       console = caller.any? { |call| call.include?('console_command.rb') }
       runner = caller.any? { |call| call.include?('runner_command.rb') }
+      good_job_instance = caller.any? { |call| call.include?('good_job/cli.rb') }
 
-      !(console || runner)
+      !(console || runner || good_job_instance)
     end
 
     def report
