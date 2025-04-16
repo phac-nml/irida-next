@@ -2650,7 +2650,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within('#dialog') do
+      within('#multiple-deletions-dialog') do
         assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.description.singular',
                            sample_name: @sample1.name)
       end
