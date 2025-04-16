@@ -88,10 +88,7 @@
 </div>
 
 <template data-nextflow--samplesheet-target="cellContainer">
-  <div
-    style="content-visibility: auto;"
-    class="border table-td dark:border-slate-600 border-slate-100"
-  >
+  <div class="border table-td dark:border-slate-600 border-slate-100">
   </div>
 </template>
 
@@ -132,7 +129,7 @@
   },
   id: "ATTACHABLE_ID_PLACEHOLDER_PROPERTY_PLACEHOLDER",
   class:
-    "block p-2 text-sm border-2 border-transparent cursor-pointer bg-inherit text-inherit hover:border-slate-300" %>
+    "block p-2 text-sm border-2 border-transparent cursor-pointer bg-inherit text-inherit focus:-outline-offset-2" %>
 </template>
 
 <template data-nextflow--samplesheet-target="metadataCell">
@@ -145,8 +142,8 @@
   <label for="ID_PLACEHOLDER" class="sr-only">NAME_PLACEHOLDER</label>
   <input
     class="
-      bg-slate-50 border-0 text-slate-900 text-sm block w-full p-2.5 dark:bg-slate-700
-      dark:border-slate-600 dark:placeholder-slate-400 dark:text-white
+      block p-2 text-sm border-2 border-transparent bg-inherit text-inherit w-full
+      focus:-outline-offset-2
     "
     data-action="change->nextflow--samplesheet#updateEditableSamplesheetData"
     type="text"
