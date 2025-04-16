@@ -2068,8 +2068,8 @@ module Projects
 
       ### ACTIONS AND VERIFY START ###
       # start import
-      assert_selector 'a', text: I18n.t('projects.samples.index.import_samples_button')
-      click_link I18n.t('projects.samples.index.import_samples_button')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_samples')
       within('#dialog') do
         # metadata sortable lists hidden
         assert_no_selector 'div[data-spreadsheet-import-target="metadata"]'
@@ -2136,8 +2136,8 @@ module Projects
 
       ### ACTIONS AND VERIFY START ###
       # start import
-      assert_selector 'a', text: I18n.t('projects.samples.index.import_samples_button')
-      click_link I18n.t('projects.samples.index.import_samples_button')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_samples')
       within('#dialog') do
         # metadata sortable lists hidden
         assert_no_selector 'div[data-spreadsheet-import-target="metadata"]'
@@ -2176,8 +2176,8 @@ module Projects
 
       ### ACTIONS START ###
       # start import
-      assert_selector 'a', text: I18n.t('projects.samples.index.import_samples_button')
-      click_link I18n.t('projects.samples.index.import_samples_button')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_samples')
       within('#dialog') do
         assert_no_selector 'div[data-spreadsheet-import-target="metadata"]'
         attach_file('spreadsheet_import[file]',
