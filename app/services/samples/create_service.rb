@@ -17,7 +17,7 @@ module Samples
 
       if sample.save
 
-        update_samples_count if @project.parent.type == Group.sti_name
+        update_samples_count if @project.parent.group_namespace?
 
         if @include_activity
           @project.namespace.create_activity key: 'namespaces_project_namespace.samples.create',

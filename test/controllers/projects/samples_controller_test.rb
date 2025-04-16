@@ -65,7 +65,7 @@ module Projects
 
     test 'should not create a sample with short sample name parameter' do
       assert_difference -> { Sample.count } => 0,
-                        -> { @namespace.reload.aggregated_samples_count } => 0,
+                        -> { @namespace.reload.samples_count } => 0,
                         -> { @project.reload.samples_count } => 0 do
         post namespace_project_samples_url(@namespace, @project),
              params: { sample: {
@@ -78,7 +78,7 @@ module Projects
 
     test 'should not create a sample with same sample name parameter' do
       assert_difference -> { Sample.count } => 0,
-                        -> { @namespace.reload.aggregated_samples_count } => 0,
+                        -> { @namespace.reload.samples_count } => 0,
                         -> { @project.reload.samples_count } => 0 do
         post namespace_project_samples_url(@namespace, @project),
              params: { sample: {
