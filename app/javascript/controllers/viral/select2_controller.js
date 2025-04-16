@@ -350,7 +350,7 @@ export default class Select2Controller extends Controller {
         onHide: () => {
           // 🧹 Clear input if no item was selected
           if (!this.#isItemSelected) {
-            this.inputTarget.value = this.#cachedInputValue || "";
+            this.#setInputTargetValueFromCache();
           }
         },
       });
@@ -426,7 +426,7 @@ export default class Select2Controller extends Controller {
   #resetInput() {
     try {
       if (this.#dropdown) this.#dropdown.hide();
-      this.inputTarget.value = this.#cachedInputValue || "";
+      this.#setInputTargetValueFromCache();
       this.inputTarget.focus();
       this.inputTarget.select();
     } catch (error) {
@@ -481,5 +481,13 @@ export default class Select2Controller extends Controller {
    */
   #handleError(error, source) {
     console.error(`❌ Select2Controller error in ${source}:`, error);
+  }
+
+  #setInputTargetValueFromCache() {
+    // 🏷️ Find item label from cached value
+    const foundItem = this.itemTargets.find(
+      (item) => item.dataset.value === this.#cachedInputValue,
+    );
+    this.inputTarget.value = foundItem ? foundItem.dataset.label : "";
   }
 }
