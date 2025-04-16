@@ -1319,7 +1319,8 @@ module Groups
 
       ### ACTIONS START ###
       # start import
-      click_link I18n.t('groups.samples.index.import_samples_button')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_samples')
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/group/missing_puid.csv'))
