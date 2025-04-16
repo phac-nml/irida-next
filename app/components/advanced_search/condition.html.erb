@@ -6,7 +6,15 @@
     <% invalid_field = @condition.errors.include?(:field) %>
     <div class="form-field w-1/3 <%= 'invalid' if invalid_field %>">
       <%= conditions_form.select :field,
-                             @fields,
+                             options_for_select(
+                               @sample_fields,
+                               selected_key = @condition.field,
+                             ).concat(
+                               grouped_options_for_select(
+                                 @metadata_fields,
+                                 selected_key = @condition.field,
+                               ),
+                             ),
                              { include_blank: t("advanced_search_component.field") },
                              { "aria-label": t("advanced_search_component.field") } %>
       <%= render "shared/form/field_errors",
@@ -15,7 +23,10 @@
     <% invalid_operator = @condition.errors.include?(:operator) %>
     <div class="form-field w-1/6 <%= 'invalid' if invalid_operator %>">
       <%= conditions_form.select :operator,
-                             @operations,
+                             options_for_select(
+                               @operations,
+                               selected = @condition.operator,
+                             ),
                              {
                                include_blank: t("advanced_search_component.operator"),
                              },

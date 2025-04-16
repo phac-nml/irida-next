@@ -18,27 +18,25 @@ class AdvancedSearchComponentPreview < ViewComponent::Preview
         )
       ]
     )
-    fields = %w[name puid created_at updated_at attachments_updated_at metadata.age metadata.country
-                metadata.collection_date metadata.food metadata.subject_type metadata.outbreak_code]
-    operations = %w[= != <= >= contains exists not_exists in not_in]
+    sample_fields = %w[name puid created_at updated_at attachments_updated_at]
+    metadata_fields = %w[age country collection_date food subject_type outbreak_code]
 
     render_with_template(locals: {
                            search: search,
-                           fields: fields,
-                           operations: operations
+                           sample_fields: sample_fields,
+                           metadata_fields: metadata_fields
                          })
   end
 
   def empty
     search = Sample::Query.new
-    fields = %w[name puid created_at updated_at attachments_updated_at metadata.age metadata.country
-                metadata.collection_date metadata.food metadata.subject_type metadata.outbreak_code]
-    operations = %w[= != <= >= contains exists not_exists in not_in]
+    sample_fields = %w[name puid created_at updated_at attachments_updated_at]
+    metadata_fields = %w[age country collection_date food subject_type outbreak_code]
 
     render_with_template(template: 'advanced_search_component_preview/default', locals: {
                            search: search,
-                           fields: fields,
-                           operations: operations
+                           sample_fields: sample_fields,
+                           metadata_fields: metadata_fields
                          })
   end
 end

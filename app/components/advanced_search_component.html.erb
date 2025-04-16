@@ -66,7 +66,8 @@
             group: group,
             group_index: group_index,
             show_remove_group_button: @search.groups.count > 1,
-            fields: @fields,
+            sample_fields: @sample_fields,
+            metadata_fields: @metadata_fields,
             operations: @operations,
           ) %>
         <% end %>
@@ -113,9 +114,8 @@
           name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][field]"
         >
           <option value="" selected><%= t(".field") %></option>
-          <% @fields.each do |field| %>
-            <option value="<%=field%>"><%= field %></option>
-          <% end %>
+          <%= options_for_select(@sample_fields) %>
+          <%= grouped_options_for_select(@metadata_fields) %>
         </select>
       </div>
       <div class="form-field w-1/6">
@@ -125,9 +125,7 @@
           name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][operator]"
         >
           <option value="" selected><%= t(".operator") %></option>
-          <% @operations.each do |operation| %>
-            <option value="<%=operation%>"><%= operation %></option>
-          <% end %>
+          <%= options_for_select(@operations) %>
         </select>
       </div>
       <div class="form-field w-6/12 value invisible">

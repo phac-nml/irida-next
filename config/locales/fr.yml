@@ -368,6 +368,17 @@ fr:
     confirm_close_text: Êtes-vous sûr de vouloir éliminer vos modifications de filtre et fermer la boîte de dialogue de recherche avancée?
     description: Cette recherche avancée utilise des champs, des opérateurs et des valeurs pour filtrer les échantillons. Ajoutez des groupes avec des conditions pour définir les critères de recherche.
     field: Champ
+    operation:
+      contains: contains
+      equals: "="
+      exists: exists
+      greater_than: ">="
+      in: in
+      less_than: "<="
+      metadata_fields: Metadata fields
+      not_equals: "!="
+      not_exists: not exists
+      not_in: not in
     operator: Opérateur
     remove_condition_aria_label: Supprimer la condition
     remove_group_button: Supprimer le groupe

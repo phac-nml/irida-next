@@ -64,25 +64,27 @@ class MetadataConcernTest < ActionDispatch::IntegrationTest
   end
 
   test 'advanced_search_fields returns combined sample and metadata fields for group' do
-    expected_base_fields = %w[name puid created_at updated_at attachments_updated_at]
-    metadata_fields = @group.metadata_fields.map { |field| "metadata.#{field}" }
-    expected_fields = expected_base_fields.concat(metadata_fields)
+    expected_sample_fields = %w[name puid created_at updated_at attachments_updated_at]
+    expected_metadata_fields = @group.metadata_fields
 
     @controller.advanced_search_fields(@group)
-    actual_fields = @controller.instance_variable_get(:@advanced_search_fields)
+    actual_sample_fields = @controller.instance_variable_get(:@sample_fields)
+    actual_metadata_fields = @controller.instance_variable_get(:@metadata_fields)
 
-    assert_equal expected_fields.sort, actual_fields.sort
+    assert_equal expected_sample_fields.sort, actual_sample_fields.sort
+    assert_equal expected_metadata_fields.sort, actual_metadata_fields.sort
   end
 
   test 'advanced_search_fields returns combined sample and metadata fields for project' do
-    expected_base_fields = %w[name puid created_at updated_at attachments_updated_at]
-    metadata_fields = @project.namespace.metadata_fields.map { |field| "metadata.#{field}" }
-    expected_fields = expected_base_fields.concat(metadata_fields)
+    expected_sample_fields = %w[name puid created_at updated_at attachments_updated_at]
+    expected_metadata_fields = @project.namespace.metadata_fields
 
     @controller.advanced_search_fields(@project.namespace)
-    actual_fields = @controller.instance_variable_get(:@advanced_search_fields)
+    actual_sample_fields = @controller.instance_variable_get(:@sample_fields)
+    actual_metadata_fields = @controller.instance_variable_get(:@metadata_fields)
 
-    assert_equal expected_fields.sort, actual_fields.sort
+    assert_equal expected_sample_fields.sort, actual_sample_fields.sort
+    assert_equal expected_metadata_fields.sort, actual_metadata_fields.sort
   end
 
   test 'metadata_templates_for_namespace returns formatted template options for group' do
