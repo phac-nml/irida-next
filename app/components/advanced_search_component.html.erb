@@ -114,10 +114,8 @@
           name="q[groups_attributes][GROUP_INDEX_PLACEHOLDER][conditions_attributes][CONDITION_INDEX_PLACEHOLDER][field]"
         >
           <option value="" selected><%= t(".field") %></option>
-          <% @metadata_fields.each do |fields_key, fields_value| %>
-            <%= options_for_select(@sample_fields) %>
-            <%= grouped_options_for_select(@metadata_fields) %>
-          <% end %>
+          <%= options_for_select(@sample_fields) %>
+          <%= grouped_options_for_select(@metadata_fields) %>
         </select>
       </div>
       <div class="form-field w-1/6">
