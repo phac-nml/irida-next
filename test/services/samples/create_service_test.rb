@@ -156,5 +156,19 @@ module Samples
         Samples::CreateService.new(@user, project1, valid_params).execute
       end
     end
+
+    test 'activity increases when sample is created' do
+      project1 = projects(:project1)
+      group1 = groups(:group_one)
+      valid_params = { name: 'a new sample', description: 'sample with already existing name',
+                       include_activity: true }
+
+      assert_difference -> { Sample.count } => 1,
+                        -> { project1.reload.samples_count } => 1,
+                        -> { group1.reload.aggregated_samples_count } => 1,
+                        -> { PublicActivity::Activity.count } => 1 do
+        Samples::CreateService.new(@user, project1, valid_params).execute
+      end
+    end
   end
 end
