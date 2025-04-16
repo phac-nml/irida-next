@@ -8,11 +8,17 @@ require 'opentelemetry-exporter-otlp-metrics'
 
 require 'irida/metrics_reporter'
 
-if Flipper.enabled?(:telemetry) && ENV['OTEL_EXPORTER_OTLP_METRICS_ENDPOINT']
-  # Metrics endpoint is set by ENV['OTEL_EXPORTER_OTLP_METRICS_ENDPOINT']
+if ENV['OTEL_EXPORTER_OTLP_METRICS_ENDPOINT']
+  # We define our own otlp metric exporter
   ENV['OTEL_METRICS_EXPORTER'] = 'none'
 
   OpenTelemetry::SDK.configure
+
+  # ENV['OTEL_EXPORTER_OTLP_TRACES_ENDPOINT'] = 'https://app-otel-gsp-cacentral-dev.azurewebsites.net:443/v1/traces'
+  # # ENV['OTEL_EXPORTER_OTLP_TRACES_ENDPOINT'] = 'http://localhost:4318/v1/traces'
+  # OpenTelemetry::SDK.configure do |c|
+  #   c.use 'OpenTelemetry::Instrumentation::ActiveJob'
+  # end
 
   otlp_metric_exporter = OpenTelemetry::Exporter::OTLP::Metrics::MetricsExporter.new
   OpenTelemetry.meter_provider.add_metric_reader(otlp_metric_exporter)

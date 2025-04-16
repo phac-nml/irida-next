@@ -4,7 +4,7 @@ Turbo::Streams::BroadcastJob.queue_name = 'transactional_messages'
 Turbo::Streams::ActionBroadcastJob.queue_name = 'transactional_messages'
 Turbo::Streams::BroadcastStreamJob.queue_name = 'transactional_messages'
 
-if Flipper.enabled?(:telemetry) && ENV['OTEL_EXPORTER_OTLP_METRICS_ENDPOINT']
+if ENV['OTEL_EXPORTER_OTLP_METRICS_ENDPOINT']
   # Job metrics reporting monkey patch
   Rails.application.config.after_initialize do
     ts_job_classes = [
