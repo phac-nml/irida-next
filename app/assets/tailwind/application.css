@@ -39,6 +39,9 @@
   td[contenteditable="true"]:focus-visible {
     outline-offset: -2px;
   }
+  button.file-selector:focus-visible {
+    outline-offset: -2px;
+  }
 }
 
 @utility collapsed {
@@ -82,7 +85,7 @@
 }
 
 @utility card {
-  @apply rounded-md border border-slate-200 bg-slate-50 p-4 shadow-xs sm:p-6 dark:border-slate-700 dark:bg-slate-800;
+  @apply shadow-xs rounded-md border border-slate-200 bg-slate-50 p-4 sm:p-6 dark:border-slate-700 dark:bg-slate-800;
 }
 
 @utility form-field {
@@ -837,11 +840,11 @@
   }
 
   dialog::backdrop {
-    @apply bg-slate-200/40 backdrop-blur-xs;
+    @apply backdrop-blur-xs bg-slate-200/40;
   }
 
   .dark dialog::backdrop {
-    @apply bg-slate-600/40 backdrop-blur-xs;
+    @apply backdrop-blur-xs bg-slate-600/40;
   }
 
   .dialog--section {
@@ -855,7 +858,7 @@
 }
 
 .pagy-nav.pagination {
-  @apply isolate inline-flex -space-x-px rounded-md shadow-xs;
+  @apply shadow-xs isolate inline-flex -space-x-px rounded-md;
 }
 
 .page.next a {
@@ -904,7 +907,7 @@ div.field_with_errors > :is(select) {
 }
 
 input[type="checkbox"] {
-  @apply text-primary-600 checked:border-primary-500 dark:checked:border-primary-500 dark:checked:bg-primary-500 mt-0.5 mr-2 shrink-0 rounded-sm border-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800;
+  @apply text-primary-600 checked:border-primary-500 dark:checked:border-primary-500 dark:checked:bg-primary-500 mr-2 mt-0.5 shrink-0 rounded-sm border-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800;
 }
 
 input[type="radio"] {
