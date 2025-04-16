@@ -2710,7 +2710,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within('#dialog #list_selections') do
+      within('#multiple-deletions-dialog #list_selections') do
         samples.each do |sample|
           assert_text sample[0]
           assert_text sample[1]
