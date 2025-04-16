@@ -105,7 +105,7 @@ module Projects
         assert_selector 'h1', text: I18n.t(:'projects.members.new.title')
 
         find('input.select2-input').click
-        find("button[data-value='#{user_to_add.id}']").click
+        find("li[data-value='#{user_to_add.id}']").click
         find('#member_access_level').find('option',
                                           text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
 
@@ -238,7 +238,7 @@ module Projects
         assert_selector 'h1', text: I18n.t(:'projects.members.new.title')
 
         find('input.select2-input').click
-        find("button[data-value='#{user_to_add.id}']").click
+        find("li[data-value='#{user_to_add.id}']").click
         find('#member_access_level').find('option',
                                           text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
 
@@ -370,7 +370,7 @@ module Projects
         assert_selector 'h1', text: I18n.t(:'projects.members.new.title')
 
         find('input.select2-input').click
-        find("button[data-value='#{user_to_add.id}']").click
+        find("li[data-value='#{user_to_add.id}']").click
         find('#member_access_level')
           .find('option',
                 text: I18n.t('activerecord.models.member.access_level.uploader')).select_option
@@ -404,7 +404,7 @@ module Projects
         assert_selector 'h1', text: I18n.t(:'projects.members.new.title')
 
         find('input.select2-input').click
-        assert_no_selector "button[data-value='#{user_to_add.id}']"
+        assert_no_selector "li[data-value='#{user_to_add.id}']"
       end
     end
 

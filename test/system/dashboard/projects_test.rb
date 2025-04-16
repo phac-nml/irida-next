@@ -326,7 +326,7 @@ module Dashboard
           assert_text @sample1.name
         end
         find('input.select2-input').click
-        find("button[data-value='#{@project2.id}']").click
+        find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
         perform_enqueued_jobs only: [::Samples::TransferJob]
@@ -382,7 +382,7 @@ module Dashboard
           assert_text @sample1.name
         end
         find('input.select2-input').click
-        find("button[data-value='#{@project2.id}']").click
+        find("li[data-value='#{@project2.id}']").click
 
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
