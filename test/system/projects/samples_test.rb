@@ -2068,6 +2068,7 @@ module Projects
 
       ### ACTIONS AND VERIFY START ###
       # start import
+      assert_selector 'a', text: I18n.t('projects.samples.index.import_samples_button')
       click_link I18n.t('projects.samples.index.import_samples_button')
       within('#dialog') do
         # metadata sortable lists hidden
@@ -2135,6 +2136,7 @@ module Projects
 
       ### ACTIONS AND VERIFY START ###
       # start import
+      assert_selector 'a', text: I18n.t('projects.samples.index.import_samples_button')
       click_link I18n.t('projects.samples.index.import_samples_button')
       within('#dialog') do
         # metadata sortable lists hidden
@@ -2174,6 +2176,7 @@ module Projects
 
       ### ACTIONS START ###
       # start import
+      assert_selector 'a', text: I18n.t('projects.samples.index.import_samples_button')
       click_link I18n.t('projects.samples.index.import_samples_button')
       within('#dialog') do
         assert_no_selector 'div[data-spreadsheet-import-target="metadata"]'

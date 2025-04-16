@@ -1460,6 +1460,7 @@ module Groups
 
       ### ACTIONS AND VERIFY START ###
       # start import
+      assert_selector 'a', text: I18n.t('groups.samples.index.import_samples_button')
       click_link I18n.t('groups.samples.index.import_samples_button')
       within('#dialog') do
         # metadata sortable lists hidden
@@ -1527,6 +1528,7 @@ module Groups
 
       ### ACTIONS AND VERIFY START ###
       # start import
+      assert_selector 'a', text: I18n.t('groups.samples.index.import_samples_button')
       click_link I18n.t('groups.samples.index.import_samples_button')
       within('#dialog') do
         # metadata sortable lists hidden
@@ -1566,6 +1568,7 @@ module Groups
 
       ### ACTIONS START ###
       # start import
+      assert_selector 'a', text: I18n.t('groups.samples.index.import_samples_button')
       click_link I18n.t('groups.samples.index.import_samples_button')
       within('#dialog') do
         assert_no_selector 'div[data-spreadsheet-import-target="metadata"]'
