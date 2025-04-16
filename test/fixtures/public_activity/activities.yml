@@ -56,7 +56,6 @@ project1_namespace_sample_clone:
       cloned_samples_count: 1,
       action: "sample_clone",
     }
-  extended_details_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace_sample_clone_extended_details, :uuid) %>
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -86,7 +85,6 @@ project2_namespace_sample_cloned_from_project1:
       cloned_samples_count: 1,
       action: "sample_clone",
     }
-  extended_details_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace_sample_clone_extended_details, :uuid) %>
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -102,7 +100,6 @@ project1_namespace_sample_transfer:
       transferred_samples_count: 1,
       action: "sample_transfer",
     }
-  extended_details_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace_sample_transfer_extended_details, :uuid) %>
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -118,7 +115,6 @@ project2_namespace_sample_transferred_from_project1:
       transferred_samples_count: 1,
       action: "sample_transfer",
     }
-  extended_details_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace_sample_transfer_extended_details, :uuid) %>
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 

@@ -9,9 +9,13 @@ class AddExtendedDetailsToActivities < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    change_table :activities do |t|
-      t.uuid :extended_details_id
+    create_table :activity_extended_details, id: :uuid do |t|
+      t.uuid :activity_id
+      t.uuid :extended_detail_id
+
+      t.timestamps
     end
-    # add_index :activities, :extended_details_id, unique: true
+
+    add_index :activity_extended_details, %i[activity_id extended_detail_id], unique: true
   end
 end

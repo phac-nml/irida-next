@@ -2,5 +2,6 @@
 
 # entity class for activity extended details
 class ExtendedDetail < ApplicationRecord
-  #  belongs_to :activity, class_name: 'PublicActivity::Activity'
+  has_many :activity_extended_details, dependent: nil
+  has_many :activities, through: :activity_extended_details
 end

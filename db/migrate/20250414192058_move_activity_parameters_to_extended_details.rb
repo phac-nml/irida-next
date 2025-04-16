@@ -55,18 +55,18 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
       if Namespace.with_deleted.find_by(id: activity_trackable.id)
         activity.parameters.delete(:cloned_samples_ids)
         activity.parameters.delete(:cloned_samples_puids)
-        activity[:extended_details_id] = ext_details.id
         activity.parameters[:cloned_samples_count] = cloned_samples_data.size
         activity.save!
+        activity.create_activity_extended_detail(extended_detail_id: ext_details.id)
       end
 
       next unless !activity_cloned_from.nil? && Namespace.with_deleted.find_by(id: activity_cloned_from.trackable_id)
 
       activity_cloned_from.parameters.delete(:cloned_samples_ids)
       activity_cloned_from.parameters.delete(:cloned_samples_puids)
-      activity_cloned_from[:extended_details_id] = ext_details.id
       activity_cloned_from.parameters[:cloned_samples_count] = cloned_samples_data.size
       activity_cloned_from.save!
+      activity_cloned_from.create_activity_extended_detail(extended_detail_id: ext_details.id)
     end
   end
 
@@ -113,10 +113,10 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
       if Namespace.with_deleted.find_by(id: activity_trackable.id)
         activity.parameters.delete(:transferred_samples_ids)
         activity.parameters.delete(:transferred_samples_puids)
-        activity[:extended_details_id] = ext_details.id
         activity.parameters[:transferred_samples_count] =
           transferred_samples_data.size
         activity.save!
+        activity.create_activity_extended_detail(extended_detail_id: ext_details.id)
       end
 
       unless !activity_transferred_from.nil? &&
@@ -126,9 +126,9 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
 
       activity_transferred_from.parameters.delete(:transferred_samples_ids)
       activity_transferred_from.parameters.delete(:transferred_samples_puids)
-      activity_transferred_from[:extended_details_id] = ext_details.id
       activity_transferred_from.parameters[:transferred_samples_count] = transferred_samples_data.size
       activity_transferred_from.save!
+      activity_transferred_from.create_activity_extended_detail(extended_detail_id: ext_details.id)
     end
   end
 
@@ -159,10 +159,10 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
       activity.parameters.delete(:samples_deleted_puids)
       activity.parameters.delete(:deleted_count)
 
-      activity[:extended_details_id] = ext_details.id
       activity.parameters[:samples_deleted_count] = deleted_samples_data.size
 
       activity.save!
+      activity.create_activity_extended_detail(extended_detail_id: ext_details.id)
     end
   end
 end

@@ -11,7 +11,7 @@ class ActivitiesController < ApplicationController
 
     dialog_component = dialog_component_type
     if dialog_component
-      render dialog_component.new(activity: @activity, extended_details: @extended_details,
+      render dialog_component.new(activity: @activity,
                                   activity_owner: @activity_owner)
     else
       handle_not_found
@@ -27,7 +27,6 @@ class ActivitiesController < ApplicationController
 
   def activity
     @activity ||= PublicActivity::Activity.find_by(id: params[:id])
-    @extended_details = ExtendedDetail.find_by(id: @activity.extended_details_id)
   end
 
   def activity_owner

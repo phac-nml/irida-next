@@ -92,37 +92,29 @@ module Samples
       ext_details = ExtendedDetail.create!(details: { transferred_samples_count: transferred_samples_ids_count,
                                                       transferred_samples_data: transferred_samples_data })
 
-      activity = PublicActivity::Activity.new(
-        key: 'namespaces_project_namespace.samples.transfer',
-        owner: current_user,
-        trackable: @project.namespace,
-        parameters:
-        {
-          target_project_puid: @new_project.puid,
-          target_project: @new_project.id,
-          transferred_samples_count: transferred_samples_ids_count,
-          action: 'sample_transfer'
-        }
-      )
+      activity = @project.namespace.create_activity key: 'namespaces_project_namespace.samples.transfer',
+                                                    owner: current_user,
+                                                    parameters:
+                                                    {
+                                                      target_project_puid: @new_project.puid,
+                                                      target_project: @new_project.id,
+                                                      transferred_samples_count: transferred_samples_ids_count,
+                                                      action: 'sample_transfer'
+                                                    }
 
-      activity[:extended_details_id] = ext_details.id
-      activity.save
+      activity.create_activity_extended_detail(extended_detail_id: ext_details.id)
 
-      activity = PublicActivity::Activity.new(
-        key: 'namespaces_project_namespace.samples.transferred_from',
-        owner: current_user,
-        trackable: @new_project.namespace,
-        parameters:
-        {
-          source_project_puid: @project.puid,
-          source_project: @project.id,
-          transferred_samples_count: transferred_samples_ids_count,
-          action: 'sample_transfer'
-        }
-      )
+      activity = @new_project.namespace.create_activity key: 'namespaces_project_namespace.samples.transferred_from',
+                                                        owner: current_user,
+                                                        parameters:
+                                                        {
+                                                          source_project_puid: @project.puid,
+                                                          source_project: @project.id,
+                                                          transferred_samples_count: transferred_samples_ids_count,
+                                                          action: 'sample_transfer'
+                                                        }
 
-      activity[:extended_details_id] = ext_details.id
-      activity.save
+      activity.create_activity_extended_detail(extended_detail_id: ext_details.id)
     end
 
     def update_samples_count(transferred_samples_count)
