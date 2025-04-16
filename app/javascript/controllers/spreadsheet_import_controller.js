@@ -297,4 +297,10 @@ export default class extends Controller {
       this.#createInputOption("", this.#blankValues[columnTarget.id]),
     );
   }
+  sendMetadata(unselectedHeaders) {
+    this.dispatch("sendMetadata", {
+      detail: {
+        content: { metadata: unselectedHeaders },
+      },
+    });
 }
