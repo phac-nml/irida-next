@@ -441,6 +441,13 @@ GEM
       opentelemetry-metrics-sdk (~> 0.5)
       opentelemetry-sdk (~> 1.2)
       opentelemetry-semantic_conventions
+    opentelemetry-instrumentation-active_job (0.8.0)
+      opentelemetry-api (~> 1.0)
+      opentelemetry-instrumentation-base (~> 0.23.0)
+    opentelemetry-instrumentation-base (0.23.0)
+      opentelemetry-api (~> 1.0)
+      opentelemetry-common (~> 0.21)
+      opentelemetry-registry (~> 0.1)
     opentelemetry-metrics-api (0.3.0)
       opentelemetry-api (~> 1.0)
     opentelemetry-metrics-sdk (0.6.0)
@@ -738,6 +745,7 @@ DEPENDENCIES
   opentelemetry-common
   opentelemetry-exporter-otlp
   opentelemetry-exporter-otlp-metrics
+  opentelemetry-instrumentation-active_job
   opentelemetry-metrics-api
   opentelemetry-metrics-sdk
   opentelemetry-sdk

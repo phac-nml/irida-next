@@ -8,18 +8,26 @@ require 'opentelemetry-exporter-otlp-metrics'
 
 require 'irida/metrics_reporter'
 
+# Do not continue if OTEL EXPORTER endpoints are not set
+return unless ENV['OTEL_EXPORTER_OTLP_METRICS_ENDPOINT'] || ENV['OTEL_EXPORTER_OTLP_TRACES_ENDPOINT']
+
+# Before SDK Configure, disable default metric exporter if we defined the endpoint
 if ENV['OTEL_EXPORTER_OTLP_METRICS_ENDPOINT']
-  # We define our own otlp metric exporter
+  # We will define our own otlp metric exporter
   ENV['OTEL_METRICS_EXPORTER'] = 'none'
+end
 
+# Configure the SDK depending on which endpoints are active
+if ENV['OTEL_EXPORTER_OTLP_TRACES_ENDPOINT']
+  OpenTelemetry::SDK.configure do |c|
+    c.use 'OpenTelemetry::Instrumentation::ActiveJob'
+  end
+else
   OpenTelemetry::SDK.configure
+end
 
-  # ENV['OTEL_EXPORTER_OTLP_TRACES_ENDPOINT'] = 'https://app-otel-gsp-cacentral-dev.azurewebsites.net:443/v1/traces'
-  # # ENV['OTEL_EXPORTER_OTLP_TRACES_ENDPOINT'] = 'http://localhost:4318/v1/traces'
-  # OpenTelemetry::SDK.configure do |c|
-  #   c.use 'OpenTelemetry::Instrumentation::ActiveJob'
-  # end
-
+# Configure our custom metrics reporter
+if ENV['OTEL_EXPORTER_OTLP_METRICS_ENDPOINT']
   otlp_metric_exporter = OpenTelemetry::Exporter::OTLP::Metrics::MetricsExporter.new
   OpenTelemetry.meter_provider.add_metric_reader(otlp_metric_exporter)
 
