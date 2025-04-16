@@ -2743,7 +2743,9 @@ module Projects
       end
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
-      within('#dialog') do
+
+      within('#multiple-deletions-dialog') do
+        assert_selector 'div[data-connected="true"]'
         click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
       ### ACTIONS END ###

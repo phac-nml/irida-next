@@ -31,6 +31,9 @@ export default class extends Controller {
         this.nonZeroHeaderValue,
       );
     }
+
+    // Add data-connected attribute
+    this.element.setAttribute("data-connected", true);
   }
 
   scroll() {
