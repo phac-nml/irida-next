@@ -379,7 +379,6 @@ en:
       not_equals: "!="
       not_exists: not exists
       not_in: not in
-      sample_fields: Sample fields
     operator: Operator
     remove_condition_aria_label: Remove condition
     remove_group_button: Remove group

@@ -21,9 +21,13 @@ class AdvancedSearchComponentTest < ApplicationSystemTestCase
           assert_selector "div[data-advanced-search-target='conditionsContainer']", count: 1
         end
 
-        # verify the field list option group elements are localized
+        # verify the field list & option group elements are localized
         within first("select[name$='[field]']") do
-          assert_selector "optgroup[label='#{I18n.t('advanced_search_component.operation.sample_fields')}']", count: 1
+          assert_text I18n.t('samples.table_component.name')
+          assert_text I18n.t('samples.table_component.puid')
+          assert_text I18n.t('samples.table_component.created_at')
+          assert_text I18n.t('samples.table_component.updated_at')
+          assert_text I18n.t('samples.table_component.attachments_updated_at')
           assert_selector "optgroup[label='#{I18n.t('advanced_search_component.operation.metadata_fields')}']", count: 1
         end
 

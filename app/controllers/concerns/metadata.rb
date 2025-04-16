@@ -30,10 +30,8 @@ module Metadata
 
   # Builds list of fields available for advanced search
   def advanced_search_fields(namespace)
-    sample_fields = %w[name puid created_at updated_at attachments_updated_at]
-    metadata_fields = namespace.metadata_fields
-    metadata_fields.map! { |field| "metadata.#{field}" }
-    @advanced_search_fields = sample_fields.concat(metadata_fields)
+    @sample_fields = %w[name puid created_at updated_at attachments_updated_at]
+    @metadata_fields = namespace.metadata_fields
   end
 
   # Sets default metadata template if none selected

@@ -2,10 +2,11 @@
 
 # View component for advanced search component
 class AdvancedSearchComponent < Component
-  def initialize(form:, search:, fields: [], open: false, status: true)
+  def initialize(form:, search:, sample_fields: [], metadata_fields: [], open: false, status: true) # rubocop: disable Metrics/ParameterLists
     @form = form
     @search = search
-    @fields = field_options(fields)
+    @sample_fields = sample_field_options(sample_fields)
+    @metadata_fields = metadata_field_options(metadata_fields)
     @operations = operation_options
     @open = open
     @status = status
@@ -13,17 +14,17 @@ class AdvancedSearchComponent < Component
 
   private
 
-  def field_options(fields)
-    prefix = 'metadata.'
-    metadata_fields, sample_fields = fields.partition { |field| field.start_with?(prefix) }
-    sample_field_options = sample_fields.map do |sample_field|
+  def sample_field_options(sample_fields)
+    sample_fields.map do |sample_field|
       [I18n.t("samples.table_component.#{sample_field}"), sample_field]
     end
+  end
+
+  def metadata_field_options(metadata_fields)
     metadata_field_options = metadata_fields.map do |metadata_field|
-      [metadata_field.delete_prefix(prefix), metadata_field]
+      [metadata_field, "metadata.#{metadata_field}"]
     end
     {
-      I18n.t('advanced_search_component.operation.sample_fields') => sample_field_options,
       I18n.t('advanced_search_component.operation.metadata_fields') => metadata_field_options
     }
   end
