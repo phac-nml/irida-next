@@ -3,7 +3,10 @@
     type="text"
     id="<%= id %>"
     name="<%= id %>"
-    data-action="viral--select2#input"
+    data-action="
+      focus->viral--select2#showDropdown
+      input->viral--select2#input
+    "
     data-viral--select2-target="input"
     placeholder="<%= placeholder %>"
     <%= "required" if required %>
