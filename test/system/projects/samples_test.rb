@@ -455,7 +455,7 @@ module Projects
         end
         # select destination project
         find('input.select2-input').click
-        find("button[data-value='#{@project2.id}']").click
+        find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
@@ -510,7 +510,7 @@ module Projects
         end
         # select destination project
         find('input.select2-input').click
-        find("button[data-value='#{@project2.id}']").click
+        find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
 
         ### ACTIONS END ###
@@ -551,7 +551,7 @@ module Projects
       within('#dialog') do
         assert_text I18n.t('projects.samples.transfers.dialog.title')
         find('input.select2-input').click
-        find("button[data-value='#{@project2.id}']").click
+        find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
@@ -607,7 +607,7 @@ module Projects
           end
         end
         find('input.select2-input').click
-        find("button[data-value='#{project25.id}']").click
+        find("li[data-value='#{project25.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
@@ -711,7 +711,7 @@ module Projects
           assert_text @sample1.puid
         end
         find('input.select2-input').click
-        find("button[data-value='#{@project2.id}']").click
+        find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
@@ -2141,7 +2141,7 @@ module Projects
           assert_text @sample2.puid
         end
         find('input.select2-input').click
-        find("button[data-value='#{@project2.id}']").click
+        find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
@@ -2200,7 +2200,7 @@ module Projects
           assert_text @sample2.puid
         end
         find('input.select2-input').click
-        find("button[data-value='#{@project2.id}']").click
+        find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
 
         ### ACTIONS END ###
@@ -2241,7 +2241,7 @@ module Projects
       within('#dialog') do
         assert_text I18n.t('projects.samples.clones.dialog.title')
         find('input.select2-input').click
-        find("button[data-value='#{@project2.id}']").click
+        find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
@@ -2300,7 +2300,7 @@ module Projects
           end
         end
         find('input.select2-input').click
-        find("button[data-value='#{project25.id}']").click
+        find("li[data-value='#{project25.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
@@ -2427,7 +2427,7 @@ module Projects
           assert_text @sample1.puid
         end
         find('input.select2-input').click
-        find("button[data-value='#{@project2.id}']").click
+        find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
@@ -2745,7 +2745,8 @@ module Projects
       click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
 
       within('#multiple-deletions-dialog') do
-        assert_selector 'div[data-connected="true"]'
+        assert_selector 'form[data-connected="true"]'
+        sleep 1
         click_button I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
       ### ACTIONS END ###
