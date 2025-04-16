@@ -23,19 +23,19 @@
       <%= viral_select2(form:, name: :new_namespace_id, id: form_id, placeholder: t(:"projects.edit.advanced.transfer.select_namespace")) do |select| %>
         <% @authorized_namespaces.each do |namespace| %>
           <% select.with_option(
-                      value: project.id,
-                      label: project.name,
+                      value: namespace.id,
+                      label: namespace.name,
                     ) do %>
             <span
               class="
                 text-slate-900 dark:text-slate-400 font-semibold block pointer-events-none
               "
             >
-              <%= project.name %>
-              <%= render PuidComponent.new(puid: project.puid, show_clipboard: false) %>
+              <%= namespace.name %>
+              <%= render PuidComponent.new(puid: namespace.puid, show_clipboard: false) %>
             </span>
             <span class="text-slate-500 dark:text-white block pointer-events-none">
-              <%= project.full_path %>
+              <%= namespace.full_path %>
             </span>
           <% end %>
         <% end %>

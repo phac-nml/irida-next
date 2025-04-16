@@ -16,7 +16,7 @@ module Projects
     test 'should transfer project' do
       visit namespace_project_edit_path(@project.namespace.parent, @project)
       find('input.select2-input').click
-      find("button[data-label='#{@namespace.full_path}']").click
+      find("button[data-value='#{@namespace.id}']").click
       assert_selector 'input.select2-input', count: 1
       click_on I18n.t(:'projects.edit.advanced.transfer.submit')
 
