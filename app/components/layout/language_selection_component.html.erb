@@ -1,0 +1,10 @@
+<% locale_options =
+  I18n.available_locales.map { |locale| [I18n.t(:"locales.#{locale}"), locale] } %>
+<%= form_with(model: Current.user, url: profile_preferences_path, method: :patch) do |form| %>
+  <%= form.select(
+    :locale,
+    locale_options,
+    { selected: Current.user.locale.to_sym },
+    { onchange: "this.form.submit();" },
+  ) %>
+<% end %>

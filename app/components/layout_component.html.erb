@@ -21,7 +21,9 @@
   <%= sidebar %>
   <div class="relative content" data-layout-target="content">
     <nav
-      class="flex px-4 max-xl:fixed xl:absolute top-0 left-0 right-0 z-20"
+      class="
+        flex justify-between px-4 max-xl:fixed xl:absolute top-0 left-0 right-0 z-20
+      "
       style="height: 50px"
     >
       <div
@@ -42,6 +44,7 @@
       <turbo-frame id="breadcrumb">
         <%= breadcrumb %>
       </turbo-frame>
+      <%= language_selection %>
     </nav>
     <main
       id="main-content"

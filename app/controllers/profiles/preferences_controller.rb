@@ -21,7 +21,7 @@ module Profiles
         if updated
           I18n.with_locale(current_user.locale) do
             flash[:success] = t('.success')
-            format.html { redirect_to profile_preferences_path }
+            format.html { redirect_back_or_to profile_preferences_path }
           end
         else
           format.html { render :show, status: :unprocessable_entity, locals: { user: @user } }
