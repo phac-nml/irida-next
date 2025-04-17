@@ -16,6 +16,14 @@ export default class extends Controller {
     selectProject: String,
   };
 
+  #defaultSampleColumnHeaders = [
+    "sample_name",
+    "sample name",
+    "sample",
+    "sample_id",
+    "sample id",
+  ];
+
   #allHeaders;
   #selectedHeaders = { sampleColumn: null, descriptionColumn: null };
   #blankValues = {
@@ -101,10 +109,11 @@ export default class extends Controller {
   }
 
   #setAutoSelections() {
-    if (this.#allHeaders.includes("sample_name")) {
-      this.#updateInputValue(this.sampleNameColumnTarget, "sample_name");
-    } else if (this.#allHeaders.includes("sample")) {
-      this.#updateInputValue(this.sampleNameColumnTarget, "sample");
+    for (const sampleColumnHeader of this.#defaultSampleColumnHeaders) {
+      if (this.#allHeaders.includes(sampleColumnHeader)) {
+        this.#updateInputValue(this.sampleNameColumnTarget, sampleColumnHeader);
+        break;
+      }
     }
 
     if (this.#allHeaders.includes("description")) {
@@ -122,53 +131,66 @@ export default class extends Controller {
   }
 
   #refreshInputOptionsForAllFields() {
+    const unselectedHeaders = this.#processUnselectedHeaders();
     this.#refreshInputOptions(
       this.sampleNameColumnTarget,
       this.#selectedHeaders["sampleColumn"],
+      unselectedHeaders,
     );
     if (this.hasProjectPUIDColumnTarget) {
       this.#refreshInputOptions(
         this.projectPUIDColumnTarget,
         this.#selectedHeaders["projectColumn"],
+        unselectedHeaders,
       );
     }
     this.#refreshInputOptions(
       this.sampleDescriptionColumnTarget,
       this.#selectedHeaders["descriptionColumn"],
+      unselectedHeaders,
     );
     this.checkFormInputsReadyForSubmit();
   }
 
-  #refreshInputOptions(columnTarget, currentSelection) {
-    // filter out used options
-    let unselectedHeaders = this.#allHeaders.filter(
-      (item) => !Object.values(this.#selectedHeaders).includes(item),
-    );
-
+  #refreshInputOptions(columnTarget, currentSelection, unselectedHeaders) {
     // rebuild select options list
     columnTarget.innerHTML = "";
 
     // add blank value
-    let option = document.createElement("option");
-    option.value = "";
-    option.text = this.#blankValues[columnTarget.id];
-    columnTarget.append(option);
+    this.#createInputOption(
+      columnTarget,
+      "",
+      this.#blankValues[columnTarget.id],
+    );
 
     // add currently selected option
     if (currentSelection) {
-      let option = document.createElement("option");
-      option.value = currentSelection;
-      option.text = currentSelection;
-      columnTarget.append(option);
+      this.#createInputOption(columnTarget, currentSelection, currentSelection);
       columnTarget.value = currentSelection;
     }
 
     // add unused options
-    for (let header of unselectedHeaders) {
-      let option = document.createElement("option");
-      option.value = header;
-      option.text = header;
-      columnTarget.append(option);
+
+    // if sample column, move all additional sample headers to top of option, remaining under
+    // else just add headers normally
+    if (columnTarget === this.sampleNameColumnTarget) {
+      let copyUnselectedHeaders = unselectedHeaders.slice();
+      for (const sampleColumnHeader of this.#defaultSampleColumnHeaders) {
+        if (copyUnselectedHeaders.includes(sampleColumnHeader)) {
+          this.#createInputOption(
+            columnTarget,
+            sampleColumnHeader,
+            sampleColumnHeader,
+          );
+          copyUnselectedHeaders.splice(
+            copyUnselectedHeaders.indexOf(sampleColumnHeader),
+            1,
+          );
+        }
+      }
+      this.#createInputOptions(columnTarget, copyUnselectedHeaders);
+    } else {
+      this.#createInputOptions(columnTarget, unselectedHeaders);
     }
     this.#enableTarget(columnTarget);
   }
@@ -198,5 +220,25 @@ export default class extends Controller {
 
   #enableTarget(target) {
     target.disabled = false;
+  }
+
+  #createInputOptions(column, values) {
+    for (let value of values) {
+      this.#createInputOption(column, value, value);
+    }
+  }
+
+  #createInputOption(column, value, text) {
+    let option = document.createElement("option");
+    option.value = value;
+    option.text = text;
+    column.append(option);
+  }
+
+  #processUnselectedHeaders() {
+    // filter out used options
+    return this.#allHeaders.filter(
+      (item) => !Object.values(this.#selectedHeaders).includes(item),
+    );
   }
 }
