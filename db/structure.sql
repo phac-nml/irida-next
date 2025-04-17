@@ -426,10 +426,10 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.active_storage_attachments (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     name character varying NOT NULL,
     record_type character varying NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
     record_id uuid NOT NULL,
     blob_id uuid NOT NULL
 );
@@ -440,6 +440,7 @@ CREATE TABLE public.active_storage_attachments (
 --
 
 CREATE TABLE public.active_storage_blobs (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     key character varying NOT NULL,
     filename character varying NOT NULL,
     content_type character varying,
@@ -447,8 +448,7 @@ CREATE TABLE public.active_storage_blobs (
     service_name character varying NOT NULL,
     byte_size bigint NOT NULL,
     checksum character varying,
-    created_at timestamp(6) without time zone NOT NULL,
-    id uuid DEFAULT gen_random_uuid() NOT NULL
+    created_at timestamp(6) without time zone NOT NULL
 );
 
 
@@ -457,8 +457,8 @@ CREATE TABLE public.active_storage_blobs (
 --
 
 CREATE TABLE public.active_storage_variant_records (
-    variation_digest character varying NOT NULL,
     id uuid DEFAULT gen_random_uuid() NOT NULL,
+    variation_digest character varying NOT NULL,
     blob_id uuid NOT NULL
 );
 
@@ -499,13 +499,13 @@ CREATE TABLE public.ar_internal_metadata (
 --
 
 CREATE TABLE public.attachments (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     metadata jsonb DEFAULT '{}'::jsonb NOT NULL,
     deleted_at timestamp(6) without time zone,
     attachable_type character varying NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     log_data jsonb,
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
     attachable_id uuid NOT NULL,
     puid character varying NOT NULL
 );
@@ -620,13 +620,13 @@ ALTER SEQUENCE public.flipper_gates_id_seq OWNED BY public.flipper_gates.id;
 --
 
 CREATE TABLE public.members (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     access_level integer,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     log_data jsonb,
     deleted_at timestamp(6) without time zone,
     expires_at date,
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
     user_id uuid NOT NULL,
     namespace_id uuid NOT NULL,
     created_by_id uuid NOT NULL
@@ -671,6 +671,7 @@ CREATE TABLE public.namespace_bots (
 --
 
 CREATE TABLE public.namespace_group_links (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     expires_at date,
     group_access_level integer NOT NULL,
     namespace_type character varying,
@@ -678,7 +679,6 @@ CREATE TABLE public.namespace_group_links (
     updated_at timestamp(6) without time zone NOT NULL,
     deleted_at timestamp(6) without time zone,
     log_data jsonb,
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
     group_id uuid NOT NULL,
     namespace_id uuid NOT NULL
 );
@@ -689,6 +689,7 @@ CREATE TABLE public.namespace_group_links (
 --
 
 CREATE TABLE public.namespaces (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     name character varying COLLATE public."numeric",
     path character varying,
     type character varying,
@@ -698,7 +699,6 @@ CREATE TABLE public.namespaces (
     log_data jsonb,
     deleted_at timestamp(6) without time zone,
     metadata_summary jsonb DEFAULT '{}'::jsonb,
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
     owner_id uuid,
     parent_id uuid,
     puid character varying NOT NULL,
@@ -712,6 +712,7 @@ CREATE TABLE public.namespaces (
 --
 
 CREATE TABLE public.personal_access_tokens (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     scopes character varying,
     name character varying,
     revoked boolean DEFAULT false NOT NULL,
@@ -722,7 +723,6 @@ CREATE TABLE public.personal_access_tokens (
     updated_at timestamp(6) without time zone NOT NULL,
     log_data jsonb,
     deleted_at timestamp(6) without time zone,
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
     user_id uuid NOT NULL
 );
 
@@ -732,10 +732,10 @@ CREATE TABLE public.personal_access_tokens (
 --
 
 CREATE TABLE public.projects (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     deleted_at timestamp(6) without time zone,
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
     creator_id uuid NOT NULL,
     namespace_id uuid NOT NULL,
     samples_count integer
@@ -747,13 +747,13 @@ CREATE TABLE public.projects (
 --
 
 CREATE TABLE public.routes (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     path character varying,
     name character varying,
     source_type character varying,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     deleted_at timestamp(6) without time zone,
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
     source_id uuid NOT NULL
 );
 
@@ -763,6 +763,7 @@ CREATE TABLE public.routes (
 --
 
 CREATE TABLE public.samples (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     name character varying COLLATE public."numeric",
     description text,
     created_at timestamp(6) without time zone NOT NULL,
@@ -772,7 +773,6 @@ CREATE TABLE public.samples (
     metadata jsonb DEFAULT '{}'::jsonb NOT NULL,
     metadata_provenance jsonb DEFAULT '{}'::jsonb NOT NULL,
     puid character varying NOT NULL,
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
     project_id uuid NOT NULL,
     attachments_updated_at timestamp(6) without time zone
 );
@@ -783,11 +783,11 @@ CREATE TABLE public.samples (
 --
 
 CREATE TABLE public.samples_workflow_executions (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     samplesheet_params jsonb DEFAULT '{}'::jsonb NOT NULL,
     deleted_at timestamp(6) without time zone,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
     workflow_execution_id uuid,
     sample_id uuid,
     attachments_updated_at timestamp(6) without time zone,
@@ -841,6 +841,7 @@ ALTER SEQUENCE public.sessions_id_seq OWNED BY public.sessions.id;
 --
 
 CREATE TABLE public.users (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     email character varying DEFAULT ''::character varying NOT NULL,
     encrypted_password character varying DEFAULT ''::character varying NOT NULL,
     reset_password_token character varying,
@@ -855,7 +856,6 @@ CREATE TABLE public.users (
     first_name character varying,
     last_name character varying,
     locale character varying DEFAULT 'en'::character varying,
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
     user_type integer DEFAULT 0
 );
 
@@ -865,6 +865,7 @@ CREATE TABLE public.users (
 --
 
 CREATE TABLE public.workflow_executions (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     metadata jsonb DEFAULT '{"workflow_name": "", "workflow_version": ""}'::jsonb NOT NULL,
     workflow_params jsonb DEFAULT '{}'::jsonb NOT NULL,
     workflow_type character varying,
@@ -877,7 +878,6 @@ CREATE TABLE public.workflow_executions (
     deleted_at timestamp(6) without time zone,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
     submitter_id uuid NOT NULL,
     attachments_updated_at timestamp(6) without time zone,
     blob_run_directory character varying,
@@ -1925,6 +1925,7 @@ ALTER TABLE ONLY public.workflow_executions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250416191422'),
 ('20250414172424'),
 ('20250219172718'),
 ('20250219002757'),
