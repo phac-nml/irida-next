@@ -9,7 +9,7 @@ module Irida
     def update_minimum_queue_times
       now = Time.now.utc
       time_by_queue = GoodJob::Job
-                      .where(performed_at: nil, finished_at: nil)
+                      .queued
                       .group(:queue_name)
                       .pluck(:queue_name, Arel.sql('min(coalesce(scheduled_at, created_at))'))
                       .to_h
@@ -25,7 +25,7 @@ module Irida
     end
 
     # def update_queue_counts
-    #   queue_counts = ::GoodJob::Job.running.group(:queue_name).count
+    #   queue_counts = ::GoodJob::Job.queued.group(:queue_name).count
     #
     #   queue_counts.each do |queue_name, count|
     #     # For this to work, we would need to change from an updown to a guage
@@ -36,7 +36,7 @@ module Irida
     private
 
     def meter
-      @meter ||= OpenTelemetry.meter_provider.meter("JOB_QUEUE_METER")
+      @meter ||= OpenTelemetry.meter_provider.meter('JOB_QUEUE_METER')
     end
 
     def job_queue_instrument_map
