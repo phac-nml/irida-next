@@ -497,6 +497,19 @@ CREATE TABLE public.activities (
 
 
 --
+-- Name: activity_extended_details; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.activity_extended_details (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    activity_id uuid,
+    extended_detail_id uuid,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -562,6 +575,18 @@ CREATE TABLE public.data_exports (
     log_data jsonb,
     user_id uuid NOT NULL,
     manifest jsonb DEFAULT '{}'::jsonb NOT NULL
+);
+
+
+--
+-- Name: extended_details; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.extended_details (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    details jsonb DEFAULT '{}'::jsonb NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
 );
 
 
@@ -962,6 +987,14 @@ ALTER TABLE ONLY public.activities
 
 
 --
+-- Name: activity_extended_details activity_extended_details_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.activity_extended_details
+    ADD CONSTRAINT activity_extended_details_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -991,6 +1024,14 @@ ALTER TABLE ONLY public.automated_workflow_executions
 
 ALTER TABLE ONLY public.data_exports
     ADD CONSTRAINT data_exports_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: extended_details extended_details_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.extended_details
+    ADD CONSTRAINT extended_details_pkey PRIMARY KEY (id);
 
 
 --
@@ -1119,6 +1160,13 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.workflow_executions
     ADD CONSTRAINT workflow_executions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: idx_on_activity_id_extended_detail_id_f24c369286; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX idx_on_activity_id_extended_detail_id_f24c369286 ON public.activity_extended_details USING btree (activity_id, extended_detail_id);
 
 
 --
@@ -1955,7 +2003,9 @@ SET search_path TO "$user", public;
 INSERT INTO "schema_migrations" (version) VALUES
 ('20250424155356'),
 ('20250416191422'),
+('20250414192058'),
 ('20250414172424'),
+('20250410194644'),
 ('20250219172718'),
 ('20250219002757'),
 ('20250219001422'),
