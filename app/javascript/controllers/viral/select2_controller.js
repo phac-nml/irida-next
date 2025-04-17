@@ -63,6 +63,7 @@ export default class Select2Controller extends Controller {
         item.setAttribute("role", "option");
         item.setAttribute("id", `select2-option-${idx}`);
         item.setAttribute("aria-selected", "false");
+        item.setAttribute("tabindex", "-1"); // Make items programmatically focusable
       });
 
       this.element.setAttribute("data-controller-connected", "true");
@@ -167,7 +168,7 @@ export default class Select2Controller extends Controller {
   /**
    * Handles input filtering for dropdown items.
    */
-  input() {
+  input(event) {
     try {
       const query = this.inputTarget.value.toLowerCase().trim();
       let visibleItemCount = 0;
@@ -246,7 +247,13 @@ export default class Select2Controller extends Controller {
     if (newIndex < 0) newIndex = 0;
     if (newIndex >= visibleItems.length) newIndex = visibleItems.length - 1;
 
+    // Remove highlight from previous item
+    if (this.#currentItemIndex >= 0 && visibleItems[this.#currentItemIndex]) {
+      visibleItems[this.#currentItemIndex].classList.remove("bg-slate-100");
+    }
+
     visibleItems[newIndex].focus();
+    visibleItems[newIndex].classList.add("bg-slate-100"); // Optional: highlight focused item
     this.#currentItemIndex = newIndex;
     this.#ensureItemVisible(visibleItems[newIndex]);
     this.#updateAriaActiveDescendant();
@@ -256,7 +263,14 @@ export default class Select2Controller extends Controller {
     const visibleItems = this.#visibleItems();
     if (visibleItems.length === 0) return;
     const newIndex = Math.max(0, Math.min(index, visibleItems.length - 1));
+
+    // Remove highlight from previous item
+    if (this.#currentItemIndex >= 0 && visibleItems[this.#currentItemIndex]) {
+      visibleItems[this.#currentItemIndex].classList.remove("bg-slate-100");
+    }
+
     visibleItems[newIndex].focus();
+    visibleItems[newIndex].classList.add("bg-slate-100"); // Optional: highlight focused item
     this.#currentItemIndex = newIndex;
     this.#ensureItemVisible(visibleItems[newIndex]);
     this.#updateAriaActiveDescendant();
@@ -289,7 +303,7 @@ export default class Select2Controller extends Controller {
       }
       this.#dropdown = new Dropdown(this.dropdownTarget, this.inputTarget, {
         placement: "bottom",
-        triggerType: "none",
+        triggerType: "click",
         offsetSkidding: 0,
         offsetDistance: 10,
         delay: 300,
