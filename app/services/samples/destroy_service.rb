@@ -40,32 +40,34 @@ module Samples
 
     def destroy_multiple # rubocop:disable Metrics/MethodLength
       samples = Sample.where(id: sample_ids).where(project_id: project.id)
-      samples_to_delete_count = samples.count
       samples_deleted_puids = []
 
       samples = samples.destroy_all
 
       samples.each do |sample|
+        next unless sample.deleted?
+
         update_metadata_summary(sample)
         samples_deleted_puids << sample.puid
       end
 
-      update_samples_count(samples_to_delete_count) if @project.parent.type == 'Group'
+      deleted_samples_count = samples_deleted_puids.count
+      update_samples_count(deleted_samples_count) if @project.parent.type == 'Group'
 
       @project.namespace.create_activity key: 'namespaces_project_namespace.samples.destroy_multiple',
                                          owner: current_user,
                                          parameters:
                                          {
-                                           deleted_count: samples_to_delete_count,
+                                           deleted_count: deleted_samples_count,
                                            samples_deleted_puids:,
                                            action: 'sample_destroy_multiple'
                                          }
 
-      samples_to_delete_count
+      deleted_samples_count
     end
 
     def update_metadata_summary(sample)
-      sample.project.namespace.update_metadata_summary_by_sample_deletion(sample) if sample.deleted?
+      sample.project.namespace.update_metadata_summary_by_sample_deletion(sample)
     end
 
     def update_samples_count(deleted_samples_count = 1)

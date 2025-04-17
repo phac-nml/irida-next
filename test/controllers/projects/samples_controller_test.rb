@@ -63,13 +63,29 @@ module Projects
       assert_redirected_to namespace_project_sample_url(id: Sample.last.id)
     end
 
-    test 'should not create a sample with wrong parameters' do
-      post namespace_project_samples_url(@namespace, @project),
-           params: { sample: {
-             description: @sample1.description,
-             name: '?'
-           } }
+    test 'should not create a sample with short sample name parameter' do
+      assert_difference -> { Sample.count } => 0,
+                        -> { @namespace.reload.samples_count } => 0,
+                        -> { @project.reload.samples_count } => 0 do
+        post namespace_project_samples_url(@namespace, @project),
+             params: { sample: {
+               description: @sample1.description,
+               name: '?'
+             } }
+      end
+      assert_response :unprocessable_entity
+    end
 
+    test 'should not create a sample with same sample name parameter' do
+      assert_difference -> { Sample.count } => 0,
+                        -> { @namespace.reload.samples_count } => 0,
+                        -> { @project.reload.samples_count } => 0 do
+        post namespace_project_samples_url(@namespace, @project),
+             params: { sample: {
+               description: @sample1.description,
+               name: 'Project 1 Sample 1'
+             } }
+      end
       assert_response :unprocessable_entity
     end
 
