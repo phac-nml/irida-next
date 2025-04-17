@@ -52,7 +52,6 @@ module ActiveSupport
       FileUtils.rm_rf(ActiveStorage::Blob.service.root)
     end
 
-    set_fixture_class activities: PublicActivity::Activity
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
 
