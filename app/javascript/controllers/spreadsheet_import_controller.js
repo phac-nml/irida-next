@@ -174,15 +174,14 @@ export default class extends Controller {
     columnTarget.innerHTML = "";
 
     // add blank value
-    this.#createInputOption(
-      columnTarget,
+    columnTarget.append(this.#createInputOption(
       "",
       this.#blankValues[columnTarget.id],
-    );
+    ));
 
     // add currently selected option
     if (currentSelection) {
-      this.#createInputOption(columnTarget, currentSelection, currentSelection);
+      columnTarget.append(this.#createInputOption(currentSelection, currentSelection));
       columnTarget.value = currentSelection;
     }
 
@@ -201,11 +200,10 @@ export default class extends Controller {
         const sampleIndex =
           lowerCasedUnselectedHeaders.indexOf(sampleColumnHeader);
         if (sampleIndex > -1) {
-          this.#createInputOption(
-            columnTarget,
+          columnTarget.append(this.#createInputOption(
             copyUnselectedHeaders[sampleIndex],
             copyUnselectedHeaders[sampleIndex],
-          );
+          ));
           // remove sample header so only 'non-sample' headers remain
           copyUnselectedHeaders.splice(sampleIndex, 1);
           lowerCasedUnselectedHeaders.splice(sampleIndex, 1);
@@ -247,15 +245,15 @@ export default class extends Controller {
 
   #createInputOptions(column, values) {
     for (let value of values) {
-      this.#createInputOption(column, value, value);
+      column.append(this.#createInputOption(value, value));
     }
   }
 
-  #createInputOption(column, value, text) {
+  #createInputOption(value, text) {
     let option = document.createElement("option");
     option.value = value;
     option.text = text;
-    column.append(option);
+    return option
   }
 
   #processUnselectedHeaders() {
