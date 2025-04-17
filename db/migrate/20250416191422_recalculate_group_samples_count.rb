@@ -13,7 +13,7 @@ class RecalculateGroupSamplesCount < ActiveRecord::Migration[8.0]
       next unless project.parent.group_namespace?
 
       project.parent.self_and_ancestors.each do |group|
-        group.samples_count += project.samples_count
+        group.samples_count += project.samples_count || 0
         group.save
       end
     end
