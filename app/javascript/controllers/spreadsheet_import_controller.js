@@ -111,6 +111,7 @@ export default class extends Controller {
   }
 
   #setAutoSelections() {
+    // lower case to test for case insensitivity
     const allHeadersToLowerCase = this.#allHeaders.map((header) =>
       header.toLowerCase(),
     );
@@ -190,6 +191,8 @@ export default class extends Controller {
     // if sample column, move all additional sample headers to top of option, remaining under
     // else just add headers normally
     if (columnTarget === this.sampleNameColumnTarget) {
+      // copy unselected headers as we'll be removing array values
+      // also create a copy that lower cases all values to test for case insensitivity
       let copyUnselectedHeaders = unselectedHeaders.slice();
       let lowerCasedUnselectedHeaders = copyUnselectedHeaders.map((header) =>
         header.toLowerCase(),
@@ -203,6 +206,7 @@ export default class extends Controller {
             copyUnselectedHeaders[sampleIndex],
             copyUnselectedHeaders[sampleIndex],
           );
+          // remove sample header so only 'non-sample' headers remain
           copyUnselectedHeaders.splice(sampleIndex, 1);
           lowerCasedUnselectedHeaders.splice(sampleIndex, 1);
         }
