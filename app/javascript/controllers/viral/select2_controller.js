@@ -168,7 +168,7 @@ export default class Select2Controller extends Controller {
   /**
    * Handles input filtering for dropdown items.
    */
-  input(event) {
+  input() {
     try {
       const query = this.inputTarget.value.toLowerCase().trim();
       let visibleItemCount = 0;
@@ -178,10 +178,10 @@ export default class Select2Controller extends Controller {
       this.itemTargets.forEach((item) => {
         const text = item.textContent.toLowerCase() || "";
         if (text.includes(query)) {
-          item.parentNode.classList.remove("hidden");
+          item.classList.remove("hidden");
           visibleItemCount++;
         } else {
-          item.parentNode.classList.add("hidden");
+          item.classList.add("hidden");
         }
       });
 
@@ -189,7 +189,9 @@ export default class Select2Controller extends Controller {
       this.#updateAriaActiveDescendant();
 
       if (visibleItemCount > 0) {
-        if (this.#dropdown) this.#dropdown.show();
+        if (this.#dropdown && !this.#dropdown.isVisible()) {
+          this.#dropdown.show();
+        }
         this.emptyTarget.classList.add("hidden");
         this.scrollerTarget.scrollTop = 0;
       } else {
@@ -372,9 +374,17 @@ export default class Select2Controller extends Controller {
   }
 
   #setInputTargetValueFromCache() {
+    const inputValue = this.inputTarget.value;
+    if (inputValue === this.#cachedInputValue) return;
     const foundItem = this.itemTargets.find(
       (item) => item.dataset.value === this.#cachedInputValue,
     );
+    if (foundItem === undefined || inputValue === "") {
+      this.hiddenTarget.value = "";
+      this.#cachedInputValue = "";
+      this.#setItemSelected(false);
+      return;
+    }
     this.inputTarget.value = foundItem ? foundItem.dataset.label : "";
     this.#updateAriaSelected(this.inputTarget.value);
   }
