@@ -81,11 +81,13 @@ export default class extends Controller {
       const workbook = XLSX.read(reader.result, { sheetRows: 1 });
       const worksheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[worksheetName];
-      this.#allHeaders = XLSX.utils
-        .sheet_to_json(worksheet, {
-          header: 1,
-        })[0]
-        .sort();
+      const headers = XLSX.utils.sheet_to_json(worksheet, {
+        header: 1,
+      })[0];
+      // sort case insensitively
+      this.#allHeaders = headers.sort(function (a, b) {
+        return a.toLowerCase().localeCompare(b.toLowerCase());
+      });
       this.#setAutoSelections();
       if (this.hasStaticProjectTarget) {
         this.#enableTarget(this.staticProjectTarget);
@@ -109,22 +111,36 @@ export default class extends Controller {
   }
 
   #setAutoSelections() {
+    const allHeadersToLowerCase = this.#allHeaders.map((header) =>
+      header.toLowerCase(),
+    );
     for (const sampleColumnHeader of this.#defaultSampleColumnHeaders) {
-      if (this.#allHeaders.includes(sampleColumnHeader)) {
-        this.#updateInputValue(this.sampleNameColumnTarget, sampleColumnHeader);
+      const sampleIndex = allHeadersToLowerCase.indexOf(sampleColumnHeader);
+      if (sampleIndex > -1) {
+        this.#updateInputValue(
+          this.sampleNameColumnTarget,
+          this.#allHeaders[sampleIndex],
+        );
         break;
       }
     }
 
-    if (this.#allHeaders.includes("description")) {
-      this.#updateInputValue(this.sampleDescriptionColumnTarget, "description");
+    const descriptionIndex = allHeadersToLowerCase.indexOf("description");
+    if (descriptionIndex > -1) {
+      this.#updateInputValue(
+        this.sampleDescriptionColumnTarget,
+        this.#allHeaders[descriptionIndex],
+      );
     }
 
-    if (
-      this.#allHeaders.includes("project_puid") &&
-      this.hasProjectPUIDColumnTarget
-    ) {
-      this.#updateInputValue(this.projectPUIDColumnTarget, "project_puid");
+    if (this.hasProjectPUIDColumnTarget) {
+      const projectIndex = allHeadersToLowerCase.indexOf("project_puid");
+      if (projectIndex > -1) {
+        this.#updateInputValue(
+          this.projectPUIDColumnTarget,
+          this.#allHeaders[projectIndex],
+        );
+      }
     }
 
     this.#refreshInputOptionsForAllFields();
@@ -175,17 +191,20 @@ export default class extends Controller {
     // else just add headers normally
     if (columnTarget === this.sampleNameColumnTarget) {
       let copyUnselectedHeaders = unselectedHeaders.slice();
+      let lowerCasedUnselectedHeaders = copyUnselectedHeaders.map((header) =>
+        header.toLowerCase(),
+      );
       for (const sampleColumnHeader of this.#defaultSampleColumnHeaders) {
-        if (copyUnselectedHeaders.includes(sampleColumnHeader)) {
+        const sampleIndex =
+          lowerCasedUnselectedHeaders.indexOf(sampleColumnHeader);
+        if (sampleIndex > -1) {
           this.#createInputOption(
             columnTarget,
-            sampleColumnHeader,
-            sampleColumnHeader,
+            copyUnselectedHeaders[sampleIndex],
+            copyUnselectedHeaders[sampleIndex],
           );
-          copyUnselectedHeaders.splice(
-            copyUnselectedHeaders.indexOf(sampleColumnHeader),
-            1,
-          );
+          copyUnselectedHeaders.splice(sampleIndex, 1);
+          lowerCasedUnselectedHeaders.splice(sampleIndex, 1);
         }
       }
       this.#createInputOptions(columnTarget, copyUnselectedHeaders);
