@@ -1274,7 +1274,7 @@ module Groups
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/group/missing_puid.csv'))
-        find('#spreadsheet_import_static_project_id', wait: 1).find(:xpath, 'option[3]').select_option
+        find('#staticProject', wait: 1).find(:xpath, 'option[3]').select_option
 
         click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
         ### ACTIONS END ###
