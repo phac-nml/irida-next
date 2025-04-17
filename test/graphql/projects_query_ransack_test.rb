@@ -114,9 +114,9 @@ class ProjectsQueryRansackTest < ActiveSupport::TestCase
     data = result['data']['projects']['nodes']
 
     assert_equal 22, data.count
-    assert_equal projects(:project9).puid, data[0]['puid']
-    assert_equal projects(:project8).puid, data[1]['puid']
-    assert_equal projects(:project7).puid, data[2]['puid']
+    assert_equal projects(:project28).puid, data[0]['puid']
+    assert_equal projects(:project25).puid, data[1]['puid']
+    assert_equal projects(:project24).puid, data[2]['puid']
   end
 
   test 'ransack projects query should throw authorization error' do

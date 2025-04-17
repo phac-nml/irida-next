@@ -7,9 +7,13 @@ module MetadataSortable
   included do
     def self.metadata_sort(field, dir)
       metadata_field = Arel::Nodes::InfixOperation.new(
-        '->',
-        arel_table[:metadata],
-        Arel::Nodes.build_quoted(field)
+        'collate',
+        Arel::Nodes::InfixOperation.new(
+          '->>',
+          arel_table[:metadata],
+          Arel::Nodes.build_quoted(field)
+        ),
+        Arel::Nodes::SqlLiteral.new('numeric')
       )
 
       if dir.to_sym == :asc

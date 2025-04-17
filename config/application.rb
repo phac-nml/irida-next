@@ -76,6 +76,9 @@ module Irida
 
     # index nested attribute errors
     config.active_record.index_nested_attribute_errors = true
+
+    # generate sql schema dumps
+    config.active_record.schema_format = :sql
   end
 end
 
