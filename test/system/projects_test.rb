@@ -17,7 +17,7 @@ class ProjectsTest < ApplicationSystemTestCase
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
       fill_in 'Name', with: new_project_name
       fill_in I18n.t('projects.new.select_namespace'), with: 'USR'
-      click_on 'INXT_USR_AAAAAAAAAA'
+      find('ul li', text: 'INXT_USR_AAAAAAAAAA').click
       click_on I18n.t(:'projects.new.submit')
     end
     assert_selector 'h1', text: new_project_name
@@ -64,7 +64,7 @@ class ProjectsTest < ApplicationSystemTestCase
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
       fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
       fill_in I18n.t('projects.new.select_namespace'), with: 'USR'
-      click_on 'INXT_USR_AAAAAAAAAA'
+      find('ul li', text: 'INXT_USR_AAAAAAAAAA').click
       assert_equal 'testtest',
                    find_field(I18n.t(:'activerecord.attributes.namespaces/project_namespace.path')).value
       click_on I18n.t(:'projects.new.submit')
@@ -83,7 +83,7 @@ class ProjectsTest < ApplicationSystemTestCase
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
       fill_in 'Name', with: project_name
       fill_in I18n.t('projects.new.select_namespace'), with: 'USR'
-      click_on 'INXT_USR_AAAAAAAAAA'
+      find('ul li', text: 'INXT_USR_AAAAAAAAAA').click
       fill_in 'Path', with: project_path
       click_on I18n.t(:'projects.new.submit')
     end
@@ -99,7 +99,7 @@ class ProjectsTest < ApplicationSystemTestCase
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
       fill_in 'Name', with: project2.name
       fill_in I18n.t('projects.new.select_namespace'), with: 'USR'
-      click_on 'INXT_USR_AAAAAAAAAA'
+      find('ul li', text: 'INXT_USR_AAAAAAAAAA').click
       click_on I18n.t(:'projects.new.submit')
     end
 
@@ -132,7 +132,7 @@ class ProjectsTest < ApplicationSystemTestCase
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
       fill_in 'Name', with: project_name
       fill_in I18n.t('projects.new.select_namespace'), with: 'USR'
-      click_on 'INXT_USR_AAAAAAAAAA'
+      find('ul > li', text: 'INXT_USR_AAAAAAAAAA').click
       fill_in 'Path', with: project_path
       click_on I18n.t(:'projects.new.submit')
     end
