@@ -49,7 +49,7 @@ module Samples
 
         update_metadata_summary(sample)
         samples_deleted_puids << sample.puid
-        deleted_samples_data << [sample.name, sample.puid]
+        deleted_samples_data << { sample_name: sample.name, sample_puid: sample.puid }
       end
 
       deleted_samples_count = samples_deleted_puids.count

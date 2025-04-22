@@ -42,7 +42,10 @@ module Samples
         cloned_sample = clone_sample(sample)
         cloned_sample_ids[sample_id] = cloned_sample.id unless cloned_sample.nil?
 
-        cloned_samples_data << [sample.name, sample.puid, cloned_sample.puid] unless cloned_sample.nil?
+        unless cloned_sample.nil?
+          cloned_samples_data << { sample_name: sample.name, sample_puid: sample.puid,
+                                   clone_puid: cloned_sample.puid }
+        end
       rescue ActiveRecord::RecordNotFound
         not_found_sample_ids << sample_id
         next

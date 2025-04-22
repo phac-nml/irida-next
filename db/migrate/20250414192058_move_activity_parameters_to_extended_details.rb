@@ -27,9 +27,9 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
         sample = Sample.with_deleted.find_by(puid: existing_puid)
 
         cloned_samples_data << if sample
-                                 [sample.name, existing_puid, new_puid]
+                                 { sample_name: sample.name, sample_puid: existing_puid, clone_puid: new_puid }
                                else
-                                 ['deleted sample', existing_puid, new_puid]
+                                 { sample_name: 'deleted sample', sample_puid: existing_puid, clone_puid: new_puid }
                                end
       end
 
@@ -84,9 +84,9 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
       existing_puids.each do |puid|
         sample = Sample.with_deleted.find_by(puid: puid)
         transferred_samples_data << if sample
-                                      [sample.name, sample.puid]
+                                      { sample_name: sample.name, sample_puid: sample.puid }
                                     else
-                                      ['deleted sample', puid]
+                                      { sample_name: 'deleted sample', sample_puid: puid }
                                     end
       end
 
@@ -145,9 +145,9 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
       existing_puids.each do |puid|
         sample = Sample.with_deleted.find_by(puid: puid)
         deleted_samples_data << if sample
-                                  [sample.name, sample.puid]
+                                  { sample_name: sample.name, sample_puid: sample.puid }
                                 else
-                                  ['deleted sample', puid]
+                                  { sample_name: 'deleted sample', sample_puid: puid }
                                 end
       end
 

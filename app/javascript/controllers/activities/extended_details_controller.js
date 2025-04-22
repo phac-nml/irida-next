@@ -8,11 +8,11 @@ export default class extends Controller {
     "paginationContainer",
     "sampleAttributes",
     "tbody",
-    "listContainer"
+    "listContainer",
   ];
 
   static values = {
-    numCols: { type: Number, default: 2 }
+    numCols: { type: Number, default: 2 },
   };
 
   #pagination_button_disabled_state = [
@@ -53,11 +53,9 @@ export default class extends Controller {
   }
 
   #setInitialData() {
-    this.#sampleAttributes = JSON.parse(
-      this.sampleAttributesTarget.innerText,
-     );
+    this.#sampleAttributes = JSON.parse(this.sampleAttributesTarget.innerText);
 
-    this.#sampleData = this.#sampleAttributes
+    this.#sampleData = this.#sampleAttributes;
 
     // set initial sample indexes to include all samples
     this.#setAllSampleIndexes();
@@ -77,8 +75,8 @@ export default class extends Controller {
         lastIndex = (this.#currentSampleIndexes.length % 5) + startingIndex;
       }
 
-      let indexRangeData = this.#sampleData.slice(startingIndex,lastIndex);
-      if(this.hasTbodyTarget) {
+      let indexRangeData = this.#sampleData.slice(startingIndex, lastIndex);
+      if (this.hasTbodyTarget) {
         this.#generateTableRows(indexRangeData);
       } else {
         this.#generateListItems(indexRangeData);
@@ -120,10 +118,10 @@ export default class extends Controller {
       this.#verifyPaginationButtonStates();
     }
 
-    if(this.hasTbodyTarget) {
-      this.tbodyTarget.innerHTML = ""
+    if (this.hasTbodyTarget) {
+      this.tbodyTarget.innerHTML = "";
     } else {
-      this.listContainerTarget.innerHTML = ""
+      this.listContainerTarget.innerHTML = "";
     }
 
     this.#loadData();
@@ -158,17 +156,24 @@ export default class extends Controller {
     for (let i = 0; i < data.length; i++) {
       let tr = document.createElement("tr");
 
-      for(let j = 0; j < this.numColsValue; j++)
-      {
-        let td= document.createElement("td");
+      for (let j = 0; j < this.numColsValue; j++) {
+        let td = document.createElement("td");
         let span = document.createElement("span");
         td.className = "px-3 py-3";
-        span.className = "bg-green-100 ml-2 dark:bg-green-900 dark:text-green-300 font-medium px-2.5 py-0.5 rounded-full text-green-800 text-xs";
+        span.className =
+          "bg-green-100 ml-2 dark:bg-green-900 dark:text-green-300 font-medium px-2.5 py-0.5 rounded-full text-green-800 text-xs";
 
         // Sample Name - (Existing PUID [copied from] or New Puid [copied to])
-        td.innerText = data[i][0];
-        span.innerHTML = data[i][j+1];
-        td.appendChild(span);
+        td.innerText = data[i]["sample_name"];
+        if (j == 0) {
+          span.innerHTML = data[i]["sample_puid"];
+          td.appendChild(span);
+        } else if (j == 1) {
+          span.innerHTML = data[i]["clone_puid"];
+          td.appendChild(span);
+        } else {
+          span.innerHTML = "";
+        }
         tr.appendChild(td);
       }
 
@@ -186,20 +191,22 @@ export default class extends Controller {
       let span = document.createElement("span");
 
       li.className = "pt-3 pb-3 sm:pb-4 sm:pt-4";
-      containerDiv.className = "flex items-center space-x-4 rtl:space-x-reverse"
-      iconDiv.className = "shrink-0"
-      paragraphDiv.className = "flex-1 min-w-0"
-      paragraph.className = "text-sm text-gray-500 truncate dark:text-gray-400"
-      span.className = "bg-green-100 ml-2 dark:bg-green-900 dark:text-green-300 font-medium px-2.5 py-0.5 rounded-full text-green-800 text-xs";
+      containerDiv.className =
+        "flex items-center space-x-4 rtl:space-x-reverse";
+      iconDiv.className = "shrink-0";
+      paragraphDiv.className = "flex-1 min-w-0";
+      paragraph.className = "text-sm text-gray-500 truncate dark:text-gray-400";
+      span.className =
+        "bg-green-100 ml-2 dark:bg-green-900 dark:text-green-300 font-medium px-2.5 py-0.5 rounded-full text-green-800 text-xs";
 
       containerDiv.appendChild(iconDiv);
-      span.innerHTML = data[i][1];
+      span.innerHTML = data[i]["sample_puid"];
       paragraphDiv.appendChild(paragraph);
       // Sample Name - Sample Puid
-      paragraph.innerHTML = data[i][0];
+      paragraph.innerHTML = data[i]["sample_name"];
       paragraph.appendChild(span);
-      containerDiv.appendChild(paragraphDiv)
-      li.appendChild(containerDiv)
+      containerDiv.appendChild(paragraphDiv);
+      li.appendChild(containerDiv);
       this.listContainerTarget.appendChild(li);
     }
   }

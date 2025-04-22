@@ -59,7 +59,7 @@ module Samples
         sample = Sample.find_by!(id: sample_id, project_id: @project.id)
         sample.update!(project_id: new_project_id)
         transferred_samples_ids << sample_id
-        transferred_samples_data << [sample.name, sample.puid]
+        transferred_samples_data << { sample_name: sample.name, sample_puid: sample.puid }
         @project.namespace.update_metadata_summary_by_sample_transfer(sample_id, old_namespaces, new_namespaces)
       rescue ActiveRecord::RecordNotFound
         not_found_sample_ids << sample_id
