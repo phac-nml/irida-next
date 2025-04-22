@@ -266,9 +266,9 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   def namespace_path
-    if @workflow_execution.namespace.type == 'Group'
+    if @workflow_execution.namespace.group_namespace?
       group_path(@workflow_execution.namespace)
-    elsif @workflow_execution.namespace.type == 'Project'
+    elsif @workflow_execution.namespace.project_namespace?
       namespace_project_path(@workflow_execution.namespace.parent, @workflow_execution.namespace.project)
     end
   end
