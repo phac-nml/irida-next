@@ -15,7 +15,11 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
     activities = PublicActivity::Activity.where(key: activity_key)
 
     activities.each do |activity| # rubocop:disable Metrics/BlockLength
-      activity_trackable = activity.trackable
+      activity_trackable = if activity.trackable.nil?
+                             Namespace.with_deleted.find_by(id: activity.trackable_id)
+                           else
+                             activity.trackable
+                           end
       cloned_samples_data = []
 
       existing_data = activity.parameters[:cloned_samples_puids]
@@ -52,7 +56,7 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
                                              cloned_samples_count: cloned_samples_data.size
                                            })
 
-      if Namespace.with_deleted.find_by(id: activity_trackable.id)
+      if activity_trackable
         activity.parameters.delete(:cloned_samples_ids)
         activity.parameters.delete(:cloned_samples_puids)
         activity.parameters[:cloned_samples_count] = cloned_samples_data.size
@@ -77,7 +81,12 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
     activities = PublicActivity::Activity.where(key: activity_key)
 
     activities.each do |activity| # rubocop:disable Metrics/BlockLength
-      activity_trackable = activity.trackable
+      activity_trackable = if activity.trackable.nil?
+                             Namespace.with_deleted.find_by(id: activity.trackable_id)
+                           else
+                             activity.trackable
+                           end
+
       existing_puids = activity.parameters[:transferred_samples_puids]
       transferred_samples_data = []
 
@@ -110,7 +119,7 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
                                              transferred_samples_count: transferred_samples_data.size
                                            })
 
-      if Namespace.with_deleted.find_by(id: activity_trackable.id)
+      if activity_trackable
         activity.parameters.delete(:transferred_samples_ids)
         activity.parameters.delete(:transferred_samples_puids)
         activity.parameters[:transferred_samples_count] =

@@ -431,6 +431,19 @@ CREATE FUNCTION public.logidze_version(v bigint, data jsonb, ts timestamp with t
 $$;
 
 
+--
+-- Name: action_cable_large_payloads_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.action_cable_large_payloads_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -928,8 +941,8 @@ CREATE TABLE public.workflow_executions (
     name character varying,
     namespace_id uuid,
     cleaned boolean DEFAULT false NOT NULL,
-    shared_with_namespace boolean DEFAULT false NOT NULL,
-    log_data jsonb
+    log_data jsonb,
+    shared_with_namespace boolean DEFAULT false NOT NULL
 );
 
 
@@ -2020,6 +2033,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20250108200329'),
 ('20250107194839'),
 ('20250106153442'),
+('20241212164410'),
 ('20241120173553'),
 ('20241017164233'),
 ('20241004162923'),
