@@ -448,6 +448,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
   test 'submitter can edit workflow execution post launch from workflow execution page' do
     ### SETUP START ###
+    Flipper.enable(:workflow_execution_sharing)
     workflow_execution = workflow_executions(:irida_next_example_new)
     visit workflow_execution_path(workflow_execution)
     dt_value = I18n.t('projects.workflow_executions.summary.name', locale: @user.locale)
@@ -471,6 +472,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       fill_in placeholder: I18n.t('workflow_executions.edit_dialog.name_placeholder'),
               with: new_we_name
 
+      assert_not find("input[type='checkbox']").checked?
+      check I18n.t(:"workflow_executions.edit_dialog.shared_with_namespace.#{workflow_execution.namespace.type.downcase}") # rubocop:disable Layout/LineLength
+
       click_button I18n.t(:'workflow_executions.edit_dialog.submit_button')
     end
     ### ACTIONS END ###
@@ -479,6 +483,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector 'h1', text: new_we_name
     assert_selector 'dt', text: dt_value
     assert_selector 'dd', text: new_we_name
+    assert_selector 'dt', text: I18n.t(:"workflow_executions.summary.shared_with_namespace.#{workflow_execution.namespace.type.downcase}") # rubocop:disable Layout/LineLength
+    assert_selector 'dd', text: workflow_execution.namespace.name
+
     ### VERIFY END ###
   end
 

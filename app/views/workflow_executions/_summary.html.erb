@@ -33,6 +33,19 @@
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".workflow_version") %></dt>
       <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= @workflow_execution.metadata["workflow_version"] %></dd>
     </div>
+    <% if @workflow_execution.shared_with_namespace %>
+      <div class="flex flex-col py-3">
+        <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".shared_with_namespace.#{@workflow_execution.namespace.type.downcase}") %></dt>
+        <dd class="text-lg font-semibold text-slate-900 dark:text-white">
+          <%= link_to @workflow_execution.namespace.name,
+          @namespace_path,
+          data: {
+            turbo: false,
+          },
+          class: "hover:underline" %>
+        </dd>
+      </div>
+    <% end %>
     <div class="flex flex-col py-3">
       <dt class="mb-1 text-slate-500 md:text-lg dark:text-slate-400"><%= t(:".created_at") %></dt>
       <dd class="text-lg font-semibold text-slate-900 dark:text-white"><%= local_time(@workflow_execution.created_at, :full_date) %></dd>

@@ -2112,6 +2112,9 @@ en:
       cancel_button: Cancel
       description: You are editing workflow execution '%{workflow_execution_id}'
       name_placeholder: Enter workflow execution name (optional)
+      shared_with_namespace:
+        group: Share results with group members?
+        project: Share results with project members?
       submit_button: Submit
       title: Edit workflow execution
     file_selector:
@@ -2186,6 +2189,9 @@ en:
       created_at: Created
       name: Name
       run_id: Run ID
+      shared_with_namespace:
+        group: Shared with Group
+        project: Shared with Project
       state: State
       updated_at: Last Updated
       workflow_name: Workflow Name

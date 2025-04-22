@@ -230,6 +230,16 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'Submitter can share the pipeline results post launch' do
+    workflow_execution = workflow_executions(:irida_next_example_new)
+
+    update_params = { workflow_execution: { shared_with_namespace: true } }
+
+    put workflow_execution_path(workflow_execution, format: :turbo_stream), params: update_params
+
+    assert_response :success
+  end
+
   test 'Cannot update another user\'s personal workflow execution name' do
     sign_in users(:ryan_doe)
 

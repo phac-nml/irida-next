@@ -71,6 +71,8 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
                                                              'available')
     when 'samplesheet'
       format_samplesheet_params
+    when 'summary'
+      @namespace_path = namespace_path
     end
   end
 
@@ -261,5 +263,13 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     search_params = {}
     search_params[:name_or_id_cont] = params.dig(:q, :name_or_id_cont)
     search_params
+  end
+
+  def namespace_path
+    if @workflow_execution.namespace.group_namespace?
+      group_path(@workflow_execution.namespace)
+    elsif @workflow_execution.namespace.project_namespace?
+      namespace_project_path(@workflow_execution.namespace.parent, @workflow_execution.namespace.project)
+    end
   end
 end
