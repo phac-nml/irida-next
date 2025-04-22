@@ -4,6 +4,7 @@ project1_namespace_create:
   trackable_type: "Namespace"
   trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   key: "namespaces_project_namespace.create"
+  parameters: {}
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -11,6 +12,7 @@ project2_namespace_create:
   trackable_type: "Namespace"
   trackable_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid) %>
   key: "namespaces_project_namespace.create"
+  parameters: {}
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -207,6 +209,7 @@ group1_create:
   trackable_type: "Namespace"
   trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   key: "group.create"
+  parameters: {}
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 

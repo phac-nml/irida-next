@@ -53,10 +53,7 @@ module ActiveSupport
     end
 
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
-    fixtures :all, except: :activity_extended_details
-
-    # Join table fixtures
-    fixtures :activity_extended_details
+    fixtures :all
 
     # Add more helper methods to be used by all tests here...
     include Devise::Test::IntegrationHelpers
