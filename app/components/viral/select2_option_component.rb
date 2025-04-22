@@ -10,6 +10,7 @@ module Viral
         role="option"
         aria-selected="false"
         id="select2-option-<%= @value %>"
+        role="option"
         data-viral--select2-target="item"
         data-label="<%= @label %>"
         data-value="<%= @value %>"

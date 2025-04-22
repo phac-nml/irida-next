@@ -25,6 +25,7 @@
   >
     <ul
       data-viral--select2-target="scroller"
+      role="listbox"
       class="
         max-h-[300px] w-full py-2 overflow-y-auto divide-y divide-slate-200
         dark:divide-slate-800
@@ -35,6 +36,9 @@
       <% end %>
       <% if empty_state? %>
         <li
+          role="option"
+          aria-disabled="true"
+          aria-selected="false"
           class="
             hidden p-4 text-blue-800 border border-blue-300 bg-blue-50 dark:bg-slate-800
             dark:text-blue-400 dark:border-blue-800 pointer-events-none

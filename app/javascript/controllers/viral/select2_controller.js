@@ -63,7 +63,6 @@ export default class Select2Controller extends Controller {
         item.setAttribute("role", "option");
         item.setAttribute("id", `select2-option-${idx}`);
         item.setAttribute("aria-selected", "false");
-        item.setAttribute("tabindex", "-1"); // Make items programmatically focusable
       });
 
       this.element.setAttribute("data-controller-connected", "true");
