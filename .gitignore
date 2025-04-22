@@ -67,3 +67,6 @@ __blobstorage__
 logfile
 
 /config/credentials/production.key
+
+# Ignore rails designer icons
+/app/assets/svg/icons
