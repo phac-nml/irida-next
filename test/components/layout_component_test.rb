@@ -40,7 +40,7 @@ class LayoutComponentTest < ViewComponent::TestCase
 
       assert_selector 'form' do
         assert_text 'English'
-        assert_text 'French'
+        assert_text 'Français'
       end
     end
   end
