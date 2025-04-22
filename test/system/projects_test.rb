@@ -115,7 +115,7 @@ class ProjectsTest < ApplicationSystemTestCase
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
       fill_in 'Name', with: project_name
       fill_in I18n.t('projects.new.select_namespace'), with: 'USR'
-      click_on 'INXT_USR_AAAAAAAAAA'
+      find('ul > li', text: 'INXT_USR_AAAAAAAAAA').click
       fill_in 'Description', with: project_description
       click_on I18n.t(:'projects.new.submit')
     end
