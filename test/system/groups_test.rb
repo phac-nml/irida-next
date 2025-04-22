@@ -320,7 +320,7 @@ class GroupsTest < ApplicationSystemTestCase
     within %(form[action="/group-1/transfer"]) do
       assert_selector 'input[type=submit]:disabled'
       find('input.select2-input').click
-      find("button[data-label='#{group3.name}']").click
+      find("li[data-label='#{group3.name}']").click
       assert_selector 'input[type=submit]:not(:disabled)'
       click_on I18n.t('groups.edit.advanced.transfer.submit')
     end
