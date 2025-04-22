@@ -11,10 +11,10 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   def human_readable_activity(public_activities) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity
     activities = []
     public_activities.each do |activity|
-      next if !activity.parameters[:member_email].nil? && activity.parameters[:member_email].include?('automation')
-
       trackable_type = activity.trackable_type
       activity[:parameters] = convert_activity_parameter_keys(activity)
+
+      next if activity[:parameters].key?(:member_email) && activity[:parameters][:member_email].include?('automation')
 
       case trackable_type
       when 'Namespace'
