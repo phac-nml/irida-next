@@ -29,8 +29,41 @@
 <div
   id="dd-metadata_templates_dropdown"
   class="
-    z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44
-    dark:bg-gray-700
+    z-50 hidden bg-white divide-y divide-slate-100 rounded-lg shadow-sm w-44
+    dark:bg-slate-700
+  "
+>
+  <ul id="metadata_templates_dropdown">
+    <li>
+      <%= render SpinnerComponent.new(
+        message: t("shared.samples.metadata_templates.loading"),
+      ) %>
+    </li>
+  </ul>
+</div>
+
+<button
+  id="dropdownRadioBgHoverButton"
+  data-dropdown-toggle="dropdownRadioBgHover"
+  class="
+    text-slate-900 bg-white border border-slate-300 hover:bg-slate-100 rounded-lg
+    text-sm px-5 py-2.5 me-2 mb-2 dark:bg-slate-800 dark:text-white
+    dark:border-slate-600 dark:hover:bg-slate-700 dark:hover:border-slate-600
+    cursor-pointer inline-flex items-center justify-center
+  "
+  type="button"
+>
+  <span class="text-sm">
+    <%= t("shared.samples.metadata_templates.label") %>
+  </span>
+  <%= viral_icon(name: "adjustment_horizontal", classes: "w-4 h-4 ml-2 flex-none") %>
+</button>
+<!-- Dropdown menu -->
+<div
+  id="dropdownRadioBgHover"
+  class="
+    z-10 hidden w-48 bg-white divide-y divide-slate-100 rounded-lg shadow-sm
+    dark:bg-slate-700 dark:divide-slate-600 z-30
   "
 >
   <ul id="metadata_templates_dropdown">
