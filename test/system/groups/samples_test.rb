@@ -322,7 +322,7 @@ module Groups
       end
 
       click_button I18n.t('shared.samples.metadata_templates.label')
-      choose 'q[metadata_template]', option: 'all'
+      click_button I18n.t("shared.samples.metadata_templates.fields.all")
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -447,7 +447,7 @@ module Groups
       assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
 
       click_button I18n.t('shared.samples.metadata_templates.label')
-      choose 'q[metadata_template]', option: 'all'
+      click_button I18n.t("shared.samples.metadata_templates.fields.all")
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -466,7 +466,7 @@ module Groups
       end
 
       click_button I18n.t('shared.samples.metadata_templates.label')
-      choose 'q[metadata_template]', option: 'none'
+      click_button I18n.t("shared.samples.metadata_templates.fields.none")
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -483,7 +483,7 @@ module Groups
       end
 
       click_button I18n.t('shared.samples.metadata_templates.label')
-      choose 'q[metadata_template]', option: 'all'
+      click_button I18n.t("shared.samples.metadata_templates.fields.all")
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -505,7 +505,7 @@ module Groups
       assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample30.name
 
       click_button I18n.t('shared.samples.metadata_templates.label')
-      choose 'q[metadata_template]', option: 'none'
+      click_button I18n.t("shared.samples.metadata_templates.fields.none")
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -1038,7 +1038,7 @@ module Groups
       visit group_samples_url(@group)
 
       click_button I18n.t('shared.samples.metadata_templates.label')
-      choose 'q[metadata_template]', option: 'all'
+      click_button I18n.t("shared.samples.metadata_templates.fields.all")
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -1140,7 +1140,7 @@ module Groups
       assert_no_selector 'div[data-test-selector="spinner"]'
 
       click_button I18n.t('shared.samples.metadata_templates.label')
-      choose 'q[metadata_template]', option: 'all'
+      click_button I18n.t("shared.samples.metadata_templates.fields.all")
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -1184,7 +1184,7 @@ module Groups
 
       # toggle metadata on for samples table
       click_button I18n.t('shared.samples.metadata_templates.label')
-      choose 'q[metadata_template]', option: 'all'
+      click_button I18n.t("shared.samples.metadata_templates.fields.all")
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
