@@ -8,9 +8,8 @@ data: {
   <ul
     id="metadata_templates"
     class="py-2 text-sm text-slate-700 dark:text-slate-200"
-    aria-labelledby="dropdownDefault"
+    aria-labelledby="metadata-template-dd-trigger"
   >
-
     <li
       class="
         w-full px-3 py-2 text-xs font-bold tracking-wider uppercase bg-slate-200
@@ -32,6 +31,8 @@ data: {
           value="all"
           name="q[metadata_template]"
           onchange="this.form.requestSubmit()"
+          aria-checked="<%= @current_metadata_template_id == 'all' ? 'true' : 'false' %>"
+          tabindex="<%= @current_metadata_template_id == 'all' ? '0' : '-1' %>"
           <%= @current_metadata_template_id == "all" ? "checked" : "" %>
         >
         <label
@@ -55,7 +56,8 @@ data: {
           value="none"
           onchange="this.form.requestSubmit()"
           name="q[metadata_template]"
-          <%= @current_metadata_template_id == "none" ? "checked" : "" %>
+          aria-checked="<%= @current_metadata_template_id == 'none' ? 'true' : 'false' %>"
+          tabindex="<%= @current_metadata_template_id == 'none' ? '0' : '-1' %>"
         >
         <label
           for="rl-none"
@@ -88,6 +90,8 @@ data: {
               value="<%= metadata_template.id %>"
               onchange="this.form.requestSubmit()"
               name="q[metadata_template]"
+              aria-checked="<%= @current_metadata_template_id == metadata_template.id ? 'true' : 'false' %>"
+              tabindex="<%= @current_metadata_template_id == metadata_template.id ? '0' : '-1' %>"
               <%= @current_metadata_template_id == metadata_template.id ? "checked" : "" %>
             >
             <label
