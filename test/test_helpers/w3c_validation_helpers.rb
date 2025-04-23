@@ -52,8 +52,8 @@ module W3cValidationHelpers
 
   # Validates HTML with W3C (vnu) validator
   #
-  # If environmental variable SKIP_W3C_VALIDATE is set and not '0' or 'false',
-  # validation is skipped.
+  # Is included if environmental variable INCLUDE_W3C_VALIDATE is set and not '0' or 'false',
+  # otherwise validation is skipped.
   #
   # The caller information is printed if fails.
   #
@@ -74,7 +74,7 @@ module W3cValidationHelpers
   # @param use_local: #see setup_w3c_validator!
   # @param validator_uri: #see setup_w3c_validator!
   def w3c_validate(name="caller", use_local: nil, validator_uri: DEF_W3C_VALIDATOR_PARAMS[:validator_uri], content: response.body)
-    return if is_env_set_positive?('SKIP_W3C_VALIDATE')
+    return unless is_env_set_positive?('INCLUDE_W3C_VALIDATE')
 
     bind = caller_locations(1,1)[0]  # Ruby 2.0+
     caller_info = sprintf "%s:%d", bind.absolute_path.sub(%r@.*(/test/)@, '\1'), bind.lineno
