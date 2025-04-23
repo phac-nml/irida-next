@@ -10,7 +10,7 @@ module BlobHelper
     format('%<run_dir>s/%<prefix>s%<filename>s', run_dir:, filename:, prefix:)
   end
 
-  def compose_blob_with_custom_key(blob, key)
+  def compose_blob_with_custom_key(blob, key, max_retries = 5)
     ActiveStorage::Blob.new(
       key:,
       filename: blob.filename,
@@ -18,7 +18,11 @@ module BlobHelper
       checksum: blob.checksum,
       content_type: blob.content_type
     ).tap do |copied_blob|
-      copied_blob.compose([blob.key])
+      if Flipper.enabled?(:compose_with_retry)
+        compose_with_retry(copied_blob, blob, max_retries)
+      else
+        copied_blob.compose([blob.key])
+      end
       copied_blob.save!
     end
   end
@@ -47,5 +51,20 @@ module BlobHelper
     end
 
     blob_id
+  end
+
+  private
+
+  def compose_with_retry(dest_blob, src_blob, max_retries = 5)
+    retries = 0
+    begin
+      dest_blob.compose([src_blob.key])
+    rescue Errno::ECONNRESET => e
+      raise e unless retries < max_retries
+
+      retries += 1
+      sleep 2**retries
+      retry
+    end
   end
 end
