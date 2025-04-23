@@ -61,7 +61,7 @@ module ActiveSupport
     include ArrayHelpers
     include ActiveJob::TestHelper
     include ActionMailer::TestHelper
-    # include W3cValidationHelpers
+    include W3cValidationHelpers if ENV['INCLUDE_W3C_VALIDATE'].present?
 
     PublicActivity.enabled = true
   end
