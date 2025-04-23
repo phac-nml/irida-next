@@ -6,13 +6,14 @@ export default class extends Controller {
     "nextBtn",
     "pagination",
     "paginationContainer",
-    "sampleAttributes",
+    "extendedDetailsData",
     "tbody",
     "listContainer",
   ];
 
   static values = {
     numCols: { type: Number, default: 2 },
+    activityType: { type: String, default: "" },
   };
 
   #pagination_button_disabled_state = [
@@ -40,60 +41,60 @@ export default class extends Controller {
   #currentPage;
   #lastPage;
 
-  #currentSampleIndexes = [];
-  #sampleData = [];
-
-  #sampleAttributes;
+  #currentDataIndexes = [];
+  #data = [];
 
   connect() {
-    if (this.hasSampleAttributesTarget) {
+    if (this.hasExtendedDetailsDataTarget) {
       this.#setInitialData();
       this.element.setAttribute("data-controller-connected", "true");
     }
   }
 
   #setInitialData() {
-    this.#sampleAttributes = JSON.parse(this.sampleAttributesTarget.innerText);
+    this.#data = JSON.parse(this.extendedDetailsDataTarget.innerText);
 
-    this.#sampleData = this.#sampleAttributes;
-
-    // set initial sample indexes to include all samples
+    // set initial data indexes to include all samples
     this.#setAllSampleIndexes();
+
     this.#setPagination();
     this.#loadData();
   }
 
   #loadData() {
-    if (this.#currentSampleIndexes.length > 0) {
+    if (this.#currentDataIndexes.length > 0) {
       let startingIndex = (this.#currentPage - 1) * 5;
       let lastIndex = startingIndex + 5;
 
       if (
         this.#currentPage == this.#lastPage &&
-        this.#currentSampleIndexes.length % 5 != 0
+        this.#currentDataIndexes.length % 5 != 0
       ) {
-        lastIndex = (this.#currentSampleIndexes.length % 5) + startingIndex;
+        lastIndex = (this.#currentDataIndexes.length % 5) + startingIndex;
       }
 
-      let indexRangeData = this.#sampleData.slice(startingIndex, lastIndex);
+      let indexRangeData = this.#data.slice(startingIndex, lastIndex);
       if (this.hasTbodyTarget) {
         this.#generateTableRows(indexRangeData);
       } else {
+        // If activityType value is set, this else statement
+        // can be updated to call the relevant method required
+        // based on the activityType
         this.#generateListItems(indexRangeData);
       }
     }
   }
 
   #setAllSampleIndexes() {
-    this.#currentSampleIndexes = [
-      ...Array(Object.keys(this.#sampleAttributes).length).keys(),
+    this.#currentDataIndexes = [
+      ...Array(Object.keys(this.#data).length).keys(),
     ];
   }
 
   #setPagination() {
     this.#currentPage = 1;
     this.paginationContainerTarget.innerHTML = "";
-    this.#lastPage = Math.ceil(this.#currentSampleIndexes.length / 5);
+    this.#lastPage = Math.ceil(this.#currentDataIndexes.length / 5);
 
     if (this.#lastPage > 1) {
       this.paginationContainerTarget.insertAdjacentHTML(
@@ -152,8 +153,9 @@ export default class extends Controller {
     button.classList.add(...this.#pagination_button_enabled_state);
   }
 
-  #generateTableRows(data) {
-    for (let i = 0; i < data.length; i++) {
+  // Generate table rows in format <td>SAMPLE_NAME <SAMPLE_PUID></td><td>SAMPLE_NAME <CLONE_PUID>
+  #generateTableRows(table_data) {
+    for (let i = 0; i < table_data.length; i++) {
       let tr = document.createElement("tr");
 
       for (let j = 0; j < this.numColsValue; j++) {
@@ -164,12 +166,12 @@ export default class extends Controller {
           "bg-green-100 ml-2 dark:bg-green-900 dark:text-green-300 font-medium px-2.5 py-0.5 rounded-full text-green-800 text-xs";
 
         // Sample Name - (Existing PUID [copied from] or New Puid [copied to])
-        td.innerText = data[i]["sample_name"];
+        td.innerText = table_data[i]["sample_name"];
         if (j == 0) {
-          span.innerHTML = data[i]["sample_puid"];
+          span.innerHTML = table_data[i]["sample_puid"];
           td.appendChild(span);
         } else if (j == 1) {
-          span.innerHTML = data[i]["clone_puid"];
+          span.innerHTML = table_data[i]["clone_puid"];
           td.appendChild(span);
         } else {
           span.innerHTML = "";
@@ -181,8 +183,9 @@ export default class extends Controller {
     }
   }
 
-  #generateListItems(data) {
-    for (let i = 0; i < data.length; i++) {
+  // Generate list items in format SAMPLE_NAME <SAMPLE_PUID>
+  #generateListItems(list_data) {
+    for (let i = 0; i < list_data.length; i++) {
       let li = document.createElement("li");
       let containerDiv = document.createElement("div");
       let iconDiv = document.createElement("div");
@@ -200,10 +203,10 @@ export default class extends Controller {
         "bg-green-100 ml-2 dark:bg-green-900 dark:text-green-300 font-medium px-2.5 py-0.5 rounded-full text-green-800 text-xs";
 
       containerDiv.appendChild(iconDiv);
-      span.innerHTML = data[i]["sample_puid"];
+      span.innerHTML = list_data[i]["sample_puid"];
       paragraphDiv.appendChild(paragraph);
       // Sample Name - Sample Puid
-      paragraph.innerHTML = data[i]["sample_name"];
+      paragraph.innerHTML = list_data[i]["sample_name"];
       paragraph.appendChild(span);
       containerDiv.appendChild(paragraphDiv);
       li.appendChild(containerDiv);

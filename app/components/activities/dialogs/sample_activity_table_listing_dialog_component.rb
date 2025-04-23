@@ -11,10 +11,11 @@ module Activities
         @activity[:parameters] = @activity.parameters.transform_keys(&:to_sym)
         @extended_details = activity.extended_details
         @activity_owner = activity_owner
-        set_params
+        set_additional_params
       end
 
-      def set_params # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      # @title, @description, @data, and @column_headers are all required attributes
+      def set_additional_params # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         return unless @activity.parameters[:action] == 'sample_clone'
 
         @title = I18n.t(:'components.activity.dialog.sample_clone.title')
@@ -37,7 +38,7 @@ module Activities
                          )
                        end
 
-        @table_data = @extended_details.details['cloned_samples_data'].to_json
+        @data = @extended_details.details['cloned_samples_data'].to_json
         @column_headers = [
           I18n.t(:'components.activity.dialog.sample_clone.copied_from'),
           I18n.t(:'components.activity.dialog.sample_clone.copied_to')
