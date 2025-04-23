@@ -913,3 +913,26 @@ input[type="checkbox"] {
 input[type="radio"] {
   @apply text-primary-600 checked:border-primary-500 dark:checked:border-primary-500 dark:checked:bg-primary-500 mt-0.5 shrink-0 rounded-full border-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:border-slate-700 dark:bg-slate-600;
 }
+
+select.language {
+  background-image: url("assets/icons/heroicons/language.svg") !important;
+  background-position: left 0.75rem center !important;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em !important;
+  text-indent: 2em;
+  padding-right: unset !important;
+  margin-right: 2.5em;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  width: 100%;
+}
+
+select.language:hover {
+  @apply cursor-pointer border-slate-50 bg-slate-50 dark:border-slate-600 dark:bg-slate-600;
+}
+
+@-moz-document url-prefix() {
+  select.language {
+    text-indent: 1em;
+  }
+}

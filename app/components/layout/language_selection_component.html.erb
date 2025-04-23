@@ -1,9 +1,17 @@
 <div class="inline-flex items-center">
   <%= form_with(model: @user, url: profile_preferences_path, method: :patch) do |form| %>
-    <%= viral_prefixed_select(form:, name: :locale, options:  @locale_options, selected_value: @user.locale.to_sym, onchange: "this.form.submit();", class: "bg-none", aria: { label: t(:'layouts.application.language_selection.aria_label')}) do |select| %>
-      <%= select.with_prefix do %>
-        <%= viral_icon(name: :language, classes: "h-5 w-5") %>
-      <% end %>
-    <% end %>
+    <%= form.select(
+      :locale,
+      @locale_options,
+      { selected: @user.locale.to_sym },
+      {
+        onchange: "this.form.submit();",
+        class:
+          "language bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg dark:bg-slate-700 dark:border-slate-600 dark:text-white",
+        aria: {
+          label: t(:"layouts.application.language_selection.aria_label"),
+        },
+      },
+    ) %>
   <% end %>
 </div>
