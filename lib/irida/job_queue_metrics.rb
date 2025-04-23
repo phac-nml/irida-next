@@ -20,18 +20,16 @@ module Irida
       end
     end
 
-    def update_job_queue_count(queue_name, value)
-      metric_update_job_queue_count(queue_name, value)
-    end
+    def update_queue_counts
+      queue_counts = GoodJob::Job
+                     .queued
+                     .group(:queue_name)
+                     .count
 
-    # def update_queue_counts
-    #   queue_counts = ::GoodJob::Job.queued.group(:queue_name).count
-    #
-    #   queue_counts.each do |queue_name, count|
-    #     # For this to work, we would need to change from an updown to a guage
-    #     metric_update_job_queue_count(queue_name, count)
-    #   end
-    # end
+      queue_counts.each do |queue_name, count|
+        metric_update_job_queue_count(queue_name, count)
+      end
+    end
 
     private
 
@@ -52,11 +50,11 @@ module Irida
     end
 
     def init_instrument(instrument_name, instrument_type)
-      if instrument_type == :up_down
-        meter.create_up_down_counter(
+      if instrument_type == :queue_count
+        meter.create_gauge(
           instrument_name, description: 'Current number of jobs in queue'
         )
-      else # gauge
+      else # queue_latency
         meter.create_gauge(
           instrument_name, unit: 's', description: 'Minimum time a queued job is waiting to be performed.'
         )
@@ -65,13 +63,13 @@ module Irida
 
     def metric_update_job_queue_count(queue_name, value)
       job_queue_count_instrument_name = "#{queue_name}_queue_count"
-      instrument = get_instrument(job_queue_count_instrument_name, :up_down)
-      instrument.add(value)
+      instrument = get_instrument(job_queue_count_instrument_name, :queue_count)
+      instrument.record(value)
     end
 
     def metric_update_queue_min_latency(queue_name, value)
       job_queue_latency_instrument_name = "#{queue_name}_queue_min_wait_time"
-      instrument = get_instrument(job_queue_latency_instrument_name, :gauge)
+      instrument = get_instrument(job_queue_latency_instrument_name, :queue_latency)
       instrument.record(value)
     end
   end

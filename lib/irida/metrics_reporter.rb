@@ -64,7 +64,8 @@ module Irida
 
       @reporter_thread = Thread.new do
         loop do
-          # run updates for metrics that are collected once per cycle instead of per action
+          # run updates for metrics that are collected once per cycle and not per action in code
+          Irida::JobQueueMetrics.instance.update_queue_counts
           Irida::JobQueueMetrics.instance.update_minimum_queue_times
 
           report
