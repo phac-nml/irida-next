@@ -3,6 +3,7 @@
 # Creates a wes connection and calls the submission service for the workflow execution
 class WorkflowExecutionSubmissionJob < ApplicationJob
   queue_as :default
+  queue_with_priority 5
 
   # When server is unreachable, continually retry
   retry_on Integrations::ApiExceptions::ConnectionError, wait: :polynomially_longer, attempts: Float::INFINITY

@@ -3,6 +3,7 @@
 # Perform actions required to cancel a workflow execution
 class WorkflowExecutionCancelationJob < ApplicationJob
   queue_as :default
+  queue_with_priority 5
 
   # When server is unreachable, continually retry
   retry_on Integrations::ApiExceptions::ConnectionError, wait: :polynomially_longer, attempts: Float::INFINITY

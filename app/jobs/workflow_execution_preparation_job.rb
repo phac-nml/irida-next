@@ -3,6 +3,7 @@
 # Queues the workflow execution submission job
 class WorkflowExecutionPreparationJob < ApplicationJob
   queue_as :default
+  queue_with_priority 20
 
   def perform(workflow_execution)
     return if workflow_execution.canceling? || workflow_execution.canceled?

@@ -4,6 +4,7 @@ module DataExports
   # Queues the data export create job
   class CleanupJob < ApplicationJob
     queue_as :default
+    queue_with_priority 50
 
     def perform
       Rails.logger.info 'Cleaning up all expired data exports'

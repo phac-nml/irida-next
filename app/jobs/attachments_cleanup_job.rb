@@ -3,6 +3,7 @@
 # delete/destroy attachements that have been deleted X days ago
 class AttachmentsCleanupJob < ApplicationJob
   queue_as :default
+  queue_with_priority 50
 
   # Finds all deleted attachments more than `days_old`` days old, and destroys them
   # Params:
