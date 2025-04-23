@@ -8,8 +8,5 @@
   >
     <%= prefix %>
   </span>
-  <%= form.select name,
-              options,
-              { selected: selected_value },
-              { onchange: on_change, class: select_classes } %>
+  <%= form.select name, options, { selected: selected_value }, **system_arguments %>
 </div>
