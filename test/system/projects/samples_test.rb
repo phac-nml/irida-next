@@ -1130,7 +1130,7 @@ module Projects
                                                                            locale: @user.locale))
       # toggle metadata on for samples table
       click_button I18n.t('shared.samples.metadata_templates.label')
-      click_button I18n.t("shared.samples.metadata_templates.fields.all")
+      click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -1208,7 +1208,7 @@ module Projects
                                                                            locale: @user.locale))
       # toggle metadata on for samples table
       click_button I18n.t('shared.samples.metadata_templates.label')
-      click_button I18n.t("shared.samples.metadata_templates.fields.all")
+      click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -1297,7 +1297,7 @@ module Projects
                                                                            locale: @user.locale))
       # toggle metadata on for samples table
       click_button I18n.t('shared.samples.metadata_templates.label')
-      click_button I18n.t("shared.samples.metadata_templates.fields.all")
+      click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -1392,7 +1392,7 @@ module Projects
                                                                            locale: @user.locale))
       # toggle metadata on for samples table
       click_button I18n.t('shared.samples.metadata_templates.label')
-      click_button I18n.t("shared.samples.metadata_templates.fields.all")
+      click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -1539,7 +1539,7 @@ module Projects
                                                                                locale: @user.locale))
       # toggle metadata on for samples table
       click_button I18n.t('shared.samples.metadata_templates.label')
-      click_button I18n.t("shared.samples.metadata_templates.fields.all")
+      click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -1601,7 +1601,7 @@ module Projects
                                                                                locale: @user.locale))
       # toggle metadata on for samples table
       click_button I18n.t('shared.samples.metadata_templates.label')
-      click_button I18n.t("shared.samples.metadata_templates.fields.all")
+      click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -1758,7 +1758,7 @@ module Projects
                                                                            locale: @user.locale))
       # toggle metadata on for samples table
       click_button I18n.t('shared.samples.metadata_templates.label')
-      click_button I18n.t("shared.samples.metadata_templates.fields.all")
+      click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -1834,7 +1834,7 @@ module Projects
                                                                            locale: @user.locale))
       # toggle metadata on for samples table
       click_button I18n.t('shared.samples.metadata_templates.label')
-      click_button I18n.t("shared.samples.metadata_templates.fields.all")
+      click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -3178,7 +3178,7 @@ module Projects
       assert_no_selector 'div[data-test-selector="spinner"]'
 
       click_button I18n.t('shared.samples.metadata_templates.label')
-      click_button I18n.t("shared.samples.metadata_templates.fields.all")
+      click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -3226,7 +3226,7 @@ module Projects
       assert_selector 'table thead tr th', count: 5
 
       click_button I18n.t('shared.samples.metadata_templates.label')
-      click_button I18n.t("shared.samples.metadata_templates.fields.all")
+      click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -3256,7 +3256,7 @@ module Projects
       assert_selector 'table thead tr th', count: 5
 
       click_button I18n.t('shared.samples.metadata_templates.label')
-      click_button I18n.t("shared.samples.metadata_templates.fields.all")
+      click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -3294,7 +3294,7 @@ module Projects
       assert_no_selector 'div[data-test-selector="spinner"]'
 
       click_button I18n.t('shared.samples.metadata_templates.label')
-      click_button I18n.t("shared.samples.metadata_templates.fields.all")
+      click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
@@ -3347,7 +3347,7 @@ module Projects
 
       # toggle metadata on for samples table
       click_button I18n.t('shared.samples.metadata_templates.label')
-      click_button I18n.t("shared.samples.metadata_templates.fields.all")
+      click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'
