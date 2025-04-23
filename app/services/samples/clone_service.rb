@@ -109,7 +109,7 @@ module Samples
                                                       action: 'sample_clone'
                                                     }
 
-      activity.create_activity_extended_detail(extended_detail_id: ext_details.id)
+      activity.create_activity_extended_detail(extended_detail_id: ext_details.id, activity_type: 'sample_clone')
 
       activity = @new_project.namespace.create_activity key: 'namespaces_project_namespace.samples.cloned_from',
                                                         owner: current_user,
@@ -121,7 +121,7 @@ module Samples
                                                           action: 'sample_clone'
                                                         }
 
-      activity.create_activity_extended_detail(extended_detail_id: ext_details.id)
+      activity.create_activity_extended_detail(extended_detail_id: ext_details.id, activity_type: 'sample_clone')
     end
   end
 end

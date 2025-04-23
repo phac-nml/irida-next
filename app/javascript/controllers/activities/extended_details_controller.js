@@ -153,7 +153,7 @@ export default class extends Controller {
     button.classList.add(...this.#pagination_button_enabled_state);
   }
 
-  // Generate table rows in format <td>SAMPLE_NAME <SAMPLE_PUID></td><td>SAMPLE_NAME <CLONE_PUID>
+  // Generate table rows in format <td>SAMPLE_NAME <SAMPLE_PUID></td><td>SAMPLE_NAME <CLONE_PUID></td>
   #generateTableRows(table_data) {
     for (let i = 0; i < table_data.length; i++) {
       let tr = document.createElement("tr");

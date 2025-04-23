@@ -180,6 +180,8 @@ en:
         system: System
     errors:
       models:
+        activity_extended_detail:
+          maximum_entries: Extended details record is already linked to the maximum number of activities for type %{activity_type}
         attachment:
           attributes:
             file:

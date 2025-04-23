@@ -10,8 +10,9 @@ class AddExtendedDetailsToActivities < ActiveRecord::Migration[8.0]
     end
 
     create_table :activity_extended_details, id: :uuid do |t|
-      t.uuid :activity_id
-      t.uuid :extended_detail_id
+      t.references :activity, type: :uuid, null: false, foreign_key: true, index: true
+      t.references :extended_detail, type: :uuid, null: false, foreign_key: true, index: true
+      t.string :activity_type, null: false
 
       t.timestamps
     end

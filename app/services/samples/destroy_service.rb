@@ -72,7 +72,8 @@ module Samples
                                                       action: 'sample_destroy_multiple'
                                                     }
 
-      activity.create_activity_extended_detail(extended_detail_id: ext_details.id)
+      activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
+                                               activity_type: 'sample_destroy_multiple')
     end
 
     def update_metadata_summary(sample)

@@ -75,7 +75,7 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
         activity.save!
 
         # Create the activity and extended details join table entry
-        activity.create_activity_extended_detail(extended_detail_id: ext_details.id)
+        activity.create_activity_extended_detail(extended_detail_id: ext_details.id, activity_type: 'sample_clone')
       end
 
       next unless !activity_cloned_from.nil? && Namespace.with_deleted.find_by(id: activity_cloned_from.trackable_id)
@@ -90,7 +90,8 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
       activity_cloned_from.save!
 
       # Create the activity and extended details join table entry
-      activity_cloned_from.create_activity_extended_detail(extended_detail_id: ext_details.id)
+      activity_cloned_from.create_activity_extended_detail(extended_detail_id: ext_details.id,
+                                                           activity_type: 'sample_clone')
     end
   end
 
@@ -158,7 +159,7 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
         activity.save!
 
         # Create the activity and extended details join table entry
-        activity.create_activity_extended_detail(extended_detail_id: ext_details.id)
+        activity.create_activity_extended_detail(extended_detail_id: ext_details.id, activity_type: 'sample_transfer')
       end
 
       unless !activity_transferred_from.nil? &&
@@ -176,7 +177,8 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
       activity_transferred_from.save!
 
       # Create the activity and extended details join table entry
-      activity_transferred_from.create_activity_extended_detail(extended_detail_id: ext_details.id)
+      activity_transferred_from.create_activity_extended_detail(extended_detail_id: ext_details.id,
+                                                                activity_type: 'sample_transfer')
     end
   end
 
@@ -218,7 +220,8 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
       activity.save!
 
       # Create the activity and extended details join table entry
-      activity.create_activity_extended_detail(extended_detail_id: ext_details.id)
+      activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
+                                               activity_type: 'sample_destroy_multiple')
     end
   end
 end

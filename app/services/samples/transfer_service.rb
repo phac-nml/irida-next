@@ -102,7 +102,7 @@ module Samples
                                                       action: 'sample_transfer'
                                                     }
 
-      activity.create_activity_extended_detail(extended_detail_id: ext_details.id)
+      activity.create_activity_extended_detail(extended_detail_id: ext_details.id, activity_type: 'sample_transfer')
 
       activity = @new_project.namespace.create_activity key: 'namespaces_project_namespace.samples.transferred_from',
                                                         owner: current_user,
@@ -114,7 +114,7 @@ module Samples
                                                           action: 'sample_transfer'
                                                         }
 
-      activity.create_activity_extended_detail(extended_detail_id: ext_details.id)
+      activity.create_activity_extended_detail(extended_detail_id: ext_details.id, activity_type: 'sample_transfer')
     end
 
     def update_samples_count(transferred_samples_count)
