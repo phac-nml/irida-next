@@ -18,55 +18,18 @@ data: {
     >
       <%= t("shared.samples.metadata_templates.fields.label") %>
     </li>
-    <li
-      class="
-        w-full border-b border-slate-200 dark:border-slate-600 hover:bg-slate-100
-        dark:hover:bg-slate-600
-      "
-    >
-      <div class="flex items-center ps-3">
-        <input
-          id="rl-all"
-          type="radio"
-          value="all"
-          name="q[metadata_template]"
-          onchange="this.form.requestSubmit()"
-          aria-checked="<%= @current_metadata_template_id == 'all' ? 'true' : 'false' %>"
-          tabindex="<%= @current_metadata_template_id == 'all' ? '0' : '-1' %>"
-          <%= @current_metadata_template_id == "all" ? "checked" : "" %>
-        >
-        <label
-          for="rl-all"
-          class="
-            w-full py-3 text-sm font-medium text-slate-900 ms-2 dark:text-slate-300
-          "
-        ><%= t("shared.samples.metadata_templates.fields.all") %></label>
-      </div>
-    </li>
-    <li
-      class="
-        w-full border-b border-slate-200 dark:border-slate-600 hover:bg-slate-100
-        dark:hover:bg-slate-600
-      "
-    >
-      <div class="flex items-center ps-3">
-        <input
-          id="rl-none"
-          type="radio"
-          value="none"
-          onchange="this.form.requestSubmit()"
-          name="q[metadata_template]"
-          aria-checked="<%= @current_metadata_template_id == 'none' ? 'true' : 'false' %>"
-          tabindex="<%= @current_metadata_template_id == 'none' ? '0' : '-1' %>"
-        >
-        <label
-          for="rl-none"
-          class="
-            w-full py-3 text-sm font-medium text-slate-900 ms-2 dark:text-slate-300
-          "
-        ><%= t("shared.samples.metadata_templates.fields.none") %></label>
-      </div>
-    </li>
+    <%= render partial: "shared/samples/metadata_template_item",
+    locals: {
+      selected: @current_metadata_template_id == "all",
+      label: t("shared.samples.metadata_templates.fields.all"),
+      value: "all",
+    } %>
+    <%= render partial: "shared/samples/metadata_template_item",
+    locals: {
+      selected: @current_metadata_template_id == "none",
+      label: t("shared.samples.metadata_templates.fields.none"),
+      value: "none",
+    } %>
     <%- if @metadata_templates.any? %>
       <li
         class="
@@ -77,31 +40,13 @@ data: {
         <%= t("shared.samples.metadata_templates.templates.label") %>
       </li>
       <% @metadata_templates.each do |metadata_template| %>
-        <li
-          class="
-            w-full border-b border-slate-200 dark:border-slate-600 hover:bg-slate-100
-            dark:hover:bg-slate-600
-          "
-        >
-          <div class="flex items-center ps-3">
-            <input
-              id="rl-<%= metadata_template.id %>"
-              type="radio"
-              value="<%= metadata_template.id %>"
-              onchange="this.form.requestSubmit()"
-              name="q[metadata_template]"
-              aria-checked="<%= @current_metadata_template_id == metadata_template.id ? 'true' : 'false' %>"
-              tabindex="<%= @current_metadata_template_id == metadata_template.id ? '0' : '-1' %>"
-              <%= @current_metadata_template_id == metadata_template.id ? "checked" : "" %>
-            >
-            <label
-              for="rl-<%= metadata_template.id %>"
-              class="
-                w-full py-3 text-sm font-medium text-slate-900 ms-2 dark:text-slate-300
-              "
-            ><%= metadata_template.name %></label>
-          </div>
-        </li>
+        <%= render partial: "shared/samples/metadata_template_item",
+        locals: {
+          selected: @current_metadata_template_id == metadata_template.id,
+          label: metadata_template.name,
+          value: metadata_template.id,
+        } %>
+
       <% end %>
     <% end %>
   </ul>
