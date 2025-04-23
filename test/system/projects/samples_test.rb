@@ -2745,7 +2745,7 @@ module Projects
       click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
 
       within('#multiple-deletions-dialog') do
-        assert_selector 'form[data-connected="true"]'
+        assert_selector 'form[data-infinite-scroll-target="pageForm"]'
         sleep 1
         click_button I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
