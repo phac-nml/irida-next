@@ -22,8 +22,10 @@ module Pathogen
     end
 
     def icon_visual(args, name)
-      args[:class] = class_names(args[:class], icon_classes, "#{name}_icon")
-      Pathogen::Icon.new(**args)
+      puts "Icon visual called with args: #{args.inspect}"
+      puts "Icon visual name: #{name}"
+      classes = class_names(args[:class], icon_classes, "#{name}_icon")
+      icon args[:icon], class: classes
     end
 
     def svg_visual(args, name)
