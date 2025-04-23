@@ -3,6 +3,7 @@
 # Permanently deletes samples that have been soft deleted 'x' days ago.
 class SamplesCleanupJob < ApplicationJob
   queue_as :default
+  queue_with_priority 50
 
   def perform(days_old: 7)
     if !days_old.instance_of?(Integer) || (days_old < 1)

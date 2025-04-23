@@ -4,6 +4,7 @@ module Samples
   # Job used to transfer samples
   class TransferJob < ApplicationJob
     queue_as :default
+    queue_with_priority 15
 
     def perform(project, current_user, new_project_id, sample_ids, broadcast_target) # rubocop:disable Metrics/MethodLength
       @transferred_sample_ids = ::Samples::TransferService.new(project, current_user)

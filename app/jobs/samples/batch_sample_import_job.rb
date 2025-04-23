@@ -4,6 +4,7 @@ module Samples
   # Job used to import metadata for samples
   class BatchSampleImportJob < ApplicationJob
     queue_as :default
+    queue_with_priority 15
 
     def perform(namespace, current_user, broadcast_target, blob_id, params) # rubocop:disable Metrics/MethodLength
       response = ::Samples::BatchFileImportService.new(namespace, current_user, blob_id, params).execute(

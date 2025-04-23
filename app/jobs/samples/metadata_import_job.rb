@@ -4,12 +4,12 @@ module Samples
   # Job used to import metadata for samples
   class MetadataImportJob < ApplicationJob
     queue_as :default
+    queue_with_priority 15
 
     def perform(namespace, current_user, broadcast_target, blob_id, params) # rubocop:disable Metrics/MethodLength
       ::Samples::Metadata::FileImportService.new(namespace, current_user, blob_id, params).execute(
         Flipper.enabled?(:progress_bars) ? broadcast_target : nil
       )
-
 
       if namespace.errors.empty?
         Turbo::StreamsChannel.broadcast_replace_to(

@@ -4,6 +4,15 @@ module DataExports
   # Queues the data export create job
   class CreateJob < ApplicationJob # rubocop:disable Metrics/ClassLength
     queue_as :default
+    queue_with_priority do
+      data_export = arguments.first
+      case data_export.export_type
+      when 'sample', 'analysis'
+        40
+      when 'linelist'
+        35
+      end
+    end
 
     def perform(data_export)
       initialize_manifest(data_export.export_type) unless data_export.export_type == 'linelist'
@@ -98,7 +107,7 @@ module DataExports
       ]
 
       child_count = @manifest['children'].count
-      (@manifest['children']).each_with_index do |child, index|
+      @manifest['children'].each_with_index do |child, index|
         # push with * is used to flatten array without creating a new array
         output_lines.push(*simple_manifest_gen_lines_recursive(
           cursor: child, prefix: '', final_child: child_count == index + 1
@@ -126,7 +135,7 @@ module DataExports
 
       if cursor['type'] == 'folder'
         child_count = cursor['children'].count
-        (cursor['children']).each_with_index do |child, index|
+        cursor['children'].each_with_index do |child, index|
           # push with * is used to flatten array without creating a new array
           output.push(*simple_manifest_gen_lines_recursive(
             cursor: child, prefix: child_prefix, final_child: child_count == index + 1
