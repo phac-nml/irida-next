@@ -15,8 +15,7 @@ module Pathogen
         )
       }
 
-      # TODO: fully implement once icons are added to pathogen
-      renders_one :icon, Pathogen::Icon
+      renders_one :icon
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(controls:, tab_type:, selected: false, text: '', wrapper_arguments: {}, **system_arguments)
