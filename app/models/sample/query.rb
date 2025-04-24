@@ -90,24 +90,23 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
   end
 
   def advanced_query_scope
-    Sample.with(
-      namespace_samples: Sample.where(project_id: project_ids).select(:id),
-      filtered_samples: advanced_query_groups
-    ).where(
-      Arel.sql('samples.id in (select * from namespace_samples) and id in (select id from filtered_samples)')
-    )
+    Sample.where(project_id: project_ids).and(advanced_query_groups)
   end
 
   def advanced_query_groups
-    or_conditions = []
+    adv_query_scope = nil
     groups.each do |group|
-      group_scope = Sample.all
+      group_scope = Sample
       group.conditions.map do |condition|
         group_scope = add_condition(group_scope, condition)
       end
-      or_conditions << group_scope
+      adv_query_scope = if adv_query_scope.nil?
+                          group_scope
+                        else
+                          adv_query_scope.or(group_scope)
+                        end
     end
-    or_conditions
+    adv_query_scope
   end
 
   def add_condition(scope, condition) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
@@ -123,26 +122,34 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
     # TODO: Refactor each case into it's own method
     case condition.operator
     when '='
-      if metadata_field || %w[name puid].include?(condition.field)
+      if metadata_field || condition.field == 'name'
         scope.where(node.matches(condition.value))
+      elsif condition.field == 'puid'
+        scope.where(node.eq(condition.value.upcase))
       else
         scope.where(node.eq(condition.value))
       end
     when 'in'
-      if metadata_field || %w[name puid].include?(condition.field)
+      if metadata_field || condition.field == 'name'
         scope.where(node.matches_any(condition.value))
+      elsif condition.field == 'puid'
+        scope.where(node.in(condition.value.map(&:upcase)))
       else
         scope.where(node.in(condition.value))
       end
     when '!='
-      if metadata_field || %w[name puid].include?(condition.field)
+      if metadata_field || condition.field == 'name'
         scope.where(node.eq(nil).or(node.does_not_match(condition.value)))
+      elsif condition.field == 'puid'
+        scope.where(node.not_eq(condition.value.upcase))
       else
         scope.where(node.not_eq(condition.value))
       end
     when 'not_in'
-      if metadata_field || %w[name puid].include?(condition.field)
+      if metadata_field || condition.field == 'name'
         scope.where(node.eq(nil).or(node.does_not_match_all(condition.value)))
+      elsif condition.field == 'puid'
+        scope.where(node.in(condition.value.map(&:upcase)))
       else
         scope.where(node.not_in(condition.value))
       end
