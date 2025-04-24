@@ -155,21 +155,21 @@ module Groups
       end
 
       click_on 'Sample ID'
-      assert_selector 'table thead th:first-child svg.icon-arrow_up'
+      assert_selector 'table thead th[aria-sort="ascending"]', text: 'Sample ID'.upcase
       puids = retrieve_puids
       (puids.length - 1).times do |n|
         assert puids[n] < puids[n + 1]
       end
 
       click_on 'Sample ID'
-      assert_selector 'table thead th:first-child svg.icon-arrow_down'
+      assert_selector 'table thead th[aria-sort="descending"]', text: 'Sample ID'.upcase
       puids = retrieve_puids
       (puids.length - 1).times do |n|
         assert puids[n] > puids[n + 1]
       end
 
       click_on 'Sample Name'
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      assert_selector 'table thead th[aria-sort="ascending"]', text: 'Sample Name'.upcase
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
@@ -177,8 +177,8 @@ module Groups
         assert_selector 'tr:nth-child(2) td:nth-child(2)', text: @sample2.name
       end
 
-      click_on 'Created'
-      assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
+      click_on 'Sample Name'
+      assert_selector 'table thead th[aria-sort="descending"]', text: 'Sample Name'.upcase
       within('table tbody') do
         assert_selector 'tr:nth-child(3) th', text: @sample28.puid
         assert_selector 'tr:nth-child(3) td:nth-child(2)', text: @sample28.name
@@ -187,7 +187,7 @@ module Groups
       end
 
       click_on 'Created'
-      assert_selector 'table thead th:nth-child(4) svg.icon-arrow_down'
+      assert_selector 'table thead th[aria-sort="ascending"]', text: 'Created'.upcase
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
