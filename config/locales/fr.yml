@@ -1929,7 +1929,7 @@ fr:
         sample_exists: 'Échantillon %{sample_puid} : Conflit avec l’échantillon nommé ''%{sample_name}'' dans le projet cible'
         samples_not_found: 'Les échantillons avec les identifiants d’échantillon suivants n’ont pas pu être transférés puisqu’ils n’ont pas été trouvés dans le projet source : %{sample_ids}'
     spreadsheet_import:
-      csv_file_malformed: The CSV file is malformed. New line characters must be either '\r\n' (DOS) or '\n' (Unix).
+      csv_file_malformed: The CSV file is malformed.
       duplicate_column_names: Le fichier comporte des noms d’en-tête de colonne en double. Veuillez supprimer les colonnes avec des noms d’en-tête en double et réessayer de les télécharger.
       invalid_file_extension: Le fichier ne peut être qu’un fichier csv, tsv ou excel.
       missing_data_columns: Il manque des colonnes de données au fichier. Veuillez ajouter des colonnes de données et des en-têtes supplémentaires et réessayer le téléchargement.

@@ -313,6 +313,21 @@ module Samples
                      I18n.t('services.spreadsheet_import.missing_data_row'))
       end
 
+      test 'import sample metadata with malformed file' do
+        file = Rack::Test::UploadedFile.new(Rails.root.join('test/fixtures/files/metadata/malformed.csv'))
+
+        blob = ActiveStorage::Blob.create_and_upload!(
+          io: file,
+          filename: file.original_filename,
+          content_type: file.content_type
+        )
+
+        params = { sample_id_column: 'sample_name' }
+        assert_empty Samples::Metadata::FileImportService.new(@project.namespace, @john_doe, blob.id, params).execute
+        assert_equal(@project.namespace.errors.full_messages_for(:base).first,
+                     I18n.t('services.spreadsheet_import.csv_file_malformed'))
+      end
+
       test 'import sample metadata with an empty header' do
         assert_equal({}, @sample1.metadata)
         assert_equal({}, @sample2.metadata)

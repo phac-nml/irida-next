@@ -41,7 +41,7 @@ class BaseSpreadsheetImportService < BaseService
     raise FileImportError, I18n.t('services.spreadsheet_import.invalid_file_extension')
   end
 
-  def download_batch_import_file(extension)
+  def download_batch_import_file(extension) # rubocop:disable Metrics/MethodLength
     begin
       @temp_import_file.binmode
       @file.download do |chunk|
