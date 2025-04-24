@@ -89,18 +89,43 @@ export default class Select2Controller extends Controller {
   }
 
   /**
-   * Handles item selection (click or keyboard).
-   * @param {Event} event
+   * Handles item selection triggered by click or keyboard (Enter key).
+   * Determines the selected item, updates the input and hidden fields,
+   * hides the dropdown, and sets focus back to the input.
+   * @param {Event} event - The event object (e.g., click, keydown).
    */
   select(event) {
     try {
-      const { label, value } = event.target.dataset;
-      if (!label || !value)
-        throw new Error("Invalid selection: missing label or value.");
-      this.#updateSelection(value, label);
-      this.#setItemSelected(true);
-      if (this.#dropdown) this.#dropdown.hide();
-      this.inputTarget.focus();
+      let selectedItemData = null;
+
+      // Case 1: Direct click on an item
+      if (event.target?.dataset?.value && event.target?.dataset?.label) {
+        selectedItemData = event.target.dataset;
+        this.#setItemSelected(true); // Mark as selected only on direct interaction
+      }
+      // Case 2: Selection via keyboard navigation (Enter key)
+      else if (this.#currentItemIndex >= 0) {
+        const currentItem = this.#visibleItems()[this.#currentItemIndex];
+        if (currentItem?.dataset?.value && currentItem?.dataset?.label) {
+          selectedItemData = currentItem.dataset;
+          // #setItemSelected is implicitly handled by #updateSelection if needed,
+          // or might already be true from previous direct interaction.
+          // Avoid setting it unconditionally here for keyboard nav.
+        }
+      }
+
+      if (selectedItemData) {
+        const { value, label } = selectedItemData;
+        this.#updateSelection(value, label);
+        if (this.#dropdown) this.#dropdown.hide();
+        this.inputTarget.focus();
+      } else {
+        // If no valid item was determined (edge case or unexpected state),
+        // potentially reset or log, but avoid throwing an error unless critical.
+        console.warn("Select2Controller: Could not determine selected item.");
+        // Optionally, reset the input if no selection is confirmed
+        // this.#resetInput();
+      }
     } catch (error) {
       this.#handleError(error, "select");
     }
@@ -134,7 +159,7 @@ export default class Select2Controller extends Controller {
           this.#resetInput();
           break;
         case Select2Controller.#KEY_CODES.ENTER:
-          if (event.target.nodeName === "INPUT") {
+          if (this.#currentItemIndex < 0) {
             if (this.#dropdown) this.#dropdown.show();
           } else {
             this.select(event);
@@ -211,14 +236,25 @@ export default class Select2Controller extends Controller {
   }
 
   #updateSelection(value, label) {
-    if (!label || !value)
-      throw new Error("Cannot update selection with empty values");
+    if (!label || !value) {
+      // It's better to handle this potential issue gracefully or log it,
+      // rather than throwing an error that might break user flow.
+      console.error(
+        "Select2Controller: Attempted to update selection with invalid data.",
+        { value, label },
+      );
+      return; // Prevent updating with invalid data
+    }
     this.inputTarget.value = label;
-    this.#cachedInputValue = value;
+    this.#cachedInputValue = value; // Cache the *value*, not the label
     this.hiddenTarget.value = value;
-    this.hideDropdown();
-    this.inputTarget.focus();
-    this.#updateAriaSelected(label);
+    this.#updateAriaSelected(label); // Update ARIA state based on the new selection
+
+    // Ensure itemSelected state reflects a valid selection update
+    this.#setItemSelected(true);
+
+    // Note: Hiding dropdown and focusing input are now handled back in the `select` method
+    // after #updateSelection completes successfully.
   }
 
   #resetInput() {
@@ -250,11 +286,14 @@ export default class Select2Controller extends Controller {
 
     // Remove highlight from previous item
     if (this.#currentItemIndex >= 0 && visibleItems[this.#currentItemIndex]) {
-      visibleItems[this.#currentItemIndex].classList.remove("bg-slate-100");
+      visibleItems[this.#currentItemIndex].classList.remove(
+        "bg-slate-200",
+        "border-slate-500",
+      );
     }
 
     visibleItems[newIndex].focus();
-    visibleItems[newIndex].classList.add("bg-slate-100"); // Optional: highlight focused item
+    visibleItems[newIndex].classList.add("bg-slate-200", "border-slate-500"); // Optional: highlight focused item
     this.#currentItemIndex = newIndex;
     this.#ensureItemVisible(visibleItems[newIndex]);
     this.#updateAriaActiveDescendant();
@@ -267,20 +306,31 @@ export default class Select2Controller extends Controller {
 
     // Remove highlight from previous item
     if (this.#currentItemIndex >= 0 && visibleItems[this.#currentItemIndex]) {
-      visibleItems[this.#currentItemIndex].classList.remove("bg-slate-100");
+      visibleItems[this.#currentItemIndex].classList.remove(
+        "bg-slate-200",
+        "border-slate-500",
+      );
     }
 
     visibleItems[newIndex].focus();
-    visibleItems[newIndex].classList.add("bg-slate-100"); // Optional: highlight focused item
+    visibleItems[newIndex].classList.add("bg-slate-200", "border-slate-500"); // Optional: highlight focused item
     this.#currentItemIndex = newIndex;
     this.#ensureItemVisible(visibleItems[newIndex]);
     this.#updateAriaActiveDescendant();
   }
 
   #visibleItems() {
-    return this.itemTargets.filter(
-      (item) => !item.parentNode.classList.contains("hidden"),
-    );
+    // Filter only items that are direct children of the scroller and not hidden
+    // This assumes items are direct children or nested within a structure where
+    // the parent visibility check is appropriate. Adjust if structure differs.
+    return this.itemTargets.filter((item) => {
+      // Check if the item itself or its immediate parent container is hidden
+      const parentElement = item.closest("li") || item.parentNode; // Adjust selector if needed
+      return (
+        !item.classList.contains("hidden") &&
+        !parentElement.classList.contains("hidden")
+      );
+    });
   }
 
   #ensureItemVisible(item) {

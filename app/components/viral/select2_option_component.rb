@@ -5,8 +5,8 @@ module Viral
   class Select2OptionComponent < Viral::Component
     erb_template <<~ERB
       <li
-        class="flex flex-col text-left p-2.5 rounded-md bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 dark:hover:bg-slate-600
-               cursor-pointer border border-transparent transition-colors duration-150 mx-0.5 my-0.5"
+        class="flex flex-col text-left p-2.5 rounded bg-slate-50 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600
+               cursor-pointer mx-0.5 my-0.5 border hover:border-slate-500 dark:hover:border-slate-600"
         role="option"
         aria-selected="false"
         id="select2-option-<%= @value %>"
