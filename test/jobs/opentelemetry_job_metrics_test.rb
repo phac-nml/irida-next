@@ -1,0 +1,84 @@
+# frozen_string_literal: true
+
+require 'test_helper'
+require 'minitest/autorun'
+
+class OpenTelemetryJobMetricsTest < ActiveJob::TestCase
+  def setup
+    # Set up a mock OpenTelemetry Meter to handle calls from the job metrics singleton
+    @job_queue_metrics = Irida::JobQueueMetrics.instance
+    @mock_meter = Minitest::Mock.new
+    @job_queue_metrics.instance_variable_set(:@meter, @mock_meter)
+  end
+
+  class DummyJob < ApplicationJob
+    self.queue_adapter = :good_job
+    queue_as :default
+
+    def perform(time)
+      Rails.logger.info "Performing dummy job with sleep time #{time}"
+      sleep time
+    end
+  end
+
+  test 'metric instrument record' do
+    # mock instrument on meter that records values
+    mock_instrument = Minitest::Mock.new
+    mock_instrument.expect(:record, nil, [234])
+    # using 'default' as our queue name
+    @mock_meter.expect(:create_gauge, mock_instrument, ['default_queue_count'], description: String)
+
+    # call private method to test basic record
+    @job_queue_metrics.instance_eval("metric_update_job_queue_count('default',234)", __FILE__, __LINE__)
+
+    # verify objects called as expected
+    assert mock_instrument.verify
+    assert @mock_meter.verify
+  end
+
+  test 'update queue counts' do
+    # mock instrument on meter that records values
+    mock_queue_count_instrument = Minitest::Mock.new
+    mock_queue_count_instrument.expect(:record, nil, [1])
+    # using 'default' as our queue name
+    @mock_meter.expect(:create_gauge, mock_queue_count_instrument, ['default_queue_count'], description: String)
+
+    # queue a job
+    DummyJob.set(wait: 2.minutes).perform_later(1)
+    travel_to(3.minutes.from_now) do
+      # run metrics while job is queued
+      @job_queue_metrics.update_queue_counts
+      # don't let job procs hang
+      GoodJob.perform_inline
+    end
+
+    # verify objects called as expected
+    mock_queue_count_instrument.verify
+    @mock_meter.verify
+  end
+
+  test 'update queue latency' do
+    # mock instrument on meter that records values
+    mock_queue_latency_instrument = Minitest::Mock.new
+    mock_queue_latency_instrument.expect(:record, nil) do |latency|
+      latency > 55 && latency < 65 # Expect latency to be about a minute
+    end
+    # using 'default' as our queue name
+    @mock_meter.expect(
+      :create_gauge, mock_queue_latency_instrument, ['default_queue_min_wait_time'], unit: String, description: String
+    )
+
+    # queue a job
+    DummyJob.set(wait: 2.minutes).perform_later(1)
+    travel_to(3.minutes.from_now) do
+      # run metrics while job is queued
+      @job_queue_metrics.update_minimum_queue_times
+      # don't let job procs hang
+      GoodJob.perform_inline
+    end
+
+    # verify objects called as expected
+    mock_queue_latency_instrument.verify
+    @mock_meter.verify
+  end
+end
