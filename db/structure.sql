@@ -31,6 +31,20 @@ COMMENT ON EXTENSION hstore IS 'data type for storing sets of (key, value) pairs
 
 
 --
+-- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION pg_trgm; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION pg_trgm IS 'text similarity measurement and index searching based on trigrams';
+
+
+--
 -- Name: logidze_capture_exception(jsonb); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -1556,6 +1570,13 @@ CREATE INDEX index_samples_on_metadata_provenance ON public.samples USING gin (m
 
 
 --
+-- Name: index_samples_on_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_samples_on_name ON public.samples USING gist (name public.gist_trgm_ops);
+
+
+--
 -- Name: index_samples_on_project_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1567,6 +1588,13 @@ CREATE INDEX index_samples_on_project_id ON public.samples USING btree (project_
 --
 
 CREATE UNIQUE INDEX index_samples_on_puid ON public.samples USING btree (puid);
+
+
+--
+-- Name: index_samples_on_puid_gist; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_samples_on_puid_gist ON public.samples USING gist (puid public.gist_trgm_ops);
 
 
 --
@@ -1925,6 +1953,7 @@ ALTER TABLE ONLY public.workflow_executions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250424155356'),
 ('20250416191422'),
 ('20250414172424'),
 ('20250219172718'),
