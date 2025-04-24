@@ -480,15 +480,25 @@ fr:
         sample_clone:
           copied_from: COPIED FROM
           copied_to: COPIED TO
-          source_project_description: "%{user} copied %{count} samples from project %{source_project_puid}"
-          target_project_description: "%{user} copied %{count} samples to project %{target_project_puid}"
+          source_project_description:
+            one: "%{user} copied 1 sample from project %{source_project_puid}"
+            other: "%{user} copied %{count} samples from project %{source_project_puid}"
+          target_project_description:
+            one: "%{user} copied 1 sample to project %{target_project_puid}"
+            other: "%{user} copied %{count} samples to project %{target_project_puid}"
           title: Copied Samples
         sample_destroy:
-          description: "%{user} removed %{count} samples from the project"
+          description:
+            one: "%{user} removed 1 sample from the project"
+            other: "%{user} removed %{count} samples from the project"
           title: Deleted Samples
         sample_transfer:
-          source_project_description: "%{user} transferred %{count} samples from project %{source_project_puid}"
-          target_project_description: "%{user} transferred %{count} samples to project %{target_project_puid}"
+          source_project_description:
+            one: "%{user} transferred 1 sample from project %{source_project_puid}"
+            other: "%{user} transferred %{count} samples from project %{source_project_puid}"
+          target_project_description:
+            one: "%{user} transferred 1 sample to project %{target_project_puid}"
+            other: "%{user} transferred %{count} samples to project %{target_project_puid}"
           title: Transferred Samples
       load_more: Charger plus
       more_details: More details
