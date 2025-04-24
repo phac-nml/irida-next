@@ -44,8 +44,8 @@ module Activities
           assert_selector 'table', count: 1
           assert_selector 'th', count: 2
           assert_selector 'tr', count: 2
-          assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.sample_clone.copied_from')
-          assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.sample_clone.copied_to')
+          assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.sample_clone.copied_from').upcase
+          assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.sample_clone.copied_to').upcase
           assert_selector 'tr > td', text: 'INXT_SAM_AAAAAAAAAA'
           assert_selector 'tr > td', text: 'INXT_SAM_XAAAATAAAA'
         end
@@ -78,8 +78,8 @@ module Activities
         assert_selector 'table', count: 1
         assert_selector 'th', count: 2
         assert_selector 'tr', count: 2
-        assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.sample_clone.copied_from')
-        assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.sample_clone.copied_to')
+        assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.sample_clone.copied_from').upcase
+        assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.sample_clone.copied_to').upcase
         assert_selector 'tr > td', text: 'INXT_SAM_AAAAAAAAAA'
         assert_selector 'tr > td', text: 'INXT_SAM_XAAAATAAAA'
       end

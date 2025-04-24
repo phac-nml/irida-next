@@ -478,8 +478,8 @@ en:
           next: Next
           previous: Previous
         sample_clone:
-          copied_from: COPIED FROM
-          copied_to: COPIED TO
+          copied_from: Copied From
+          copied_to: Copied To
           source_project_description:
             one: "%{user} copied 1 sample from project %{source_project_puid}"
             other: "%{user} copied %{count} samples from project %{source_project_puid}"

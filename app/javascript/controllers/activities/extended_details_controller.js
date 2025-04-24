@@ -16,27 +16,6 @@ export default class extends Controller {
     activityType: { type: String, default: "" },
   };
 
-  #pagination_button_disabled_state = [
-    "cursor-default",
-    "text-slate-600",
-    "bg-slate-50",
-    "dark:bg-slate-700",
-    "dark:text-slate-400",
-    "pointer-events-none",
-  ];
-  #pagination_button_enabled_state = [
-    "text-slate-500",
-    "bg-white",
-    "hover:bg-slate-100",
-    "hover:text-slate-700",
-    "dark:bg-slate-800",
-    "dark:text-slate-400",
-    "dark:hover:bg-slate-700",
-    "dark:hover:text-white",
-    "cursor",
-    "cursor-pointer",
-  ];
-
   // pagination page params
   #currentPage;
   #lastPage;
@@ -143,14 +122,10 @@ export default class extends Controller {
 
   #disablePaginationButton(button) {
     button.disabled = true;
-    button.classList.remove(...this.#pagination_button_enabled_state);
-    button.classList.add(...this.#pagination_button_disabled_state);
   }
 
   #enablePaginationButton(button) {
     button.disabled = false;
-    button.classList.remove(...this.#pagination_button_disabled_state);
-    button.classList.add(...this.#pagination_button_enabled_state);
   }
 
   // Generate table rows in format <td>SAMPLE_NAME <SAMPLE_PUID></td><td>SAMPLE_NAME <CLONE_PUID></td>
@@ -198,7 +173,8 @@ export default class extends Controller {
         "flex items-center space-x-4 rtl:space-x-reverse";
       iconDiv.className = "shrink-0";
       paragraphDiv.className = "flex-1 min-w-0";
-      paragraph.className = "text-sm text-gray-500 truncate dark:text-gray-400";
+      paragraph.className =
+        "text-sm text-slate-500 truncate dark:text-slate-400";
       span.className =
         "bg-green-100 ml-2 dark:bg-green-900 dark:text-green-300 font-medium px-2.5 py-0.5 rounded-full text-green-800 text-xs";
 
