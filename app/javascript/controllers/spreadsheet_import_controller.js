@@ -6,54 +6,63 @@ export default class extends Controller {
     "sampleNameColumn",
     "projectPUIDColumn",
     "sampleDescriptionColumn",
+    "staticProject",
     "submitButton",
   ];
 
   static values = {
-    group: Boolean
-  }
+    selectSample: String,
+    selectDescription: String,
+    selectProject: String,
+  };
 
-  #header_map = {};
+  #defaultSampleColumnHeaders = [
+    "sample_name",
+    "sample name",
+    "sample",
+    "sample_id",
+    "sample id",
+  ];
 
-  #headers = [];
-
-  #curr_sample_name = null;
-  #curr_project_puid = null;
-  #curr_sample_description = null;
+  #allHeaders;
+  #selectedHeaders = { sampleColumn: null, descriptionColumn: null };
+  #blankValues = {
+    sampleColumn: this.selectSampleValue,
+    descriptionColumn: this.selectDescriptionValue,
+  };
 
   connect() {
-    this.#disableTarget(this.sampleNameColumnTarget);
-    if (this.groupValue) {
-      this.#disableTarget(this.projectPUIDColumnTarget);
+    if (this.hasProjectPUIDColumnTarget) {
+      this.#selectedHeaders["projectColumn"] = null;
+      this.#blankValues["projectColumn"] = this.selectProjectValue;
     }
-    this.#disableTarget(this.sampleDescriptionColumnTarget);
   }
 
-  changeSampleNameInput(event) {
-    this.#header_map[this.#curr_sample_name] = false;
-    const { value } = event.target;
-    this.#curr_sample_name = value;
-    this.#header_map[this.#curr_sample_name] = true;
-    this.#refreshInputOptionsForAllFields();
-    this.#checkFormInputsReadyForSubmit();
+  changeInputValue(event) {
+    switch (event.target.id) {
+      case "sampleColumn":
+        this.#updateInputValue(this.sampleNameColumnTarget, event.target.value);
+        this.#refreshInputOptionsForAllFields();
+        break;
+      case "projectColumn":
+        this.#updateInputValue(
+          this.projectPUIDColumnTarget,
+          event.target.value,
+        );
+        this.#refreshInputOptionsForAllFields();
+        break;
+      case "descriptionColumn":
+        this.#updateInputValue(
+          this.sampleDescriptionColumnTarget,
+          event.target.value,
+        );
+        this.#refreshInputOptionsForAllFields();
+        break;
+    }
   }
 
-  changeProjectPUIDInput(event) {
-    this.#header_map[this.#curr_project_puid] = false;
-    const { value } = event.target;
-    this.#curr_project_puid = value;
-    this.#header_map[this.#curr_project_puid] = true;
-    this.#refreshInputOptionsForAllFields();
-    this.#checkFormInputsReadyForSubmit();
-  }
-
-  changeSampleDescriptionInput(event) {
-    this.#header_map[this.#curr_sample_description] = false;
-    const { value } = event.target;
-    this.#curr_sample_description = value;
-    this.#header_map[this.#curr_sample_description] = true;
-    this.#refreshInputOptionsForAllFields();
-    this.#checkFormInputsReadyForSubmit();
+  #updateInputValue(target, value) {
+    this.#selectedHeaders[target.id] = value;
   }
 
   readFile(event) {
@@ -72,91 +81,157 @@ export default class extends Controller {
       const workbook = XLSX.read(reader.result, { sheetRows: 1 });
       const worksheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[worksheetName];
-      this.#headers = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
-      this.#buildHeaderMap();
-      this.#initSelection();
-      this.#refreshInputOptionsForAllFields()
+      const headers = XLSX.utils.sheet_to_json(worksheet, {
+        header: 1,
+      })[0];
+      // sort case insensitively
+      this.#allHeaders = headers.sort(function (a, b) {
+        return a.toLowerCase().localeCompare(b.toLowerCase());
+      });
+      this.#setAutoSelections();
+      if (this.hasStaticProjectTarget) {
+        this.#enableTarget(this.staticProjectTarget);
+      }
+      this.checkFormInputsReadyForSubmit();
     };
   }
 
   #clearFormOptions() {
-    this.#removeInputOptions(this.sampleNameColumnTarget);
+    this.#selectedHeaders = { sampleColumn: null, descriptionColumn: null };
+    this.sampleNameColumnTarget.innerHTML = "";
     this.#disableTarget(this.sampleNameColumnTarget);
-    if (this.groupValue) {
-      this.#removeInputOptions(this.projectPUIDColumnTarget);
+    if (this.hasProjectPUIDColumnTarget) {
+      this.#selectedHeaders["projectColumn"] = null;
+      this.projectPUIDColumnTarget.innerHTML = "";
       this.#disableTarget(this.projectPUIDColumnTarget);
     }
-    this.#removeInputOptions(this.sampleDescriptionColumnTarget);
+    this.sampleDescriptionColumnTarget.innerHTML = "";
     this.#disableTarget(this.sampleDescriptionColumnTarget);
     this.submitButtonTarget.disabled = true;
   }
 
-  #buildHeaderMap() {
-    this.#header_map = {}
-    this.#headers.forEach(h => {
-      this.#header_map[h] = false;
-    })
-  }
+  #setAutoSelections() {
+    // lower case to test for case insensitivity
+    const allHeadersToLowerCase = this.#allHeaders.map((header) =>
+      header.toLowerCase(),
+    );
+    for (const sampleColumnHeader of this.#defaultSampleColumnHeaders) {
+      const sampleIndex = allHeadersToLowerCase.indexOf(sampleColumnHeader);
+      if (sampleIndex > -1) {
+        this.#updateInputValue(
+          this.sampleNameColumnTarget,
+          this.#allHeaders[sampleIndex],
+        );
+        break;
+      }
+    }
 
-  #initSelection() {
-    this.#curr_sample_name = null;
-    this.#curr_project_puid = null;
-    this.#curr_sample_description = null;
+    const descriptionIndex = allHeadersToLowerCase.indexOf("description");
+    if (descriptionIndex > -1) {
+      this.#updateInputValue(
+        this.sampleDescriptionColumnTarget,
+        this.#allHeaders[descriptionIndex],
+      );
+    }
+
+    if (this.hasProjectPUIDColumnTarget) {
+      const projectIndex = allHeadersToLowerCase.indexOf("project_puid");
+      if (projectIndex > -1) {
+        this.#updateInputValue(
+          this.projectPUIDColumnTarget,
+          this.#allHeaders[projectIndex],
+        );
+      }
+    }
+
+    this.#refreshInputOptionsForAllFields();
   }
 
   #refreshInputOptionsForAllFields() {
-    this.#refreshInputOptions(this.sampleNameColumnTarget, this.#curr_sample_name)
-    if (this.groupValue) {
-      this.#refreshInputOptions(this.projectPUIDColumnTarget, this.#curr_project_puid)
+    const unselectedHeaders = this.#processUnselectedHeaders();
+    this.#refreshInputOptions(
+      this.sampleNameColumnTarget,
+      this.#selectedHeaders["sampleColumn"],
+      unselectedHeaders,
+    );
+    if (this.hasProjectPUIDColumnTarget) {
+      this.#refreshInputOptions(
+        this.projectPUIDColumnTarget,
+        this.#selectedHeaders["projectColumn"],
+        unselectedHeaders,
+      );
     }
-    this.#refreshInputOptions(this.sampleDescriptionColumnTarget, this.#curr_sample_description)
+    this.#refreshInputOptions(
+      this.sampleDescriptionColumnTarget,
+      this.#selectedHeaders["descriptionColumn"],
+      unselectedHeaders,
+    );
+    this.checkFormInputsReadyForSubmit();
   }
 
-  #refreshInputOptions(columnTarget, current_selection) {
-    // filter out fields other headers are using, but not this target's own selection
-    let headers = this.#headers.filter( (header) =>
-      (header != current_selection) &&  !(this.#header_map[header])
-    );
+  #refreshInputOptions(columnTarget, currentSelection, unselectedHeaders) {
+    // rebuild select options list
+    columnTarget.innerHTML = "";
 
-    // delete the old input options, except for one that is currently selected
-    this.#removeInputOptions(columnTarget, current_selection);
+    // add blank value
+    columnTarget.append(this.#createInputOption(
+      "",
+      this.#blankValues[columnTarget.id],
+    ));
 
-    // build a list of new input options based on above filtering
-    for (let header of headers) {
-      const option = document.createElement("option");
-      option.value = header;
-      option.text = header;
-      columnTarget.append(option);
+    // add currently selected option
+    if (currentSelection) {
+      columnTarget.append(this.#createInputOption(currentSelection, currentSelection));
+      columnTarget.value = currentSelection;
+    }
+
+    // add unused options
+
+    // if sample column, move all additional sample headers to top of option, remaining under
+    // else just add headers normally
+    if (columnTarget === this.sampleNameColumnTarget) {
+      // copy unselected headers as we'll be removing array values
+      // also create a copy that lower cases all values to test for case insensitivity
+      let copyUnselectedHeaders = unselectedHeaders.slice();
+      let lowerCasedUnselectedHeaders = copyUnselectedHeaders.map((header) =>
+        header.toLowerCase(),
+      );
+      for (const sampleColumnHeader of this.#defaultSampleColumnHeaders) {
+        const sampleIndex =
+          lowerCasedUnselectedHeaders.indexOf(sampleColumnHeader);
+        if (sampleIndex > -1) {
+          columnTarget.append(this.#createInputOption(
+            copyUnselectedHeaders[sampleIndex],
+            copyUnselectedHeaders[sampleIndex],
+          ));
+          // remove sample header so only 'non-sample' headers remain
+          copyUnselectedHeaders.splice(sampleIndex, 1);
+          lowerCasedUnselectedHeaders.splice(sampleIndex, 1);
+        }
+      }
+      this.#createInputOptions(columnTarget, copyUnselectedHeaders);
+    } else {
+      this.#createInputOptions(columnTarget, unselectedHeaders);
     }
     this.#enableTarget(columnTarget);
   }
 
-  #checkFormInputsReadyForSubmit() {
-    var puid_value = true
-    if (this.groupValue) {
-      puid_value = this.hasProjectPUIDColumnTarget;
+  checkFormInputsReadyForSubmit() {
+    // set default to true so project imports can by pass project selection validation
+    let projectSelected = true;
+    let staticProjectSelected = true;
+    if (this.hasProjectPUIDColumnTarget) {
+      projectSelected = this.projectPUIDColumnTarget.value;
+      staticProjectSelected = this.staticProjectTarget.value;
     }
 
-    if (this.hasSampleNameColumnTarget && puid_value ){
-        this.submitButtonTarget.disabled = false;
+    if (
+      this.sampleNameColumnTarget.value &&
+      (projectSelected || staticProjectSelected)
+    ) {
+      this.submitButtonTarget.disabled = false;
     } else {
       this.submitButtonTarget.disabled = true;
-    }
-  }
-
-  #removeInputOptions(target, current = null) {
-    // When a current selection is passed in, it does not get removed.
-    var post_length = 1
-    if (current == null || current == ""){
-      post_length = 0
-    }
-
-    var rev_index = target.options.length - 1;
-    while (target.options.length > post_length + 1){
-      if(current != target.options[rev_index].value){
-        target.remove(rev_index);
-      }
-      rev_index = rev_index - 1;
     }
   }
 
@@ -166,5 +241,25 @@ export default class extends Controller {
 
   #enableTarget(target) {
     target.disabled = false;
+  }
+
+  #createInputOptions(column, values) {
+    for (let value of values) {
+      column.append(this.#createInputOption(value, value));
+    }
+  }
+
+  #createInputOption(value, text) {
+    let option = document.createElement("option");
+    option.value = value;
+    option.text = text;
+    return option
+  }
+
+  #processUnselectedHeaders() {
+    // filter out used options
+    return this.#allHeaders.filter(
+      (item) => !Object.values(this.#selectedHeaders).includes(item),
+    );
   }
 }

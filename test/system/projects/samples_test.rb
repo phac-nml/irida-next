@@ -1908,10 +1908,6 @@ module Projects
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/project/valid.csv'))
-        find('#spreadsheet_import_sample_name_column', wait: 1).find(:xpath, 'option[2]').select_option
-        # sample name column is "consumed" by first selection, so select option 2 again for sample description
-        find('#spreadsheet_import_sample_description_column', wait: 1).find(:xpath, 'option[2]').select_option
-
         click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
         ### ACTIONS END ###
       end
@@ -1927,8 +1923,8 @@ module Projects
       within('#samples-table table tbody') do
         # added 2 new samples
         assert_selector 'tr', count: 5
-        assert_text 'my new sample'
-        assert_text 'my new sample 2'
+        assert_selector 'tr:first-child td:nth-child(2)', text: 'my new sample 2'
+        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: 'my new sample 1'
       end
       ### VERIFY END ###
     end
@@ -1944,6 +1940,7 @@ module Projects
 
       within('#samples-table table tbody') do
         assert_selector 'tr', count: 3
+        assert_no_text 'my new sample'
       end
       ### SETUP END ###
 
@@ -1954,8 +1951,6 @@ module Projects
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/project/invalid_short_sample_name.csv'))
-        find('#spreadsheet_import_sample_name_column', wait: 1).find(:xpath, 'option[2]').select_option
-
         click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
         ### ACTIONS END ###
       end
@@ -1979,7 +1974,7 @@ module Projects
       within('#samples-table table tbody') do
         # added 1 new sample
         assert_selector 'tr', count: 4
-        assert_text 'my new sample'
+        assert_selector 'tr:first-child td:nth-child(2)', text: 'my new sample'
       end
       ### VERIFY END ###
     end
@@ -2005,8 +2000,6 @@ module Projects
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/project/invalid_duplicate_header.csv'))
-        find('#spreadsheet_import_sample_name_column', wait: 1).find(:xpath, 'option[2]').select_option
-
         click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
         ### ACTIONS END ###
       end

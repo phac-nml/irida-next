@@ -35,7 +35,7 @@ module Samples
       end
 
       assert_equal 5, @project.samples.count
-      assert_equal 1, @project.samples.where(name: 'my new sample').count
+      assert_equal 1, @project.samples.where(name: 'my new sample 1').count
       assert_equal 1, @project.samples.where(name: 'my new sample 2').count
     end
 
@@ -79,7 +79,7 @@ module Samples
       assert_equal I18n.t('services.samples.batch_import.project_puid_not_in_namespace',
                           project_puid: @project.puid,
                           namespace: @group2.full_path),
-                   response['my new sample'][0][:message]
+                   response['my new sample 1'][0][:message]
       assert_equal I18n.t('services.samples.batch_import.project_puid_not_in_namespace',
                           project_puid: @project.puid,
                           namespace: @group2.full_path),
@@ -108,11 +108,11 @@ module Samples
                    response['my new sample 2'][0][:message]
     end
 
-    test 'import with bad data missing puid' do
+    test 'import with bad data missing puid and missing static_project_id' do
       assert_equal 3, @project.samples.count
 
       file = Rack::Test::UploadedFile.new(
-        Rails.root.join('test/fixtures/files/batch_sample_import/group/invalid_missing_puid.csv')
+        Rails.root.join('test/fixtures/files/batch_sample_import/group/missing_puid.csv')
       )
       blob = ActiveStorage::Blob.create_and_upload!(
         io: file,
@@ -124,10 +124,30 @@ module Samples
                                                      @default_params).execute
 
       assert_equal 4, @project.samples.count
-
       assert_equal I18n.t('services.spreadsheet_import.missing_field',
                           index: 2),
                    response['index 2'][0][:message]
+    end
+
+    test 'valid import with missing puid but with static_project_id' do
+      assert_equal 3, @project.samples.count
+      assert_equal 20, @project2.samples.count
+      @default_params[:static_project_id] = @project2.id
+
+      file = Rack::Test::UploadedFile.new(
+        Rails.root.join('test/fixtures/files/batch_sample_import/group/missing_puid.csv')
+      )
+      blob = ActiveStorage::Blob.create_and_upload!(
+        io: file,
+        filename: file.original_filename,
+        content_type: file.content_type
+      )
+
+      Samples::BatchFileImportService.new(@group, @john_doe, blob.id,
+                                          @default_params).execute
+
+      assert_equal 4, @project.samples.count
+      assert_equal 21, @project2.samples.count
     end
 
     test 'import with bad data blank line' do
@@ -235,13 +255,13 @@ module Samples
       m1 = { 'metadata1' => 'a', 'metadata2' => 'b' }
       m2 = { 'metadata1' => 'c', 'metadata2' => 'd' }
 
-      assert_equal m1, response['my new sample'].metadata
-      assert_equal m1, @project.samples.where(name: 'my new sample')[0].metadata
+      assert_equal m1, response['my new sample 1'].metadata
+      assert_equal m1, @project.samples.where(name: 'my new sample 1')[0].metadata
       assert_equal m2, response['my new sample 2'].metadata
       assert_equal m2, @project.samples.where(name: 'my new sample 2')[0].metadata
 
-      assert_equal 'user', @project.samples.where(name: 'my new sample')[0].metadata_provenance['metadata1']['source']
-      assert_equal 'user', @project.samples.where(name: 'my new sample')[0].metadata_provenance['metadata2']['source']
+      assert_equal 'user', @project.samples.where(name: 'my new sample 1')[0].metadata_provenance['metadata1']['source']
+      assert_equal 'user', @project.samples.where(name: 'my new sample 1')[0].metadata_provenance['metadata2']['source']
       assert_equal 'user', @project.samples.where(name: 'my new sample 2')[0].metadata_provenance['metadata1']['source']
       assert_equal 'user', @project.samples.where(name: 'my new sample 2')[0].metadata_provenance['metadata2']['source']
     end
@@ -265,13 +285,13 @@ module Samples
       m1 = { 'metadata1' => 'a', 'metadata2' => 'b' }
       m2 = { 'metadata2' => 'd' }
 
-      assert_equal m1, response['my new sample'].metadata
-      assert_equal m1, @project.samples.where(name: 'my new sample')[0].metadata
+      assert_equal m1, response['my new sample 1'].metadata
+      assert_equal m1, @project.samples.where(name: 'my new sample 1')[0].metadata
       assert_equal m2, response['my new sample 2'].metadata
       assert_equal m2, @project.samples.where(name: 'my new sample 2')[0].metadata
 
-      assert_equal 'user', @project.samples.where(name: 'my new sample')[0].metadata_provenance['metadata1']['source']
-      assert_equal 'user', @project.samples.where(name: 'my new sample')[0].metadata_provenance['metadata2']['source']
+      assert_equal 'user', @project.samples.where(name: 'my new sample 1')[0].metadata_provenance['metadata1']['source']
+      assert_equal 'user', @project.samples.where(name: 'my new sample 1')[0].metadata_provenance['metadata2']['source']
       assert_equal 'user', @project.samples.where(name: 'my new sample 2')[0].metadata_provenance['metadata2']['source']
     end
   end

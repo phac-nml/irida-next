@@ -7,11 +7,9 @@
 
     <div
       data-controller="spreadsheet-import"
-      <% if @namespace.group_namespace? %>
-      data-spreadsheet-import-group-value="1"
-      <% else %>
-      data-spreadsheet-import-group-value="0"
-      <% end %>
+      data-spreadsheet-import-select-sample-value='<%= t(".select_sample_name_column") %>'
+      data-spreadsheet-import-select-description-value='<%= t(".select_sample_description_column") %>'
+      data-spreadsheet-import-select-project-value='<%= t(".select_project_puid_column") %>'
     >
 
       <%= form_for(:spreadsheet_import, url: url, method: :post) do |form| %>
@@ -41,56 +39,99 @@
                               action: "change->spreadsheet-import#readFile",
                             },
                             class:
-                              "block w-full text-sm text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400" %>
+                              "block w-full text-sm text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50 dark:text-slate-400 dark:bg-slate-900 dark:border-slate-600 dark:placeholder-slate-400" %>
             <p class="mt-1 text-sm text-slate-500 dark:text-slate-300"><%= t(".file_help") %></p>
           </div>
           <div class="form-field">
-            <%= form.label :sample_name_column,
-                       t(".sample_name_column"),
-                       class:
-                         "block mb-2 text-sm font-medium text-slate-900 dark:text-white
-                                                             disabled:bg-slate-50 disabled:border disabled:border-slate-300 disabled:rounded-lg disabled:w-full disabled:p-2.5 disabled:dark:bg-slate-700 disabled:dark:border-slate-600 disabled:dark:placeholder-slate-400" %>
+            <label
+              for="sampleColumn"
+              class="
+                block mb-2 text-sm font-medium text-slate-900 dark:text-white
+              "
+            ><%= t(".sample_name_column") %></label>
             <%= form.select :sample_name_column,
                         {},
                         { prompt: t(".select_sample_name_column") },
                         required: true,
                         data: {
                           "spreadsheet-import-target": "sampleNameColumn",
-                          action: "change->spreadsheet-import#changeSampleNameInput",
-                        } %>
+                          action: "change->spreadsheet-import#changeInputValue",
+                        },
+                        id: "sampleColumn",
+                        disabled: true,
+                        class:
+                          "disabled:bg-slate-50 disabled:border disabled:border-slate-300 disabled:rounded-lg disabled:w-full disabled:p-2.5 disabled:dark:bg-slate-700 disabled:dark:border-slate-600 disabled:dark:placeholder-slate-400" %>
           </div>
-          <% if @namespace.group_namespace? %>
-            <div class="form-field">
-              <%= form.label :project_puid_column,
-                         t(".project_puid_column"),
-                         class:
-                           "block mb-2 text-sm font-medium text-slate-900 dark:text-white
-                                                                    disabled:bg-slate-50 disabled:border disabled:border-slate-300 disabled:rounded-lg disabled:w-full disabled:p-2.5 disabled:dark:bg-slate-700 disabled:dark:border-slate-600 disabled:dark:placeholder-slate-400" %>
-              <%= form.select :project_puid_column,
-                          {},
-                          { prompt: t(".select_project_puid_column") },
-                          required: true,
-                          data: {
-                            "spreadsheet-import-target": "projectPUIDColumn",
-                            action: "change->spreadsheet-import#changeProjectPUIDInput",
-                          } %>
-            </div>
-          <% end %>
           <div class="form-field">
-            <%= form.label :sample_description_column,
-                       t(".sample_description_column"),
-                       class:
-                         "block mb-2 text-sm font-medium text-slate-900 dark:text-white
-                                                             disabled:bg-slate-50 disabled:border disabled:border-slate-300 disabled:rounded-lg disabled:w-full disabled:p-2.5 disabled:dark:bg-slate-700 disabled:dark:border-slate-600 disabled:dark:placeholder-slate-400" %>
+            <label
+              for="descriptionColumn"
+              class="
+                block mb-2 text-sm font-medium text-slate-900 dark:text-white
+              "
+            ><%= t(".sample_description_column") %></label>
             <%= form.select :sample_description_column,
                         {},
                         { prompt: t(".select_sample_description_column") },
                         required: false,
                         data: {
                           "spreadsheet-import-target": "sampleDescriptionColumn",
-                          action: "change->spreadsheet-import#changeSampleDescriptionInput",
-                        } %>
+                          action: "change->spreadsheet-import#changeInputValue",
+                          "input-type": "sample-description",
+                        },
+                        id: "descriptionColumn",
+                        disabled: true,
+                        class:
+                          "disabled:bg-slate-50 disabled:border disabled:border-slate-300 disabled:rounded-lg disabled:w-full disabled:p-2.5 disabled:dark:bg-slate-700 disabled:dark:border-slate-600 disabled:dark:placeholder-slate-400" %>
           </div>
+          <% if @namespace.group_namespace? %>
+            <div class="form-field">
+              <div class="mb-2">
+                <p class="font-sm font-medium text-slate-900 dark:text-white"><%= t(".project_selection") %></p>
+                <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-400 "><%= t(".project_selection_description") %></p>
+              </div>
+              <label
+                for="projectColumn"
+                class="
+                  block text-sm font-medium text-slate-900 dark:text-white
+                "
+              ><%= t(".project_puid_column") %></label>
+              <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-400 "><%= t(".project_puid_column_description") %></p>
+              <%= form.select :project_puid_column,
+                          {},
+                          { prompt: t(".select_project_puid_column") },
+                          required: false,
+                          data: {
+                            "spreadsheet-import-target": "projectPUIDColumn",
+                            action: "change->spreadsheet-import#changeInputValue",
+                            "input-type": "project-puid",
+                          },
+                          id: "projectColumn",
+                          disabled: true,
+                          class:
+                            "disabled:bg-slate-50 disabled:border disabled:border-slate-300 disabled:rounded-lg disabled:w-full disabled:p-2.5 disabled:dark:bg-slate-700 disabled:dark:border-slate-600 disabled:dark:placeholder-slate-400" %>
+              <label
+                for="staticProject"
+                class="
+                  block mt-2 text-sm font-medium text-slate-900 dark:text-white
+                "
+              ><%= t(".static_project") %></label>
+              <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-400"><%= t(".static_project_description") %></p>
+              <%= form.select :static_project_id,
+                          @group_projects_for_static_selection,
+                          { prompt: t(".select_static_project") },
+                          required: false,
+                          data: {
+                            "spreadsheet-import-target": "staticProject",
+                            action:
+                              "change->spreadsheet-import#checkFormInputsReadyForSubmit",
+                            "input-type": "static-project",
+                          },
+                          id: "staticProject",
+                          disabled: true,
+                          class:
+                            "disabled:bg-slate-50 disabled:border disabled:border-slate-300 disabled:rounded-lg disabled:w-full disabled:p-2.5 disabled:dark:bg-slate-700 disabled:dark:border-slate-600 disabled:dark:placeholder-slate-400" %>
+            </div>
+          <% end %>
           <div>
             <%= form.submit t(".submit_button"),
                         class: "button button--size-default button--state-primary",
