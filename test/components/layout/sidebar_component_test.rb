@@ -8,8 +8,8 @@ module Layout
       render_inline Layout::SidebarComponent.new do |sidebar|
         sidebar.with_header(label: 'My Sidebar')
         sidebar.with_section(title: 'My Work') do |section|
-          section.with_item(label: 'Projects', url: '/-/projects', icon: 'rectangle_stack')
-          section.with_item(label: 'Groups', url: '/-/groups', icon: 'squares_2x2')
+          section.with_item(label: 'Projects', url: '/-/projects', icon: 'cards-three')
+          section.with_item(label: 'Groups', url: '/-/groups', icon: 'stack')
         end
       end
 
@@ -27,8 +27,8 @@ module Layout
     test 'should render the sidebar with a header and items' do
       render_inline Layout::SidebarComponent.new do |sidebar|
         sidebar.with_header(label: 'My Sidebar')
-        sidebar.with_item(label: 'Projects', url: '/-/projects', icon: 'rectangle_stack')
-        sidebar.with_item(label: 'Groups', url: '/-/groups', icon: 'squares_2x2')
+        sidebar.with_item(label: 'Projects', url: '/-/projects', icon: 'cards-three')
+        sidebar.with_item(label: 'Groups', url: '/-/groups', icon: 'stack')
       end
 
       assert_selector 'aside' do
@@ -43,8 +43,8 @@ module Layout
 
     test 'sidebar should render without a header' do
       render_inline Layout::SidebarComponent.new do |sidebar|
-        sidebar.with_item(label: 'Projects', url: '/-/projects', icon: 'rectangle_stack')
-        sidebar.with_item(label: 'Groups', url: '/-/groups', icon: 'squares_2x2')
+        sidebar.with_item(label: 'Projects', url: '/-/projects', icon: 'cards-three')
+        sidebar.with_item(label: 'Groups', url: '/-/groups', icon: 'stack')
       end
 
       assert_selector 'aside' do
@@ -61,10 +61,10 @@ module Layout
       render_inline Layout::SidebarComponent.new(label: 'Project 1',
                                                  icon_name: 'rectangle_stack') do |sidebar|
         sidebar.with_section do |section|
-          section.with_item(label: 'Details', url: '/', icon: 'clipboard_document')
+          section.with_item(label: 'Details', url: '/', icon: 'clipboard-text')
           section.with_item(label: 'Members', url: '/-/members', icon: 'users')
-          section.with_item(label: 'Samples', url: '/-/samples', icon: 'beaker')
-          section.with_item(label: 'History', url: '/-/history', icon: 'list_bullet')
+          section.with_item(label: 'Samples', url: '/-/samples', icon: 'flask')
+          section.with_item(label: 'History', url: '/-/history', icon: 'export')
           section.with_multi_level_menu(title: 'Settings', selectable_pages: ['general']) do |mlm|
             mlm.with_menu_item(
               url: '/-/edit',
@@ -95,10 +95,10 @@ module Layout
       render_inline Layout::SidebarComponent.new(label: 'Project 1',
                                                  icon_name: 'rectangle_stack') do |sidebar|
         sidebar.with_section do |section|
-          section.with_item(label: 'Details', url: '/', icon: 'clipboard_document')
+          section.with_item(label: 'Details', url: '/', icon: 'clipboard-text')
           section.with_item(label: 'Members', url: '/-/members', icon: 'users')
-          section.with_item(label: 'Samples', url: '/-/samples', icon: 'beaker')
-          section.with_item(label: 'History', url: '/-/history', icon: 'list_bullet')
+          section.with_item(label: 'Samples', url: '/-/samples', icon: 'flask')
+          section.with_item(label: 'History', url: '/-/history', icon: 'export')
           section.with_multi_level_menu(title: 'Settings', current_page: 'general',
                                         selectable_pages: ['general']) do |mlm|
             mlm.with_menu_item(
