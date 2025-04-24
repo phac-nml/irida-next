@@ -100,11 +100,11 @@ class Sample::Query # rubocop:disable Style/ClassAndModuleChildren, Metrics/Clas
       group.conditions.map do |condition|
         group_scope = add_condition(group_scope, condition)
       end
-      if adv_query_scope.nil?
-        adv_query_scope = group_scope
-      else
-        adv_query_scope = adv_query_scope.or(group_scope)
-      end
+      adv_query_scope = if adv_query_scope.nil?
+                          group_scope
+                        else
+                          adv_query_scope.or(group_scope)
+                        end
     end
     adv_query_scope
   end
