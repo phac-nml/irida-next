@@ -1315,5 +1315,59 @@ module Groups
       end
       ### VERIFY END ###
     end
+
+    test 'pagy overflow redirects to first page' do
+      group = groups(:group_seventeen)
+      sample = samples(:bulk_sample25)
+
+      visit group_samples_url(group)
+
+      within('#samples-table table') do
+        within('tbody') do
+          # rows
+          assert_selector '#samples-table table tbody tr', count: 20
+          # row contents
+        end
+      end
+
+      assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+
+      click_on I18n.t(:'viral.pagy.pagination_component.next')
+
+      # verifies navigation to page
+      assert_selector 'h1', text: I18n.t('groups.samples.index.title')
+
+      # samples table
+      within('#samples-table table') do
+        within('tbody') do
+          # rows
+          assert_selector '#samples-table table tbody tr', count: 20
+          # row contents
+        end
+      end
+
+      fill_in placeholder: I18n.t(:'groups.samples.table_filter.search.placeholder'), with: sample.puid
+      find('input.t-search-component').native.send_keys(:return)
+
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
+
+      # Search for PUID
+      #        within('#samples-table table') do
+      within('tbody') do
+        # rows
+        assert_selector '#samples-table table tbody tr', count: 1
+
+        within("tr[id='#{dom_id(sample)}']") do
+          assert_selector 'th:first-child', text: sample.puid
+          assert_selector 'td:nth-child(2)', text: sample.name
+        end
+      end
+
+      # verify url contains page=1
+      url = URI.parse(current_url).to_s
+      assert url.include?('?page=1')
+    end
   end
 end

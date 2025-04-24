@@ -14,6 +14,8 @@ module Projects
     before_action :index_view_authorizations, only: %i[index]
     before_action :show_view_authorizations, only: %i[show]
 
+    rescue_from Pagy::OverflowError, with: :redirect_to_first_page
+
     def index
       @timestamp = DateTime.current
       @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
@@ -195,6 +197,10 @@ module Projects
         update_store(search_key, updated_params)
       end
       updated_params
+    end
+
+    def redirect_to_first_page
+      redirect_to url_for(page: 1)
     end
   end
 end

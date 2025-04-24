@@ -11,6 +11,8 @@ module Groups
     before_action :current_metadata_template, only: %i[index]
     before_action :index_view_authorizations, only: %i[index]
 
+    rescue_from Pagy::OverflowError, with: :redirect_to_first_page
+
     def index
       @timestamp = DateTime.current
       @pagy, @samples = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
@@ -117,6 +119,10 @@ module Groups
 
     def search_key
       :"#{controller_name}_#{group.id}_search_params"
+    end
+
+    def redirect_to_first_page
+      redirect_to url_for(page: 1)
     end
   end
 end
