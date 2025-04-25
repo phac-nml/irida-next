@@ -12,9 +12,9 @@ class LayoutComponentTest < ViewComponent::TestCase
           sidebar.with_header(label: I18n.t('general.default_sidebar.title'))
           sidebar.with_section do |section|
             section.with_item(label: I18n.t(:'general.default_sidebar.projects'), url: '/-/projects',
-                              icon: 'rectangle_stack', selected: true)
+                              icon: 'stack', selected: true)
             section.with_item(label: I18n.t(:'general.default_sidebar.groups'), url: '/-/groups',
-                              icon: 'squares_2x2', selected: false)
+                              icon: 'cards-three', selected: false)
           end
         end
         layout.with_body do
