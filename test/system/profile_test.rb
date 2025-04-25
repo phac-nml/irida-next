@@ -154,6 +154,8 @@ class ProfileTest < ApplicationSystemTestCase
       end
     end
 
+    assert_current_path profile_preferences_path
+
     # change user language selection from the profile page preferences section
     find('input[id=user_locale_en]').click
 
