@@ -1,5 +1,6 @@
-import { Controller } from "@hotwired/stimulus";
 import * as XLSX from "xlsx";
+
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = [
@@ -25,33 +26,37 @@ export default class extends Controller {
   ];
 
   #allHeaders;
-  #selectedHeaders = { sampleColumn: null, descriptionColumn: null };
+  #selectedHeaders = {
+    spreadsheet_import_sample_name_column: null,
+    spreadsheet_import_sample_description_column: null,
+  };
   #blankValues = {
-    sampleColumn: this.selectSampleValue,
-    descriptionColumn: this.selectDescriptionValue,
+    spreadsheet_import_sample_name_column: this.selectSampleValue,
+    spreadsheet_import_sample_description_column: this.selectDescriptionValue,
   };
 
   connect() {
     if (this.hasProjectPUIDColumnTarget) {
-      this.#selectedHeaders["projectColumn"] = null;
-      this.#blankValues["projectColumn"] = this.selectProjectValue;
+      this.#selectedHeaders["spreadsheet_import_project_puid_column"] = null;
+      this.#blankValues["spreadsheet_import_project_puid_column"] =
+        this.selectProjectValue;
     }
   }
 
   changeInputValue(event) {
     switch (event.target.id) {
-      case "sampleColumn":
+      case this.sampleNameColumnTarget.id:
         this.#updateInputValue(this.sampleNameColumnTarget, event.target.value);
         this.#refreshInputOptionsForAllFields();
         break;
-      case "projectColumn":
+      case this.projectPUIDColumnTarget.id:
         this.#updateInputValue(
           this.projectPUIDColumnTarget,
           event.target.value,
         );
         this.#refreshInputOptionsForAllFields();
         break;
-      case "descriptionColumn":
+      case this.sampleDescriptionColumnTarget.id:
         this.#updateInputValue(
           this.sampleDescriptionColumnTarget,
           event.target.value,
@@ -97,11 +102,14 @@ export default class extends Controller {
   }
 
   #clearFormOptions() {
-    this.#selectedHeaders = { sampleColumn: null, descriptionColumn: null };
+    this.#selectedHeaders = {
+      spreadsheet_import_sample_name_column: null,
+      spreadsheet_import_sample_description_column: null,
+    };
     this.sampleNameColumnTarget.innerHTML = "";
     this.#disableTarget(this.sampleNameColumnTarget);
     if (this.hasProjectPUIDColumnTarget) {
-      this.#selectedHeaders["projectColumn"] = null;
+      this.#selectedHeaders["spreadsheet_import_project_puid_column"] = null;
       this.projectPUIDColumnTarget.innerHTML = "";
       this.#disableTarget(this.projectPUIDColumnTarget);
     }
@@ -151,19 +159,19 @@ export default class extends Controller {
     const unselectedHeaders = this.#processUnselectedHeaders();
     this.#refreshInputOptions(
       this.sampleNameColumnTarget,
-      this.#selectedHeaders["sampleColumn"],
+      this.#selectedHeaders["spreadsheet_import_sample_name_column"],
       unselectedHeaders,
     );
     if (this.hasProjectPUIDColumnTarget) {
       this.#refreshInputOptions(
         this.projectPUIDColumnTarget,
-        this.#selectedHeaders["projectColumn"],
+        this.#selectedHeaders["spreadsheet_import_project_puid_column"],
         unselectedHeaders,
       );
     }
     this.#refreshInputOptions(
       this.sampleDescriptionColumnTarget,
-      this.#selectedHeaders["descriptionColumn"],
+      this.#selectedHeaders["spreadsheet_import_sample_description_column"],
       unselectedHeaders,
     );
     this.checkFormInputsReadyForSubmit();
@@ -174,14 +182,15 @@ export default class extends Controller {
     columnTarget.innerHTML = "";
 
     // add blank value
-    columnTarget.append(this.#createInputOption(
-      "",
-      this.#blankValues[columnTarget.id],
-    ));
+    columnTarget.append(
+      this.#createInputOption("", this.#blankValues[columnTarget.id]),
+    );
 
     // add currently selected option
     if (currentSelection) {
-      columnTarget.append(this.#createInputOption(currentSelection, currentSelection));
+      columnTarget.append(
+        this.#createInputOption(currentSelection, currentSelection),
+      );
       columnTarget.value = currentSelection;
     }
 
@@ -200,10 +209,12 @@ export default class extends Controller {
         const sampleIndex =
           lowerCasedUnselectedHeaders.indexOf(sampleColumnHeader);
         if (sampleIndex > -1) {
-          columnTarget.append(this.#createInputOption(
-            copyUnselectedHeaders[sampleIndex],
-            copyUnselectedHeaders[sampleIndex],
-          ));
+          columnTarget.append(
+            this.#createInputOption(
+              copyUnselectedHeaders[sampleIndex],
+              copyUnselectedHeaders[sampleIndex],
+            ),
+          );
           // remove sample header so only 'non-sample' headers remain
           copyUnselectedHeaders.splice(sampleIndex, 1);
           lowerCasedUnselectedHeaders.splice(sampleIndex, 1);
@@ -253,7 +264,7 @@ export default class extends Controller {
     let option = document.createElement("option");
     option.value = value;
     option.text = text;
-    return option
+    return option;
   }
 
   #processUnselectedHeaders() {

@@ -105,7 +105,7 @@ module Projects
         assert_selector 'h1', text: I18n.t(:'projects.members.new.title')
 
         find('input.select2-input').click
-        find("button[data-viral--select2-primary-param='#{user_to_add.email}']").click
+        find("li[data-value='#{user_to_add.id}']").click
         find('#member_access_level').find('option',
                                           text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
 
@@ -217,8 +217,8 @@ module Projects
 
       within %(div[data-controller="slugify"][data-controller-connected="true"]) do
         fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
-        fill_in I18n.t('projects.new.select_namespace'), with: 'USR'
-        click_on 'INXT_USR_AAAAAAAAAA'
+        fill_in I18n.t('projects.new.select_namespace'), with: @user.email[0, 4]
+        find('ul > li:first-child').click
         assert_equal 'new-project',
                      find_field(I18n.t(:'activerecord.attributes.namespaces/project_namespace.path')).value
         fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.description'), with: project_description
@@ -238,7 +238,7 @@ module Projects
         assert_selector 'h1', text: I18n.t(:'projects.members.new.title')
 
         find('input.select2-input').click
-        find("button[data-viral--select2-primary-param='#{user_to_add.email}']").click
+        find("li[data-value='#{user_to_add.id}']").click
         find('#member_access_level').find('option',
                                           text: I18n.t('activerecord.models.member.access_level.analyst')).select_option
 
@@ -370,7 +370,7 @@ module Projects
         assert_selector 'h1', text: I18n.t(:'projects.members.new.title')
 
         find('input.select2-input').click
-        find("button[data-viral--select2-primary-param='#{user_to_add.email}']").click
+        find("li[data-value='#{user_to_add.id}']").click
         find('#member_access_level')
           .find('option',
                 text: I18n.t('activerecord.models.member.access_level.uploader')).select_option
@@ -404,7 +404,7 @@ module Projects
         assert_selector 'h1', text: I18n.t(:'projects.members.new.title')
 
         find('input.select2-input').click
-        assert_no_selector "button[data-viral--select2-primary-param='#{user_to_add.email}']"
+        assert_no_selector "li[data-value='#{user_to_add.id}']"
       end
     end
 

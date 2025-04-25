@@ -4,37 +4,25 @@ module Viral
   # Search component for rendering a searchable dropdown
   class Select2OptionComponent < Viral::Component
     erb_template <<~ERB
-      <li class="w-full">
-          <button
-            type="button"
-            data-viral--select2-target="item"
-            data-viral--select2-primary-param="<%= @primary %>"
-            data-viral--select2-secondary-param="<%= @secondary %>"
-            data-viral--select2-value-param="<%= @value %>"
-            data-action="click->viral--select2#select"
-            class="
-              flex-col w-full border-2 border-transparent text-left p-2.5 bg-slate-50 hover:bg-slate-100
-              dark:bg-slate-700 dark:hover:bg-slate-600
-            "
-          >
-            <span
-              class="block text-base font-semibold truncate text-slate-900 dark:text-white"
-            >
-              <%= @primary %>
-            </span>
-            <% if @secondary %>
-            <span class="text-sm truncate text-slate-500 dark:text-slate-300">
-              <%= @secondary %>
-            </span>
-            <% end %>
-          </button>
-        </li>
+      <li
+        class="flex flex-col text-left p-2.5 rounded bg-slate-50 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600
+               cursor-pointer mx-0.5 my-0.5 border hover:border-slate-500 dark:hover:border-slate-600"
+        role="option"
+        aria-selected="false"
+        id="select2-option-<%= @value %>"
+        role="option"
+        data-viral--select2-target="item"
+        data-label="<%= @label %>"
+        data-value="<%= @value %>"
+        data-action="click->viral--select2#select keydown->viral--select2#keydown"
+      >
+        <%= content %>
+      </li>
     ERB
 
-    def initialize(primary:, value:, secondary: nil)
-      @primary = primary
-      @secondary = secondary
+    def initialize(value:, label:)
       @value = value
+      @label = label
     end
   end
 end

@@ -455,7 +455,7 @@ module Projects
         end
         # select destination project
         find('input.select2-input').click
-        find("button[data-viral--select2-value-param='#{@project2.id}']").click
+        find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
@@ -510,7 +510,7 @@ module Projects
         end
         # select destination project
         find('input.select2-input').click
-        find("button[data-viral--select2-value-param='#{@project2.id}']").click
+        find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
 
         ### ACTIONS END ###
@@ -551,7 +551,7 @@ module Projects
       within('#dialog') do
         assert_text I18n.t('projects.samples.transfers.dialog.title')
         find('input.select2-input').click
-        find("button[data-viral--select2-value-param='#{@project2.id}']").click
+        find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
@@ -607,7 +607,7 @@ module Projects
           end
         end
         find('input.select2-input').click
-        find("button[data-viral--select2-value-param='#{project25.id}']").click
+        find("li[data-value='#{project25.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
@@ -711,7 +711,7 @@ module Projects
           assert_text @sample1.puid
         end
         find('input.select2-input').click
-        find("button[data-viral--select2-value-param='#{@project2.id}']").click
+        find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
@@ -2141,7 +2141,7 @@ module Projects
           assert_text @sample2.puid
         end
         find('input.select2-input').click
-        find("button[data-viral--select2-value-param='#{@project2.id}']").click
+        find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
@@ -2200,7 +2200,7 @@ module Projects
           assert_text @sample2.puid
         end
         find('input.select2-input').click
-        find("button[data-viral--select2-value-param='#{@project2.id}']").click
+        find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
 
         ### ACTIONS END ###
@@ -2241,7 +2241,7 @@ module Projects
       within('#dialog') do
         assert_text I18n.t('projects.samples.clones.dialog.title')
         find('input.select2-input').click
-        find("button[data-viral--select2-value-param='#{@project2.id}']").click
+        find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
@@ -2300,7 +2300,7 @@ module Projects
           end
         end
         find('input.select2-input').click
-        find("button[data-viral--select2-value-param='#{project25.id}']").click
+        find("li[data-value='#{project25.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
@@ -2427,7 +2427,7 @@ module Projects
           assert_text @sample1.puid
         end
         find('input.select2-input').click
-        find("button[data-viral--select2-value-param='#{@project2.id}']").click
+        find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
@@ -2650,7 +2650,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within('#dialog') do
+      within('#multiple-deletions-dialog') do
         assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.description.singular',
                            sample_name: @sample1.name)
       end
@@ -2679,7 +2679,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within('#dialog') do
+      within('#multiple-deletions-dialog') do
         assert_text I18n.t(
           'projects.samples.deletions.new_multiple_deletions_dialog.description.plural'
         ).gsub! 'COUNT_PLACEHOLDER', '3'
@@ -2710,7 +2710,7 @@ module Projects
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      within('#dialog #list_selections') do
+      within('#multiple-deletions-dialog #list_selections') do
         samples.each do |sample|
           assert_text sample[0]
           assert_text sample[1]
@@ -2743,8 +2743,11 @@ module Projects
       end
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
-      within('#dialog') do
-        click_on I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
+
+      within('#multiple-deletions-dialog') do
+        assert_selector 'form[data-infinite-scroll-target="pageForm"]'
+        sleep 1
+        click_button I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
       end
       ### ACTIONS END ###
 

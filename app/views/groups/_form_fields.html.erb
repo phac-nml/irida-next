@@ -32,10 +32,18 @@
           <%= viral_prefixed_select2(form:, name: :parent_id, id: form_id, selected_value: group.parent.id, placeholder: t(:"groups.new_subgroup.select_group")) do |select| %>
             <% authorized_namespaces.each do |namespace| %>
               <% select.with_option(
-                primary: namespace.full_path,
-                secondary: namespace.puid,
-                value: namespace.id,
-              ) %>
+                      value: namespace.id,
+                      label: namespace.full_path,
+                    ) do %>
+                <span
+                  class="
+                    text-slate-900 dark:text-slate-400 font-semibold block pointer-events-none
+                  "
+                >
+                  <%= namespace.full_path %>
+                  <%= render PuidComponent.new(puid: namespace.puid, show_clipboard: false) %>
+                </span>
+              <% end %>
             <% end %>
             <%= select.with_empty_state do %>
               <%= t(:"groups.new_subgroup.empty_state") %>

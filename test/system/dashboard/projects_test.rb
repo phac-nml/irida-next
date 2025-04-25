@@ -201,7 +201,7 @@ module Dashboard
       within %(div[data-controller="slugify"][data-controller-connected="true"]) do
         fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.name'), with: project_name
         fill_in I18n.t('projects.new.select_namespace'), with: 'USR'
-        click_on 'INXT_USR_AAAAAAAAAA'
+        find('ul li', text: 'INXT_USR_AAAAAAAAAA').click
         assert_equal 'new-project',
                      find_field(I18n.t(:'activerecord.attributes.namespaces/project_namespace.path')).value
         fill_in I18n.t(:'activerecord.attributes.namespaces/project_namespace.description'), with: project_description
@@ -326,7 +326,7 @@ module Dashboard
           assert_text @sample1.name
         end
         find('input.select2-input').click
-        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('projects.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
         perform_enqueued_jobs only: [::Samples::TransferJob]
@@ -382,7 +382,7 @@ module Dashboard
           assert_text @sample1.name
         end
         find('input.select2-input').click
-        find("button[data-viral--select2-primary-param='#{@project2.full_path}']").click
+        find("li[data-value='#{@project2.id}']").click
 
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')

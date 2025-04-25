@@ -22,7 +22,19 @@
         </label>
         <%= viral_select2(form:, name: :group_id, id: form_id, placeholder: t("groups.group_links.new.placeholder.search_for_group")) do |select| %>
           <% @namespace_linkable_groups.each do |group| %>
-            <%= select.with_option(primary: group.name, secondary: group.puid, value: group.id) %>
+            <% select.with_option(
+                      value: group.id,
+                      label: group.name,
+                    ) do %>
+              <span
+                class="
+                  text-slate-900 dark:text-slate-400 font-semibold block pointer-events-none
+                "
+              >
+                <%= group.name %>
+                <%= render PuidComponent.new(puid: group.puid, show_clipboard: false) %>
+              </span>
+            <% end %>
           <% end %>
           <%= select.with_empty_state do %>
             <%= t(:"groups.group_links.new.empty_state") %>

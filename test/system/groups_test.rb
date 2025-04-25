@@ -95,7 +95,7 @@ class GroupsTest < ApplicationSystemTestCase
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
       fill_in I18n.t('activerecord.attributes.group.name'), with: 'New sub-group'
       fill_in I18n.t('groups.new_subgroup.select_group'), with: '1'
-      click_on 'INXT_GRP_AAAAAAAAAA'
+      find('ul li', text: 'INXT_GRP_AAAAAAAAAA').click
       fill_in 'Description', with: 'New sub-group description'
       click_on I18n.t('groups.new_subgroup.submit')
     end
@@ -126,7 +126,7 @@ class GroupsTest < ApplicationSystemTestCase
     within %(div[data-controller="slugify"][data-controller-connected="true"]) do
       fill_in I18n.t('activerecord.attributes.group.name'), with: subgroup1.name
       fill_in I18n.t('groups.new_subgroup.select_group'), with: '1'
-      click_on 'INXT_GRP_AAAAAAAAAA'
+      find('ul li', text: 'INXT_GRP_AAAAAAAAAA').click
       click_on I18n.t('groups.new_subgroup.submit')
     end
 
@@ -144,7 +144,7 @@ class GroupsTest < ApplicationSystemTestCase
       fill_in I18n.t('activerecord.attributes.group.name'), with: 'New group'
       fill_in I18n.t('activerecord.attributes.group.path'), with: subgroup1.path
       fill_in I18n.t('groups.new_subgroup.select_group'), with: '1'
-      click_on 'INXT_GRP_AAAAAAAAAA'
+      find('ul li', text: 'INXT_GRP_AAAAAAAAAA').click
       click_on I18n.t('groups.new_subgroup.submit')
     end
 
@@ -320,7 +320,7 @@ class GroupsTest < ApplicationSystemTestCase
     within %(form[action="/group-1/transfer"]) do
       assert_selector 'input[type=submit]:disabled'
       find('input.select2-input').click
-      find("button[data-viral--select2-primary-param='#{group3.full_path}']").click
+      find("li[data-label='#{group3.name}']").click
       assert_selector 'input[type=submit]:not(:disabled)'
       click_on I18n.t('groups.edit.advanced.transfer.submit')
     end
