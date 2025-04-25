@@ -7,7 +7,7 @@
         <%== a.(
           @pagy.prev,
           t(".previous"),
-          aria_label: t(".previous"),
+          aria_label: t(".previous_aria_label"),
           classes: "#{active_link_classes} border-e-0 rounded-s-lg",
         ) %>
       <% else %>
@@ -24,20 +24,26 @@
     <% @pagy.series.each do |item| %>
       <li>
         <% if item.is_a?(Integer) %>
-          <%== a.(item, classes: class_names(active_link_classes, invisible_link_classes)) %>
+          <%== a.(
+            item,
+            classes: class_names(active_link_classes, invisible_link_classes),
+            aria_label: t(".item_aria_label", number: item),
+          ) %>
         <% elsif item.is_a?(String) %>
-          <span
+          <a
+            href="javascript:void(0);"
+            aria-current="page"
             class="
               flex items-center justify-center px-4 h-10 ms-0 leading-tight border
-              border-slate-300 dark:border-slate-600 text-slate-400 bg-slate-100
+              border-slate-300 dark:border-slate-600 text-slate-600 bg-slate-100
               dark:bg-slate-800 cursor-not-allowed
             "
-          ><%= item %></span>
+          ><%= item %></a>
         <% elsif item == :gap %>
           <span
             class="
               flex items-center justify-center px-4 h-10 ms-0 leading-tight border
-              border-slate-300 dark:border-slate-600 text-slate-400 bg-slate-100
+              border-slate-300 dark:border-slate-600 text-slate-600 bg-slate-100
               dark:bg-slate-800 cursor-not-allowed
             "
           >...</span>
@@ -47,7 +53,12 @@
     <%# Next page link %>
     <li>
       <% if @pagy.next %>
-        <%== a.(@pagy.next, t(".next"), classes: "#{active_link_classes} rounded-e-lg") %>
+        <%== a.(
+          @pagy.next,
+          t(".next"),
+          classes: "#{active_link_classes} rounded-e-lg",
+          aria_label: t(".next_aria_label"),
+        ) %>
       <% else %>
         <span
           class="

@@ -2093,14 +2093,19 @@ en:
         action: Action
     pagy:
       limit_component:
+        aria_label: Select the number of items to display
+        item_aria_label: Show %{items} items per page
         items: "%{items} per page:"
         summary:
           one: Displaying <span class='font-bold'>%{count}</span> item
           other: Displaying <span class='font-bold'>%{from}-%{to}</span> of <span class='font-bold'>%{count}</span> items
       pagination_component:
-        aria-label: Pagination
+        aria-label: Pagination Navigation
+        item_aria_label: Go to Page %{number}
         next: Next
+        next_aria_label: Go to next page
         previous: Previous
+        previous_aria_label: Go to previous page
     sortable_list:
       list_component:
         aria_role_description: "%{list} listbox drag and drop"
