@@ -53,8 +53,8 @@ class OpenTelemetryJobMetricsTest < ActiveJob::TestCase
     end
 
     # verify objects called as expected
-    mock_queue_count_instrument.verify
-    @mock_meter.verify
+    assert mock_queue_count_instrument.verify
+    assert @mock_meter.verify
   end
 
   test 'update queue latency' do
@@ -78,8 +78,8 @@ class OpenTelemetryJobMetricsTest < ActiveJob::TestCase
     end
 
     # verify objects called as expected
-    mock_queue_latency_instrument.verify
-    @mock_meter.verify
+    assert mock_queue_latency_instrument.verify
+    assert @mock_meter.verify
   end
 
   test 'update queue count to 0 when queue is empty' do
@@ -109,8 +109,8 @@ class OpenTelemetryJobMetricsTest < ActiveJob::TestCase
     @job_queue_metrics.update_queue_counts
 
     # verify objects called as expected
-    mock_queue_count_instrument.verify
-    @mock_meter.verify
+    assert mock_queue_count_instrument.verify
+    assert @mock_meter.verify
   end
 
   test 'update queue latency to 0 when queue is empty' do
@@ -144,7 +144,7 @@ class OpenTelemetryJobMetricsTest < ActiveJob::TestCase
     @job_queue_metrics.update_minimum_queue_times
 
     # verify objects called as expected
-    mock_queue_latency_instrument.verify
-    @mock_meter.verify
+    assert mock_queue_latency_instrument.verify
+    assert @mock_meter.verify
   end
 end
