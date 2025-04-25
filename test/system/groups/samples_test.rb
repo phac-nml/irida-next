@@ -222,15 +222,15 @@ module Groups
         assert_no_text @sample2.name
       end
 
-      assert_no_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      assert_no_selector 'table thead th[aria-sort="ascending"]', text: 'Sample ID'.upcase
       click_on 'Sample Name'
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      assert_selector 'table thead th[aria-sort="ascending"]', text: 'Sample Name'.upcase
 
       assert_selector 'tbody tr:first-child th', text: @sample1.puid
       assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample1.name
 
       click_on 'Sample Name'
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
+      assert_selector 'table thead th[aria-sort="descending"]', text: 'Sample Name'.upcase
 
       assert_selector 'tbody tr:last-child th', text: @sample1.puid
       assert_selector 'tbody tr:last-child td:nth-child(2)', text: @sample1.name
@@ -260,7 +260,7 @@ module Groups
         assert_no_text @sample2.name
       end
       click_on 'Sample Name'
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      assert_selector 'table thead th[aria-sort="ascending"]', text: 'Sample Name'.upcase
 
       within('table tbody') do
         assert_selector 'tr', count: 1
@@ -353,7 +353,7 @@ module Groups
       end
 
       click_on 'Sample Name'
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      assert_selector 'table thead th[aria-sort="ascending"]', text: 'Sample Name'.upcase
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
@@ -362,7 +362,7 @@ module Groups
       end
 
       click_on 'Created'
-      assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
+      assert_selector 'table thead th[aria-sort="ascending"]', text: 'Created'.upcase
       within('table tbody') do
         assert_selector 'tr:nth-child(3) th', text: @sample28.puid
         assert_selector 'tr:nth-child(3) td:nth-child(2)', text: @sample28.name
@@ -400,7 +400,7 @@ module Groups
       end
 
       click_on 'Sample Name'
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      assert_selector 'table thead th[aria-sort="ascending"]', text: 'Sample Name'.upcase
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
@@ -409,7 +409,7 @@ module Groups
       end
 
       click_on 'Created'
-      assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
+      assert_selector 'table thead th[aria-sort="ascending"]', text: 'Created'.upcase
       within('table tbody') do
         assert_selector 'tr:nth-child(3) th', text: @sample28.puid
         assert_selector 'tr:nth-child(3) td:nth-child(2)', text: @sample28.name
@@ -444,7 +444,7 @@ module Groups
       end
 
       click_on 'Last Updated'
-      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
+      assert_selector 'table thead th[aria-sort="ascending"]', text: 'Last Updated'.upcase
 
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
@@ -493,13 +493,13 @@ module Groups
       end
 
       click_on 'metadatafield1'
-      assert_selector 'table thead th:nth-child(7) svg.icon-arrow_up'
+      assert_selector 'table thead th[aria-sort="ascending"]', text: 'metadatafield1'.upcase
 
       assert_selector 'tbody tr:first-child th', text: @sample30.puid
       assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample30.name
 
       click_on 'metadatafield2'
-      assert_selector 'table thead th:nth-child(8) svg.icon-arrow_up'
+      assert_selector 'table thead th[aria-sort="ascending"]', text: 'metadatafield2'.upcase
 
       assert_selector 'tbody tr:first-child th', text: @sample30.puid
       assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample30.name
@@ -514,7 +514,7 @@ module Groups
         assert_selector 'th', count: 6
       end
 
-      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_down'
+      assert_selector 'table thead th[aria-sort="descending"]', text: 'Last updated'.upcase
       within('tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @sample1.name
