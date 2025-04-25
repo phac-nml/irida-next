@@ -59,7 +59,7 @@ module BlobHelper
     retries = 0
     begin
       dest_blob.compose([src_blob.key])
-    rescue Errno::ECONNRESET, Net::OpenTimeout, Net::ReadTimeout => e
+    rescue Errno::ECONNRESET, Errno::ECONNREFUSED, Net::OpenTimeout, Net::ReadTimeout => e
       raise e unless retries < max_retries
 
       retries += 1
