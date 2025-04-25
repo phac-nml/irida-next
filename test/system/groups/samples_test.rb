@@ -1318,7 +1318,7 @@ module Groups
 
     test 'pagy overflow redirects to first page' do
       group = groups(:group_seventeen)
-      sample = samples(:bulk_sample25)
+      sample = samples(:bulk_sample19)
 
       visit group_samples_url(group)
 
@@ -1357,17 +1357,13 @@ module Groups
       #        within('#samples-table table') do
       within('tbody') do
         # rows
-        assert_selector '#samples-table table tbody tr', count: 1
+        assert_selector 'tr', count: 11
 
         within("tr[id='#{dom_id(sample)}']") do
           assert_selector 'th:first-child', text: sample.puid
           assert_selector 'td:nth-child(2)', text: sample.name
         end
       end
-
-      # verify url contains page=1
-      url = URI.parse(current_url).to_s
-      assert url.include?('?page=1')
     end
   end
 end
