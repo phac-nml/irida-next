@@ -122,7 +122,7 @@ module Groups
     end
 
     def redirect_to_first_page
-      redirect_to url_for(page: 1)
+      redirect_to url_for(page: 1, limit: params[:limit] || 20)
     end
   end
 end
