@@ -21,10 +21,10 @@
       aria-label="<%= t(:'components.token.toggle_visible') %>"
     >
       <span data-token-target="hide">
-        <%= icon "eye", classes: "size-5 text-slate-500 dark:text-slate-400" %>
+        <%= icon "eye", class: "size-5 text-slate-500 dark:text-slate-400" %>
       </span>
       <span data-token-target="view" class="flex items-center hidden">
-        <%= icon "eye-slash", classes: "size-5" %>
+        <%= icon "eye-slash", class: "size-5" %>
       </span>
     </button>
   </div>
@@ -38,7 +38,7 @@
   >
     <span data-token-target="initial"><%= t("components.token.copy") %></span>
     <span data-token-target="copied" class="flex items-center hidden">
-      <%= icon "check", classes: "size-5 me-2" %>
+      <%= icon "check", class: "size-5 me-2" %>
       <%= t("components.token.copied") %></span>
   </button>
 <% end %>
