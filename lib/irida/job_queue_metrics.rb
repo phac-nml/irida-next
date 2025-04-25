@@ -3,7 +3,8 @@
 require 'singleton'
 
 module Irida
-  class JobQueueMetrics # rubocop:disable Style/Documentation
+  # Functions for creating instruments and updating values on metrics meter
+  class JobQueueMetrics
     include Singleton
 
     def update_minimum_queue_times
@@ -120,10 +121,6 @@ module Irida
       job_queue_latency_instrument_name = "#{queue_name}_queue_min_wait_time"
       instrument = get_instrument(job_queue_latency_instrument_name, :queue_latency)
       instrument.record(value)
-    end
-
-    def validate_and_update(instrument_name, value)
-
     end
   end
 end
