@@ -97,7 +97,7 @@ module Projects
       assert_selector 'table tbody tr', count: 2
 
       click_on 'ID'
-      assert_selector 'table thead th:first-child svg.icon-arrow_up'
+      assert_selector 'table thead th[aria-sort="ascending"]', text: 'ID'
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @attachment1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @attachment1.file.filename.to_s
@@ -106,7 +106,7 @@ module Projects
       end
 
       click_on 'ID'
-      assert_selector 'table thead th:first-child svg.icon-arrow_down'
+      assert_selector 'table thead th[aria-sort="descending"]', text: 'ID'
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @attachment2.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @attachment2.file.filename.to_s
@@ -115,7 +115,7 @@ module Projects
       end
 
       click_on 'Filename'
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      assert_selector 'table thead th[aria-sort="ascending"]', text: 'Filename'.upcase
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @attachment2.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @attachment2.file.filename.to_s
@@ -124,7 +124,7 @@ module Projects
       end
 
       click_on 'Filename'
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
+      assert_selector 'table thead th[aria-sort="descending"]', text: 'Filename'.upcase
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @attachment1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @attachment1.file.filename.to_s
@@ -133,7 +133,7 @@ module Projects
       end
 
       click_on 'format'
-      assert_selector 'table thead th:nth-child(3) svg.icon-arrow_up'
+      assert_selector 'table thead th[aria-sort="ascending"]', text: 'Format'.upcase
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @attachment2.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @attachment2.file.filename.to_s
@@ -142,7 +142,7 @@ module Projects
       end
 
       click_on 'format'
-      assert_selector 'table thead th:nth-child(3) svg.icon-arrow_down'
+      assert_selector 'table thead th[aria-sort="descending"]', text: 'Format'.upcase
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @attachment1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @attachment1.file.filename.to_s
@@ -151,7 +151,7 @@ module Projects
       end
 
       click_on 'type'
-      assert_selector 'table thead th:nth-child(4) svg.icon-arrow_up'
+      assert_selector 'table thead th[aria-sort="ascending"]', text: 'Type'.upcase
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @attachment1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @attachment1.file.filename.to_s
@@ -160,7 +160,7 @@ module Projects
       end
 
       click_on 'type'
-      assert_selector 'table thead th:nth-child(4) svg.icon-arrow_down'
+      assert_selector 'table thead th[aria-sort="descending"]', text: 'Type'.upcase
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @attachment1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @attachment1.file.filename.to_s
@@ -169,7 +169,7 @@ module Projects
       end
 
       click_on 'Size'
-      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
+      assert_selector 'table thead th[aria-sort="ascending"]', text: 'Size'.upcase
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @attachment2.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @attachment2.file.filename.to_s
@@ -178,7 +178,7 @@ module Projects
       end
 
       click_on 'Size'
-      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_down'
+      assert_selector 'table thead th[aria-sort="descending"]', text: 'Size'.upcase
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @attachment1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @attachment1.file.filename.to_s
@@ -187,7 +187,7 @@ module Projects
       end
 
       click_on 'Uploaded'
-      assert_selector 'table thead th:nth-child(6) svg.icon-arrow_up'
+      assert_selector 'table thead th[aria-sort="ascending"]', text: 'Uploaded'.upcase
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @attachment1.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @attachment1.file.filename.to_s
@@ -196,7 +196,7 @@ module Projects
       end
 
       click_on 'Uploaded'
-      assert_selector 'table thead th:nth-child(6) svg.icon-arrow_down'
+      assert_selector 'table thead th[aria-sort="descending"]', text: 'Uploaded'.upcase
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @attachment2.puid
         assert_selector 'tr:first-child td:nth-child(2)', text: @attachment2.file.filename.to_s

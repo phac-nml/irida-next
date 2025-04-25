@@ -7,6 +7,9 @@ module Attachments
   class TableComponent < Component
     include Ransack::Helpers::FormHelper
 
+    METADATA_COLUMNS = %w[format type].freeze
+    FILE_DATA_COLUMNS = %w[filename byte_size].freeze
+
     # rubocop:disable Naming/MethodParameterName,Metrics/ParameterLists
     def initialize(
       attachments,
@@ -77,6 +80,20 @@ module Attachments
         namespace_project_attachment_new_destroy_path(
           attachment_id:
         )
+      end
+    end
+
+    def sort_column_name(column)
+      column_str = column.to_s
+      case column_str
+      when 'id'
+        'puid'
+      when *METADATA_COLUMNS
+        "metadata_#{column_str}"
+      when *FILE_DATA_COLUMNS
+        "file_blob_#{column_str}"
+      else
+        column_str # Return the original column name if no specific mapping exists
       end
     end
 
