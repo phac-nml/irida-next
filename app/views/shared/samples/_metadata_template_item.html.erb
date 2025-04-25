@@ -8,11 +8,11 @@
     type="submit"
     value="<%= value %>"
     name="q[metadata_template]"
-    class="w-full flex py-2.5 px-3 cursor-pointer"
+    class="w-full flex py-2.5 px-3 cursor-pointer items-center"
   >
     <span class="size-5 mr-2">
       <% if selected %>
-        <%= viral_icon(name: "check", classes: "flex-none") %>
+        <%= icon "check", class: "size-4" %>
       <% end %>
     </span>
     <%= label %>
