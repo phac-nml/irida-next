@@ -2044,8 +2044,7 @@ module Projects
         assert_no_selector 'select[id="sampleColumn"][disabled]'
         assert_no_selector 'select[id="descriptionColumn"][disabled]'
 
-        attach_file('spreadsheet_import[file]',
-                    Rails.root.join(''))
+        attach_file('spreadsheet_import[file]', Rails.root.join)
         # verify select inputs are re-disabled after file is unselected
         assert_selector 'select[id="sampleColumn"][disabled]'
         assert_selector 'select[id="descriptionColumn"][disabled]'
