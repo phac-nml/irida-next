@@ -98,15 +98,15 @@ export default class extends Controller {
 
   #clearFormOptions() {
     this.#selectedHeaders = { sampleColumn: null, descriptionColumn: null };
-    this.sampleNameColumnTarget.innerHTML = "";
-    this.#disableTarget(this.sampleNameColumnTarget);
+    this.#resetSelectInput(this.sampleNameColumnTarget);
     if (this.hasProjectPUIDColumnTarget) {
       this.#selectedHeaders["projectColumn"] = null;
-      this.projectPUIDColumnTarget.innerHTML = "";
-      this.#disableTarget(this.projectPUIDColumnTarget);
+      this.#resetSelectInput(this.projectPUIDColumnTarget);
+
+      this.#disableTarget(this.staticProjectTarget);
+      this.staticProjectTarget.value = "";
     }
-    this.sampleDescriptionColumnTarget.innerHTML = "";
-    this.#disableTarget(this.sampleDescriptionColumnTarget);
+    this.#resetSelectInput(this.sampleDescriptionColumnTarget);
     this.submitButtonTarget.disabled = true;
   }
 
@@ -174,9 +174,7 @@ export default class extends Controller {
     columnTarget.innerHTML = "";
 
     // add blank value
-    columnTarget.append(
-      this.#createInputOption("", this.#blankValues[columnTarget.id]),
-    );
+    this.#resetSelectInput(columnTarget);
 
     // add currently selected option
     if (currentSelection) {
@@ -263,6 +261,18 @@ export default class extends Controller {
     // filter out used options
     return this.#allHeaders.filter(
       (item) => !Object.values(this.#selectedHeaders).includes(item),
+    );
+  }
+
+  #resetSelectInput(columnTarget) {
+    columnTarget.innerHTML = "";
+    this.#appendBlankValue(columnTarget);
+    this.#disableTarget(columnTarget);
+  }
+
+  #appendBlankValue(columnTarget) {
+    columnTarget.append(
+      this.#createInputOption("", this.#blankValues[columnTarget.id]),
     );
   }
 }
