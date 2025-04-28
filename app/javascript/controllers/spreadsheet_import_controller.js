@@ -1,6 +1,5 @@
-import * as XLSX from "xlsx";
-
 import { Controller } from "@hotwired/stimulus";
+import * as XLSX from "xlsx";
 
 export default class extends Controller {
   static targets = [
@@ -26,37 +25,33 @@ export default class extends Controller {
   ];
 
   #allHeaders;
-  #selectedHeaders = {
-    spreadsheet_import_sample_name_column: null,
-    spreadsheet_import_sample_description_column: null,
-  };
+  #selectedHeaders = { sampleColumn: null, descriptionColumn: null };
   #blankValues = {
-    spreadsheet_import_sample_name_column: this.selectSampleValue,
-    spreadsheet_import_sample_description_column: this.selectDescriptionValue,
+    sampleColumn: this.selectSampleValue,
+    descriptionColumn: this.selectDescriptionValue,
   };
 
   connect() {
     if (this.hasProjectPUIDColumnTarget) {
-      this.#selectedHeaders["spreadsheet_import_project_puid_column"] = null;
-      this.#blankValues["spreadsheet_import_project_puid_column"] =
-        this.selectProjectValue;
+      this.#selectedHeaders["projectColumn"] = null;
+      this.#blankValues["projectColumn"] = this.selectProjectValue;
     }
   }
 
   changeInputValue(event) {
     switch (event.target.id) {
-      case this.sampleNameColumnTarget.id:
+      case "sampleColumn":
         this.#updateInputValue(this.sampleNameColumnTarget, event.target.value);
         this.#refreshInputOptionsForAllFields();
         break;
-      case this.projectPUIDColumnTarget.id:
+      case "projectColumn":
         this.#updateInputValue(
           this.projectPUIDColumnTarget,
           event.target.value,
         );
         this.#refreshInputOptionsForAllFields();
         break;
-      case this.sampleDescriptionColumnTarget.id:
+      case "descriptionColumn":
         this.#updateInputValue(
           this.sampleDescriptionColumnTarget,
           event.target.value,
@@ -102,14 +97,11 @@ export default class extends Controller {
   }
 
   #clearFormOptions() {
-    this.#selectedHeaders = {
-      spreadsheet_import_sample_name_column: null,
-      spreadsheet_import_sample_description_column: null,
-    };
+    this.#selectedHeaders = { sampleColumn: null, descriptionColumn: null };
     this.sampleNameColumnTarget.innerHTML = "";
     this.#disableTarget(this.sampleNameColumnTarget);
     if (this.hasProjectPUIDColumnTarget) {
-      this.#selectedHeaders["spreadsheet_import_project_puid_column"] = null;
+      this.#selectedHeaders["projectColumn"] = null;
       this.projectPUIDColumnTarget.innerHTML = "";
       this.#disableTarget(this.projectPUIDColumnTarget);
     }
@@ -159,19 +151,19 @@ export default class extends Controller {
     const unselectedHeaders = this.#processUnselectedHeaders();
     this.#refreshInputOptions(
       this.sampleNameColumnTarget,
-      this.#selectedHeaders["spreadsheet_import_sample_name_column"],
+      this.#selectedHeaders["sampleColumn"],
       unselectedHeaders,
     );
     if (this.hasProjectPUIDColumnTarget) {
       this.#refreshInputOptions(
         this.projectPUIDColumnTarget,
-        this.#selectedHeaders["spreadsheet_import_project_puid_column"],
+        this.#selectedHeaders["projectColumn"],
         unselectedHeaders,
       );
     }
     this.#refreshInputOptions(
       this.sampleDescriptionColumnTarget,
-      this.#selectedHeaders["spreadsheet_import_sample_description_column"],
+      this.#selectedHeaders["descriptionColumn"],
       unselectedHeaders,
     );
     this.checkFormInputsReadyForSubmit();
