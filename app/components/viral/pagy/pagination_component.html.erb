@@ -7,9 +7,9 @@
         <%== a.(
           @pagy.prev,
           t(".previous"),
-          "aria-label": t(".previous_aria_label"),
           classes:
             "flex items-center justify-center text-slate-700 bg-slate-200 border border-slate-300 font-medium text-sm px-4 h-10 hover:bg-slate-300 hover:text-slate-900 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600 dark:hover:text-white border-e-0 rounded-s-md",
+          aria_label: t(".previous_aria_label"),
         ) %>
       <% else %>
         <span
@@ -29,7 +29,7 @@
             item,
             classes:
               "flex items-center justify-center text-slate-700 bg-slate-200 border border-slate-300 font-medium text-sm px-4 h-10 hover:bg-slate-300 hover:text-slate-900 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600 dark:hover:text-white",
-            "aria-label": t(".item_aria_label", number: item),
+            aria_label: t(".item_aria_label", number: item),
           ) %>
         <% elsif item.is_a?(String) %>
           <a
@@ -58,8 +58,9 @@
         <%== a.(
           @pagy.next,
           t(".next"),
-          classes: "#{active_link_classes} rounded-e-md",
-          "aria-label": t(".next_aria_label"),
+          classes:
+            "flex items-center justify-center text-slate-700 bg-slate-200 border border-slate-300 font-medium text-sm px-4 h-10 hover:bg-slate-300 hover:text-slate-900 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600 dark:hover:text-white rounded-e-md",
+          aria_label: t(".next_aria_label"),
         ) %>
       <% else %>
         <span
