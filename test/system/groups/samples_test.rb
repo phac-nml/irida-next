@@ -1353,6 +1353,49 @@ module Groups
       ### VERIFY END ###
     end
 
+    test 'should disable select inputs if file is unselected' do
+      ### SETUP START ###
+      visit group_samples_url(@group)
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS AND VERIFY START ###
+      # start import
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_samples')
+      within('#dialog') do
+        # verify initial disabled states of select inputs
+        assert_selector 'select[id="sampleColumn"][disabled]'
+        assert_selector 'select[id="descriptionColumn"][disabled]'
+        assert_selector 'select[id="projectColumn"][disabled]'
+        assert_selector 'select[id="staticProject"][disabled]'
+        attach_file('spreadsheet_import[file]',
+                    Rails.root.join('test/fixtures/files/batch_sample_import/group/valid.csv'))
+
+        # select inputs no longer disabled after file uploaded
+        assert_no_selector 'select[id="sampleColumn"][disabled]'
+        assert_no_selector 'select[id="descriptionColumn"][disabled]'
+        assert_no_selector 'select[id="projectColumn"][disabled]'
+        assert_no_selector 'select[id="staticProject"][disabled]'
+
+        attach_file('spreadsheet_import[file]',
+                    Rails.root.join(''))
+        # verify select inputs are re-disabled after file is unselected
+        assert_selector 'select[id="sampleColumn"][disabled]'
+        assert_selector 'select[id="descriptionColumn"][disabled]'
+        assert_selector 'select[id="projectColumn"][disabled]'
+        assert_selector 'select[id="staticProject"][disabled]'
+        # verify blank values still exist
+        assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_name_column')
+        assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column')
+        assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_project_puid_column')
+        assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_static_project')
+        ### ACTIONS AND VERIFY END ###
+      end
+    end
+
     test 'pagy overflow redirects to first page' do
       group = groups(:group_seventeen)
       sample = samples(:bulk_sample19)
