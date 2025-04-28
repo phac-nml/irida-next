@@ -11,6 +11,14 @@ class OpenTelemetryJobMetricsTest < ActiveJob::TestCase
     @job_queue_metrics.instance_variable_set(:@meter, @mock_meter)
   end
 
+  def teardown
+    @mock_meter = nil
+    @job_queue_metrics.instance_variable_set(:@meter, nil)
+    @job_queue_metrics.instance_variable_set(:@job_queue_count_previous_value_map, nil)
+    @job_queue_metrics.instance_variable_set(:@job_queue_latency_previous_value_map, nil)
+    @job_queue_metrics.instance_variable_set(:@job_queue_instrument_map, nil)
+  end
+
   class DummyJob < ApplicationJob
     self.queue_adapter = :good_job
     queue_as :default
