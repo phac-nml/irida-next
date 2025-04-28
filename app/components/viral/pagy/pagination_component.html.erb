@@ -1,5 +1,9 @@
 <% a = helpers.pagy_anchor(@pagy, anchor_string: @data_string) %>
-<nav class="pagy nav" aria-label="<%= t(".aria-label") %>">
+<nav
+  class="pagy nav"
+  aria-role="navigation"
+  aria-label="<%= t(".aria_label") %>"
+>
   <ul class="inline-flex h-10 -space-x-px text-base">
     <%# Previous page link %>
     <li>
@@ -8,13 +12,14 @@
           @pagy.prev,
           t(".previous"),
           aria_label: t(".previous_aria_label"),
-          classes: "#{active_link_classes} border-e-0 rounded-s-lg",
+          classes:
+            "flex items-center justify-center text-slate-700 bg-slate-200 border border-slate-300 font-medium text-sm px-4 h-10 hover:bg-slate-300 hover:text-slate-900 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600 dark:hover:text-white border-e-0 rounded-s-md",
         ) %>
       <% else %>
         <span
           class="
             flex items-center justify-center px-4 h-10 ms-0 leading-tight border
-            border-slate-300 dark:border-slate-600 text-slate-600 bg-slate-100
+            border-slate-300 dark:border-slate-600 text-slate-600 bg-slate-300
             dark:bg-slate-800 cursor-not-allowed rounded-s-lg
           "
         ><%= t(".previous") %></span>
@@ -26,7 +31,8 @@
         <% if item.is_a?(Integer) %>
           <%== a.(
             item,
-            classes: class_names(active_link_classes, invisible_link_classes),
+            classes:
+              "flex items-center justify-center text-slate-700 bg-slate-200 border border-slate-300 font-medium text-sm px-4 h-10 hover:bg-slate-300 hover:text-slate-900 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600 dark:hover:text-white",
             aria_label: t(".item_aria_label", number: item),
           ) %>
         <% elsif item.is_a?(String) %>
@@ -35,7 +41,7 @@
             aria-current="page"
             class="
               flex items-center justify-center px-4 h-10 ms-0 leading-tight border
-              border-slate-300 dark:border-slate-600 text-slate-600 bg-slate-100
+              border-slate-300 dark:border-slate-600 text-slate-600 bg-slate-300
               dark:bg-slate-800 cursor-not-allowed
             "
           ><%= item %></a>
@@ -43,7 +49,7 @@
           <span
             class="
               flex items-center justify-center px-4 h-10 ms-0 leading-tight border
-              border-slate-300 dark:border-slate-600 text-slate-600 bg-slate-100
+              border-slate-300 dark:border-slate-600 text-slate-600 bg-slate-300
               dark:bg-slate-800 cursor-not-allowed
             "
           >...</span>
@@ -56,15 +62,15 @@
         <%== a.(
           @pagy.next,
           t(".next"),
-          classes: "#{active_link_classes} rounded-e-lg",
+          classes: "#{active_link_classes} rounded-e-md",
           aria_label: t(".next_aria_label"),
         ) %>
       <% else %>
         <span
           class="
             flex items-center justify-center px-4 h-10 ms-0 leading-tight border
-            border-slate-300 dark:border-slate-600 text-slate-600 bg-slate-100
-            dark:bg-slate-800 cursor-not-allowed rounded-e-lg
+            border-slate-300 dark:border-slate-600 text-slate-600 bg-slate-300
+            dark:bg-slate-800 cursor-not-allowed rounded-e-md
           "
         ><%= t(".next") %></span>
       <% end %>
