@@ -43,13 +43,14 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector '#workflow-executions-table table tbody tr', count: 20
 
     assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
-    assert_selector "a[aria-label='#{viral.pagy.pagination_component.at_first_aria_label}']",
+    assert_selector "a[aria-label='#{I18n.t(:'viral.pagy.pagination_component.at_first_aria_label')}']",
                     exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
     click_on I18n.t(:'viral.pagy.pagination_component.next')
     assert_selector '#workflow-executions-table table tbody tr', count: 5
 
     assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
-    assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+    assert_selector "a[aria-label='#{I18n.t(:'viral.pagy.pagination_component.at_last_aria_label')}']",
+                    exact_text: I18n.t(:'viral.pagy.pagination_component.next')
     click_on I18n.t(:'viral.pagy.pagination_component.previous')
     assert_selector '#workflow-executions-table table tbody tr', count: 20
   end
