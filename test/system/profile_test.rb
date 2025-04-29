@@ -145,7 +145,10 @@ class ProfileTest < ApplicationSystemTestCase
 
     # change user language selection from the layout
     within find('nav') do
-      find('select').find('option[value=fr]').select_option
+      find('#language-selection-dd-trigger').click
+      within find('#language_selection_dropdown') do
+        click_button I18n.t(:'locales.fr', locale: :fr)
+      end
     end
 
     I18n.with_locale(:fr) do
