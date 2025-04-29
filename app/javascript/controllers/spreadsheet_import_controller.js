@@ -184,13 +184,6 @@ export default class extends Controller {
     this.checkFormInputsReadyForSubmit();
   }
 
-  #processUnselectedHeaders() {
-    // filter out used options
-    return this.#allHeaders.filter(
-      (item) => !Object.values(this.#selectedHeaders).includes(item),
-    );
-  }
-
   #refreshInputOptions(columnTarget, currentSelection, unselectedHeaders) {
     // rebuild select options list
     columnTarget.innerHTML = "";
@@ -303,4 +296,5 @@ export default class extends Controller {
         content: { metadata: unselectedHeaders },
       },
     });
+  }
 }
