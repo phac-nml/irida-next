@@ -3,7 +3,7 @@
 # Migration to move large activity parameters to extended details table and remove this data from activity parameters
 class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # rubocop:disable Metrics/ClassLength
   def change
-    migrate_clone_data
+    # migrate_clone_data
     migrate_transfer_data
     migrate_multiple_destroy_data
   end
@@ -46,15 +46,15 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
       activity_key_cloned_from = 'namespaces_project_namespace.samples.cloned_from'
       cloned_from_activities = PublicActivity::Activity.where(
         key: activity_key_cloned_from
-      )
+      ).where("parameters LIKE '%source_project_puid: #{activity_trackable.puid}%'")
 
       activity_cloned_from = nil
 
       # Get the `target project` activity which matches the source
       # project activity in the first activities loop
       cloned_from_activities.each do |cloned_from_activity|
+        next if cloned_from_activity.parameters[:cloned_samples_puids].nil?
         next unless (cloned_from_activity.parameters[:source_project_puid] == activity_trackable.puid) &&
-                    !cloned_from_activity.parameters[:cloned_samples_puids].nil? &&
                     (cloned_from_activity.parameters[:cloned_samples_puids] == existing_data)
 
         activity_cloned_from = cloned_from_activity
@@ -132,15 +132,15 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
 
       transferred_from_activities = PublicActivity::Activity.where(
         key: activity_key_transferred_from
-      )
+      ).where("parameters LIKE '%source_project_puid: #{activity_trackable.puid}%'")
 
       activity_transferred_from = nil
 
       # Get the `target project` activity which matches the source
       # project activity in the first activities loop
       transferred_from_activities.each do |transferred_from_activity|
+        next if transferred_from_activity.parameters[:transferred_samples_puids].nil?
         next unless (transferred_from_activity.parameters[:source_project_puid] == activity_trackable.puid) &&
-                    !transferred_from_activity.parameters[:transferred_samples_puids].nil? &&
                     (transferred_from_activity.parameters[:transferred_samples_puids] - existing_puids).blank?
 
         activity_transferred_from = transferred_from_activity
