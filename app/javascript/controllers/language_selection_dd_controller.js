@@ -25,7 +25,6 @@ export default class extends Controller {
    * Connects the controller and initializes the dropdown.
    */
   connect() {
-    console.log("CONNECTED");
     this.#dropdown = new Dropdown(this.menuTarget, this.triggerTarget);
     this.element.setAttribute("data-controller-connected", "true");
   }
@@ -34,7 +33,6 @@ export default class extends Controller {
    * Disconnects the controller.
    */
   disconnect() {
-    console.log("DISCONNECTED");
     if (this.#dropdown) {
       this.#dropdown.hide();
       this.#dropdown = null;
