@@ -1256,6 +1256,7 @@ module Groups
 
     test 'should import sample including missing project puid if static project selected' do
       ### SETUP START ###
+      project2 = projects(:project2)
       visit group_samples_url(@group)
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
@@ -1274,7 +1275,8 @@ module Groups
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/group/missing_puid.csv'))
-        find('#spreadsheet_import_static_project_id', wait: 1).find(:xpath, 'option[3]').select_option
+        select "#{project2.namespace.full_path} (#{project2.namespace.puid})",
+               from: I18n.t('shared.samples.spreadsheet_imports.dialog.static_project')
 
         click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
         ### ACTIONS END ###
@@ -1367,25 +1369,25 @@ module Groups
       click_button I18n.t('shared.samples.actions_dropdown.import_samples')
       within('#dialog') do
         # verify initial disabled states of select inputs
-        assert_selector 'select[id="spreadsheet_import_sample_name_column"][disabled]'
-        assert_selector 'select[id="spreadsheet_import_sample_description_column"][disabled]'
-        assert_selector 'select[id="spreadsheet_import_project_puid_column"][disabled]'
-        assert_selector 'select[id="spreadsheet_import_static_project_id"][disabled]'
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: true
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: true
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.project_puid_column'), disabled: true
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.static_project'), disabled: true
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/group/valid.csv'))
 
         # select inputs no longer disabled after file uploaded
-        assert_no_selector 'select[id="spreadsheet_import_sample_name_column"][disabled]'
-        assert_no_selector 'select[id="spreadsheet_import_sample_description_column"][disabled]'
-        assert_no_selector 'select[id="spreadsheet_import_project_puid_column"][disabled]'
-        assert_no_selector 'select[id="spreadsheet_import_static_project_id"][disabled]'
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: false
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: false
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.project_puid_column'), disabled: false
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.static_project'), disabled: false
 
         attach_file('spreadsheet_import[file]', Rails.root.join)
         # verify select inputs are re-disabled after file is unselected
-        assert_selector 'select[id="spreadsheet_import_sample_name_column"][disabled]'
-        assert_selector 'select[id="spreadsheet_import_sample_description_column"][disabled]'
-        assert_selector 'select[id="spreadsheet_import_project_puid_column"][disabled]'
-        assert_selector 'select[id="spreadsheet_import_static_project_id"][disabled]'
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: true
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: true
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.project_puid_column'), disabled: true
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.static_project'), disabled: true
         # verify blank values still exist
         assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_name_column')
         assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column')

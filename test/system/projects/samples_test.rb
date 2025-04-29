@@ -2035,19 +2035,19 @@ module Projects
       click_button I18n.t('shared.samples.actions_dropdown.import_samples')
       within('#dialog') do
         # verify initial disabled states of select inputs
-        assert_selector 'select[id="spreadsheet_import_sample_name_column"][disabled]'
-        assert_selector 'select[id="spreadsheet_import_sample_description_column"][disabled]'
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: true
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: true
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/project/valid.csv'))
 
         # select inputs no longer disabled after file uploaded
-        assert_no_selector 'select[id="spreadsheet_import_sample_name_column"][disabled]'
-        assert_no_selector 'select[id="spreadsheet_import_sample_description_column"][disabled]'
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: false
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: false
 
         attach_file('spreadsheet_import[file]', Rails.root.join)
         # verify select inputs are re-disabled after file is unselected
-        assert_selector 'select[id="spreadsheet_import_sample_name_column"][disabled]'
-        assert_selector 'select[id="spreadsheet_import_sample_description_column"][disabled]'
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: true
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: true
         # verify blank values still exist
         assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_name_column')
         assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column')
