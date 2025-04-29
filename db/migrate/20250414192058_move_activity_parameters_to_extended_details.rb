@@ -3,7 +3,7 @@
 # Migration to move large activity parameters to extended details table and remove this data from activity parameters
 class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # rubocop:disable Metrics/ClassLength
   def change
-    # migrate_clone_data
+    migrate_clone_data
     migrate_transfer_data
     migrate_multiple_destroy_data
   end
