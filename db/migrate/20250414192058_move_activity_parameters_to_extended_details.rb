@@ -52,7 +52,7 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
       # project activity in the first activities loop
       cloned_from_activities.each do |cloned_from_activity|
         if (cloned_from_activity.parameters[:source_project_puid] == activity_trackable.puid) &&
-           (cloned_from_activity.parameters[:cloned_samples_puids] == existing_data)
+           (cloned_from_activity.parameters[:cloned_samples_puids] - existing_data).blank?
           activity_cloned_from = cloned_from_activity
         end
       end
@@ -135,7 +135,7 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
       # project activity in the first activities loop
       transferred_from_activities.each do |transferred_from_activity|
         if (transferred_from_activity.parameters[:source_project_puid] == activity_trackable.puid) &&
-           (transferred_from_activity.parameters[:transferred_samples_puids] == existing_puids)
+           (transferred_from_activity.parameters[:transferred_samples_puids] - existing_puids).blank?
           activity_transferred_from = transferred_from_activity
         end
       end
