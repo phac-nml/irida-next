@@ -2020,6 +2020,41 @@ module Projects
       ### VERIFY END ###
     end
 
+    test 'should disable select inputs if file is unselected' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+
+      assert_text strip_tags(
+        I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3, locale: @user.locale)
+      )
+      ### SETUP END ###
+
+      ### ACTIONS AND VERIFY START ###
+      # start import
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_samples')
+      within('#dialog') do
+        # verify initial disabled states of select inputs
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: true
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: true
+        attach_file('spreadsheet_import[file]',
+                    Rails.root.join('test/fixtures/files/batch_sample_import/project/valid.csv'))
+
+        # select inputs no longer disabled after file uploaded
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: false
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: false
+
+        attach_file('spreadsheet_import[file]', Rails.root.join)
+        # verify select inputs are re-disabled after file is unselected
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: true
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: true
+        # verify blank values still exist
+        assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_name_column')
+        assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column')
+        ### ACTIONS AND VERIFY END ###
+      end
+    end
+
     test 'singular clone dialog description' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)

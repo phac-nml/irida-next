@@ -1256,6 +1256,7 @@ module Groups
 
     test 'should import sample including missing project puid if static project selected' do
       ### SETUP START ###
+      project2 = projects(:project2)
       visit group_samples_url(@group)
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
@@ -1274,7 +1275,8 @@ module Groups
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/group/missing_puid.csv'))
-        find('#staticProject', wait: 1).find(:xpath, 'option[3]').select_option
+        select "#{project2.namespace.full_path} (#{project2.namespace.puid})",
+               from: I18n.t('shared.samples.spreadsheet_imports.dialog.static_project')
 
         click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
         ### ACTIONS END ###
@@ -1351,6 +1353,48 @@ module Groups
         assert_no_text 'my new sample 2'
       end
       ### VERIFY END ###
+    end
+
+    test 'should disable select inputs if file is unselected' do
+      ### SETUP START ###
+      visit group_samples_url(@group)
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS AND VERIFY START ###
+      # start import
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_samples')
+      within('#dialog') do
+        # verify initial disabled states of select inputs
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: true
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: true
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.project_puid_column'), disabled: true
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.static_project'), disabled: true
+        attach_file('spreadsheet_import[file]',
+                    Rails.root.join('test/fixtures/files/batch_sample_import/group/valid.csv'))
+
+        # select inputs no longer disabled after file uploaded
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: false
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: false
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.project_puid_column'), disabled: false
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.static_project'), disabled: false
+
+        attach_file('spreadsheet_import[file]', Rails.root.join)
+        # verify select inputs are re-disabled after file is unselected
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: true
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: true
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.project_puid_column'), disabled: true
+        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.static_project'), disabled: true
+        # verify blank values still exist
+        assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_name_column')
+        assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column')
+        assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_project_puid_column')
+        assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_static_project')
+        ### ACTIONS AND VERIFY END ###
+      end
     end
 
     test 'pagy overflow redirects to first page' do
