@@ -24,7 +24,7 @@
     data-language-selection-dd-target="menu"
     id="language-selection-dd-menu"
     class="
-      hidden w-48 bg-white divide-y divide-slate-100 rounded-lg shadow-sm
+      hidden w-32 bg-white divide-y divide-slate-100 rounded-lg shadow-sm
       dark:bg-slate-700 dark:divide-slate-600 z-30
     "
     aria-labelledby="language-selection-dd-trigger"
@@ -38,7 +38,7 @@
       <% @locale_options.each do |key, value| %>
         <li role="option">
           <%= form_with(model: @user, url: profile_preferences_path, method: :patch) do |form| %>
-            <%= form.hidden_field :locale, value: value %>
+            <%= form.hidden_field :locale, value: value, id: "user_locale_#{value}" %>
             <%= form.submit key,
                         class:
                           "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white" %>
