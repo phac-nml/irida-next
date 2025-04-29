@@ -13,6 +13,7 @@ module Activities
         @activity_owner = activity_owner
         @activity_type = @activity.parameters[:action]
         set_additional_params
+        set_pagination_aria_labels
       end
 
       # @title, @description, and @data are all required attributes
@@ -47,6 +48,19 @@ module Activities
                                 count: @activity.parameters[:samples_deleted_count])
           @data = @extended_details.details['deleted_samples_data'].to_json
         end
+      end
+
+      def set_pagination_aria_labels
+        @aria_labels = {
+          previous: {
+            enabled: I18n.t('components.activity.dialog.pagination.previous_aria_label'),
+            disabled: I18n.t('components.activity.dialog.pagination.at_first_aria_label')
+          },
+          next: {
+            enabled: I18n.t('components.activity.dialog.pagination.next_aria_label'),
+            disabled: I18n.t('components.activity.dialog.pagination.at_last_aria_label')
+          }
+        }.to_json
       end
     end
   end

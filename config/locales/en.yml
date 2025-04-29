@@ -475,8 +475,13 @@ en:
       dialog:
         close: Close
         pagination:
+          aria_label: Pagination
+          at_first_aria_label: On first page
+          at_last_aria_label: On last page
           next: Next
+          next_aria_label: Go to next page
           previous: Previous
+          previous_aria_label: Go to previous page
         sample_clone:
           copied_from: Copied From
           copied_to: Copied To
@@ -2032,9 +2037,9 @@ en:
           file_help: CSV, TSV, XLS or XLSX.
           namespace:
             group:
-              description_html: The spreadsheet is required to have a column for <b>Sample Name</b>, and optionally for <b>Sample Description</b> and <b>Project PUID</b>.
+              description_html: The spreadsheet is required to have columns for <b>Sample Name</b> and <b>Project PUID</b>, and optionally <b>Sample Description</b>.
             project:
-              description_html: The spreadsheet is required to have a column for <b>Sample Name</b>, and optionally for <b>Sample Description</b>.
+              description_html: The spreadsheet is required to have a column for <b>Sample Name</b>, and optionally <b>Sample Description</b>.
           project_puid_column: Project ID Column
           project_puid_column_description: Assigns each sample to the associated project within the imported spreadsheet
           project_selection: Project Selection

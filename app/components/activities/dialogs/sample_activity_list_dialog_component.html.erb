@@ -41,10 +41,10 @@
     >
     </div>
 
-    <template id="listRow">
+    <template id="listRow" data-activities--extended_details-target="listRow">
       <li class="pt-3 pb-3 sm:pb-4 sm:pt-4">
         <p class="inline-flex text-sm text-slate-500 truncate dark:text-slate-400">
-          <span class="mr-2"></span>
+          <span class="mr-2" data-activities--extended_details-target="sampleName"></span>
           <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
         </p>
       </li>
@@ -65,7 +65,14 @@
       </button>
     </div>
     <template data-activities--extended_details-target="pagination">
-      <nav aria-label="">
+      <nav
+        aria-label="<%= t("components.activity.dialog.pagination.aria_label") %>"
+        aria-describedby="pagination-info"
+        aria-live="polite"
+      >
+        <div class="hidden" data-activities--extended_details-target="ariaLabels">
+          <%= @aria_labels %>
+        </div>
         <ul class="inline-flex h-10 text-base">
           <li><button
               type="button"
@@ -80,7 +87,8 @@
               data-action="click->activities--extended_details#previousPage"
               data-activities--extended_details-target="previousBtn"
               disabled="disabled"
-            ><%= I18n.t(:"components.activity.dialog.pagination.previous") %></button>
+              aria-label="<%= t("components.activity.dialog.pagination.at_first_aria_label") %>"
+            ><%= t(:"components.activity.dialog.pagination.previous") %></button>
           </li>
           <li><button
               class="
@@ -94,6 +102,7 @@
               type="button"
               data-activities--extended_details-target="nextBtn"
               data-action="click->activities--extended_details#nextPage"
+              aria-label="<%= t("components.activity.dialog.pagination.at_last_aria_label") %>"
             ><%= I18n.t(:"components.activity.dialog.pagination.next") %></button>
           </li>
         </ul>

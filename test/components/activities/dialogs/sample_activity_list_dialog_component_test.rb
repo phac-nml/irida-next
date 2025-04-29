@@ -41,8 +41,8 @@ module Activities
                                        user: @user.email, count: 1)
 
           assert_selector 'li', count: 1
-          assert_selector 'li > div > div > p', text: 'Project 1 Sample 1'
-          assert_selector 'li > div > div > p > span', text: 'INXT_SAM_AAAAAAAAAA'
+          assert_selector 'li > p > span:nth-child(1)', text: 'Project 1 Sample 1'
+          assert_selector 'li > p > span:nth-child(2)', text: 'INXT_SAM_AAAAAAAAAA'
         end
       end
 
@@ -73,8 +73,8 @@ module Activities
                                        target_project_puid: 'INXT_PRJ_AAAAAAAAAB')
 
           assert_selector 'li', count: 1
-          assert_selector 'li > div > div > p', text: 'Project 1 Sample 1'
-          assert_selector 'li > div > div > p > span', text: 'INXT_SAM_AAAAAAAAAA'
+          assert_selector 'li > p > span:nth-child(1)', text: 'Project 1 Sample 1'
+          assert_selector 'li > p > span:nth-child(2)', text: 'INXT_SAM_AAAAAAAAAA'
         end
       end
 
@@ -105,8 +105,8 @@ module Activities
                                        source_project_puid: 'INXT_PRJ_AAAAAAAAAA')
 
           assert_selector 'li', count: 1
-          assert_selector 'li > div > div > p', text: 'Project 1 Sample 1'
-          assert_selector 'li > div > div > p > span', text: 'INXT_SAM_AAAAAAAAAA'
+          assert_selector 'li > p > span:nth-child(1)', text: 'Project 1 Sample 1'
+          assert_selector 'li > p > span:nth-child(2)', text: 'INXT_SAM_AAAAAAAAAA'
         end
       end
     end

@@ -12,6 +12,7 @@ module Activities
         @extended_details = activity.extended_details
         @activity_owner = activity_owner
         set_additional_params
+        set_pagination_aria_labels
       end
 
       # @title, @description, @data, and @column_headers are all required attributes
@@ -43,6 +44,19 @@ module Activities
           I18n.t(:'components.activity.dialog.sample_clone.copied_from'),
           I18n.t(:'components.activity.dialog.sample_clone.copied_to')
         ]
+      end
+
+      def set_pagination_aria_labels
+        @aria_labels = {
+          previous: {
+            enabled: I18n.t('components.activity.dialog.pagination.previous_aria_label'),
+            disabled: I18n.t('components.activity.dialog.pagination.at_first_aria_label')
+          },
+          next: {
+            enabled: I18n.t('components.activity.dialog.pagination.next_aria_label'),
+            disabled: I18n.t('components.activity.dialog.pagination.at_last_aria_label')
+          }
+        }.to_json
       end
     end
   end

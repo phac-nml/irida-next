@@ -9,6 +9,10 @@ export default class extends Controller {
     "extendedDetailsData",
     "tbody",
     "listContainer",
+    "sampleCloneTableRow",
+    "listRow",
+    "ariaLabels",
+    "sampleName",
   ];
 
   static values = {
@@ -22,6 +26,7 @@ export default class extends Controller {
 
   #currentDataIndexes = [];
   #data = [];
+  #paginationAriaLabels = {};
 
   connect() {
     if (this.hasExtendedDetailsDataTarget) {
@@ -80,6 +85,7 @@ export default class extends Controller {
         "beforeend",
         this.paginationTarget.innerHTML,
       );
+      this.#paginationAriaLabels = JSON.parse(this.ariaLabelsTarget.innerText);
     }
   }
 
@@ -122,19 +128,45 @@ export default class extends Controller {
 
   #disablePaginationButton(button) {
     button.disabled = true;
+
+    if (button == this.previousBtnTarget) {
+      button.setAttribute(
+        "aria-label",
+        this.#paginationAriaLabels["previous"]["disabled"],
+      );
+    } else {
+      button.setAttribute(
+        "aria-label",
+        this.#paginationAriaLabels["next"]["disabled"],
+      );
+    }
   }
 
   #enablePaginationButton(button) {
     button.disabled = false;
+
+    if (button == this.previousBtnTarget) {
+      button.setAttribute(
+        "aria-label",
+        this.#paginationAriaLabels["previous"]["enabled"],
+      );
+    } else {
+      button.setAttribute(
+        "aria-label",
+        this.#paginationAriaLabels["next"]["enabled"],
+      );
+    }
   }
 
   // Generate table rows in format <td>SAMPLE_NAME <SAMPLE_PUID></td><td>SAMPLE_NAME <CLONE_PUID></td>
   #generateTableRows(table_data) {
     if ("content" in document.createElement("template")) {
+      const template = this.sampleCloneTableRowTarget;
+
       for (let i = 0; i < table_data.length; i++) {
-        const template = document.querySelector("#sampleCloneTableRow");
         const clone = template.content.cloneNode(true);
-        const sampleNameSelector = "span:nth-child(1)";
+        const sampleNameSelector =
+          "span[data-activities--extended_details-target='sampleName']";
         const puidSelector = "span:nth-child(2)";
         let tds = clone.querySelectorAll("td");
         let sampleName = table_data[i]["sample_name"];
@@ -155,13 +187,15 @@ export default class extends Controller {
   // Generate list items in format SAMPLE_NAME <SAMPLE_PUID>
   #generateListItems(list_data) {
     if ("content" in document.createElement("template")) {
+      const template = this.listRowTarget;
+
       for (let i = 0; i < list_data.length; i++) {
-        const template = document.querySelector("#listRow");
         const clone = template.content.cloneNode(true);
         let li = clone.querySelector("li");
 
-        li.querySelector("p > span:nth-child(1)").textContent =
-          list_data[i]["sample_name"];
+        li.querySelector(
+          "span[data-activities--extended_details-target='sampleName']",
+        ).textContent = list_data[i]["sample_name"];
         li.querySelector("p > span:nth-child(2)").textContent =
           list_data[i]["sample_puid"];
 

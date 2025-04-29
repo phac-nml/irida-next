@@ -475,8 +475,13 @@ fr:
       dialog:
         close: Close
         pagination:
-          next: Next
-          previous: Previous
+          aria_label: Pagination
+          at_first_aria_label: On first page
+          at_last_aria_label: On last page
+          next: Suivant
+          next_aria_label: Go to next page
+          previous: Précédent
+          previous_aria_label: Go to previous page
         sample_clone:
           copied_from: Copied From
           copied_to: Copied To
