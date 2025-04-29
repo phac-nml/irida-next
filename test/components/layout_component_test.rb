@@ -38,9 +38,9 @@ class LayoutComponentTest < ViewComponent::TestCase
         assert_text 'Hello, World!'
       end
 
-      assert_selector 'form' do
-        assert_text 'English'
-        assert_text 'Français'
+      assert_selector '#language_selection_dropdown' do
+        assert_button 'English'
+        assert_button 'Français'
       end
     end
   end
