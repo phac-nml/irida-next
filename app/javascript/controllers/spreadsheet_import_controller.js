@@ -49,16 +49,16 @@ export default class extends Controller {
         this.#updateInputValue(this.sampleNameColumnTarget, event.target.value);
         this.#refreshInputOptionsForAllFields();
         break;
-      case this.projectPUIDColumnTarget.id:
+      case this.sampleDescriptionColumnTarget.id:
         this.#updateInputValue(
-          this.projectPUIDColumnTarget,
+          this.sampleDescriptionColumnTarget,
           event.target.value,
         );
         this.#refreshInputOptionsForAllFields();
         break;
-      case this.sampleDescriptionColumnTarget.id:
+      case this.projectPUIDColumnTarget.id:
         this.#updateInputValue(
-          this.sampleDescriptionColumnTarget,
+          this.projectPUIDColumnTarget,
           event.target.value,
         );
         this.#refreshInputOptionsForAllFields();

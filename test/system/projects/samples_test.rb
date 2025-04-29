@@ -2082,7 +2082,8 @@ module Projects
           assert_text 'metadata2'
         end
 
-        find('#descriptionColumn', wait: 1).find(:xpath, 'option[1]').select_option
+        select I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column'),
+               from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
         within('#Selected') do
           assert_text 'metadata1'
@@ -2098,7 +2099,8 @@ module Projects
           assert_text 'description'
         end
 
-        find('#descriptionColumn', wait: 1).find(:xpath, 'option[2]').select_option
+        select 'description',
+               from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
         within('#Available') do
           assert_text 'metadata1'
@@ -2106,7 +2108,8 @@ module Projects
           assert_no_text 'description'
         end
 
-        find('#descriptionColumn', wait: 1).find(:xpath, 'option[1]').select_option
+        select I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column'),
+               from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
         within('#Available') do
           assert_text 'metadata1'
@@ -2146,7 +2149,8 @@ module Projects
         # metadata sortable lists still hidden
         assert_no_selector 'div[data-spreadsheet-import-target="metadata"]'
 
-        find('#descriptionColumn', wait: 1).find(:xpath, 'option[1]').select_option
+        select I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column'),
+               from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
         # metadata sortable lists renders now that description header is available
         assert_selector 'div[data-spreadsheet-import-target="metadata"]'
@@ -2155,7 +2159,8 @@ module Projects
           assert_text 'description'
         end
 
-        find('#descriptionColumn', wait: 1).find(:xpath, 'option[2]').select_option
+        select 'description',
+               from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
         assert_no_selector 'div[data-spreadsheet-import-target="metadata"]'
 
@@ -2185,13 +2190,13 @@ module Projects
         assert_selector 'div[data-spreadsheet-import-target="metadata"]'
 
         # make metadata selections so one metadata field is in available and one is in selected
-        find('#descriptionColumn', wait: 1).find(:xpath, 'option[1]').select_option
-
         click_button I18n.t('viral.sortable_lists_component.remove_all')
 
-        find('#descriptionColumn', wait: 1).find(:xpath, 'option[3]').select_option
+        select 'metadata1',
+               from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
-        find('#descriptionColumn', wait: 1).find(:xpath, 'option[3]').select_option
+        select 'description',
+               from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
 
         within('#Selected') do
           assert_text 'metadata1'
@@ -2223,7 +2228,7 @@ module Projects
       end
 
       click_button I18n.t('shared.samples.metadata_templates.label')
-      choose 'q[metadata_template]', option: 'all'
+      click_button I18n.t('shared.samples.metadata_templates.fields.all')
 
       assert_selector 'div[data-test-selector="spinner"]'
       assert_no_selector 'div[data-test-selector="spinner"]'

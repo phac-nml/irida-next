@@ -339,7 +339,7 @@ export default class extends Controller {
       }
     });
 
-    // empty lists
+    // reset lists
     this.availableList.innerHTML = "";
     this.selectedList.innerHTML = "";
 
