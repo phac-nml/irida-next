@@ -181,7 +181,7 @@ export default class extends Controller {
     columnTarget.innerHTML = "";
 
     // add blank value
-    this.#resetSelectInput(columnTarget);
+    this.#appendBlankValue(columnTarget);
 
     // add currently selected option
     if (currentSelection) {
