@@ -1367,25 +1367,25 @@ module Groups
       click_button I18n.t('shared.samples.actions_dropdown.import_samples')
       within('#dialog') do
         # verify initial disabled states of select inputs
-        assert_selector 'select[id="sampleColumn"][disabled]'
-        assert_selector 'select[id="descriptionColumn"][disabled]'
-        assert_selector 'select[id="projectColumn"][disabled]'
-        assert_selector 'select[id="staticProject"][disabled]'
+        assert_selector 'select[id="spreadsheet_import_sample_name_column"][disabled]'
+        assert_selector 'select[id="spreadsheet_import_sample_description_column"][disabled]'
+        assert_selector 'select[id="spreadsheet_import_project_puid_column"][disabled]'
+        assert_selector 'select[id="spreadsheet_import_static_project_id"][disabled]'
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/group/valid.csv'))
 
         # select inputs no longer disabled after file uploaded
-        assert_no_selector 'select[id="sampleColumn"][disabled]'
-        assert_no_selector 'select[id="descriptionColumn"][disabled]'
-        assert_no_selector 'select[id="projectColumn"][disabled]'
-        assert_no_selector 'select[id="staticProject"][disabled]'
+        assert_no_selector 'select[id="spreadsheet_import_sample_name_column"][disabled]'
+        assert_no_selector 'select[id="spreadsheet_import_sample_description_column"][disabled]'
+        assert_no_selector 'select[id="spreadsheet_import_project_puid_column"][disabled]'
+        assert_no_selector 'select[id="spreadsheet_import_static_project_id"][disabled]'
 
         attach_file('spreadsheet_import[file]', Rails.root.join)
         # verify select inputs are re-disabled after file is unselected
-        assert_selector 'select[id="sampleColumn"][disabled]'
-        assert_selector 'select[id="descriptionColumn"][disabled]'
-        assert_selector 'select[id="projectColumn"][disabled]'
-        assert_selector 'select[id="staticProject"][disabled]'
+        assert_selector 'select[id="spreadsheet_import_sample_name_column"][disabled]'
+        assert_selector 'select[id="spreadsheet_import_sample_description_column"][disabled]'
+        assert_selector 'select[id="spreadsheet_import_project_puid_column"][disabled]'
+        assert_selector 'select[id="spreadsheet_import_static_project_id"][disabled]'
         # verify blank values still exist
         assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_name_column')
         assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column')
