@@ -130,63 +130,43 @@ export default class extends Controller {
 
   // Generate table rows in format <td>SAMPLE_NAME <SAMPLE_PUID></td><td>SAMPLE_NAME <CLONE_PUID></td>
   #generateTableRows(table_data) {
-    for (let i = 0; i < table_data.length; i++) {
-      let tr = document.createElement("tr");
+    if ("content" in document.createElement("template")) {
+      for (let i = 0; i < table_data.length; i++) {
+        const template = document.querySelector("#sampleCloneTableRow");
+        const clone = template.content.cloneNode(true);
+        const sampleNameSelector = "span:nth-child(1)";
+        const puidSelector = "span:nth-child(2)";
+        let tds = clone.querySelectorAll("td");
+        let sampleName = table_data[i]["sample_name"];
+        let samplePuid = table_data[i]["sample_puid"];
+        let clonePuid = table_data[i]["clone_puid"];
 
-      for (let j = 0; j < this.numColsValue; j++) {
-        let td = document.createElement("td");
-        let span = document.createElement("span");
-        td.className = "px-3 py-3";
-        span.className =
-          "bg-green-100 ml-2 dark:bg-green-900 dark:text-green-300 font-medium px-2.5 py-0.5 rounded-full text-green-800 text-xs";
+        tds[0].querySelector(sampleNameSelector).textContent = sampleName;
+        tds[0].querySelector(puidSelector).textContent = samplePuid;
 
-        // Sample Name - (Existing PUID [copied from] or New Puid [copied to])
-        td.innerText = table_data[i]["sample_name"];
-        if (j == 0) {
-          span.innerHTML = table_data[i]["sample_puid"];
-          td.appendChild(span);
-        } else if (j == 1) {
-          span.innerHTML = table_data[i]["clone_puid"];
-          td.appendChild(span);
-        } else {
-          span.innerHTML = "";
-        }
-        tr.appendChild(td);
+        tds[1].querySelector(sampleNameSelector).textContent = sampleName;
+        tds[1].querySelector(puidSelector).textContent = clonePuid;
+
+        this.tbodyTarget.appendChild(clone);
       }
-
-      this.tbodyTarget.appendChild(tr);
     }
   }
 
   // Generate list items in format SAMPLE_NAME <SAMPLE_PUID>
   #generateListItems(list_data) {
-    for (let i = 0; i < list_data.length; i++) {
-      let li = document.createElement("li");
-      let containerDiv = document.createElement("div");
-      let iconDiv = document.createElement("div");
-      let paragraphDiv = document.createElement("div");
-      let paragraph = document.createElement("p");
-      let span = document.createElement("span");
+    if ("content" in document.createElement("template")) {
+      for (let i = 0; i < list_data.length; i++) {
+        const template = document.querySelector("#listRow");
+        const clone = template.content.cloneNode(true);
+        let li = clone.querySelector("li");
 
-      li.className = "pt-3 pb-3 sm:pb-4 sm:pt-4";
-      containerDiv.className =
-        "flex items-center space-x-4 rtl:space-x-reverse";
-      iconDiv.className = "shrink-0";
-      paragraphDiv.className = "flex-1 min-w-0";
-      paragraph.className =
-        "text-sm text-slate-500 truncate dark:text-slate-400";
-      span.className =
-        "bg-green-100 ml-2 dark:bg-green-900 dark:text-green-300 font-medium px-2.5 py-0.5 rounded-full text-green-800 text-xs";
+        li.querySelector("p > span:nth-child(1)").textContent =
+          list_data[i]["sample_name"];
+        li.querySelector("p > span:nth-child(2)").textContent =
+          list_data[i]["sample_puid"];
 
-      containerDiv.appendChild(iconDiv);
-      span.innerHTML = list_data[i]["sample_puid"];
-      paragraphDiv.appendChild(paragraph);
-      // Sample Name - Sample Puid
-      paragraph.innerHTML = list_data[i]["sample_name"];
-      paragraph.appendChild(span);
-      containerDiv.appendChild(paragraphDiv);
-      li.appendChild(containerDiv);
-      this.listContainerTarget.appendChild(li);
+        this.listContainerTarget.appendChild(clone);
+      }
     }
   }
 }
