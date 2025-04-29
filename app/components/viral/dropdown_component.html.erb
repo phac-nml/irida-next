@@ -8,14 +8,16 @@
     <% if icon_name.present? %>
       <%= viral_icon(
         name: icon_name,
-        classes: label.present? ? "w-6 h-6 flex-none mr-3" : "w-6 h-6 flex-none",
+        classes: class_names("size-4 flex-none", label.present? ? "mr-2" : ""),
       ) %>
     <% end %>
     <% if label.present? %>
       <span class="text-left truncate grow"><%= label %></span>
     <% end %>
     <% if caret %>
-      <%= viral_icon(name: "chevron_down", classes: "w-4 h-4 ml-2 flex-none") %>
+      <span class="pointer-events-none flex items-center ml-2">
+        <%= viral_icon(name: "chevron_down", classes: "size-4 text-slate-500 dark:text-slate-400") %>
+      </span>
     <% end %>
   <% end %>
   <!-- Dropdown menu -->
