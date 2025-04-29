@@ -136,6 +136,16 @@ gem 'caxlsx'
 # renders client's local time zone
 gem 'local_time', '~> 3.0', '>= 3.0.2'
 
+# OpenTelemetry
+gem 'opentelemetry-api'
+gem 'opentelemetry-common'
+gem 'opentelemetry-exporter-otlp'
+gem 'opentelemetry-exporter-otlp-metrics'
+gem 'opentelemetry-instrumentation-active_job'
+gem 'opentelemetry-metrics-api'
+gem 'opentelemetry-metrics-sdk'
+gem 'opentelemetry-sdk'
+
 # feature flags
 flipper_version = '~> 1.3.2'
 gem 'flipper-active_record', flipper_version

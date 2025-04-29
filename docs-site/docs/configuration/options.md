@@ -35,3 +35,6 @@ Primary ENV Variable which sets what type of environment to run
 | `ENABLE_CRON`                | Enables built in cron cleanup jobs for samples, attachments, and data exports.                           | `true`                     |
 | `CRON_CLEANUP_AFTER_DAYS`    | Set the number of days old a deleted sample/attachment must be before it is cleaned.                     | `7`                        |
 | `RAILS_ENABLE_WEB_CONSOLE`    | Development mode only: When set, a rails console will be present on every webpage.                      | `nil`                        |
+| `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT`    | When set, custom metrics telemetry will be sent to the metrics endpoint specified. (example: "localhost:4318/v1/metrics").                      | `nil`                        |
+| `OTEL_METRICS_SEND_INTERVAL`    | Number of seconds to sleep between telemetry batch send calls.                      | `10`                        |
+| `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`    | When set, configured trace telemetry will be sent to the traces endpoint specified. (example: "localhost:4318/v1/traces").                      | `nil`                        |
