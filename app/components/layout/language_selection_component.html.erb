@@ -35,14 +35,28 @@
       class="py-2 text-sm text-slate-700 dark:text-slate-200"
     >
       <% @locale_options.each do |key, value| %>
-        <li role="option">
-          <%= form_with(model: @user, url: profile_preferences_path, method: :patch) do |form| %>
-            <%= form.hidden_field :locale, value: value, id: "language_selection_#{value}" %>
-            <%= form.submit key,
-                        class:
-                          "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white" %>
-          <% end %>
-        </li>
+        <% if @user.locale.to_sym == value %>
+          <li
+            class="
+              flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600
+              dark:hover:text-white bg-slate-100 text-slate-600 dark:bg-slate-600
+              dark:text-slate-300 border-slate-100 dark:border-slate-600
+            "
+          ><%= key %></li>
+        <% else %>
+          <li
+            role="option"
+            class="
+              flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600
+              dark:hover:text-white
+            "
+          >
+            <%= form_with(model: @user, url: profile_preferences_path, method: :patch) do |form| %>
+              <%= form.hidden_field :locale, value: value, id: "language_selection_#{value}" %>
+              <%= form.submit key %>
+            <% end %>
+          </li>
+        <% end %>
       <% end %>
     </ul>
   </div>
