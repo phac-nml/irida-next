@@ -162,25 +162,28 @@ export default class extends Controller {
   #generateTableRows(table_data) {
     if ("content" in document.createElement("template")) {
       const template = this.sampleCloneTableRowTarget;
+      const fragment = document.createDocumentFragment();
+      const sampleNameSelector =
+        "span[data-activities--extended_details-target='sampleName']";
+      const puidSelector = "span:nth-child(2)";
 
-      for (let i = 0; i < table_data.length; i++) {
+      table_data.forEach((data) => {
         const clone = template.content.cloneNode(true);
-        const sampleNameSelector =
-          "span[data-activities--extended_details-target='sampleName']";
-        const puidSelector = "span:nth-child(2)";
-        let tds = clone.querySelectorAll("td");
-        let sampleName = table_data[i]["sample_name"];
-        let samplePuid = table_data[i]["sample_puid"];
-        let clonePuid = table_data[i]["clone_puid"];
+        const tds = clone.querySelectorAll("td");
 
-        tds[0].querySelector(sampleNameSelector).textContent = sampleName;
-        tds[0].querySelector(puidSelector).textContent = samplePuid;
+        const updateTextContent = (tdIndex, sampleName, puid) => {
+          const td = tds[tdIndex];
+          td.querySelector(sampleNameSelector).textContent = sampleName;
+          td.querySelector(puidSelector).textContent = puid;
+        };
 
-        tds[1].querySelector(sampleNameSelector).textContent = sampleName;
-        tds[1].querySelector(puidSelector).textContent = clonePuid;
+        updateTextContent(0, data["sample_name"], data["sample_puid"]);
+        updateTextContent(1, data["sample_name"], data["clone_puid"]);
 
-        this.tbodyTarget.appendChild(clone);
-      }
+        fragment.appendChild(clone);
+      });
+
+      this.tbodyTarget.appendChild(fragment);
     }
   }
 
@@ -188,19 +191,22 @@ export default class extends Controller {
   #generateListItems(list_data) {
     if ("content" in document.createElement("template")) {
       const template = this.listRowTarget;
+      const fragment = document.createDocumentFragment();
 
-      for (let i = 0; i < list_data.length; i++) {
+      list_data.forEach((data) => {
         const clone = template.content.cloneNode(true);
-        let li = clone.querySelector("li");
+        const li = clone.querySelector("li");
 
         li.querySelector(
           "span[data-activities--extended_details-target='sampleName']",
-        ).textContent = list_data[i]["sample_name"];
+        ).textContent = data["sample_name"];
         li.querySelector("p > span:nth-child(2)").textContent =
-          list_data[i]["sample_puid"];
+          data["sample_puid"];
 
-        this.listContainerTarget.appendChild(clone);
-      }
+        fragment.appendChild(clone);
+      });
+
+      this.listContainerTarget.appendChild(fragment);
     }
   }
 }
