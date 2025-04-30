@@ -32,6 +32,11 @@ module Viral
       @header_system_arguments = header_system_arguments
       @system_arguments = system_arguments
 
+      @system_arguments[:classes] = class_names(
+        @system_arguments[:classes],
+        dialog_size
+      )
+
       @system_arguments[:data] = if @system_arguments.key?(:data)
                                    @system_arguments[:data].merge({ 'viral--dialog-target' => 'dialog' })
                                  else
