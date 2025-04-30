@@ -3,7 +3,7 @@
 # Migration to move large activity parameters to extended details table and remove this data from activity parameters
 class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # rubocop:disable Metrics/ClassLength
   def change
-    # migrate_clone_data
+    migrate_clone_data
     migrate_transfer_data
     migrate_multiple_destroy_data
   end
@@ -54,10 +54,10 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
       # project activity in the first activities loop
       cloned_from_activities.each do |cloned_from_activity|
         next if cloned_from_activity.parameters[:cloned_samples_puids].nil?
-        next unless (cloned_from_activity.parameters[:source_project_puid] == activity_trackable.puid) &&
-                    (cloned_from_activity.parameters[:cloned_samples_puids] == existing_data)
+        next unless cloned_from_activity.parameters[:cloned_samples_puids] == existing_data
 
         activity_cloned_from = cloned_from_activity
+        break unless activity_cloned_from.nil?
       end
 
       # Create a shared extended_details table entry which will be
@@ -140,10 +140,10 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
       # project activity in the first activities loop
       transferred_from_activities.each do |transferred_from_activity|
         next if transferred_from_activity.parameters[:transferred_samples_puids].nil?
-        next unless (transferred_from_activity.parameters[:source_project_puid] == activity_trackable.puid) &&
-                    (transferred_from_activity.parameters[:transferred_samples_puids] - existing_puids).blank?
+        next if (transferred_from_activity.parameters[:transferred_samples_puids] - existing_puids).present?
 
         activity_transferred_from = transferred_from_activity
+        break unless activity_transferred_from.nil?
       end
 
       # Create a shared extended_details table entry which will be
