@@ -140,6 +140,7 @@ class MoveActivityParametersToExtendedDetails < ActiveRecord::Migration[8.0] # r
       # project activity in the first activities loop
       transferred_from_activities.each do |transferred_from_activity|
         next if transferred_from_activity.parameters[:transferred_samples_puids].nil?
+        next if transferred_from_activity.parameters[:transferred_samples_puids].size != existing_puids.size
         next if (existing_puids - transferred_from_activity.parameters[:transferred_samples_puids]).present?
 
         activity_transferred_from = transferred_from_activity
