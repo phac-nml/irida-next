@@ -8,6 +8,7 @@ export default class extends Controller {
     "sampleDescriptionColumn",
     "staticProject",
     "submitButton",
+    "metadata",
   ];
 
   static values = {
@@ -48,16 +49,16 @@ export default class extends Controller {
         this.#updateInputValue(this.sampleNameColumnTarget, event.target.value);
         this.#refreshInputOptionsForAllFields();
         break;
-      case this.projectPUIDColumnTarget.id:
+      case this.sampleDescriptionColumnTarget.id:
         this.#updateInputValue(
-          this.projectPUIDColumnTarget,
+          this.sampleDescriptionColumnTarget,
           event.target.value,
         );
         this.#refreshInputOptionsForAllFields();
         break;
-      case this.sampleDescriptionColumnTarget.id:
+      case this.projectPUIDColumnTarget.id:
         this.#updateInputValue(
-          this.sampleDescriptionColumnTarget,
+          this.projectPUIDColumnTarget,
           event.target.value,
         );
         this.#refreshInputOptionsForAllFields();
@@ -173,6 +174,13 @@ export default class extends Controller {
       this.#selectedHeaders["spreadsheet_import_sample_description_column"],
       unselectedHeaders,
     );
+
+    if (unselectedHeaders.length > 0) {
+      this.sendMetadata(unselectedHeaders);
+      this.metadataTarget.classList.remove("hidden");
+    } else {
+      this.metadataTarget.classList.add("hidden");
+    }
     this.checkFormInputsReadyForSubmit();
   }
 
@@ -281,5 +289,12 @@ export default class extends Controller {
     columnTarget.append(
       this.#createInputOption("", this.#blankValues[columnTarget.id]),
     );
+  }
+  sendMetadata(unselectedHeaders) {
+    this.dispatch("sendMetadata", {
+      detail: {
+        content: { metadata: unselectedHeaders },
+      },
+    });
   }
 }

@@ -21,7 +21,8 @@ module Projects
       end
 
       def spreadsheet_import_params
-        params.expect(spreadsheet_import: %i[file sample_name_column sample_description_column])
+        params.expect(spreadsheet_import: [:file, :sample_name_column, :sample_description_column,
+                                           { metadata_fields: [] }])
       end
     end
   end

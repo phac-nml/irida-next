@@ -6,10 +6,16 @@
     <%= turbo_frame_tag "import_spreadsheet_dialog_alert" %>
 
     <div
-      data-controller="spreadsheet-import"
+      data-controller="spreadsheet-import viral--sortable-lists--two-lists-selection"
+      data-viral--sortable-lists--two-lists-selection-selected-list-value="<%= t(".selected") %>"
+      data-viral--sortable-lists--two-lists-selection-available-list-value="<%= t(".available") %>"
+      data-viral--sortable-lists--two-lists-selection-field-name-value="spreadsheet_import[metadata_fields][]"
       data-spreadsheet-import-select-sample-value='<%= t(".select_sample_name_column") %>'
       data-spreadsheet-import-select-description-value='<%= t(".select_sample_description_column") %>'
       data-spreadsheet-import-select-project-value='<%= t(".select_project_puid_column") %>'
+      data-action="
+        spreadsheet-import:sendMetadata->viral--sortable-lists--two-lists-selection#updateMetadataListing
+      "
     >
 
       <%= form_for(:spreadsheet_import, url: url, method: :post) do |form| %>
@@ -117,6 +123,36 @@
                             "disabled:bg-slate-50 disabled:border disabled:border-slate-300 disabled:rounded-lg disabled:w-full disabled:p-2.5 disabled:dark:bg-slate-700 disabled:dark:border-slate-600 disabled:dark:placeholder-slate-400" %>
             </div>
           <% end %>
+          <template
+            id="sortable-list-item-template"
+            data-viral--sortable-lists--two-lists-selection-target="itemTemplate"
+          >
+            <%= render Viral::SortableList::ListItemComponent.new(list_item: "NAME_HERE") %>
+          </template>
+          <div class="grid gap-4 hidden" data-spreadsheet-import-target="metadata">
+            <%= viral_sortable_lists(
+            title: t(".metadata"),
+            ) do |sortable_lists| %>
+              <%= sortable_lists.with_list(
+                id: t(".available"),
+                title: t(".available"),
+                group: "metadata_selection",
+                container_classes: "block mb-1 pr-2 text-sm font-medium",
+                list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
+              ) %>
+              <%= sortable_lists.with_list(
+                id: t(".selected"),
+                title: t(".selected"),
+                group: "metadata_selection",
+                container_classes: "block mb-1 text-sm font-medium",
+                list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
+              ) %>
+            <% end %>
+          </div>
+          <div
+            class="hidden"
+            data-viral--sortable-lists--two-lists-selection-target="field"
+          ></div>
           <div>
             <%= form.submit t(".submit_button"),
                         class: "button button--size-default button--state-primary",
@@ -124,7 +160,6 @@
                           turbo_frame: "_top",
                           action:
                             "click->viral--sortable-lists--two-lists-selection#constructParams",
-                          "viral--sortable-lists--two-lists-selection-target": "submitBtn",
                           "spreadsheet-import-target": "submitButton",
                         },
                         disabled: true %>

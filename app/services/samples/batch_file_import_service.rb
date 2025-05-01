@@ -8,6 +8,7 @@ module Samples
     def initialize(namespace, user = nil, blob_id = nil, params = {})
       @sample_name_column = params[:sample_name_column]
       @sample_description_column = params[:sample_description_column]
+      @metadata_fields = params[:metadata_fields] if params[:metadata_fields]
       required_headers = [@sample_name_column]
       if namespace.group_namespace?
         @project_puid_column = params[:project_puid_column]
@@ -120,7 +121,12 @@ module Samples
     end
 
     def process_metadata_row(data)
-      metadata = data.except(*@required_headers, @sample_description_column)
+      return if @metadata_fields.nil?
+
+      metadata = {}
+      @metadata_fields.each do |metadata_field|
+        metadata[metadata_field] = data[metadata_field]
+      end
       metadata.compact!
 
       metadata

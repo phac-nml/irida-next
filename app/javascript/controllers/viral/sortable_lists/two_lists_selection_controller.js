@@ -124,9 +124,11 @@ export default class extends Controller {
   }
 
   #setSubmitButtonDisableState(disableState) {
-    this.submitBtnTarget.disabled = !(
-      !disableState && this.selectedList.querySelectorAll("li").length > 0
-    );
+    if (this.hasSubmitBtnTarget) {
+      this.submitBtnTarget.disabled = !(
+        !disableState && this.selectedList.querySelectorAll("li").length > 0
+      );
+    }
   }
 
   #setAddOrRemoveButtonDisableState(button, disableState) {
@@ -151,14 +153,8 @@ export default class extends Controller {
   }
 
   disconnect() {
-    this.selectedList.removeEventListener(
-      "mouseover",
-      this.buttonStateListener,
-    );
-    this.availableList.removeEventListener(
-      "mouseover",
-      this.buttonStateListener,
-    );
+    this.selectedList.removeEventListener("drop", this.buttonStateListener);
+    this.availableList.removeEventListener("drop", this.buttonStateListener);
 
     window.removeEventListener("click", this.windowClickListener);
   }
@@ -210,10 +206,7 @@ export default class extends Controller {
           items.splice(index, 1);
           textFields.splice(index, 1);
         } else {
-          const template = this.itemTemplateTarget.content.cloneNode(true);
-          template.querySelector("li").innerText = element;
-          template.querySelector("li").id = element.replace(/\s+/g, "-");
-          this.selectedList.append(template);
+          this.#createListItem(element, this.selectedList);
         }
       });
       this.availableList.append(...items);
@@ -323,5 +316,52 @@ export default class extends Controller {
       this.#selectedOption.setAttribute("aria-selected", "false");
       this.#selectedOption = null;
     }
+  }
+
+  // used for dynamic/changing listing values
+  updateMetadataListing({ detail: { content } }) {
+    let newMetadata = content["metadata"];
+    let existingMetadata = { available: [], selected: [] };
+
+    // check which values already exist in lists; prevents moving metadata between lists that have already been moved
+    // by user
+    this.availableList.querySelectorAll("li").forEach((availableMetadata) => {
+      if (newMetadata.includes(availableMetadata.innerText)) {
+        existingMetadata["available"].push(availableMetadata.innerText);
+        newMetadata.splice(newMetadata.indexOf(availableMetadata.innerText), 1);
+      }
+    });
+
+    this.selectedList.querySelectorAll("li").forEach((selectedMetadata) => {
+      if (newMetadata.includes(selectedMetadata.innerText)) {
+        existingMetadata["selected"].push(selectedMetadata.innerText);
+        newMetadata.splice(newMetadata.indexOf(selectedMetadata.innerText), 1);
+      }
+    });
+
+    // reset lists
+    this.availableList.innerHTML = "";
+    this.selectedList.innerHTML = "";
+
+    // add new metadata to the selected list
+    let selectedMetadata = existingMetadata["selected"].concat(newMetadata);
+
+    // repopulate lists with existing and new metadata
+    existingMetadata["available"].forEach((metadata) => {
+      this.#createListItem(metadata, this.availableList);
+    });
+
+    selectedMetadata.forEach((metadata) => {
+      this.#createListItem(metadata, this.selectedList);
+    });
+
+    this.idempotentConnect();
+  }
+
+  #createListItem(element, list) {
+    let template = this.itemTemplateTarget.content.cloneNode(true);
+    template.querySelector("li").innerText = element;
+    template.querySelector("li").id = element.replace(/\s+/g, "-");
+    list.append(template);
   }
 }

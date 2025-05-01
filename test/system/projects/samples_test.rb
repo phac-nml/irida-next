@@ -2055,6 +2055,199 @@ module Projects
       end
     end
 
+    test 'batch sample import metadata fields listing' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      within('#samples-table table tbody') do
+        assert_selector 'tr', count: 3
+      end
+      ### SETUP END ###
+
+      ### ACTIONS AND VERIFY START ###
+      # start import
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_samples')
+      within('#dialog') do
+        # metadata sortable lists hidden
+        assert_no_selector 'div[data-spreadsheet-import-target="metadata"]'
+        attach_file('spreadsheet_import[file]',
+                    Rails.root.join('test/fixtures/files/batch_sample_import/project/with_metadata_valid.csv'))
+        # metadata sortable lists no longer hidden
+        assert_selector 'div[data-spreadsheet-import-target="metadata"]'
+        within('#Selected') do
+          assert_text 'metadata1'
+          assert_text 'metadata2'
+        end
+
+        select I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column'),
+               from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
+
+        within('#Selected') do
+          assert_text 'metadata1'
+          assert_text 'metadata2'
+          assert_text 'description'
+        end
+
+        click_button I18n.t('viral.sortable_lists_component.remove_all')
+
+        within('#Available') do
+          assert_text 'metadata1'
+          assert_text 'metadata2'
+          assert_text 'description'
+        end
+
+        select 'description',
+               from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
+
+        within('#Available') do
+          assert_text 'metadata1'
+          assert_text 'metadata2'
+          assert_no_text 'description'
+        end
+
+        select I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column'),
+               from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
+
+        within('#Available') do
+          assert_text 'metadata1'
+          assert_text 'metadata2'
+          assert_no_text 'description'
+        end
+
+        within('#Selected') do
+          assert_no_text 'metadata1'
+          assert_no_text 'metadata2'
+          assert_text 'description'
+        end
+        ### ACTIONS AND VERIFY END ###
+      end
+    end
+
+    test 'batch sample import metadata fields listing does not render if no metadata fields' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      within('#samples-table table tbody') do
+        assert_selector 'tr', count: 3
+      end
+      ### SETUP END ###
+
+      ### ACTIONS AND VERIFY START ###
+      # start import
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_samples')
+      within('#dialog') do
+        # metadata sortable lists hidden
+        assert_no_selector 'div[data-spreadsheet-import-target="metadata"]'
+        attach_file('spreadsheet_import[file]',
+                    Rails.root.join('test/fixtures/files/batch_sample_import/project/valid.csv'))
+        # metadata sortable lists still hidden
+        assert_no_selector 'div[data-spreadsheet-import-target="metadata"]'
+
+        select I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column'),
+               from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
+
+        # metadata sortable lists renders now that description header is available
+        assert_selector 'div[data-spreadsheet-import-target="metadata"]'
+
+        within('#Selected') do
+          assert_text 'description'
+        end
+
+        select 'description',
+               from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
+
+        assert_no_selector 'div[data-spreadsheet-import-target="metadata"]'
+
+        ### ACTIONS AND VERIFY END ###
+      end
+    end
+
+    test 'batch sample import with partial metadata fields' do
+      ### SETUP START ###
+      visit namespace_project_samples_url(@namespace, @project)
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      within('#samples-table table tbody') do
+        assert_selector 'tr', count: 3
+      end
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # start import
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.import_samples')
+      within('#dialog') do
+        assert_no_selector 'div[data-spreadsheet-import-target="metadata"]'
+        attach_file('spreadsheet_import[file]',
+                    Rails.root.join('test/fixtures/files/batch_sample_import/project/with_metadata_valid.csv'))
+        assert_selector 'div[data-spreadsheet-import-target="metadata"]'
+
+        # make metadata selections so one metadata field is in available and one is in selected
+        click_button I18n.t('viral.sortable_lists_component.remove_all')
+
+        select 'metadata1',
+               from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
+
+        select 'description',
+               from: I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column')
+
+        within('#Selected') do
+          assert_text 'metadata1'
+        end
+
+        within('#Available') do
+          assert_text 'metadata2'
+        end
+
+        click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
+        ### ACTIONS END ###
+      end
+
+      ### VERIFY START ###
+      assert_text I18n.t('shared.progress_bar.in_progress')
+      perform_enqueued_jobs only: [::Samples::BatchSampleImportJob]
+
+      # success msg
+      assert_text I18n.t('shared.samples.spreadsheet_imports.success.description')
+
+      click_on I18n.t('shared.samples.spreadsheet_imports.success.ok_button')
+
+      # refresh to see new samples
+      visit namespace_project_samples_url(@namespace, @project)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 5, count: 5,
+                                                                           locale: @user.locale))
+      within('table thead tr') do
+        assert_selector 'th', count: 5
+      end
+
+      click_button I18n.t('shared.samples.metadata_templates.label')
+      click_button I18n.t('shared.samples.metadata_templates.fields.all')
+
+      assert_selector 'div[data-test-selector="spinner"]'
+      assert_no_selector 'div[data-test-selector="spinner"]'
+
+      # only metadata1 imported and not metadata2
+      within('table thead tr') do
+        assert_selector 'th', count: 8
+        assert_selector 'th:nth-child(6)', text: 'METADATA1'
+        assert_no_text 'METADATA2'
+      end
+      within('table tbody') do
+        assert_selector 'tr:first-child td:nth-child(2)', text: 'my new sample 2'
+        assert_selector 'tr:first-child td:nth-child(6)', text: 'c'
+
+        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: 'my new sample 1'
+        assert_selector 'tr:nth-child(2) td:nth-child(6)', text: 'a'
+      end
+    end
+
     test 'singular clone dialog description' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
