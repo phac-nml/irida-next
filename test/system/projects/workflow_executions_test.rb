@@ -45,8 +45,8 @@ module Projects
       assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
       assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
-      click_on 'Run ID'
-      assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.icon-arrow_up"
+      click_on I18n.t(:'workflow_executions.table_component.run_id')
+      assert_selector "#workflow-executions-table table thead th[aria-sort='ascending']", text: I18n.t(:'workflow_executions.table_component.run_id').upcase
 
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 12
@@ -55,8 +55,8 @@ module Projects
         assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution_shared2.run_id
       end
 
-      click_on 'Run ID'
-      assert_selector "#workflow-executions-table table thead th:nth-child(#{@run_id_col}) svg.icon-arrow_down"
+      click_on I18n.t(:'workflow_executions.table_component.run_id')
+      assert_selector "#workflow-executions-table table thead th[aria-sort='descending']", text: I18n.t(:'workflow_executions.table_component.run_id').upcase
 
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 12
@@ -66,7 +66,8 @@ module Projects
       end
 
       click_on I18n.t(:'workflow_executions.table_component.workflow_name')
-      assert_selector "#workflow-executions-table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_up"
+      assert_selector "#workflow-executions-table table thead th[aria-sort='ascending']",
+                      text: I18n.t(:'workflow_executions.table_component.workflow_name').upcase
 
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 12
@@ -79,7 +80,8 @@ module Projects
       end
 
       click_on I18n.t(:'workflow_executions.table_component.workflow_name')
-      assert_selector "#workflow-executions-table table thead th:nth-child(#{@workflow_name_col}) svg.icon-arrow_down"
+      assert_selector "#workflow-executions-table table thead th[aria-sort='descending']",
+                      text: I18n.t(:'workflow_executions.table_component.workflow_name').upcase
 
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 12
