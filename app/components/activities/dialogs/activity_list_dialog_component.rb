@@ -3,7 +3,7 @@
 module Activities
   module Dialogs
     # Component for rendering extended details list items
-    class SampleActivityListDialogComponent < Component
+    class ActivityListDialogComponent < Component
       attr_accessor :activity, :activity_owner, :activity_type
 
       def initialize(activity: nil, activity_owner: nil)
@@ -47,6 +47,13 @@ module Activities
                                 user: @activity_owner,
                                 count: @activity.parameters[:samples_deleted_count])
           @data = @extended_details.details['deleted_samples_data'].to_json
+
+        elsif @activity_type == 'workflow_execution_destroy'
+          @title = I18n.t(:'components.activity.dialog.workflow_execution_destroy.title')
+          @description = I18n.t(:'components.activity.dialog.workflow_execution_destroy.description',
+                                user: @activity_owner,
+                                count: @activity.parameters[:workflow_executions_deleted_count])
+          @data = @extended_details.details['deleted_workflow_executions_data'].to_json
         end
       end
 

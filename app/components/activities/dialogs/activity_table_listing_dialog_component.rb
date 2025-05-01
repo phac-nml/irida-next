@@ -3,7 +3,7 @@
 module Activities
   module Dialogs
     # Component for rendering extended details table
-    class SampleActivityTableListingDialogComponent < Component
+    class ActivityTableListingDialogComponent < Component
       attr_accessor :activity, :activity_owner
 
       def initialize(activity: nil, activity_owner: nil)

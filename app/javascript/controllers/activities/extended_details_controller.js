@@ -12,7 +12,7 @@ export default class extends Controller {
     "sampleCloneTableRow",
     "listRow",
     "ariaLabels",
-    "sampleName",
+    "itemName",
   ];
 
   static values = {
@@ -168,7 +168,7 @@ export default class extends Controller {
       const template = this.sampleCloneTableRowTarget;
       const fragment = document.createDocumentFragment();
       const sampleNameSelector =
-        "span[data-activities--extended_details-target='sampleName']";
+        "span[data-activities--extended_details-target='itemName']";
       const puidSelector = "span:nth-child(2)";
 
       table_data.forEach((data) => {
@@ -202,7 +202,7 @@ export default class extends Controller {
         const li = clone.querySelector("li");
 
         li.querySelector(
-          "span[data-activities--extended_details-target='sampleName']",
+          "span[data-activities--extended_details-target='itemName']",
         ).textContent = data["sample_name"];
         li.querySelector("p > span:nth-child(2)").textContent =
           data["sample_puid"];
@@ -225,7 +225,7 @@ export default class extends Controller {
         const li = clone.querySelector("li");
 
         li.querySelector(
-          "span[data-activities--extended_details-target='workflowName']",
+          "span[data-activities--extended_details-target='itemName']",
         ).textContent = data["workflow_name"];
         li.querySelector("p > span:nth-child(2)").textContent =
           data["workflow_id"];

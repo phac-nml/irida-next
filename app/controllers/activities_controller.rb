@@ -45,11 +45,9 @@ class ActivitiesController < ApplicationController
 
     case type
     when 'samples_clone'
-      Activities::Dialogs::SampleActivityTableListingDialogComponent
-    when 'samples_transfer', 'samples_destroy'
-      Activities::Dialogs::SampleActivityListDialogComponent
-    when 'workflow_executions_destroy'
-      Activities::Dialogs::WorkflowExecutionActivityListDialogComponent
+      Activities::Dialogs::ActivityTableListingDialogComponent
+    when 'samples_transfer', 'samples_destroy', 'workflow_executions_destroy'
+      Activities::Dialogs::ActivityListDialogComponent
     end
   end
 

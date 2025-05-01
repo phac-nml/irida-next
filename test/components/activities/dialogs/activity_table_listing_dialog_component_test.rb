@@ -4,7 +4,7 @@ require 'application_system_test_case'
 
 module Activities
   module Dialogs
-    class SampleActivityTableListingDialogComponentTest < ApplicationSystemTestCase
+    class ActivityTableListingDialogComponentTest < ApplicationSystemTestCase
       include ActionView::Helpers::SanitizeHelper
 
       setup do
