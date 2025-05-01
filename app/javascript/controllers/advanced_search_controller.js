@@ -33,8 +33,7 @@ export default class extends Controller {
     if (!(event instanceof KeyboardEvent) && event.type === "keydown") {
       event.preventDefault();
       event.stopImmediatePropagation();
-    }
-    else if (!this.#dirty()) {
+    } else if (!this.#dirty()) {
       this.clear();
     } else {
       if (window.confirm(this.confirmCloseTextValue)) {
@@ -48,7 +47,7 @@ export default class extends Controller {
 
   addCondition(event) {
     let group = event.currentTarget.parentElement.closest(
-      "div[data-advanced-search-target='groupsContainer']",
+      "fieldset[data-advanced-search-target='groupsContainer']",
     );
     this.#addConditionToGroup(group);
   }
@@ -56,15 +55,15 @@ export default class extends Controller {
   removeCondition(event) {
     let condition = event.currentTarget.parentElement;
     let group = condition.closest(
-      "div[data-advanced-search-target='groupsContainer']",
+      "fieldset[data-advanced-search-target='groupsContainer']",
     );
     let conditions = group.querySelectorAll(
-      "div[data-advanced-search-target='conditionsContainer']",
+      "fieldset[data-advanced-search-target='conditionsContainer']",
     );
 
     condition.remove();
     conditions = group.querySelectorAll(
-      "div[data-advanced-search-target='conditionsContainer']",
+      "fieldset[data-advanced-search-target='conditionsContainer']",
     );
     //re-index all the form fields within the group
     conditions.forEach((condition, index) => {
@@ -138,14 +137,14 @@ export default class extends Controller {
   handleOperatorChange(event) {
     let operator = event.target.value;
     let condition = event.target.parentElement.closest(
-      "div[data-advanced-search-target='conditionsContainer']",
+      "fieldset[data-advanced-search-target='conditionsContainer']",
     );
     let value = condition.querySelector(".value");
     let group = condition.parentElement;
     let group_index = this.groupsContainerTargets.indexOf(group);
     let condition_index = [
       ...group.querySelectorAll(
-        "div[data-advanced-search-target='conditionsContainer']",
+        "fieldset[data-advanced-search-target='conditionsContainer']",
       ),
     ].indexOf(condition);
 
@@ -171,7 +170,7 @@ export default class extends Controller {
   #addConditionToGroup(group) {
     let group_index = this.groupsContainerTargets.indexOf(group);
     let condition_index = group.querySelectorAll(
-      "div[data-advanced-search-target='conditionsContainer']",
+      "fieldset[data-advanced-search-target='conditionsContainer']",
     ).length;
     let newCondition = this.conditionTemplateTarget.innerHTML
       .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
@@ -181,10 +180,18 @@ export default class extends Controller {
 
   #dirty() {
     let dirty = true;
-    if (this.searchGroupsContainerTarget.innerHTML.trim() === this.searchGroupsTemplateTarget.innerHTML.trim()) {
+    if (
+      this.searchGroupsContainerTarget.innerHTML.trim() ===
+      this.searchGroupsTemplateTarget.innerHTML.trim()
+    ) {
       dirty = false;
-      const currentInputs = this.searchGroupsContainerTarget.querySelectorAll("[id^='q_groups_attributes_']");
-      const originalInputs = this.searchGroupsTemplateTarget.content.querySelectorAll("[id^='q_groups_attributes_']");
+      const currentInputs = this.searchGroupsContainerTarget.querySelectorAll(
+        "[id^='q_groups_attributes_']",
+      );
+      const originalInputs =
+        this.searchGroupsTemplateTarget.content.querySelectorAll(
+          "[id^='q_groups_attributes_']",
+        );
       originalInputs.forEach((item, index) => {
         if (item.value !== currentInputs[index].value) {
           dirty = true;
