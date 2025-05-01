@@ -30,7 +30,7 @@ module Projects
           'activity.namespaces_project_namespace.samples.clone_html',
           user: 'System',
           href: activity_to_render[:target_project_puid],
-          cloned_samples_count: activity_to_render[:cloned_samples_ids]&.size
+          cloned_samples_count: activity_to_render[:cloned_samples_count]
         )
       )
 
@@ -60,7 +60,7 @@ module Projects
           'activity.namespaces_project_namespace.samples.cloned_from_html',
           user: 'System',
           href: activity_to_render[:source_project_puid],
-          cloned_samples_count: activity_to_render[:cloned_samples_ids]&.size
+          cloned_samples_count: activity_to_render[:cloned_samples_count]
         )
       )
 
@@ -93,7 +93,7 @@ module Projects
           'activity.namespaces_project_namespace.samples.cloned_from_html',
           user: 'System',
           href: activity_to_render[:source_project_puid],
-          cloned_samples_count: activity_to_render[:cloned_samples_ids]&.size
+          cloned_samples_count: activity_to_render[:cloned_samples_count]
         )
       )
 
@@ -126,7 +126,7 @@ module Projects
           'activity.namespaces_project_namespace.samples.clone_html',
           user: 'System',
           href: activity_to_render[:target_project_puid],
-          cloned_samples_count: activity_to_render[:cloned_samples_ids]&.size
+          cloned_samples_count: activity_to_render[:cloned_samples_count]
         )
       )
 

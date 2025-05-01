@@ -11,7 +11,8 @@ class ActivitiesController < ApplicationController
 
     dialog_component = dialog_component_type
     if dialog_component
-      render dialog_component.new(activity: @activity, activity_owner: @activity_owner)
+      render dialog_component.new(activity: @activity,
+                                  activity_owner: @activity_owner)
     else
       handle_not_found
     end
@@ -43,12 +44,10 @@ class ActivitiesController < ApplicationController
     type = params[:dialog_type]
 
     case type
-    when 'samples_transfer'
-      Activities::Dialogs::SampleTransferActivityDialogComponent
     when 'samples_clone'
-      Activities::Dialogs::SampleCloneActivityDialogComponent
-    when 'samples_destroy'
-      Activities::Dialogs::SampleDestroyActivityDialogComponent
+      Activities::Dialogs::SampleActivityTableListingDialogComponent
+    when 'samples_transfer', 'samples_destroy'
+      Activities::Dialogs::SampleActivityListDialogComponent
     end
   end
 

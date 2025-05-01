@@ -1,0 +1,139 @@
+<%= viral_dialog(open: true, size: :extra_large, classes: ["overflow-visible"]) do |dialog| %>
+  <% dialog.with_header(title: @title) %>
+  <div
+    data-controller="activities--extended_details"
+    data-activities--extended_details-num-cols-value="<%= @column_headers.length %>"
+  >
+    <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
+      <%= viral_pill(
+        text: helpers.local_time(activity[:created_at], :long),
+        color: :green,
+      ) %>
+
+      <p class="dark:text-slate-400 mt-2">
+        <%= @description %>
+      </p>
+    </div>
+
+    <div
+      class="
+        overflow-y-auto max-h-[300px] border border-slate-300 rounded-md block w-full
+        p-2.5 dark:bg-slate-800 dark:border-slate-600
+      "
+    >
+      <div
+        class="hidden"
+        data-activities--extended_details-target="extendedDetailsData"
+      >
+        <%= @data %>
+      </div>
+
+      <table
+        class="
+          w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+          whitespace-nowrap
+        "
+      >
+        <thead
+          class="
+            text-xs uppercase text-slate-700 bg-slate-50 dark:bg-slate-700
+            dark:text-slate-300
+          "
+        >
+          <tr>
+            <% @column_headers.each do |column_header| %>
+              <th class="px-3 py-3"><%= column_header %></th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody
+          data-activities--extended_details-target="tbody"
+          class="
+            overflow-y-auto bg-white divide-y divide-slate-200 dark:bg-slate-800
+            dark:divide-slate-700
+          "
+        >
+        </tbody>
+      </table>
+    </div>
+
+    <template
+      id="sampleCloneTableRow"
+      data-activities--extended_details-target="sampleCloneTableRow"
+    >
+      <tr>
+        <td class="px-3 py-3"><span class="mr-2" data-activities--extended_details-target="sampleName"></span>
+          <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
+        </td>
+        <td class="px-3 py-3"><span class="mr-2" data-activities--extended_details-target="sampleName"></span>
+          <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
+        </td>
+      </tr>
+    </template>
+
+    <div
+      data-activities--extended_details-target="paginationContainer"
+      class="flex items-center justify-end mt-4"
+    >
+    </div>
+
+    <div class="mt-4">
+      <button
+        type="button"
+        class="
+          inline-flex items-center justify-center w-1/2 text-sm border rounded-md
+          cursor-pointer sm:w-auto px-5 py-2.5 bg-white text-slate-900 border-slate-200
+          hover:bg-slate-100 hover:text-slate-950 dark:bg-slate-800 dark:text-slate-400
+          dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700
+        "
+        data-action="click->viral--dialog#close"
+      >
+        <%= t(:"components.activity.dialog.close") %>
+      </button>
+    </div>
+
+    <template data-activities--extended_details-target="pagination">
+      <nav
+        aria-label="<%= t("components.activity.dialog.pagination.aria_label") %>"
+        aria-live="polite"
+      >
+        <div class="hidden" data-activities--extended_details-target="ariaLabels">
+          <%= @aria_labels %>
+        </div>
+        <ul class="inline-flex h-10 text-base">
+          <li><button
+              type="button"
+              class="
+                flex items-center justify-center h-10 px-4 leading-tight border
+                disabled:cursor-default disabled:text-slate-600 disabled:bg-slate-50
+                disabled:dark:bg-slate-700 disabled:dark:text-slate-400
+                disabled:pointer-events-none ms-0 border-slate-300 dark:border-slate-700
+                border-e-0 rounded-s-md cursor cursor-pointer text-slate-500 hover:bg-slate-100
+                dark:hover:bg-slate-700 dark:hover:text-white dark:text-slate-400
+              "
+              data-action="click->activities--extended_details#previousPage"
+              data-activities--extended_details-target="previousBtn"
+              disabled="disabled"
+              aria-label="<%= t("components.activity.dialog.pagination.at_first_aria_label") %>"
+            ><%= I18n.t(:"components.activity.dialog.pagination.previous") %></button>
+          </li>
+          <li><button
+              class="
+                flex items-center justify-center h-10 px-4 leading-tight bg-white border
+                border-slate-300 dark:border-slate-700 text-slate-500 disabled:cursor-default
+                disabled:text-slate-600 disabled:bg-slate-50 disabled:dark:bg-slate-700
+                disabled:dark:text-slate-400 disabled:pointer-events-none hover:bg-slate-100
+                hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
+                dark:hover:bg-slate-700 dark:hover:text-white rounded-e-md cursor cursor-pointer
+              "
+              type="button"
+              data-activities--extended_details-target="nextBtn"
+              data-action="click->activities--extended_details#nextPage"
+              aria-label="<%= t("components.activity.dialog.pagination.at_last_aria_label") %>"
+            ><%= I18n.t(:"components.activity.dialog.pagination.next") %></button>
+          </li>
+        </ul>
+      </nav>
+    </template>
+  </div>
+<% end %>

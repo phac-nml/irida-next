@@ -196,8 +196,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
                       source_project: get_object_by_id(activity.parameters[:source_project], Project),
                       target_project_puid: activity.parameters[:target_project_puid],
                       target_project: get_object_by_id(activity.parameters[:target_project], Project),
-                      transferred_samples_ids: activity.parameters[:transferred_samples_ids],
-                      transferred_samples_puids: activity.parameters[:transferred_samples_puids]
+                      transferred_samples_count: activity.parameters[:transferred_samples_count]
                     })
     end
 
@@ -207,8 +206,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
                       source_project: get_object_by_id(activity.parameters[:source_project], Project),
                       target_project_puid: activity.parameters[:target_project_puid],
                       target_project: get_object_by_id(activity.parameters[:target_project], Project),
-                      cloned_samples_ids: activity.parameters[:cloned_samples_ids],
-                      cloned_samples_puids: activity.parameters[:cloned_samples_puids]
+                      cloned_samples_count: activity.parameters[:cloned_samples_count]
                     })
     end
 
@@ -257,8 +255,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     return params unless activity.parameters[:action] == 'sample_destroy_multiple'
 
     params.merge(
-      deleted_count: activity.parameters[:deleted_count],
-      samples_deleted_puids: activity.parameters[:samples_deleted_puids]
+      samples_deleted_count: activity.parameters[:samples_deleted_count]
     )
   end
 

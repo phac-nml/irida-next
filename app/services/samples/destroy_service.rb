@@ -38,10 +38,10 @@ module Samples
       update_metadata_summary(sample)
     end
 
-    def destroy_multiple # rubocop:disable Metrics/MethodLength
+    def destroy_multiple # rubocop:disable Metrics/AbcSize
       samples = Sample.where(id: sample_ids).where(project_id: project.id)
       samples_deleted_puids = []
-
+      deleted_samples_data = []
       samples = samples.destroy_all
 
       samples.each do |sample|
@@ -49,21 +49,31 @@ module Samples
 
         update_metadata_summary(sample)
         samples_deleted_puids << sample.puid
+        deleted_samples_data << { sample_name: sample.name, sample_puid: sample.puid }
       end
 
       deleted_samples_count = samples_deleted_puids.count
       update_samples_count(deleted_samples_count) if @project.parent.type == 'Group'
 
-      @project.namespace.create_activity key: 'namespaces_project_namespace.samples.destroy_multiple',
-                                         owner: current_user,
-                                         parameters:
-                                         {
-                                           deleted_count: deleted_samples_count,
-                                           samples_deleted_puids:,
-                                           action: 'sample_destroy_multiple'
-                                         }
+      create_activities(deleted_samples_data) if deleted_samples_data.size.positive?
 
       deleted_samples_count
+    end
+
+    def create_activities(deleted_samples_data)
+      ext_details = ExtendedDetail.create!(details: { samples_deleted_count: deleted_samples_data.size,
+                                                      deleted_samples_data: deleted_samples_data })
+
+      activity = @project.namespace.create_activity key: 'namespaces_project_namespace.samples.destroy_multiple',
+                                                    owner: current_user,
+                                                    parameters:
+                                                    {
+                                                      samples_deleted_count: deleted_samples_data.size,
+                                                      action: 'sample_destroy_multiple'
+                                                    }
+
+      activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
+                                               activity_type: 'sample_destroy_multiple')
     end
 
     def update_metadata_summary(sample)

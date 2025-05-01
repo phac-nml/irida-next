@@ -431,6 +431,19 @@ CREATE FUNCTION public.logidze_version(v bigint, data jsonb, ts timestamp with t
 $$;
 
 
+--
+-- Name: action_cable_large_payloads_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.action_cable_large_payloads_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -491,6 +504,20 @@ CREATE TABLE public.activities (
     parameters text,
     recipient_type character varying,
     recipient_id uuid,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: activity_extended_details; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.activity_extended_details (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    activity_id uuid NOT NULL,
+    extended_detail_id uuid NOT NULL,
+    activity_type character varying NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
@@ -562,6 +589,18 @@ CREATE TABLE public.data_exports (
     log_data jsonb,
     user_id uuid NOT NULL,
     manifest jsonb DEFAULT '{}'::jsonb NOT NULL
+);
+
+
+--
+-- Name: extended_details; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.extended_details (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    details jsonb DEFAULT '{}'::jsonb NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
 );
 
 
@@ -903,8 +942,8 @@ CREATE TABLE public.workflow_executions (
     name character varying,
     namespace_id uuid,
     cleaned boolean DEFAULT false NOT NULL,
-    shared_with_namespace boolean DEFAULT false NOT NULL,
-    log_data jsonb
+    log_data jsonb,
+    shared_with_namespace boolean DEFAULT false NOT NULL
 );
 
 
@@ -962,6 +1001,14 @@ ALTER TABLE ONLY public.activities
 
 
 --
+-- Name: activity_extended_details activity_extended_details_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.activity_extended_details
+    ADD CONSTRAINT activity_extended_details_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -991,6 +1038,14 @@ ALTER TABLE ONLY public.automated_workflow_executions
 
 ALTER TABLE ONLY public.data_exports
     ADD CONSTRAINT data_exports_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: extended_details extended_details_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.extended_details
+    ADD CONSTRAINT extended_details_pkey PRIMARY KEY (id);
 
 
 --
@@ -1122,6 +1177,13 @@ ALTER TABLE ONLY public.workflow_executions
 
 
 --
+-- Name: idx_on_activity_id_extended_detail_id_f24c369286; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX idx_on_activity_id_extended_detail_id_f24c369286 ON public.activity_extended_details USING btree (activity_id, extended_detail_id);
+
+
+--
 -- Name: index_active_storage_attachments_on_blob_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1210,6 +1272,20 @@ CREATE INDEX index_activities_on_trackable ON public.activities USING btree (tra
 --
 
 CREATE INDEX index_activities_on_trackable_id_and_trackable_type ON public.activities USING btree (trackable_id, trackable_type);
+
+
+--
+-- Name: index_activity_extended_details_on_activity_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_activity_extended_details_on_activity_id ON public.activity_extended_details USING btree (activity_id);
+
+
+--
+-- Name: index_activity_extended_details_on_extended_detail_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_activity_extended_details_on_extended_detail_id ON public.activity_extended_details USING btree (extended_detail_id);
 
 
 --
@@ -1843,6 +1919,14 @@ ALTER TABLE ONLY public.workflow_executions
 
 
 --
+-- Name: activity_extended_details fk_rails_4dfd492441; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.activity_extended_details
+    ADD CONSTRAINT fk_rails_4dfd492441 FOREIGN KEY (extended_detail_id) REFERENCES public.extended_details(id);
+
+
+--
 -- Name: data_exports fk_rails_5408e45594; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1880,6 +1964,14 @@ ALTER TABLE ONLY public.samples_workflow_executions
 
 ALTER TABLE ONLY public.automated_workflow_executions
     ADD CONSTRAINT fk_rails_64f0b6275c FOREIGN KEY (created_by_id) REFERENCES public.users(id);
+
+
+--
+-- Name: activity_extended_details fk_rails_66c12bb972; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.activity_extended_details
+    ADD CONSTRAINT fk_rails_66c12bb972 FOREIGN KEY (activity_id) REFERENCES public.activities(id);
 
 
 --
@@ -1955,7 +2047,9 @@ SET search_path TO "$user", public;
 INSERT INTO "schema_migrations" (version) VALUES
 ('20250424155356'),
 ('20250416191422'),
+('20250414192058'),
 ('20250414172424'),
+('20250410194644'),
 ('20250219172718'),
 ('20250219002757'),
 ('20250219001422'),
@@ -1970,6 +2064,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20250108200329'),
 ('20250107194839'),
 ('20250106153442'),
+('20241212164410'),
 ('20241120173553'),
 ('20241017164233'),
 ('20241004162923'),

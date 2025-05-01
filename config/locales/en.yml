@@ -180,6 +180,8 @@ en:
         system: System
     errors:
       models:
+        activity_extended_detail:
+          maximum_entries: Extended details record is already linked to the maximum number of activities for type %{activity_type}
         attachment:
           attributes:
             file:
@@ -472,18 +474,36 @@ en:
     activity:
       dialog:
         close: Close
+        pagination:
+          aria_label: Pagination
+          at_first_aria_label: You are on the first page
+          at_last_aria_label: You are on the last page
+          next: Next
+          next_aria_label: Go to next page
+          previous: Previous
+          previous_aria_label: Go to previous page
         sample_clone:
-          copied_from: Copied from
-          copied_to: Copied to
-          source_project_description: "%{user} copied %{count} samples from project %{source_project_puid}"
-          target_project_description: "%{user} copied %{count} samples to project %{target_project_puid}"
+          copied_from: Copied From
+          copied_to: Copied To
+          source_project_description:
+            one: "%{user} copied 1 sample from project %{source_project_puid}"
+            other: "%{user} copied %{count} samples from project %{source_project_puid}"
+          target_project_description:
+            one: "%{user} copied 1 sample to project %{target_project_puid}"
+            other: "%{user} copied %{count} samples to project %{target_project_puid}"
           title: Copied Samples
         sample_destroy:
-          description: "%{user} removed %{count} samples from the project"
+          description:
+            one: "%{user} removed 1 sample from the project"
+            other: "%{user} removed %{count} samples from the project"
           title: Deleted Samples
         sample_transfer:
-          source_project_description: "%{user} transferred %{count} samples from project %{source_project_puid}"
-          target_project_description: "%{user} transferred %{count} samples to project %{target_project_puid}"
+          source_project_description:
+            one: "%{user} transferred 1 sample from project %{source_project_puid}"
+            other: "%{user} transferred %{count} samples from project %{source_project_puid}"
+          target_project_description:
+            one: "%{user} transferred 1 sample to project %{target_project_puid}"
+            other: "%{user} transferred %{count} samples to project %{target_project_puid}"
           title: Transferred Samples
       load_more: Load more
       more_details: More details
@@ -2017,9 +2037,9 @@ en:
           file_help: CSV, TSV, XLS or XLSX.
           namespace:
             group:
-              description_html: The spreadsheet is required to have a column for <b>Sample Name</b>, and optionally for <b>Sample Description</b> and <b>Project PUID</b>.
+              description_html: The spreadsheet is required to have columns for <b>Sample Name</b> and <b>Project PUID</b>, and optionally <b>Sample Description</b>.
             project:
-              description_html: The spreadsheet is required to have a column for <b>Sample Name</b>, and optionally for <b>Sample Description</b>.
+              description_html: The spreadsheet is required to have a column for <b>Sample Name</b>, and optionally <b>Sample Description</b>.
           project_puid_column: Project ID Column
           project_puid_column_description: Assigns each sample to the associated project within the imported spreadsheet
           project_selection: Project Selection

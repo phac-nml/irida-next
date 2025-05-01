@@ -30,7 +30,7 @@ module Projects
           'activity.namespaces_project_namespace.samples.transfer_html',
           user: 'System',
           href: activity_to_render[:target_project_puid],
-          transferred_samples_count: activity_to_render[:transferred_samples_ids]&.size
+          transferred_samples_count: activity_to_render[:transferred_samples_count]
         )
       )
 
@@ -60,7 +60,7 @@ module Projects
           'activity.namespaces_project_namespace.samples.transferred_from_html',
           user: 'System',
           href: activity_to_render[:source_project_puid],
-          transferred_samples_count: activity_to_render[:transferred_samples_ids]&.size
+          transferred_samples_count: activity_to_render[:transferred_samples_count]
         )
       )
 
@@ -93,7 +93,7 @@ module Projects
           'activity.namespaces_project_namespace.samples.transferred_from_html',
           user: 'System',
           href: activity_to_render[:source_project_puid],
-          transferred_samples_count: activity_to_render[:transferred_samples_ids]&.size
+          transferred_samples_count: activity_to_render[:transferred_samples_count]
         )
       )
 
@@ -126,7 +126,7 @@ module Projects
           'activity.namespaces_project_namespace.samples.transfer_html',
           user: 'System',
           href: activity_to_render[:target_project_puid],
-          transferred_samples_count: activity_to_render[:transferred_samples_ids]&.size
+          transferred_samples_count: activity_to_render[:transferred_samples_count]
         )
       )
 

@@ -49,7 +49,7 @@ module Samples
 
     def transfer(new_project_id, sample_ids, broadcast_target) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       transferred_samples_ids = []
-      transferred_samples_puids = []
+      transferred_samples_data = []
       not_found_sample_ids = []
       old_namespaces = namespaces_for_transfer(@project.namespace)
       new_namespaces = namespaces_for_transfer(@new_project.namespace)
@@ -59,7 +59,7 @@ module Samples
         sample = Sample.find_by!(id: sample_id, project_id: @project.id)
         sample.update!(project_id: new_project_id)
         transferred_samples_ids << sample_id
-        transferred_samples_puids << sample.puid
+        transferred_samples_data << { sample_name: sample.name, sample_puid: sample.puid }
         @project.namespace.update_metadata_summary_by_sample_transfer(sample_id, old_namespaces, new_namespaces)
       rescue ActiveRecord::RecordNotFound
         not_found_sample_ids << sample_id
@@ -77,39 +77,44 @@ module Samples
       end
 
       if transferred_samples_ids.count.positive?
-        update_namespace_attributes(transferred_samples_ids, transferred_samples_puids)
+        update_namespace_attributes(transferred_samples_ids)
+        create_activities(transferred_samples_data, transferred_samples_ids.count)
       end
 
       transferred_samples_ids
     end
 
-    def update_namespace_attributes(transferred_samples_ids, transferred_samples_puids)
-      create_activities(transferred_samples_ids, transferred_samples_puids)
+    def update_namespace_attributes(transferred_samples_ids)
       update_samples_count(transferred_samples_ids.count)
     end
 
-    def create_activities(transferred_samples_ids, transferred_samples_puids) # rubocop:disable Metrics/MethodLength
-      @project.namespace.create_activity key: 'namespaces_project_namespace.samples.transfer',
-                                         owner: current_user,
-                                         parameters:
-                                          {
-                                            target_project_puid: @new_project.puid,
-                                            target_project: @new_project.id,
-                                            transferred_samples_ids:,
-                                            transferred_samples_puids:,
-                                            action: 'sample_transfer'
-                                          }
+    def create_activities(transferred_samples_data, transferred_samples_ids_count) # rubocop:disable Metrics/MethodLength
+      ext_details = ExtendedDetail.create!(details: { transferred_samples_count: transferred_samples_ids_count,
+                                                      transferred_samples_data: transferred_samples_data })
 
-      @new_project.namespace.create_activity key: 'namespaces_project_namespace.samples.transferred_from',
-                                             owner: current_user,
-                                             parameters:
-                                              {
-                                                source_project_puid: @project.puid,
-                                                source_project: @project.id,
-                                                transferred_samples_ids:,
-                                                transferred_samples_puids:,
-                                                action: 'sample_transfer'
-                                              }
+      activity = @project.namespace.create_activity key: 'namespaces_project_namespace.samples.transfer',
+                                                    owner: current_user,
+                                                    parameters:
+                                                    {
+                                                      target_project_puid: @new_project.puid,
+                                                      target_project: @new_project.id,
+                                                      transferred_samples_count: transferred_samples_ids_count,
+                                                      action: 'sample_transfer'
+                                                    }
+
+      activity.create_activity_extended_detail(extended_detail_id: ext_details.id, activity_type: 'sample_transfer')
+
+      activity = @new_project.namespace.create_activity key: 'namespaces_project_namespace.samples.transferred_from',
+                                                        owner: current_user,
+                                                        parameters:
+                                                        {
+                                                          source_project_puid: @project.puid,
+                                                          source_project: @project.id,
+                                                          transferred_samples_count: transferred_samples_ids_count,
+                                                          action: 'sample_transfer'
+                                                        }
+
+      activity.create_activity_extended_detail(extended_detail_id: ext_details.id, activity_type: 'sample_transfer')
     end
 
     def update_samples_count(transferred_samples_count)

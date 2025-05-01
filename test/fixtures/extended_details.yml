@@ -1,0 +1,32 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+project1_namespace_sample_clone_extended_details:
+  details:
+    {
+      "cloned_samples_data":
+        [
+          {
+            sample_name: "Project 1 Sample 1",
+            sample_puid: "INXT_SAM_AAAAAAAAAA",
+            clone_puid: "INXT_SAM_XAAAATAAAA",
+          },
+        ],
+      "cloned_samples_count": 1,
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+project1_namespace_sample_transfer_extended_details:
+  details:
+    {
+      "transferred_samples_data":
+        [
+          {
+            sample_name: "Project 1 Sample 1",
+            sample_puid: "INXT_SAM_AAAAAAAAAA",
+          },
+        ],
+      "transferred_samples_count": 1,
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
