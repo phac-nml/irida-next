@@ -168,7 +168,7 @@ export default class extends Controller {
       const template = this.sampleCloneTableRowTarget;
       const fragment = document.createDocumentFragment();
       const sampleNameSelector =
-        "span[data-activities--extended_details-target='itemName']";
+        "span[data-activities--extended_details-target='sampleName']";
       const puidSelector = "span:nth-child(2)";
 
       table_data.forEach((data) => {
