@@ -21,9 +21,7 @@
   <%= sidebar %>
   <div class="relative content" data-layout-target="content">
     <nav
-      class="
-        flex justify-between px-4 max-xl:fixed xl:absolute top-0 left-0 right-0 z-20
-      "
+      class="flex px-4 max-xl:fixed xl:absolute top-0 left-0 right-0 z-20"
       style="height: 50px"
     >
       <div
@@ -41,9 +39,11 @@
           <%= viral_icon(name: "sidebar", classes: "w-6 h-6") %>
         </button>
       </div>
-      <turbo-frame id="breadcrumb">
-        <%= breadcrumb %>
-      </turbo-frame>
+      <div class="flex-1">
+        <turbo-frame id="breadcrumb">
+          <%= breadcrumb %>
+        </turbo-frame>
+      </div>
       <%= language_selection %>
     </nav>
     <main
