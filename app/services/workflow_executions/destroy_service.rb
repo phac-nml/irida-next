@@ -23,7 +23,10 @@ module WorkflowExecutions
 
       @workflow_execution.destroy
 
-      create_activity([{ id: @workflow_execution.id, name: @workflow_execution.name }]) unless @namespace.nil?
+      return if @namespace.nil?
+
+      create_activities([{ workflow_id: @workflow_execution.id,
+                           workflow_name: @workflow_execution.name }])
     end
 
     def destroy_multiple
@@ -35,17 +38,15 @@ module WorkflowExecutions
         state: %w[completed canceled error], cleaned: true
       )
 
-      deletable_workflow_params_for_activity = deletable_workflow_executions.pluck(:id, :name).map do |id, name|
-        { id: id, name: name }
+      deletable_workflow_data = deletable_workflow_executions.pluck(:id, :name).map do |id, name|
+        { workflow_id: id, workflow_name: name }
       end
 
       deletable_workflow_executions.destroy_all
 
-      if deletable_workflow_params_for_activity.count.positive? && !@namespace.nil?
-        create_activity(deletable_workflow_params_for_activity)
-      end
+      create_activities(deletable_workflow_data) if deletable_workflow_data.count.positive? && !@namespace.nil?
 
-      deletable_workflow_params_for_activity.count
+      deletable_workflow_data.count
     end
 
     def query_workflow_executions
@@ -58,14 +59,20 @@ module WorkflowExecutions
       end
     end
 
-    def create_activity(deleted_workflow_executions)
-      @namespace.create_activity key: 'namespaces_project_namespace.workflow_executions.destroy',
-                                 owner: current_user,
-                                 parameters:
+    def create_activities(deleted_workflow_executions_data)
+      ext_details = ExtendedDetail.create!(details: {
+                                             workflow_executions_deleted_count: deleted_workflow_executions_data.count,
+                                             deleted_workflow_executions_data: deleted_workflow_executions_data
+                                           })
+      activity = @namespace.create_activity key: 'namespaces_project_namespace.workflow_executions.destroy',
+                                            owner: current_user,
+                                            parameters:
                                  {
-                                   workflow_executions: deleted_workflow_executions,
+                                   workflow_executions: deleted_workflow_executions_data,
                                    action: 'workflow_execution_destroy'
                                  }
+      activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
+                                               activity_type: 'workflow_execution_destroy')
     end
   end
 end

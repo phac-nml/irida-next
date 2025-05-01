@@ -64,7 +64,11 @@ export default class extends Controller {
         // If activityType value is set, this else statement
         // can be updated to call the relevant method required
         // based on the activityType
-        this.#generateListItems(indexRangeData);
+        if (this.activityTypeValue === "workflow_execution_destroy") {
+          this.#generateWorkflowListItems(indexRangeData);
+        } else {
+          this.#generateSampleListItems(indexRangeData);
+        }
       }
     }
   }
@@ -188,7 +192,7 @@ export default class extends Controller {
   }
 
   // Generate list items in format SAMPLE_NAME <SAMPLE_PUID>
-  #generateListItems(list_data) {
+  #generateSampleListItems(list_data) {
     if ("content" in document.createElement("template")) {
       const template = this.listRowTarget;
       const fragment = document.createDocumentFragment();
@@ -202,6 +206,27 @@ export default class extends Controller {
         ).textContent = data["sample_name"];
         li.querySelector("p > span:nth-child(2)").textContent =
           data["sample_puid"];
+
+        fragment.appendChild(clone);
+      });
+
+      this.listContainerTarget.appendChild(fragment);
+    }
+  }
+  #generateWorkflowListItems(listData) {
+    if ("content" in document.createElement("template")) {
+      const template = this.listRowTarget;
+      const fragment = document.createDocumentFragment();
+
+      listData.forEach((data) => {
+        const clone = template.content.cloneNode(true);
+        const li = clone.querySelector("li");
+
+        li.querySelector(
+          "span[data-activities--extended_details-target='workflowName']",
+        ).textContent = data["workflow_name"];
+        li.querySelector("p > span:nth-child(2)").textContent =
+          data["workflow_id"];
 
         fragment.appendChild(clone);
       });
