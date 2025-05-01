@@ -7,6 +7,9 @@ module WorkflowExecutions
   class TableComponent < Component
     include Ransack::Helpers::FormHelper
 
+    # 🧊 Fields within the 'metadata' JSONB column that require prefixing for sorting.
+    METADATA_FIELDS = %i[workflow_name workflow_version].freeze
+
     # rubocop:disable Naming/MethodParameterName,Metrics/ParameterLists
     def initialize(
       workflow_executions,
@@ -91,6 +94,20 @@ module WorkflowExecutions
       else
         workflow_execution_path(workflow_execution)
       end
+    end
+
+    # 💡 Determines the actual database column name for sorting purposes.
+    #    Certain display columns (like workflow name/version) are stored
+    #    within a JSONB 'metadata' column and need prefixing for Ransack.
+    #
+    # @param column [Symbol] The symbolic name of the column used in the view.
+    # @return [String] The corresponding database column name suitable for Ransack sorting.
+    def sort_column_name(column)
+      # 🛡️ Return the column name directly if it's not a special metadata field.
+      return column.to_s unless METADATA_FIELDS.include?(column)
+
+      # 🔧 Prefix metadata fields stored in the JSONB column.
+      "metadata_#{column}"
     end
 
     private
