@@ -25,7 +25,16 @@ export default class extends Controller {
    * Connects the controller and initializes the dropdown.
    */
   connect() {
-    this.#dropdown = new Dropdown(this.menuTarget, this.triggerTarget);
+    const options = {
+      onHide: () => {
+        this.triggerTarget.setAttribute("aria-expanded", "false");
+      },
+      onShow: () => {
+        this.triggerTarget.setAttribute("aria-expanded", "true");
+      },
+    };
+
+    this.#dropdown = new Dropdown(this.menuTarget, this.triggerTarget, options);
     this.element.setAttribute("data-controller-connected", "true");
   }
 
@@ -34,8 +43,7 @@ export default class extends Controller {
    */
   disconnect() {
     if (this.#dropdown) {
-      this.#dropdown.hide();
-      this.#dropdown = null;
+      this.#dropdown.destroy();
     }
   }
 }
