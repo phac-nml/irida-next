@@ -140,13 +140,29 @@ class ProfileTest < ApplicationSystemTestCase
     assert_text I18n.t(:'locales.en')
   end
 
-  test 'can update language to french' do
+  test 'can update language selection' do
     visit profile_preferences_path
 
-    find('input[id=user_locale_fr]').click
+    # change user language selection from the layout
+    within find('nav') do
+      find('#language-selection-dd-trigger').click
+      within find('#language_selection_dropdown') do
+        click_button I18n.t(:'locales.fr', locale: :fr)
+      end
+    end
 
     I18n.with_locale(:fr) do
-      assert_text I18n.t(:'locales.en', locale: :en)
+      within %(div[data-controller='viral--flash']) do
+        assert_text I18n.t(:'profiles.preferences.update.success')
+      end
+    end
+
+    assert_current_path profile_preferences_path
+
+    # change user language selection from the profile page preferences section
+    find('input[id=user_locale_en]').click
+
+    I18n.with_locale(:en) do
       within %(div[data-controller='viral--flash']) do
         assert_text I18n.t(:'profiles.preferences.update.success')
       end

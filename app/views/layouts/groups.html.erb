@@ -84,6 +84,7 @@
           <% end %>
         <% end %>
         <%= layout.with_breadcrumb(context_crumbs: @context_crumbs) %>
+        <% layout.with_language_selection %>
         <% layout.with_body do %>
           <%= yield %>
         <% end %>

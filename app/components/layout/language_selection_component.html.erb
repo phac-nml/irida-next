@@ -1,0 +1,75 @@
+<div
+  data-controller="language-selection-dd"
+  data-turbo="false"
+  class="inline-flex items-center"
+>
+  <button
+    data-language-selection-dd-target="trigger"
+    id="language-selection-dd-trigger"
+    class="
+      navbar-button text-slate-600 dark:text-slate-400 border border-slate-300
+      dark:border-slate-600 rounded-lg text-sm px-3 py-1 cursor-pointer inline-flex
+      items-center justify-center
+    "
+    type="button"
+    aria-haspopup="listbox"
+    aria-expanded="false"
+    aria-controls="language-selection-dd-menu"
+  >
+    <%= viral_icon(
+      name: "language",
+      classes: "w-4 h-4 mr-2 flex-none",
+      "aria-hidden": true,
+    ) %>
+    <span class="text-sm" id="language-selection-dd-label">
+      <%= I18n.t(:"locales.#{locale}", locale: locale) %>
+    </span>
+  </button>
+  <!-- Dropdown menu -->
+  <div
+    data-language-selection-dd-target="menu"
+    id="language-selection-dd-menu"
+    class="
+      hidden w-32 bg-white divide-y divide-slate-100 rounded-lg shadow-sm
+      dark:bg-slate-700 dark:divide-slate-600 z-30
+    "
+    aria-labelledby="language-selection-dd-trigger"
+  >
+    <ul
+      id="language_selection_dropdown"
+      role="listbox"
+      class="
+        py-2 text-sm text-slate-700 dark:text-slate-200 focus:outline-none
+      "
+      aria-labelledby="language-selection-dd-label"
+      tabindex="-1"
+    >
+      <% @locale_options.each do |locale_name, locale_value| %>
+        <% if @user.locale.to_sym == locale_value %>
+          <li
+            class="
+              flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600
+              dark:hover:text-white bg-slate-100 text-slate-600 dark:bg-slate-600
+              dark:text-slate-300 border-slate-100 dark:border-slate-600
+            "
+          ><%= locale_name %></li>
+        <% else %>
+          <li
+            role="option"
+            class="
+              flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600
+              dark:hover:text-white cursor-pointer
+            "
+          >
+            <%= form_with(model: @user, url: profile_preferences_path, method: :patch) do |form| %>
+              <%= form.hidden_field :locale,
+                                value: locale_value,
+                                id: "language_selection_#{locale_value}" %>
+              <%= form.submit locale_name, class: "cursor-pointer" %>
+            <% end %>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+</div>

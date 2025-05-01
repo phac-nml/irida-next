@@ -20,6 +20,7 @@ class LayoutComponentTest < ViewComponent::TestCase
         layout.with_body do
           'Hello, World!'
         end
+        layout.with_language_selection(user: user)
       end
 
       assert_link I18n.t('components.layout.main_content_link'), count: 1, href: '#main-content'
@@ -35,6 +36,11 @@ class LayoutComponentTest < ViewComponent::TestCase
 
       assert_selector '.content' do
         assert_text 'Hello, World!'
+      end
+
+      assert_selector '#language_selection_dropdown' do
+        assert_button 'English'
+        assert_button 'Français'
       end
     end
   end

@@ -39,9 +39,12 @@
           <%= viral_icon(name: "sidebar", classes: "w-6 h-6") %>
         </button>
       </div>
-      <turbo-frame id="breadcrumb">
-        <%= breadcrumb %>
-      </turbo-frame>
+      <div class="flex-1">
+        <turbo-frame id="breadcrumb">
+          <%= breadcrumb %>
+        </turbo-frame>
+      </div>
+      <%= language_selection %>
     </nav>
     <main
       id="main-content"
