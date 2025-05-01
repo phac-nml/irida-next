@@ -115,53 +115,55 @@
     <% end %>
   <% end %>
 
-  <div class="flex @max-2xl:flex-col @max-2xl:space-y-2 mb-2">
-    <div class="inline-flex grow space-x-2">
-      <% if @allowed_to[:submit_workflow] || @allowed_to[:export_data] %>
-        <%= form_with(
+  <% if @has_samples %>
+    <div class="flex @max-2xl:flex-col @max-2xl:space-y-2 mb-2">
+      <div class="inline-flex grow space-x-2">
+        <% if @allowed_to[:submit_workflow] || @allowed_to[:export_data] %>
+          <%= form_with(
                   url: select_group_samples_url,
                   method: :get,
                   id: "select-all-form",
                   class: "filters align-middle"
                 ) do |f| %>
-          <input type="hidden" name="format" value="turbo_stream"/>
-          <input type="hidden" name="select" value="on"/>
-          <%= render "shared/samples/timestamp_input" %>
-          <%= f.submit t(".select_all_button"),
-                   class: "button button--state-default button--size-default" %>
-        <% end %>
-        <%= form_with(
+            <input type="hidden" name="format" value="turbo_stream"/>
+            <input type="hidden" name="select" value="on"/>
+            <%= render "shared/samples/timestamp_input" %>
+            <%= f.submit t(".select_all_button"),
+                     class: "button button--state-default button--size-default" %>
+          <% end %>
+          <%= form_with(
                   url: select_group_samples_url,
                   method: :get,
                   id: "deselect-all-form",
                   class: "filters align-middle"
                 ) do |f| %>
-          <input type="hidden" name="format" value="turbo_stream"/>
-          <%= f.submit t(".deselect_all_button"),
-                   class: "button button--state-default button--size-default" %>
+            <input type="hidden" name="format" value="turbo_stream"/>
+            <%= f.submit t(".deselect_all_button"),
+                     class: "button button--state-default button--size-default" %>
+          <% end %>
         <% end %>
-      <% end %>
-    </div>
-    <div id="table-filter" class="flex grow-0">
-      <%= render partial: "table_filter", locals: { query: @query } %>
+      </div>
+      <div id="table-filter" class="flex grow-0">
+        <%= render partial: "table_filter", locals: { query: @query } %>
+      </div>
+
+      <%= render partial: "shared/samples/metadata_template_dropdown",
+      locals: {
+        url: list_group_metadata_templates_url(@group),
+        metadata_template: @metadata_template,
+        pagy: @pagy,
+      } %>
     </div>
 
-    <%= render partial: "shared/samples/metadata_template_dropdown",
+    <%= render partial: "table",
     locals: {
-      url: list_group_metadata_templates_url(@group),
-      metadata_template: @metadata_template,
+      allowed_to: @allowed_to,
+      fields: @fields,
+      group: @group,
+      has_samples: @has_samples,
       pagy: @pagy,
+      samples: @samples,
+      search_params: @search_params,
     } %>
-  </div>
-
-  <%= render partial: "table",
-  locals: {
-    allowed_to: @allowed_to,
-    fields: @fields,
-    group: @group,
-    has_samples: @has_samples,
-    pagy: @pagy,
-    samples: @samples,
-    search_params: @search_params,
-  } %>
+  <% end %>
 </div>
