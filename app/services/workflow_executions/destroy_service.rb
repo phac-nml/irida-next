@@ -67,10 +67,11 @@ module WorkflowExecutions
       activity = @namespace.create_activity key: 'namespaces_project_namespace.workflow_executions.destroy',
                                             owner: current_user,
                                             parameters:
-                                 {
-                                   workflow_executions_deleted_count: deleted_workflow_executions_data.count,
-                                   action: 'workflow_execution_destroy'
-                                 }
+                                              {
+                                                workflow_executions_deleted_count:
+                                                  deleted_workflow_executions_data.count,
+                                                action: 'workflow_execution_destroy'
+                                              }
       activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
                                                activity_type: 'workflow_execution_destroy')
     end
