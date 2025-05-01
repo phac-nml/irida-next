@@ -213,6 +213,8 @@ export default class extends Controller {
       this.listContainerTarget.appendChild(fragment);
     }
   }
+
+  // Generate list items in format WORKFLOW_NAME <WORKFLOW_ID>
   #generateWorkflowListItems(listData) {
     if ("content" in document.createElement("template")) {
       const template = this.listRowTarget;

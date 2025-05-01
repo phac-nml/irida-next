@@ -22,7 +22,7 @@ module Activities
         @title = I18n.t(:'components.activity.dialog.workflow_execution_destroy.title')
         @description = I18n.t(:'components.activity.dialog.workflow_execution_destroy.description',
                               user: @activity_owner,
-                              count: @activity.parameters[:workflow_executions].count)
+                              count: @activity.parameters[:workflow_executions_deleted_count])
         @data = @extended_details.details['deleted_workflow_executions_data'].to_json
       end
 

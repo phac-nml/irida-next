@@ -68,7 +68,7 @@ module WorkflowExecutions
                                             owner: current_user,
                                             parameters:
                                  {
-                                   workflow_executions: deleted_workflow_executions_data,
+                                   workflow_executions_deleted_count: deleted_workflow_executions_data.count,
                                    action: 'workflow_execution_destroy'
                                  }
       activity.create_activity_extended_detail(extended_detail_id: ext_details.id,

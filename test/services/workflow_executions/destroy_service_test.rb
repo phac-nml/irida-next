@@ -270,8 +270,9 @@ module WorkflowExecutions
       ).order(created_at: :desc).first
       assert_equal 'namespaces_project_namespace.workflow_executions.destroy', activity.key
       assert_equal @user, activity.owner
-      assert_equal [{ id: canceled_workflow.id, name: canceled_workflow.name }],
-                   activity.parameters[:workflow_executions]
+      assert_equal 1, activity.parameters[:workflow_executions_deleted_count]
+      assert_equal [{ 'workflow_id' => canceled_workflow.id, 'workflow_name' => canceled_workflow.name }],
+                   activity.extended_details.details['deleted_workflow_executions_data']
       assert_equal 'workflow_execution_destroy', activity.parameters[:action]
     end
 
@@ -292,9 +293,11 @@ module WorkflowExecutions
       ).order(created_at: :desc).first
       assert_equal 'namespaces_project_namespace.workflow_executions.destroy', activity.key
       assert_equal @user, activity.owner
-      assert_equal [{ id: error_workflow.id, name: error_workflow.name },
-                    { id: canceled_workflow.id, name: canceled_workflow.name }],
-                   activity.parameters[:workflow_executions]
+      assert_equal 2, activity.parameters[:workflow_executions_deleted_count]
+      assert_equal [{ 'workflow_id' => error_workflow.id, 'workflow_name' => error_workflow.name },
+                    { 'workflow_id' => canceled_workflow.id,
+                      'workflow_name' => canceled_workflow.name }],
+                   activity.extended_details.details['deleted_workflow_executions_data']
       assert_equal 'workflow_execution_destroy', activity.parameters[:action]
     end
 
@@ -318,9 +321,11 @@ module WorkflowExecutions
       ).order(created_at: :desc).first
       assert_equal 'namespaces_project_namespace.workflow_executions.destroy', activity.key
       assert_equal @user, activity.owner
-      assert_equal [{ id: error_workflow.id, name: error_workflow.name },
-                    { id: canceled_workflow.id, name: canceled_workflow.name }],
-                   activity.parameters[:workflow_executions]
+      assert_equal 2, activity.parameters[:workflow_executions_deleted_count]
+      assert_equal [{ 'workflow_id' => error_workflow.id, 'workflow_name' => error_workflow.name },
+                    { 'workflow_id' => canceled_workflow.id,
+                      'workflow_name' => canceled_workflow.name }],
+                   activity.extended_details.details['deleted_workflow_executions_data']
       assert_equal 'workflow_execution_destroy', activity.parameters[:action]
     end
 

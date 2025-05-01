@@ -345,7 +345,7 @@ project1_namespace_workflow_execution_destroy:
   key: "namespaces_project_namespace.workflow_executions.destroy"
   parameters:
     {
-      workflow_executions: [{id: "first_workflow_id", name: "first_workflow_name"}, {id: "second_workflow_id", name: "second_workflow_name"}, {id: "third_workflow_id", name: "third_workflow_name"}],
+      workflow_executions_deleted_count: 3,
       action: "workflow_execution_destroy",
     }
   created_at: <%= Time.zone.now %>

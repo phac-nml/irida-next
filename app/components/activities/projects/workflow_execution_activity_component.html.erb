@@ -6,7 +6,7 @@
       href:
         content_tag(
           :span,
-          @activity[:workflow_executions]&.size,
+          @activity[:workflow_executions_deleted_count],
           class: "text-slate-800 dark:text-slate-300 font-medium",
         ),
     ) %>

@@ -29,7 +29,7 @@ module Projects
         I18n.t(
           'activity.namespaces_project_namespace.workflow_executions.destroy_html',
           user: 'System',
-          href: activity_to_render[:workflow_executions].count
+          href: activity_to_render[:workflow_executions_deleted_count]
         )
       )
 

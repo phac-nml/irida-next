@@ -30,3 +30,26 @@ project1_namespace_sample_transfer_extended_details:
     }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
+
+project1_namespace_workflow_execution_destroy_extended_details:
+  details:
+    {
+      "deleted_workflow_executions_data":
+        [
+          {
+            workflow_id: "first_workflow_id",
+            workflow_name: "first_workflow_name",
+          },
+          {
+            workflow_id: "second_workflow_id",
+            workflow_name: "second_workflow_name",
+          },
+          {
+            workflow_id: "third_workflow_id",
+            workflow_name: "third_workflow_name",
+          },
+        ],
+      "workflow_exeuctions_deleted_count": 3,
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
