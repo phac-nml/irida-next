@@ -17,7 +17,7 @@
             <% @columns.each_with_index do |column, index| %>
               <%= render_cell(
                 tag: 'th',
-                **helpers.aria_sort("file_blob_#{column.to_s}", @q.sorts[0].name, @q.sorts[0].dir),
+                **helpers.aria_sort(sort_column_name(column), @q.sorts[0].name, @q.sorts[0].dir),
                 scope: 'col',
                 classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', '@2xl:sticky left-0 min-w-56 max-w-56 z-10': index.zero?, '@2xl:sticky left-56 z-10 bg-slate-100 dark:bg-slate-900': index == 1)
               ) do %>
@@ -54,7 +54,7 @@
                 <% elsif column == :format || column == :type %>
                   <%= render Ransack::SortComponent.new(
                     ransack_obj: @q,
-                    label: column,
+                    label: t(".#{column}"),
                     url:
                       helpers.sorting_url(
                         @q,

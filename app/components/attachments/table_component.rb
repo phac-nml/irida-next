@@ -7,6 +7,11 @@ module Attachments
   class TableComponent < Component
     include Ransack::Helpers::FormHelper
 
+    # 📝 Define columns related to attachment metadata for sorting/filtering.
+    METADATA_COLUMNS = %w[format type].freeze
+    # 📝 Define columns related to the actual file data for sorting/filtering.
+    FILE_DATA_COLUMNS = %w[filename byte_size].freeze
+
     # rubocop:disable Naming/MethodParameterName,Metrics/ParameterLists
     def initialize(
       attachments,
@@ -29,9 +34,11 @@ module Attachments
       @abilities = abilities
       @row_actions = row_actions
       @empty = empty
-      @renders_row_actions = @row_actions.select { |_key, value| value }.count.positive?
+      # 🚀 Determine if any row actions are enabled for rendering the actions column.
+      @renders_row_actions = @row_actions.any? { |_key, value| value }
       @system_arguments = system_arguments
 
+      # 📝 Set the columns to be displayed in the table.
       @columns = columns
     end
     # rubocop:enable Naming/MethodParameterName,Metrics/ParameterLists
@@ -77,6 +84,22 @@ module Attachments
         namespace_project_attachment_new_destroy_path(
           attachment_id:
         )
+      end
+    end
+
+    # 💡 Maps the display column name to the corresponding Ransack sort attribute name.
+    # Handles specific mappings for metadata and file data columns.
+    def sort_column_name(column)
+      column_str = column.to_s
+      case column_str
+      when 'id'
+        'puid' # 📝 Map display 'id' to the 'puid' attribute.
+      when *METADATA_COLUMNS
+        "metadata_#{column_str}" # 📝 Prefix metadata columns.
+      when *FILE_DATA_COLUMNS
+        "file_blob_#{column_str}" # 📝 Prefix file data columns (accessing via ActiveStorage blob).
+      else
+        column_str # 📝 Return the original column name if no specific mapping exists.
       end
     end
 
