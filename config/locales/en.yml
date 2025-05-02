@@ -518,6 +518,7 @@ en:
       aria_label: Breadcrumb
       dropdown:
         aria_label: Breadcrumb dropdown
+      navigation_aria_label: Breadcrumb navigation
     clipboard:
       copied: Copied!
       title: Copy to clipboard

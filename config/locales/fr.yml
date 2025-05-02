@@ -518,6 +518,7 @@ fr:
       aria_label: Breadcrumb
       dropdown:
         aria_label: Breadcrumb dropdown
+      navigation_aria_label: Navigation du fil d'Ariane
     clipboard:
       copied: Copié!
       title: Copier dans le presse-papiers
