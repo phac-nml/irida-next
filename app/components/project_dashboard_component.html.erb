@@ -1,17 +1,21 @@
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_250px] gap-4">
   <%# Information Section - Spans full width on medium screens, third column on large screens %>
-  <div
+  <section
+    aria-labelledby="project-dashboard-info-title"
     class="
       md:col-span-2 lg:col-span-1 order-1 lg:order-3 p-4 bg-white border rounded-lg
       border-slate-200 dark:border-slate-700 dark:bg-slate-800
     "
   >
-    <p class="mb-4 text-xl font-semibold text-slate-900 dark:text-white"><%= t(:"components.project_dashboard.info_title") %></p>
+    <h2 id="project-dashboard-info-title" class="mb-4 text-xl font-semibold text-slate-900 dark:text-white"><%= t(:"components.project_dashboard.info_title") %></h2>
     <%= render ProjectDashboard::InformationComponent.new(project: @project) %>
-  </div>
+  </section>
 
   <%# Activity Section - Second item visually on small screens, first column on medium screens, first column on large screens %>
-  <div class="order-2 md:order-2 lg:order-1 lg:col-span-1">
+  <section
+    aria-labelledby="project-dashboard-activity-title"
+    class="order-2 md:order-2 lg:order-1 lg:col-span-1"
+  >
     <div
       class="
         p-4 bg-white border rounded-lg border-slate-200 dark:border-slate-700
@@ -19,7 +23,7 @@
       "
     >
       <div class="flex-grow">
-        <p class="mb-4 text-xl font-semibold text-slate-900 dark:text-white"><%= t(:"components.project_dashboard.activity_title") %></p>
+        <h2 id="project-dashboard-activity-title" class="mb-4 text-xl font-semibold text-slate-900 dark:text-white"><%= t(:"components.project_dashboard.activity_title") %></h2>
         <%= render ProjectDashboard::ActivityComponent.new(activities: @activities) %>
       </div>
       <%= link_to t(:"components.project_dashboard.view_more"),
@@ -27,10 +31,13 @@
       class:
         "mt-4 button button--state-default button--size-default dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600" %>
     </div>
-  </div>
+  </section>
 
   <%# Samples Section - Third item visually on small screens, second column on medium screens, second column (fixed width) on large screens %>
-  <div class="order-3 md:order-3 lg:order-2 lg:col-span-1">
+  <section
+    aria-labelledby="project-dashboard-samples-title"
+    class="order-3 md:order-3 lg:order-2 lg:col-span-1"
+  >
     <div
       class="
         p-4 bg-white border rounded-lg border-slate-200 dark:border-slate-700
@@ -38,7 +45,7 @@
       "
     >
       <div class="flex-grow">
-        <p class="mb-4 text-xl font-semibold text-slate-900 dark:text-white"><%= t(:"components.project_dashboard.samples_title") %></p>
+        <h2 id="project-dashboard-samples-title" class="mb-4 text-xl font-semibold text-slate-900 dark:text-white"><%= t(:"components.project_dashboard.samples_title") %></h2>
         <%= render ProjectDashboard::SamplesComponent.new(
           samples: @samples,
           project: @project,
@@ -49,5 +56,5 @@
       class:
         "mt-4 button button--state-default button--size-default dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600" %>
     </div>
-  </div>
+  </section>
 </div>
