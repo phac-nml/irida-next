@@ -12,14 +12,10 @@ module SampleSpreadsheetImportActions
     @broadcast_target = "samples_import_#{SecureRandom.uuid}"
   end
 
-  def create # rubocop:disable Metrics/AbcSize
+  def create
     @broadcast_target = params[:broadcast_target]
 
-    blob = ActiveStorage::Blob.create_and_upload!(
-      io: spreadsheet_import_params[:file],
-      filename: spreadsheet_import_params[:file].original_filename,
-      content_type: spreadsheet_import_params[:file].content_type
-    )
+    blob = ActiveStorage::Blob.find_signed!(spreadsheet_import_params[:file])
 
     ::Samples::BatchSampleImportJob.set(
       wait_until: 1.second.from_now

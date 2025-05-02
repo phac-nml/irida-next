@@ -8,8 +8,7 @@ module Groups
       setup do
         sign_in users(:john_doe)
         @group = groups(:group_one)
-        @csv = fixture_file_upload('test/fixtures/files/batch_sample_import/group/valid.csv')
-
+        @blob_file = active_storage_blobs(:group_sample_import_valid_csv_blob)
         Flipper.enable(:batch_sample_spreadsheet_import)
       end
 
@@ -18,7 +17,7 @@ module Groups
           post group_samples_spreadsheet_import_path(@group, format: :turbo_stream),
                params: {
                  spreadsheet_import: {
-                   file: @csv,
+                   file: @blob_file.signed_id,
                    sample_id_column: 'sample_name',
                    project_puid_column: 'project_puid'
                  }

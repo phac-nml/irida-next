@@ -2062,6 +2062,7 @@ fr:
           static_project_description: Assigns each sample to the static project if either the Project ID column isn't assigned, or if the Project ID column is assigned but the project value within the spreadsheet is either empty or invalid
           submit_button: Import Samples
           title: Import Samples
+          uploading: Uploading
         errors:
           description: 'The sample import completed with the following errors:'
           ok_button: OK
