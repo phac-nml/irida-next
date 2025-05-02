@@ -4,31 +4,22 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        {
-            "type": "rdbg",
-            "name": "Debug rails",
-            "request": "launch",
-            "rdbgPath": "bin/rdbg",
-            "script": "bin/rails",
-            "args": [
-                "s"
-            ],
-            "useBundler": false,
-            "command": "ruby",
-        },
-        {
-            "type": "rdbg",
-            "name": "Debug current rails test file",
-            "request": "launch",
-            "rdbgPath": "bin/rdbg",
-            "script": "bin/rails test ${file}",
-            "useBundler": false,
-            "command": "ruby"
-        },
-        {
-            "type": "rdbg",
-            "name": "Attach with rdbg",
-            "request": "attach"
-        }
+      {
+        "type": "ruby_lsp",
+        "name": "Debug rails",
+        "request": "launch",
+        "program": "bin/rails s"
+      },
+      {
+        "type": "ruby_lsp",
+        "name": "Debug current rails test file",
+        "request": "launch",
+        "program": "bin/rails test ${file}"
+      },
+      {
+        "type": "ruby_lsp",
+        "name": "Attach with rdbg",
+        "request": "attach"
+      }
     ]
-}
+  }
