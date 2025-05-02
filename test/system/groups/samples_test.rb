@@ -1643,5 +1643,17 @@ module Groups
         assert_selector 'tr:nth-child(2) td:nth-child(7)', text: 'a'
       end
     end
+
+    test 'group without projects should not render sample actions dropdown' do
+      group = groups(:group_seven)
+      ### SETUP START ###
+      visit group_samples_url(group)
+
+      assert_selector 'div.empty_state_message'
+      assert_text I18n.t('groups.samples.table.no_associated_samples')
+      assert_text I18n.t('groups.samples.table.no_samples')
+
+      assert_no_selector 'button', text: 'Sample Actions'
+    end
   end
 end

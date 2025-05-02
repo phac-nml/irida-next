@@ -99,10 +99,10 @@ module Groups
       metadata_fields(@search_params['metadata_template'])
       advanced_search_fields(@group)
 
-      project_ids =
-        authorized_scope(Project, type: :relation, as: :group_projects, scope_options: { group: @group }).pluck(:id)
+      @group_project_ids = authorized_scope(Project, type: :relation, as: :group_projects,
+                                                     scope_options: { group: @group }).pluck(:id)
 
-      @query = Sample::Query.new(@search_params.except('metadata_template').merge({ project_ids: project_ids }))
+      @query = Sample::Query.new(@search_params.except('metadata_template').merge({ project_ids: @group_project_ids }))
     end
 
     def search_params
