@@ -223,17 +223,19 @@ export default class extends Controller {
       const fragment = document.createDocumentFragment();
       const workflowNameSelector =
         "span[data-activities--extended_details-target='workflowName']";
+      const workflowIdSelector =
+        "span[data-activities--extended_details-target='workflowId']";
 
       table_data.forEach((data) => {
         const clone = template.content.cloneNode(true);
         const tds = clone.querySelectorAll("td");
 
-        const updateTextContent = (tdIndex, workflowName) => {
+        const updateTextContent = (tdIndex, content, selector) => {
           const td = tds[tdIndex];
-          td.querySelector(workflowNameSelector).textContent = workflowName;
+          td.querySelector(selector).textContent = content;
         };
-        updateTextContent(0, data["workflow_name"]);
-        updateTextContent(1, data["workflow_id"]);
+        updateTextContent(0, data["workflow_name"], workflowNameSelector);
+        updateTextContent(1, data["workflow_id"], workflowIdSelector);
 
         fragment.appendChild(clone);
       });
