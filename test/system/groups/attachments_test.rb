@@ -92,7 +92,7 @@ module Groups
     test 'can sort by column' do
       visit group_attachments_path(@namespace)
 
-      assert_text 'Displaying 1-2 of 2 items'
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary.other', from: 1, to: 2, count: 2))
       assert_selector 'table tbody tr', count: 2
 
       click_on I18n.t('attachments.table_component.id')
