@@ -1,8 +1,8 @@
-<%# filepath: /home/CSCScience.ca/jadam/Development/irida-next/app/components/viral/breadcrumb_component.html.erb %>
-<nav aria-label="<%= I18n.t(:'components.breadcrumb.navigation_aria_label') %>" class="py-3">
-  <ol
-    class="inline-flex items-center space-x-1 md:space-x-3"
-  >
+<nav
+  aria-label="<%= I18n.t(:'components.breadcrumb.navigation_aria_label') %>"
+  class="py-3"
+>
+  <ol class="inline-flex items-center space-x-1 md:space-x-3">
     <% links.each_with_index do |link, index| %>
       <li class="max-md:hidden md:visible inline-flex items-center">
         <div class="flex items-center">
@@ -11,7 +11,9 @@
           <% end %>
           <%= link_to link[:name],
           URI.join(root_url, link[:path]).to_s,
-          aria: { current: (index == links.length - 1) ? "page" : nil },
+          aria: {
+            current: (index == links.length - 1) ? "page" : nil,
+          },
           data: {
             turbo_frame: "_top",
           },
@@ -55,7 +57,9 @@
           <% link = links.last %>
           <%= link_to link[:name],
           URI.join(root_url, link[:path]).to_s,
-          aria: { current: "page" },
+          aria: {
+            current: "page",
+          },
           data: {
             turbo_frame: "_top",
           },
