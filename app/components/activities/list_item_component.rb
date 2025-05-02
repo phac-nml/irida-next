@@ -59,5 +59,9 @@ module Activities
     def project_transfer_action
       @activity[:action] == 'project_namespace_transfer'
     end
+
+    def project_namespace_workflow_execution_action
+      @activity[:action] == 'workflow_execution_destroy'
+    end
   end
 end

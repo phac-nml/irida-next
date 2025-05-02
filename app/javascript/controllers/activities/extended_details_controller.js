@@ -10,9 +10,10 @@ export default class extends Controller {
     "tbody",
     "listContainer",
     "sampleCloneTableRow",
+    "workflowTableRow",
     "listRow",
     "ariaLabels",
-    "sampleName",
+    "itemName",
   ];
 
   static values = {
@@ -58,13 +59,18 @@ export default class extends Controller {
       }
 
       let indexRangeData = this.#data.slice(startingIndex, lastIndex);
+
+      // If activityType value is set, this else statement
+      // can be updated to call the relevant method required
+      // based on the activityType
       if (this.hasTbodyTarget) {
-        this.#generateTableRows(indexRangeData);
+        if (this.activityTypeValue === "workflow_execution_destroy") {
+          this.#generateWorkflowTableRows(indexRangeData);
+        } else {
+          this.#generateTableRows(indexRangeData);
+        }
       } else {
-        // If activityType value is set, this else statement
-        // can be updated to call the relevant method required
-        // based on the activityType
-        this.#generateListItems(indexRangeData);
+        this.#generateSampleListItems(indexRangeData);
       }
     }
   }
@@ -188,7 +194,7 @@ export default class extends Controller {
   }
 
   // Generate list items in format SAMPLE_NAME <SAMPLE_PUID>
-  #generateListItems(list_data) {
+  #generateSampleListItems(list_data) {
     if ("content" in document.createElement("template")) {
       const template = this.listRowTarget;
       const fragment = document.createDocumentFragment();
@@ -198,7 +204,7 @@ export default class extends Controller {
         const li = clone.querySelector("li");
 
         li.querySelector(
-          "span[data-activities--extended_details-target='sampleName']",
+          "span[data-activities--extended_details-target='itemName']",
         ).textContent = data["sample_name"];
         li.querySelector("p > span:nth-child(2)").textContent =
           data["sample_puid"];
@@ -207,6 +213,34 @@ export default class extends Controller {
       });
 
       this.listContainerTarget.appendChild(fragment);
+    }
+  }
+
+  // Generate table row in format WORKFLOW_NAME | WORKFLOW_ID
+  #generateWorkflowTableRows(table_data) {
+    if ("content" in document.createElement("template")) {
+      const template = this.workflowTableRowTarget;
+      const fragment = document.createDocumentFragment();
+      const workflowNameSelector =
+        "span[data-activities--extended_details-target='workflowName']";
+      const workflowIdSelector =
+        "span[data-activities--extended_details-target='workflowId']";
+
+      table_data.forEach((data) => {
+        const clone = template.content.cloneNode(true);
+        const tds = clone.querySelectorAll("td");
+
+        const updateTextContent = (tdIndex, content, selector) => {
+          const td = tds[tdIndex];
+          td.querySelector(selector).textContent = content;
+        };
+        updateTextContent(0, data["workflow_name"], workflowNameSelector);
+        updateTextContent(1, data["workflow_id"], workflowIdSelector);
+
+        fragment.appendChild(clone);
+      });
+
+      this.tbodyTarget.appendChild(fragment);
     }
   }
 }

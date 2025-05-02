@@ -338,3 +338,15 @@ group1_sample_import_create:
     }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
+
+project1_namespace_workflow_execution_destroy:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  key: "namespaces_project_namespace.workflow_executions.destroy"
+  parameters:
+    {
+      workflow_executions_deleted_count: 3,
+      action: "workflow_execution_destroy",
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

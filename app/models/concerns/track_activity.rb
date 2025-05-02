@@ -33,7 +33,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
   private
 
-  def project_activity(activity) # rubocop:disable Metrics/MethodLength
+  def project_activity(activity) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     activity_trackable = activity_trackable(activity, Project)
 
     base_params = {
@@ -52,6 +52,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     params = member_activity_params(activity, activity_trackable, base_params)
     params = group_link_params(activity, params)
     params = transfer_activity_parameters(params, activity)
+    params = workflow_execution_activity_params(params, activity)
 
     namespace_project_sample_activity_parameters(params, activity)
   end
@@ -210,6 +211,15 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
                     })
     end
 
+    params
+  end
+
+  def workflow_execution_activity_params(params, activity)
+    if activity.parameters[:action] == 'workflow_execution_destroy'
+      params.merge!({
+                      workflow_executions_deleted_count: activity.parameters[:workflow_executions_deleted_count]
+                    })
+    end
     params
   end
 

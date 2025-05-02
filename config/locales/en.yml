@@ -352,6 +352,8 @@ en:
         update_html: "%{user} updated sample %{href} attributes"
       transfer_html: "%{user} transferred project from namespace %{old_namespace} to %{new_namespace}"
       update_html: "%{user} updated project attributes"
+      workflow_executions:
+        destroy_html: "%{user} removed %{href} workflow executions from project"
     workflow_execution:
       automated_workflow:
         create_html: "%{user} setup automated pipeline %{href} for the project"
@@ -505,6 +507,11 @@ en:
             one: "%{user} transferred 1 sample to project %{target_project_puid}"
             other: "%{user} transferred %{count} samples to project %{target_project_puid}"
           title: Transferred Samples
+        workflow_execution_destroy:
+          description: "%{user} removed %{count} workflow executions from the project"
+          id: id
+          name: name
+          title: Deleted Workflow Executions
       load_more: Load more
       more_details: More details
     breadcrumb:

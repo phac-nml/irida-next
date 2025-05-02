@@ -3,7 +3,7 @@
 module Activities
   module Dialogs
     # Component for rendering extended details list items
-    class SampleActivityListDialogComponent < Component
+    class ActivityListDialogComponent < Component
       attr_accessor :activity, :activity_owner, :activity_type
 
       def initialize(activity: nil, activity_owner: nil)
@@ -18,7 +18,8 @@ module Activities
 
       # @title, @description, and @data are all required attributes
       def set_additional_params # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-        if @activity_type == 'sample_transfer'
+        case @activity_type
+        when 'sample_transfer'
           project_type = @activity.parameters[:source_project].present? ? 'source' : 'target'
 
           @title = I18n.t(:'components.activity.dialog.sample_transfer.title')
@@ -41,7 +42,7 @@ module Activities
 
           @data = @extended_details.details['transferred_samples_data'].to_json
 
-        elsif @activity_type == 'sample_destroy_multiple'
+        when 'sample_destroy_multiple'
           @title = I18n.t(:'components.activity.dialog.sample_destroy.title')
           @description = I18n.t(:'components.activity.dialog.sample_destroy.description',
                                 user: @activity_owner,

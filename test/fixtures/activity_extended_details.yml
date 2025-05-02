@@ -25,3 +25,10 @@ project2_namespace_sample_cloned_from_project1_activity_extended_details:
   activity_type: sample_clone
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
+
+project1_namespace_workflow_execution_destroy_activity_extended_details:
+  activity: project1_namespace_workflow_execution_destroy
+  extended_detail: project1_namespace_workflow_execution_destroy_extended_details
+  activity_type: workflow_execution_destroy
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

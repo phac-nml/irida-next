@@ -352,6 +352,8 @@ fr:
         update_html: "%{user} a mis à jour les attributs de l’échantillon %{href}"
       transfer_html: "%{user} a transféré le projet de l’espace de noms %{old_namespace} vers %{new_namespace}"
       update_html: "%{user} a mis à jour les attributs de projet"
+      workflow_executions:
+        destroy_html: "%{user} removed %{href} workflow executions from project"
     workflow_execution:
       automated_workflow:
         create_html: "%{user} a mis en place le pipeline automatisé %{href} pour le projet"
@@ -505,6 +507,11 @@ fr:
             one: "%{user} transferred 1 sample to project %{target_project_puid}"
             other: "%{user} transferred %{count} samples to project %{target_project_puid}"
           title: Transferred Samples
+        workflow_execution_destroy:
+          description: "%{user} removed %{count} workflow executions from the project"
+          id: id
+          name: name
+          title: Deleted Workflow Executions
       load_more: Charger plus
       more_details: More details
     breadcrumb:
@@ -1694,7 +1701,7 @@ fr:
         delete_files_button: Supprimer des fichiersDelete Files
         delete_metadata_button: Supprimer les métadonnéesDelete Metadata
         edit_button: Modifier cet échantillon
-        files: FichiersFiles
+        files: Fichiers
         files_ignored: 'Les fichiers fasta et fastq doivent être compressés. Les fichiers suivants ne peuvent pas être téléchargés :'
         history:
           modal:
