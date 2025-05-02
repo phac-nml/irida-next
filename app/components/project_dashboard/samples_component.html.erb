@@ -1,9 +1,10 @@
-<ol class="divide-y divide-slate-200 dark:divide-slate-700">
+<ol class="divide-y divide-slate-200 dark:divide-slate-700" aria-label="<%= t('.list_aria_label') %>"> <%# ♿ Add aria-label for screen reader context %>
   <% samples.each do |sample| %>
     <li class="py-3 sm:py-4 sample">
       <div class="flex items-center space-x-3 rtl:space-x-reverse">
         <span
           id="samples-icon-lg"
+          aria-hidden="true" <%# ♿ Hide decorative icon from screen readers %>
           class="
             inline-flex items-center justify-center p-2 rounded-full bg-blue-100
             dark:bg-blue-700 mr-2

@@ -1328,6 +1328,9 @@ fr:
       profile: Profil
     update:
       success: Profil mis à jour avec succès
+  project_dashboard:
+    samples_component:
+      list_aria_label: List of updated samples
   projects:
     activity:
       title: Activité du projet

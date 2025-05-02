@@ -1330,6 +1330,9 @@ en:
       profile: Profile
     update:
       success: Profile updated successfully
+  project_dashboard:
+    samples_component:
+      list_aria_label: List of updated samples
   projects:
     activity:
       title: Project Activity
