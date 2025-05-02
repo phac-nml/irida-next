@@ -65,8 +65,14 @@ export default class extends Controller {
     conditions = group.querySelectorAll(
       "fieldset[data-advanced-search-target='conditionsContainer']",
     );
-    //re-index all the form fields within the group
+    //re-index the fieldset legend & all the form fields within the group
     conditions.forEach((condition, index) => {
+      let legend = condition.querySelector("legend");
+      let updatedLegend = legend.innerHTML.replace(
+        /(Condition\s)\d+/,
+        "$1" + index,
+      );
+      legend.innerHTML = updatedLegend;
       let inputFields = condition.querySelectorAll("[name]");
       inputFields.forEach((inputField) => {
         let updatedInputFieldName = inputField.name.replace(
@@ -85,7 +91,10 @@ export default class extends Controller {
     let group_index = this.groupsContainerTargets.length;
     this.searchGroupsContainerTarget.insertAdjacentHTML(
       "beforeend",
-      this.groupTemplateTarget.innerHTML,
+      this.groupTemplateTarget.innerHTML.replace(
+        /GROUP_INDEX_PLACEHOLDER/g,
+        group_index,
+      ),
     );
     let newCondition = this.conditionTemplateTarget.innerHTML
       .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
@@ -107,8 +116,16 @@ export default class extends Controller {
   removeGroup(event) {
     if (this.groupsContainerTargets.length > 1) {
       event.currentTarget.parentElement.parentElement.remove();
-      //re-index all the form fields within all the groups
+      //re-index the fieldset legend & all the form fields within all the groups
       this.groupsContainerTargets.forEach((group, index) => {
+        let legend = Array.from(group.children).filter((child) =>
+          child.matches("legend"),
+        )[0];
+        let updatedLegend = legend.innerHTML.replace(
+          /(Group\s)\d+/,
+          "$1" + index,
+        );
+        legend.innerHTML = updatedLegend;
         let inputFields = group.querySelectorAll("[name]");
         inputFields.forEach((inputField) => {
           let updatedInputFieldName = inputField.name.replace(

@@ -5,7 +5,8 @@
     dark:border-slate-600 text-sm text-slate-500 dark:text-slate-400
   "
 >
-  <legend>Condition 1</legend>
+  <legend>Condition
+    <%= @condition_index %></legend>
   <%= @groups_form.fields_for :conditions, @condition do |conditions_form| %>
     <% invalid_field = @condition.errors.include?(:field) %>
     <div class="form-field w-1/3 <%= 'invalid' if invalid_field %>">
