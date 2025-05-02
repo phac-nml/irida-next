@@ -13,7 +13,8 @@
           <%= viral_icon(name: :beaker, classes: "h-5 w-5 text-blue-700 dark:text-blue-200") %>
         </span>
         <div class="flex-1 min-w-0">
-          <p class="text-sm font-medium text-slate-900 truncate dark:text-white">
+          <%# 💡 Allow sample name to wrap to two lines before truncating %>
+          <p class="text-sm font-medium text-slate-900 dark:text-white line-clamp-2">
             <%= link_to sample.name, sample_path(sample), class: "hover:underline" %>
           </p>
           <p class="text-sm text-slate-500 truncate dark:text-slate-400">
