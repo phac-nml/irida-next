@@ -46,7 +46,8 @@ module Projects
       assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
       click_on I18n.t(:'workflow_executions.table_component.run_id')
-      assert_selector "#workflow-executions-table table thead th[aria-sort='ascending']", text: I18n.t(:'workflow_executions.table_component.run_id').upcase
+      assert_selector "#workflow-executions-table table thead th[aria-sort='ascending']",
+                      text: I18n.t(:'workflow_executions.table_component.run_id').upcase
 
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 12
@@ -56,7 +57,8 @@ module Projects
       end
 
       click_on I18n.t(:'workflow_executions.table_component.run_id')
-      assert_selector "#workflow-executions-table table thead th[aria-sort='descending']", text: I18n.t(:'workflow_executions.table_component.run_id').upcase
+      assert_selector "#workflow-executions-table table thead th[aria-sort='descending']",
+                      text: I18n.t(:'workflow_executions.table_component.run_id').upcase
 
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 12
