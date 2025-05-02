@@ -28,7 +28,7 @@ module Viral
     end
 
     def generate_hsla_colour(name)
-      h = name.hash.abs % 360
+      h = (Digest::MD5.hexdigest name).to_i(16) % 360
       { border: "hsla(#{h}, 100%, var(--tw-avatar-border-lightness), var(--tw-avatar-bg-alpha))",
         background: "hsla(#{h}, 100%, var(--tw-avatar-bg-lightness), var(--tw-avatar-bg-alpha))" }
     end
