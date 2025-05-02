@@ -19,9 +19,7 @@ module Activities
       # @title, @description, @data, and @column_headers are all required attributes
       def set_additional_params # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         case @activity_type
-
         when 'sample_clone'
-
           @title = I18n.t(:'components.activity.dialog.sample_clone.title')
 
           project_type = @activity.parameters[:source_project].present? ? 'source' : 'target'

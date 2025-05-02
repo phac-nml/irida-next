@@ -64,9 +64,7 @@ export default class extends Controller {
       // can be updated to call the relevant method required
       // based on the activityType
       if (this.hasTbodyTarget) {
-        console.log("has tbody?");
         if (this.activityTypeValue === "workflow_execution_destroy") {
-          console.log("workflow?");
           this.#generateWorkflowTableRows(indexRangeData);
         } else {
           this.#generateTableRows(indexRangeData);
