@@ -31,13 +31,17 @@ module Projects
       assert_selector 'tr', count: 20 + header_row_count
 
       assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
-      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+      assert_selector "a[aria-label='#{I18n.t(:'viral.pagy.pagination_component.at_first_aria_label')}']" \
+                      '.cursor-not-allowed',
+                      exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
 
       click_on I18n.t(:'viral.pagy.pagination_component.next')
       assert_selector 'tr', count: 6 + header_row_count
 
       assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
-      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+      assert_selector "a[aria-label='#{I18n.t(:'viral.pagy.pagination_component.at_last_aria_label')}']" \
+                      '.cursor-not-allowed',
+                      exact_text: I18n.t(:'viral.pagy.pagination_component.next')
 
       click_on I18n.t(:'viral.pagy.pagination_component.previous')
       assert_selector 'tr', count: 20 + header_row_count
@@ -170,7 +174,9 @@ module Projects
       project_member = members(:project_twenty_six_group_member25)
 
       assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
-      assert_no_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+      assert_selector "a[aria-label='#{I18n.t(:'viral.pagy.pagination_component.at_first_aria_label')}']" \
+                      '.cursor-not-allowed',
+                      exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
 
       assert_selector 'th', text: I18n.t(:'members.table_component.user_email').upcase
 

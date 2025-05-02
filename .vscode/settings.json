@@ -27,19 +27,20 @@
   "files.insertFinalNewline": true,
   "editor.rulers": [120],
   "cSpell.words": [
-    "micha",
-    "irida",
-    "nofork",
-    "logfile",
-    "createuser",
-    "headful",
-    "tailwindcss",
-    "colour",
-    "datetime",
-    "keyfile",
-    "flowbite",
-    "checkin",
     "activerecord",
-    "rubocop"
+    "checkin",
+    "colour",
+    "createuser",
+    "datetime",
+    "describedby",
+    "flowbite",
+    "headful",
+    "irida",
+    "keyfile",
+    "logfile",
+    "micha",
+    "nofork",
+    "rubocop",
+    "tailwindcss"
   ]
 }

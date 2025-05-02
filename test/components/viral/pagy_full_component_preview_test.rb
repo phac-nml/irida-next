@@ -9,8 +9,9 @@ class PagyFullComponentPreviewTest < ApplicationSystemTestCase
     assert_selector 'nav.pagy.nav'
     assert_selector 'li span.cursor-not-allowed', text: I18n.t('viral.pagy.pagination_component.previous')
     assert_selector 'li > a', text: I18n.t('viral.pagy.pagination_component.next')
-    assert_selector 'li span.cursor-not-allowed', text: '1'
-    assert_selector 'li > a', count: '5'
+    assert_selector 'li span.cursor-not-allowed', text: I18n.t('viral.pagy.pagination_component.previous')
+    assert_selector 'li a[aria-current="page"]', text: '1', count: 1
+    assert_selector 'li > a', count: '6'
   end
 
   test 'renders empty state' do

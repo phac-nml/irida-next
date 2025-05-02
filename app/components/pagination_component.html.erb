@@ -1,33 +1,48 @@
-<div class="flex items-center justify-center space-x-2 mt-4">
+<nav
+  class="flex items-center justify-center space-x-2 mt-4"
+  role="navigation"
+  aria-label="<%= t("viral.pagy.pagination_component.aria_label") %>"
+  aria-describedby="pagination-info"
+  aria-live="polite"
+>
   <% if prev_url %>
     <%= link_to t("viral.pagy.pagination_component.previous"),
     prev_url,
     **link_arguments,
     class:
-      "flex items-center justify-center text-slate-700 bg-slate-200 border border-slate-300 font-medium rounded text-sm px-4 h-10 hover:bg-slate-300 hover:text-slate-900 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600 dark:hover:text-white" %>
+      "flex items-center justify-center text-slate-700 bg-slate-200 border border-slate-300 font-medium rounded text-sm px-4 h-10 hover:bg-slate-300 hover:text-slate-900 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600 dark:hover:text-white",
+    "aria-label": t("viral.pagy.pagination_component.previous_aria_label") %>
   <% else %>
-    <span
+    <a
+      href="javascript:void(0);"
+      aria-label="<%= t("viral.pagy.pagination_component.at_first_aria_label") %>"
       class="
-        flex items-center justify-center px-4 h-10 ms-0 leading-tight rounded border
-        border-slate-300 dark:border-slate-600 text-slate-600 bg-slate-100
-        dark:bg-slate-800 cursor-not-allowed
+        flex items-center justify-center px-4 h-10 ms-0 leading-tight border
+        border-slate-300 dark:border-slate-600 text-slate-600 bg-slate-300
+        dark:bg-slate-800 cursor-not-allowed rounded
       "
-    ><%= t("viral.pagy.pagination_component.previous") %></span>
+    ><%= t("viral.pagy.pagination_component.previous") %></a>
   <% end %>
   <% if next_url %>
     <%= link_to t("viral.pagy.pagination_component.next"),
     next_url,
     **link_arguments,
     class:
-      "flex items-center justify-center text-slate-700 bg-slate-200 border border-slate-300 font-medium rounded text-sm px-4 h-10 hover:bg-slate-300 hover:text-slate-900 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600 dark:hover:text-white" %>
+      "flex items-center justify-center text-slate-700 bg-slate-200 border border-slate-300 font-medium rounded text-sm px-4 h-10 hover:bg-slate-300 hover:text-slate-900 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600 dark:hover:text-white",
+    "aria-label": t("viral.pagy.pagination_component.next_aria_label") %>
   <% else %>
-    <span
+    <a
+      href="javascript:void(0);"
+      aria-label="<%= t("viral.pagy.pagination_component.at_last_aria_label") %>"
       class="
-        flex items-center justify-center px-4 h-10 leading-tight rounded border
-        border-slate-300 dark:border-slate-600 text-slate-600 bg-slate-100
-        dark:bg-slate-800 cursor-not-allowed
+        flex items-center justify-center px-4 h-10 ms-0 leading-tight border
+        border-slate-300 dark:border-slate-600 text-slate-600 bg-slate-300
+        dark:bg-slate-800 cursor-not-allowed rounded
       "
-    ><%= t("viral.pagy.pagination_component.next") %></span>
+    ><%= t("viral.pagy.pagination_component.next") %></a>
   <% end %>
-</div>
-<p class="text-center m-4 text-slate-700 dark:text-slate-200"><%== info %></p>
+</nav>
+<p
+  id="pagination-info"
+  class="text-center m-4 text-slate-700 dark:text-slate-200"
+><%== info %></p>
