@@ -41,7 +41,7 @@ class BaseSpreadsheetImportService < BaseService
     raise FileImportError, I18n.t('services.spreadsheet_import.invalid_file_extension')
   end
 
-  def download_batch_import_file(extension)
+  def download_batch_import_file(extension) # rubocop:disable Metrics/MethodLength
     begin
       @temp_import_file.binmode
       @file.download do |chunk|
@@ -50,13 +50,18 @@ class BaseSpreadsheetImportService < BaseService
     ensure
       @temp_import_file.close
     end
+
     @spreadsheet = if extension.eql? '.tsv'
                      Roo::Spreadsheet.open(@temp_import_file.path,
                                            { extension: '.csv', csv_options: { col_sep: "\t" } })
                    else
                      Roo::Spreadsheet.open(@temp_import_file.path, extension:)
                    end
-    @spreadsheet.parse(clean: true)
+    begin
+      @spreadsheet.parse(clean: true)
+    rescue CSV::MalformedCSVError
+      raise FileImportError, I18n.t('services.spreadsheet_import.csv_file_malformed')
+    end
   end
 
   def validate_file_headers
