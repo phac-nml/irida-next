@@ -107,7 +107,7 @@
     <fieldset
       data-advanced-search-target="conditionsContainer"
       class="
-        flex space-x-2 p-4 m-4 items-start rounded-md border border-slate-300
+        flex space-x-2 p-4 mb-4 items-start rounded-md border border-slate-300
         dark:border-slate-600 text-sm text-slate-500 dark:text-slate-400
       "
     >
@@ -154,12 +154,12 @@
     <fieldset
       data-advanced-search-target="groupsContainer"
       class="
-        rounded-lg border border-slate-300 dark:border-slate-600 text-sm text-slate-500
-        dark:text-slate-400
+        p-4 rounded-lg border border-slate-300 dark:border-slate-600 text-sm
+        text-slate-500 dark:text-slate-400
       "
     >
       <legend>Group 1</legend>
-      <div class="flex justify-end pb-4 px-4">
+      <div class="flex justify-end">
         <%= viral_button(data: { action: "advanced-search#addCondition" }) do %>
           <%= t(".add_condition_button") %>
         <% end %>
