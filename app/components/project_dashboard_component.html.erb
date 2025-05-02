@@ -1,42 +1,48 @@
-<div class="grid grid-cols-9 gap-4 p-4 pl-0">
-  <div class="col-span-4">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <%# Information Section - Spans full width on medium screens and up %>
+  <div class="md:col-span-2 order-1 p-4 bg-white border rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-800">
+    <p class="mb-4 text-xl font-semibold text-slate-900 dark:text-white"><%= t(:"components.project_dashboard.info_title") %></p>
+    <%= render ProjectDashboard::InformationComponent.new(project: @project) %>
+  </div>
+
+  <%# Activity Section - Second item visually on small screens, first column on medium screens %>
+  <div class="order-2 md:order-2">
     <div
       class="
         p-4 bg-white border rounded-lg border-slate-200 dark:border-slate-700
-        dark:bg-slate-800
+        dark:bg-slate-800 h-full flex flex-col
       "
     >
-      <p class="mb-4 text-xl font-semibold text-slate-900 dark:text-white"><%= t(:"components.project_dashboard.activity_title") %></p>
-      <%= render ProjectDashboard::ActivityComponent.new(activities: @activities) %>
-
+      <div class="flex-grow">
+        <p class="mb-4 text-xl font-semibold text-slate-900 dark:text-white"><%= t(:"components.project_dashboard.activity_title") %></p>
+        <%= render ProjectDashboard::ActivityComponent.new(activities: @activities) %>
+      </div>
       <%= link_to t(:"components.project_dashboard.view_more"),
       namespace_project_activity_path(@project.namespace.parent, @project),
       class:
-        "button button--state-default button--size-default dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600" %>
+        "mt-4 button button--state-default button--size-default dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600" %>
     </div>
   </div>
-  <div class="col-span-4">
+
+  <%# Samples Section - Third item visually on small screens, second column on medium screens %>
+  <div class="order-3 md:order-3">
     <div
       class="
         p-4 bg-white border rounded-lg border-slate-200 dark:border-slate-700
-        dark:bg-slate-800
+        dark:bg-slate-800 h-full flex flex-col
       "
     >
-      <p class="mb-4 text-xl font-semibold text-slate-900 dark:text-white"><%= t(:"components.project_dashboard.samples_title") %></p>
-      <%= render ProjectDashboard::SamplesComponent.new(
-        samples: @samples,
-        project: @project,
-      ) %>
+      <div class="flex-grow">
+        <p class="mb-4 text-xl font-semibold text-slate-900 dark:text-white"><%= t(:"components.project_dashboard.samples_title") %></p>
+        <%= render ProjectDashboard::SamplesComponent.new(
+          samples: @samples,
+          project: @project,
+        ) %>
+      </div>
       <%= link_to t(:"components.project_dashboard.view_more"),
       namespace_project_samples_path(@project.namespace.parent, @project),
       class:
-        "button button--state-default button--size-default dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600" %>
-    </div>
-  </div>
-  <div class="col-span-1">
-    <div>
-      <p class="font-semibold text-slate-900 dark:text-white"><%= t(:"components.project_dashboard.info_title") %></p>
-      <%= render ProjectDashboard::InformationComponent.new(project: @project) %>
+        "mt-4 button button--state-default button--size-default dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600" %>
     </div>
   </div>
 </div>
