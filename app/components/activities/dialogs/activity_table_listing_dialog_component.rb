@@ -57,6 +57,17 @@ module Activities
             I18n.t(:'components.activity.dialog.workflow_execution_destroy.name'),
             I18n.t(:'components.activity.dialog.workflow_execution_destroy.id')
           ]
+
+        when 'group_import_samples'
+          @title = I18n.t(:'components.activity.dialog.import_samples.title')
+          @description = I18n.t('components.activity.dialog.import_samples.description.group',
+                                user: @activity_owner,
+                                count: @activity.parameters[:imported_samples_count])
+          @data = @extended_details.details['imported_samples_data']['group_data'].to_json
+          @column_headers = [
+            I18n.t(:'components.activity.dialog.import_samples.sample'),
+            I18n.t(:'components.activity.dialog.import_samples.project')
+          ]
         end
       end
 

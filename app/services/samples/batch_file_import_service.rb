@@ -17,7 +17,7 @@ module Samples
       else
         @static_project = namespace.project
       end
-      @imported_samples_data = {}
+      @imported_samples_data = { project_data: {}, group_data: [] }
       @project_puid_map = {}
       super(namespace, user, blob_id, required_headers, 0, params)
     end
@@ -73,7 +73,7 @@ module Samples
       end
       cleanup_files
 
-      create_activities unless @imported_samples_data.empty?
+      create_activities unless @imported_samples_data[:project_data].empty?
 
       response
     end
@@ -163,11 +163,16 @@ module Samples
     end
 
     def add_imported_sample_to_data(sample, project_puid)
-      if @imported_samples_data.key?(project_puid)
-        @imported_samples_data[project_puid] << { sample_name: sample.name, sample_puid: sample.puid }
+      if @imported_samples_data[:project_data].key?(project_puid)
+        @imported_samples_data[:project_data][project_puid] << { sample_name: sample.name, sample_puid: sample.puid }
       else
-        @imported_samples_data[project_puid] = [{ sample_name: sample.name, sample_puid: sample.puid }]
+        @imported_samples_data[:project_data][project_puid] = [{ sample_name: sample.name, sample_puid: sample.puid }]
       end
+
+      return unless @namespace.group_namespace?
+
+      @imported_samples_data[:group_data] << { sample_name: sample.name, sample_puid: sample.puid,
+                                               project_puid: project_puid }
     end
 
     def create_activities # rubocop:disable Metrics/MethodLength
@@ -175,7 +180,7 @@ module Samples
       ext_details = ExtendedDetail.create!(details: {
                                              imported_samples_data: @imported_samples_data
                                            })
-      @imported_samples_data.each do |project_puid, sample_data|
+      @imported_samples_data[:project_data].each do |project_puid, sample_data|
         imported_samples_count = sample_data.count
         project_namespace = Namespaces::ProjectNamespace.find_by(puid: project_puid)
         project_activity = project_namespace.create_activity(
