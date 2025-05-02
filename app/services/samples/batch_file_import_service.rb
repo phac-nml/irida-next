@@ -177,10 +177,14 @@ module Samples
 
     def create_activities # rubocop:disable Metrics/MethodLength
       total_imported_samples_count = 0
-      ext_details = ExtendedDetail.create!(details: {
-                                             imported_samples_data: @imported_samples_data
-                                           })
+
       @imported_samples_data[:project_data].each do |project_puid, sample_data|
+        project_ext_details = ExtendedDetail.create!(
+          details: {
+            imported_samples_data: @imported_samples_data[:project_data][project_puid]
+          }
+        )
+
         imported_samples_count = sample_data.count
         project_namespace = Namespaces::ProjectNamespace.find_by(puid: project_puid)
         project_activity = project_namespace.create_activity(
@@ -193,13 +197,18 @@ module Samples
           }
         )
 
-        project_activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
+        project_activity.create_activity_extended_detail(extended_detail_id: project_ext_details.id,
                                                          activity_type: 'project_import_samples')
         total_imported_samples_count += imported_samples_count
       end
 
       return unless @namespace.group_namespace?
 
+      group_ext_details = ExtendedDetail.create!(
+        details: {
+          imported_samples_data: @imported_samples_data[:group_data]
+        }
+      )
       group_activity = @namespace.create_activity key: 'group.import_samples.create',
                                                   owner: current_user,
                                                   parameters:
@@ -207,7 +216,7 @@ module Samples
                                    imported_samples_count: total_imported_samples_count,
                                    action: 'group_import_samples'
                                  }
-      group_activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
+      group_activity.create_activity_extended_detail(extended_detail_id: group_ext_details.id,
                                                      activity_type: 'group_import_samples')
     end
   end

@@ -63,7 +63,7 @@ module Activities
           @description = I18n.t('components.activity.dialog.import_samples.description.group',
                                 user: @activity_owner,
                                 count: @activity.parameters[:imported_samples_count])
-          @data = @extended_details.details['imported_samples_data']['group_data'].to_json
+          @data = @extended_details.details['imported_samples_data'].to_json
           @column_headers = [
             I18n.t(:'components.activity.dialog.import_samples.sample'),
             I18n.t(:'components.activity.dialog.import_samples.project')

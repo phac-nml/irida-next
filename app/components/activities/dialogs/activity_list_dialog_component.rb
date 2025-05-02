@@ -54,7 +54,7 @@ module Activities
           @description = I18n.t('components.activity.dialog.import_samples.description.project',
                                 user: @activity_owner,
                                 count: @activity.parameters[:imported_samples_count])
-          @data = @extended_details.details['imported_samples_data']['project_data'][@activity.trackable.puid].to_json
+          @data = @extended_details.details['imported_samples_data'].to_json
         end
       end
 
