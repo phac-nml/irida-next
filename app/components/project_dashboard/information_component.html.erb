@@ -8,25 +8,39 @@
 
 <hr class="h-px my-4 border-0 bg-slate-200 dark:bg-slate-600"/>
 
-<%# Container for stats - always horizontal row %>
-<div class="flex flex-row gap-4">
+<%# Container for stats - horizontal row on small screens, vertical column on medium+ screens %>
+<div class="flex flex-row lg:flex-col gap-4">
 
   <%# Item 1: Samples %>
   <%# Use accessible dark blue colors %>
-  <div class="flex-1 p-4 rounded-lg shadow-sm bg-blue-50 dark:bg-blue-900 dark:border dark:border-blue-700">
+  <div
+    class="
+      flex-1 p-4 rounded-lg shadow-sm bg-blue-50 dark:bg-blue-900 dark:border
+      dark:border-blue-700
+    "
+  >
     <%# Small screen layout (< md): Icon + Count on same line, Tooltip on Icon %>
     <div class="block md:hidden">
       <%# Flex container for icon and count %>
       <div class="flex items-center justify-start gap-2">
         <%= viral_tooltip(title: t(:"components.project_dashboard.information.number_of_samples")) do %>
           <%# Icon in a colored circle - accessible dark blue. Add ID for aria-labelledby %>
-          <span id="samples-icon-sm" class="inline-flex items-center justify-center p-2 rounded-full bg-blue-100 dark:bg-blue-700">
-             <%# Icon color - accessible dark blue %>
-             <%= viral_icon(name: :beaker, classes: "h-5 w-5 text-blue-700 dark:text-blue-200") %>
+          <span
+            id="samples-icon-sm"
+            class="
+              inline-flex items-center justify-center p-2 rounded-full bg-blue-100
+              dark:bg-blue-700
+            "
+          >
+            <%# Icon color - accessible dark blue %>
+            <%= viral_icon(name: :beaker, classes: "h-5 w-5 text-blue-700 dark:text-blue-200") %>
           </span>
         <% end %>
         <%# Count (large text next to icon). Associate with icon via aria-labelledby %>
-        <div class="text-2xl font-semibold text-slate-900 dark:text-slate-100" aria-labelledby="samples-icon-sm">
+        <div
+          class="text-2xl font-semibold text-slate-900 dark:text-slate-100"
+          aria-labelledby="samples-icon-sm"
+        >
           <%= @project.samples.count %>
         </div>
       </div>
@@ -37,17 +51,29 @@
       <%# Icon and Label row %>
       <div class="flex items-center mb-1">
         <%# Icon in a colored circle - accessible dark blue. Add ID for aria-labelledby %>
-        <span id="samples-icon-lg" class="inline-flex items-center justify-center p-2 rounded-full bg-blue-100 dark:bg-blue-700 mr-2">
-           <%# Icon color - accessible dark blue %>
-           <%= viral_icon(name: :beaker, classes: "h-5 w-5 text-blue-700 dark:text-blue-200") %>
+        <span
+          id="samples-icon-lg"
+          class="
+            inline-flex items-center justify-center p-2 rounded-full bg-blue-100
+            dark:bg-blue-700 mr-2
+          "
+        >
+          <%# Icon color - accessible dark blue %>
+          <%= viral_icon(name: :beaker, classes: "h-5 w-5 text-blue-700 dark:text-blue-200") %>
         </span>
         <%# Label (visible text next to icon) - Make semibold. Accessible dark text %>
-        <span id="samples-label-lg" class="text-sm font-semibold text-slate-600 dark:text-slate-300">
+        <span
+          id="samples-label-lg"
+          class="text-sm font-semibold text-slate-600 dark:text-slate-300"
+        >
           <%= t(:"components.project_dashboard.information.number_of_samples") %>
         </span>
       </div>
       <%# Count (large text below icon/label). Associate with icon and label via aria-labelledby %>
-      <div class="text-2xl font-semibold text-slate-900 dark:text-slate-100 pl-11" aria-labelledby="samples-icon-lg samples-label-lg">
+      <div
+        class="text-2xl font-semibold text-slate-900 dark:text-slate-100 pl-11"
+        aria-labelledby="samples-icon-lg samples-label-lg"
+      >
         <%= @project.samples.count %>
       </div>
     </div>
@@ -55,20 +81,37 @@
 
   <%# Item 2: Workflows %>
   <%# Use accessible dark teal colors %>
-  <div class="flex-1 p-4 rounded-lg shadow-sm bg-teal-50 dark:bg-teal-900 dark:border dark:border-teal-700">
-     <%# Small screen layout (< md): Icon + Count on same line, Tooltip on Icon %>
+  <div
+    class="
+      flex-1 p-4 rounded-lg shadow-sm bg-teal-50 dark:bg-teal-900 dark:border
+      dark:border-teal-700
+    "
+  >
+    <%# Small screen layout (< md): Icon + Count on same line, Tooltip on Icon %>
     <div class="block md:hidden">
-       <%# Flex container for icon and count %>
+      <%# Flex container for icon and count %>
       <div class="flex items-center justify-start gap-2">
         <%= viral_tooltip(title: t(:"components.project_dashboard.information.number_of_automated_workflow_executions")) do %>
           <%# Icon in a colored circle - accessible dark teal. Add ID for aria-labelledby %>
-          <span id="workflows-icon-sm" class="inline-flex items-center justify-center p-2 rounded-full bg-teal-100 dark:bg-teal-700">
-             <%# Icon color - accessible dark teal %>
-             <%= viral_icon(name: :command_line, classes: "h-5 w-5 text-teal-700 dark:text-teal-200") %>
+          <span
+            id="workflows-icon-sm"
+            class="
+              inline-flex items-center justify-center p-2 rounded-full bg-teal-100
+              dark:bg-teal-700
+            "
+          >
+            <%# Icon color - accessible dark teal %>
+            <%= viral_icon(
+              name: :command_line,
+              classes: "h-5 w-5 text-teal-700 dark:text-teal-200",
+            ) %>
           </span>
         <% end %>
         <%# Count (large text next to icon). Associate with icon via aria-labelledby %>
-        <div class="text-2xl font-semibold text-slate-900 dark:text-slate-100" aria-labelledby="workflows-icon-sm">
+        <div
+          class="text-2xl font-semibold text-slate-900 dark:text-slate-100"
+          aria-labelledby="workflows-icon-sm"
+        >
           <%= @project.namespace.automated_workflow_executions.count %>
         </div>
       </div>
@@ -79,17 +122,34 @@
       <%# Icon and Label row %>
       <div class="flex items-center mb-1">
         <%# Icon in a colored circle - accessible dark teal. Add ID for aria-labelledby %>
-        <span id="workflows-icon-lg" class="inline-flex items-center justify-center p-2 rounded-full bg-teal-100 dark:bg-teal-700 mr-2">
-           <%# Icon color - accessible dark teal %>
-           <%= viral_icon(name: :command_line, classes: "h-5 w-5 text-teal-700 dark:text-teal-200") %>
+        <span
+          id="workflows-icon-lg"
+          class="
+            inline-flex items-center justify-center p-2 rounded-full bg-teal-100
+            dark:bg-teal-700 mr-2
+          "
+        >
+          <%# Icon color - accessible dark teal %>
+          <%= viral_icon(
+            name: :command_line,
+            classes: "h-5 w-5 text-teal-700 dark:text-teal-200",
+          ) %>
         </span>
         <%# Label (visible text next to icon) - Make semibold. Accessible dark text %>
-        <span id="workflows-label-lg" class="text-sm font-semibold text-slate-600 dark:text-slate-300">
-          <%= t(:"components.project_dashboard.information.number_of_automated_workflow_executions") %>
+        <span
+          id="workflows-label-lg"
+          class="text-sm font-semibold text-slate-600 dark:text-slate-300"
+        >
+          <%= t(
+            :"components.project_dashboard.information.number_of_automated_workflow_executions",
+          ) %>
         </span>
       </div>
       <%# Count (large text below icon/label). Associate with icon and label via aria-labelledby %>
-      <div class="text-2xl font-semibold text-slate-900 dark:text-slate-100 pl-11" aria-labelledby="workflows-icon-lg workflows-label-lg">
+      <div
+        class="text-2xl font-semibold text-slate-900 dark:text-slate-100 pl-11"
+        aria-labelledby="workflows-icon-lg workflows-label-lg"
+      >
         <%= @project.namespace.automated_workflow_executions.count %>
       </div>
     </div>
@@ -97,20 +157,37 @@
 
   <%# Item 3: Members %>
   <%# Use accessible dark indigo colors %>
-  <div class="flex-1 p-4 rounded-lg shadow-sm bg-indigo-50 dark:bg-indigo-900 dark:border dark:border-indigo-700">
-     <%# Small screen layout (< md): Icon + Count on same line, Tooltip on Icon %>
+  <div
+    class="
+      flex-1 p-4 rounded-lg shadow-sm bg-indigo-50 dark:bg-indigo-900 dark:border
+      dark:border-indigo-700
+    "
+  >
+    <%# Small screen layout (< md): Icon + Count on same line, Tooltip on Icon %>
     <div class="block md:hidden">
-       <%# Flex container for icon and count %>
+      <%# Flex container for icon and count %>
       <div class="flex items-center justify-start gap-2">
         <%= viral_tooltip(title: t(:"components.project_dashboard.information.number_of_members")) do %>
           <%# Icon in a colored circle - accessible dark indigo. Add ID for aria-labelledby %>
-          <span id="members-icon-sm" class="inline-flex items-center justify-center p-2 rounded-full bg-indigo-100 dark:bg-indigo-700">
-             <%# Icon color - accessible dark indigo %>
-             <%= viral_icon(name: :users, classes: "h-5 w-5 text-indigo-700 dark:text-indigo-200") %>
+          <span
+            id="members-icon-sm"
+            class="
+              inline-flex items-center justify-center p-2 rounded-full bg-indigo-100
+              dark:bg-indigo-700
+            "
+          >
+            <%# Icon color - accessible dark indigo %>
+            <%= viral_icon(
+              name: :users,
+              classes: "h-5 w-5 text-indigo-700 dark:text-indigo-200",
+            ) %>
           </span>
         <% end %>
         <%# Count (large text next to icon). Associate with icon via aria-labelledby %>
-        <div class="text-2xl font-semibold text-slate-900 dark:text-slate-100" aria-labelledby="members-icon-sm">
+        <div
+          class="text-2xl font-semibold text-slate-900 dark:text-slate-100"
+          aria-labelledby="members-icon-sm"
+        >
           <%= @project.namespace.project_members.without_automation_bots.count %>
         </div>
       </div>
@@ -121,24 +198,39 @@
       <%# Icon and Label row %>
       <div class="flex items-center mb-1">
         <%# Icon in a colored circle - accessible dark indigo. Add ID for aria-labelledby %>
-        <span id="members-icon-lg" class="inline-flex items-center justify-center p-2 rounded-full bg-indigo-100 dark:bg-indigo-700 mr-2">
-           <%# Icon color - accessible dark indigo %>
-           <%= viral_icon(name: :users, classes: "h-5 w-5 text-indigo-700 dark:text-indigo-200") %>
+        <span
+          id="members-icon-lg"
+          class="
+            inline-flex items-center justify-center p-2 rounded-full bg-indigo-100
+            dark:bg-indigo-700 mr-2
+          "
+        >
+          <%# Icon color - accessible dark indigo %>
+          <%= viral_icon(
+            name: :users,
+            classes: "h-5 w-5 text-indigo-700 dark:text-indigo-200",
+          ) %>
         </span>
         <%# Label (visible text next to icon) - Make semibold. Accessible dark text %>
-        <span id="members-label-lg" class="text-sm font-semibold text-slate-600 dark:text-slate-300">
-           <%= t(:"components.project_dashboard.information.number_of_members") %>
+        <span
+          id="members-label-lg"
+          class="text-sm font-semibold text-slate-600 dark:text-slate-300"
+        >
+          <%= t(:"components.project_dashboard.information.number_of_members") %>
         </span>
       </div>
       <%# Count (large text below icon/label). Associate with icon and label via aria-labelledby %>
-      <div class="text-2xl font-semibold text-slate-900 dark:text-slate-100 pl-11" aria-labelledby="members-icon-lg members-label-lg">
+      <div
+        class="text-2xl font-semibold text-slate-900 dark:text-slate-100 pl-11"
+        aria-labelledby="members-icon-lg members-label-lg"
+      >
         <%= @project.namespace.project_members.without_automation_bots.count %>
       </div>
     </div>
   </div>
 
-</div> <%# End of stats container %>
-
+</div>
+<%# End of stats container %>
 
 <hr class="h-px my-4 border-0 bg-slate-200 dark:bg-slate-600"/>
 
