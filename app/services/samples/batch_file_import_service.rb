@@ -175,17 +175,18 @@ module Samples
                                                project_puid: project_puid }
     end
 
-    def create_activities # rubocop:disable Metrics/MethodLength
+    def create_activities # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       total_imported_samples_count = 0
 
       @imported_samples_data[:project_data].each do |project_puid, sample_data|
+        imported_samples_count = sample_data.count
         project_ext_details = ExtendedDetail.create!(
           details: {
-            imported_samples_data: @imported_samples_data[:project_data][project_puid]
+            imported_samples_data: @imported_samples_data[:project_data][project_puid],
+            imported_samples_count:
           }
         )
 
-        imported_samples_count = sample_data.count
         project_namespace = Namespaces::ProjectNamespace.find_by(puid: project_puid)
         project_activity = project_namespace.create_activity(
           key: 'namespaces_project_namespace.import_samples.create',
@@ -206,7 +207,8 @@ module Samples
 
       group_ext_details = ExtendedDetail.create!(
         details: {
-          imported_samples_data: @imported_samples_data[:group_data]
+          imported_samples_data: @imported_samples_data[:group_data],
+          imported_samples_count: total_imported_samples_count
         }
       )
       group_activity = @namespace.create_activity key: 'group.import_samples.create',
