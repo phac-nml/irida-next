@@ -4,46 +4,62 @@ module Activities
   module Dialogs
     # Component for rendering extended details table
     class ActivityTableListingDialogComponent < Component
-      attr_accessor :activity, :activity_owner
+      attr_accessor :activity, :activity_owner, :activity_type
 
       def initialize(activity: nil, activity_owner: nil)
         @activity = activity
         @activity[:parameters] = @activity.parameters.transform_keys(&:to_sym)
         @extended_details = activity.extended_details
         @activity_owner = activity_owner
+        @activity_type = @activity.parameters[:action]
         set_additional_params
         set_pagination_aria_labels
       end
 
       # @title, @description, @data, and @column_headers are all required attributes
       def set_additional_params # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-        return unless @activity.parameters[:action] == 'sample_clone'
+        case @activity_type
 
-        @title = I18n.t(:'components.activity.dialog.sample_clone.title')
+        when 'sample_clone'
 
-        project_type = @activity.parameters[:source_project].present? ? 'source' : 'target'
+          @title = I18n.t(:'components.activity.dialog.sample_clone.title')
 
-        @description = if project_type == 'source'
-                         I18n.t(
-                           :'components.activity.dialog.sample_clone.source_project_description',
-                           user: @activity_owner,
-                           count: @activity.parameters[:cloned_samples_count],
-                           source_project_puid: @activity.parameters[:source_project_puid]
-                         )
-                       else
-                         I18n.t(
-                           :'components.activity.dialog.sample_clone.target_project_description',
-                           user: @activity_owner,
-                           count: @activity.parameters[:cloned_samples_count],
-                           target_project_puid: @activity.parameters[:target_project_puid]
-                         )
-                       end
+          project_type = @activity.parameters[:source_project].present? ? 'source' : 'target'
 
-        @data = @extended_details.details['cloned_samples_data'].to_json
-        @column_headers = [
-          I18n.t(:'components.activity.dialog.sample_clone.copied_from'),
-          I18n.t(:'components.activity.dialog.sample_clone.copied_to')
-        ]
+          @description = if project_type == 'source'
+                           I18n.t(
+                             :'components.activity.dialog.sample_clone.source_project_description',
+                             user: @activity_owner,
+                             count: @activity.parameters[:cloned_samples_count],
+                             source_project_puid: @activity.parameters[:source_project_puid]
+                           )
+                         else
+                           I18n.t(
+                             :'components.activity.dialog.sample_clone.target_project_description',
+                             user: @activity_owner,
+                             count: @activity.parameters[:cloned_samples_count],
+                             target_project_puid: @activity.parameters[:target_project_puid]
+                           )
+                         end
+
+          @data = @extended_details.details['cloned_samples_data'].to_json
+          @column_headers = [
+            I18n.t(:'components.activity.dialog.sample_clone.copied_from'),
+            I18n.t(:'components.activity.dialog.sample_clone.copied_to')
+          ]
+
+        when 'workflow_execution_destroy'
+          @title = I18n.t(:'components.activity.dialog.workflow_execution_destroy.title')
+          @description = I18n.t(:'components.activity.dialog.workflow_execution_destroy.description',
+                                user: @activity_owner,
+                                count: @activity.parameters[:workflow_executions_deleted_count])
+          @data = @extended_details.details['deleted_workflow_executions_data'].to_json
+
+          @column_headers = [
+            I18n.t(:'components.activity.dialog.workflow_execution_destroy.name'),
+            I18n.t(:'components.activity.dialog.workflow_execution_destroy.id')
+          ]
+        end
       end
 
       def set_pagination_aria_labels

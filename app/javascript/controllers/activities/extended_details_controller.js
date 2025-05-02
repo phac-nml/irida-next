@@ -10,6 +10,7 @@ export default class extends Controller {
     "tbody",
     "listContainer",
     "sampleCloneTableRow",
+    "workflowTableRow",
     "listRow",
     "ariaLabels",
     "itemName",
@@ -58,17 +59,20 @@ export default class extends Controller {
       }
 
       let indexRangeData = this.#data.slice(startingIndex, lastIndex);
+
+      // If activityType value is set, this else statement
+      // can be updated to call the relevant method required
+      // based on the activityType
       if (this.hasTbodyTarget) {
-        this.#generateTableRows(indexRangeData);
-      } else {
-        // If activityType value is set, this else statement
-        // can be updated to call the relevant method required
-        // based on the activityType
+        console.log("has tbody?");
         if (this.activityTypeValue === "workflow_execution_destroy") {
-          this.#generateWorkflowListItems(indexRangeData);
+          console.log("workflow?");
+          this.#generateWorkflowTableRows(indexRangeData);
         } else {
-          this.#generateSampleListItems(indexRangeData);
+          this.#generateTableRows(indexRangeData);
         }
+      } else {
+        this.#generateSampleListItems(indexRangeData);
       }
     }
   }
@@ -214,26 +218,29 @@ export default class extends Controller {
     }
   }
 
-  // Generate list items in format WORKFLOW_NAME <WORKFLOW_ID>
-  #generateWorkflowListItems(listData) {
+  // Generate table row in format WORKFLOW_NAME | WORKFLOW_ID
+  #generateWorkflowTableRows(table_data) {
     if ("content" in document.createElement("template")) {
-      const template = this.listRowTarget;
+      const template = this.workflowTableRowTarget;
       const fragment = document.createDocumentFragment();
+      const workflowNameSelector =
+        "span[data-activities--extended_details-target='workflowName']";
 
-      listData.forEach((data) => {
+      table_data.forEach((data) => {
         const clone = template.content.cloneNode(true);
-        const li = clone.querySelector("li");
+        const tds = clone.querySelectorAll("td");
 
-        li.querySelector(
-          "span[data-activities--extended_details-target='itemName']",
-        ).textContent = data["workflow_name"];
-        li.querySelector("p > span:nth-child(2)").textContent =
-          data["workflow_id"];
+        const updateTextContent = (tdIndex, workflowName) => {
+          const td = tds[tdIndex];
+          td.querySelector(workflowNameSelector).textContent = workflowName;
+        };
+        updateTextContent(0, data["workflow_name"]);
+        updateTextContent(1, data["workflow_id"]);
 
         fragment.appendChild(clone);
       });
 
-      this.listContainerTarget.appendChild(fragment);
+      this.tbodyTarget.appendChild(fragment);
     }
   }
 }

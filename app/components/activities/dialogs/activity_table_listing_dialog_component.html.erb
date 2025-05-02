@@ -2,6 +2,7 @@
   <% dialog.with_header(title: @title) %>
   <div
     data-controller="activities--extended_details"
+    data-activities--extended_details-activity-type-value="<%= activity_type %>"
     data-activities--extended_details-num-cols-value="<%= @column_headers.length %>"
   >
     <div class="mb-6 text-lg font-normal text-slate-500 dark:text-slate-400">
@@ -67,6 +68,18 @@
         </td>
         <td class="px-3 py-3"><span class="mr-2" data-activities--extended_details-target="sampleName"></span>
           <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
+        </td>
+      </tr>
+    </template>
+
+    <template
+      id="workflowTableRow"
+      data-activities--extended_details-target="workflowTableRow"
+    >
+      <tr>
+        <td class="px-3 py-3"><span class="mr-2" data-activities--extended_details-target="workflowName"></span>
+        </td>
+        <td class="px-3 py-3"><span class="mr-2" data-activities--extended_details-target="workflowName"></span>
         </td>
       </tr>
     </template>

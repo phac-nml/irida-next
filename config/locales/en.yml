@@ -509,6 +509,8 @@ en:
           title: Transferred Samples
         workflow_execution_destroy:
           description: "%{user} removed %{count} workflow executions from the project"
+          id: id
+          name: name
           title: Deleted Workflow Executions
       load_more: Load more
       more_details: More details
