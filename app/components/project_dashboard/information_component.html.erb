@@ -33,12 +33,14 @@
             "
           >
             <%# Icon color - accessible dark blue %>
-            <%= viral_icon(name: :beaker, classes: "h-5 w-5 text-blue-700 dark:text-blue-200") %>
+            <%# 📝 Reduced icon size from h-5 w-5 to h-4 w-4 %>
+            <%= viral_icon(name: :beaker, classes: "h-4 w-4 text-blue-700 dark:text-blue-200") %>
           </span>
         <% end %>
         <%# Count (large text next to icon). Associate with icon via aria-labelledby %>
+        <%# 📝 Reduced text size from text-2xl to text-xl %>
         <div
-          class="text-2xl font-semibold text-slate-900 dark:text-slate-100"
+          class="text-xl font-semibold text-slate-900 dark:text-slate-100"
           aria-labelledby="samples-icon-sm"
         >
           <%= @project.samples.count %>
@@ -59,6 +61,7 @@
           "
         >
           <%# Icon color - accessible dark blue %>
+          <%# ⏪ Reverted icon size from h-4 w-4 back to h-5 w-5 %>
           <%= viral_icon(name: :beaker, classes: "h-5 w-5 text-blue-700 dark:text-blue-200") %>
         </span>
         <%# Label (visible text next to icon) - Make semibold. Accessible dark text %>
@@ -70,6 +73,7 @@
         </span>
       </div>
       <%# Count (large text below icon/label). Associate with icon and label via aria-labelledby %>
+      <%# ⏪ Reverted text size from text-xl back to text-2xl and padding from pl-9 back to pl-11 %>
       <div
         class="text-2xl font-semibold text-slate-900 dark:text-slate-100 pl-11"
         aria-labelledby="samples-icon-lg samples-label-lg"
@@ -101,15 +105,17 @@
             "
           >
             <%# Icon color - accessible dark teal %>
+            <%# 📝 Reduced icon size from h-5 w-5 to h-4 w-4 %>
             <%= viral_icon(
               name: :command_line,
-              classes: "h-5 w-5 text-teal-700 dark:text-teal-200",
+              classes: "h-4 w-4 text-teal-700 dark:text-teal-200",
             ) %>
           </span>
         <% end %>
         <%# Count (large text next to icon). Associate with icon via aria-labelledby %>
+        <%# 📝 Reduced text size from text-2xl to text-xl %>
         <div
-          class="text-2xl font-semibold text-slate-900 dark:text-slate-100"
+          class="text-xl font-semibold text-slate-900 dark:text-slate-100"
           aria-labelledby="workflows-icon-sm"
         >
           <%= @project.namespace.automated_workflow_executions.count %>
@@ -130,6 +136,7 @@
           "
         >
           <%# Icon color - accessible dark teal %>
+          <%# ⏪ Reverted icon size from h-4 w-4 back to h-5 w-5 %>
           <%= viral_icon(
             name: :command_line,
             classes: "h-5 w-5 text-teal-700 dark:text-teal-200",
@@ -146,6 +153,7 @@
         </span>
       </div>
       <%# Count (large text below icon/label). Associate with icon and label via aria-labelledby %>
+      <%# ⏪ Reverted text size from text-xl back to text-2xl and padding from pl-9 back to pl-11 %>
       <div
         class="text-2xl font-semibold text-slate-900 dark:text-slate-100 pl-11"
         aria-labelledby="workflows-icon-lg workflows-label-lg"
@@ -177,15 +185,17 @@
             "
           >
             <%# Icon color - accessible dark indigo %>
+            <%# 📝 Reduced icon size from h-5 w-5 to h-4 w-4 %>
             <%= viral_icon(
               name: :users,
-              classes: "h-5 w-5 text-indigo-700 dark:text-indigo-200",
+              classes: "h-4 w-4 text-indigo-700 dark:text-indigo-200",
             ) %>
           </span>
         <% end %>
         <%# Count (large text next to icon). Associate with icon via aria-labelledby %>
+        <%# 📝 Reduced text size from text-2xl to text-xl %>
         <div
-          class="text-2xl font-semibold text-slate-900 dark:text-slate-100"
+          class="text-xl font-semibold text-slate-900 dark:text-slate-100"
           aria-labelledby="members-icon-sm"
         >
           <%= @project.namespace.project_members.without_automation_bots.count %>
@@ -206,6 +216,7 @@
           "
         >
           <%# Icon color - accessible dark indigo %>
+          <%# ⏪ Reverted icon size from h-4 w-4 back to h-5 w-5 %>
           <%= viral_icon(
             name: :users,
             classes: "h-5 w-5 text-indigo-700 dark:text-indigo-200",
@@ -220,6 +231,7 @@
         </span>
       </div>
       <%# Count (large text below icon/label). Associate with icon and label via aria-labelledby %>
+      <%# ⏪ Reverted text size from text-xl back to text-2xl and padding from pl-9 back to pl-11 %>
       <div
         class="text-2xl font-semibold text-slate-900 dark:text-slate-100 pl-11"
         aria-labelledby="members-icon-lg members-label-lg"
