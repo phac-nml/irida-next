@@ -58,7 +58,6 @@ export default class extends Controller {
       ) {
         lastIndex = (this.#currentDataIndexes.length % 5) + startingIndex;
       }
-      console.log(this.#data);
       let indexRangeData = this.#data.slice(startingIndex, lastIndex);
 
       // If activityType value is set, this else statement

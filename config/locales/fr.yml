@@ -476,6 +476,13 @@ fr:
     activity:
       dialog:
         close: Close
+        import_samples:
+          description:
+            group: "%{user} imported %{count} samples to group"
+            project: "%{user} imported %{count} samples to project"
+          project: Project
+          sample: Sample
+          title: Imported Samples
         pagination:
           aria_label: Pagination
           at_first_aria_label: You are on the first page
