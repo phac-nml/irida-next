@@ -36,7 +36,8 @@ module Activities
 
     def sample_action
       %w[sample_create sample_update attachment_create attachment_destroy
-         metadata_update sample_destroy sample_destroy_multiple import_samples].include?(@activity[:action])
+         metadata_update sample_destroy sample_destroy_multiple project_import_samples
+         group_import_samples].include?(@activity[:action])
     end
 
     def sample_transfer_action
