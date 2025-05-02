@@ -515,7 +515,6 @@ en:
       load_more: Load more
       more_details: More details
     breadcrumb:
-      aria_label: Breadcrumb
       dropdown:
         aria_label: Breadcrumb dropdown
       navigation_aria_label: Breadcrumb navigation
