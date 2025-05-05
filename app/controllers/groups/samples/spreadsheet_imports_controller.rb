@@ -26,13 +26,8 @@ module Groups
       end
 
       def group_projects
-        @group_projects_for_static_selection = []
-        group_projects = authorized_scope(Project, type: :relation, as: :group_projects,
-                                                   scope_options: { group: @group }).includes({ namespace: :route })
-        group_projects.each do |project|
-          @group_projects_for_static_selection << ["#{project.namespace.route.path} (#{project.namespace.puid})",
-                                                   project.id]
-        end
+        @group_projects = authorized_scope(Project, type: :relation, as: :group_projects,
+                                                    scope_options: { group: @group })
       end
 
       def spreadsheet_import_params

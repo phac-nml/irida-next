@@ -6,7 +6,7 @@
     <%= turbo_frame_tag "import_spreadsheet_dialog_alert" %>
 
     <div
-      data-controller="spreadsheet-import viral--sortable-lists--two-lists-selection attachment-upload"
+      data-controller="spreadsheet-import viral--sortable-lists--two-lists-selection attachment-upload <% if @namespace.group_namespace? %> viral--select2 <% end %>"
       data-viral--sortable-lists--two-lists-selection-selected-list-value="<%= t(".selected") %>"
       data-viral--sortable-lists--two-lists-selection-available-list-value="<%= t(".available") %>"
       data-viral--sortable-lists--two-lists-selection-field-name-value="spreadsheet_import[metadata_fields][]"
@@ -14,8 +14,10 @@
       data-spreadsheet-import-select-description-value='<%= t(".select_sample_description_column") %>'
       data-spreadsheet-import-select-project-value='<%= t(".select_project_puid_column") %>'
       data-attachment-upload-button-text-value='<%=t(".uploading") %>'
+      data-viral--select2-enable-controller-coordination-value="<%= true %>"
       data-action="
         spreadsheet-import:sendMetadata->viral--sortable-lists--two-lists-selection#updateMetadataListing
+        viral--select2:sendSelection->spreadsheet-import#checkFormInputsReadyForSubmit
       "
     >
 
@@ -107,23 +109,36 @@
                           disabled: true,
                           class:
                             "mb-2 disabled:bg-slate-50 disabled:border disabled:border-slate-300 disabled:rounded-lg disabled:w-full disabled:p-2.5 disabled:dark:bg-slate-700 disabled:dark:border-slate-600 disabled:dark:placeholder-slate-400" %>
-              <%= form.label :static_project_id,
-                         t(".static_project"),
-                         class:
-                           "block mb-2 text-sm font-medium text-slate-900 dark:text-white" %>
+              <% form_id = "static-project-select" %>
+              <label
+                for="<%= form_id %>"
+                class="
+                  block mb-2 text-sm font-medium text-slate-900 dark:text-white
+                "
+              ><%= t(".static_project") %></label>
               <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-300"><%= t(".static_project_description") %></p>
-              <%= form.select :static_project_id,
-                          @group_projects_for_static_selection,
-                          { prompt: t(".select_static_project") },
-                          required: false,
-                          data: {
-                            "spreadsheet-import-target": "staticProject",
-                            action:
-                              "change->spreadsheet-import#checkFormInputsReadyForSubmit",
-                          },
-                          disabled: true,
-                          class:
-                            "disabled:bg-slate-50 disabled:border disabled:border-slate-300 disabled:rounded-lg disabled:w-full disabled:p-2.5 disabled:dark:bg-slate-700 disabled:dark:border-slate-600 disabled:dark:placeholder-slate-400" %>
+
+              <%= viral_select2(form:, name: :static_project_id, id: form_id, placeholder: t(".select_static_project")) do |select| %>
+                <% @group_projects.each do |project| %>
+                  <% select.with_option(
+                      value: project.id,
+                      label: project.namespace.full_path,
+                    ) do %>
+                    <span
+                      class="
+                        text-slate-900 dark:text-slate-400 font-semibold block pointer-events-none
+                      "
+                    >
+                      <%= project.namespace.full_path %>
+                      <%= render PuidComponent.new(puid: project.puid, show_clipboard: false) %>
+                    </span>
+                  <% end %>
+                <% end %>
+                <%= select.with_empty_state do %>
+                  <%= "empty" %>
+                <% end %>
+              <% end %>
+
             </div>
           <% end %>
           <template

@@ -21,6 +21,11 @@ export default class Select2Controller extends Controller {
     "submitButton",
   ];
 
+  static values = {
+    // conditional to allow select2 to send values to other stimulus controllers
+    enableControllerCoordination: { type: Boolean, default: false },
+  };
+
   #itemSelected = false;
   #cachedInputValue = "";
   #currentItemIndex = -1;
@@ -226,6 +231,15 @@ export default class Select2Controller extends Controller {
     }
   }
 
+  // handles cross-talk with other stimulus controllers, dispatches select2's input value
+  sendSelection() {
+    this.dispatch("sendSelection", {
+      detail: {
+        content: { value: this.hiddenTarget.value },
+      },
+    });
+  }
+
   // --- Private helpers ---
 
   #setItemSelected(selected) {
@@ -253,6 +267,10 @@ export default class Select2Controller extends Controller {
     // Ensure itemSelected state reflects a valid selection update
     this.#setItemSelected(true);
 
+    // update select2 value for other controllers
+    if (this.enableControllerCoordinationValue) {
+      this.sendSelection();
+    }
     // Note: Hiding dropdown and focusing input are now handled back in the `select` method
     // after #updateSelection completes successfully.
   }
@@ -271,6 +289,11 @@ export default class Select2Controller extends Controller {
       }
       this.inputTarget.focus();
       this.#updateAriaActiveDescendant();
+
+      // update select2 value for other controllers
+      if (this.enableControllerCoordinationValue) {
+        this.sendSelection();
+      }
     } catch (error) {
       this.#handleError(error, "resetInput");
     }
@@ -432,6 +455,9 @@ export default class Select2Controller extends Controller {
       this.hiddenTarget.value = "";
       this.#cachedInputValue = "";
       this.#setItemSelected(false);
+      if (this.enableControllerCoordinationValue) {
+        this.sendSelection();
+      }
       return;
     }
     this.inputTarget.value = foundItem ? foundItem.dataset.label : "";
