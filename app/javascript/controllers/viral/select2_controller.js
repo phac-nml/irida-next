@@ -228,15 +228,6 @@ export default class Select2Controller extends Controller {
     }
   }
 
-  // handles cross-talk with other stimulus controllers, dispatches select2's input value
-  sendSelection() {
-    this.dispatch("sendSelection", {
-      detail: {
-        content: { value: this.hiddenTarget.value },
-      },
-    });
-  }
-
   // --- Private helpers ---
 
   #setItemSelected(selected) {
