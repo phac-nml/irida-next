@@ -166,18 +166,18 @@ export default class extends Controller {
     ].indexOf(condition);
 
     if (["", "exists", "not_exists"].includes(operator)) {
-      value.classList.add("invisible");
+      value.classList.add("hidden");
       let inputs = value.querySelectorAll("input");
       inputs.forEach((input) => {
         input.value = "";
       });
     } else if (["in", "not_in"].includes(operator)) {
-      value.classList.remove("invisible");
+      value.classList.remove("hidden");
       value.outerHTML = this.listValueTemplateTarget.innerHTML
         .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
         .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
     } else {
-      value.classList.remove("invisible");
+      value.classList.remove("hidden");
       value.outerHTML = this.valueTemplateTarget.innerHTML
         .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
         .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
