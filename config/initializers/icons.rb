@@ -19,45 +19,60 @@
 module ICONS
   # :section: Phosphor Icons
   PHOSPHOR = {
-  alert:        { library: :phosphor, name: :warning, variant: :duotone },
-  clipboard:    { library: :phosphor, name: :clipboard, variant: :duotone },
-  data_exports: { library: :phosphor, name: :export, variant: :duotone },
-  file:         { library: :phosphor, name: :file, variant: :duotone },
-  files:        { library: :phosphor, name: :files, variant: :duotone },
-  groups:       { library: :phosphor, name: "squares-four", variant: :duotone },
-  list_bullets: { library: :phosphor, name: "list-bullets", variant: :duotone },
-  projects:     { library: :phosphor, name: :stack, variant: :duotone },
-  samples:      { library: :phosphor, name: :flask, variant: :duotone },
-  settings:     { library: :phosphor, name: "gear-six", variant: :duotone },
-  user:         { library: :phosphor, name: :user_circle, variant: :duotone },
-  users:        { library: :phosphor, name: :users, variant: :duotone },
-  workflows:    { library: :phosphor, name: "terminal-window", variant: :duotone }
+  clipboard:    [:clipboard, {}],
+  export:       [:export, {}],
+  file:         [:file, {}],
+  files:        [:files, {}],
+  squares_four: [:"squares-four", {}],
+  list_bullets: [:"list-bullets", {}],
+  stack:        [:stack, {}],
+  flask:        [:flask, {}],
+  terminal_window: [:"terminal-window", {}],
+  gear_six:     [:"gear-six", {}],
+  plus_circle:  ["plus-circle", {}],
+  question:     ["question", {}],
+  sidebar:      [:sidebar, {}],
+  user_circle:  [:user_circle, {}],
+  users:        [:users, {}],
+  workflows:    [:"terminal-window", {}] # Note: Duplicate of terminal_window above, kept for potential semantic difference
 }.freeze
 
   # :section: Heroicons
   HEROICONS = {
-    beaker:     { library: :heroicons, name: :beaker, variant: :solid },
-    menu:       { library: :heroicons, name: :bars_3, variant: :outline },
-    close:      { library: :heroicons, name: :x_mark, variant: :solid },
+    beaker:     [:beaker, {library: :heroicons, variant: :solid}],
+  }.freeze
+
+  DEFAULTS = {
+    irida_logo: [:flask, {variant: :fill}],
+    projects:   PHOSPHOR[:stack],
+    groups:     PHOSPHOR[:squares_four],
+    samples:    PHOSPHOR[:flask],
+    workflows:  PHOSPHOR[:terminal_window],
+    data_exports: PHOSPHOR[:export],
+    settings:   PHOSPHOR[:gear_six],
+    user:       PHOSPHOR[:user_circle],
+    users:      PHOSPHOR[:users],
   }.freeze
 
   # :section: Unified lookup
-  ICONS = PHOSPHOR.merge(HEROICONS).freeze
+  # Internal storage of raw definitions
+  RAW_DEFINITIONS = PHOSPHOR.merge(HEROICONS).merge(DEFAULTS).freeze
 
-  # Lookup by symbol or string
+  # Lookup by symbol or string, returns processed format [name, options_hash]
   # @param key [Symbol, String]
-  # @return [Hash, nil]
+  # @return [Array, nil] Icon definition `[name, merged_options]` or nil if not found.
   def self.[](key)
-    ICONS[key.to_sym]
+    RAW_DEFINITIONS[key.to_sym]
   end
 
-  # Dot notation (ICONS.project)
+  # Dot notation (ICONS.project), returns processed format [name, options_hash]
   def self.method_missing(method, *args, &block)
-    return ICONS[method] if ICONS.key?(method)
+    definition = RAW_DEFINITIONS[method]
+    return definition if definition
     super
   end
 
   def self.respond_to_missing?(method, include_private = false)
-    ICONS.key?(method) || super
+    RAW_DEFINITIONS.key?(method) || super
   end
 end

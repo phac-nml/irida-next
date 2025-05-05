@@ -8,7 +8,9 @@
     "
   >
     <%= render Layout::Sidebar::SelectedComponent.new(selected: selected) %>
-    <%= icon @icon[:name], variant: @icon[:variant], library: @icon[:library], class: ['size-5', 'text-primary-600 dark:text-primary-400': selected] %>
+    <%# @icon is already the [name, options] array from ICONS initializer %>
+    <% name, base_options = @icon %>
+    <%= helpers.icon name, **base_options, class: class_names('size-5', 'text-primary-600 dark:text-primary-400': selected) %>
     <span class="ml-2 grow">
       <%= label %>
     </span>
