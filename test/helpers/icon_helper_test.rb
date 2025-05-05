@@ -19,7 +19,7 @@ class IconHelperTest < ActionView::TestCase
     end.join(' ')
 
     # Return a simple, predictable HTML structure for testing
-    "<div data-icon=\"#{name}\" #{options_str}>Icon: #{name}</div>".html_safe
+    "<div data-test-selector=\"#{name}\" #{options_str}>Icon: #{name}</div>".html_safe
   end
 
   # Test that render_icon returns nil for unknown icon key
@@ -36,7 +36,7 @@ class IconHelperTest < ActionView::TestCase
 
     # Basic structure validation
     expected_icon_name, = ICONS[:irida_logo]
-    assert_match(/data-icon="#{expected_icon_name}"/, result,
+    assert_match(/data-test-selector="#{expected_icon_name}"/, result,
                  "Should include the icon name '#{expected_icon_name}' in the output")
   end
 
@@ -48,7 +48,7 @@ class IconHelperTest < ActionView::TestCase
 
     # Validate that the icon name is included in the output
     expected_icon_name, = ICONS[:clipboard]
-    assert_match(/data-icon="#{expected_icon_name}"/, result,
+    assert_match(/data-test-selector="#{expected_icon_name}"/, result,
                  "Should include the icon name '#{expected_icon_name}' in the output")
   end
 
@@ -60,7 +60,7 @@ class IconHelperTest < ActionView::TestCase
 
     # Validate that the icon name is included in the output
     expected_icon_name, = ICONS[:beaker]
-    assert_match(/data-icon="#{expected_icon_name}"/, result,
+    assert_match(/data-test-selector="#{expected_icon_name}"/, result,
                  "Should include the icon name '#{expected_icon_name}' in the output")
   end
 
