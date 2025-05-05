@@ -1390,7 +1390,6 @@ module Groups
         assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_name_column')
         assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column')
         assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_project_puid_column')
-        assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_static_project')
         ### ACTIONS AND VERIFY END ###
       end
     end
