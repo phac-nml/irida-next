@@ -119,18 +119,6 @@
               <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-300"><%= t(".static_project_description") %></p>
 
               <%= viral_select2(form:, name: :static_project_id, id: form_id, placeholder: t(".select_static_project"), required: false) do |select| %>
-                <% select.with_option(
-                      value: '',
-                      label: 'test',
-                    ) do %>
-                  <span
-                    class="
-                      text-slate-900 dark:text-slate-400 font-semibold block pointer-events-none
-                    "
-                  >
-                    <%= t(".select_static_project") %>
-                  </span>
-                <% end %>
                 <% @group_projects.each do |project| %>
                   <% select.with_option(
                       value: project.id,
