@@ -19,23 +19,25 @@
 module ICONS
   # :section: Phosphor Icons
   PHOSPHOR = {
-    projects:    { library: :phosphor, name: :stack, variant: :duotone },
-    groups:      { library: :phosphor, name: "squares-four", variant: :duotone },
-    workflows:   { library: :phosphor, name: "terminal-window", variant: :duotone },
-    data_exports: { library: :phosphor, name: :export, variant: :duotone },
-    clipboard: { library: :phosphor, name: :clipboard, variant: :duotone },
-    users:       { library: :phosphor, name: :users, variant: :duotone },
-    user:       { library: :phosphor, name: :user_circle, variant: :duotone },
-    alert:      { library: :phosphor, name: :warning, variant: :duotone },
-    # ...add more as needed
-  }.freeze
+  alert:        { library: :phosphor, name: :warning, variant: :duotone },
+  clipboard:    { library: :phosphor, name: :clipboard, variant: :duotone },
+  data_exports: { library: :phosphor, name: :export, variant: :duotone },
+  file:         { library: :phosphor, name: :file, variant: :duotone },
+  files:        { library: :phosphor, name: :files, variant: :duotone },
+  groups:       { library: :phosphor, name: "squares-four", variant: :duotone },
+  list_bullets: { library: :phosphor, name: "list-bullets", variant: :duotone },
+  projects:     { library: :phosphor, name: :stack, variant: :duotone },
+  settings:     { library: :phosphor, name: "gear-six", variant: :duotone },
+  user:         { library: :phosphor, name: :user_circle, variant: :duotone },
+  users:        { library: :phosphor, name: :users, variant: :duotone },
+  workflows:    { library: :phosphor, name: "terminal-window", variant: :duotone }
+}.freeze
 
   # :section: Heroicons
   HEROICONS = {
-    search:     { library: :heroicons, name: :magnifying_glass, variant: :outline },
+    beaker:     { library: :heroicons, name: :beaker, variant: :solid },
     menu:       { library: :heroicons, name: :bars_3, variant: :outline },
     close:      { library: :heroicons, name: :x_mark, variant: :solid },
-    # ...add more as needed
   }.freeze
 
   # :section: Unified lookup

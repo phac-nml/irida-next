@@ -14,20 +14,20 @@
           ) %>
           <%= render section.with_item(
             url: namespace_project_members_path,
-            icon: "users",
+            icon: ICONS.users,
             label: t(:"projects.sidebar.members"),
             selected: @current_page == t(:"projects.sidebar.members"),
           ) %>
           <%= render section.with_item(
             url: namespace_project_samples_path,
-            icon: "beaker",
+            icon: ICONS.beaker,
             label: t(:"projects.sidebar.samples"),
             selected: @current_page == t(:"projects.sidebar.samples"),
           ) %>
           <% if allowed_to?(:view_attachments?, @project) %>
             <%= render section.with_item(
               url: namespace_project_attachments_path,
-              icon: "document_text",
+              icon: ICONS.files,
               label: t(:"projects.sidebar.files"),
               selected: @current_page == t(:"projects.sidebar.files"),
             ) %>
@@ -35,7 +35,7 @@
           <% if allowed_to?(:view_history?, @project) %>
             <%= render section.with_item(
               url: namespace_project_activity_path,
-              icon: "list_bullet",
+              icon: ICONS.list_bullets,
               label: t(:"projects.sidebar.activity"),
               selected: @current_page == t(:"projects.sidebar.activity"),
             ) %>
@@ -43,7 +43,7 @@
           <% if allowed_to?(:view_workflow_executions?, @project.namespace) && @pipelines_enabled %>
             <%= render section.with_item(
               url: namespace_project_workflow_executions_path,
-              icon: "command_line",
+              icon: ICONS.workflows,
               label: t(:"projects.sidebar.workflow_executions"),
               selected: @current_page == t(:"projects.sidebar.workflow_executions"),
             ) %>
@@ -51,7 +51,7 @@
           <% if allowed_to?(:update?, @project) %>
             <%= render section.with_multi_level_menu(
               title: t(:"projects.sidebar.settings"),
-              icon: "cog_6_tooth",
+              icon: ICONS.settings,
               selectable_pages: [
                 t(:"projects.sidebar.general"),
                 t(:"projects.sidebar.bot_accounts"),
