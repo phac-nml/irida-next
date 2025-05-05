@@ -7,27 +7,27 @@
         <%= navigation.with_header(label: t(:"general.default_sidebar.title")) %>
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
-            icon: "rectangle_stack",
+            icon: ICONS[:projects],
             label: t(:"general.default_sidebar.projects"),
             url: dashboard_projects_path,
             selected: @current_page == t(:"general.default_sidebar.projects"),
           ) %>
           <%= render section.with_item(
-            icon: "squares_2x2",
+            icon: ICONS[:groups],
             label: t(:"general.default_sidebar.groups"),
             url: dashboard_groups_path,
             selected: @current_page == t(:"general.default_sidebar.groups"),
           ) %>
           <% if @pipelines_enabled %>
             <%= render section.with_item(
-              icon: "command_line",
+              icon: ICONS[:workflows],
               label: t(:"general.default_sidebar.workflows"),
               url: workflow_executions_path,
               selected: @current_page == t(:"general.default_sidebar.workflows"),
             ) %>
           <% end %>
           <%= render section.with_item(
-            icon: "arrow_up_on_square_stack",
+            icon: ICONS[:data_exports],
             label: t(:"general.default_sidebar.data_exports"),
             url: data_exports_path,
             selected: @current_page == t(:"general.default_sidebar.data_exports"),
