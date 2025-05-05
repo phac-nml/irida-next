@@ -108,7 +108,7 @@ module IconHelper
     # Merge base options with provided options, giving priority to provided options for non-class keys
     final_options = base_options.except(:class).merge(options.except(:class))
     final_options[:class] = merged_classes if merged_classes.present?
-    final_options[:'data-test-selector'] = name
+    final_options[:'data-test-selector'] = name if Rails.env.test?
 
     # Call the underlying icon helper (assuming it's named `icon`)
     # Adjust if the actual helper used by the project (e.g., heroicon) is different.
