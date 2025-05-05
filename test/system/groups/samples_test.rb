@@ -537,8 +537,8 @@ module Groups
       click_button I18n.t(:'advanced_search_component.title')
       within '#advanced-search-dialog' do
         assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
-        within all("div[data-advanced-search-target='groupsContainer']")[0] do
-          within all("div[data-advanced-search-target='conditionsContainer']")[0] do
+        within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
+          within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
             find("select[name$='[field]']").find("option[value='puid']").select_option
             find("select[name$='[operator]']").find("option[value='in']").select_option
             find("input[name$='[value][]']").fill_in with: "#{@sample1.puid}, #{@sample2.puid}"
@@ -582,8 +582,8 @@ module Groups
       click_button I18n.t(:'advanced_search_component.title')
       within '#advanced-search-dialog' do
         assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
-        within all("div[data-advanced-search-target='groupsContainer']")[0] do
-          within all("div[data-advanced-search-target='conditionsContainer']")[0] do
+        within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
+          within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
             find("select[name$='[field]']").find("option[value='metadata.unique.metadata.field']").select_option
             find("select[name$='[operator]']").find("option[value='=']").select_option
             find("input[name$='[value]']").fill_in with: @sample28.metadata['unique.metadata.field']
@@ -629,8 +629,8 @@ module Groups
       click_button I18n.t(:'advanced_search_component.title')
       within '#advanced-search-dialog' do
         assert_selector 'h1', text: I18n.t(:'advanced_search_component.title')
-        within all("div[data-advanced-search-target='groupsContainer']")[0] do
-          within all("div[data-advanced-search-target='conditionsContainer']")[0] do
+        within all("fieldset[data-advanced-search-target='groupsContainer']")[0] do
+          within all("fieldset[data-advanced-search-target='conditionsContainer']")[0] do
             find("select[name$='[field]']").find("option[value='metadata.unique.metadata.field']").select_option
             find("select[name$='[operator]']").find("option[value='exists']").select_option
           end
