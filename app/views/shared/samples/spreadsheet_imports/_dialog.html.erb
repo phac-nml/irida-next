@@ -118,7 +118,7 @@
               ><%= t(".static_project") %></label>
               <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-300"><%= t(".static_project_description") %></p>
 
-              <%= viral_select2(form:, name: :static_project_id, id: form_id, placeholder: t(".select_static_project")) do |select| %>
+              <%= viral_select2(form:, name: :static_project_id, id: form_id, placeholder: t(".select_static_project"), required: false) do |select| %>
                 <% @group_projects.each do |project| %>
                   <% select.with_option(
                       value: project.id,
@@ -135,7 +135,7 @@
                   <% end %>
                 <% end %>
                 <%= select.with_empty_state do %>
-                  <%= "empty" %>
+                  <%= t(".static_project_empty_state") %>
                 <% end %>
               <% end %>
 
