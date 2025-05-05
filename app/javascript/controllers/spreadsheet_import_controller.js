@@ -229,6 +229,7 @@ export default class extends Controller {
   }
 
   checkFormInputsReadyForSubmit() {
+    console.log("in check form inputs");
     // set default to true so project imports can by pass project selection validation
     let projectSelected = true;
     let staticProjectSelected = true;

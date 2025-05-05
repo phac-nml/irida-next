@@ -15,10 +15,13 @@
       data-spreadsheet-import-select-project-value='<%= t(".select_project_puid_column") %>'
       data-attachment-upload-button-text-value='<%=t(".uploading") %>'
       data-viral--select2-enable-controller-coordination-value="<%= true %>"
+      <% if @namespace.group_namespace? %>
+      data-viral--select2-spreadsheet-import-outlet='#spreadsheet-import-dialog-content'
+      <% end %>
       data-action="
         spreadsheet-import:sendMetadata->viral--sortable-lists--two-lists-selection#updateMetadataListing
-        viral--select2:sendSelection->spreadsheet-import#checkFormInputsReadyForSubmit
       "
+      id="spreadsheet-import-dialog-content"
     >
 
       <%= form_for(:spreadsheet_import, url: url, method: :post) do |form| %>

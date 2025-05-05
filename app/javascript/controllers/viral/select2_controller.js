@@ -21,10 +21,7 @@ export default class Select2Controller extends Controller {
     "submitButton",
   ];
 
-  static values = {
-    // conditional to allow select2 to send values to other stimulus controllers
-    enableControllerCoordination: { type: Boolean, default: false },
-  };
+  static outlets = ["spreadsheet-import"];
 
   #itemSelected = false;
   #cachedInputValue = "";
@@ -267,9 +264,8 @@ export default class Select2Controller extends Controller {
     // Ensure itemSelected state reflects a valid selection update
     this.#setItemSelected(true);
 
-    // update select2 value for other controllers
-    if (this.enableControllerCoordinationValue) {
-      this.sendSelection();
+    if (this.hasSpreadsheetImportOutlet) {
+      this.spreadsheetImportOutlet.checkFormInputsReadyForSubmit();
     }
     // Note: Hiding dropdown and focusing input are now handled back in the `select` method
     // after #updateSelection completes successfully.
@@ -290,9 +286,8 @@ export default class Select2Controller extends Controller {
       this.inputTarget.focus();
       this.#updateAriaActiveDescendant();
 
-      // update select2 value for other controllers
-      if (this.enableControllerCoordinationValue) {
-        this.sendSelection();
+      if (this.hasSpreadsheetImportOutlet) {
+        this.spreadsheetImportOutlet.checkFormInputsReadyForSubmit();
       }
     } catch (error) {
       this.#handleError(error, "resetInput");
@@ -455,8 +450,8 @@ export default class Select2Controller extends Controller {
       this.hiddenTarget.value = "";
       this.#cachedInputValue = "";
       this.#setItemSelected(false);
-      if (this.enableControllerCoordinationValue) {
-        this.sendSelection();
+      if (this.hasSpreadsheetImportOutlet) {
+        this.spreadsheetImportOutlet.checkFormInputsReadyForSubmit();
       }
       return;
     }
