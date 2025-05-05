@@ -9,7 +9,7 @@ module Activities
       end
 
       def import_samples_action
-        @activity[:action] == 'import_samples'
+        @activity[:action] == 'group_import_samples'
       end
     end
   end

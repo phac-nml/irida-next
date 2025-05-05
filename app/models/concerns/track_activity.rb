@@ -254,7 +254,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   end
 
   def add_samples_import_params(params, activity)
-    return params unless activity.parameters[:action] == 'import_samples'
+    return params unless %w[group_import_samples project_import_samples].include?(activity.parameters[:action])
 
     params.merge(
       imported_samples_count: activity.parameters[:imported_samples_count]

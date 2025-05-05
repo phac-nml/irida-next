@@ -322,5 +322,66 @@ module Samples
       assert_equal 'user', @project.samples.where(name: 'my new sample 1')[0].metadata_provenance['metadata1']['source']
       assert_equal 'user', @project.samples.where(name: 'my new sample 2')[0].metadata_provenance['metadata1']['source']
     end
+
+    test 'should create activities for sample import' do
+      file = Rack::Test::UploadedFile.new(
+        Rails.root.join('test/fixtures/files/batch_sample_import/group/valid_with_multiple_project_puids.csv')
+      )
+      blob = ActiveStorage::Blob.create_and_upload!(
+        io: file,
+        filename: file.original_filename,
+        content_type: file.content_type
+      )
+      # 3 activities created, 1 at the group level, and 1 for each of 2 projects
+      assert_difference -> { Sample.count } => 2,
+                        -> { PublicActivity::Activity.count } => 3 do
+                          Samples::BatchFileImportService.new(@group, @john_doe, blob.id,
+                                                              @default_params).execute
+                        end
+      # verify group activity
+      activity = PublicActivity::Activity.where(
+        key: 'group.import_samples.create'
+      ).order(created_at: :desc).first
+
+      assert_equal 'group.import_samples.create', activity.key
+      assert_equal @john_doe, activity.owner
+      assert_equal 2, activity.parameters[:imported_samples_count]
+      first_sample = Sample.find_by(name: 'my new sample 1')
+      second_sample = Sample.find_by(name: 'my new sample 2')
+      assert_equal [
+        { 'sample_name' => first_sample.name, 'sample_puid' => first_sample.puid,
+          'project_puid' => 'INXT_PRJ_AAAAAAAAAA' },
+        { 'sample_name' => second_sample.name, 'sample_puid' => second_sample.puid,
+          'project_puid' => 'INXT_PRJ_AAAAAAAAAB' }
+      ],
+                   activity.extended_details.details['imported_samples_data']
+      assert_equal 'group_import_samples', activity.parameters[:action]
+
+      # verify project activity 1
+      activity = PublicActivity::Activity.where(
+        key: 'namespaces_project_namespace.import_samples.create'
+      ).order(created_at: :desc).first
+
+      assert_equal 'namespaces_project_namespace.import_samples.create', activity.key
+      assert_equal @john_doe, activity.owner
+      assert_equal 1, activity.parameters[:imported_samples_count]
+      sample2 = Sample.find_by(name: 'my new sample 2')
+      assert_equal [{ 'sample_name' => sample2.name, 'sample_puid' => sample2.puid }],
+                   activity.extended_details.details['imported_samples_data']
+      assert_equal 'project_import_samples', activity.parameters[:action]
+
+      # verify project activity 2
+      activity = PublicActivity::Activity.where(
+        key: 'namespaces_project_namespace.import_samples.create'
+      ).order(created_at: :desc).second
+
+      assert_equal 'namespaces_project_namespace.import_samples.create', activity.key
+      assert_equal @john_doe, activity.owner
+      assert_equal 1, activity.parameters[:imported_samples_count]
+      sample1 = Sample.find_by(name: 'my new sample 1')
+      assert_equal [{ 'sample_name' => sample1.name, 'sample_puid' => sample1.puid }],
+                   activity.extended_details.details['imported_samples_data']
+      assert_equal 'project_import_samples', activity.parameters[:action]
+    end
   end
 end

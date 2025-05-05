@@ -11,6 +11,7 @@ export default class extends Controller {
     "listContainer",
     "sampleCloneTableRow",
     "workflowTableRow",
+    "importSampleTableRow",
     "listRow",
     "ariaLabels",
     "itemName",
@@ -57,7 +58,6 @@ export default class extends Controller {
       ) {
         lastIndex = (this.#currentDataIndexes.length % 5) + startingIndex;
       }
-
       let indexRangeData = this.#data.slice(startingIndex, lastIndex);
 
       // If activityType value is set, this else statement
@@ -66,6 +66,8 @@ export default class extends Controller {
       if (this.hasTbodyTarget) {
         if (this.activityTypeValue === "workflow_execution_destroy") {
           this.#generateWorkflowTableRows(indexRangeData);
+        } else if (this.activityTypeValue === "group_import_samples") {
+          this.#generateImportSampleTableRows(indexRangeData);
         } else {
           this.#generateTableRows(indexRangeData);
         }
@@ -236,6 +238,41 @@ export default class extends Controller {
         };
         updateTextContent(0, data["workflow_name"], workflowNameSelector);
         updateTextContent(1, data["workflow_id"], workflowIdSelector);
+
+        fragment.appendChild(clone);
+      });
+
+      this.tbodyTarget.appendChild(fragment);
+    }
+  }
+
+  #generateImportSampleTableRows(table_data) {
+    if ("content" in document.createElement("template")) {
+      const template = this.importSampleTableRowTarget;
+      const fragment = document.createDocumentFragment();
+      const sampleNameSelector =
+        "span[data-activities--extended_details-target='sampleName']";
+      const puidSelector = "span:nth-child(2)";
+      const projectIdSelector =
+        "span[data-activities--extended_details-target='projectId']";
+
+      table_data.forEach((data) => {
+        const clone = template.content.cloneNode(true);
+        const tds = clone.querySelectorAll("td");
+
+        const updateTextContent = (tdIndex, sampleName, puid) => {
+          const td = tds[tdIndex];
+          if (tdIndex === 0) {
+            td.querySelector(sampleNameSelector).textContent = sampleName;
+            td.querySelector(puidSelector).textContent = puid;
+          } else {
+            td.querySelector(projectIdSelector).textContent =
+              data["project_puid"];
+          }
+        };
+
+        updateTextContent(0, data["sample_name"], data["sample_puid"]);
+        updateTextContent(1, data["project_puid"], projectIdSelector);
 
         fragment.appendChild(clone);
       });

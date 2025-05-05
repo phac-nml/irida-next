@@ -44,9 +44,9 @@ class ActivitiesController < ApplicationController
     type = params[:dialog_type]
 
     case type
-    when 'samples_clone', 'workflow_executions_destroy'
+    when 'samples_clone', 'workflow_executions_destroy', 'group_import_samples'
       Activities::Dialogs::ActivityTableListingDialogComponent
-    when 'samples_transfer', 'samples_destroy'
+    when 'samples_transfer', 'samples_destroy', 'project_import_samples'
       Activities::Dialogs::ActivityListDialogComponent
     end
   end

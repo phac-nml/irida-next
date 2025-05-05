@@ -84,6 +84,19 @@
       </tr>
     </template>
 
+    <template
+      id="importSampleTableRow"
+      data-activities--extended_details-target="importSampleTableRow"
+    >
+      <tr>
+        <td class="px-3 py-3"><span class="mr-2" data-activities--extended_details-target="sampleName"></span>
+          <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
+        </td>
+        <td class="px-3 py-3"><span class="mr-2" data-activities--extended_details-target="projectId"></span>
+        </td>
+      </tr>
+    </template>
+
     <div
       data-activities--extended_details-target="paginationContainer"
       class="flex items-center justify-end mt-4"

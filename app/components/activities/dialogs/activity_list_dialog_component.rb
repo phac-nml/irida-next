@@ -48,6 +48,13 @@ module Activities
                                 user: @activity_owner,
                                 count: @activity.parameters[:samples_deleted_count])
           @data = @extended_details.details['deleted_samples_data'].to_json
+
+        when 'project_import_samples'
+          @title = I18n.t(:'components.activity.dialog.import_samples.title')
+          @description = I18n.t('components.activity.dialog.import_samples.description.project',
+                                user: @activity_owner,
+                                count: @activity.parameters[:imported_samples_count])
+          @data = @extended_details.details['imported_samples_data'].to_json
         end
       end
 

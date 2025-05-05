@@ -270,10 +270,10 @@ module Projects
       assert_text strip_tags(
         I18n.t('activity.namespaces_project_namespace.import_samples.create_html',
                user: 'System',
-               href: 2)
+               href: 1)
       )
       assert_selector 'span',
-                      text: 2
+                      text: 1
     end
   end
 end

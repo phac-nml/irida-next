@@ -121,6 +121,42 @@ module Activities
         assert_selector 'tr > td', text: workflow_execution.name
         assert_selector 'tr > td', text: workflow_execution.id
       end
+
+      test 'group import samples activity dialog' do
+        group_namespace = groups(:group_one)
+
+        activities = group_namespace.human_readable_activity(group_namespace.retrieve_group_activity).reverse
+
+        assert_equal(1, activities.count do |activity|
+          activity[:key].include?('group.import_samples.create')
+        end)
+
+        activity_to_render = activities.find do |a|
+          a[:key] == 'activity.group.import_samples.create_html'
+        end
+
+        visit group_activity_path(group_namespace)
+
+        click_link(I18n.t('components.activity.more_details'),
+                   href: activity_path(activity_to_render[:id], dialog_type: 'group_import_samples').to_s)
+
+        assert_selector 'h1', text: I18n.t(:'components.activity.dialog.import_samples.title')
+
+        assert_selector 'p',
+                        text: I18n.t(:'components.activity.dialog.import_samples.description.group',
+                                     user: 'System', count: 2)
+        assert_selector 'table', count: 1
+        assert_selector 'th', count: 2
+        assert_selector 'tr', count: 3
+        assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.import_samples.sample').upcase
+        assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.import_samples.project').upcase
+        assert_selector 'tr > td', text: 'sample 1 name'
+        assert_selector 'tr > td', text: 'sample 1 puid'
+        assert_selector 'tr > td', text: 'sample 2 name'
+        assert_selector 'tr > td', text: 'sample 1 puid'
+        assert_selector 'tr > td', text: 'INXT_PRJ_AAAAAAAAAA'
+        assert_selector 'tr > td', text: 'INXT_PRJ_AAAAAAAAAB'
+      end
     end
   end
 end

@@ -17,7 +17,7 @@ module Samples
       else
         @static_project = namespace.project
       end
-      @project_samples_count = {}
+      @imported_samples_data = { project_data: {}, group_data: [] }
       @project_puid_map = {}
       super(namespace, user, blob_id, required_headers, 0, params)
     end
@@ -73,7 +73,7 @@ module Samples
       end
       cleanup_files
 
-      create_activities unless @project_samples_count.empty?
+      create_activities unless @imported_samples_data[:project_data].empty?
 
       response
     end
@@ -141,7 +141,7 @@ module Samples
           sample.project, sample, current_user, { 'metadata' => metadata, include_activity: false }
         ).execute
 
-        increment_sample_count(project)
+        add_imported_sample_to_data(sample, project.puid)
 
         sample
       else
@@ -162,40 +162,64 @@ module Samples
       )
     end
 
-    def create_activities # rubocop:disable Metrics/MethodLength
-      total_sample_count = 0
-      @project_samples_count.each do |project_puid, sample_count|
-        @project_puid_map[project_puid].namespace.create_activity(
+    def add_imported_sample_to_data(sample, project_puid)
+      if @imported_samples_data[:project_data].key?(project_puid)
+        @imported_samples_data[:project_data][project_puid] << { sample_name: sample.name, sample_puid: sample.puid }
+      else
+        @imported_samples_data[:project_data][project_puid] = [{ sample_name: sample.name, sample_puid: sample.puid }]
+      end
+
+      return unless @namespace.group_namespace?
+
+      @imported_samples_data[:group_data] << { sample_name: sample.name, sample_puid: sample.puid,
+                                               project_puid: project_puid }
+    end
+
+    def create_activities # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      total_imported_samples_count = 0
+
+      @imported_samples_data[:project_data].each do |project_puid, sample_data|
+        imported_samples_count = sample_data.count
+        project_ext_details = ExtendedDetail.create!(
+          details: {
+            imported_samples_data: @imported_samples_data[:project_data][project_puid],
+            imported_samples_count:
+          }
+        )
+
+        project_namespace = Namespaces::ProjectNamespace.find_by(puid: project_puid)
+        project_activity = project_namespace.create_activity(
           key: 'namespaces_project_namespace.import_samples.create',
           owner: current_user,
           parameters:
           {
-            imported_samples_count: sample_count,
-            action: 'import_samples'
+            imported_samples_count: imported_samples_count,
+            action: 'project_import_samples'
           }
         )
-        total_sample_count += sample_count
+
+        project_activity.create_activity_extended_detail(extended_detail_id: project_ext_details.id,
+                                                         activity_type: 'project_import_samples')
+        total_imported_samples_count += imported_samples_count
       end
 
-      return unless @namespace.group_namespace? && total_sample_count.positive?
+      return unless @namespace.group_namespace?
 
-      @namespace.create_activity key: 'group.import_samples.create',
-                                 owner: current_user,
-                                 parameters:
+      group_ext_details = ExtendedDetail.create!(
+        details: {
+          imported_samples_data: @imported_samples_data[:group_data],
+          imported_samples_count: total_imported_samples_count
+        }
+      )
+      group_activity = @namespace.create_activity key: 'group.import_samples.create',
+                                                  owner: current_user,
+                                                  parameters:
                                  {
-                                   imported_samples_count: total_sample_count,
-                                   action: 'import_samples'
+                                   imported_samples_count: total_imported_samples_count,
+                                   action: 'group_import_samples'
                                  }
-    end
-
-    def increment_sample_count(project)
-      project_puid = project.puid
-      @project_samples_count[project_puid] = if @project_samples_count.key?(project_puid)
-                                               @project_samples_count[project_puid] + 1
-                                             else
-                                               @project_puid_map[project_puid] = project
-                                               1
-                                             end
+      group_activity.create_activity_extended_detail(extended_detail_id: group_ext_details.id,
+                                                     activity_type: 'group_import_samples')
     end
   end
 end

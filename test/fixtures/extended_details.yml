@@ -53,3 +53,34 @@ project1_namespace_workflow_execution_destroy_extended_details:
     }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
+
+project1_namespace_import_sample_create_extended_details:
+  details:
+    {
+      "imported_samples_data":
+        [{ sample_name: "sample name", sample_puid: "sample puid" }],
+      "imported_samples_count": 1,
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+group1_namespace_import_sample_create_extended_details:
+  details:
+    {
+      "imported_samples_data":
+        [
+          {
+            sample_name: "sample 1 name",
+            sample_puid: "sample 1 puid",
+            project_puid: "INXT_PRJ_AAAAAAAAAA",
+          },
+          {
+            sample_name: "sample 2 name",
+            sample_puid: "sample 2 puid",
+            project_puid: "INXT_PRJ_AAAAAAAAAB",
+          },
+        ],
+      "imported_samples_count": 2,
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
