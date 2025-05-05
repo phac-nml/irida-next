@@ -369,9 +369,11 @@ fr:
     apply_filter_button: Appliquer un filtre
     clear_aria_label: Terminer la recherche avancée
     clear_filter_button: Effacer le filtre
+    condition: Condition %{index}
     confirm_close_text: Êtes-vous sûr de vouloir éliminer vos modifications de filtre et fermer la boîte de dialogue de recherche avancée?
     description: Cette recherche avancée utilise des champs, des opérateurs et des valeurs pour filtrer les échantillons. Ajoutez des groupes avec des conditions pour définir les critères de recherche.
     field: Champ
+    group: Group %{index}
     operation:
       contains: contains
       equals: "="

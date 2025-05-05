@@ -70,7 +70,7 @@ export default class extends Controller {
       let legend = condition.querySelector("legend");
       let updatedLegend = legend.innerHTML.replace(
         /(Condition\s)\d+/,
-        "$1" + index,
+        "$1" + (index + 1),
       );
       legend.innerHTML = updatedLegend;
       let inputFields = condition.querySelectorAll("[name]");
@@ -91,14 +91,14 @@ export default class extends Controller {
     let group_index = this.groupsContainerTargets.length;
     this.searchGroupsContainerTarget.insertAdjacentHTML(
       "beforeend",
-      this.groupTemplateTarget.innerHTML.replace(
-        /GROUP_INDEX_PLACEHOLDER/g,
-        group_index,
-      ),
+      this.groupTemplateTarget.innerHTML
+        .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
+        .replace(/GROUP_LEGEND_INDEX_PLACEHOLDER/g, group_index + 1),
     );
     let newCondition = this.conditionTemplateTarget.innerHTML
       .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
-      .replace(/CONDITION_INDEX_PLACEHOLDER/g, 0);
+      .replace(/CONDITION_INDEX_PLACEHOLDER/g, 0)
+      .replace(/CONDITION_LEGEND_INDEX_PLACEHOLDER/g, 1);
     let group = this.groupsContainerTargets[group_index];
     group.insertAdjacentHTML("afterbegin", newCondition);
     //show 'Remove group' buttons if there's more than one group
@@ -123,7 +123,7 @@ export default class extends Controller {
         )[0];
         let updatedLegend = legend.innerHTML.replace(
           /(Group\s)\d+/,
-          "$1" + index,
+          "$1" + (index + 1),
         );
         legend.innerHTML = updatedLegend;
         let inputFields = group.querySelectorAll("[name]");
@@ -191,7 +191,8 @@ export default class extends Controller {
     ).length;
     let newCondition = this.conditionTemplateTarget.innerHTML
       .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
-      .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
+      .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index)
+      .replace(/CONDITION_LEGEND_INDEX_PLACEHOLDER/g, condition_index + 1);
     group.lastElementChild.insertAdjacentHTML("beforebegin", newCondition);
   }
 
