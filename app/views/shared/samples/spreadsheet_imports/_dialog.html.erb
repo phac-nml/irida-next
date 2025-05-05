@@ -129,8 +129,11 @@
                         text-slate-900 dark:text-slate-400 font-semibold block pointer-events-none
                       "
                     >
+                      <%= project.namespace.name %>
+                      <%= render PuidComponent.new(puid: project.namespace.puid, show_clipboard: false) %>
+                    </span>
+                    <span class="text-slate-600 dark:text-white block pointer-events-none">
                       <%= project.namespace.full_path %>
-                      <%= render PuidComponent.new(puid: project.puid, show_clipboard: false) %>
                     </span>
                   <% end %>
                 <% end %>
