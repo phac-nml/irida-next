@@ -3,7 +3,6 @@
     <li class="py-3 sm:py-4 sample">
       <div class="flex items-center space-x-3 rtl:space-x-reverse">
         <span
-          id="samples-icon-lg"
           aria-hidden="true" <%# ♿ Hide decorative icon from screen readers %>
           class="
             inline-flex items-center justify-center p-2 rounded-full bg-blue-100
@@ -18,9 +17,7 @@
           <p class="text-sm font-medium text-slate-900 dark:text-white line-clamp-2">
             <%= link_to sample.name, sample_path(sample), class: "hover:underline" %>
           </p>
-          <p class="text-sm text-slate-500 truncate dark:text-slate-400">
-            <%= render PuidComponent.new(puid: sample.puid, show_clipboard: true) %>
-          </p>
+          <%= render PuidComponent.new(puid: sample.puid, show_clipboard: true) %>
         </div>
         <div
           class="

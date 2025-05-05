@@ -8,23 +8,16 @@
 
 <hr class="h-px my-4 border-0 bg-slate-200 dark:bg-slate-600"/>
 
-<%# Container for stats - horizontal row on small screens, vertical column on medium+ screens %>
 <div class="flex flex-row lg:flex-col gap-4">
-
-  <%# Item 1: Samples %>
-  <%# Use accessible dark blue colors %>
   <div
     class="
       flex-1 p-4 rounded-lg shadow-sm bg-blue-50 dark:bg-blue-900 dark:border
       dark:border-blue-700
     "
   >
-    <%# Small screen layout (< md): Icon + Count on same line, Tooltip on Icon %>
     <div class="block md:hidden">
-      <%# Flex container for icon and count %>
       <div class="flex items-center justify-start gap-2">
         <%= viral_tooltip(title: t(:"components.project_dashboard.information.number_of_samples")) do %>
-          <%# Icon in a colored circle - accessible dark blue. Add ID for aria-labelledby %>
           <span
             id="samples-icon-sm"
             class="
@@ -32,8 +25,6 @@
               dark:bg-blue-700
             "
           >
-            <%# Icon color - accessible dark blue %>
-            <%# 📝 Reduced icon size from h-5 w-5 to h-4 w-4 %>
             <%= viral_icon(name: :beaker, classes: "h-4 w-4 text-blue-700 dark:text-blue-200") %>
           </span>
         <% end %>
@@ -52,7 +43,6 @@
     <div class="hidden md:block">
       <%# Icon and Label row %>
       <div class="flex items-center mb-1">
-        <%# Icon in a colored circle - accessible dark blue. Add ID for aria-labelledby %>
         <span
           id="samples-icon-lg"
           class="
@@ -60,8 +50,6 @@
             dark:bg-blue-700 mr-2
           "
         >
-          <%# Icon color - accessible dark blue %>
-          <%# ⏪ Reverted icon size from h-4 w-4 back to h-5 w-5 %>
           <%= viral_icon(name: :beaker, classes: "h-5 w-5 text-blue-700 dark:text-blue-200") %>
         </span>
         <%# Label (visible text next to icon) - Make semibold. Accessible dark text %>
@@ -72,8 +60,6 @@
           <%= t(:"components.project_dashboard.information.number_of_samples") %>
         </span>
       </div>
-      <%# Count (large text below icon/label). Associate with icon and label via aria-labelledby %>
-      <%# ⏪ Reverted text size from text-xl back to text-2xl and padding from pl-9 back to pl-11 %>
       <div
         class="text-2xl font-semibold text-slate-900 dark:text-slate-100 pl-11"
         aria-labelledby="samples-icon-lg samples-label-lg"
@@ -83,8 +69,6 @@
     </div>
   </div>
 
-  <%# Item 2: Workflows %>
-  <%# Use accessible dark teal colors %>
   <div
     class="
       flex-1 p-4 rounded-lg shadow-sm bg-teal-50 dark:bg-teal-900 dark:border
@@ -96,7 +80,6 @@
       <%# Flex container for icon and count %>
       <div class="flex items-center justify-start gap-2">
         <%= viral_tooltip(title: t(:"components.project_dashboard.information.number_of_automated_workflow_executions")) do %>
-          <%# Icon in a colored circle - accessible dark teal. Add ID for aria-labelledby %>
           <span
             id="workflows-icon-sm"
             class="
@@ -104,16 +87,12 @@
               dark:bg-teal-700
             "
           >
-            <%# Icon color - accessible dark teal %>
-            <%# 📝 Reduced icon size from h-5 w-5 to h-4 w-4 %>
             <%= viral_icon(
               name: :command_line,
               classes: "h-4 w-4 text-teal-700 dark:text-teal-200",
             ) %>
           </span>
         <% end %>
-        <%# Count (large text next to icon). Associate with icon via aria-labelledby %>
-        <%# 📝 Reduced text size from text-2xl to text-xl %>
         <div
           class="text-xl font-semibold text-slate-900 dark:text-slate-100"
           aria-labelledby="workflows-icon-sm"
@@ -123,11 +102,9 @@
       </div>
     </div>
 
-    <%# Large screen layout (>= md): Icon + Label + Count %>
     <div class="hidden md:block">
       <%# Icon and Label row %>
       <div class="flex items-center mb-1">
-        <%# Icon in a colored circle - accessible dark teal. Add ID for aria-labelledby %>
         <span
           id="workflows-icon-lg"
           class="
@@ -135,14 +112,11 @@
             dark:bg-teal-700 mr-2
           "
         >
-          <%# Icon color - accessible dark teal %>
-          <%# ⏪ Reverted icon size from h-4 w-4 back to h-5 w-5 %>
           <%= viral_icon(
             name: :command_line,
             classes: "h-5 w-5 text-teal-700 dark:text-teal-200",
           ) %>
         </span>
-        <%# Label (visible text next to icon) - Make semibold. Accessible dark text %>
         <span
           id="workflows-label-lg"
           class="text-sm font-semibold text-slate-600 dark:text-slate-300"
@@ -152,8 +126,6 @@
           ) %>
         </span>
       </div>
-      <%# Count (large text below icon/label). Associate with icon and label via aria-labelledby %>
-      <%# ⏪ Reverted text size from text-xl back to text-2xl and padding from pl-9 back to pl-11 %>
       <div
         class="text-2xl font-semibold text-slate-900 dark:text-slate-100 pl-11"
         aria-labelledby="workflows-icon-lg workflows-label-lg"
@@ -163,8 +135,6 @@
     </div>
   </div>
 
-  <%# Item 3: Members %>
-  <%# Use accessible dark indigo colors %>
   <div
     class="
       flex-1 p-4 rounded-lg shadow-sm bg-indigo-50 dark:bg-indigo-900 dark:border
@@ -184,16 +154,12 @@
               dark:bg-indigo-700
             "
           >
-            <%# Icon color - accessible dark indigo %>
-            <%# 📝 Reduced icon size from h-5 w-5 to h-4 w-4 %>
             <%= viral_icon(
               name: :users,
               classes: "h-4 w-4 text-indigo-700 dark:text-indigo-200",
             ) %>
           </span>
         <% end %>
-        <%# Count (large text next to icon). Associate with icon via aria-labelledby %>
-        <%# 📝 Reduced text size from text-2xl to text-xl %>
         <div
           class="text-xl font-semibold text-slate-900 dark:text-slate-100"
           aria-labelledby="members-icon-sm"
@@ -207,7 +173,6 @@
     <div class="hidden md:block">
       <%# Icon and Label row %>
       <div class="flex items-center mb-1">
-        <%# Icon in a colored circle - accessible dark indigo. Add ID for aria-labelledby %>
         <span
           id="members-icon-lg"
           class="
@@ -215,14 +180,11 @@
             dark:bg-indigo-700 mr-2
           "
         >
-          <%# Icon color - accessible dark indigo %>
-          <%# ⏪ Reverted icon size from h-4 w-4 back to h-5 w-5 %>
           <%= viral_icon(
             name: :users,
             classes: "h-5 w-5 text-indigo-700 dark:text-indigo-200",
           ) %>
         </span>
-        <%# Label (visible text next to icon) - Make semibold. Accessible dark text %>
         <span
           id="members-label-lg"
           class="text-sm font-semibold text-slate-600 dark:text-slate-300"
@@ -230,8 +192,6 @@
           <%= t(:"components.project_dashboard.information.number_of_members") %>
         </span>
       </div>
-      <%# Count (large text below icon/label). Associate with icon and label via aria-labelledby %>
-      <%# ⏪ Reverted text size from text-xl back to text-2xl and padding from pl-9 back to pl-11 %>
       <div
         class="text-2xl font-semibold text-slate-900 dark:text-slate-100 pl-11"
         aria-labelledby="members-icon-lg members-label-lg"
