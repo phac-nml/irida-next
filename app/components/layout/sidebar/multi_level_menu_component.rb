@@ -4,7 +4,7 @@ module Layout
   module Sidebar
     # Sidebar multi level menu item component
     class MultiLevelMenuComponent < Component
-      attr_reader :title, :icon, :selectable_pages, :current_page
+      attr_reader :title, :selectable_pages, :current_page
 
       renders_many :menu_items, ItemComponent
 

@@ -27,6 +27,7 @@ module ICONS
   groups:       { library: :phosphor, name: "squares-four", variant: :duotone },
   list_bullets: { library: :phosphor, name: "list-bullets", variant: :duotone },
   projects:     { library: :phosphor, name: :stack, variant: :duotone },
+  samples:      { library: :phosphor, name: :flask, variant: :duotone },
   settings:     { library: :phosphor, name: "gear-six", variant: :duotone },
   user:         { library: :phosphor, name: :user_circle, variant: :duotone },
   users:        { library: :phosphor, name: :users, variant: :duotone },
