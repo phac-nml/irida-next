@@ -8,7 +8,7 @@
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
             url: namespace_project_path,
-            icon: "clipboard_document",
+            icon: ICONS.clipboard,
             label: t("projects.sidebar.details"),
             selected: @current_page == t(:"projects.sidebar.details"),
           ) %>

@@ -23,6 +23,8 @@ module ICONS
     groups:      { library: :phosphor, name: "squares-four", variant: :duotone },
     workflows:   { library: :phosphor, name: "terminal-window", variant: :duotone },
     data_exports: { library: :phosphor, name: :export, variant: :duotone },
+    clipboard: { library: :phosphor, name: :clipboard, variant: :duotone },
+    users:       { library: :phosphor, name: :users, variant: :duotone },
     user:       { library: :phosphor, name: :user_circle, variant: :duotone },
     alert:      { library: :phosphor, name: :warning, variant: :duotone },
     # ...add more as needed
