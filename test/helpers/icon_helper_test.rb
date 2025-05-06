@@ -1,6 +1,6 @@
 require 'test_helper'
 
-# 🧪 Tests for IconHelper
+# Tests for IconHelper
 # Ensures icons are rendered correctly based on the ICONS registry.
 class IconHelperTest < ActionView::TestCase
   include IconHelper
@@ -28,16 +28,17 @@ class IconHelperTest < ActionView::TestCase
     assert_nil result, 'Should return nil when the icon key is not found in ICONS registry'
   end
 
-  # Test rendering a default icon mapping (:irida_logo -> :flask)
+  # Test rendering a default icon mapping (:irida_logo -> :beaker)
   test 'renders icon from DEFAULTS mapping' do
     result = render_icon(:irida_logo)
     assert result.present?, 'Should return HTML for irida_logo icon'
     assert result.html_safe?, 'Result should be HTML safe'
 
     # Basic structure validation
-    expected_icon_name, = ICONS[:irida_logo]
-    assert_match(/data-test-selector="#{expected_icon_name}"/, result,
-                 "Should include the icon name '#{expected_icon_name}' in the output")
+    assert_match(/data-test-selector="beaker"/, result,
+                 "Should include the icon name 'beaker' in the output")
+    assert_match(/data-test-selector="irida_logo"/, result,
+                 "Should include the test selector 'irida_logo' in the output")
   end
 
   # Test rendering a Phosphor icon
@@ -47,9 +48,10 @@ class IconHelperTest < ActionView::TestCase
     assert result.html_safe?, 'Result should be HTML safe'
 
     # Validate that the icon name is included in the output
-    expected_icon_name, = ICONS[:clipboard]
-    assert_match(/data-test-selector="#{expected_icon_name}"/, result,
-                 "Should include the icon name '#{expected_icon_name}' in the output")
+    assert_match(/data-test-selector="clipboard-text"/, result,
+                 "Should include the icon name 'clipboard-text' in the output")
+    assert_match(/data-test-selector="clipboard"/, result,
+                 "Should include the test selector 'clipboard' in the output")
   end
 
   # Test rendering a Heroicon icon
@@ -59,9 +61,8 @@ class IconHelperTest < ActionView::TestCase
     assert result.html_safe?, 'Result should be HTML safe'
 
     # Validate that the icon name is included in the output
-    expected_icon_name, = ICONS[:beaker]
-    assert_match(/data-test-selector="#{expected_icon_name}"/, result,
-                 "Should include the icon name '#{expected_icon_name}' in the output")
+    assert_match(/data-test-selector="beaker"/, result,
+                 "Should include both the icon name and test selector 'beaker' in the output")
   end
 
   # Test rendering an icon with additional CSS classes
@@ -89,10 +90,34 @@ class IconHelperTest < ActionView::TestCase
     assert_not_nil ICONS[:clipboard], 'ICONS registry should contain clipboard'
     assert_not_nil ICONS[:beaker], 'ICONS registry should contain beaker'
 
-    # Validate the structure (array with name and options)
-    name, options = ICONS[:beaker]
-    assert_equal :beaker, name, 'Icon name should be :beaker'
-    assert_equal :heroicons, options[:library], 'Icon library should be :heroicons'
-    assert_equal :solid, options[:variant], 'Icon variant should be :solid'
+    # Validate the structure (hash with :name and :options keys)
+    icon_def = ICONS[:beaker]
+    assert_equal :beaker, icon_def[:name], 'Icon name should be :beaker'
+    assert_equal :heroicons, icon_def[:options][:library], 'Icon library should be :heroicons'
+    
+    # Check irida_logo definition
+    icon_def = ICONS[:irida_logo]
+    assert_equal :beaker, icon_def[:name], 'irida_logo icon name should be :beaker'
+    assert_equal :heroicons, icon_def[:options][:library], 'irida_logo icon library should be :heroicons'
+    assert_equal :solid, icon_def[:options][:variant], 'irida_logo icon variant should be :solid'
+  end
+  
+  # Test the private methods through the public interface
+  test 'private methods work correctly through render_icon' do
+    # Test resolve_icon_definition through render_icon
+    result = render_icon(ICONS[:clipboard])
+    assert result.present?, 'Should handle a direct icon definition hash'
+    
+    # Test prepare_icon_options through render_icon with various options
+    result = render_icon(:clipboard, class: 'custom-class', data: { testid: 'test' })
+    assert_match(/class="custom-class"/, result, 'Should apply custom class')
+    assert_match(/data-testid="test"/, result, 'Should apply data attributes')
+  end
+  
+  # Test that test selectors are added in test environment
+  test 'adds test selectors in test environment' do
+    # The test environment is mocked in the icon method above
+    result = render_icon(:clipboard)
+    assert_match(/data-test-selector="clipboard"/, result, 'Should add test selector in test environment')
   end
 end

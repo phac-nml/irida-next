@@ -14,6 +14,19 @@ module Layout
         @selectable_pages = selectable_pages
         @current_page = current_page
       end
+
+      def create_icon
+        return unless @icon
+
+        base_options = {}
+        base_options[:variant] = :duotone
+        base_options[:class] = class_names(
+          'size-5',
+          'fill-primary-700 text-primary-700': @selected,
+          'fill-slate-500 stroke-slate-300': !@selected
+        )
+        helpers.render_icon(@icon, **base_options)
+      end
     end
   end
 end

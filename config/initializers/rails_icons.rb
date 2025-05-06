@@ -1,9 +1,9 @@
 RailsIcons.configure do |config|
-  config.default_library = "phosphor"
+  config.default_library = 'phosphor'
   # config.default_variant = "" # Set a default variant for all libraries
 
   # Override Phosphor defaults
-  config.libraries.phosphor.default_variant = "duotone" # Set a default variant for Phosphor
+  # config.libraries.phosphor.default_variant = "duotone" # Set a default variant for Phosphor
   # config.libraries.phosphor.exclude_variants = [:duotone, :thin] # Exclude specific variants
 
   # config.libraries.phosphor.bold.default.css = "size-6"

@@ -8,7 +8,7 @@
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
             url: namespace_project_path,
-            icon: ICONS[:clipboard],
+            icon: ICONS[:details],
             label: t("projects.sidebar.details"),
             selected: @current_page == t(:"projects.sidebar.details"),
           ) %>
@@ -43,7 +43,7 @@
           <% if allowed_to?(:view_workflow_executions?, @project.namespace) && @pipelines_enabled %>
             <%= render section.with_item(
               url: namespace_project_workflow_executions_path,
-              icon: ICONS[:workflows],
+              icon: ICONS[:terminal_window],
               label: t(:"projects.sidebar.workflow_executions"),
               selected: @current_page == t(:"projects.sidebar.workflow_executions"),
             ) %>

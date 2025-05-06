@@ -1,5 +1,5 @@
 <% control_id = "multi-level-menu_#{title.parameterize.underscore}" %>
-<li data-controller="collapsible" class="list-none">
+<li data-controller="collapsible" class="Layout-Sidebar__Item">
   <button
     type="button"
     class="
@@ -9,10 +9,10 @@
     aria-controls="<%= control_id %>"
     data-action="collapsible#toggle"
   >
-    <%# @icon is already the [name, options] array from ICONS initializer %>
-    <% name, base_options = @icon %>
-    <%= helpers.icon name, **base_options, class: "shrink-0 w-5 h-5 ml-1 text-slate-800 transition duration-75 group-hover:text-slate-900 dark:text-slate-400 dark:group-hover:text-white" %>
-    <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap"><%= title %></span>
+    <span class="w-6 ml-1 flex items-center justify-center">
+      <%= create_icon %>
+    </span>
+    <span class="flex-1 ms-2 text-left rtl:text-right whitespace-nowrap"><%= title %></span>
     <%= viral_icon(
       name: "chevron_down",
       classes:
