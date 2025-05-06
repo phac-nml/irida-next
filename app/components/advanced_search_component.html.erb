@@ -107,9 +107,9 @@
     <fieldset
       data-advanced-search-target="conditionsContainer"
       class="
-        flex @max-xl:flex-wrap @max-xl:space-y-2 space-x-2 @max-xl:py-0 p-4 mb-4
-        items-start rounded-md border border-slate-300 dark:border-slate-600 text-sm
-        text-slate-500 dark:text-slate-400
+        flex @max-xl:flex-col @max-xl:space-y-2 space-x-2 p-4 items-start rounded-md
+        border border-slate-300 dark:border-slate-600 text-sm text-slate-500
+        dark:text-slate-400
       "
     >
       <legend><%= t(
@@ -146,7 +146,9 @@
       </div>
       <button
         type="button"
-        class="mt-3 text-slate-400 hover:text-slate-900 dark:hover:text-white"
+        class="
+          @min-xl:ml-auto mt-3 text-slate-400 hover:text-slate-900 dark:hover:text-white
+        "
         aria-label="<%= t(".remove_condition_aria_label") %>"
         data-action="advanced-search#removeCondition"
       >
@@ -163,7 +165,7 @@
       "
     >
       <legend><%= t("advanced_search_component.group", index: "GROUP_LEGEND_INDEX_PLACEHOLDER") %></legend>
-      <div class="flex justify-end">
+      <div class="flex justify-end my-4">
         <%= viral_button(data: { action: "advanced-search#addCondition" }) do %>
           <%= t(".add_condition_button") %>
         <% end %>
