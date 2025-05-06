@@ -48,7 +48,8 @@ module Viral
                    id: "dd-#{SecureRandom.hex(10)}",
                    data:,
                    tag: :button,
-                   type: :button
+                   type: :button,
+                   classes: 'cursor-pointer'
                  })
     end
 
