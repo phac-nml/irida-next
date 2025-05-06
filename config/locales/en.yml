@@ -574,9 +574,9 @@ en:
       information:
         created_on: Created on
         no_description: No description provided for project
-        number_of_automated_workflow_executions: Number of automated pipelines configured
-        number_of_members: Number of members
-        number_of_samples: Number of samples
+        number_of_automated_workflow_executions: Automated pipelines
+        number_of_members: Members
+        number_of_samples: Samples
       samples_title: Samples Recently Updated
       view_more: View more
     token:
@@ -1337,6 +1337,9 @@ en:
       profile: Profile
     update:
       success: Profile updated successfully
+  project_dashboard:
+    samples_component:
+      list_aria_label: List of updated samples
   projects:
     activity:
       title: Project Activity
