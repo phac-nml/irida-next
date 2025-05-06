@@ -23,7 +23,7 @@
     <%= viral_button(data: { action: "advanced-search#addCondition" }) do %>
       <%= t("advanced_search_component.add_condition_button") %>
     <% end %>
-    <%= viral_button(classes: class_names("ml-2", hidden: !@show_remove_group_button), data: { action: "advanced-search#removeGroup" }) do %>
+    <%= viral_button(classes: class_names("ml-2", "invisible @max-xl:hidden": !@show_remove_group_button), data: { action: "advanced-search#removeGroup" }) do %>
       <%= t("advanced_search_component.remove_group_button") %>
     <% end %>
   </div>

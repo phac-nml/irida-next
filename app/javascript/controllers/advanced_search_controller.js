@@ -15,6 +15,7 @@ export default class extends Controller {
   static values = {
     confirmCloseText: String,
   };
+  static hidden_classes = ["invisible", "@max-xl:hidden"];
 
   connect() {
     this.idempotentConnect();
@@ -108,7 +109,7 @@ export default class extends Controller {
           .querySelector(
             "div > button[data-action='advanced-search#removeGroup']",
           )
-          .classList.remove("hidden");
+          .classList.remove(...this.hidden_classes);
       });
     }
   }
@@ -141,7 +142,7 @@ export default class extends Controller {
           .querySelector(
             "div > button[data-action='advanced-search#removeGroup']",
           )
-          .classList.add("hidden");
+          .classList.add(...this.hidden_classes);
       }
     }
   }
@@ -166,18 +167,18 @@ export default class extends Controller {
     ].indexOf(condition);
 
     if (["", "exists", "not_exists"].includes(operator)) {
-      value.classList.add("hidden");
+      value.classList.add(...this.hidden_classes);
       let inputs = value.querySelectorAll("input");
       inputs.forEach((input) => {
         input.value = "";
       });
     } else if (["in", "not_in"].includes(operator)) {
-      value.classList.remove("hidden");
+      value.classList.remove(...this.hidden_classes);
       value.outerHTML = this.listValueTemplateTarget.innerHTML
         .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
         .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
     } else {
-      value.classList.remove("hidden");
+      value.classList.remove(...this.hidden_classes);
       value.outerHTML = this.valueTemplateTarget.innerHTML
         .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
         .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
