@@ -819,7 +819,6 @@ module Groups
       click_button I18n.t('shared.samples.actions_dropdown.import_metadata')
       within('#dialog') do
         attach_file 'file_import[file]', Rails.root.join('test/fixtures/files/metadata/valid_with_puid.csv')
-        find('#file_import_sample_id_column', wait: 1).find("option[value='sample_puid']").select_option
         within "ul[id='Available']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
