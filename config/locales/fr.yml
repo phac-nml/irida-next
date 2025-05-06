@@ -1740,9 +1740,9 @@ fr:
             update_metadata: Mettre à jour les métadonnées
             value: Valeur
         new_attachment_button: Télécharger des fichiers
-        no_associated_files: Il n’y a aucun fichier associé à cet échantillon.
+        no_associated_files: Click here to uploads files
         no_associated_metadata: Cet échantillon ne contient aucune métadonnée.
-        no_files: Aucun fichier
+        no_files: There are no files associated with this sample.
         no_metadata: Aucune métadonnée
         remove_button: Retirer
         remove_button_confirmation: Êtes-vous sûr de vouloir retirer cet échantillon du projet?

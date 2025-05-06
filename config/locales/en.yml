@@ -1744,9 +1744,9 @@ en:
             update_metadata: Update Metadata
             value: Value
         new_attachment_button: Upload Files
-        no_associated_files: There are no files associated with this sample.
+        no_associated_files: Click here to uploads files
         no_associated_metadata: This sample has no metadata.
-        no_files: No Files
+        no_files: There are no files associated with this sample.
         no_metadata: No Metadata
         remove_button: Remove
         remove_button_confirmation: Are you sure you want to remove this sample from the project?
