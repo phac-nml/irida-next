@@ -1,32 +1,44 @@
-<ol class="divide-y divide-slate-200 dark:divide-slate-700" aria-label="<%= t('.list_aria_label') %>"> <%# ♿ Add aria-label for screen reader context %>
+<ol
+  class="divide-y divide-slate-200 dark:divide-slate-700 @container"
+  aria-label="<%= t('.list_aria_label') %>"
+>
+  <%# ♿ Add aria-label for screen reader context %>
   <% samples.each do |sample| %>
-    <li class="py-3 sm:py-4 sample">
-      <div class="flex items-center space-x-3 rtl:space-x-reverse">
+    <li class="py-3 sm:py-4 sample flex">
+      <div>
         <span
-          aria-hidden="true" <%# ♿ Hide decorative icon from screen readers %>
+          aria-hidden="true"
+          <%# ♿ Hide decorative icon from screen readers %>
           class="
-            inline-flex items-center justify-center p-2 rounded-full bg-blue-100
-            dark:bg-blue-700 mr-2
+            p-2 inline-block rounded-full bg-blue-100 dark:bg-blue-700 mr-2
           "
         >
           <%# Icon color - accessible dark blue %>
           <%= viral_icon(name: :beaker, classes: "h-5 w-5 text-blue-700 dark:text-blue-200") %>
         </span>
-        <div class="flex-1 min-w-0">
-          <%# 💡 Allow sample name to wrap to two lines before truncating %>
-          <p class="text-sm font-medium text-slate-900 dark:text-white line-clamp-2">
-            <%= link_to sample.name, sample_path(sample), class: "hover:underline" %>
-          </p>
-          <%= render PuidComponent.new(puid: sample.puid, show_clipboard: true) %>
-        </div>
+      </div>
+      <div class="flex grow flex-col space-x-3 rtl:space-x-reverse ">
+        <%# 💡 Allow sample name to wrap to two lines before truncating %>
+        <p class="text-sm font-medium text-slate-900 dark:text-white line-clamp-2">
+          <%= link_to sample.name, sample_path(sample), class: "hover:underline" %>
+        </p>
         <div
           class="
-            inline-flex items-center text-xs font-normal text-slate-500 dark:text-slate-400
-            whitespace-nowrap
+            grow flex @max-sm:flex-col space-between @sm:items-center @max-sm:space-y-1
           "
         >
-          <%# Display last updated time %>
-          <%= helpers.local_time(sample.updated_at, :short_no_year) %>
+          <div class="grow">
+            <%= render PuidComponent.new(puid: sample.puid, show_clipboard: true) %>
+          </div>
+          <div
+            class="
+              text-xs font-normal text-slate-500 dark:text-slate-400 whitespace-nowrap
+              shrink-0
+            "
+          >
+            <%# Display last updated time %>
+            <%= helpers.local_time(sample.updated_at, :short_no_year) %>
+          </div>
         </div>
       </div>
     </li>
