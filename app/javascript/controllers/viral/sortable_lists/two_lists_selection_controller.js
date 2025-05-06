@@ -30,7 +30,6 @@ export default class extends Controller {
     // Get a handle on the available and selected lists
     this.availableList = document.getElementById(this.availableListValue);
     this.selectedList = document.getElementById(this.selectedListValue);
-
     if (this.availableList && this.selectedList) {
       // Get a handle on the original available list
       this.#originalAvailableList = [

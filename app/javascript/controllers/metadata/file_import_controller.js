@@ -6,47 +6,28 @@ export default class extends Controller {
   static targets = [
     "sampleIdColumn",
     "metadataColumns",
-    "sortableListsTemplate",
-    "sortableListsItemTemplate",
     "submitButton",
+    "error",
+  ];
+
+  #defaultSampleColumnHeaders = [
+    "sample_name",
+    "sample name",
+    "sample",
+    "sample_id",
+    "sample id",
+    "sample_puid",
+    "sample puid",
   ];
 
   #headers = [];
-  #disabled_classes = [
-    "bg-slate-50",
-    "border",
-    "border-slate-300",
-    "text-slate-900",
-    "text-sm",
-    "rounded-lg",
-    "block",
-    "w-full",
-    "p-2.5",
-    "dark:bg-slate-700",
-    "dark:border-slate-600",
-    "dark:placeholder-slate-400",
-    "dark:text-white",
-  ];
-
-  connect() {
-    this.#disableTarget(this.sampleIdColumnTarget);
-  }
 
   changeSampleIDInput(event) {
     const { value } = event.target;
-
     if (value) {
-      if (this.hasMetadataColumnsTarget) {
-        this.#addMetadataColumns();
-      } else {
-        this.submitButtonTarget.disabled = false;
-      }
+      this.#enableDialogState();
     } else {
-      if (this.hasMetadataColumnsTarget) {
-        this.#removeMetadataColumns();
-      } else {
-        this.submitButtonTarget.disabled = true;
-      }
+      this.#resetDialogState();
     }
   }
 
@@ -54,9 +35,8 @@ export default class extends Controller {
     const { files } = event.target;
 
     this.#removeSampleIDInputOptions();
-    this.#removeMetadataColumns();
-    this.submitButtonTarget.disabled = true;
-
+    this.#resetDialogState();
+    this.#disableErrorState();
     if (!files.length) {
       return;
     }
@@ -73,12 +53,6 @@ export default class extends Controller {
     };
   }
 
-  #removeMetadataColumns() {
-    if (this.hasMetadataColumnsTarget) {
-      this.metadataColumnsTarget.innerHTML = "";
-    }
-  }
-
   #removeSampleIDInputOptions() {
     this.#removeInputOptions(this.sampleIdColumnTarget);
     this.#disableTarget(this.sampleIdColumnTarget);
@@ -91,17 +65,38 @@ export default class extends Controller {
       option.text = header;
       this.sampleIdColumnTarget.append(option);
     }
+    // lower case to test for case insensitivity
+    const allHeadersToLowerCase = this.#headers.map((header) =>
+      header.toLowerCase(),
+    );
+    for (const sampleColumnHeader of this.#defaultSampleColumnHeaders) {
+      const sampleIndex = allHeadersToLowerCase.indexOf(sampleColumnHeader);
+      if (sampleIndex > -1) {
+        this.sampleIdColumnTarget.value = this.#headers[sampleIndex];
+        this.#enableDialogState();
+        break;
+      }
+    }
     this.#enableTarget(this.sampleIdColumnTarget);
   }
 
   #addMetadataColumns() {
     const ignoreList = [
-      "sample id",
+      "sample_name",
       "sample name",
+      "sample",
+      "sample_id",
+      "sample id",
+      "sample_puid",
+      "sample puid",
       "project id",
+      "project_id",
+      "project_puid",
+      "project puid",
       "created_at",
       "updated_at",
       "last_updated_at",
+      "description",
     ];
 
     let columns = this.#headers.filter(
@@ -109,18 +104,13 @@ export default class extends Controller {
         !ignoreList.includes(header.toLowerCase()) &&
         header.toLowerCase() != this.sampleIdColumnTarget.value.toLowerCase(),
     );
-
-    this.metadataColumnsTarget.innerHTML =
-      this.sortableListsTemplateTarget.innerHTML;
-
-    columns.forEach((column) => {
-      const template =
-        this.sortableListsItemTemplateTarget.content.cloneNode(true);
-      template.querySelector("li").innerText = column;
-      template.querySelector("li").id = column.replace(/\s+/g, "-");
-      this.metadataColumnsTarget.querySelector("#selected").append(template);
-    });
-    this.submitButtonTarget.disabled = !columns.length;
+    if (columns.length > 0) {
+      this.metadataColumnsTarget.classList.remove("hidden");
+      this.sendMetadata(columns);
+    } else {
+      this.metadataColumnsTarget.classList.add("hidden");
+      this.#enableErrorState();
+    }
   }
 
   #removeInputOptions(target) {
@@ -131,11 +121,40 @@ export default class extends Controller {
 
   #disableTarget(target) {
     target.disabled = true;
-    target.classList.add(...this.#disabled_classes);
   }
 
   #enableTarget(target) {
     target.disabled = false;
-    target.classList.remove(...this.#disabled_classes);
+  }
+
+  #resetDialogState() {
+    this.#disableTarget(this.submitButtonTarget);
+    if (this.hasMetadataColumnsTarget) {
+      this.metadataColumnsTarget.classList.add("hidden");
+    }
+  }
+
+  #enableDialogState() {
+    this.#enableTarget(this.submitButtonTarget);
+    if (this.hasMetadataColumnsTarget) {
+      this.#addMetadataColumns();
+    }
+  }
+
+  #disableErrorState() {
+    this.errorTarget.classList.add("hidden");
+  }
+
+  #enableErrorState() {
+    this.errorTarget.classList.remove("hidden");
+    this.#disableTarget(this.submitButtonTarget);
+  }
+
+  sendMetadata(unselectedHeaders) {
+    this.dispatch("sendMetadata", {
+      detail: {
+        content: { metadata: unselectedHeaders },
+      },
+    });
   }
 }
