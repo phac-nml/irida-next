@@ -1275,8 +1275,9 @@ module Groups
       within('#dialog') do
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/group/missing_puid.csv'))
-        select "#{project2.namespace.full_path} (#{project2.namespace.puid})",
-               from: I18n.t('shared.samples.spreadsheet_imports.dialog.static_project')
+
+        find('input.select2-input').click
+        find("li[data-value='#{project2.id}']").click
 
         click_on I18n.t('shared.samples.spreadsheet_imports.dialog.submit_button')
         ### ACTIONS END ###
@@ -1372,7 +1373,6 @@ module Groups
         assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: true
         assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: true
         assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.project_puid_column'), disabled: true
-        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.static_project'), disabled: true
         attach_file('spreadsheet_import[file]',
                     Rails.root.join('test/fixtures/files/batch_sample_import/group/valid.csv'))
 
@@ -1380,19 +1380,16 @@ module Groups
         assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: false
         assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: false
         assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.project_puid_column'), disabled: false
-        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.static_project'), disabled: false
 
         attach_file('spreadsheet_import[file]', Rails.root.join)
         # verify select inputs are re-disabled after file is unselected
         assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_name_column'), disabled: true
         assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.sample_description_column'), disabled: true
         assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.project_puid_column'), disabled: true
-        assert_select I18n.t('shared.samples.spreadsheet_imports.dialog.static_project'), disabled: true
         # verify blank values still exist
         assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_name_column')
         assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_sample_description_column')
         assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_project_puid_column')
-        assert_text I18n.t('shared.samples.spreadsheet_imports.dialog.select_static_project')
         ### ACTIONS AND VERIFY END ###
       end
     end

@@ -21,6 +21,8 @@ export default class Select2Controller extends Controller {
     "submitButton",
   ];
 
+  static outlets = ["spreadsheet-import"];
+
   #itemSelected = false;
   #cachedInputValue = "";
   #currentItemIndex = -1;
@@ -253,6 +255,9 @@ export default class Select2Controller extends Controller {
     // Ensure itemSelected state reflects a valid selection update
     this.#setItemSelected(true);
 
+    if (this.hasSpreadsheetImportOutlet) {
+      this.spreadsheetImportOutlet.checkFormInputsReadyForSubmit();
+    }
     // Note: Hiding dropdown and focusing input are now handled back in the `select` method
     // after #updateSelection completes successfully.
   }
@@ -271,6 +276,10 @@ export default class Select2Controller extends Controller {
       }
       this.inputTarget.focus();
       this.#updateAriaActiveDescendant();
+
+      if (this.hasSpreadsheetImportOutlet) {
+        this.spreadsheetImportOutlet.checkFormInputsReadyForSubmit();
+      }
     } catch (error) {
       this.#handleError(error, "resetInput");
     }
@@ -432,6 +441,9 @@ export default class Select2Controller extends Controller {
       this.hiddenTarget.value = "";
       this.#cachedInputValue = "";
       this.#setItemSelected(false);
+      if (this.hasSpreadsheetImportOutlet) {
+        this.spreadsheetImportOutlet.checkFormInputsReadyForSubmit();
+      }
       return;
     }
     this.inputTarget.value = foundItem ? foundItem.dataset.label : "";

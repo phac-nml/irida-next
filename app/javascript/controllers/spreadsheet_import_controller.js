@@ -6,7 +6,6 @@ export default class extends Controller {
     "sampleNameColumn",
     "projectPUIDColumn",
     "sampleDescriptionColumn",
-    "staticProject",
     "submitButton",
     "metadata",
   ];
@@ -40,6 +39,9 @@ export default class extends Controller {
       this.#selectedHeaders["spreadsheet_import_project_puid_column"] = null;
       this.#blankValues["spreadsheet_import_project_puid_column"] =
         this.selectProjectValue;
+      this.staticProjectInput = document.getElementById(
+        "spreadsheet_import_static_project_id",
+      );
     }
   }
 
@@ -94,9 +96,6 @@ export default class extends Controller {
         return a.toLowerCase().localeCompare(b.toLowerCase());
       });
       this.#setAutoSelections();
-      if (this.hasStaticProjectTarget) {
-        this.#enableTarget(this.staticProjectTarget);
-      }
       this.checkFormInputsReadyForSubmit();
     };
   }
@@ -110,9 +109,6 @@ export default class extends Controller {
     if (this.hasProjectPUIDColumnTarget) {
       this.#selectedHeaders["spreadsheet_import_project_puid_column"] = null;
       this.#resetSelectInput(this.projectPUIDColumnTarget);
-
-      this.#disableTarget(this.staticProjectTarget);
-      this.staticProjectTarget.value = "";
     }
     this.#resetSelectInput(this.sampleDescriptionColumnTarget);
     this.submitButtonTarget.disabled = true;
@@ -238,7 +234,7 @@ export default class extends Controller {
     let staticProjectSelected = true;
     if (this.hasProjectPUIDColumnTarget) {
       projectSelected = this.projectPUIDColumnTarget.value;
-      staticProjectSelected = this.staticProjectTarget.value;
+      staticProjectSelected = this.staticProjectInput.value;
     }
 
     if (
@@ -290,6 +286,7 @@ export default class extends Controller {
       this.#createInputOption("", this.#blankValues[columnTarget.id]),
     );
   }
+
   sendMetadata(unselectedHeaders) {
     this.dispatch("sendMetadata", {
       detail: {
