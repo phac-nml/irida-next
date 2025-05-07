@@ -12,7 +12,7 @@
 <div class="flex items-center ml-2 namespace-text-container grow">
   <div class="flex flex-col namespace-text">
     <div class="flex flex-wrap items-center space-x-2 font-semibold title">
-      <%= link_to namespace_path, data: { turbo: false }, class: "hover:underline" do %>
+      <%= link_to namespace_path(@namespace), data: { turbo: false }, class: "hover:underline" do %>
         <%= highlight(
           @namespace.name,
           defined?(@search_params[:name_or_puid_cont]) &&
