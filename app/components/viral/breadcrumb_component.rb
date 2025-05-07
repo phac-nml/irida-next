@@ -10,7 +10,7 @@ module Viral
     end
 
     def render?
-      false if @links.blank?
+      @links.any?
     end
 
     private
