@@ -6,13 +6,12 @@
         data: t(".success", filename: attachment.file.filename),
       ) %>
     <% end %>
-    <% if !attachment.associated_attachment || (attachment.associated_attachment && attachment.metadata['direction'] == 'forward') %>
-      <%= turbo_stream.append "attachments-table-body",
-                          partial: "attachment",
-                          locals: {
-                            attachment: attachment,
-                          } %>
-    <% end %>
+
+    <turbo-stream action="replace" method="morph" target="sample-attachments">
+      <template>
+        <%= render partial: "table", locals: { attachments: attachments, sample: @sample } %>
+      </template>
+    </turbo-stream>
   <% else %>
     <%= turbo_stream.append "flashes" do %>
       <%= viral_flash(
@@ -27,9 +26,4 @@
     <% end %>
   <% end %>
 <% end %>
-<%= turbo_stream.update "sample_modal",
-                    partial: "new_attachment_modal",
-                    locals: {
-                      open: false,
-                      attachment: attachment,
-                    } %>
+<%= turbo_stream.remove "sample_modal" %>
