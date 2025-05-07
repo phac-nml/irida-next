@@ -2,7 +2,6 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = [
-    "table",
     "tableBody",
     "submit",
     "error",
@@ -331,7 +330,7 @@ export default class extends Controller {
       }
       for (let i = startingIndex; i < lastIndex; i++) {
         let sampleIndex = this.#currentSampleIndexes[i];
-        let tableRow = this.#generateTableRow(sampleIndex);
+        let tableRow = this.#generateTableRow();
 
         this.#columnNames.forEach((columnName) => {
           let container = this.#generateCellContainer(
@@ -371,14 +370,12 @@ export default class extends Controller {
     }
   }
 
-  #generateTableRow(index) {
+  #generateTableRow() {
     this.tableBodyTarget.insertAdjacentHTML(
       "beforeend",
       this.tableRowTarget.innerHTML,
     );
-    let tableRow = this.tableBodyTarget.lastElementChild;
-    tableRow.id = `samplesheet_row_${index}`;
-    return tableRow;
+    return this.tableBodyTarget.lastElementChild;
   }
 
   // inserting the template html then requerying it out via lastElementChild turns the node from textNode into an
