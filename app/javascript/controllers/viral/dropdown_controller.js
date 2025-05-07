@@ -15,12 +15,12 @@ export default class extends Controller {
       offsetSkidding: this.skiddingValue,
       offsetDistance: this.distanceValue,
       onShow: () => {
-        this.element.setAttribute("data-dropdown-open", "true");
-        this.triggerTarget.setAttribute("aria-expanded", "true");
+        this.menuTarget.setAttribute("aria-expanded", "true");
+        this.menuTarget.removeAttribute("aria-hidden");
       },
       onHide: () => {
-        this.element.removeAttribute("data-dropdown-open");
-        this.triggerTarget.setAttribute("aria-expanded", "false");
+        this.menuTarget.setAttribute("aria-expanded", "false");
+        this.menuTarget.removeAttribute("aria-hidden");
       },
     });
 
