@@ -15,11 +15,11 @@ export default class extends Controller {
       offsetSkidding: this.skiddingValue,
       offsetDistance: this.distanceValue,
       onShow: () => {
-        this.menuTarget.setAttribute("aria-expanded", "true");
+        this.triggerTarget.setAttribute("aria-expanded", "true");
         this.menuTarget.removeAttribute("aria-hidden");
       },
       onHide: () => {
-        this.menuTarget.setAttribute("aria-expanded", "false");
+        this.triggerTarget.setAttribute("aria-expanded", "false");
         this.menuTarget.removeAttribute("aria-hidden");
       },
     });

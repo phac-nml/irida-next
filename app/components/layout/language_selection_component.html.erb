@@ -18,6 +18,7 @@
     type="button"
     aria-haspopup="listbox"
     aria-controls="language-selection-dd-menu"
+    aria-expanded="false"
   >
     <%= viral_icon(
       name: "language",
@@ -31,7 +32,6 @@
   <!-- Dropdown menu -->
   <div
     data-viral--dropdown-target="menu"
-    aria-expanded="false"
     id="language-selection-dd-menu"
     class="
       hidden w-32 bg-white divide-y divide-slate-100 rounded-lg shadow-sm

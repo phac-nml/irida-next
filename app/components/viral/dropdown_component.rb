@@ -34,7 +34,7 @@ module Viral
     # rubocop:enable Metrics/ParameterLists
 
     def default_system_arguments(args)
-      data = { 'viral--dropdown-target': 'trigger' }
+      data = { 'viral--dropdown-target': 'trigger', 'aria-expanded': false }
 
       if @action_link
         data = data.merge({
