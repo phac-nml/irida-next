@@ -7,9 +7,13 @@
       ) %>
     <% end %>
 
-    <turbo-stream action="replace" method="morph" target="sample-attachments">
+    <turbo-stream action="update" method="morph" target="sample-attachments">
       <template>
-        <%= render partial: "table", locals: { attachments: attachments, sample: @sample } %>
+        <%= render partial: "table",
+        locals: {
+          attachments: @sample.attachments,
+          sample: @sample,
+        } %>
       </template>
     </turbo-stream>
   <% else %>
@@ -26,4 +30,9 @@
     <% end %>
   <% end %>
 <% end %>
-<%= turbo_stream.remove "sample_modal" %>
+<%= turbo_stream.update "sample_modal",
+                    partial: "new_attachment_modal",
+                    locals: {
+                      open: false,
+                      attachment: attachment,
+                    } %>
