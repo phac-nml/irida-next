@@ -2244,6 +2244,9 @@ en:
     summary:
       created_at: Created
       name: Name
+      run_from_namespace:
+        group: Run from Group
+        project: Run from Project
       run_id: Run ID
       shared_with_namespace:
         group: Shared with Group

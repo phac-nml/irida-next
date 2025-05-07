@@ -2240,6 +2240,9 @@ fr:
     summary:
       created_at: Créé
       name: Nom
+      run_from_namespace:
+        group: Run from Group
+        project: Run from Project
       run_id: Exécuter l’identifiant
       shared_with_namespace:
         group: Shared with Group
