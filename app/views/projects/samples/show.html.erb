@@ -3,12 +3,12 @@
 <%= render Viral::PageHeaderComponent.new(title: @sample.name, id: @sample.puid, subtitle: @sample.description) do |component| %>
   <%= viral_pill(text: @sample.puid, color: :blue) %>
   <% component.with_buttons do %>
-    <div class="flex flex-row">
+    <div class="flex flex-row space-x-2">
       <% if @allowed_to[:update_sample] %>
         <%= link_to(
           t("projects.samples.show.edit_button"),
           edit_namespace_project_sample_path(id: @sample.id),
-          class: "button button--state-primary button--size-default mr-1",
+          class: "button button--state-default button--size-default",
         ) %>
       <% end %>
       <% if @allowed_to[:destroy_sample] %>
