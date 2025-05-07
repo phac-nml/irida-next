@@ -546,6 +546,8 @@ en:
       keys_deleted: 'Keys deleted:'
       previous_version: Previous (Version %{version})
     layout:
+      language_selection:
+        title: Language Selection
       main_content_link: Skip to content
     list_filter:
       apply: Apply filter
@@ -1442,7 +1444,7 @@ en:
           title: Delete project
         path:
           description: Changing a project's URL can have unintended side effects.
-          help: The path is used in URLs and can only contain letters, numbers, dashes and underscores
+          help: The path is used in URLs and must be at least 3 characters and can only contain letters, numbers, dashes and underscores
           submit: Change project URL
           title: Change project URL
         title: Advanced settings
@@ -2132,8 +2134,6 @@ en:
           other: Displaying <span class='font-bold'>%{from}-%{to}</span> of <span class='font-bold'>%{count}</span> items
       pagination_component:
         aria_label: Pagination Navigation
-        at_first_aria_label: You are on the first page
-        at_last_aria_label: You are on the last page
         item_aria_label: Go to Page %{number}
         next: Next
         next_aria_label: Go to next page

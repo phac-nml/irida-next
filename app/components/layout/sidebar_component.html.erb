@@ -77,9 +77,13 @@
           dark:border-slate-800 dark:text-slate-200 cursor-pointer
         "
         data-viral--dropdown-target='trigger'
+        aria-haspopup="listbox"
+        aria-controls="sidebar-dd-menu"
         aria-expanded="false"
       ><%= t(:"general.default_sidebar.goto") %></button>
       <div
+        id="sidebar-dd-menu"
+        role="menu"
         aria-expanded="false"
         data-viral--dropdown-target="menu"
         class="
@@ -91,22 +95,26 @@
           <%= t(:"general.default_sidebar.title") %>
         </h3>
         <ul class="py-2 w-full text-sm text-slate-700 dark:text-slate-200">
-          <li>
+          <li role="presentation">
             <%= link_to t(:"general.default_sidebar.projects"),
             dashboard_projects_path,
+            role: "menuitem",
             class:
               "px-4 py-2 block text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-950" %>
           </li>
-          <li><%= link_to t(:"general.default_sidebar.groups"),
+          <li role="presentation"><%= link_to t(:"general.default_sidebar.groups"),
             groups_path,
+            role: "menuitem",
             class:
               "px-4 py-2 block text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-950" %></li>
-          <li><%= link_to t(:"general.default_sidebar.workflows"),
+          <li role="presentation"><%= link_to t(:"general.default_sidebar.workflows"),
             workflow_executions_path,
+            role: "menuitem",
             class:
               "px-4 py-2 block text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-950" %></li>
-          <li><%= link_to t(:"general.default_sidebar.data_exports"),
+          <li role="presentation"><%= link_to t(:"general.default_sidebar.data_exports"),
             data_exports_path,
+            role: "menuitem",
             class:
               "px-4 py-2 block text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-950" %></li>
         </ul>

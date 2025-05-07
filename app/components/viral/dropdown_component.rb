@@ -24,6 +24,7 @@ module Viral
       @action_link = action_link
       @action_link_value = action_link_value
       @trigger = TRIGGER_MAPPINGS[trigger]
+      @dd_id = "dd-#{SecureRandom.hex(10)}"
 
       @system_arguments = default_system_arguments(system_arguments)
       @system_arguments[:title] = tooltip if tooltip.present?
@@ -34,8 +35,7 @@ module Viral
     # rubocop:enable Metrics/ParameterLists
 
     def default_system_arguments(args)
-      data = { 'viral--dropdown-target': 'trigger', 'aria-expanded': false }
-
+      data = { 'viral--dropdown-target': 'trigger' }
       if @action_link
         data = data.merge({
                             action: 'turbo:morph-element->action-button#idempotentConnect',
@@ -49,7 +49,10 @@ module Viral
                    data:,
                    tag: :button,
                    type: :button,
-                   classes: 'cursor-pointer'
+                   classes: 'cursor-pointer',
+                   'aria-expanded': false,
+                   'aria-haspopup': true,
+                   'aria-controls': @dd_id
                  })
     end
 

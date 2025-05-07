@@ -6,6 +6,8 @@
   data-viral--dropdown-position-value="bottom-start"
   data-turbo="false"
   class="inline-flex items-center"
+  role="region"
+  aria-label="<%= t(:'components.layout.language_selection.title') %>"
 >
   <button
     data-viral--dropdown-target="trigger"
@@ -41,16 +43,17 @@
   >
     <ul
       id="language_selection_dropdown"
-      role="listbox"
       class="
         py-2 text-sm text-slate-700 dark:text-slate-200 focus:outline-none
       "
       aria-labelledby="language-selection-dd-label"
       tabindex="-1"
+      role="menu"
     >
       <% @locale_options.each do |locale_name, locale_value| %>
         <% if @user.locale.to_sym == locale_value %>
           <li
+            role="presentation"
             class="
               flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600
               dark:hover:text-white bg-slate-100 text-slate-600 dark:bg-slate-600
@@ -59,7 +62,7 @@
           ><%= locale_name %></li>
         <% else %>
           <li
-            role="option"
+            role="menuitem"
             class="
               flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600
               dark:hover:text-white cursor-pointer

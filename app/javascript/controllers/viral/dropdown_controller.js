@@ -16,17 +16,19 @@ export default class extends Controller {
       offsetDistance: this.distanceValue,
       onShow: () => {
         this.triggerTarget.setAttribute("aria-expanded", "true");
-        this.menuTarget.removeAttribute("aria-hidden");
+        this.menuTarget.setAttribute("aria-hidden", "false");
       },
       onHide: () => {
         this.triggerTarget.setAttribute("aria-expanded", "false");
-        this.menuTarget.removeAttribute("aria-hidden");
+        this.menuTarget.setAttribute("aria-hidden", "true");
       },
     });
 
     this.boundHandleTriggerFocusOut = this.handleTriggerFocusOut.bind(this);
 
     this.element.setAttribute("data-controller-connected", "true");
+
+    this.menuTarget.setAttribute("aria-hidden", "true");
 
     this.menuTarget.addEventListener(
       "focusout",

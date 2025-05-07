@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Pagnation component using pagy gem
-class PaginationComponent < ViewComponent::Base
+class PaginationComponent < Component
   attr_reader :prev_url, :next_url, :info
 
   def initialize(info:, prev_url: nil, next_url: nil, **link_arguments)
