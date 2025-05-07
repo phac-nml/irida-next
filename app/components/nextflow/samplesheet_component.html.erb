@@ -51,25 +51,28 @@
       ></div>
     </div>
   </div>
-  <div
+  <table
     data-nextflow--samplesheet-target="table"
     class="
-      relative flex mb-1 overflow-y-auto border samplesheet-table
-      dark:border-slate-600 border-slate-100 max-h-72
+      w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+      whitespace-nowrap
     "
   >
-    <% properties.each do |header, property| %>
-      <%= render Nextflow::Samplesheet::HeaderComponent.new(
-        namespace_id:,
-        header:,
-        property:,
-        samples: @samples,
-        metadata_fields:,
-        required_properties:,
-        workflow_params:,
-      ) %>
-    <% end %>
-  </div>
+    <thead class="@2xl:sticky @2xl:top-0 z-10 text-xs uppercase">
+      <% properties.each do |header, property| %>
+        <%= render Nextflow::Samplesheet::HeaderComponent.new(
+          namespace_id:,
+          header:,
+          property:,
+          samples: @samples,
+          metadata_fields:,
+          required_properties:,
+          workflow_params:,
+        ) %>
+      <% end %>
+    </thead>
+    <tbody data-nextflow--samplesheet-target="tableBody"></tbody>
+  </table>
   <div
     data-nextflow--samplesheet-target="emptyState"
     class="flex justify-center hidden"
@@ -85,11 +88,25 @@
     class="flex items-center justify-end"
   >
   </div>
+  <div hidden id="samplesheet-payload-container"></div>
 </div>
 
+<template data-nextflow--samplesheet-target="tableRow">
+  <tr
+    class="
+      bg-white border-b border-slate-200 dark:bg-slate-800 dark:border-slate-700
+    "
+  ></tr>
+</template>
+
+<template data-nextflow--samplesheet-target="headerContainer">
+  <th class="border table-td dark:border-slate-600 border-slate-100 font-medium">
+  </th>
+</template>
+
 <template data-nextflow--samplesheet-target="cellContainer">
-  <div class="border table-td dark:border-slate-600 border-slate-100">
-  </div>
+  <td class="border table-td dark:border-slate-600 border-slate-100">
+  </td>
 </template>
 
 <template data-nextflow--samplesheet-target="sampleIdentifierCell">

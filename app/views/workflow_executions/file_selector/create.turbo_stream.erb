@@ -4,7 +4,7 @@
                       open: false,
                       file_selector_params:,
                     } %>
-<%= turbo_stream.append "metadata-#{file_selector_params["property"]}-column" do %>
+<%= turbo_stream.append "samplesheet-payload-container" do %>
   <div
     hidden
     data-controller="nextflow--file"
