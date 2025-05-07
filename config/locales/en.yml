@@ -1622,9 +1622,9 @@ en:
           success: File %{filename} was successfully removed.
         table:
           empty_state:
-            action_text: Upload New Attachment
+            action_text: Upload Files
             description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
-            title: No Attachments Yet
+            title: No files have been uploaded
       clones:
         create:
           error: 'The following list of samples failed to copy:'
