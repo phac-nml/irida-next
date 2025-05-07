@@ -3,6 +3,7 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = [
     "table",
+    "tableBody",
     "submit",
     "error",
     "errorMessage",
@@ -10,6 +11,8 @@ export default class extends Controller {
     "spinner",
     "workflowAttributes",
     "samplesheetProperties",
+    "tableRow",
+    "headerContainer",
     "cellContainer",
     "sampleIdentifierCell",
     "dropdownCell",
@@ -326,16 +329,16 @@ export default class extends Controller {
       ) {
         lastIndex = (this.#currentSampleIndexes.length % 5) + startingIndex;
       }
-      this.#columnNames.forEach((columnName) => {
-        let columnNode = document.getElementById(
-          `metadata-${columnName}-column`,
-        );
-        for (let i = startingIndex; i < lastIndex; i++) {
-          let sampleIndex = this.#currentSampleIndexes[i];
+      for (let i = startingIndex; i < lastIndex; i++) {
+        let sampleIndex = this.#currentSampleIndexes[i];
+        let tableRow = this.#generateTableRow(sampleIndex);
+
+        this.#columnNames.forEach((columnName) => {
           let container = this.#generateCellContainer(
-            columnNode,
+            tableRow,
             columnName,
             sampleIndex,
+            this.#columnNames.indexOf(columnName) == 0,
           );
           switch (this.#samplesheetProperties[columnName]["cell_type"]) {
             case "sample_cell":
@@ -361,21 +364,33 @@ export default class extends Controller {
               this.#generateTextCell(container, columnName, sampleIndex);
               break;
           }
-        }
-      });
+        });
+      }
     } else {
       this.emptyStateTarget.classList.remove("hidden");
     }
   }
 
+  #generateTableRow(index) {
+    this.tableBodyTarget.insertAdjacentHTML(
+      "beforeend",
+      this.tableRowTarget.innerHTML,
+    );
+    let tableRow = this.tableBodyTarget.lastElementChild;
+    tableRow.id = `samplesheet_row_${index}`;
+    return tableRow;
+  }
+
   // inserting the template html then requerying it out via lastElementChild turns the node from textNode into an
   // HTML element we can manipulate via appendChild, insertHTML, etc.
-  #generateCellContainer(columnNode, columnName, index) {
-    let newCellContainer = this.cellContainerTarget.innerHTML;
-    columnNode.insertAdjacentHTML("beforeend", newCellContainer);
-    let container = columnNode.lastElementChild;
+  #generateCellContainer(tableRow, columnName, index, headerCell) {
+    let newCellContainer = headerCell
+      ? this.headerContainerTarget.innerHTML
+      : this.cellContainerTarget.innerHTML;
+    tableRow.insertAdjacentHTML("beforeend", newCellContainer);
+    let container = tableRow.lastElementChild;
     container.id = `${index}_${columnName}`;
-    return columnNode.lastElementChild;
+    return tableRow.lastElementChild;
   }
 
   #generateSampleCell(container, columnName, index) {
@@ -503,9 +518,7 @@ export default class extends Controller {
       this.#verifyPaginationButtonStates();
     }
     // delete the table data and reload with new indexes
-    this.#columnNames.forEach((columnName) => {
-      document.getElementById(`metadata-${columnName}-column`).innerHTML = "";
-    });
+    this.tableBodyTarget.innerHTML = "";
     this.#loadTableData();
   }
 
