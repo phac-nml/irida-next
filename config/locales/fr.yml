@@ -528,6 +528,9 @@ fr:
       title: Confirmation requise
     dialog:
       close: Fermer la boîte de dialogue
+      pagination:
+        at_first_aria_label: You are on the first page
+        at_last_aria_label: You are on the last page
     flash:
       error_icon: Icône X
       information_icon: Icône de renseignements
