@@ -31,10 +31,7 @@
     style="<%= dropdown_styles %>"
     aria-labelledby="<%= system_arguments[:id] %>"
   >
-    <ul
-      class="py-2 text-sm text-slate-700 dark:text-slate-200"
-      role="menu"
-    >
+    <ul class="py-2 text-sm text-slate-700 dark:text-slate-200" role="menu">
       <% items.each do |item| %>
         <%= item %>
       <% end %>
