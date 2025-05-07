@@ -55,11 +55,11 @@ module Activities
         @aria_labels = {
           previous: {
             enabled: I18n.t('components.activity.dialog.pagination.previous_aria_label'),
-            disabled: I18n.t('components.activity.dialog.pagination.at_first_aria_label')
+            disabled: I18n.t('components.dialog.pagination.at_first_aria_label')
           },
           next: {
             enabled: I18n.t('components.activity.dialog.pagination.next_aria_label'),
-            disabled: I18n.t('components.activity.dialog.pagination.at_last_aria_label')
+            disabled: I18n.t('components.dialog.pagination.at_last_aria_label')
           }
         }.to_json
       end

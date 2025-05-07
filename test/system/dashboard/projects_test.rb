@@ -70,12 +70,10 @@ module Dashboard
       assert_text 'Displaying 4 items'
       assert_selector 'tr', count: 4
       assert_text projects(:john_doe_project2).human_name
-      assert_selector "a[aria-label='#{I18n.t(:'viral.pagy.pagination_component.at_first_aria_label')}']" \
-                      '.cursor-not-allowed',
-                      exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
-      assert_selector "a[aria-label='#{I18n.t(:'viral.pagy.pagination_component.at_last_aria_label')}']" \
-                      '.cursor-not-allowed',
-                      exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+      assert_no_selector 'a',
+                         exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+      assert_no_selector 'a',
+                         exact_text: I18n.t(:'viral.pagy.pagination_component.next')
     end
 
     test 'can search the list of projects by name' do
@@ -89,12 +87,10 @@ module Dashboard
       find('input.t-search-component').native.send_keys(:return)
 
       assert_selector 'tr', count: 12
-      assert_selector "a[aria-label='#{I18n.t(:'viral.pagy.pagination_component.at_first_aria_label')}']" \
-                      '.cursor-not-allowed',
-                      exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
-      assert_selector "a[aria-label='#{I18n.t(:'viral.pagy.pagination_component.at_last_aria_label')}']" \
-                      '.cursor-not-allowed',
-                      exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+      assert_no_selector 'a',
+                         exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+      assert_no_selector 'a',
+                         exact_text: I18n.t(:'viral.pagy.pagination_component.next')
 
       assert_selector %(input.t-search-component) do |input|
         assert_equal @project.name, input['value']
