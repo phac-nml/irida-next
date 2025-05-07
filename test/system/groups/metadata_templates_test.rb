@@ -28,8 +28,8 @@ module Groups
       end
 
       assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
-      assert_selector "a[aria-label='#{I18n.t(:'viral.pagy.pagination_component.at_first_aria_label')}']",
-                      exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
+      assert_no_selector 'a',
+                         exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
 
       click_on I18n.t(:'viral.pagy.pagination_component.next')
 
@@ -38,8 +38,8 @@ module Groups
       end
 
       assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.previous')
-      assert_selector "a[aria-label='#{I18n.t(:'viral.pagy.pagination_component.at_last_aria_label')}']",
-                      exact_text: I18n.t(:'viral.pagy.pagination_component.next')
+      assert_no_selector 'a',
+                         exact_text: I18n.t(:'viral.pagy.pagination_component.next')
 
       click_on I18n.t(:'viral.pagy.pagination_component.previous')
 
