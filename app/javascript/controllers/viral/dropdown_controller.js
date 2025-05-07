@@ -14,6 +14,14 @@ export default class extends Controller {
       triggerType: this.triggerValue,
       offsetSkidding: this.skiddingValue,
       offsetDistance: this.distanceValue,
+      onShow: () => {
+        this.element.setAttribute("data-dropdown-open", "true");
+        this.triggerTarget.setAttribute("aria-expanded", "true");
+      },
+      onHide: () => {
+        this.element.removeAttribute("data-dropdown-open");
+        this.triggerTarget.setAttribute("aria-expanded", "false");
+      },
     });
 
     this.boundHandleTriggerFocusOut = this.handleTriggerFocusOut.bind(this);

@@ -1,10 +1,14 @@
 <div
-  data-controller="language-selection-dd"
+  data-controller="viral--dropdown"
+  data-viral--dropdown-skidding-value="0"
+  data-viral--dropdown-distance-value="5"
+  data-viral--dropdown-trigger-value="click"
+  data-viral--dropdown-position-value="bottom-start"
   data-turbo="false"
   class="inline-flex items-center"
 >
   <button
-    data-language-selection-dd-target="trigger"
+    data-viral--dropdown-target="trigger"
     id="language-selection-dd-trigger"
     class="
       navbar-button text-slate-600 dark:text-slate-400 border border-slate-300
@@ -13,7 +17,6 @@
     "
     type="button"
     aria-haspopup="listbox"
-    aria-expanded="false"
     aria-controls="language-selection-dd-menu"
   >
     <%= viral_icon(
@@ -27,7 +30,8 @@
   </button>
   <!-- Dropdown menu -->
   <div
-    data-language-selection-dd-target="menu"
+    data-viral--dropdown-target="menu"
+    aria-expanded="false"
     id="language-selection-dd-menu"
     class="
       hidden w-32 bg-white divide-y divide-slate-100 rounded-lg shadow-sm
