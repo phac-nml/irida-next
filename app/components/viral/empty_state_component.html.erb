@@ -1,30 +1,52 @@
 <section
   class="
-    flex items-center p-6 space-x-4 border border-slate-300 rounded-lg shadow
-    dark:border-slate-700 pointer-events-none
+    flex items-start p-6 space-x-5 bg-white dark:bg-slate-800 border
+    border-slate-200 dark:border-slate-700 rounded-lg shadow-md
   "
-  role="alert"
+  role="region"
+  aria-labelledby="empty-state-title-<%= self.object_id %>"
+  <%# 💡 Unique ID for aria-labelledby for multiple instances %>
 >
-  <span
+  <%# Icon Section: Visually distinct with an accent color %>
+  <div
     aria-hidden="true"
     class="
-      flex-shrink-0 flex items-center justify-center w-16 h-16 rounded-full
-      bg-primary-100 dark:bg-primary-700
+      flex-shrink-0 flex items-center justify-center w-14 h-14 rounded-full
+      bg-emerald-100 dark:bg-emerald-800 <%# 🎨 Emerald accent for icon background %>
     "
   >
     <%= viral_icon(
-      name: icon_name,
-      classes: "size-8 text-primary-600 dark:text-primary-200",
+      name: @icon_name,
+      classes: "size-7 text-emerald-600 dark:text-emerald-400", # 🎨 Emerald accent for icon color
     ) %>
-  </span>
-  <div>
-    <h1 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-      <%= title %>
-    </h1>
-    <% if description.present? %>
-      <p class="text-base font-normal text-slate-700 dark:text-slate-300 mt-1">
-        <%= description %>
-      </p>
+  </div>
+
+  <%# Text and Action Section: Clear hierarchy and actionable elements %>
+  <div class="flex-grow">
+    <h3
+      id="empty-state-title-<%= self.object_id %>"
+      class="text-lg font-semibold text-slate-800 dark:text-slate-100"
+    >
+      <%= @title %>
+    </h3>
+
+    <%# Description and optional inline action link. Uses helper methods from the component class. %>
+    <% if render_content_area? %>
+      <div class="text-sm text-slate-600 dark:text-slate-400 mt-1">
+        <% if @description.present? %>
+          <span><%= @description %></span>
+        <% end %>
+
+        <%# 🚀 Optional action link, styled to flow with the description %>
+        <% if @action_text.present? && @action_path.present? %>
+          <%= " " if space_needed_before_action? %>
+          <%= link_to @action_text,
+          @action_path,
+          method: @action_method,
+          class:
+            "font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 hover:underline focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 rounded-sm" %>
+        <% end %>
+      </div>
     <% end %>
   </div>
 </section>
