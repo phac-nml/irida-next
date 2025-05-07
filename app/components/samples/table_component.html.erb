@@ -106,7 +106,7 @@
                         ) %>
                       </span>
                     <% end %>
-                  <% elsif column == :project_id %>
+                  <% elsif column == "namespaces.puid" %>
                     <%= link_to sample.project.puid,
                     namespace_project_samples_path(sample.project.namespace.parent, sample.project),
                     data: {
