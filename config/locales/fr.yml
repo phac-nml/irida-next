@@ -1706,6 +1706,14 @@ fr:
           remove_field: Supprimer le champ
           submit_button: Ajouter
           value: Valeur
+        new_metadata_modal:
+          title: Add Metadata
+        table:
+          add_metadata: Add Metadata
+          concatenate_button: Concatenate Files
+          delete_metadata_button: Delete Metadata
+          no_associated_metadata: This sample currently has no metadata.  Get started by adding metadata to your sample.
+          no_metadata: No metadata has added
       new:
         cancel_button: Annuler
         submit_button: Créer un échantillon
@@ -1718,10 +1726,8 @@ fr:
           ok_button: OK
           success: Réussite
       show:
-        add_metadata: Ajouter des métadonnées
-        concatenate_button: Concaténer les fichiers
+        concatenate_button: Concatenate Files
         delete_files_button: Supprimer des fichiersDelete Files
-        delete_metadata_button: Supprimer les métadonnéesDelete Metadata
         edit_button: Modifier cet échantillon
         files: Fichiers
         files_ignored: 'Les fichiers fasta et fastq doivent être compressés. Les fichiers suivants ne peuvent pas être téléchargés :'
