@@ -144,9 +144,13 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
   end
 
   def namespace_linkable_groups
-    @namespace_linkable_groups = Group.where.not(
-      id: NamespaceGroupLink.where(namespace:).select(:group_id) + Group.where(id: namespace.id).select(:id)
-    ).order(:name)
+    @namespace_linkable_groups = Group.where.not(id: NamespaceGroupLink.where(namespace:).select(:group_id))
+
+    @namespace_linkable_groups = if namespace.project_namespace?
+                                   @namespace_linkable_groups.where.not(id: namespace.parent.self_and_ancestor_ids).order(:name)
+                                 else
+                                   @namespace_linkable_groups.where.not(id: namespace.self_and_ancestor_ids).order(:name)
+                                 end
   end
 
   def load_namespace_group_links
