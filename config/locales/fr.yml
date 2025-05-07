@@ -1362,8 +1362,8 @@ fr:
         upload_files: Télécharger des fichiers
       table:
         empty:
-          description: Il n’y a aucun fichier associé à ce projet.
-          title: Aucun fichier
+          description: There are no files associated with this project.
+          title: No Files
     automated_workflow_executions:
       actions:
         delete_button: Supprimer
@@ -1616,6 +1616,11 @@ fr:
         destroy:
           error: 'Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}'
           success: Le fichier %{filename} a été supprimé avec succès.
+        table:
+          empty_state:
+            action_text: Upload New Attachment
+            description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
+            title: No Attachments Yet
       clones:
         create:
           error: 'La liste suivante des échantillons n’a pas été copiée :'
@@ -1740,9 +1745,7 @@ fr:
             update_metadata: Mettre à jour les métadonnées
             value: Valeur
         new_attachment_button: Télécharger des fichiers
-        no_associated_files: Click here to uploads files
         no_associated_metadata: Cet échantillon ne contient aucune métadonnée.
-        no_files: There are no files associated with this sample.
         no_metadata: Aucune métadonnée
         remove_button: Retirer
         remove_button_confirmation: Êtes-vous sûr de vouloir retirer cet échantillon du projet?

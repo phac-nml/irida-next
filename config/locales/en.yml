@@ -1620,6 +1620,11 @@ en:
         destroy:
           error: 'File %{filename} was not removed due to the following errors: %{errors}'
           success: File %{filename} was successfully removed.
+        table:
+          empty_state:
+            action_text: Upload New Attachment
+            description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
+            title: No Attachments Yet
       clones:
         create:
           error: 'The following list of samples failed to copy:'
@@ -1744,9 +1749,7 @@ en:
             update_metadata: Update Metadata
             value: Value
         new_attachment_button: Upload Files
-        no_associated_files: Click here to uploads files
         no_associated_metadata: This sample has no metadata.
-        no_files: There are no files associated with this sample.
         no_metadata: No Metadata
         remove_button: Remove
         remove_button_confirmation: Are you sure you want to remove this sample from the project?
