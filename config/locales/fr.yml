@@ -1710,7 +1710,6 @@ fr:
           title: Add Metadata
         table:
           add_metadata: Add Metadata
-          concatenate_button: Concatenate Files
           delete_metadata_button: Delete Metadata
           no_associated_metadata: This sample currently has no metadata.  Get started by adding metadata to your sample.
           no_metadata: No metadata has added
@@ -1751,8 +1750,6 @@ fr:
             update_metadata: Mettre à jour les métadonnées
             value: Valeur
         new_attachment_button: Télécharger des fichiers
-        no_associated_metadata: Cet échantillon ne contient aucune métadonnée.
-        no_metadata: Aucune métadonnée
         remove_button: Retirer
         remove_button_confirmation: Êtes-vous sûr de vouloir retirer cet échantillon du projet?
         table_header:
