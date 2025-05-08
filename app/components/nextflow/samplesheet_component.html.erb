@@ -51,27 +51,31 @@
       ></div>
     </div>
   </div>
-  <table
-    class="
-      w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-      whitespace-nowrap
-    "
-  >
-    <thead class="@2xl:sticky @2xl:top-0 z-10 text-xs uppercase">
-      <% properties.each do |header, property| %>
-        <%= render Nextflow::Samplesheet::HeaderComponent.new(
-          namespace_id:,
-          header:,
-          property:,
-          samples: @samples,
-          metadata_fields:,
-          required_properties:,
-          workflow_params:,
-        ) %>
-      <% end %>
-    </thead>
-    <tbody data-nextflow--samplesheet-target="tableBody"></tbody>
-  </table>
+  <div class="@2xl:flex @2xl:flex-col @3xl:min-h-0 @3xl:shrink table-container">
+    <div class="overflow-auto relative">
+      <table
+        class="
+          w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+          whitespace-nowrap
+        "
+      >
+        <thead class="@2xl:sticky @2xl:top-0 z-10 text-xs uppercase">
+          <% properties.each do |header, property| %>
+            <%= render Nextflow::Samplesheet::HeaderComponent.new(
+              namespace_id:,
+              header:,
+              property:,
+              samples: @samples,
+              metadata_fields:,
+              required_properties:,
+              workflow_params:,
+            ) %>
+          <% end %>
+        </thead>
+        <tbody data-nextflow--samplesheet-target="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
   <div
     data-nextflow--samplesheet-target="emptyState"
     class="flex justify-center hidden"
