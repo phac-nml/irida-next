@@ -40,6 +40,9 @@
       dark:bg-slate-700 dark:divide-slate-600 z-30
     "
     aria-labelledby="language-selection-dd-trigger"
+    aria-hidden="true"
+    tabindex="-1"
+    hidden
   >
     <ul
       id="language_selection_dropdown"
@@ -47,7 +50,6 @@
         py-2 text-sm text-slate-700 dark:text-slate-200 focus:outline-none
       "
       aria-labelledby="language-selection-dd-label"
-      tabindex="-1"
       role="menu"
     >
       <% @locale_options.each do |locale_name, locale_value| %>
