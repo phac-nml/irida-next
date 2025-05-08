@@ -32,6 +32,7 @@ module Samples
         assert_selector 'table', count: 1
         assert_selector 'table thead th', count: 6
         assert_selector 'table tbody tr', count: samples.count
+        assert_selector 'table thead th:nth-child(3) svg.icon-arrow_up'
         previous_project_puid = ''
         samples.each do |sample|
           assert_selector 'table tbody tr td:nth-child(2)', text: sample.name
