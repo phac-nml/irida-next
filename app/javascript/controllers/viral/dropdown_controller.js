@@ -17,10 +17,14 @@ export default class extends Controller {
       onShow: () => {
         this.triggerTarget.setAttribute("aria-expanded", "true");
         this.menuTarget.setAttribute("aria-hidden", "false");
+        this.menuTarget.removeAttribute("hidden");
+        this.menuTarget.setAttribute("tabindex", "0");
       },
       onHide: () => {
         this.triggerTarget.setAttribute("aria-expanded", "false");
         this.menuTarget.setAttribute("aria-hidden", "true");
+        this.menuTarget.setAttribute("tabindex", "-1");
+        this.menuTarget.setAttribute("hidden", "");
       },
     });
 
