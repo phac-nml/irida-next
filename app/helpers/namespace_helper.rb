@@ -3,9 +3,9 @@
 # Helper for namespace paths
 module NamespaceHelper
   def namespace_path(namespace)
-    if namespace.type == 'Group'
+    if namespace.group_namespace?
       group_path(namespace)
-    elsif namespace.type == 'Project'
+    elsif namespace.project_namespace?
       namespace_project_path(namespace.parent, namespace.project)
     end
   end
