@@ -34,9 +34,8 @@ module Samples
       if @sample.errors.any?
         render status: :unprocessable_entity, locals: { type: 'error', message: error_message(@sample) }
       else
-        status = get_create_status(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
-        messages = get_create_messages(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
-        render status:, locals: { messages: }
+        @status = get_create_status(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
+        @messages = get_create_messages(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
       end
     end
 

@@ -1,16 +1,18 @@
+<%# locals: { sample_metadata: @sample.metadata_with_provenance, sample: @sample } %>
+
 <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 <div id="sample-metadata">
   <% if sample_metadata.present? %>
   <div class="flex flex-row items-center ml-auto space-x-2 font-normal">
     <%= link_to t(".add_metadata"),
-    new_namespace_project_sample_metadata_path(sample_id: @sample.id),
+    new_namespace_project_sample_metadata_path(@project.namespace.parent, @project, @sample),
     data: {
       turbo_frame: "sample_modal",
       turbo_stream: true,
     },
     class: "button button--size-default button--state-default" %>
     <%= button_to t(".delete_metadata_button"),
-    new_namespace_project_sample_metadata_deletion_path(sample_id: @sample.id),
+    new_namespace_project_sample_metadata_deletion_path(@project.namespace.parent, @project, @sample),
     method: :get,
     data: {
       turbo_frame: "sample_modal",
