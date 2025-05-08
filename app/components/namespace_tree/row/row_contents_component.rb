@@ -4,7 +4,7 @@ module NamespaceTree
   module Row
     # Component for the contents of NamespaceTree row
     class RowContentsComponent < Viral::Component
-      include NamespaceHelper
+      include NamespacePathHelper
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(namespace:, path: nil, path_args: {}, collapsed: false, icon_size: :small, search_params: nil)

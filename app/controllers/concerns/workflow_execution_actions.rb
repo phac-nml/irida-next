@@ -4,7 +4,7 @@
 module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
   include ListActions
-  include NamespaceHelper
+  include NamespacePathHelper
 
   included do
     before_action :set_default_tab, only: :show

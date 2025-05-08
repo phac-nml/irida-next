@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Helper for namespace paths
-module NamespaceHelper
+module NamespacePathHelper
   def namespace_path(namespace)
     if namespace.group_namespace?
       group_path(namespace)
