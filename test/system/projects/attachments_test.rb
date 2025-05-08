@@ -378,7 +378,7 @@ module Projects
 
       assert_no_selector 'table'
 
-      within 'div[role="alert"]' do
+      within 'section[role="alert"]' do
         assert_text I18n.t('components.viral.pagy.empty_state.title')
         assert_text I18n.t('components.viral.pagy.empty_state.description')
       end
