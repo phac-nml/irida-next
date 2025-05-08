@@ -25,7 +25,7 @@
 
     <% links.each_with_index do |link, index| %>
 
-      <li class="<%= class_names('inline-flex items-center', {'max-md:hidden md:visible' => links.length - 1 == index}) %>">
+      <li class="<%= class_names('inline-flex items-center', 'max-md:hidden md:visible': index <  links.length - 1 ) %>">
         <div class="flex items-center">
           <% if index > 0 %>
             <%= viral_icon(name: "chevron_right", classes: "w-3 h-3 text-slate-400") %>
