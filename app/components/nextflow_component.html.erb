@@ -96,7 +96,7 @@
         <% end %>
       <% end %>
 
-      <%- if @allowed_to_update_samples %>
+      <% if @allowed_to_update_samples %>
         <div class="flex items-center h-5 mb-4">
           <%= workflow.check_box :update_samples,
                              { checked: instance.present? && instance["update_samples"] } %>
@@ -104,7 +104,7 @@
                          t(:"components.nextflow.update_samples"),
                          class: "mr-2 text-sm font-medium text-slate-900 dark:text-white" %>
         </div>
-      <%- end %>
+      <% end %>
       <div class="flex items-center h-5 mb-4">
         <%= workflow.check_box :email_notification,
                            {
