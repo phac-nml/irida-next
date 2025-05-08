@@ -4,10 +4,10 @@ require 'test_helper'
 
 module Samples
   class TableComponentTest < ViewComponent::TestCase
-    test 'Should render a table of samples for a group sort by the project column' do
+    test 'Should render a table of samples for a group that are sorted by the project column' do
       with_request_url '/-/groups/group-1/-/samples' do
         namespace = groups(:group_one)
-        project_ids = Project.where(namespace_id: namespace.project_namespace_ids).pluck(:id)
+        project_ids = namespace.project_namespaces.pluck(:id)
         query = Sample::Query.new({ sort: 'namespaces.puid asc', project_ids: project_ids })
         pagy, samples = query.results(limit: 50, page: 1)
         samples = samples.includes(project: { namespace: :parent })
