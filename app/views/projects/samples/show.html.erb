@@ -73,11 +73,7 @@
       <% end %>
     </ul>
   </nav>
-  <section
-    class="flex flex-col p-4 min-h-[200px]"
-    aria-labelledby="sample-tabs"
-    data-turbo-temporary
-  >
+  <section class="flex flex-col p-4 min-h-[200px]" data-turbo-temporary>
     <%= turbo_frame_tag "table-listing", src: namespace_project_sample_path(format: :turbo_stream, tab: @tab || 'files') do %>
       <% if @tab == "history" %>
         <%= render partial: "shared/loading/history" %>
