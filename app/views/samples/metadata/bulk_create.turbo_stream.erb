@@ -3,18 +3,11 @@
     <%= viral_flash(type:, data: message) %>
   <% end %>
 <% else %>
-  <% messages.each do |message| %>
+  <% @messages.each do |message| %>
     <%= turbo_stream.append "flashes" do %>
       <%= viral_flash(type: message[:type], data: message[:message]) %>
     <% end %>
   <% end %>
-<% end %>
-
-<%= turbo_stream.update "table-listing" do %>
-  <% render partial: "projects/samples/metadata/table",
-  locals: {
-    sample_metadata: @sample.metadata_with_provenance,
-  } %>
 <% end %>
 
 <%= turbo_stream.update "sample_modal",
@@ -22,3 +15,11 @@
                     locals: {
                       open: false,
                     } %>
+
+<%= turbo_stream.update "sample-metadata" do %>
+  <% render partial: "projects/samples/metadata/table",
+  locals: {
+    sample: @sample,
+    sample_metadata: @sample.metadata_with_provenance,
+  } %>
+<% end %>
