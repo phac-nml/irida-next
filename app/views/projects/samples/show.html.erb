@@ -26,70 +26,52 @@
   <% end %>
 <% end %>
 
-<div class="bg-white dark:bg-slate-800">
-  <div
-    id="sample-tabs"
-    class="
-      flex mb-4 text-sm font-medium text-center border-b text-slate-500
-      border-slate-200 dark:text-slate-400 dark:border-slate-700
-    "
+<main class="bg-white dark:bg-slate-800 rounded-lg shadow-sm">
+  <nav
+    aria-label="Sample tabs"
+    class="border-b border-slate-200 dark:border-slate-700"
   >
-    <ul class="flex flex-wrap -mb-px">
-      <li class="mr-2">
-        <%= link_to t(:"projects.samples.show.tabs.files"),
-        namespace_project_sample_path(id: @sample.id, tab: "files"),
-        class:
-          (
-            if @tab == "files" || @tab == nil
-              "inline-block p-4 text-primary-700 border-b-2 border-primary-700 rounded-t-lg active dark:text-primary-500 dark:border-primary-500"
-            else
-              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
-            end
-          ),
-        aria: {
-          current: (@tab == "files" || @tab == nil) ? "page" : "false",
-        } %>
-      </li>
-      <li class="mr-2">
-        <%= link_to t(:"projects.samples.show.tabs.metadata"),
-        namespace_project_sample_path(id: @sample.id, tab: "metadata"),
-        class:
-          (
-            if @tab == "metadata"
-              "inline-block p-4 text-primary-700 border-b-2 border-primary-700 rounded-t-lg active dark:text-primary-500 dark:border-primary-500"
-            else
-              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
-            end
-          ),
-        aria: {
-          current: @tab == "metadata" ? "page" : "false",
-        } %>
-      </li>
-      <li class="mr-2">
-        <%= link_to t(:"projects.samples.show.tabs.history"),
-        namespace_project_sample_path(id: @sample.id, tab: "history"),
-        class:
-          (
-            if @tab == "history"
-              "inline-block p-4 text-primary-700 border-b-2 border-primary-700 rounded-t-lg active dark:text-primary-500 dark:border-primary-500"
-            else
-              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
-            end
-          ),
-        aria: {
-          current: @tab == "history" ? "page" : "false",
-        } %>
-      </li>
-    </ul>
-    <% if @allowed_to[:update_sample] %>
-      <% if @tab == 'files' || @tab == nil %>
-
-      <% elsif @tab == 'metadata' %>
-        
+    <ul
+      class="
+        flex flex-wrap text-sm font-medium text-center text-slate-500
+        dark:text-slate-400
+      "
+      role="tablist"
+    >
+      <% tab_items = [
+        { key: "files", label: t(:"projects.samples.show.tabs.files") },
+        { key: "metadata", label: t(:"projects.samples.show.tabs.metadata") },
+        { key: "history", label: t(:"projects.samples.show.tabs.history") },
+      ] %>
+      <% tab_items.each do |item| %>
+        <% active = (@tab == item[:key]) || (@tab.nil? && item[:key] == "files") %>
+        <li class="mr-2" role="presentation">
+          <%= link_to item[:label],
+          namespace_project_sample_path(id: @sample.id, tab: item[:key]),
+          class: [
+            "inline-block px-5 py-3 rounded-t-lg border-b-2 focus:outline-none transition-colors duration-150",
+            (
+              if active
+                "text-primary-700 border-primary-700 bg-slate-50 dark:bg-slate-900 dark:text-primary-500 border-b-2 border-primary-700 dark:border-primary-500"
+              else
+                "border-transparent hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
+              end
+            ),
+          ].join(" "),
+          aria: {
+            current: active ? "page" : "false",
+          },
+          role: "tab",
+          tabindex: active ? 0 : -1 %>
+        </li>
       <% end %>
-    <% end %>
-  </div>
-  <div class="flex flex-col" data-turbo-temporary>
+    </ul>
+  </nav>
+  <section
+    class="flex flex-col p-4 min-h-[200px]"
+    aria-labelledby="sample-tabs"
+    data-turbo-temporary
+  >
     <%= turbo_frame_tag "table-listing", src: namespace_project_sample_path(format: :turbo_stream, tab: @tab || 'files') do %>
       <% if @tab == "history" %>
         <%= render partial: "shared/loading/history" %>
@@ -99,5 +81,5 @@
         <%= render partial: "shared/loading/table" %>
       <% end %>
     <% end %>
-  </div>
-</div>
+  </section>
+</main>
