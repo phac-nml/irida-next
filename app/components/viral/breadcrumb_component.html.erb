@@ -1,6 +1,6 @@
 <nav
   aria-label="<%= I18n.t(:'components.breadcrumb.navigation_aria_label') %>"
-  class="flex items-center h-12"
+  class="flex items-center h-14"
 >
   <ol class="inline-flex items-center space-x-1 md:space-x-3">
 
@@ -42,7 +42,7 @@
           },
           class:
             class_names(
-              "text-sm text-slate-600 dark:text-slate-400 hover:underline",
+              "text-sm text-slate-600 dark:text-slate-400 hover:underline py-3",
               "font-normal": index < links.length - 1,
               "font-medium": index == links.length - 1,
               "ml-1 md:ml-2": !index.zero?,
