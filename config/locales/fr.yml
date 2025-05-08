@@ -522,9 +522,9 @@ fr:
       load_more: Charger plus
       more_details: More details
     breadcrumb:
-      aria_label: Breadcrumb
       dropdown:
         aria_label: Breadcrumb dropdown
+      navigation_aria_label: Navigation du fil d'Ariane
     clipboard:
       copied: Copié!
       title: Copier dans le presse-papiers
@@ -535,6 +535,9 @@ fr:
       title: Confirmation requise
     dialog:
       close: Fermer la boîte de dialogue
+      pagination:
+        at_first_aria_label: You are on the first page
+        at_last_aria_label: You are on the last page
     flash:
       error_icon: Icône X
       information_icon: Icône de renseignements
@@ -553,6 +556,8 @@ fr:
       keys_deleted: 'Clés supprimées :'
       previous_version: Précédent (Version %{version})
     layout:
+      language_selection:
+        title: Language Selection
       main_content_link: Skip to content
     list_filter:
       apply: Appliquer un filtre
@@ -2140,8 +2145,6 @@ fr:
           other: Afficher les éléments <span class='font-bold'>%{from}-%{to}</span> de <span class='font-bold'>%{count}</span>
       pagination_component:
         aria_label: Pagination
-        at_first_aria_label: You are on the first page
-        at_last_aria_label: You are on the last page
         item_aria_label: Go to Page %{number}
         next: Suivant
         next_aria_label: Go to next page

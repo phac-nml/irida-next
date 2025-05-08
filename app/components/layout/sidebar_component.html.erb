@@ -11,11 +11,14 @@
     <div
       class="
         flex overflow-x-hidden justify-between items-center px-2 whitespace-nowrap
-        bg-slate-200 dark:bg-slate-950
+        bg-slate-200 dark:bg-slate-950 h-14
       "
-      style="height: 50px;"
     >
-      <a href="<%= root_path %>" class="whitespace-nowrap" data-layout-target="logo">
+      <a
+        href="<%= root_path %>"
+        class="whitespace-nowrap py-3"
+        data-layout-target="logo"
+      >
         <%= viral_icon(
           name: "beaker",
           classes: "w-8 h-8 text-green-500 rotate-12 inline-block",
@@ -77,34 +80,47 @@
           dark:border-slate-800 dark:text-slate-200 cursor-pointer
         "
         data-viral--dropdown-target='trigger'
+        aria-haspopup="listbox"
+        aria-controls="sidebar-dd-menu"
+        aria-expanded="false"
       ><%= t(:"general.default_sidebar.goto") %></button>
       <div
+        id="sidebar-dd-menu"
+        role="menu"
+        aria-expanded="false"
         data-viral--dropdown-target="menu"
         class="
           hidden z-20 mx-3 w-56 bg-white rounded-lg divide-y shadow-sm divide-slate-100
           dark:bg-slate-700
         "
+        aria-hidden="true"
+        tabindex="-1"
+        hidden="hidden"
       >
         <h3 class="py-2 pl-4 font-semibold text-slate-900 dark:text-white">
           <%= t(:"general.default_sidebar.title") %>
         </h3>
         <ul class="py-2 w-full text-sm text-slate-700 dark:text-slate-200">
-          <li>
+          <li role="presentation">
             <%= link_to t(:"general.default_sidebar.projects"),
             dashboard_projects_path,
+            role: "menuitem",
             class:
               "px-4 py-2 block text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-950" %>
           </li>
-          <li><%= link_to t(:"general.default_sidebar.groups"),
+          <li role="presentation"><%= link_to t(:"general.default_sidebar.groups"),
             groups_path,
+            role: "menuitem",
             class:
               "px-4 py-2 block text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-950" %></li>
-          <li><%= link_to t(:"general.default_sidebar.workflows"),
+          <li role="presentation"><%= link_to t(:"general.default_sidebar.workflows"),
             workflow_executions_path,
+            role: "menuitem",
             class:
               "px-4 py-2 block text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-950" %></li>
-          <li><%= link_to t(:"general.default_sidebar.data_exports"),
+          <li role="presentation"><%= link_to t(:"general.default_sidebar.data_exports"),
             data_exports_path,
+            role: "menuitem",
             class:
               "px-4 py-2 block text-base hover:bg-slate-100 hover:cursor-pointer dark:hover:bg-slate-950" %></li>
         </ul>

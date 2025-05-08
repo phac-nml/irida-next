@@ -1,71 +1,55 @@
-<ol
-  aria-label="<%=I18n.t(:'components.breadcrumb.aria_label')%>"
-  class="inline-flex items-center space-x-1 md:space-x-3"
-  style="height: 50px"
+<nav
+  aria-label="<%= I18n.t(:'components.breadcrumb.navigation_aria_label') %>"
+  class="flex items-center h-14"
 >
-  <% links.each_with_index do |link, index| %>
-    <li class="max-md:hidden md:visible inline-flex items-center">
-      <div class="flex items-center">
-        <% if index > 0 %>
-          <%= viral_icon(name: "chevron_right", classes: "w-3 h-3 text-slate-300") %>
-        <% end %>
-        <%= link_to link[:name],
-        URI.join(root_url, link[:path]).to_s,
-        data: {
-          turbo_frame: "_top",
-        },
-        class:
-          class_names(
-            "text-sm text-slate-600 dark:text-slate-400 hover:underline",
-            "font-normal": index < links.length - 1,
-            "font-medium": index === links.length - 1,
-            "ml-1 md:ml-2": !index.zero?,
-          ) %>
+  <ol class="inline-flex items-center space-x-1 md:space-x-3">
 
-      </div>
-    </li>
-  <% end %>
-
-  <% if links.length > 1 %>
-    <li class="max-md:visible md:hidden inline-flex items-center">
-      <%= viral_dropdown(icon: "ellipsis_horizontal", aria: { label: I18n.t(:'components.breadcrumb.dropdown.aria_label') }, classes: "text-slate-500 cursor-pointer") do |dropdown| %>
-        <% links.each_with_index do |link, index| %>
-          <% if index < links.length - 1 %>
-            <%= link_to link[:name],
-            URI.join(root_url, link[:path]).to_s,
-            data: {
-              turbo_frame: "_top",
-            },
-            class:
-              "ml-1 text-sm font-normal text-slate-500 md:ml-2 dark:text-slate-400 hover:underline" %>
-            <% dropdown.with_item(
-              label: link[:name],
-              url: URI.join(root_url, link[:path]).to_s,
-              data: {
-                turbo_frame: "_top",
-              },
-            ) %>
+    <% if links.length > 1 %>
+      <li class="max-md:visible md:hidden inline-flex items-center">
+        <%= viral_dropdown(icon: "ellipsis_horizontal", aria: { label: I18n.t(:'components.breadcrumb.dropdown.aria_label') }, classes: "text-slate-500 cursor-pointer") do |dropdown| %>
+          <% links.each_with_index do |link, index| %>
+            <% if index < links.length - 1 %>
+              <%# Note: Dropdown items typically don't need aria-current, the final link outside the dropdown handles this %>
+              <% dropdown.with_item(
+                label: link[:name],
+                url: URI.join(root_url, link[:path]).to_s,
+                data: {
+                  turbo_frame: "_top",
+                },
+              ) %>
+            <% end %>
           <% end %>
         <% end %>
-      <% end %>
-    </li>
-  <% end %>
+      </li>
+    <% end %>
 
-  <% if links.length > 0 %>
-    <li class="max-md:visible md:hidden inline-flex items-center">
-      <div class="flex items-center">
-        <% if links.length > 1 %>
-          <%= viral_icon(name: "chevron_right", classes: "w-3 h-3 text-slate-300") %>
-        <% end %>
-        <% link = links.last %>
-        <%= link_to link[:name],
-        URI.join(root_url, link[:path]).to_s,
-        data: {
-          turbo_frame: "_top",
-        },
-        class:
-          "ml-1 text-sm font-medium text-slate-600 md:ml-2 dark:text-slate-400 hover:underline" %>
-      </div>
-    </li>
-  <% end %>
-</ol>
+    <% links.each_with_index do |link, index| %>
+
+      <li
+        class="<%= class_names('inline-flex items-center', 'max-md:hidden md:visible': index <  links.length - 1 ) %>"
+      >
+        <div class="flex items-center">
+          <% if index > 0 %>
+            <%= viral_icon(name: "chevron_right", classes: "w-3 h-3 text-slate-400") %>
+          <% end %>
+          <%= link_to link[:name],
+          URI.join(root_url, link[:path]).to_s,
+          aria: {
+            current: (index == links.length - 1) ? "page" : nil,
+          },
+          data: {
+            turbo_frame: "_top",
+          },
+          class:
+            class_names(
+              "text-sm text-slate-600 dark:text-slate-400 hover:underline py-3",
+              "font-normal": index < links.length - 1,
+              "font-medium": index == links.length - 1,
+              "ml-1 md:ml-2": !index.zero?,
+            ) %>
+
+        </div>
+      </li>
+    <% end %>
+  </ol>
+</nav>

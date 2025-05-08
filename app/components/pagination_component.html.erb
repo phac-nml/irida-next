@@ -6,43 +6,27 @@
   aria-live="polite"
 >
   <% if prev_url %>
-    <%= link_to t("viral.pagy.pagination_component.previous"),
-    prev_url,
+    <%= link_to prev_url,
     **link_arguments,
     class:
       "flex items-center justify-center text-slate-700 bg-slate-200 border border-slate-300 font-medium rounded text-sm px-4 h-10 hover:bg-slate-300 hover:text-slate-900 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600 dark:hover:text-white",
-    "aria-label": t("viral.pagy.pagination_component.previous_aria_label") %>
-  <% else %>
-    <a
-      href="javascript:void(0);"
-      aria-label="<%= t("viral.pagy.pagination_component.at_first_aria_label") %>"
-      class="
-        flex items-center justify-center px-4 h-10 ms-0 leading-tight border
-        border-slate-300 dark:border-slate-600 text-slate-600 bg-slate-300
-        dark:bg-slate-800 cursor-not-allowed rounded
-      "
-    ><%= t("viral.pagy.pagination_component.previous") %></a>
+    "aria-label": t("viral.pagy.pagination_component.previous_aria_label") do %>
+      <%= viral_icon name: "chevron_left", classes: "h-5 w-5 mr-2", "aria-hidden": "true" %>
+      <span><%= t("viral.pagy.pagination_component.previous") %></span>
+    <% end %>
   <% end %>
   <% if next_url %>
-    <%= link_to t("viral.pagy.pagination_component.next"),
-    next_url,
+    <%= link_to next_url,
     **link_arguments,
     class:
       "flex items-center justify-center text-slate-700 bg-slate-200 border border-slate-300 font-medium rounded text-sm px-4 h-10 hover:bg-slate-300 hover:text-slate-900 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600 dark:hover:text-white",
-    "aria-label": t("viral.pagy.pagination_component.next_aria_label") %>
-  <% else %>
-    <a
-      href="javascript:void(0);"
-      aria-label="<%= t("viral.pagy.pagination_component.at_last_aria_label") %>"
-      class="
-        flex items-center justify-center px-4 h-10 ms-0 leading-tight border
-        border-slate-300 dark:border-slate-600 text-slate-600 bg-slate-300
-        dark:bg-slate-800 cursor-not-allowed rounded
-      "
-    ><%= t("viral.pagy.pagination_component.next") %></a>
+    "aria-label": t("viral.pagy.pagination_component.next_aria_label") do %>
+      <span><%= t("viral.pagy.pagination_component.next") %></span>
+      <%= viral_icon name: "chevron_right", classes: "h-5 w-5 ml-2", "aria-hidden": "true" %>
+    <% end %>
   <% end %>
 </nav>
-<p
+<div
   id="pagination-info"
   class="text-center m-4 text-slate-700 dark:text-slate-200"
-><%== info %></p>
+><%== info %></div>

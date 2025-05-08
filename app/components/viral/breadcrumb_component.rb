@@ -9,6 +9,10 @@ module Viral
       @links = validate_context_crumbs(context_crumbs)
     end
 
+    def render?
+      @links.any?
+    end
+
     private
 
     def validate_context_crumbs(context_crumbs)

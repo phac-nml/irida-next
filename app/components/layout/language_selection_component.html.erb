@@ -1,10 +1,16 @@
 <div
-  data-controller="language-selection-dd"
+  data-controller="viral--dropdown"
+  data-viral--dropdown-skidding-value="0"
+  data-viral--dropdown-distance-value="5"
+  data-viral--dropdown-trigger-value="click"
+  data-viral--dropdown-position-value="bottom-start"
   data-turbo="false"
   class="inline-flex items-center"
+  role="region"
+  aria-label="<%= t(:'components.layout.language_selection.title') %>"
 >
   <button
-    data-language-selection-dd-target="trigger"
+    data-viral--dropdown-target="trigger"
     id="language-selection-dd-trigger"
     class="
       navbar-button text-slate-600 dark:text-slate-400 border border-slate-300
@@ -13,8 +19,8 @@
     "
     type="button"
     aria-haspopup="listbox"
-    aria-expanded="false"
     aria-controls="language-selection-dd-menu"
+    aria-expanded="false"
   >
     <%= viral_icon(
       name: "language",
@@ -27,26 +33,29 @@
   </button>
   <!-- Dropdown menu -->
   <div
-    data-language-selection-dd-target="menu"
+    data-viral--dropdown-target="menu"
     id="language-selection-dd-menu"
     class="
       hidden w-32 bg-white divide-y divide-slate-100 rounded-lg shadow-sm
       dark:bg-slate-700 dark:divide-slate-600 z-30
     "
     aria-labelledby="language-selection-dd-trigger"
+    aria-hidden="true"
+    tabindex="-1"
+    hidden="hidden"
   >
     <ul
       id="language_selection_dropdown"
-      role="listbox"
       class="
         py-2 text-sm text-slate-700 dark:text-slate-200 focus:outline-none
       "
       aria-labelledby="language-selection-dd-label"
-      tabindex="-1"
+      role="menu"
     >
       <% @locale_options.each do |locale_name, locale_value| %>
         <% if @user.locale.to_sym == locale_value %>
           <li
+            role="presentation"
             class="
               flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600
               dark:hover:text-white bg-slate-100 text-slate-600 dark:bg-slate-600
@@ -55,7 +64,7 @@
           ><%= locale_name %></li>
         <% else %>
           <li
-            role="option"
+            role="menuitem"
             class="
               flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600
               dark:hover:text-white cursor-pointer
