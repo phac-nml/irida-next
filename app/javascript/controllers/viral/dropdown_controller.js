@@ -24,7 +24,7 @@ export default class extends Controller {
         this.triggerTarget.setAttribute("aria-expanded", "false");
         this.menuTarget.setAttribute("aria-hidden", "true");
         this.menuTarget.setAttribute("tabindex", "-1");
-        this.menuTarget.setAttribute("hidden", "");
+        this.menuTarget.setAttribute("hidden", "hidden");
       },
     });
 
