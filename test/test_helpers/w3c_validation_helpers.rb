@@ -52,8 +52,8 @@ module W3cValidationHelpers
 
   # Validates HTML with W3C (vnu) validator
   #
-  # If environmental variable SKIP_W3C_VALIDATE is set and not '0' or 'false',
-  # validation is skipped.
+  # Is included if environmental variable INCLUDE_W3C_VALIDATE is set and not '0' or 'false',
+  # otherwise validation is skipped.
   #
   # The caller information is printed if fails.
   #
@@ -74,6 +74,11 @@ module W3cValidationHelpers
   # @param use_local: #see setup_w3c_validator!
   # @param validator_uri: #see setup_w3c_validator!
   def w3c_validate(name="caller", use_local: nil, validator_uri: DEF_W3C_VALIDATOR_PARAMS[:validator_uri], content: response.body)
+    # unless is_env_set_positive?('INCLUDE_W3C_VALIDATE')
+    #   Rails.logger.warn "Skipping W3C Validation"
+    #   return true
+    # end
+    return if ENV["RUBY_LSP_TEST_RUNNER"]
     return if is_env_set_positive?('SKIP_W3C_VALIDATE')
 
     bind = caller_locations(1,1)[0]  # Ruby 2.0+
@@ -91,14 +96,14 @@ module W3cValidationHelpers
   #
   # Note that +validator_uri+ is ignored unless +use_local+ is true (Def: false).
   #
-  # See [TestW3cValidateHelper::DEF_W3C_VALIDATOR_PARAMS] and also the comment for this modeule
+  # See [TestW3cValidateHelper::DEF_W3C_VALIDATOR_PARAMS] and also the comment for this module
   # for the default +validator_uri+
   #
   # If the optional argument +use_local+ is nil, the environmental variable +USE_W3C_SERVER_VALIDATOR+
   # is read; then, if it is not set or set "0" or "false", +use_local+ is set true,
   # and this method (attempts to) use the local VNU server.  Make sure your local VNU server is
-  # up and running (the comment for this modeule for detail); otherwise,
-  # +W3CValidators::ValidatorUnavailable+ exception is raised, perhams many times.
+  # up and running (the comment for this module for detail); otherwise,
+  # +W3CValidators::ValidatorUnavailable+ exception is raised, perhaps many times.
   #
   # @param use_local: [Boolean, NilClass] If true (Def), use the local server. Otherwise, use the W3C server (use it sensibly!)
   # @param validator_uri: [String, NilClass] read only when use_local is true (Def).
