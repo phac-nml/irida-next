@@ -109,7 +109,7 @@ export default class extends Controller {
           .querySelector(
             "div > button[data-action='advanced-search#removeGroup']",
           )
-          .classList.remove(...this.#hidden_classes);
+          .classList.remove("hidden");
       });
     }
   }
@@ -142,7 +142,7 @@ export default class extends Controller {
           .querySelector(
             "div > button[data-action='advanced-search#removeGroup']",
           )
-          .classList.add(...this.#hidden_classes);
+          .classList.add("hidden");
       }
     }
   }
