@@ -4,6 +4,7 @@
 module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
   include ListActions
+  include NamespacePathHelper
 
   included do
     before_action :set_default_tab, only: :show
@@ -72,7 +73,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     when 'samplesheet'
       format_samplesheet_params
     when 'summary'
-      @namespace_path = namespace_path
+      @namespace_path = namespace_path(@workflow_execution.namespace)
     end
   end
 
@@ -263,13 +264,5 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     search_params = {}
     search_params[:name_or_id_cont] = params.dig(:q, :name_or_id_cont)
     search_params
-  end
-
-  def namespace_path
-    if @workflow_execution.namespace.group_namespace?
-      group_path(@workflow_execution.namespace)
-    elsif @workflow_execution.namespace.project_namespace?
-      namespace_project_path(@workflow_execution.namespace.parent, @workflow_execution.namespace.project)
-    end
   end
 end
