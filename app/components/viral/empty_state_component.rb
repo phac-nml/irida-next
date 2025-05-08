@@ -16,7 +16,9 @@ module Viral
     # @param action_path [String, nil] Optional URL or path for the action link.
     # @param action_method [Symbol, nil] Optional HTTP method for the action link (e.g., :post, :delete).
     # @param data [Hash, nil] Optional data attributes for the action link.
-    def initialize(icon_name:, title:, description: nil, action_text: nil, action_path: nil, action_method: nil, data: nil) # rubocop:disable Metrics/ParameterLists
+    # rubocop:disable Metrics/ParameterLists
+    def initialize(icon_name:, title:, description: nil, action_text: nil, action_path: nil, action_method: nil,
+                   data: nil)
       @icon_name = icon_name
       @title = title
       @description = description
@@ -25,6 +27,7 @@ module Viral
       @action_method = action_method
       @data = data
     end
+    # rubocop:enable Metrics/ParameterLists
 
     # Determines if the content area (description or action link) should be rendered.
     # @return [Boolean] True if description or action link is present, false otherwise.
