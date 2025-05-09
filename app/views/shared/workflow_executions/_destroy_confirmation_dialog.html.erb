@@ -4,26 +4,21 @@
     <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400 ">
       <%= t(".description") %>
     </p>
-    <%= form_for(:destroy, url: workflow_execution_path(@workflow_execution), method: :delete,
+    <div class="grid gap-4">
+      <div
+        data-controller="delete"
+        data-delete-id-value='<%= @workflow_execution.id %>'
+        data-delete-selection-outlet="#workflow-executions-table"
+      >
+        <%= button_to t(".submit_button"),
+        @destroy_path,
+        method: :delete,
         data: {
-            controller: "delete",
-            "delete-selection-outlet": '#workflow-executions-table',
-            "delete-id-value": @workflow_execution.id,
-          }
-        ) do |form| %>
-      <div class="grid gap-4">
-        <div>
-          <div>
-            <%= form.submit t(".submit_button"),
-                        class:
-                          "button text-sm px-5 py-2.5 text-white bg-red-700 border-red-800 hover:bg-red-800 dark:bg-red-600 dark:text-white dark:border-red-600 dark:hover:bg-red-700",
-                        data: {
-                          turbo_frame: "_top",
-                          action: "click->delete#removeItemFromSelection",
-                        } %>
-          </div>
-        </div>
+          turbo_frame: "_top",
+          action: "click->delete#removeItemFromSelection",
+        },
+        class: "button button--state-destructive button--size-default" %>
       </div>
-    <% end %>
+    </div>
   </div>
 <% end %>

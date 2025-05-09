@@ -73,6 +73,10 @@ module Projects
         }]
     end
 
+    def destroy_path
+      @destroy_path = namespace_project_workflow_execution_path(@project.parent, @project, @workflow_execution)
+    end
+
     def destroy_multiple_paths
       @list_path = list_namespace_project_workflow_executions_path(@project.parent, @project,
                                                                    list_class: 'workflow_execution')

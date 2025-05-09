@@ -38,6 +38,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
         resources :workflow_executions, only: %i[index destroy show edit update] do
           member do
             put :cancel
+            get :destroy_confirmation
           end
           collection do
             get :select
