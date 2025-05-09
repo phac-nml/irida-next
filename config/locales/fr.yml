@@ -2106,6 +2106,10 @@ fr:
           problem_message: "%{path} %{message}"
           problems: Errors were encountered while importing the following samples.
     workflow_executions:
+      destroy_confirmation_dialog:
+        description: Êtes-vous sûr de vouloir supprimer cette exécution de flux de travail?
+        submit_button: Confirmer
+        title: Delete Workflow Execution
       destroy_multiple_confirmation_dialog:
         description:
           plural: The selected COUNT_PLACEHOLDER workflow executions will be deleted.
@@ -2219,7 +2223,6 @@ fr:
         cancel_button: Annuler
         cancel_confirm: Êtes-vous sûr de vouloir annuler cette exécution de flux de travail?
         delete_button: Supprimer
-        delete_confirm: Êtes-vous sûr de vouloir supprimer cette exécution de flux de travail?
       create_export_button: Créer une exportation
       delete_workflows_button: Delete Workflow Executions
       deselect_all_button: Désélectionner tout
