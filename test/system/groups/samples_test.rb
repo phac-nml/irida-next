@@ -154,21 +154,21 @@ module Groups
         assert_selector 'tr', count: 20
       end
 
-      click_on 'Sample ID'
+      click_on I18n.t(:'samples.table_component.puid')
       assert_selector 'table thead th:first-child svg.icon-arrow_up'
       puids = retrieve_puids
       (puids.length - 1).times do |n|
         assert puids[n] < puids[n + 1]
       end
 
-      click_on 'Sample ID'
+      click_on I18n.t(:'samples.table_component.puid')
       assert_selector 'table thead th:first-child svg.icon-arrow_down'
       puids = retrieve_puids
       (puids.length - 1).times do |n|
         assert puids[n] > puids[n + 1]
       end
 
-      click_on 'Sample Name'
+      click_on I18n.t(:'samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
@@ -223,13 +223,13 @@ module Groups
       end
 
       assert_no_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
-      click_on 'Sample Name'
+      click_on I18n.t(:'samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
 
       assert_selector 'tbody tr:first-child th', text: @sample1.puid
       assert_selector 'tbody tr:first-child td:nth-child(2)', text: @sample1.name
 
-      click_on 'Sample Name'
+      click_on I18n.t(:'samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
 
       assert_selector 'tbody tr:last-child th', text: @sample1.puid
@@ -259,7 +259,7 @@ module Groups
         assert_text @sample1.name
         assert_no_text @sample2.name
       end
-      click_on 'Sample Name'
+      click_on I18n.t(:'samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
 
       within('table tbody') do
@@ -352,7 +352,7 @@ module Groups
         assert_text @sample1.puid
       end
 
-      click_on 'Sample Name'
+      click_on I18n.t(:'samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
@@ -399,7 +399,7 @@ module Groups
         assert_text @sample1.puid
       end
 
-      click_on 'Sample Name'
+      click_on I18n.t(:'samples.table_component.name')
       assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
       within('table tbody') do
         assert_selector 'tr:first-child th', text: @sample1.puid
@@ -1698,7 +1698,7 @@ module Groups
       assert_text I18n.t('groups.samples.table.no_associated_samples')
       assert_text I18n.t('groups.samples.table.no_samples')
 
-      assert_no_selector 'button', text: 'Sample Actions'
+      assert_no_selector 'button', text: I18n.t(:'shared.samples.actions_dropdown.label')
     end
   end
 end
