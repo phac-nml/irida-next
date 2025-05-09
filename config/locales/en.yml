@@ -660,7 +660,7 @@ en:
         no_groups_title: No groups found
         row_aria_label: See %{name} subgroups
         search:
-          placeholder: Filter by ID or name
+          placeholder: Filter by PUID or name
         sorting:
           created_at_asc: Oldest created
           created_at_desc: Last created
@@ -677,7 +677,7 @@ en:
         row:
           samples: Samples
         search:
-          placeholder: Filter by ID or name
+          placeholder: Filter by PUID or name
         sorting:
           created_at_asc: Oldest created
           created_at_desc: Last created
@@ -1019,7 +1019,7 @@ en:
       table_filter:
         loading: Loading search results...
         search:
-          placeholder: Filter by ID or name
+          placeholder: Filter by PUID or name
     shared_namespaces:
       index:
         pagy:
@@ -1028,7 +1028,7 @@ en:
       create_project_button: New project
       create_subgroup_button: New subgroup
       search:
-        placeholder: Filter by ID or name
+        placeholder: Filter by PUID or name
       shared_namespaces:
         no_shared:
           description: Groups and projects can be shared with other groups through their members page.
@@ -1249,7 +1249,7 @@ en:
         default: "%{label} (default)"
         required: Required
     samplesheet_component:
-      filter_placeholder: Filter by ID or name
+      filter_placeholder: Filter by PUID or name
       label: Samples
       next: Next
       page_selection:
@@ -1772,7 +1772,7 @@ en:
       table_filter:
         loading: Loading search results...
         search:
-          placeholder: Filter by ID or name
+          placeholder: Filter by PUID or name
       transfers:
         create:
           error: "The following list of samples failed to transfer:"

@@ -660,7 +660,7 @@ fr:
         no_groups_title: Aucun groupe trouvé
         row_aria_label: Voir les sous-groupes %{name}
         search:
-          placeholder: Filtrer par ID ou nom
+          placeholder: Filtrer par PUID ou nom
         sorting:
           created_at_asc: Plus ancien créé
           created_at_desc: Dernier créé
@@ -677,7 +677,7 @@ fr:
         row:
           samples: Échantillons
         search:
-          placeholder: Filtrer par ID ou nom
+          placeholder: Filtrer par PUID ou nom
         sorting:
           created_at_asc: Plus ancien créé
           created_at_desc: Dernier créé
@@ -831,7 +831,7 @@ fr:
         success: Le fichier %{filename} a été supprimé avec succès.
       index:
         search:
-          placeholder: Filtrer par ID ou nom de fichier
+          placeholder: Filtrer par PUID ou nom de fichier
         subtitle: Ce sont les fichiers qui appartiennent au groupe %{group_name}
         title: Fichiers
         upload_files: Télécharger des fichiers
@@ -1017,7 +1017,7 @@ fr:
       table_filter:
         loading: Chargement des résultats de recherche...
         search:
-          placeholder: Filtrer par ID ou nom
+          placeholder: Filtrer par PUID ou nom
     shared_namespaces:
       index:
         pagy:
@@ -1026,7 +1026,7 @@ fr:
       create_project_button: Nouveau projet
       create_subgroup_button: Nouveau sous-groupe
       search:
-        placeholder: Filtrer par ID ou nom
+        placeholder: Filtrer par PUID ou nom
       shared_namespaces:
         no_shared:
           description: Les groupes et les projets peuvent être partagés avec d’autres groupes par l’intermédiaire de leur page de membres.
@@ -1247,7 +1247,7 @@ fr:
         default: "%{label} (par défaut)"
         required: Obligatoire
     samplesheet_component:
-      filter_placeholder: Filtrer par ID ou nom
+      filter_placeholder: Filtrer par PUID ou nom
       label: Échantillons
       next: Suivant
       page_selection:
@@ -1356,7 +1356,7 @@ fr:
         success: Le fichier %{filename} a été supprimé avec succès.
       index:
         search:
-          placeholder: Filtrer par ID ou nom de fichier
+          placeholder: Filtrer par PUID ou nom de fichier
         subtitle: Ce sont les fichiers qui appartiennent au projet %{project_name}
         title: Fichiers
         upload_files: Télécharger des fichiers
@@ -1768,7 +1768,7 @@ fr:
       table_filter:
         loading: Recherche en cours...
         search:
-          placeholder: Filtrer par ID ou nom
+          placeholder: Filtrer par PUID ou nom
       transfers:
         create:
           error: "La liste suivante des échantillons n’a pas été transférée :"
