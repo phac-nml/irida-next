@@ -12,7 +12,7 @@
       <input
         id="samplesheet-filter"
         data-nextflow--samplesheet-target="filter"
-        data-action="search->nextflow--samplesheet#filter"
+        data-action="keydown.enter->nextflow--samplesheet#filter"
         class="
           t-search-component block w-full p-2.5 pl-10 text-sm text-slate-900 border
           border-slate-300 rounded-lg bg-slate-50 dark:bg-slate-700 dark:border-slate-600
@@ -149,7 +149,7 @@
   },
   id: "ATTACHABLE_ID_PLACEHOLDER_PROPERTY_PLACEHOLDER",
   class:
-    "block p-2 text-sm border-2 border-transparent cursor-pointer bg-inherit text-inherit focus:-outline-offset-2" %>
+    "block p-2 text-sm border-2 border-transparent cursor-pointer bg-inherit text-inherit focus:-outline-offset-4" %>
 </template>
 
 <template data-nextflow--samplesheet-target="metadataCell">
@@ -163,7 +163,7 @@
   <input
     class="
       block p-2 text-sm border-2 border-transparent bg-inherit text-inherit w-full
-      focus:-outline-offset-2
+      focus:border-slate-400 dark:focus:border-slate-300
     "
     data-action="change->nextflow--samplesheet#updateEditableSamplesheetData"
     type="text"
