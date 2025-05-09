@@ -4,7 +4,7 @@ module Layout
   module Sidebar
     # Sidebar item component
     class ItemComponent < Component
-      attr_reader :url, :label, :selected
+      attr_reader :url, :label, :selected, :icon
 
       def initialize(url:, label:, icon: nil, selected: false)
         @url = url
@@ -17,11 +17,15 @@ module Layout
         return unless @icon
 
         base_options = {}
-        base_options[:variant] = :duotone
+        base_options[:variant] = :duotone unless selected # Keep duotone for non-selected
         base_options[:class] = class_names(
-          'size-5',
-          'fill-primary-700 text-primary-700': selected,
-          'fill-slate-500 stroke-slate-300': !selected
+          'size-5', # Icon size
+          {
+            # Selected state: primary color text, no specific fill needed here as background handles it
+            'text-primary-600': selected,
+            # Non-selected state: slate text, changes on group hover
+            'text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-50': !selected
+          }
         )
         helpers.render_icon(@icon, **base_options)
       end

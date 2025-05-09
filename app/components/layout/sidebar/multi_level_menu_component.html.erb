@@ -3,22 +3,43 @@
   <button
     type="button"
     class="
-      flex w-full items-center mt-1 p-3 transition-colors ease-in-out delay-75
-      hover:bg-slate-200 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer
+      flex items-center w-full mt-1 py-1 pr-1 pl-2 transition-colors ease-in-out
+      delay-75 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 group cursor-pointer
+      min-h-[44px] <%= class_names({
+        'bg-primary-100 dark:bg-slate-700': @selected, # Use @selected for button background
+        'text-slate-700 dark:text-slate-200': !@selected
+      }) %>
     "
     aria-controls="<%= control_id %>"
     data-action="collapsible#toggle"
   >
-    <span class="w-6 ml-1 flex items-center justify-center">
+    <span
+      class="
+        w-8 h-8 flex items-center justify-center rounded-full mr-2
+        <%= @selected ? 'bg-primary-200 dark:bg-primary-600' : 'bg-slate-100 dark:bg-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-700' %>
+      "
+    >
       <%= create_icon %>
     </span>
-    <span class="flex-1 ms-2 text-left rtl:text-right whitespace-nowrap"><%= title %></span>
+    <span
+      class="
+        flex-1 ml-1 text-left rtl:text-right whitespace-nowrap
+        <%= @selected ? 'font-semibold text-primary-700 dark:text-primary-100' : 'text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-slate-50' %>
+      "
+    ><%= title %></span>
     <%= viral_icon(
       name: "chevron_down",
       classes:
         class_names(
-          "mr-0 w-4 h-4",
-          { "rotate-180": selectable_pages.include?(current_page) },
+          "mr-1 w-4 h-4 transition-transform", # Added mr-1 for spacing
+          { "rotate-180": @selected },
+          (
+            if @selected
+              "text-primary-700 dark:text-primary-100"
+            else
+              "text-slate-400 group-hover:text-slate-500"
+            end
+          ),
         ),
       "data-collapsible-target": "icon",
     ) %>
@@ -26,21 +47,28 @@
   <ul
     id="<%= control_id %>"
     data-collapsible-target="item"
-    class="<%= class_names('py-2 space-y-2', { hidden: selectable_pages.exclude?(current_page) }) %>"
+    class="<%= class_names('py-1 space-y-1 pl-8', { 'hidden': !@selected }) %>"
   >
     <% menu_items.each do |menu_item| %>
       <li class="Layout-Sidebar-MultiLevelMenu__Item">
         <a
           href="<%= menu_item.url %>"
           class="
-            flex w-full items-center p-2 text-slate-900 t delay-75 pl-11 group
-            hover:bg-slate-200 dark:text-white dark:hover:bg-slate-700
+            flex items-center py-1 pr-1 w-full transition-colors ease-in-out delay-75
+            rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 group min-h-[44px] pl-10
+            <%= class_names({
+              'bg-primary-100 dark:bg-slate-700': menu_item.selected,
+              'text-slate-700 dark:text-slate-200': !menu_item.selected
+            }) %>
           "
         >
-          <%= render Layout::Sidebar::SelectedComponent.new(selected: menu_item.selected) %>
-          <span class="ml-2 grow">
+          <%# Icon container removed %>
+          <span
+            class="grow <%= menu_item.selected ? 'font-semibold text-primary-700 dark:text-primary-100' : 'text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-slate-50' %>"
+          >
             <%= menu_item.label %>
-          </span></a>
+          </span>
+        </a>
       </li>
     <% end %>
   </ul>
