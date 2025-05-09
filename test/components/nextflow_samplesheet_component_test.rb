@@ -41,7 +41,7 @@ class NextflowSamplesheetComponentTest < ApplicationSystemTestCase
   test 'with metadata' do
     visit("/rails/view_components/nextflow_samplesheet_component/with_metadata?sample_ids[]=#{@sample1.id}&sample_ids[]=#{@sample2.id}") # rubocop:disable Layout/LineLength
     assert_selector 'table' do |table|
-      table.assert_selector '.table-header', count: 4
+      table.assert_selector 'thead th', count: 4
       table.assert_selector 'thead tr:first-of-type th:nth-of-type(2) select', count: 1
       table.assert_selector 'thead tr:first-of-type th:nth-of-type(2) select', text: 'pfge_pattern (default)'
       table.assert_selector 'tbody tr', count: 2
