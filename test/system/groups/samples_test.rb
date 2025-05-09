@@ -890,13 +890,13 @@ module Groups
       visit namespace_project_sample_url(group, project, sample)
       assert_text I18n.t('projects.samples.show.tabs.metadata')
       click_on I18n.t('projects.samples.show.tabs.metadata')
-      within %(turbo-frame[id="table-listing"]) do
+      within '#sample-metadata table' do
         assert_text I18n.t('projects.samples.show.table_header.key').upcase
-        assert_selector 'table#metadata-table tbody tr', count: 3
-        within('table#metadata-table tbody tr:first-child td:nth-child(2)') do
+        assert_selector 'tbody tr', count: 3
+        within('tbody tr:first-child td:nth-child(2)') do
           assert_text 'metadatafield1'
         end
-        within('table#metadata-table tbody tr:first-child td:nth-child(3)') do
+        within('tbody tr:first-child td:nth-child(3)') do
           assert_text 'value1'
         end
       end
@@ -938,9 +938,9 @@ module Groups
       visit namespace_project_sample_url(group, project, sample)
       assert_text I18n.t('projects.samples.show.tabs.metadata')
       click_on I18n.t('projects.samples.show.tabs.metadata')
-      within %(turbo-frame[id="table-listing"]) do
+      within '#sample-metadata table' do
         assert_text I18n.t('projects.samples.show.table_header.key').upcase
-        assert_selector 'table#metadata-table tbody tr', count: 2
+        assert_selector 'tbody tr', count: 2
         assert_no_text 'metadatafield1'
       end
     end

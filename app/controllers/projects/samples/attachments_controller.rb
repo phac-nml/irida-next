@@ -32,6 +32,9 @@ module Projects
                    :multi_status
                  end
 
+        # Refresh the current page
+
+        # redirect_to namespace_project_sample_path(id: @sample.id, tab: 'files')
         respond_to do |format|
           format.turbo_stream do
             render status:, locals: { attachment: Attachment.new(attachable: @sample),

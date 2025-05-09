@@ -157,7 +157,7 @@ class DataExportsTest < ApplicationSystemTestCase
     end
 
     assert_no_selector 'table'
-    within 'div[role="alert"]' do
+    within 'section[role="status"]' do
       assert_text I18n.t('data_exports.index.no_data_exports')
       assert_text I18n.t('data_exports.index.no_data_exports_message')
     end
@@ -1807,7 +1807,7 @@ class DataExportsTest < ApplicationSystemTestCase
             with: 'something that does not exist'
     find('input.t-search-component').native.send_keys(:return)
 
-    within 'div[role="alert"]' do
+    within 'section[role="status"]' do
       assert_text I18n.t('components.viral.pagy.empty_state.title')
       assert_text I18n.t('components.viral.pagy.empty_state.description')
     end

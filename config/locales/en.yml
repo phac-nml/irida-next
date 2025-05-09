@@ -1620,6 +1620,12 @@ en:
         destroy:
           error: 'File %{filename} was not removed due to the following errors: %{errors}'
           success: File %{filename} was successfully removed.
+        table:
+          empty_state:
+            action_text: Upload Files
+            description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
+            no_permission_description: You do not have permission to upload files to this sample
+            title: No files have been uploaded
       clones:
         create:
           error: 'The following list of samples failed to copy:'
@@ -1705,6 +1711,14 @@ en:
           remove_field: Remove Field
           submit_button: Add
           value: Value
+        new_metadata_modal:
+          title: Add Metadata
+        table:
+          add_metadata: Add Metadata
+          delete_metadata_button: Delete Metadata
+          no_associated_metadata: This sample currently has no metadata. Get started by adding metadata to your sample.
+          no_metadata: No metadata has been added
+          no_permission_description: You do not have permission to add metadata to this sample
       new:
         cancel_button: Cancel
         submit_button: Create sample
@@ -1717,10 +1731,8 @@ en:
           ok_button: OK
           success: Success
       show:
-        add_metadata: Add Metadata
         concatenate_button: Concatenate Files
         delete_files_button: Delete Files
-        delete_metadata_button: Delete Metadata
         edit_button: Edit this sample
         files: Files
         files_ignored: 'fasta and fastq files must be compressed. The following file(s) cannot be uploaded:'
@@ -1743,11 +1755,8 @@ en:
             update: Update
             update_metadata: Update Metadata
             value: Value
+        nav_aria_label: Sample Navigation
         new_attachment_button: Upload Files
-        no_associated_files: There are no files associated with this sample.
-        no_associated_metadata: This sample has no metadata.
-        no_files: No Files
-        no_metadata: No Metadata
         remove_button: Remove
         remove_button_confirmation: Are you sure you want to remove this sample from the project?
         table_header:
