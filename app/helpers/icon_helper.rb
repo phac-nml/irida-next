@@ -43,7 +43,7 @@ module ICONS
     beaker: { name: :beaker, options: { library: :heroicons } },
 
     # Named icons
-    irida_logo: { name: :beaker, options: { library: :heroicons, variant: :solid } },
+    irida_logo: { name: :beaker, options: { library: :heroicons } },
     details: { name: 'clipboard-text', options: {} },
     samples: { name: :flask, options: {} },
     settings: { name: 'gear-six', options: {} },
