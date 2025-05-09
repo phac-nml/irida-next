@@ -433,7 +433,7 @@ fr:
       delete_confirm: Êtes-vous sûr de vouloir supprimer la pièce jointe '%{name}'?
       filename: Nom du fichier
       format: Format
-      id: ID
+      id: PUID
       limit:
         item: Attachments
       select_page: Sélectionner/Désélectionner les pièces jointes visibles
@@ -1753,7 +1753,7 @@ fr:
           format: Format
           key: Key
           last_updated: Dernière mise à jour
-          puid: ID
+          puid: PUID
           size: Taille
           source: Source
           type: Type
