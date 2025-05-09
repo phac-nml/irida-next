@@ -52,7 +52,7 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
 
   def samples_workflow_execution_params_attributes
     [
-      :id, # index, increment for each one, not necissary for functionality
+      :id, # index, increment for each one, not necessary for functionality
       :sample_id,
       { samplesheet_params: {} }
     ]
@@ -92,6 +92,10 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
 
   def show_view_authorizations
     view_authorizations
+  end
+
+  def destroy_path
+    @destroy_path = workflow_execution_path
   end
 
   def destroy_multiple_paths
