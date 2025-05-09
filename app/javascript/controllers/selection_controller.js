@@ -60,6 +60,10 @@ export default class extends Controller {
     this.#addOrRemove(event.target.checked, event.target.value);
   }
 
+  removeFromStorageOnly({ params: { id } }) {
+    this.#addOrRemove(false, id, false);
+  }
+
   remove({ params: { id } }) {
     this.#addOrRemove(false, id);
   }
@@ -87,7 +91,7 @@ export default class extends Controller {
     return JSON.parse(sessionStorage.getItem(this.#storageKey)) || [];
   }
 
-  #addOrRemove(add, storageValue) {
+  #addOrRemove(add, storageValue, update = true) {
     const newStorageValue = this.getStoredItems();
     if (add) {
       newStorageValue.push(storageValue);
@@ -98,19 +102,22 @@ export default class extends Controller {
       }
     }
     this.save(newStorageValue);
-    this.#updateUI(newStorageValue);
+
+    if (update) {
+      this.#updateUI(newStorageValue);
+    }
   }
 
   #updateUI(ids) {
     this.rowSelectionTargets.map((row) => {
       row.checked = ids.indexOf(row.value) > -1;
     });
-    this.#updateactionButtons(ids.length);
+    this.#updateActionButtons(ids.length);
     this.#updateCounts(ids.length);
     this.#setSelectPageCheckboxValue();
   }
 
-  #updateactionButtons(count) {
+  #updateActionButtons(count) {
     this.actionButtonOutlets.forEach((outlet) => {
       outlet.setDisabled(count);
     });

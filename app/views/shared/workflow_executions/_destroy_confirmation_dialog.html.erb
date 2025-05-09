@@ -4,7 +4,6 @@
     <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400 ">
       <%= t(".description") %>
     </p>
-    <!--form_for(:deletion-->
     <%= form_for(:destroy, url: workflow_execution_path(@workflow_execution), method: :delete,
         data: {
             controller: "delete",

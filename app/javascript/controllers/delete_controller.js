@@ -7,6 +7,8 @@ export default class extends Controller {
   };
 
   removeItemFromSelection() {
-    this.selectionOutlet.remove({ params: { id: this.idValue } })();
+    this.selectionOutlet.removeFromStorageOnly({
+      params: { id: this.idValue },
+    });
   }
 }
