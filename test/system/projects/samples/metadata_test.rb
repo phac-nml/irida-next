@@ -27,9 +27,9 @@ module Projects
         assert_text I18n.t('projects.samples.show.tabs.metadata')
         click_on I18n.t('projects.samples.show.tabs.metadata')
 
-        within %(turbo-frame[id="table-listing"]) do
+        within '#sample-metadata table' do
           assert_text I18n.t('projects.samples.show.table_header.key').upcase
-          assert_selector 'table#metadata-table tbody tr', count: 2
+          assert_selector 'tbody tr', count: 2
           assert_text 'metadatafield1'
           assert_text 'value1'
           assert_text 'metadatafield2'
@@ -181,7 +181,7 @@ module Projects
         visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
-        click_on I18n.t('projects.samples.show.add_metadata')
+        click_on I18n.t('projects.samples.metadata.table.add_metadata')
 
         within %(turbo-frame[id="sample_modal"]) do
           find('input.keyInput').fill_in with: 'metadatafield3'
@@ -205,7 +205,7 @@ module Projects
         visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
-        click_on I18n.t('projects.samples.show.add_metadata')
+        click_on I18n.t('projects.samples.metadata.table.add_metadata')
 
         within %(turbo-frame[id="sample_modal"]) do
           click_on I18n.t('projects.samples.metadata.form.create_field_button')
@@ -250,7 +250,7 @@ module Projects
           end
         end
 
-        click_on I18n.t('projects.samples.show.add_metadata')
+        click_on I18n.t('projects.samples.metadata.table.add_metadata')
 
         within %(turbo-frame[id="sample_modal"]) do
           find('input.keyInput').fill_in with: 'metadatafield1'
@@ -282,7 +282,7 @@ module Projects
           end
         end
 
-        click_on I18n.t('projects.samples.show.add_metadata')
+        click_on I18n.t('projects.samples.metadata.table.add_metadata')
 
         within %(turbo-frame[id="sample_modal"]) do
           click_on I18n.t('projects.samples.metadata.form.create_field_button')
@@ -313,7 +313,7 @@ module Projects
             assert_text 'value1'
           end
         end
-        click_on I18n.t('projects.samples.show.add_metadata')
+        click_on I18n.t('projects.samples.metadata.table.add_metadata')
 
         within %(turbo-frame[id="sample_modal"]) do
           click_on I18n.t('projects.samples.metadata.form.create_field_button')
@@ -341,7 +341,7 @@ module Projects
         visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
-        click_on I18n.t('projects.samples.show.add_metadata')
+        click_on I18n.t('projects.samples.metadata.table.add_metadata')
 
         within %(turbo-frame[id="sample_modal"]) do
           click_on I18n.t('projects.samples.metadata.form.create_field_button')
@@ -389,7 +389,7 @@ module Projects
         visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
-        click_on I18n.t('projects.samples.show.add_metadata')
+        click_on I18n.t('projects.samples.metadata.table.add_metadata')
 
         within %(turbo-frame[id="sample_modal"]) do
           assert_selector 'input.keyInput', count: 1
@@ -407,7 +407,7 @@ module Projects
         visit namespace_project_sample_url(@group12a, @project29, @sample32)
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
-        assert_no_text I18n.t('projects.samples.show.add_metadata')
+        assert_no_text I18n.t('projects.samples.metadata.table.add_metadata')
       end
 
       test 'delete metadata key added by user' do
@@ -475,7 +475,7 @@ module Projects
           find('input#metadatafield1').click
         end
 
-        click_on I18n.t('projects.samples.show.delete_metadata_button')
+        click_on I18n.t('projects.samples.metadata.table.delete_metadata_button')
 
         within %(turbo-frame[id="sample_modal"]) do
           assert_text 'metadatafield1'
@@ -504,7 +504,7 @@ module Projects
           find('input#metadatafield2').click
         end
 
-        click_on I18n.t('projects.samples.show.delete_metadata_button')
+        click_on I18n.t('projects.samples.metadata.table.delete_metadata_button')
 
         within %(turbo-frame[id="sample_modal"]) do
           assert_text 'metadatafield1'
@@ -521,8 +521,9 @@ module Projects
           assert_no_text 'value1'
           assert_no_text 'metadatafield2'
           assert_no_text 'value2'
-          assert_text I18n.t('projects.samples.show.no_metadata')
-          assert_text I18n.t('projects.samples.show.no_associated_metadata')
+          assert_selector "[id^='empty-state-title-']", text: I18n.t('projects.samples.metadata.table.no_metadata')
+          assert_selector "[id^='empty-state-desc-'] span",
+                          text: I18n.t('projects.samples.metadata.table.no_associated_metadata')
         end
       end
 
@@ -532,7 +533,7 @@ module Projects
 
         click_on I18n.t('projects.samples.show.tabs.metadata')
 
-        within %(turbo-frame[id="table-listing"]) do
+        within '#sample-metadata' do
           assert_text 'metadatafield1'
           assert_text 'value1'
           assert_text 'metadatafield2'
@@ -541,7 +542,8 @@ module Projects
           assert_no_text I18n.t('projects.samples.show.table_header.action').upcase
         end
 
-        assert_no_selector I18n.t('projects.samples.show.delete_metadata_button')
+        assert_no_selector 'button', text: I18n.t('projects.samples.metadata.table.add_metadata')
+        assert_no_selector 'button', text: I18n.t('projects.samples.metadata.table.delete_metadata_button')
       end
     end
   end
