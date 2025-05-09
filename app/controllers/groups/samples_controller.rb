@@ -39,7 +39,7 @@ module Groups
       respond_to do |format|
         format.turbo_stream do
           if params[:select].present?
-            @sample_ids = @query.results.where(updated_at: ..params[:timestamp].to_datetime).select(:id).pluck(:id)
+            @sample_ids = @query.results.joins(project: { namespace: :parent }).where(updated_at: ..params[:timestamp].to_datetime).select(:id).pluck(:id)
           end
         end
       end
