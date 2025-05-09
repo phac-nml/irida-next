@@ -111,7 +111,7 @@ export default class extends Controller {
     );
 
     if (columns.length > 0) {
-      this.metadataColumnsTarget.classList.remove("hidden");
+      this.#unhideElement(this.metadataColumnsTarget);
       this.metadataColumnsTarget.innerHTML =
         this.sortableListsTemplateTarget.innerHTML;
 
@@ -124,7 +124,7 @@ export default class extends Controller {
       });
       this.submitButtonTarget.disabled = !columns.length;
     } else {
-      this.metadataColumnsTarget.classList.add("hidden");
+      this.#hideElement(this.metadataColumnsTarget);
       this.#enableErrorState();
     }
   }
@@ -148,7 +148,8 @@ export default class extends Controller {
   #resetDialogState() {
     this.#disableTarget(this.submitButtonTarget);
     if (this.hasMetadataColumnsTarget) {
-      this.metadataColumnsTarget.classList.add("hidden");
+      this.#hideElement(this.metadataColumnsTarget);
+      this.errorTarget.setAttribute("aria-disabled", "true");
     }
   }
 
@@ -160,14 +161,22 @@ export default class extends Controller {
   }
 
   #disableErrorState() {
-    this.errorTarget.classList.add("hidden");
-    this.errorTarget.setAttribute("aria-disabled", "true");
+    this.#hideElement(this.errorTarget);
   }
 
   #enableErrorState() {
-    this.errorTarget.classList.remove("hidden");
-    this.errorTarget.removeAttribute("aria-hidden");
+    this.#unhideElement(this.errorTarget);
     this.#disableTarget(this.submitButtonTarget);
+  }
+
+  #hideElement(element) {
+    element.classList.add("hidden");
+    element.setAttribute("aria-disabled", "true");
+  }
+
+  #unhideElement(element) {
+    element.classList.remove("hidden");
+    element.removeAttribute("aria-hidden");
   }
 
   #sortableListsConnect() {
