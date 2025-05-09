@@ -4,36 +4,37 @@
 <div id="sample-metadata">
   <% if sample_metadata.present? %>
     <div class="relative overflow-x-auto table-wrapper" data-turbo-temporary>
-      <div class="flex justify-between items-center mb-4">
-        <div></div>
-        <div class="flex items-center space-x-2">
-          <%= link_to t(".add_metadata"),
-          new_namespace_project_sample_metadata_path(
-            @project.namespace.parent,
-            @project,
-            @sample,
-          ),
-          data: {
-            turbo_frame: "sample_modal",
-            turbo_stream: true,
-          },
-          class: "button button--size-default button--state-default" %>
-          <%= button_to t(".delete_metadata_button"),
-          new_namespace_project_sample_metadata_deletion_path(
-            @project.namespace.parent,
-            @project,
-            @sample,
-          ),
-          method: :get,
-          data: {
-            turbo_frame: "sample_modal",
-            turbo_stream: false,
-            controller: "action-button",
-            action_button_required_value: 1,
-          },
-          class: "button button--size-default button--state-destructive action-button" %>
+      <% if @allowed_to[:update_sample] %>
+        <div class="flex justify-between items-center mb-4">
+          <div class="flex items-center space-x-2">
+            <%= link_to t(".add_metadata"),
+            new_namespace_project_sample_metadata_path(
+              @project.namespace.parent,
+              @project,
+              @sample,
+            ),
+            data: {
+              turbo_frame: "sample_modal",
+              turbo_stream: true,
+            },
+            class: "button button--size-default button--state-default" %>
+            <%= button_to t(".delete_metadata_button"),
+            new_namespace_project_sample_metadata_deletion_path(
+              @project.namespace.parent,
+              @project,
+              @sample,
+            ),
+            method: :get,
+            data: {
+              turbo_frame: "sample_modal",
+              turbo_stream: false,
+              controller: "action-button",
+              action_button_required_value: 1,
+            },
+            class: "button button--size-default button--state-destructive action-button" %>
+          </div>
         </div>
-      </div>
+      <% end %>
       <table
         class="
           w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
@@ -134,20 +135,30 @@
       </table>
     </div>
   <% else %>
-    <%= render(
-      Viral::EmptyStateComponent.new(
-        icon_name: :table_cells,
-        title: t(".no_metadata"),
-        description: t(".no_associated_metadata"),
-        action_text: t(".add_metadata"),
-        action_path:
-          new_namespace_project_sample_metadata_path(sample_id: @sample.id),
-        action_method: :get,
-        data: {
-          turbo_frame: "sample_modal",
-          turbo_stream: true,
-        },
-      ),
-    ) %>
+    <% if @allowed_to[:update_sample] %>
+      <%= render(
+        Viral::EmptyStateComponent.new(
+          icon_name: :table_cells,
+          title: t(".no_metadata"),
+          description: t(".no_associated_metadata"),
+          action_text: t(".add_metadata"),
+          action_path:
+            new_namespace_project_sample_metadata_path(sample_id: @sample.id),
+          action_method: :get,
+          data: {
+            turbo_frame: "sample_modal",
+            turbo_stream: true,
+          },
+        ),
+      ) %>
+    <% else %>
+      <%= render(
+        Viral::EmptyStateComponent.new(
+          icon_name: :table_cells,
+          title: t(".no_metadata"),
+          description: t(".no_permission_description"),
+        ),
+      ) %>
+    <% end %>
   <% end %>
 </div>

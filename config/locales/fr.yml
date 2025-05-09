@@ -1714,6 +1714,7 @@ fr:
           delete_metadata_button: Delete Metadata
           no_associated_metadata: This sample currently has no metadata.  Get started by adding metadata to your sample.
           no_metadata: No metadata has added
+          no_permission_description: You do not have permission to add metadata to this sample
       new:
         cancel_button: Annuler
         submit_button: Créer un échantillon
