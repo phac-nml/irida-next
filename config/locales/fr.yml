@@ -1875,7 +1875,8 @@ fr:
       limit:
         item: Échantillons
       name: Nom de l’échantillon
-      project_id: Projet
+      namespaces:
+        puid: Projet
       puid: ID de l’échantillon
       select_page: Sélectionner/Désélectionner les échantillons visibles
       updated_at: Dernière mise à jour
