@@ -26,12 +26,7 @@
   <% end %>
 <% end %>
 
-<div
-  class="
-    bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200
-    dark:border-slate-700
-  "
->
+<div>
   <nav
     aria-label="<%= t("projects.samples.show.nav_aria_label") %>"
     class="border-b border-slate-200 dark:border-slate-700"
@@ -49,11 +44,11 @@
       ] %>
       <% tab_items.each_with_index do |item, idx| %>
         <% active = (@tab == item[:key]) || (@tab.nil? && item[:key] == "files") %>
-        <li role="presentation" class="flex-1">
+        <li role="presentation">
           <%= link_to item[:label],
           namespace_project_sample_path(id: @sample.id, tab: item[:key]),
           class: [
-            "block px-0 py-3 border-b-2 text-center transition-colors duration-150",
+            "block px-4 py-3 border-b-2 transition-colors duration-150",
             (
               if active
                 "border-primary-600 text-primary-700 dark:border-primary-400 dark:text-primary-400 bg-transparent font-semibold"
