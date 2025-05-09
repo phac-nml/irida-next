@@ -36,6 +36,7 @@ module Samples
       else
         @status = get_create_status(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
         @messages = get_create_messages(create_metadata_fields[:added_keys], create_metadata_fields[:existing_keys])
+        render status: @status
       end
     end
 
