@@ -3,50 +3,53 @@ import * as XLSX from "xlsx";
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
+  static outlets = ["viral--sortable-lists--two-lists-selection"];
   static targets = [
     "sampleIdColumn",
     "metadataColumns",
+    "submitButton",
+    "error",
     "sortableListsTemplate",
     "sortableListsItemTemplate",
-    "submitButton",
+  ];
+
+  #defaultSampleColumnHeaders = [
+    "sample_name",
+    "sample name",
+    "sample",
+    "sample_id",
+    "sample id",
+    "sample_puid",
+    "sample puid",
+  ];
+
+  #ignoreList = [
+    "sample_name",
+    "sample name",
+    "sample",
+    "sample_id",
+    "sample id",
+    "sample_puid",
+    "sample puid",
+    "project id",
+    "project_id",
+    "project_puid",
+    "project puid",
+    "created_at",
+    "updated_at",
+    "last_updated_at",
+    "description",
   ];
 
   #headers = [];
-  #disabled_classes = [
-    "bg-slate-50",
-    "border",
-    "border-slate-300",
-    "text-slate-900",
-    "text-sm",
-    "rounded-lg",
-    "block",
-    "w-full",
-    "p-2.5",
-    "dark:bg-slate-700",
-    "dark:border-slate-600",
-    "dark:placeholder-slate-400",
-    "dark:text-white",
-  ];
-
-  connect() {
-    this.#disableTarget(this.sampleIdColumnTarget);
-  }
 
   changeSampleIDInput(event) {
     const { value } = event.target;
-
     if (value) {
-      if (this.hasMetadataColumnsTarget) {
-        this.#addMetadataColumns();
-      } else {
-        this.submitButtonTarget.disabled = false;
-      }
+      this.#enableDialogState();
+      this.#sortableListsConnect();
     } else {
-      if (this.hasMetadataColumnsTarget) {
-        this.#removeMetadataColumns();
-      } else {
-        this.submitButtonTarget.disabled = true;
-      }
+      this.#resetDialogState();
     }
   }
 
@@ -54,9 +57,8 @@ export default class extends Controller {
     const { files } = event.target;
 
     this.#removeSampleIDInputOptions();
-    this.#removeMetadataColumns();
-    this.submitButtonTarget.disabled = true;
-
+    this.#resetDialogState();
+    this.#disableErrorState();
     if (!files.length) {
       return;
     }
@@ -73,12 +75,6 @@ export default class extends Controller {
     };
   }
 
-  #removeMetadataColumns() {
-    if (this.hasMetadataColumnsTarget) {
-      this.metadataColumnsTarget.innerHTML = "";
-    }
-  }
-
   #removeSampleIDInputOptions() {
     this.#removeInputOptions(this.sampleIdColumnTarget);
     this.#disableTarget(this.sampleIdColumnTarget);
@@ -91,36 +87,46 @@ export default class extends Controller {
       option.text = header;
       this.sampleIdColumnTarget.append(option);
     }
+    // lower case to test for case insensitivity
+    const allHeadersToLowerCase = this.#headers.map((header) =>
+      header.toLowerCase(),
+    );
+    for (const sampleColumnHeader of this.#defaultSampleColumnHeaders) {
+      const sampleIndex = allHeadersToLowerCase.indexOf(sampleColumnHeader);
+      if (sampleIndex > -1) {
+        this.sampleIdColumnTarget.value = this.#headers[sampleIndex];
+        this.#enableDialogState();
+        this.#sortableListsConnect();
+        break;
+      }
+    }
     this.#enableTarget(this.sampleIdColumnTarget);
   }
 
   #addMetadataColumns() {
-    const ignoreList = [
-      "sample id",
-      "sample name",
-      "project id",
-      "created_at",
-      "updated_at",
-      "last_updated_at",
-    ];
-
     let columns = this.#headers.filter(
       (header) =>
-        !ignoreList.includes(header.toLowerCase()) &&
+        !this.#ignoreList.includes(header.toLowerCase()) &&
         header.toLowerCase() != this.sampleIdColumnTarget.value.toLowerCase(),
     );
 
-    this.metadataColumnsTarget.innerHTML =
-      this.sortableListsTemplateTarget.innerHTML;
+    if (columns.length > 0) {
+      this.#unhideElement(this.metadataColumnsTarget);
+      this.metadataColumnsTarget.innerHTML =
+        this.sortableListsTemplateTarget.innerHTML;
 
-    columns.forEach((column) => {
-      const template =
-        this.sortableListsItemTemplateTarget.content.cloneNode(true);
-      template.querySelector("li").innerText = column;
-      template.querySelector("li").id = column.replace(/\s+/g, "-");
-      this.metadataColumnsTarget.querySelector("#selected").append(template);
-    });
-    this.submitButtonTarget.disabled = !columns.length;
+      columns.forEach((column) => {
+        const template =
+          this.sortableListsItemTemplateTarget.content.cloneNode(true);
+        template.querySelector("li").innerText = column;
+        template.querySelector("li").id = column.replace(/\s+/g, "-");
+        this.metadataColumnsTarget.querySelector("#Selected").append(template);
+      });
+      this.submitButtonTarget.disabled = !columns.length;
+    } else {
+      this.#hideElement(this.metadataColumnsTarget);
+      this.#enableErrorState();
+    }
   }
 
   #removeInputOptions(target) {
@@ -131,11 +137,51 @@ export default class extends Controller {
 
   #disableTarget(target) {
     target.disabled = true;
-    target.classList.add(...this.#disabled_classes);
+    target.setAttribute("aria-disabled", "true");
   }
 
   #enableTarget(target) {
     target.disabled = false;
-    target.classList.remove(...this.#disabled_classes);
+    target.removeAttribute("aria-disabled");
+  }
+
+  #resetDialogState() {
+    this.#disableTarget(this.submitButtonTarget);
+    if (this.hasMetadataColumnsTarget) {
+      this.#hideElement(this.metadataColumnsTarget);
+      this.errorTarget.setAttribute("aria-disabled", "true");
+    }
+  }
+
+  #enableDialogState() {
+    this.#enableTarget(this.submitButtonTarget);
+    if (this.hasMetadataColumnsTarget) {
+      this.#addMetadataColumns();
+    }
+  }
+
+  #disableErrorState() {
+    this.#hideElement(this.errorTarget);
+  }
+
+  #enableErrorState() {
+    this.#unhideElement(this.errorTarget);
+    this.#disableTarget(this.submitButtonTarget);
+  }
+
+  #hideElement(element) {
+    element.classList.add("hidden");
+    element.setAttribute("aria-disabled", "true");
+  }
+
+  #unhideElement(element) {
+    element.classList.remove("hidden");
+    element.removeAttribute("aria-hidden");
+  }
+
+  #sortableListsConnect() {
+    if (this.hasViralSortableListsTwoListsSelectionOutlet) {
+      this.viralSortableListsTwoListsSelectionOutlet.idempotentConnect();
+    }
   }
 }

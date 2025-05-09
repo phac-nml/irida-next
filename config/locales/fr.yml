@@ -2028,6 +2028,7 @@ fr:
                 description_html: L’identificateur est sensible à la casse et doit contenir l’<b>identifiant de l’échantillon</b>.
               project:
                 description_html: L’identificateur est sensible à la casse et peut contenir le <b>nom ou l’identifiant de l’échantillon</b>.
+            no_valid_metadata: The uploaded spreadsheet contains no viable metadata
             sample_id_column: Colonne ID de l’échantillon
             select_sample_id_column: Sélectionner une colonne ID de l’échantillon
             selected: Sélectionné

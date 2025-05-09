@@ -2024,7 +2024,7 @@ en:
             file: File
             file_help: CSV, TSV, XLS or XLSX.
             ignore_empty_values:
-              description: If selected, any metadata fields without an associated value will be ignored and those metadata keys will not be removed from the sample if present. However, if this not selected, any samples with the metadata key and empty value will be deleted.
+              description: If selected, any metadata fields without an associated value will be ignored and those metadata keys will not be removed from the sample if present. However, if this is not selected, any samples with the metadata key and empty value will be deleted.
             metadata_columns: Metadata Columns
             namespace:
               description: The spreadsheet is required to have a column that contains a sample identifier.
@@ -2032,6 +2032,7 @@ en:
                 description_html: The identifier is case-sensitive and must contain the <b>sample ID</b>.
               project:
                 description_html: The identifier is case-sensitive and can contain either the <b>sample name or ID</b>.
+            no_valid_metadata: The uploaded spreadsheet contains no viable metadata
             sample_id_column: Sample ID Column
             select_sample_id_column: Select a Sample ID Column
             selected: Selected

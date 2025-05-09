@@ -159,14 +159,14 @@ module Groups
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.new_template_dialog.description')
 
-        within "ul[id='available']" do
+        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.available')}']" do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'unique.metadata.field'
           assert_selector 'li', count: 3
         end
 
-        within "ul[id='selected']" do
+        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'unique.metadata.field'
@@ -214,14 +214,14 @@ module Groups
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.new_template_dialog.description')
 
-        within "ul[id='available']" do
+        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.available')}']" do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'unique.metadata.field'
           assert_selector 'li', count: 3
         end
 
-        within "ul[id='selected']" do
+        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'unique.metadata.field'
@@ -258,14 +258,14 @@ module Groups
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.new_template_dialog.description')
 
-        within "ul[id='available']" do
+        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.available')}']" do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'unique.metadata.field'
           assert_selector 'li', count: 3
         end
 
-        within "ul[id='selected']" do
+        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'unique.metadata.field'
@@ -300,14 +300,14 @@ module Groups
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.new_template_dialog.description')
 
-        within "ul[id='available']" do
+        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.available')}']" do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'unique.metadata.field'
           assert_selector 'li', count: 3
         end
 
-        within "ul[id='selected']" do
+        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'unique.metadata.field'
@@ -344,14 +344,14 @@ module Groups
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.new_template_dialog.description')
 
-        within "ul[id='available']" do
+        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.available')}']" do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'unique.metadata.field'
           assert_selector 'li', count: 3
         end
 
-        within "ul[id='selected']" do
+        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'unique.metadata.field'
@@ -388,14 +388,14 @@ module Groups
         assert_selector 'h1', text: I18n.t('metadata_templates.new_template_dialog.title')
         assert_text I18n.t('metadata_templates.new_template_dialog.description')
 
-        within "ul[id='available']" do
+        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.available')}']" do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'unique.metadata.field'
           assert_selector 'li', count: 3
         end
 
-        within "ul[id='selected']" do
+        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'unique.metadata.field'
@@ -404,14 +404,14 @@ module Groups
 
         click_button I18n.t('viral.sortable_lists_component.add_all')
 
-        within "ul[id='available']" do
+        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.available')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'unique.metadata.field'
           assert_no_selector 'li'
         end
 
-        within "ul[id='selected']" do
+        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'unique.metadata.field'
@@ -420,14 +420,14 @@ module Groups
 
         click_button I18n.t('viral.sortable_lists_component.remove_all')
 
-        within "ul[id='available']" do
+        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.available')}']" do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'unique.metadata.field'
           assert_selector 'li', count: 3
         end
 
-        within "ul[id='selected']" do
+        within "ul[id='#{I18n.t('metadata_templates.new_template_dialog.selected')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'unique.metadata.field'
@@ -468,7 +468,7 @@ module Groups
       within('div[data-controller-connected="true"] dialog') do
         assert_text I18n.t('metadata_templates.edit_template_dialog.title')
 
-        within "ul[id='available']" do
+        within "ul[id='#{I18n.t('metadata_templates.edit_template_dialog.available')}']" do
           assert_text 'metadatafield1'
           assert_text 'metadatafield2'
           assert_text 'unique.metadata.field'
@@ -476,7 +476,7 @@ module Groups
         end
 
         # fields currently in template fixture
-        within "ul[id='selected']" do
+        within "ul[id='#{I18n.t('metadata_templates.edit_template_dialog.selected')}']" do
           assert_text 'field_1'
           assert_text 'field_2'
           assert_text 'field_3'
@@ -485,14 +485,14 @@ module Groups
 
         click_button I18n.t('viral.sortable_lists_component.add_all')
 
-        within "ul[id='available']" do
+        within "ul[id='#{I18n.t('metadata_templates.edit_template_dialog.available')}']" do
           assert_no_text 'metadatafield1'
           assert_no_text 'metadatafield2'
           assert_no_text 'unique.metadata.field'
           assert_no_selector 'li'
         end
 
-        within "ul[id='selected']" do
+        within "ul[id='#{I18n.t('metadata_templates.edit_template_dialog.selected')}']" do
           assert_text 'field_1'
           assert_text 'field_2'
           assert_text 'field_3'
