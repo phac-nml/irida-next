@@ -93,7 +93,7 @@ class WorkflowExecutionsController < ApplicationController
   end
 
   def destroy_path
-    @destroy_path = workflow_execution_path
+    @destroy_path = workflow_execution_path(@workflow_execution)
   end
 
   def destroy_multiple_paths

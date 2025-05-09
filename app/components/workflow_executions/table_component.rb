@@ -70,6 +70,20 @@ module WorkflowExecutions
       render(Viral::BaseComponent.new(**arguments), &)
     end
 
+    def individual_path(workflow_execution)
+      if @namespace && @namespace.type == 'Project'
+        namespace_project_workflow_execution_path(
+          @namespace.parent,
+          @namespace.project,
+          workflow_execution
+        )
+      elsif @namespace && @namespace.type == 'Group'
+        group_workflow_execution_path(@namespace, workflow_execution)
+      else
+        workflow_execution_path(workflow_execution)
+      end
+    end
+
     def cancel_path(workflow_execution)
       if @namespace
         cancel_namespace_project_workflow_execution_path(
@@ -82,17 +96,13 @@ module WorkflowExecutions
       end
     end
 
-    def individual_path(workflow_execution)
-      if @namespace && @namespace.type == 'Project'
-        namespace_project_workflow_execution_path(
-          @namespace.parent,
-          @namespace.project,
-          workflow_execution
-        )
-      elsif @namespace && @namespace.type == 'Group'
-        group_workflow_execution_path(@namespace, workflow_execution)
+    def destroy_confirmation_path(workflow_execution)
+      if @namespace
+        destroy_confirmation_namespace_project_workflow_execution_path(@namespace.parent,
+                                                                       @namespace.project,
+                                                                       workflow_execution)
       else
-        workflow_execution_path(workflow_execution)
+        destroy_confirmation_workflow_execution_path(workflow_execution)
       end
     end
 
