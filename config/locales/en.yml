@@ -1624,6 +1624,7 @@ en:
           empty_state:
             action_text: Upload Files
             description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
+            no_permission_description: You do not have permission to upload files to this sample
             title: No files have been uploaded
       clones:
         create:
@@ -1753,6 +1754,7 @@ en:
             update: Update
             update_metadata: Update Metadata
             value: Value
+        nav_aria_label: Sample Navigation
         new_attachment_button: Upload Files
         remove_button: Remove
         remove_button_confirmation: Are you sure you want to remove this sample from the project?

@@ -1012,7 +1012,7 @@ fr:
         workflows:
           button_sr: Lancer le flux de travail
       table:
-        no_associated_samples: Il n’y a aucun échantillon associé à ce groupe.
+        no_associated_samples: Il n’y a aucun échantillon associé à ce projet.
         no_samples: Aucun échantillon
       table_filter:
         loading: Chargement des résultats de recherche...
@@ -1455,7 +1455,7 @@ fr:
           title: Supprimer le projet
         path:
           description: Changer l’URL d’un projet peut avoir des effets secondaires inattendus.
-          help: Le chemin est utilisé dans les URL et ne peut contenir que des lettres, des chiffres, des tirets et des traits de soulignement
+          help: Le chemin est utilisé dans les URL et doit comporter au moins 3 caractères et ne peut contenir que des lettres, des chiffres, des tirets et des traits de soulignement
           submit: Modifier l’URL du projet
           title: Modifier l’URL du projet
         title: Paramètres avancés
@@ -1620,6 +1620,7 @@ fr:
           empty_state:
             action_text: Upload Files
             description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
+            no_permission_description: You do not have permission to upload files to this sample
             title: No files have been uploaded
       clones:
         create:
@@ -1749,6 +1750,7 @@ fr:
             update: Mise à jour
             update_metadata: Mettre à jour les métadonnées
             value: Valeur
+        nav_aria_label: Sample Navigation
         new_attachment_button: Télécharger des fichiers
         remove_button: Retirer
         remove_button_confirmation: Êtes-vous sûr de vouloir retirer cet échantillon du projet?
