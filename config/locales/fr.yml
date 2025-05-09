@@ -970,6 +970,7 @@ fr:
           link_remove_aria_label: Supprimer le lien %{member} du membre du groupe
         add: Ajouter un nouveau membre
         invite_group: Inviter le groupe
+        invited_groups: Invited Groups
         leave_confirmation: Êtes-vous sûr de vouloir vous retirer de ce groupe?
         leave_group: Quitter le groupe
         remove: Retirer
@@ -1548,6 +1549,7 @@ fr:
           link_remove_aria_label: Supprimer le lien du membre du projet %{member}
         add: Ajouter un nouveau membre
         invite_group: Inviter le groupe
+        invited_groups: Invited Groups
         leave_confirmation: Êtes-vous sûr de vouloir vous retirer de ce projet?
         leave_project: Quitter le projet
         remove: Retirer
@@ -2104,6 +2106,7 @@ fr:
         name: 'Name:'
         run_id: 'Run ID:'
         workflow: 'Workflow:'
+      workflow_execution: Workflow Execution
   spreadsheet_helper:
     failed_parsing: 'Failed to parse spreadsheet file: %{error}'
     no_file: No file provided

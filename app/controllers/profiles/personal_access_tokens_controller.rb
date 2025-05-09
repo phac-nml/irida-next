@@ -5,6 +5,7 @@ module Profiles
   # Controller for the user personal access tokens page
   class PersonalAccessTokensController < Profiles::ApplicationController
     before_action :active_access_tokens
+    before_action :page_title
 
     def index
       authorize! @user
@@ -55,6 +56,10 @@ module Profiles
 
     def current_page
       @current_page = t(:'profiles.sidebar.access_tokens')
+    end
+
+    def page_title
+      @title = "#{t(:'profiles.sidebar.access_tokens')} · #{current_user.namespace.full_path}"
     end
   end
 end

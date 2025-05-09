@@ -2,7 +2,7 @@
 
 module Groups
   # Controller actions for Samples within a Group
-  class SamplesController < Groups::ApplicationController
+  class SamplesController < Groups::ApplicationController # rubocop:disable Metrics/ClassLength
     include Metadata
     include Storable
 
@@ -10,6 +10,7 @@ module Groups
     before_action :query, only: %i[index search select]
     before_action :current_metadata_template, only: %i[index]
     before_action :index_view_authorizations, only: %i[index]
+    before_action :page_title
 
     rescue_from Pagy::OverflowError, with: :redirect_to_first_page
 
@@ -123,6 +124,10 @@ module Groups
 
     def redirect_to_first_page
       redirect_to url_for(page: 1, limit: params[:limit] || 20)
+    end
+
+    def page_title
+      @title = "#{t(:'activerecord.models.sample.other')} · #{@group.full_path}"
     end
   end
 end

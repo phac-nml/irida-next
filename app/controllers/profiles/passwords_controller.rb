@@ -4,6 +4,8 @@
 module Profiles
   # Controller for the user password page
   class PasswordsController < Profiles::ApplicationController
+    before_action :page_title
+
     # Get password page
     def edit
       authorize! @user
@@ -32,6 +34,10 @@ module Profiles
 
     def current_page
       @current_page = t(:'profiles.sidebar.password')
+    end
+
+    def page_title
+      @title = "#{t(:'profiles.sidebar.password')} · #{current_user.namespace.full_path}"
     end
   end
 end

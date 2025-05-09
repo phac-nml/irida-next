@@ -7,6 +7,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   before_action :authorized_namespaces, only: %i[edit new update create transfer]
   before_action :current_page
   before_action :edit_view_authorizations, only: %i[edit]
+  before_action :page_title
 
   def index
     redirect_to dashboard_projects_path
@@ -206,5 +207,20 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
                     else
                       t(:'projects.sidebar.general')
                     end
+  end
+
+  def page_title
+    @title = case action_name
+             when 'show'
+               "#{t(:'projects.sidebar.details')} · #{@project.full_path}"
+             when 'activity'
+               "#{t(:'projects.sidebar.activity')} · #{@project.full_path}"
+             when 'edit'
+               "#{t(:'projects.sidebar.general')} · #{t(:'projects.edit.title')} · #{@project.full_path}"
+             when 'new'
+               t(:'projects.new.title')
+             else
+               'Projects'
+             end
   end
 end

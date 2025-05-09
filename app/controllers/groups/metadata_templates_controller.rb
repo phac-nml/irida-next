@@ -6,6 +6,7 @@ module Groups
     include MetadataTemplateActions
 
     before_action :current_page
+    before_action :page_title
 
     private
 
@@ -38,6 +39,10 @@ module Groups
 
     def metadata_templates_path
       group_metadata_templates_path
+    end
+
+    def page_title
+      @title = "#{t(:'groups.sidebar.metadata_templates')} · #{t(:'groups.edit.title')} · #{@group.full_path}"
     end
   end
 end

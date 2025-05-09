@@ -6,6 +6,7 @@ module Projects
     include MetadataTemplateActions
 
     before_action :current_page
+    before_action :page_title
 
     private
 
@@ -39,6 +40,10 @@ module Projects
 
     def current_page
       @current_page = t(:'projects.sidebar.metadata_templates')
+    end
+
+    def page_title
+      @title = "#{t(:'projects.sidebar.metadata_templates')} · #{@project.full_path}"
     end
   end
 end

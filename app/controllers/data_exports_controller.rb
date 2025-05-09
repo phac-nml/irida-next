@@ -11,6 +11,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   before_action :namespace, only: :new
   before_action :current_page
   before_action :set_default_tab, only: :show
+  before_action :page_title
 
   TABS = %w[summary preview].freeze
 
@@ -192,5 +193,16 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
         redirect_to namespace_project_workflow_execution_path(namespace.parent, namespace.project, workflow_execution)
       end
     end
+  end
+
+  def page_title
+    @title = case action_name
+             when 'index'
+               "#{t(:'general.default_sidebar.data_exports')} · #{current_user.namespace.full_path}"
+             when 'show'
+               "Summary · Data Export #{@data_export.id} · #{current_user.namespace.full_path}"
+             else
+               t(:'general.default_sidebar.data_exports')
+             end
   end
 end
