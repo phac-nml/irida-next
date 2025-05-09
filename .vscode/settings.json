@@ -34,13 +34,19 @@
     "datetime",
     "describedby",
     "flowbite",
+    "gsub",
     "headful",
+    "hotwired",
     "irida",
     "keyfile",
     "logfile",
     "micha",
     "nofork",
+    "nowrap",
+    "pagy",
+    "puid",
     "rubocop",
+    "samplesheet",
     "tailwindcss"
   ]
 }
