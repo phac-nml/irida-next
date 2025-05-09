@@ -15,6 +15,7 @@ export default class extends Controller {
   static values = {
     confirmCloseText: String,
   };
+  #hidden_classes = ["invisible", "@max-xl:hidden"];
 
   connect() {
     this.idempotentConnect();
@@ -33,8 +34,7 @@ export default class extends Controller {
     if (!(event instanceof KeyboardEvent) && event.type === "keydown") {
       event.preventDefault();
       event.stopImmediatePropagation();
-    }
-    else if (!this.#dirty()) {
+    } else if (!this.#dirty()) {
       this.clear();
     } else {
       if (window.confirm(this.confirmCloseTextValue)) {
@@ -48,7 +48,7 @@ export default class extends Controller {
 
   addCondition(event) {
     let group = event.currentTarget.parentElement.closest(
-      "div[data-advanced-search-target='groupsContainer']",
+      "fieldset[data-advanced-search-target='groupsContainer']",
     );
     this.#addConditionToGroup(group);
   }
@@ -56,18 +56,24 @@ export default class extends Controller {
   removeCondition(event) {
     let condition = event.currentTarget.parentElement;
     let group = condition.closest(
-      "div[data-advanced-search-target='groupsContainer']",
+      "fieldset[data-advanced-search-target='groupsContainer']",
     );
     let conditions = group.querySelectorAll(
-      "div[data-advanced-search-target='conditionsContainer']",
+      "fieldset[data-advanced-search-target='conditionsContainer']",
     );
 
     condition.remove();
     conditions = group.querySelectorAll(
-      "div[data-advanced-search-target='conditionsContainer']",
+      "fieldset[data-advanced-search-target='conditionsContainer']",
     );
-    //re-index all the form fields within the group
+    //re-index the fieldset legend & all the form fields within the group
     conditions.forEach((condition, index) => {
+      let legend = condition.querySelector("legend");
+      let updatedLegend = legend.innerHTML.replace(
+        /(Condition\s)\d+/,
+        "$1" + (index + 1),
+      );
+      legend.innerHTML = updatedLegend;
       let inputFields = condition.querySelectorAll("[name]");
       inputFields.forEach((inputField) => {
         let updatedInputFieldName = inputField.name.replace(
@@ -86,11 +92,14 @@ export default class extends Controller {
     let group_index = this.groupsContainerTargets.length;
     this.searchGroupsContainerTarget.insertAdjacentHTML(
       "beforeend",
-      this.groupTemplateTarget.innerHTML,
+      this.groupTemplateTarget.innerHTML
+        .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
+        .replace(/GROUP_LEGEND_INDEX_PLACEHOLDER/g, group_index + 1),
     );
     let newCondition = this.conditionTemplateTarget.innerHTML
       .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
-      .replace(/CONDITION_INDEX_PLACEHOLDER/g, 0);
+      .replace(/CONDITION_INDEX_PLACEHOLDER/g, 0)
+      .replace(/CONDITION_LEGEND_INDEX_PLACEHOLDER/g, 1);
     let group = this.groupsContainerTargets[group_index];
     group.insertAdjacentHTML("afterbegin", newCondition);
     //show 'Remove group' buttons if there's more than one group
@@ -108,8 +117,16 @@ export default class extends Controller {
   removeGroup(event) {
     if (this.groupsContainerTargets.length > 1) {
       event.currentTarget.parentElement.parentElement.remove();
-      //re-index all the form fields within all the groups
+      //re-index the fieldset legend & all the form fields within all the groups
       this.groupsContainerTargets.forEach((group, index) => {
+        let legend = Array.from(group.children).filter((child) =>
+          child.matches("legend"),
+        )[0];
+        let updatedLegend = legend.innerHTML.replace(
+          /(Group\s)\d+/,
+          "$1" + (index + 1),
+        );
+        legend.innerHTML = updatedLegend;
         let inputFields = group.querySelectorAll("[name]");
         inputFields.forEach((inputField) => {
           let updatedInputFieldName = inputField.name.replace(
@@ -138,30 +155,30 @@ export default class extends Controller {
   handleOperatorChange(event) {
     let operator = event.target.value;
     let condition = event.target.parentElement.closest(
-      "div[data-advanced-search-target='conditionsContainer']",
+      "fieldset[data-advanced-search-target='conditionsContainer']",
     );
     let value = condition.querySelector(".value");
     let group = condition.parentElement;
     let group_index = this.groupsContainerTargets.indexOf(group);
     let condition_index = [
       ...group.querySelectorAll(
-        "div[data-advanced-search-target='conditionsContainer']",
+        "fieldset[data-advanced-search-target='conditionsContainer']",
       ),
     ].indexOf(condition);
 
     if (["", "exists", "not_exists"].includes(operator)) {
-      value.classList.add("invisible");
+      value.classList.add(...this.#hidden_classes);
       let inputs = value.querySelectorAll("input");
       inputs.forEach((input) => {
         input.value = "";
       });
     } else if (["in", "not_in"].includes(operator)) {
-      value.classList.remove("invisible");
+      value.classList.remove(...this.#hidden_classes);
       value.outerHTML = this.listValueTemplateTarget.innerHTML
         .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
         .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
     } else {
-      value.classList.remove("invisible");
+      value.classList.remove(...this.#hidden_classes);
       value.outerHTML = this.valueTemplateTarget.innerHTML
         .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
         .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
@@ -171,20 +188,29 @@ export default class extends Controller {
   #addConditionToGroup(group) {
     let group_index = this.groupsContainerTargets.indexOf(group);
     let condition_index = group.querySelectorAll(
-      "div[data-advanced-search-target='conditionsContainer']",
+      "fieldset[data-advanced-search-target='conditionsContainer']",
     ).length;
     let newCondition = this.conditionTemplateTarget.innerHTML
       .replace(/GROUP_INDEX_PLACEHOLDER/g, group_index)
-      .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index);
+      .replace(/CONDITION_INDEX_PLACEHOLDER/g, condition_index)
+      .replace(/CONDITION_LEGEND_INDEX_PLACEHOLDER/g, condition_index + 1);
     group.lastElementChild.insertAdjacentHTML("beforebegin", newCondition);
   }
 
   #dirty() {
     let dirty = true;
-    if (this.searchGroupsContainerTarget.innerHTML.trim() === this.searchGroupsTemplateTarget.innerHTML.trim()) {
+    if (
+      this.searchGroupsContainerTarget.innerHTML.trim() ===
+      this.searchGroupsTemplateTarget.innerHTML.trim()
+    ) {
       dirty = false;
-      const currentInputs = this.searchGroupsContainerTarget.querySelectorAll("[id^='q_groups_attributes_']");
-      const originalInputs = this.searchGroupsTemplateTarget.content.querySelectorAll("[id^='q_groups_attributes_']");
+      const currentInputs = this.searchGroupsContainerTarget.querySelectorAll(
+        "[id^='q_groups_attributes_']",
+      );
+      const originalInputs =
+        this.searchGroupsTemplateTarget.content.querySelectorAll(
+          "[id^='q_groups_attributes_']",
+        );
       originalInputs.forEach((item, index) => {
         if (item.value !== currentInputs[index].value) {
           dirty = true;

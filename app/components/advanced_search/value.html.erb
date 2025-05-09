@@ -4,8 +4,8 @@
     %w[exists not_exists].include?(@condition.operator) %>
 <div
   class="
-    form-field w-6/12 value <%= 'invalid' if invalid_value %>
-    <%= 'invisible' if operator_exists %>
+    form-field w-6/12 @max-xl:w-auto value <%= 'invalid' if invalid_value %>
+    <%= 'invisible @max-xl:hidden' if operator_exists %>
   "
 >
   <% if %w[in not_in].include?(@condition.operator) %>

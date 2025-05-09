@@ -1,10 +1,19 @@
-<div
+<fieldset
   data-advanced-search-target="conditionsContainer"
-  class="flex space-x-2 p-4 items-start"
+  class="
+    flex @max-xl:flex-col @max-xl:space-y-2 space-x-2 p-4 items-start rounded-md
+    border border-slate-300 dark:border-slate-600 text-sm text-slate-500
+    dark:text-slate-400
+  "
 >
+  <legend><%= t("advanced_search_component.condition", index: @condition_index + 1) %></legend>
   <%= @groups_form.fields_for :conditions, @condition do |conditions_form| %>
     <% invalid_field = @condition.errors.include?(:field) %>
-    <div class="form-field w-1/3 <%= 'invalid' if invalid_field %>">
+    <div
+      class="
+        form-field w-1/3 @max-xl:w-auto <%= 'invalid' if invalid_field %>
+      "
+    >
       <%= conditions_form.select :field,
                              options_for_select(
                                @sample_fields,
@@ -21,7 +30,11 @@
       errors: @condition.errors.full_messages_for(:field) %>
     </div>
     <% invalid_operator = @condition.errors.include?(:operator) %>
-    <div class="form-field w-1/6 <%= 'invalid' if invalid_operator %>">
+    <div
+      class="
+        form-field w-1/6 @max-xl:w-auto <%= 'invalid' if invalid_operator %>
+      "
+    >
       <%= conditions_form.select :operator,
                              options_for_select(
                                @operations,
@@ -52,4 +65,4 @@
   >
     <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>
   </button>
-</div>
+</fieldset>
