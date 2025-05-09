@@ -12,7 +12,7 @@ module Layout
         @selected = selected
 
         @selected_classes = class_names(
-          'w-1 h-6 my-0 mr-1 rounded-lg bg-primary-600',
+          'w-1 h-6 my-0 mr-2 rounded-lg bg-primary-600',
           {
             'rounded-lg bg-primary-600': selected,
             'bg-transparent': !selected

@@ -55,6 +55,9 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
+      - name: Install icons
+        run: |
+          bin/rails generate rails_icons:install --libraries=phosphor heroicons
       - name: Precompile assets
         run: |
           bin/rails assets:precompile
