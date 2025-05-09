@@ -2,16 +2,34 @@
   <a
     href="<%= url %>"
     class="
-      flex items-center mt-1 p-1 transition-colors ease-in-out delay-75 rounded-sm
-      hover:bg-slate-200 dark:text-slate-200 dark:hover:bg-slate-700
-      <%= class_names('Layout-Sidebar__Item--selected bg-slate-200 dark:bg-slate-700': selected)  %>
+      flex items-center mt-1 py-1 pr-1 pl-2 transition-colors ease-in-out delay-75
+      rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 group min-h-[44px] #
+      Ensure minimum height <%= class_names({
+        'bg-primary-100 dark:bg-slate-700': selected, # Subtle background for selected item
+        'text-slate-700 dark:text-slate-200': !selected
+      })  %>
     "
   >
-    <%= render Layout::Sidebar::SelectedComponent.new(selected: selected) %>
-    <span class="w-6 flex items-center justify-center">
+    <span
+      #
+      Circular
+      background
+      for
+      icon,
+      more
+      prominent
+      when
+      selected
+      class="
+        w-8 h-8 flex items-center justify-center rounded-full mr-2
+        <%= selected ? 'bg-primary-200 dark:bg-primary-600' : 'bg-slate-100 dark:bg-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-700' %>
+      "
+    >
       <%= create_icon %>
     </span>
-    <span class="ml-2 grow">
+    <span
+      class="ml-1 grow <%= selected ? 'font-semibold text-primary-700 dark:text-primary-100' : 'text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-slate-50' %>"
+    >
       <%= label %>
     </span>
   </a>
