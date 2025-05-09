@@ -89,20 +89,28 @@ module Projects
       namespace_project_workflow_executions_path
     end
 
-    def page_title
+    def page_title # rubocop:disable Metrics/MethodLength
       case action_name
       when 'index'
         @title = "#{t(:'general.default_sidebar.workflows')} · #{@project.full_path}"
       when 'show'
         @title = case @tab
                  when 'params'
-                   "#{t(:'workflow_executions.show.tabs.params')} · #{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id} · #{@project.full_path}"
+                   "#{t(:'workflow_executions.show.tabs.params')} · " \
+                   "#{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id} · " \
+                   "#{@project.full_path}"
                  when 'samplesheet'
-                   "#{t(:'workflow_executions.show.tabs.samplesheet')} · #{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id} · #{@project.full_path}"
+                   "#{t(:'workflow_executions.show.tabs.samplesheet')} · " \
+                   "#{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id} · " \
+                   "#{@project.full_path}"
                  when 'files'
-                   "#{t(:'workflow_executions.show.tabs.files')} · #{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id} · #{@project.full_path}"
+                   "#{t(:'workflow_executions.show.tabs.files')} · " \
+                   "#{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id} · " \
+                   "#{@project.full_path}"
                  else
-                   "#{t(:'workflow_executions.show.tabs.summary')} · #{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id} · #{@project.full_path}"
+                   "#{t(:'workflow_executions.show.tabs.summary')} · " \
+                   "#{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id} · " \
+                   "#{@project.full_path}"
                  end
       end
     end
