@@ -20,6 +20,24 @@ export default class extends Controller {
     "sample puid",
   ];
 
+  #ignoreList = [
+    "sample_name",
+    "sample name",
+    "sample",
+    "sample_id",
+    "sample id",
+    "sample_puid",
+    "sample puid",
+    "project id",
+    "project_id",
+    "project_puid",
+    "project puid",
+    "created_at",
+    "updated_at",
+    "last_updated_at",
+    "description",
+  ];
+
   #headers = [];
 
   changeSampleIDInput(event) {
@@ -81,27 +99,9 @@ export default class extends Controller {
   }
 
   #addMetadataColumns() {
-    const ignoreList = [
-      "sample_name",
-      "sample name",
-      "sample",
-      "sample_id",
-      "sample id",
-      "sample_puid",
-      "sample puid",
-      "project id",
-      "project_id",
-      "project_puid",
-      "project puid",
-      "created_at",
-      "updated_at",
-      "last_updated_at",
-      "description",
-    ];
-
     let columns = this.#headers.filter(
       (header) =>
-        !ignoreList.includes(header.toLowerCase()) &&
+        !this.#ignoreList.includes(header.toLowerCase()) &&
         header.toLowerCase() != this.sampleIdColumnTarget.value.toLowerCase(),
     );
     if (columns.length > 0) {
@@ -121,10 +121,12 @@ export default class extends Controller {
 
   #disableTarget(target) {
     target.disabled = true;
+    target.setAttribute("aria-disabled", "true");
   }
 
   #enableTarget(target) {
     target.disabled = false;
+    target.removeAttribute("aria-disabled");
   }
 
   #resetDialogState() {
@@ -143,10 +145,12 @@ export default class extends Controller {
 
   #disableErrorState() {
     this.errorTarget.classList.add("hidden");
+    this.errorTarget.setAttribute("aria-disabled", "true");
   }
 
   #enableErrorState() {
     this.errorTarget.classList.remove("hidden");
+    this.errorTarget.removeAttribute("aria-hidden");
     this.#disableTarget(this.submitButtonTarget);
   }
 

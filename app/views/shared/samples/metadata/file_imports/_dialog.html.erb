@@ -39,6 +39,7 @@
               flex items-center hidden p-4 mb-2 text-red-800 border-l-4 border-red-300
               bg-red-50 dark:text-red-400 dark:bg-slate-800 dark:border-red-800
             "
+            aria-hidden="true"
             data-metadata--file-import-target="error"
           >
             <span class="inline shrink-0">
@@ -82,7 +83,10 @@
                         },
                         class:
                           "disabled:bg-slate-50 disabled:text-slate-900 disabled:dark:bg-slate-700 disabled:dark:placeholder-slate-400 disabled:dark:text-white",
-                        disabled: true %>
+                        disabled: true,
+                        aria: {
+                          disabled: true,
+                        } %>
           </div>
           <% if Flipper.enabled?(:metadata_import_field_selection) %>
             <template
@@ -94,6 +98,7 @@
             <div
               class="grid gap-4 hidden"
               data-metadata--file-import-target="metadataColumns"
+              aria-hidden="true"
             >
               <%= viral_sortable_lists(
             title: t(".metadata_columns"),
@@ -147,7 +152,10 @@
                           "metadata--file-import-target": "submitButton",
                           "attachment-upload-target": "submitButton",
                         },
-                        disabled: true %>
+                        disabled: true,
+                        aria: {
+                          disabled: true,
+                        } %>
           </div>
         </div>
       <% end %>
