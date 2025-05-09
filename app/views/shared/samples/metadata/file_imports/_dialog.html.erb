@@ -11,13 +11,12 @@
       data-viral--sortable-lists--two-lists-selection-selected-list-value="<%= t(".selected") %>"
       data-viral--sortable-lists--two-lists-selection-available-list-value="<%= t(".available") %>"
       data-viral--sortable-lists--two-lists-selection-field-name-value="file_import[metadata_columns][]"
-      data-action="
-        metadata--file-import:sendMetadata->viral--sortable-lists--two-lists-selection#updateMetadataListing
-      "
+      data-metadata--file-import-viral--sortable-lists--two-lists-selection-outlet="#import-metadata-dialog-content"
       <% else %>
       data-controller="attachment-upload metadata--file-import"
       <% end %>
       data-attachment-upload-button-text-value='<%=t(".uploading") %>'
+      id="import-metadata-dialog-content"
     >
       <%= form_for(:file_import, url: url, method: :post) do |form| %>
         <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>"/>
@@ -89,40 +88,36 @@
                         } %>
           </div>
           <% if Flipper.enabled?(:metadata_import_field_selection) %>
-            <template
-              id="sortable-list-item-template"
-              data-viral--sortable-lists--two-lists-selection-target="itemTemplate"
-            >
+            <div data-metadata--file-import-target="metadataColumns"></div>
+            <template data-metadata--file-import-target="sortableListsTemplate">
+              <div class="grid gap-4">
+                <div
+                  class="hidden"
+                  data-viral--sortable-lists--two-lists-selection-target="field"
+                ></div>
+                <%= viral_sortable_lists(
+                title: t(".metadata_columns"),
+            ) do |sortable_lists| %>
+                  <%= sortable_lists.with_list(
+                    id: t(".available"),
+                    title: t(".available"),
+                    group: "metadata_selection",
+                    container_classes: "block mb-1 pr-2 text-sm font-medium",
+                    list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
+                  ) %>
+                  <%= sortable_lists.with_list(
+                    id: t(".selected"),
+                    title: t(".selected"),
+                    group: "metadata_selection",
+                    container_classes: "block mb-1 text-sm font-medium",
+                    list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
+                  ) %>
+                <% end %>
+              </div>
+            </template>
+            <template data-metadata--file-import-target="sortableListsItemTemplate">
               <%= render Viral::SortableList::ListItemComponent.new(list_item: "NAME_HERE") %>
             </template>
-            <div
-              class="grid gap-4 hidden"
-              data-metadata--file-import-target="metadataColumns"
-              aria-hidden="true"
-            >
-              <%= viral_sortable_lists(
-            title: t(".metadata_columns"),
-            ) do |sortable_lists| %>
-                <%= sortable_lists.with_list(
-                  id: t(".available"),
-                  title: t(".available"),
-                  group: "metadata_selection",
-                  container_classes: "block mb-1 pr-2 text-sm font-medium",
-                  list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
-                ) %>
-                <%= sortable_lists.with_list(
-                  id: t(".selected"),
-                  title: t(".selected"),
-                  group: "metadata_selection",
-                  container_classes: "block mb-1 text-sm font-medium",
-                  list_classes: "overflow-y-auto max-w-[356px] min-w-[356px] w-full",
-                ) %>
-              <% end %>
-            </div>
-            <div
-              class="hidden"
-              data-viral--sortable-lists--two-lists-selection-target="field"
-            ></div>
           <% end %>
           <div class="flex items-center">
             <%= form.check_box :ignore_empty_values, {}, true, false %>

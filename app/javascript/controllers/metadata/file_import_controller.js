@@ -3,11 +3,14 @@ import * as XLSX from "xlsx";
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
+  static outlets = ["viral--sortable-lists--two-lists-selection"];
   static targets = [
     "sampleIdColumn",
     "metadataColumns",
     "submitButton",
     "error",
+    "sortableListsTemplate",
+    "sortableListsItemTemplate",
   ];
 
   #defaultSampleColumnHeaders = [
@@ -44,6 +47,7 @@ export default class extends Controller {
     const { value } = event.target;
     if (value) {
       this.#enableDialogState();
+      this.#sortableListsConnect();
     } else {
       this.#resetDialogState();
     }
@@ -92,6 +96,7 @@ export default class extends Controller {
       if (sampleIndex > -1) {
         this.sampleIdColumnTarget.value = this.#headers[sampleIndex];
         this.#enableDialogState();
+        this.#sortableListsConnect();
         break;
       }
     }
@@ -104,9 +109,20 @@ export default class extends Controller {
         !this.#ignoreList.includes(header.toLowerCase()) &&
         header.toLowerCase() != this.sampleIdColumnTarget.value.toLowerCase(),
     );
+
     if (columns.length > 0) {
       this.metadataColumnsTarget.classList.remove("hidden");
-      this.sendMetadata(columns);
+      this.metadataColumnsTarget.innerHTML =
+        this.sortableListsTemplateTarget.innerHTML;
+
+      columns.forEach((column) => {
+        const template =
+          this.sortableListsItemTemplateTarget.content.cloneNode(true);
+        template.querySelector("li").innerText = column;
+        template.querySelector("li").id = column.replace(/\s+/g, "-");
+        this.metadataColumnsTarget.querySelector("#Selected").append(template);
+      });
+      this.submitButtonTarget.disabled = !columns.length;
     } else {
       this.metadataColumnsTarget.classList.add("hidden");
       this.#enableErrorState();
@@ -154,11 +170,9 @@ export default class extends Controller {
     this.#disableTarget(this.submitButtonTarget);
   }
 
-  sendMetadata(unselectedHeaders) {
-    this.dispatch("sendMetadata", {
-      detail: {
-        content: { metadata: unselectedHeaders },
-      },
-    });
+  #sortableListsConnect() {
+    if (this.hasViralSortableListsTwoListsSelectionOutlet) {
+      this.viralSortableListsTwoListsSelectionOutlet.idempotentConnect();
+    }
   }
 }
