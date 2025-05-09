@@ -220,7 +220,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
              when 'new'
                t(:'projects.new.title')
              else
-               'Projects'
+               t(:'general.default_sidebar.projects')
              end
   end
 end

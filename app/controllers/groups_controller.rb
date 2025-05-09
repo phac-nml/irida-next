@@ -283,7 +283,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
                  t(:'groups.create.title')
                end
              else
-               'Groups'
+               t(:'general.default_sidebar.groups')
              end
   end
 end
