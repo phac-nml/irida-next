@@ -3,6 +3,7 @@
 resources :workflow_executions, only: %i[index create show destroy edit update] do
   member do
     put :cancel
+    get :destroy_confirmation
   end
 
   scope module: :workflow_executions, as: :workflow_executions do

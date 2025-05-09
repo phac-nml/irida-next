@@ -9,9 +9,10 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   included do
     before_action :set_default_tab, only: :show
     before_action :current_page, only: %i[show index]
-    before_action :workflow_execution, only: %i[show cancel destroy update edit]
+    before_action :workflow_execution, only: %i[show cancel destroy update edit destroy_confirmation]
     before_action proc { view_authorizations }, only: %i[index]
     before_action proc { show_view_authorizations }, only: %i[show]
+    before_action proc { destroy_path }, only: %i[destroy_confirmation destroy]
     before_action proc { destroy_multiple_paths }, only: %i[destroy_multiple_confirmation destroy_multiple]
   end
 
@@ -84,10 +85,10 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     respond_to do |format|
       format.turbo_stream do
         if @workflow_execution.deleted?
-          flash[:success] =
-            t('concerns.workflow_execution_actions.destroy.success',
-              workflow_name: @workflow_execution.metadata['workflow_name'])
-          redirect_to redirect_path
+          render status: :ok,
+                 locals: { type: 'success',
+                           message: t('concerns.workflow_execution_actions.destroy.success',
+                                      workflow_name: @workflow_execution.metadata['workflow_name']) }
         else
           render status: :unprocessable_entity, locals: {
             type: 'alert', message: t('concerns.workflow_execution_actions.destroy.error',
@@ -130,6 +131,17 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
         end
       end
     end
+  end
+
+  def destroy_confirmation
+    authorize! @workflow_execution, to: :destroy?
+    render turbo_stream: turbo_stream.update(
+      'workflow_execution_dialog',
+      partial: 'shared/workflow_executions/destroy_confirmation_dialog',
+      locals: {
+        open: true
+      }
+    ), status: :ok
   end
 
   def destroy_multiple_confirmation
@@ -221,6 +233,10 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   protected
 
   def redirect_path
+    raise NotImplementedError
+  end
+
+  def destroy_path
     raise NotImplementedError
   end
 

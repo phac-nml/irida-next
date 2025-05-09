@@ -2,4 +2,11 @@
   <%= viral_flash(type:, data: message) %>
 <% end %>
 
-<turbo-stream action="refresh"></turbo-stream>
+<%= turbo_stream.update "workflow_execution_dialog",
+                    partial:
+                      "shared/workflow_executions/destroy_confirmation_dialog",
+                    locals: {
+                      open: false,
+                    } %>
+
+<%= turbo_stream.remove(@workflow_execution) %>
