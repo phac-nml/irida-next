@@ -6,7 +6,7 @@ class Viral::EmptyStateComponentTest < ViewComponent::TestCase
   def test_renders_with_title_and_description
     render_inline(
       Viral::EmptyStateComponent.new(
-        icon_name: :document,
+        icon_name: :building_library,
         title: 'No files have been uploaded',
         description: 'Get started by uploading sequence data, assembly files, or other relevant documents.',
         action_text: 'Upload Files',
@@ -24,7 +24,7 @@ class Viral::EmptyStateComponentTest < ViewComponent::TestCase
   def test_accessibility
     render_inline(
       Viral::EmptyStateComponent.new(
-        icon_name: :document,
+        icon_name: :building_library,
         title: 'No files',
         description: 'Description',
         action_text: 'Action',
