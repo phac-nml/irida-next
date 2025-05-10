@@ -5,6 +5,7 @@ module Dashboard
   class GroupsController < ApplicationController
     before_action :current_page
     before_action :render_flat_list, only: %i[index]
+    before_action :page_title
 
     def index
       @q = build_ransack_query
@@ -63,6 +64,10 @@ module Dashboard
 
     def current_page
       @current_page = t(:'general.default_sidebar.groups')
+    end
+
+    def page_title
+      @title = t(:'general.default_sidebar.groups')
     end
   end
 end

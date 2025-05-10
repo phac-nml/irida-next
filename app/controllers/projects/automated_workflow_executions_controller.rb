@@ -10,6 +10,7 @@ module Projects
     before_action :automated_workflow_execution, only: %i[edit update destroy show]
     before_action :available_automated_workflows, only: %i[new edit]
     before_action :current_page, only: %i[index show]
+    before_action :page_title
 
     def index
       authorize! @namespace, to: :view_automated_workflow_executions?
@@ -152,6 +153,10 @@ module Projects
           path: namespace_project_automated_workflow_executions_path
         }]
       end
+    end
+
+    def page_title
+      @title = "#{t(:'projects.sidebar.automated_workflow_executions')} · #{@project.full_path}"
     end
   end
 end

@@ -8,6 +8,7 @@ module Groups
 
     respond_to :turbo_stream
     before_action :current_page
+    before_action :page_title
 
     private
 
@@ -43,6 +44,10 @@ module Groups
 
     def redirect_path
       group_bots_path
+    end
+
+    def page_title
+      @title = "#{t(:'groups.sidebar.bot_accounts')} · #{t(:'groups.edit.title')} · #{@group.full_path}"
     end
   end
 end

@@ -8,6 +8,7 @@ module Projects
 
     respond_to :turbo_stream
     before_action :current_page
+    before_action :page_title
 
     private
 
@@ -44,6 +45,10 @@ module Projects
 
     def redirect_path
       namespace_project_bots_path
+    end
+
+    def page_title
+      @title = "#{t(:'projects.sidebar.bot_accounts')} · #{t(:'projects.edit.title')} · #{@project.full_path}"
     end
   end
 end

@@ -2,6 +2,8 @@
 
 # Controller for the user profile page
 class ProfilesController < Profiles::ApplicationController
+  before_action :page_title
+
   # Get the profile page
   def show
     authorize! @user, to: :read?
@@ -35,5 +37,9 @@ class ProfilesController < Profiles::ApplicationController
 
   def current_page
     @current_page = t(:'profiles.sidebar.profile')
+  end
+
+  def page_title
+    @title = "#{t(:'profiles.sidebar.profile')} · #{current_user.namespace&.full_path}"
   end
 end

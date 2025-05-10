@@ -6,6 +6,7 @@ module Projects
     include HistoryActions
 
     before_action :current_page
+    before_action :page_title
 
     private
 
@@ -34,6 +35,10 @@ module Projects
 
     def current_page
       @current_page = t(:'projects.sidebar.history')
+    end
+
+    def page_title
+      @title = "#{t(:'projects.sidebar.history')} · #{t(:'projects.edit.title')} · #{@project.full_path}"
     end
   end
 end

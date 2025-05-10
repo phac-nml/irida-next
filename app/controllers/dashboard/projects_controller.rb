@@ -4,6 +4,7 @@ module Dashboard
   # Dashboard Projects Controller
   class ProjectsController < ApplicationController
     before_action :current_page
+    before_action :page_title
 
     def index
       @q = authorized_projects(params).ransack(params[:q])
@@ -34,6 +35,10 @@ module Dashboard
 
     def current_page
       @current_page = t(:'general.default_sidebar.projects')
+    end
+
+    def page_title
+      @title = t(:'general.default_sidebar.projects')
     end
   end
 end

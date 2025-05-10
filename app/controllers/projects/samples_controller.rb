@@ -13,6 +13,7 @@ module Projects
     before_action :current_metadata_template, only: %i[index]
     before_action :index_view_authorizations, only: %i[index]
     before_action :show_view_authorizations, only: %i[show]
+    before_action :page_title
 
     rescue_from Pagy::OverflowError, with: :redirect_to_first_page
 
@@ -201,6 +202,30 @@ module Projects
 
     def redirect_to_first_page
       redirect_to url_for(page: 1, limit: params[:limit] || 20)
+    end
+
+    def page_title # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      case action_name
+      when 'new'
+        @title = "#{t(:'projects.samples.new.title')} · #{@project.full_path}"
+      when 'edit'
+        @title = "#{t(:'projects.samples.edit.title')} · #{t(:'activerecord.models.sample.one')} #{@sample.name} · " \
+                 "#{@project.full_path}"
+      when 'show'
+        @tab = params[:tab]
+        @title = if @tab == 'metadata'
+                   "#{t(:'projects.samples.show.tabs.metadata')} · " \
+                     "#{t(:'activerecord.models.sample.one')} #{@sample.name} · #{@project.full_path}"
+                 elsif @tab == 'history'
+                   "#{t(:'projects.samples.show.tabs.history')} · " \
+                     "#{t(:'activerecord.models.sample.one')} #{@sample.name} · #{@project.full_path}"
+                 else
+                   "#{t(:'projects.samples.show.tabs.files')} · " \
+                     "#{t(:'activerecord.models.sample.one')} #{@sample.name} · #{@project.full_path}"
+                 end
+      else
+        @title = "#{t(:'activerecord.models.sample.other')} · #{@project.full_path}"
+      end
     end
   end
 end

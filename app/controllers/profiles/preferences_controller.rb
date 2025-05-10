@@ -4,6 +4,8 @@
 module Profiles
   # Controller for the user personal preferences page
   class PreferencesController < Profiles::ApplicationController
+    before_action :page_title
+
     def show
       authorize! @user, to: :read?
     end
@@ -35,6 +37,10 @@ module Profiles
       params.expect(
         user: [:locale]
       )
+    end
+
+    def page_title
+      @title = "#{t(:'profiles.sidebar.preferences')} · #{current_user.namespace&.full_path}"
     end
   end
 end

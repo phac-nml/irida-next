@@ -6,6 +6,7 @@ module Groups
     include HistoryActions
 
     before_action :current_page
+    before_action :page_title
 
     private
 
@@ -39,6 +40,10 @@ module Groups
 
     def current_page
       @current_page = t(:'groups.sidebar.history')
+    end
+
+    def page_title
+      @title = "#{t(:'groups.sidebar.history')} · #{t(:'groups.edit.title')} · #{@group.full_path}"
     end
   end
 end
