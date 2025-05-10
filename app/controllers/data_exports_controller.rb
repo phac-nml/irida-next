@@ -200,7 +200,9 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
              when 'index'
                "#{t(:'general.default_sidebar.data_exports')} · #{current_user.namespace.full_path}"
              when 'show'
-               "Summary · Data Export #{@data_export.id} · #{current_user.namespace.full_path}"
+               "#{t(:'data_exports.show.tabs.summary')} · " \
+               "#{t(:'data_exports.show.page_title')} #{@data_export.id} · " \
+               "#{current_user.namespace.full_path}"
              else
                t(:'general.default_sidebar.data_exports')
              end

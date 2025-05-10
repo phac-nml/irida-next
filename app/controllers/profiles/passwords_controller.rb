@@ -37,7 +37,7 @@ module Profiles
     end
 
     def page_title
-      @title = "#{t(:'profiles.sidebar.password')} · #{current_user.namespace.full_path}"
+      @title = "#{t(:'profiles.sidebar.password')} · #{current_user.namespace&.full_path}"
     end
   end
 end

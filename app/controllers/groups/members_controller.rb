@@ -52,7 +52,7 @@ module Groups
       @title = if @tab == 'invited_groups'
                  "#{t(:'groups.members.index.invited_groups')} · #{@namespace.full_path}"
                else
-                 "#{t(:'groups.sidebar.members')} · #{namespace.full_path}"
+                 "#{t(:'groups.sidebar.members')} · #{@namespace.full_path}"
                end
     end
   end

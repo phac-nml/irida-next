@@ -209,15 +209,19 @@ module Projects
       when 'new'
         @title = "#{t(:'projects.samples.new.title')} · #{@project.full_path}"
       when 'edit'
-        @title = "#{t(:'projects.samples.edit.title')} · #{t(:'activerecord.models.sample.one')} #{@sample.name} · #{@project.full_path}"
+        @title = "#{t(:'projects.samples.edit.title')} · #{t(:'activerecord.models.sample.one')} #{@sample.name} · " \
+                 "#{@project.full_path}"
       when 'show'
         @tab = params[:tab]
         @title = if @tab == 'metadata'
-                   "#{t(:'projects.samples.show.tabs.metadata')} · #{t(:'activerecord.models.sample.one')} #{@sample.name} · #{@project.full_path}"
+                   "#{t(:'projects.samples.show.tabs.metadata')} · " \
+                     "#{t(:'activerecord.models.sample.one')} #{@sample.name} · #{@project.full_path}"
                  elsif @tab == 'history'
-                   "#{t(:'projects.samples.show.tabs.history')} · #{t(:'activerecord.models.sample.one')} #{@sample.name} · #{@project.full_path}"
+                   "#{t(:'projects.samples.show.tabs.history')} · " \
+                     "#{t(:'activerecord.models.sample.one')} #{@sample.name} · #{@project.full_path}"
                  else
-                   "#{t(:'projects.samples.show.tabs.files')} · #{t(:'activerecord.models.sample.one')} #{@sample.name} · #{@project.full_path}"
+                   "#{t(:'projects.samples.show.tabs.files')} · " \
+                     "#{t(:'activerecord.models.sample.one')} #{@sample.name} · #{@project.full_path}"
                  end
       else
         @title = "#{t(:'activerecord.models.sample.other')} · #{@project.full_path}"

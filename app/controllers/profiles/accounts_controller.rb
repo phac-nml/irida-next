@@ -22,7 +22,7 @@ module Profiles
     end
 
     def page_title
-      @title = "#{t(:'profiles.sidebar.account')} · #{current_user.namespace.full_path}"
+      @title = "#{t(:'profiles.sidebar.account')} · #{current_user.namespace&.full_path}"
     end
   end
 end
