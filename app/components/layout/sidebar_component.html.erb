@@ -75,7 +75,8 @@
         class="
           py-2 w-full rounded-md border transition-colors duration-200 border-slate-300
           bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600
-          dark:border-slate-600 dark:text-slate-200 cursor-pointer
+          dark:border-slate-600 dark:text-slate-200 cursor-pointer min-h-[44px] flex
+          items-center justify-center
         "
         data-viral--dropdown-target='trigger'
         aria-haspopup="listbox"
@@ -124,28 +125,39 @@
         </ul>
       </div>
     </div>
-    <div class="flex-1">
-      <turbo-frame id="sidebar-header">
-        <%= header %>
-      </turbo-frame>
-      <% if sections.present? %>
+    <div class="flex flex-col flex-1 overflow-y-auto">
+      <%# Render the header slot if it's provided %>
+      <%= header %>
+
+      <%# "Go to" dropdown %>
+      <div class="px-2 mb-2 bg-slate-100 dark:bg-slate-800">
+      </div>
+
+      <%# Main content: sections and items passed to the component %>
+      <ul class="pt-4 px-2 space-y-1">
+        <%# Iterate over sections and render them %>
         <% sections.each do |section| %>
           <%= section %>
         <% end %>
-      <% else %>
-        <%= render Layout::Sidebar::SectionComponent.new do %>
-          <% items.each do |item| %>
-            <%= item %>
-          <% end %>
+        <%# Iterate over items and render them %>
+        <% items.each do |item| %>
+          <%= item %>
         <% end %>
-      <% end %>
+      </ul>
     </div>
   </div>
-  <div class="p-2">
-    <%= link_to "https://phac-nml.github.io/irida-next/docs/intro", target: :_blank, class: "flex-inline button button--state-default button--size-default" do %>
-      <%= helpers.render_icon :question, class: "size-4 mr-1" %>
+  <div class="p-2 border-t border-slate-200 dark:border-slate-800">
+    <a
+      href="https://phac-nml.github.io/irida-next/docs/intro"
+      class="
+        flex items-center justify-center w-full px-4 py-2 text-sm font-medium
+        text-slate-700 rounded-lg dark:text-slate-200 hover:bg-slate-100
+        dark:hover:bg-slate-700 min-h-[44px]
+      "
+    >
+      <%= helpers.render_icon :question, class: "w-5 h-5 mr-2" %>
       <%= t("general.help") %>
-    <% end %>
+    </a>
   </div>
 </aside>
 <div
