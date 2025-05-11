@@ -18,7 +18,13 @@ module ICONS
   # Icon definitions with semantic names mapping to actual icon names and default options
   #
   # Format:
-  # semantic_name: { name: 'actual-icon-name', options: { library: :phosphor|:heroicons, variant: :outline|:solid|:duotone, etc. } }
+  # semantic_name: {
+  #   name: 'actual-icon-name',
+  #   options: {
+  #     library: :phosphor|:heroicons,
+  #     variant: :outline|:solid|:duotone, etc.
+  #   }
+  # }
   #
   # Default library is :phosphor and default variant is :regular unless specified
   DEFINITIONS = {
