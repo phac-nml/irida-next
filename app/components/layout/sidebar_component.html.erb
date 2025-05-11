@@ -129,12 +129,8 @@
       <%# Render the header slot if it's provided %>
       <%= header %>
 
-      <%# "Go to" dropdown %>
-      <div class="px-2 mb-2 bg-slate-100 dark:bg-slate-800">
-      </div>
-
       <%# Main content: sections and items passed to the component %>
-      <ul class="pt-4 px-2 space-y-1">
+      <ul class="pt-1 px-2 space-y-1">
         <%# Iterate over sections and render them %>
         <% sections.each do |section| %>
           <%= section %>
