@@ -25,8 +25,8 @@ module Layout
         base_options[:class] = class_names(
           'size-5',
           {
-            # Selected state: primary color text
-            'text-primary-600': @selected,
+            # Selected state: white or slate-50 icon for modern dark look
+            'text-white dark:text-slate-50': @selected,
             # Non-selected state: slate text, changes on group hover (group class to be added in HTML)
             'text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-50': !@selected
           }

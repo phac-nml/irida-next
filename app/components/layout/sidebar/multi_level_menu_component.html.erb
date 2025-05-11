@@ -6,8 +6,8 @@
       flex items-center w-full mt-1 py-1 pr-1 pl-2 transition-colors ease-in-out
       delay-75 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 group cursor-pointer
       min-h-[44px] <%= class_names({
-        'bg-primary-100 dark:bg-slate-700': @selected, # Use @selected for button background
-        'text-slate-700 dark:text-slate-200': !@selected
+        'bg-slate-800 dark:bg-slate-900 text-white dark:text-slate-50 shadow-md': @selected, # Modern selected state
+        'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200': !@selected
       }) %>
     "
     aria-controls="<%= control_id %>"
@@ -16,7 +16,7 @@
     <span
       class="
         w-8 h-8 flex items-center justify-center rounded-full mr-2
-        <%= @selected ? 'bg-primary-200 dark:bg-primary-600' : 'bg-slate-100 dark:bg-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-700' %>
+        <%= @selected ? 'bg-slate-700 dark:bg-slate-800' : 'bg-slate-100 dark:bg-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-700' %>
       "
     >
       <%= create_icon %>
@@ -24,7 +24,7 @@
     <span
       class="
         flex-1 ml-1 text-left rtl:text-right whitespace-nowrap
-        <%= @selected ? 'font-semibold text-primary-700 dark:text-primary-100' : 'text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-slate-50' %>
+        <%= @selected ? 'font-semibold text-white dark:text-slate-50' : 'text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-slate-50' %>
       "
     ><%= title %></span>
     <%= viral_icon(
@@ -35,7 +35,7 @@
           { "rotate-180": @selected },
           (
             if @selected
-              "text-primary-700 dark:text-primary-100"
+              "text-white dark:text-slate-50"
             else
               "text-slate-400 group-hover:text-slate-500"
             end
@@ -57,14 +57,14 @@
             flex items-center py-1 pr-1 w-full transition-colors ease-in-out delay-75
             rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 group min-h-[44px] pl-10
             <%= class_names({
-              'bg-primary-100 dark:bg-slate-700': menu_item.selected,
-              'text-slate-700 dark:text-slate-200': !menu_item.selected
+              'bg-slate-700 dark:bg-slate-800 text-white dark:text-slate-50': menu_item.selected, # Modern selected child item
+              'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200': !menu_item.selected
             }) %>
           "
         >
           <%# Icon container removed %>
           <span
-            class="grow <%= menu_item.selected ? 'font-semibold text-primary-700 dark:text-primary-100' : 'text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-slate-50' %>"
+            class="grow <%= menu_item.selected ? 'font-semibold text-white dark:text-slate-50' : 'text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-slate-50' %>"
           >
             <%= menu_item.label %>
           </span>
