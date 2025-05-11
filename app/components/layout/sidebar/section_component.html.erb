@@ -1,7 +1,7 @@
 <ul class="px-1 Layout-Sidebar__Section">
   <% if items.present? %>
     <% if title.present? %>
-      <%= title %>
+      <li class="sidebar-section-title" aria-hidden="true"><%= title %></li>
     <% end %>
     <% items.each do |item| %>
       <%= item %>
