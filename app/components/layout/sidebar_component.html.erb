@@ -130,7 +130,7 @@
       <%= header %>
 
       <%# Main content: sections and items passed to the component %>
-      <ul class="pt-1 px-2 space-y-1">
+      <div class="pt-1 px-2 space-y-1">
         <%# Iterate over sections and render them %>
         <% sections.each do |section| %>
           <%= section %>
@@ -139,7 +139,7 @@
         <% items.each do |item| %>
           <%= item %>
         <% end %>
-      </ul>
+      </div>
     </div>
   </div>
   <div class="p-2 border-t border-slate-200 dark:border-slate-800">
