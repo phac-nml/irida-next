@@ -153,8 +153,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       click_link 'Cancel'
     end
 
-    assert_text 'Confirmation required'
-    click_button 'Confirm'
+    assert_text I18n.t('shared.workflow_executions.destroy_confirmation_dialog.title')
+    click_button I18n.t('shared.workflow_executions.destroy_confirmation_dialog.submit_button')
 
     within %(div[data-controller='viral--flash']) do
       assert_text I18n.t(
@@ -229,8 +229,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       click_link 'Delete'
     end
 
-    assert_text 'Confirmation required'
-    click_button 'Confirm'
+    assert_text I18n.t('shared.workflow_executions.destroy_confirmation_dialog.title')
+    click_button I18n.t('shared.workflow_executions.destroy_confirmation_dialog.submit_button')
 
     within %(div[data-controller='viral--flash']) do
       assert_text I18n.t(
@@ -258,8 +258,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       click_link 'Delete'
     end
 
-    assert_text 'Confirmation required'
-    click_button 'Confirm'
+    assert_text I18n.t('shared.workflow_executions.destroy_confirmation_dialog.title')
+    click_button I18n.t('shared.workflow_executions.destroy_confirmation_dialog.submit_button')
 
     assert_no_text workflow_execution.id
   end
@@ -296,8 +296,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       click_link 'Delete'
     end
 
-    assert_text 'Confirmation required'
-    click_button 'Confirm'
+    assert_text I18n.t('shared.workflow_executions.destroy_confirmation_dialog.title')
+    click_button I18n.t('shared.workflow_executions.destroy_confirmation_dialog.submit_button')
 
     assert_no_text workflow_execution.id
   end
@@ -389,8 +389,9 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     click_link I18n.t(:'workflow_executions.show.remove_button')
 
-    within('#turbo-confirm[open]') do
-      click_button I18n.t(:'components.confirmation.confirm')
+    within('dialog[open]') do
+      assert_text I18n.t('shared.workflow_executions.destroy_confirmation_dialog.title')
+      click_button I18n.t('shared.workflow_executions.destroy_confirmation_dialog.submit_button')
     end
 
     within %(#workflow-executions-table table tbody) do

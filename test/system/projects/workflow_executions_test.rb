@@ -206,8 +206,8 @@ module Projects
         click_link 'Delete'
       end
 
-      assert_text 'Confirmation required'
-      click_button 'Confirm'
+      assert_text I18n.t('shared.workflow_executions.destroy_confirmation_dialog.title')
+      click_button I18n.t('shared.workflow_executions.destroy_confirmation_dialog.submit_button')
 
       within %(div[data-controller='viral--flash']) do
         assert_text I18n.t(
@@ -236,8 +236,8 @@ module Projects
         click_link 'Delete'
       end
 
-      assert_text 'Confirmation required'
-      click_button 'Confirm'
+      assert_text I18n.t('shared.workflow_executions.destroy_confirmation_dialog.title')
+      click_button I18n.t('shared.workflow_executions.destroy_confirmation_dialog.submit_button')
 
       assert_no_text workflow_execution.id
     end
@@ -276,8 +276,8 @@ module Projects
         click_link 'Delete'
       end
 
-      assert_text 'Confirmation required'
-      click_button 'Confirm'
+      assert_text I18n.t('shared.workflow_executions.destroy_confirmation_dialog.title')
+      click_button I18n.t('shared.workflow_executions.destroy_confirmation_dialog.submit_button')
 
       assert_no_text workflow_execution.id
     end

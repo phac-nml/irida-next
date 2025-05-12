@@ -12,7 +12,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     before_action :workflow_execution, only: %i[show cancel destroy update edit destroy_confirmation]
     before_action proc { view_authorizations }, only: %i[index]
     before_action proc { show_view_authorizations }, only: %i[show]
-    before_action proc { destroy_path }, only: %i[destroy_confirmation destroy]
+    before_action proc { destroy_path }, only: %i[destroy_confirmation]
     before_action proc { destroy_multiple_paths }, only: %i[destroy_multiple_confirmation destroy_multiple]
   end
 
