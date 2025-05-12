@@ -2157,9 +2157,9 @@ fr:
         action: Mesure
     pagy:
       limit_component:
-        aria_label: Select the number of items to display
         item_aria_label: Show %{items} items per page
         items: "%{items} par page :"
+        select_items_action: select the number of items to display
         summary:
           one: Afficher l’élément <span class='font-bold'>%{count}</span>
           other: Afficher les éléments <span class='font-bold'>%{from}-%{to}</span> de <span class='font-bold'>%{count}</span>
