@@ -59,7 +59,9 @@ module Viral
     def system_arguments_for_button
       {
         classes: class_names(
-          'viral-dropdown--button flex items-center w-full',
+          'text-slate-600 dark:text-slate-400 border border-slate-300 min-h-11 min-w-11
+      dark:border-slate-600 rounded text-sm px-3 py-1 cursor-pointer inline-flex
+      items-center justify-center',
           system_arguments[:classes]
         )
       }
