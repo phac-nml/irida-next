@@ -335,8 +335,16 @@ module Groups
                                             Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq.gz')]
         click_on I18n.t('attachments.dialogs.new_attachment_component.upload')
       end
+
       assert_selector '#attachments-table table tbody tr', count: 3
       assert_text 'Displaying 1-3 of 3 items'
+
+      # Clear all notifications as this was interfering with entering and submitting the search below
+      if has_selector?('div#flashes button[data-action="viral--flash#dismiss"]', wait: Capybara.default_max_wait_time)
+        all('div#flashes button[data-action="viral--flash#dismiss"]').each(&:click)
+        # Wait for flashes to disappear
+        assert_no_selector 'div#flashes button[data-action="viral--flash#dismiss"]'
+      end
 
       within('table tbody') do
         assert_selector 'tr:first-child td:nth-child(2)', text: 'TestSample_S1_L001_R2_001.fastq.gz'
@@ -344,9 +352,6 @@ module Groups
         assert_selector 'tr:first-child td:nth-child(3)', text: 'fastq'
         assert_selector 'tr:first-child td:nth-child(4)', text: 'illumina_pe'
       end
-
-      # Clear all notifications as this was interfering with entering and submitting the search below
-      all('div#flashes button[data-action="viral--flash#dismiss"]').each(&:click)
 
       fill_in placeholder: I18n.t(:'groups.attachments.index.search.placeholder'),
               with: 'fastq.gz'
