@@ -4,7 +4,7 @@
   <% if sample_metadata.present? %>
     <div class="relative overflow-x-auto table-wrapper" data-turbo-temporary>
       <% if @allowed_to[:update_sample] %>
-        <div class="flex justify-between items-center mb-4">
+        <div class="flex justify-end items-center mb-4">
           <div class="flex items-center space-x-2">
             <%= link_to t(".add_metadata"),
             new_namespace_project_sample_metadata_path(
@@ -30,7 +30,7 @@
               controller: "action-button",
               action_button_required_value: 1,
             },
-            class: "button button--size-default button--state-destructive action-button" %>
+            class: "button button--size-default button--state-default action-button" %>
           </div>
         </div>
       <% end %>

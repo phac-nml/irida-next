@@ -3,14 +3,14 @@
     <div class="relative overflow-x-auto table-wrapper" data-turbo-temporary>
       <% if @allowed_to[:update_sample] %>
         <%# Flex container for search (future) and button group %>
-        <div class="flex justify-between items-center mb-4">
+        <div class="flex items-center mb-4">
           <%# Placeholder for future search input %>
           <div>
             <%# TODO: Add search input here in a future iteration %>
           </div>
 
           <%# Button group %>
-          <div class="flex items-center space-x-2">
+          <div class="flex items-center space-x-2 ml-auto">
             <%= link_to t("projects.samples.show.new_attachment_button"),
             new_namespace_project_sample_attachment_path(sample_id: @sample.id),
             data: {
@@ -39,7 +39,7 @@
               controller: "action-button",
               action_button_required_value: 1,
             },
-            class: "button button--size-default button--state-destructive action-button" %>
+            class: "button button--size-default button--state-default action-button" %>
           </div>
         </div>
       <% end %>
