@@ -5,18 +5,13 @@
 
   <% if item.present? %>
     <div class="mt-1 flex items-center py-1 pr-1 min-h-[44px]">
-      <span
-        class="
-          w-8 h-8 flex items-center justify-center rounded-full mr-2 bg-slate-100
-          dark:bg-slate-800
-        "
-      >
+      <div class="w-8 h-8 flex items-center justify-center rounded-full mr-2 bg-slate-100 dark:bg-slate-800">
         <%= viral_avatar(
           name: item.name,
           colour_string: "#{item.name}-#{item.id}",
           size: :xs,
         ) %>
-      </span>
+      </div>
       <span class="ml-1 text-sm text-slate-700 dark:text-slate-200">
         <%= item.name %>
       </span>
