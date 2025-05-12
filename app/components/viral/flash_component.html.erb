@@ -8,8 +8,13 @@
     shadow-lg dark:text-slate-400 dark:bg-slate-800 transition-opacity duration-300
     ease-out
   "
-  role="alert"
-  aria-live="assertive"
+  <% if type.to_s == 'error' %>
+    role="alert"
+    aria-live="assertive"
+  <% else %>
+    role="status"
+    aria-live="polite"
+  <% end %>
   aria-atomic="true"
   data-turbo-permanent="true"
 >
