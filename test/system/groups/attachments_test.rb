@@ -335,8 +335,13 @@ module Groups
                                             Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq.gz')]
         click_on I18n.t('attachments.dialogs.new_attachment_component.upload')
       end
+
       assert_selector '#attachments-table table tbody tr', count: 3
       assert_text 'Displaying 1-3 of 3 items'
+
+      # Assert that the success messages are present
+      assert_text I18n.t('groups.attachments.create.success', filename: 'TestSample_S1_L001_R2_001.fastq.gz')
+      assert_text I18n.t('groups.attachments.create.success', filename: 'TestSample_S1_L001_R1_001.fastq.gz')
 
       within('table tbody') do
         assert_selector 'tr:first-child td:nth-child(2)', text: 'TestSample_S1_L001_R2_001.fastq.gz'
@@ -345,8 +350,9 @@ module Groups
         assert_selector 'tr:first-child td:nth-child(4)', text: 'illumina_pe'
       end
 
-      # Clear all notifications as this was interfering with entering and submitting the search below
-      all('div#flashes button[data-action="viral--flash#dismiss"]').each(&:click)
+      # Wait for the flash messages to disappear
+      assert_no_text I18n.t('groups.attachments.create.success', filename: 'TestSample_S1_L001_R2_001.fastq.gz')
+      assert_no_text I18n.t('groups.attachments.create.success', filename: 'TestSample_S1_L001_R1_001.fastq.gz')
 
       fill_in placeholder: I18n.t(:'groups.attachments.index.search.placeholder'),
               with: 'fastq.gz'
