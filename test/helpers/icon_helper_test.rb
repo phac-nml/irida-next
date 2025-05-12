@@ -105,9 +105,9 @@ class IconHelperTest < ActionView::TestCase
     assert(result.present?, 'Should handle a direct icon definition hash')
 
     # Test prepare_icon_options through render_icon with various options
-    result = render_icon(:clipboard, class: 'custom-class', data: { testid: 'test' })
+    result = render_icon(:clipboard, class: 'custom-class', data: { "test-selector": 'test' })
     assert_match(/class="custom-class"/, result, 'Should apply custom class')
-    assert_match(/data-testid="test"/, result, 'Should apply data attributes')
+    assert_match(/data-test-selector="test"/, result, 'Should apply data attributes')
   end
 
   # 📝 Test: test selectors are added in test environment
