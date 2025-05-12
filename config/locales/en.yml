@@ -2280,7 +2280,7 @@ en:
       id: ID
       name: Name
       run_id: Run ID
-      select_page: Select / Deselect visible samples
+      select_page: Select / Deselect visible workflow executions
       state: State
       updated_at: Last Updated
       workflow_name: Workflow Name
