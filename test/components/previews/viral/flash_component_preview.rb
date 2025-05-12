@@ -16,7 +16,7 @@ module Viral
     # @label Error
     # @param message text "This is an error message."
     # @param timeout number 0
-    def error(message: 'This is an error message.', timeout: 0)
+    def error(message: 'This is an error message.')
       render Viral::FlashComponent.new(type: :error, data: message, timeout:)
     end
 
