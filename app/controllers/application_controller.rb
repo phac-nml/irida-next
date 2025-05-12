@@ -31,6 +31,7 @@ class ApplicationController < ActionController::Base
   end
 
   def not_found(err_msg = 'Resource not found')
+    @title = I18n.t('layouts.application.browser_page_titles.page_not_found')
     if defined?(err_msg.message)
       match_data = err_msg.message.match(/Couldn't find (\w+) with 'id'=(\d+)/)
       if match_data
@@ -51,6 +52,7 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from ActionPolicy::Unauthorized do |exception|
+    @title = I18n.t('layouts.application.browser_page_titles.unauthorized')
     render 'shared/error/not_authorized', status: :unauthorized, layout: 'application', locals: {
       authorization_message: exception.result.message
     }

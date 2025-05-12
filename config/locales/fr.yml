@@ -1114,6 +1114,9 @@ fr:
           title: No workflow executions.
   layouts:
     application:
+      browser_page_titles:
+        page_not_found: Page Not Found
+        unauthorized: Unauthorized
       language_selection:
         aria_label: 'Langue sélectionnée : Français'
       site_title: IRIDA Next
