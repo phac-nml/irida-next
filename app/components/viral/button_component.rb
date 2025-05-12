@@ -14,7 +14,7 @@ module Viral
 
     SIZE_DEFAULT = :default
     SIZE_MAPPINGS = {
-      :small => 'button--size-small',
+      :small => 'button--size-default',
       SIZE_DEFAULT => 'button--size-default',
       :large => 'button--size-large'
     }.freeze
