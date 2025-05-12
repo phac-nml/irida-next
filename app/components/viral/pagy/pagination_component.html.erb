@@ -1,3 +1,4 @@
+<%# filepath: /home/josh/Development/irida-next/app/components/viral/pagy/pagination_component.html.erb %>
 <% a = helpers.pagy_anchor(@pagy, anchor_string: @data_string) %>
 <nav class="pagy nav" aria-label="<%= t(".aria_label") %>">
   <ul class="inline-flex h-11 -space-x-px text-base">
@@ -8,15 +9,15 @@
           @pagy.prev,
           t(".previous"),
           classes:
-            "flex items-center justify-center text-slate-700 bg-white border border-slate-300 font-medium text-sm px-4 h-11 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600 dark:hover:text-white border-e-0 rounded-s-md",
+            "flex items-center justify-center text-slate-700 bg-white border border-slate-300 font-medium text-sm px-4 h-11 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-slate-100 border-e-0 rounded-s-md",
           aria_label: t(".previous_aria_label"),
         ) %>
       <% else %>
         <span
           class="
             flex items-center justify-center px-4 h-11 ms-0 leading-tight border
-            border-slate-300 text-slate-600 bg-slate-100 dark:bg-slate-700
-            dark:text-slate-300 dark:border-slate-600 cursor-not-allowed rounded-s-md
+            border-slate-300 text-slate-500 bg-slate-100 dark:bg-slate-800
+            dark:text-slate-400 dark:border-slate-700 cursor-not-allowed rounded-s-md
           "
         ><%= t(".previous") %></span>
       <% end %>
@@ -28,7 +29,7 @@
           <%== a.(
             item,
             classes:
-              "flex items-center justify-center text-slate-700 bg-white border border-slate-300 font-medium text-sm px-4 h-11 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600 dark:hover:text-white",
+              "flex items-center justify-center text-slate-700 bg-white border border-slate-300 font-medium text-sm px-4 h-11 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-slate-100",
             aria_label: t(".item_aria_label", number: item),
           ) %>
         <% elsif item.is_a?(String) %>
@@ -37,7 +38,7 @@
             aria-current="page"
             class="
               flex items-center justify-center px-4 h-11 ms-0 leading-tight border
-              border-slate-800 bg-slate-800 text-white dark:border-slate-600 dark:bg-slate-800
+              border-slate-400 bg-slate-400 text-white dark:border-slate-600 dark:bg-slate-600
               dark:text-white font-medium text-sm cursor-default
             "
           ><%= item %></a>
@@ -45,8 +46,8 @@
           <span
             class="
               flex items-center justify-center px-4 h-11 ms-0 leading-tight border
-              border-slate-300 text-slate-600 bg-slate-100 dark:bg-slate-700
-              dark:text-slate-300 dark:border-slate-600 cursor-default
+              border-slate-300 text-slate-500 bg-slate-100 dark:bg-slate-800
+              dark:text-slate-400 dark:border-slate-700 cursor-default
             "
           >...</span>
         <% end %>
@@ -59,15 +60,15 @@
           @pagy.next,
           t(".next"),
           classes:
-            "flex items-center justify-center text-slate-700 bg-white border border-slate-300 font-medium text-sm px-4 h-11 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-600 dark:hover:text-white rounded-e-md",
+            "flex items-center justify-center text-slate-700 bg-white border border-slate-300 font-medium text-sm px-4 h-11 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-slate-100 rounded-e-md",
           aria_label: t(".next_aria_label"),
         ) %>
       <% else %>
         <span
           class="
             flex items-center justify-center px-4 h-11 ms-0 leading-tight border
-            border-slate-300 text-slate-600 bg-slate-100 dark:bg-slate-700
-            dark:text-slate-300 dark:border-slate-600 cursor-not-allowed rounded-e-md
+            border-slate-300 text-slate-500 bg-slate-100 dark:bg-slate-800
+            dark:text-slate-400 dark:border-slate-700 cursor-not-allowed rounded-e-md
           "
         ><%= t(".next") %></span>
       <% end %>
