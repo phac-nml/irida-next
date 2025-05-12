@@ -453,7 +453,8 @@ module DataExports
       export_file = Roo::Spreadsheet.open(ActiveStorage::Blob.service.path_for(data_export9.file.key),
                                           extension: 'xlsx')
 
-      assert_equal ['SAMPLE PUID', 'SAMPLE NAME', 'PROJECT PUID', 'METADATAFIELD1', 'NON_EXISTANT_FIELD', 'METADATAFIELD2'],
+      assert_equal ['SAMPLE PUID', 'SAMPLE NAME', 'PROJECT PUID', 'METADATAFIELD1', 'NON_EXISTANT_FIELD',
+                    'METADATAFIELD2'],
                    export_file.row(1)
       assert_equal [
         sample32.puid,
