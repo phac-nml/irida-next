@@ -85,10 +85,10 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     respond_to do |format|
       format.turbo_stream do
         if @workflow_execution.deleted?
-          render status: :ok,
-                 locals: { type: 'success',
-                           message: t('concerns.workflow_execution_actions.destroy.success',
-                                      workflow_name: @workflow_execution.metadata['workflow_name']) }
+          flash[:success] =
+            t('concerns.workflow_execution_actions.destroy.success',
+              workflow_name: @workflow_execution.metadata['workflow_name'])
+          redirect_to redirect_path
         else
           render status: :unprocessable_entity, locals: {
             type: 'alert', message: t('concerns.workflow_execution_actions.destroy.error',
