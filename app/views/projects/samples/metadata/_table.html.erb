@@ -1,6 +1,5 @@
 <%# locals: { sample_metadata: @sample.metadata_with_provenance, sample: @sample } %>
 
-<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 <div id="sample-metadata">
   <% if sample_metadata.present? %>
     <div class="relative overflow-x-auto table-wrapper" data-turbo-temporary>
