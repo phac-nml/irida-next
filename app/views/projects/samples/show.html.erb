@@ -3,12 +3,12 @@
 <%= render Viral::PageHeaderComponent.new(title: @sample.name, id: @sample.puid, subtitle: @sample.description) do |component| %>
   <%= viral_pill(text: @sample.puid, color: :blue) %>
   <% component.with_buttons do %>
-    <div class="flex flex-row">
+    <div class="flex flex-row space-x-2">
       <% if @allowed_to[:update_sample] %>
         <%= link_to(
           t("projects.samples.show.edit_button"),
           edit_namespace_project_sample_path(id: @sample.id),
-          class: "button button--state-primary button--size-default mr-1",
+          class: "button button--state-default button--size-default",
         ) %>
       <% end %>
       <% if @allowed_to[:destroy_sample] %>
@@ -26,118 +26,50 @@
   <% end %>
 <% end %>
 
-<div class="bg-white dark:bg-slate-800">
-  <div
-    id="sample-tabs"
-    class="
-      flex mb-4 text-sm font-medium text-center border-b text-slate-500
-      border-slate-200 dark:text-slate-400 dark:border-slate-700
-    "
+<div>
+  <nav
+    aria-label="<%= t("projects.samples.show.nav_aria_label") %>"
+    class="border-b border-slate-200 dark:border-slate-700 mb-4"
   >
-    <ul class="flex flex-wrap -mb-px">
-      <li class="mr-2">
-        <%= link_to t(:"projects.samples.show.tabs.files"),
-        namespace_project_sample_path(id: @sample.id, tab: "files"),
-        class:
-          (
-            if @tab == "files" || @tab == nil
-              "inline-block p-4 text-primary-700 border-b-2 border-primary-700 rounded-t-lg active dark:text-primary-500 dark:border-primary-500"
-            else
-              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
-            end
-          ),
-        aria: {
-          current: (@tab == "files" || @tab == nil) ? "page" : "false",
-        } %>
-      </li>
-      <li class="mr-2">
-        <%= link_to t(:"projects.samples.show.tabs.metadata"),
-        namespace_project_sample_path(id: @sample.id, tab: "metadata"),
-        class:
-          (
-            if @tab == "metadata"
-              "inline-block p-4 text-primary-700 border-b-2 border-primary-700 rounded-t-lg active dark:text-primary-500 dark:border-primary-500"
-            else
-              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
-            end
-          ),
-        aria: {
-          current: @tab == "metadata" ? "page" : "false",
-        } %>
-      </li>
-      <li class="mr-2">
-        <%= link_to t(:"projects.samples.show.tabs.history"),
-        namespace_project_sample_path(id: @sample.id, tab: "history"),
-        class:
-          (
-            if @tab == "history"
-              "inline-block p-4 text-primary-700 border-b-2 border-primary-700 rounded-t-lg active dark:text-primary-500 dark:border-primary-500"
-            else
-              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
-            end
-          ),
-        aria: {
-          current: @tab == "history" ? "page" : "false",
-        } %>
-      </li>
-    </ul>
-    <% if @allowed_to[:update_sample] %>
-      <% if @tab == 'files' || @tab == nil %>
-        <div class="flex flex-row items-center ml-auto space-x-2 font-normal">
-          <%= link_to t(".new_attachment_button"),
-          new_namespace_project_sample_attachment_path(sample_id: @sample.id),
-          data: {
-            turbo_frame: "sample_modal",
-            turbo_stream: true,
+    <ul
+      class="
+        flex flex-row space-x-0 text-sm font-medium text-slate-500 dark:text-slate-400
+      "
+      role="tablist"
+    >
+      <% tab_items = [
+        { key: "files", label: t(:"projects.samples.show.tabs.files") },
+        { key: "metadata", label: t(:"projects.samples.show.tabs.metadata") },
+        { key: "history", label: t(:"projects.samples.show.tabs.history") },
+      ] %>
+      <% tab_items.each_with_index do |item, idx| %>
+        <% active = (@tab == item[:key]) || (@tab.nil? && item[:key] == "files") %>
+        <li role="presentation">
+          <%= link_to item[:label],
+          namespace_project_sample_path(id: @sample.id, tab: item[:key]),
+          class: [
+            "block px-4 py-3 border-b-2 transition-colors duration-150",
+            (
+              if active
+                "border-primary-600 text-primary-700 dark:border-primary-400 dark:text-primary-400 bg-transparent font-semibold"
+              else
+                "border-transparent hover:text-primary-700 hover:border-primary-300 dark:hover:text-primary-300"
+              end
+            ),
+            idx == 0 ? "rounded-tl-lg" : nil,
+            idx == tab_items.size - 1 ? "rounded-tr-lg" : nil,
+          ].compact.join(" "),
+          aria: {
+            selected: active ? "true" : "false",
+            current: active ? "page" : "false",
           },
-          class: "button button--size-default button--state-default" %>
-          <%= button_to t(".concatenate_button"),
-          new_namespace_project_sample_attachments_concatenation_path(
-            sample_id: @sample.id,
-          ),
-          method: :get,
-          data: {
-            turbo_frame: "sample_modal",
-            turbo_stream: false,
-            controller: "action-button",
-            action_button_required_value: 2,
-          },
-          class: "button button--size-default button--state-default action-button" %>
-          <%= button_to t(".delete_files_button"),
-          new_namespace_project_sample_attachments_deletion_path(sample_id: @sample.id),
-          method: :get,
-          data: {
-            turbo_frame: "sample_modal",
-            turbo_stream: false,
-            controller: "action-button",
-            action_button_required_value: 1,
-          },
-          class: "button button--size-default button--state-destructive action-button" %>
-        </div>
-      <% elsif @tab == 'metadata' %>
-        <div class="flex flex-row items-center ml-auto space-x-2 font-normal">
-          <%= link_to t(".add_metadata"),
-          new_namespace_project_sample_metadata_path(sample_id: @sample.id),
-          data: {
-            turbo_frame: "sample_modal",
-            turbo_stream: true,
-          },
-          class: "button button--size-default button--state-default" %>
-          <%= button_to t(".delete_metadata_button"),
-          new_namespace_project_sample_metadata_deletion_path(sample_id: @sample.id),
-          method: :get,
-          data: {
-            turbo_frame: "sample_modal",
-            turbo_stream: false,
-            controller: "action-button",
-            action_button_required_value: 1,
-          },
-          class: "button button--size-default button--state-destructive action-button" %>
-        </div>
+          role: "tab",
+          tabindex: 0 %>
+        </li>
       <% end %>
-    <% end %>
-  </div>
-  <div class="flex flex-col" data-turbo-temporary>
+    </ul>
+  </nav>
+  <section class="flex flex-col min-h-[200px]" data-turbo-temporary>
     <%= turbo_frame_tag "table-listing", src: namespace_project_sample_path(format: :turbo_stream, tab: @tab || 'files') do %>
       <% if @tab == "history" %>
         <%= render partial: "shared/loading/history" %>
@@ -147,5 +79,5 @@
         <%= render partial: "shared/loading/table" %>
       <% end %>
     <% end %>
-  </div>
+  </section>
 </div>

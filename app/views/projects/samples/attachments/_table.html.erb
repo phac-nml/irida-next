@@ -1,48 +1,113 @@
-<div class="relative overflow-x-auto table-container" data-turbo-temporary>
-  <table
-    class="
-      w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-      whitespace-nowrap
-    "
-    data-controller="selection"
-    data-selection-action-button-outlet=".action-button"
-    data-selection-storage-key-value="files-<%=@sample.id%>"
-  >
-    <thead
-      class="
-        text-xs uppercase border-b text-slate-700 bg-slate-100 dark:bg-slate-900
-        dark:text-slate-400 border-slate-200 dark:border-slate-700
-      "
-    >
-      <tr>
-        <% if @allowed_to[:update_sample] %>
-          <th aria-hidden="true" class="px-6 py-3"></th>
-        <% end %>
-        <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.puid") %></th>
-        <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.filename") %></th>
-        <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.format") %></th>
-        <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.type") %></th>
-        <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.size") %></th>
-        <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.created_at") %></th>
-        <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.action") %></th>
-      </tr>
-    </thead>
-    <tbody id="attachments-table-body" class="bg-white dark:bg-slate-800">
-      <% attachments.each do |attachment| %>
-        <% unless attachment.associated_attachment && attachment.metadata['direction'] == 'reverse' %>
-          <%= render partial: "projects/samples/attachments/attachment",
-          locals: {
-            attachment: attachment,
-          } %>
-        <% end %>
+<div id="sample-attachments">
+  <% if attachments.present? %>
+    <div class="relative overflow-x-auto table-wrapper" data-turbo-temporary>
+      <% if @allowed_to[:update_sample] %>
+        <%# Flex container for search (future) and button group %>
+        <div class="flex items-center mb-4">
+          <%# Placeholder for future search input %>
+          <div>
+            <%# TODO: Add search input here in a future iteration %>
+          </div>
+
+          <%# Button group %>
+          <div class="flex items-center space-x-2 ml-auto">
+            <%= link_to t("projects.samples.show.new_attachment_button"),
+            new_namespace_project_sample_attachment_path(sample_id: @sample.id),
+            data: {
+              turbo_frame: "sample_modal",
+              turbo_stream: true,
+            },
+            class: "button button--size-default button--state-default" %>
+            <%= button_to t("projects.samples.show.concatenate_button"),
+            new_namespace_project_sample_attachments_concatenation_path(
+              sample_id: @sample.id,
+            ),
+            method: :get,
+            data: {
+              turbo_frame: "sample_modal",
+              turbo_stream: false,
+              controller: "action-button",
+              action_button_required_value: 2,
+            },
+            class: "button button--size-default button--state-default action-button" %>
+            <%= button_to t("projects.samples.show.delete_files_button"),
+            new_namespace_project_sample_attachments_deletion_path(sample_id: @sample.id),
+            method: :get,
+            data: {
+              turbo_frame: "sample_modal",
+              turbo_stream: false,
+              controller: "action-button",
+              action_button_required_value: 1,
+            },
+            class: "button button--size-default button--state-default action-button" %>
+          </div>
+        </div>
       <% end %>
-    </tbody>
-  </table>
-  <div class="empty_state_message">
-    <%= viral_empty(
-      title: t(:"projects.samples.show.no_files"),
-      description: t(:"projects.samples.show.no_associated_files"),
-      icon_name: :document_text,
-    ) %>
-  </div>
+      <table
+        class="
+          w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+          whitespace-nowrap
+        "
+        data-controller="selection"
+        data-selection-action-button-outlet=".action-button"
+        data-selection-storage-key-value="files-<%=@sample.id%>"
+      >
+        <thead
+          class="
+            text-xs uppercase border-b text-slate-700 bg-slate-100 dark:bg-slate-900
+            dark:text-slate-400 border-slate-200 dark:border-slate-700
+          "
+        >
+          <tr>
+            <% if @allowed_to[:update_sample] %>
+              <th aria-hidden="true" class="px-6 py-3"></th>
+            <% end %>
+            <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.puid") %></th>
+            <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.filename") %></th>
+            <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.format") %></th>
+            <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.type") %></th>
+            <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.size") %></th>
+            <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.created_at") %></th>
+            <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.action") %></th>
+          </tr>
+        </thead>
+        <tbody id="attachments-table-body" class="bg-white dark:bg-slate-800">
+          <% attachments.each do |attachment| %>
+            <% unless attachment.associated_attachment && attachment.metadata['direction'] == 'reverse' %>
+              <%= render partial: "projects/samples/attachments/attachment",
+              locals: {
+                attachment: attachment,
+              } %>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <% if @allowed_to[:update_sample] %>
+      <%= render(
+        Viral::EmptyStateComponent.new(
+          icon_name: :document_text,
+          title: t(".empty_state.title"),
+          description: t(".empty_state.description"),
+          action_text: t(".empty_state.action_text"),
+          action_path:
+            new_namespace_project_sample_attachment_path(sample_id: @sample.id),
+          action_method: :get,
+          data: {
+            turbo_frame: "sample_modal",
+            turbo_stream: true,
+          },
+        ),
+      ) %>
+    <% else %>
+      <%= render(
+        Viral::EmptyStateComponent.new(
+          icon_name: :document_text,
+          title: t(".empty_state.title"),
+          description: t(".empty_state.no_permission_description"),
+        ),
+      ) %>
+    <% end %>
+  <% end %>
 </div>

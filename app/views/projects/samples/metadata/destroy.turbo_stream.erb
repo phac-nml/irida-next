@@ -10,9 +10,10 @@
     <%= viral_flash(type:, data: message) %>
   <% end %>
 
-  <%= turbo_stream.update "table-listing" do %>
+  <%= turbo_stream.update "sample-metadata" do %>
     <% render partial: "projects/samples/metadata/table",
     locals: {
+      sample: @sample,
       sample_metadata: @sample.metadata_with_provenance,
     } %>
   <% end %>

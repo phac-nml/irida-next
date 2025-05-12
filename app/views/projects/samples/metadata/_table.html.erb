@@ -1,107 +1,163 @@
-<div class="relative overflow-x-auto table-container" data-turbo-temporary>
-  <table
-    class="
-      w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-      whitespace-nowrap
-    "
-    data-controller="selection"
-    data-selection-action-button-outlet=".action-button"
-    id="metadata-table"
-  >
-    <thead
-      class="
-        text-xs uppercase border-b text-slate-700 bg-slate-100 dark:bg-slate-700
-        dark:text-slate-400 border-slate-200 dark:border-slate-700
-      "
-    >
-      <tr>
-        <% if @allowed_to[:update_sample] %>
-          <th aria-hidden="true" class="px-6 py-3"></th>
-        <% end %>
-        <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.key") %></th>
-        <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.value") %></th>
-        <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.source") %></th>
-        <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.last_updated") %></th>
-        <% if @allowed_to[:update_sample] %>
-          <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.action") %></th>
-        <% end %>
-      </tr>
-    </thead>
-    <tbody id="metadata-table-body">
-      <% sample_metadata.each do |metadata| %>
-        <tr
-          id="<%= metadata[:key] %>_field"
+<%# locals: { sample_metadata: @sample.metadata_with_provenance, sample: @sample } %>
+
+<div id="sample-metadata">
+  <% if sample_metadata.present? %>
+    <div class="relative overflow-x-auto table-wrapper" data-turbo-temporary>
+      <% if @allowed_to[:update_sample] %>
+        <div class="flex justify-end items-center mb-4">
+          <div class="flex items-center space-x-2">
+            <%= link_to t(".add_metadata"),
+            new_namespace_project_sample_metadata_path(
+              @project.namespace.parent,
+              @project,
+              @sample,
+            ),
+            data: {
+              turbo_frame: "sample_modal",
+              turbo_stream: true,
+            },
+            class: "button button--size-default button--state-default" %>
+            <%= button_to t(".delete_metadata_button"),
+            new_namespace_project_sample_metadata_deletion_path(
+              @project.namespace.parent,
+              @project,
+              @sample,
+            ),
+            method: :get,
+            data: {
+              turbo_frame: "sample_modal",
+              turbo_stream: false,
+              controller: "action-button",
+              action_button_required_value: 1,
+            },
+            class: "button button--size-default button--state-default action-button" %>
+          </div>
+        </div>
+      <% end %>
+      <table
+        class="
+          w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+          whitespace-nowrap
+        "
+        data-controller="selection"
+        data-selection-action-button-outlet=".action-button"
+        data-selection-storage-key-value="metadata-<%= @sample.id %>"
+      >
+        <thead
           class="
-            bg-white border-b border-slate-200 dark:bg-slate-800 dark:border-slate-700
+            text-xs uppercase border-b text-slate-700 bg-slate-100 dark:bg-slate-900
+            dark:text-slate-400 border-slate-200 dark:border-slate-700
           "
         >
-          <% if @allowed_to[:update_sample] %>
-            <td class="px-6 py-4">
-              <%= check_box_tag "metadata_keys[]",
-              metadata[:key],
-              nil,
-              id: metadata[:key],
-              "aria-label": metadata[:key],
-              data: {
-                selection_target: "rowSelection",
-                action: "input->selection#toggle",
-              } %>
-            </td>
-          <% end %>
-          <td class="px-6 py-4"><%= metadata[:key] %></td>
-          <td class="px-6 py-4"><%= metadata[:value] %></td>
-          <td class="px-6 py-4"><%= metadata[:source] %></td>
-          <td class="px-6 py-4"><%= local_time_ago(metadata[:last_updated]) %></td>
-          <% if @allowed_to[:update_sample] %>
-            <td class="px-6 py-4 space-x-2">
-              <% unless metadata[:source_type] == 'analysis' %>
-                <%= link_to(
-                  t(:"projects.samples.show.metadata.actions.dropdown.update"),
-                  edit_namespace_project_sample_metadata_path(
-                    @project.namespace.parent,
-                    @project,
-                    @sample,
-                    key: metadata[:key],
-                    value: metadata[:value],
-                  ),
-                  class:
-                    "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer",
-                ) %>
+          <tr>
+            <% if @allowed_to[:update_sample] %>
+              <th aria-hidden="true" class="px-6 py-3"></th>
+            <% end %>
+            <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.key") %></th>
+            <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.value") %></th>
+            <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.source") %></th>
+            <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.last_updated") %></th>
+            <% if @allowed_to[:update_sample] %>
+              <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.action") %></th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody id="metadata-table-body" class="bg-white dark:bg-slate-800">
+          <% sample_metadata.each do |metadata| %>
+            <tr
+              id="<%= metadata[:key] %>_field"
+              class="
+                bg-white border-b border-slate-200 dark:bg-slate-800 dark:border-slate-700
+              "
+            >
+              <% if @allowed_to[:update_sample] %>
+                <td class="px-6 py-4">
+                  <%= check_box_tag "metadata_keys[]",
+                  metadata[:key],
+                  nil,
+                  id: metadata[:key],
+                  "aria-label": metadata[:key],
+                  data: {
+                    selection_target: "rowSelection",
+                    action: "input->selection#toggle",
+                  } %>
+                </td>
               <% end %>
-              <%= link_to(
-                t(:"projects.samples.show.metadata.actions.dropdown.delete"),
-                namespace_project_sample_metadata_path(
-                  @project.namespace.parent,
-                  @project,
-                  @sample,
-                  sample: {
-                    metadata: {
-                      metadata[:key] => "",
-                    },
-                  },
-                ),
-                data: {
-                  turbo_method: :delete,
-                  turbo_confirm:
-                    t(
-                      :"projects.samples.show.metadata.actions.delete_confirm",
-                      deleted_key: metadata[:key],
+              <td class="px-6 py-4"><%= metadata[:key] %></td>
+              <td class="px-6 py-4"><%= metadata[:value] %></td>
+              <td class="px-6 py-4"><%= metadata[:source] %></td>
+              <td class="px-6 py-4"><%= local_time_ago(metadata[:last_updated]) %></td>
+              <% if @allowed_to[:update_sample] %>
+                <td class="px-6 py-4 space-x-2">
+                  <% unless metadata[:source_type] == 'analysis' %>
+                    <%= link_to(
+                      t(:"projects.samples.show.metadata.actions.dropdown.update"),
+                      edit_namespace_project_sample_metadata_path(
+                        @project.namespace.parent,
+                        @project,
+                        @sample,
+                        key: metadata[:key],
+                        value: metadata[:value],
+                      ),
+                      class:
+                        "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer",
+                    ) %>
+                  <% end %>
+                  <%= link_to(
+                    t(:"projects.samples.show.metadata.actions.dropdown.delete"),
+                    namespace_project_sample_metadata_path(
+                      @project.namespace.parent,
+                      @project,
+                      @sample,
+                      sample: {
+                        metadata: {
+                          metadata[:key] => "",
+                        },
+                      },
                     ),
-                },
-                class:
-                  "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer",
-              ) %>
-            </td>
+                    data: {
+                      turbo_method: :delete,
+                      turbo_confirm:
+                        t(
+                          :"projects.samples.show.metadata.actions.delete_confirm",
+                          deleted_key: metadata[:key],
+                        ),
+                    },
+                    class:
+                      "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer",
+                  ) %>
+                </td>
+              <% end %>
+            </tr>
           <% end %>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-  <div class="empty_state_message">
-    <%= viral_empty(
-      title: t(:"projects.samples.show.no_metadata"),
-      description: t(:"projects.samples.show.no_associated_metadata"),
-      icon_name: :document_text,
-    ) %>
-  </div>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <% if @allowed_to[:update_sample] %>
+      <%= render(
+        Viral::EmptyStateComponent.new(
+          icon_name: :table_cells,
+          title: t(".no_metadata"),
+          description: t(".no_associated_metadata"),
+          action_text: t(".add_metadata"),
+          action_path:
+            new_namespace_project_sample_metadata_path(sample_id: @sample.id),
+          action_method: :get,
+          data: {
+            turbo_frame: "sample_modal",
+            turbo_stream: true,
+          },
+        ),
+      ) %>
+    <% else %>
+      <%= render(
+        Viral::EmptyStateComponent.new(
+          icon_name: :table_cells,
+          title: t(".no_metadata"),
+          description: t(".no_permission_description"),
+        ),
+      ) %>
+    <% end %>
+  <% end %>
 </div>

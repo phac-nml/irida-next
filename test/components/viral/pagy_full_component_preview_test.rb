@@ -17,8 +17,8 @@ class PagyFullComponentPreviewTest < ApplicationSystemTestCase
   test 'renders empty state' do
     visit('/rails/view_components/viral_pagy_full_component/empty_state')
 
-    assert_selector 'h1', text: I18n.t('components.viral.pagy.empty_state.title')
-    assert_selector 'p', text: I18n.t('components.viral.pagy.empty_state.description')
+    assert_selector 'h2', text: I18n.t('components.viral.pagy.empty_state.title')
+    assert_selector 'span', text: I18n.t('components.viral.pagy.empty_state.description')
     assert_no_selector 'nav.pagy.nav'
   end
 end

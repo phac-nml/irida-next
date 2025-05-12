@@ -1012,7 +1012,7 @@ fr:
         workflows:
           button_sr: Lancer le flux de travail
       table:
-        no_associated_samples: Il n’y a aucun échantillon associé à ce groupe.
+        no_associated_samples: Il n’y a aucun échantillon associé à ce projet.
         no_samples: Aucun échantillon
       table_filter:
         loading: Chargement des résultats de recherche...
@@ -1362,8 +1362,8 @@ fr:
         upload_files: Télécharger des fichiers
       table:
         empty:
-          description: Il n’y a aucun fichier associé à ce projet.
-          title: Aucun fichier
+          description: There are no files associated with this project.
+          title: No Files
     automated_workflow_executions:
       actions:
         delete_button: Supprimer
@@ -1455,7 +1455,7 @@ fr:
           title: Supprimer le projet
         path:
           description: Changer l’URL d’un projet peut avoir des effets secondaires inattendus.
-          help: Le chemin est utilisé dans les URL et ne peut contenir que des lettres, des chiffres, des tirets et des traits de soulignement
+          help: Le chemin est utilisé dans les URL et doit comporter au moins 3 caractères et ne peut contenir que des lettres, des chiffres, des tirets et des traits de soulignement
           submit: Modifier l’URL du projet
           title: Modifier l’URL du projet
         title: Paramètres avancés
@@ -1616,6 +1616,12 @@ fr:
         destroy:
           error: 'Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}'
           success: Le fichier %{filename} a été supprimé avec succès.
+        table:
+          empty_state:
+            action_text: Upload Files
+            description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
+            no_permission_description: You do not have permission to upload files to this sample
+            title: No files have been uploaded
       clones:
         create:
           error: 'La liste suivante des échantillons n’a pas été copiée :'
@@ -1701,6 +1707,14 @@ fr:
           remove_field: Supprimer le champ
           submit_button: Ajouter
           value: Valeur
+        new_metadata_modal:
+          title: Add Metadata
+        table:
+          add_metadata: Add Metadata
+          delete_metadata_button: Delete Metadata
+          no_associated_metadata: This sample currently has no metadata.  Get started by adding metadata to your sample.
+          no_metadata: No metadata has added
+          no_permission_description: You do not have permission to add metadata to this sample
       new:
         cancel_button: Annuler
         submit_button: Créer un échantillon
@@ -1713,10 +1727,8 @@ fr:
           ok_button: OK
           success: Réussite
       show:
-        add_metadata: Ajouter des métadonnées
-        concatenate_button: Concaténer les fichiers
+        concatenate_button: Concatenate Files
         delete_files_button: Supprimer des fichiersDelete Files
-        delete_metadata_button: Supprimer les métadonnéesDelete Metadata
         edit_button: Modifier cet échantillon
         files: Fichiers
         files_ignored: 'Les fichiers fasta et fastq doivent être compressés. Les fichiers suivants ne peuvent pas être téléchargés :'
@@ -1739,11 +1751,8 @@ fr:
             update: Mise à jour
             update_metadata: Mettre à jour les métadonnées
             value: Valeur
+        nav_aria_label: Sample Navigation
         new_attachment_button: Télécharger des fichiers
-        no_associated_files: Il n’y a aucun fichier associé à cet échantillon.
-        no_associated_metadata: Cet échantillon ne contient aucune métadonnée.
-        no_files: Aucun fichier
-        no_metadata: Aucune métadonnée
         remove_button: Retirer
         remove_button_confirmation: Êtes-vous sûr de vouloir retirer cet échantillon du projet?
         table_header:

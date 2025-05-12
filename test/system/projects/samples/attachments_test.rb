@@ -16,28 +16,29 @@ module Projects
         @namespace = groups(:group_one)
       end
 
-      test 'user with role >= Maintainer should be able to see upload, concatenate and delete files buttons' do
+      test 'user with role >= Maintainer should be able to see empty state with upload message' do
         visit namespace_project_sample_url(@namespace, @project, @sample2)
         assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
-        assert_selector 'button', text: I18n.t('projects.samples.show.concatenate_button'), count: 1
-        assert_selector 'button', text: I18n.t('projects.samples.show.delete_files_button'), count: 1
+        assert_no_selector 'button', text: I18n.t('projects.samples.show.concatenate_button')
+        assert_no_selector 'button', text: I18n.t('projects.samples.show.delete_files_button')
       end
 
       test 'user with role < Maintainer should not be able to see upload, concatenate and delete files buttons' do
         user = users(:ryan_doe)
         login_as user
         visit namespace_project_sample_url(@namespace, @project, @sample2)
-        assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 0
-        assert_selector 'a', text: I18n.t('projects.samples.show.concatenate_button'), count: 0
-        assert_selector 'a', text: I18n.t('projects.samples.show.delete_files_button'), count: 0
+        assert_no_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button')
+        assert_no_selector 'button', text: I18n.t('projects.samples.show.concatenate_button')
+        assert_no_selector 'button', text: I18n.t('projects.samples.show.delete_files_button')
+        assert_text I18n.t('projects.samples.attachments.table.empty_state.no_permission_description')
       end
 
       test 'user with role >= Maintainer should be able to attach a file to a Sample' do
         visit namespace_project_sample_url(@namespace, @project, @sample2)
         assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
         within('#table-listing') do
-          assert_text I18n.t('projects.samples.show.no_files')
-          assert_text I18n.t('projects.samples.show.no_associated_files')
+          assert_text I18n.t('projects.samples.attachments.table.empty_state.title')
+          assert_text I18n.t('projects.samples.attachments.table.empty_state.description')
           assert_no_text 'test_file_2.fastq.gz'
         end
         click_on I18n.t('projects.samples.show.upload_files')
@@ -134,8 +135,8 @@ module Projects
         # Initial View
         assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
         within('#table-listing') do
-          assert_text I18n.t('projects.samples.show.no_files')
-          assert_text I18n.t('projects.samples.show.no_associated_files')
+          assert_text I18n.t('projects.samples.attachments.table.empty_state.title')
+          assert_text I18n.t('projects.samples.attachments.table.empty_state.description')
           assert_selector 'button', text: I18n.t('projects.samples.attachments.attachment.delete'), count: 0
         end
         click_on I18n.t('projects.samples.show.upload_files')
@@ -176,8 +177,8 @@ module Projects
         within('#table-listing') do
           assert_no_text 'TestSample_S1_L001_R1_001.fastq.gz'
           assert_no_text 'TestSample_S1_L001_R2_001.fastq.gz'
-          assert_text I18n.t('projects.samples.show.no_files')
-          assert_text I18n.t('projects.samples.show.no_associated_files')
+          assert_text I18n.t('projects.samples.attachments.table.empty_state.title')
+          assert_text I18n.t('projects.samples.attachments.table.empty_state.description')
         end
       end
 
@@ -437,8 +438,8 @@ module Projects
           assert_selector 'table #attachments-table-body tr', count: 0
           assert_no_text 'test_file_A.fastq'
           assert_no_text 'test_file_B.fastq'
-          assert_text I18n.t('projects.samples.show.no_files')
-          assert_text I18n.t('projects.samples.show.no_associated_files')
+          assert_text I18n.t('projects.samples.attachments.table.empty_state.title')
+          assert_text I18n.t('projects.samples.attachments.table.empty_state.description')
         end
       end
 
@@ -482,8 +483,8 @@ module Projects
       test 'user can see delete buttons as owner' do
         visit namespace_project_sample_url(@namespace, @project, @sample1)
         assert_text I18n.t('projects.samples.show.delete_files_button'), count: 1
-        within %(turbo-frame[id="table-listing"]) do
-          assert_selector 'table #attachments-table-body tr', count: 2
+        within '#attachments-table-body' do
+          assert_selector 'tr', count: 2
           assert_text I18n.t('projects.samples.attachments.attachment.delete'), count: 2
         end
       end
@@ -492,8 +493,8 @@ module Projects
         login_as users(:ryan_doe)
         visit namespace_project_sample_url(@namespace, @project, @sample1)
         assert_text I18n.t('projects.samples.show.delete_files_button'), count: 0
-        within %(turbo-frame[id="table-listing"]) do
-          assert_selector 'table #attachments-table-body tr', count: 2
+        within 'table #attachments-table-body' do
+          assert_selector ' tr', count: 2
           assert_text I18n.t('projects.samples.attachments.attachment.delete'), count: 0
         end
       end
@@ -526,10 +527,10 @@ module Projects
           all('input[type="checkbox"]')[4].click
         end
 
-        click_on I18n.t('projects.samples.show.tabs.metadata')
+        within "nav[aria-label='#{I18n.t('projects.samples.show.nav_aria_label')}']" do
+          click_link I18n.t('projects.samples.show.tabs.metadata')
 
-        within %(#sample-tabs) do
-          click_on I18n.t('projects.samples.show.tabs.files')
+          click_link I18n.t('projects.samples.show.tabs.files')
         end
 
         within %(turbo-frame[id="table-listing"]) do
@@ -573,8 +574,8 @@ module Projects
         assert_text I18n.t('projects.samples.attachments.deletions.destroy.success')
         assert_no_text 'test_file_A.fastq'
         assert_no_text 'test_file_B.fastq'
-        assert_text I18n.t('projects.samples.show.no_files')
-        assert_selector 'button[disabled]', count: 2
+        assert_text I18n.t('projects.samples.attachments.table.empty_state.title')
+        assert_text I18n.t('projects.samples.attachments.table.empty_state.description')
       end
     end
   end
