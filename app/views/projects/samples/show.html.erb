@@ -60,10 +60,11 @@
             idx == tab_items.size - 1 ? "rounded-tr-lg" : nil,
           ].compact.join(" "),
           aria: {
+            selected: active ? "true" : "false",
             current: active ? "page" : "false",
           },
           role: "tab",
-          tabindex: active ? 0 : -1 %>
+          tabindex: 0 %>
         </li>
       <% end %>
     </ul>
