@@ -127,7 +127,7 @@
     </div>
     <div class="flex flex-col flex-1 overflow-y-auto">
       <%# Render the header slot if it's provided %>
-      <%= header %>
+      <turbo-frame id="sidebar-header"><%= header %></turbo-frame>
 
       <%# Main content: sections and items passed to the component %>
       <div class="pt-1 px-2 space-y-1">
