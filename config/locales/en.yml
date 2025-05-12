@@ -433,7 +433,7 @@ en:
       delete_confirm: Are you sure you would like to delete attachment '%{name}'?
       filename: Filename
       format: Format
-      id: ID
+      id: PUID
       limit:
         item: Attachments
       select_page: Select / Deselect visible attachments
@@ -660,7 +660,7 @@ en:
         no_groups_title: No groups found
         row_aria_label: See %{name} subgroups
         search:
-          placeholder: Filter by ID or name
+          placeholder: Filter by PUID or name
         sorting:
           created_at_asc: Oldest created
           created_at_desc: Last created
@@ -677,7 +677,7 @@ en:
         row:
           samples: Samples
         search:
-          placeholder: Filter by ID or name
+          placeholder: Filter by PUID or name
         sorting:
           created_at_asc: Oldest created
           created_at_desc: Last created
@@ -832,7 +832,7 @@ en:
         success: File %{filename} was successfully removed.
       index:
         search:
-          placeholder: Filter by ID or Filename
+          placeholder: Filter by PUID or Filename
         subtitle: These are the files that belong to Group %{group_name}
         title: Files
         upload_files: Upload Files
@@ -1021,7 +1021,7 @@ en:
       table_filter:
         loading: Loading search results...
         search:
-          placeholder: Filter by ID or name
+          placeholder: Filter by PUID or name
     shared_namespaces:
       index:
         pagy:
@@ -1030,7 +1030,7 @@ en:
       create_project_button: New project
       create_subgroup_button: New subgroup
       search:
-        placeholder: Filter by ID or name
+        placeholder: Filter by PUID or name
       shared_namespaces:
         no_shared:
           description: Groups and projects can be shared with other groups through their members page.
@@ -1254,7 +1254,7 @@ en:
         default: "%{label} (default)"
         required: Required
     samplesheet_component:
-      filter_placeholder: Filter by ID or name
+      filter_placeholder: Filter by PUID or name
       label: Samples
       next: Next
       page_selection:
@@ -1363,7 +1363,7 @@ en:
         success: File %{filename} was successfully removed.
       index:
         search:
-          placeholder: Filter by ID or Filename
+          placeholder: Filter by PUID or Filename
         subtitle: These are the files that belong to Project %{project_name}
         title: Files
         upload_files: Upload Files
@@ -1772,7 +1772,7 @@ en:
           format: Format
           key: Key
           last_updated: Last Updated
-          puid: ID
+          puid: PUID
           size: Size
           source: Source
           type: Type
@@ -1787,7 +1787,7 @@ en:
       table_filter:
         loading: Loading search results...
         search:
-          placeholder: Filter by ID or name
+          placeholder: Filter by PUID or name
       transfers:
         create:
           error: 'The following list of samples failed to transfer:'
@@ -1896,7 +1896,7 @@ en:
       name: Sample Name
       namespaces:
         puid: Project
-      puid: Sample ID
+      puid: Sample PUID
       select_page: Select / Deselect visible samples
       updated_at: Last Updated
   services:
@@ -2044,12 +2044,12 @@ en:
             namespace:
               description: The spreadsheet is required to have a column that contains a sample identifier.
               group:
-                description_html: The identifier is case-sensitive and must contain the <b>sample ID</b>.
+                description_html: The identifier is case-sensitive and must contain the <b>sample PUID</b>.
               project:
-                description_html: The identifier is case-sensitive and can contain either the <b>sample name or ID</b>.
+                description_html: The identifier is case-sensitive and can contain either the <b>sample name or PUID</b>.
             no_valid_metadata: The uploaded spreadsheet contains no viable metadata
-            sample_id_column: Sample ID Column
-            select_sample_id_column: Select a Sample ID Column
+            sample_id_column: Sample Identifier Column
+            select_sample_id_column: Select a Sample Identifier Column
             selected: Selected
             spinner_message: Importing sample metadata, this might take a while...
             submit_button: Import Metadata
@@ -2084,13 +2084,13 @@ en:
               description_html: The spreadsheet is required to have columns for <b>Sample Name</b> and <b>Project PUID</b>, and optionally <b>Sample Description</b>.
             project:
               description_html: The spreadsheet is required to have a column for <b>Sample Name</b>, and optionally <b>Sample Description</b>.
-          project_puid_column: Project ID Column
+          project_puid_column: Project PUID Column
           project_puid_column_description: Assigns each sample to the associated project within the imported spreadsheet
           project_selection: Project Selection
           project_selection_description: You can specify which project(s) samples are assigned to by selecting a Project ID column and/or a static project
           sample_description_column: Sample Description Column (Optional)
           sample_name_column: Sample Name Column
-          select_project_puid_column: Select a Project ID Column
+          select_project_puid_column: Select a Project PUID Column
           select_sample_description_column: Select a Sample Description Column
           select_sample_name_column: Select a Sample Name Column
           select_static_project: Select Static Project
