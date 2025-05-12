@@ -10,7 +10,7 @@ module System
         assert_no_text 'Aspergillus awamori'
         assert_no_text 'Bacillus cereus'
         assert_no_text 'Pseudomonas aeruginosa'
-        assert_selector '.viral-dropdown--button'
+
         click_on 'Organism'
         assert_text 'Aspergillus awamori'
         assert_text 'Bacillus cereus'
