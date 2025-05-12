@@ -108,6 +108,42 @@ module Groups
       assert_selector 'h1', text: samples(:sample28).name
     end
 
+    test 'User with role >= Analyst does not see workflow executions button' do
+      visit group_samples_url(@group)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+
+      assert_selector 'span', text: I18n.t('projects.samples.index.workflows.button_sr')
+    end
+
+    test 'User with role < Analyst does not see workflow executions button' do
+      login_as users(:ryan_doe)
+      visit group_samples_url(@group)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+
+      assert_no_selector 'span', text: I18n.t('projects.samples.index.workflows.button_sr')
+    end
+
+    test 'User with role >= Analyst sees sample actions dropdown' do
+      visit group_samples_url(@group)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      assert_selector 'span', text: I18n.t('shared.samples.actions_dropdown.label')
+    end
+
+    test 'User with role < Analyst does not see sample actions dropdown' do
+      login_as users(:ryan_doe)
+      visit group_samples_url(@group)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      assert_no_selector 'span', text: I18n.t('shared.samples.actions_dropdown.label')
+    end
+
     test 'cannot access group samples' do
       login_as users(:user_no_access)
 

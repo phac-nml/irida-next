@@ -49,12 +49,17 @@ module Groups
     private
 
     def index_view_authorizations
+      # add all sample actions related authorizations
       @allowed_to = {
-        submit_workflow: allowed_to?(:submit_workflow?, @group),
         export_data: allowed_to?(:export_data?, @group),
         update_sample_metadata: allowed_to?(:update_sample_metadata?, @group),
         import_samples_and_metadata: allowed_to?(:import_samples_and_metadata?, @group)
       }
+      # verify if sample actions dropdown should be rendered
+      @render_sample_actions = @allowed_to.value?(true)
+
+      # add non-sample actions related authorizations
+      @allowed_to[:submit_workflow] = allowed_to?(:submit_workflow?, @group)
     end
 
     def group
