@@ -8,33 +8,33 @@
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
             url: group_path(@group),
-            icon: "squares_2x2",
+            icon: ICONS[:groups],
             label: t("groups.sidebar.details"),
             selected: @current_page == t(:"groups.sidebar.details"),
           ) %>
           <%= render section.with_item(
             url: group_samples_path(@group),
-            icon: "beaker",
+            icon: ICONS[:samples],
             label: t(:"groups.sidebar.samples"),
             selected: @current_page == t(:"groups.sidebar.samples"),
           ) %>
           <% if allowed_to?(:view_attachments?, @group) %>
             <%= render section.with_item(
               url: group_attachments_path(@group),
-              icon: "document_text",
+              icon: ICONS[:files],
               label: t(:"groups.sidebar.files"),
               selected: @current_page == t(:"groups.sidebar.files"),
             ) %>
           <% end %>
           <%= render section.with_item(
             url: group_members_path(@group),
-            icon: "users",
+            icon: ICONS[:users],
             label: t(:"groups.sidebar.members"),
             selected: @current_page == t(:"groups.sidebar.members"),
           ) %>
           <%= render section.with_item(
             url: group_activity_path(@group),
-            icon: "list_bullet",
+            icon: ICONS[:list_bullets],
             label: t(:"groups.sidebar.activity"),
             selected: @current_page == t(:"groups.sidebar.activity"),
           ) %>
@@ -42,7 +42,7 @@
             <% if allowed_to?(:view_workflow_executions?, @group) && @pipelines_enabled %>
               <%= render section.with_item(
                 url: group_workflow_executions_path(@group),
-                icon: "command_line",
+                icon: ICONS[:workflows],
                 label: t(:"groups.sidebar.workflow_executions"),
                 selected: @current_page == t(:"groups.sidebar.workflow_executions"),
               ) %>
@@ -51,7 +51,7 @@
           <% if allowed_to?(:update?, @group) %>
             <%= render section.with_multi_level_menu(
               title: t(:"groups.sidebar.settings"),
-              icon: "cog_6_tooth",
+              icon: ICONS[:settings],
               selectable_pages: [
                 t(:"groups.sidebar.general"),
                 t(:"groups.sidebar.bot_accounts"),
