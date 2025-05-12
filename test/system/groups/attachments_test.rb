@@ -340,10 +340,25 @@ module Groups
       assert_text 'Displaying 1-3 of 3 items'
 
       # Clear all notifications as this was interfering with entering and submitting the search below
+      # Use a more robust approach to wait for and dismiss flash messages
       if has_selector?('div#flashes button[data-action="viral--flash#dismiss"]', wait: Capybara.default_max_wait_time)
-        all('div#flashes button[data-action="viral--flash#dismiss"]').each(&:click)
-        # Wait for flashes to disappear
-        assert_no_selector 'div#flashes button[data-action="viral--flash#dismiss"]'
+        # First count how many flash messages we need to dismiss
+        flash_count = all('div#flashes button[data-action="viral--flash#dismiss"]').count
+
+        # Click each dismiss button one by one and wait after each click
+        flash_count.times do
+          # Make sure we have a flash message before attempting to click
+          next unless has_selector?('div#flashes button[data-action="viral--flash#dismiss"]', wait: 1)
+
+          # Find the first visible dismiss button and click it
+          first('div#flashes button[data-action="viral--flash#dismiss"]', visible: true).click
+
+          # Allow time for the animation to complete (the component has a 300ms transition)
+          sleep 0.4
+        end
+
+        # Finally, wait for all flash messages to disappear
+        assert_no_selector 'div#flashes button[data-action="viral--flash#dismiss"]', wait: 2
       end
 
       within('table tbody') do
