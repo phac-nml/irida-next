@@ -8,35 +8,35 @@ module Viral
     # @!group Types
     # @label Success
     # @param message text "This is a success message."
-    # @param timeout number 3500
-    def success(message: 'This is a success message.', timeout: 3500)
+    # @param timeout number 0
+    def success(message: 'This is a success message.', timeout: 0)
       render Viral::FlashComponent.new(type: :success, data: message, timeout:)
     end
 
     # @label Error
     # @param message text "This is an error message."
     def error(message: 'This is an error message.')
-      render Viral::FlashComponent.new(type: :error, data: message, timeout:)
+      render Viral::FlashComponent.new(type: :error, data: message)
     end
 
     # @label Warning
     # @param message text "This is a warning message."
-    # @param timeout number 3500
-    def warning(message: 'This is a warning message.', timeout: 3500)
+    # @param timeout number 0
+    def warning(message: 'This is a warning message.', timeout: 0)
       render Viral::FlashComponent.new(type: :warning, data: message, timeout:)
     end
 
     # @label Info
     # @param message text "This is an info message."
-    # @param timeout number 3500
-    def info(message: 'This is an info message.', timeout: 3500)
+    # @param timeout number 0
+    def info(message: 'This is an info message.', timeout: 0)
       render Viral::FlashComponent.new(type: :info, data: message, timeout:)
     end
 
     # @label Notice (maps to Info)
     # @param message text "This is a notice message."
-    # @param timeout number 3500
-    def notice(message: 'This is a notice message.', timeout: 3500)
+    # @param timeout number 0
+    def notice(message: 'This is a notice message.', timeout: 0)
       render Viral::FlashComponent.new(type: :notice, data: message, timeout:)
     end
 
