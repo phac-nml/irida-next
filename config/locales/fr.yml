@@ -763,6 +763,7 @@ fr:
       manifest_json: manifest.json
     show:
       download: Télécharger
+      page_title: Data Export
       remove_button: Retirer
       remove_button_confirmation: Êtes-vous sûr de vouloir supprimer l’exportation de données '%{name}'?
       tabs:
@@ -970,6 +971,7 @@ fr:
           link_remove_aria_label: Supprimer le lien %{member} du membre du groupe
         add: Ajouter un nouveau membre
         invite_group: Inviter le groupe
+        invited_groups: Invited Groups
         leave_confirmation: Êtes-vous sûr de vouloir vous retirer de ce groupe?
         leave_group: Quitter le groupe
         remove: Retirer
@@ -1112,6 +1114,9 @@ fr:
           title: No workflow executions.
   layouts:
     application:
+      browser_page_titles:
+        page_not_found: Page Not Found
+        unauthorized: Unauthorized
       language_selection:
         aria_label: 'Langue sélectionnée : Français'
       site_title: IRIDA Next
@@ -1548,6 +1553,7 @@ fr:
           link_remove_aria_label: Supprimer le lien du membre du projet %{member}
         add: Ajouter un nouveau membre
         invite_group: Inviter le groupe
+        invited_groups: Invited Groups
         leave_confirmation: Êtes-vous sûr de vouloir vous retirer de ce projet?
         leave_project: Quitter le projet
         remove: Retirer
@@ -2115,6 +2121,7 @@ fr:
         name: 'Name:'
         run_id: 'Run ID:'
         workflow: 'Workflow:'
+      workflow_execution: Workflow Execution
   spreadsheet_helper:
     failed_parsing: 'Failed to parse spreadsheet file: %{error}'
     no_file: No file provided
@@ -2280,7 +2287,7 @@ fr:
       id: ID
       name: Nom
       run_id: Exécuter l’identifiant
-      select_page: Sélectionner/Désélectionner les échantillons visibles
+      select_page: Sélectionner/Désélectionner les exécutions de flux de travail visibles
       state: État
       updated_at: Dernière mise à jour
       workflow_name: Nom du flux de travail

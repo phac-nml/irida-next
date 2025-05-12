@@ -10,6 +10,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   before_action :current_page
   before_action :edit_view_authorizations, only: %i[edit]
   before_action :show_view_authorizations, only: %i[show]
+  before_action :page_title, only: %i[show edit activity new]
 
   def index
     redirect_to dashboard_groups_path
@@ -261,5 +262,28 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def tab
     @tab = params[:tab]
+  end
+
+  def page_title # rubocop:disable Metrics/MethodLength
+    @title = case action_name
+             when 'show'
+               if @tab == 'shared_namespaces'
+                 "#{t(:'groups.show.tabs.shared_namespaces')} · #{@group.full_path}"
+               else
+                 "#{t(:'groups.show.tabs.subgroups_and_projects')} · #{@group.full_path}"
+               end
+             when 'activity'
+               "#{t(:'groups.sidebar.activity')} · #{@group.full_path}"
+             when 'edit'
+               "#{t(:'groups.sidebar.general')} · #{t(:'groups.edit.title')} · #{@group.full_path}"
+             when 'new'
+               if @group
+                 t(:'groups.new_subgroup.title')
+               else
+                 t(:'groups.create.title')
+               end
+             else
+               t(:'general.default_sidebar.groups')
+             end
   end
 end

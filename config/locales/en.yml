@@ -763,6 +763,7 @@ en:
       manifest_json: manifest.json
     show:
       download: Download
+      page_title: Data Export
       remove_button: Remove
       remove_button_confirmation: Are you sure you would like to delete data export '%{name}'?
       tabs:
@@ -972,6 +973,7 @@ en:
           link_remove_aria_label: Remove group member %{member} link
         add: Add New Member
         invite_group: Invite Group
+        invited_groups: Invited Groups
         leave_confirmation: Are you sure you want to remove yourself from this group?
         leave_group: Leave group
         remove: Remove
@@ -1114,6 +1116,9 @@ en:
           title: No workflow executions.
   layouts:
     application:
+      browser_page_titles:
+        page_not_found: Page Not Found
+        unauthorized: Unauthorized
       language_selection:
         aria_label: 'Selected language: English'
       site_title: IRIDA Next
@@ -1552,6 +1557,7 @@ en:
           link_remove_aria_label: Remove project member %{member} link
         add: Add New Member
         invite_group: Invite group
+        invited_groups: Invited Groups
         leave_confirmation: Are you sure you want to remove yourself from the project?
         leave_project: Leave project
         remove: Remove
@@ -2119,6 +2125,7 @@ en:
         name: 'Name:'
         run_id: 'Run ID:'
         workflow: 'Workflow:'
+      workflow_execution: Workflow Execution
   spreadsheet_helper:
     failed_parsing: 'Failed to parse spreadsheet file: %{error}'
     no_file: No file provided
@@ -2284,7 +2291,7 @@ en:
       id: ID
       name: Name
       run_id: Run ID
-      select_page: Select / Deselect visible samples
+      select_page: Select / Deselect visible workflow executions
       state: State
       updated_at: Last Updated
       workflow_name: Workflow Name

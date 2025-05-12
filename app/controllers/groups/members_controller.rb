@@ -6,6 +6,7 @@ module Groups
     include MembershipActions
 
     before_action :current_page
+    before_action :page_title
 
     def member_params
       params.expect(member: %i[user_id access_level type namespace_id created_by_id expires_at])
@@ -45,6 +46,14 @@ module Groups
 
     def current_page
       @current_page = t(:'groups.sidebar.members')
+    end
+
+    def page_title
+      @title = if @tab == 'invited_groups'
+                 "#{t(:'groups.members.index.invited_groups')} · #{@namespace.full_path}"
+               else
+                 "#{t(:'groups.sidebar.members')} · #{@namespace.full_path}"
+               end
     end
   end
 end

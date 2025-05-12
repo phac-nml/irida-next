@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 # Workflow executions controller
-class WorkflowExecutionsController < ApplicationController
+class WorkflowExecutionsController < ApplicationController # rubocop:disable Metrics/ClassLength
   include BreadcrumbNavigation
   include Metadata
   include WorkflowExecutionActions
+
+  before_action :page_title
 
   def create
     @workflow_execution = WorkflowExecutions::CreateService.new(current_user, workflow_execution_params).execute
@@ -95,5 +97,31 @@ class WorkflowExecutionsController < ApplicationController
   def destroy_multiple_paths
     @list_path = list_workflow_executions_path(list_class: 'workflow_execution')
     @destroy_path = destroy_multiple_workflow_executions_path
+  end
+
+  def page_title # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    case action_name
+    when 'index'
+      @title = "#{t(:'general.default_sidebar.workflows')} · #{current_user.namespace&.full_path}"
+    when 'show'
+      @title = case @tab
+               when 'params'
+                 "#{t(:'workflow_executions.show.tabs.params')} · " \
+                 "#{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id} · " \
+                 "#{current_user.namespace&.full_path}"
+               when 'samplesheet'
+                 "#{t(:'workflow_executions.show.tabs.samplesheet')} · " \
+                 "#{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id} · " \
+                 "#{current_user.namespace&.full_path}"
+               when 'files'
+                 "#{t(:'workflow_executions.show.tabs.files')} · " \
+                 "#{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id} · " \
+                 "#{current_user.namespace&.full_path}"
+               else
+                 "#{t(:'workflow_executions.show.tabs.summary')} · " \
+                 "#{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id} · " \
+                 "#{current_user.namespace&.full_path}"
+               end
+    end
   end
 end

@@ -7,6 +7,7 @@ module Groups
     include AttachmentActions
 
     before_action :group
+    before_action :page_title
 
     private
 
@@ -40,6 +41,10 @@ module Groups
           name: t(:'groups.sidebar.files'),
           path: group_attachments_path(@group)
         }]
+    end
+
+    def page_title
+      @title = "#{t(:'groups.sidebar.files')} · #{@group.full_path}"
     end
   end
 end

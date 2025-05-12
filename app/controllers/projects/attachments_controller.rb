@@ -6,6 +6,8 @@ module Projects
     include Metadata
     include AttachmentActions
 
+    before_action :page_title
+
     private
 
     def view_authorizations
@@ -34,6 +36,10 @@ module Projects
           name: t(:'projects.sidebar.files'),
           path: namespace_project_attachments_path(@project.parent, @project)
         }]
+    end
+
+    def page_title
+      @title = "#{t(:'projects.sidebar.files')} · #{@project.full_path}"
     end
   end
 end

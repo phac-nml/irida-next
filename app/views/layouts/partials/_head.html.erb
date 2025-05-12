@@ -1,5 +1,12 @@
 <head>
-  <title><%= t(:"layouts.application.site_title") %></title>
+  <title>
+    <%= if @title.present?
+      "#{@title} · #{t(:"layouts.application.site_title")}"
+    else
+      t(:"layouts.application.site_title")
+    end %>
+  </title>
+
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
