@@ -55,7 +55,7 @@ module Layout
 
       node = Capybara.string(component.to_html)
       node.assert_selector('aside[aria-label="Sidebar"]', visible: true)
-      refute_includes(component.to_html, I18n.t('sidebar.header'))
+      assert_not_includes(component.to_html, I18n.t('sidebar.header'))
       node.assert_selector('.Layout-Sidebar__Item', count: 2)
       node.assert_selector('a[href="/-/projects"]')
       node.assert_selector('a[href="/-/groups"]')
@@ -79,7 +79,7 @@ module Layout
       end
       node = Capybara.string(component.to_html)
       node.assert_selector('aside[aria-label="Sidebar"]', visible: true)
-      refute_includes(component.to_html, I18n.t('sidebar.header'))
+      assert_not_includes(component.to_html, I18n.t('sidebar.header'))
       node.assert_selector('.Layout-Sidebar__Item', minimum: 4)
       node.assert_selector('a[href="/"]')
       node.assert_selector('a[href="/-/members"]')
@@ -131,20 +131,22 @@ module Layout
 
     # 📝 Sidebar renders with expanded multi-level menu (regression)
     test 'should render the sidebar with expanded multi level menu' do
-      component = render_inline(Layout::SidebarComponent.new(label: 'Project 1', icon_name: 'rectangle_stack')) do |sidebar|
+      component = render_inline(Layout::SidebarComponent.new(label: 'Project 1',
+                                                             icon_name: 'rectangle_stack')) do |sidebar|
         sidebar.with_section do |section|
           section.with_item(label: 'Details', url: '/', icon: :file_text)
           section.with_item(label: 'Members', url: '/-/members', icon: :users_three)
           section.with_item(label: 'Samples', url: '/-/samples', icon: :flask)
           section.with_item(label: 'History', url: '/-/history', icon: :clock_counter_clockwise)
-          section.with_multi_level_menu(title: 'Settings', current_page: 'general', selectable_pages: ['general']) do |mlm|
+          section.with_multi_level_menu(title: 'Settings', current_page: 'general',
+                                        selectable_pages: ['general']) do |mlm|
             mlm.with_menu_item(url: '/-/edit', label: 'General')
           end
         end
       end
       node = Capybara.string(component.to_html)
       node.assert_selector('aside')
-      refute_includes(component.to_html, 'My Sidebar')
+      assert_not_includes(component.to_html, 'My Sidebar')
       # The total number of sidebar items is 5 in current implementation (includes settings button)
       node.assert_selector('.Layout-Sidebar__Item', count: 5)
       node.assert_selector('a[href="/"]')
