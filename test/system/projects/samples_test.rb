@@ -125,6 +125,23 @@ module Projects
       assert_no_selector 'span', text: I18n.t('projects.samples.index.workflows.button_sr')
     end
 
+    test 'User with role >= Analyst sees sample actions dropdown' do
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      assert_selector 'span', text: I18n.t('shared.samples.actions_dropdown.label')
+    end
+
+    test 'User with role < Analyst does not see sample actions dropdown' do
+      login_as users(:ryan_doe)
+      visit namespace_project_samples_url(@namespace, @project)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      assert_no_selector 'span', text: I18n.t('shared.samples.actions_dropdown.label')
+    end
+
     test 'User with role >= Analyst sees create export button' do
       user = users(:james_doe)
       login_as user
