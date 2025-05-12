@@ -93,7 +93,7 @@ module Viral
         'Small Button'
       end
 
-      assert_selector 'button.button--size-small' do
+      assert_selector 'button.button--size-default' do
         assert_text 'Small Button'
       end
     end
