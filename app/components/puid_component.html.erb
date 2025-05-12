@@ -5,12 +5,14 @@
       text-indigo-800 bg-indigo-100 border-indigo-300 dark:bg-indigo-900
       dark:text-indigo-200 dark:border-indigo-700
     "
+  >
     <%= render ClipboardComponent.new(
       value: puid,
       button_classes:
         "p-1 bg-white border border-indigo-300 rounded-full hover:bg-indigo-200 text-indigo-800 hover:text-indigo-900 dark:hover:text-indigo-100 dark:bg-indigo-800 dark:text-indigo-200 dark:border-indigo-700 dark:hover:bg-indigo-700",
     ) %>
   </div>
+
 <% else %>
   <span
     class="
