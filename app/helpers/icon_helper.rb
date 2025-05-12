@@ -35,6 +35,7 @@ module ICONS
     files: { name: :files, options: {} },
     squares_four: { name: 'squares-four', options: {} },
     list_bullets: { name: 'list-bullets', options: {} },
+    lock_key: { name: 'lock-key', options: {} },
     stack: { name: :stack, options: {} },
     flask: { name: :flask, options: {} },
     terminal_window: { name: 'terminal-window', options: {} },
@@ -42,8 +43,11 @@ module ICONS
     plus_circle: { name: 'plus-circle', options: {} },
     question: { name: :question, options: {} },
     sidebar: { name: :sidebar, options: {} },
+    sliders_horizontal: { name: 'sliders-horizontal', options: {} },
+    ticket: { name: :ticket, options: {} },
     user_circle: { name: 'user-circle', options: {} },
     users: { name: :users, options: {} },
+    bank: { name: :bank, options: {} },
 
     # Heroicons
     beaker: { name: :beaker, options: { library: :heroicons } },
