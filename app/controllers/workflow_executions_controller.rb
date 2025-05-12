@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Workflow executions controller
-class WorkflowExecutionsController < ApplicationController
+class WorkflowExecutionsController < ApplicationController # rubocop:disable Metrics/ClassLength
   include BreadcrumbNavigation
   include Metadata
   include WorkflowExecutionActions
@@ -99,7 +99,7 @@ class WorkflowExecutionsController < ApplicationController
     @destroy_path = destroy_multiple_workflow_executions_path
   end
 
-  def page_title # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def page_title # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     case action_name
     when 'index'
       @title = "#{t(:'general.default_sidebar.workflows')} · #{current_user.namespace&.full_path}"
