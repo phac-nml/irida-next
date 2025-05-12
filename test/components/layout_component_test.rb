@@ -29,7 +29,7 @@ class LayoutComponentTest < ViewComponent::TestCase
         assert_text I18n.t('general.default_sidebar.title')
         assert_selector '.Layout-Sidebar__Section' do
           assert_selector '.Layout-Sidebar__Item', count: 2
-          assert_selector 'a[href="/-/projects"].font-semibold'
+          assert_selector 'a[href="/-/projects"].font-bold'
           assert_selector 'a[href="/-/groups"]'
         end
       end
