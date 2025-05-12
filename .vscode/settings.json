@@ -33,6 +33,7 @@
     "createuser",
     "datetime",
     "describedby",
+    "fieldset",
     "flowbite",
     "gsub",
     "headful",
@@ -46,7 +47,6 @@
     "pagy",
     "puid",
     "rubocop",
-    "fieldset",
     "samplesheet",
     "tailwindcss"
   ]

@@ -6,9 +6,7 @@ export default class extends Controller {
   };
 
   removeItemFromSelection() {
-    console.log("delete_controller");
-    console.log(this.idValue);
-    this.dispatch("removeItemFromLocalStorage", {
+    this.dispatch("removeItemFromStorage", {
       detail: {
         id: this.idValue,
       },

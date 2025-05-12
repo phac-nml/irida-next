@@ -60,10 +60,7 @@ export default class extends Controller {
     this.#addOrRemove(event.target.checked, event.target.value);
   }
 
-  removeFromStorageOnly({ detail: { id } }) {
-    console.log("selection_controller");
-    console.log(id);
-    console.log(this.#storageKey);
+  removeFromStorage({ detail: { id } }) {
     this.#addOrRemove(false, id, false);
   }
 
