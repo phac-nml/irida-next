@@ -329,11 +329,11 @@
 }
 
 @utility viral-dropdown--button {
-  @apply hover:text-primary-700 flex items-center rounded-md border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-900 hover:bg-slate-100 focus:z-10 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white min-h-11 min-w-11;
+  @apply hover:text-primary-700 flex min-h-11 min-w-11 items-center rounded-md border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-900 hover:bg-slate-100 focus:z-10 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white;
 }
 
 @utility button {
-  @apply inline-flex cursor-pointer items-center justify-center rounded-md border focus:z-10 sm:w-auto text-sm;
+  @apply inline-flex cursor-pointer items-center justify-center rounded-md border text-sm focus:z-10 sm:w-auto;
 
   &:disabled {
     @apply cursor-not-allowed opacity-50;
@@ -342,6 +342,7 @@
 
 @utility button--size-default {
   @apply min-h-11 min-w-11 px-5 py-2.5 text-sm;
+}
 
 @utility button--size-small {
   @apply px-3 py-2 text-xs;
