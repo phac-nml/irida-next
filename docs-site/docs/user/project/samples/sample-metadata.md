@@ -60,41 +60,42 @@ Importing metadata allows you to add multiple metadata fields to multiple sample
 
 This is an example of the expected spreadsheet format:
 
-  | Sample Name | MetadataField1 | MetadataField2 | MetadataField3 |
-  | :---------- | :------------- | :------------- | :------------- |
-  | Sample 1    | value1         | value2         | value3         |
-  | Sample 2    | value4         | value5         | value6         |
+| Sample Name | MetadataField1 | MetadataField2 | MetadataField3 |
+| :---------- | :------------- | :------------- | :------------- |
+| Sample 1    | value1         | value2         | value3         |
+| Sample 2    | value4         | value5         | value6         |
 
 The following metadata will be added:
 
-  - Sample 1:
+- Sample 1:
 
-    | Key            | Value  |
-    | :------------- | :----- |
-    | MetadataField1 | value1 |
-    | MetadataField2 | value2 |
-    | MetadataField3 | value3 |
+  | Key            | Value  |
+  | :------------- | :----- |
+  | MetadataField1 | value1 |
+  | MetadataField2 | value2 |
+  | MetadataField3 | value3 |
 
-  - Sample 2:
+- Sample 2:
 
-    | Key            | Value  |
-    | :------------- | :----- |
-    | MetadataField1 | value4 |
-    | MetadataField2 | value5 |
-    | MetadataField3 | value6 |
+  | Key            | Value  |
+  | :------------- | :----- |
+  | MetadataField1 | value4 |
+  | MetadataField2 | value5 |
+  | MetadataField3 | value6 |
 
-When creating the spreadsheet, you are required to have a column that contains a sample identifier. The identifier is case-sensitive and can contain either the sample names or IDs. When importing metadata from a **project**, the sample identifier can be either the **sample name or ID**. If importing metadata from a **group**, the sample identifier must be the **sample ID**.
+When creating the spreadsheet, you are required to have a column that contains a sample identifier. The identifier is case-sensitive and can contain either the sample names or PUIDs. When importing metadata from a **project**, the sample identifier can be either the **sample name or PUID**. If importing metadata from a **group**, the sample identifier must be the **sample PUID**.
 
 **An important note:** When importing a metadata spreadsheet, you will be asked if you'd like to **Ignore empty values**. If this is **selected**, any metadata fields without an associated value will be ignored and those metadata keys will not be removed from the sample if present. However, if this **not selected**, any samples with the metadata key and empty value will be **deleted**.
 
 For example, if the metadata above was imported and added to Sample 1 and Sample 2, and the following spreadsheet was then imported:
 
-  | Sample Name | MetadataField1 | MetadataField2 | MetadataField3 | MetadataField4 |
-  | :---------- | :------------- | :------------- | :------------- | :------------- |
-  | Sample 1    |                | newValue2      | newValue3      | anotherValue1  |
-  | Sample 2    | newValue4      |                | newValue6      | anotherValue2  |
+| Sample Name | MetadataField1 | MetadataField2 | MetadataField3 | MetadataField4 |
+| :---------- | :------------- | :------------- | :------------- | :------------- |
+| Sample 1    |                | newValue2      | newValue3      | anotherValue1  |
+| Sample 2    | newValue4      |                | newValue6      | anotherValue2  |
 
 This would result in the following sample metadata:
+
 - If **Ignore empty values** was **checked**:
 
   - Sample 1:

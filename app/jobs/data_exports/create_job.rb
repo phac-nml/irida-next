@@ -321,7 +321,7 @@ module DataExports
     end
 
     def write_spreadsheet_header(metadata_fields)
-      header = ['SAMPLE ID', 'SAMPLE NAME', 'PROJECT ID']
+      header = ['SAMPLE PUID', 'SAMPLE NAME', 'PROJECT PUID']
       header += metadata_fields.map(&:upcase)
       header
     end

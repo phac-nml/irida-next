@@ -435,9 +435,9 @@ module DataExports
       csv_text = File.read(export_file)
       csv = CSV.parse(csv_text, headers: true)
       csv.each do |row|
-        assert_equal sample32.puid, row['SAMPLE ID']
+        assert_equal sample32.puid, row['SAMPLE PUID']
         assert_equal sample32.name, row['SAMPLE NAME']
-        assert_equal sample32.project.puid, row['PROJECT ID']
+        assert_equal sample32.project.puid, row['PROJECT PUID']
         assert_equal sample32.metadata['metadatafield1'], row['METADATAFIELD1']
         assert_equal sample32.metadata['metadatafield2'], row['METADATAFIELD2']
       end
@@ -453,7 +453,7 @@ module DataExports
       export_file = Roo::Spreadsheet.open(ActiveStorage::Blob.service.path_for(data_export9.file.key),
                                           extension: 'xlsx')
 
-      assert_equal ['SAMPLE ID', 'SAMPLE NAME', 'PROJECT ID', 'METADATAFIELD1', 'NON_EXISTANT_FIELD', 'METADATAFIELD2'],
+      assert_equal ['SAMPLE PUID', 'SAMPLE NAME', 'PROJECT PUID', 'METADATAFIELD1', 'NON_EXISTANT_FIELD', 'METADATAFIELD2'],
                    export_file.row(1)
       assert_equal [
         sample32.puid,

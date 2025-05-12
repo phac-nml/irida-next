@@ -2065,13 +2065,13 @@ fr:
               description_html: The spreadsheet is required to have a column for <b>Sample Name</b>, and optionally for <b>Sample Description</b> and <b>Project PUID</b>.
             project:
               description_html: The spreadsheet is required to have a column for <b>Sample Name</b>, and optionally for <b>Sample Description</b>.
-          project_puid_column: Project ID Column
+          project_puid_column: Project PUID Column
           project_puid_column_description: Assigns each sample to the associated project within the imported spreadsheet
           project_selection: Project Selection
           project_selection_description: You can specify which project(s) samples are assigned to by selecting a Project ID column and/or a static project
           sample_description_column: Sample Description Column (Optional)
           sample_name_column: Sample Name Column
-          select_project_puid_column: Select a Project ID Column
+          select_project_puid_column: Select a Project PUID Column
           select_sample_description_column: Select a Sample Description Column
           select_sample_name_column: Select a Sample Name Column
           select_static_project: Select Static Project
