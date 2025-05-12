@@ -7,7 +7,7 @@
 >
   <div class="inline-flex items-center space-x-2">
     <span><%= t(".items", items: @item) %></span>
-    <%= viral_dropdown(label: @pagy.limit, "aria-label": t(".aria_label")) do |dropdown| %>
+    <%= viral_dropdown(label: @pagy.limit, "aria-label": "#{ @pagy.limit }, #{t('.select_items_action')}") do |dropdown| %>
       <% Pagy::DEFAULT[:limits].each do |limit| %>
         <% dropdown.with_item(
           label: limit,
