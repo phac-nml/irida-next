@@ -74,10 +74,10 @@ class IconHelperTest < ActionView::TestCase
   # 📝 Test: rendering an icon with additional HTML attributes
   test 'renders icon with additional HTML attributes' do
     data_testid = 'clipboard-icon'
-    result = render_icon(:clipboard, data: { testid: data_testid })
+    result = render_icon(:clipboard, data: { "test-selector": data_testid })
 
     assert result.present?, 'Should return HTML with the additional attributes'
-    assert_match(/data-testid="#{data_testid}"/, result, 'Rendered HTML should contain the data attribute')
+    assert_match(/data-test-selector="#{data_testid}"/, result, 'Rendered HTML should contain the data attribute')
   end
 
   # 📝 Test: ICONS registry correctly returns icon definitions
