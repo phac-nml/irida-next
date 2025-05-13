@@ -197,6 +197,15 @@ module Projects
       assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
       assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
+      # Select all workflow executions within the table
+      click_button I18n.t(:'projects.workflow_executions.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: 12
+      end
+      within 'tfoot' do
+        assert_selector 'strong[data-selection-target="selected"]', text: '12'
+      end
+
       tr = find('a', text: @workflow_execution1.id).ancestor('tr')
 
       within tr do
@@ -217,6 +226,14 @@ module Projects
       end
 
       assert_no_text @workflow_execution1.id
+
+      # Verify all workflow executions within the table are still selected and the footer is updated
+      within 'tbody' do
+        assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: 11
+      end
+      within 'tfoot' do
+        assert_selector 'strong[data-selection-target="selected"]', text: '11'
+      end
     end
 
     test 'should delete an errored workflow' do

@@ -73,7 +73,8 @@ module Projects
         }]
     end
 
-    def destroy_path
+    def destroy_paths
+      @index_path = namespace_project_workflow_executions_path(@project.parent, @project)
       @destroy_path = namespace_project_workflow_execution_path(@project.parent, @project, @workflow_execution)
     end
 

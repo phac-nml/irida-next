@@ -94,7 +94,8 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
     view_authorizations
   end
 
-  def destroy_path
+  def destroy_paths
+    @index_path = workflow_executions_path
     @destroy_path = workflow_execution_path(@workflow_execution)
   end
 

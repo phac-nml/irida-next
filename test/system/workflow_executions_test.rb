@@ -220,6 +220,15 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
+    # Select all workflow executions within the table
+    click_button I18n.t(:'workflow_executions.index.select_all_button')
+    within 'tbody' do
+      assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: 20
+    end
+    within 'tfoot' do
+      assert_selector 'strong[data-selection-target="selected"]', text: '20'
+    end
+
     tr = find('a', text: @workflow_execution1.id).ancestor('tr')
 
     within tr do
@@ -240,6 +249,14 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     end
 
     assert_no_text @workflow_execution1.id
+
+    # Verify all workflow executions within the table are still selected and the footer is updated
+    within 'tbody' do
+      assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: 19
+    end
+    within 'tfoot' do
+      assert_selector 'strong[data-selection-target="selected"]', text: '19'
+    end
   end
 
   test 'should delete an errored workflow' do

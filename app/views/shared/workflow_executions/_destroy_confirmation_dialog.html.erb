@@ -7,7 +7,7 @@
     <div class="grid gap-4">
       <div
         data-controller="remove-selection selection"
-        data-selection-storage-key-value="<%= "#{request.base_url}#{workflow_executions_path}" %>"
+        data-selection-storage-key-value="<%= "#{request.base_url}#{@index_path}" %>"
         data-remove-selection-id-value="<%= @workflow_execution.id %>"
         data-action="
           remove-selection:removeItemFromStorage->selection#removeFromStorage
