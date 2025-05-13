@@ -10,7 +10,7 @@ export default class extends Controller {
     "spinner",
     "workflowAttributes",
     "samplesheetProperties",
-    "tableRow",
+    "trTemplate",
     "thTemplate",
     "tdTemplate",
     "sampleIdentifierTemplate",
@@ -373,7 +373,7 @@ export default class extends Controller {
   #generateTableRow() {
     this.tableBodyTarget.insertAdjacentHTML(
       "beforeend",
-      this.tableRowTarget.innerHTML,
+      this.trTemplateTarget.innerHTML,
     );
     return this.tableBodyTarget.lastElementChild;
   }
