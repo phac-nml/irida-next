@@ -21,8 +21,6 @@ export default class extends Controller {
     "previousBtn",
     "nextBtn",
     "pageNum",
-    "metadataIndexStart",
-    "metadataIndexEnd",
     "dataPayload",
     "filter",
     "paginationTemplate",
@@ -362,8 +360,10 @@ export default class extends Controller {
               this.#insertTextContent(cell, columnName, sampleIndex);
               break;
           }
+          // add cell content to the row
           tableRow.appendChild(cell);
         });
+        // add row to tbody once row contains all content
         this.tableBodyTarget.appendChild(tableRow);
       }
     } else {
