@@ -11,13 +11,13 @@ export default class extends Controller {
     "workflowAttributes",
     "samplesheetProperties",
     "tableRow",
-    "headerContainer",
-    "cellContainer",
-    "sampleIdentifierCell",
-    "dropdownCell",
-    "fileCell",
-    "metadataCell",
-    "textCell",
+    "thTemplate",
+    "tdTemplate",
+    "sampleIdentifierTemplate",
+    "dropdownTemplate",
+    "fileTemplate",
+    "metadataTemplate",
+    "textTemplate",
     "previousBtn",
     "nextBtn",
     "pageNum",
@@ -25,7 +25,7 @@ export default class extends Controller {
     "metadataIndexEnd",
     "dataPayload",
     "filter",
-    "pagination",
+    "paginationTemplate",
     "paginationContainer",
     "emptyState",
     "metadataHeaderForm",
@@ -382,8 +382,8 @@ export default class extends Controller {
   // HTML element we can manipulate via appendChild, insertHTML, etc.
   #generateCellContainer(tableRow, columnName, index, headerCell) {
     let newCellContainer = headerCell
-      ? this.headerContainerTarget.innerHTML
-      : this.cellContainerTarget.innerHTML;
+      ? this.thTemplateTarget.innerHTML
+      : this.tdTemplateTarget.innerHTML;
     tableRow.insertAdjacentHTML("beforeend", newCellContainer);
     let container = tableRow.lastElementChild;
     container.id = `${index}_${columnName}`;
@@ -391,7 +391,7 @@ export default class extends Controller {
   }
 
   #generateSampleCell(container, columnName, index) {
-    let childNode = this.sampleIdentifierCellTarget.innerHTML.replace(
+    let childNode = this.sampleIdentifierTemplateTarget.innerHTML.replace(
       /SAMPLE_IDENTIFIER/g,
       this.#retrieveFormData(index, columnName),
     );
@@ -399,7 +399,7 @@ export default class extends Controller {
   }
 
   #generateDropdownCell(container, columnName, index, options) {
-    let childNode = this.dropdownCellTarget.innerHTML
+    let childNode = this.dropdownTemplateTarget.innerHTML
       .replace(/INDEX_PLACEHOLDER/g, index)
       .replace(/COLUMN_NAME_PLACEHOLDER/g, columnName);
 
@@ -421,7 +421,7 @@ export default class extends Controller {
       // Need to encode pattern so that + is not interpreted as a space, etc.
       pattern = encodeURIComponent(pattern);
     }
-    let childNode = this.fileCellTarget.innerHTML
+    let childNode = this.fileTemplateTarget.innerHTML
       .replace(/INDEX_PLACEHOLDER/g, index)
       .replace(/PROPERTY_PLACEHOLDER/g, columnName)
       .replace(
@@ -448,7 +448,7 @@ export default class extends Controller {
   #generateMetadataCell(container, columnName, index) {
     let metadataValue = this.#retrieveFormData(index, columnName);
     if (metadataValue) {
-      let childNode = this.metadataCellTarget.innerHTML.replace(
+      let childNode = this.metadataTemplateTarget.innerHTML.replace(
         /METADATA_PLACEHOLDER/g,
         this.#retrieveFormData(index, columnName),
       );
@@ -459,7 +459,7 @@ export default class extends Controller {
   }
 
   #generateTextCell(container, columnName, index) {
-    let childNode = this.textCellTarget.innerHTML
+    let childNode = this.textTemplateTarget.innerHTML
       .replace(
         /NAME_PLACEHOLDER/g,
         `workflow_execution[samples_workflow_executions_attributes][${index}][samplesheet_params][${columnName}]`,
@@ -487,7 +487,7 @@ export default class extends Controller {
     if (this.#lastPage > 1) {
       this.paginationContainerTarget.insertAdjacentHTML(
         "beforeend",
-        this.paginationTarget.innerHTML,
+        this.paginationTemplateTarget.innerHTML,
       );
       this.#generatePageNumberDropdown();
     }
