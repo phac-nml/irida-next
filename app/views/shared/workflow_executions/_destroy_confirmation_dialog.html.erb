@@ -6,20 +6,16 @@
     </p>
     <div class="grid gap-4">
       <div
-        data-controller="remove-selection selection"
+        data-controller="selection"
         data-selection-storage-key-value="<%= "#{request.base_url}#{@index_path}" %>"
-        data-remove-selection-id-value="<%= @workflow_execution.id %>"
-        data-action="
-          remove-selection:removeItemFromStorage->selection#removeFromStorage
-        "
+        data-selection-id-value="<%= @workflow_execution.id %>"
       >
         <%= button_to t(".submit_button"),
         @destroy_path,
         method: :delete,
         data: {
           turbo_frame: "_top",
-          action:
-            "click->remove-selection#removeItemFromSelection click->viral--dialog#close",
+          action: "click->selection#removeFromStorage click->viral--dialog#close",
         },
         class: "button button--state-destructive button--size-default" %>
       </div>

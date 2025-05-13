@@ -10,9 +10,8 @@ export default class extends Controller {
   static outlets = ["action-button"];
 
   static values = {
-    storageKey: {
-      type: String,
-    },
+    id: String,
+    storageKey: String,
     total: Number,
   };
 
@@ -60,8 +59,8 @@ export default class extends Controller {
     this.#addOrRemove(event.target.checked, event.target.value);
   }
 
-  removeFromStorage({ detail: { id } }) {
-    this.#addOrRemove(false, id, false);
+  removeFromStorage() {
+    this.#addOrRemove(false, this.idValue, false);
   }
 
   remove({ params: { id } }) {
