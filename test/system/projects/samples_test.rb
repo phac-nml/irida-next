@@ -175,15 +175,15 @@ module Projects
                                                                            locale: @user.locale))
     end
 
-    test 'User with role < Maintainer does not see import metadata button' do
-      login_as users(:ryan_doe)
-      visit namespace_project_samples_url(@namespace, @project)
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: @user.locale))
+    test 'User with role == Analyst sees sample actions dropdown but not import metadata button' do
+      login_as users(:michelle_doe)
+      project = projects(:project24)
+      visit namespace_project_samples_url(project.parent, project)
+
+      assert_text I18n.t('projects.samples.index.no_associated_samples')
 
       click_button I18n.t('shared.samples.actions_dropdown.label')
-      assert_no_selector 'button', text: I18n.t('shared.samples.actions_dropdown.transfer')
+      assert_no_selector 'button', text: I18n.t('shared.samples.actions_dropdown.import_metadata')
     end
 
     test 'User with role >= Maintainer sees new sample button' do
