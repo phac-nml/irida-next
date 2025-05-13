@@ -63,11 +63,10 @@
         ) %>
       <% end %>
       <% if @workflow_execution.deletable? %>
-        <%= link_to(
-          t("workflow_executions.show.remove_button"),
-          destroy_confirmation_workflow_execution_path(@workflow_execution),
-          class: "button button--state-default button--size-default mr-1",
-        ) %>
+        <%= button_to t("workflow_executions.show.remove_button"),
+        destroy_confirmation_workflow_execution_path(@workflow_execution),
+        method: "get",
+        class: "button button--state-default button--size-default mr-1" %>
       <% end %>
     </div>
   <% end %>

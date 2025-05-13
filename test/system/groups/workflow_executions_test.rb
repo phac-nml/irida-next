@@ -312,7 +312,7 @@ module Groups
       within('#workflow-executions-table table tbody') do
         assert_selector 'tr', count: 11
         assert_no_link 'Cancel'
-        assert_no_link 'Delete'
+        assert_no_button 'Delete'
       end
     end
 

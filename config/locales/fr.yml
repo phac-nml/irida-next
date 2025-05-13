@@ -1852,7 +1852,6 @@ fr:
         create_export_button: Créer une exportation
         edit_button: Modifier
         remove_button: Retirer
-        remove_button_confirmation: Êtes-vous sûr de vouloir supprimer cette exécution de flux de travail?
       summary:
         created_at: Créé
         name: Nom

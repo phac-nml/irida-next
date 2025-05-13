@@ -211,8 +211,8 @@ module Projects
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"workflow_executions.state.#{@workflow_execution1.state}")
-        assert_link 'Delete', count: 1
-        click_link 'Delete'
+        assert_button 'Delete', count: 1
+        click_button 'Delete'
       end
 
       assert_text I18n.t('shared.workflow_executions.destroy_confirmation_dialog.title')
@@ -249,8 +249,8 @@ module Projects
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-        assert_link 'Delete', count: 1
-        click_link 'Delete'
+        assert_button 'Delete', count: 1
+        click_button 'Delete'
       end
 
       assert_text I18n.t('shared.workflow_executions.destroy_confirmation_dialog.title')
@@ -272,7 +272,7 @@ module Projects
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-        assert_no_link 'Delete'
+        assert_no_button 'Delete'
       end
     end
 
@@ -289,8 +289,8 @@ module Projects
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-        assert_link 'Delete', count: 1
-        click_link 'Delete'
+        assert_button 'Delete', count: 1
+        click_button 'Delete'
       end
 
       assert_text I18n.t('shared.workflow_executions.destroy_confirmation_dialog.title')
@@ -364,10 +364,11 @@ module Projects
     test 'can remove workflow execution from workflow execution page' do
       visit namespace_project_workflow_execution_path(@namespace, @project, @workflow_execution1)
 
-      click_link I18n.t(:'projects.workflow_executions.show.remove_button')
+      click_button I18n.t(:'projects.workflow_executions.show.remove_button')
 
-      within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm')
+      within('dialog[open]') do
+        assert_text I18n.t('shared.workflow_executions.destroy_confirmation_dialog.title')
+        click_button I18n.t('shared.workflow_executions.destroy_confirmation_dialog.submit_button')
       end
 
       within %(#workflow-executions-table table tbody) do
@@ -477,7 +478,7 @@ module Projects
       assert_button I18n.t(:'workflow_executions.show.create_export_button')
       assert_no_link I18n.t(:'workflow_executions.show.cancel_button')
       assert_no_link I18n.t(:'workflow_executions.show.edit_button')
-      assert_no_link I18n.t(:'workflow_executions.show.remove_button')
+      assert_no_button I18n.t(:'workflow_executions.show.remove_button')
 
       within %(div[id="workflow-execution-tabs"]) do
         click_on I18n.t('workflow_executions.show.tabs.files')
