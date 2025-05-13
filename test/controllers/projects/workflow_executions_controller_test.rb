@@ -268,6 +268,14 @@ module Projects
       assert_response :unauthorized
     end
 
+    test 'should open destroy_confirmation' do
+      get destroy_confirmation_namespace_project_workflow_execution_path(
+        @namespace, @project, @workflow_execution, format: :turbo_stream
+      )
+
+      assert_response :success
+    end
+
     test 'should open destroy_multiple_confirmation' do
       get destroy_multiple_confirmation_namespace_project_workflow_executions_path(
         @namespace, @project, format: :turbo_stream

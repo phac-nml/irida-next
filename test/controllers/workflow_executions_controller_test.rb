@@ -252,6 +252,12 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
+  test 'should open destroy_confirmation' do
+    get destroy_confirmation_workflow_execution_path(@workflow_execution, format: :turbo_stream)
+
+    assert_response :success
+  end
+
   test 'should open destroy_multiple_confirmation' do
     get destroy_multiple_confirmation_workflow_executions_path(format: :turbo_stream)
 
