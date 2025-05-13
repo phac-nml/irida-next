@@ -4,8 +4,6 @@ rm -rf tmp/storage/*
 # grab any new gems
 bundle
 # delete, create and migrate databases
-# Install required icons
-bin/rails generate rails_icons:install --libraries=phosphor heroicons
 # includes primary: and jobs: databases
 bin/rails info db:drop db:create db:migrate
 # seed db, attachment max set to 50 for quick seed time
