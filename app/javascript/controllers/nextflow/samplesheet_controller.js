@@ -333,8 +333,7 @@ export default class extends Controller {
         const tableRow = this.#generateTableRow();
 
         this.#columnNames.forEach((columnName) => {
-          let container = this.#generateCellContainer(
-            tableRow,
+          const cell = this.#generateTableCell(
             columnName,
             sampleIndex,
             this.#columnNames.indexOf(columnName) == 0,
@@ -342,11 +341,11 @@ export default class extends Controller {
           switch (this.#samplesheetProperties[columnName]["cell_type"]) {
             case "sample_cell":
             case "sample_name_cell":
-              this.#generateSampleCell(container, columnName, sampleIndex);
+              this.#insertSampleContent(cell, columnName, sampleIndex);
               break;
             case "dropdown_cell":
-              this.#generateDropdownCell(
-                container,
+              this.#insertDropdownContent(
+                cell,
                 columnName,
                 sampleIndex,
                 this.#samplesheetProperties[columnName]["enum"],
@@ -354,18 +353,18 @@ export default class extends Controller {
               break;
             case "fastq_cell":
             case "file_cell":
-              this.#generateFileCell(container, columnName, sampleIndex);
+              this.#insertFileContent(cell, columnName, sampleIndex);
               break;
             case "metadata_cell":
-              this.#generateMetadataCell(container, columnName, sampleIndex);
+              this.#insertMetadataContent(cell, columnName, sampleIndex);
               break;
             case "input_cell":
-              this.#generateTextCell(container, columnName, sampleIndex);
+              this.#insertTextContent(cell, columnName, sampleIndex);
               break;
           }
-
-          this.tableBodyTarget.appendChild(tableRow);
+          tableRow.appendChild(cell);
         });
+        this.tableBodyTarget.appendChild(tableRow);
       }
     } else {
       this.emptyStateTarget.classList.remove("hidden");
@@ -375,38 +374,33 @@ export default class extends Controller {
   #generateTableRow() {
     const template = this.trTemplateTarget.content.cloneNode(true);
     const tableRow = template.firstElementChild;
-    console.log(template);
-    console.log(tableRow);
     return tableRow;
   }
 
-  // inserting the template html then requerying it out via lastElementChild turns the node from textNode into an
-  // HTML element we can manipulate via appendChild, insertHTML, etc.
-  #generateCellContainer(tableRow, columnName, index, headerCell) {
-    let newCellContainer = headerCell
-      ? this.thTemplateTarget.innerHTML
-      : this.tdTemplateTarget.innerHTML;
-    tableRow.insertAdjacentHTML("beforeend", newCellContainer);
-    let container = tableRow.lastElementChild;
-    container.id = `${index}_${columnName}`;
-    return tableRow.lastElementChild;
+  #generateTableCell(columnName, index, headerCell) {
+    const template = headerCell
+      ? this.thTemplateTarget.content.cloneNode(true)
+      : this.tdTemplateTarget.content.cloneNode(true);
+    const cell = template.firstElementChild;
+    cell.id = `${index}_${columnName}`;
+    return cell;
   }
 
-  #generateSampleCell(container, columnName, index) {
-    let childNode = this.sampleIdentifierTemplateTarget.innerHTML.replace(
+  #insertSampleContent(cell, columnName, index) {
+    const sampleContent = this.sampleIdentifierTemplateTarget.innerHTML.replace(
       /SAMPLE_IDENTIFIER/g,
       this.#retrieveFormData(index, columnName),
     );
-    container.insertAdjacentHTML("beforeend", childNode);
+    cell.insertAdjacentHTML("beforeend", sampleContent);
   }
 
-  #generateDropdownCell(container, columnName, index, options) {
-    let childNode = this.dropdownTemplateTarget.innerHTML
+  #insertDropdownContent(cell, columnName, index, options) {
+    const dropdown = this.dropdownTemplateTarget.innerHTML
       .replace(/INDEX_PLACEHOLDER/g, index)
       .replace(/COLUMN_NAME_PLACEHOLDER/g, columnName);
 
-    container.insertAdjacentHTML("beforeend", childNode);
-    let select = container.lastElementChild;
+    cell.insertAdjacentHTML("beforeend", dropdown);
+    let select = cell.lastElementChild;
     for (let j = 0; j < options.length; j++) {
       let option = document.createElement("option");
       option.value = options[j];
@@ -417,13 +411,14 @@ export default class extends Controller {
     select.value = this.#retrieveFormData(index, columnName);
   }
 
-  #generateFileCell(container, columnName, index) {
+  #insertFileContent(cell, columnName, index) {
     let pattern = this.#samplesheetProperties[columnName]["pattern"];
     if (pattern) {
       // Need to encode pattern so that + is not interpreted as a space, etc.
       pattern = encodeURIComponent(pattern);
     }
-    let childNode = this.fileTemplateTarget.innerHTML
+
+    const file = this.fileTemplateTarget.innerHTML
       .replace(/INDEX_PLACEHOLDER/g, index)
       .replace(/PROPERTY_PLACEHOLDER/g, columnName)
       .replace(
@@ -444,24 +439,24 @@ export default class extends Controller {
           "filename"
         ],
       );
-    container.insertAdjacentHTML("beforeend", childNode);
+    cell.insertAdjacentHTML("beforeend", file);
   }
 
-  #generateMetadataCell(container, columnName, index) {
-    let metadataValue = this.#retrieveFormData(index, columnName);
+  #insertMetadataContent(cell, columnName, index) {
+    const metadataValue = this.#retrieveFormData(index, columnName);
     if (metadataValue) {
-      let childNode = this.metadataTemplateTarget.innerHTML.replace(
+      const metadata = this.metadataTemplateTarget.innerHTML.replace(
         /METADATA_PLACEHOLDER/g,
         this.#retrieveFormData(index, columnName),
       );
-      container.insertAdjacentHTML("beforeend", childNode);
+      cell.insertAdjacentHTML("beforeend", metadata);
     } else {
-      this.#generateTextCell(container, columnName, index);
+      this.#insertTextContent(cell, columnName, index);
     }
   }
 
-  #generateTextCell(container, columnName, index) {
-    let childNode = this.textTemplateTarget.innerHTML
+  #insertTextContent(cell, columnName, index) {
+    const text = this.textTemplateTarget.innerHTML
       .replace(
         /NAME_PLACEHOLDER/g,
         `workflow_execution[samples_workflow_executions_attributes][${index}][samplesheet_params][${columnName}]`,
@@ -471,12 +466,12 @@ export default class extends Controller {
         `workflow_execution_samples_workflow_executions_attributes_${index}_samplesheet_params_${columnName}`,
       );
 
-    container.insertAdjacentHTML("beforeend", childNode);
+    cell.insertAdjacentHTML("beforeend", text);
     // requery to retrieve HTML node rather than textNode
-    let textCell = container.lastElementChild;
-    const form_value = this.#retrieveFormData(index, columnName);
-    if (form_value) {
-      textCell.value = form_value;
+    let textCell = cell.lastElementChild;
+    const formValue = this.#retrieveFormData(index, columnName);
+    if (formValue) {
+      textCell.value = formValue;
     }
   }
 
@@ -556,17 +551,17 @@ export default class extends Controller {
     }
   }
 
-  #updateCell(columnName, index, cell_type, focusCell) {
-    let container = document.getElementById(`${index}_${columnName}`);
-    if (container) {
-      container.innerHTML = "";
-      if (cell_type == "file_cell") {
-        this.#generateFileCell(container, columnName, index);
+  #updateCell(columnName, index, cellType, focusCell) {
+    const cell = document.getElementById(`${index}_${columnName}`);
+    if (cell) {
+      cell.innerHTML = "";
+      if (cellType == "file_cell") {
+        this.#insertFileContent(cell, columnName, index);
       } else {
-        this.#generateMetadataCell(container, columnName, index);
+        this.#insertMetadataContent(cell, columnName, index);
       }
       if (focusCell) {
-        container.firstElementChild.focus();
+        cell.firstElementChild.focus();
       }
     }
   }
