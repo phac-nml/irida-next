@@ -4,6 +4,8 @@ require 'application_system_test_case'
 
 module Projects
   class WorkflowExecutionsTest < ApplicationSystemTestCase
+    WORKFLOW_EXECUTION_COUNT = 12
+
     setup do
       @user = users(:john_doe)
       login_as @user
@@ -30,7 +32,7 @@ module Projects
       assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
       assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
 
-      assert_selector '#workflow-executions-table table tbody tr', count: 12
+      assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
     end
 
     test 'should sort a list of workflow executions' do
@@ -50,7 +52,7 @@ module Projects
                       text: I18n.t(:'workflow_executions.table_component.run_id').upcase
 
       within('#workflow-executions-table table tbody') do
-        assert_selector 'tr', count: 12
+        assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
         assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution4.run_id
         assert_selector "tr:nth-child(#{@run_id_col}) td:nth-child(#{@run_id_col})", text: workflow_execution1.run_id
         assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution_shared2.run_id
@@ -61,7 +63,7 @@ module Projects
                       text: I18n.t(:'workflow_executions.table_component.run_id').upcase
 
       within('#workflow-executions-table table tbody') do
-        assert_selector 'tr', count: 12
+        assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
         assert_selector "tr:first-child td:nth-child(#{@run_id_col})", text: workflow_execution_shared2.run_id
         assert_selector "tr:nth-child(2) td:nth-child(#{@run_id_col})", text: workflow_execution_shared1.run_id
         assert_selector "tr:last-child td:nth-child(#{@run_id_col})", text: workflow_execution4.run_id
@@ -72,7 +74,7 @@ module Projects
                       text: I18n.t(:'workflow_executions.table_component.workflow_name').upcase
 
       within('#workflow-executions-table table tbody') do
-        assert_selector 'tr', count: 12
+        assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
         assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
                         text: @workflow_execution2.metadata['workflow_name']
         assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
@@ -86,7 +88,7 @@ module Projects
                       text: I18n.t(:'workflow_executions.table_component.workflow_name').upcase
 
       within('#workflow-executions-table table tbody') do
-        assert_selector 'tr', count: 12
+        assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT
         assert_selector "tr:first-child td:nth-child(#{@workflow_name_col})",
                         text: workflow_execution_shared1.metadata['workflow_name']
         assert_selector "tr:nth-child(2) td:nth-child(#{@workflow_name_col})",
@@ -200,10 +202,10 @@ module Projects
       # Select all workflow executions within the table
       click_button I18n.t(:'projects.workflow_executions.index.select_all_button')
       within 'tbody' do
-        assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: 12
+        assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: WORKFLOW_EXECUTION_COUNT
       end
       within 'tfoot' do
-        assert_selector 'strong[data-selection-target="selected"]', text: '12'
+        assert_selector 'strong[data-selection-target="selected"]', text: WORKFLOW_EXECUTION_COUNT
       end
 
       tr = find('a', text: @workflow_execution1.id).ancestor('tr')
@@ -229,10 +231,10 @@ module Projects
 
       # Verify all workflow executions within the table are still selected and the footer is updated
       within 'tbody' do
-        assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: 11
+        assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: WORKFLOW_EXECUTION_COUNT - 1
       end
       within 'tfoot' do
-        assert_selector 'strong[data-selection-target="selected"]', text: '11'
+        assert_selector 'strong[data-selection-target="selected"]', text: WORKFLOW_EXECUTION_COUNT - 1
       end
     end
 
@@ -370,10 +372,10 @@ module Projects
       # Select all workflow executions within the table
       click_button I18n.t(:'projects.workflow_executions.index.select_all_button')
       within 'tbody' do
-        assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: 12
+        assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: WORKFLOW_EXECUTION_COUNT
       end
       within 'tfoot' do
-        assert_selector 'strong[data-selection-target="selected"]', text: '12'
+        assert_selector 'strong[data-selection-target="selected"]', text: WORKFLOW_EXECUTION_COUNT
       end
 
       visit namespace_project_workflow_execution_path(@namespace, @project, @workflow_execution1)
@@ -389,18 +391,18 @@ module Projects
 
       # Verify all workflow executions within the table are still selected and the footer is updated
       within 'tbody' do
-        assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: 11
+        assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: WORKFLOW_EXECUTION_COUNT - 1
       end
       within 'tfoot' do
-        assert_selector 'strong[data-selection-target="selected"]', text: '11'
+        assert_selector 'strong[data-selection-target="selected"]', text: WORKFLOW_EXECUTION_COUNT - 1
       end
     end
 
     test 'can filter by ID and name on projects workflow execution index page' do
       visit namespace_project_workflow_executions_path(@namespace, @project)
 
-      assert_text 'Displaying 12 items'
-      assert_selector 'table tbody tr', count: 12
+      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_selector 'table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
       within('table tbody') do
         assert_text @workflow_execution1.id
@@ -427,8 +429,8 @@ module Projects
               with: ''
       find('input.t-search-component').native.send_keys(:return)
 
-      assert_text 'Displaying 12 items'
-      assert_selector 'table tbody tr', count: 12
+      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_selector 'table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
       fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
               with: @workflow_execution2.name
@@ -516,8 +518,8 @@ module Projects
 
       assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-      assert_text 'Displaying 12 items'
-      assert_selector '#workflow-executions-table table tbody tr', count: 12
+      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
       within 'table' do
         find("input[type='checkbox'][value='#{@workflow_execution1.id}']").click
@@ -542,8 +544,8 @@ module Projects
 
       assert_no_selector '#dialog'
 
-      assert_text 'Displaying 10 items'
-      assert_selector '#workflow-executions-table table tbody tr', count: 10
+      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT - 2} items"
+      assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT - 2
       assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.success')
     end
 
@@ -554,8 +556,8 @@ module Projects
 
       assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-      assert_text 'Displaying 12 items'
-      assert_selector '#workflow-executions-table table tbody tr', count: 12
+      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
       within 'table' do
         find("input[type='checkbox'][value='#{new_workflow.id}']").click
@@ -582,8 +584,8 @@ module Projects
 
       assert_no_selector '#dialog'
 
-      assert_text 'Displaying 10 items'
-      assert_selector '#workflow-executions-table table tbody tr', count: 10
+      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT - 2} items"
+      assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT - 2
       assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_error', not_deleted: '1/3')
       assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_success', deleted: '2/3')
     end
@@ -594,8 +596,8 @@ module Projects
 
       assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-      assert_text 'Displaying 12 items'
-      assert_selector '#workflow-executions-table table tbody tr', count: 12
+      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
       within 'table' do
         find("input[type='checkbox'][value='#{new_workflow.id}']").click
@@ -617,8 +619,8 @@ module Projects
 
       assert_no_selector '#dialog'
 
-      assert_text 'Displaying 12 items'
-      assert_selector '#workflow-executions-table table tbody tr', count: 12
+      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
       assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.error')
     end
 
@@ -626,8 +628,8 @@ module Projects
       visit namespace_project_workflow_executions_path(@namespace, @project)
       assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-      assert_text 'Displaying 12 items'
-      assert_selector '#workflow-executions-table table tbody tr', count: 12
+      assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+      assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
       assert_selector 'button', text: I18n.t('workflow_executions.index.delete_workflows_button')
     end

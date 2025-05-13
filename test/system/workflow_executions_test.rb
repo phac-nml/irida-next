@@ -29,7 +29,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    assert_text 'Displaying 20 items'
+    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
     assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
   end
 
@@ -40,7 +40,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    assert_selector '#workflow-executions-table table tbody tr', count: 20
+    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
     assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
     assert_no_selector 'a',
@@ -52,7 +52,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_no_selector 'a',
                        exact_text: I18n.t(:'viral.pagy.pagination_component.next')
     click_on I18n.t(:'viral.pagy.pagination_component.previous')
-    assert_selector '#workflow-executions-table table tbody tr', count: 20
+    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
   end
 
   test 'should sort a list of workflow executions' do
@@ -438,7 +438,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   test 'can filter by ID and name on workflow execution index page' do
     visit workflow_executions_path
 
-    assert_text 'Displaying 20 items'
+    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
     assert_selector 'table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
     within('table tbody') do
@@ -466,7 +466,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
             with: ''
     find('input.t-search-component').native.send_keys(:return)
 
-    assert_text 'Displaying 20 items'
+    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
     assert_selector 'table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
     fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
@@ -556,7 +556,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    assert_text 'Displaying 20 items'
+    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
     assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
     within 'table' do
@@ -584,8 +584,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_no_selector '#dialog'
 
-    assert_text 'Displaying 17 items'
-    assert_selector '#workflow-executions-table table tbody tr', count: 17
+    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT - 3} items"
+    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT - 3
     assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.success')
   end
 
@@ -595,7 +595,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    assert_text 'Displaying 20 items'
+    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
     assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
     within 'table' do
@@ -623,8 +623,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_no_selector '#dialog'
 
-    assert_text 'Displaying 18 items'
-    assert_selector '#workflow-executions-table table tbody tr', count: 18
+    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT - 2} items"
+    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT - 2
     assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_error', not_deleted: '1/3')
     assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_success', deleted: '2/3')
   end
@@ -635,7 +635,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    assert_text 'Displaying 20 items'
+    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
     assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
     within 'table' do
@@ -658,8 +658,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_no_selector '#dialog'
 
-    assert_text 'Displaying 20 items'
-    assert_selector '#workflow-executions-table table tbody tr', count: 20
+    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
     assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.error')
   end
 end
