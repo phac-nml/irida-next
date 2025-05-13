@@ -40,7 +40,7 @@ gem install bundler
 Install dependencies:
 
 ```bash
-BUNDLE_BUILD__PG="--with-pg-config=$(asdf which pg_config)" bundle && pnpm install
+BUNDLE_BUILD__PG="--with-pg-config=$(asdf which pg_config)" bundle && pnpm install && bin/rails g rails_icons:install --libraries=phosphor heroicons
 ```
 
 Generate credentials:
