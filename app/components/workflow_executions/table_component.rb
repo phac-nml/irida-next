@@ -71,13 +71,13 @@ module WorkflowExecutions
     end
 
     def individual_path(workflow_execution)
-      if @namespace && @namespace.type == 'Project'
+      if @namespace&.project_namespace?
         namespace_project_workflow_execution_path(
           @namespace.parent,
           @namespace.project,
           workflow_execution
         )
-      elsif @namespace && @namespace.type == 'Group'
+      elsif @namespace&.group_namespace?
         group_workflow_execution_path(@namespace, workflow_execution)
       else
         workflow_execution_path(workflow_execution)
