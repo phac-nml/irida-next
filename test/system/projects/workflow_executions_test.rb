@@ -362,6 +362,20 @@ module Projects
     end
 
     test 'can remove workflow execution from workflow execution page' do
+      visit namespace_project_workflow_executions_path(@namespace, @project)
+
+      assert_selector 'h1', text: I18n.t(:'projects.workflow_executions.index.title')
+      assert_selector 'p', text: I18n.t(:'projects.workflow_executions.index.subtitle')
+
+      # Select all workflow executions within the table
+      click_button I18n.t(:'projects.workflow_executions.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: 12
+      end
+      within 'tfoot' do
+        assert_selector 'strong[data-selection-target="selected"]', text: '12'
+      end
+
       visit namespace_project_workflow_execution_path(@namespace, @project, @workflow_execution1)
 
       click_button I18n.t(:'projects.workflow_executions.show.remove_button')
@@ -371,9 +385,14 @@ module Projects
         click_button I18n.t('shared.workflow_executions.destroy_confirmation_dialog.submit_button')
       end
 
-      within %(#workflow-executions-table table tbody) do
-        assert_selector 'tr', count: 11
-        assert_no_text @workflow_execution1.id
+      assert_no_text @workflow_execution1.id
+
+      # Verify all workflow executions within the table are still selected and the footer is updated
+      within 'tbody' do
+        assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: 11
+      end
+      within 'tfoot' do
+        assert_selector 'strong[data-selection-target="selected"]', text: '11'
       end
     end
 

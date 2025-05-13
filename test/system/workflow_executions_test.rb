@@ -223,10 +223,10 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     # Select all workflow executions within the table
     click_button I18n.t(:'workflow_executions.index.select_all_button')
     within 'tbody' do
-      assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: 20
+      assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: WORKFLOW_EXECUTION_COUNT
     end
     within 'tfoot' do
-      assert_selector 'strong[data-selection-target="selected"]', text: '20'
+      assert_selector 'strong[data-selection-target="selected"]', text: WORKFLOW_EXECUTION_COUNT
     end
 
     tr = find('a', text: @workflow_execution1.id).ancestor('tr')
@@ -252,10 +252,10 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     # Verify all workflow executions within the table are still selected and the footer is updated
     within 'tbody' do
-      assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: 19
+      assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: WORKFLOW_EXECUTION_COUNT - 1
     end
     within 'tfoot' do
-      assert_selector 'strong[data-selection-target="selected"]', text: '19'
+      assert_selector 'strong[data-selection-target="selected"]', text: WORKFLOW_EXECUTION_COUNT - 1
     end
   end
 
@@ -402,6 +402,19 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'can remove workflow execution from workflow execution page' do
+    visit workflow_executions_path
+
+    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+
+    # Select all workflow executions within the table
+    click_button I18n.t(:'workflow_executions.index.select_all_button')
+    within 'tbody' do
+      assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: WORKFLOW_EXECUTION_COUNT
+    end
+    within 'tfoot' do
+      assert_selector 'strong[data-selection-target="selected"]', text: WORKFLOW_EXECUTION_COUNT
+    end
+
     visit workflow_execution_path(@workflow_execution1)
 
     click_button I18n.t(:'workflow_executions.show.remove_button')
@@ -411,9 +424,14 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       click_button I18n.t('shared.workflow_executions.destroy_confirmation_dialog.submit_button')
     end
 
-    within %(#workflow-executions-table table tbody) do
-      assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT - 1
-      assert_no_text @workflow_execution1.id
+    assert_no_text @workflow_execution1.id
+
+    # Verify all workflow executions within the table are still selected and the footer is updated
+    within 'tbody' do
+      assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: WORKFLOW_EXECUTION_COUNT - 1
+    end
+    within 'tfoot' do
+      assert_selector 'strong[data-selection-target="selected"]', text: WORKFLOW_EXECUTION_COUNT - 1
     end
   end
 
