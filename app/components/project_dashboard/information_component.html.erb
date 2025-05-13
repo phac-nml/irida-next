@@ -25,7 +25,7 @@
               dark:bg-blue-700
             "
           >
-            <%= viral_icon(name: :beaker, classes: "h-4 w-4 text-blue-700 dark:text-blue-200") %>
+            <%= helpers.render_icon(ICONS[:flask], class: "h-4 w-4 text-blue-700 dark:text-blue-200") %>
           </span>
         <% end %>
         <%# Count (large text next to icon). Associate with icon via aria-labelledby %>
@@ -50,7 +50,7 @@
             dark:bg-blue-700 mr-2
           "
         >
-          <%= viral_icon(name: :beaker, classes: "h-5 w-5 text-blue-700 dark:text-blue-200") %>
+          <%= helpers.render_icon(ICONS[:flask], class: "h-5 w-5 text-blue-700 dark:text-blue-200") %>
         </span>
         <%# Label (visible text next to icon) - Make semibold. Accessible dark text %>
         <span
@@ -87,10 +87,7 @@
               dark:bg-teal-700
             "
           >
-            <%= viral_icon(
-              name: :command_line,
-              classes: "h-4 w-4 text-teal-700 dark:text-teal-200",
-            ) %>
+            <%= helpers.render_icon(ICONS[:terminal_window], class: "h-4 w-4 text-teal-700 dark:text-teal-200") %>
           </span>
         <% end %>
         <div
@@ -112,10 +109,7 @@
             dark:bg-teal-700 mr-2
           "
         >
-          <%= viral_icon(
-            name: :command_line,
-            classes: "h-5 w-5 text-teal-700 dark:text-teal-200",
-          ) %>
+          <%= helpers.render_icon(ICONS[:terminal_window], class: "h-5 w-5 text-teal-700 dark:text-teal-200") %>
         </span>
         <span
           id="workflows-label-lg"
@@ -154,10 +148,7 @@
               dark:bg-indigo-700
             "
           >
-            <%= viral_icon(
-              name: :users,
-              classes: "h-4 w-4 text-indigo-700 dark:text-indigo-200",
-            ) %>
+            <%= helpers.render_icon(ICONS[:users], class: "h-4 w-4 text-indigo-700 dark:text-indigo-200") %>
           </span>
         <% end %>
         <div
@@ -180,10 +171,7 @@
             dark:bg-indigo-700 mr-2
           "
         >
-          <%= viral_icon(
-            name: :users,
-            classes: "h-5 w-5 text-indigo-700 dark:text-indigo-200",
-          ) %>
+          <%= helpers.render_icon(ICONS[:users], class: "h-5 w-5 text-indigo-700 dark:text-indigo-200") %>
         </span>
         <span
           id="members-label-lg"
