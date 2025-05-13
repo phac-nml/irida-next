@@ -6,7 +6,7 @@
       flex items-center w-full mt-1 py-1 pr-1 pl-2 transition-colors ease-in-out
       delay-75 rounded-lg group cursor-pointer min-h-[44px] relative overflow-hidden
       <%= class_names({
-        'bg-slate-200 text-white dark:bg-slate-200 dark:text-slate-50 border border-slate-200 dark:border-slate-200 font-bold': @selected,
+        'bg-slate-200 text-white dark:bg-slate-700 dark:text-slate-50 font-bold': @selected,
         'hover:bg-slate-50 dark:hover:bg-slate-500 text-slate-700 dark:text-slate-200': !@selected
       }) %>
     "
@@ -18,7 +18,7 @@
     <span
       class="
         w-8 h-8 flex items-center justify-center rounded-full mr-2
-        <%= @selected ? 'bg-primary-600 text-white dark:bg-slate-50' : 'bg-slate-100 dark:bg-slate-600 group-hover:bg-slate-100 dark:group-hover:bg-slate-500' %>
+        <%= @selected ? 'bg-primary-600 text-white' : 'bg-slate-100 dark:bg-slate-600 group-hover:bg-slate-100 dark:group-hover:bg-slate-500' %>
       "
     >
       <%= create_icon %>
@@ -60,7 +60,7 @@
           class="
             flex items-center py-1 pr-1 w-full transition-colors ease-in-out delay-75
             rounded-lg group min-h-[44px] pl-10 <%= class_names({
-              'bg-slate-200 text-white dark:bg-slate-200 dark:text-slate-50 border border-slate-200 dark:border-slate-200 font-bold': menu_item.selected,
+              'bg-slate-200 text-white dark:bg-slate-700 dark:text-slate-50 font-bold': menu_item.selected,
               'hover:bg-slate-50 dark:hover:bg-slate-500 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-slate-50': !menu_item.selected
             }) %>
           "

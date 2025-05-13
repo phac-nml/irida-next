@@ -5,7 +5,7 @@
       flex items-center mt-1 py-1 pr-1 pl-2 transition-colors ease-in-out delay-75
       rounded-lg group min-h-[44px] shadow-none relative overflow-hidden
       <%= class_names({
-        'bg-slate-200 text-white dark:bg-slate-200 dark:text-slate-50 border border-slate-200 dark:border-slate-200 font-bold': selected,
+        'bg-slate-200 text-white dark:bg-slate-700 dark:text-slate-50  font-bold': selected,
         'hover:bg-slate-50 dark:hover:bg-slate-500 text-slate-700 dark:text-slate-200': !selected
       }) %>
     "
@@ -13,7 +13,7 @@
     <span
       class="
         w-8 h-8 flex items-center justify-center rounded-full mr-2
-        <%= selected ? 'bg-primary-600 dark:bg-primary-300' : 'bg-slate-100/90 dark:bg-slate-600 group-hover:bg-slate-100 dark:group-hover:bg-slate-500' %>
+        <%= selected ? 'bg-primary-600' : 'bg-slate-100/90 dark:bg-slate-600 group-hover:bg-slate-100 dark:group-hover:bg-slate-500' %>
       "
     >
       <%= create_icon %>
