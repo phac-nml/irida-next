@@ -320,8 +320,8 @@ export default class extends Controller {
   #loadTableData() {
     if (this.#currentSampleIndexes.length > 0) {
       this.emptyStateTarget.classList.add("hidden");
-      let startingIndex = (this.#currentPage - 1) * 5;
-      let lastIndex = startingIndex + 5;
+      const startingIndex = (this.#currentPage - 1) * 5;
+      const lastIndex = startingIndex + 5;
       if (
         this.#currentPage == this.#lastPage &&
         this.#currentSampleIndexes.length % 5 != 0
@@ -329,8 +329,8 @@ export default class extends Controller {
         lastIndex = (this.#currentSampleIndexes.length % 5) + startingIndex;
       }
       for (let i = startingIndex; i < lastIndex; i++) {
-        let sampleIndex = this.#currentSampleIndexes[i];
-        let tableRow = this.#generateTableRow();
+        const sampleIndex = this.#currentSampleIndexes[i];
+        const tableRow = this.#generateTableRow();
 
         this.#columnNames.forEach((columnName) => {
           let container = this.#generateCellContainer(
@@ -363,6 +363,8 @@ export default class extends Controller {
               this.#generateTextCell(container, columnName, sampleIndex);
               break;
           }
+
+          this.tableBodyTarget.appendChild(tableRow);
         });
       }
     } else {
@@ -371,11 +373,11 @@ export default class extends Controller {
   }
 
   #generateTableRow() {
-    this.tableBodyTarget.insertAdjacentHTML(
-      "beforeend",
-      this.trTemplateTarget.innerHTML,
-    );
-    return this.tableBodyTarget.lastElementChild;
+    const template = this.trTemplateTarget.content.cloneNode(true);
+    const tableRow = template.firstElementChild;
+    console.log(template);
+    console.log(tableRow);
+    return tableRow;
   }
 
   // inserting the template html then requerying it out via lastElementChild turns the node from textNode into an
