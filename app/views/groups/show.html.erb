@@ -42,184 +42,29 @@
     <hr class="h-px my-4 border-0 bg-slate-200 dark:bg-slate-600"/>
 
     <div class="flex flex-row lg:flex-col gap-4">
-      <%# Samples Stat Box %>
-      <div
-        class="
-          flex-1 p-4 rounded-lg shadow-sm bg-blue-50 dark:bg-blue-900 dark:border
-          dark:border-blue-700
-        "
-      >
-        <div class="block md:hidden">
-          <div class="flex items-center justify-start gap-2">
-            <%= viral_tooltip(title: t(:"groups.show.information.number_of_samples")) do %>
-              <span
-                id="group-samples-icon-sm"
-                class="
-                  inline-flex items-center justify-center p-2 rounded-full bg-blue-100
-                  dark:bg-blue-700
-                "
-              >
-                <%= render_icon(ICONS[:samples], class: "h-4 w-4 text-blue-700 dark:text-blue-200") %>
-              </span>
-            <% end %>
-            <div
-              class="text-xl font-semibold text-slate-900 dark:text-slate-100"
-              aria-labelledby="group-samples-icon-sm"
-            >
-              <%# TODO: Ensure @group.samples_count is implemented or passed to the view %>
-              <%= @group.samples_count || 0 %>
-            </div>
-          </div>
-        </div>
-        <div class="hidden md:block">
-          <div class="flex items-center mb-1">
-            <span
-              id="group-samples-icon-lg"
-              class="
-                inline-flex items-center justify-center p-2 rounded-full bg-blue-100
-                dark:bg-blue-700 mr-2
-              "
-            >
-              <%= render_icon(ICONS[:samples], class: "h-5 w-5 text-blue-700 dark:text-blue-200") %>
-            </span>
-            <span
-              id="group-samples-label-lg"
-              class="text-sm font-semibold text-slate-600 dark:text-slate-300"
-            >
-              <%= t(:"groups.show.information.number_of_samples") %>
-            </span>
-          </div>
-          <div
-            class="
-              text-2xl font-semibold text-slate-900 dark:text-slate-100 pl-11
-            "
-            aria-labelledby="group-samples-icon-lg group-samples-label-lg"
-          >
-            <%# TODO: Ensure @group.samples_count is implemented or passed to the view %>
-            <%= @group.samples_count || 0 %>
-          </div>
-        </div>
-      </div>
+      <%= render NamespaceStatisticComponent.new(
+        id_prefix: "group-samples",
+        icon_name: :samples,
+        label_key: :"groups.show.information.number_of_samples",
+        count: @group.samples_count || 0,
+        color_scheme: :blue,
+      ) %>
 
-      <%# Projects Stat Box %>
-      <div
-        class="
-          flex-1 p-4 rounded-lg shadow-sm bg-fuchsia-50 dark:bg-fuchsia-900 dark:border
-          dark:border-fuchsia-700
-        "
-      >
-        <div class="block md:hidden">
-          <div class="flex items-center justify-start gap-2">
-            <%= viral_tooltip(title: t(:"groups.show.information.number_of_projects")) do %>
-              <span
-                id="group-projects-icon-sm"
-                class="
-                  inline-flex items-center justify-center p-2 rounded-full bg-fuchsia-100
-                  dark:bg-fuchsia-700
-                "
-              >
-                <%= render_icon(
-                  ICONS[:projects],
-                  class: "h-4 w-4 text-fuchsia-700 dark:text-fuchsia-200",
-                ) %>
-              </span>
-            <% end %>
-            <div
-              class="text-xl font-semibold text-slate-900 dark:text-slate-100"
-              aria-labelledby="group-projects-icon-sm"
-            >
-              <%= @group.project_namespaces.count %>
-            </div>
-          </div>
-        </div>
-        <div class="hidden md:block">
-          <div class="flex items-center mb-1">
-            <span
-              id="group-projects-icon-lg"
-              class="
-                inline-flex items-center justify-center p-2 rounded-full bg-fuchsia-100
-                dark:bg-fuchsia-700 mr-2
-              "
-            >
-              <%= render_icon(
-                ICONS[:projects],
-                class: "h-5 w-5 text-fuchsia-700 dark:text-fuchsia-200",
-              ) %>
-            </span>
-            <span
-              id="group-projects-label-lg"
-              class="text-sm font-semibold text-slate-600 dark:text-slate-300"
-            >
-              <%= t(:"groups.show.information.number_of_projects") %>
-            </span>
-          </div>
-          <div
-            class="
-              text-2xl font-semibold text-slate-900 dark:text-slate-100 pl-11
-            "
-            aria-labelledby="group-projects-icon-lg group-projects-label-lg"
-          >
-            <%= @group.project_namespaces.count %>
-          </div>
-        </div>
-      </div>
+      <%= render NamespaceStatisticComponent.new(
+        id_prefix: "group-projects",
+        icon_name: :projects,
+        label_key: :"groups.show.information.number_of_projects",
+        count: @group.project_namespaces.count,
+        color_scheme: :fuchsia, # Note: You may need to add :fuchsia to the component's color_scheme options
+      ) %>
 
-      <%# Subgroups Stat Box %>
-      <div
-        class="
-          flex-1 p-4 rounded-lg shadow-sm bg-amber-50 dark:bg-amber-900 dark:border
-          dark:border-amber-700
-        "
-      >
-        <div class="block md:hidden">
-          <div class="flex items-center justify-start gap-2">
-            <%= viral_tooltip(title: t(:"groups.show.information.number_of_subgroups")) do %>
-              <span
-                id="group-subgroups-icon-sm"
-                class="
-                  inline-flex items-center justify-center p-2 rounded-full bg-amber-100
-                  dark:bg-amber-700
-                "
-              >
-                <%= render_icon(ICONS[:groups], class: "h-4 w-4 text-amber-700 dark:text-amber-200") %>
-              </span>
-            <% end %>
-            <div
-              class="text-xl font-semibold text-slate-900 dark:text-slate-100"
-              aria-labelledby="group-subgroups-icon-sm"
-            >
-              <%= @group.children.count %>
-            </div>
-          </div>
-        </div>
-        <div class="hidden md:block">
-          <div class="flex items-center mb-1">
-            <span
-              id="group-subgroups-icon-lg"
-              class="
-                inline-flex items-center justify-center p-2 rounded-full bg-amber-100
-                dark:bg-amber-700 mr-2
-              "
-            >
-              <%= render_icon(ICONS[:groups], class: "h-5 w-5 text-amber-700 dark:text-amber-200") %>
-            </span>
-            <span
-              id="group-subgroups-label-lg"
-              class="text-sm font-semibold text-slate-600 dark:text-slate-300"
-            >
-              <%= t(:"groups.show.information.number_of_subgroups") %>
-            </span>
-          </div>
-          <div
-            class="
-              text-2xl font-semibold text-slate-900 dark:text-slate-100 pl-11
-            "
-            aria-labelledby="group-subgroups-icon-lg group-subgroups-label-lg"
-          >
-            <%= @group.children.count %>
-          </div>
-        </div>
-      </div>
+      <%= render NamespaceStatisticComponent.new(
+        id_prefix: "group-subgroups",
+        icon_name: :groups,
+        label_key: :"groups.show.information.number_of_subgroups",
+        count: @group.children.count,
+        color_scheme: :amber, # Note: You may need to add :amber to the component's color_scheme options
+      ) %>
     </div>
 
     <hr class="h-px my-4 border-0 bg-slate-200 dark:bg-slate-600"/>
