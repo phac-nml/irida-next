@@ -104,7 +104,7 @@ module Viral
     def build_classes(user_defined:, mapped_state:, full_width:)
       base_classes = [
         'inline-flex items-center justify-center border sm:w-auto',
-        'min-h-11 min-w-11 px-5 py-2.5 rounded-lg font-semibold cursor-pointer'
+        'min-h-11 min-w-11 px-5 py-2.5 rounded-lg font-semibold text-sm cursor-pointer'
       ]
       base_classes << user_defined if user_defined.present?
       base_classes << STATE_MAPPINGS[mapped_state]
