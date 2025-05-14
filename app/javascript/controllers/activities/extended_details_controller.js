@@ -67,8 +67,11 @@ export default class extends Controller {
       if (this.hasTbodyTarget) {
         if (this.activityTypeValue === "workflow_execution_destroy") {
           this.#generateWorkflowTableRows(indexRangeData);
-        } else if (this.activityTypeValue === "group_import_samples") {
-          this.#generateImportSampleTableRows(indexRangeData);
+        } else if (
+          this.activityTypeValue === "group_import_samples" ||
+          this.activityTypeValue === "group_samples_destroy"
+        ) {
+          this.#generateSingleSampleAndProjectTableRows(indexRangeData);
         } else if (this.activityTypeValue === "group_sample_transfer") {
           this.#generateGroupSampleTransferTableRows(indexRangeData);
         } else {
@@ -249,7 +252,7 @@ export default class extends Controller {
     }
   }
 
-  #generateImportSampleTableRows(table_data) {
+  #generateSingleSampleAndProjectTableRows(table_data) {
     if ("content" in document.createElement("template")) {
       const template = this.importSampleTableRowTarget;
       const fragment = document.createDocumentFragment();

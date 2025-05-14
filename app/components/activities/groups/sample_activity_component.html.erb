@@ -21,5 +21,27 @@
           "inline-flex items-center justify-center button button--state-default button--size-default dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600",
       ) %>
     </span>
+  <% elsif sample_destroy_action %>
+    <%= t(
+      "#{@activity[:key]}",
+      user: @activity[:user],
+      href:
+        content_tag(
+          :span,
+          @activity[:samples_deleted_count],
+          class: "text-slate-800 dark:text-slate-300 font-medium",
+        ),
+    ) %>
+    <span class="block">
+      <%= link_to(
+        t(:"components.activity.more_details"),
+        activity_path(@activity[:id], dialog_type: "group_samples_destroy"),
+        data: {
+          turbo_stream: true,
+        },
+        class:
+          "inline-flex items-center justify-center button button--state-default button--size-default dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600",
+      ) %>
+    </span>
   <% end %>
 </span>
