@@ -8,7 +8,7 @@
 # - Destructive: Red palette, accessible in light/dark.
 # - Disabled: Faded, cursor-not-allowed, aria-disabled.
 #
-# All states include explicit hover/focus/active styles.
+# All states include explicit hover/active styles. Default browser focus is used.
 module Viral
   # Renders a highly accessible, theme-aware button.
   #
@@ -27,7 +27,6 @@ module Viral
       default: [
         'border border-slate-300 bg-slate-50 text-slate-900',
         'hover:bg-slate-100 hover:text-slate-950',
-        'focus-visible:ring-2 focus-visible:ring-primary-600',
         'dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50',
         'dark:hover:bg-slate-800 dark:hover:text-white',
         # Disabled styles
@@ -39,7 +38,7 @@ module Viral
       # 💡 Primary, AAA contrast, light/dark. Disabled state handled by `disabled:`
       primary: [
         'border border-primary-800 bg-primary-800 text-white',
-        'hover:bg-primary-900 focus-visible:ring-2 focus-visible:ring-primary-400',
+        'hover:bg-primary-900',
         'dark:border-primary-700 dark:bg-primary-700 dark:text-white',
         'dark:hover:bg-primary-600',
         # Disabled styles
@@ -51,7 +50,7 @@ module Viral
       # 💡 Destructive, AAA contrast, light/dark. Disabled state handled by `disabled:`
       destructive: [
         'border border-red-800 bg-red-700 text-white',
-        'hover:bg-red-800 focus-visible:ring-2 focus-visible:ring-red-400',
+        'hover:bg-red-800',
         'dark:border-red-600 dark:bg-red-600 dark:text-white',
         'dark:hover:bg-red-700',
         # Disabled styles
@@ -64,7 +63,7 @@ module Viral
     # @!endgroup
 
     DISCLOSURE_DEFAULT = false
-    DISCLOSURE_OPTIONS = [true, false, :down, :up, :right, :select, :horizontal_dots].freeze
+    DISCLOSURE_OPTIONS = [true, false, :down, :up, :right].freeze
 
     # Initialize the button component.
     #
@@ -104,7 +103,7 @@ module Viral
 
     def build_classes(user_defined:, mapped_state:, full_width:)
       base_classes = [
-        'inline-flex items-center justify-center border focus:z-10 sm:w-auto',
+        'inline-flex items-center justify-center border sm:w-auto',
         'min-h-11 min-w-11 px-5 py-2.5 rounded-lg font-semibold cursor-pointer'
       ]
       base_classes << user_defined if user_defined.present?
