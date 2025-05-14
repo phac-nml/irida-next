@@ -317,7 +317,7 @@ module Projects
 
       ### ACTIONS START ##
       # remove sample
-      click_button I18n.t(:'projects.samples.show.remove_button')
+      click_link I18n.t(:'projects.samples.show.remove_button')
 
       within('dialog[open]') do
         click_button I18n.t(:'projects.samples.deletions.new_deletion_dialog.submit_button')
