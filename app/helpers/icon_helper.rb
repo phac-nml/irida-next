@@ -40,6 +40,7 @@ module ICONS
     file: { name: :file, options: {} },
     files: { name: :files, options: {} },
     squares_four: { name: 'squares-four', options: {} },
+    magnifying_glass: { name: 'magnifying-glass', options: {} },
     list_bullets: { name: 'list-bullets', options: {} },
     lock_key: { name: 'lock-key', options: {} },
     stack: { name: :stack, options: {} },
