@@ -9,15 +9,16 @@
           @pagy.prev,
           t(".previous"),
           classes:
-            "flex items-center justify-center text-slate-700 bg-white border border-slate-300 font-medium text-sm px-4 h-11 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-slate-100 border-e-0 rounded-s-lg",
+            "border-l border-slate-300 bg-slate-50 text-slate-900 hover:bg-slate-100 hover:text-slate-950 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:hover:bg-slate-800 dark:hover:text-white inline-flex items-center justify-center border sm:w-auto min-h-11 min-w-11 px-5 py-2.5 rounded-l-lg font-semibold cursor-pointer",
           aria_label: t(".previous_aria_label"),
         ) %>
       <% else %>
         <span
           class="
-            flex items-center justify-center px-4 h-11 ms-0 leading-tight border
-            border-slate-300 text-slate-600 bg-slate-100 dark:bg-slate-800
-            dark:text-slate-400 dark:border-slate-700 cursor-not-allowed rounded-s-lg
+            inline-flex items-center justify-center border sm:w-auto min-h-11 min-w-11 px-5
+            py-2.5 rounded-l-lg font-semibold bg-slate-100 text-slate-500 border-slate-200
+            dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700 cursor-not-allowed
+            opacity-80
           "
         ><%= t(".previous") %></span>
       <% end %>
@@ -29,7 +30,7 @@
           <%== a.(
             item,
             classes:
-              "flex items-center justify-center text-slate-700 bg-white border border-slate-300 font-medium text-sm px-4 h-11 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-slate-100",
+              "inline-flex items-center justify-center border sm:w-auto min-h-11 min-w-11 px-5 py-2.5 font-semibold cursor-pointer border border-slate-300 bg-slate-50 text-slate-900 hover:bg-slate-100 hover:text-slate-950 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:hover:bg-slate-800 dark:hover:text-white",
             aria_label: t(".item_aria_label", number: item),
           ) %>
         <% elsif item.is_a?(String) %>
@@ -37,17 +38,19 @@
             href="javascript:void(0);"
             aria-current="page"
             class="
-              flex items-center justify-center px-4 h-11 ms-0 leading-tight border
-              border-primary-600 bg-primary-600 text-white dark:border-primary-600 dark:text-white
-              font-medium text-sm cursor-default
+              inline-flex items-center justify-center border sm:w-auto min-h-11 min-w-11 px-5
+              py-2.5 font-semibold cursor-pointer border border-primary-800 bg-primary-800
+              text-white hover:bg-primary-900 dark:border-primary-700 dark:bg-primary-700
+              dark:text-white dark:hover:bg-primary-600
             "
           ><%= item %></a>
         <% elsif item == :gap %>
           <span
             class="
-              flex items-center justify-center px-4 h-11 ms-0 leading-tight border
-              border-slate-300 text-slate-600 bg-slate-100 dark:bg-slate-800
-              dark:text-slate-400 dark:border-slate-700 cursor-default
+              inline-flex items-center justify-center border sm:w-auto min-h-11 min-w-11 px-5
+              py-2.5 font-semibold bg-slate-100 text-slate-500 border-slate-200
+              dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700 cursor-not-allowed
+              opacity-80
             "
           >...</span>
         <% end %>
@@ -60,15 +63,16 @@
           @pagy.next,
           t(".next"),
           classes:
-            "flex items-center justify-center text-slate-700 bg-white border border-slate-300 font-medium text-sm px-4 h-11 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-slate-100 rounded-e-lg",
+            "border-l border-slate-300 bg-slate-50 text-slate-900 hover:bg-slate-100 hover:text-slate-950 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:hover:bg-slate-800 dark:hover:text-white inline-flex items-center justify-center border sm:w-auto min-h-11 min-w-11 px-5 py-2.5 rounded-e-lg font-semibold cursor-pointer",
           aria_label: t(".next_aria_label"),
         ) %>
       <% else %>
         <span
           class="
-            flex items-center justify-center px-4 h-11 ms-0 leading-tight border
-            border-slate-300 text-slate-600 bg-slate-100 dark:bg-slate-800
-            dark:text-slate-400 dark:border-slate-700 cursor-not-allowed rounded-e-lg
+            inline-flex items-center justify-center border sm:w-auto min-h-11 min-w-11 px-5
+            py-2.5 font-semibold bg-slate-100 text-slate-500 border-slate-200
+            dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700 cursor-not-allowed
+            opacity-80 rounded-e-lg
           "
         ><%= t(".next") %></span>
       <% end %>
