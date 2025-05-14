@@ -26,6 +26,11 @@ class WorkflowExecutionTest < ActiveSupport::TestCase
     assert @workflow_execution_valid.valid?
   end
 
+  test 'invalid workflow execution' do
+    @workflow_execution_valid.name = ''
+    assert_not @workflow_execution_valid.valid?
+  end
+
   test 'invalid metadata' do
     assert_not @workflow_execution_invalid_metadata.valid?
     assert_not_nil @workflow_execution_invalid_metadata.errors[:metadata]

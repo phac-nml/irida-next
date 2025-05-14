@@ -249,6 +249,9 @@ fr:
             password_confirmation:
               confirmation: ne correspond pas au mot de passe
         workflow_execution:
+          attributes:
+            name:
+              blank: Ne peut pas être vide
           invalid_namespace: Ne peut être qu’un groupe ou un projet
           invalid_workflow: Impossible de trouver le flux de travail avec le nom '%{workflow_name}' et la version '%{workflow_version}'
           name_not_unique_for_submitter: A unique workflow execution name must be provided. Workflow execution with name '%{name}' already exists for this user

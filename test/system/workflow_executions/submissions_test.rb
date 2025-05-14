@@ -183,6 +183,127 @@ module WorkflowExecutions
       end
     end
 
+    test 'cannot launch workflow execution (user launched) without a name' do
+      user = users(:john_doe)
+      login_as user
+
+      project = projects(:project1)
+      sample = samples(:sample1)
+      Project.reset_counters(project.id, :samples_count)
+
+      visit namespace_project_samples_url(project.namespace.parent, project)
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: user.locale))
+
+      within 'table' do
+        find("input[type='checkbox'][value='#{sample.id}']").click
+      end
+
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_button text: 'phac-nml/iridanextexample', count: 3
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+
+      within 'dialog[open].dialog--size-xl' do
+        assert_selector 'div.samplesheet-table' do |table|
+          table.assert_selector '.table-column:first-child .table-td', count: 1
+          table.assert_selector '.table-column:first-child .table-td:first-child', text: sample.puid, count: 1
+        end
+
+        assert_text I18n.t(:'components.nextflow.update_samples')
+        assert_text I18n.t(:'components.nextflow.email_notification')
+        assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}")
+
+        click_button I18n.t('workflow_executions.submissions.create.submit')
+
+        assert_text I18n.t('workflow_executions.create.error_message')
+        assert_text I18n.t('activerecord.errors.models.workflow_execution.attributes.name.blank')
+      end
+    end
+
+    test 'cannot launch workflow execution with an existing name in the context of the user' do
+      user = users(:john_doe)
+      login_as user
+
+      project = projects(:project1)
+      sample = samples(:sample1)
+      Project.reset_counters(project.id, :samples_count)
+
+      visit namespace_project_samples_url(project.namespace.parent, project)
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: user.locale))
+
+      within 'table' do
+        find("input[type='checkbox'][value='#{sample.id}']").click
+      end
+
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_button text: 'phac-nml/iridanextexample', count: 3
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+
+      within 'dialog[open].dialog--size-xl' do
+        find('input#workflow_execution_name').fill_in with: "#{sample.name} (#{sample.puid})"
+
+        assert_selector 'div.samplesheet-table' do |table|
+          table.assert_selector '.table-column:first-child .table-td', count: 1
+          table.assert_selector '.table-column:first-child .table-td:first-child', text: sample.puid, count: 1
+        end
+
+        assert_text I18n.t(:'components.nextflow.update_samples')
+        assert_text I18n.t(:'components.nextflow.email_notification')
+        assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}")
+
+        click_button I18n.t('workflow_executions.submissions.create.submit')
+      end
+
+      assert_selector 'h1', text: I18n.t('workflow_executions.index.title')
+
+      within('#workflow-executions-table table tbody') do
+        assert_selector 'tr:first-child td:nth-child(2)', text: "#{sample.name} (#{sample.puid})"
+      end
+
+      visit namespace_project_samples_url(project.namespace.parent, project)
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: user.locale))
+
+      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+
+      within %(turbo-frame[id="samples_dialog"]) do
+        assert_selector '.dialog--header', text: I18n.t(:'workflow_executions.submissions.pipeline_selection.title')
+        assert_button text: 'phac-nml/iridanextexample', count: 3
+        first('button', text: 'phac-nml/iridanextexample').click
+      end
+
+      within 'dialog[open].dialog--size-xl' do
+        find('input#workflow_execution_name').fill_in with: "#{sample.name} (#{sample.puid})"
+
+        assert_selector 'div.samplesheet-table' do |table|
+          table.assert_selector '.table-column:first-child .table-td', count: 1
+          table.assert_selector '.table-column:first-child .table-td:first-child', text: sample.puid, count: 1
+        end
+
+        assert_text I18n.t(:'components.nextflow.update_samples')
+        assert_text I18n.t(:'components.nextflow.email_notification')
+        assert_text I18n.t(:"components.nextflow.shared_with.#{@project.namespace.type.downcase}")
+
+        click_button I18n.t('workflow_executions.submissions.create.submit')
+
+        assert_text I18n.t('workflow_executions.create.error_message')
+        assert_text I18n.t('activerecord.errors.models.workflow_execution.name_not_unique_for_submitter',
+                           name: "#{sample.name} (#{sample.puid})")
+      end
+    end
+
     test 'should not display a launch pipeline button for project samples as guest' do
       login_as users(:ryan_doe)
 
