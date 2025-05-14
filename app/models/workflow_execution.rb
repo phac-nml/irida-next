@@ -99,8 +99,8 @@ class WorkflowExecution < ApplicationRecord # rubocop:disable Metrics/ClassLengt
 
   # This validation ensures that the submitter (non automation bot)
   # has unique workflow execution names
-  def unique_submitter_namespace
-    return true if submitter.automation_bot? || !name_changed?
+  def unique_submitter_namespace # rubocop:disable Metrics/AbcSize
+    return true if submitter.automation_bot? || name.blank? || !name_changed?
 
     workflow_execution_arel_table = WorkflowExecution.arel_table
 
