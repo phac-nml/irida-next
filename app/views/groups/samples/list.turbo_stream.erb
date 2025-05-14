@@ -6,6 +6,6 @@
 
 <%= turbo_stream.append("list_selections") do %>
   <% @samples.each do |sample| %>
-    <%= render "list_sample", sample: sample %>
+    <%= render "shared/samples/list_sample", sample: sample %>
   <% end %>
 <% end %>
