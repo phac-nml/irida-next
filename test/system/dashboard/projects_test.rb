@@ -255,10 +255,10 @@ module Dashboard
       end
 
       visit namespace_project_sample_url(@group1, @project, @sample1)
-      click_link I18n.t('projects.samples.show.remove_button')
+      click_button I18n.t('projects.samples.show.remove_button')
 
-      within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm')
+      within('dialog[open]') do
+        click_button I18n.t(:'projects.samples.deletions.new_deletion_dialog.submit_button')
       end
 
       visit dashboard_projects_url

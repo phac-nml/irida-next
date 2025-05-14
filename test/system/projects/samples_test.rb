@@ -297,9 +297,16 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
 
-      within('#samples-table table tbody') do
+      # select all samples
+      click_button I18n.t(:'projects.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
         assert_selector "tr[id='#{dom_id(@sample1)}']"
         assert_selector 'tr', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
       end
 
       # nav to sample show
@@ -310,10 +317,10 @@ module Projects
 
       ### ACTIONS START ##
       # remove sample
-      click_link I18n.t(:'projects.samples.show.remove_button')
+      click_button I18n.t(:'projects.samples.show.remove_button')
 
-      within('#turbo-confirm[open]') do
-        click_button I18n.t(:'components.confirmation.confirm')
+      within('dialog[open]') do
+        click_button I18n.t(:'projects.samples.deletions.new_deletion_dialog.submit_button')
       end
       ### ACTIONS END ###
 
@@ -326,11 +333,18 @@ module Projects
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
                                                                            locale: @user.locale))
-      within('#samples-table table tbody') do
+      within 'tbody' do
+        # remaining samples still appear selected
+        assert_selector 'input[name="sample_ids[]"]:checked',
+                        count: 2
         # remaining samples still appear on table
         assert_selector 'tr', count: 2
         # deleted sample row no longer exists
         assert_no_selector "tr[id='#{dom_id(@sample1)}']"
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 2'
+        assert_selector 'strong[data-selection-target="selected"]', text: '2'
       end
       ### VERIFY END ###
     end
