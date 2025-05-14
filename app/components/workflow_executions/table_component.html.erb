@@ -158,11 +158,15 @@
                       ) %>
                     <% end %>
                     <% if workflow_execution.deletable? && @row_actions.key?(:destroy) %>
-                      <%= button_to t(:"workflow_executions.index.actions.delete_button"),
-                      destroy_confirmation_path(workflow_execution),
-                      method: "get",
-                      class:
-                        "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer" %>
+                      <%= link_to(
+                        t(:"workflow_executions.index.actions.delete_button"),
+                        destroy_confirmation_path(workflow_execution),
+                        data: {
+                          turbo_stream: true,
+                        },
+                        class:
+                          "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer",
+                      ) %>
                     <% end %>
                   <% end %>
                 </div>
