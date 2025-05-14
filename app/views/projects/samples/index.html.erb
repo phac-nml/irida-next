@@ -14,7 +14,7 @@
         <% if @allowed_to[:submit_workflow] && @pipelines_enabled %>
           <%= button_to pipeline_selection_workflow_executions_submissions_path, params: { namespace_id: @project.namespace.id }, method: :get,
         data: { action: "turbo:morph-element->action-button#idempotentConnect ", turbo_stream: true, controller: "action-button", action_button_required_value: 1 },
-                  class: "button button--size-default button--state-default action-button" do %>
+                  class: "button button--size-default button--state-default action-button cursor-pointer" do %>
             <%= viral_icon(name: :rocket_launch, classes: "w-5 h-5 inline-block") %>
             <span class="ml-2"><%= t(:".workflows.button_sr") %></span>
           <% end %>
@@ -29,6 +29,8 @@
                 data: {
                   turbo_stream: true,
                 },
+                class:
+                  "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white cursor-pointer",
               ) %>
             <% end %>
 
@@ -44,7 +46,7 @@
                   action_button_required_value: 1,
                 },
                 class:
-                  "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button",
+                  "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button cursor-pointer",
               ) %>
             <% end %>
             <% if @allowed_to[:transfer_sample] %>
@@ -59,7 +61,7 @@
                   action_button_required_value: 1,
                 },
                 class:
-                  "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button",
+                  "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button cursor-pointer",
               ) %>
             <% end %>
 
@@ -78,7 +80,7 @@
                   action_button_required_value: 1,
                 },
                 class:
-                  "flex w-full items-center text-red-600 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white dark:text-red-300 action-button",
+                  "flex w-full items-center text-red-600 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white dark:text-red-300 action-button cursor-pointer",
               ) %>
             <% end %>
 
@@ -95,6 +97,8 @@
                   data: {
                     turbo_stream: true,
                   },
+                  class:
+                    "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white cursor-pointer",
                 ) %>
               <% end %>
 
@@ -106,6 +110,8 @@
                   data: {
                     turbo_stream: true,
                   },
+                  class:
+                    "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white cursor-pointer",
                 ) %>
               <% end %>
             <% end %>
@@ -150,7 +156,7 @@
                     action_button_required_value: 1,
                   },
                   class:
-                    "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button",
+                    "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button cursor-pointer",
                 ) %>
               <% end %>
 
@@ -169,7 +175,7 @@
                   action_button_required_value: 1,
                 },
                 class:
-                  "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button",
+                  "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button cursor-pointer",
               ) %>
             <% end %>
           <% end %>

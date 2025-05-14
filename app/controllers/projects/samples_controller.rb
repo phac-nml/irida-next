@@ -107,8 +107,8 @@ module Projects
     private
 
     def index_view_authorizations
-      # add all sample actions related authorizations
       @allowed_to = {
+        submit_workflow: allowed_to?(:submit_workflow?, @project),
         clone_sample: allowed_to?(:clone_sample?, @project),
         transfer_sample: allowed_to?(:transfer_sample?, @project),
         export_data: allowed_to?(:export_data?, @project),
@@ -118,11 +118,11 @@ module Projects
         update_sample: allowed_to?(:update_sample?, @project),
         import_samples_and_metadata: allowed_to?(:import_samples_and_metadata?, @project.namespace)
       }
-      # verify if sample actions dropdown should be rendered
-      @render_sample_actions = @allowed_to.value?(true)
 
-      # add non-sample actions related authorizations
-      @allowed_to[:submit_workflow] = allowed_to?(:submit_workflow?, @project)
+      @render_sample_actions = @allowed_to.slice(
+        :clone_sample, :transfer_sample, :export_data, :update_sample_metadata,
+        :create_sample, :import_samples_and_metadata
+      ).value?(true)
     end
 
     def show_view_authorizations
