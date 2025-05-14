@@ -153,6 +153,28 @@ module Groups
       assert_text I18n.t(:'action_policy.policy.group.sample_listing?', name: @group.name)
     end
 
+    test 'User with role == Owner sees delete samples button' do
+      visit group_samples_url(@group)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      assert_selector 'button', text: I18n.t('shared.samples.actions_dropdown.delete_samples')
+    end
+
+    test 'User with role < Owner does not see delete samples button' do
+      user = users(:joan_doe)
+      login_as user
+      visit group_samples_url(@group)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: user.locale))
+
+      click_button I18n.t('shared.samples.actions_dropdown.label', locale: user.locale)
+      assert_no_selector 'button', text: I18n.t('shared.samples.actions_dropdown.delete_samples', locale: user.locale)
+    end
+
     test 'can search the list of samples by name' do
       visit group_samples_url(@group)
 
@@ -2163,6 +2185,146 @@ module Groups
         assert_text I18n.t('samples.transfers.dialog.empty_state')
         ### VERIFY END ###
       end
+    end
+
+    test 'delete samples belonging to group' do
+      ### SETUP START ###
+      visit group_samples_url(@group)
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      assert_selector 'button[disabled]', text: I18n.t('shared.samples.actions_dropdown.delete_samples')
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # select samples for deletion
+      within '#samples-table table tbody' do
+        find("input##{dom_id(@sample1,
+                             :checkbox)}").click
+        find("input##{dom_id(@sample2,
+                             :checkbox)}").click
+      end
+      # click delete samples button
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
+
+      # verify dialog contents
+      within '#multiple-deletions-dialog' do
+        assert_selector 'h1', text: I18n.t('shared.samples.destroy_multiple_confirmation_dialog.title')
+        within '#list_selections' do
+          assert_text @sample1.name
+          assert_text @sample1.puid
+          assert_text @sample2.name
+          assert_text @sample2.name
+        end
+        # submit
+        click_button I18n.t('shared.samples.destroy_multiple_confirmation_dialog.submit_button')
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_text I18n.t('groups.samples.deletions.destroy.success')
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 24,
+                                                                           locale: @user.locale))
+      ### VERIFY END ###
+    end
+
+    test 'delete group samples with partial success' do
+      sample25 = samples(:sample25)
+      sample28 = samples(:sample28)
+      ### SETUP START ###
+      visit group_samples_url(@group)
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      assert_selector 'button[disabled]', text: I18n.t('shared.samples.actions_dropdown.delete_samples')
+
+      click_on I18n.t(:'viral.pagy.pagination_component.next')
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 21, to: 26, count: 26,
+                                                                           locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # select samples for deletion
+      within '#samples-table table tbody' do
+        find("input##{dom_id(sample25,
+                             :checkbox)}").click
+        find("input##{dom_id(sample28,
+                             :checkbox)}").click
+      end
+      # click delete samples button
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
+
+      # verify dialog contents
+      within '#multiple-deletions-dialog' do
+        assert_selector 'h1', text: I18n.t('shared.samples.destroy_multiple_confirmation_dialog.title')
+        within '#list_selections' do
+          assert_text sample25.name
+          assert_text sample25.puid
+          assert_text sample28.name
+          assert_text sample28.puid
+        end
+        # submit
+        click_button I18n.t('shared.samples.destroy_multiple_confirmation_dialog.submit_button')
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_text I18n.t('groups.samples.deletions.destroy.partial_success', deleted: '1/2')
+      assert_text I18n.t('groups.samples.deletions.destroy.partial_error', not_deleted: '1/2')
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 25,
+                                                                           locale: @user.locale))
+      ### VERIFY END ###
+    end
+
+    test 'delete group samples unsuccessfully' do
+      sample28 = samples(:sample28)
+      ### SETUP START ###
+      visit group_samples_url(@group)
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      assert_selector 'button[disabled]', text: I18n.t('shared.samples.actions_dropdown.delete_samples')
+
+      click_on I18n.t(:'viral.pagy.pagination_component.next')
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 21, to: 26, count: 26,
+                                                                           locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # select samples for deletion
+      within '#samples-table table tbody' do
+        find("input##{dom_id(sample28,
+                             :checkbox)}").click
+      end
+      # click delete samples button
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.delete_samples')
+
+      # verify dialog contents
+      within '#multiple-deletions-dialog' do
+        assert_selector 'h1', text: I18n.t('shared.samples.destroy_multiple_confirmation_dialog.title')
+        within '#list_selections' do
+          assert_text sample28.name
+          assert_text sample28.puid
+        end
+        # submit
+        click_button I18n.t('shared.samples.destroy_multiple_confirmation_dialog.submit_button')
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      assert_text I18n.t('groups.samples.deletions.destroy.no_deleted_samples', deleted: '1/2')
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      ### VERIFY END ###
     end
   end
 end

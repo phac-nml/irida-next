@@ -207,7 +207,7 @@ module Projects
       assert_no_selector 'button', text: I18n.t('shared.samples.actions_dropdown.new_sample')
     end
 
-    test 'User with role >= Maintainer sees delete samples button' do
+    test 'User with role == Owner sees delete samples button' do
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
@@ -217,7 +217,7 @@ module Projects
       assert_selector 'button', text: I18n.t('shared.samples.actions_dropdown.delete_samples')
     end
 
-    test 'User with role < Maintainer does not see delete samples button' do
+    test 'User with role < Owner does not see delete samples button' do
       user = users(:ryan_doe)
       login_as user
       visit namespace_project_samples_url(@namespace, @project)
@@ -225,7 +225,8 @@ module Projects
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: user.locale))
 
-      assert_no_selector 'a', text: I18n.t('shared.samples.actions_dropdown.delete_samples')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      assert_no_selector 'button', text: I18n.t('shared.samples.actions_dropdown.delete_samples')
     end
 
     test 'cannot access project samples' do
