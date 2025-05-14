@@ -1,17 +1,11 @@
 # frozen_string_literal: true
 
 class ViralButtonComponentPreview < ViewComponent::Preview
-  def basic; end
+  # Comprehensive preview showing all button states and common variants.
+  # Corresponds to all_states_and_variants.html.erb
+  def all_states_and_variants; end
 
-  def destructive; end
-
-  def disclosure; end
-
-  def full_width; end
-
-  def large; end
-
-  def primary; end
-
-  def small; end
+  # Comprehensive preview showing all disclosure icon types.
+  # Corresponds to all_disclosure_types.html.erb
+  def all_disclosure_types; end
 end
