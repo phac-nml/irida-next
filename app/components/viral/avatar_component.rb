@@ -7,7 +7,7 @@ module Viral
 
     SIZE_DEFAULT = :medium
     SIZE_MAPPINGS = {
-      xs: 'w-6 h-6',
+      xs: 'w-6 h-6 rounded-sm',
       small: 'w-8 h-8',
       medium: 'w-12 h-12',
       large: 'w-16 h-16'
