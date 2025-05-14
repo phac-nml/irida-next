@@ -19,7 +19,7 @@ module Viral
       render_inline(Viral::ButtonComponent.new) { 'Click Me!' }
       assert_selector 'button', text: 'Click Me!' do |button_element|
         base_style_classes = %w[
-          inline-flex items-center justify-center border focus:z-10
+          inline-flex items-center justify-center border
           sm:w-auto min-h-11 min-w-11 px-5 py-2.5 rounded-lg
           font-semibold cursor-pointer
         ]
