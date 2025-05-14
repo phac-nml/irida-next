@@ -33,7 +33,7 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    Samples::DestroyService.new(@namespace.project, users(:james_doe), { sample_ids: [@sample.id] }).execute
+    Samples::DestroyService.new(@namespace, users(:james_doe), { sample_ids: [@sample.id] }).execute
 
     activities = @namespace.human_readable_activity(@namespace.retrieve_project_activity).reverse
 
@@ -47,7 +47,7 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    Samples::DestroyService.new(@namespace.project, @user, { sample_ids: [@sample2.id] }).execute
+    Samples::DestroyService.new(@namespace, @user, { sample_ids: [@sample2.id] }).execute
 
     activities = @namespace.human_readable_activity(@namespace.retrieve_project_activity).reverse
 

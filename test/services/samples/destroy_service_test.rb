@@ -21,7 +21,7 @@ module Samples
 
     test 'destroy sample with correct permissions' do
       assert_difference -> { Sample.count } => -1 do
-        Samples::DestroyService.new(@project, @user, { sample: @sample1 }).execute
+        Samples::DestroyService.new(@project.namespace, @user, { sample: @sample1 }).execute
       end
     end
 
@@ -29,7 +29,7 @@ module Samples
       @user = users(:joan_doe)
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
-        Samples::DestroyService.new(@project, @user, { sample: @sample1 }).execute
+        Samples::DestroyService.new(@project.namespace, @user, { sample: @sample1 }).execute
       end
 
       assert_equal ProjectPolicy, exception.policy
@@ -42,7 +42,7 @@ module Samples
     test 'valid authorization to destroy sample' do
       assert_authorized_to(:destroy_sample?, @sample1.project, with: ProjectPolicy,
                                                                context: { user: @user }) do
-        Samples::DestroyService.new(@project, @user, { sample: @sample1 }).execute
+        Samples::DestroyService.new(@project.namespace, @user, { sample: @sample1 }).execute
       end
     end
 
@@ -58,7 +58,7 @@ module Samples
       assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
 
       assert_no_changes -> { @subgroup12b.reload.metadata_summary } do
-        Samples::DestroyService.new(@project31, @user, { sample: @sample34 }).execute
+        Samples::DestroyService.new(@project31.namespace, @user, { sample: @sample34 }).execute
       end
 
       assert_equal({}, @project31.namespace.reload.metadata_summary)
@@ -70,7 +70,8 @@ module Samples
 
     test 'multiple destroy with multiple samples and correct permissions' do
       assert_difference -> { Sample.count } => -3 do
-        Samples::DestroyService.new(@project, @user, { sample_ids: [@sample1.id, @sample2.id, @sample30.id] }).execute
+        Samples::DestroyService.new(@project.namespace, @user,
+                                    { sample_ids: [@sample1.id, @sample2.id, @sample30.id] }).execute
       end
     end
 
@@ -78,7 +79,8 @@ module Samples
       user = users(:joan_doe)
 
       exception = assert_raises(ActionPolicy::Unauthorized) do
-        Samples::DestroyService.new(@project, user, { sample_ids: [@sample1.id, @sample2.id, @sample30.id] }).execute
+        Samples::DestroyService.new(@project.namespace, user,
+                                    { sample_ids: [@sample1.id, @sample2.id, @sample30.id] }).execute
       end
 
       assert_equal ProjectPolicy, exception.policy
@@ -111,7 +113,7 @@ module Samples
       assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12aa.reload.metadata_summary)
 
       assert_no_changes -> { @subgroup12b.reload.metadata_summary } do
-        Samples::DestroyService.new(@project31, @user, { sample_ids: [sample33.id, @sample34.id] }).execute
+        Samples::DestroyService.new(@project31.namespace, @user, { sample_ids: [sample33.id, @sample34.id] }).execute
       end
 
       assert_equal({}, @project31.namespace.reload.metadata_summary)
@@ -132,7 +134,7 @@ module Samples
                         -> { @subgroup12a.reload.samples_count } => -1,
                         -> { @subgroup12b.reload.samples_count } => 0,
                         -> { @group12.reload.samples_count } => -1 do
-        Samples::DestroyService.new(@project31, @user, { sample: @sample34 }).execute
+        Samples::DestroyService.new(@project31.namespace, @user, { sample: @sample34 }).execute
       end
     end
 
@@ -149,7 +151,7 @@ module Samples
                         -> { @subgroup12a.reload.samples_count } => -2,
                         -> { @subgroup12b.reload.samples_count } => 0,
                         -> { @group12.reload.samples_count } => -2 do
-        Samples::DestroyService.new(@project31, @user, { sample_ids: [@sample34.id, sample35.id] }).execute
+        Samples::DestroyService.new(@project31.namespace, @user, { sample_ids: [@sample34.id, sample35.id] }).execute
       end
     end
   end
