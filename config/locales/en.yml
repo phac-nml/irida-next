@@ -19,6 +19,7 @@ en:
         destroy_bot_accounts?: You are not authorized to destroy bot accounts for group %{name} on this server.
         destroy_member?: You are not authorized to remove members for group %{name} on this server.
         destroy_metadata_templates?: You are not authorized to destroy metadata templates for group %{name} on this server.
+        destroy_sample?: You are not authorized to remove samples from group %{name} on this server.
         destroy_workflow_executions?: You are not authorized to destroy workflow executions for group %{name} on this server.
         edit?: You are not authorized to modify group %{name} on this server.
         export_data?: You are not authorized to export data from project %{name} on this server.

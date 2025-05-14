@@ -148,3 +148,24 @@ group_sample_transfer_sample_transfer_extended_details:
     }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
+
+group1_namespace_sample_destroy_extended_details:
+  details:
+    {
+      "deleted_samples_data":
+        [
+          {
+            sample_name: "sample 1 name",
+            sample_puid: "sample 1 puid",
+            project_puid: "INXT_PRJ_AAAAAAAAAA",
+          },
+          {
+            sample_name: "sample 2 name",
+            sample_puid: "sample 2 puid",
+            project_puid: "INXT_PRJ_AAAAAAAAAB",
+          },
+        ],
+      "samples_deleted_count": 2,
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
