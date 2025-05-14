@@ -1,16 +1,18 @@
 <%= render Viral::BaseComponent.new(tag: 'button', **system_arguments) do %>
-  <% if content.present? %>
-    <span class="pointer-events-none"><%= content %></span>
-  <% end %>
-
-  <% if disclosure.present? %>
-    <% case disclosure %>
-    <% when :down %>
-      <%= viral_icon(name: "chevron_down", classes: "ml-2 w-4 h-4") %>
-    <% when :up %>
-      <%= viral_icon(name: "chevron_up", classes: "ml-2 w-4 h-4") %>
-    <% when :right %>
-      <%= viral_icon(name: "chevron_right", classes: "ml-2 w-4 h-4") %>
+  <%# Accessible, flex-aligned button content and disclosure icon %>
+  <span class="flex items-center w-full justify-center">
+    <% if content.present? %>
+      <span class="pointer-events-none"><%= content %></span>
     <% end %>
-  <% end %>
+    <% if disclosure.present? %>
+      <% case disclosure %>
+      <% when :down %>
+        <span class="ml-2 flex items-center pointer-events-none"><%= viral_icon(name: "chevron_down", classes: "w-4 h-4 align-middle") %></span>
+      <% when :up %>
+        <span class="ml-2 flex items-center pointer-events-none"><%= viral_icon(name: "chevron_up", classes: "w-4 h-4 align-middle") %></span>
+      <% when :right %>
+        <span class="ml-2 flex items-center pointer-events-none"><%= viral_icon(name: "chevron_right", classes: "w-4 h-4 align-middle") %></span>
+      <% end %>
+    <% end %>
+  </span>
 <% end %>
