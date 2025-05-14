@@ -19,7 +19,7 @@ module Viral
         @options.tap do |opts|
           opts[:id] = @id
           opts[:class] = class_names(
-            'border border-slate-300 text-slate-900 sm:text-sm rounded-md',
+            'border border-slate-300 text-slate-900 sm:text-sm rounded-lg',
             'block w-full pl-10 p-2.5 dark:bg-slate-800 dark:border-slate-600',
             'dark:placeholder-slate-400 dark:text-white'
           )

@@ -60,7 +60,7 @@ module Viral
       {
         classes: class_names(
           'text-slate-600 dark:text-slate-400 border border-slate-300 min-h-11 min-w-11
-      dark:border-slate-600 rounded text-sm px-3 py-1 cursor-pointer inline-flex
+      dark:border-slate-600 rounded-lg text-sm px-3 py-1 cursor-pointer inline-flex
       items-center justify-center',
           system_arguments[:classes]
         )
