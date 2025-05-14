@@ -8,14 +8,14 @@
       <div
         data-controller="selection"
         data-selection-storage-key-value="<%= "#{request.base_url}#{@index_path}" %>"
-        data-selection-id-value="<%= @workflow_execution.id %>"
       >
         <%= button_to t(".submit_button"),
         @destroy_path,
         method: :delete,
         data: {
           turbo_frame: "_top",
-          action: "click->selection#removeFromStorage click->viral--dialog#close",
+          action: "click->selection#remove click->viral--dialog#close",
+          "selection-id-param": @workflow_execution.id,
         },
         class: "button button--state-destructive button--size-default" %>
       </div>

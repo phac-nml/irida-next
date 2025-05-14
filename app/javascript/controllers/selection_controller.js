@@ -10,8 +10,9 @@ export default class extends Controller {
   static outlets = ["action-button"];
 
   static values = {
-    id: String,
-    storageKey: String,
+    storageKey: {
+      type: String,
+    },
     total: Number,
   };
 
@@ -59,10 +60,6 @@ export default class extends Controller {
     this.#addOrRemove(event.target.checked, event.target.value);
   }
 
-  removeFromStorage() {
-    this.#addOrRemove(false, this.idValue, false);
-  }
-
   remove({ params: { id } }) {
     this.#addOrRemove(false, id);
   }
@@ -90,7 +87,7 @@ export default class extends Controller {
     return JSON.parse(sessionStorage.getItem(this.#storageKey)) || [];
   }
 
-  #addOrRemove(add, storageValue, update = true) {
+  #addOrRemove(add, storageValue) {
     const newStorageValue = this.getStoredItems();
     if (add) {
       newStorageValue.push(storageValue);
@@ -101,10 +98,7 @@ export default class extends Controller {
       }
     }
     this.save(newStorageValue);
-
-    if (update) {
-      this.#updateUI(newStorageValue);
-    }
+    this.#updateUI(newStorageValue);
   }
 
   #updateUI(ids) {
