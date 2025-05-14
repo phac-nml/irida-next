@@ -2,7 +2,7 @@
 
 module Samples
   # Service used to Delete Samples
-  class DestroyService < BaseService
+  class DestroyService < BaseService # rubocop:disable Metrics/ClassLength
     attr_accessor :sample, :sample_ids, :namespace
 
     def initialize(namespace, user = nil, params = {})
@@ -27,24 +27,24 @@ module Samples
     def destroy_single
       sample_destroyed = sample.destroy
 
-      if sample_destroyed
-        @namespace.project.namespace.create_activity key: 'namespaces_project_namespace.samples.destroy',
-                                                     owner: current_user,
-                                                     parameters:
-                                            {
-                                              sample_puid: sample.puid,
-                                              action: 'sample_destroy'
-                                            }
-      end
+      return unless sample_destroyed
 
-      update_samples_count if @namespace.project_namespace? && @namespace.project.parent.type == 'Group'
+      @namespace.project.namespace.create_activity key: 'namespaces_project_namespace.samples.destroy',
+                                                   owner: current_user,
+                                                   parameters:
+                                          {
+                                            sample_puid: sample.puid,
+                                            action: 'sample_destroy'
+                                          }
+
+      update_samples_count(@namespace.project, 1) if @namespace.project.parent.group_namespace?
 
       update_metadata_summary(sample)
     end
 
     def destroy_multiple
       samples = query_samples
-      samples_deleted_puids = []
+      deleted_samples_count = 0
       @deleted_samples_data = { project_data: {}, group_data: [] }
       samples = samples.destroy_all
 
@@ -52,21 +52,16 @@ module Samples
         next unless sample.deleted?
 
         update_metadata_summary(sample)
-        samples_deleted_puids << sample.puid
+        deleted_samples_count += 1
         add_deleted_sample_to_data(sample, sample.project.puid)
       end
 
-      deleted_samples_count = samples_deleted_puids.count
-      if @namespace.project_namespace? && @namespace.project.parent.type == 'Group'
-        update_samples_count(deleted_samples_count)
-      end
-
-      create_activities unless @deleted_samples_data[:project_data].empty?
+      create_activities_and_update_sample_count unless @deleted_samples_data[:project_data].empty?
 
       deleted_samples_count
     end
 
-    def create_activities # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    def create_activities_and_update_sample_count # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       total_deleted_samples_count = 0
 
       @deleted_samples_data[:project_data].each do |project_puid, sample_data|
@@ -79,6 +74,9 @@ module Samples
         )
 
         project_namespace = Namespaces::ProjectNamespace.find_by(puid: project_puid)
+
+        update_sample_count(project_namespace, samples_deleted_count) if project_namespace.parent.group_namespace?
+
         project_activity = project_namespace.create_activity(
           key: 'namespaces_project_namespace.samples.destroy_multiple',
           owner: current_user,
@@ -117,10 +115,8 @@ module Samples
       sample.project.namespace.update_metadata_summary_by_sample_deletion(sample)
     end
 
-    def update_samples_count(deleted_samples_count = 1)
-      return unless @namespace.project_namespace?
-
-      @namespace.project.parent.update_samples_count_by_destroy_service(deleted_samples_count)
+    def update_samples_count(project_namespace, samples_deleted_count)
+      project_namespace.parent.update_samples_count_by_destroy_service(samples_deleted_count)
     end
 
     def query_samples
