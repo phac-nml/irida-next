@@ -14,7 +14,7 @@
         "turbo-frame" => "new_member_modal",
         :turbo_stream => true,
       },
-      class: "button button--state-default button--size-default" %>
+      class: "bg-slate-50 border border-slate-300 cursor-pointer dark:bg-slate-900 dark:border-slate-700 dark:hover:bg-slate-800 dark:hover:text-white dark:text-slate-50 font-semibold hover:bg-slate-100 hover:text-slate-950 inline-flex items-center justify-center min-h-11 min-w-11 px-5 py-2.5 rounded-lg sm:w-auto text-slate-900" %>
     <% end %>
     <% if @allowed_to[:create_member] %>
       <%= link_to t(:".add"),
@@ -27,7 +27,7 @@
         turbo_frame: "new_member_modal",
         turbo_stream: true,
       },
-      class: "button button--state-primary button--size-default",
+      class: "bg-primary-800 border border-primary-800 cursor-pointer dark:bg-primary-700 dark:border-primary-700 dark:hover:bg-primary-600 dark:text-white font-semibold hover:bg-primary-900 inline-flex items-center justify-center min-h-11 min-w-11 px-5 py-2.5 rounded-lg sm:w-auto text-white",
       "aria-label": t(:".actions.button_add_aria_label") %>
     <% end %>
   <% end %>
