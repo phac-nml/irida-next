@@ -7,11 +7,11 @@
     <% if disclosure.present? %>
       <% case disclosure %>
       <% when :down %>
-        <span class="ml-2 flex items-center pointer-events-none"><%= viral_icon(name: "chevron_down", classes: "w-4 h-4 align-middle") %></span>
+        <%= helpers.render_icon :caret_down, class: "size-4 align-middle ml-2" %>
       <% when :up %>
-        <span class="ml-2 flex items-center pointer-events-none"><%= viral_icon(name: "chevron_up", classes: "w-4 h-4 align-middle") %></span>
+        <%= helpers.render_icon :caret_up, class: "size-4 align-middle ml-2" %>
       <% when :right %>
-        <span class="ml-2 flex items-center pointer-events-none"><%= viral_icon(name: "chevron_right", classes: "w-4 h-4 align-middle") %></span>
+        <%= helpers.render_icon :caret_right, class: "size-4 align-middle ml-2" %>
       <% end %>
     <% end %>
   </span>
