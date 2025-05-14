@@ -319,7 +319,7 @@ export default class extends Controller {
     if (this.#currentSampleIndexes.length > 0) {
       this.emptyStateTarget.classList.add("hidden");
       const startingIndex = (this.#currentPage - 1) * 5;
-      const lastIndex = startingIndex + 5;
+      let lastIndex = startingIndex + 5;
       if (
         this.#currentPage == this.#lastPage &&
         this.#currentSampleIndexes.length % 5 != 0
