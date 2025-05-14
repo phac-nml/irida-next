@@ -308,6 +308,8 @@ fr:
         destroy_html: "%{user} a supprimé le projet %{href} du groupe"
         transfer_in_html: "%{user} a transféré le projet %{href} de l’espace de noms %{old_namespace} vers %{new_namespace}"
         transfer_out_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
+      samples:
+        destroy_html: "%{user} removed %{href} samples from group"
       subgroups:
         create_html: "%{user} a créé le sous-groupe %{href}"
         destroy_html: "%{user} a supprimé le groupe descendant %{href}"
@@ -505,8 +507,11 @@ fr:
           title: Copied Samples
         sample_destroy:
           description:
+            group: "%{user} removed %{count} samples from the group"
             one: "%{user} removed 1 sample from the project"
             other: "%{user} removed %{count} samples from the project"
+          project: Project
+          sample: Sample
           title: Deleted Samples
         sample_transfer:
           source_project_description:
@@ -1006,6 +1011,12 @@ fr:
       subtitle: Les groupes vous permettent de gérer et de collaborer sur plusieurs projets. Les membres d’un groupe ont accès à tous ses projets
       title: Créer un sous-groupe
     samples:
+      deletions:
+        destroy:
+          no_deleted_samples: Selected samples could not be deleted
+          partial_error: "%{not_deleted} samples could not be deleted"
+          partial_success: "%{deleted} samples were successfully deleted"
+          success: Samples were successfully deleted
       index:
         deselect_all_button: Désélectionner tout
         select_all_button: Tout sélectionner
@@ -2016,6 +2027,16 @@ fr:
         new_sample: Nouvel échantillon
         sample_export: Exportation d’échantillons
         transfer: Transférer des échantillons
+      destroy_multiple_confirmation_dialog:
+        description:
+          plural: 'The following COUNT_PLACEHOLDER samples have been selected for deletion:'
+          singular: 'The following sample has been selected for deletion:'
+          zero: No samples have been selected for deletion
+        loading: Loading...
+        samples: Samples
+        spinner: Deleting samples. This may take a while...
+        submit_button: Confirm
+        title: Delete Samples
       metadata:
         editing_field_cell:
           dialog:
