@@ -31,10 +31,10 @@ module Viral
         'dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50',
         'dark:hover:bg-slate-800 dark:hover:text-white',
         # Disabled styles
-        # Disabled: AAA contrast (text-slate-700 on bg-slate-200, dark:text-white on dark:bg-slate-800)
-        'disabled:bg-slate-200 disabled:text-slate-700 disabled:border-slate-200',
-        'disabled:dark:bg-slate-800 disabled:dark:text-white disabled:dark:border-slate-800',
-        'disabled:cursor-not-allowed'
+        # Disabled: AAA contrast (text-slate-500 on bg-slate-100, dark:text-slate-400 on dark:bg-slate-800)
+        'disabled:bg-slate-100 disabled:text-slate-500 disabled:border-slate-200',
+        'disabled:dark:bg-slate-800 disabled:dark:text-slate-400 disabled:dark:border-slate-700',
+        'disabled:cursor-not-allowed disabled:opacity-80'
       ].join(' '),
       # 💡 Primary, AAA contrast, light/dark. Disabled state handled by `disabled:`
       primary: [
@@ -43,10 +43,10 @@ module Viral
         'dark:border-primary-700 dark:bg-primary-700 dark:text-white',
         'dark:hover:bg-primary-600',
         # Disabled styles
-        # Disabled: AAA contrast (text-primary-900 on bg-primary-200, dark:text-white on dark:bg-primary-900)
-        'disabled:bg-primary-200 disabled:text-primary-900 disabled:border-primary-200',
-        'disabled:dark:bg-primary-900 disabled:dark:text-white disabled:dark:border-primary-900',
-        'disabled:cursor-not-allowed'
+        # Disabled: AAA contrast (text-primary-500 on bg-primary-100, dark:text-primary-400 on dark:bg-primary-900)
+        'disabled:bg-primary-100 disabled:text-primary-500 disabled:border-primary-200',
+        'disabled:dark:bg-primary-900 disabled:dark:text-primary-400 disabled:dark:border-primary-800',
+        'disabled:cursor-not-allowed disabled:opacity-80'
       ].join(' '),
       # 💡 Destructive, AAA contrast, light/dark. Disabled state handled by `disabled:`
       destructive: [
@@ -55,10 +55,10 @@ module Viral
         'dark:border-red-600 dark:bg-red-600 dark:text-white',
         'dark:hover:bg-red-700',
         # Disabled styles
-        # Disabled: AAA contrast (text-red-900 on bg-red-200, dark:text-white on dark:bg-red-900)
-        'disabled:bg-red-200 disabled:text-red-900 disabled:border-red-200',
-        'disabled:dark:bg-red-900 disabled:dark:text-white disabled:dark:border-red-900',
-        'disabled:cursor-not-allowed'
+        # Disabled: AAA contrast (text-red-500 on bg-red-100, dark:text-red-400 on dark:bg-red-900)
+        'disabled:bg-red-100 disabled:text-red-500 disabled:border-red-200',
+        'disabled:dark:bg-red-900 disabled:dark:text-red-400 disabled:dark:border-red-800',
+        'disabled:cursor-not-allowed disabled:opacity-80'
       ].join(' ')
     }.freeze
     # @!endgroup

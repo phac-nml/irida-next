@@ -1,1 +1,14 @@
-<%= viral_button { "Create user" } %>
+<div class="flex flex-col space-y-4">
+  <div class="flex space-x-4">
+    <%= viral_button { "Default Button" } %>
+    <%= viral_button(disabled: true) { "Disabled Button" } %>
+  </div>
+  <div class="flex space-x-4">
+    <%= viral_button(state: :primary) { "Primary Button" } %>
+    <%= viral_button(state: :primary, disabled: true) { "Disabled Primary Button" } %>
+  </div>
+  <div class="flex space-x-4">
+    <%= viral_button(state: :destructive) { "Destructive Button" } %>
+    <%= viral_button(state: :destructive, disabled: true) { "Disabled Destructive Button" } %>
+  </div>
+</div>
