@@ -8,7 +8,7 @@
     data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
   >
     <%= form_with(
-        url: list_group_samples_path(list_class: 'sample'),
+        url: @list_path,
         data: { "infinite-scroll-target": "pageForm" }
       ) do %>
       <div data-infinite-scroll-target="pageFormContent"></div>
@@ -37,7 +37,7 @@
         </div>
       </div>
 
-      <%= form_for(:deletion, url: group_samples_deletion_path, method: :delete,
+      <%= form_for(:deletion, url: @destroy_path, method: :delete,
             data: {
               controller: "spinner form--hidden-inputs",
               "form--hidden-inputs-selection-outlet": '#samples-table',

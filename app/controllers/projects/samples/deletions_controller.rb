@@ -5,7 +5,7 @@ module Projects
     # Controller actions for Project Samples Deletions
     class DeletionsController < Projects::ApplicationController
       before_action :sample, only: %i[new destroy]
-      before_action :new_dialog_partial, only: :new
+      before_action :set_new_dialog_params, only: :new
 
       def new
         authorize! @project, to: :destroy_sample?
@@ -63,8 +63,14 @@ module Projects
         @sample = Sample.find_by(id: params[:id] || params[:sample_id], project_id: project.id) || not_found
       end
 
-      def new_dialog_partial
-        @partial = params['deletion_type'] == 'single' ? 'new_deletion_dialog' : 'new_multiple_deletions_dialog'
+      def set_new_dialog_params
+        if params['deletion_type'] == 'single'
+          @partial = 'new_deletion_dialog'
+        else
+          @partial = 'shared/samples/destroy_multiple_confirmation_dialog'
+          @list_path = list_namespace_project_samples_path(list_class: 'sample')
+          @destroy_path = destroy_multiple_namespace_project_samples_deletion_path
+        end
       end
 
       def destroy_multiple_params
