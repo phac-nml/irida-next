@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class NamespaceStatisticComponentPreview < Lookbook::Preview
+class NamespaceStatisticComponentPreview < ViewComponent::Preview
   # Default Preview
   # ---------------
   # This is the default preview for the NamespaceStatisticComponent.
@@ -10,7 +10,7 @@ class NamespaceStatisticComponentPreview < Lookbook::Preview
       NamespaceStatisticComponent.new(
         id_prefix: 'total-projects',
         icon_name: 'user_circle',
-        label_key: 'components.project_dashboard.information.number_of_automated_workflow_executions',
+        label: I18n.t('components.project_dashboard.information.number_of_automated_workflow_executions'),
         count: 123,
         color_scheme: :default
       )
@@ -27,7 +27,7 @@ class NamespaceStatisticComponentPreview < Lookbook::Preview
       NamespaceStatisticComponent.new(
         id_prefix: 'blue-stats',
         icon_name: 'user_circle',
-        label_key: 'components.project_dashboard.information.number_of_automated_workflow_executions',
+        label: I18n.t('components.project_dashboard.information.number_of_automated_workflow_executions'),
         count: 456,
         color_scheme: :blue
       )
@@ -42,7 +42,7 @@ class NamespaceStatisticComponentPreview < Lookbook::Preview
       NamespaceStatisticComponent.new(
         id_prefix: 'teal-stats',
         icon_name: 'user_circle',
-        label_key: 'components.project_dashboard.information.number_of_automated_workflow_executions',
+        label: I18n.t('components.project_dashboard.information.number_of_automated_workflow_executions'),
         count: 789,
         color_scheme: :teal
       )
@@ -57,7 +57,7 @@ class NamespaceStatisticComponentPreview < Lookbook::Preview
       NamespaceStatisticComponent.new(
         id_prefix: 'indigo-stats',
         icon_name: 'user_circle',
-        label_key: 'components.project_dashboard.information.number_of_members',
+        label: I18n.t('components.project_dashboard.information.number_of_members'),
         count: 101,
         color_scheme: :indigo
       )
@@ -72,7 +72,7 @@ class NamespaceStatisticComponentPreview < Lookbook::Preview
       NamespaceStatisticComponent.new(
         id_prefix: 'fuchsia-stats',
         icon_name: 'user_circle',
-        label_key: 'components.project_dashboard.information.number_of_automated_workflow_executions',
+        label: I18n.t('components.project_dashboard.information.number_of_automated_workflow_executions'),
         count: 202,
         color_scheme: :fuchsia
       )
@@ -87,7 +87,7 @@ class NamespaceStatisticComponentPreview < Lookbook::Preview
       NamespaceStatisticComponent.new(
         id_prefix: 'amber-stats',
         icon_name: 'user_circle',
-        label_key: 'components.project_dashboard.information.number_of_automated_workflow_executions',
+        label: I18n.t('components.project_dashboard.information.number_of_automated_workflow_executions'),
         count: 303,
         color_scheme: :amber
       )
