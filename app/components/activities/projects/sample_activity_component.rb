@@ -5,7 +5,7 @@ module Activities
     # Component for rendering an project sample activity
     class SampleActivityComponent < BaseActivityComponent
       def sample_destroy_multiple_action
-        @activity[:action] == 'sample_destroy_multiple'
+        @activity[:action] == 'project_sample_destroy_multiple'
       end
 
       def sample_exists(sample)
