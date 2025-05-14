@@ -9,12 +9,12 @@
     <%= link_to prev_url,
           **link_arguments,
           class: [
-            "flex items-center justify-center rounded-lg border border-slate-300 bg-slate-200 px-4 py-2.5 text-sm font-medium text-slate-700",
-            "hover:bg-slate-300 hover:text-slate-900 min-h-11",
-            "dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600 dark:hover:text-white"
+            "bg-slate-50 border border-slate-300 cursor-pointer dark:bg-slate-900 dark:border-slate-700 dark:hover:bg-slate-800 dark:hover:text-white dark:text-slate-50 font-semibold hover:bg-slate-100 hover:text-slate-950 inline-flex items-center justify-center min-h-11 min-w-11 px-5 py-2.5 rounded-lg sm:w-auto text-slate-900"
           ],
           "aria-label": t("viral.pagy.pagination_component.previous_aria_label") do %>
-      <%= viral_icon name: "chevron_left", classes: "mr-2 h-5 w-5", "aria-hidden": "true" %>
+      <%= helpers.render_icon ICONS[:caret_left],
+                          classes: "mr-2 size-5",
+                          "aria-hidden": "true" %>
       <span><%= t("viral.pagy.pagination_component.previous") %></span>
     <% end %>
   <% end %>
@@ -23,13 +23,13 @@
     <%= link_to next_url,
           **link_arguments,
           class: [
-            "flex items-center justify-center rounded-lg border border-slate-300 bg-slate-200 px-4 py-2.5 text-sm font-medium text-slate-700",
-            "hover:bg-slate-300 hover:text-slate-900 min-h-11",
-            "dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600 dark:hover:text-white"
+            "bg-slate-50 border border-slate-300 cursor-pointer dark:bg-slate-900 dark:border-slate-700 dark:hover:bg-slate-800 dark:hover:text-white dark:text-slate-50 font-semibold hover:bg-slate-100 hover:text-slate-950 inline-flex items-center justify-center min-h-11 min-w-11 px-5 py-2.5 rounded-lg sm:w-auto text-slate-900"
           ],
           "aria-label": t("viral.pagy.pagination_component.next_aria_label") do %>
       <span><%= t("viral.pagy.pagination_component.next") %></span>
-      <%= viral_icon name: "chevron_right", classes: "ml-2 h-5 w-5", "aria-hidden": "true" %>
+      <%= helpers.render_icon ICONS[:caret_right],
+                          classes: "ml-2 size-5",
+                          "aria-hidden": "true" %>
     <% end %>
   <% end %>
 </nav>
