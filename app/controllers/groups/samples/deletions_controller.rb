@@ -5,7 +5,6 @@ module Groups
     # Controller actions for Project Samples Deletions
     class DeletionsController < Groups::ApplicationController
       before_action :group
-      before_action :sample, only: %i[new destroy]
       before_action :new_dialog_partial, only: :new
 
       def new
@@ -20,7 +19,7 @@ module Groups
       def destroy
         samples_to_delete_count = destroy_multiple_params['sample_ids'].count
 
-        deleted_samples_count = ::Samples::DestroyService.new(@project, current_user, destroy_multiple_params).execute
+        deleted_samples_count = ::Samples::DestroyService.new(@group, current_user, destroy_multiple_params).execute
 
         # No selected samples deleted
         if deleted_samples_count.zero?
@@ -33,20 +32,13 @@ module Groups
           flash[:success] = t('.success')
         end
 
-        redirect_to namespace_project_samples_path
+        redirect_to group_samples_path
       end
 
       private
 
       def group
         @group = Group.find_by_full_path(params[:group_id]) # rubocop:disable Rails/DynamicFindBy
-      end
-
-      def sample
-        # Necessary return for new when deletion_type = 'multiple', as has no params[:sample_id] defined
-        return if params[:deletion_type] == 'multiple'
-
-        @sample = Sample.find_by(id: params[:id] || params[:sample_id], project_id: project.id) || not_found
       end
 
       def new_dialog_partial
