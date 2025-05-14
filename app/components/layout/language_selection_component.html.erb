@@ -13,23 +13,30 @@
     data-viral--dropdown-target="trigger"
     id="language-selection-dd-trigger"
     class="
-      navbar-button text-slate-600 dark:text-slate-400 border border-slate-300
-      dark:border-slate-600 rounded-lg text-sm px-3 py-1 cursor-pointer inline-flex
-      items-center justify-center min-h-[44px] hover:bg-slate-100
-      dark:hover:bg-slate-700
+      inline-flex items-center justify-center
+      min-h-11 min-w-11 sm:w-auto
+      px-5 py-2.5
+      font-semibold
+      text-slate-900 dark:text-slate-50
+      bg-slate-50 dark:bg-slate-900
+      border border-slate-300 dark:border-slate-700
+      rounded-lg
+      cursor-pointer
+      hover:bg-slate-100 hover:text-slate-950
+      dark:hover:bg-slate-800 dark:hover:text-white
     "
     type="button"
-    aria-haspopup="listbox"
-    aria-controls="language-selection-dd-menu"
+    aria-haspopup="true"
+    aria-controls="language-selection-dd-menu-ul"
     aria-expanded="false"
   >
     <%= viral_icon(
       name: "language",
-      classes: "w-4 h-4 mr-2 flex-none",
+      classes: "mr-2 h-4 w-4 flex-none",
       "aria-hidden": true,
     ) %>
     <span class="text-sm" id="language-selection-dd-label">
-      <%= I18n.t(:"locales.#{locale}", locale: locale) %>
+      <%= I18n.t("locales.#{locale}", locale: locale) %>
     </span>
   </button>
   <!-- Dropdown menu -->
@@ -37,18 +44,24 @@
     data-viral--dropdown-target="menu"
     id="language-selection-dd-menu"
     class="
-      hidden w-32 bg-white divide-y divide-slate-100 rounded-lg shadow-sm
-      dark:bg-slate-700 dark:divide-slate-600 z-30
+      hidden
+      w-32
+      divide-y divide-slate-100 dark:divide-slate-600
+      rounded-lg
+      bg-white dark:bg-slate-700
+      shadow-sm
+      z-30
     "
     aria-labelledby="language-selection-dd-trigger"
     aria-hidden="true"
     tabindex="-1"
-    hidden="hidden"
   >
     <ul
-      id="language_selection_dropdown"
+      id="language-selection-dd-menu-ul"
       class="
-        py-2 text-sm text-slate-700 dark:text-slate-200 focus:outline-none
+        py-2
+        text-sm text-slate-700 dark:text-slate-200
+        focus:outline-none
       "
       aria-labelledby="language-selection-dd-label"
       role="menu"
@@ -58,25 +71,37 @@
           <li
             role="presentation"
             class="
-              flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600
-              dark:hover:text-white bg-slate-100 text-slate-600 dark:bg-slate-600
-              dark:text-slate-300 border-slate-100 dark:border-slate-600
+              flex w-full items-center
+              px-4 py-2
+              text-slate-600 dark:text-slate-300
+              bg-slate-100 dark:bg-slate-600
             "
           ><%= locale_name %></li>
         <% else %>
           <li
-            role="menuitem"
+            role="presentation"
             lang="<%= locale_value %>"
-            class="
-              flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600
-              dark:hover:text-white cursor-pointer
-            "
           >
-            <%= form_with(model: @user, url: profile_preferences_path, method: :patch) do |form| %>
+            <%= form_with(model: @user, url: profile_preferences_path, method: :patch, class: "w-full") do |form| %>
               <%= form.hidden_field :locale,
                                 value: locale_value,
                                 id: "language_selection_#{locale_value}" %>
-              <%= form.submit locale_name, class: "cursor-pointer" %>
+              <%= form.submit locale_name,
+                              role: "menuitem",
+                              tabindex: "-1",
+                              class: "
+                                block w-full
+                                px-4 py-2
+                                text-left font-normal
+                                text-slate-700 dark:text-slate-200
+                                bg-transparent border-none
+                                cursor-pointer
+                                hover:bg-slate-100 hover:text-slate-900
+                                dark:hover:bg-slate-600 dark:hover:text-white
+                                focus:bg-slate-100 focus:text-slate-900
+                                dark:focus:bg-slate-600 dark:focus:text-white
+                                focus:outline-none
+                              " %>
             <% end %>
           </li>
         <% end %>
