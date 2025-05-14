@@ -21,35 +21,44 @@ module Viral
 
     # @!group State mappings (WCAG AAA)
     STATE_DEFAULT = :default
-    STATE_DISABLED = :disabled
+
     STATE_MAPPINGS = {
-      # 💡 slate, AAA contrast, light/dark
+      # 💡 slate, AAA contrast, light/dark. Disabled state is handled by `disabled:` Tailwind modifiers.
       default: [
         'border border-slate-300 bg-slate-50 text-slate-900',
         'hover:bg-slate-100 hover:text-slate-950',
         'focus-visible:ring-2 focus-visible:ring-primary-600',
         'dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50',
-        'dark:hover:bg-slate-800 dark:hover:text-white'
+        'dark:hover:bg-slate-800 dark:hover:text-white',
+        # Disabled styles
+        # Disabled: AAA contrast (text-slate-700 on bg-slate-200, dark:text-white on dark:bg-slate-800)
+        'disabled:bg-slate-200 disabled:text-slate-700 disabled:border-slate-200',
+        'disabled:dark:bg-slate-800 disabled:dark:text-white disabled:dark:border-slate-800',
+        'disabled:cursor-not-allowed'
       ].join(' '),
-      # 💡 Primary, AAA contrast, light/dark
+      # 💡 Primary, AAA contrast, light/dark. Disabled state handled by `disabled:`
       primary: [
         'border border-primary-800 bg-primary-800 text-white',
         'hover:bg-primary-900 focus-visible:ring-2 focus-visible:ring-primary-400',
         'dark:border-primary-700 dark:bg-primary-700 dark:text-white',
-        'dark:hover:bg-primary-600'
+        'dark:hover:bg-primary-600',
+        # Disabled styles
+        # Disabled: AAA contrast (text-primary-900 on bg-primary-200, dark:text-white on dark:bg-primary-900)
+        'disabled:bg-primary-200 disabled:text-primary-900 disabled:border-primary-200',
+        'disabled:dark:bg-primary-900 disabled:dark:text-white disabled:dark:border-primary-900',
+        'disabled:cursor-not-allowed'
       ].join(' '),
-      # 💡 Destructive, AAA contrast, light/dark
+      # 💡 Destructive, AAA contrast, light/dark. Disabled state handled by `disabled:`
       destructive: [
         'border border-red-800 bg-red-700 text-white',
         'hover:bg-red-800 focus-visible:ring-2 focus-visible:ring-red-400',
         'dark:border-red-600 dark:bg-red-600 dark:text-white',
-        'dark:hover:bg-red-700'
-      ].join(' '),
-      # 💡 Disabled, faded, not interactive
-      disabled: [
-        'border border-slate-200 bg-slate-200 text-slate-400',
-        'cursor-not-allowed opacity-60',
-        'dark:border-slate-800 dark:bg-slate-800 dark:text-slate-500'
+        'dark:hover:bg-red-700',
+        # Disabled styles
+        # Disabled: AAA contrast (text-red-900 on bg-red-200, dark:text-white on dark:bg-red-900)
+        'disabled:bg-red-200 disabled:text-red-900 disabled:border-red-200',
+        'disabled:dark:bg-red-900 disabled:dark:text-white disabled:dark:border-red-900',
+        'disabled:cursor-not-allowed'
       ].join(' ')
     }.freeze
     # @!endgroup
@@ -79,6 +88,7 @@ module Viral
         full_width: full_width
       )
       apply_aria_accessibility(@system_arguments, is_disabled)
+      # Tailwind's `disabled:` handles all visual states; no need to map `:disabled` state.
     end
 
     private
@@ -87,8 +97,8 @@ module Viral
       args[:disabled].present? && args[:disabled]
     end
 
-    def resolve_state(state, is_disabled)
-      mapped_state = is_disabled ? STATE_DISABLED : state.to_sym
+    def resolve_state(state, _is_disabled)
+      mapped_state = state.to_sym
       STATE_MAPPINGS.key?(mapped_state) ? mapped_state : STATE_DEFAULT
     end
 
