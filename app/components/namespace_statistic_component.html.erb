@@ -7,7 +7,7 @@
   <%# Small screen layout (< md): Icon + Count on same line, Tooltip on Icon %>
   <div class="block md:hidden">
     <div class="flex items-center justify-start gap-2">
-      <%= viral_tooltip(title: t(label_key)) do %>
+      <%= viral_tooltip(title: label) do %>
         <span
           id="<%= icon_id_sm %>"
           class="
@@ -52,7 +52,7 @@
         id="<%= label_id_lg %>"
         class="text-sm font-semibold text-slate-600 dark:text-slate-300"
       >
-        <%= t(label_key) %>
+        <%= label %>
       </span>
     </div>
     <div

@@ -45,7 +45,7 @@
       <%= render NamespaceStatisticComponent.new(
         id_prefix: "group-samples",
         icon_name: :samples,
-        label_key: :"groups.show.information.number_of_samples",
+        label: t(:"groups.show.information.number_of_samples"),
         count: @group.samples_count || 0,
         color_scheme: :blue,
       ) %>
@@ -53,7 +53,7 @@
       <%= render NamespaceStatisticComponent.new(
         id_prefix: "group-projects",
         icon_name: :projects,
-        label_key: :"groups.show.information.number_of_projects",
+        label: t(:"groups.show.information.number_of_projects"),
         count: @group.project_namespaces.count,
         color_scheme: :fuchsia,
       ) %>
@@ -61,7 +61,7 @@
       <%= render NamespaceStatisticComponent.new(
         id_prefix: "group-subgroups",
         icon_name: :groups,
-        label_key: :"groups.show.information.number_of_subgroups",
+        label: t(:"groups.show.information.number_of_subgroups"),
         count: @group.children.count,
         color_scheme: :amber,
       ) %>

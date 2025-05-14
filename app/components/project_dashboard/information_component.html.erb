@@ -12,16 +12,15 @@
   <%= render NamespaceStatisticComponent.new(
     id_prefix: "samples",
     icon_name: :flask,
-    label_key: :"components.project_dashboard.information.number_of_samples",
+    label: t(:"components.project_dashboard.information.number_of_samples"),
     count: @project.samples.count,
     color_scheme: :blue,
   ) %>
 
   <%= render NamespaceStatisticComponent.new(
-    id_prefix: "workflows",
+    id_prefix: "automated-workflow-executions",
     icon_name: :terminal_window,
-    label_key:
-      :"components.project_dashboard.information.number_of_automated_workflow_executions",
+    label: t(:"components.project_dashboard.information.number_of_automated_workflow_executions"),
     count: @project.namespace.automated_workflow_executions.count,
     color_scheme: :teal,
   ) %>
@@ -29,7 +28,7 @@
   <%= render NamespaceStatisticComponent.new(
     id_prefix: "members",
     icon_name: :users,
-    label_key: :"components.project_dashboard.information.number_of_members",
+    label: t(:"components.project_dashboard.information.number_of_members"),
     count: @project.namespace.project_members.without_automation_bots.count,
     color_scheme: :indigo,
   ) %>

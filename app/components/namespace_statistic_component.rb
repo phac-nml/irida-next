@@ -7,13 +7,13 @@ class NamespaceStatisticComponent < Component
   #   @return [String] Prefix for unique HTML IDs.
   # @!attribute [r] icon_name
   #   @return [String] Heroicon name.
-  # @!attribute [r] label_key
-  #   @return [String] I18n key for the label.
+  # @!attribute [r] label
+  #   @return [String] Label for the statistic (already translated).
   # @!attribute [r] count
   #   @return [Integer] Statistic value.
   # @!attribute [r] color_scheme
   #   @return [Symbol] Color scheme symbol (e.g., :blue, :teal).
-  attr_reader :id_prefix, :icon_name, :label_key, :count, :color_scheme
+  attr_reader :id_prefix, :icon_name, :label, :count, :color_scheme
 
   # Icon color variations 🎨.
   # Keys: color scheme symbols. Values: Tailwind CSS classes.
@@ -42,14 +42,14 @@ class NamespaceStatisticComponent < Component
   #
   # @param id_prefix [String] Prefix for unique HTML IDs (e.g., "User Projects" becomes "user-projects").
   # @param icon_name [String] Heroicon name (e.g., 'users_solid').
-  # @param label_key [String] I18n key for the label (e.g., 'projects.index.total_projects').
+  # @param label [String] Translated label for the statistic (e.g., t('projects.index.total_projects')).
   # @param count [Integer] Statistic value.
   # @param color_scheme [Symbol] Color scheme (e.g., :blue, :teal). Defaults to slate.
-  def initialize(id_prefix:, icon_name:, label_key:, count:, color_scheme:)
+  def initialize(id_prefix:, icon_name:, label:, count:, color_scheme:)
     super
     @id_prefix = id_prefix.to_s.parameterize
     @icon_name = icon_name
-    @label_key = label_key
+    @label = label
     @count = count
     @color_scheme = color_scheme
   end
