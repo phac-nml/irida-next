@@ -1318,7 +1318,9 @@ en:
     filtering_samples: Filtering samples, this may take some time.
     name:
       helper: A custom name will make it easier to search for this in the future.
-      label: Name (Optional)
+      label:
+        optional: Name (Optional)
+        required: Name (Required)
     processing_request: Processing your submission, this may take some time.
     processing_samplesheet: Processing samplesheet, this may take some time.
     submission_error: Something went wrong with the submission request.

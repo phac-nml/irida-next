@@ -1302,6 +1302,9 @@ module WorkflowExecutions
       ### ACTIONS START ###
       within '#dialog' do
         assert_selector 'h1', text: 'phac-nml/gasclustering'
+
+        find('input#workflow_execution_name').fill_in with: "WE-#{sample32.name}"
+
         # check default metadata dropdown selected values
         within('#field-metadata_1') do
           assert_text 'metadata_1'
@@ -1337,7 +1340,8 @@ module WorkflowExecutions
       end
 
       # verify show page
-      assert_selector 'h1', text: 'phac-nml/gasclustering'
+      assert_selector 'h1', text: "WE-#{sample32.name}"
+
       assert_text I18n.t(:'workflow_executions.show.tabs.params')
       # click parameters tab
       click_link I18n.t(:'workflow_executions.show.tabs.params')

@@ -1318,7 +1318,9 @@ fr:
     filtering_samples: Le filtrage des échantillons peut prendre un certain temps.
     name:
       helper: Un nom personnalisé facilitera la recherche à l’avenir.
-      label: Nom (facultatif)
+      label:
+        optional: Nom (facultatif)
+        required: Nom (Obligatoire)
     processing_request: Le traitement de votre soumission peut prendre un certain temps.
     processing_samplesheet: Le traitement de la fiche d’échantillonnage peut prendre un certain temps.
     submission_error: Quelque chose s’est mal passé avec la demande de soumission.

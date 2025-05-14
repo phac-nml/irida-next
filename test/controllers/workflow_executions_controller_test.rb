@@ -39,7 +39,8 @@ class WorkflowExecutionsControllerTest < ActionDispatch::IntegrationTest
                      'fastq_2' => ''
                    }
                  }
-               ]
+               ],
+               name: 'Newest Workflow Execution'
              }
            }
 

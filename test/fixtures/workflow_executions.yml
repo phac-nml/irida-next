@@ -20,6 +20,7 @@ workflow_execution_valid:
   run_id: "my_run_id_1"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  name: "workflow_execution_valid"
 
 workflow_execution_gasclustering:
   <<: *DEFAULTS
@@ -30,6 +31,7 @@ workflow_execution_gasclustering:
   run_id: "my_run_id_1"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  name: "workflow_execution_gasclustering"
 
 workflow_execution_invalid_metadata:
   <<: *DEFAULTS
@@ -40,6 +42,7 @@ workflow_execution_invalid_metadata:
   run_id: "my_run_id_2"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  name: "workflow_execution_invalid_metadata"
 
 workflow_execution_invalid_workflow:
   <<: *DEFAULTS
@@ -50,6 +53,7 @@ workflow_execution_invalid_workflow:
   run_id: "my_run_id_2"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  name: "workflow_execution_invalid_workflow"
 
 workflow_execution_invalid_namespace:
   <<: *DEFAULTS
@@ -60,6 +64,7 @@ workflow_execution_invalid_namespace:
   run_id: "my_run_id_3"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace, :uuid) %>
+  name: "workflow_execution_invalid_namespace"
 
 irida_next_example:
   <<: *DEFAULTS
@@ -72,6 +77,7 @@ irida_next_example:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   email_notification: true
   cleaned: false
+  name: "irida_next_example"
 
 irida_next_example_nonexecutable:
   <<: *DEFAULTS
@@ -84,6 +90,7 @@ irida_next_example_nonexecutable:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   email_notification: true
   cleaned: false
+  name: "irida_next_example_nonexecutable"
 
 irida_next_example_prepared:
   <<: *DEFAULTS
@@ -105,6 +112,7 @@ irida_next_example_prepared:
   state: "prepared"
   email_notification: true
   cleaned: false
+  name: "irida_next_example_prepared"
 
 irida_next_example_submitted:
   <<: *DEFAULTS
@@ -125,6 +133,7 @@ irida_next_example_submitted:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "submitted"
   cleaned: false
+  name: "irida_next_example_submitted"
 
 irida_next_example_completed:
   <<: *DEFAULTS
@@ -146,6 +155,7 @@ irida_next_example_completed:
   state: "completed"
   blob_run_directory: "not a run dir"
   cleaned: true
+  name: "irida_next_example_completed"
 
 irida_next_example_completed_2_files:
   <<: *DEFAULTS
@@ -189,6 +199,7 @@ irida_next_example_completed_unclean:
   state: "completed"
   blob_run_directory: "not a run dir"
   cleaned: false
+  name: "irida_next_example_completed_unclean"
 
 irida_next_example_error:
   <<: *DEFAULTS
@@ -209,6 +220,7 @@ irida_next_example_error:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "error"
   cleaned: true
+  name: "irida_next_example_error"
 
 irida_next_example_error_unclean:
   <<: *DEFAULTS
@@ -229,6 +241,7 @@ irida_next_example_error_unclean:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "error"
   cleaned: false
+  name: "irida_next_example_error_unclean"
 
 irida_next_example_canceling:
   <<: *DEFAULTS
@@ -249,6 +262,7 @@ irida_next_example_canceling:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "canceling"
   cleaned: false
+  name: "irida_next_example_canceling"
 
 irida_next_example_canceled:
   <<: *DEFAULTS
@@ -269,6 +283,7 @@ irida_next_example_canceled:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "canceled"
   cleaned: true
+  name: "irida_next_example_canceled"
 
 irida_next_example_canceled_unclean:
   <<: *DEFAULTS
@@ -289,6 +304,7 @@ irida_next_example_canceled_unclean:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "canceled"
   cleaned: false
+  name: "irida_next_example_canceled_unclean"
 
 irida_next_example_running:
   <<: *DEFAULTS
@@ -309,6 +325,7 @@ irida_next_example_running:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "running"
   cleaned: false
+  name: "irida_next_example_running"
 
 irida_next_example_new:
   <<: *DEFAULTS
@@ -329,6 +346,7 @@ irida_next_example_new:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "initial"
   cleaned: false
+  name: "irida_next_example_new"
 
 irida_next_example_completing_a:
   <<: *DEFAULTS
@@ -351,6 +369,7 @@ irida_next_example_completing_a:
   blob_run_directory: "not a run dir"
   email_notification: true
   cleaned: false
+  name: "irida_next_example_completing_a"
 
 irida_next_example_completing_b:
   <<: *DEFAULTS
@@ -372,6 +391,7 @@ irida_next_example_completing_b:
   state: "completing"
   blob_run_directory: "not a run dir"
   cleaned: false
+  name: "irida_next_example_completing_b"
 
 irida_next_example_completing_c:
   <<: *DEFAULTS
@@ -394,6 +414,7 @@ irida_next_example_completing_c:
   blob_run_directory: "not a run dir"
   update_samples: true
   cleaned: false
+  name: "irida_next_example_completing_c"
 
 irida_next_example_completing_d:
   <<: *DEFAULTS
@@ -415,6 +436,7 @@ irida_next_example_completing_d:
   state: "completing"
   blob_run_directory: "not a run dir"
   cleaned: false
+  name: "irida_next_example_completing_d"
 
 irida_next_example_completing_e:
   <<: *DEFAULTS
@@ -436,6 +458,7 @@ irida_next_example_completing_e:
   state: "completing"
   blob_run_directory: "not a run dir"
   cleaned: false
+  name: "irida_next_example_completing_e"
 
 irida_next_example_completing_f:
   <<: *DEFAULTS
@@ -459,6 +482,7 @@ irida_next_example_completing_f:
   update_samples: false
   email_notification: true
   cleaned: false
+  name: "irida_next_example_completing_f"
 
 irida_next_example_completing_g:
   <<: *DEFAULTS
@@ -482,6 +506,7 @@ irida_next_example_completing_g:
   update_samples: true
   email_notification: true
   cleaned: false
+  name: "irida_next_example_completing_g"
 
 irida_next_example_completing_h:
   <<: *DEFAULTS
@@ -504,6 +529,7 @@ irida_next_example_completing_h:
   blob_run_directory: "not a run dir"
   update_samples: true
   cleaned: false
+  name: "irida_next_example_completing_h"
 
 irida_next_example_completed_with_output:
   <<: *DEFAULTS
@@ -547,6 +573,7 @@ automated_workflow_execution:
   state: "completed"
   blob_run_directory: "not a run dir"
   cleaned: true
+  name: "automated_workflow_execution"
 
 <% (1..25).each do |n| %>
 workflow_execution<%= (n) %>:
@@ -568,6 +595,7 @@ workflow_execution<%= (n) %>:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project33_namespace, :uuid) %>
   state: "initial"
   cleaned: false
+  name: <%= "workflow_execution#{n}" %>
 <% end %>
 
 workflow_execution_existing:
@@ -587,6 +615,7 @@ workflow_execution_existing:
   run_id: "my_run_id_1"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  name: "workflow_execution_existing"
 
 automated_example_prepared:
   <<: *DEFAULTS
@@ -608,6 +637,7 @@ automated_example_prepared:
   state: "prepared"
   email_notification: true
   cleaned: false
+  name: "automated_example_prepared"
 
 automated_example_submitted:
   <<: *DEFAULTS
@@ -628,6 +658,7 @@ automated_example_submitted:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "submitted"
   cleaned: false
+  name: "automated_example_submitted"
 
 automated_example_completed:
   <<: *DEFAULTS
@@ -670,6 +701,7 @@ automated_example_error:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "error"
   cleaned: true
+  name: "automated_example_error"
 
 automated_example_canceling:
   <<: *DEFAULTS
@@ -690,6 +722,7 @@ automated_example_canceling:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "canceling"
   cleaned: false
+  name: "automated_example_canceling"
 
 automated_example_canceled:
   <<: *DEFAULTS
@@ -731,6 +764,7 @@ automated_example_running:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "running"
   cleaned: false
+  name: "automated_example_running"
 
 automated_example_new:
   <<: *DEFAULTS
@@ -751,6 +785,7 @@ automated_example_new:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   state: "initial"
   cleaned: false
+  name: "automated_example_new"
 
 automated_workflow_execution_existing:
   <<: *DEFAULTS
@@ -770,6 +805,7 @@ automated_workflow_execution_existing:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   cleaned: false
+  name: "automated_example_existing"
 
 irida_next_example_end_to_end:
   <<: *DEFAULTS
@@ -789,6 +825,7 @@ irida_next_example_end_to_end:
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
   state: "initial"
   cleaned: false
+  name: "irida_next_example_end_to_end"
 
 irida_next_example_completed_DELETE:
   <<: *DEFAULTS
@@ -810,6 +847,7 @@ irida_next_example_completed_DELETE:
   blob_run_directory: "not a run dir"
   state: "completed"
   cleaned: true
+  name: "irida_next_example_completed_DELETE"
 
 irida_next_example_error_DELETE:
   <<: *DEFAULTS
@@ -827,6 +865,7 @@ irida_next_example_error_DELETE:
   blob_run_directory: "not a run dir"
   state: "error"
   cleaned: true
+  name: "irida_next_example_error_DELETE"
 
 irida_next_example_canceled_DELETE:
   <<: *DEFAULTS
@@ -844,6 +883,7 @@ irida_next_example_canceled_DELETE:
   blob_run_directory: "not a run dir"
   state: "canceled"
   cleaned: true
+  name: "irida_next_example_canceled_DELETE"
 
 irida_next_example_completed_unclean_DELETE:
   <<: *DEFAULTS
@@ -861,6 +901,7 @@ irida_next_example_completed_unclean_DELETE:
   blob_run_directory: "not a run dir"
   state: "completed"
   cleaned: false
+  name: "irida_next_example_completed_unclean_DELETE"
 
 irida_next_example_error_unclean_DELETE:
   <<: *DEFAULTS
@@ -878,6 +919,7 @@ irida_next_example_error_unclean_DELETE:
   blob_run_directory: "not a run dir"
   state: "error"
   cleaned: false
+  name: "irida_next_example_error_unclean_DELETE"
 
 irida_next_example_canceled_unclean_DELETE:
   <<: *DEFAULTS
@@ -895,6 +937,7 @@ irida_next_example_canceled_unclean_DELETE:
   blob_run_directory: "not a run dir"
   state: "canceled"
   cleaned: false
+  name: "irida_next_example_canceled_unclean_DELETE"
 
 workflow_execution_valid_on_group:
   <<: *DEFAULTS
@@ -905,6 +948,7 @@ workflow_execution_valid_on_group:
   run_id: "my_group_run_id_1"
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  name: "workflow_execution_valid_on_group"
 
 workflow_execution_shared1:
   <<: *DEFAULTS
@@ -916,6 +960,7 @@ workflow_execution_shared1:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   shared_with_namespace: true
+  name: "workflow_execution_shared1"
 
 workflow_execution_shared2:
   <<: *DEFAULTS
@@ -929,6 +974,7 @@ workflow_execution_shared2:
   shared_with_namespace: true
   state: "completed"
   cleaned: true
+  name: "workflow_execution_shared2"
 
 workflow_execution_shared3:
   <<: *DEFAULTS
@@ -940,6 +986,7 @@ workflow_execution_shared3:
   submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid) %>
   shared_with_namespace: true
+  name: "workflow_execution_shared3"
 
 workflow_execution_completed_shared1:
   <<: *DEFAULTS
@@ -1175,6 +1222,7 @@ workflow_execution_group_shared_error:
   state: "error"
   cleaned: true
   shared_with_namespace: true
+  name: "workflow_execution_group_shared_error"
 
 workflow_execution_group_shared_canceling:
   <<: *DEFAULTS
@@ -1196,6 +1244,7 @@ workflow_execution_group_shared_canceling:
   state: "canceling"
   cleaned: false
   shared_with_namespace: true
+  name: "workflow_execution_group_shared_canceling"
 
 workflow_execution_group_shared_canceled:
   <<: *DEFAULTS
