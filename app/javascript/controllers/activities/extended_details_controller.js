@@ -71,6 +71,7 @@ export default class extends Controller {
           this.activityTypeValue === "group_import_samples" ||
           this.activityTypeValue === "group_samples_destroy"
         ) {
+          // table row format: SAMPLE_NAME (SAMPLE_PUID) | PROJECT_PUID
           this.#generateSingleSampleAndProjectTableRows(indexRangeData);
         } else if (this.activityTypeValue === "group_sample_transfer") {
           this.#generateGroupSampleTransferTableRows(indexRangeData);
