@@ -33,7 +33,11 @@
     <%= fields_for :workflow_execution do |workflow| %>
       <section class="mb-4">
         <%= workflow.label :name, class: "block text-sm font-medium text-slate-900 dark:text-white" do %>
-          <%= t(".name.label") %>
+          <% if url.include?("automated_workflow_executions") %>
+            <%= t(".name.label.optional") %>
+          <% else %>
+            <%= t(".name.label.required") %>
+          <% end %>
         <% end %>
         <p
           id="helper-text-explanation"

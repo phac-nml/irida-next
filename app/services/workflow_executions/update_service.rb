@@ -10,7 +10,7 @@ module WorkflowExecutions
 
     def execute
       authorize! @workflow_execution, to: :update?
-      @workflow_execution.update!(params)
+      @workflow_execution.update(params)
     end
   end
 end
