@@ -71,7 +71,7 @@ export default class extends Controller {
           this.activityTypeValue === "group_samples_destroy"
         ) {
           // table row format: SAMPLE_NAME (SAMPLE_PUID) | PROJECT_PUID
-          this.#generateSingleSampleAndProjectTableRows(indexRangeData);
+          this.#generateSampleAndProjectTableRows(indexRangeData);
         } else {
           this.#generateTableRows(indexRangeData);
         }
@@ -250,7 +250,7 @@ export default class extends Controller {
     }
   }
 
-  #generateSingleSampleAndProjectTableRows(table_data) {
+  #generateSampleAndProjectTableRows(table_data) {
     if ("content" in document.createElement("template")) {
       const template = this.importSampleTableRowTarget;
       const fragment = document.createDocumentFragment();
