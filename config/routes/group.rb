@@ -53,6 +53,7 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
           resource :file_import, module: :metadata, only: %i[create new]
           resource :spreadsheet_import, only: %i[create new]
           resource :transfer, only: %i[create new]
+          resource :deletion, only: %i[destroy new]
         end
       end
       collection do
