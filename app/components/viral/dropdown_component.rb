@@ -22,7 +22,7 @@ module Viral
       'disabled:text-slate-500', 'font-semibold', 'hover:bg-slate-100',
       'hover:text-slate-950', 'inline-flex', 'items-center', 'justify-center',
       'min-h-11', 'min-w-11', 'px-5', 'py-2.5', 'rounded-lg', 'sm:w-auto',
-      'text-slate-900'
+      'text-slate-900', 'text-sm'
     ].freeze
 
     # rubocop:disable Metrics/ParameterLists

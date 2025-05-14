@@ -51,6 +51,7 @@ module ICONS
     question: { name: :question, options: {} },
     sidebar: { name: :sidebar, options: {} },
     sliders_horizontal: { name: 'sliders-horizontal', options: {} },
+    rocket_launch: { name: 'rocket-launch', options: {} },
     ticket: { name: :ticket, options: {} },
     user_circle: { name: 'user-circle', options: {} },
     users: { name: :users, options: {} },
