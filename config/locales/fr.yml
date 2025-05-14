@@ -1760,7 +1760,6 @@ fr:
         nav_aria_label: Sample Navigation
         new_attachment_button: Télécharger des fichiers
         remove_button: Retirer
-        remove_button_confirmation: Êtes-vous sûr de vouloir retirer cet échantillon du projet?
         table_header:
           action: Mesure
           created_at: Téléchargé
