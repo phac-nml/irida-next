@@ -12,6 +12,19 @@ module Viral
       hover: 'hover'
     }.freeze
 
+    BUTTON_CLASSES = [
+      'bg-slate-50', 'border', 'border-slate-300', 'cursor-pointer',
+      'dark:bg-slate-900', 'dark:border-slate-700', 'dark:hover:bg-slate-800',
+      'dark:hover:text-white', 'dark:text-slate-50', 'disabled:bg-slate-100',
+      'disabled:border-slate-200', 'disabled:cursor-not-allowed',
+      'disabled:dark:bg-slate-800', 'disabled:dark:border-slate-700',
+      'disabled:dark:text-slate-400', 'disabled:opacity-80',
+      'disabled:text-slate-500', 'font-semibold', 'hover:bg-slate-100',
+      'hover:text-slate-950', 'inline-flex', 'items-center', 'justify-center',
+      'min-h-11', 'min-w-11', 'px-5', 'py-2.5', 'rounded-lg', 'sm:w-auto',
+      'text-slate-900'
+    ].freeze
+
     # rubocop:disable Metrics/ParameterLists
     def initialize(label: nil, tooltip: '', icon: nil, caret: false, trigger: TRIGGER_DEFAULT, skidding: 0,
                    distance: 10, dropdown_styles: '', action_link: false, action_link_value: nil, **system_arguments)
@@ -36,14 +49,8 @@ module Viral
 
     def default_system_arguments(args)
       data = { 'viral--dropdown-target': 'trigger' }
-      if @action_link
-        data = data.merge({
-                            action: 'turbo:morph-element->action-button#idempotentConnect',
-                            turbo_stream: true,
-                            controller: 'action-button',
-                            action_link_required_value: @action_link_value
-                          })
-      end
+      data.merge!(action_link_data_attributes) if @action_link
+
       args.merge({
                    id: "dd-#{SecureRandom.hex(10)}",
                    data:,
@@ -59,9 +66,7 @@ module Viral
     def system_arguments_for_button
       {
         classes: class_names(
-          'text-slate-600 dark:text-slate-400 border border-slate-300 min-h-11 min-w-11
-      dark:border-slate-600 rounded-lg text-sm px-3 py-1 cursor-pointer inline-flex
-      items-center justify-center',
+          BUTTON_CLASSES,
           system_arguments[:classes]
         )
       }
@@ -73,6 +78,17 @@ module Viral
           'viral-dropdown--icon',
           system_arguments[:classes]
         )
+      }
+    end
+
+    private
+
+    def action_link_data_attributes
+      {
+        action: 'turbo:morph-element->action-button#idempotentConnect',
+        turbo_stream: true,
+        controller: 'action-button',
+        action_link_required_value: @action_link_value
       }
     end
   end
