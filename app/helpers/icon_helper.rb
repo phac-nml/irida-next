@@ -29,6 +29,10 @@ module ICONS
   # Default library is :phosphor and default variant is :regular unless specified
   DEFINITIONS = {
     # Phosphor Icons (default library)
+    caret_down: { name: 'caret-down', options: {} },
+    caret_up: { name: 'caret-up', options: {} },
+    caret_right: { name: 'caret-right', options: {} },
+    caret_left: { name: 'caret-left', options: {} },
     clipboard: { name: 'clipboard-text', options: {} },
     caret_down: { name: 'caret-down', options: {} },
     caret_up: { name: 'caret-up', options: {} },
