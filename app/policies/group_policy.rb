@@ -307,6 +307,13 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
+  def destroy_sample?
+    return true if effective_access_level == Member::AccessLevel::OWNER
+
+    details[:name] = record.name
+    false
+  end
+
   scope_for :relation do |relation|
     relation.with(
       user_groups: relation.where(id: user.members.not_expired.select(:namespace_id)).self_and_descendant_ids,
