@@ -7,7 +7,7 @@
     <%= render HistoryVersionComponent.new(log_data: log_data) %>
   </div>
   <% dialog.with_secondary_action do %>
-    <%= viral_button(data: { action: 'click->viral--dialog#close' }) do %>
+    <%= render Pathogen::Button.new(data: { action: 'click->viral--dialog#close' }) do %>
       <%= t(".close") %>
     <% end %>
   <% end %>
