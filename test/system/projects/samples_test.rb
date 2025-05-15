@@ -2955,7 +2955,7 @@ module Projects
 
       ### VERIFY START ###
       within('#multiple-deletions-dialog') do
-        assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.description.singular',
+        assert_text I18n.t('shared.samples.destroy_multiple_confirmation_dialog.description.singular',
                            sample_name: @sample1.name)
       end
       ### VERIFY END ###
@@ -2985,7 +2985,7 @@ module Projects
       ### VERIFY START ###
       within('#multiple-deletions-dialog') do
         assert_text I18n.t(
-          'projects.samples.deletions.new_multiple_deletions_dialog.description.plural'
+          'shared.samples.destroy_multiple_confirmation_dialog.description.plural'
         ).gsub! 'COUNT_PLACEHOLDER', '3'
       end
       ### VERIFY END ###
@@ -3051,13 +3051,13 @@ module Projects
       within('#multiple-deletions-dialog') do
         assert_selector 'form[data-infinite-scroll-target="pageForm"]'
         sleep 1
-        click_button I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
+        click_button I18n.t('shared.samples.destroy_multiple_confirmation_dialog.submit_button')
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
       # flash msg
-      assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
+      assert_text I18n.t('shared.samples.destroy_multiple.success')
 
       # no remaining samples
       within 'section[role="status"]' do
