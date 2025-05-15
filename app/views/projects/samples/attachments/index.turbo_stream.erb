@@ -1,0 +1,21 @@
+<%= turbo_stream.update("sample_attachments") do %>
+  <%= render Attachments::TableComponent.new(
+    @sample_attachments,
+    @pagy,
+    @q,
+    @sample,
+    nil,
+    false,
+    @has_attachments,
+    abilities: {
+      select_attachments: @allowed_to[:update_sample],
+    },
+    row_actions: {
+      destroy: @allowed_to[:destroy_attachment],
+    },
+    empty: {
+      title: t(:".empty_state.title"),
+      description: t(:".empty_state.description"),
+    },
+  ) %>
+<% end %>
