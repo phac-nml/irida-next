@@ -51,25 +51,10 @@
           </div>
         </div>
       <% end %>
-      <%= render Attachments::TableComponent.new(
-        attachments,
-        @pagy,
-        @q,
-        @sample,
-        nil,
-        false,
-        @has_attachments,
-        abilities: {
-          select_attachments: @allowed_to[:update_sample],
-        },
-        row_actions: {
-          destroy: @allowed_to[:destroy_attachment],
-        },
-        empty: {
-          title: t(:".empty_state.title"),
-          description: t(:".empty_state.description"),
-        },
-      ) %>
+
+      <%= turbo_frame_tag "sample_attachments", src: namespace_project_sample_attachments_url(sample_id: @sample.id, format: :turbo_stream, **request.query_parameters) do %>
+        <%= render partial: "shared/loading/table" %>
+      <% end %>
     </div>
   <% else %>
     <% if @allowed_to[:update_sample] %>
