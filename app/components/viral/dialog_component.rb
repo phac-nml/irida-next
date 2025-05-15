@@ -9,7 +9,7 @@ module Viral
       Viral::Dialog::HeaderComponent.new(title:, closable: @closable, **header_system_arguments)
     }
     renders_one :primary_action, lambda { |**system_arguments|
-      Viral::ButtonComponent.new(state: :primary, **system_arguments)
+      Pathogen::Button.new(scheme: :primary, **system_arguments)
     }
     renders_many :secondary_actions
 

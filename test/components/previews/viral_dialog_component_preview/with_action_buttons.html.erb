@@ -16,7 +16,7 @@
   </p>
   <% dialog.with_primary_action { "Primary button" } %>
   <% dialog.with_secondary_action do %>
-    <%= viral_button(data: { action: 'click->viral--dialog#close' }) do %>
+    <%= render Pathogen::Button.new(data: { action: 'click->viral--dialog#close' }) do %>
       Secondary button
     <% end %>
   <% end %>
