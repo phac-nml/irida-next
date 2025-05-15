@@ -23,13 +23,13 @@ module Groups
 
         # No selected samples deleted
         if deleted_samples_count.zero?
-          flash[:error] = t('.no_deleted_samples')
+          flash[:error] = t('shared.samples.destroy_multiple.no_deleted_samples')
         # Partial sample deletion
         elsif deleted_samples_count.positive? && deleted_samples_count != samples_to_delete_count
           set_multi_status_destroy_multiple_message(deleted_samples_count, samples_to_delete_count)
         # All samples deleted successfully
         else
-          flash[:success] = t('.success')
+          flash[:success] = t('shared.samples.destroy_multiple.success')
         end
 
         redirect_to group_samples_path
@@ -55,9 +55,9 @@ module Groups
       end
 
       def set_multi_status_destroy_multiple_message(deleted_samples_count, samples_to_delete_count)
-        flash[:success] = t('projects.samples.deletions.destroy_multiple.partial_success',
+        flash[:success] = t('shared.samples.destroy_multiple.partial_success',
                             deleted: "#{deleted_samples_count}/#{samples_to_delete_count}")
-        flash[:error] = t('projects.samples.deletions.destroy_multiple.partial_error',
+        flash[:error] = t('shared.samples.destroy_multiple.partial_error',
                           not_deleted: "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}")
       end
     end

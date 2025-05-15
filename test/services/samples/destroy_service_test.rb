@@ -238,15 +238,29 @@ module Samples
       end
     end
 
-    test 'delete shared group samples with owner shared role' do
-      group1 = groups(:group_one)
-      group7 = groups(:group_seven)
+    test 'delete shared group samples with owner shared group role' do
+      group_hotel = groups(:group_hotel)
+      project_hotel = projects(:projectHotel)
+      group = groups(:user30_group_one)
+      sample36 = samples(:sample36)
       user = users(:steve_doe)
 
       assert_difference -> { Sample.count } => -1,
-                        -> { group1.reload.samples_count } => -1,
-                        -> { @project.reload.samples.size } => -1 do
-        Samples::DestroyService.new(group7, user, { sample_ids: [@sample1.id] }).execute
+                        -> { group_hotel.reload.samples_count } => -1,
+                        -> { project_hotel.reload.samples.size } => -1 do
+        Samples::DestroyService.new(group, user, { sample_ids: [sample36.id] }).execute
+      end
+    end
+
+    test 'delete shared group samples with owner shared project role' do
+      project_alpha = projects(:projectAlpha)
+      group = groups(:user30_group_one)
+      sample_alpha = samples(:sampleAlpha)
+      user = users(:steve_doe)
+
+      assert_difference -> { Sample.count } => -1,
+                        -> { project_alpha.reload.samples_count } => -1 do
+        Samples::DestroyService.new(group, user, { sample_ids: [sample_alpha.id] }).execute
       end
     end
 

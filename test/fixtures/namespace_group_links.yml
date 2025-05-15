@@ -188,7 +188,13 @@ namespace_group_link31:
   namespace_type: "Group"
 
 namespace_group_link32:
-  group_id: <%= ActiveRecord::FixtureSet.identify(:group_seven, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  group_id: <%= ActiveRecord::FixtureSet.identify(:user30_group_one, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_hotel, :uuid) %>
   group_access_level: <%= Member::AccessLevel::OWNER %>
   namespace_type: "Group"
+
+namespace_group_link33:
+  group_id: <%= ActiveRecord::FixtureSet.identify(:user30_group_one, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha_namespace, :uuid) %>
+  group_access_level: <%= Member::AccessLevel::OWNER %>
+  namespace_type: "Project"
