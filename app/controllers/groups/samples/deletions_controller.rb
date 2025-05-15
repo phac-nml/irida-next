@@ -5,7 +5,7 @@ module Groups
     # Controller actions for Project Samples Deletions
     class DeletionsController < Groups::ApplicationController
       before_action :group
-      before_action :new_dialog_partial, :new_dialog_paths, only: :new
+      before_action :new_dialog_paths, only: :new
 
       def new
         authorize! @group, to: :destroy_sample?
@@ -39,10 +39,6 @@ module Groups
 
       def group
         @group = Group.find_by_full_path(params[:group_id]) # rubocop:disable Rails/DynamicFindBy
-      end
-
-      def new_dialog_partial
-        @partial = params['deletion_type'] == 'single' ? 'new_deletion_dialog' : 'new_multiple_deletions_dialog'
       end
 
       def new_dialog_paths
