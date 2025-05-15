@@ -1,42 +1,57 @@
 import { Controller } from "@hotwired/stimulus";
 
+/**
+ * 🎮 Controls the enabled/disabled state of an action button.
+ *
+ * This controller disables the target button element if a specified 'required'
+ * count is not met. It's useful for scenarios where an action should only
+ * be available after a certain number of items are selected or conditions are fulfilled.
+ *
+ * @property {number} requiredValue - The minimum count required to enable the button. Defaults to 0.
+ */
 export default class extends Controller {
-  static values = { required: { type: Number, default: 0 } };
+  static values = {
+    /**
+     * 🔢 The minimum number of items/conditions required for the button to be enabled.
+     * If the current count is less than this value, the button will be disabled.
+     * @type {number}
+     * @default 0
+     */
+    required: { type: Number, default: 0 },
+  };
 
-  // # indicates private attribute or method
-  // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties
-  #event_classes = ["pointer-events-none", "cursor-not-allowed"];
-
-  #default_colours = ["bg-slate-100", "text-slate-600", "dark:bg-slate-600", "dark:text-slate-300",
-    "border-slate-100", "dark:border-slate-600"];
-
-  #primary_colours = ["bg-primary-200", "text-slate-400", "border-primary-200"];
-
+  /**
+   * 🔗 Called automatically when the controller is connected to the DOM.
+   * Initializes the button's disabled state.
+   */
   connect() {
-    this.idempotentConnect();
+    this._initializeButtonState();
   }
 
-  idempotentConnect() {
-    this.setDisabled();
+  /**
+   * 🔄 Idempotent connection logic to set the initial disabled state of the button.
+   * This method can be called multiple times without side effects beyond the initial setup.
+   * @private
+   */
+  _initializeButtonState() {
+    // Initially, check if the button should be disabled based on the requiredValue.
+    // Assumes a count of 0 if no specific count is provided at initialization.
+    this.setDisabled(0);
   }
 
+  /**
+   * ⚙️ Sets the disabled state of the button element.
+   *
+   * This method compares the provided count against the `requiredValue`.
+   * If `requiredValue` is greater than the `count`, the button is disabled; otherwise, it's enabled.
+   *
+   * @param {number} [count=0] - The current count to compare against `requiredValue`. Defaults to 0.
+   */
   setDisabled(count = 0) {
     if (this.requiredValue > count) {
       this.element.disabled = true;
-      this.element.classList.add(...this.#event_classes);
-      if (this.element.classList.contains("button--state-primary")) {
-        this.element.classList.add(...this.#primary_colours);
-      } else {
-        this.element.classList.add(...this.#default_colours);
-      }
     } else {
       this.element.disabled = false;
-      this.element.classList.remove(...this.#event_classes);
-      if (this.element.classList.contains("button--state-primary")) {
-        this.element.classList.remove(...this.#primary_colours);
-      } else {
-        this.element.classList.remove(...this.#default_colours);
-      }
     }
   }
 }
