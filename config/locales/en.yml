@@ -692,7 +692,6 @@ en:
         partial_success: "%{deleted} workflows were successfully deleted"
         success: All selected workflows were successfully deleted
       update:
-        error: Could not update workflow %{workflow_name}
         success: Workflow %{workflow_name} was successfully updated
   dashboard:
     groups:
