@@ -25,11 +25,13 @@
           </button>
         </div>
       <% else %>
-        <%= viral_button(
+        <%= render Pathogen::Button.new(
           data: {
             action: "advanced-search#idempotentConnect viral--dialog#open",
           },
-        ) { t(".title") } %>
+        ) do %>
+          <%= t(".title") %>
+        <% end %>
       <% end %>
     <% end %>
     <% dialog.with_header(title: t(".title")) %>
@@ -43,7 +45,7 @@
       <div class="space-y-4" data-advanced-search-target="searchGroupsContainer">
       </div>
       <div class="flex justify-end space-x-2">
-        <%= viral_button(data: { action: "advanced-search#addGroup" }) do %>
+        <%= render Pathogen::Button.new(data: { action: "advanced-search#addGroup" }) do %>
           <%= t(".add_group_button") %>
         <% end %>
       </div>
@@ -65,7 +67,7 @@
       t(".apply_filter_button")
     end %>
     <% dialog.with_secondary_action do %>
-      <%= viral_button(data: { action: "advanced-search#clearForm filters#submit" }) do %>
+      <%= render Pathogen::Button.new(data: { action: "advanced-search#clearForm filters#submit" }) do %>
         <%= t(".clear_filter_button") %>
       <% end %>
     <% end %>
@@ -152,10 +154,10 @@
     >
       <legend><%= t("advanced_search_component.group", index: "GROUP_LEGEND_INDEX_PLACEHOLDER") %></legend>
       <div class="flex justify-end my-4">
-        <%= viral_button(data: { action: "advanced-search#addCondition" }) do %>
+        <%= render Pathogen::Button.new(data: { action: "advanced-search#addCondition" }) do %>
           <%= t(".add_condition_button") %>
         <% end %>
-        <%= viral_button(classes: "ml-2", data: { action: "advanced-search#removeGroup" }) do %>
+        <%= render Pathogen::Button.new(classes: "ml-2", data: { action: "advanced-search#removeGroup" }) do %>
           <%= t(".remove_group_button") %>
         <% end %>
       </div>
