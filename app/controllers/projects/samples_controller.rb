@@ -44,7 +44,11 @@ module Projects
       elsif @tab == 'history'
         @log_data = @sample.log_data_without_changes
       else
-        @sample_attachments = @sample.attachments
+        all_attachments = load_attachments
+        @has_attachments = all_attachments.count.positive?
+        @q = all_attachments.ransack(params[:q])
+        set_default_sort
+        @pagy, @sample_attachments = pagy_with_metadata_sort(@q.result)
       end
     end
 
@@ -105,6 +109,14 @@ module Projects
     end
 
     private
+
+    def load_attachments
+      @sample.attachments.where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
+    end
+
+    def set_default_sort
+      @q.sorts = 'updated_at desc' if @q.sorts.empty?
+    end
 
     def index_view_authorizations
       @allowed_to = {
