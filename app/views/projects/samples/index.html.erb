@@ -20,7 +20,7 @@
           <% end %>
         <% end %>
         <% if @render_sample_actions %>
-          <%= viral_dropdown(label: t("shared.samples.actions_dropdown.label"), aria: { label: t('shared.samples.actions_dropdown.label') }, caret: true, classes: "font-normal button button--size-default button--state-default") do |dropdown| %>
+          <%= viral_dropdown(label: t("shared.samples.actions_dropdown.label"), aria: { label: t('shared.samples.actions_dropdown.label') }, caret: true, classes: "btn btn-default btn-rounded") do |dropdown| %>
             <% if @allowed_to[:create_sample] %>
               <% dropdown.with_item(
                 label: t("shared.samples.actions_dropdown.new_sample"),
@@ -196,7 +196,7 @@
           <input type="hidden" name="select" value="on"/>
           <%= render "shared/samples/timestamp_input" %>
           <%= f.submit t(".select_all_button"),
-                   class: "button button--state-default button--size-default" %>
+                   class: "btn btn-default btn-rounded" %>
         <% end %>
         <%= form_with(
                   url: select_namespace_project_samples_url,
@@ -205,7 +205,7 @@
                 ) do |f| %>
           <input type="hidden" name="format" value="turbo_stream"/>
           <%= f.submit t(".deselect_all_button"),
-                   class: "button button--state-default button--size-default" %>
+                   class: "btn btn-default btn-rounded" %>
         <% end %>
       <% end %>
     </div>
