@@ -28,7 +28,7 @@ module Viral
       assert_selector 'li > a', text: I18n.t('viral.pagy.pagination_component.next')
       assert_selector 'li a[aria-current="page"]', text: '5', count: 1
       assert_selector 'li > a:not([aria-disabled="true"])', count: 7
-      assert_selector 'li span.cursor-default', text: '...', count: 2
+      assert_selector 'li span.cursor-not-allowed', text: '...', count: 2
     end
   end
 end
