@@ -1642,6 +1642,10 @@ en:
             description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
             no_permission_description: You do not have permission to upload files to this sample
             title: No files have been uploaded
+          limit:
+            item: Item
+          search:
+            placeholder: Filter by PUID or Filename
       clones:
         create:
           error: 'The following list of samples failed to copy:'
