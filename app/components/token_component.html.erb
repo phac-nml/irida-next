@@ -6,9 +6,9 @@
       type="text"
       data-token-target="input"
       class="
-        w-full font-mono text-sm border rounded-lg text-slate-900 border-slate-300
-        bg-slate-50 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400
-        dark:text-white
+        w-full font-mono text-sm leading-tight border rounded-lg text-slate-900
+        border-slate-300 bg-slate-50 dark:bg-slate-700 dark:border-slate-600
+        dark:placeholder-slate-400 dark:text-white px-2.5 py-3
       "
       value="<%= '*' * value.length %>"
       readonly
@@ -16,7 +16,7 @@
     >
     <button
       type="button"
-      class="absolute inset-y-0 bottom-0 right-0 p-2 rounded-r-lg"
+      class="absolute inset-y-0 right-0 flex items-center p-2 rounded-r-lg"
       data-action="click->token#toggleVisibility"
       aria-label="<%= t(:'components.token.toggle_visible') %>"
     >
@@ -31,10 +31,7 @@
   <button
     type="submit"
     data-action="click->token#copyToClipboard"
-    class="
-      px-4 py-2 text-sm text-white rounded-lg bg-primary-700 hover:bg-primary-800
-      dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700
-    "
+    class="btn btn-default btn-rounded"
   >
     <span data-token-target="initial"><%= t("components.token.copy") %></span>
     <span data-token-target="copied" class="flex items-center hidden"><%= viral_icon(name: "check", classes: "w-5 h-5") %>
