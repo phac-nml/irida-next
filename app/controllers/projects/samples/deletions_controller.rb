@@ -34,7 +34,7 @@ module Projects
         end
       end
 
-      def destroy_multiple
+      def destroy_multiple # rubocop:disable Metrics/AbcSize
         samples_to_delete_count = destroy_multiple_params['sample_ids'].count
 
         deleted_samples_count = ::Samples::DestroyService.new(@project.namespace, current_user,
@@ -42,13 +42,13 @@ module Projects
 
         # No selected samples deleted
         if deleted_samples_count.zero?
-          flash[:error] = t('.no_deleted_samples')
+          flash[:error] = t('shared.samples.destroy_multiple.no_deleted_samples')
         # Partial sample deletion
         elsif deleted_samples_count.positive? && deleted_samples_count != samples_to_delete_count
           set_multi_status_destroy_multiple_message(deleted_samples_count, samples_to_delete_count)
         # All samples deleted successfully
         else
-          flash[:success] = t('.success')
+          flash[:success] = t('shared.samples.destroy_multiple.success')
         end
 
         redirect_to namespace_project_samples_path, status: :see_other
@@ -78,9 +78,9 @@ module Projects
       end
 
       def set_multi_status_destroy_multiple_message(deleted_samples_count, samples_to_delete_count)
-        flash[:success] = t('projects.samples.deletions.destroy_multiple.partial_success',
+        flash[:success] = t('shared.samples.destroy_multiple.partial_success',
                             deleted: "#{deleted_samples_count}/#{samples_to_delete_count}")
-        flash[:error] = t('projects.samples.deletions.destroy_multiple.partial_error',
+        flash[:error] = t('shared.samples.destroy_multiple.partial_error',
                           not_deleted: "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}")
       end
     end

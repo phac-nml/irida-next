@@ -37,7 +37,7 @@ module Activities
 
         within %(div[data-controller="activities--extended_details"][data-controller-connected="true"]) do
           assert_selector 'p',
-                          text: I18n.t(:'components.activity.dialog.sample_destroy.description',
+                          text: I18n.t(:'components.activity.dialog.sample_destroy.description.project',
                                        user: @user.email, count: 1)
 
           assert_selector 'li', count: 1
