@@ -23,7 +23,7 @@
         controller: "action-button",
         action_button_required_value: 1,
       },
-      class: "bg-slate-50 border border-slate-300 cursor-pointer dark:bg-slate-900 dark:border-slate-700 dark:hover:bg-slate-800 dark:hover:text-white dark:text-slate-50 disabled:bg-slate-100 disabled:border-slate-200 disabled:cursor-not-allowed disabled:dark:bg-slate-800 disabled:dark:border-slate-700 disabled:dark:text-slate-400 disabled:opacity-80 disabled:text-slate-500 font-semibold hover:bg-slate-100 hover:text-slate-950 inline-flex items-center justify-center min-h-11 min-w-11 px-5 py-2.5 rounded-lg sm:w-auto text-slate-900 action-button" %>
+      class: "btn btn-default btn-rounded" %>
       <% if Flipper.enabled?(:delete_multiple_workflows) %>
         <%= button_to t(".delete_workflows_button"),
         destroy_multiple_confirmation_workflow_executions_path,
@@ -34,7 +34,7 @@
           controller: "action-button",
           action_button_required_value: 1,
         },
-        class: "bg-slate-50 border border-slate-300 cursor-pointer dark:bg-slate-900 dark:border-slate-700 dark:hover:bg-slate-800 dark:hover:text-white dark:text-slate-50 disabled:bg-slate-100 disabled:border-slate-200 disabled:cursor-not-allowed disabled:dark:bg-slate-800 disabled:dark:border-slate-700 disabled:dark:text-slate-400 disabled:opacity-80 disabled:text-slate-500 font-semibold hover:bg-slate-100 hover:text-slate-950 inline-flex items-center justify-center min-h-11 min-w-11 px-5 py-2.5 rounded-lg sm:w-auto text-slate-900 action-button" %>
+        class: "btn btn-default btn-rounded" %>
       <% end %>
     </div>
   <% end %>
@@ -50,7 +50,7 @@
         <input type="hidden" name="format" value="turbo_stream"/>
         <input type="hidden" name="select" value="on"/>
         <%= f.submit t(".select_all_button"),
-                 class: "bg-slate-50 border border-slate-300 cursor-pointer dark:bg-slate-900 dark:border-slate-700 dark:hover:bg-slate-800 dark:hover:text-white dark:text-slate-50 disabled:bg-slate-100 disabled:border-slate-200 disabled:cursor-not-allowed disabled:dark:bg-slate-800 disabled:dark:border-slate-700 disabled:dark:text-slate-400 disabled:opacity-80 disabled:text-slate-500 font-semibold hover:bg-slate-100 hover:text-slate-950 inline-flex items-center justify-center min-h-11 min-w-11 px-5 py-2.5 rounded-lg sm:w-auto text-slate-900" %>
+                 class: "btn btn-default btn-rounded" %>
       <% end %>
       <%= form_with(
                   url: select_workflow_executions_url,
@@ -59,7 +59,7 @@
                 ) do |f| %>
         <input type="hidden" name="format" value="turbo_stream"/>
         <%= f.submit t(".deselect_all_button"),
-                 class: "bg-slate-50 border border-slate-300 cursor-pointer dark:bg-slate-900 dark:border-slate-700 dark:hover:bg-slate-800 dark:hover:text-white dark:text-slate-50 disabled:bg-slate-100 disabled:border-slate-200 disabled:cursor-not-allowed disabled:dark:bg-slate-800 disabled:dark:border-slate-700 disabled:dark:text-slate-400 disabled:opacity-80 disabled:text-slate-500 font-semibold hover:bg-slate-100 hover:text-slate-950 inline-flex items-center justify-center min-h-11 min-w-11 px-5 py-2.5 rounded-lg sm:w-auto text-slate-900" %>
+                 class: "btn btn-default btn-rounded" %>
       <% end %>
     </div>
     <div class="grow-0">
