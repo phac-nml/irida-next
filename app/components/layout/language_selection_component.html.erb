@@ -76,7 +76,8 @@
               <%= form.hidden_field :locale,
                                 value: locale_value,
                                 id: "language_selection_#{locale_value}" %>
-              <%= form.submit locale_name,
+              <%= form.button locale_name,
+                              type: "submit",
                               role: "menuitem",
                               tabindex: "-1",
                               class: "
