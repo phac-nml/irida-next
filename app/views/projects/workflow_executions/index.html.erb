@@ -27,7 +27,7 @@
           controller: "action-button",
           action_button_required_value: 1,
         },
-        class: "btn btn-default btn-rounded" %>
+        class: "btn btn-default btn-rounded action-button" %>
       <% end %>
       <% if allowed_to?(:destroy_workflow_executions?, @project.namespace) && Flipper.enabled?(:delete_multiple_workflows) %>
         <%= button_to t(".delete_workflows_button"),
@@ -39,7 +39,7 @@
           controller: "action-button",
           action_button_required_value: 1,
         },
-        class: "btn btn-destructive btn-rounded" %>
+        class: "btn btn-destructive btn-rounded action-button" %>
       <% end %>
     </div>
   <% end %>
