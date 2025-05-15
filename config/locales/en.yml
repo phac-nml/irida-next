@@ -519,9 +519,12 @@ en:
           title: Copied Samples
         sample_destroy:
           description:
-            group: "%{user} removed %{count} samples from the group"
-            one: "%{user} removed 1 sample from the project"
-            other: "%{user} removed %{count} samples from the project"
+            group:
+              one: "%{user} removed 1 sample from the group"
+              other: "%{user} removed %{count} samples from the group"
+            project:
+              one: "%{user} removed 1 sample from the project"
+              other: "%{user} removed %{count} samples from the project"
           project: Project
           sample: Sample
           title: Deleted Samples
@@ -1028,12 +1031,6 @@ en:
       subtitle: Groups allow you to manage and collaborate across multiple projects. Members of a group have access to all of its projects
       title: Create subgroup
     samples:
-      deletions:
-        destroy:
-          no_deleted_samples: Selected samples could not be deleted
-          partial_error: "%{not_deleted} samples could not be deleted"
-          partial_success: "%{deleted} samples were successfully deleted"
-          success: Samples were successfully deleted
       index:
         deselect_all_button: Deselect All
         select_all_button: Select All
@@ -1683,25 +1680,10 @@ en:
       deletions:
         destroy:
           success: Sample %{sample_name} was successfully removed from project %{project_name}.
-        destroy_multiple:
-          no_deleted_samples: Selected samples could not be deleted
-          partial_error: "%{not_deleted} samples could not be deleted"
-          partial_success: "%{deleted} samples were successfully deleted"
-          success: Samples were successfully deleted
         new_deletion_dialog:
           description: Are you sure you want to delete sample '%{sample_name}'?
           submit_button: Remove
           title: Delete Sample
-        new_multiple_deletions_dialog:
-          description:
-            plural: "The following COUNT_PLACEHOLDER samples have been selected for deletion:"
-            singular: "The following sample has been selected for deletion:"
-            zero: No samples have been selected for deletion
-          loading: Loading...
-          samples: Samples
-          spinner: Deleting samples. This may take a while...
-          submit_button: Confirm
-          title: Delete Samples
       edit:
         cancel_button: Cancel
         form:
@@ -2029,6 +2011,11 @@ en:
         new_sample: New sample
         sample_export: Sample export
         transfer: Transfer samples
+      destroy_multiple:
+        no_deleted_samples: Selected samples could not be deleted
+        partial_error: "%{not_deleted} samples could not be deleted"
+        partial_success: "%{deleted} samples were successfully deleted"
+        success: Samples were successfully deleted
       destroy_multiple_confirmation_dialog:
         description:
           plural: "The following COUNT_PLACEHOLDER samples have been selected for deletion:"

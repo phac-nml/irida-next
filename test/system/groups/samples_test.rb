@@ -2225,7 +2225,7 @@ module Groups
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('groups.samples.deletions.destroy.success')
+      assert_text I18n.t('shared.samples.destroy_multiple.success')
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 24,
                                                                            locale: @user.locale))
       ### VERIFY END ###
@@ -2275,8 +2275,8 @@ module Groups
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('groups.samples.deletions.destroy.partial_success', deleted: '1/2')
-      assert_text I18n.t('groups.samples.deletions.destroy.partial_error', not_deleted: '1/2')
+      assert_text I18n.t('shared.samples.destroy_multiple.partial_success', deleted: '1/2')
+      assert_text I18n.t('shared.samples.destroy_multiple.partial_error', not_deleted: '1/2')
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 25,
                                                                            locale: @user.locale))
       ### VERIFY END ###
@@ -2321,7 +2321,7 @@ module Groups
       ### ACTIONS END ###
 
       ### VERIFY START ###
-      assert_text I18n.t('groups.samples.deletions.destroy.no_deleted_samples', deleted: '1/2')
+      assert_text I18n.t('shared.samples.destroy_multiple.no_deleted_samples', deleted: '1/2')
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                            locale: @user.locale))
       ### VERIFY END ###

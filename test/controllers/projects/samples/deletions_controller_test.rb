@@ -96,7 +96,7 @@ module Projects
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('projects.samples.deletions.destroy_multiple.success'), flash[:success]
+      assert_equal I18n.t('shared.samples.destroy_multiple.success'), flash[:success]
       assert_response :redirect
       assert_redirected_to namespace_project_samples_path(@namespace, @project)
     end
@@ -112,9 +112,9 @@ module Projects
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('projects.samples.deletions.destroy_multiple.partial_success', deleted: '3/4'),
+      assert_equal I18n.t('shared.samples.destroy_multiple.partial_success', deleted: '3/4'),
                    flash[:success]
-      assert_equal I18n.t('projects.samples.deletions.destroy_multiple.partial_error', not_deleted: '1/4'),
+      assert_equal I18n.t('shared.samples.destroy_multiple.partial_error', not_deleted: '1/4'),
                    flash[:error]
       assert_response :redirect
       assert_redirected_to namespace_project_samples_path(@namespace, @project)
@@ -129,7 +129,7 @@ module Projects
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('projects.samples.deletions.destroy_multiple.no_deleted_samples'), flash[:error]
+      assert_equal I18n.t('shared.samples.destroy_multiple.no_deleted_samples'), flash[:error]
       assert_response :redirect
       assert_redirected_to namespace_project_samples_path(@namespace, @project)
     end
@@ -147,7 +147,7 @@ module Projects
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('projects.samples.deletions.destroy_multiple.no_deleted_samples'), flash[:error]
+      assert_equal I18n.t('shared.samples.destroy_multiple.no_deleted_samples'), flash[:error]
       assert_response :redirect
       assert_redirected_to namespace_project_samples_path(@namespace, @project)
     end
