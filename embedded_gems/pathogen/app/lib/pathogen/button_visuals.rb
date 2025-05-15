@@ -3,11 +3,8 @@
 module Pathogen
   # Provides visual components (icons) and helpers for button styling in Pathogen
   module ButtonVisuals
-    # A hash of predefined icon size mappings
-    ICON_SIZE_MAPPINGS = {
-      small: 'w-3 h-3',
-      medium: 'w-4 h-4'
-    }.freeze
+    # Default icon size class
+    DEFAULT_ICON_CLASSES = 'w-4 h-4'.freeze
 
     def self.included(base)
       base.renders_one :leading_visual, types: visual_types(name: :leading_visual)
@@ -39,10 +36,7 @@ module Pathogen
     private
 
     def icon_classes
-      [
-        ICON_SIZE_MAPPINGS[fetch_or_fallback(Pathogen::ButtonSizes::SIZE_OPTIONS, @size,
-                                             Pathogen::ButtonSizes::DEFAULT_SIZE)]
-      ].compact
+      DEFAULT_ICON_CLASSES
     end
   end
 end

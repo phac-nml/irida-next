@@ -21,39 +21,26 @@ module Pathogen
   #   <% end %>
   #
   class Button < Pathogen::Component
-    include Pathogen::ButtonSizes
     include Pathogen::ButtonVisuals
 
     # Available color schemes for the button
     SCHEME_OPTIONS = %i[primary default danger].freeze
     DEFAULT_SCHEME = :default
 
-    # Base CSS classes applied to all buttons
-    # rubocop:disable Layout/LineLength
-    DEFAULT_CLASSES = %w[
-      rounded-lg inline-flex min-h-11 min-w-11 cursor-pointer items-center
-      justify-center border px-5 py-2.5 text-sm font-semibold transition
-      duration-200 disabled:cursor-not-allowed disabled:opacity-80 sm:w-auto
-    ].join(' ').freeze
-    # rubocop:enable Layout/LineLength
-
     # @param base_button_class [Class] The base button class to use for rendering
     # @param scheme [Symbol] The color scheme to apply (default: :default)
-    # @param size [Symbol] The size of the button (default: :medium)
     # @param block [Boolean] Whether the button should be a block-level element
     # @param disabled [Boolean] Whether the button is disabled
     # @param system_arguments [Hash] Additional HTML attributes to be passed to the button
     def initialize(
       base_button_class: Pathogen::BaseButton,
       scheme: DEFAULT_SCHEME,
-      size: DEFAULT_SIZE,
       block: false,
       disabled: false,
       **system_arguments
     )
       @base_button_class = base_button_class
       @scheme = scheme
-      @size = size
       @block = block
 
       @system_arguments = system_arguments
@@ -73,15 +60,10 @@ module Pathogen
       scheme_class = generate_scheme_class(
         fetch_or_fallback(SCHEME_OPTIONS, @scheme, DEFAULT_SCHEME)
       )
-      size_class = SIZE_MAPPINGS[
-        fetch_or_fallback(SIZE_OPTIONS, @size, DEFAULT_SIZE)
-      ]
 
       @system_arguments[:classes] = class_names(
         @system_arguments[:class],
         scheme_class,
-        size_class,
-        DEFAULT_CLASSES,
         'block w-full' => @block
       )
     end
