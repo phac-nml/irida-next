@@ -2,11 +2,19 @@
   <% if attachments.present? %>
     <div class="relative overflow-x-auto table-wrapper" data-turbo-temporary>
       <% if @allowed_to[:update_sample] %>
-        <%# Flex container for search (future) and button group %>
+        <%# Flex container for search and button group %>
         <div class="flex items-center mb-4">
-          <%# Placeholder for future search input %>
-          <div>
-            <%# TODO: Add search input here in a future iteration %>
+          <%# Search input %>
+          <div class="ml-1">
+            <%= render SearchComponent.new(
+              query: @q,
+              search_attribute: :puid_or_file_blob_filename_cont,
+              placeholder: t(:".search.placeholder"),
+              url: namespace_project_sample_path(format: :turbo_stream)
+              ) do %>
+              <%= hidden_field_tag :limit, @pagy.limit %>
+              <%= hidden_field_tag :tab, @tab %>
+            <% end %>
           </div>
 
           <%# Button group %>
@@ -82,6 +90,7 @@
           <% end %>
         </tbody>
       </table>
+      <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".limit.item")) %>
     </div>
   <% else %>
     <% if @allowed_to[:update_sample] %>
