@@ -14,11 +14,10 @@
     <%= viral_flash(type:, data: message) %>
   <% end %>
 
-  <%= turbo_stream.update(
-    "table-listing",
-    partial: "projects/samples/attachments/table",
-    locals: {
-      attachments: @sample.attachments,
-    },
-  ) %>
+  <%= turbo_stream.replace "sample_attachments" do %>
+    <%= turbo_frame_tag "sample_attachments",
+    src: namespace_project_sample_attachments_url(sample_id: @sample.id, format: :turbo_stream, **request.query_parameters) do %>
+      <%= render partial: "shared/loading/table" %>
+    <% end %>
+  <% end %>
 <% end %>

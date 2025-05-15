@@ -73,7 +73,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
           post :search
           post :metadata_template
         end
-        resources :attachments, module: :samples, only: %i[new create destroy] do
+        resources :attachments, module: :samples, only: %i[index new create destroy] do
           scope module: :attachments, as: :attachments do
             collection do
               resource :concatenation, only: %i[create new]

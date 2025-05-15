@@ -4,9 +4,18 @@ module Projects
   module Samples
     # Controller actions for Project Samples Attachments
     class AttachmentsController < Projects::Samples::ApplicationController
+      include ::Metadata
       before_action :attachment, only: %i[destroy]
       before_action :new_destroy_params, only: %i[new_destroy]
-      before_action :view_authorizations, only: %i[destroy create]
+      before_action :view_authorizations, only: %i[index destroy create]
+
+      def index
+        all_attachments = load_attachments
+        @has_attachments = all_attachments.count.positive?
+        @q = all_attachments.ransack(params[:q])
+        set_default_sort
+        @pagy, @sample_attachments = pagy_with_metadata_sort(@q.result)
+      end
 
       def new
         authorize! @project, to: :update_sample?
@@ -76,6 +85,14 @@ module Projects
       end
 
       private
+
+      def load_attachments
+        @sample.attachments.where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
+      end
+
+      def set_default_sort
+        @q.sorts = 'updated_at desc' if @q.sorts.empty?
+      end
 
       def view_authorizations
         @allowed_to = {
