@@ -46,6 +46,18 @@ module Activities
             I18n.t(:'components.activity.dialog.sample_clone.copied_to')
           ]
 
+        when 'group_sample_transfer'
+          @title = 'Group samples transfer'
+
+          @description = 'There are the samples transferred between projects within the group'
+
+          @data = @extended_details.details['transferred_samples_data'].to_json
+          @column_headers = [
+            'Sample Name',
+            'Transferred From',
+            'Transferred To'
+          ]
+
         when 'workflow_execution_destroy'
           @title = I18n.t(:'components.activity.dialog.workflow_execution_destroy.title')
           @description = I18n.t(:'components.activity.dialog.workflow_execution_destroy.description',

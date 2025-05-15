@@ -308,6 +308,8 @@ fr:
         destroy_html: "%{user} a supprimé le projet %{href} du groupe"
         transfer_in_html: "%{user} a transféré le projet %{href} de l’espace de noms %{old_namespace} vers %{new_namespace}"
         transfer_out_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
+      samples:
+        transfer_html: "%{user} transferred %{transferred_samples_count} samples between projects in group"
       subgroups:
         create_html: "%{user} a créé le sous-groupe %{href}"
         destroy_html: "%{user} a supprimé le groupe descendant %{href}"
@@ -1796,19 +1798,6 @@ fr:
           error: 'La liste suivante des échantillons n’a pas été transférée :'
           no_samples_transferred_error: 'Les échantillons n’ont pas été transférés pour les raisons suivantes :'
           success: Les échantillons ont été transférés avec succès.
-        dialog:
-          description:
-            plural: Les échantillons COUNT_PLACEHOLDER suivants sont sur le point d’être transférés, ce qui fera en sorte que ces échantillons ne seront plus accessibles dans le cadre de ce projet. Les responsables ne peuvent transférer des échantillons qu’à un autre projet dans la même hiérarchie.
-            singular: L’échantillon suivant est sur le point d’être transféré, ce qui fera en sorte que l’échantillon ne sera plus accessible dans le cadre de ce projet. Les responsables ne peuvent transférer des échantillons qu’à un autre projet dans la même hiérarchie.
-            zero: Aucun échantillon n’a été sélectionné pour être transféré
-          empty_state: Aucun projet n’est associé à ce nom ou à cet identifiant
-          new_project_id: Projet de transférer les échantillons à
-          no_available_projects: Aucun projet disponible
-          samples: Échantillons
-          select_project: Sélectionner le projet
-          spinner_message: Transférer des échantillons, cela peut prendre un certain temps...
-          submit_button: Envoyer
-          title: Transférer des échantillons
       update:
         success: L’échantillon a été mis à jour avec succès.
     sidebar:
@@ -2112,6 +2101,20 @@ fr:
           ok_button: OK
           problem_message: "%{path} %{message}"
           problems: Errors were encountered while importing the following samples.
+      transfers:
+        dialog:
+          description:
+            plural: Les échantillons COUNT_PLACEHOLDER suivants sont sur le point d’être transférés, ce qui fera en sorte que ces échantillons ne seront plus accessibles dans le cadre de ce projet. Les responsables ne peuvent transférer des échantillons qu’à un autre projet dans la même hiérarchie.
+            singular: L’échantillon suivant est sur le point d’être transféré, ce qui fera en sorte que l’échantillon ne sera plus accessible dans le cadre de ce projet. Les responsables ne peuvent transférer des échantillons qu’à un autre projet dans la même hiérarchie.
+            zero: Aucun échantillon n’a été sélectionné pour être transféré
+          empty_state: Aucun projet n’est associé à ce nom ou à cet identifiant
+          new_project_id: Projet de transférer les échantillons à
+          no_available_projects: Aucun projet disponible
+          samples: Échantillons
+          select_project: Sélectionner le projet
+          spinner_message: Transférer des échantillons, cela peut prendre un certain temps...
+          submit_button: Envoyer
+          title: Transférer des échantillons
     workflow_executions:
       destroy_confirmation_dialog:
         description: Êtes-vous sûr de vouloir supprimer cette exécution de flux de travail?

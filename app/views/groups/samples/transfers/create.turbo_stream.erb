@@ -1,0 +1,8 @@
+<%= render partial: "shared/samples/transfers/create",
+locals: {
+  list_samples_path:
+    list_group_samples_path(@group, data: { list_class: "sample" }),
+  transfer_path:
+    group_samples_transfer_path(@group, data: { list_class: "sample" }),
+  broadcast_target: @broadcast_target,
+} %>

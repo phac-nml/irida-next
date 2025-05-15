@@ -1,0 +1,11 @@
+<% if @page == 1 %>
+  <%= turbo_stream.replace "list_selections" do %>
+    <%= turbo_frame_tag "list_selections" %>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.append("list_selections") do %>
+  <% @samples.each do |sample| %>
+    <%= render "shared/samples/list_sample", sample: sample %>
+  <% end %>
+<% end %>
