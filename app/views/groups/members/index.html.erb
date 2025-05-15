@@ -10,7 +10,7 @@
         "turbo-frame" => "new_member_modal",
         :turbo_stream => true,
       },
-      class: "button button--state-default button--size-default" %>
+      class: "btn btn-default btn-rounded" %>
     <% end %>
     <% if @allowed_to[:create_member] %>
       <%= link_to t(:".add"),
@@ -19,7 +19,7 @@
         turbo_frame: "new_member_modal",
         turbo_stream: true,
       },
-      class: "button button--state-primary button--size-default",
+      class: "btn btn-primary btn-rounded ml-2",
       "aria-label": t(:".actions.button_add_aria_label") %>
     <% end %>
   <% end %>
