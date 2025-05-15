@@ -1172,7 +1172,7 @@ module WorkflowExecutions
 
       click_button I18n.t(:'projects.samples.index.select_all_button')
       # launch workflow execution dialog
-      click_on I18n.t(:'projects.samples.index.workflows.button_sr')
+      click_button I18n.t(:'projects.samples.index.workflows.button_sr')
 
       assert_selector '#dialog'
       within %(turbo-frame[id="samples_dialog"]) do
