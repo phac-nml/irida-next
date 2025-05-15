@@ -66,16 +66,17 @@ module Samples
 
       @deleted_samples_data[:project_data].each do |project_puid, sample_data|
         samples_deleted_count = sample_data.count
+
+        project_namespace = Namespaces::ProjectNamespace.find_by(puid: project_puid)
+
+        update_samples_count(project_namespace, samples_deleted_count) if project_namespace.parent.group_namespace?
+
         project_ext_details = ExtendedDetail.create!(
           details: {
             deleted_samples_data: @deleted_samples_data[:project_data][project_puid],
             samples_deleted_count:
           }
         )
-
-        project_namespace = Namespaces::ProjectNamespace.find_by(puid: project_puid)
-
-        update_samples_count(project_namespace, samples_deleted_count) if project_namespace.parent.group_namespace?
 
         project_activity = project_namespace.create_activity(
           key: 'namespaces_project_namespace.samples.destroy_multiple',
