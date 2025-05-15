@@ -1,5 +1,5 @@
 <div id="sample-attachments">
-  <% if attachments.present? %>
+  <% if @has_attachments %>
     <div class="relative overflow-x-auto table-wrapper" data-turbo-temporary>
       <% if @allowed_to[:update_sample] %>
         <%# Flex container for search and button group %>
