@@ -1,18 +1,15 @@
-<% if Flipper.enabled?(:progress_bars) %>
-  <%= turbo_stream.update "samples_dialog",
-                      partial: "dialog",
-                      locals: {
-                        open: true,
-                        closable: false,
-                      } %>
-
-  <%= turbo_stream.update "transfer_samples_dialog_content" do %>
-    <%= render partial: "shared/progress_bar", locals: { percentage: 0 } %>
-  <% end %>
-<% else %>
-  <%= turbo_stream.append "transfer_samples_dialog_content" do %>
-    <%= render SpinnerComponent.new(
-      message: t("projects.samples.transfers.dialog.spinner_message"),
-    ) %>
-  <% end %>
-<% end %>
+<%= render partial: "shared/samples/transfers/create",
+locals: {
+  list_samples_path:
+    list_namespace_project_samples_path(
+      @project.namespace.parent,
+      @project,
+      list_class: "sample",
+    ),
+  transfer_path:
+    namespace_project_samples_transfer_path(
+      @project.namespace.parent,
+      @project,
+    ),
+  broadcast_target: @broadcast_target,
+} %>

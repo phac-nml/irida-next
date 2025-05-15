@@ -41,7 +41,7 @@ module Activities
     end
 
     def sample_transfer_action
-      %w[sample_transfer].include?(@activity[:action])
+      %w[group_sample_transfer sample_transfer].include?(@activity[:action])
     end
 
     def subgroup_action
