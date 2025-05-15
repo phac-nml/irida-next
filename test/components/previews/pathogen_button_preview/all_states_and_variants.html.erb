@@ -1,0 +1,69 @@
+<div class="space-y-8">
+  <div>
+    <h3 class="text-lg font-medium mb-4">Color Schemes</h3>
+    <div class="flex flex-wrap items-center gap-4">
+      <%= render Pathogen::Button.new(scheme: :default, size: local_assigns[:size]) do %>
+        Default
+      <% end %>
+
+      <%= render Pathogen::Button.new(scheme: :primary, size: local_assigns[:size]) do %>
+        Primary
+      <% end %>
+      <%= render Pathogen::Button.new(scheme: :danger, size: local_assigns[:size]) do %>
+        Danger
+      <% end %>
+    </div>
+  </div>
+
+
+  <div>
+    <h3 class="text-lg font-medium mb-4">States</h3>
+    <div class="flex flex-wrap items-center gap-4">
+      <%= render Pathogen::Button.new(scheme: :default, size: local_assigns[:size]) do %>
+        Normal
+      <% end %>
+      <%= render Pathogen::Button.new(scheme: :default, size: local_assigns[:size], disabled: true) do %>
+        Disabled
+      <% end %>
+      <%= render Pathogen::Button.new(scheme: :default, size: local_assigns[:size], class: 'opacity-50') do %>
+        Loading
+      <% end %>
+    </div>
+  </div>
+
+
+  <div>
+    <h3 class="text-lg font-medium mb-4">Sizes</h3>
+    <div class="flex items-center gap-4">
+      <%= render Pathogen::Button.new(scheme: :primary, size: :small) do %>
+        Small
+      <% end %>
+      <%= render Pathogen::Button.new(scheme: :primary, size: :medium) do %>
+        Medium
+      <% end %>
+    </div>
+  </div>
+
+
+  <div>
+    <h3 class="text-lg font-medium mb-4">Full Width</h3>
+    <%= render Pathogen::Button.new(scheme: :primary, size: local_assigns[:size], block: true) do %>
+      Full Width Button
+    <% end %>
+  </div>
+
+
+  <div>
+    <h3 class="text-lg font-medium mb-4">As Link</h3>
+    <div class="flex items-center gap-4">
+      <%= render Pathogen::Button.new(
+        scheme: :primary, 
+        size: local_assigns[:size], 
+        href: '#', 
+        tag: :a
+      ) do %>
+        Link Button
+      <% end %>
+    </div>
+  </div>
+</div>
