@@ -47,6 +47,9 @@
   <ul
     id="<%= control_id %>"
     data-collapsible-target="item"
+    aria-hidden="<%= @selected ? 'false' : 'true' %>"
+    <%= @selected ? 'tabindex="0"' : 'tabindex="-1"' %>
+    <%= @selected ? 'hidden="false"' : 'hidden="hidden"' %>
     class="<%= class_names('py-1 space-y-1 pl-8', { 'hidden': !@selected }) %>"
   >
     <% menu_items.each do |menu_item| %>

@@ -8,9 +8,15 @@ export default class extends Controller {
 
     if (isCollapsed) {
       this.itemTarget.classList.remove("hidden");
+      this.itemTarget.setAttribute("tabindex", "0");
+      this.itemTarget.setAttribute("aria-hidden", "false");
+      this.itemTarget.removeAttribute("hidden");
       this.#updateIcon(false);
     } else {
       this.itemTarget.classList.add("hidden");
+      this.itemTarget.setAttribute("tabindex", "-1");
+      this.itemTarget.setAttribute("aria-hidden", "true");
+      this.itemTarget.setAttribute("hidden", "hidden");
       this.#updateIcon(true);
     }
   }
