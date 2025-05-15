@@ -51,46 +51,25 @@
           </div>
         </div>
       <% end %>
-      <table
-        class="
-          w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
-          whitespace-nowrap
-        "
-        data-controller="selection"
-        data-selection-action-button-outlet=".action-button"
-        data-selection-storage-key-value="files-<%=@sample.id%>"
-      >
-        <thead
-          class="
-            text-xs uppercase border-b text-slate-700 bg-slate-100 dark:bg-slate-900
-            dark:text-slate-400 border-slate-200 dark:border-slate-700
-          "
-        >
-          <tr>
-            <% if @allowed_to[:update_sample] %>
-              <th aria-hidden="true" class="px-6 py-3"></th>
-            <% end %>
-            <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.puid") %></th>
-            <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.filename") %></th>
-            <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.format") %></th>
-            <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.type") %></th>
-            <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.size") %></th>
-            <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.created_at") %></th>
-            <th scope="col" class="px-6 py-3"><%= t("projects.samples.show.table_header.action") %></th>
-          </tr>
-        </thead>
-        <tbody id="attachments-table-body" class="bg-white dark:bg-slate-800">
-          <% attachments.each do |attachment| %>
-            <% unless attachment.associated_attachment && attachment.metadata['direction'] == 'reverse' %>
-              <%= render partial: "projects/samples/attachments/attachment",
-              locals: {
-                attachment: attachment,
-              } %>
-            <% end %>
-          <% end %>
-        </tbody>
-      </table>
-      <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".limit.item")) %>
+      <%= render Attachments::TableComponent.new(
+        attachments,
+        @pagy,
+        @q,
+        @sample,
+        nil,
+        false,
+        @has_attachments,
+        abilities: {
+          select_attachments: @allowed_to[:update_sample],
+        },
+        row_actions: {
+          destroy: @allowed_to[:destroy_attachment],
+        },
+        empty: {
+          title: t(:".empty_state.title"),
+          description: t(:".empty_state.description"),
+        },
+      ) %>
     </div>
   <% else %>
     <% if @allowed_to[:update_sample] %>
