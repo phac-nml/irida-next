@@ -83,7 +83,7 @@ module Viral
     test '🔽 renders disclosure icon (true defaults to :down)' do
       render_inline(Viral::ButtonComponent.new(disclosure: true)) { 'Open Menu' }
       assert_text 'Open Menu'
-      assert_selector "button span svg[data-test-selector='caret_down']" do |svg_element|
+      assert_selector "button svg[data-test-selector='caret_down']" do |svg_element|
         assert_classes(svg_element, %w[size-4 align-middle ml-2])
       end
     end
@@ -91,7 +91,7 @@ module Viral
     test '🔽 renders disclosure :down icon' do
       render_inline(Viral::ButtonComponent.new(disclosure: :down)) { 'Show Details' }
       assert_text 'Show Details'
-      assert_selector "button span svg[data-test-selector='caret_down']" do |svg_element|
+      assert_selector "button svg[data-test-selector='caret_down']" do |svg_element|
         assert_classes(svg_element, %w[size-4 align-middle ml-2])
       end
     end
@@ -99,7 +99,7 @@ module Viral
     test '🔼 renders disclosure :up icon' do
       render_inline(Viral::ButtonComponent.new(disclosure: :up)) { 'Hide Details' }
       assert_text 'Hide Details'
-      assert_selector "button span svg[data-test-selector='caret_up']" do |svg_element|
+      assert_selector "button svg[data-test-selector='caret_up']" do |svg_element|
         assert_classes(svg_element, %w[size-4 align-middle ml-2])
       end
     end
@@ -107,7 +107,7 @@ module Viral
     test '▶️ renders disclosure :right icon' do
       render_inline(Viral::ButtonComponent.new(disclosure: :right)) { 'Continue' }
       assert_text 'Continue'
-      assert_selector "button span svg[data-test-selector='caret_right']" do |svg_element|
+      assert_selector "button svg[data-test-selector='caret_right']" do |svg_element|
         assert_classes(svg_element, %w[size-4 align-middle ml-2])
       end
     end
@@ -115,9 +115,9 @@ module Viral
     test '🧐 disclosure :select does not render a specific caret icon via current template' do
       render_inline(Viral::ButtonComponent.new(disclosure: :select)) { 'Select Option' }
       assert_text 'Select Option'
-      assert_no_selector "button span svg[data-test-selector='caret_down']"
-      assert_no_selector "button span svg[data-test-selector='caret_up']"
-      assert_no_selector "button span svg[data-test-selector='caret_right']"
+      assert_no_selector "button svg[data-test-selector='caret_down']"
+      assert_no_selector "button svg[data-test-selector='caret_up']"
+      assert_no_selector "button svg[data-test-selector='caret_right']"
       # NOTE: :select might render a different icon (e.g., 'dots-three')
       # if mapped in IconHelper and ButtonComponent's template
     end
@@ -125,22 +125,22 @@ module Viral
     test '🧐 disclosure :horizontal_dots does not render a specific caret icon via current template' do
       render_inline(Viral::ButtonComponent.new(disclosure: :horizontal_dots)) { 'More Actions' }
       assert_text 'More Actions'
-      assert_no_selector "button span svg[data-test-selector='caret_down']"
-      assert_no_selector "button span svg[data-test-selector='caret_up']"
-      assert_no_selector "button span svg[data-test-selector='caret_right']"
+      assert_no_selector "button svg[data-test-selector='caret_down']"
+      assert_no_selector "button svg[data-test-selector='caret_up']"
+      assert_no_selector "button svg[data-test-selector='caret_right']"
       # NOTE: :horizontal_dots might render a different icon if mapped
     end
 
     test '💨 renders no disclosure icon when disclosure: false' do
       render_inline(Viral::ButtonComponent.new(disclosure: false)) { 'No Icon Here' }
       assert_text 'No Icon Here'
-      assert_no_selector 'button span svg'
+      assert_no_selector 'button svg'
     end
 
     test '💨 renders no disclosure icon when disclosure option is not provided' do
       render_inline(Viral::ButtonComponent.new) { 'Still No Icon' }
       assert_text 'Still No Icon'
-      assert_no_selector 'button span svg'
+      assert_no_selector 'button svg'
     end
 
     # 🏷️ `type` Attribute
@@ -194,7 +194,7 @@ module Viral
                       text: 'Combo Action' do |button_element|
         expected_classes = %w[btn btn-primary btn-rounded w-full]
         assert_classes(button_element, expected_classes)
-        assert_selector "span svg[data-test-selector='caret_down']"
+        assert_selector "svg[data-test-selector='caret_down']"
       end
     end
 
