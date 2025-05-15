@@ -20,12 +20,12 @@
       <%= form_with(model: @sample, url: namespace_project_sample_path(id: @sample.id), data: {turbo: false}, method: :patch) do |form| %>
         <div class="grid gap-4">
           <%= render partial: "form_fields", locals: { form: form, sample: @sample } %>
-          <div>
+          <div class="flex flex-row gap-2">
             <%= form.submit t("projects.samples.edit.submit_button"),
-                        class: "button button--state-primary button--size-default mr-1" %>
+                        class: "btn btn-primary btn-rounded" %>
             <%= link_to t("projects.samples.edit.cancel_button"),
             namespace_project_sample_path(id: @sample.id),
-            class: "button button--state-default button--size-default" %>
+            class: "btn btn-default btn-rounded" %>
           </div>
         </div>
       <% end %>
