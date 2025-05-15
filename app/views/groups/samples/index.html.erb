@@ -12,9 +12,9 @@
         <% if @allowed_to[:submit_workflow] && @pipelines_enabled %>
           <%= button_to pipeline_selection_workflow_executions_submissions_path, params: { namespace_id: @group.id }, method: :get,
         data: { turbo_stream: true, controller: "action-button", action_button_required_value: 1, action: "turbo:morph-element->action-button#idempotentConnect " },
-                  class: "btn btn-default btn-rounded" do %>
-            <%= viral_icon(name: :rocket_launch, classes: "w-5 h-5 inline-block") %>
-            <span class="ml-2"><%= t(".workflows.button_sr") %></span>
+                  class: "btn btn-default btn-rounded gap-2 action-button" do %>
+            <%= render_icon ICONS[:rocket_launch], class: "size-4" %>
+            <%= t(".workflows.button_sr") %>
           <% end %>
         <% end %>
         <% if @group_project_ids.count.positive? && @render_sample_actions %>
