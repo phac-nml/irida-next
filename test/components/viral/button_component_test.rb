@@ -18,17 +18,10 @@ module Viral
     test '✅ renders default button with content and base/default state classes' do
       render_inline(Viral::ButtonComponent.new) { 'Click Me!' }
       assert_selector 'button', text: 'Click Me!' do |button_element|
-        base_style_classes = %w[
-          inline-flex items-center justify-center border
-          sm:w-auto min-h-11 min-w-11 px-5 py-2.5 rounded-lg
-          font-semibold cursor-pointer
+        expected_classes = %w[
+          btn btn-default btn-rounded
         ]
-        default_state_classes = %w[
-          bg-slate-50 text-slate-900 border-slate-300
-          dark:bg-slate-900 dark:text-slate-50 dark:border-slate-700
-        ]
-        assert_classes(button_element, base_style_classes)
-        assert_classes(button_element, default_state_classes)
+        assert_classes(button_element, expected_classes)
       end
     end
 
@@ -37,25 +30,16 @@ module Viral
     test '🎨 renders primary state with correct classes' do
       render_inline(Viral::ButtonComponent.new(state: :primary)) { 'Primary Action' }
       assert_selector 'button', text: 'Primary Action' do |button_element|
-        primary_state_classes = %w[
-          bg-primary-800 text-white border-primary-800
-          dark:bg-primary-700 dark:text-white dark:border-primary-700
-        ]
-        assert_classes(button_element, primary_state_classes)
-        # Ensure default state classes are not present if they conflict
-        assert_not_includes button_element[:class]&.split || [], 'bg-slate-50'
+        expected_classes = %w[btn btn-primary btn-rounded]
+        assert_classes(button_element, expected_classes)
       end
     end
 
     test '🎨 renders destructive state with correct classes' do
       render_inline(Viral::ButtonComponent.new(state: :destructive)) { 'Delete Item' }
       assert_selector 'button', text: 'Delete Item' do |button_element|
-        destructive_state_classes = %w[
-          bg-red-700 text-white border-red-800
-          dark:bg-red-600 dark:text-white dark:border-red-600
-        ]
-        assert_classes(button_element, destructive_state_classes)
-        assert_not_includes button_element[:class]&.split || [], 'bg-slate-50'
+        expected_classes = %w[btn btn-destructive btn-rounded]
+        assert_classes(button_element, expected_classes)
       end
     end
 
@@ -64,39 +48,24 @@ module Viral
     test '🚫 renders disabled default button with correct attributes and classes' do
       render_inline(Viral::ButtonComponent.new(disabled: true)) { 'Cannot Click' }
       assert_selector 'button[disabled][aria-disabled="true"]', text: 'Cannot Click' do |button_element|
-        disabled_default_classes = %w[
-          disabled:bg-slate-100 disabled:text-slate-500 disabled:border-slate-200
-          disabled:dark:bg-slate-800 disabled:dark:text-slate-400
-          disabled:dark:border-slate-700 disabled:cursor-not-allowed
-          disabled:opacity-80
-        ]
-        assert_classes(button_element, disabled_default_classes)
+        expected_classes = %w[btn btn-default btn-rounded]
+        assert_classes(button_element, expected_classes)
       end
     end
 
     test '🚫 renders disabled primary button with correct attributes and classes' do
       render_inline(Viral::ButtonComponent.new(state: :primary, disabled: true)) { 'Processing...' }
       assert_selector 'button[disabled][aria-disabled="true"]', text: 'Processing...' do |button_element|
-        disabled_primary_classes = %w[
-          disabled:bg-primary-100 disabled:text-primary-500 disabled:border-primary-200
-          disabled:dark:bg-primary-900 disabled:dark:text-primary-400
-          disabled:dark:border-primary-800 disabled:cursor-not-allowed
-          disabled:opacity-80
-        ]
-        assert_classes(button_element, disabled_primary_classes)
+        expected_classes = %w[btn btn-primary btn-rounded]
+        assert_classes(button_element, expected_classes)
       end
     end
 
     test '🚫 renders disabled destructive button with correct attributes and classes' do
       render_inline(Viral::ButtonComponent.new(state: :destructive, disabled: true)) { 'Deleting...' }
       assert_selector 'button[disabled][aria-disabled="true"]', text: 'Deleting...' do |button_element|
-        disabled_destructive_classes = %w[
-          disabled:bg-red-100 disabled:text-red-500 disabled:border-red-200
-          disabled:dark:bg-red-900 disabled:dark:text-red-400
-          disabled:dark:border-red-800 disabled:cursor-not-allowed
-          disabled:opacity-80
-        ]
-        assert_classes(button_element, disabled_destructive_classes)
+        expected_classes = %w[btn btn-destructive btn-rounded]
+        assert_classes(button_element, expected_classes)
       end
     end
 
@@ -207,24 +176,24 @@ module Viral
       custom_class = 'my-extra-class'
       render_inline(Viral::ButtonComponent.new(classes: custom_class)) { 'Styled Button' }
       assert_selector 'button', text: 'Styled Button' do |button_element|
-        assert_classes(button_element, [custom_class])
-        assert_classes(button_element, %w[bg-slate-50]) # Default state class still present
+        expected_classes = %w[btn btn-default btn-rounded my-extra-class]
+        assert_classes(button_element, expected_classes)
       end
     end
 
-    # ✨ Combinations
-    # =================================================================================
     test '✨ renders combination: primary, full_width, disclosure(:down), custom id & data' do
       render_inline(Viral::ButtonComponent.new(
+                      id: 'custom-combo-btn',
                       state: :primary,
                       full_width: true,
                       disclosure: :down,
-                      id: 'combo-btn',
-                      data: { action: 'combo-click' }
-                    )) { 'Combo Button!' }
+                      data: { action: 'click->test#action', controller: 'test' }
+                    )) { 'Combo Action' }
 
-      assert_selector 'button#combo-btn[data-action="combo-click"]', text: 'Combo Button!' do |button_element|
-        assert_classes(button_element, %w[bg-primary-800 w-full])
+      assert_selector 'button#custom-combo-btn[data-action="click->test#action"][data-controller="test"]',
+                      text: 'Combo Action' do |button_element|
+        expected_classes = %w[btn btn-primary btn-rounded w-full]
+        assert_classes(button_element, expected_classes)
         assert_selector "span svg[data-test-selector='caret_down']"
       end
     end
