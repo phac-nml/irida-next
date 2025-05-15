@@ -9,7 +9,7 @@
     <%= link_to prev_url,
           **link_arguments,
           class: [
-            "bg-slate-50 border border-slate-300 cursor-pointer dark:bg-slate-900 dark:border-slate-700 dark:hover:bg-slate-800 dark:hover:text-white dark:text-slate-50 font-semibold hover:bg-slate-100 hover:text-slate-950 inline-flex items-center justify-center min-h-11 min-w-11 px-5 py-2.5 rounded-lg sm:w-auto text-sm text-slate-900"
+            "btn btn-default btn-rounded"
           ],
           "aria-label": t("viral.pagy.pagination_component.previous_aria_label") do %>
       <%= helpers.render_icon ICONS[:caret_left],
@@ -23,7 +23,7 @@
     <%= link_to next_url,
           **link_arguments,
           class: [
-            "bg-slate-50 border border-slate-300 cursor-pointer dark:bg-slate-900 dark:border-slate-700 dark:hover:bg-slate-800 dark:hover:text-white dark:text-slate-50 font-semibold hover:bg-slate-100 hover:text-slate-950 inline-flex items-center justify-center min-h-11 min-w-11 px-5 py-2.5 rounded-lg sm:w-auto text-sm text-slate-900"
+            "btn btn-default btn-rounded"
           ],
           "aria-label": t("viral.pagy.pagination_component.next_aria_label") do %>
       <%= t("viral.pagy.pagination_component.next") %>
