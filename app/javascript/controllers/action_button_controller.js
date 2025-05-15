@@ -25,15 +25,14 @@ export default class extends Controller {
    * Initializes the button's disabled state.
    */
   connect() {
-    this._initializeButtonState();
+    this.idempotentConnect();
   }
 
   /**
    * 🔄 Idempotent connection logic to set the initial disabled state of the button.
    * This method can be called multiple times without side effects beyond the initial setup.
-   * @private
    */
-  _initializeButtonState() {
+  idempotentConnect() {
     // Initially, check if the button should be disabled based on the requiredValue.
     // Assumes a count of 0 if no specific count is provided at initialization.
     this.setDisabled(0);
