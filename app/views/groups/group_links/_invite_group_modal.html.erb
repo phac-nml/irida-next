@@ -84,14 +84,14 @@
       </div>
       <div class="my-4">
         <%= form.submit I18n.t("groups.group_links.new.button.submit"),
-                    class: "button button--size-default button--state-primary",
+                    class: "btn btn-primary btn-rounded",
                     disabled: true,
                     data: {
                       "viral--select2-target": "submitButton",
                     } %>
         <button
           type="button"
-          class="button button--size-default button--state-default"
+          class="btn btn-default btn-rounded ml-2"
           data-action="click->viral--dialog#close"
         >
           <%= I18n.t("groups.group_links.new.button.cancel") %>
