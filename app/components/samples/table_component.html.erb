@@ -210,12 +210,18 @@
             </span>
           </p>
           <% dialog.with_secondary_action do %>
-            <%= viral_button(value: "confirm", state: :primary) do
-              t("shared.samples.metadata.editing_field_cell.dialog.confirm_button")
-            end %>
-            <%= viral_button(value: "cancel", state: :default) do
-              t("shared.samples.metadata.editing_field_cell.dialog.discard_button")
-            end %>
+            <%= render Pathogen::Button.new(
+              scheme: :primary,
+              value: "confirm",
+            ) do %>
+              <%= t("shared.samples.metadata.editing_field_cell.dialog.confirm_button") %>
+            <% end %>
+            <%= render Pathogen::Button.new(
+              scheme: :default,
+              value: "cancel",
+            ) do %>
+              <%= t("shared.samples.metadata.editing_field_cell.dialog.discard_button") %>
+            <% end %>
           <% end %>
         <% end %>
       </template>
