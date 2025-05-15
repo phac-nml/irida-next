@@ -1,4 +1,4 @@
-<%= viral_dialog(open: open, size: :large) do |dialog| %>
+<%= viral_dialog(open: open, size: :extra_large) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
   <%= turbo_frame_tag("concatenation-alert") %>
 
@@ -8,7 +8,7 @@
     "
   >
     <p class="mb-4"><%= t(".description") %></p>
-    <div
+    <div class="overflow-x-auto"
       data-controller="projects--samples--attachments--files"
       data-projects--samples--attachments--files-target="field"
     ></div>
@@ -47,7 +47,7 @@
 
       <div>
         <%= form.submit t(".submit_button"),
-                    class: "button button--size-default button--state-primary" %>
+                    class: "btn btn-primary btn-rounded" %>
       </div>
     </div>
   <% end %>
