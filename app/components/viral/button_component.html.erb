@@ -1,18 +1,15 @@
 <%= render Viral::BaseComponent.new(tag: 'button', **system_arguments) do %>
-  <%# Accessible, flex-aligned button content and disclosure icon %>
-  <span class="flex items-center w-full justify-center">
-    <% if content.present? %>
-      <span class="pointer-events-none"><%= content %></span>
+  <% if content.present? %>
+    <%= content %>
+  <% end %>
+  <% if disclosure.present? %>
+    <% case disclosure %>
+    <% when :down %>
+      <%= helpers.render_icon :caret_down, class: "size-4 align-middle ml-2" %>
+    <% when :up %>
+      <%= helpers.render_icon :caret_up, class: "size-4 align-middle ml-2" %>
+    <% when :right %>
+      <%= helpers.render_icon :caret_right, class: "size-4 align-middle ml-2" %>
     <% end %>
-    <% if disclosure.present? %>
-      <% case disclosure %>
-      <% when :down %>
-        <%= helpers.render_icon :caret_down, class: "size-4 align-middle ml-2" %>
-      <% when :up %>
-        <%= helpers.render_icon :caret_up, class: "size-4 align-middle ml-2" %>
-      <% when :right %>
-        <%= helpers.render_icon :caret_right, class: "size-4 align-middle ml-2" %>
-      <% end %>
-    <% end %>
-  </span>
+  <% end %>
 <% end %>
