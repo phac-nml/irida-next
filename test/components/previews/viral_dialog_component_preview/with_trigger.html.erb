@@ -1,6 +1,6 @@
 <%= viral_dialog do |dialog| %>
   <% dialog.with_trigger do %>
-    <%= viral_button(data: { action: "click->viral--dialog#open" }) do %>
+    <%= render Pathogen::Button.new(data: { action: "click->viral--dialog#open" }) do %>
       Open dialog
     <% end %>
   <% end %>
