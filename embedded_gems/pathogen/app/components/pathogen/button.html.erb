@@ -1,6 +1,6 @@
-<%# 
+<%#
   Button component template
-  
+
   @param leading_visual [String] Optional leading icon/visual element
   @param trailing_visual [String] Optional trailing icon/visual element
   @param trimmed_content [String] The button's text content (automatically trimmed)
@@ -16,30 +16,30 @@
 ) do -%>
   <%# Leading visual (icon, etc.) - adds consistent right margin when present %>
   <% if leading_visual %>
-    <span class="mr-2 flex-shrink-0" aria-hidden="true">
+    <span class="mr-2 flex-shrink-0 pointer-events-none" aria-hidden="true">
       <%= leading_visual %>
     </span>
   <% end %>
 
   <%# Main content - ensures proper text wrapping and truncation %>
-  <span class="truncate">
+  <span class="truncate pointer-events-none">
     <%= trimmed_content %>
   </span>
 
   <%# Trailing visual (icon, counter, etc.) - adds consistent left margin when present %>
   <% if trailing_visual %>
-    <span class="ml-2 flex-shrink-0">
+    <span class="ml-2 flex-shrink-0 pointer-events-none">
       <% if @trailing_visual_counter %>
         <%# For counter-type visuals, ensure proper screen reader announcement %>
         <span class="sr-only">
           (<%= trailing_visual %>)
         </span>
-        <span aria-hidden="true">
+        <span class="pointer-events-none" aria-hidden="true">
           <%= trailing_visual %>
         </span>
       <% else %>
         <%# Regular trailing visual (icon, etc.) %>
-        <span aria-hidden="true">
+        <span class="pointer-events-none" aria-hidden="true">
           <%= trailing_visual %>
         </span>
       <% end %>
