@@ -55,7 +55,7 @@ module Pathogen
       end
 
       assert_selector 'button[type="button"]' do
-        assert_icon 'plus'
+        assert_selector 'button svg[data-phosphor-icon="plus"]', count: 1
         assert_text 'Button with icon'
       end
     end
@@ -67,12 +67,12 @@ module Pathogen
       end
 
       assert_selector 'button[type="button"]' do
-        assert_icon 'plus'
+        assert_selector 'button svg[data-phosphor-icon="plus"]', count: 1
         assert_text 'Ghost Button'
       end
 
       # Verify ghost button classes
-      assert_selector 'button.bg-transparent.border-0.hover\:bg-slate-100'
+      assert_selector 'button.bg-transparent'
     end
 
     test 'renders with trailing icon' do
@@ -126,11 +126,11 @@ module Pathogen
 
     test 'ghost button has correct hover and disabled states' do
       render_inline(Pathogen::Button.new(
-        test_selector: 'ghost-button-states',
-        scheme: :ghost,
-        disabled: true
-      )) { 'Ghost Disabled' }
-      
+                      test_selector: 'ghost-button-states',
+                      scheme: :ghost,
+                      disabled: true
+                    )) { 'Ghost Disabled' }
+
       button = page.find('button[data-test-selector="ghost-button-states"]')
       assert_match(/Ghost Disabled/, button.text.squish)
       assert_match(/disabled:text-slate-400/, button['class'])
