@@ -51,9 +51,6 @@ module Pathogen
         system_arguments[:class]
       )
 
-      # Set default size if not specified by the user.
-      system_arguments[:size] ||= '1.5rem'
-
       # Add a data attribute for easier targeting in tests, only if an icon name is present.
       if Rails.env.test? && @icon_name.present?
         # Using a symbol key consistent with other options like :class, :size, :variant.
