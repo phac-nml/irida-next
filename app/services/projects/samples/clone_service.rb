@@ -7,6 +7,8 @@ module Projects
       CloneError = Class.new(StandardError)
 
       def execute(new_project_id, sample_ids, broadcast_target = nil)
+        puts 'hegoainegonewaogawerg'
+        puts @project
         authorize! @project, to: :clone_sample?
 
         validate(new_project_id, sample_ids)
