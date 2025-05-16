@@ -36,20 +36,27 @@ module Pathogen
     # @param tag [Symbol] the HTML tag to use (:button or :a)
     # @param type [Symbol] the type attribute for button tags (:button, :submit, or :reset)
     # @param disabled [Boolean] whether the button should be disabled
+    # @param apply_default_base_styles [Boolean] whether to apply default base styles
     # @param system_arguments [Hash] additional HTML attributes for the button
     # @option system_arguments [String] :href required when tag is :a
     # @raise [ArgumentError] if invalid tag or type is provided
     def initialize(tag: Configuration::DEFAULT_TAG, type: Configuration::DEFAULT_TYPE, disabled: false,
+                   apply_default_base_styles: true,
                    **system_arguments)
       @system_arguments = system_arguments
+      @custom_classes_from_caller = @system_arguments.delete(:class) # Extract classes passed by the caller
       @disabled = disabled
 
       validate_arguments!(tag, type)
       set_tag_and_type(tag, type)
       handle_disabled_state
 
-      # Set default classes if none provided
-      @system_arguments[:classes] = default_classes(@system_arguments[:classes])
+      # Conditionally apply default base classes
+      if apply_default_base_styles
+        @system_arguments[:class] = default_classes(@custom_classes_from_caller)
+      else
+        @system_arguments[:class] = @custom_classes_from_caller
+      end
     end
 
     # @return [Pathogen::BaseComponent] the rendered button component
@@ -92,11 +99,8 @@ module Pathogen
         disabled:opacity-80
       ]
 
-      if custom_classes.present?
-        "#{base_classes.join(' ')} #{custom_classes}"
-      else
-        base_classes.join(' ')
-      end
+      # Use class_names to combine base_classes with custom_classes intelligently
+      class_names(base_classes, custom_classes)
     end
   end
 end
