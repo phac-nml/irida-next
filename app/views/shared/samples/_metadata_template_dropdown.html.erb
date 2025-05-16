@@ -5,7 +5,7 @@
     <input type="hidden" name="page" value="<%= pagy&.page %>"/>
     <%= f.hidden_field :metadata_template, value: metadata_template[:id] %>
   <% end %>
-  <%= render Pathogen::Button.new(
+  <%= p_button(
     id: "metadata-template-dd-trigger",
     title: t("shared.samples.metadata_templates.tooltip"),
     data: { action: "click->metadata-template-dd#toggle", 'metadata-template-dd-target': 'trigger' },
