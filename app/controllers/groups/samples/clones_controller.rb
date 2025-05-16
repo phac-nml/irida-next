@@ -2,12 +2,13 @@
 
 module Groups
   module Samples
-    # Controller actions for Project Samples Clone Controller
-    class ClonesController < Projects::ApplicationController
+    # Controller actions for Group Samples Clone Controller
+    class ClonesController < Groups::SamplesController
       respond_to :turbo_stream
       before_action :projects
 
       def new
+        authorize! @group, to: :clone_sample?
         @broadcast_target = "samples_clone_#{SecureRandom.uuid}"
       end
 
@@ -15,9 +16,9 @@ module Groups
         @broadcast_target = params[:broadcast_target]
         new_project_id = clone_params[:new_project_id]
         sample_ids = clone_params[:sample_ids]
-
-        ::Projects::Samples::CloneJob.set(wait_until: 1.second.from_now).perform_later(@project, current_user, new_project_id,
-                                                                                       sample_ids, @broadcast_target)
+        ::Groups::Samples::CloneJob.set(wait_until: 1.second.from_now).perform_later(@group, current_user,
+                                                                                     new_project_id,
+                                                                                     sample_ids, @broadcast_target)
 
         render status: :ok
       end
@@ -29,8 +30,8 @@ module Groups
       end
 
       def projects
-        @projects = authorized_scope(Project, type: :relation,
-                                              as: :manageable).where.not(namespace_id: @project.namespace_id)
+        @projects = authorized_scope(Project, type: :relation, as: :group_projects_for_sample_actions,
+                                              scope_options: { group: @group })
       end
     end
   end
