@@ -7,9 +7,10 @@
     <% end %>
   </span>
   <%= render Pathogen::Button.new(
-    scheme: :ghost,
+    scheme: :unstyled,
     data: { action: 'click->clipboard#copy' },
     'data-clipboard-target': 'button',
+    class: @button_classes,
     title: t('components.clipboard.title'),
     'aria-label': t('components.clipboard.title'),
     value: value
@@ -21,7 +22,7 @@
     role="tooltip"
     class="
       absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white
-      transition-opacity bg-green-600 rounded-lg shadow-sm opacity-80 duration-600
+      transition-opacity bg-green-800 rounded-lg shadow-sm opacity-80 duration-600
       tooltip dark:bg-green-700
     "
   >
