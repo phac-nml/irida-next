@@ -16,7 +16,7 @@ module Activities
         project_namespace = namespaces_project_namespaces(:project1_namespace)
         sample = samples(:sample1)
         params = { sample_ids: [sample.id] }
-        ::Samples::DestroyService.new(project_namespace, @user, params).execute
+        ::Projects::Samples::DestroyService.new(project_namespace.project, @user, params).execute
 
         activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
 

@@ -38,7 +38,7 @@ module Groups
       sample2 = samples(:sample2)
 
       params = { sample_ids: [sample1.id, sample2.id] }
-      ::Samples::DestroyService.new(group, @user, params).execute
+      ::Groups::Samples::DestroyService.new(group, @user, params).execute
 
       activities = group.human_readable_activity(group.retrieve_group_activity).reverse
 
