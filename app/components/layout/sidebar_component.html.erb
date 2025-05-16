@@ -26,16 +26,14 @@
         </span>
       </a>
       <div class=" flex flex-row shrink-0 justify-end items-center space-x-1">
-        <button
-          data-action="click->layout#collapse"
-          class="
-            navbar-button cursor-pointer hover:bg-slate-300 dark:hover:bg-slate-700
-            dark:text-slate-500 dark:hover:text-slate-100
-          "
-          aria-label="<%= t(:'general.navbar.collapse.aria_label') %>"
-        >
-          <%= helpers.render_icon :sidebar, class: "size-6" %>
-        </button>
+        <%= p_button(
+              "data-action": "layout#collapse",
+              title: t(:'general.navbar.collapse.aria_label'),
+              aria: { label: t(:'general.navbar.collapse.aria_label') },
+              class: "navbar-button"
+            ) do |c| %>
+          <% c.with_leading_visual_icon(icon: :sidebar) %>
+        <% end %>
         <!-- Add new items -->
         <%= viral_dropdown(icon: "plus", skidding: -300, dropdown_styles: "width: 276px;", aria: { label: t(:'general.navbar.new_dropdown.aria_label') }, classes: "p-1 navbar-button text-slate-500 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-700") do |dropdown| %>
           <%= dropdown.with_item(
@@ -48,7 +46,7 @@
           ) %>
         <% end %>
         <!-- Profile menu -->
-        <%= viral_dropdown(icon: "user_circle", skidding: -300, dropdown_styles: "width: 276px;", aria: { label: t(:'general.navbar.account_dropdown.aria_label') }, classes: "p-1 navbar-button text-slate-500 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-700") do |dropdown| %>
+        <%= viral_dropdown(icon: "user-circle", skidding: -300, dropdown_styles: "width: 276px;", aria: { label: t(:'general.navbar.account_dropdown.aria_label') }, classes: "p-1 navbar-button text-slate-500 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-700") do |dropdown| %>
           <%= dropdown.with_item(
             label: t(:"general.navbar.account_dropdown.profile"),
             url: profile_path,
@@ -72,13 +70,7 @@
       data-viral--dropdown-position-value="bottom-start"
     >
       <button
-        class="
-          py-2 w-full rounded-md border transition-colors duration-200 cursor-pointer
-          min-h-[44px] flex items-center justify-center bg-slate-500 dark:bg-slate-500
-          text-white border-slate-500 dark:border-slate-500 font-semibold
-          hover:bg-slate-600 dark:hover:bg-slate-400 hover:border-slate-600
-          dark:hover:border-slate-400
-        "
+        class="btn btn-slate btn-rounded w-full"
         data-viral--dropdown-target='trigger'
         aria-haspopup="listbox"
         aria-controls="sidebar-dd-menu"

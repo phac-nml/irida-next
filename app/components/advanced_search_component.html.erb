@@ -9,13 +9,7 @@
         <div class="inline-flex rounded-md" role="group">
           <button
             type="button"
-            class="
-              inline-flex items-center justify-center w-1/2 text-sm border rounded-s-md
-              cursor-pointer sm:w-auto focus:z-10 text-sm px-5 py-2.5 bg-white text-slate-900
-              border-slate-200 hover:bg-slate-100 hover:text-slate-950 dark:bg-slate-800
-              dark:text-slate-400 dark:border-slate-600 dark:hover:text-white
-              dark:hover:bg-slate-700
-            "
+            class="btn btn-default btn-rounded rounded-r-none"
             data-action="advanced-search#idempotentConnect viral--dialog#open"
             aria-label="<%= t(".title") %>"
           >
@@ -23,25 +17,21 @@
           </button>
           <button
             type="button"
-            class="
-              inline-flex items-center justify-center w-1/2 text-sm border border-l-0
-              rounded-e-md cursor-pointer sm:w-auto focus:z-10 text-sm px-5 py-2.5 bg-white
-              text-slate-900 border-slate-200 hover:bg-slate-100 hover:text-slate-950
-              dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600
-              dark:hover:text-white dark:hover:bg-slate-700
-            "
+            class="btn btn-default btn-rounded rounded-l-none border-l-0"
             data-action="advanced-search#clearForm filters#submit"
             aria-label="<%= t(".clear_aria_label") %>"
           >
-            <%= viral_icon(name: "x_mark", classes: "size-5") %>
+            <%= helpers.render_icon(:x, class: "size-5") %>
           </button>
         </div>
       <% else %>
-        <%= viral_button(
+        <%= p_button(
           data: {
             action: "advanced-search#idempotentConnect viral--dialog#open",
           },
-        ) { t(".title") } %>
+        ) do %>
+          <%= t(".title") %>
+        <% end %>
       <% end %>
     <% end %>
     <% dialog.with_header(title: t(".title")) %>
@@ -55,7 +45,7 @@
       <div class="space-y-4" data-advanced-search-target="searchGroupsContainer">
       </div>
       <div class="flex justify-end space-x-2">
-        <%= viral_button(data: { action: "advanced-search#addGroup" }) do %>
+        <%= p_button(data: { action: "advanced-search#addGroup" }) do %>
           <%= t(".add_group_button") %>
         <% end %>
       </div>
@@ -77,7 +67,7 @@
       t(".apply_filter_button")
     end %>
     <% dialog.with_secondary_action do %>
-      <%= viral_button(data: { action: "advanced-search#clearForm filters#submit" }) do %>
+      <%= p_button(data: { action: "advanced-search#clearForm filters#submit" }) do %>
         <%= t(".clear_filter_button") %>
       <% end %>
     <% end %>
@@ -144,14 +134,9 @@
           aria-label="<%= t(".value") %>"
         />
       </div>
-      <button
-        type="button"
-        class="mt-3 text-slate-400 hover:text-slate-900 dark:hover:text-white"
-        aria-label="<%= t(".remove_condition_aria_label") %>"
-        data-action="advanced-search#removeCondition"
-      >
-        <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>
-      </button>
+      <%= p_button(scheme: :ghost, title: t(".remove_condition_aria_label"), "aria-label": t(".remove_condition_aria_label"), data: { action: "advanced-search#removeCondition" }) do |c| %>
+        <% c.with_leading_visual_icon(icon: :x) %>
+      <% end %>
     </fieldset>
   </template>
   <template data-advanced-search-target="groupTemplate">
@@ -164,10 +149,10 @@
     >
       <legend><%= t("advanced_search_component.group", index: "GROUP_LEGEND_INDEX_PLACEHOLDER") %></legend>
       <div class="flex justify-end my-4">
-        <%= viral_button(data: { action: "advanced-search#addCondition" }) do %>
+        <%= p_button(data: { action: "advanced-search#addCondition" }) do %>
           <%= t(".add_condition_button") %>
         <% end %>
-        <%= viral_button(classes: "ml-2", data: { action: "advanced-search#removeGroup" }) do %>
+        <%= p_button(classes: "ml-2", data: { action: "advanced-search#removeGroup" }) do %>
           <%= t(".remove_group_button") %>
         <% end %>
       </div>

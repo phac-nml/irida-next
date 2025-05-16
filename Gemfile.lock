@@ -9,10 +9,10 @@ GIT
 PATH
   remote: embedded_gems/pathogen
   specs:
-    pathogen_view_components (0.0.1)
+    pathogen_view_components (0.1.0)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
-      heroicon-rails (>= 0.2.9)
+      railties (>= 5.0.0)
       view_component (>= 3.1, < 4.0)
 
 GEM
