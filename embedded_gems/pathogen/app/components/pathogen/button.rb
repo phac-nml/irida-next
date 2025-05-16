@@ -2,15 +2,14 @@
 
 module Pathogen
   # The Button component provides a flexible, accessible button with multiple visual styles and states.
-  # It supports various color schemes, sizes, and can include leading/trailing visual elements.
+  # It supports various color schemes and can include leading/trailing visual elements.
   #
   # @example Basic usage
   #   <%= render Pathogen::ButtonComponent.new(type: :button) { "Click me" } %>
   #
-  # @example With scheme and size
+  # @example With scheme
   #   <%= render Pathogen::ButtonComponent.new(
   #     scheme: :primary,
-  #     size: :medium,
   #     disabled: false
   #   ) { "Submit" } %>
   #
