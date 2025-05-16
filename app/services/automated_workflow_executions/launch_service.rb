@@ -50,9 +50,9 @@ module AutomatedWorkflowExecutions
 
     def name
       if @automated_workflow_execution.name.blank?
-        @sample.puid
+        "#{@sample.name} (#{@sample.puid})"
       else
-        [@automated_workflow_execution.name, @sample.puid].join(' ')
+        [@automated_workflow_execution.name, @sample.name, "(#{@sample.puid})"].join(' ')
       end
     end
   end

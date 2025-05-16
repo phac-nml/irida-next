@@ -48,7 +48,7 @@ module AutomatedWorkflowExecutions
       workflow_execution = AutomatedWorkflowExecutions::LaunchService.new(@automated_workflow_execution, @sample,
                                                                           @pe_attachment_pair,
                                                                           @automation_bot).execute
-      assert_equal @sample.puid, workflow_execution.name
+      assert_equal "#{@sample.name} (#{@sample.puid})", workflow_execution.name
     end
 
     test 'sets the name in the created workflow execution to automated workflow execution name plus samples puid if automated workflow execution has a name' do # rubocop:disable Layout/LineLength
@@ -56,7 +56,7 @@ module AutomatedWorkflowExecutions
       workflow_execution = AutomatedWorkflowExecutions::LaunchService.new(@automated_workflow_execution, @sample,
                                                                           @pe_attachment_pair,
                                                                           @automation_bot).execute
-      assert_equal "Prefix #{@sample.puid}", workflow_execution.name
+      assert_equal "Prefix #{@sample.name} (#{@sample.puid})", workflow_execution.name
     end
   end
 end
