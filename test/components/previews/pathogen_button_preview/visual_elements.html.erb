@@ -7,8 +7,8 @@
         <div class="flex flex-col items-center">
           <p class="text-sm text-gray-500 mb-2"><%= scheme.to_s.humanize %></p>
           <%= p_button(scheme:) do |c| %>
-            <% c.with_leading_visual_icon(icon: scheme == :danger ? 'trash' : 'plus') %>
-            <%= scheme == :danger ? 'Delete' : 'Add Item' %>
+            <% c.with_leading_visual_icon(icon: scheme == :danger ? "trash" : "plus") %>
+            <%= scheme == :danger ? "Delete" : "Add Item" %>
           <% end %>
         </div>
       <% end %>
@@ -23,11 +23,59 @@
         <div class="flex flex-col items-center">
           <p class="text-sm text-gray-500 mb-2"><%= scheme.to_s.humanize %></p>
           <%= p_button(scheme:) do |c| %>
-            <%= scheme == :primary ? 'Open Link' : 'More Options' %>
-            <% c.with_trailing_visual_icon(icon: scheme == :primary ? 'arrow-right' : 'arrow-down') %>
+            <%= scheme == :primary ? "Open Link" : "More Options" %>
+            <% c.with_trailing_visual_icon(
+              icon: scheme == :primary ? "arrow-right" : "arrow-down",
+            ) %>
           <% end %>
         </div>
       <% end %>
+    </div>
+  </div>
+
+  <%# SVG Examples %>
+  <div>
+    <h3 class="text-lg font-medium mb-4">SVG Examples</h3>
+    <div class="flex flex-wrap items-center gap-4">
+      <div class="flex flex-col items-center">
+        <p class="text-sm text-gray-500 mb-2">SVG with Block</p>
+        <%= p_button(scheme: :primary) do |c| %>
+          <% c.with_leading_visual_svg(viewBox: "0 0 20 20") do %>
+            <path
+              d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14A6 6 0 1110 4a6 6 0 010 12zm-1-5v-3a1 1 0 112 0v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3z"
+            />
+          <% end %>
+          Add Custom
+        <% end %>
+      </div>
+
+      <div class="flex flex-col items-center">
+        <p class="text-sm text-gray-500 mb-2">SVG with Path Param</p>
+        <%= p_button(scheme: :default) do |c| %>
+          <% c.with_leading_visual_svg(
+            path:
+              "M10 2a8 8 0 100 16 8 8 0 000-16zm-1 12a1 1 0 012 0v1a1 1 0 11-2 0v-1zm.08-7.95c-.5.082-.868.47-.98.965a1 1 0 01-1.97-.3C6.33 5.092 7.364 4.15 8.77 4.017c1.463-.138 2.856.628 3.228 2.021.344 1.292-.058 2.251-.678 2.918-.615.66-1.298.961-1.562 1.07A1 1 0 019 11v2a1 1 0 11-2 0v-2c0-1.087.389-1.565.798-1.796.429-.242.922-.43 1.319-.902.275-.333.376-.74.273-1.129-.103-.388-.418-.677-.83-.716-.344-.033-.748.116-.94.456z",
+            viewBox: "0 0 20 20",
+          ) %>
+          Info
+        <% end %>
+      </div>
+
+      <div class="flex flex-col items-center">
+        <p class="text-sm text-gray-500 mb-2">Custom Width/Height</p>
+        <%= p_button(scheme: :danger) do |c| %>
+          <% c.with_leading_visual_svg(
+            viewBox: "0 0 24 24",
+            width: "20",
+            height: "20"
+          ) do %>
+            <path
+              d="M5 5a1 1 0 011-1h12a1 1 0 011 1v1H5V5zm-1 3v10a3 3 0 003 3h10a3 3 0 003-3V8H4zm4 8a1 1 0 01-1-1v-4a1 1 0 112 0v4a1 1 0 01-1 1zm4 0a1 1 0 01-1-1v-4a1 1 0 112 0v4a1 1 0 01-1 1zm4 0a1 1 0 01-1-1v-4a1 1 0 112 0v4a1 1 0 01-1 1z"
+            />
+          <% end %>
+          Delete
+        <% end %>
+      </div>
     </div>
   </div>
 
