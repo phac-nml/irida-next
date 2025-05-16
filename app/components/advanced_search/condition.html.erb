@@ -57,12 +57,8 @@
       condition_index: @condition_index,
     ) %>
   <% end %>
-  <button
-    type="button"
-    class="mt-3 text-slate-400 hover:text-slate-900 dark:hover:text-white"
-    aria-label="<%=t("advanced_search_component.remove_condition_aria_label")%>"
-    data-action="advanced-search#removeCondition"
-  >
-    <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>
-  </button>
+  <%= p_button(scheme: :ghost, title: t("advanced_search_component.remove_condition_aria_label"), "aria-label": t("advanced_search_component.remove_condition_aria_label"), data: { action: "advanced-search#removeCondition" }) do |c| %>
+    <% c.with_leading_visual_icon(icon: :x) %>
+  <% end %>
+
 </fieldset>
