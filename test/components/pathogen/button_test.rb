@@ -55,7 +55,7 @@ module Pathogen
       end
 
       assert_selector 'button[type="button"]' do
-        assert_icon(:plus, count: 1)
+        assert_selector '[data-phosphor-icon="plus"]', count: 1
         assert_text 'Button with icon'
       end
     end
@@ -67,7 +67,7 @@ module Pathogen
       end
 
       assert_selector 'button[type="button"]' do
-        assert_icon(:plus, count: 1)
+        assert_selector '[data-phosphor-icon="plus"]', count: 1
         assert_text 'Ghost Button'
       end
 
@@ -86,16 +86,32 @@ module Pathogen
       assert_selector 'button .trailing_visual_icon.inline-block', count: 1
     end
 
-    test 'renders with custom SVG' do
-      component = Pathogen::Button.new(test_selector: 'custom-svg').tap do |c|
-        c.with_leading_visual_svg do
+    test 'renders with custom SVG using block' do
+      render_inline(Pathogen::Button.new(test_selector: 'custom-svg-block')) do |c|
+        c.with_leading_visual_svg(viewBox: '0 0 20 20') do
           '<path d="M10 5a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H6a1 1 0 1 1 0-2h3V6a1 1 0 0 1 1-1z"/>'.html_safe
         end
+        'Custom SVG with Block'
       end
-      render_inline(component) { 'Custom SVG' }
 
-      assert_selector 'button[data-test-selector="custom-svg"]', text: 'Custom SVG', count: 1
-      assert_selector 'button svg.leading_visual_svg', count: 1
+      assert_selector 'button[data-test-selector="custom-svg-block"]', text: 'Custom SVG with Block', count: 1
+      assert_selector 'button svg.fill-current.leading_visual_svg', count: 1
+    end
+
+    test 'renders with custom SVG using path parameter' do
+      svg_path = 'M10 5a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H6a1 1 0 1 1 0-2h3V6a1 1 0 0 1 1-1z'
+      render_inline(Pathogen::Button.new(test_selector: 'custom-svg-path')) do |c|
+        c.with_leading_visual_svg(
+          path: svg_path,
+          viewBox: '0 0 20 20',
+          width: '20',
+          height: '20'
+        )
+        'Custom SVG with Path Param'
+      end
+
+      assert_selector 'button[data-test-selector="custom-svg-path"]', text: 'Custom SVG with Path Param', count: 1
+      assert_selector 'button svg.fill-current.leading_visual_svg', count: 1
     end
 
     # Color Scheme Tests
