@@ -23,7 +23,7 @@ module Pathogen
     include Pathogen::ButtonVisuals
 
     # Available color schemes for the button
-    SCHEME_OPTIONS = %i[primary default danger ghost].freeze
+    SCHEME_OPTIONS = %i[primary default danger ghost unstyled].freeze
     DEFAULT_SCHEME = :default
 
     # @param base_button_class [Class] The base button class to use for rendering
@@ -42,25 +42,47 @@ module Pathogen
       @scheme = scheme
       @block = block
 
-      @system_arguments = system_arguments
+      # Consolidate user-provided :class and :classes attributes into :class for internal processing.
+      # This ensures that subsequent modifications to @system_arguments[:class] build upon all user inputs.
+      # We operate on a copy of system_arguments initially to safely delete keys.
+      processed_system_arguments = system_arguments.dup
+      user_class_attr = processed_system_arguments.delete(:class)
+      user_classes_attr = processed_system_arguments.delete(:classes)
+      consolidated_user_classes = class_names(user_class_attr, user_classes_attr)
+
+      @system_arguments = processed_system_arguments # Contains remaining system_arguments
+      @system_arguments[:class] = consolidated_user_classes # Prime :class with all user-provided classes
+
       @system_arguments[:disabled] = disabled
+
+      # Pass apply_default_base_styles: false if scheme is :unstyled
+      @system_arguments[:apply_default_base_styles] = false if @scheme == :unstyled
 
       setup_button_classes
     end
 
     # Called before rendering to handle visual elements
     def before_render
-      add_visual_styles if leading_visual.present? || trailing_visual.present?
+      add_visual_styles if (leading_visual.present? || trailing_visual.present?) && @scheme != :unstyled
     end
 
     private
 
     def setup_button_classes
+      # If unstyled, only use provided classes and block status
+      if @scheme == :unstyled
+        @system_arguments[:class] = class_names(
+          @system_arguments[:class],
+          'block w-full' => @block
+        )
+        return
+      end
+
       scheme_class = generate_scheme_class(
         fetch_or_fallback(SCHEME_OPTIONS, @scheme, DEFAULT_SCHEME)
       )
 
-      @system_arguments[:classes] = class_names(
+      @system_arguments[:class] = class_names(
         @system_arguments[:class],
         scheme_class,
         'block w-full' => @block
@@ -68,8 +90,8 @@ module Pathogen
     end
 
     def add_visual_styles
-      @system_arguments[:classes] = class_names(
-        @system_arguments[:classes],
+      @system_arguments[:class] = class_names(
+        @system_arguments[:class],
         'text-center inline-flex items-center'
       )
     end
@@ -79,6 +101,8 @@ module Pathogen
     # @param scheme [Symbol] The color scheme to generate classes for
     # @return [String] CSS classes for the specified scheme
     def generate_scheme_class(scheme)
+      return '' if scheme == :unstyled
+
       scheme_classes = {
         primary: %w[
           border-primary-800 bg-primary-800 hover:bg-primary-900
