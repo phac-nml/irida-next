@@ -1,31 +1,30 @@
 <div id="sample-attachments">
-  <% if @has_attachments %>
-    <div class="relative overflow-x-auto table-wrapper" data-turbo-temporary>
-      <% if @allowed_to[:update_sample] %>
-        <div class="flex items-center mb-4">
-          <div class="flex items-center space-x-2">
-            <%= form_with(
+  <div class="relative overflow-x-auto table-wrapper" data-turbo-temporary>
+    <% if @allowed_to[:update_sample] %>
+      <div class="flex items-center mb-4">
+        <div class="flex items-center space-x-2">
+          <%= form_with(
                   url: select_namespace_project_sample_attachments_url(sample_id: @sample.id),
                   method: :get,
                   id: "select-all-form",
                 ) do |f| %>
-              <input type="hidden" name="format" value="turbo_stream"/>
-              <input type="hidden" name="select" value="on"/>
-              <%= f.submit t(".select_all_button"),
-                       class: "button button--state-default button--size-default" %>
-            <% end %>
-            <%= form_with(
+            <input type="hidden" name="format" value="turbo_stream"/>
+            <input type="hidden" name="select" value="on"/>
+            <%= f.submit t(".select_all_button"),
+                     class: "button button--state-default button--size-default" %>
+          <% end %>
+          <%= form_with(
                   url: select_namespace_project_sample_attachments_url(sample_id: @sample.id),
                   method: :get,
                   id: "deselect-all-form" ,
                 ) do |f| %>
-              <input type="hidden" name="format" value="turbo_stream"/>
-              <%= f.submit t(".deselect_all_button"),
-                       class: "button button--state-default button--size-default" %>
-            <% end %>
-          </div>
-          <div class="flex items-center space-x-2 ml-auto">
-            <%= render SearchComponent.new(
+            <input type="hidden" name="format" value="turbo_stream"/>
+            <%= f.submit t(".deselect_all_button"),
+                     class: "button button--state-default button--size-default" %>
+          <% end %>
+        </div>
+        <div class="flex items-center space-x-2 ml-auto">
+          <%= render SearchComponent.new(
               query: @q,
               search_attribute: :puid_or_file_blob_filename_cont,
               placeholder: t(:".search.placeholder"),
@@ -35,71 +34,44 @@
                 selection_storage_key_value: "files-#{@sample.id}"
               }
               ) do %>
-              <%= hidden_field_tag :limit, @pagy.limit %>
-              <%= hidden_field_tag :tab, @tab %>
-            <% end %>
-            <%= link_to t("projects.samples.show.new_attachment_button"),
-            new_namespace_project_sample_attachment_path(sample_id: @sample.id),
-            data: {
-              turbo_frame: "sample_modal",
-              turbo_stream: true,
-            },
-            class: "button button--size-default button--state-default" %>
-            <%= button_to t("projects.samples.show.concatenate_button"),
-            new_namespace_project_sample_attachments_concatenation_path(
-              sample_id: @sample.id,
-            ),
-            method: :get,
-            data: {
-              turbo_frame: "sample_modal",
-              turbo_stream: false,
-              controller: "action-button",
-              action_button_required_value: 2,
-            },
-            class: "button button--size-default button--state-default action-button" %>
-            <%= button_to t("projects.samples.show.delete_files_button"),
-            new_namespace_project_sample_attachments_deletion_path(sample_id: @sample.id),
-            method: :get,
-            data: {
-              turbo_frame: "sample_modal",
-              turbo_stream: false,
-              controller: "action-button",
-              action_button_required_value: 1,
-            },
-            class: "button button--size-default button--state-default action-button" %>
-          </div>
-        </div>
-      <% end %>
-
-      <%= turbo_frame_tag "sample_attachments", src: namespace_project_sample_attachments_url(sample_id: @sample.id, format: :turbo_stream, **request.query_parameters) do %>
-        <%= render partial: "shared/loading/table" %>
-      <% end %>
-    </div>
-  <% else %>
-    <% if @allowed_to[:update_sample] %>
-      <%= render(
-        Viral::EmptyStateComponent.new(
-          icon_name: :document_text,
-          title: t(".empty_state.title"),
-          description: t(".empty_state.description"),
-          action_text: t(".empty_state.action_text"),
-          action_path:
-            new_namespace_project_sample_attachment_path(sample_id: @sample.id),
-          action_method: :get,
+            <%= hidden_field_tag :limit, @pagy.limit %>
+            <%= hidden_field_tag :tab, @tab %>
+          <% end %>
+          <%= link_to t("projects.samples.show.new_attachment_button"),
+          new_namespace_project_sample_attachment_path(sample_id: @sample.id),
           data: {
             turbo_frame: "sample_modal",
             turbo_stream: true,
           },
-        ),
-      ) %>
-    <% else %>
-      <%= render(
-        Viral::EmptyStateComponent.new(
-          icon_name: :document_text,
-          title: t(".empty_state.title"),
-          description: t(".empty_state.no_permission_description"),
-        ),
-      ) %>
+          class: "button button--size-default button--state-default" %>
+          <%= button_to t("projects.samples.show.concatenate_button"),
+          new_namespace_project_sample_attachments_concatenation_path(
+            sample_id: @sample.id,
+          ),
+          method: :get,
+          data: {
+            turbo_frame: "sample_modal",
+            turbo_stream: false,
+            controller: "action-button",
+            action_button_required_value: 2,
+          },
+          class: "button button--size-default button--state-default action-button" %>
+          <%= button_to t("projects.samples.show.delete_files_button"),
+          new_namespace_project_sample_attachments_deletion_path(sample_id: @sample.id),
+          method: :get,
+          data: {
+            turbo_frame: "sample_modal",
+            turbo_stream: false,
+            controller: "action-button",
+            action_button_required_value: 1,
+          },
+          class: "button button--size-default button--state-default action-button" %>
+        </div>
+      </div>
     <% end %>
-  <% end %>
+
+    <%= turbo_frame_tag "sample_attachments", src: namespace_project_sample_attachments_url(sample_id: @sample.id, format: :turbo_stream, **request.query_parameters) do %>
+      <%= render partial: "shared/loading/table" %>
+    <% end %>
+  </div>
 </div>

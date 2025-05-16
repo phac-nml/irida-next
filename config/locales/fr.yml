@@ -1632,10 +1632,6 @@ fr:
         destroy:
           error: 'Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}'
           success: Le fichier %{filename} a été supprimé avec succès.
-        index:
-          empty_state:
-            description: Description
-            title: Title
         table:
           deselect_all_button: Désélectionner tout
           empty_state:
