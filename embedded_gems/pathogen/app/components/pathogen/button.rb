@@ -136,7 +136,6 @@ module Pathogen
         ]
       }
 
-
       scheme_classes[scheme].join(' ')
     end
 
