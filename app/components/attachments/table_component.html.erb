@@ -255,10 +255,6 @@
   <% end %>
 <% else %>
   <div class="empty_state_message">
-    <%= viral_empty(
-      title: @empty[:title],
-      description: @empty[:description],
-      icon_name: :document_text,
-    ) %>
+    <%= viral_empty(**@empty) %>
   </div>
 <% end %>

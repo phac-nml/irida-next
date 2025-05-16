@@ -1636,10 +1636,6 @@ en:
         destroy:
           error: 'File %{filename} was not removed due to the following errors: %{errors}'
           success: File %{filename} was successfully removed.
-        index:
-          empty_state:
-            description: Description
-            title: Title
         table:
           deselect_all_button: Deselect all
           empty_state:
