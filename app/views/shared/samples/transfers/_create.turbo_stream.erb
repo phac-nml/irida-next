@@ -16,7 +16,7 @@
 <% else %>
   <%= turbo_stream.append "transfer_samples_dialog_content" do %>
     <%= render SpinnerComponent.new(
-      message: t("projects.samples.transfers.dialog.spinner_message"),
+      message: t("shared.samples.transfers.dialog.spinner_message"),
     ) %>
   <% end %>
 <% end %>
