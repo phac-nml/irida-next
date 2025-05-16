@@ -55,7 +55,7 @@ module Pathogen
       end
 
       assert_selector 'button[type="button"]' do
-        assert_selector 'button svg[data-phosphor-icon="plus"]', count: 1
+        assert_icon(:plus, count: 1)
         assert_text 'Button with icon'
       end
     end
@@ -67,7 +67,7 @@ module Pathogen
       end
 
       assert_selector 'button[type="button"]' do
-        assert_selector 'button svg[data-phosphor-icon="plus"]', count: 1
+        assert_icon(:plus, count: 1)
         assert_text 'Ghost Button'
       end
 
