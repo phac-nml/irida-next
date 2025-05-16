@@ -21,16 +21,19 @@ module Pathogen
     def initialize(icon: nil, variant: :regular, **system_arguments)
       @icon_name = icon&.to_sym
       @variant = variant
-      
+
       # Set default classes if none provided
       system_arguments[:class] = class_names(
         'inline-block',
         system_arguments[:class]
       )
-      
+
       # Set default size if not specified
       system_arguments[:size] ||= '1.5rem'
-      
+
+      # add data-phosphor-icon="plus" if in test environment
+      system_arguments['data-phosphor-icon'] = @icon_name.to_s if Rails.env.test?
+
       @system_arguments = system_arguments
     end
   end
