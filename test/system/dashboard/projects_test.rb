@@ -393,7 +393,7 @@ module Dashboard
 
         click_on I18n.t('projects.samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
-        perform_enqueued_jobs only: [::Samples::CloneJob]
+        perform_enqueued_jobs only: [::Projects::Samples::CloneJob]
       end
       assert_text I18n.t('projects.samples.clones.create.success')
 
