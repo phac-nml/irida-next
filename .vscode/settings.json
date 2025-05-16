@@ -33,21 +33,15 @@
     "createuser",
     "datetime",
     "describedby",
-    "fieldset",
     "flowbite",
-    "gsub",
     "headful",
-    "hotwired",
     "irida",
     "keyfile",
     "logfile",
     "micha",
     "nofork",
-    "nowrap",
-    "pagy",
-    "puid",
     "rubocop",
-    "samplesheet",
-    "tailwindcss"
+    "tailwindcss",
+    "fieldset"
   ]
 }

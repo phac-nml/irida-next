@@ -236,6 +236,10 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     raise NotImplementedError
   end
 
+  # Paths that are needed for the destroy confirmation.
+  #
+  # @return @index_path [String] Sets the selection storage key, so the workflow id can be removed from local storage.
+  # @return @destroy_path [String] Deletes the workflow execution on a successful confirmation.
   def destroy_paths
     raise NotImplementedError
   end
