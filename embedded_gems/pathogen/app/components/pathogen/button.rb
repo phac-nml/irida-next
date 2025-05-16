@@ -26,6 +26,36 @@ module Pathogen
     SCHEME_OPTIONS = %i[primary default danger ghost unstyled].freeze
     DEFAULT_SCHEME = :default
 
+    SCHEME_CLASSES = {
+      primary: %w[
+        border-primary-800 bg-primary-800 hover:bg-primary-900
+        dark:border-primary-700 dark:bg-primary-700 dark:hover:bg-primary-600
+        disabled:bg-primary-100 disabled:text-primary-500 disabled:border-primary-200
+        disabled:dark:bg-primary-900 disabled:dark:text-primary-400
+        disabled:dark:border-primary-800 text-white dark:text-white
+      ],
+      default: %w[
+        border-slate-300 bg-slate-50 text-slate-900 hover:bg-slate-100
+        hover:text-slate-950 disabled:border-slate-200 disabled:bg-slate-100
+        disabled:text-slate-500 dark:border-slate-700 dark:bg-slate-900
+        dark:text-slate-50 dark:hover:bg-slate-800 dark:hover:text-white
+        disabled:dark:border-slate-700 disabled:dark:bg-slate-800
+        disabled:dark:text-slate-400
+      ],
+      danger: %w[
+        border-red-800 bg-red-700 text-white hover:bg-red-800
+        disabled:border-red-200 disabled:bg-red-100 disabled:text-red-500
+        dark:border-red-600 dark:bg-red-600 dark:text-white
+        dark:hover:bg-red-700 disabled:dark:border-red-800
+        disabled:dark:bg-red-900 disabled:dark:text-red-400
+      ],
+      ghost: %w[
+        border-transparent bg-transparent text-slate-700 hover:bg-slate-100
+        hover:text-slate-900 disabled:text-slate-400 dark:text-slate-300
+        dark:hover:bg-slate-800 dark:hover:text-white disabled:dark:text-slate-600
+      ]
+    }.freeze
+
     # @param base_button_class [Class] The base button class to use for rendering
     # @param scheme [Symbol] The color scheme to apply (default: :default)
     # @param block [Boolean] Whether the button should be a block-level element
@@ -103,40 +133,7 @@ module Pathogen
     def generate_scheme_class(scheme)
       return '' if scheme == :unstyled
 
-      scheme_classes = {
-        primary: %w[
-          border-primary-800 bg-primary-800 hover:bg-primary-900
-          dark:border-primary-700 dark:bg-primary-700 dark:hover:bg-primary-600
-          disabled:bg-primary-100 disabled:text-primary-500 disabled:border-primary-200
-          disabled:dark:bg-primary-900 disabled:dark:text-primary-400
-          disabled:dark:border-primary-800 text-white dark:text-white
-        ],
-
-        default: %w[
-          border-slate-300 bg-slate-50 text-slate-900 hover:bg-slate-100
-          hover:text-slate-950 disabled:border-slate-200 disabled:bg-slate-100
-          disabled:text-slate-500 dark:border-slate-700 dark:bg-slate-900
-          dark:text-slate-50 dark:hover:bg-slate-800 dark:hover:text-white
-          disabled:dark:border-slate-700 disabled:dark:bg-slate-800
-          disabled:dark:text-slate-400
-        ],
-
-        danger: %w[
-          border-red-800 bg-red-700 text-white hover:bg-red-800
-          disabled:border-red-200 disabled:bg-red-100 disabled:text-red-500
-          dark:border-red-600 dark:bg-red-600 dark:text-white
-          dark:hover:bg-red-700 disabled:dark:border-red-800
-          disabled:dark:bg-red-900 disabled:dark:text-red-400
-        ],
-
-        ghost: %w[
-          border-transparent bg-transparent text-slate-700 hover:bg-slate-100
-          hover:text-slate-900 disabled:text-slate-400 dark:text-slate-300
-          dark:hover:bg-slate-800 dark:hover:text-white disabled:dark:text-slate-600
-        ]
-      }
-
-      scheme_classes[scheme].join(' ')
+      SCHEME_CLASSES[scheme].join(' ')
     end
 
     # Trims the content while preserving HTML safety
