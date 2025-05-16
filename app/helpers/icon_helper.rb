@@ -56,6 +56,7 @@ module ICONS
     user_circle: { name: 'user-circle', options: {} },
     users: { name: :users, options: {} },
     bank: { name: :bank, options: {} },
+    x: { name: :x, options: {} },
 
     # Heroicons
     beaker: { name: :beaker, options: { library: :heroicons } },
