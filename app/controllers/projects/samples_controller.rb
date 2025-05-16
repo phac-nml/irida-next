@@ -115,7 +115,7 @@ module Projects
     end
 
     def set_default_sort
-      @q.sorts = 'updated_at desc' if @q.sorts.empty?
+      @q.sorts = 'created_at desc' if @q.sorts.empty?
     end
 
     def index_view_authorizations
