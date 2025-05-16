@@ -581,9 +581,9 @@ fr:
       information:
         created_on: Créé le
         no_description: Aucune description fournie pour le projet
-        number_of_automated_workflow_executions: Automated pipelines
-        number_of_members: Members
-        number_of_samples: Samples
+        number_of_automated_workflow_executions: Pipelines automatisés
+        number_of_members: Membres
+        number_of_samples: Échantillons
       samples_title: Échantillons récemment mis à jour
       view_more: En savoir plus
     token:
