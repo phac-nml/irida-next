@@ -85,7 +85,7 @@
       </span>
     <% end %>
   <% end %>
-  <% if @namespace.type == "Project" %>
+  <% if @namespace.project_namespace? %>
     <%= viral_tooltip(title: t(:'.stats.samples')) do %>
       <span
         id="<%= "#{dom_id(@namespace.project)}-samples-count" %>"
