@@ -5,18 +5,17 @@
   data-viral--dropdown-skidding-value="<%= skidding %>"
   data-viral--dropdown-distance-value="<%= distance %>"
 >
-  <%= render Viral::BaseComponent.new(tag: :button, **system_arguments) do %>
+  <%= render Pathogen::Button.new(**system_arguments) do |button| %>
     <% if icon_name.present? %>
-      <%= viral_icon(
-        name: icon_name,
-        classes: label.present? ? "w-6 h-6 flex-none mr-3" : "w-6 h-6 flex-none",
-      ) %>
+      <% button.with_leading_visual_icon(icon: icon_name) %>
     <% end %>
+
     <% if label.present? %>
-      <span class="text-left truncate grow"><%= label %></span>
+      <%= label %>
     <% end %>
-    <% if caret %>
-      <%= helpers.render_icon ICONS[:caret_down], class: "size-4 ml-2 flex-none" %>
+
+    <% if caret.present? %>
+      <% button.with_trailing_visual_icon(icon: "caret-down") %>
     <% end %>
   <% end %>
   <!-- Dropdown menu -->
