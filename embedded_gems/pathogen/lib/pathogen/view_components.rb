@@ -2,6 +2,10 @@
 
 require 'pathogen/view_components/version'
 require 'pathogen/view_components/engine'
+require 'pathogen/view_components/railtie'
+
+# Load the button helper
+require 'pathogen/button_helper'
 
 module Pathogen
   # :nodoc:

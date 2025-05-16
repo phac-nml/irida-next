@@ -3,7 +3,7 @@
 class PathogenButtonPreview < ViewComponent::Preview
   # @param scheme select { choices: [default, primary, danger, ghost, unstyled] } "The color scheme of the button."
   def playground(scheme: :default)
-    render Pathogen::Button.new(scheme:, test_selector: 'playground') do
+    render(Pathogen::Button.new(scheme: scheme, test_selector: 'playground')) do
       'Button'
     end
   end

@@ -6,7 +6,7 @@
       <%= value %>
     <% end %>
   </span>
-  <%= render Pathogen::Button.new(
+  <%= p_button(
     scheme: :unstyled,
     data: { action: 'click->clipboard#copy' },
     'data-clipboard-target': 'button',

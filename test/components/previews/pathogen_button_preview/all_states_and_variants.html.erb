@@ -2,64 +2,60 @@
   <div>
     <h3 class="text-lg font-medium mb-4">Color Schemes</h3>
     <div class="flex flex-wrap items-center gap-4">
-      <%= render Pathogen::Button.new(scheme: :default) do %>
+      <%= p_button(scheme: :default) do %>
         Default
       <% end %>
 
-      <%= render Pathogen::Button.new(scheme: :primary) do %>
+      <%= p_button(scheme: :primary) do %>
         Primary
       <% end %>
-      <%= render Pathogen::Button.new(scheme: :danger) do %>
+      <%= p_button(scheme: :danger) do %>
         Danger
       <% end %>
-      <%= render Pathogen::Button.new(scheme: :ghost) do %>
+      <%= p_button(scheme: :ghost) do %>
         Ghost
       <% end %>
     </div>
   </div>
 
-
   <div>
     <h3 class="text-lg font-medium mb-4">States</h3>
     <div class="flex flex-wrap items-center gap-4">
-      <%= render Pathogen::Button.new(scheme: :default) do %>
+      <%= p_button(scheme: :default) do %>
         Normal
       <% end %>
-      <%= render Pathogen::Button.new(scheme: :default, disabled: true) do %>
+      <%= p_button(scheme: :default, disabled: true) do %>
         Disabled
       <% end %>
-      <%= render Pathogen::Button.new(scheme: :default, class: 'opacity-50') do %>
+      <%= p_button(scheme: :default, class: 'opacity-50') do %>
         Loading
       <% end %>
     </div>
   </div>
 
-
   <div>
     <h3 class="text-lg font-medium mb-4">Sizes</h3>
     <div class="flex items-center gap-4">
-      <%= render Pathogen::Button.new(scheme: :primary) do %>
+      <%= p_button(scheme: :primary) do %>
         Small
       <% end %>
-      <%= render Pathogen::Button.new(scheme: :primary) do %>
+      <%= p_button(scheme: :primary) do %>
         Medium
       <% end %>
     </div>
   </div>
 
-
   <div>
     <h3 class="text-lg font-medium mb-4">Full Width</h3>
-    <%= render Pathogen::Button.new(scheme: :primary, block: true) do %>
+    <%= p_button(scheme: :primary, block: true) do %>
       Full Width Button
     <% end %>
   </div>
 
-
   <div>
     <h3 class="text-lg font-medium mb-4">As Link</h3>
     <div class="flex items-center gap-4">
-      <%= render Pathogen::Button.new(
+      <%= p_button(
         scheme: :primary, 
         href: '#', 
         tag: :a

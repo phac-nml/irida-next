@@ -10,22 +10,27 @@ module Pathogen
     class Engine < ::Rails::Engine
       isolate_namespace Pathogen::ViewComponents
 
-      config.autoload_paths = %W[
-        #{root}/lib
+      # Configure autoload paths
+      config.autoload_paths += [
+        root.join('app/helpers').to_s,
+        root.join('app/components').to_s,
+        root.join('app/lib').to_s,
+        root.join('lib').to_s
       ]
 
-      config.eager_load_paths = %W[
-        #{root}/app/components
-        #{root}/app/helpers
-        #{root}/app/lib
+      # Eager load paths for production
+      config.eager_load_paths += [
+        root.join('app/helpers').to_s,
+        root.join('app/components').to_s
       ]
 
+      # Initialize ViewComponent configuration
       config._view_components = ActiveSupport::OrderedOptions.new
 
       config._view_components.raise_on_invalid_options = false
       config._view_components.silence_deprecations = false
       config._view_components.validate_class_names = !Rails.env.production?
-      config._view_components.raise_on_invalide_aria = false
+      config._view_components.raise_on_invalide_aria = true
 
       initializer '_view_components.assets' do |app|
         if app.config.respond_to?(:assets)
