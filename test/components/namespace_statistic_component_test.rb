@@ -64,7 +64,8 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
         bg: 'bg-indigo-100', text: 'text-indigo-700', dark_bg: 'dark:bg-indigo-700', dark_text: 'dark:text-indigo-200'
       },
       fuchsia: {
-        bg: 'bg-fuchsia-100', text: 'text-fuchsia-700', dark_bg: 'dark:bg-fuchsia-700', dark_text: 'dark:text-fuchsia-200'
+        bg: 'bg-fuchsia-100', text: 'text-fuchsia-700',
+        dark_bg: 'dark:bg-fuchsia-700', dark_text: 'dark:text-fuchsia-200'
       },
       amber: {
         bg: 'bg-amber-100', text: 'text-amber-700', dark_bg: 'dark:bg-amber-700', dark_text: 'dark:text-amber-200'
