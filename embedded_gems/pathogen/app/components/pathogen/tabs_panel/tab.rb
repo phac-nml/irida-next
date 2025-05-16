@@ -20,15 +20,16 @@ module Pathogen
       # @param variant [Symbol] The variant of the icon (default: :regular, options: :regular, :thin, :light, :bold, :fill, :duotone)
       # @param size [String, Integer] The size of the icon (default: '1rem')
       # @param class [String] Additional CSS classes to apply to the icon
-      renders_one :icon, ->(icon_name = nil, variant: :regular, size: '1rem', **system_arguments) do
+      renders_one :icon, lambda { |icon_name = nil, variant: :regular, size: '1rem', **system_arguments|
         Pathogen::Icon.new(icon: icon_name, variant: variant, size: size, **system_arguments) if icon_name.present?
-      end
+      }
 
       # rubocop:disable Metrics/ParameterLists
       # @param icon [Symbol, String] The name of the Phosphor icon to render (optional)
       # @param icon_variant [Symbol] The variant of the icon (default: :regular)
       # @param icon_size [String, Integer] The size of the icon (default: '1rem')
-      def initialize(controls:, tab_type:, selected: false, text: '', wrapper_arguments: {}, icon: nil, icon_variant: :regular, icon_size: '1rem', **system_arguments)
+      def initialize(controls:, tab_type:, selected: false, text: '', wrapper_arguments: {}, icon: nil,
+                     icon_variant: :regular, icon_size: '1rem', **system_arguments)
         @controls = controls
         @selected = selected
         @text = text
@@ -45,7 +46,7 @@ module Pathogen
         @system_arguments[:'aria-current'] = @selected ? 'page' : 'false'
         @system_arguments[:classes] = generate_tab_classes
         @system_arguments[:'aria-controls'] = @controls
-        
+
         # Initialize icon if provided
         with_icon(icon, variant: icon_variant, size: icon_size) if icon.present?
       end
