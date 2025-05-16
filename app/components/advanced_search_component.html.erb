@@ -9,7 +9,7 @@
         <div class="inline-flex rounded-lg" role="group">
           <button
             type="button"
-            class="btn btn-default btn-rounded"
+            class="btn btn-default btn-rounded rounded-r-none"
             data-action="advanced-search#idempotentConnect viral--dialog#open"
             aria-label="<%= t(".title") %>"
           >
@@ -17,15 +17,15 @@
           </button>
           <button
             type="button"
-            class="btn btn-default btn-rounded"
+            class="btn btn-default btn-rounded rounded-l-none border-l-0"
             data-action="advanced-search#clearForm filters#submit"
             aria-label="<%= t(".clear_aria_label") %>"
           >
-            <%= viral_icon(name: "x_mark", classes: "size-5") %>
+            <%= helpers.render_icon(:x, class: "size-5") %>
           </button>
         </div>
       <% else %>
-        <%= render Pathogen::Button.new(
+        <%= p_button(
           data: {
             action: "advanced-search#idempotentConnect viral--dialog#open",
           },
@@ -45,7 +45,7 @@
       <div class="space-y-4" data-advanced-search-target="searchGroupsContainer">
       </div>
       <div class="flex justify-end space-x-2">
-        <%= render Pathogen::Button.new(data: { action: "advanced-search#addGroup" }) do %>
+        <%= p_button(data: { action: "advanced-search#addGroup" }) do %>
           <%= t(".add_group_button") %>
         <% end %>
       </div>
@@ -67,7 +67,7 @@
       t(".apply_filter_button")
     end %>
     <% dialog.with_secondary_action do %>
-      <%= render Pathogen::Button.new(data: { action: "advanced-search#clearForm filters#submit" }) do %>
+      <%= p_button(data: { action: "advanced-search#clearForm filters#submit" }) do %>
         <%= t(".clear_filter_button") %>
       <% end %>
     <% end %>
@@ -134,14 +134,9 @@
           aria-label="<%= t(".value") %>"
         />
       </div>
-      <button
-        type="button"
-        class="mt-3 text-slate-400 hover:text-slate-900 dark:hover:text-white"
-        aria-label="<%= t(".remove_condition_aria_label") %>"
-        data-action="advanced-search#removeCondition"
-      >
-        <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>
-      </button>
+      <%= p_button(scheme: :ghost, title: t(".remove_condition_aria_label"), "aria-label": t(".remove_condition_aria_label"), data: { action: "advanced-search#removeCondition" }) do |c| %>
+        <% c.with_leading_visual_icon(icon: :x) %>
+      <% end %>
     </fieldset>
   </template>
   <template data-advanced-search-target="groupTemplate">
@@ -154,11 +149,13 @@
     >
       <legend><%= t("advanced_search_component.group", index: "GROUP_LEGEND_INDEX_PLACEHOLDER") %></legend>
       <div class="flex justify-end my-4">
-        <%= render Pathogen::Button.new(data: { action: "advanced-search#addCondition" }) do %>
+        <%= p_button(data: { action: "advanced-search#addCondition" }) do %>
           <%= t(".add_condition_button") %>
+          - JOSH
         <% end %>
-        <%= render Pathogen::Button.new(classes: "ml-2", data: { action: "advanced-search#removeGroup" }) do %>
+        <%= p_button(classes: "ml-2", data: { action: "advanced-search#removeGroup" }) do %>
           <%= t(".remove_group_button") %>
+          - JOSH
         <% end %>
       </div>
     </fieldset>
