@@ -1,5 +1,7 @@
 <%= viral_pageheader(title: 'Page header with buttons', subtitle: 'This is a page header') do |header| %>
   <%= header.with_buttons do %>
-    <%= render Pathogen::Button.new { "Button" } %>
+    <%= p_button do %>
+      Button
+    <% end %>
   <% end %>
 <% end %>
