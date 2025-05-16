@@ -29,7 +29,6 @@ module Viral
       @system_arguments = default_system_arguments(system_arguments)
       @system_arguments[:title] = tooltip if tooltip.present?
 
-      @system_arguments.merge!(system_arguments_for_button) if @label.present?
       @system_arguments.merge!(system_arguments_for_icon) if @icon_name.present?
     end
     # rubocop:enable Metrics/ParameterLists
@@ -48,15 +47,6 @@ module Viral
                    'aria-haspopup': true,
                    'aria-controls': @dd_id
                  })
-    end
-
-    def system_arguments_for_button
-      {
-        classes: class_names(
-          'btn btn-default btn-rounded',
-          system_arguments[:classes]
-        )
-      }
     end
 
     def system_arguments_for_icon
