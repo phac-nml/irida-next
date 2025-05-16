@@ -1027,6 +1027,13 @@ fr:
     show:
       create_project_button: Nouveau projet
       create_subgroup_button: Nouveau sous-groupe
+      information:
+        created_on: Created on
+        no_description: No description provided for this group
+        number_of_projects: Projects
+        number_of_samples: Samples
+        number_of_subgroups: Subgroups
+        title: Group Information
       search:
         placeholder: Filtrer par PUID ou nom
       shared_namespaces:

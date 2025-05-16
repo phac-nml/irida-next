@@ -9,198 +9,29 @@
 <hr class="h-px my-4 border-0 bg-slate-200 dark:bg-slate-600"/>
 
 <div class="flex flex-row lg:flex-col gap-4">
-  <div
-    class="
-      flex-1 p-4 rounded-lg shadow-sm bg-blue-50 dark:bg-blue-900 dark:border
-      dark:border-blue-700
-    "
-  >
-    <div class="block md:hidden">
-      <div class="flex items-center justify-start gap-2">
-        <%= viral_tooltip(title: t(:"components.project_dashboard.information.number_of_samples")) do %>
-          <span
-            id="samples-icon-sm"
-            class="
-              inline-flex items-center justify-center p-2 rounded-full bg-blue-100
-              dark:bg-blue-700
-            "
-          >
-            <%= viral_icon(name: :beaker, classes: "h-4 w-4 text-blue-700 dark:text-blue-200") %>
-          </span>
-        <% end %>
-        <%# Count (large text next to icon). Associate with icon via aria-labelledby %>
-        <%# 📝 Reduced text size from text-2xl to text-xl %>
-        <div
-          class="text-xl font-semibold text-slate-900 dark:text-slate-100"
-          aria-labelledby="samples-icon-sm"
-        >
-          <%= @project.samples.count %>
-        </div>
-      </div>
-    </div>
+  <%= render NamespaceStatisticComponent.new(
+    id_prefix: "samples",
+    icon_name: :flask,
+    label: t(:"components.project_dashboard.information.number_of_samples"),
+    count: @project.samples.count,
+    color_scheme: :blue,
+  ) %>
 
-    <%# Large screen layout (>= md): Icon + Label + Count %>
-    <div class="hidden md:block">
-      <%# Icon and Label row %>
-      <div class="flex items-center mb-1">
-        <span
-          id="samples-icon-lg"
-          class="
-            inline-flex items-center justify-center p-2 rounded-full bg-blue-100
-            dark:bg-blue-700 mr-2
-          "
-        >
-          <%= viral_icon(name: :beaker, classes: "h-5 w-5 text-blue-700 dark:text-blue-200") %>
-        </span>
-        <%# Label (visible text next to icon) - Make semibold. Accessible dark text %>
-        <span
-          id="samples-label-lg"
-          class="text-sm font-semibold text-slate-600 dark:text-slate-300"
-        >
-          <%= t(:"components.project_dashboard.information.number_of_samples") %>
-        </span>
-      </div>
-      <div
-        class="text-2xl font-semibold text-slate-900 dark:text-slate-100 pl-11"
-        aria-labelledby="samples-icon-lg samples-label-lg"
-      >
-        <%= @project.samples.count %>
-      </div>
-    </div>
-  </div>
+  <%= render NamespaceStatisticComponent.new(
+    id_prefix: "automated-workflow-executions",
+    icon_name: :terminal_window,
+    label: t(:"components.project_dashboard.information.number_of_automated_workflow_executions"),
+    count: @project.namespace.automated_workflow_executions.count,
+    color_scheme: :teal,
+  ) %>
 
-  <div
-    class="
-      flex-1 p-4 rounded-lg shadow-sm bg-teal-50 dark:bg-teal-900 dark:border
-      dark:border-teal-700
-    "
-  >
-    <%# Small screen layout (< md): Icon + Count on same line, Tooltip on Icon %>
-    <div class="block md:hidden">
-      <%# Flex container for icon and count %>
-      <div class="flex items-center justify-start gap-2">
-        <%= viral_tooltip(title: t(:"components.project_dashboard.information.number_of_automated_workflow_executions")) do %>
-          <span
-            id="workflows-icon-sm"
-            class="
-              inline-flex items-center justify-center p-2 rounded-full bg-teal-100
-              dark:bg-teal-700
-            "
-          >
-            <%= viral_icon(
-              name: :command_line,
-              classes: "h-4 w-4 text-teal-700 dark:text-teal-200",
-            ) %>
-          </span>
-        <% end %>
-        <div
-          class="text-xl font-semibold text-slate-900 dark:text-slate-100"
-          aria-labelledby="workflows-icon-sm"
-        >
-          <%= @project.namespace.automated_workflow_executions.count %>
-        </div>
-      </div>
-    </div>
-
-    <div class="hidden md:block">
-      <%# Icon and Label row %>
-      <div class="flex items-center mb-1">
-        <span
-          id="workflows-icon-lg"
-          class="
-            inline-flex items-center justify-center p-2 rounded-full bg-teal-100
-            dark:bg-teal-700 mr-2
-          "
-        >
-          <%= viral_icon(
-            name: :command_line,
-            classes: "h-5 w-5 text-teal-700 dark:text-teal-200",
-          ) %>
-        </span>
-        <span
-          id="workflows-label-lg"
-          class="text-sm font-semibold text-slate-600 dark:text-slate-300"
-        >
-          <%= t(
-            :"components.project_dashboard.information.number_of_automated_workflow_executions",
-          ) %>
-        </span>
-      </div>
-      <div
-        class="text-2xl font-semibold text-slate-900 dark:text-slate-100 pl-11"
-        aria-labelledby="workflows-icon-lg workflows-label-lg"
-      >
-        <%= @project.namespace.automated_workflow_executions.count %>
-      </div>
-    </div>
-  </div>
-
-  <div
-    class="
-      flex-1 p-4 rounded-lg shadow-sm bg-indigo-50 dark:bg-indigo-900 dark:border
-      dark:border-indigo-700
-    "
-  >
-    <%# Small screen layout (< md): Icon + Count on same line, Tooltip on Icon %>
-    <div class="block md:hidden">
-      <%# Flex container for icon and count %>
-      <div class="flex items-center justify-start gap-2">
-        <%= viral_tooltip(title: t(:"components.project_dashboard.information.number_of_members")) do %>
-          <%# Icon in a colored circle - accessible dark indigo. Add ID for aria-labelledby %>
-          <span
-            id="members-icon-sm"
-            class="
-              inline-flex items-center justify-center p-2 rounded-full bg-indigo-100
-              dark:bg-indigo-700
-            "
-          >
-            <%= viral_icon(
-              name: :users,
-              classes: "h-4 w-4 text-indigo-700 dark:text-indigo-200",
-            ) %>
-          </span>
-        <% end %>
-        <div
-          class="text-xl font-semibold text-slate-900 dark:text-slate-100"
-          aria-labelledby="members-icon-sm"
-        >
-          <%= @project.namespace.project_members.without_automation_bots.count %>
-        </div>
-      </div>
-    </div>
-
-    <%# Large screen layout (>= md): Icon + Label + Count %>
-    <div class="hidden md:block">
-      <%# Icon and Label row %>
-      <div class="flex items-center mb-1">
-        <span
-          id="members-icon-lg"
-          class="
-            inline-flex items-center justify-center p-2 rounded-full bg-indigo-100
-            dark:bg-indigo-700 mr-2
-          "
-        >
-          <%= viral_icon(
-            name: :users,
-            classes: "h-5 w-5 text-indigo-700 dark:text-indigo-200",
-          ) %>
-        </span>
-        <span
-          id="members-label-lg"
-          class="text-sm font-semibold text-slate-600 dark:text-slate-300"
-        >
-          <%= t(:"components.project_dashboard.information.number_of_members") %>
-        </span>
-      </div>
-      <div
-        class="text-2xl font-semibold text-slate-900 dark:text-slate-100 pl-11"
-        aria-labelledby="members-icon-lg members-label-lg"
-      >
-        <%= @project.namespace.project_members.without_automation_bots.count %>
-      </div>
-    </div>
-  </div>
-
+  <%= render NamespaceStatisticComponent.new(
+    id_prefix: "members",
+    icon_name: :users,
+    label: t(:"components.project_dashboard.information.number_of_members"),
+    count: @project.namespace.project_members.without_automation_bots.count,
+    color_scheme: :indigo,
+  ) %>
 </div>
 <%# End of stats container %>
 
