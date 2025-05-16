@@ -1,4 +1,5 @@
 <%= turbo_frame_tag "sample_modal" %>
+<%= turbo_frame_tag "samples_dialog" %>
 
 <%= render Viral::PageHeaderComponent.new(title: @sample.name, id: @sample.puid, subtitle: @sample.description) do |component| %>
   <%= viral_pill(text: @sample.puid, color: :blue) %>
@@ -14,12 +15,15 @@
       <% if @allowed_to[:destroy_sample] %>
         <%= link_to(
           t("projects.samples.show.remove_button"),
-          namespace_project_samples_deletion_path(sample_id: @sample.id, format: :html),
+          new_namespace_project_samples_deletion_path(
+            @project.namespace.parent,
+            @project,
+            { params: { deletion_type: "single", sample_id: @sample.id } },
+          ),
           data: {
-            turbo_method: :delete,
-            turbo_confirm: t("projects.samples.show.remove_button_confirmation"),
+            turbo_stream: true,
           },
-          class: "button button--state-default button--size-default",
+          class: "button button--size-default button--state-default",
         ) %>
       <% end %>
     </div>
