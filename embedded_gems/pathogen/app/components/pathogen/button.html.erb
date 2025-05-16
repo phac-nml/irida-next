@@ -9,7 +9,7 @@
 %>
 <% button_classes = class_names(
   @system_arguments[:class],
-  '!px-2' => (leading_visual.present? && content.blank? && trailing_visual.blank?)
+  '!px-2 flex items-center justify-center' => (leading_visual.present? && content.blank? && trailing_visual.blank?)
 ) %>
 
 <%# Calculate if we have both leading and trailing visuals %>
@@ -25,7 +25,7 @@
 ) do -%>
   <%# Leading visual (icon, etc.) - adds consistent right margin when present %>
   <% if leading_visual %>
-    <span class="flex-shrink-0 pointer-events-none <%= has_both_visuals ? 'mr-1.5' : 'mr-2' %>" aria-hidden="true" data-button-target="leading">
+    <span class="flex-shrink-0 pointer-events-none <%= has_both_visuals ? 'mr-1.5' : (content.present? ? 'mr-2' : '') %>" aria-hidden="true" data-button-target="leading">
       <%= leading_visual %>
     </span>
   <% end %>
