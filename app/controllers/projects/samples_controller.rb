@@ -118,6 +118,11 @@ module Projects
         update_sample: allowed_to?(:update_sample?, @project),
         import_samples_and_metadata: allowed_to?(:import_samples_and_metadata?, @project.namespace)
       }
+
+      @render_sample_actions = @allowed_to.slice(
+        :clone_sample, :transfer_sample, :export_data, :update_sample_metadata,
+        :create_sample, :import_samples_and_metadata
+      ).value?(true)
     end
 
     def show_view_authorizations

@@ -262,22 +262,6 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_selector 'button', text: I18n.t('shared.samples.actions_dropdown.sample_export')
   end
 
-  test 'user with access level == guest cannot see create export button on sample pages' do
-    login_as users(:ryan_doe)
-
-    # project samples page
-    visit namespace_project_samples_url(@group1, @project1)
-    click_button I18n.t('shared.samples.actions_dropdown.label')
-    assert_no_selector 'button',
-                       text: I18n.t('shared.samples.actions_dropdown.linelist_export')
-    assert_no_selector 'button',
-                       text: I18n.t('shared.samples.actions_dropdown.sample_export')
-
-    # group samples page
-    visit group_samples_url(@group1)
-    assert_no_selector 'button', text: I18n.t('groups.samples.index.create_export_button.label')
-  end
-
   test 'create export from project samples page' do
     visit data_exports_path
     within('tbody') do

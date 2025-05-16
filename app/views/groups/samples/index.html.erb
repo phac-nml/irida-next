@@ -17,16 +17,13 @@
             <span class="ml-2"><%= t(".workflows.button_sr") %></span>
           <% end %>
         <% end %>
-        <% if @group_project_ids.count.positive? %>
+        <% if @group_project_ids.count.positive? && @render_sample_actions %>
           <%= viral_dropdown(label: t("shared.samples.actions_dropdown.label"), aria: { label: t('shared.samples.actions_dropdown.label') }, caret: true, classes: "font-normal button button--size-default button--state-default") do |dropdown| %>
-
             <% if @allowed_to[:update_sample_metadata] || @allowed_to[:import_samples_and_metadata] %>
-
               <% dropdown.with_item(
                 label: t("shared.samples.actions_dropdown.import"),
                 section_header: true,
               ) %>
-
               <% if @allowed_to[:update_sample_metadata] && @has_samples %>
                 <% dropdown.with_item(
                   label: t("shared.samples.actions_dropdown.import_metadata"),
@@ -35,6 +32,8 @@
                   data: {
                     turbo_stream: true,
                   },
+                  class:
+                    "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white cursor-pointer",
                 ) %>
               <% end %>
 
@@ -46,6 +45,8 @@
                   data: {
                     turbo_stream: true,
                   },
+                  class:
+                    "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white cursor-pointer",
                 ) %>
               <% end %>
             <% end %>
@@ -90,7 +91,7 @@
                     action_button_required_value: 1,
                   },
                   class:
-                    "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button",
+                    "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button cursor-pointer",
                 ) %>
               <% end %>
               <% dropdown.with_item(
@@ -108,7 +109,7 @@
                   action_button_required_value: 1,
                 },
                 class:
-                  "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button",
+                  "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white action-button cursor-pointer",
               ) %>
             <% end %>
           <% end %>
