@@ -48,26 +48,42 @@ module Pathogen
     end
 
     # Visual Elements Tests
-    test 'renders with leading icon' do
-      component = Pathogen::Button.new(test_selector: 'leading-icon').tap do |c|
+    test 'button with leading visual icon' do
+      render_inline(Pathogen::Button.new) do |c|
         c.with_leading_visual_icon(icon: 'plus')
+        'Button with icon'
       end
-      render_inline(component) { 'Add' }
 
-      assert_selector 'button[data-test-selector="leading-icon"]', text: 'Add', count: 1
-      assert_selector 'button svg.leading_visual_icon', count: 1
-      assert_selector 'button .leading_visual_icon.w-4.h-4', count: 1
+      assert_selector 'button[type="button"]' do
+        assert_icon 'plus'
+        assert_text 'Button with icon'
+      end
+    end
+
+    test 'ghost button with icon' do
+      render_inline(Pathogen::Button.new(scheme: :ghost)) do |c|
+        c.with_leading_visual_icon(icon: 'plus')
+        'Ghost Button'
+      end
+
+      assert_selector 'button[type="button"]' do
+        assert_icon 'plus'
+        assert_text 'Ghost Button'
+      end
+
+      # Verify ghost button classes
+      assert_selector 'button.bg-transparent.border-0.hover\:bg-slate-100'
     end
 
     test 'renders with trailing icon' do
       component = Pathogen::Button.new(test_selector: 'trailing-icon').tap do |c|
-        c.with_trailing_visual_icon(icon: 'chevron-right')
+        c.with_trailing_visual_icon(icon: 'caret-right')
       end
       render_inline(component) { 'Next' }
 
       assert_selector 'button[data-test-selector="trailing-icon"]', text: 'Next', count: 1
-      assert_selector 'button svg.trailing_visual_icon', count: 1
-      assert_selector 'button .trailing_visual_icon.w-4.h-4', count: 1
+      assert_selector 'button svg[data-phosphor-icon="caret-right"]', count: 1
+      assert_selector 'button .trailing_visual_icon.inline-block', count: 1
     end
 
     test 'renders with custom SVG' do
@@ -128,9 +144,11 @@ module Pathogen
       end
       render_inline(component) { 'Add Item' }
 
-      assert_selector 'button[data-test-selector="ghost-with-icon"]', text: 'Add Item', count: 1
-      assert_selector 'button svg.leading_visual_icon', count: 1
-      assert_match(/text-slate-700/, page.find('button[data-test-selector="ghost-with-icon"]')['class'])
+      button = page.find('button[data-test-selector="ghost-with-icon"]')
+      assert_match(/Add Item/, button.text)
+      assert_selector 'button svg[data-phosphor-icon="plus"]', count: 1
+      assert_match(/text-slate-700/, button['class'])
+      assert_match(/bg-transparent/, button['class'])
     end
 
     test 'renders default scheme when invalid' do

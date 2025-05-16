@@ -1,9 +1,17 @@
 <%= render Pathogen::BaseComponent.new(**@wrapper_arguments) do %>
   <%= render Pathogen::BaseComponent.new(**@system_arguments) do %>
-    <%= icon %>
-    <span>
-      <%= @text %>
-    </span>
-    <%= count %>
+    <div class="flex items-center gap-2">
+      <% if icon.present? %>
+        <div class="flex-shrink-0">
+          <%= icon %>
+        </div>
+      <% end %>
+      
+      <% if @text.present? %>
+        <span><%= @text %></span>
+      <% end %>
+      
+      <%= count %>
+    </div>
   <% end %>
 <% end %>
