@@ -10,13 +10,14 @@
   <div class="flex flex-col h-full">
     <div
       class="
-        flex overflow-visible justify-between items-center px-2 whitespace-nowrap
-        bg-slate-100 dark:bg-slate-800 h-14 shrink-0 relative
+        flex overflow-visible justify-between items-center px-2 whitespace-nowrap h-14
       "
     >
       <a
         href="<%= root_path %>"
-        class="whitespace-nowrap py-2.5 focus:outline-offset-2 relative"
+        class="
+          whitespace-nowrap py-2.5 focus:outline-offset-2 inline-flex items-center
+        "
         data-layout-target="logo"
       >
         <%= helpers.render_icon :irida_logo,
@@ -64,7 +65,7 @@
       </div>
     </div>
     <div
-      class="p-2 shrink-0"
+      class="p-2 shrink-0 border-t border-slate-200 dark:border-slate-800"
       data-controller="viral--dropdown"
       data-viral--dropdown-skidding-value="0"
       data-viral--dropdown-distance-value="5"
@@ -73,10 +74,14 @@
     >
       <button
         class="
-          py-2 w-full rounded-md transition-colors duration-200 cursor-pointer
-          min-h-[44px] flex items-center justify-center bg-slate-200 text-slate-700
-          dark:bg-slate-700 dark:text-slate-50 font-semibold hover:bg-slate-300
-          dark:hover:bg-slate-500
+          rounded-lg inline-flex min-h-11 h-auto min-w-11 px-4 py-2.5 justify-center
+          items-center cursor-pointer border text-sm font-semibold transition duration-200
+          disabled:cursor-not-allowed disabled:opacity-80 border-slate-300 bg-slate-50
+          text-slate-900 hover:bg-slate-100 hover:text-slate-950 disabled:border-slate-200
+          disabled:bg-slate-100 disabled:text-slate-500 dark:border-slate-700
+          dark:bg-slate-900 dark:text-slate-50 dark:hover:bg-slate-800
+          dark:hover:text-white disabled:dark:border-slate-700 disabled:dark:bg-slate-800
+          disabled:dark:text-slate-400 w-full
         "
         data-viral--dropdown-target='trigger'
         aria-haspopup="listbox"

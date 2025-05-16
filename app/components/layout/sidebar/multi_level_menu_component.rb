@@ -16,22 +16,24 @@ module Layout
         @selected = selectable_pages.include?(current_page) # Determine if the main menu item is selected
       end
 
+      def icon_classes(selected)
+        class_names(
+          'size-5',
+          {
+            'text-primary-50 dark:text-slate-50 stroke-2': selected,
+            'text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-50': !selected
+          }
+        )
+      end
+
+      def render_icon(icon, selected)
+        helpers.render_icon(icon, class: icon_classes(selected), variant: (selected ? nil : :duotone))
+      end
+
       def create_icon
         return unless @icon
 
-        base_options = {}
-        # Apply duotone only when not selected for a more subtle look
-        base_options[:variant] = :duotone unless @selected
-        base_options[:class] = class_names(
-          'size-5',
-          {
-            # Selected state: white or slate-50 icon for modern dark look
-            'text-white dark:text-slate-50': @selected,
-            # Non-selected state: slate text, changes on group hover (group class to be added in HTML)
-            'text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-50': !@selected
-          }
-        )
-        helpers.render_icon(@icon, **base_options)
+        render_icon(@icon, @selected)
       end
     end
   end
