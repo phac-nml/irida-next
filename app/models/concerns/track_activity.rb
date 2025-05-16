@@ -77,6 +77,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
     params = member_activity_params(activity, activity_trackable, base_params)
     params = group_link_params(activity, params)
+    params = transfer_activity_parameters(params, activity)
     params = additional_group_activity_params(params, activity)
 
     transfer_activity_parameters(params, activity)
@@ -197,6 +198,12 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
                       source_project: get_object_by_id(activity.parameters[:source_project], Project),
                       target_project_puid: activity.parameters[:target_project_puid],
                       target_project: get_object_by_id(activity.parameters[:target_project], Project),
+                      transferred_samples_count: activity.parameters[:transferred_samples_count]
+                    })
+    end
+
+    if activity.parameters[:action] == 'group_sample_transfer'
+      params.merge!({
                       transferred_samples_count: activity.parameters[:transferred_samples_count]
                     })
     end
