@@ -5,6 +5,7 @@ module Groups
   class SamplesController < Groups::ApplicationController # rubocop:disable Metrics/ClassLength
     include Metadata
     include Storable
+    include ListActions
 
     before_action :group, :current_page
     before_action :query, only: %i[index search select]
@@ -50,10 +51,11 @@ module Groups
 
     def index_view_authorizations
       @allowed_to = {
+        submit_workflow: allowed_to?(:submit_workflow?, @group),
         export_data: allowed_to?(:export_data?, @group),
         update_sample_metadata: allowed_to?(:update_sample_metadata?, @group),
         import_samples_and_metadata: allowed_to?(:import_samples_and_metadata?, @group),
-        submit_workflow: allowed_to?(:submit_workflow?, @group)
+        destroy_sample: allowed_to?(:destroy_sample?, @group)
       }
 
       @render_sample_actions = @allowed_to.slice(

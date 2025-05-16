@@ -68,6 +68,17 @@ module Activities
             I18n.t(:'components.activity.dialog.import_samples.sample'),
             I18n.t(:'components.activity.dialog.import_samples.project')
           ]
+
+        when 'group_samples_destroy'
+          @title = I18n.t(:'components.activity.dialog.sample_destroy.title')
+          @description = I18n.t(:'components.activity.dialog.sample_destroy.description.group',
+                                count: @activity.parameters[:samples_deleted_count],
+                                user: @activity_owner)
+          @data = @extended_details.details['deleted_samples_data'].to_json
+          @column_headers = [
+            I18n.t(:'components.activity.dialog.sample_destroy.sample'),
+            I18n.t(:'components.activity.dialog.sample_destroy.project')
+          ]
         end
       end
 
