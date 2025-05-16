@@ -25,19 +25,14 @@
           </span>
         </a>
         <div class=" flex flex-row shrink-0 justify-end items-center space-x-1">
-          <button
-            type="button"
-            data-action="click->layout#collapse"
-            class="
-              navbar-button cursor-pointer p-2 rounded-lg transition-colors hover:bg-slate-100
-              dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700
-              dark:hover:text-slate-200 focus:outline-none focus-visible:ring-2
-              focus-visible:ring-primary-500
-            "
-            aria-label="<%= t(:'general.navbar.collapse.aria_label') %>"
-          >
-            <%= helpers.render_icon :sidebar, class: "size-6", "aria-hidden": "true" %>
-          </button>
+          <%= p_button(
+              "data-action": "layout#collapse",
+              title: t(:'general.navbar.collapse.aria_label'),
+              aria: { label: t(:'general.navbar.collapse.aria_label') },
+              class: "navbar-button"
+            ) do |c| %>
+            <% c.with_leading_visual_icon(icon: :sidebar) %>
+          <% end %>
           <!-- Add new items -->
           <%= viral_dropdown(icon: "plus", skidding: -300, dropdown_styles: "width: 276px;", aria: { label: t(:'general.navbar.new_dropdown.aria_label') }, classes: "p-1 navbar-button text-slate-500 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-700") do |dropdown| %>
             <%= dropdown.with_item(
@@ -74,16 +69,7 @@
         data-viral--dropdown-position-value="bottom-start"
       >
         <button
-          class="
-            rounded-lg inline-flex min-h-11 h-auto min-w-11 px-4 py-2.5 justify-center
-            items-center cursor-pointer border text-sm font-semibold transition duration-200
-            disabled:cursor-not-allowed disabled:opacity-80 border-slate-300 bg-slate-50
-            text-slate-900 hover:bg-slate-100 hover:text-slate-950 disabled:border-slate-200
-            disabled:bg-slate-100 disabled:text-slate-500 dark:border-slate-700
-            dark:bg-slate-900 dark:text-slate-50 dark:hover:bg-slate-800
-            dark:hover:text-white disabled:dark:border-slate-700 disabled:dark:bg-slate-800
-            disabled:dark:text-slate-400 w-full
-          "
+          class="btn btn-slate btn-rounded w-full"
           data-viral--dropdown-target='trigger'
           aria-haspopup="listbox"
           aria-controls="sidebar-dd-menu"
