@@ -6,11 +6,11 @@
   <%= viral_dialog(id: 'advanced-search-dialog', size: :large, open: @open, header_system_arguments: {close_action: "advanced-search#close"}, data: { action: "keydown.esc->advanced-search#close"}) do |dialog| %>
     <% dialog.with_trigger do %>
       <% if @status %>
-        <div class="inline-flex rounded-md" role="group">
+        <div class="inline-flex rounded-lg" role="group">
           <button
             type="button"
             class="
-              inline-flex items-center justify-center w-1/2 text-sm border rounded-s-md
+              inline-flex items-center justify-center w-1/2 text-sm border rounded-s-lg
               cursor-pointer sm:w-auto focus:z-10 text-sm px-5 py-2.5 bg-white text-slate-900
               border-slate-200 hover:bg-slate-100 hover:text-slate-950 dark:bg-slate-800
               dark:text-slate-400 dark:border-slate-600 dark:hover:text-white
@@ -25,7 +25,7 @@
             type="button"
             class="
               inline-flex items-center justify-center w-1/2 text-sm border border-l-0
-              rounded-e-md cursor-pointer sm:w-auto focus:z-10 text-sm px-5 py-2.5 bg-white
+              rounded-e-lg cursor-pointer sm:w-auto focus:z-10 text-sm px-5 py-2.5 bg-white
               text-slate-900 border-slate-200 hover:bg-slate-100 hover:text-slate-950
               dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600
               dark:hover:text-white dark:hover:bg-slate-700
@@ -107,7 +107,7 @@
     <fieldset
       data-advanced-search-target="conditionsContainer"
       class="
-        flex @max-xl:flex-col @max-xl:space-y-2 space-x-2 p-4 items-start rounded-md
+        flex @max-xl:flex-col @max-xl:space-y-2 space-x-2 p-4 items-start rounded-lg
         border border-slate-300 dark:border-slate-600 text-sm text-slate-500
         dark:text-slate-400
       "
