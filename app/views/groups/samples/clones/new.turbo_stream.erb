@@ -1,0 +1,10 @@
+<%= render partial: "shared/samples/clones/dialog",
+locals: {
+  #   list_samples_path: list_group_samples_path(@group),
+  #   transfer_path: group_samples_transfer_path(@group),
+  broadcast_target: @broadcast_target,
+  closable: true,
+  open: true,
+  clone_path: group_samples_clone_path,
+  list_path: list_group_samples_path(list_class: "sample"),
+} %>
