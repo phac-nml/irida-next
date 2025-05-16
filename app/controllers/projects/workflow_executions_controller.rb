@@ -76,7 +76,7 @@ module Projects
     # Paths that are needed for the destroy confirmation.
     #
     # @return @index_path [String] Sets the selection storage key, so the workflow id can be removed from local storage.
-    # @return @destroy_path [String] Is called after the confirmation.
+    # @return @destroy_path [String] Deletes the workflow execution on a successful confirmation.
     def destroy_paths
       @index_path = namespace_project_workflow_executions_path(@project.parent, @project)
       @destroy_path = namespace_project_workflow_execution_path(@project.parent, @project, @workflow_execution)
