@@ -39,7 +39,8 @@ module Pathogen
     # @param system_arguments [Hash] additional HTML attributes for the button
     # @option system_arguments [String] :href required when tag is :a
     # @raise [ArgumentError] if invalid tag or type is provided
-    def initialize(tag: Configuration::DEFAULT_TAG, type: Configuration::DEFAULT_TYPE, disabled: false, **system_arguments)
+    def initialize(tag: Configuration::DEFAULT_TAG, type: Configuration::DEFAULT_TYPE, disabled: false,
+                   **system_arguments)
       @system_arguments = system_arguments
       @disabled = disabled
 
@@ -60,7 +61,7 @@ module Pathogen
 
     def validate_arguments!(tag, type)
       return if Configuration::TAG_OPTIONS.include?(tag) &&
-               (tag != :button || Configuration::TYPE_OPTIONS.include?(type))
+                (tag != :button || Configuration::TYPE_OPTIONS.include?(type))
 
       raise ArgumentError, "Invalid tag: #{tag.inspect} or type: #{type.inspect}"
     end
@@ -68,9 +69,9 @@ module Pathogen
     def set_tag_and_type(tag, type)
       @system_arguments[:tag] = fetch_or_fallback(Configuration::TAG_OPTIONS, tag, Configuration::DEFAULT_TAG)
 
-      if @system_arguments[:tag] == :button
-        @system_arguments[:type] = fetch_or_fallback(Configuration::TYPE_OPTIONS, type, Configuration::DEFAULT_TYPE)
-      end
+      return unless @system_arguments[:tag] == :button
+
+      @system_arguments[:type] = fetch_or_fallback(Configuration::TYPE_OPTIONS, type, Configuration::DEFAULT_TYPE)
     end
 
     def handle_disabled_state
