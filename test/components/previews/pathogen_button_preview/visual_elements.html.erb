@@ -6,7 +6,7 @@
       <% Pathogen::Button::SCHEME_OPTIONS.each do |scheme| %>
         <div class="flex flex-col items-center">
           <p class="text-sm text-gray-500 mb-2"><%= scheme.to_s.humanize %></p>
-          <%= render Pathogen::Button.new(scheme:, size: local_assigns[:size]) do |c| %>
+          <%= render Pathogen::Button.new(scheme:) do |c| %>
             <% c.with_leading_visual_icon(icon: scheme == :danger ? 'trash' : 'plus') %>
             <%= scheme == :danger ? 'Delete' : 'Add Item' %>
           <% end %>
@@ -22,7 +22,7 @@
       <% Pathogen::Button::SCHEME_OPTIONS.each do |scheme| %>
         <div class="flex flex-col items-center">
           <p class="text-sm text-gray-500 mb-2"><%= scheme.to_s.humanize %></p>
-          <%= render Pathogen::Button.new(scheme:, size: local_assigns[:size]) do |c| %>
+          <%= render Pathogen::Button.new(scheme:) do |c| %>
             <%= scheme == :primary ? 'Open Link' : 'More Options' %>
             <% c.with_trailing_visual_icon(icon: scheme == :primary ? 'arrow-right' : 'arrow-down') %>
           <% end %>
@@ -44,7 +44,6 @@
           <p class="text-sm text-gray-500 mb-2"><%= button[:scheme].to_s.humanize %></p>
           <%= render Pathogen::Button.new(
             scheme: button[:scheme],
-            size: local_assigns[:size],
             title: button[:label],
             'aria-label': button[:label]
           ) do |c| %>
@@ -62,7 +61,7 @@
       <% Pathogen::Button::SCHEME_OPTIONS.each do |scheme| %>
         <div class="flex flex-col items-center">
           <p class="text-sm text-gray-500 mb-2"><%= scheme.to_s.humanize %></p>
-          <%= render Pathogen::Button.new(scheme:, size: local_assigns[:size]) do |c| %>
+          <%= render Pathogen::Button.new(scheme:) do |c| %>
             <% c.with_leading_visual_icon(icon: "magnifying-glass") %>
             Add Item
             <% c.with_trailing_visual_icon(icon: "arrow-down") %>
