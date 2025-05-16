@@ -1,20 +1,20 @@
 <div class="flex gap-1">
-  <%= render Pathogen::Button.new(scheme: :default) do %>
+  <%= p_button(scheme: :default) do %>
     Default
   <% end %>
 
-  <%= render Pathogen::Button.new(scheme: :primary) do %>
+  <%= p_button(scheme: :primary) do %>
     Primary
   <% end %>
-  <%= render Pathogen::Button.new(scheme: :danger) do %>
+  <%= p_button(scheme: :danger) do %>
     Danger
   <% end %>
-  <%= render Pathogen::Button.new(scheme: :ghost) do %>
+  <%= p_button(scheme: :ghost) do %>
     Ghost
   <% end %>
 
   <%# 💡 Added unstyled button example with custom classes %>
-  <%= render Pathogen::Button.new(scheme: :unstyled, class: 'bg-purple-500 text-white p-2 rounded-md hover:bg-purple-600') do %>
+  <%= p_button(scheme: :unstyled, class: 'bg-purple-500 text-white p-2 rounded-md hover:bg-purple-600') do %>
     Unstyled (Custom)
   <% end %>
 </div>
