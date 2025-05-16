@@ -1,5 +1,3 @@
-<%= turbo_frame_tag "selected" %>
-
 <%= turbo_stream.update("sample_attachments") do %>
   <%= render Attachments::TableComponent.new(
     @sample_attachments,
