@@ -52,11 +52,11 @@ module Pathogen
       handle_disabled_state
 
       # Conditionally apply default base classes
-      if apply_default_base_styles
-        @system_arguments[:class] = default_classes(@custom_classes_from_caller)
-      else
-        @system_arguments[:class] = @custom_classes_from_caller
-      end
+      @system_arguments[:class] = if apply_default_base_styles
+                                    default_classes(@custom_classes_from_caller)
+                                  else
+                                    @custom_classes_from_caller
+                                  end
     end
 
     # @return [Pathogen::BaseComponent] the rendered button component
