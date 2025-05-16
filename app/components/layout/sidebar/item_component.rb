@@ -19,13 +19,9 @@ module Layout
         base_options = {}
         base_options[:variant] = :duotone unless selected # Keep duotone for non-selected
         base_options[:class] = class_names(
-          'size-5', # Icon size
-          {
-            # Selected state: white or slate-50 icon for modern dark look
-            'text-white dark:text-slate-50': selected,
-            # Non-selected state: slate text, changes on group hover
-            'text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-50': !selected
-          }
+          'size-5',
+          'text-primary-50 dark:text-slate-50 stroke-2': selected,
+          'text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-50': !selected
         )
         helpers.render_icon(@icon, **base_options)
       end
