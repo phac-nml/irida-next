@@ -1637,6 +1637,7 @@ fr:
             description: Description
             title: Title
         table:
+          deselect_all_button: Désélectionner tout
           empty_state:
             action_text: Upload Files
             description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
@@ -1644,6 +1645,7 @@ fr:
             title: No files have been uploaded
           search:
             placeholder: Filtrer par PUID ou nom de fichier
+          select_all_button: Tout sélectionner
       clones:
         create:
           error: 'La liste suivante des échantillons n’a pas été copiée :'
