@@ -5,7 +5,7 @@
   data-viral--dropdown-skidding-value="<%= skidding %>"
   data-viral--dropdown-distance-value="<%= distance %>"
 >
-  <%= render Pathogen::Button.new(**system_arguments) do |button| %>
+  <%= p_button(**system_arguments) do |button| %>
     <% if icon_name.present? %>
       <% button.with_leading_visual_icon(icon: icon_name) %>
     <% end %>
