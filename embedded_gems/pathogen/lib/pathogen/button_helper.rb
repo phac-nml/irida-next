@@ -10,8 +10,8 @@ module Pathogen
     # @yield [c] The button component for adding visual elements
     # @yieldparam c [Pathogen::Button] The button component
     # @return [String] HTML for the rendered button
-    def p_button(scheme: :default, **options, &block)
-      render(Pathogen::Button.new(scheme: scheme, **options), &block)
+    def p_button(scheme: :default, **, &)
+      render(Pathogen::Button.new(scheme: scheme, **), &)
     end
   end
 end
