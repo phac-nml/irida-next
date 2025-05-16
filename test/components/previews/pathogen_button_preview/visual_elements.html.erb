@@ -38,7 +38,8 @@
       <% [
         { scheme: :default, icon: 'gear', label: 'Settings' },
         { scheme: :primary, icon: 'pencil-simple', label: 'Edit' },
-        { scheme: :danger, icon: 'trash', label: 'Delete' }
+        { scheme: :danger, icon: 'trash', label: 'Delete' },
+        { scheme: :ghost, icon: 'x', label: 'Remove' },
       ].each do |button| %>
         <div class="flex flex-col items-center">
           <p class="text-sm text-gray-500 mb-2"><%= button[:scheme].to_s.humanize %></p>
