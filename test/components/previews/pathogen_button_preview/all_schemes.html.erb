@@ -1,13 +1,15 @@
 <div class="flex gap-1">
   <%= render Pathogen::Button.new(scheme: :default) do %>
-    Button
+    Default
   <% end %>
 
   <%= render Pathogen::Button.new(scheme: :primary) do %>
-    Button
+    Primary
   <% end %>
-
   <%= render Pathogen::Button.new(scheme: :danger) do %>
-    Button
+    Danger
+  <% end %>
+  <%= render Pathogen::Button.new(scheme: :ghost) do %>
+    Ghost
   <% end %>
 </div>
