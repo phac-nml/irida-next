@@ -5,23 +5,21 @@
     <input type="hidden" name="page" value="<%= pagy&.page %>"/>
     <%= f.hidden_field :metadata_template, value: metadata_template[:id] %>
   <% end %>
-  <button
-    data-metadata-template-dd-target="trigger"
-    title="<%= t("shared.samples.metadata_templates.tooltip") %>"
-    id="metadata-template-dd-trigger"
-    class="
-     btn btn-default btn-rounded
-    "
-    type="button"
-    aria-haspopup="listbox"
-    aria-expanded="false"
-    aria-controls="metadata-template-dd-menu"
-  >
+  <%= render Pathogen::Button.new(
+    id: "metadata-template-dd-trigger",
+    title: t("shared.samples.metadata_templates.tooltip"),
+    data: { action: "click->metadata-template-dd#toggle", 'metadata-template-dd-target': 'trigger' },
+    aria: {
+      haspopup: "listbox",
+      expanded: "false",
+      controls: "metadata-template-dd-menu"
+    },
+  ) do |c| %>
+    <% c.with_leading_visual_icon(icon: "sliders-horizontal") %>
     <span id="metadata-template-dd-label">
       <%= t("shared.samples.metadata_templates.label") %>
     </span>
-    <%= render_icon ICONS[:sliders_horizontal], class: "size-4 ml-2 flex-none" %>
-  </button>
+  <% end %>
   <!-- Dropdown menu -->
   <div
     data-metadata-template-dd-target="menu"
