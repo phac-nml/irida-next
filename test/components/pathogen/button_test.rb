@@ -99,6 +99,40 @@ module Pathogen
       assert_match(/text-white/, button['class'])
     end
 
+    test 'renders ghost scheme' do
+      render_inline(Pathogen::Button.new(test_selector: 'ghost-button', scheme: :ghost)) { 'Ghost' }
+      button = page.find('button[data-test-selector="ghost-button"]')
+      assert_match(/Ghost/, button.text.squish)
+      assert_match(/bg-transparent/, button['class'])
+      assert_match(/border-transparent/, button['class'])
+      assert_match(/text-slate-700/, button['class'])
+    end
+
+    test 'ghost button has correct hover and disabled states' do
+      render_inline(Pathogen::Button.new(
+        test_selector: 'ghost-button-states',
+        scheme: :ghost,
+        disabled: true
+      )) { 'Ghost Disabled' }
+      
+      button = page.find('button[data-test-selector="ghost-button-states"]')
+      assert_match(/Ghost Disabled/, button.text.squish)
+      assert_match(/disabled:text-slate-400/, button['class'])
+      assert_match(/dark:text-slate-300/, button['class'])
+      assert_match(/dark:hover:bg-slate-800/, button['class'])
+    end
+
+    test 'ghost button works with visual elements' do
+      component = Pathogen::Button.new(test_selector: 'ghost-with-icon', scheme: :ghost).tap do |c|
+        c.with_leading_visual_icon(icon: 'plus')
+      end
+      render_inline(component) { 'Add Item' }
+
+      assert_selector 'button[data-test-selector="ghost-with-icon"]', text: 'Add Item', count: 1
+      assert_selector 'button svg.leading_visual_icon', count: 1
+      assert_match(/text-slate-700/, page.find('button[data-test-selector="ghost-with-icon"]')['class'])
+    end
+
     test 'renders default scheme when invalid' do
       assert_raises Pathogen::FetchOrFallbackHelper::InvalidValueError do
         render_inline(Pathogen::Button.new(test_selector: 'invalid-scheme', scheme: :invalid)) { 'Default' }

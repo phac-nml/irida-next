@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PathogenButtonPreview < ViewComponent::Preview
-  # @param scheme select { choices: [default, primary, danger] } "The color scheme of the button."
+  # @param scheme select { choices: [default, primary, danger, ghost] } "The color scheme of the button."
   # @param size select { choices: [small, medium] } "The size of the button."
   # @param disabled toggle "The Boolean disabled attribute, when present, makes the element not mutable, focusable, or even submitted with the form."
   # @param block toggle "If true, the button will take up the full width of its container."

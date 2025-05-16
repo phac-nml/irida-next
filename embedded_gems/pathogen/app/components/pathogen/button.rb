@@ -24,7 +24,7 @@ module Pathogen
     include Pathogen::ButtonVisuals
 
     # Available color schemes for the button
-    SCHEME_OPTIONS = %i[primary default danger].freeze
+    SCHEME_OPTIONS = %i[primary default danger ghost].freeze
     DEFAULT_SCHEME = :default
 
     # @param base_button_class [Class] The base button class to use for rendering
@@ -104,6 +104,12 @@ module Pathogen
           dark:border-red-600 dark:bg-red-600 dark:text-white
           dark:hover:bg-red-700 disabled:dark:border-red-800
           disabled:dark:bg-red-900 disabled:dark:text-red-400
+        ],
+
+        ghost: %w[
+          border-transparent bg-transparent text-slate-700 hover:bg-slate-100
+          hover:text-slate-900 disabled:text-slate-400 dark:text-slate-300
+          dark:hover:bg-slate-800 dark:hover:text-white disabled:dark:text-slate-600
         ]
       }
 
