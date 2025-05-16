@@ -6,6 +6,7 @@ export default class extends Controller {
     "nextBtn",
     "pagination",
     "paginationContainer",
+    "paginationStatus",
     "extendedDetailsData",
     "tbody",
     "listContainer",
@@ -94,17 +95,35 @@ export default class extends Controller {
         this.paginationTarget.innerHTML,
       );
       this.#paginationAriaLabels = JSON.parse(this.ariaLabelsTarget.innerText);
+      
+      // Set initial ARIA attributes
+      this.previousBtnTarget.setAttribute('aria-disabled', 'true');
+      this.previousBtnTarget.setAttribute('tabindex', '-1');
+      this.nextBtnTarget.setAttribute('aria-disabled', this.#lastPage === 1 ? 'true' : 'false');
+      this.nextBtnTarget.setAttribute('tabindex', this.#lastPage === 1 ? '-1' : '0');
+      
+      // Set initial aria-live region
+      const paginationStatus = document.createElement('div');
+      paginationStatus.setAttribute('aria-live', 'polite');
+      paginationStatus.setAttribute('class', 'sr-only');
+      paginationStatus.setAttribute('data-activities--extended_details-target', 'paginationStatus');
+      this.paginationContainerTarget.appendChild(paginationStatus);
+      this.updatePaginationStatus();
     }
   }
 
   previousPage() {
-    this.#currentPage -= 1;
-    this.#updatePageData();
+    if (this.#currentPage > 1) {
+      this.#currentPage -= 1;
+      this.#updatePageData();
+    }
   }
 
   nextPage() {
-    this.#currentPage += 1;
-    this.#updatePageData();
+    if (this.#currentPage < this.#lastPage) {
+      this.#currentPage += 1;
+      this.#updatePageData();
+    }
   }
 
   #updatePageData() {
@@ -136,6 +155,8 @@ export default class extends Controller {
 
   #disablePaginationButton(button) {
     button.disabled = true;
+    button.setAttribute('aria-disabled', 'true');
+    button.setAttribute('tabindex', '-1');
 
     if (button == this.previousBtnTarget) {
       button.setAttribute(
@@ -150,8 +171,19 @@ export default class extends Controller {
     }
   }
 
+  // Update the pagination status for screen readers
+  updatePaginationStatus() {
+    if (this.hasPaginationStatusTarget) {
+      const status = `Page ${this.#currentPage} of ${this.#lastPage}`;
+      this.paginationStatusTarget.textContent = status;
+      this.paginationStatusTarget.setAttribute('aria-live', 'polite');
+    }
+  }
+
   #enablePaginationButton(button) {
     button.disabled = false;
+    button.setAttribute('aria-disabled', 'false');
+    button.setAttribute('tabindex', '0');
 
     if (button == this.previousBtnTarget) {
       button.setAttribute(
@@ -164,6 +196,8 @@ export default class extends Controller {
         this.#paginationAriaLabels["next"]["enabled"],
       );
     }
+    
+    this.updatePaginationStatus();
   }
 
   // Generate table rows in format <td>SAMPLE_NAME <SAMPLE_PUID></td><td>SAMPLE_NAME <CLONE_PUID></td>
