@@ -2,23 +2,42 @@
   <% if @has_attachments %>
     <div class="relative overflow-x-auto table-wrapper" data-turbo-temporary>
       <% if @allowed_to[:update_sample] %>
-        <%# Flex container for search and button group %>
         <div class="flex items-center mb-4">
-          <%# Search input %>
-          <div class="ml-1">
+          <div class="flex items-center space-x-2">
+            <%= form_with(
+                  url: select_namespace_project_sample_attachments_url(sample_id: @sample.id),
+                  method: :get,
+                  id: "select-all-form",
+                ) do |f| %>
+              <input type="hidden" name="format" value="turbo_stream"/>
+              <input type="hidden" name="select" value="on"/>
+              <%= f.submit t(".select_all_button"),
+                       class: "button button--state-default button--size-default" %>
+            <% end %>
+            <%= form_with(
+                  url: select_namespace_project_sample_attachments_url(sample_id: @sample.id),
+                  method: :get,
+                  id: "deselect-all-form" ,
+                ) do |f| %>
+              <input type="hidden" name="format" value="turbo_stream"/>
+              <%= f.submit t(".deselect_all_button"),
+                       class: "button button--state-default button--size-default" %>
+            <% end %>
+          </div>
+          <div class="flex items-center space-x-2 ml-auto">
             <%= render SearchComponent.new(
               query: @q,
               search_attribute: :puid_or_file_blob_filename_cont,
               placeholder: t(:".search.placeholder"),
-              url: namespace_project_sample_path(format: :turbo_stream)
+              url: namespace_project_sample_path(format: :turbo_stream),
+              data: {
+                controller: "selection",
+                selection_storage_key_value: "files-#{@sample.id}"
+              }
               ) do %>
               <%= hidden_field_tag :limit, @pagy.limit %>
               <%= hidden_field_tag :tab, @tab %>
             <% end %>
-          </div>
-
-          <%# Button group %>
-          <div class="flex items-center space-x-2 ml-auto">
             <%= link_to t("projects.samples.show.new_attachment_button"),
             new_namespace_project_sample_attachment_path(sample_id: @sample.id),
             data: {

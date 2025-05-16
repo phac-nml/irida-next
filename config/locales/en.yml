@@ -1641,6 +1641,7 @@ en:
             description: Description
             title: Title
         table:
+          deselect_all_button: Deselect all
           empty_state:
             action_text: Upload Files
             description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
@@ -1648,6 +1649,7 @@ en:
             title: No files have been uploaded
           search:
             placeholder: Filter by PUID or Filename
+          select_all_button: Select all
       clones:
         create:
           error: 'The following list of samples failed to copy:'
