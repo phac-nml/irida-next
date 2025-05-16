@@ -243,8 +243,12 @@ en:
             password_confirmation:
               confirmation: doesn't match password
         workflow_execution:
+          attributes:
+            name:
+              blank: can't be blank
           invalid_namespace: can only be Group or Project
           invalid_workflow: unable to find workflow with name '%{workflow_name}' and version '%{workflow_version}'
+          name_not_unique_for_submitter: A unique workflow execution name must be provided. Workflow execution with name '%{name}' already exists for this user
     exceptions:
       personal_access_token:
         not_found: Could not find personal access token with id %{token_id}
@@ -650,7 +654,6 @@ en:
         partial_success: "%{deleted} workflows were successfully deleted"
         success: All selected workflows were successfully deleted
       update:
-        error: Could not update workflow %{workflow_name}
         success: Workflow %{workflow_name} was successfully updated
   dashboard:
     groups:
@@ -1265,7 +1268,9 @@ en:
     filtering_samples: Filtering samples, this may take some time.
     name:
       helper: A custom name will make it easier to search for this in the future.
-      label: Name (Optional)
+      label:
+        optional: Name (Optional)
+        required: Name (Required)
     processing_request: Processing your submission, this may take some time.
     processing_samplesheet: Processing samplesheet, this may take some time.
     submission_error: Something went wrong with the submission request.
