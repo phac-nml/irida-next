@@ -12,4 +12,9 @@
   <%= render Pathogen::Button.new(scheme: :ghost) do %>
     Ghost
   <% end %>
+
+  <%# 💡 Added unstyled button example with custom classes %>
+  <%= render Pathogen::Button.new(scheme: :unstyled, class: 'bg-purple-500 text-white p-2 rounded-md hover:bg-purple-600') do %>
+    Unstyled (Custom)
+  <% end %>
 </div>
