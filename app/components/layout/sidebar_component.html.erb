@@ -32,7 +32,7 @@
               aria: { label: t(:'general.navbar.collapse.aria_label') },
               class: "navbar-button"
             ) do |c| %>
-            <% c.with_leading_visual_icon(icon: :sidebar) %>
+          <% c.with_leading_visual_icon(icon: :sidebar) %>
         <% end %>
         <!-- Add new items -->
         <%= viral_dropdown(icon: "plus", skidding: -300, dropdown_styles: "width: 276px;", aria: { label: t(:'general.navbar.new_dropdown.aria_label') }, classes: "p-1 navbar-button text-slate-500 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-700") do |dropdown| %>
