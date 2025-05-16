@@ -328,13 +328,13 @@ module Dashboard
       click_button I18n.t('shared.samples.actions_dropdown.transfer')
 
       within('div[data-controller-connected="true"] dialog') do
-        assert_text I18n.t('projects.samples.transfers.dialog.description.singular')
+        assert_text I18n.t('shared.samples.transfers.dialog.description.singular')
         within %(turbo-frame[id="list_selections"]) do
           assert_text @sample1.name
         end
         find('input.select2-input').click
         find("li[data-value='#{@project2.id}']").click
-        click_on I18n.t('projects.samples.transfers.dialog.submit_button')
+        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
         perform_enqueued_jobs only: [::Samples::TransferJob]
       end
