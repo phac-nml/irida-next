@@ -7,44 +7,44 @@ module Pathogen
     # Basic Button Tests
     test 'renders default button' do
       render_inline(Pathogen::Button.new(test_selector: 'default-button')) { 'Click me' }
-      assert_selector 'button[data-test-selector="default-button"]', 
-                     text: 'Click me',
-                     class: 'border-slate-300 bg-slate-50 text-slate-900',
-                     count: 1
+      assert_selector 'button[data-test-selector="default-button"]',
+                      text: 'Click me',
+                      class: 'border-slate-300 bg-slate-50 text-slate-900',
+                      count: 1
     end
 
     test 'renders disabled button' do
       render_inline(Pathogen::Button.new(test_selector: 'disabled-button', disabled: true)) { 'Disabled' }
-      assert_selector 'button[data-test-selector="disabled-button"][disabled]', 
-                     text: 'Disabled',
-                     class: 'disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-500',
-                     count: 1
+      assert_selector 'button[data-test-selector="disabled-button"][disabled]',
+                      text: 'Disabled',
+                      class: 'disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-500',
+                      count: 1
     end
 
     test 'renders block button' do
       render_inline(Pathogen::Button.new(test_selector: 'block-button', block: true)) { 'Block Button' }
-      assert_selector 'button.block[data-test-selector="block-button"]', 
-                     text: 'Block Button',
-                     class: 'w-full',
-                     count: 1
+      assert_selector 'button.block[data-test-selector="block-button"]',
+                      text: 'Block Button',
+                      class: 'w-full',
+                      count: 1
     end
 
     test 'merges custom classes' do
       render_inline(Pathogen::Button.new(test_selector: 'custom-class', class: 'custom-class')) { 'Custom' }
-      assert_selector 'button.custom-class[data-test-selector="custom-class"]', 
-                     text: 'Custom',
-                     count: 1
+      assert_selector 'button.custom-class[data-test-selector="custom-class"]',
+                      text: 'Custom',
+                      count: 1
     end
 
     test 'renders with aria attributes' do
       render_inline(Pathogen::Button.new(
-        test_selector: 'aria-button',
-        aria: { label: 'Custom Label', expanded: 'false' }
-      )) { 'Aria' }
-      
-      assert_selector 'button[data-test-selector="aria-button"][aria-label="Custom Label"][aria-expanded="false"]', 
-                     text: 'Aria',
-                     count: 1
+                      test_selector: 'aria-button',
+                      aria: { label: 'Custom Label', expanded: 'false' }
+                    )) { 'Aria' }
+
+      assert_selector 'button[data-test-selector="aria-button"][aria-label="Custom Label"][aria-expanded="false"]',
+                      text: 'Aria',
+                      count: 1
     end
 
     # Visual Elements Tests
@@ -53,7 +53,7 @@ module Pathogen
         c.with_leading_visual_icon(icon: 'plus')
       end
       render_inline(component) { 'Add' }
-      
+
       assert_selector 'button[data-test-selector="leading-icon"]', text: 'Add', count: 1
       assert_selector 'button svg.leading_visual_icon', count: 1
       assert_selector 'button .leading_visual_icon.w-4.h-4', count: 1
@@ -64,7 +64,7 @@ module Pathogen
         c.with_trailing_visual_icon(icon: 'chevron-right')
       end
       render_inline(component) { 'Next' }
-      
+
       assert_selector 'button[data-test-selector="trailing-icon"]', text: 'Next', count: 1
       assert_selector 'button svg.trailing_visual_icon', count: 1
       assert_selector 'button .trailing_visual_icon.w-4.h-4', count: 1
@@ -77,7 +77,7 @@ module Pathogen
         end
       end
       render_inline(component) { 'Custom SVG' }
-      
+
       assert_selector 'button[data-test-selector="custom-svg"]', text: 'Custom SVG', count: 1
       assert_selector 'button svg.leading_visual_svg', count: 1
     end
@@ -86,17 +86,17 @@ module Pathogen
     test 'renders primary scheme' do
       render_inline(Pathogen::Button.new(test_selector: 'primary-button', scheme: :primary)) { 'Primary' }
       button = page.find('button[data-test-selector="primary-button"]')
-      assert_match /Primary/, button.text.squish
-      assert_match /bg-primary-800/, button['class']
-      assert_match /text-white/, button['class']
+      assert_match(/Primary/, button.text.squish)
+      assert_match(/bg-primary-800/, button['class'])
+      assert_match(/text-white/, button['class'])
     end
 
     test 'renders danger scheme' do
       render_inline(Pathogen::Button.new(test_selector: 'danger-button', scheme: :danger)) { 'Danger' }
       button = page.find('button[data-test-selector="danger-button"]')
-      assert_match /Danger/, button.text.squish
-      assert_match /bg-red-700/, button['class']
-      assert_match /text-white/, button['class']
+      assert_match(/Danger/, button.text.squish)
+      assert_match(/bg-red-700/, button['class'])
+      assert_match(/text-white/, button['class'])
     end
 
     test 'renders default scheme when invalid' do
@@ -108,17 +108,17 @@ module Pathogen
     test 'falls back to default scheme in production when invalid' do
       # Test the behavior by stubbing the fetch_or_fallback method directly
       original_method = Pathogen::Button.instance_method(:fetch_or_fallback)
-      
+
       # Define a new implementation that returns the default value
       Pathogen::Button.define_method(:fetch_or_fallback) do |*_args|
         :default
       end
-      
+
       render_inline(Pathogen::Button.new(test_selector: 'invalid-scheme', scheme: :invalid)) { 'Default' }
       button = page.find('button[data-test-selector="invalid-scheme"]')
-      assert_match /Default/, button.text.squish
-      assert_match /bg-slate-50/, button['class']
-      assert_match /text-slate-900/, button['class']
+      assert_match(/Default/, button.text.squish)
+      assert_match(/bg-slate-50/, button['class'])
+      assert_match(/text-slate-900/, button['class'])
     ensure
       # Restore the original method
       Pathogen::Button.define_method(:fetch_or_fallback, original_method)
@@ -127,21 +127,21 @@ module Pathogen
     # Edge Cases
     test 'renders empty content' do
       render_inline(Pathogen::Button.new(test_selector: 'empty-button'))
-      assert_selector 'button[data-test-selector="empty-button"]', 
-                     text: '',
-                     count: 1
+      assert_selector 'button[data-test-selector="empty-button"]',
+                      text: '',
+                      count: 1
     end
 
     test 'renders as link when tag is :a' do
       render_inline(Pathogen::Button.new(
-        test_selector: 'link-button',
-        tag: :a,
-        href: '/example'
-      )) { 'Link' }
-      
-      assert_selector 'a[data-test-selector="link-button"][href="/example"]', 
-                     text: 'Link',
-                     count: 1
+                      test_selector: 'link-button',
+                      tag: :a,
+                      href: '/example'
+                    )) { 'Link' }
+
+      assert_selector 'a[data-test-selector="link-button"][href="/example"]',
+                      text: 'Link',
+                      count: 1
     end
   end
 end
