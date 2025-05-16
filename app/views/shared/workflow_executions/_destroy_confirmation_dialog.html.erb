@@ -1,0 +1,24 @@
+<%= viral_dialog(open: open) do |dialog| %>
+  <% dialog.with_header(title: t(".title")) %>
+  <div class="grid gap-4">
+    <p class="text-base leading-relaxed text-slate-500 dark:text-slate-400 ">
+      <%= t(".description") %>
+    </p>
+    <div class="grid gap-4">
+      <div
+        data-controller="selection"
+        data-selection-storage-key-value="<%= "#{request.base_url}#{@index_path}" %>"
+      >
+        <%= button_to t(".submit_button"),
+        @destroy_path,
+        method: :delete,
+        data: {
+          turbo_frame: "_top",
+          action: "click->selection#remove click->viral--dialog#close",
+          "selection-id-param": @workflow_execution.id,
+        },
+        class: "button button--state-destructive button--size-default" %>
+      </div>
+    </div>
+  </div>
+<% end %>

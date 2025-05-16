@@ -52,7 +52,7 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
 
   def samples_workflow_execution_params_attributes
     [
-      :id, # index, increment for each one, not necissary for functionality
+      :id, # index, increment for each one, not necessary for functionality
       :sample_id,
       { samplesheet_params: {} }
     ]
@@ -92,6 +92,15 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
 
   def show_view_authorizations
     view_authorizations
+  end
+
+  # Paths that are needed for the destroy confirmation.
+  #
+  # @return @index_path [String] Sets the selection storage key, so the workflow id can be removed from local storage.
+  # @return @destroy_path [String] Deletes the workflow execution on a successful confirmation.
+  def destroy_paths
+    @index_path = workflow_executions_path
+    @destroy_path = workflow_execution_path(@workflow_execution)
   end
 
   def destroy_multiple_paths

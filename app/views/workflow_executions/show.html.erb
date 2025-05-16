@@ -3,8 +3,8 @@
 <%= turbo_stream_from @workflow_execution %>
 
 <%= turbo_frame_tag "export_dialog" %>
-
 <%= turbo_frame_tag "edit_dialog" %>
+<%= turbo_frame_tag "workflow_execution_dialog" %>
 
 <%= render Viral::PageHeaderComponent.new(title: turbo_frame_tag('we_name_header') do @workflow_execution.name.blank? ? @workflow_execution.metadata["workflow_name"] :
    @workflow_execution.name end, id: @workflow_execution.id, id_color: find_pill_color_for_state(@workflow_execution.state)) do |component| %>
@@ -65,10 +65,9 @@
       <% if @workflow_execution.deletable? %>
         <%= link_to(
           t("workflow_executions.show.remove_button"),
-          workflow_execution_path(@workflow_execution, redirect: true),
+          destroy_confirmation_workflow_execution_path(@workflow_execution),
           data: {
-            turbo_method: :delete,
-            turbo_confirm: t("workflow_executions.show.remove_button_confirmation"),
+            turbo_stream: true,
           },
           class: "button button--state-default button--size-default mr-1",
         ) %>

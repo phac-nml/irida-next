@@ -9,9 +9,10 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   included do
     before_action :set_default_tab, only: :show
     before_action :current_page, only: %i[show index]
-    before_action :workflow_execution, only: %i[show cancel destroy update edit]
+    before_action :workflow_execution, only: %i[show cancel destroy update edit destroy_confirmation]
     before_action proc { view_authorizations }, only: %i[index]
     before_action proc { show_view_authorizations }, only: %i[show]
+    before_action proc { destroy_paths }, only: %i[destroy_confirmation]
     before_action proc { destroy_multiple_paths }, only: %i[destroy_multiple_confirmation destroy_multiple]
   end
 
@@ -132,6 +133,17 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
+  def destroy_confirmation
+    authorize! @workflow_execution, to: :destroy?
+    render turbo_stream: turbo_stream.update(
+      'workflow_execution_dialog',
+      partial: 'shared/workflow_executions/destroy_confirmation_dialog',
+      locals: {
+        open: true
+      }
+    ), status: :ok
+  end
+
   def destroy_multiple_confirmation
     authorize! @namespace, to: :destroy_workflow_executions? unless @namespace.nil?
     render turbo_stream: turbo_stream.update(
@@ -221,6 +233,14 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   protected
 
   def redirect_path
+    raise NotImplementedError
+  end
+
+  # Paths that are needed for the destroy confirmation.
+  #
+  # @return @index_path [String] Sets the selection storage key, so the workflow id can be removed from local storage.
+  # @return @destroy_path [String] Deletes the workflow execution on a successful confirmation.
+  def destroy_paths
     raise NotImplementedError
   end
 

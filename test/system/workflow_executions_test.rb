@@ -29,7 +29,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    assert_text 'Displaying 20 items'
+    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
     assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
   end
 
@@ -40,7 +40,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    assert_selector '#workflow-executions-table table tbody tr', count: 20
+    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
     assert_link exact_text: I18n.t(:'viral.pagy.pagination_component.next')
     assert_no_selector 'a',
@@ -52,7 +52,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_no_selector 'a',
                        exact_text: I18n.t(:'viral.pagy.pagination_component.next')
     click_on I18n.t(:'viral.pagy.pagination_component.previous')
-    assert_selector '#workflow-executions-table table tbody tr', count: 20
+    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
   end
 
   test 'should sort a list of workflow executions' do
@@ -153,8 +153,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       click_link 'Cancel'
     end
 
-    assert_text 'Confirmation required'
-    click_button 'Confirm'
+    assert_text I18n.t('shared.workflow_executions.destroy_confirmation_dialog.title')
+    click_button I18n.t('shared.workflow_executions.destroy_confirmation_dialog.submit_button')
 
     within %(div[data-controller='viral--flash']) do
       assert_text I18n.t(
@@ -179,7 +179,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within tr do
       assert_selector "td:nth-child(#{@state_col})",
                       text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-      assert_no_link 'Delete'
+      assert_no_link I18n.t(:'workflow_executions.index.actions.delete_button')
     end
   end
 
@@ -195,7 +195,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within tr do
       assert_selector "td:nth-child(#{@state_col})",
                       text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-      assert_no_link 'Delete'
+      assert_no_link I18n.t(:'workflow_executions.index.actions.delete_button')
     end
   end
 
@@ -211,7 +211,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within tr do
       assert_selector "td:nth-child(#{@state_col})",
                       text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-      assert_no_link 'Delete'
+      assert_no_link I18n.t(:'workflow_executions.index.actions.delete_button')
     end
   end
 
@@ -220,17 +220,26 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
+    # Select all workflow executions within the table
+    click_button I18n.t(:'workflow_executions.index.select_all_button')
+    within 'tbody' do
+      assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: WORKFLOW_EXECUTION_COUNT
+    end
+    within 'tfoot' do
+      assert_selector 'strong[data-selection-target="selected"]', text: WORKFLOW_EXECUTION_COUNT
+    end
+
     tr = find('a', text: @workflow_execution1.id).ancestor('tr')
 
     within tr do
       assert_selector "td:nth-child(#{@state_col})",
                       text: I18n.t(:"workflow_executions.state.#{@workflow_execution1.state}")
-      assert_link 'Delete', count: 1
-      click_link 'Delete'
+      assert_link I18n.t(:'workflow_executions.index.actions.delete_button'), count: 1
+      click_link I18n.t(:'workflow_executions.index.actions.delete_button')
     end
 
-    assert_text 'Confirmation required'
-    click_button 'Confirm'
+    assert_text I18n.t(:'shared.workflow_executions.destroy_confirmation_dialog.title')
+    click_button I18n.t(:'shared.workflow_executions.destroy_confirmation_dialog.submit_button')
 
     within %(div[data-controller='viral--flash']) do
       assert_text I18n.t(
@@ -240,6 +249,14 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     end
 
     assert_no_text @workflow_execution1.id
+
+    # Verify all workflow executions within the table are still selected and the footer is updated
+    within 'tbody' do
+      assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: WORKFLOW_EXECUTION_COUNT - 1
+    end
+    within 'tfoot' do
+      assert_selector 'strong[data-selection-target="selected"]', text: WORKFLOW_EXECUTION_COUNT - 1
+    end
   end
 
   test 'should delete an errored workflow' do
@@ -254,12 +271,12 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within tr do
       assert_selector "td:nth-child(#{@state_col})",
                       text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-      assert_link 'Delete', count: 1
-      click_link 'Delete'
+      assert_link I18n.t(:'workflow_executions.index.actions.delete_button'), count: 1
+      click_link I18n.t(:'workflow_executions.index.actions.delete_button')
     end
 
-    assert_text 'Confirmation required'
-    click_button 'Confirm'
+    assert_text I18n.t(:'shared.workflow_executions.destroy_confirmation_dialog.title')
+    click_button I18n.t(:'shared.workflow_executions.destroy_confirmation_dialog.submit_button')
 
     assert_no_text workflow_execution.id
   end
@@ -276,7 +293,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within tr do
       assert_selector "td:nth-child(#{@state_col})",
                       text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-      assert_no_link 'Delete'
+      assert_no_link I18n.t(:'workflow_executions.index.actions.delete_button')
     end
   end
 
@@ -292,12 +309,12 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within tr do
       assert_selector "td:nth-child(#{@state_col})",
                       text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-      assert_link 'Delete', count: 1
-      click_link 'Delete'
+      assert_link I18n.t(:'workflow_executions.index.actions.delete_button'), count: 1
+      click_link I18n.t(:'workflow_executions.index.actions.delete_button')
     end
 
-    assert_text 'Confirmation required'
-    click_button 'Confirm'
+    assert_text I18n.t(:'shared.workflow_executions.destroy_confirmation_dialog.title')
+    click_button I18n.t(:'shared.workflow_executions.destroy_confirmation_dialog.submit_button')
 
     assert_no_text workflow_execution.id
   end
@@ -314,7 +331,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within tr do
       assert_selector "td:nth-child(#{@state_col})",
                       text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-      assert_no_link 'Delete'
+      assert_no_link I18n.t(:'workflow_executions.index.actions.delete_button')
     end
   end
 
@@ -330,7 +347,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     within tr do
       assert_selector "td:nth-child(#{@state_col})",
                       text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-      assert_no_link 'Delete'
+      assert_no_link I18n.t(:'workflow_executions.index.actions.delete_button')
     end
   end
 
@@ -385,24 +402,43 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   end
 
   test 'can remove workflow execution from workflow execution page' do
+    visit workflow_executions_path
+
+    assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
+
+    # Select all workflow executions within the table
+    click_button I18n.t(:'workflow_executions.index.select_all_button')
+    within 'tbody' do
+      assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: WORKFLOW_EXECUTION_COUNT
+    end
+    within 'tfoot' do
+      assert_selector 'strong[data-selection-target="selected"]', text: WORKFLOW_EXECUTION_COUNT
+    end
+
     visit workflow_execution_path(@workflow_execution1)
 
     click_link I18n.t(:'workflow_executions.show.remove_button')
 
-    within('#turbo-confirm[open]') do
-      click_button I18n.t(:'components.confirmation.confirm')
+    within('dialog[open]') do
+      assert_text I18n.t('shared.workflow_executions.destroy_confirmation_dialog.title')
+      click_button I18n.t('shared.workflow_executions.destroy_confirmation_dialog.submit_button')
     end
 
-    within %(#workflow-executions-table table tbody) do
-      assert_selector 'tr', count: WORKFLOW_EXECUTION_COUNT - 1
-      assert_no_text @workflow_execution1.id
+    assert_no_text @workflow_execution1.id
+
+    # Verify all workflow executions within the table are still selected and the footer is updated
+    within 'tbody' do
+      assert_selector 'input[name="workflow_execution_ids[]"]:checked', count: WORKFLOW_EXECUTION_COUNT - 1
+    end
+    within 'tfoot' do
+      assert_selector 'strong[data-selection-target="selected"]', text: WORKFLOW_EXECUTION_COUNT - 1
     end
   end
 
   test 'can filter by ID and name on workflow execution index page' do
     visit workflow_executions_path
 
-    assert_text 'Displaying 20 items'
+    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
     assert_selector 'table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
     within('table tbody') do
@@ -430,7 +466,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
             with: ''
     find('input.t-search-component').native.send_keys(:return)
 
-    assert_text 'Displaying 20 items'
+    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
     assert_selector 'table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
     fill_in placeholder: I18n.t(:'workflow_executions.index.search.placeholder'),
@@ -520,7 +556,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    assert_text 'Displaying 20 items'
+    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
     assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
     within 'table' do
@@ -548,8 +584,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_no_selector '#dialog'
 
-    assert_text 'Displaying 17 items'
-    assert_selector '#workflow-executions-table table tbody tr', count: 17
+    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT - 3} items"
+    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT - 3
     assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.success')
   end
 
@@ -559,7 +595,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    assert_text 'Displaying 20 items'
+    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
     assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
     within 'table' do
@@ -587,8 +623,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_no_selector '#dialog'
 
-    assert_text 'Displaying 18 items'
-    assert_selector '#workflow-executions-table table tbody tr', count: 18
+    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT - 2} items"
+    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT - 2
     assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_error', not_deleted: '1/3')
     assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.partial_success', deleted: '2/3')
   end
@@ -599,7 +635,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_selector 'h1', text: I18n.t(:'workflow_executions.index.title')
 
-    assert_text 'Displaying 20 items'
+    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
     assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
 
     within 'table' do
@@ -622,8 +658,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     assert_no_selector '#dialog'
 
-    assert_text 'Displaying 20 items'
-    assert_selector '#workflow-executions-table table tbody tr', count: 20
+    assert_text "Displaying #{WORKFLOW_EXECUTION_COUNT} items"
+    assert_selector '#workflow-executions-table table tbody tr', count: WORKFLOW_EXECUTION_COUNT
     assert_text I18n.t('concerns.workflow_execution_actions.destroy_multiple.error')
   end
 end

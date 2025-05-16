@@ -1856,7 +1856,6 @@ en:
         create_export_button: Create Export
         edit_button: Edit
         remove_button: Remove
-        remove_button_confirmation: Are you sure that you want to remove this workflow execution?
       summary:
         created_at: Created
         name: Name
@@ -2110,6 +2109,10 @@ en:
           problem_message: "%{path} %{message}"
           problems: Errors were encountered while importing the following samples.
     workflow_executions:
+      destroy_confirmation_dialog:
+        description: Are you sure you want to delete this workflow execution?
+        submit_button: Confirm
+        title: Delete Workflow Execution
       destroy_multiple_confirmation_dialog:
         description:
           plural: The selected COUNT_PLACEHOLDER workflow executions will be deleted.
@@ -2223,7 +2226,6 @@ en:
         cancel_button: Cancel
         cancel_confirm: Are you sure you want to cancel this workflow execution?
         delete_button: Delete
-        delete_confirm: Are you sure you want to delete this workflow execution?
       create_export_button: Create Export
       delete_workflows_button: Delete Workflow Executions
       deselect_all_button: Deselect All
@@ -2239,7 +2241,6 @@ en:
       create_export_button: Create Export
       edit_button: Edit
       remove_button: Remove
-      remove_button_confirmation: Are you sure that you want to remove this workflow execution?
       tabs:
         files: Files
         params: Parameters

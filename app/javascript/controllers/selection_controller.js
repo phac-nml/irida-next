@@ -105,12 +105,12 @@ export default class extends Controller {
     this.rowSelectionTargets.map((row) => {
       row.checked = ids.indexOf(row.value) > -1;
     });
-    this.#updateactionButtons(ids.length);
+    this.#updateActionButtons(ids.length);
     this.#updateCounts(ids.length);
     this.#setSelectPageCheckboxValue();
   }
 
-  #updateactionButtons(count) {
+  #updateActionButtons(count) {
     this.actionButtonOutlets.forEach((outlet) => {
       outlet.setDisabled(count);
     });
