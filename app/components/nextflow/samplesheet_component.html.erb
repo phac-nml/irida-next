@@ -12,11 +12,11 @@
       <input
         id="samplesheet-filter"
         data-nextflow--samplesheet-target="filter"
-        data-action="search->nextflow--samplesheet#filter"
+        data-action="keydown.enter->nextflow--samplesheet#filter"
         class="
           t-search-component block w-full p-2.5 pl-10 text-sm text-slate-900 border
           border-slate-300 rounded-lg bg-slate-50 dark:bg-slate-700 dark:border-slate-600
-          dark:placeholder-slate-400 dark:text-white
+          placeholder-slate-900 dark:placeholder-slate-300 dark:text-white
         "
         placeholder="<%= t('.filter_placeholder')%>"
         type="search"
@@ -52,28 +52,35 @@
     </div>
   </div>
   <div
-    data-nextflow--samplesheet-target="table"
     class="
-      relative flex mb-1 overflow-y-auto border samplesheet-table
-      dark:border-slate-600 border-slate-100 max-h-72
+      @2xl:flex @2xl:flex-col @3xl:min-h-0 @3xl:shrink table-container mb-2
     "
   >
-    <% properties.each do |header, property| %>
-      <%= render Nextflow::Samplesheet::HeaderComponent.new(
-        namespace_id:,
-        header:,
-        property:,
-        samples: @samples,
-        metadata_fields:,
-        required_properties:,
-        workflow_params:,
-      ) %>
-    <% end %>
+    <div class="overflow-auto relative">
+      <table
+        class="
+          w-full text-sm text-left rtl:text-right text-slate-500 dark:text-slate-400
+          whitespace-nowrap
+        "
+      >
+        <thead class="@2xl:sticky @2xl:top-0 z-10 text-xs uppercase">
+          <% properties.each do |header, property| %>
+            <%= render Nextflow::Samplesheet::HeaderComponent.new(
+              namespace_id:,
+              header:,
+              property:,
+              samples: @samples,
+              metadata_fields:,
+              required_properties:,
+              workflow_params:,
+            ) %>
+          <% end %>
+        </thead>
+        <tbody data-nextflow--samplesheet-target="tableBody"></tbody>
+      </table>
+    </div>
   </div>
-  <div
-    data-nextflow--samplesheet-target="emptyState"
-    class="flex justify-center hidden"
-  >
+  <div data-nextflow--samplesheet-target="emptyState" class="hidden">
     <%= render Viral::EmptyStateComponent.new(
       icon_name: :magnifying_glass,
       title: t("components.viral.pagy.empty_state.title"),
@@ -85,20 +92,35 @@
     class="flex items-center justify-end"
   >
   </div>
+  <div class="hidden" id="samplesheet-payload-container"></div>
 </div>
 
-<template data-nextflow--samplesheet-target="cellContainer">
-  <div class="border table-td dark:border-slate-600 border-slate-100">
-  </div>
+<template data-nextflow--samplesheet-target="trTemplate">
+  <tr
+    class="
+      bg-white border-b border-slate-200 dark:bg-slate-800 dark:border-slate-700
+      text-slate-900 dark:text-slate-300
+    "
+  ></tr>
 </template>
 
-<template data-nextflow--samplesheet-target="sampleIdentifierCell">
-  <div class="p-2.5 sticky left-0">
+<template data-nextflow--samplesheet-target="thTemplate">
+  <th class="border table-td dark:border-slate-600 border-slate-100 font-medium">
+  </th>
+</template>
+
+<template data-nextflow--samplesheet-target="tdTemplate">
+  <td class="border table-td dark:border-slate-600 border-slate-100">
+  </td>
+</template>
+
+<template data-nextflow--samplesheet-target="sampleIdentifierTemplate">
+  <div class="p-2.5">
     SAMPLE_IDENTIFIER
   </div>
 </template>
 
-<template data-nextflow--samplesheet-target="dropdownCell">
+<template data-nextflow--samplesheet-target="dropdownTemplate">
   <select
     aria-label="COLUMN_NAME_PLACEHOLDER"
     class="
@@ -113,7 +135,7 @@
   </select>
 </template>
 
-<template data-nextflow--samplesheet-target="fileCell">
+<template data-nextflow--samplesheet-target="fileTemplate">
   <%= link_to "FILENAME_PLACEHOLDER",
   new_workflow_executions_file_selector_path(
     "file_selector[attachable_id]": "ATTACHABLE_ID_PLACEHOLDER",
@@ -129,21 +151,21 @@
   },
   id: "ATTACHABLE_ID_PLACEHOLDER_PROPERTY_PLACEHOLDER",
   class:
-    "block p-2 text-sm border-2 border-transparent cursor-pointer bg-inherit text-inherit focus:-outline-offset-2" %>
+    "block p-2 text-sm border-2 border-transparent cursor-pointer bg-inherit text-inherit focus:relative" %>
 </template>
 
-<template data-nextflow--samplesheet-target="metadataCell">
+<template data-nextflow--samplesheet-target="metadataTemplate">
   <div class="p-2.5 text-nowrap">
     <span class="h-3.5 inline-block">METADATA_PLACEHOLDER</span>
   </div>
 </template>
 
-<template data-nextflow--samplesheet-target="textCell">
+<template data-nextflow--samplesheet-target="textTemplate">
   <label for="ID_PLACEHOLDER" class="sr-only">NAME_PLACEHOLDER</label>
   <input
     class="
       block p-2 text-sm border-2 border-transparent bg-inherit text-inherit w-full
-      focus:-outline-offset-2
+      focus:relative
     "
     data-action="change->nextflow--samplesheet#updateEditableSamplesheetData"
     type="text"
@@ -152,15 +174,15 @@
   />
 </template>
 
-<template data-nextflow--samplesheet-target="pagination">
+<template data-nextflow--samplesheet-target="paginationTemplate">
   <nav aria-label="<%= t("viral.pagy.pagination_component.aria_label") %>">
     <ul class="inline-flex h-10 text-base">
       <li><button
           type="button"
           class="
             flex items-center justify-center h-10 px-4 leading-tight border cursor-default
-            ms-0 border-slate-300 dark:border-slate-700 text-slate-600 bg-slate-50
-            dark:bg-slate-700 dark:text-slate-400 border-e-0 rounded-s-lg
+            ms-0 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-700
+            border-e-0 rounded-s-lg text-slate-900 dark:text-slate-300 focus:relative
           "
           data-action="click->nextflow--samplesheet#previousPage"
           data-nextflow--samplesheet-target="previousBtn"
@@ -175,7 +197,7 @@
             flex items-center justify-center h-10 px-4 leading-tight bg-white border
             cursor-pointer ms-0 border-slate-300 dark:border-slate-700 text-slate-500
             hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
-            dark:hover:bg-slate-700 dark:hover:text-white
+            dark:hover:bg-slate-700 dark:hover:text-white focus:relative
           "
           data-nextflow--samplesheet-target="pageNum"
           data-action="change->nextflow--samplesheet#pageSelected"
@@ -187,7 +209,7 @@
             flex items-center justify-center h-10 px-4 leading-tight bg-white border
             border-l-0 ms-0 border-slate-300 dark:border-slate-700 text-slate-500
             hover:bg-slate-100 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400
-            dark:hover:bg-slate-700 dark:hover:text-white rounded-e-lg
+            dark:hover:bg-slate-700 dark:hover:text-white rounded-e-lg focus:relative
           "
           type="button"
           data-nextflow--samplesheet-target="nextBtn"

@@ -57,10 +57,11 @@ module WorkflowExecutions
       end
 
       within 'dialog[open].dialog--size-xl' do
-        assert_selector 'div.samplesheet-table' do |table|
-          table.assert_selector '.table-column:first-child .table-td', count: 2
-          table.assert_selector '.table-column:first-child .table-td:first-child', text: @sample43.puid, count: 1
-          table.assert_selector '.table-column:first-child .table-td:nth-child(2)', text: @sample44.puid, count: 1
+        assert_selector 'table'
+        within 'table tbody' do
+          assert_selector 'tr', count: 2
+          assert_selector 'tr:first-child th:first-child', text: @sample43.puid
+          assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
         end
 
         assert_text I18n.t(:'components.nextflow.update_samples')
@@ -93,10 +94,11 @@ module WorkflowExecutions
       end
 
       within 'dialog[open].dialog--size-xl' do
-        assert_selector 'div.samplesheet-table' do |table|
-          table.assert_selector '.table-column:first-child .table-td', count: 2
-          table.assert_selector '.table-column:first-child .table-td:first-child', text: @sample43.puid, count: 1
-          table.assert_selector '.table-column:first-child .table-td:nth-child(2)', text: @sample44.puid, count: 1
+        assert_selector 'table'
+        within 'table tbody' do
+          assert_selector 'tr', count: 2
+          assert_selector 'tr:first-child th:first-child', text: @sample43.puid
+          assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
         end
 
         assert_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
@@ -129,10 +131,11 @@ module WorkflowExecutions
       end
 
       within 'dialog[open].dialog--size-xl' do
-        assert_selector 'div.samplesheet-table' do |table|
-          table.assert_selector '.table-column:first-child .table-td', count: 2
-          table.assert_selector '.table-column:first-child .table-td:first-child', text: @sample43.puid, count: 1
-          table.assert_selector '.table-column:first-child .table-td:nth-child(2)', text: @sample44.puid, count: 1
+        assert_selector 'table'
+        within 'table tbody' do
+          assert_selector 'tr', count: 2
+          assert_selector 'tr:first-child th:first-child', text: @sample43.puid
+          assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
         end
 
         assert_no_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
@@ -168,9 +171,10 @@ module WorkflowExecutions
       end
 
       within 'dialog[open].dialog--size-xl' do
-        assert_selector 'div.samplesheet-table' do |table|
-          table.assert_selector '.table-column:first-child .table-td', count: 1
-          table.assert_selector '.table-column:first-child .table-td:first-child', text: sample.puid, count: 1
+        assert_selector 'table'
+        within 'table tbody' do
+          assert_selector 'tr', count: 1
+          assert_selector 'tr:first-child th:first-child', text: sample.puid
         end
 
         assert_no_text I18n.t(:'components.nextflow.update_samples')
@@ -210,10 +214,11 @@ module WorkflowExecutions
       end
 
       within 'dialog[open].dialog--size-xl' do
-        assert_selector 'div.samplesheet-table' do |table|
-          table.assert_selector '.table-column:first-child .table-td', count: 2
-          table.assert_selector '.table-column:first-child .table-td:first-child', text: @sample43.puid, count: 1
-          table.assert_selector '.table-column:first-child .table-td:nth-child(2)', text: @sample44.puid, count: 1
+        assert_selector 'table'
+        within 'table tbody' do
+          assert_selector 'tr', count: 2
+          assert_selector 'tr:first-child th:first-child', text: @sample43.puid
+          assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
         end
 
         assert_text I18n.t(:'components.nextflow.update_samples')
@@ -246,10 +251,11 @@ module WorkflowExecutions
       end
 
       within 'dialog[open].dialog--size-xl' do
-        assert_selector 'div.samplesheet-table' do |table|
-          table.assert_selector '.table-column:first-child .table-td', count: 2
-          table.assert_selector '.table-column:first-child .table-td:first-child', text: @sample43.puid, count: 1
-          table.assert_selector '.table-column:first-child .table-td:nth-child(2)', text: @sample44.puid, count: 1
+        assert_selector 'table'
+        within 'table tbody' do
+          assert_selector 'tr', count: 2
+          assert_selector 'tr:first-child th:first-child', text: @sample43.puid
+          assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
         end
 
         assert_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
@@ -282,10 +288,11 @@ module WorkflowExecutions
       end
 
       within 'dialog[open].dialog--size-xl' do
-        assert_selector 'div.samplesheet-table' do |table|
-          table.assert_selector '.table-column:first-child .table-td', count: 2
-          table.assert_selector '.table-column:first-child .table-td:first-child', text: @sample43.puid, count: 1
-          table.assert_selector '.table-column:first-child .table-td:nth-child(2)', text: @sample44.puid, count: 1
+        assert_selector 'table'
+        within 'table tbody' do
+          assert_selector 'tr', count: 2
+          assert_selector 'tr:first-child th:first-child', text: @sample43.puid
+          assert_selector 'tr:nth-child(2) th:first-child', text: @sample44.puid
         end
 
         assert_no_text I18n.t(:'components.nextflow.update_samples', locale: user.locale)
@@ -380,7 +387,7 @@ module WorkflowExecutions
       ### ACTIONS START ###
       within '#dialog' do
         # verify samples samplesheet loaded
-        assert_selector 'div.sample-sheet'
+        assert_selector 'table'
         # verify auto selected attachments
         assert_selector "a[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
         assert_selector "a[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev3.file.filename.to_s
@@ -435,7 +442,7 @@ module WorkflowExecutions
       ### ACTIONS START ###
       within '#dialog' do
         # verify samples samplesheet loaded
-        assert_selector 'div.sample-sheet'
+        assert_selector 'table'
         # verify auto selected attachments
         assert_selector "a[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
         assert_selector "a[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev3.file.filename.to_s
@@ -491,7 +498,7 @@ module WorkflowExecutions
       ### ACTIONS START ###
       within '#dialog' do
         # verify samples samplesheet loaded
-        assert_selector 'div.sample-sheet'
+        assert_selector 'table'
         # verify auto selected attachments
         assert_selector "a[id='#{@sample_a.id}_fastq_1']", text: @attachment_c.file.filename.to_s
         assert_selector "a[id='#{@sample_a.id}_fastq_2']",
@@ -548,7 +555,7 @@ module WorkflowExecutions
       ### ACTIONS START ###
       within '#dialog' do
         # verify samples samplesheet loaded
-        assert_selector 'div.sample-sheet'
+        assert_selector 'table'
         # verify auto selected attachments
         assert_selector "a[id='#{@sample_a.id}_fastq_1']", text: @attachment_c.file.filename.to_s
         assert_selector "a[id='#{@sample_a.id}_fastq_2']",
@@ -597,7 +604,7 @@ module WorkflowExecutions
       ### ACTIONS START ###
       within '#dialog' do
         # verify samples samplesheet loaded
-        assert_selector 'div.sample-sheet'
+        assert_selector 'table'
         # verify auto selected attachments
         assert_selector "a[id='#{@sample_b.id}_fastq_1']", text: @attachment_fwd3.file.filename.to_s
         assert_selector "a[id='#{@sample_b.id}_fastq_2']", text: @attachment_rev3.file.filename.to_s
@@ -651,7 +658,7 @@ module WorkflowExecutions
       ### ACTIONS START ###
       within '#dialog' do
         # verify samples samplesheet loaded
-        assert_selector 'div.sample-sheet'
+        assert_selector 'table'
         # verify auto selected attachments
         assert_selector "a[id='#{@sample_a.id}_fastq_1']", text: @attachment_c.file.filename.to_s
         assert_selector "a[id='#{@sample_a.id}_fastq_2']",
@@ -706,7 +713,7 @@ module WorkflowExecutions
       ### ACTIONS START ###
       within '#dialog' do
         # verify samples samplesheet loaded
-        assert_selector 'div.sample-sheet'
+        assert_selector 'table'
         # verify auto selected attachments
         assert_selector "a[id='#{@sample43.id}_fastq_1']",
                         text: fwd_attachment.file.filename.to_s
@@ -799,7 +806,7 @@ module WorkflowExecutions
         assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '3'
 
         # test navigating by page dropdown selection
-        find('select[data-action="change->nextflow--samplesheet#pageSelected"]').find('option[value="4"]').select_option
+        select '4', from: I18n.t('nextflow.samplesheet_component.page_selection.aria_label')
 
         assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '4'
         # verify next button is disabled on last page
@@ -842,8 +849,9 @@ module WorkflowExecutions
       end
 
       within '#dialog' do
+        assert_no_selector "a[id='#{@sample22.id}_fastq_2']"
         # navigate to page 4
-        find('select[data-action="change->nextflow--samplesheet#pageSelected"]').find('option[value="4"]').select_option
+        select '4', from: I18n.t('nextflow.samplesheet_component.page_selection.aria_label')
         assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '4'
 
         # verify attachment to test initially has a selection
@@ -920,8 +928,8 @@ module WorkflowExecutions
       ### ACTIONS START ###
       within '#dialog' do
         # verify samples samplesheet loaded
-        assert_selector 'div.sample-sheet'
-        within('#metadata-sample-column') do
+        assert_selector 'table'
+        within('table tbody') do
           assert_text @sample43.puid
           assert_text @sample44.puid
           assert_text @sample46.puid
@@ -981,12 +989,12 @@ module WorkflowExecutions
         assert_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
                         text: I18n.t('nextflow.samplesheet_component.next')
         # verify current samples listed
-        within('#metadata-sample-column') do
+        within('table tbody') do
           assert_text sample3.puid
           assert_text sample4.puid
           assert_text sample5.puid
           assert_no_text @sample22.puid
-          assert_selector 'div[class="p-2.5 sticky left-0"]', count: 5
+          assert_selector 'tr', count: 5
         end
         # enter filter
         find('input#samplesheet-filter').fill_in with: @sample22.puid
@@ -995,12 +1003,12 @@ module WorkflowExecutions
 
         ### VERIFY START ###
         # verify above samples no longer listed and only the filter sample is rendered
-        within('#metadata-sample-column') do
+        within('table tbody') do
           assert_no_text sample3.puid
           assert_no_text sample4.puid
           assert_no_text sample5.puid
           assert_text @sample22.puid
-          assert_selector 'div[class="p-2.5 sticky left-0"]', count: 1
+          assert_selector 'tr', count: 1
         end
         # verify pagination is removed because there is only 1 page of samples remaining
         assert_selector 'div[data-nextflow--samplesheet-target="paginationContainer"]'
@@ -1050,8 +1058,8 @@ module WorkflowExecutions
         assert_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
                         text: I18n.t('nextflow.samplesheet_component.next')
         # verify current samples listed
-        within('#metadata-sample-column') do
-          assert_selector 'div[class="p-2.5 sticky left-0"]', count: 5
+        within('table tbody') do
+          assert_selector 'tr', count: 5
         end
         # enter filter
         find('input#samplesheet-filter').fill_in with: 'inxt_sam_'
@@ -1064,9 +1072,9 @@ module WorkflowExecutions
         assert_selector %(input#samplesheet-filter) do |input|
           assert_equal 'inxt_sam_', input['value']
         end
-        assert_selector '#metadata-sample-column'
-        within('#metadata-sample-column') do
-          assert_selector 'div[class="p-2.5 sticky left-0"]', count: 5
+        assert_selector 'table tbody'
+        within('table tbody') do
+          assert_selector 'tr', count: 5
         end
         # verify 4 pages of samples still exist
         assert_selector 'select[data-action="change->nextflow--samplesheet#pageSelected"]', text: '1'
@@ -1116,8 +1124,8 @@ module WorkflowExecutions
         assert_selector 'button[data-action="click->nextflow--samplesheet#nextPage"]',
                         text: I18n.t('nextflow.samplesheet_component.next')
         # verify current samples listed
-        within('#metadata-sample-column') do
-          assert_selector 'div[class="p-2.5 sticky left-0"]', count: 5
+        within('table tbody') do
+          assert_selector 'tr', count: 5
         end
         # enter filter
         find('input#samplesheet-filter').fill_in with: 'not a valid filter'
@@ -1126,8 +1134,8 @@ module WorkflowExecutions
 
         ### VERIFY START ###
         # verify no samples in samplesheet
-        within('#metadata-sample-column') do
-          assert_no_selector 'div[class="p-2.5 sticky left-0"]'
+        within('table tbody') do
+          assert_no_selector 'tr'
         end
 
         # verify empty state
@@ -1178,15 +1186,15 @@ module WorkflowExecutions
       within '#dialog' do
         assert_selector 'h1', text: 'phac-nml/gasclustering'
         # assert indexes of samples
-        within('div[id="0_sample"]') do
+        within('th[id="0_sample"]') do
           assert_text sample32.puid
         end
 
-        within('div[id="1_sample"]') do
+        within('th[id="1_sample"]') do
           assert_text sample33.puid
         end
 
-        within('div[id="2_sample"]') do
+        within('th[id="2_sample"]') do
           assert_text sample34.puid
         end
 
@@ -1195,21 +1203,24 @@ module WorkflowExecutions
           assert_text 'metadata_1'
         end
 
-        within('#metadata-metadata_1-column') do
-          assert_selector 'input[type="text"]', count: 4
-        end
-
         within('#field-metadata_2') do
           assert_text 'metadata_2'
         end
 
-        within('#metadata-metadata_2-column') do
-          assert_selector 'input[type="text"]', count: 4
+        within('table tbody') do
+          assert_selector 'td[id="0_metadata_1"] input[type="text"]', text: ''
+          assert_selector 'td[id="1_metadata_1"] input[type="text"]', text: ''
+          assert_selector 'td[id="2_metadata_1"] input[type="text"]', text: ''
+          assert_selector 'td[id="3_metadata_1"] input[type="text"]', text: ''
+          assert_selector 'td[id="0_metadata_2"] input[type="text"]', text: ''
+          assert_selector 'td[id="1_metadata_2"] input[type="text"]', text: ''
+          assert_selector 'td[id="2_metadata_2"] input[type="text"]', text: ''
+          assert_selector 'td[id="3_metadata_2"] input[type="text"]', text: ''
         end
 
         # change metadata_1 and metadata_2 option selection
-        find('#field-metadata_1', wait: 1).find("option[value='metadatafield1']").select_option
-        find('#field-metadata_2', wait: 1).find("option[value='metadatafield2']").select_option
+        select 'metadatafield1', from: 'metadata_1'
+        select 'metadatafield2', from: 'metadata_2'
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -1223,30 +1234,30 @@ module WorkflowExecutions
         end
 
         # check metadata values of samples
-        within('div[id="0_metadata_1"]') do
+        within('td[id="0_metadata_1"]') do
           assert_selector 'span', text: sample32.metadata['metadatafield1']
         end
-        within('div[id="1_metadata_1"]') do
+        within('td[id="1_metadata_1"]') do
           assert_selector 'span', text: sample33.metadata['metadatafield1']
         end
-        within('div[id="2_metadata_1"]') do
+        within('td[id="2_metadata_1"]') do
           assert_selector 'span', text: sample34.metadata['metadatafield1']
         end
-        within('div[id="3_metadata_1"]') do
+        within('td[id="3_metadata_1"]') do
           # sample contains no metadata value for this field, stays as text input
           assert_selector 'input[type="text"]'
         end
 
-        within('div[id="0_metadata_2"]') do
+        within('td[id="0_metadata_2"]') do
           assert_selector 'span', text: sample32.metadata['metadatafield2']
         end
-        within('div[id="1_metadata_2"]') do
+        within('td[id="1_metadata_2"]') do
           assert_selector 'span', text: sample33.metadata['metadatafield2']
         end
-        within('div[id="2_metadata_2"]') do
+        within('td[id="2_metadata_2"]') do
           assert_selector 'span', text: sample34.metadata['metadatafield2']
         end
-        within('div[id="3_metadata_2"]') do
+        within('td[id="3_metadata_2"]') do
           # sample contains no metadata value for this field, stays as text input
           assert_selector 'input[type="text"]'
         end
@@ -1254,7 +1265,7 @@ module WorkflowExecutions
       end
     end
 
-    test 'samplesheet metadata header changes param value' do
+    test 'samplesheet metadata header changes param value after workflow submission' do
       ### SETUP START ###
       user = users(:john_doe)
       namespace = groups(:group_twelve)
@@ -1293,8 +1304,8 @@ module WorkflowExecutions
         end
 
         # change metadata_1 and metadata_8 option selection
-        find('#field-metadata_1', wait: 1).find("option[value='metadatafield1']").select_option
-        find('#field-metadata_8', wait: 1).find("option[value='metadatafield2']").select_option
+        select 'metadatafield1', from: 'metadata_1'
+        select 'metadatafield2', from: 'metadata_8'
 
         # check new metadata dropdown selected values
         within('#field-metadata_1') do
