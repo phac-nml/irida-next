@@ -82,7 +82,7 @@ class WorkflowExecutionActivityComponentTest < ViewComponentTestCase
 
   test 'workflow launched on sample and sample deleted activity' do
     params = { sample: @sample1 }
-    ::Samples::DestroyService.new(@project.namespace, @user, params).execute
+    ::Projects::Samples::DestroyService.new(@project, @user, params).execute
     activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity).reverse
 
     assert_equal(1, activities.count do |activity|
@@ -134,7 +134,7 @@ class WorkflowExecutionActivityComponentTest < ViewComponentTestCase
     ::WorkflowExecutions::CancelService.new(@workflow_execution, @user).execute
     ::WorkflowExecutions::DestroyService.new(@user, { workflow_execution: @workflow_execution }).execute
     params = { sample: @sample1 }
-    ::Samples::DestroyService.new(@project.namespace, @user, params).execute
+    ::Projects::Samples::DestroyService.new(@project, @user, params).execute
 
     activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity).reverse
 
