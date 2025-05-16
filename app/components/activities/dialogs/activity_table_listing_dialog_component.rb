@@ -47,15 +47,19 @@ module Activities
           ]
 
         when 'group_sample_transfer'
-          @title = 'Group samples transfer'
+          @title = I18n.t(:'components.activity.dialog.group_sample_transfer.title')
 
-          @description = 'There are the samples transferred between projects within the group'
+          @description = I18n.t(
+            :'components.activity.dialog.group_sample_transfer.description',
+            user: @activity_owner,
+            count: @activity.parameters[:transferred_samples_count]
+          )
 
           @data = @extended_details.details['transferred_samples_data'].to_json
           @column_headers = [
-            'Sample Name',
-            'Transferred From',
-            'Transferred To'
+            I18n.t(:'components.activity.dialog.group_sample_transfer.sample_name'),
+            I18n.t(:'components.activity.dialog.group_sample_transfer.transferred_from'),
+            I18n.t(:'components.activity.dialog.group_sample_transfer.transferred_to')
           ]
 
         when 'workflow_execution_destroy'

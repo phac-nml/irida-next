@@ -85,15 +85,15 @@ module Groups
         end
 
         if transferred_samples_ids.count.positive?
-          update_namespace_attributes(transferred_samples_ids)
+          update_namespace_attributes(new_project, transferred_samples_ids)
           create_activities(transferred_samples_data)
         end
 
         transferred_samples_ids
       end
 
-      def update_namespace_attributes(transferred_samples_ids)
-        # update_samples_count(transferred_samples_ids.count)
+      def update_namespace_attributes(new_project, transferred_samples_ids)
+        update_samples_count(new_project, transferred_samples_ids.count)
       end
 
       def create_activities(transferred_samples_data) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -146,12 +146,10 @@ module Groups
                                                  activity_type: 'group_sample_transfer')
       end
 
-      def update_samples_count(transferred_samples_count)
-        if @project.parent.type == 'Group'
-          @project.parent.update_samples_count_by_transfer_service(@new_project, transferred_samples_count)
-        elsif @new_project.parent.type == 'Group'
-          @new_project.parent.update_samples_count_by_addition_services(transferred_samples_count)
-        end
+      def update_samples_count(new_project, transferred_samples_count)
+        return unless new_project.parent.type == 'Group'
+
+        new_project.parent.update_samples_count_by_transfer_service(new_project, transferred_samples_count)
       end
 
       def namespaces_for_transfer(project_namespace)

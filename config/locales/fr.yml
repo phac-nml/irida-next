@@ -480,6 +480,14 @@ fr:
     activity:
       dialog:
         close: Close
+        group_sample_transfer:
+          description:
+            one: "%{user} transferred 1 sample between projects within group"
+            other: "%{user} transferred %{count} samples between projects within group"
+          sample_name: Sample Name
+          title: Transferred Samples
+          transferred_from: Transferred From
+          transferred_to: Transferred To
         import_samples:
           description:
             group: "%{user} imported %{count} samples to group"
