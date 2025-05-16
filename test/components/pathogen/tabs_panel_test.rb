@@ -103,5 +103,50 @@ module Pathogen
                       'font-medium ms-2 px-2 py-1 rounded-full dark:bg-slate-700 dark:text-slate-300"]',
                       text: '100'
     end
+
+    test 'panel with icons' do
+      tabs_component = Pathogen::TabsPanel.new(id: 'test_panel_with_icons').tap do |tabs|
+        tabs.with_tab(selected: true, href: '#', text: 'Home', icon: 'house')
+        tabs.with_tab(selected: false, href: '#', text: 'Profile', icon: 'user')
+        tabs.with_tab(selected: false, href: '#', text: 'Settings', icon: 'gear')
+      end
+      render_inline(tabs_component)
+
+      assert_selector 'nav[id="test_panel_with_icons"]'
+      assert_selector 'ul[role="tablist"]', count: 1
+      assert_selector 'li', count: 3
+      
+      # Check that icons are rendered with the correct Phosphor icon names
+      assert_selector 'svg[data-phosphor-icon="house"]', count: 1
+      assert_selector 'svg[data-phosphor-icon="user"]', count: 1
+      assert_selector 'svg[data-phosphor-icon="gear"]', count: 1
+      
+      # Check that the selected tab has the correct classes
+      assert_selector 'a[class*="text-primary-600"] svg[data-phosphor-icon="house"]', count: 1
+      
+      # Check that the tab text is still rendered
+      assert_selector 'a', text: 'Home', count: 1
+      assert_selector 'a', text: 'Profile', count: 1
+      assert_selector 'a', text: 'Settings', count: 1
+    end
+
+    test 'panel with icons and counts' do
+      tabs_component = Pathogen::TabsPanel.new(id: 'test_panel_icons_counts').tap do |tabs|
+        tabs.with_tab(selected: true, href: '#', text: 'Inbox', icon: 'envelope') do |tab|
+          tab.with_count(count: 5)
+        end
+        tabs.with_tab(selected: false, href: '#', text: 'Sent', icon: 'paper-plane') do |tab|
+          tab.with_count(count: 0)
+        end
+      end
+      render_inline(tabs_component)
+
+      # Check that icons and counts are rendered together
+      assert_selector 'svg[data-phosphor-icon="envelope"]', count: 1
+      assert_selector 'span', text: '5', count: 1
+      
+      assert_selector 'svg[data-phosphor-icon="paper-plane"]', count: 1
+      assert_selector 'span', text: '0', count: 1
+    end
   end
 end

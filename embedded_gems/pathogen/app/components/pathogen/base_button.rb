@@ -86,9 +86,10 @@ module Pathogen
 
     def default_classes(custom_classes)
       base_classes = %w[
-        rounded-lg inline-flex min-h-11 min-w-11 cursor-pointer items-center
-        justify-center border px-5 py-2.5 text-sm font-semibold transition
-        duration-200 disabled:cursor-not-allowed disabled:opacity-80 sm:w-auto
+        rounded-lg inline-flex min-h-11 min-w-11 h-11 px-3 justify-center items-center
+        cursor-pointer border text-sm font-semibold transition
+        duration-200 disabled:cursor-not-allowed disabled:opacity-80
+        [&:has(>span:only-child)]:w-11 [&:has(>span:only-child)]:p-0
       ]
 
       if custom_classes.present?

@@ -24,7 +24,7 @@
           <p class="text-sm text-gray-500 mb-2"><%= scheme.to_s.humanize %></p>
           <%= render Pathogen::Button.new(scheme:, size: local_assigns[:size]) do |c| %>
             <%= scheme == :primary ? 'Open Link' : 'More Options' %>
-            <% c.with_trailing_visual_icon(icon: scheme == :primary ? 'arrow-up-right' : 'chevron-down') %>
+            <% c.with_trailing_visual_icon(icon: scheme == :primary ? 'arrow-right' : 'arrow-down') %>
           <% end %>
         </div>
       <% end %>
@@ -36,8 +36,8 @@
     <h3 class="text-lg font-medium mb-4">Icon Only Buttons</h3>
     <div class="flex flex-wrap items-center gap-4">
       <% [
-        { scheme: :default, icon: 'cog', label: 'Settings' },
-        { scheme: :primary, icon: 'pencil', label: 'Edit' },
+        { scheme: :default, icon: 'gear', label: 'Settings' },
+        { scheme: :primary, icon: 'pencil-simple', label: 'Edit' },
         { scheme: :danger, icon: 'trash', label: 'Delete' }
       ].each do |button| %>
         <div class="flex flex-col items-center">
@@ -65,7 +65,7 @@
           <%= render Pathogen::Button.new(scheme:, size: local_assigns[:size]) do |c| %>
             <% c.with_leading_visual_icon(icon: "magnifying-glass") %>
             Add Item
-            <% c.with_trailing_visual_icon(icon: "chevron-down") %>
+            <% c.with_trailing_visual_icon(icon: "arrow-down") %>
           <% end %>
         </div>
       <% end %>
