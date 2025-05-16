@@ -51,6 +51,7 @@ module Groups
 
     def index_view_authorizations
       @allowed_to = {
+        submit_workflow: allowed_to?(:submit_workflow?, @group),
         export_data: allowed_to?(:export_data?, @group),
         update_sample_metadata: allowed_to?(:update_sample_metadata?, @group),
         import_samples_and_metadata: allowed_to?(:import_samples_and_metadata?, @group),
