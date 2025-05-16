@@ -34,14 +34,14 @@ module Pathogen
 
     test 'renders self-closing tags properly' do
       render_inline Pathogen::BaseComponent.new(tag: :img, src: 'test.jpg', alt: 'Test')
-      
+
       # Check that it's rendered as a self-closing tag
       assert_selector 'img[src="test.jpg"][alt="Test"]', count: 1
     end
 
     test 'renders style attribute' do
       render_inline Pathogen::BaseComponent.new(
-        tag: :div, 
+        tag: :div,
         style: 'color: red; font-size: 16px;'
       )
 
@@ -50,7 +50,7 @@ module Pathogen
 
     test 'merges class names' do
       render_inline Pathogen::BaseComponent.new(
-        tag: :div, 
+        tag: :div,
         classes: 'foo bar',
         class: 'baz qux'
       )
@@ -78,21 +78,21 @@ module Pathogen
 
     test 'adds test selector' do
       render_inline Pathogen::BaseComponent.new(tag: :div, test_selector: 'test-component')
-      
+
       assert_selector 'div[data-test-selector="test-component"]'
     end
 
     test 'handles multiple data attributes' do
       render_inline Pathogen::BaseComponent.new(
-        tag: :div, 
+        tag: :div,
         'data-controller': 'controller',
         'data-action': 'action',
         'data-test-id': 'test-id'
       )
-      
-      assert_selector 'div[data-controller="controller"]'\
-                     '[data-action="action"]'\
-                     '[data-test-id="test-id"]'
+
+      assert_selector 'div[data-controller="controller"]' \
+                      '[data-action="action"]' \
+                      '[data-test-id="test-id"]'
     end
   end
 end
