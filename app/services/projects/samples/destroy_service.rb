@@ -70,11 +70,11 @@ module Projects
                                                       parameters:
                                                       {
                                                         samples_deleted_count: deleted_samples_data.size,
-                                                        action: 'project_sample_destroy_multiple'
+                                                        action: 'sample_destroy_multiple'
                                                       }
 
         activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
-                                                 activity_type: 'project_sample_destroy_multiple')
+                                                 activity_type: 'sample_destroy_multiple')
       end
 
       def update_metadata_summary(sample)

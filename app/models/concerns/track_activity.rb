@@ -270,9 +270,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   end
 
   def add_bulk_sample_params(params, activity)
-    unless %w[project_sample_destroy_multiple group_samples_destroy].include?(activity.parameters[:action])
-      return params
-    end
+    return params unless %w[sample_destroy_multiple group_samples_destroy].include?(activity.parameters[:action])
 
     params.merge(
       samples_deleted_count: activity.parameters[:samples_deleted_count]
