@@ -4,7 +4,7 @@ module Viral
   # Dropdown component
   class DropdownComponent < Viral::Component
     renders_many :items, Dropdown::ItemComponent
-    attr_reader :distance, :dropdown_styles, :label, :icon_name, :caret, :skidding, :trigger, :tooltip
+    attr_reader :distance, :dropdown_styles, :label, :icon_name, :caret, :skidding, :trigger, :tooltip, :button_styles
 
     TRIGGER_DEFAULT = :click
     TRIGGER_MAPPINGS = {
@@ -14,7 +14,7 @@ module Viral
 
     # rubocop:disable Metrics/ParameterLists
     def initialize(label: nil, tooltip: '', icon: nil, caret: false, trigger: TRIGGER_DEFAULT, skidding: 0,
-                   distance: 10, dropdown_styles: '', action_link: false, action_link_value: nil, **system_arguments)
+                   distance: 10, dropdown_styles: '', button_styles: nil, action_link: false, action_link_value: nil, **system_arguments)
       @distance = distance
       @dropdown_styles = dropdown_styles
       @label = label
@@ -25,6 +25,7 @@ module Viral
       @action_link_value = action_link_value
       @trigger = TRIGGER_MAPPINGS[trigger]
       @dd_id = "dd-#{SecureRandom.hex(10)}"
+      @button_styles = button_styles
 
       @system_arguments = default_system_arguments(system_arguments)
       @system_arguments[:title] = tooltip if tooltip.present?
@@ -57,14 +58,16 @@ module Viral
     end
 
     def system_arguments_for_button
-      {
-        classes: class_names(
-          'text-slate-600 dark:text-slate-400 border border-slate-300 min-h-11 min-w-11
-      dark:border-slate-600 rounded-lg text-sm px-3 py-1 cursor-pointer inline-flex
-      items-center justify-center',
-          system_arguments[:classes]
-        )
-      }
+      if button_styles.present?
+        { classes: button_styles }
+      else
+        {
+          classes: class_names(
+            'text-slate-600 dark:text-slate-400 border border-slate-300 min-h-11 min-w-11 dark:border-slate-600 rounded-lg text-sm px-3 py-1 cursor-pointer inline-flex items-center justify-center',
+            system_arguments[:classes]
+          )
+        }
+      end
     end
 
     def system_arguments_for_icon
