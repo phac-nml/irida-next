@@ -8,7 +8,7 @@ module Layout
       render_inline(Layout::SidebarComponent.new) do |sidebar|
         sidebar.with_header(label: 'Header')
       end
-      
+
       assert_selector('aside')
     end
 
@@ -16,7 +16,7 @@ module Layout
       render_inline(Layout::SidebarComponent.new) do |sidebar|
         sidebar.with_header(label: 'Header')
       end
-      
+
       # The component should render with the default structure
       assert_selector('aside')
     end
@@ -25,7 +25,7 @@ module Layout
       render_inline(Layout::SidebarComponent.new) do |sidebar|
         sidebar.with_header(label: 'Custom Header')
       end
-      
+
       assert_text('Custom Header')
     end
 
@@ -39,7 +39,7 @@ module Layout
           section.with_item(label: 'Item 2', url: '/path2')
         end
       end
-      
+
       assert_selector('h3', text: 'Section 1')
       assert_selector('h3', text: 'Section 2')
       assert_selector('a[href="/path1"]', text: 'Item 1')
@@ -52,7 +52,7 @@ module Layout
         sidebar.with_item(label: 'Item 1', url: '/path1')
         sidebar.with_item(label: 'Item 2', url: '/path2')
       end
-      
+
       assert_selector('a[href="/path1"]', text: 'Item 1')
       assert_selector('a[href="/path2"]', text: 'Item 2')
     end
@@ -61,7 +61,7 @@ module Layout
       render_inline(Layout::SidebarComponent.new(pipelines_enabled: false)) do |sidebar|
         sidebar.with_header(label: 'Header')
       end
-      
+
       # Verify the sidebar renders without pipeline-specific content
       assert_selector('aside')
     end
@@ -70,7 +70,7 @@ module Layout
       render_inline(Layout::SidebarComponent.new(collapsed_by_default: true)) do |sidebar|
         sidebar.with_header(label: 'Header')
       end
-      
+
       # The collapsed state is handled by JavaScript, so we just check the component renders
       assert_selector('aside')
     end
@@ -82,7 +82,7 @@ module Layout
           item.with_icon { 'ICON' }
         end
       end
-      
+
       assert_selector('a', text: 'Item with Icon')
     end
 
@@ -92,7 +92,7 @@ module Layout
         sidebar.with_item(label: 'Current Page', url: '/current', selected: true)
         sidebar.with_item(label: 'Other Page', url: '/other')
       end
-      
+
       assert_selector('a[href="/current"][aria-current="page"]')
       assert_no_selector('a[href="/other"][aria-current="page"]')
     end
@@ -104,7 +104,7 @@ module Layout
           section.with_item(label: 'Projects', url: '/projects')
         end
       end
-      
+
       assert_selector('aside[aria-label]')
       assert_selector('a[href="/projects"]', text: 'Projects')
     end
@@ -119,7 +119,7 @@ module Layout
           end
         end
       end
-      
+
       # The menu items might be hidden by default, so we just check the button is rendered
       assert_selector('button', text: 'Configuration')
     end
