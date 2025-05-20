@@ -81,7 +81,10 @@ module Layout
           'size-5 transition-colors duration-200',
           {
             'text-primary-600 dark:text-primary-400' => selected,
-            'text-slate-500 dark:text-slate-400 group-hover/item:text-slate-600 dark:group-hover/item:text-slate-300' => !selected
+            (
+              'text-slate-500 dark:text-slate-400 ' \
+              'group-hover/item:text-slate-600 dark:group-hover/item:text-slate-300'
+            ) => !selected
           }
         )
 
