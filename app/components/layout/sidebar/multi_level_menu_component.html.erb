@@ -1,5 +1,5 @@
 <% control_id = "multi-level-menu_#{title.parameterize.underscore}" %>
-<li class="group/menu list-none">
+<li class="group/menu list-none" data-controller="collapsible sidebar-item">
   <div role="none">
     <button
       type="button"
@@ -11,11 +11,13 @@
           'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/70': !@selected
         }) %>
       "
+      id="<%= control_id %>-button"
       aria-controls="<%= control_id %>"
       aria-expanded="<%= @selected ? 'true' : 'false' %>"
-      data-action="collapsible#toggle"
+      data-action="click->collapsible#toggle click->sidebar-item#onClick"
       data-collapsible-target="button"
       data-sidebar-item-target="trigger"
+      data-turbo="false"
     >
     <span
       class="
@@ -42,6 +44,7 @@
   <div role="menu"
     id="<%= control_id %>"
     data-collapsible-target="item"
+    aria-labelledby="<%= control_id %>-button"
     aria-hidden="<%= @selected ? 'false' : 'true' %>"
     aria-label="<%= title %> submenu"
     <%= 'hidden' if !@selected %>
