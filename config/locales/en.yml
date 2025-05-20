@@ -510,12 +510,13 @@ en:
         sample_clone:
           copied_from: Copied From
           copied_to: Copied To
-          source_project_description:
-            one: "%{user} copied 1 sample from project %{source_project_puid}"
-            other: "%{user} copied %{count} samples from project %{source_project_puid}"
-          target_project_description:
-            one: "%{user} copied 1 sample to project %{target_project_puid}"
-            other: "%{user} copied %{count} samples to project %{target_project_puid}"
+          project:
+            source_project_description:
+              one: "%{user} copied 1 sample from project %{source_project_puid}"
+              other: "%{user} copied %{count} samples from project %{source_project_puid}"
+            target_project_description:
+              one: "%{user} copied 1 sample to project %{target_project_puid}"
+              other: "%{user} copied %{count} samples to project %{target_project_puid}"
           title: Copied Samples
         sample_destroy:
           description:

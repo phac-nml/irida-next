@@ -46,7 +46,7 @@ project1_namespace_sample_create:
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
-project1_namespace_sample_clone:
+project1_namespace_project_sample_clone:
   trackable_type: "Namespace"
   trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
   key: "namespaces_project_namespace.samples.clone"
@@ -56,7 +56,7 @@ project1_namespace_sample_clone:
       target_project: <%= ActiveRecord::FixtureSet.identify(:project2,
       :uuid) %>,
       cloned_samples_count: 1,
-      action: "sample_clone",
+      action: "project_sample_clone",
     }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
@@ -75,7 +75,7 @@ project1_namespace_metadata_template_create:
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
-project2_namespace_sample_cloned_from_project1:
+project2_namespace_project_sample_cloned_from_project1:
   trackable_type: "Namespace"
   trackable_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid) %>
   key: "namespaces_project_namespace.samples.cloned_from"
@@ -85,7 +85,7 @@ project2_namespace_sample_cloned_from_project1:
       source_project: <%= ActiveRecord::FixtureSet.identify(:project1,
       :uuid) %>,
       cloned_samples_count: 1,
-      action: "sample_clone",
+      action: "project_sample_clone",
     }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>

@@ -14,7 +14,7 @@ class ActivityExtendedDetail < ApplicationRecord
   # Validates that only the correct amount of join table entries can exist
   # for the activity_type
   def validate_ext_details_entries
-    shared_extended_details_types = %w[sample_clone sample_transfer]
+    shared_extended_details_types = %w[project_sample_clone sample_transfer]
     existing_count = ActivityExtendedDetail.where(extended_detail: extended_detail).count
 
     if shared_extended_details_types.include?(activity_type)

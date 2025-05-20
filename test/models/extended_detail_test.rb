@@ -4,7 +4,7 @@ require 'test_helper'
 
 class ExtendedDetailTest < ActiveSupport::TestCase
   def setup
-    @extended_detail_clone = extended_details(:project1_namespace_sample_clone_extended_details)
+    @extended_detail_clone = extended_details(:project1_namespace_project_sample_clone_extended_details)
     @extended_detail_transfer = extended_details(:project1_namespace_sample_transfer_extended_details)
   end
 
@@ -29,9 +29,11 @@ class ExtendedDetailTest < ActiveSupport::TestCase
 
   test 'linked to correct activities through activity_extended_details join table' do
     assert @extended_detail_clone.activities.length == 2
-    assert @extended_detail_clone.activities.include?(public_activity_activities(:project1_namespace_sample_clone))
     assert @extended_detail_clone.activities.include?(
-      public_activity_activities(:project2_namespace_sample_cloned_from_project1)
+      public_activity_activities(:project1_namespace_project_sample_clone)
+    )
+    assert @extended_detail_clone.activities.include?(
+      public_activity_activities(:project2_namespace_project_sample_cloned_from_project1)
     )
 
     assert @extended_detail_transfer.activities.length == 2
