@@ -37,7 +37,7 @@ module Activities
 
         within %(div[data-controller="activities--extended_details"][data-controller-connected="true"]) do
           assert_selector 'p',
-                          text: I18n.t(:'components.activity.dialog.sample_clone.target_project_description',
+                          text: I18n.t(:'components.activity.dialog.sample_clone.project.target_project_description',
                                        user: 'System', count: 1,
                                        target_project_puid: 'INXT_PRJ_AAAAAAAAAB')
 
@@ -72,7 +72,7 @@ module Activities
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.sample_clone.title')
 
         assert_selector 'p',
-                        text: I18n.t(:'components.activity.dialog.sample_clone.source_project_description',
+                        text: I18n.t(:'components.activity.dialog.sample_clone.project.source_project_description',
                                      user: 'System', count: 1,
                                      source_project_puid: 'INXT_PRJ_AAAAAAAAAA')
         assert_selector 'table', count: 1
