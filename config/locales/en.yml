@@ -795,6 +795,7 @@ en:
         other: "%{count} errors prohibited this %{resource} from being saved:"
   general:
     default_sidebar:
+      aria_label: Main menu
       data_exports: Data Exports
       goto: Go to
       groups: Groups

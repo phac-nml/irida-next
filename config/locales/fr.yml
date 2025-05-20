@@ -795,6 +795,7 @@ fr:
         other: 'Les erreurs %{count} ont empêché cette %{resource} d’être sauvegardée :'
   general:
     default_sidebar:
+      aria_label: Main navigation
       data_exports: Exportations de données
       goto: Allez à
       groups: Groupes
