@@ -66,7 +66,7 @@ module Groups
         assert_equal 1, activity.parameters[:samples_deleted_count]
         assert_equal [{ 'sample_name' => @sample32.name, 'sample_puid' => @sample32.puid }],
                      activity.extended_details.details['deleted_samples_data']
-        assert_equal 'project_sample_destroy_multiple', activity.parameters[:action]
+        assert_equal 'sample_destroy_multiple', activity.parameters[:action]
 
         # verify project activity 2
         activity = PublicActivity::Activity.where(
@@ -78,7 +78,7 @@ module Groups
         assert_equal 1, activity.parameters[:samples_deleted_count]
         assert_equal [{ 'sample_name' => @sample34.name, 'sample_puid' => @sample34.puid }],
                      activity.extended_details.details['deleted_samples_data']
-        assert_equal 'project_sample_destroy_multiple', activity.parameters[:action]
+        assert_equal 'sample_destroy_multiple', activity.parameters[:action]
       end
 
       test 'only delete group samples with proper permission' do

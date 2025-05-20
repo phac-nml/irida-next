@@ -42,7 +42,7 @@ module Activities
 
           @data = @extended_details.details['transferred_samples_data'].to_json
 
-        when 'project_sample_destroy_multiple'
+        when 'sample_destroy_multiple'
           @title = I18n.t(:'components.activity.dialog.sample_destroy.title')
           @description =
             I18n.t(:'components.activity.dialog.sample_destroy.description.project',

@@ -64,12 +64,12 @@ module Groups
             parameters:
             {
               samples_deleted_count:,
-              action: 'project_sample_destroy_multiple'
+              action: 'sample_destroy_multiple'
             }
           )
 
           project_activity.create_activity_extended_detail(extended_detail_id: project_ext_details.id,
-                                                           activity_type: 'project_sample_destroy_multiple')
+                                                           activity_type: 'sample_destroy_multiple')
           total_deleted_samples_count += samples_deleted_count
         end
 
