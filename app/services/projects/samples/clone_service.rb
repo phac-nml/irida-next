@@ -107,11 +107,10 @@ module Projects
                                                         target_project_puid: @new_project.puid,
                                                         target_project: @new_project.id,
                                                         cloned_samples_count: cloned_samples_count,
-                                                        action: 'project_sample_clone'
+                                                        action: 'sample_clone'
                                                       }
 
-        activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
-                                                 activity_type: 'project_sample_clone')
+        activity.create_activity_extended_detail(extended_detail_id: ext_details.id, activity_type: 'sample_clone')
 
         activity = @new_project.namespace.create_activity key: 'namespaces_project_namespace.samples.cloned_from',
                                                           owner: current_user,
@@ -120,11 +119,10 @@ module Projects
                                                             source_project_puid: @project.puid,
                                                             source_project: @project.id,
                                                             cloned_samples_count: cloned_samples_count,
-                                                            action: 'project_sample_clone'
+                                                            action: 'sample_clone'
                                                           }
 
-        activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
-                                                 activity_type: 'project_sample_clone')
+        activity.create_activity_extended_detail(extended_detail_id: ext_details.id, activity_type: 'sample_clone')
       end
     end
   end

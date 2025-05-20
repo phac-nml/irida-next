@@ -12,17 +12,17 @@ project2_namespace_sample_transferred_from_project1_activity_extended_details:
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
-project1_namespace_project_sample_clone_activity_extended_details:
-  activity: project1_namespace_project_sample_clone
-  extended_detail: project1_namespace_project_sample_clone_extended_details
-  activity_type: project_sample_clone
+project1_namespace_sample_clone_activity_extended_details:
+  activity: project1_namespace_sample_clone
+  extended_detail: project1_namespace_sample_clone_extended_details
+  activity_type: sample_clone
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
-project2_namespace_project_sample_cloned_from_project1_activity_extended_details:
-  activity: project2_namespace_project_sample_cloned_from_project1
-  extended_detail: project1_namespace_project_sample_clone_extended_details
-  activity_type: project_sample_clone
+project2_namespace_sample_cloned_from_project1_activity_extended_details:
+  activity: project2_namespace_sample_cloned_from_project1
+  extended_detail: project1_namespace_sample_clone_extended_details
+  activity_type: sample_clone
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
