@@ -48,7 +48,7 @@ module Projects
         @has_attachments = all_attachments.count.positive?
         @q = all_attachments.ransack(params[:q])
         set_default_sort
-        @pagy, @sample_attachments = pagy_with_metadata_sort(@q.result)
+        @pagy, @sample_attachments = pagy_with_metadata_sort(@q.result, Attachment)
       end
     end
 
