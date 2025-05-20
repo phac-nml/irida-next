@@ -241,6 +241,11 @@ export default class extends Controller {
     this.spinnerTarget.classList.add("hidden");
   }
 
+  #disableErrorState() {
+    this.errorTarget.classList.add("hidden");
+    this.errorMessageTarget.innerHTML = "";
+  }
+
   #enableErrorState(message) {
     this.errorTarget.classList.remove("hidden");
     this.errorMessageTarget.innerHTML = message;
