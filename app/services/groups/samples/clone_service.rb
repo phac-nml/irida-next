@@ -26,7 +26,6 @@ module Groups
       end
 
       def clone_samples(sample_ids, broadcast_target) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-        puts 'hihihihiihi4'
         cloned_sample_ids = {}
         cloned_samples_data = []
 
