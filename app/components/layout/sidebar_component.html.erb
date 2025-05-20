@@ -39,7 +39,7 @@
             <%= helpers.render_icon :sidebar, class: "size-6", "aria-hidden": "true" %>
           </button>
           <!-- Add new items -->
-          <%= viral_dropdown(icon: "plus", skidding: -300, dropdown_styles: "width: 276px;", aria: { label: t(:'general.navbar.new_dropdown.aria_label') }, classes: "p-1 navbar-button text-slate-500 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-700") do |dropdown| %>
+          <%= viral_dropdown(icon: "plus", styles: { button: "p-1 navbar-button text-slate-500 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-700" }, aria: { label: t(:'general.navbar.new_dropdown.aria_label') }) do |dropdown| %>
             <%= dropdown.with_item(
               label: t(:"general.navbar.new_dropdown.project"),
               url: new_project_path,
@@ -50,7 +50,7 @@
             ) %>
           <% end %>
           <!-- Profile menu -->
-          <%= viral_dropdown(icon: "user_circle", skidding: -300, dropdown_styles: "width: 276px;", aria: { label: t(:'general.navbar.account_dropdown.aria_label') }, classes: "p-1 navbar-button text-slate-500 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-700") do |dropdown| %>
+          <%= viral_dropdown(icon: "user_circle", aria: { label: t(:'general.navbar.account_dropdown.aria_label') }, classes: "p-1 navbar-button text-slate-500 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-700") do |dropdown| %>
             <%= dropdown.with_item(
               label: t(:"general.navbar.account_dropdown.profile"),
               url: profile_path,
