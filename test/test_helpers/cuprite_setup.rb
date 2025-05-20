@@ -6,7 +6,7 @@ require 'capybara/cuprite'
 # with #driven_by method.
 Capybara.register_driver(:irida_next_cuprite) do |app|
   options = {}
-  options['no-sandbox'] = nil if ENV['CI']
+  options['no-sandbox'] = nil if ENV['CI'] || ENV.key?('BROWSERLESS_HOST')
   options['disable-smooth-scrolling'] = true
   Capybara::Cuprite::Driver.new(
     app,
@@ -21,7 +21,8 @@ Capybara.register_driver(:irida_next_cuprite) do |app|
     inspector: ENV.fetch('INSPECTOR', false),
     # Allow running Chrome in a headful mode by setting HEADLESS env
     # var to a falsey value
-    headless: !ENV['HEADLESS'].in?(%w[n 0 no false])
+    headless: !ENV['HEADLESS'].in?(%w[n 0 no false]),
+    **(ENV.key?('BROWSERLESS_HOST') ? { url: "http://#{ENV['BROWSERLESS_HOST']}:4000" } : {})
   )
 end
 
