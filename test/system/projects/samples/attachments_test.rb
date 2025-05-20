@@ -124,9 +124,9 @@ module Projects
           click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
         end
 
-        assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file_A.fastq')
+        assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file_B.fastq')
         within('#table-listing') do
-          assert_no_text 'test_file_A.fastq'
+          assert_no_text 'test_file_B.fastq'
         end
       end
 
@@ -522,9 +522,9 @@ module Projects
         visit namespace_project_sample_url(namespace, project, sample)
         within %(turbo-frame[id="table-listing"]) do
           assert_selector 'table #attachments-table-body tr', count: 6
-          all('input[type="checkbox"]')[0].click
-          all('input[type="checkbox"]')[2].click
-          all('input[type="checkbox"]')[4].click
+          all('input[type="checkbox"]')[1].click
+          all('input[type="checkbox"]')[3].click
+          all('input[type="checkbox"]')[5].click
         end
 
         within "nav[aria-label='#{I18n.t('projects.samples.show.nav_aria_label')}']" do
@@ -534,12 +534,12 @@ module Projects
         end
 
         within %(turbo-frame[id="table-listing"]) do
-          assert all('input[type="checkbox"]')[0].checked?
-          assert all('input[type="checkbox"]')[2].checked?
-          assert all('input[type="checkbox"]')[4].checked?
-          assert_not all('input[type="checkbox"]')[1].checked?
-          assert_not all('input[type="checkbox"]')[3].checked?
-          assert_not all('input[type="checkbox"]')[5].checked?
+          assert all('input[type="checkbox"]')[1].checked?
+          assert all('input[type="checkbox"]')[3].checked?
+          assert all('input[type="checkbox"]')[5].checked?
+          assert_not all('input[type="checkbox"]')[2].checked?
+          assert_not all('input[type="checkbox"]')[4].checked?
+          assert_not all('input[type="checkbox"]')[6].checked?
         end
       end
 
@@ -557,17 +557,17 @@ module Projects
           click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
         end
 
-        assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file_A.fastq')
+        assert_text I18n.t('projects.samples.attachments.destroy.success', filename: 'test_file_B.fastq')
         within('#table-listing') do
-          assert_no_text 'test_file_A.fastq'
-          assert_text 'test_file_B.fastq'
+          assert_no_text 'test_file_B.fastq'
+          assert_text 'test_file_A.fastq'
         end
 
         click_button I18n.t('projects.samples.show.delete_files_button'), match: :first
 
         within('dialog') do
-          assert_text 'test_file_B.fastq'
-          assert_no_text 'test_file_A.fastq'
+          assert_text 'test_file_A.fastq'
+          assert_no_text 'test_file_B.fastq'
           click_button I18n.t('projects.samples.attachments.deletions.modal.submit_button')
         end
 
