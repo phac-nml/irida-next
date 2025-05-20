@@ -5,8 +5,9 @@ module Metadata
   extend ActiveSupport::Concern
 
   # Handles pagination with custom metadata field sorting
-  def pagy_with_metadata_sort(result) # rubocop:disable Metrics/AbcSize
-    model = controller_name.classify.constantize
+  def pagy_with_metadata_sort(result, model = nil) # rubocop:disable Metrics/AbcSize
+    model ||= controller_name.classify.constantize
+
     if !@q.sorts.empty? && model.ransackable_attributes.exclude?(@q.sorts.first.name)
       field = @q.sorts.first.name.gsub('metadata_', '')
       dir = @q.sorts.first.dir
