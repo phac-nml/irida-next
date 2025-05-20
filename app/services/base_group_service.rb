@@ -6,8 +6,6 @@ class BaseGroupService < BaseService
 
   def initialize(group, user = nil, params = {})
     super(user, params.except(:group, :group_id))
-    puts 'in basebase'
     @group = group
-    puts @group
   end
 end

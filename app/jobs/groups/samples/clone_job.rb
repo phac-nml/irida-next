@@ -8,7 +8,6 @@ module Groups
       queue_with_priority 15
 
       def perform(group, current_user, new_project_id, sample_ids, broadcast_target) # rubocop:disable Metrics/MethodLength
-        puts 'in job????'
         @cloned_sample_ids = Groups::Samples::CloneService.new(group, current_user)
                                                           .execute(
                                                             new_project_id,
