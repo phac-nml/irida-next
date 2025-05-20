@@ -1,13 +1,13 @@
 <% control_id = "multi-level-menu_#{title.parameterize.underscore}" %>
-<li data-controller="collapsible" class="Layout-Sidebar__Item">
+<li data-controller="collapsible sidebar-item" class="group/menu">
   <button
     type="button"
     class="
-      flex items-center w-full mt-1 py-1 pr-1 pl-2 transition-colors ease-in-out
-      delay-75 rounded-lg group cursor-pointer min-h-[44px] relative overflow-hidden
+      flex items-center w-full py-2.5 px-3 mx-2 my-1 rounded-lg transition-all duration-200
+      text-left rtl:text-right whitespace-nowrap
       <%= class_names({
-        'bg-slate-500 text-white dark:bg-slate-700 dark:text-slate-50 font-bold': @selected,
-        'hover:bg-slate-50 dark:hover:bg-slate-500 text-slate-700 dark:text-slate-200': !@selected
+        'bg-primary-50 text-primary-700 dark:bg-slate-800/80 dark:text-primary-300 font-medium shadow-sm': @selected,
+        'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/70': !@selected
       }) %>
     "
     aria-controls="<%= control_id %>"
@@ -17,28 +17,24 @@
   >
     <span
       class="
-        w-8 h-8 flex items-center justify-center rounded-full mr-2
-        <%= @selected ? 'bg-primary-600' : 'bg-slate-100/90 dark:bg-slate-600 group-hover:bg-slate-100 dark:group-hover:bg-slate-500' %>
+        w-8 h-8 flex items-center justify-center rounded-lg mr-3 flex-shrink-0
+        transition-colors duration-200
+        <%= @selected ? 'bg-primary-100 text-primary-700 dark:bg-slate-700/90' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 group-hover/menu:bg-slate-200/70 dark:group-hover/menu:bg-slate-700/50' %>
       "
     >
       <%= create_icon %>
     </span>
-    <span class=" flex-1 ml-1 text-left rtl:text-right whitespace-nowrap "><%= title %></span>
-    <%= viral_icon(
-      name: "chevron_down",
-      classes:
-        class_names(
-          "mr-1 w-4 h-4 transition-transform",
-          { "rotate-180": @selected },
-          (
-            if @selected
-              "text-white dark:text-slate-50"
-            else
-              "text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-50"
-            end
-          ),
-        ),
-      "data-collapsible-target": "icon",
+    <span class="text-sm font-medium transition-opacity duration-200 ease-in-out flex-1">
+      <%= title %>
+    </span>
+    <%= helpers.render_icon(
+      :chevron_down,
+      class: class_names(
+        "w-4 h-4 transition-transform duration-200 flex-shrink-0",
+        { "rotate-180": @selected },
+        @selected ? "text-primary-600 dark:text-primary-400" : "text-slate-400 group-hover/menu:text-slate-600 dark:group-hover/menu:text-slate-300"
+      ),
+      "data-collapsible-target": "icon"
     ) %>
   </button>
   <ul
@@ -46,7 +42,7 @@
     data-collapsible-target="item"
     aria-hidden="<%= @selected ? 'false' : 'true' %>"
     <%= 'hidden' if !@selected %>
-    class="<%= class_names('py-1 space-y-1 pl-4', { 'hidden': !@selected }) %>"
+    class="<%= class_names('py-1 pl-2 space-y-1 overflow-hidden transition-all duration-200 border-l-2 border-slate-100 dark:border-slate-700 ml-6', { 'hidden': !@selected }) %>"
   >
     <% menu_items.each do |menu_item| %>
       <li class="Layout-Sidebar-MultiLevelMenu__Item">
@@ -55,7 +51,7 @@
           class="
             flex items-center py-1 pr-1 w-full transition-colors ease-in-out delay-75
             rounded-lg group min-h-[44px] pl-10 <%= class_names({
-              'bg-slate-500 text-white dark:bg-slate-700 dark:text-slate-50 font-bold': menu_item.selected,
+              'bg-slate-300 text-slate-900 dark:bg-slate-700 dark:text-slate-50': menu_item.selected,
               'hover:bg-slate-50 dark:hover:bg-slate-500 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-slate-50': !menu_item.selected
             }) %>
           "
