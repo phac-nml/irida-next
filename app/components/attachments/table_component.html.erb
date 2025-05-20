@@ -146,7 +146,11 @@
                 ) do %>
                   <% if index.zero? && @abilities[:select_attachments] %>
                     <%= check_box_tag "attachment_ids[]",
-                    attachment.id,
+                    if attachment.associated_attachment
+                      [attachment.id, attachment.associated_attachment.id].to_s
+                    else
+                      attachment.id
+                    end,
                     nil,
                     id: dom_id(attachment, "checkbox"),
                     "aria-label": attachment.file.filename.to_s,
