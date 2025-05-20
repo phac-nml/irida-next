@@ -32,7 +32,7 @@ services:
       TIMEOUT: 600000 # sessions live up to 10 minutes max
 
   postgres:
-    image: postgres:16.1
+    image: postgres:14.17
     restart: unless-stopped
     volumes:
       - postgres-data:/var/lib/postgresql/data
