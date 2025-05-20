@@ -99,8 +99,16 @@ module Projects
 
       private
 
+      def filter_requested?
+        params.dig(:q, :puid_or_file_blob_filename_cont).present?
+      end
+
       def load_attachments
-        @sample.attachments.where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
+        if filter_requested?
+          @sample.attachments.all
+        else
+          @sample.attachments.where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
+        end
       end
 
       def set_default_sort
