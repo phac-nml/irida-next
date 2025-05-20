@@ -9,8 +9,8 @@
   // Features to add to the dev container. More info: https://containers.dev/features.
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
-      "version": "20.14.0",
-      "pnpmVersion": "9.2.0"
+      "version": "24.0.2",
+      "pnpmVersion": "10.11.0"
     },
     "ghcr.io/devcontainers/features/github-cli:1": {},
     "ghcr.io/rails/devcontainer/features/activestorage": {},
@@ -32,9 +32,6 @@
     "vscode": {
       "extensions": [
         "shopify.ruby-lsp",
-        "koichisasada.vscode-rdbg",
-        "connorshea.vscode-ruby-test-adapter",
-        "hbenl.vscode-test-explorer",
         "elia.erb-formatter",
         "esbenp.prettier-vscode",
         "streetsidesoftware.code-spell-checker"

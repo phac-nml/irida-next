@@ -2,7 +2,7 @@ name: Docs Site Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -37,11 +37,11 @@ jobs:
       - name: Set up PNPM
         uses: pnpm/action-setup@v4
         with:
-          version: 9
-      - name: Use Node.js 20
+          version: 10
+      - name: Use Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
@@ -53,7 +53,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
-          path: 'docs-site/build'
+          path: "docs-site/build"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
