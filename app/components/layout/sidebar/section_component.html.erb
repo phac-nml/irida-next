@@ -10,10 +10,10 @@
   <ul class="space-y-1 px-2">
     <% if items.present? %>
       <% items.each do |item| %>
-        <li><%= item %></li>
+        <%= item %>
       <% end %>
     <% else %>
-      <li><%= content %></li>
+      <%= content %>
     <% end %>
 
     <% if multi_level_menus.present? %>

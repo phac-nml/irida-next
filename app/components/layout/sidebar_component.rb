@@ -35,9 +35,6 @@ module Layout
       @collapsed_by_default = collapsed_by_default
       @system_arguments = system_arguments
       @system_arguments[:data] ||= {}
-      @system_arguments[:data][:controller] = 'sidebar'
-      @system_arguments[:data][:sidebar_collapsed_class] = 'w-20'
-      @system_arguments[:data][:sidebar_expanded_class] = 'w-64'
     end
 
     # Returns the CSS classes for the sidebar based on its state
