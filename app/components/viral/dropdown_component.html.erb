@@ -25,10 +25,10 @@
     data-viral--dropdown-target="menu"
     role="menu"
     class="
-      z-20 hidden mx-3 bg-white divide-y rounded-lg shadow-sm divide-slate-100
-      dark:bg-slate-700
+      z-20 hidden mx-3 bg-white divide-y rounded-lg shadow divide-slate-100
+      dark:bg-slate-700 border border-slate-200 dark:border-slate-800
+      <%= styles[:dropdown] %>
     "
-    style="<%= dropdown_styles %>"
     aria-labelledby="<%= system_arguments[:id] %>"
     aria-hidden="true"
     tabindex="-1"
