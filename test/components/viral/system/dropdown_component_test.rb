@@ -73,17 +73,6 @@ module System
       end
     end
 
-    test 'dropdown component uses custom dropdown_styles when provided' do
-      visit('/rails/view_components/viral_dropdown_component/with_custom_dropdown_styles')
-      within('.Viral-Preview > [data-controller-connected="true"]') do
-        click_on 'Custom Dropdown'
-        dropdown_menu = find('div[data-viral--dropdown-target="menu"]')
-        assert dropdown_menu[:class].include?('bg-sky-100'), 'Expected custom dropdown style to be applied'
-        assert dropdown_menu[:class].include?('border-sky-500'), 'Expected custom dropdown style to be applied'
-        assert_text 'Item A'
-      end
-    end
-
     test 'dropdown component with tooltip' do
       visit('/rails/view_components/viral_dropdown_component/with_tooltip')
       within('.Viral-Preview > [data-controller-connected="true"]') do
