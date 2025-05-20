@@ -1,9 +1,9 @@
 <% control_id = "multi-level-menu_#{title.parameterize.underscore}" %>
-<li data-controller="collapsible sidebar-item" class="group/menu list-none">
+<li data-controller="collapsible sidebar-item" class="group/menu list-none" role="none">
   <button
     type="button"
     class="
-      flex items-center w-full py-2.5 px-3 mx-2 my-1 rounded-lg transition-all duration-200
+      flex items-center w-full py-2.5 px-3 mx-2 my-1 rounded-lg transition-colors duration-200
       text-left rtl:text-right whitespace-nowrap
       <%= class_names({
         'bg-primary-50 text-primary-700 dark:bg-slate-800/80 dark:text-primary-300 font-medium shadow-sm': @selected,
@@ -12,8 +12,11 @@
     "
     aria-controls="<%= control_id %>"
     aria-expanded="<%= @selected ? 'true' : 'false' %>"
+    aria-haspopup="menu"
+    aria-label="<%= title %> menu"
     data-action="collapsible#toggle"
     data-collapsible-target="button"
+    role="menuitem"
   >
     <span
       class="
@@ -41,11 +44,14 @@
     id="<%= control_id %>"
     data-collapsible-target="item"
     aria-hidden="<%= @selected ? 'false' : 'true' %>"
+    aria-label="<%= title %> submenu"
+    role="menu"
+    aria-orientation="vertical"
     <%= 'hidden' if !@selected %>
     class="<%= class_names('py-1 pl-2 space-y-1 overflow-hidden transition-all duration-200 border-l-2 border-slate-100 dark:border-slate-700 ml-6', { 'hidden': !@selected }) %>"
   >
     <% menu_items.each do |menu_item| %>
-      <li class="Layout-Sidebar-MultiLevelMenu__Item">
+      <li class="Layout-Sidebar-MultiLevelMenu__Item" role="none">
         <a
           href="<%= menu_item.url %>"
           class="
@@ -55,6 +61,9 @@
               'hover:bg-slate-50 dark:hover:bg-slate-500 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-slate-50': !menu_item.selected
             }) %>
           "
+          role="menuitem"
+          tabindex="-1"
+          <%= 'aria-current="page"' if menu_item.selected %>
         >
           <span class="grow">
             <%= menu_item.label %>
