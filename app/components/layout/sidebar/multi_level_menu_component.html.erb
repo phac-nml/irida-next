@@ -1,23 +1,22 @@
 <% control_id = "multi-level-menu_#{title.parameterize.underscore}" %>
-<li data-controller="collapsible sidebar-item" class="group/menu list-none" role="none">
-  <button
-    type="button"
-    class="
-      flex items-center w-full py-2.5 px-3 mx-2 my-1 rounded-lg transition-colors duration-200
-      text-left rtl:text-right whitespace-nowrap
-      <%= class_names({
-        'bg-primary-50 text-primary-700 dark:bg-slate-800/80 dark:text-primary-300 font-medium shadow-sm': @selected,
-        'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/70': !@selected
-      }) %>
-    "
-    aria-controls="<%= control_id %>"
-    aria-expanded="<%= @selected ? 'true' : 'false' %>"
-    aria-haspopup="menu"
-    aria-label="<%= title %> menu"
-    data-action="collapsible#toggle"
-    data-collapsible-target="button"
-    role="menuitem"
-  >
+<li class="group/menu list-none">
+  <div role="none">
+    <button
+      type="button"
+      class="
+        flex items-center w-full py-2.5 px-3 mx-2 my-1 rounded-lg transition-colors duration-200
+        text-left rtl:text-right whitespace-nowrap
+        <%= class_names({
+          'bg-primary-50 text-primary-700 dark:bg-slate-800/80 dark:text-primary-300 font-medium shadow-sm': @selected,
+          'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/70': !@selected
+        }) %>
+      "
+      aria-controls="<%= control_id %>"
+      aria-expanded="<%= @selected ? 'true' : 'false' %>"
+      data-action="collapsible#toggle"
+      data-collapsible-target="button"
+      data-sidebar-item-target="trigger"
+    >
     <span
       class="
         w-8 h-8 flex items-center justify-center rounded-lg mr-3 flex-shrink-0
@@ -40,18 +39,16 @@
       "data-collapsible-target": "icon"
     ) %>
   </button>
-  <ul
+  <div role="menu"
     id="<%= control_id %>"
     data-collapsible-target="item"
     aria-hidden="<%= @selected ? 'false' : 'true' %>"
     aria-label="<%= title %> submenu"
-    role="menu"
-    aria-orientation="vertical"
     <%= 'hidden' if !@selected %>
     class="<%= class_names('py-1 pl-2 space-y-1 overflow-hidden transition-all duration-200 border-l-2 border-slate-100 dark:border-slate-700 ml-6', { 'hidden': !@selected }) %>"
   >
     <% menu_items.each do |menu_item| %>
-      <li class="Layout-Sidebar-MultiLevelMenu__Item" role="none">
+      <div role="none" class="Layout-Sidebar-MultiLevelMenu__Item">
         <a
           href="<%= menu_item.url %>"
           class="
@@ -70,7 +67,7 @@
           </span>
           <%= render_icon(menu_item.icon, menu_item.selected) if menu_item.icon.present? %>
         </a>
-      </li>
+      </div>
     <% end %>
-  </ul>
+  </div>
 </li>
