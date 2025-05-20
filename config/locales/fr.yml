@@ -795,10 +795,11 @@ fr:
         other: 'Les erreurs %{count} ont empêché cette %{resource} d’être sauvegardée :'
   general:
     default_sidebar:
-      aria_label: Main navigation
+      aria_label: Main sidebar
       data_exports: Exportations de données
       goto: Allez à
       groups: Groupes
+      navigation: Main navigation
       projects: Projets
       title: Votre travail
       workflows: Exécutions de flux de travail
@@ -817,6 +818,7 @@ fr:
         aria_label: Nouvel élément de menu
         group: Créer un nouveau groupe
         project: Créer un nouveau projet
+    opens_in_new_tab: Opens in new tab
     screen_reader:
       close: Fermer
   graphql:

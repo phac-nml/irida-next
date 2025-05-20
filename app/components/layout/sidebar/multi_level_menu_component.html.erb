@@ -63,7 +63,7 @@
           "
           role="menuitem"
           tabindex="-1"
-          <%= 'aria-current="page"' if menu_item.selected %>
+          <%= tag.attributes(aria: { current: ('page' if menu_item.selected) }) %>
         >
           <span class="grow">
             <%= menu_item.label %>
