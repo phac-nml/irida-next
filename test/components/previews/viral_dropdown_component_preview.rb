@@ -46,18 +46,6 @@ class ViralDropdownComponentPreview < ViewComponent::Preview
     end
   end
 
-  # Preview for custom dropdown_styles
-  def with_custom_dropdown_styles
-    render(Viral::DropdownComponent.new(
-             label: 'Custom Dropdown',
-             styles: { dropdown: 'bg-sky-100 border-sky-500' },
-             caret: true
-           )) do |dropdown|
-      dropdown.with_item(label: 'Item A', url: '#')
-      dropdown.with_item(label: 'Item B', url: '#')
-    end
-  end
-
   # Preview for dropdown with tooltip
   def with_tooltip
     render(Viral::DropdownComponent.new(
