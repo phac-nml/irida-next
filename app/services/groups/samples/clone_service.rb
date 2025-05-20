@@ -7,15 +7,8 @@ module Groups
       CloneError = Class.new(StandardError)
 
       def execute(new_project_id, sample_ids, broadcast_target = nil)
-        puts 'hihihihiihi1'
-        puts 'group'
-
-        puts @group
-        puts 'group'
         authorize! @group, to: :clone_sample?
-        puts 'hihihihiihi2'
         validate(new_project_id, sample_ids)
-        puts 'hihihihiihi3'
         @new_project = Project.find_by(id: new_project_id)
         authorize! @new_project, to: :clone_sample_into_project?
         clone_samples(sample_ids, broadcast_target)
