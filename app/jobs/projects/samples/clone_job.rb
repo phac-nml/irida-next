@@ -8,12 +8,13 @@ module Projects
       queue_with_priority 15
 
       def perform(project, current_user, new_project_id, sample_ids, broadcast_target) # rubocop:disable Metrics/MethodLength
-        @cloned_sample_ids = ::Projects::Samples::CloneService.new(project, current_user)
-                                                              .execute(
-                                                                new_project_id,
-                                                                sample_ids,
-                                                                Flipper.enabled?(:progress_bars) ? broadcast_target : nil
-                                                              )
+        @cloned_sample_ids = ::Projects::Samples::CloneService
+                             .new(project, current_user)
+                             .execute(
+                               new_project_id,
+                               sample_ids,
+                               Flipper.enabled?(:progress_bars) ? broadcast_target : nil
+                             )
 
         if project.errors.empty?
           Turbo::StreamsChannel.broadcast_replace_to(
