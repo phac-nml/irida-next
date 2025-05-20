@@ -61,7 +61,7 @@ RUN bundle exec bootsnap precompile app/ lib/
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 # Install icon library
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails g rails_icons:install --libraries=phosphor heroicons
+RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails g rails_icons:sync --libraries=phosphor heroicons
 
 RUN rm -rf node_modules
 
