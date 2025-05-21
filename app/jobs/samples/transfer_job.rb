@@ -18,7 +18,7 @@ module Samples
         Turbo::StreamsChannel.broadcast_replace_to(
           broadcast_target,
           target: 'transfer_samples_dialog_content',
-          partial: 'projects/samples/shared/success',
+          partial: 'shared/samples/success',
           locals: {
             type: :success,
             message: I18n.t('projects.samples.transfers.create.success')
@@ -29,7 +29,7 @@ module Samples
         Turbo::StreamsChannel.broadcast_replace_to(
           broadcast_target,
           target: 'transfer_samples_dialog_content',
-          partial: 'projects/samples/shared/errors',
+          partial: 'shared/samples/errors',
           locals: {
             type: :alert,
             message: I18n.t('projects.samples.transfers.create.error'),
@@ -41,7 +41,7 @@ module Samples
         Turbo::StreamsChannel.broadcast_replace_to(
           broadcast_target,
           target: 'transfer_samples_dialog_content',
-          partial: 'projects/samples/shared/errors',
+          partial: 'shared/samples/errors',
           locals: {
             type: :alert,
             message: I18n.t('projects.samples.transfers.create.no_samples_transferred_error'),

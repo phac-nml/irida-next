@@ -233,8 +233,13 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   scope_for :relation, :project_samples_transferable do |relation, options|
-    if Member.effective_access_level(options[:project].namespace, user) == Member::AccessLevel::MAINTAINER
-      top_level_ancestor = options[:project].parent.self_and_ancestors.find_by(type: Group.sti_name, parent: nil)
+    obj = options.key?(:group) ? options[:group] : options[:project].namespace
+    if Member.effective_access_level(obj, user) == Member::AccessLevel::MAINTAINER
+      top_level_ancestor = if obj.project_namespace?
+                             obj.parent.self_and_ancestors.find_by(type: Group.sti_name, parent: nil)
+                           else
+                             obj.self_and_ancestors.find_by(type: Group.sti_name, parent: nil)
+                           end
       group_and_subgroup_ids = top_level_ancestor.self_and_descendant_ids
 
       authorized_scope(relation, type: :relation,
@@ -243,17 +248,6 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
 
     else
       authorized_scope(relation, type: :relation, as: :manageable)
-    end
-  end
-
-  scope_for :relation, :group_project_samples_transferable do |relation, options|
-    if Member.effective_access_level(options[:group], user) >= Member::AccessLevel::MAINTAINER
-      top_level_ancestor = options[:group].self_and_ancestors.find_by(type: Group.sti_name, parent: nil)
-      group_and_subgroup_ids = top_level_ancestor.self_and_descendant_ids
-
-      authorized_scope(relation, type: :relation,
-                                 as: :manageable_without_shared_links)
-        .where(namespace: { parent_id: group_and_subgroup_ids })
     end
   end
 

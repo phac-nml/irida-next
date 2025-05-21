@@ -497,7 +497,7 @@ module Projects
       ### VERIFY START ###
       # flash msg
       assert_text I18n.t('projects.samples.transfers.create.success')
-      click_button I18n.t('projects.samples.shared.success.ok_button')
+      click_button I18n.t('shared.samples.success.ok_button')
       # originating project no longer has samples
       assert_text I18n.t('projects.samples.index.no_samples')
 
@@ -2615,7 +2615,7 @@ module Projects
         assert_text I18n.t('projects.samples.clones.create.error')
         assert_text I18n.t('services.samples.clone.sample_exists', sample_puid: @sample30.puid,
                                                                    sample_name: @sample30.name).gsub(':', '')
-        click_on I18n.t('projects.samples.shared.errors.ok_button')
+        click_on I18n.t('shared.samples.errors.ok_button')
       end
 
       visit namespace_project_samples_url(namespace, project25)
