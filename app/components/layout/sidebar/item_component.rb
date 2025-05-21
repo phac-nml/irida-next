@@ -45,6 +45,10 @@ module Layout
       #   @return [Hash] additional HTML attributes to be included in the root element
       attr_reader :system_arguments
 
+      # @!attribute [r] avatar
+      #   @return [Boolean] whether to display an avatar next to the label
+      attr_reader :avatar
+
       # Initialize a new Sidebar ItemComponent
       #
       # @param url [String, nil] the URL the item links to
@@ -60,6 +64,7 @@ module Layout
         icon: nil,
         badge: nil,
         selected: false,
+        avatar: false,
         **system_arguments
       )
         @url = url
@@ -67,6 +72,7 @@ module Layout
         @icon = icon
         @badge = badge
         @selected = selected
+        @avatar = avatar
         @system_arguments = system_arguments
       end
       # rubocop:enable Metrics/ParameterLists
@@ -80,11 +86,10 @@ module Layout
         icon_classes = class_names(
           'size-5 transition-colors duration-200',
           {
-            'text-primary-600 dark:text-primary-400' => selected,
-            (
-              'text-slate-500 dark:text-slate-400 ' \
-              'group-hover/item:text-slate-600 dark:group-hover/item:text-slate-300'
-            ) => !selected
+            'text-primary-800 dark:text-primary-400' => selected,
+
+            'text-slate-500 dark:text-slate-400 ' \
+            'group-hover/item:text-slate-600 dark:group-hover/item:text-slate-300' => !selected
           }
         )
 

@@ -1,15 +1,14 @@
 <% control_id = "multi-level-menu_#{title.parameterize.underscore}" %>
-<li class="group/menu list-none" data-controller="collapsible sidebar-item">
+<li class="group/menu list-none mr-1" data-controller="collapsible sidebar-item">
   <button
     type="button"
     class="
-      flex items-center w-full py-2.5 px-3 mx-2 my-1 rounded-lg transition-colors duration-200
-      text-left rtl:text-right whitespace-nowrap cursor-pointer
+      flex items-center text-left p-2.5 m-1 rounded-lg transition-colors duration-200 cursor-pointer w-full
       <%= class_names({
-          'bg-primary-50 text-primary-700 dark:bg-slate-800/80 dark:text-primary-300 font-medium shadow-sm': @selected,
-          'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/70': !@selected
-        }) %>
-      "
+        'bg-primary-100 text-primary-800 dark:bg-slate-800 dark:text-primary-400 font-medium': selected,
+        'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/70': !selected
+      }) %>
+    "
       id="<%= control_id %>-button"
       aria-controls="<%= control_id %>"
       aria-expanded="<%= @selected ? 'true' : 'false' %>"
@@ -22,7 +21,7 @@
       class="
         w-8 h-8 flex items-center justify-center rounded-lg mr-3 flex-shrink-0
         transition-colors duration-200
-        <%= @selected ? 'bg-primary-100 text-primary-700 dark:bg-slate-700/90' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 group-hover/menu:bg-slate-200/70 dark:group-hover/menu:bg-slate-700/50' %>
+        <%= @selected ? 'bg-primary-300 text-primary-800 dark:bg-slate-700/90' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 group-hover/menu:bg-slate-200/70 dark:group-hover/menu:bg-slate-700/50' %>
       "
     >
       <%= create_icon %>
@@ -33,7 +32,7 @@
     <%= helpers.render_icon(
       :caret_down,
       class: class_names(
-        "w-4 h-4 transition-transform duration-200 flex-shrink-0",
+        "w-4 h-4 transition-transform duration-200 mr-2 flex-shrink-0",
         { "rotate-180": @selected },
         @selected ? "text-primary-600 dark:text-primary-400" : "text-slate-400 group-hover/menu:text-slate-600 dark:group-hover/menu:text-slate-300"
       ),

@@ -8,8 +8,8 @@
         <%= navigation.with_section do |section| %>
           <%= render section.with_item(
             url: group_path(@group),
-            icon: ICONS[:groups],
-            label: t("groups.sidebar.details"),
+            avatar: true,
+            label: @group.name,
             selected: @current_page == t(:"groups.sidebar.details"),
           ) %>
           <%= render section.with_item(

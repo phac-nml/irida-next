@@ -2,9 +2,9 @@
   <a
     href="<%= url %>"
     class="
-      flex items-center p-2.5 mx-1 my-1 rounded-lg transition-colors duration-200
+      flex items-center p-2.5 m-1 rounded-lg transition-colors duration-200
       <%= class_names({
-        'bg-primary-50 text-primary-700 dark:bg-slate-800 dark:text-primary-400 font-medium shadow-sm': selected,
+        'bg-primary-100 text-primary-800 dark:bg-slate-800 dark:text-primary-400 font-medium': selected,
         'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/70': !selected
       }) %>
     "
@@ -14,10 +14,18 @@
       class="
         w-8 h-8 flex items-center justify-center rounded-lg mr-3 flex-shrink-0
         transition-colors duration-200
-        <%= selected ? 'bg-primary-100 text-primary-600 dark:bg-slate-700/80' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 group-hover/item:bg-slate-200/70 dark:group-hover/item:bg-slate-700/50' %>
+        <%= selected ? 'bg-primary-300 text-primary-800 dark:bg-slate-700/80' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 group-hover/item:bg-slate-200/70 dark:group-hover/item:bg-slate-700/50' %>
       "
     >
+    <% if avatar %>
+      <%= viral_avatar(
+        name: label,
+        colour_string: "#{label}-#{url}",
+        size: :xs,
+      ) %>
+    <% else %>
       <%= create_icon %>
+    <% end %>
     </span>
     <span class="text-sm font-medium transition-opacity duration-200 ease-in-out">
       <%= label %>
