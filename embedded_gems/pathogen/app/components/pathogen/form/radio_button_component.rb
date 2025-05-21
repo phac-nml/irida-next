@@ -49,25 +49,12 @@ module Pathogen
 
       def call
         # Generate the radio button HTML directly without using form builder
-        radio_button = radio_button_tag(
+        radio_button_tag(
           "#{@form.object_name}[#{@attribute}]",
           @value,
           @checked,
           radio_button_attributes
         )
-
-        return radio_button if @options[:raw_input]
-
-        label = label_tag(
-          radio_button_id,
-          @label || @attribute.to_s.humanize,
-          class: 'ml-2 text-sm font-medium text-slate-900 dark:text-slate-300',
-          lang: @lang
-        )
-
-        tag.div(class: 'flex items-center') do
-          safe_join([radio_button, label])
-        end
       end
 
       private
