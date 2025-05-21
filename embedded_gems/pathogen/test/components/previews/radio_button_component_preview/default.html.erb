@@ -1,0 +1,76 @@
+<div class="space-y-4 p-6">
+  <div>
+    <h2 class="text-lg font-semibold mb-4">Radio Button Examples</h2>
+    
+    <div class="space-y-4">
+      <div class="space-y-2">
+        <h3 class="font-medium">Regular</h3>
+        <%= render Pathogen::Form::RadioButtonComponent.new(
+          form: form,
+          attribute: :option,
+          value: "option1",
+          label: label.presence || "Option 1"
+        ) %>
+      </div>
+      
+      <div class="space-y-2">
+        <h3 class="font-medium">Checked</h3>
+        <%= render Pathogen::Form::RadioButtonComponent.new(
+          form: form,
+          attribute: :option,
+          value: "option2",
+          label: "Checked Option",
+          checked: true
+        ) %>
+      </div>
+      
+      <div class="space-y-2">
+        <h3 class="font-medium">Disabled</h3>
+        <%= render Pathogen::Form::RadioButtonComponent.new(
+          form: form,
+          attribute: :option,
+          value: "option3",
+          label: "Disabled Option",
+          disabled: true
+        ) %>
+      </div>
+      
+      <div class="space-y-2">
+        <h3 class="font-medium">Required</h3>
+        <%= render Pathogen::Form::RadioButtonComponent.new(
+          form: form,
+          attribute: :option,
+          value: "option4",
+          label: "Required Option",
+          required: true
+        ) %>
+      </div>
+      
+      <div class="space-y-2">
+        <h3 class="font-medium">With Description</h3>
+        <%= render Pathogen::Form::RadioButtonComponent.new(
+          form: form,
+          attribute: :option,
+          value: "option5",
+          label: "Option with description",
+          described_by: "option5-help"
+        ) %>
+        <p id="option5-help" class="text-sm text-slate-500 dark:text-slate-400 ml-7">
+          This is a detailed description for the option.
+        </p>
+      </div>
+      
+      <div class="space-y-2">
+        <h3 class="font-medium">Dark Mode</h3>
+        <div class="dark p-4 rounded-lg bg-slate-800">
+          <%= render Pathogen::Form::RadioButtonComponent.new(
+            form: form,
+            attribute: :option,
+            value: "option6",
+            label: "Dark Mode Option"
+          ) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
