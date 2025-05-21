@@ -14,7 +14,7 @@
     <span class="sr-only"><%= t(".success") %></span>
   </div>
   <p class="mb-4 text-lg font-semibold text-slate-900 dark:text-white"><%= t(".description") %></p>
-  <%= viral_button(state: :primary, data: { action: 'click->viral--dialog#close' }) do %>
+  <%= render Pathogen::Button.new(scheme: :primary, data: { action: 'click->viral--dialog#close' }) do %>
     <%= t(".ok_button") %>
   <% end %>
 </div>

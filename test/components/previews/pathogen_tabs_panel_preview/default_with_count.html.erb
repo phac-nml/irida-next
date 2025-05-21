@@ -1,11 +1,11 @@
 <%= render Pathogen::TabsPanel.new(id: "default-tabs-panel-id", label: "default tabs panel") do |tabs| %>
-  <%= tabs.with_tab(selected: true, href: "#", text: "Tab 1") do |tab| %>
-    <%= tab.with_count(count: 1) %>
+  <%= tabs.with_tab(selected: true, href: "#", text: "Inbox", icon: 'envelope') do |tab| %>
+    <%= tab.with_count(count: 5) %>
   <% end %>
-  <%= tabs.with_tab(selected: false, href: "#", text: "Tab 2") do |tab| %>
-    <%= tab.with_count(count: 10) %>
+  <%= tabs.with_tab(selected: false, href: "#", text: "Sent", icon: 'paper-plane') do |tab| %>
+    <%= tab.with_count(count: 0) %>
   <% end %>
-  <%= tabs.with_tab(selected: false, href: "#", text: "Tab 3") do |tab| %>
-    <%= tab.with_count(count: 100) %>
+  <%= tabs.with_tab(selected: false, href: "#", text: "Drafts", icon: 'file') do |tab| %>
+    <%= tab.with_count(count: 2) %>
   <% end %>
 <% end %>

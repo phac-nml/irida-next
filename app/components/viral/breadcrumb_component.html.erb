@@ -6,7 +6,7 @@
 
     <% if links.length > 1 %>
       <li class="max-md:visible md:hidden inline-flex items-center">
-        <%= viral_dropdown(icon: "ellipsis_horizontal", aria: { label: I18n.t(:'components.breadcrumb.dropdown.aria_label') }, classes: "text-slate-500 cursor-pointer") do |dropdown| %>
+        <%= viral_dropdown(icon: "dots-three", aria: { label: I18n.t(:'components.breadcrumb.dropdown.aria_label') }, classes: "text-slate-500 cursor-pointer") do |dropdown| %>
           <% links.each_with_index do |link, index| %>
             <% if index < links.length - 1 %>
               <%# Note: Dropdown items typically don't need aria-current, the final link outside the dropdown handles this %>

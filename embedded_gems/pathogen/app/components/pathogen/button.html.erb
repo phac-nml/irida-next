@@ -1,17 +1,57 @@
-<%= render @base_button_class.new(**@system_arguments) do -%>
+<%#
+  Button component template
+
+  @param leading_visual [String] Optional leading icon/visual element
+  @param trailing_visual [String] Optional trailing icon/visual element
+  @param trimmed_content [String] The button's text content (automatically trimmed)
+  @param trailing_visual_counter [Boolean] Whether the trailing visual is a counter
+  @param system_arguments [Hash] Additional HTML attributes passed to the base button
+%>
+<% button_classes = class_names(
+  @system_arguments[:class],
+  '!px-2 flex items-center justify-center' => (leading_visual.present? && content.blank? && trailing_visual.blank?)
+) %>
+
+<%# Calculate if we have both leading and trailing visuals %>
+<% has_both_visuals = leading_visual.present? && trailing_visual.present? %>
+
+<%= render @base_button_class.new(
+  **@system_arguments.merge(
+    role: 'button',
+    'aria-disabled': @system_arguments[:disabled],
+    'aria-label': @system_arguments.dig(:aria, :label) || content.presence&.strip,
+    class: button_classes
+  )
+) do -%>
+  <%# Leading visual (icon, etc.) - adds consistent right margin when present %>
   <% if leading_visual %>
-    <span class="mr-2">
+    <span class="flex-shrink-0 pointer-events-none <%= has_both_visuals ? 'mr-1.5' : (content.present? ? 'mr-2' : '') %>" aria-hidden="true" data-button-target="leading">
       <%= leading_visual %>
     </span>
   <% end %>
-  <span><%= trimmed_content %></span>
+
+  <%# Main content - ensures proper text wrapping and truncation %>
+  <% if content.present? %>
+    <span class="truncate pointer-events-none" data-button-target="content">
+      <%= trimmed_content %>
+    </span>
+  <% end %>
+  <%# Trailing visual (icon, counter, etc.) - adds consistent left margin when present %>
   <% if trailing_visual %>
-    <span class="ml-2">
+    <span class="flex-shrink-0 pointer-events-none <%= has_both_visuals ? 'ml-1.5' : 'ml-2' %>" data-button-target="trailing">
       <% if @trailing_visual_counter %>
-        <span class="sr-only">(<%= trailing_visual %>)</span>
-        <%= trailing_visual %>
+        <%# For counter-type visuals, ensure proper screen reader announcement %>
+        <span class="sr-only">
+          (<%= trailing_visual %>)
+        </span>
+        <span class="pointer-events-none" aria-hidden="true">
+          <%= trailing_visual %>
+        </span>
       <% else %>
-        <%= trailing_visual %>
+        <%# Regular trailing visual (icon, etc.) %>
+        <span class="pointer-events-none" aria-hidden="true">
+          <%= trailing_visual %>
+        </span>
       <% end %>
     </span>
   <% end %>
