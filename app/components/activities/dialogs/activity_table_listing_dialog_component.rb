@@ -26,14 +26,14 @@ module Activities
 
           @description = if project_type == 'source'
                            I18n.t(
-                             :'components.activity.dialog.sample_clone.source_project_description',
+                             :'components.activity.dialog.sample_clone.project.source_project_description',
                              user: @activity_owner,
                              count: @activity.parameters[:cloned_samples_count],
                              source_project_puid: @activity.parameters[:source_project_puid]
                            )
                          else
                            I18n.t(
-                             :'components.activity.dialog.sample_clone.target_project_description',
+                             :'components.activity.dialog.sample_clone.project.target_project_description',
                              user: @activity_owner,
                              count: @activity.parameters[:cloned_samples_count],
                              target_project_puid: @activity.parameters[:target_project_puid]
@@ -60,6 +60,24 @@ module Activities
             I18n.t(:'components.activity.dialog.group_sample_transfer.sample_name'),
             I18n.t(:'components.activity.dialog.group_sample_transfer.transferred_from'),
             I18n.t(:'components.activity.dialog.group_sample_transfer.transferred_to')
+          ]
+
+        when 'group_sample_clone'
+          @title = I18n.t(:'components.activity.dialog.sample_clone.title')
+
+          @description =
+            I18n.t(
+              :'components.activity.dialog.sample_clone.group.target_project_description',
+              user: @activity_owner,
+              count: @activity.parameters[:cloned_samples_count],
+              target_project_puid: @activity.parameters[:target_project_puid]
+            )
+
+          @data = @extended_details.details['cloned_samples_data'].to_json
+          @column_headers = [
+            I18n.t(:'components.activity.dialog.sample_clone.project_from'),
+            I18n.t(:'components.activity.dialog.sample_clone.copied_from'),
+            I18n.t(:'components.activity.dialog.sample_clone.copied_to')
           ]
 
         when 'workflow_execution_destroy'

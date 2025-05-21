@@ -38,6 +38,8 @@
         ) %>
       <% elsif group_link_action %>
         <%= render Activities::NamespaceGroupLinkActivityComponent.new(activity: activity) %>
+      <% elsif sample_clone_action %>
+        <%= render Activities::Groups::SampleCloneActivityComponent.new(activity: activity) %>
       <% elsif sample_action %>
         <%= render Activities::Groups::SampleActivityComponent.new(activity: activity) %>
       <% else %>
