@@ -113,7 +113,6 @@ module Pathogen
       def radio_button_aria_attributes
         {
           label: @label,
-          checked: @checked.to_s,
           disabled: @disabled.to_s,
           required: @required.to_s,
           invalid: @invalid.to_s,
