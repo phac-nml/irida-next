@@ -10,7 +10,6 @@
                 ) do |f| %>
             <input type="hidden" name="format" value="turbo_stream"/>
             <input type="hidden" name="select" value="on"/>
-            <input type="hidden" name="" value="<%@attachment_search_params%>">
             <%= f.submit t(".select_all_button"),
                      class: "button button--state-default button--size-default" %>
           <% end %>
@@ -29,7 +28,7 @@
               query: @q,
               search_attribute: :puid_or_file_blob_filename_cont,
               placeholder: t(:".search.placeholder"),
-              url: namespace_project_sample_path(format: :turbo_stream, **request.query_parameters),
+              url: namespace_project_sample_path(format: :turbo_stream),
               data: {
                 controller: "selection",
                 selection_storage_key_value: "files-#{@sample.id}"
