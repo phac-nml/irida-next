@@ -3,14 +3,17 @@
 module Groups
   module Samples
     # Service used to clone samples
-    class CloneService < BaseGroupService
+    class CloneService < BaseGroupService # rubocop:disable Metrics/ClassLength
       CloneError = Class.new(StandardError)
 
       def execute(new_project_id, sample_ids, broadcast_target = nil)
         authorize! @group, to: :clone_sample?
+
         validate(new_project_id, sample_ids)
         @new_project = Project.find_by(id: new_project_id)
+
         authorize! @new_project, to: :clone_sample_into_project?
+
         clone_samples(sample_ids, broadcast_target)
       rescue Groups::Samples::CloneService::CloneError => e
         @group.errors.add(:base, e.message)
@@ -37,18 +40,7 @@ module Groups
           unless cloned_sample.nil?
             cloned_sample_ids[sample_id] = cloned_sample.id
             old_project_puid = sample.project.puid
-            if @cloned_samples_data[:project_data].key?(old_project_puid)
-              @cloned_samples_data[:project_data][old_project_puid] << { sample_name: sample.name,
-                                                                         sample_puid: sample.puid,
-                                                                         clone_puid: cloned_sample.puid }
-            else
-              @cloned_samples_data[:project_data][old_project_puid] = [{ sample_name: sample.name,
-                                                                         sample_puid: sample.puid,
-                                                                         clone_puid: cloned_sample.puid }]
-            end
-            @cloned_samples_data[:group_data] << { sample_name: sample.name, sample_puid: sample.puid,
-                                                   clone_puid: cloned_sample.puid, project_name: sample.project.name,
-                                                   project_puid: old_project_puid }
+            add_cloned_sample_data(sample, cloned_sample.puid, old_project_puid)
           end
         rescue ActiveRecord::RecordNotFound
           not_found_sample_ids << sample_id
@@ -60,6 +52,7 @@ module Groups
                             I18n.t('services.samples.clone.samples_not_found',
                                    sample_ids: not_found_sample_ids.join(', ')))
         end
+
         return if @cloned_samples_data[:project_data].empty?
 
         update_samples_count if @new_project.parent.group_namespace?
@@ -88,6 +81,21 @@ module Groups
       def clone_attachments(sample, clone)
         files = sample.attachments.map { |attachment| attachment.file.blob }
         ::Attachments::CreateService.new(current_user, clone, { files:, include_activity: false }).execute
+      end
+
+      def add_cloned_sample_data(sample, cloned_puid, old_project_puid)
+        if @cloned_samples_data[:project_data].key?(old_project_puid)
+          @cloned_samples_data[:project_data][old_project_puid] << { sample_name: sample.name,
+                                                                     sample_puid: sample.puid,
+                                                                     clone_puid: cloned_puid }
+        else
+          @cloned_samples_data[:project_data][old_project_puid] = [{ sample_name: sample.name,
+                                                                     sample_puid: sample.puid,
+                                                                     clone_puid: cloned_puid }]
+        end
+        @cloned_samples_data[:group_data] << { sample_name: sample.name, sample_puid: sample.puid,
+                                               clone_puid: cloned_puid, project_name: sample.project.name,
+                                               project_puid: old_project_puid }
       end
 
       def update_samples_count
