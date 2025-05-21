@@ -1623,11 +1623,21 @@ fr:
           error: 'Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}'
           success: Le fichier %{filename} a été supprimé avec succès.
         table:
-          empty_state:
-            action_text: Upload Files
-            description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
-            no_permission_description: You do not have permission to upload files to this sample
-            title: No files have been uploaded
+          no_permission:
+            empty_state:
+              description: You do not have permission to upload files to this sample
+              title: No files have been uploaded
+          no_results:
+            empty_state:
+              action_text: Upload Files
+              description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
+              title: No files have been uploaded
+          no_search_results:
+            empty_state:
+              description: No items found matching your search
+              title: No items found
+          search:
+            placeholder: Filtrer par PUID ou nom de fichier
       clones:
         create:
           error: 'La liste suivante des échantillons n’a pas été copiée :'

@@ -44,7 +44,10 @@ module Projects
       elsif @tab == 'history'
         @log_data = @sample.log_data_without_changes
       else
-        @sample_attachments = @sample.attachments
+        all_attachments = @sample.attachments
+        @q = all_attachments.ransack(params[:q])
+        @sample_attachments = @q.result
+        @has_attachments = all_attachments.count.positive?
       end
     end
 

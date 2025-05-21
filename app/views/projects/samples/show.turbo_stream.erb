@@ -8,6 +8,7 @@
     <% render partial: "projects/samples/attachments/table",
     locals: {
       attachments: @sample_attachments,
+      has_attachments: @has_attachments,
     } %>
   <% elsif @tab == 'history' %>
     <div class="grid gap-4 px-4 py-8">
