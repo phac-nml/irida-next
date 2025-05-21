@@ -8,6 +8,7 @@ en:
       destroy?: You are not authorized to remove the requested resource from this server.
       edit?: You are not authorized to update this resource on this server.
       group:
+        clone_sample?: You are not authorized to copy samples from group %{name} on this server.
         create?: You are not authorized to create a project under group %{name} on this server.
         create_attachment?: You are not authorized to create attachments for group %{name} on this server.
         create_bot_accounts?: You are not authorized to create bot accounts for group %{name} on this server.
@@ -1984,7 +1985,7 @@ en:
         empty_sample_ids: The sample ids are empty.
         same_project: The source and destination projects are the same. Please select a different destination project.
         sample_exists: "Sample %{sample_puid}: Conflicts with sample named '%{sample_name}' in the target project"
-        samples_not_found: "Samples with the following sample ids could not be copied as they were not found in the source project: %{sample_ids}"
+        samples_not_found: "Samples with the following sample ids could not be copied as they were not found in the source namespace: %{sample_ids}"
       metadata:
         empty_metadata: No metadata was received to update sample '%{sample_name}'
         fields:
@@ -2042,6 +2043,10 @@ en:
         sample_export: Sample export
         transfer: Transfer samples
       clones:
+        create:
+          error: "The following list of samples failed to copy:"
+          no_samples_cloned_error: "Samples were not copied for the following reasons:"
+          success: Samples were successfully copied.
         dialog:
           description:
             plural: The following COUNT_PLACEHOLDER samples are about to be copied to another project.

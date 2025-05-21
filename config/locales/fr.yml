@@ -8,6 +8,7 @@ fr:
       destroy?: Vous n’êtes pas autorisé à supprimer la ressource demandée de ce serveur.
       edit?: Vous n’êtes pas autorisé à mettre à jour cette ressource sur ce serveur.
       group:
+        clone_sample?: You are not authorized to copy samples from group %{name} on this server.
         create?: Vous n’êtes pas autorisé à créer un projet sous le groupe %{name} sur ce serveur.
         create_attachment?: Vous n’êtes pas autorisé à créer des pièces jointes pour le groupe %{name} sur ce serveur.
         create_bot_accounts?: Vous n’êtes pas autorisé à créer des comptes de bots pour le groupe %{name} sur ce serveur.
@@ -1985,7 +1986,7 @@ fr:
         empty_sample_ids: Les identifiants de l’échantillon sont vides.
         same_project: Les projets sources et de destination sont les mêmes. Veuillez sélectionner un autre projet de destination.
         sample_exists: "Échantillon %{sample_puid} : Conflit avec l’échantillon nommé '%{sample_name}' dans le projet cible"
-        samples_not_found: "Les échantillons avec les identifiants d’échantillon suivants n’ont pas pu être copiés puisqu’ils n’ont pas été trouvés dans le projet source : %{sample_ids}"
+        samples_not_found: "Les échantillons avec les identifiants d’échantillon suivants n’ont pas pu être copiés puisqu’ils n’ont pas été trouvés dans l’espace de noms source : %{sample_ids}"
       metadata:
         empty_metadata: Aucune métadonnée n’a été reçue pour mettre à jour l’échantillon '%{sample_name}'
         fields:

@@ -13,6 +13,8 @@ module Groups
       @user = users(:john_doe)
       login_as @user
       @group = groups(:group_one)
+      @project1 = projects(:project1)
+      @project2 = projects(:project2)
       @sample1 = samples(:sample1)
       @sample2 = samples(:sample2)
       @sample3 = samples(:sample3)
@@ -144,6 +146,27 @@ module Groups
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
                                                                            locale: @user.locale))
       assert_no_selector 'span', text: I18n.t('shared.samples.actions_dropdown.label')
+    end
+
+    test 'User with role >= Maintainer sees copy samples button' do
+      visit group_samples_url(@group)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      assert_selector 'button', text: I18n.t('shared.samples.actions_dropdown.clone')
+    end
+
+    test 'User with role < Maintainer does not see delete samples button' do
+      user = users(:ryan_doe)
+      login_as user
+      visit group_samples_url(@group)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: user.locale))
+
+      assert_no_selector 'a', text: I18n.t('shared.samples.actions_dropdown.clone')
     end
 
     test 'cannot access group samples' do
@@ -2186,6 +2209,366 @@ module Groups
         assert_text I18n.t('samples.transfers.dialog.empty_state')
         ### VERIFY END ###
       end
+    end
+
+    test 'singular clone dialog description' do
+      ### SETUP START ###
+      visit group_samples_url(@group)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within '#samples-table table tbody' do
+        all('input[type="checkbox"]')[0].click
+      end
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.clone')
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      within('#dialog') do
+        assert_text I18n.t('shared.samples.clones.dialog.description.singular')
+      end
+      ### VERIFY END ###
+    end
+
+    test 'plural clone dialog description' do
+      ### SETUP START ###
+      visit group_samples_url(@group)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      click_button I18n.t(:'groups.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.clone')
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      within('#dialog') do
+        assert_text I18n.t(
+          'shared.samples.clones.dialog.description.plural'
+        ).gsub! 'COUNT_PLACEHOLDER', '3'
+      end
+      ### VERIFY END ###
+    end
+
+    test 'clone dialog sample listing' do
+      ### SETUP START ###
+      visit group_samples_url(@group)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within '#samples-table table tbody' do
+        find("input##{dom_id(@sample1, :checkbox)}").click
+        find("input##{dom_id(@sample2, :checkbox)}").click
+      end
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 2
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 26'
+        assert_selector 'strong[data-selection-target="selected"]', text: '2'
+      end
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.clone')
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      within('#list_selections') do
+        assert_text @sample1.name
+        assert_text @sample1.puid
+        assert_text @sample2.name
+        assert_text @sample2.puid
+      end
+      ### VERIFY END ###
+    end
+
+    test 'should clone samples' do
+      ### SETUP START ###
+      visit group_samples_url(@group)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # select samples 1 and 2 for cloning
+      within '#samples-table table tbody' do
+        find("input##{dom_id(@sample1, :checkbox)}").click
+        find("input##{dom_id(@sample2, :checkbox)}").click
+      end
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.clone')
+      assert_selector '#dialog'
+      within('#dialog') do
+        within('#list_selections') do
+          # additional asserts to help prevent select2 actions below from flaking
+          assert_text @sample1.name
+          assert_text @sample1.puid
+          assert_text @sample2.name
+          assert_text @sample2.puid
+        end
+        find('input.select2-input').click
+        find("li[data-value='#{@project2.id}']").click
+        click_on I18n.t('shared.samples.clones.dialog.submit_button')
+        assert_text I18n.t('shared.progress_bar.in_progress')
+
+        perform_enqueued_jobs only: [::Groups::Samples::CloneJob]
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      # flash msg
+      assert_text I18n.t('shared.samples.clones.create.success')
+      # samples table now contains both original and cloned samples
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 28,
+                                                                           locale: @user.locale))
+      # duplicated sample names
+      within('#samples-table table tbody') do
+        assert_text @sample1.name, count: 2
+        assert_text @sample2.name, count: 2
+      end
+
+      # samples now exist in project2 samples table
+      visit namespace_project_samples_url(@group, @project2)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 22,
+                                                                           locale: @user.locale))
+      within('#samples-table table tbody') do
+        assert_text @sample1.name
+        assert_text @sample2.name
+      end
+      ### VERIFY END ###
+    end
+
+    test 'dialog close button hidden while cloning samples' do
+      ### SETUP START ###
+      visit group_samples_url(@group)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # select samples 1 and 2 for cloning
+      within '#samples-table table tbody' do
+        find("input##{dom_id(@sample1, :checkbox)}").click
+        find("input##{dom_id(@sample2, :checkbox)}").click
+      end
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.clone')
+      assert_selector '#dialog'
+      within('#dialog') do
+        # close button available before confirming cloning
+        assert_selector 'button.dialog--close'
+        within('#list_selections') do
+          # additional asserts to help prevent select2 actions below from flaking
+          assert_text @sample1.name
+          assert_text @sample1.puid
+          assert_text @sample2.name
+          assert_text @sample2.puid
+        end
+        find('input.select2-input').click
+        find("li[data-value='#{@project2.id}']").click
+        click_on I18n.t('shared.samples.clones.dialog.submit_button')
+
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
+        assert_text I18n.t('shared.progress_bar.in_progress')
+        # close button hidden during cloning
+        assert_no_selector 'button.dialog--close'
+        perform_enqueued_jobs only: [::Groups::Samples::CloneJob]
+        ### VERIFY END ###
+      end
+    end
+
+    test 'should not clone samples with session storage cleared' do
+      ### SETUP START ###
+      visit group_samples_url(@group)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      click_button I18n.t(:'groups.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 26'
+        assert_selector 'strong[data-selection-target="selected"]', text: '26'
+      end
+      # clear localstorage
+      Capybara.execute_script 'sessionStorage.clear()'
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.clone')
+
+      assert_selector '#dialog'
+      within('#dialog') do
+        assert_text I18n.t('projects.samples.clones.dialog.title')
+        find('input.select2-input').click
+        find("li[data-value='#{@project2.id}']").click
+        click_on I18n.t('shared.samples.clones.dialog.submit_button')
+        assert_text I18n.t('shared.progress_bar.in_progress')
+
+        perform_enqueued_jobs only: [::Groups::Samples::CloneJob]
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
+        # sample listing should not be in error dialog
+        assert_no_selector '#list_selections'
+        # error msg
+        assert_text I18n.t('shared.samples.clones.create.no_samples_cloned_error')
+        assert_text I18n.t('services.samples.clone.empty_sample_ids')
+        ### VERIFY END ###
+      end
+    end
+
+    test 'should not clone some samples' do
+      ### SETUP START ###
+      visit group_samples_url(@group)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      click_button I18n.t(:'groups.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 26'
+        assert_selector 'strong[data-selection-target="selected"]', text: '26'
+      end
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.clone')
+      assert_selector '#dialog'
+      within('#dialog') do
+        within('#list_selections') do
+          assert_text @sample1.name
+          assert_text @sample2.name
+        end
+        find('input.select2-input').click
+        find("li[data-value='#{@project1.id}']").click
+        click_on I18n.t('shared.samples.clones.dialog.submit_button')
+        assert_text I18n.t('shared.progress_bar.in_progress')
+
+        perform_enqueued_jobs only: [::Groups::Samples::CloneJob]
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
+        # errors that a sample with the same name as sample30 already exists in project25
+        assert_text I18n.t('shared.samples.clones.create.error')
+        assert_text I18n.t('services.samples.clone.sample_exists', sample_puid: @sample1.puid,
+                                                                   sample_name: @sample1.name).gsub(':', '')
+        assert_text I18n.t('services.samples.clone.sample_exists', sample_puid: @sample2.puid,
+                                                                   sample_name: @sample2.name).gsub(':', '')
+        click_on I18n.t('shared.samples.errors.ok_button')
+      end
+
+      # verify samples table updates with cloned samples
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 48,
+                                                                           locale: @user.locale))
+      ### VERIFY END ###
+    end
+
+    test 'empty state of destination project selection for sample cloning' do
+      ### SETUP START ###
+      visit group_samples_url(@group)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ####
+      click_button I18n.t(:'groups.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 26'
+        assert_selector 'strong[data-selection-target="selected"]', text: '26'
+      end
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.clone')
+      assert_selector '#dialog'
+      within('#dialog') do
+        find('input.select2-input').fill_in with: 'invalid project name or puid'
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
+        assert_text I18n.t('shared.samples.clones.dialog.empty_state')
+        ### VERIFY END ###
+      end
+    end
+
+    test 'updating sample selection during sample cloning' do
+      ### SETUP START ###
+      visit group_samples_url(@group)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # select 1 sample to clone
+      within '#samples-table table tbody' do
+        all('input[type="checkbox"]')[0].click
+      end
+
+      # verify 1 sample selected in originating project
+      within 'tfoot' do
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 26"
+        assert_selector 'strong[data-selection-target="selected"]', text: '1'
+      end
+
+      # clone sample
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.clone')
+
+      assert_selector '#dialog'
+      within('#dialog') do
+        within('#list_selections') do
+          # additional asserts to help prevent select2 actions below from flaking
+          assert_text @sample1.name
+          assert_text @sample1.puid
+        end
+        find('input.select2-input').click
+        find("li[data-value='#{@project2.id}']").click
+        click_on I18n.t('shared.samples.clones.dialog.submit_button')
+        assert_text I18n.t('shared.progress_bar.in_progress')
+
+        perform_enqueued_jobs only: [::Groups::Samples::CloneJob]
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      # flash msg
+      assert_text I18n.t('shared.samples.clones.create.success')
+      # verify no samples selected anymore
+      within 'tfoot' do
+        assert_text "#{I18n.t('samples.table_component.counts.samples')}: 27"
+        assert_selector 'strong[data-selection-target="selected"]', text: '0'
+      end
+      ### VERIFY END ###
     end
 
     test 'delete samples belonging to group' do
