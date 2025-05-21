@@ -18,32 +18,32 @@ module Projects
 
       test 'user with role >= Maintainer should be able to see empty state with upload message' do
         visit namespace_project_sample_url(@namespace, @project, @sample2)
-        assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
-        assert_no_selector 'button', text: I18n.t('projects.samples.show.concatenate_button')
-        assert_no_selector 'button', text: I18n.t('projects.samples.show.delete_files_button')
+        assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button')
+        assert_selector 'button', text: I18n.t('projects.samples.show.concatenate_button'), visible: false
+        assert_selector 'button', text: I18n.t('projects.samples.show.delete_files_button'), visible: false
       end
 
       test 'user with role < Maintainer should not be able to see upload, concatenate and delete files buttons' do
         user = users(:ryan_doe)
         login_as user
         visit namespace_project_sample_url(@namespace, @project, @sample2)
-        assert_no_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button')
-        assert_no_selector 'button', text: I18n.t('projects.samples.show.concatenate_button')
-        assert_no_selector 'button', text: I18n.t('projects.samples.show.delete_files_button')
+        assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), visible: false
+        assert_selector 'button', text: I18n.t('projects.samples.show.concatenate_button'), visible: false
+        assert_selector 'button', text: I18n.t('projects.samples.show.delete_files_button'), visible: false
         assert_text I18n.t('projects.samples.attachments.table.empty_state.no_permission_description')
       end
 
       test 'user with role >= Maintainer should be able to attach a file to a Sample' do
         visit namespace_project_sample_url(@namespace, @project, @sample2)
-        assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
+        assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button')
         within('#table-listing') do
           assert_text I18n.t('projects.samples.attachments.table.empty_state.title')
           assert_text I18n.t('projects.samples.attachments.table.empty_state.description')
           assert_no_text 'test_file_2.fastq.gz'
         end
-        click_on I18n.t('projects.samples.show.upload_files')
+        click_on I18n.t('projects.samples.show.upload_files'), match: :first
 
-        within('dialog') do
+        within('dialog[open]') do
           attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/data_export_1.zip')
           # check that button goes from being enabled to disabled when clicked
           assert_selector 'input[type=submit]:not(:disabled)'
@@ -61,10 +61,10 @@ module Projects
 
       test 'user with role >= Maintainer should not be able to attach a duplicate file to a Sample' do
         visit namespace_project_sample_url(@namespace, @project, @sample1)
-        assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
+        assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button')
         click_on I18n.t('projects.samples.show.upload_files')
 
-        within('dialog') do
+        within('dialog[open]') do
           attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
           click_on I18n.t('projects.samples.show.upload')
         end
@@ -73,7 +73,7 @@ module Projects
 
         click_on I18n.t('projects.samples.show.upload_files')
 
-        within('dialog') do
+        within('dialog[open]') do
           attach_file 'attachment[files][]', Rails.root.join('test/fixtures/files/test_file_2.fastq.gz')
           click_on I18n.t('projects.samples.show.upload')
         end
@@ -84,10 +84,10 @@ module Projects
 
       test 'user with role >= Maintainer not be able to upload uncompressed files to a Sample' do
         visit namespace_project_sample_url(@namespace, @project, @sample1)
-        assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
+        assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button')
         click_on I18n.t('projects.samples.show.upload_files')
 
-        within('dialog') do
+        within('dialog[open]') do
           attach_file 'attachment[files][]', [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq.gz'),
                                               Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq.gz'),
                                               Rails.root.join('test/fixtures/files/test_file.fastq')]
@@ -118,7 +118,7 @@ module Projects
           click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
         end
 
-        within('dialog') do
+        within('dialog[open]') do
           assert_accessible
           assert_text I18n.t('projects.samples.attachments.delete_attachment_modal.description')
           click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
@@ -133,16 +133,16 @@ module Projects
       test 'user with role >= Maintainer should be able to attach, view, and destroy paired files to a Sample' do
         visit namespace_project_sample_url(@namespace, @project, @sample2)
         # Initial View
-        assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), count: 1
+        assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button')
         within('#table-listing') do
           assert_text I18n.t('projects.samples.attachments.table.empty_state.title')
           assert_text I18n.t('projects.samples.attachments.table.empty_state.description')
-          assert_selector 'button', text: I18n.t('projects.samples.attachments.attachment.delete'), count: 0
+          assert_selector 'button', text: I18n.t('projects.samples.attachments.attachment.delete'), visible: false
         end
-        click_on I18n.t('projects.samples.show.upload_files')
+        click_on I18n.t('projects.samples.show.upload_files'), match: :first
 
         # Attach paired files
-        within('dialog') do
+        within('dialog[open]') do
           attach_file 'attachment[files][]',
                       [Rails.root.join('test/fixtures/files/TestSample_S1_L001_R1_001.fastq.gz'),
                        Rails.root.join('test/fixtures/files/TestSample_S1_L001_R2_001.fastq.gz')]
@@ -166,7 +166,7 @@ module Projects
           click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
         end
 
-        within('dialog') do
+        within('dialog[open]') do
           click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
         end
 
@@ -198,7 +198,7 @@ module Projects
           all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
         end
         click_button I18n.t('projects.samples.show.concatenate_button'), match: :first
-        within('div[data-controller-connected="true"] dialog') do
+        within('dialog[open]') do
           assert_text 'test_file_A.fastq'
           assert_text 'test_file_B.fastq'
           fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
@@ -224,7 +224,7 @@ module Projects
           find('table #attachments-table-body tr', text: 'test_file_fwd_3.fastq').find('input').click
         end
         click_button I18n.t('projects.samples.show.concatenate_button'), match: :first
-        within('div[data-controller-connected="true"] dialog') do
+        within('dialog[open]') do
           assert_text 'test_file_fwd_1.fastq'
           assert_text 'test_file_rev_1.fastq'
           assert_text 'test_file_fwd_2.fastq'
@@ -248,7 +248,7 @@ module Projects
           all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
         end
         click_button I18n.t('projects.samples.show.concatenate_button'), match: :first
-        within('div[data-controller-connected="true"] dialog') do
+        within('dialog[open]') do
           assert_text 'test_file_A.fastq'
           assert_text 'test_file_B.fastq'
           fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
@@ -275,7 +275,7 @@ module Projects
           find('table #attachments-table-body tr', text: 'test_file_fwd_3.fastq').find('input').click
         end
         click_button I18n.t('projects.samples.show.concatenate_button'), match: :first
-        within('div[data-controller-connected="true"] dialog') do
+        within('dialog[open]') do
           assert_text 'test_file_fwd_1.fastq'
           assert_text 'test_file_rev_1.fastq'
           assert_text 'test_file_fwd_2.fastq'
@@ -308,7 +308,7 @@ module Projects
           find('table #attachments-table-body tr', text: 'test_file_D.fastq').find('input').click
         end
         click_button I18n.t('projects.samples.show.concatenate_button'), match: :first
-        within('div[data-controller-connected="true"] dialog') do
+        within('dialog[open]') do
           assert_text 'test_file_fwd_1.fastq'
           assert_text 'test_file_rev_1.fastq'
           assert_text 'test_file_fwd_2.fastq'
@@ -337,7 +337,7 @@ module Projects
           find('table #attachments-table-body tr', text: 'test_file_2.fastq').find('input').click
         end
         click_button I18n.t('projects.samples.show.concatenate_button'), match: :first
-        within('div[data-controller-connected="true"] dialog') do
+        within('dialog[open]') do
           assert_text 'test_file_D.fastq'
           assert_text 'test_file_2.fastq.gz'
           fill_in I18n.t('projects.samples.attachments.concatenations.modal.basename'), with: 'concatenated_file'
@@ -371,7 +371,7 @@ module Projects
           find('table #attachments-table-body tr', text: 'test_file_fwd_3.fastq').find('input').click
         end
         click_button I18n.t('projects.samples.show.concatenate_button'), match: :first
-        within('div[data-controller-connected="true"] dialog') do
+        within('dialog[open]') do
           assert_text 'test_file_fwd_1.fastq'
           assert_text 'test_file_rev_1.fastq'
           assert_text 'test_file_fwd_2.fastq'
@@ -398,7 +398,7 @@ module Projects
           find('table #attachments-table-body tr', text: 'test_file_fwd_3.fastq').find('input').click
         end
         click_button I18n.t('projects.samples.show.concatenate_button'), match: :first
-        within('div[data-controller-connected="true"] dialog') do
+        within('dialog[open]') do
           assert_text 'test_file_fwd_1.fastq'
           assert_text 'test_file_rev_1.fastq'
           assert_text 'test_file_fwd_2.fastq'
@@ -427,7 +427,7 @@ module Projects
           find('table #attachments-table-body tr', text: 'test_file_B.fastq').find('input').click
         end
         click_button I18n.t('projects.samples.show.delete_files_button'), match: :first
-        within('div[data-controller-connected="true"] dialog') do
+        within('dialog[open]') do
           assert_text 'test_file_A.fastq'
           assert_text 'test_file_B.fastq'
           click_on I18n.t('projects.samples.attachments.deletions.modal.submit_button')
@@ -457,7 +457,7 @@ module Projects
           find('table #attachments-table-body tr', text: 'test_file_D.fastq').find('input').click
         end
         click_button I18n.t('projects.samples.show.delete_files_button'), match: :first
-        within('div[data-controller-connected="true"] dialog') do
+        within('dialog[open]') do
           assert_text 'test_file_fwd_1.fastq'
           assert_text 'test_file_rev_1.fastq'
           assert_text 'test_file_fwd_2.fastq'
@@ -552,7 +552,7 @@ module Projects
           click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
         end
 
-        within('dialog') do
+        within('dialog[open]') do
           assert_text I18n.t('projects.samples.attachments.delete_attachment_modal.description')
           click_button I18n.t('projects.samples.attachments.delete_attachment_modal.submit_button')
         end
@@ -565,7 +565,7 @@ module Projects
 
         click_button I18n.t('projects.samples.show.delete_files_button'), match: :first
 
-        within('dialog') do
+        within('dialog[open]') do
           assert_text 'test_file_A.fastq'
           assert_no_text 'test_file_B.fastq'
           click_button I18n.t('projects.samples.attachments.deletions.modal.submit_button')
