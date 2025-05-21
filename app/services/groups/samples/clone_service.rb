@@ -53,10 +53,10 @@ module Groups
                                    sample_ids: not_found_sample_ids.join(', ')))
         end
 
-        return if @cloned_samples_data[:project_data].empty?
-
-        update_samples_count if @new_project.parent.group_namespace?
-        create_activities
+        unless @cloned_samples_data[:project_data].empty?
+          update_samples_count if @new_project.parent.group_namespace?
+          create_activities
+        end
 
         cloned_sample_ids
       end
