@@ -31,7 +31,7 @@ module Activities
     end
 
     def sample_clone_action
-      %w[sample_clone].include?(@activity[:action])
+      %w[sample_clone group_sample_clone].include?(@activity[:action])
     end
 
     def sample_action

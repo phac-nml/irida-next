@@ -311,6 +311,7 @@ en:
         transfer_in_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
         transfer_out_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
       samples:
+        clone_html: "%{user} copied %{cloned_samples_count} samples to project %{href}"
         destroy_html: "%{user} removed %{href} samples from group"
         transfer_html: "%{user} transferred %{transferred_samples_count} samples between projects"
       subgroups:
@@ -510,12 +511,18 @@ en:
         sample_clone:
           copied_from: Copied From
           copied_to: Copied To
-          source_project_description:
-            one: "%{user} copied 1 sample from project %{source_project_puid}"
-            other: "%{user} copied %{count} samples from project %{source_project_puid}"
-          target_project_description:
-            one: "%{user} copied 1 sample to project %{target_project_puid}"
-            other: "%{user} copied %{count} samples to project %{target_project_puid}"
+          group:
+            target_project_description:
+              one: "%{user} copied 1 sample to project %{target_project_puid}"
+              other: "%{user} copied %{count} samples to project %{target_project_puid}"
+          project:
+            source_project_description:
+              one: "%{user} copied 1 sample from project %{source_project_puid}"
+              other: "%{user} copied %{count} samples from project %{source_project_puid}"
+            target_project_description:
+              one: "%{user} copied 1 sample to project %{target_project_puid}"
+              other: "%{user} copied %{count} samples to project %{target_project_puid}"
+          project_from: Project From
           title: Copied Samples
         sample_destroy:
           description:

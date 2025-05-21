@@ -219,6 +219,14 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
                     })
     end
 
+    if activity.parameters[:action] == 'group_sample_clone'
+      params.merge!({
+                      target_project_puid: activity.parameters[:target_project_puid],
+                      target_project: get_object_by_id(activity.parameters[:target_project], Project),
+                      cloned_samples_count: activity.parameters[:cloned_samples_count]
+                    })
+    end
+
     params
   end
 
