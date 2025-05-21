@@ -10,28 +10,28 @@
     "
     <%= tag.attributes(aria: { current: ('page' if selected) }) %>
   >
-    <span
+    <div
       class="
         w-8 h-8 flex items-center justify-center rounded-lg mr-3 flex-shrink-0
-        transition-colors duration-200
-        <%= selected ? 'bg-primary-300 text-primary-800 dark:bg-slate-700/80' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 group-hover/item:bg-slate-200/70 dark:group-hover/item:bg-slate-700/50' %>
+        transition-colors duration-200 <%= selected ? 'bg-primary-300 text-primary-800 dark:bg-slate-700/80' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 group-hover/item:bg-slate-200/70 dark:group-hover/item:bg-slate-700/50' %>
       "
     >
-    <% if avatar %>
-      <%= viral_avatar(
-        name: label,
-        colour_string: "#{label}-#{url}",
-        size: :xs,
-      ) %>
-    <% else %>
-      <%= create_icon %>
-    <% end %>
-    </span>
+      <% if avatar %>
+        <%= viral_avatar(name: label, colour_string: "#{label}-#{url}", size: :xs) %>
+      <% else %>
+        <%= create_icon %>
+      <% end %>
+    </div>
     <span class="text-sm font-medium transition-opacity duration-200 ease-in-out">
       <%= label %>
     </span>
     <% if defined?(badge) && badge.present? %>
-      <span class="ml-auto px-2 py-0.5 text-xs font-medium rounded-full bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300">
+      <span
+        class="
+          ml-auto px-2 py-0.5 text-xs font-medium rounded-full bg-primary-100
+          text-primary-800 dark:bg-primary-900/30 dark:text-primary-300
+        "
+      >
         <%= badge %>
       </span>
     <% end %>
