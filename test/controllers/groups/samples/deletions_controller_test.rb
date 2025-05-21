@@ -9,7 +9,6 @@ module Groups
       @sample1 = samples(:sample1)
       @sample2 = samples(:sample2)
       @sample23 = samples(:sample23)
-      @project = projects(:project1)
       @namespace = groups(:group_one)
     end
 
