@@ -17,10 +17,10 @@ module Groups
       end
 
       def destroy
-        samples_to_delete_count = destroy_multiple_params['sample_ids'].count
+        samples_to_delete_count = destroy_samples_params['sample_ids'].count
 
         deleted_samples_count = ::Groups::Samples::DestroyService.new(@group, current_user,
-                                                                      destroy_multiple_params).execute
+                                                                      destroy_samples_params).execute
 
         # No selected samples deleted
         if deleted_samples_count.zero?
@@ -47,8 +47,8 @@ module Groups
         @destroy_path = group_samples_deletion_path
       end
 
-      def destroy_multiple_params
-        params.expect(multiple_deletion: [sample_ids: []])
+      def destroy_samples_params
+        params.expect(destroy_samples: [sample_ids: []])
       end
 
       def set_multi_status_destroy_multiple_message(deleted_samples_count, samples_to_delete_count)

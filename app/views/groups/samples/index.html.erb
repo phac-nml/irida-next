@@ -43,9 +43,6 @@
               <% dropdown.with_item(
                 label: t("shared.samples.actions_dropdown.delete_samples"),
                 url: new_group_samples_deletion_path,
-                params: {
-                  deletion_type: "multiple",
-                },
                 disableable: true,
                 data: {
                   action: "turbo:morph-element->action-button#idempotentConnect ",
