@@ -22,6 +22,6 @@ class PageHeaderComponentTest < ApplicationSystemTestCase
 
   test 'renders header with avatar' do
     visit('/rails/view_components/viral_page_header_component/with_avatar')
-    assert_selector 'div.page-header div.avatar'
+    assert_selector 'div.page-header span.avatar'
   end
 end
