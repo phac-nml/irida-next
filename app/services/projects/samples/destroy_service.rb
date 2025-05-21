@@ -34,7 +34,7 @@ module Projects
                                               }
         end
 
-        update_samples_count if @project.parent.type == 'Group'
+        update_samples_count if @project.parent.group_namespace?
 
         update_metadata_summary(sample)
       end
