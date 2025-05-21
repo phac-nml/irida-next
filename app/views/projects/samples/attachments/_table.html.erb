@@ -10,6 +10,11 @@
                 ) do |f| %>
             <input type="hidden" name="format" value="turbo_stream"/>
             <input type="hidden" name="select" value="on"/>
+            <input
+              type="hidden"
+              name="q[puid_or_file_blob_filename_cont]"
+              value="<%=params.dig(:q, :puid_or_file_blob_filename_cont)%>"
+            >
             <%= f.submit t(".select_all_button"),
                      class: "button button--state-default button--size-default" %>
           <% end %>
