@@ -91,7 +91,13 @@ module Projects
           format.turbo_stream do
             if params[:select].present?
               @q = load_attachments.ransack(params[:q])
-              @sample_attachment_ids = @q.result.pluck(:id)
+              @q.result.each do |attachment|
+                @sample_attachment_ids << if attachment.associated_attachment
+                                            [attachment.id, attachment.associated_attachment.id].to_s
+                                          else
+                                            attachment.id
+                                          end
+              end
             end
           end
         end
