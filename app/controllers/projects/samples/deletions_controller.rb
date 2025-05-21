@@ -35,10 +35,10 @@ module Projects
       end
 
       def destroy_multiple
-        samples_to_delete_count = destroy_multiple_params['sample_ids'].count
+        samples_to_delete_count = destroy_samples_params['sample_ids'].count
 
         deleted_samples_count = ::Projects::Samples::DestroyService.new(@project, current_user,
-                                                                        destroy_multiple_params).execute
+                                                                        destroy_samples_params).execute
 
         # No selected samples deleted
         if deleted_samples_count.zero?
@@ -73,8 +73,8 @@ module Projects
         end
       end
 
-      def destroy_multiple_params
-        params.expect(multiple_deletion: [sample_ids: []])
+      def destroy_samples_params
+        params.expect(destroy_samples: [sample_ids: []])
       end
 
       def set_multi_status_destroy_multiple_message(deleted_samples_count, samples_to_delete_count)
