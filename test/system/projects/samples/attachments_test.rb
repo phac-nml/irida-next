@@ -27,9 +27,9 @@ module Projects
         user = users(:ryan_doe)
         login_as user
         visit namespace_project_sample_url(@namespace, @project, @sample2)
-        assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button'), visible: false
-        assert_selector 'button', text: I18n.t('projects.samples.show.concatenate_button'), visible: false
-        assert_selector 'button', text: I18n.t('projects.samples.show.delete_files_button'), visible: false
+        assert_no_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button')
+        assert_no_selector 'button', text: I18n.t('projects.samples.show.concatenate_button')
+        assert_no_selector 'button', text: I18n.t('projects.samples.show.delete_files_button')
         assert_text I18n.t('projects.samples.attachments.table.empty_state.no_permission_description')
       end
 
