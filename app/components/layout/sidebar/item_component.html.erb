@@ -23,7 +23,11 @@
       <% end %>
     </div>
     <span class="text-sm font-medium transition-opacity duration-200 ease-in-out">
-      <%= label %>
+      <% if avatar %>
+        <turbo-frame id="namespace_name"><%= label %></turbo-frame>
+      <% else %>
+        <%= label %>
+      <% end %>
     </span>
     <% if defined?(badge) && badge.present? %>
       <span

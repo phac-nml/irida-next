@@ -5,11 +5,8 @@
 <% end %>
 
 <% if @updated %>
-  <%= turbo_stream.update "sidebar-header" do %>
-    <%= render Layout::Sidebar::HeaderComponent.new(
-      label: t(:"projects.sidebar.label"),
-      item: @project,
-    ) %>
+  <%= turbo_stream.update "namespace_name" do %>
+    <%= @project.namespace.name %>
   <% end %>
 
   <%= turbo_stream.update "breadcrumb" do %>
