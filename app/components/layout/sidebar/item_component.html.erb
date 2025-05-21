@@ -17,7 +17,9 @@
       "
     >
       <% if avatar %>
-        <%= viral_avatar(name: label, colour_string: "#{label}-#{url}", size: :xs) %>
+        <span class="bg-white rounded-lg">
+          <%= viral_avatar(name: label, colour_string: "#{label}-#{url}", size: :xs) %>
+        </span>
       <% else %>
         <%= create_icon %>
       <% end %>
