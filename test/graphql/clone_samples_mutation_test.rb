@@ -346,7 +346,7 @@ class CloneSamplesMutationTest < ActiveSupport::TestCase
 
     assert_not_empty data, 'copySample should be populated when no authorization errors'
     assert_not_empty data['errors']
-    assert data['errors'][0]['message'].include?('Samples with the following sample ids could not be copied as they were not found in the source project:') # rubocop:disable Layout/LineLength
+    assert data['errors'][0]['message'].include?('Samples with the following sample ids could not be copied as they were not found in the source namespace:') # rubocop:disable Layout/LineLength
   end
 
   test 'copySamples mutation should not work with no samples given' do
@@ -441,7 +441,7 @@ class CloneSamplesMutationTest < ActiveSupport::TestCase
     # check that the failed sample is in the error, and matches the one we expect to fail
     assert_not_empty data['errors']
     assert_equal 1, data['errors'].count
-    assert data['errors'][0]['message'].include?('Samples with the following sample ids could not be copied as they were not found in the source project:') # rubocop:disable Layout/LineLength
+    assert data['errors'][0]['message'].include?('Samples with the following sample ids could not be copied as they were not found in the source namespace:') # rubocop:disable Layout/LineLength
     expected_failed_sample = project2.samples[0].id
     assert data['errors'][0]['message'].include?(expected_failed_sample)
   end
