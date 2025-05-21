@@ -31,6 +31,7 @@ fr:
         submit_workflow?: Vous n’êtes pas autorisé à soumettre des flux de travail pour les échantillons au sein du groupe %{name} sur ce serveur.
         transfer?: Vous n’êtes pas autorisé à transférer le groupe %{name} de ce serveur.
         transfer_into_namespace?: Vous n’êtes pas autorisé à transférer vers l’espace de noms de groupe %{name} sur ce serveur.
+        transfer_sample?: You are not authorized to transfer samples for group %{name} on this server.
         unlink_namespace_with_group?: Vous n’êtes pas autorisé à dissocier le groupe %{name} d’autres groupes sur ce serveur.
         update?: Vous n’êtes pas autorisé à mettre à jour le groupe %{name} sur ce serveur.
         update_member?: Vous n’êtes pas autorisé à mettre à jour les membres du groupe %{name} sur ce serveur.
