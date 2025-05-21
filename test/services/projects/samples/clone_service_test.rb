@@ -23,24 +23,30 @@ module Projects
 
       test 'not clone samples with no sample ids' do
         clone_samples_params = { new_project_id: @new_project.id, sample_ids: [] }
-        assert_empty Projects::Samples::CloneService.new(@project, @john_doe).execute(clone_samples_params[:new_project_id],
-                                                                                      clone_samples_params[:sample_ids])
+        assert_empty Projects::Samples::CloneService.new(@project, @john_doe).execute(
+          clone_samples_params[:new_project_id],
+          clone_samples_params[:sample_ids]
+        )
         assert_equal(@project.errors.full_messages_for(:base).first,
                      I18n.t('services.samples.clone.empty_sample_ids'))
       end
 
       test 'not clone samples with into same project' do
         clone_samples_params = { new_project_id: @project.id, sample_ids: [@sample1.id, @sample2.id] }
-        assert_empty Projects::Samples::CloneService.new(@project, @john_doe).execute(clone_samples_params[:new_project_id],
-                                                                                      clone_samples_params[:sample_ids])
+        assert_empty Projects::Samples::CloneService.new(@project, @john_doe).execute(
+          clone_samples_params[:new_project_id],
+          clone_samples_params[:sample_ids]
+        )
         assert_equal(@project.errors.full_messages_for(:base).first,
                      I18n.t('services.samples.clone.same_project'))
       end
 
       test 'not clone samples with not matching sample ids' do
         clone_samples_params = { new_project_id: @new_project.id, sample_ids: ['gid://irida/Sample/not_a_real_id'] }
-        assert_empty Projects::Samples::CloneService.new(@project, @john_doe).execute(clone_samples_params[:new_project_id],
-                                                                                      clone_samples_params[:sample_ids])
+        assert_empty Projects::Samples::CloneService.new(@project, @john_doe).execute(
+          clone_samples_params[:new_project_id],
+          clone_samples_params[:sample_ids]
+        )
         assert_equal(I18n.t('services.samples.clone.samples_not_found', sample_ids: 'gid://irida/Sample/not_a_real_id'),
                      @project.errors.messages_for(:samples).first)
       end
@@ -135,8 +141,10 @@ module Projects
 
       test 'clone samples with permission' do
         clone_samples_params = { new_project_id: @new_project.id, sample_ids: [@sample1.id, @sample2.id] }
-        cloned_sample_ids = Projects::Samples::CloneService.new(@project, @john_doe).execute(clone_samples_params[:new_project_id],
-                                                                                             clone_samples_params[:sample_ids])
+        cloned_sample_ids = Projects::Samples::CloneService.new(@project, @john_doe).execute(
+          clone_samples_params[:new_project_id],
+          clone_samples_params[:sample_ids]
+        )
         cloned_sample_ids.each do |sample_id, clone_id|
           sample = Sample.find_by(id: sample_id)
           clone = Sample.find_by(id: clone_id)
@@ -157,8 +165,10 @@ module Projects
         assert_equal({}, @new_project.namespace.metadata_summary)
         assert_equal({ 'metadatafield1' => 633, 'metadatafield2' => 106 }, @group.metadata_summary)
         clone_samples_params = { new_project_id: @new_project.id, sample_ids: [@sample30.id] }
-        cloned_sample_ids = Projects::Samples::CloneService.new(@project, @john_doe).execute(clone_samples_params[:new_project_id],
-                                                                                             clone_samples_params[:sample_ids])
+        cloned_sample_ids = Projects::Samples::CloneService.new(@project, @john_doe).execute(
+          clone_samples_params[:new_project_id],
+          clone_samples_params[:sample_ids]
+        )
         cloned_sample_ids.each do |sample_id, clone_id|
           sample = Sample.find_by(id: sample_id)
           clone = Sample.find_by(id: clone_id)
@@ -181,8 +191,10 @@ module Projects
       test 'not clone samples with same sample name' do
         new_project = projects(:project34)
         clone_samples_params = { new_project_id: new_project.id, sample_ids: [@sample2.id] }
-        cloned_sample_ids = Projects::Samples::CloneService.new(@project, @john_doe).execute(clone_samples_params[:new_project_id],
-                                                                                             clone_samples_params[:sample_ids])
+        cloned_sample_ids = Projects::Samples::CloneService.new(@project, @john_doe).execute(
+          clone_samples_params[:new_project_id],
+          clone_samples_params[:sample_ids]
+        )
         assert_empty cloned_sample_ids
         assert @project.errors.messages_for(:samples).include?(
           I18n.t('services.samples.clone.sample_exists',
