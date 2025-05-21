@@ -55,7 +55,7 @@ module Pathogen
         }.merge(options)
 
         # Render the component
-        @template.render(Pathogen::Form::RadioButtonComponent.new(**component_options))
+        @template.render(Pathogen::Form::RadioButton.new(**component_options))
       end
     end
   end

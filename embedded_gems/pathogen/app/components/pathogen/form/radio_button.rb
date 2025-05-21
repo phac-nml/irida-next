@@ -26,7 +26,7 @@ module Pathogen
     #     lang: "en",
     #     class: "custom-class"
     #   ) %>
-    class RadioButtonComponent < ViewComponent::Base
+    class RadioButton < ViewComponent::Base
       include ActionView::Helpers::TagHelper
       include ActionView::Helpers::FormTagHelper
 
