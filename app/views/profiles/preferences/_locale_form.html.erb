@@ -1,15 +1,23 @@
 <%= form_with(model: @user, url: profile_preferences_path, method: :patch) do |f| %>
-  <%= f.field_set_tag do %>
+  <fieldset>
     <legend class="mb-2 text-sm font-semibold text-slate-800 dark:text-white uppercase">
       <%= t("profiles.preferences.show.locale_title") %>
     </legend>
-    <%- I18n.available_locales.each do |locale| %>
-      <%= f.radio_button :locale,
-                      locale,
-                      checked: (@user.locale.to_sym == locale),
-                      onchange: "this.form.submit()",
-                      label: t(:"locales.#{locale}", locale: locale),
-                      lang: locale %>
-    <%- end %>
-  <% end %>
+    <div class="space-y-2">
+      <% I18n.available_locales.each do |locale| %>
+        <div class="flex items-center">
+          <%= f.radio_button :locale,
+                          locale,
+                          checked: (@user.locale.to_sym == locale),
+                          onchange: "this.form.submit()",
+                          aria: { describedby: "locale_#{locale}_label" } %>
+          <%= f.label "locale_#{locale}",
+                    t(:"locales.#{locale}", locale: locale),
+                    class: "ml-2 block text-sm text-slate-700 dark:text-slate-300",
+                    lang: locale,
+                    id: "locale_#{locale}_label" %>
+        </div>
+      <% end %>
+    </div>
+  </fieldset>
 <% end %>
