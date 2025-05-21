@@ -2245,11 +2245,11 @@ module Groups
       ### ACTIONS START ###
       click_button I18n.t(:'groups.samples.index.select_all_button')
       within 'tbody' do
-        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
       end
       within 'tfoot' do
-        assert_text 'Samples: 3'
-        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+        assert_text 'Samples: 26'
+        assert_selector 'strong[data-selection-target="selected"]', text: '26'
       end
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
@@ -2259,7 +2259,7 @@ module Groups
       within('#dialog') do
         assert_text I18n.t(
           'shared.samples.clones.dialog.description.plural'
-        ).gsub! 'COUNT_PLACEHOLDER', '3'
+        ).gsub! 'COUNT_PLACEHOLDER', '26'
       end
       ### VERIFY END ###
     end
@@ -2422,7 +2422,7 @@ module Groups
 
       assert_selector '#dialog'
       within('#dialog') do
-        assert_text I18n.t('projects.samples.clones.dialog.title')
+        assert_text I18n.t('shared.samples.clones.dialog.title')
         find('input.select2-input').click
         find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('shared.samples.clones.dialog.submit_button')
