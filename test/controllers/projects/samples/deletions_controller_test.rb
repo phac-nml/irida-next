@@ -91,7 +91,7 @@ module Projects
       assert_difference('Sample.count', -3) do
         delete destroy_multiple_namespace_project_samples_deletion_path(@namespace, @project),
                params: {
-                 multiple_deletion: {
+                 destroy_samples: {
                    sample_ids: [@sample1.id, sample2.id, sample30.id]
                  }
                }, as: :turbo_stream
@@ -107,7 +107,7 @@ module Projects
       assert_difference('Sample.count', -3) do
         delete destroy_multiple_namespace_project_samples_deletion_path(@namespace, @project),
                params: {
-                 multiple_deletion: {
+                 destroy_samples: {
                    sample_ids: [@sample1.id, sample2.id, sample30.id, 'invalid_sample_id']
                  }
                }, as: :turbo_stream
@@ -124,7 +124,7 @@ module Projects
       assert_no_difference('Sample.count') do
         delete destroy_multiple_namespace_project_samples_deletion_path(@namespace, @project),
                params: {
-                 multiple_deletion: {
+                 destroy_samples: {
                    sample_ids: %w[invalid_sample_id_1 invalid_sample_id_2 invalid_sample_id_3]
                  }
                }, as: :turbo_stream
@@ -142,7 +142,7 @@ module Projects
       assert_no_difference('Sample.count') do
         delete destroy_multiple_namespace_project_samples_deletion_path(@namespace, @project),
                params: {
-                 multiple_deletion: {
+                 destroy_samples: {
                    sample_ids: [sample4.id, sample5.id, sample6.id]
                  }
                }, as: :turbo_stream
