@@ -1033,6 +1033,11 @@ fr:
         loading: Chargement des résultats de recherche...
         search:
           placeholder: Filtrer par PUID ou nom
+      transfers:
+        create:
+          error: 'La liste suivante des échantillons n’a pas été transférée :'
+          no_samples_transferred_error: 'Les échantillons n’ont pas été transférés pour les raisons suivantes :'
+          success: Les échantillons ont été transférés avec succès.
     shared_namespaces:
       index:
         pagy:
@@ -1750,12 +1755,6 @@ fr:
         submit_button: Créer un échantillon
         subtitle: Créer un nouvel échantillon dans le projet en cours
         title: Créer un échantillon
-      shared:
-        errors:
-          ok_button: OK
-        success:
-          ok_button: OK
-          success: Réussite
       show:
         concatenate_button: Concatenate Files
         delete_files_button: Supprimer des fichiersDelete Files
@@ -1923,6 +1922,14 @@ fr:
         invalid_export_workflow_executions: Impossible de créer une exportation en raison des autorisations d’exécution du flux de travail ou des exécutions de flux de travail introuvables.
         non_completed_workflow_executions: Impossible de créer une exportation en raison des exécutions de flux de travail sélectionnées ayant un état autre que « Terminé ».
     groups:
+      samples:
+        transfer:
+          empty_new_project_id: Le projet de destination n’a pas été sélectionné.
+          empty_sample_ids: Les identifiants de l’échantillon sont vides.
+          maintainer_transfer_not_allowed: Un responsable ne peut transférer des échantillons qu’à d’autres projets dans la même hiérarchie avec un ancêtre commun
+          sample_exists: 'Échantillon %{sample_puid} : Conflit avec l’échantillon nommé ''%{sample_name}'' dans le projet cible'
+          samples_not_found: 'Les échantillons avec les identifiants d’échantillon suivants n’ont pas pu être transférés puisqu’ils n’ont pas été trouvés dans le projet source : %{sample_ids}'
+          target_project_duplicate: Sample %{sample_name} already belongs to target project
       share:
         group_not_found: Le groupe avec l’identifiant %{group_id} avec lequel partager l’espace de noms est introuvable.
         group_self_reference: Le groupe ne peut pas être partagé avec lui-même.
@@ -2021,6 +2028,8 @@ fr:
         new_sample: Nouvel échantillon
         sample_export: Exportation d’échantillons
         transfer: Transférer des échantillons
+      errors:
+        ok_button: OK
       metadata:
         editing_field_cell:
           dialog:
@@ -2109,6 +2118,9 @@ fr:
           ok_button: OK
           problem_message: "%{path} %{message}"
           problems: Errors were encountered while importing the following samples.
+      success:
+        ok_button: OK
+        success: Réussite
       transfers:
         dialog:
           description:

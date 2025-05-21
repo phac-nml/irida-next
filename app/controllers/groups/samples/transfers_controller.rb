@@ -31,7 +31,7 @@ module Groups
       end
 
       def projects
-        @projects = authorized_scope(Project, type: :relation, as: :group_project_samples_transferable,
+        @projects = authorized_scope(Project, type: :relation, as: :project_samples_transferable,
                                               scope_options: { group: @group })
       end
     end

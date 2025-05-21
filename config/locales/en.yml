@@ -1035,6 +1035,11 @@ en:
         loading: Loading search results...
         search:
           placeholder: Filter by PUID or name
+      transfers:
+        create:
+          error: 'The following list of samples failed to transfer:'
+          no_samples_transferred_error: 'Samples were not transferred for the following reasons:'
+          success: Samples were successfully transferred.
     shared_namespaces:
       index:
         pagy:
@@ -1754,12 +1759,6 @@ en:
         submit_button: Create sample
         subtitle: Create a new sample in the current Project
         title: Create sample
-      shared:
-        errors:
-          ok_button: OK
-        success:
-          ok_button: OK
-          success: Success
       show:
         concatenate_button: Concatenate Files
         delete_files_button: Delete Files
@@ -1927,6 +1926,14 @@ en:
         invalid_export_workflow_executions: Unable to create export due to either workflow execution permissions or not found workflow executions.
         non_completed_workflow_executions: Unable to create export due to selected workflow executions having a state other than 'Completed'.
     groups:
+      samples:
+        transfer:
+          empty_new_project_id: Destination project was not selected.
+          empty_sample_ids: The sample ids are empty.
+          maintainer_transfer_not_allowed: A maintainer can only transfer samples to other projects within the same hierarchy with a common ancestor
+          sample_exists: 'Sample %{sample_puid}: Conflicts with sample named ''%{sample_name}'' in the target project'
+          samples_not_found: 'Samples with the following sample ids could not be transferred as they were not found in the source project: %{sample_ids}'
+          target_project_duplicate: Sample %{sample_name} already belongs to target project
       share:
         group_not_found: Group with id %{group_id} to share namespace with cannot be found.
         group_self_reference: Group cannot be shared with itself.
@@ -2025,6 +2032,8 @@ en:
         new_sample: New sample
         sample_export: Sample export
         transfer: Transfer samples
+      errors:
+        ok_button: OK
       metadata:
         editing_field_cell:
           dialog:
@@ -2113,6 +2122,9 @@ en:
           ok_button: OK
           problem_message: "%{path} %{message}"
           problems: Errors were encountered while importing the following samples.
+      success:
+        ok_button: OK
+        success: Success
       transfers:
         dialog:
           description:
