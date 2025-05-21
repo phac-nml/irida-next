@@ -580,7 +580,7 @@ en:
       info_title: Project Information
       information:
         created_on: Created on
-        no_description: No description provided for project
+        no_description: No description provided for this project
         number_of_automated_workflow_executions: Automated pipelines
         number_of_members: Members
         number_of_samples: Samples
@@ -1029,6 +1029,13 @@ en:
     show:
       create_project_button: New project
       create_subgroup_button: New subgroup
+      information:
+        created_on: Created on
+        no_description: No description provided for this group
+        number_of_projects: Projects
+        number_of_samples: Samples
+        number_of_subgroups: Subgroups
+        title: Group Information
       search:
         placeholder: Filter by PUID or name
       shared_namespaces:

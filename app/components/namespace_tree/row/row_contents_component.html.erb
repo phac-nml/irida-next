@@ -48,30 +48,57 @@
     <%= viral_tooltip(title: t(:'.stats.samples')) do %>
       <span
         id="<%= "#{dom_id(@namespace)}-samples-count" %>"
-        class="flex items-center text-sm samples-count"
+        class="
+          items-center text-sm samples-count inline-flex justify-center p-2 py-1
+          rounded-full font-mono bg-blue-100 dark:bg-blue-700 text-slate-800
+          dark:text-slate-200
+        "
       >
-        <%= viral_icon(name: :beaker, color: :subdued, classes: "h-5 w-5 mr-1") %><%= @namespace.aggregated_samples_count %>
+        <%= helpers.render_icon ICONS[:samples],
+                            class: "size-4 mr-0.5 text-blue-700 dark:text-blue-200" %>
+        <%= @namespace.aggregated_samples_count %>
       </span>
     <% end %>
     <%= viral_tooltip(title: t(:'.stats.projects')) do %>
-      <span class="flex items-center text-sm">
-        <%= viral_icon(name: :rectangle_stack, color: :subdued, classes: "h-5 w-5 mr-1") %>
+      <span
+        class="
+          items-center text-sm inline-flex justify-center p-2 py-1 rounded-full font-mono
+          bg-fuchsia-100 dark:bg-fuchsia-700 text-slate-800 dark:text-slate-200
+        "
+      >
+        <%= helpers.render_icon ICONS[:projects],
+                            class:
+                              "size-4 mr-0.5 text-fuchsia-700 dark:text-fuchsia-200" %>
         <%= @namespace.project_namespaces.count %>
       </span>
     <% end %>
     <%= viral_tooltip(title: t(:'.stats.subnamespaces')) do %>
-      <span class="flex items-center text-sm">
-        <%= viral_icon(name: :squares_2x2, color: :subdued, classes: "h-5 w-5 mr-1") %><%= @namespace.children.count %>
+      <span
+        class="
+          items-center text-sm inline-flex justify-center p-2 py-1 rounded-full font-mono
+          bg-amber-100 dark:bg-amber-700 text-slate-800 dark:text-slate-200
+        "
+      >
+        <%= helpers.render_icon ICONS[:groups],
+                            class: "size-4 mr-0.5 text-amber-700 dark:text-amber-200" %>
+        <%= @namespace.children.count %>
       </span>
     <% end %>
   <% end %>
-  <% if @namespace.type == "Project" %>
+  <% if @namespace.project_namespace? %>
     <%= viral_tooltip(title: t(:'.stats.samples')) do %>
       <span
         id="<%= "#{dom_id(@namespace.project)}-samples-count" %>"
-        class="flex items-center text-sm"
+        class="
+          items-center text-sm samples-count inline-flex justify-center p-2 py-1
+          rounded-full font-mono bg-primary-100 dark:bg-primary-700 text-slate-800
+          dark:text-slate-200
+        "
       >
-        <%= viral_icon(name: :beaker, color: :subdued, classes: "h-5 w-5") %><%= @namespace.project.samples.size %>
+        <%= helpers.render_icon ICONS[:samples],
+                            class:
+                              "size-4 mr-0.5 text-primary-700 dark:text-primary-200" %>
+        <%= @namespace.project.samples.size %>
       </span>
     <% end %>
   <% end %>

@@ -1,4 +1,4 @@
-<%= render Viral::PageHeaderComponent.new(title: @group.name, id: @group.puid, subtitle: @group.description) do |component| %>
+<%= render Viral::PageHeaderComponent.new(title: @group.name, id: @group.puid) do |component| %>
   <%= component.icon do %>
     <%= viral_avatar(
       name: @group.name,
@@ -18,30 +18,90 @@
   <% end %>
 <% end %>
 
-<%= viral_tabs(id: "group-details", label: t(:'.tabs.label')) do |tabs| %>
-  <%= tabs.with_tab(url: group_path(@group), selected: @tab != "shared_namespaces") do %>
-    <%= t(:".tabs.subgroups_and_projects") %>
-  <% end %>
-  <%= tabs.with_tab(url: group_path(@group, tab: "shared_namespaces"), selected: @tab == "shared_namespaces") do %>
-    <%= t(:".tabs.shared_namespaces") %>
-  <% end %>
+<div class="flex flex-col lg:flex-row gap-4">
+  <section
+    aria-labelledby="groups-dashboard-info-title"
+    class="
+      self-start p-4 bg-white border rounded-lg border-slate-200 dark:border-slate-700
+      dark:bg-slate-800 order-1 lg:order-2 lg:w-[250px] lg:flex-shrink-0 lg:mt-12
+    "
+  >
+    <h2
+      id="groups-dashboard-info-title"
+      class="mb-2 text-xl font-semibold text-slate-900 dark:text-white"
+    ><%= t(:"groups.show.information.title") %></h2>
 
-  <%= tabs.with_tab_content do %>
-    <div class="mt-2">
-      <div class="flex flex-row-reverse mb-2">
-        <%= render SearchComponent.new(query: @q, url: group_path(@group), search_attribute: :name_or_puid_cont, placeholder: t(".search.placeholder")) do %>
+    <p class="py-2 dark:text-slate-300 text-sm leading-6">
+      <% if @group.description && !@group.description.blank? %>
+        <%= @group.description %>
+      <% else %>
+        <%= t(:"groups.show.information.no_description") %>
+      <% end %>
+    </p>
+
+    <hr class="h-px my-4 border-0 bg-slate-200 dark:bg-slate-600"/>
+
+    <div class="flex flex-row lg:flex-col gap-4">
+      <%= render NamespaceStatisticComponent.new(
+        id_prefix: "group-samples",
+        icon_name: :samples,
+        label: t(:"groups.show.information.number_of_samples"),
+        count: @group.samples_count || 0,
+        color_scheme: :blue,
+      ) %>
+
+      <%= render NamespaceStatisticComponent.new(
+        id_prefix: "group-projects",
+        icon_name: :projects,
+        label: t(:"groups.show.information.number_of_projects"),
+        count: @group.project_namespaces.count,
+        color_scheme: :fuchsia,
+      ) %>
+
+      <%= render NamespaceStatisticComponent.new(
+        id_prefix: "group-subgroups",
+        icon_name: :groups,
+        label: t(:"groups.show.information.number_of_subgroups"),
+        count: @group.children.count,
+        color_scheme: :amber,
+      ) %>
+    </div>
+
+    <hr class="h-px my-4 border-0 bg-slate-200 dark:bg-slate-600"/>
+
+    <p class="py-2 dark:text-slate-300 leading-6">
+      <span class="font-semibold"><%= t(:"groups.show.information.created_on") %></span>
+      <span><%= local_time(@group.created_at, :full_date) %></span>
+    </p>
+  </section>
+
+  <section class="order-2 lg:order-1 flex-grow">
+    <%= viral_tabs(id: "group-details", label: t(:'.tabs.label')) do |tabs| %>
+      <%= tabs.with_tab(url: group_path(@group), selected: @tab != "shared_namespaces") do %>
+        <%= t(:".tabs.subgroups_and_projects") %>
+      <% end %>
+      <%= tabs.with_tab(url: group_path(@group, tab: "shared_namespaces"), selected: @tab == "shared_namespaces") do %>
+        <%= t(:".tabs.shared_namespaces") %>
+      <% end %>
+
+      <%= tabs.with_tab_content do %>
+        <div class="mt-2">
+          <div class="flex flex-row-reverse mb-2">
+            <%= render SearchComponent.new(query: @q, url: group_path(@group), search_attribute: :name_or_puid_cont, placeholder: t(".search.placeholder")) do %>
+
+              <% if @tab == "shared_namespaces" %>
+                <input type="hidden" name="tab" value="shared_namespaces">
+              <% end %>
+            <% end %>
+          </div>
 
           <% if @tab == "shared_namespaces" %>
-            <input type="hidden" name="tab" value="shared_namespaces">
+            <%= render "groups/shared_namespaces/index", locals: { namespaces: @namespaces } %>
+          <% else %>
+            <%= render "groups/subgroups/index", locals: { namespaces: @namespaces } %>
           <% end %>
-        <% end %>
-      </div>
-
-      <% if @tab == "shared_namespaces" %>
-        <%= render "groups/shared_namespaces/index", locals: { namespaces: @namespaces } %>
-      <% else %>
-        <%= render "groups/subgroups/index", locals: { namespaces: @namespaces } %>
+        </div>
       <% end %>
-    </div>
-  <% end %>
-<% end %>
+    <% end %>
+  </section>
+</div>
