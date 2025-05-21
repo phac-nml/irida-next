@@ -8,6 +8,7 @@ module Projects
       before_action :projects
 
       def new
+        authorize! @project, to: :clone_sample?
         @broadcast_target = "samples_clone_#{SecureRandom.uuid}"
       end
 
