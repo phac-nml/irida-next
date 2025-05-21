@@ -1671,24 +1671,6 @@ en:
           search:
             placeholder: Filter by PUID or Filename
           select_all_button: Select all
-      clones:
-        create:
-          error: "The following list of samples failed to copy:"
-          no_samples_cloned_error: "Samples were not copied for the following reasons:"
-          success: Samples were successfully copied.
-        dialog:
-          description:
-            plural: The following COUNT_PLACEHOLDER samples are about to be copied to another project.
-            singular: The following sample is about to be copied to another project.
-            zero: No samples have been selected for copying
-          empty_state: No projects are associated with that name or ID
-          new_project_id: Project to copy samples to
-          no_available_projects: No available projects
-          samples: Samples
-          select_project: Select project
-          spinner_message: Copying samples, this might take a while...
-          submit_button: Submit
-          title: Copy Samples
       create:
         success: Sample was successfully created.
       edit:

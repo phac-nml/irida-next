@@ -312,6 +312,7 @@ fr:
         transfer_in_html: "%{user} a transféré le projet %{href} de l’espace de noms %{old_namespace} vers %{new_namespace}"
         transfer_out_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
       samples:
+        clone_html: "%{user} copied %{cloned_samples_count} samples to project %{href}"
         destroy_html: "%{user} removed %{href} samples from group"
         transfer_html: "%{user} transferred %{transferred_samples_count} samples between projects"
       subgroups:
@@ -512,9 +513,6 @@ fr:
           copied_from: Copied From
           copied_to: Copied To
           group:
-            source_project_description:
-              one: "%{user} copied 1 sample from group"
-              other: "%{user} copied %{count} samples from group"
             target_project_description:
               one: "%{user} copied 1 sample to project %{target_project_puid}"
               other: "%{user} copied %{count} samples to project %{target_project_puid}"
@@ -525,6 +523,7 @@ fr:
             target_project_description:
               one: "%{user} copied 1 sample to project %{target_project_puid}"
               other: "%{user} copied %{count} samples to project %{target_project_puid}"
+          project_from: Project From
           title: Copied Samples
         sample_destroy:
           description:
@@ -1672,24 +1671,6 @@ fr:
           search:
             placeholder: Filtrer par PUID ou nom de fichier
           select_all_button: Tout sélectionner
-      clones:
-        create:
-          error: "La liste suivante des échantillons n’a pas été copiée :"
-          no_samples_cloned_error: "Les échantillons n’ont pas été copiés pour les raisons suivantes :"
-          success: Les échantillons ont été copiés avec succès.
-        dialog:
-          description:
-            plural: Les échantillons COUNT_PLACEHOLDER suivants sont sur le point d’être copiés dans un autre projet.
-            singular: L’exemple suivant est sur le point d’être copié dans un autre projet.
-            zero: Aucun échantillon n’a été sélectionné pour être copier
-          empty_state: Aucun projet n’est associé à ce nom ou à cet identifiant
-          new_project_id: Projeter de copier les échantillons vers
-          no_available_projects: Aucun projet disponible
-          samples: Échantillons
-          select_project: Sélectionner le projet
-          spinner_message: Copier des échantillons, cela peut prendre un certain temps...
-          submit_button: Envoyer
-          title: Copier des échantillons
       create:
         success: L’échantillon a été créé avec succès.
       edit:
@@ -2043,6 +2024,24 @@ fr:
         new_sample: Nouvel échantillon
         sample_export: Exportation d’échantillons
         transfer: Transférer des échantillons
+      clones:
+        create:
+          error: "La liste suivante des échantillons n’a pas été copiée :"
+          no_samples_cloned_error: "Les échantillons n’ont pas été copiés pour les raisons suivantes :"
+          success: Les échantillons ont été copiés avec succès.
+        dialog:
+          description:
+            plural: Les échantillons COUNT_PLACEHOLDER suivants sont sur le point d’être copiés dans un autre projet.
+            singular: L’exemple suivant est sur le point d’être copié dans un autre projet.
+            zero: Aucun échantillon n’a été sélectionné pour être copier
+          empty_state: Aucun projet n’est associé à ce nom ou à cet identifiant
+          new_project_id: Projeter de copier les échantillons vers
+          no_available_projects: Aucun projet disponible
+          samples: Échantillons
+          select_project: Sélectionner le projet
+          spinner_message: Copier des échantillons, cela peut prendre un certain temps...
+          submit_button: Envoyer
+          title: Copier des échantillons
       errors:
         ok_button: OK
       metadata:
