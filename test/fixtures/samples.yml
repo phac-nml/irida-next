@@ -568,3 +568,63 @@ group_sample_transfer_sample3:
   description: "Group Sample Transfer 3 description."
   project_id: <%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransfer, :uuid) %>
   puid: "INXT_SAM_AAAAAAAADS"
+
+sample67:
+  name: Sample 67
+  description: Sample 67 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectGroupSampleActions, :uuid) %>
+  puid: INXT_SAM_AAAAAAAADQ
+  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2'}
+  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
+                                             'updated_at': <%= DateTime.new(2000,1,1) %> },
+                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+
+sample68:
+  name: Sample 68
+  description: Sample 68 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectSubGroupSampleActions, :uuid) %>
+  puid: INXT_SAM_AAAAAAAADR
+  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2'}
+  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
+                                             'updated_at': <%= DateTime.new(2000,1,1) %> },
+                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+
+sample69:
+  name: Sample 69
+  description: Sample 69 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectSharedGroupSampleActionsOwner, :uuid) %>
+  puid: INXT_SAM_AAAAAAAADS
+  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2'}
+  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
+                                             'updated_at': <%= DateTime.new(2000,1,1) %> },
+                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+
+sample70:
+  name: Sample 70
+  description: Sample 70 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectSharedGroupSampleActionsMaintainer, :uuid) %>
+  puid: INXT_SAM_AAAAAAAADT
+  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2'}
+  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
+                                             'updated_at': <%= DateTime.new(2000,1,1) %> },
+                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+
+sample71:
+  name: Sample 71
+  description: Sample 71 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectSharedGroupSampleActionsAnalyst, :uuid) %>
+  puid: INXT_SAM_AAAAAAAADU
+  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2'}
+  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
+                                             'updated_at': <%= DateTime.new(2000,1,1) %> },
+                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+
+sample72:
+  name: Sample 72
+  description: Sample 72 description.
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectSharedGroupSampleActionsGuest, :uuid) %>
+  puid: INXT_SAM_AAAAAAAADV
+  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2'}
+  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
+                                             'updated_at': <%= DateTime.new(2000,1,1) %> },
+                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> } }

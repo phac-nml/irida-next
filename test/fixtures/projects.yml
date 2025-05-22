@@ -344,3 +344,33 @@ projectGroupSampleTransferTarget:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_group_sample_transfer_target_namespace, :uuid) %>
   samples_count: 0
+
+projectGroupSampleActions:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_group_sample_actions_namespace, :uuid) %>
+  samples_count: 1
+
+projectSubGroupSampleActions:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_subgroup_sample_actions_namespace, :uuid) %>
+  samples_count: 1
+
+projectSharedGroupSampleActionsOwner:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_shared_group_sample_actions_owner_namespace, :uuid) %>
+  samples_count: 1
+
+projectSharedGroupSampleActionsMaintainer:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_shared_group_sample_actions_maintainer_namespace, :uuid) %>
+  samples_count: 1
+
+projectSharedGroupSampleActionsAnalyst:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_shared_group_sample_actions_analyst_namespace, :uuid) %>
+  samples_count: 1
+
+projectSharedGroupSampleActionsGuest:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_shared_group_sample_actions_guest_namespace, :uuid) %>
+  samples_count: 1

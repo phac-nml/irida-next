@@ -146,3 +146,24 @@ mary_doe_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
   puid: INXT_USR_AAAAAAAAAT
+
+sample_actions_doe_namespace:
+  name: sample.actions.doe@localhost
+  path: sample.actions.doe_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
+  puid: INXT_USR_AAAAAAAAAU
+
+shared_sample_actions_doe_namespace:
+  name: shared.sample.actions.doe@localhost
+  path: shared.sample.actions.doe_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
+  puid: INXT_USR_AAAAAAAAAV
+
+subgroup_sample_actions_doe_namespace:
+  name: subgroup.sample.actions.doe@localhost
+  path: subgroup.sample.actions.doe_at_localhost
+  type: User
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_sample_actions_doe, :uuid) %>
+  puid: INXT_USR_AAAAAAAAAW

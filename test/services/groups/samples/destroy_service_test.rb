@@ -100,29 +100,32 @@ module Groups
       end
 
       test 'delete shared group samples with owner shared group role' do
-        group_hotel = groups(:group_hotel)
-        project_hotel = projects(:projectHotel)
-        group = groups(:user30_group_one)
-        sample36 = samples(:sample36)
-        user = users(:steve_doe)
+        group = groups(:group_sample_actions)
+        user = users(:sample_actions_doe)
+        sample = samples(:sample69)
+        shared_group = groups(:shared_group_sample_actions_owner)
+        shared_project = projects(:projectSharedGroupSampleActionsOwner)
 
         assert_difference -> { Sample.count } => -1,
-                          -> { group_hotel.reload.samples_count } => -1,
-                          -> { project_hotel.reload.samples.size } => -1 do
-          ::Groups::Samples::DestroyService.new(group, user, { sample_ids: [sample36.id] }).execute
+                          -> { shared_group.reload.samples_count } => -1,
+                          -> { shared_project.reload.samples.size } => -1 do
+          ::Groups::Samples::DestroyService.new(group, user, { sample_ids: [sample.id] }).execute
         end
       end
 
       test 'delete shared group samples with owner shared project role' do
-        project_alpha = projects(:projectAlpha)
-        group = groups(:user30_group_one)
-        sample_alpha = samples(:sampleAlpha)
-        user = users(:steve_doe)
-
+        project = projects(:projectSharedGroupSampleActionsOwner)
+        group = groups(:subgroup_sample_actions)
+        user = users(:subgroup_sample_actions_doe)
+        sample = samples(:sample69)
+        puts group.name
+        puts project.name
+        puts user.name
+        puts sample.name
         assert_difference -> { Sample.count } => -1,
-                          -> { project_alpha.reload.samples_count } => -1 do
+                          -> { project.reload.samples_count } => -1 do
           ::Groups::Samples::DestroyService.new(group, user,
-                                                { sample_ids: [sample_alpha.id] }).execute
+                                                { sample_ids: [sample.id] }).execute
         end
       end
 
@@ -141,17 +144,18 @@ module Groups
       end
 
       test 'incorrect permission if user is not an owner within the group shared as owner' do
-        group7 = groups(:group_seven)
-        user = users(:user0)
+        group = groups(:group_sample_actions)
+        user = users(:sample_actions_doe)
+        sample = samples(:sample72)
 
         exception = assert_raises(ActionPolicy::Unauthorized) do
-          ::Groups::Samples::DestroyService.new(group7, user, { sample_ids: [@sample1.id] }).execute
+          ::Groups::Samples::DestroyService.new(group, user, { sample_ids: [sample.id] }).execute
         end
 
         assert_equal GroupPolicy, exception.policy
         assert_equal :destroy_sample?, exception.rule
         assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-        assert_equal I18n.t(:'action_policy.policy.group.destroy_sample?', name: group7.name),
+        assert_equal I18n.t(:'action_policy.policy.group.destroy_sample?', name: group.name),
                      exception.result.message
       end
     end

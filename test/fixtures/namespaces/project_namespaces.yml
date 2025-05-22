@@ -602,3 +602,63 @@ project_group_sample_transfer_target_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_sample_transfer_target, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
   puid: INXT_PRJ_AAAAAAAACD
+
+project_group_sample_actions_namespace:
+  <<: *DEFAULTS
+  name: Project Group Sample Actions
+  path: project-group-sample-actions
+  description: Project Group Sample Actions description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_sample_actions, :uuid) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
+  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  puid: INXT_PRJ_AAAAAAAACC
+
+project_subgroup_sample_actions_namespace:
+  <<: *DEFAULTS
+  name: Project Subgroup Sample Actions
+  path: project-subgroup-sample-actions
+  description: Subgroup Sample Actions description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_sample_actions, :uuid) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
+  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  puid: INXT_PRJ_AAAAAAAACD
+
+project_shared_group_sample_actions_owner_namespace:
+  <<: *DEFAULTS
+  name: Project Shared Group Sample Actions Owner
+  path: project-shared-group-sample-actions-owner
+  description: Project Shared Group Sample Actions Owner description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_owner, :uuid) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
+  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  puid: INXT_PRJ_AAAAAAAACE
+
+project_shared_group_sample_actions_maintainer_namespace:
+  <<: *DEFAULTS
+  name: Project Shared Group Sample Actions Maintainer
+  path: project-shared-group-sample-actions-maintainer
+  description: Project Shared Group Sample Actions Maintainer description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_maintainer, :uuid) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
+  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  puid: INXT_PRJ_AAAAAAAACF
+
+project_shared_group_sample_actions_analyst_namespace:
+  <<: *DEFAULTS
+  name: Project Shared Group Sample Actions Analyst
+  path: project-shared-group-sample-actions-analyst
+  description: Project Shared Group Sample Actions Analyst description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_analyst, :uuid) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
+  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  puid: INXT_PRJ_AAAAAAAACG
+
+project_shared_group_sample_actions_guest_namespace:
+  <<: *DEFAULTS
+  name: Project Shared Group Sample Actions Guest
+  path: project-shared-group-sample-actions-guest
+  description: Project Shared Group Sample Actions Guest description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_guest, :uuid) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
+  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  puid: INXT_PRJ_AAAAAAAACH
