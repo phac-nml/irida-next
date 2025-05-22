@@ -84,7 +84,9 @@ module Projects
         end
       end
 
-      def select
+      def select # rubocop:disable Metrics/MethodLength
+        authorize! @project, to: :update_sample?
+
         @sample_attachment_ids = []
 
         respond_to do |format|

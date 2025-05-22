@@ -13,6 +13,11 @@ module Projects
         @namespace = groups(:group_one)
       end
 
+      test 'should get index' do
+        get namespace_project_sample_attachments_path(@namespace, @project, @sample1, format: :turbo_stream)
+        assert_response :success
+      end
+
       test 'should get new for a member with role >= maintainer' do
         get new_namespace_project_sample_attachment_path(@namespace, @project, @sample1,
                                                          format: :turbo_stream)
@@ -126,6 +131,17 @@ module Projects
         get namespace_project_sample_attachment_new_destroy_path(@namespace, @project, @sample1, @attachment1),
             as: :turbo_stream
 
+        assert_response :unauthorized
+      end
+
+      test 'user with role >= Maintainer can select attachments of a sample' do
+        get select_namespace_project_sample_attachments_url(@namespace, @project, @sample1, format: :turbo_stream)
+        assert_response :success
+      end
+
+      test 'user with role < Maintainer can not select attachments of a sample' do
+        sign_in users(:ryan_doe)
+        get select_namespace_project_sample_attachments_url(@namespace, @project, @sample1, format: :turbo_stream)
         assert_response :unauthorized
       end
     end
