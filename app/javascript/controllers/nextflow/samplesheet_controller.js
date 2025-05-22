@@ -181,7 +181,7 @@ export default class extends Controller {
         this.#combineFormData();
         fetch(this.urlValue, {
           method: "POST",
-          body: new URLSearchParams(this.#formData),
+          body: new URLSearchParams(this.#compactFormData()),
           credentials: "same-origin",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -253,6 +253,10 @@ export default class extends Controller {
   #enableErrorState(message) {
     this.errorTarget.classList.remove("hidden");
     this.errorMessageTarget.innerHTML = message;
+    this.errorMessageTarget.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   }
 
   #setFormData(inputName, inputValue) {
@@ -651,5 +655,16 @@ export default class extends Controller {
     this.element.insertAdjacentHTML("beforeend", metadataForm);
     this.element.lastElementChild.requestSubmit();
     this.element.lastElementChild.remove();
+  }
+
+  #compactFormData() {
+    const compactFormData = new FormData();
+    for (const [key, value] of this.#formData.entries()) {
+      // exclude empty values from form data for samplesheet_params
+      if (!(/[samplesheet_params]/.test(key) && value === "")) {
+        compactFormData.append(key, value);
+      }
+    }
+    return compactFormData;
   }
 }
