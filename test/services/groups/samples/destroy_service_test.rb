@@ -102,7 +102,7 @@ module Groups
       test 'delete shared group samples with owner shared group role' do
         group = groups(:group_sample_actions)
         user = users(:sample_actions_doe)
-        sample = samples(:sample69)
+        sample = samples(:sample70)
         shared_group = groups(:shared_group_sample_actions_owner)
         shared_project = projects(:projectSharedGroupSampleActionsOwner)
 
@@ -141,18 +141,17 @@ module Groups
       end
 
       test 'incorrect permission if user is not an owner within the group shared as owner' do
-        group = groups(:group_sample_actions)
-        user = users(:sample_actions_doe)
-        sample = samples(:sample72)
+        group7 = groups(:group_seven)
+        user = users(:user0)
 
         exception = assert_raises(ActionPolicy::Unauthorized) do
-          ::Groups::Samples::DestroyService.new(group, user, { sample_ids: [sample.id] }).execute
+          ::Groups::Samples::DestroyService.new(group7, user, { sample_ids: [@sample1.id] }).execute
         end
 
         assert_equal GroupPolicy, exception.policy
         assert_equal :destroy_sample?, exception.rule
         assert exception.result.reasons.is_a?(::ActionPolicy::Policy::FailureReasons)
-        assert_equal I18n.t(:'action_policy.policy.group.destroy_sample?', name: group.name),
+        assert_equal I18n.t(:'action_policy.policy.group.destroy_sample?', name: group7.name),
                      exception.result.message
       end
     end
