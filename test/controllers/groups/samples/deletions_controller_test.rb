@@ -83,7 +83,7 @@ module Groups
       assert_redirected_to group_samples_path(@namespace)
     end
 
-    test 'deleting no samples in destroy_multiple' do
+    test 'deleting no samples' do
       assert_no_difference('Sample.count') do
         delete group_samples_deletion_path(@namespace),
                params: {
@@ -97,7 +97,7 @@ module Groups
       assert_redirected_to group_samples_path(@namespace)
     end
 
-    test 'deleting no samples in destroy_multiple with valid sample ids but do not belong to group' do
+    test 'deleting no samples with valid sample ids but do not belong to group' do
       sample65 = samples(:sample65)
       sample66 = samples(:sample66)
 
