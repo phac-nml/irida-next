@@ -557,3 +557,62 @@ group_sample_transfer_target:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
   puid: INXT_GRP_AAAAAAAACQ
   samples_count: 0
+
+group_sample_actions:
+  <<: *DEFAULTS
+  name: Group Sample Actions
+  path: group-sample-actions
+  description: Group Sample Actions description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
+  puid: INXT_GRP_AAAAAAAACP
+  metadata_summary: { "metadatafield1": 2, "metadatafield2": 2 }
+  samples_count: 2
+
+subgroup_sample_actions:
+  name: Subgroup Sample Actions
+  path: subgroup-sample-actions
+  description: Group Sample Actions description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
+  puid: INXT_GRP_AAAAAAAACQ
+  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  samples_count: 1
+
+shared_group_sample_actions_owner:
+  <<: *DEFAULTS
+  name: Shared Group Sample Actions Owner
+  path: shared-group-sample-actions-owner
+  description: Shared Group Sample Actions Owner description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
+  puid: INXT_GRP_AAAAAAAACR
+  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  samples_count: 1
+
+shared_group_sample_actions_maintainer:
+  <<: *DEFAULTS
+  name: Shared Group Sample Actions Maintainer
+  path: shared-group-sample-actions-maintainer
+  description: Shared Group Sample Actions Maintainer description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
+  puid: INXT_GRP_AAAAAAAACS
+  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  samples_count: 1
+
+shared_group_sample_actions_analyst:
+  <<: *DEFAULTS
+  name: Shared Group Sample Actions Analyst
+  path: shared-group-sample-actions-analyst
+  description: Shared Group Sample Actions Analyst description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
+  puid: INXT_GRP_AAAAAAAACT
+  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  samples_count: 1
+
+shared_group_sample_actions_guest:
+  <<: *DEFAULTS
+  name: Shared Group Sample Actions Guest
+  path: shared-group-sample-actions-guest
+  description: Shared Group Sample Actions Guest description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
+  puid: INXT_GRP_AAAAAAAACU
+  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  samples_count: 1

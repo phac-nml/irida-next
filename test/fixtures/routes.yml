@@ -723,3 +723,63 @@ project_group_sample_transfer_target_namespace_route:
   name: Group Sample Transfer Target / Project Group Sample Transfer Target
   path: group-sample-transfer-target/project-group-sample-transfer-target
   source: project_group_sample_transfer_target_namespace (Namespace)
+
+group_sample_actions_route:
+  name: Group Sample Actions
+  path: group-sample-actions
+  source: group_sample_actions (Namespace)
+
+subgroup_sample_actions_route:
+  name: Group Sample Actions / Subgroup Sample Actions
+  path: group-sample-actions/subgroup-sample-actions
+  source: subgroup_sample_actions (Namespace)
+
+project_group_sample_actions_namespace_route:
+  name: Group Sample Actions / Project Group Sample Actions
+  path: group-sample-actions/project-group-sample-actions
+  source: project_group_sample_actions_namespace (Namespace)
+
+project_subgroup_sample_actions_namespace_route:
+  name: Group Sample Actions / Subgroup Sample Actions / Project Subgroup Sample Actions
+  path: group-sample-actions/subgroup-sample-actions/project-subgroup-sample-actions
+  source: project_subgroup_sample_actions_namespace (Namespace)
+
+shared_group_sample_actions_owner_route:
+  name: Shared Group Sample Actions Owner
+  path: shared-group-sample-actions-owner
+  source: shared_group_sample_actions_owner (Namespace)
+
+shared_group_sample_actions_maintainer_route:
+  name: Shared Group Sample Actions Maintainer
+  path: shared-group-sample-actions-maintainer
+  source: shared_group_sample_actions_maintainer (Namespace)
+
+shared_group_sample_actions_analyst_route:
+  name: Shared Group Sample Actions Analyst
+  path: shared-group-sample-actions-analyst
+  source: shared_group_sample_actions_analyst (Namespace)
+
+shared_group_sample_actions_guest_route:
+  name: Shared Group Sample Actions Guest
+  path: shared-group-sample-actions-guest
+  source: shared_group_sample_actions_guest (Namespace)
+
+project_shared_group_sample_actions_owner_route:
+  name: Shared Group Sample Actions Owner / Project Shared Group Sample Actions Owner
+  path: shared-group-sample-actions-owner/project-shared-group-sample-actions-owner
+  source: project_shared_group_sample_actions_owner_namespace (Namespace)
+
+shared_group_sample_actions_maintainer_route:
+  name: Shared Group Sample Actions Maintainer / Project Shared Group Sample Actions Maintainer
+  path: shared-group-sample-actions-maintainer/project-shared-group-sample-actions-maintainer
+  source: project_shared_group_sample_actions_maintainer_namespace (Namespace)
+
+shared_group_sample_actions_analyst_route:
+  name: Shared Group Sample Actions Analyst / Project Shared Group Sample Actions Analyst
+  path: shared-group-sample-actions-analyst/project-shared-group-sample-actions-analyst
+  source: project_shared_group_sample_actions_analyst_namespace (Namespace)
+
+shared_group_sample_actions_guest_route:
+  name: Shared Group Sample Actions Guest / Project Shared Group Sample Actions Guest
+  path: shared-group-sample-actions-guest/project-shared-group-sample-actions-guest
+  source: project_shared_group_sample_actions_guest_namespace (Namespace)
