@@ -102,7 +102,7 @@ module Groups
       test 'delete shared group samples with owner shared group role' do
         group = groups(:group_sample_actions)
         user = users(:sample_actions_doe)
-        sample = samples(:sample70)
+        sample = samples(:sample69)
         shared_group = groups(:shared_group_sample_actions_owner)
         shared_project = projects(:projectSharedGroupSampleActionsOwner)
 
