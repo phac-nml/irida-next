@@ -664,19 +664,19 @@ shared_group_sample_actions_maintainer_member_shared_sample_actions_doe:
   user_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_maintainer, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
+  access_level: <%= Member::AccessLevel::OWNER %>
 
 shared_group_sample_actions_analyst_member_shared_sample_actions_doe:
   user_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_analyst, :uuid) %>
-  access_level: <%= Member::AccessLevel::ANALYST %>
+  access_level: <%= Member::AccessLevel::OWNER %>
 
 shared_group_sample_actions_guest_member_shared_sample_actions_doe:
   user_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_guest, :uuid) %>
-  access_level: <%= Member::AccessLevel::GUEST %>
+  access_level: <%= Member::AccessLevel::OWNER %>
 
 subgroup_sample_actions_group_member_subgroup_sample_actions_doe:
   user_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_sample_actions_doe, :uuid) %>

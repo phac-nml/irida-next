@@ -769,17 +769,17 @@ project_shared_group_sample_actions_owner_route:
   path: shared-group-sample-actions-owner/project-shared-group-sample-actions-owner
   source: project_shared_group_sample_actions_owner_namespace (Namespace)
 
-shared_group_sample_actions_maintainer_route:
+project_shared_group_sample_actions_maintainer_route:
   name: Shared Group Sample Actions Maintainer / Project Shared Group Sample Actions Maintainer
   path: shared-group-sample-actions-maintainer/project-shared-group-sample-actions-maintainer
   source: project_shared_group_sample_actions_maintainer_namespace (Namespace)
 
-shared_group_sample_actions_analyst_route:
+project_shared_group_sample_actions_analyst_route:
   name: Shared Group Sample Actions Analyst / Project Shared Group Sample Actions Analyst
   path: shared-group-sample-actions-analyst/project-shared-group-sample-actions-analyst
   source: project_shared_group_sample_actions_analyst_namespace (Namespace)
 
-shared_group_sample_actions_guest_route:
+project_shared_group_sample_actions_guest_route:
   name: Shared Group Sample Actions Guest / Project Shared Group Sample Actions Guest
   path: shared-group-sample-actions-guest/project-shared-group-sample-actions-guest
   source: project_shared_group_sample_actions_guest_namespace (Namespace)
