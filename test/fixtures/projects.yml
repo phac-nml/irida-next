@@ -343,4 +343,4 @@ projectGroupSampleTransfer:
 projectGroupSampleTransferTarget:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_group_sample_transfer_target_namespace, :uuid) %>
-  samples_count: 2
+  samples_count: 0
