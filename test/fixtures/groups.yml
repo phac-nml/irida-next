@@ -569,10 +569,11 @@ group_sample_actions:
   samples_count: 2
 
 subgroup_sample_actions:
+  <<: *DEFAULTS
   name: Subgroup Sample Actions
   path: subgroup-sample-actions
-  description: Group Sample Actions description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
+  description: Subgroup Sample Actions description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_sample_actions, :uuid) %>
   puid: INXT_GRP_AAAAAAAACQ
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   samples_count: 1
