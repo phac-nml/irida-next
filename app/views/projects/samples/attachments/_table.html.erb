@@ -2,34 +2,37 @@
   <div class="relative overflow-x-auto table-wrapper" data-turbo-temporary>
     <% if @allowed_to[:update_sample] %>
       <div class="flex items-center mb-4">
-        <div class="flex items-center space-x-2">
-          <%= form_with(
+        <% if Flipper.enabled?(:sample_attachments_searching) %>
+          <div class="flex items-center space-x-2">
+            <%= form_with(
                   url: select_namespace_project_sample_attachments_url(sample_id: @sample.id),
                   method: :get,
                   id: "select-all-form",
                 ) do |f| %>
-            <input type="hidden" name="format" value="turbo_stream"/>
-            <input type="hidden" name="select" value="on"/>
-            <input
-              type="hidden"
-              name="q[puid_or_file_blob_filename_cont]"
-              value="<%=params.dig(:q, :puid_or_file_blob_filename_cont)%>"
-            >
-            <%= f.submit t(".select_all_button"),
-                     class: "button button--state-default button--size-default" %>
-          <% end %>
-          <%= form_with(
+              <input type="hidden" name="format" value="turbo_stream"/>
+              <input type="hidden" name="select" value="on"/>
+              <input
+                type="hidden"
+                name="q[puid_or_file_blob_filename_cont]"
+                value="<%=params.dig(:q, :puid_or_file_blob_filename_cont)%>"
+              >
+              <%= f.submit t(".select_all_button"),
+                       class: "button button--state-default button--size-default" %>
+            <% end %>
+            <%= form_with(
                   url: select_namespace_project_sample_attachments_url(sample_id: @sample.id),
                   method: :get,
                   id: "deselect-all-form" ,
                 ) do |f| %>
-            <input type="hidden" name="format" value="turbo_stream"/>
-            <%= f.submit t(".deselect_all_button"),
-                     class: "button button--state-default button--size-default" %>
-          <% end %>
-        </div>
+              <input type="hidden" name="format" value="turbo_stream"/>
+              <%= f.submit t(".deselect_all_button"),
+                       class: "button button--state-default button--size-default" %>
+            <% end %>
+          </div>
+        <% end %>
         <div class="flex items-center space-x-2 ml-auto">
-          <%= render SearchComponent.new(
+          <% if Flipper.enabled?(:sample_attachments_searching) %>
+            <%= render SearchComponent.new(
               query: @q,
               search_attribute: :puid_or_file_blob_filename_cont,
               placeholder: t(:".search.placeholder"),
@@ -39,8 +42,9 @@
                 selection_storage_key_value: "files-#{@sample.id}"
               }
               ) do %>
-            <%= hidden_field_tag :limit, @pagy.limit %>
-            <%= hidden_field_tag :tab, @tab %>
+              <%= hidden_field_tag :limit, @pagy.limit %>
+              <%= hidden_field_tag :tab, @tab %>
+            <% end %>
           <% end %>
           <%= link_to t("projects.samples.show.new_attachment_button"),
           new_namespace_project_sample_attachment_path(sample_id: @sample.id),
