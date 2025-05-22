@@ -78,7 +78,7 @@ module Mutations
         next
       end
 
-      samples = Samples::CloneService.new(
+      samples = Projects::Samples::CloneService.new(
         project, current_user
       ).execute(new_project_id, sample_ids.compact)
 
