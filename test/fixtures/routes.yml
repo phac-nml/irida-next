@@ -703,3 +703,23 @@ metadata_doe_projectMetadata2_namespace_route:
   name: metadata.doe@localhost / Project Metadata 2
   path: metadata.doe_at_localhost/project-metadata-2
   source: metadata_doe_projectMetadata2_namespace (Namespace)
+
+group_sample_transfer_route:
+  name: Group Sample Transfer
+  path: group-sample-transfer
+  source: group_sample_transfer (Namespace)
+
+group_sample_transfer_target_route:
+  name: Group Sample Transfer Target
+  path: group-sample-transfer-target
+  source: group_sample_transfer_target (Namespace)
+
+project_group_sample_transfer_namespace:
+  name: Group Sample Transfer / Project Group Sample Transfer
+  path: group-sample-transfer/project-group-sample-transfer
+  source: project_group_sample_transfer_namespace (Namespace)
+
+project_group_sample_transfer_target_namespace_route:
+  name: Group Sample Transfer Target / Project Group Sample Transfer Target
+  path: group-sample-transfer-target/project-group-sample-transfer-target
+  source: project_group_sample_transfer_target_namespace (Namespace)

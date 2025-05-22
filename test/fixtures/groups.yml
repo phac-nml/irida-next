@@ -539,3 +539,21 @@ group_metadata:
   metadata_summary: { "example_date": 3, "example_float": 3, "example_integer": 3 }
   puid: INXT_GRP_AAAAAAAACO
   samples_count: 3
+
+group_sample_transfer:
+  <<: *DEFAULTS
+  name: Group Sample Transfer
+  path: group-sample-transfer
+  description: Group Sample Transfer description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
+  puid: INXT_GRP_AAAAAAAACP
+  samples_count: 3
+
+group_sample_transfer_target:
+  <<: *DEFAULTS
+  name: Group Sample Transfer Target
+  path: group-sample-transfer-target
+  description: Group Sample Transfer Target description
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
+  puid: INXT_GRP_AAAAAAAACQ
+  samples_count: 0
