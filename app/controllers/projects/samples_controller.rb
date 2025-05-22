@@ -44,6 +44,7 @@ module Projects
       elsif @tab == 'history'
         @log_data = @sample.log_data_without_changes
       else
+        @render_individual_attachments = filter_requested?
         all_attachments = load_attachments
         @has_attachments = all_attachments.count.positive?
         @q = all_attachments.ransack(params[:q])
@@ -119,7 +120,6 @@ module Projects
         @sample.attachments.all
       else
         @sample.attachments.where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
-
       end
     end
 

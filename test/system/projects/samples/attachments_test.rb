@@ -543,6 +543,114 @@ module Projects
         end
       end
 
+      test 'select all & deselect all attachments' do
+        login_as users(:jeff_doe)
+        project = projects(:projectA)
+        sample = samples(:sampleB)
+        namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+
+        visit namespace_project_sample_url(namespace, project, sample)
+        assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 6, count: 6,
+                                                                             locale: @user.locale))
+
+        # no attachments selected/checked
+        within 'tbody' do
+          assert_selector 'input[name="attachment_ids[]"]', count: 6
+          assert_selector 'input[name="attachment_ids[]"]:checked', count: 0
+        end
+        within 'tfoot' do
+          assert_text "#{I18n.t('attachments.table_component.counts.attachments')}: 6"
+          assert_selector 'strong[data-selection-target="selected"]', text: '0'
+        end
+        # attachments selected
+        click_button I18n.t(:'projects.samples.attachments.table.select_all_button')
+        within 'tbody' do
+          assert_selector 'input[name="attachment_ids[]"]:checked', count: 6
+        end
+        within 'tfoot' do
+          assert_text "#{I18n.t('attachments.table_component.counts.attachments')}: 6"
+          assert_selector 'strong[data-selection-target="selected"]', text: '6'
+        end
+        # unselect single attachment
+        within 'tbody' do
+          first('input[name="attachment_ids[]"]').click
+        end
+        within 'tfoot' do
+          assert_text "#{I18n.t('attachments.table_component.counts.attachments')}: 6"
+          assert_selector 'strong[data-selection-target="selected"]', text: '5'
+        end
+        # select all again
+        click_button I18n.t(:'projects.samples.attachments.table.select_all_button')
+        within 'tbody' do
+          assert_selector 'input[name="attachment_ids[]"]', count: 6
+          assert_selector 'input[name="attachment_ids[]"]:checked', count: 6
+        end
+        within 'tfoot' do
+          assert_text "#{I18n.t('attachments.table_component.counts.attachments')}: 6"
+          assert_selector 'strong[data-selection-target="selected"]', text: '6'
+        end
+        # deselect all
+        click_button I18n.t(:'projects.samples.attachments.table.deselect_all_button')
+        within 'tbody' do
+          assert_selector 'input[name="attachment_ids[]"]', count: 6
+          assert_selector 'input[name="attachment_ids[]"]:checked', count: 0
+        end
+        within 'tfoot' do
+          assert_text "#{I18n.t('attachments.table_component.counts.attachments')}: 6"
+          assert_selector 'strong[data-selection-target="selected"]', text: '0'
+        end
+      end
+
+      test 'selecting attachments while filtering' do
+        login_as users(:jeff_doe)
+        project = projects(:projectA)
+        sample = samples(:sampleB)
+        namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+
+        visit namespace_project_sample_url(namespace, project, sample)
+        assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 6, count: 6,
+                                                                             locale: @user.locale))
+
+        # no attachments selected/checked
+        within 'tbody' do
+          assert_selector 'input[name="attachment_ids[]"]', count: 6
+          assert_selector 'input[name="attachment_ids[]"]:checked', count: 0
+        end
+        within 'tfoot' do
+          assert_text "#{I18n.t('attachments.table_component.counts.attachments')}: 6"
+          assert_selector 'strong[data-selection-target="selected"]', text: '0'
+        end
+
+        # apply filter
+        fill_in placeholder: I18n.t(:'projects.samples.attachments.table.search.placeholder'),
+                with: attachments(:attachmentPEFWD1).puid
+        find('input.t-search-component').native.send_keys(:return)
+
+        within 'tbody' do
+          assert_selector 'input[name="attachment_ids[]"]', count: 2
+          assert_selector 'input[name="attachment_ids[]"]:checked', count: 0
+        end
+
+        click_button I18n.t(:'projects.samples.attachments.table.select_all_button')
+
+        within 'tbody' do
+          assert_selector 'input[name="attachment_ids[]"]:checked', count: 2
+        end
+        within 'tfoot' do
+          assert_text 'Attachments: 2'
+          assert_selector 'strong[data-selection-target="selected"]', text: '2'
+        end
+
+        # remove filter
+        fill_in placeholder: I18n.t(:'projects.samples.attachments.table.search.placeholder'), with: ' '
+        find('input.t-search-component').native.send_keys(:return)
+
+        within 'tfoot' do
+          assert_text "#{I18n.t('attachments.table_component.counts.attachments')}: 6"
+          assert_selector 'strong[data-selection-target="selected"]', text: '0'
+        end
+      end
+
       test 'delete single attachment with remove link while all attachments selected followed by multiple deletion' do
         visit namespace_project_sample_url(@namespace, @project, @sample1)
 
