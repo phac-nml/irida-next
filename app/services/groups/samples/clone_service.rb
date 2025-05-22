@@ -32,13 +32,13 @@ module Groups
         @cloned_samples_data = { project_data: {}, group_data: [] }
         cloned_sample_ids = {}
         not_found_sample_ids = []
-        total_sample_count = sample_ids.count
-        sample_ids.each.with_index(1) do |sample_id, index|
+        authorized_samples = query_authorized_samples(sample_ids)
+        total_sample_count = authorized_samples.count
+        authorized_samples.each.with_index(1) do |sample, index|
           update_progress_bar(index, total_sample_count, broadcast_target)
-          sample = Sample.find(sample_id)
           cloned_sample = clone_sample(sample)
           unless cloned_sample.nil?
-            cloned_sample_ids[sample_id] = cloned_sample.id
+            cloned_sample_ids[sample.id] = cloned_sample.id
             old_project_puid = sample.project.puid
             add_cloned_sample_data(sample, cloned_sample.puid, old_project_puid)
           end
@@ -51,6 +51,14 @@ module Groups
           @group.errors.add(:samples,
                             I18n.t('services.samples.clone.samples_not_found',
                                    sample_ids: not_found_sample_ids.join(', ')))
+        end
+
+        unless sample_ids.count == authorized_samples.count
+          unauthorized_samples_ids = sample_ids - authorized_samples.pluck(:id)
+          unauthorized_samples_puids = Sample.where(id: unauthorized_samples_ids).pluck(:puid)
+          @group.errors.add(:samples,
+                            I18n.t('services.samples.clone.unauthorized_samples',
+                                   sample_puids: unauthorized_samples_puids.join(', ')))
         end
 
         unless @cloned_samples_data[:project_data].empty?
@@ -96,6 +104,15 @@ module Groups
         @cloned_samples_data[:group_data] << { sample_name: sample.name, sample_puid: sample.puid,
                                                clone_puid: cloned_puid, project_name: sample.project.name,
                                                project_puid: old_project_puid }
+      end
+
+      def query_authorized_samples(sample_ids)
+        authorized_scope(Sample, type: :relation, as: :namespace_samples,
+                                 scope_options: {
+                                   namespace: @group,
+                                   minimum_access_level: Member::AccessLevel::MAINTAINER
+                                 })
+          .where(id: sample_ids)
       end
 
       def update_samples_count

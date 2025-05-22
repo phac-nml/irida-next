@@ -1968,6 +1968,7 @@ fr:
         same_project: Les projets sources et de destination sont les mêmes. Veuillez sélectionner un autre projet de destination.
         sample_exists: "Échantillon %{sample_puid} : Conflit avec l’échantillon nommé '%{sample_name}' dans le projet cible"
         samples_not_found: "Les échantillons avec les identifiants d’échantillon suivants n’ont pas pu être copiés puisqu’ils n’ont pas été trouvés dans l’espace de noms source : %{sample_ids}"
+        unauthorized_samples: "You do not have permission to copy the following samples with sample puids: %{sample_puids}"
       metadata:
         empty_metadata: Aucune métadonnée n’a été reçue pour mettre à jour l’échantillon '%{sample_name}'
         fields:
