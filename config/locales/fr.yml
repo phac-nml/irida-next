@@ -2018,22 +2018,20 @@ fr:
         sample_export: Exportation d’échantillons
         transfer: Transférer des échantillons
       destroy_multiple:
-        no_deleted_samples: Selected samples could not be deleted
-        partial_error: "%{not_deleted} samples could not be deleted"
-        partial_success: "%{deleted} samples were successfully deleted"
-        success: Samples were successfully deleted
+        no_deleted_samples: Les échantillons sélectionnés n’ont pas pu être supprimés
+        partial_error: Les échantillons %{not_deleted} n’ont pas pu être supprimés
+        partial_success: Les échantillons %{deleted} ont été supprimés avec succès
+        success: Les échantillons ont été supprimés avec succès
       destroy_multiple_confirmation_dialog:
         description:
-          plural: "The following COUNT_PLACEHOLDER samples have been selected for deletion:"
-          singular: "The following sample has been selected for deletion:"
-          zero: No samples have been selected for deletion
-        loading: Loading...
-        samples: Samples
-        spinner: Deleting samples. This may take a while...
-        submit_button: Confirm
-        title: Delete Samples
-      errors:
-        ok_button: OK
+          plural: "Les échantillons COUNT_PLACEHOLDER suivants ont été sélectionnés aux fins de suppression :"
+          singular: "L’échantillon suivant a été sélectionné aux fins de suppression :"
+          zero: Aucun échantillon n’a été sélectionné pour être supprimer
+        loading: Chargement...
+        samples: Échantillons
+        spinner: Suppression des échantillons. Cela peut prendre un certain temps...
+        submit_button: Confirmer
+        title: Supprimer les échantillons
       metadata:
         editing_field_cell:
           dialog:
