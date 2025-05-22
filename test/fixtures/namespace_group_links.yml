@@ -188,54 +188,48 @@ namespace_group_link31:
   namespace_type: "Group"
 
 namespace_group_link32:
-  group_id: <%= ActiveRecord::FixtureSet.identify(:user30_group_one, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_hotel, :uuid) %>
-  group_access_level: <%= Member::AccessLevel::OWNER %>
-  namespace_type: "Group"
-
-namespace_group_link33:
   group_id: <%= ActiveRecord::FixtureSet.identify(:group_sample_actions, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_owner, :uuid) %>
   group_access_level: <%= Member::AccessLevel::OWNER %>
   namespace_type: "Group"
 
-namespace_group_link34:
+namespace_group_link33:
   group_id: <%= ActiveRecord::FixtureSet.identify(:group_sample_actions, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_maintainer, :uuid) %>
   group_access_level: <%= Member::AccessLevel::MAINTAINER %>
   namespace_type: "Group"
 
-namespace_group_link35:
+namespace_group_link34:
   group_id: <%= ActiveRecord::FixtureSet.identify(:group_sample_actions, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_analyst, :uuid) %>
   group_access_level: <%= Member::AccessLevel::ANALYST %>
   namespace_type: "Group"
 
-namespace_group_link36:
+namespace_group_link35:
   group_id: <%= ActiveRecord::FixtureSet.identify(:group_sample_actions, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_guest, :uuid) %>
   group_access_level: <%= Member::AccessLevel::GUEST %>
   namespace_type: "Group"
 
-namespace_group_link37:
+namespace_group_link36:
   group_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_sample_actions, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_shared_group_sample_actions_owner_namespace, :uuid) %>
   group_access_level: <%= Member::AccessLevel::OWNER %>
   namespace_type: "Project"
 
-namespace_group_link38:
+namespace_group_link37:
   group_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_sample_actions, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_shared_group_sample_actions_maintainer_namespace, :uuid) %>
   group_access_level: <%= Member::AccessLevel::MAINTAINER %>
   namespace_type: "Project"
 
-namespace_group_link39:
+namespace_group_link38:
   group_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_sample_actions, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_shared_group_sample_actions_analyst_namespace, :uuid) %>
   group_access_level: <%= Member::AccessLevel::ANALYST %>
   namespace_type: "Project"
 
-namespace_group_link40:
+namespace_group_link39:
   group_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_sample_actions, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_shared_group_sample_actions_guest_namespace, :uuid) %>
   group_access_level: <%= Member::AccessLevel::GUEST %>

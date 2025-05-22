@@ -648,12 +648,6 @@ group_sample_transfer_target_member_mary_doe:
   access_level: <%= Member::AccessLevel::OWNER %>
 
 
-user30_group_one_group_member_steve_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:steve_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:user30, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:user30_group_one, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
 subgroup_sample_actions_group_member_subgroup_sample_actions_doe:
   user_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_sample_actions_doe, :uuid) %>
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
