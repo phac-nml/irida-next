@@ -18,54 +18,6 @@
           "
           data-layout-target="logo"
         >
-<<<<<<< HEAD
-          <%= helpers.render_icon :irida_logo,
-                              class: "size-8 text-primary-600 rotate-12 inline-block" %>
-          <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">
-            <%= t(:"general.name") %>
-          </span>
-        </a>
-        <div class=" flex flex-row shrink-0 justify-end items-center space-x-1">
-          <button
-            type="button"
-            data-action="click->layout#collapse"
-            class="
-              navbar-button cursor-pointer p-2 rounded-lg transition-colors hover:bg-slate-100
-              dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700
-              dark:hover:text-slate-200 focus:outline-none focus-visible:ring-2
-              focus-visible:ring-primary-500
-            "
-            aria-label="<%= t(:'general.navbar.collapse.aria_label') %>"
-          >
-            <%= helpers.render_icon :sidebar, class: "size-6", "aria-hidden": "true" %>
-          </button>
-          <!-- Add new items -->
-          <%= viral_dropdown(icon: "plus", skidding: -300, dropdown_styles: "width: 276px;", aria: { label: t(:'general.navbar.new_dropdown.aria_label') }, classes: "p-1 navbar-button text-slate-500 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-700") do |dropdown| %>
-            <%= dropdown.with_item(
-              label: t(:"general.navbar.new_dropdown.project"),
-              url: new_project_path,
-            ) %>
-            <%= dropdown.with_item(
-              label: t(:"general.navbar.new_dropdown.group"),
-              url: new_group_path,
-            ) %>
-          <% end %>
-          <!-- Profile menu -->
-          <%= viral_dropdown(icon: "user_circle", skidding: -300, dropdown_styles: "width: 276px;", aria: { label: t(:'general.navbar.account_dropdown.aria_label') }, classes: "p-1 navbar-button text-slate-500 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-700") do |dropdown| %>
-            <%= dropdown.with_item(
-              label: t(:"general.navbar.account_dropdown.profile"),
-              url: profile_path,
-            ) %>
-            <%= dropdown.with_item(
-              label: t(:"general.navbar.account_dropdown.sign_out"),
-              url: destroy_user_session_path,
-              data: {
-                turbo_method: :delete,
-              },
-            ) %>
-          <% end %>
-        </div>
-=======
           <%= helpers.render_icon :sidebar, class: "size-6" %>
         </button>
         <!-- Add new items -->
@@ -93,7 +45,6 @@
             },
           ) %>
         <% end %>
->>>>>>> 5fec038ea (feat: enhance dropdown component with custom styles and previews 🎨✨)
       </div>
       <div
         class="p-2 pt shrink-0"
