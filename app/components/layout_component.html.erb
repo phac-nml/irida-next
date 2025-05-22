@@ -20,7 +20,12 @@
 >
   <%= sidebar %>
   <div class="relative content" data-layout-target="content">
-    <div class="flex px-4 max-xl:fixed xl:absolute top-0 left-0 right-0 z-20 h-16">
+    <div
+      class="
+        flex px-4 max-xl:fixed xl:absolute top-0 left-0 right-0 z-20 h-16
+        -outline-offset-1 border-b border-slate-200 dark:border-slate-950
+      "
+    >
       <div
         class="
           flex flex-row shrink-0 justify-end items-center space-x-1 max-xl:visible
@@ -48,7 +53,7 @@
       tabindex="0"
       class="
         @container max-xl:fixed xl:absolute bottom-0 left-0 right-0 p-4 overflow-y-auto
-        top-16 border-t border-slate-200 dark:border-slate-950
+        top-16
       "
     >
       <div class="<%= @layout %>"><%= body %></div>

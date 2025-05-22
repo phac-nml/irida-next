@@ -785,8 +785,8 @@
 
 @utility fixed-table-component {
   @media screen and (min-height: 500px) {
-    height: calc(100vh - 50px - 32px);
-    max-height: calc(100vh - 50px - 32px);
+    height: calc(100vh - 64px - 32px);
+    max-height: calc(100vh - 64px - 32px);
     display: flex;
     flex-direction: column;
   }
