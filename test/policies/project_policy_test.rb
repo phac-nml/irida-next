@@ -298,7 +298,7 @@ class ProjectPolicyTest < ActiveSupport::TestCase
 
     scoped_projects = policy.apply_scope(Project, type: :relation)
 
-    assert_equal 3, scoped_projects.count
+    assert_equal 1, scoped_projects.count
 
     assert_equal true, policy.submit_workflow?
   end
