@@ -157,6 +157,65 @@ module Activities
         assert_selector 'tr > td', text: 'INXT_PRJ_AAAAAAAAAA'
         assert_selector 'tr > td', text: 'INXT_PRJ_AAAAAAAAAB'
       end
+
+      test 'group samples transfer activity dialog' do
+        user = users(:mary_doe)
+        login_as user
+        group = groups(:group_sample_transfer)
+
+        activities = group.human_readable_activity(group.retrieve_group_activity).reverse
+
+        assert_equal(1, activities.count do |activity|
+          activity[:key].include?('group.samples.transfer')
+        end)
+
+        activity_to_render = activities.find do |a|
+          a[:key] == 'activity.group.samples.transfer_html'
+        end
+
+        visit group_activity_path(group)
+
+        click_link(I18n.t('components.activity.more_details'),
+                   href: activity_path(activity_to_render[:id], dialog_type: 'group_sample_transfer').to_s)
+
+        assert_selector 'h1', text: I18n.t(:'components.activity.dialog.group_sample_transfer.title')
+
+        within %(div[data-controller="activities--extended_details"][data-controller-connected="true"]) do
+          assert_selector 'p',
+                          text: I18n.t(:'components.activity.dialog.group_sample_transfer.description',
+                                       user: 'System', count: 3,
+                                       target_project_puid: 'INXT_PRJ_AAAAAAAACD')
+
+          assert_selector 'table', count: 1
+          assert_selector 'th', count: 3
+          assert_selector 'tr', count: 4
+          assert_selector 'tr > th',
+                          text: I18n.t(:'components.activity.dialog.group_sample_transfer.transferred_from').upcase
+          assert_selector 'tr > th',
+                          text: I18n.t(:'components.activity.dialog.group_sample_transfer.transferred_to').upcase
+
+          assert_selector 'tr:nth-child(1) > td:first-child', text: 'Group Sample Transfer 1'
+          assert_selector 'tr:nth-child(1) > td:first-child > span', text: 'INXT_SAM_AAAAAAAADQ'
+          assert_selector 'tr:nth-child(1) > td:nth-child(2)', text: 'Project Group Sample Transfer'
+          assert_selector 'tr:nth-child(1) > td:nth-child(2) > span', text: 'INXT_PRJ_AAAAAAAACC'
+          assert_selector 'tr:nth-child(1) > td:nth-child(3)', text: 'Project Group Sample Transfer Target'
+          assert_selector 'tr:nth-child(1) > td:nth-child(3) > span', text: 'INXT_PRJ_AAAAAAAACD'
+
+          assert_selector 'tr:nth-child(2) > td:first-child', text: 'Group Sample Transfer 2'
+          assert_selector 'tr:nth-child(2) > td:first-child > span', text: 'INXT_SAM_AAAAAAAADR'
+          assert_selector 'tr:nth-child(2) > td:nth-child(2)', text: 'Project Group Sample Transfer'
+          assert_selector 'tr:nth-child(2) > td:nth-child(2) > span', text: 'INXT_PRJ_AAAAAAAACC'
+          assert_selector 'tr:nth-child(2) > td:nth-child(3)', text: 'Project Group Sample Transfer Target'
+          assert_selector 'tr:nth-child(2) > td:nth-child(3) > span', text: 'INXT_PRJ_AAAAAAAACD'
+
+          assert_selector 'tr:nth-child(3) > td:first-child', text: 'Group Sample Transfer 3'
+          assert_selector 'tr:nth-child(3) > td:first-child > span', text: 'INXT_SAM_AAAAAAAADS'
+          assert_selector 'tr:nth-child(3) > td:nth-child(2)', text: 'Project Group Sample Transfer'
+          assert_selector 'tr:nth-child(3) > td:nth-child(2) > span', text: 'INXT_PRJ_AAAAAAAACC'
+          assert_selector 'tr:nth-child(3) > td:nth-child(3)', text: 'Project Group Sample Transfer Target'
+          assert_selector 'tr:nth-child(3) > td:nth-child(3) > span', text: 'INXT_PRJ_AAAAAAAACD'
+        end
+      end
     end
   end
 end

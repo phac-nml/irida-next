@@ -550,3 +550,33 @@ sample66:
   metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
     'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
     'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+
+group_sample_transfer_sample1:
+  name: "Group Sample Transfer 1"
+  description: "Group Sample Transfer 1 description."
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransfer, :uuid) %>
+  puid: "INXT_SAM_AAAAAAAADQ"
+
+group_sample_transfer_sample2:
+  name: "Group Sample Transfer 2"
+  description: "Group Sample Transfer 2 description."
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransfer, :uuid) %>
+  puid: "INXT_SAM_AAAAAAAADR"
+
+group_sample_transfer_sample3:
+  name: "Group Sample Transfer 3"
+  description: "Group Sample Transfer 3 description."
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransfer, :uuid) %>
+  puid: "INXT_SAM_AAAAAAAADS"
+
+group_sample_transfer_target_sample1:
+  name: "Group Sample Transfer Target 1"
+  description: "Group Sample Transfer Target 1 description."
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransferTarget, :uuid) %>
+  puid: "INXT_SAM_AAAAAAAADT"
+
+group_sample_transfer_target_sample2:
+  name: "Group Sample Transfer Target 2"
+  description: "Group Sample Transfer Target 2 description."
+  project_id: <%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransferTarget, :uuid) %>
+  puid: "INXT_SAM_AAAAAAAADU"
