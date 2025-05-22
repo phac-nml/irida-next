@@ -35,7 +35,7 @@ module Viral
 
     def system_arguments
       @system_arguments.tap do |opts|
-        opts[:tag] = @url ? :a : :div
+        opts[:tag] = @url ? :a : :span
         (opts[:role] = :img) unless @url
         (opts[:href] = @url) if @url
         opts[:style] = "background-color: #{@colours[:background]}; border: 1px solid #{@colours[:border]};"

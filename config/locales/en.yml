@@ -795,9 +795,11 @@ en:
         other: "%{count} errors prohibited this %{resource} from being saved:"
   general:
     default_sidebar:
+      aria_label: Main sidebar
       data_exports: Data Exports
       goto: Go to
       groups: Groups
+      navigation: Main Navigation
       projects: Projects
       title: Your work
       workflows: Workflow Executions
@@ -816,6 +818,7 @@ en:
         aria_label: New menu item
         group: Create new group
         project: Create new project
+    opens_in_new_tab: Opens in new tab
     screen_reader:
       close: Close
   graphql:

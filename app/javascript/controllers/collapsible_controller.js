@@ -9,7 +9,7 @@ import { Controller } from "@hotwired/stimulus";
  *
  * @example
  * <div data-controller="collapsible">
- *   <button type="button" data-action="collapsible#toggle" data-collapsible-target="button">
+ *   <button type="button" data-action="click->collapsible#toggle" data-collapsible-target="button">
  *     Toggle Me
  *     <span data-collapsible-target="icon">➡️</span>
  *   </button>
@@ -55,29 +55,41 @@ export default class extends Controller {
    * - If visible (expanded): It collapses the item, updates ARIA attributes,
    *   adds the `hidden` HTML attribute, and updates the icon.
    */
-  toggle() {
-    const isCollapsed = this.itemTarget.classList.contains("hidden");
+  toggle(event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    const isCollapsed = this.itemTarget.classList.contains("hidden") || 
+                      this.itemTarget.hasAttribute("hidden");
 
     if (isCollapsed) {
       // ✨ Expanding the item
       this.itemTarget.classList.remove("hidden");
       this.itemTarget.setAttribute("aria-hidden", "false");
-      this.itemTarget.removeAttribute("hidden"); // Ensure it's truly visible
+      this.itemTarget.removeAttribute("hidden");
 
       if (this.hasButtonTarget) {
         this.buttonTarget.setAttribute("aria-expanded", "true");
       }
-      this.#updateIcon(false); // Update icon to "expanded" state
+      this.#updateIcon(false);
+      
+      // Dispatch event for other controllers to listen to
+      this.dispatch("expanded", { target: this.element });
     } else {
       // 🙈 Collapsing the item
       this.itemTarget.classList.add("hidden");
       this.itemTarget.setAttribute("aria-hidden", "true");
-      this.itemTarget.setAttribute("hidden", "hidden"); // HTML attribute for hiding
+      this.itemTarget.setAttribute("hidden", "");
 
       if (this.hasButtonTarget) {
         this.buttonTarget.setAttribute("aria-expanded", "false");
       }
-      this.#updateIcon(true); // Update icon to "collapsed" state
+      this.#updateIcon(true);
+      
+      // Dispatch event for other controllers to listen to
+      this.dispatch("collapsed", { target: this.element });
     }
   }
 
@@ -99,11 +111,11 @@ export default class extends Controller {
 
     // Apply rotation only if the current state doesn't match the desired state
     if (wantsRotate180 && !hasRotate180) {
-      this.iconTarget.classList.remove("rotate-0"); // Clean up just in case
-      this.iconTarget.classList.add("rotate-180"); // Show "expanded" icon
+      this.iconTarget.classList.remove("rotate-0");
+      this.iconTarget.classList.add("rotate-180");
     } else if (!wantsRotate180 && hasRotate180) {
       this.iconTarget.classList.remove("rotate-180");
-      this.iconTarget.classList.add("rotate-0"); // Show "collapsed" icon (optional, if rotate-0 is defined)
+      this.iconTarget.classList.add("rotate-0");
     }
   }
 }

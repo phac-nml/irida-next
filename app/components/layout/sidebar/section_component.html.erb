@@ -1,18 +1,25 @@
-<ul class="px-1 Layout-Sidebar__Section">
-  <% if items.present? %>
-    <% if title.present? %>
-      <li class="sidebar-section-title" aria-hidden="true"><%= title %></li>
-    <% end %>
-    <% items.each do |item| %>
-      <%= item %>
-    <% end %>
-  <% else %>
-    <%= content %>
+<div class="space-y-1 py-2">
+  <% if title.present? %>
+    <div class="px-4 py-2">
+      <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+        <%= title %>
+      </h3>
+    </div>
   <% end %>
 
-  <% if multi_level_menus.present? %>
-    <% multi_level_menus.each do |multi_level_menu| %>
-      <%= multi_level_menu %>
+  <ul class="space-y-1 px-2">
+    <% if items.present? %>
+      <% items.each do |item| %>
+        <%= item %>
+      <% end %>
+    <% else %>
+      <%= content %>
     <% end %>
-  <% end %>
-</ul>
+
+    <% if multi_level_menus.present? %>
+      <% multi_level_menus.each do |multi_level_menu| %>
+        <%= multi_level_menu %>
+      <% end %>
+    <% end %>
+  </ul>
+</div>

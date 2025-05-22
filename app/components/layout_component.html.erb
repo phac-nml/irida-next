@@ -20,7 +20,7 @@
 >
   <%= sidebar %>
   <div class="relative content" data-layout-target="content">
-    <div class="flex px-4 max-xl:fixed xl:absolute top-0 left-0 right-0 z-20 h-14">
+    <div class="flex px-4 max-xl:fixed xl:absolute top-0 left-0 right-0 z-20 h-16">
       <div
         class="
           flex flex-row shrink-0 justify-end items-center space-x-1 max-xl:visible
@@ -33,11 +33,11 @@
           class="text-slate-500 navbar-button cursor-pointer"
           aria-label="<%= t(:'general.navbar.expand.aria_label') %>"
         >
-          <%= viral_icon(name: "sidebar", classes: "w-6 h-6") %>
+          <%= helpers.render_icon :sidebar, class: "size-6" %>
         </button>
       </div>
-      <div class="flex-1">
-        <turbo-frame id="breadcrumb">
+      <div class="flex-1 flex items-center h-full pl-2">
+        <turbo-frame id="breadcrumb" class="flex items-center h-full">
           <%= breadcrumb %>
         </turbo-frame>
       </div>
@@ -48,7 +48,7 @@
       tabindex="0"
       class="
         @container max-xl:fixed xl:absolute bottom-0 left-0 right-0 p-4 overflow-y-auto
-        top-14 border-t border-slate-200 dark:border-slate-950
+        top-16 border-t border-slate-200 dark:border-slate-950
       "
     >
       <div class="<%= @layout %>"><%= body %></div>

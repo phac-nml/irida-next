@@ -1,78 +1,74 @@
 <% control_id = "multi-level-menu_#{title.parameterize.underscore}" %>
-<li data-controller="collapsible" class="Layout-Sidebar__Item">
+<li class="group/menu list-none mr-1" data-controller="collapsible sidebar-item">
   <button
     type="button"
     class="
-      flex items-center w-full mt-1 py-1 pr-1 pl-2 transition-colors ease-in-out
-      delay-75 rounded-lg group cursor-pointer min-h-[44px] relative overflow-hidden
+      flex items-center text-left p-2.5 m-1 rounded-lg transition-colors duration-200 cursor-pointer w-full
       <%= class_names({
-        'bg-slate-500 text-white dark:bg-slate-500 dark:text-slate-50 border border-slate-500 dark:border-slate-500 font-bold': @selected,
-        'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200': !@selected
+        'bg-primary-100 text-primary-800 dark:bg-slate-800 dark:text-primary-400 font-medium': selected,
+        'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/70': !selected
       }) %>
     "
-    aria-controls="<%= control_id %>"
-    aria-expanded="<%= @selected ? 'true' : 'false' %>"
-    data-action="collapsible#toggle"
-    data-collapsible-target="button"
-  >
+      id="<%= control_id %>-button"
+      aria-controls="<%= control_id %>"
+      aria-expanded="<%= @selected ? 'true' : 'false' %>"
+      data-action="click->collapsible#toggle click->sidebar-item#onClick"
+      data-collapsible-target="button"
+      data-sidebar-item-target="trigger"
+      data-turbo="false"
+    >
     <span
       class="
-        w-8 h-8 flex items-center justify-center rounded-full mr-2
-        <%= @selected ? 'bg-slate-600/90 dark:bg-slate-400' : 'bg-slate-100 dark:bg-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-700' %>
+        w-8 h-8 flex items-center justify-center rounded-lg mr-3 flex-shrink-0
+        transition-colors duration-200
+        <%= @selected ? 'bg-primary-300 text-primary-800 dark:bg-slate-700/90' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 group-hover/menu:bg-slate-200/70 dark:group-hover/menu:bg-slate-700/50' %>
       "
     >
       <%= create_icon %>
     </span>
-    <span
-      class="
-        flex-1 ml-1 text-left rtl:text-right whitespace-nowrap
-        <%= @selected ? 'font-bold text-white dark:text-slate-50' : 'text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-slate-50' %>
-      "
-    ><%= title %></span>
-    <%= viral_icon(
-      name: "chevron_down",
-      classes:
-        class_names(
-          "mr-1 w-4 h-4 transition-transform",
-          { "rotate-180": @selected },
-          (
-            if @selected
-              "text-white dark:text-slate-50"
-            else
-              "text-slate-400 group-hover:text-slate-500"
-            end
-          ),
-        ),
-      "data-collapsible-target": "icon",
+    <span class="text-sm font-medium transition-opacity duration-200 ease-in-out flex-1">
+      <%= title %>
+    </span>
+    <%= helpers.render_icon(
+      :caret_down,
+      class: class_names(
+        "w-4 h-4 transition-transform duration-200 mr-2 flex-shrink-0",
+        { "rotate-180": @selected },
+        @selected ? "text-primary-600 dark:text-primary-400" : "text-slate-400 group-hover/menu:text-slate-600 dark:group-hover/menu:text-slate-300"
+      ),
+      "data-collapsible-target": "icon"
     ) %>
   </button>
-  <ul
+  <div role="menu"
     id="<%= control_id %>"
     data-collapsible-target="item"
+    aria-labelledby="<%= control_id %>-button"
     aria-hidden="<%= @selected ? 'false' : 'true' %>"
+    aria-label="<%= title %> submenu"
     <%= 'hidden' if !@selected %>
-    class="<%= class_names('py-1 space-y-1 pl-4', { 'hidden': !@selected }) %>"
+    class="<%= class_names('py-1 pl-2 space-y-1 overflow-hidden transition-all duration-200 border-l-2 border-slate-100 dark:border-slate-700 ml-6', { 'hidden': !@selected }) %>"
   >
     <% menu_items.each do |menu_item| %>
-      <li class="Layout-Sidebar-MultiLevelMenu__Item">
+      <div role="none" class="Layout-Sidebar-MultiLevelMenu__Item">
         <a
           href="<%= menu_item.url %>"
           class="
             flex items-center py-1 pr-1 w-full transition-colors ease-in-out delay-75
             rounded-lg group min-h-[44px] pl-10 <%= class_names({
-              'bg-slate-500 text-white dark:bg-slate-500 dark:text-slate-50 border border-slate-500 dark:border-slate-500 font-bold': menu_item.selected,
-              'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-slate-50': !menu_item.selected
+              'bg-slate-300 text-slate-900 dark:bg-slate-700 dark:text-slate-50': menu_item.selected,
+              'hover:bg-slate-50 dark:hover:bg-slate-500 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-slate-50': !menu_item.selected
             }) %>
           "
+          role="menuitem"
+          tabindex="-1"
+          <%= tag.attributes(aria: { current: ('page' if menu_item.selected) }) %>
         >
-          <%# Icon container removed %>
-          <span
-            class="grow <%= menu_item.selected ? 'font-bold text-white dark:text-slate-50' : 'text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-slate-50' %>"
-          >
+          <span class="grow">
             <%= menu_item.label %>
           </span>
+          <%= render_icon(menu_item.icon, menu_item.selected) if menu_item.icon.present? %>
         </a>
-      </li>
+      </div>
     <% end %>
-  </ul>
+  </div>
 </li>

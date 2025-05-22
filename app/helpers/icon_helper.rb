@@ -30,6 +30,8 @@ module ICONS
   DEFINITIONS = {
     # Phosphor Icons (default library)
     clipboard: { name: 'clipboard-text', options: {} },
+    caret_down: { name: 'caret-down', options: {} },
+    caret_up: { name: 'caret-up', options: {} },
     export: { name: :export, options: {} },
     file: { name: :file, options: {} },
     files: { name: :files, options: {} },
