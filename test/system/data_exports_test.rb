@@ -472,10 +472,10 @@ class DataExportsTest < ApplicationSystemTestCase
     assert_text @sample1.puid
     within %(#attachments-table-body) do
       assert_selector 'tr', count: 2
-      assert_selector 'tr:first-child td:nth-child(2) ', text: attachment1.puid
-      assert_selector 'tr:first-child td:nth-child(3) ', text: attachment1.file.filename.to_s
-      assert_selector 'tr:nth-child(2) td:nth-child(2)', text: attachment2.puid
-      assert_selector 'tr:nth-child(2) td:nth-child(3)', text: attachment2.file.filename.to_s
+      assert_selector 'tr:first-child th:first-child', text: attachment2.puid
+      assert_selector 'tr:first-child td:nth-child(2)', text: attachment2.file.filename.to_s
+      assert_selector 'tr:nth-child(2) th:first-child', text: attachment1.puid
+      assert_selector 'tr:nth-child(2) td:nth-child(2)', text: attachment1.file.filename.to_s
     end
   end
 
