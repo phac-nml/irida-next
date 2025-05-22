@@ -118,10 +118,7 @@ module Groups
         group = groups(:subgroup_sample_actions)
         user = users(:subgroup_sample_actions_doe)
         sample = samples(:sample69)
-        puts group.name
-        puts project.name
-        puts user.name
-        puts sample.name
+
         assert_difference -> { Sample.count } => -1,
                           -> { project.reload.samples_count } => -1 do
           ::Groups::Samples::DestroyService.new(group, user,
