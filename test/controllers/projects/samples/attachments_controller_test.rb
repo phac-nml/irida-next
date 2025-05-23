@@ -18,6 +18,17 @@ module Projects
         assert_response :success
       end
 
+      test 'should not get index without proper access' do
+        sign_in users(:david_doe)
+
+        namespace = namespaces_user_namespaces(:john_doe_namespace)
+        project = projects(:john_doe_project2)
+        sample = samples(:sample24)
+
+        get namespace_project_sample_attachments_path(namespace, project, sample, format: :turbo_stream)
+        assert_response :unauthorized
+      end
+
       test 'should get new for a member with role >= maintainer' do
         get new_namespace_project_sample_attachment_path(@namespace, @project, @sample1,
                                                          format: :turbo_stream)
