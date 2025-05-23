@@ -13,6 +13,7 @@ Flipper.enable(:delete_multiple_workflows)
 Flipper.enable(:batch_sample_spreadsheet_import)
 Flipper.enable(:compose_with_retry)
 Flipper.enable(:sample_attachments_searching)
+Flipper.enable(:group_samples_transfer)
 
 @namespace_group_link_expiry_date = (Time.zone.today + 14).strftime('%Y-%m-%d')
 
