@@ -46,3 +46,24 @@ group1_namespace_import_sample_activity_extended_details:
   activity_type: project_import_samples
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
+
+group_sample_transfer_sample_transfer_activity_extended_details:
+  activity: group_sample_transfer_sample_transfer
+  extended_detail: group_sample_transfer_sample_transfer_extended_details
+  activity_type: group_sample_transfer
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+project_group_sample_transfer_sample_transfer_activity_extended_details:
+  activity: project_group_sample_transfer_sample_transfer
+  extended_detail: project_group_sample_transfer_sample_transfer_extended_details
+  activity_type: sample_transfer
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+project_group_sample_transfer_target_sample_transfer_activity_extended_details:
+  activity: project_group_sample_transfer_target_sample_transfer
+  extended_detail: project_group_sample_transfer_sample_transfer_extended_details
+  activity_type: sample_transfer
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

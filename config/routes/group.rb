@@ -52,11 +52,13 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
         collection do
           resource :file_import, module: :metadata, only: %i[create new]
           resource :spreadsheet_import, only: %i[create new]
+          resource :transfer, only: %i[create new]
         end
       end
       collection do
         get :select
         post :search
+        post :list
       end
     end
     resources :subgroups, only: %i[index]

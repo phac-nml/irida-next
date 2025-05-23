@@ -230,6 +230,13 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
+  def transfer_sample?
+    return true if Member::AccessLevel.manageable.include?(effective_access_level)
+
+    details[:name] = record.name
+    false
+  end
+
   def update_sample_metadata?
     return true if Member::AccessLevel.manageable.include?(effective_access_level)
 

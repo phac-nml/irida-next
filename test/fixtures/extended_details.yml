@@ -84,3 +84,67 @@ group1_namespace_import_sample_create_extended_details:
     }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
+
+project_group_sample_transfer_sample_transfer_extended_details:
+  details:
+    {
+      "transferred_samples_data":
+        [
+          {
+            sample_name: "Group Sample Transfer 1",
+            sample_puid: "INXT_SAM_AAAAAAAADQ",
+          },
+          {
+            sample_name: "Group Sample Transfer 2",
+            sample_puid: "INXT_SAM_AAAAAAAADR",
+          },
+          {
+            sample_name: "Group Sample Transfer 3",
+            sample_puid: "INXT_SAM_AAAAAAAADS",
+          },
+        ],
+      "transferred_samples_count": 3,
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+group_sample_transfer_sample_transfer_extended_details:
+  details:
+    {
+      "transferred_samples_data":
+        [
+          {
+            sample_name: "Group Sample Transfer 1",
+            sample_puid: "INXT_SAM_AAAAAAAADQ",
+            source_project_id: "<%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransfer, :uuid) %>",
+            source_project_name: "Project Group Sample Transfer",
+            source_project_puid: "INXT_PRJ_AAAAAAAACC",
+            target_project_id: "<%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransferTarget, :uuid) %>",
+            target_project_name: "Project Group Sample Transfer Target",
+            target_project_puid: "INXT_PRJ_AAAAAAAACD",
+          },
+          {
+            sample_name: "Group Sample Transfer 2",
+            sample_puid: "INXT_SAM_AAAAAAAADR",
+            source_project_id: "<%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransfer, :uuid) %>",
+            source_project_name: "Project Group Sample Transfer",
+            source_project_puid: "INXT_PRJ_AAAAAAAACC",
+            target_project_id: "<%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransferTarget, :uuid) %>",
+            target_project_name: "Project Group Sample Transfer Target",
+            target_project_puid: "INXT_PRJ_AAAAAAAACD",
+          },
+          {
+            sample_name: "Group Sample Transfer 3",
+            sample_puid: "INXT_SAM_AAAAAAAADS",
+            source_project_id: "<%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransfer, :uuid) %>",
+            source_project_name: "Project Group Sample Transfer",
+            source_project_puid: "INXT_PRJ_AAAAAAAACC",
+            target_project_id: "<%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransferTarget, :uuid) %>",
+            target_project_name: "Project Group Sample Transfer Target",
+            target_project_puid: "INXT_PRJ_AAAAAAAACD",
+          },
+        ],
+      "transferred_samples_count": 3,
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
