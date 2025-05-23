@@ -10,6 +10,8 @@ module Projects
       before_action :view_authorizations, only: %i[index destroy create select]
 
       def index
+        authorize! @sample.project, to: :read_sample?
+
         @render_individual_attachments = filter_requested?
         all_attachments = load_attachments
         @has_attachments = all_attachments.count.positive?
