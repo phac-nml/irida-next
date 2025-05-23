@@ -310,7 +310,7 @@ en:
         transfer_in_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
         transfer_out_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
       samples:
-        transfer_html: "%{user} transferred %{transferred_samples_count} samples between projects in group"
+        transfer_html: "%{user} transferred %{transferred_samples_count} samples between projects"
       subgroups:
         create_html: "%{user} created subgroup %{href}"
         destroy_html: "%{user} removed descendant group %{href}"
@@ -483,8 +483,8 @@ en:
         close: Close
         group_sample_transfer:
           description:
-            one: "%{user} transferred 1 sample between projects within group"
-            other: "%{user} transferred %{count} samples between projects within group"
+            one: "%{user} transferred 1 sample between projects"
+            other: "%{user} transferred %{count} samples between projects"
           sample_name: Sample Name
           title: Transferred Samples
           transferred_from: Transferred From
