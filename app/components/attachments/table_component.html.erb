@@ -14,7 +14,6 @@
               text-slate-900 bg-slate-100 dark:bg-slate-900
             "
           >
-            <% data = @sample ? { turbo_action: "replace" } : {} %>
             <% @columns.each_with_index do |column, index| %>
               <%= render_cell(
                 tag: 'th',
@@ -38,7 +37,7 @@
                     label: t(".#{column}"),
                     url: helpers.sorting_url(@q, "puid"),
                     field: "puid",
-                    data: data,
+                    **(@sample ? {} : { data: { turbo_action: "replace" } }),
                   ) %>
                 <% elsif column == :byte_size || column == :filename %>
                   <%= render Ransack::SortComponent.new(
@@ -46,7 +45,7 @@
                     label: t(".#{column}"),
                     url: helpers.sorting_url(@q, "file_blob_#{column}"),
                     field: "file_blob_#{column}",
-                    data: data,
+                    **(@sample ? {} : { data: { turbo_action: "replace" } }),
                   ) %>
                 <% elsif column == :format || column == :type %>
                   <%= render Ransack::SortComponent.new(
@@ -58,7 +57,7 @@
                         URI.encode_www_form_component("metadata_#{column}"),
                       ),
                     field: "metadata_#{column}",
-                    data: data,
+                    **(@sample ? {} : { data: { turbo_action: "replace" } }),
                   ) %>
                 <% else %>
                   <%= render Ransack::SortComponent.new(
@@ -66,7 +65,7 @@
                     label: t(".#{column}"),
                     url: helpers.sorting_url(@q, column),
                     field: column,
-                    data: data,
+                    **(@sample ? {} : { data: { turbo_action: "replace" } }),
                   ) %>
                 <% end %>
               <% end %>
