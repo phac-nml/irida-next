@@ -21,6 +21,7 @@
                 scope: 'col',
                 classes: class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900', '@2xl:sticky left-0 min-w-56 max-w-56 z-10': index.zero?, '@2xl:sticky left-56 z-10 bg-slate-100 dark:bg-slate-900': index == 1)
               ) do %>
+                <% data = @sample ? { turbo_action: "replace" } : {} %>
                 <% if index.zero? and @abilities[:select_attachments] %>
                   <%= check_box_tag "select-page",
                   title: t(:".select_page"),
@@ -32,89 +33,41 @@
                   } %>
                 <% end %>
                 <% if column == :id %>
-                  <% if @sample %>
-                    <%= render Ransack::SortComponent.new(
-                      ransack_obj: @q,
-                      label: t(".#{column}"),
-                      url: helpers.sorting_url(@q, "puid"),
-                      field: "puid",
-                    ) %>
-                  <% else %>
-                    <%= render Ransack::SortComponent.new(
-                      ransack_obj: @q,
-                      label: t(".#{column}"),
-                      url: helpers.sorting_url(@q, "puid"),
-                      field: "puid",
-                      data: {
-                        turbo_action: "replace",
-                      },
-                    ) %>
-                  <% end %>
+                  <%= render Ransack::SortComponent.new(
+                    ransack_obj: @q,
+                    label: t(".#{column}"),
+                    url: helpers.sorting_url(@q, "puid"),
+                    field: "puid",
+                    data: data,
+                  ) %>
                 <% elsif column == :byte_size || column == :filename %>
-                  <% if @sample %>
-                    <%= render Ransack::SortComponent.new(
-                      ransack_obj: @q,
-                      label: t(".#{column}"),
-                      url: helpers.sorting_url(@q, "file_blob_#{column}"),
-                      field: "file_blob_#{column}",
-                    ) %>
-                  <% else %>
-                    <%= render Ransack::SortComponent.new(
-                      ransack_obj: @q,
-                      label: t(".#{column}"),
-                      url: helpers.sorting_url(@q, "file_blob_#{column}"),
-                      field: "file_blob_#{column}",
-                      data: {
-                        turbo_action: "replace",
-                      },
-                    ) %>
-                  <% end %>
+                  <%= render Ransack::SortComponent.new(
+                    ransack_obj: @q,
+                    label: t(".#{column}"),
+                    url: helpers.sorting_url(@q, "file_blob_#{column}"),
+                    field: "file_blob_#{column}",
+                    data: data,
+                  ) %>
                 <% elsif column == :format || column == :type %>
-                  <% if @sample %>
-                    <%= render Ransack::SortComponent.new(
-                      ransack_obj: @q,
-                      label: t(".#{column}"),
-                      url:
-                        helpers.sorting_url(
-                          @q,
-                          URI.encode_www_form_component("metadata_#{column}"),
-                        ),
-                      field: "metadata_#{column}",
-                    ) %>
-                  <% else %>
-                    <%= render Ransack::SortComponent.new(
-                      ransack_obj: @q,
-                      label: t(".#{column}"),
-                      url:
-                        helpers.sorting_url(
-                          @q,
-                          URI.encode_www_form_component("metadata_#{column}"),
-                        ),
-                      field: "metadata_#{column}",
-                      data: {
-                        turbo_action: "replace",
-                      },
-                    ) %>
-                  <% end %>
+                  <%= render Ransack::SortComponent.new(
+                    ransack_obj: @q,
+                    label: t(".#{column}"),
+                    url:
+                      helpers.sorting_url(
+                        @q,
+                        URI.encode_www_form_component("metadata_#{column}"),
+                      ),
+                    field: "metadata_#{column}",
+                    data: data,
+                  ) %>
                 <% else %>
-                  <% if @sample %>
-                    <%= render Ransack::SortComponent.new(
-                      ransack_obj: @q,
-                      label: t(".#{column}"),
-                      url: helpers.sorting_url(@q, column),
-                      field: column,
-                    ) %>
-                  <% else %>
-                    <%= render Ransack::SortComponent.new(
-                      ransack_obj: @q,
-                      label: t(".#{column}"),
-                      url: helpers.sorting_url(@q, column),
-                      field: column,
-                      data: {
-                        turbo_action: "replace",
-                      },
-                    ) %>
-                  <% end %>
+                  <%= render Ransack::SortComponent.new(
+                    ransack_obj: @q,
+                    label: t(".#{column}"),
+                    url: helpers.sorting_url(@q, column),
+                    field: column,
+                    data: data,
+                  ) %>
                 <% end %>
               <% end %>
             <% end %>
