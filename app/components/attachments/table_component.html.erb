@@ -239,7 +239,7 @@
               <% if @renders_row_actions %>
                 <%= render_cell(
                   tag: 'td',
-                  classes: class_names('px-3 py-3 space-x-2 w-full')
+                  classes: class_names('px-3 py-3 space-x-2')
                 ) do %>
                   <% if @row_actions[:destroy] %>
                     <%= link_to(
