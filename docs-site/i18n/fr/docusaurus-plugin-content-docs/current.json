@@ -1,0 +1,82 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.docs.category.Use IRIDA Next": {
+    "message": "Use IRIDA Next",
+    "description": "The label for category Use IRIDA Next in sidebar docs"
+  },
+  "sidebar.docs.category.Set up your organization": {
+    "message": "Set up your organization",
+    "description": "The label for category Set up your organization in sidebar docs"
+  },
+  "sidebar.docs.category.Set up your organization.link.generated-index.description": {
+    "message": "Configure your organization and its users. Determine user roles and give everyone access to the projects they need.",
+    "description": "The generated-index page description for category Set up your organization in sidebar docs"
+  },
+  "sidebar.docs.category.Members": {
+    "message": "Members",
+    "description": "The label for category Members in sidebar docs"
+  },
+  "sidebar.docs.category.Groups": {
+    "message": "Groups",
+    "description": "The label for category Groups in sidebar docs"
+  },
+  "sidebar.docs.category.Bot Accounts": {
+    "message": "Bot Accounts",
+    "description": "The label for category Bot Accounts in sidebar docs"
+  },
+  "sidebar.docs.category.Organize work with projects": {
+    "message": "Organize work with projects",
+    "description": "The label for category Organize work with projects in sidebar docs"
+  },
+  "sidebar.docs.category.Projects": {
+    "message": "Projects",
+    "description": "The label for category Projects in sidebar docs"
+  },
+  "sidebar.docs.category.Samples": {
+    "message": "Samples",
+    "description": "The label for category Samples in sidebar docs"
+  },
+  "sidebar.docs.category.Analyse your data": {
+    "message": "Analyse your data",
+    "description": "The label for category Analyse your data in sidebar docs"
+  },
+  "sidebar.docs.category.Analyse your data.link.generated-index.description": {
+    "message": "Run workflow executions to analyse your data.",
+    "description": "The generated-index page description for category Analyse your data in sidebar docs"
+  },
+  "sidebar.docs.category.Export your data": {
+    "message": "Export your data",
+    "description": "The label for category Export your data in sidebar docs"
+  },
+  "sidebar.docs.category.Export your data.link.generated-index.description": {
+    "message": "Export your data from IRIDA Next.",
+    "description": "The generated-index page description for category Export your data in sidebar docs"
+  },
+  "sidebar.docs.category.Extend": {
+    "message": "Extend",
+    "description": "The label for category Extend in sidebar docs"
+  },
+  "sidebar.docs.category.Contribute": {
+    "message": "Contribute",
+    "description": "The label for category Contribute in sidebar docs"
+  },
+  "sidebar.docs.category.Development Processes": {
+    "message": "Development Processes",
+    "description": "The label for category Development Processes in sidebar docs"
+  },
+  "sidebar.docs.category.Front End Development": {
+    "message": "Front End Development",
+    "description": "The label for category Front End Development in sidebar docs"
+  },
+  "sidebar.docs.category.Integrations": {
+    "message": "Integrations",
+    "description": "The label for category Integrations in sidebar docs"
+  },
+  "sidebar.docs.category.Configuration": {
+    "message": "Configuration",
+    "description": "The label for category Configuration in sidebar docs"
+  }
+}
