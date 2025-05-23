@@ -18,9 +18,11 @@ export default class extends Controller {
         newRow.classList = row.classList;
 
         for (let cell of row.cells) {
-          // copy file name, type, and sze
+          // copy file name, type, size, and uploaded time
           if ([1, 2, 4, 5].includes(cell.cellIndex)) {
-            newRow.append(cell.cloneNode(true));
+            let cloneNode = cell.cloneNode(true);
+            cloneNode.classList = "px-3 py-3";
+            newRow.append(cloneNode);
           }
         }
       }

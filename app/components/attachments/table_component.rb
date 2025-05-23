@@ -17,6 +17,7 @@ module Attachments
       attachments,
       pagy,
       q,
+      sample,
       namespace,
       render_individual_attachments,
       has_attachments,
@@ -28,6 +29,7 @@ module Attachments
       @attachments = attachments
       @pagy = pagy
       @q = q
+      @sample = sample
       @namespace = namespace
       @render_individual_attachments = render_individual_attachments
       @has_attachments = has_attachments
@@ -52,6 +54,7 @@ module Attachments
           args[:data][:controller] = 'selection'
           args[:data][:'selection-total-value'] = @pagy.count
           args[:data][:'selection-action-button-outlet'] = '.action-button'
+          args[:data][:'selection-storage-key-value'] = "files-#{@sample.id}" if @sample
         end
       end
     end
@@ -76,7 +79,12 @@ module Attachments
     end
 
     def destroy_path(attachment_id)
-      if @namespace.type == 'Group'
+      if @sample
+        namespace_project_sample_attachment_new_destroy_path(
+          sample_id: @sample.id,
+          attachment_id:
+        )
+      elsif @namespace.group_namespace?
         group_attachment_new_destroy_path(
           attachment_id:
         )

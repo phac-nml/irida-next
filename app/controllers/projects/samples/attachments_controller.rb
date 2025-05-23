@@ -3,10 +3,22 @@
 module Projects
   module Samples
     # Controller actions for Project Samples Attachments
-    class AttachmentsController < Projects::Samples::ApplicationController
+    class AttachmentsController < Projects::Samples::ApplicationController # rubocop:disable Metrics/ClassLength
+      include ::Metadata
       before_action :attachment, only: %i[destroy]
       before_action :new_destroy_params, only: %i[new_destroy]
-      before_action :view_authorizations, only: %i[destroy create]
+      before_action :view_authorizations, only: %i[index destroy create select]
+
+      def index
+        authorize! @sample.project, to: :read_sample?
+
+        @render_individual_attachments = filter_requested?
+        all_attachments = load_attachments
+        @has_attachments = all_attachments.count.positive?
+        @q = all_attachments.ransack(params[:q])
+        set_default_sort
+        @pagy, @sample_attachments = pagy_with_metadata_sort(@q.result)
+      end
 
       def new
         authorize! @project, to: :update_sample?
@@ -75,7 +87,44 @@ module Projects
         end
       end
 
+      def select # rubocop:disable Metrics/MethodLength
+        authorize! @project, to: :update_sample?
+
+        @sample_attachment_ids = []
+
+        respond_to do |format|
+          format.turbo_stream do
+            if params[:select].present?
+              @q = load_attachments.ransack(params[:q])
+              @q.result.each do |attachment|
+                @sample_attachment_ids << if attachment.associated_attachment
+                                            [attachment.id, attachment.associated_attachment.id].to_s
+                                          else
+                                            attachment.id
+                                          end
+              end
+            end
+          end
+        end
+      end
+
       private
+
+      def filter_requested?
+        params.dig(:q, :puid_or_file_blob_filename_cont).present?
+      end
+
+      def load_attachments
+        if filter_requested?
+          @sample.attachments.all
+        else
+          @sample.attachments.where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
+        end
+      end
+
+      def set_default_sort
+        @q.sorts = 'created_at desc' if @q.sorts.empty?
+      end
 
       def view_authorizations
         @allowed_to = {
