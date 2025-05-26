@@ -41,7 +41,7 @@ module Groups
             old_project_puid = sample.project.puid
             add_cloned_sample_data(sample, cloned_sample.puid, old_project_puid)
           end
-
+        end
         handle_not_found_sample_ids(sample_ids, authorized_samples) unless sample_ids.count == authorized_samples.count
 
         unless @cloned_samples_data[:project_data].empty?
@@ -98,7 +98,7 @@ module Groups
           .where(id: sample_ids)
       end
 
-      def handle_not_found_sample_ids(sample_ids, authorized_samples)
+      def handle_not_found_sample_ids(sample_ids, authorized_samples) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         unauthorized_sample_puids = []
         invalid_ids = []
         not_found_sample_ids = sample_ids - authorized_samples.pluck(:id)
@@ -107,20 +107,20 @@ module Groups
           if sample.nil?
             invalid_ids << sample_id
           else
-            unauthorized_sample_puids << Sample.puid
+            unauthorized_sample_puids << sample.puid
           end
         end
+
         if unauthorized_sample_puids.count.positive?
           @group.errors.add(:samples,
                             I18n.t('services.samples.clone.unauthorized_samples',
-                                   sample_puids: unauthorized_samples_puids.join(', ')))
+                                   sample_puids: unauthorized_sample_puids.join(', ')))
         end
 
         return unless invalid_ids.count.positive?
 
         @group.errors.add(:samples,
-                          I18n.t('services.samples.clone.samples_not_found',
-                                 sample_ids: not_found_sample_ids.join(', ')))
+                          I18n.t('services.samples.clone.samples_not_found', sample_ids: invalid_ids.join(', ')))
       end
 
       def update_samples_count
