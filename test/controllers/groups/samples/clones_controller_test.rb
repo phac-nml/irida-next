@@ -11,6 +11,8 @@ module Groups
         @new_project = projects(:project2)
         @sample1 = samples(:sample1)
         @sample2 = samples(:sample2)
+
+        Flipper.enable(:group_samples_clone)
       end
 
       test 'should enqueue a Groups::Samples::CloneJob' do
