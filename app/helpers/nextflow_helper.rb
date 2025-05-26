@@ -63,6 +63,7 @@ module NextflowHelper
     if !property.key?(:enum) || property[:enum].include?(original_value)
       original_value
     else
+      original_value = '' if original_value.nil?
       property[:enum].select { |(_label, value)| value == original_value }[0][0]
     end
   end
