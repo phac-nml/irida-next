@@ -5,7 +5,7 @@ module Groups
     # Controller actions for Group Samples Clone Controller
     class ClonesController < Groups::SamplesController
       respond_to :turbo_stream
-      before_action :projects
+      before_action :projects, :ensure_enabled
 
       def new
         authorize! @group, to: :clone_sample?
