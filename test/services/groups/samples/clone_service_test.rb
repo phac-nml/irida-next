@@ -301,6 +301,66 @@ module Groups
           assert_equal projects(:project1).puid, activity.parameters[:source_project_puid]
         end
       end
+
+      test 'clone shared group samples with maintainer shared group role' do
+        # Group group_sample_actions has access to sample70 via
+        # maintainer shared role in Group shared_group_sample_actions_maintainer
+        group = groups(:group_sample_actions)
+        user = users(:sample_actions_doe)
+        sample = samples(:sample70)
+        target_project = projects(:projectGroupSampleActions)
+
+        assert_difference -> { Sample.count } => 1,
+                          -> { target_project.reload.samples_count } => 1,
+                          -> { group.reload.samples_count } => 1 do
+          ::Groups::Samples::CloneService.new(group, user).execute(target_project.id, [sample.id])
+        end
+      end
+
+      test 'cannot clone shared group samples with analyst shared group role' do
+        # Group group_sample_actions has access to sample71 via
+        # analyst shared role in Group shared_group_sample_actions_analyst
+        group = groups(:group_sample_actions)
+        user = users(:sample_actions_doe)
+        sample = samples(:sample71)
+        target_project = projects(:projectGroupSampleActions)
+
+        assert_difference -> { Sample.count } => 0,
+                          -> { target_project.reload.samples_count } => 0,
+                          -> { group.reload.samples_count } => 0 do
+          ::Groups::Samples::CloneService.new(group, user).execute(target_project.id, [sample.id])
+        end
+      end
+
+      test 'clone shared group samples with maintainer shared project role' do
+        # Group subgroup_sample_actions has access to sample70 via
+        # maintainer shared role in Project projectSharedGroupSampleActionsMaintainer
+        group = groups(:subgroup_sample_actions)
+        user = users(:subgroup_sample_actions_doe)
+        sample = samples(:sample70)
+        target_project = projects(:projectSubGroupSampleActions)
+
+        assert_difference -> { Sample.count } => 1,
+                          -> { target_project.reload.samples_count } => 1,
+                          -> { group.reload.samples_count } => 1 do
+          ::Groups::Samples::CloneService.new(group, user).execute(target_project.id, [sample.id])
+        end
+      end
+
+      test 'cannot clone shared group samples with analyst shared project role' do
+        # Group subgroup_sample_actions has access to sample70 via
+        # analyst shared role in Project projectSharedGroupSampleActionsAnalyst
+        group = groups(:subgroup_sample_actions)
+        user = users(:subgroup_sample_actions_doe)
+        sample = samples(:sample71)
+        target_project = projects(:projectSubGroupSampleActions)
+
+        assert_difference -> { Sample.count } => 0,
+                          -> { target_project.reload.samples_count } => 0,
+                          -> { group.reload.samples_count } => 0 do
+          ::Groups::Samples::CloneService.new(group, user).execute(target_project.id, [sample.id])
+        end
+      end
     end
   end
 end
