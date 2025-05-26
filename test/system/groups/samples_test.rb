@@ -2486,7 +2486,7 @@ module Groups
       end
 
       # verify samples table updates with cloned samples
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 48,
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 47,
                                                                            locale: @user.locale))
       ### VERIFY END ###
     end

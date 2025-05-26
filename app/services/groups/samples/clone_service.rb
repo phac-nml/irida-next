@@ -42,6 +42,7 @@ module Groups
             add_cloned_sample_data(sample, cloned_sample.puid, old_project_puid)
           end
         end
+
         handle_not_found_sample_ids(sample_ids, authorized_samples) unless sample_ids.count == authorized_samples.count
 
         unless @cloned_samples_data[:project_data].empty?

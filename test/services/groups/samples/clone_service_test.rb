@@ -201,41 +201,41 @@ module Groups
                           -> { subgroup12a.reload.samples_count } => 1,
                           -> { subgroup12b.reload.samples_count } => 0,
                           -> { group12.reload.samples_count } => 1 do
-          Groups::Samples::CloneService.new(@group, @john_doe).execute(project31.id, [sample33.id])
+          Groups::Samples::CloneService.new(group12, @john_doe).execute(project31.id, [sample33.id])
         end
       end
 
       test 'group clone activities' do
-        sample28 = samples(:sample28)
-        clone_samples_params = { new_project_id: @new_project.id, sample_ids: [@sample1.id, @sample2.id, sample28.id] }
+        group = groups(:group_sample_actions)
+        user = users(:sample_actions_doe)
+        sample69 = samples(:sample69)
+        sample70 = samples(:sample70)
+        target_project = projects(:projectGroupSampleActions)
+
+        clone_samples_params = { new_project_id: target_project.id, sample_ids: [sample69.id, sample70.id] }
         assert_difference -> { PublicActivity::Activity.count } => 5,
-                          -> { Sample.count } => 3 do
-          cloned_ids = Groups::Samples::CloneService.new(@group, @john_doe).execute(
+                          -> { Sample.count } => 2 do
+          cloned_ids = Groups::Samples::CloneService.new(group, user).execute(
             clone_samples_params[:new_project_id],
             clone_samples_params[:sample_ids]
           )
 
-          sample1_clone_puid = Sample.find(cloned_ids[@sample1.id]).puid
-          sample2_clone_puid = Sample.find(cloned_ids[@sample2.id]).puid
-          sample28_clone_puid = Sample.find(cloned_ids[sample28.id]).puid
+          sample69_clone_puid = Sample.find(cloned_ids[sample69.id]).puid
+          sample70_clone_puid = Sample.find(cloned_ids[sample70.id]).puid
+
           # verify group activity
           activity = PublicActivity::Activity.where(
             key: 'group.samples.clone'
           ).order(created_at: :desc).first
 
-          assert_equal 'group.samples.clone',
-                       activity.key
-          assert_equal @john_doe,
-                       activity.owner
-          assert_equal 3,
-                       activity.parameters[:cloned_samples_count]
+          assert_equal 'group.samples.clone', activity.key
+          assert_equal user, activity.owner
+          assert_equal 2, activity.parameters[:cloned_samples_count]
           assert_equal [
-            { 'clone_puid' => sample1_clone_puid, 'sample_name' => @sample1.name, 'sample_puid' => @sample1.puid,
-              'project_name' => @sample1.project.name, 'project_puid' => @sample1.project.puid },
-            { 'clone_puid' => sample2_clone_puid, 'sample_name' => @sample2.name, 'sample_puid' => @sample2.puid,
-              'project_name' => @sample2.project.name, 'project_puid' => @sample2.project.puid },
-            { 'clone_puid' => sample28_clone_puid, 'sample_name' => sample28.name, 'sample_puid' => sample28.puid,
-              'project_name' => sample28.project.name, 'project_puid' => sample28.project.puid }
+            { 'clone_puid' => sample69_clone_puid, 'sample_name' => sample69.name, 'sample_puid' => sample69.puid,
+              'project_name' => sample69.project.name, 'project_puid' => sample69.project.puid },
+            { 'clone_puid' => sample70_clone_puid, 'sample_name' => sample70.name, 'sample_puid' => sample70.puid,
+              'project_name' => sample70.project.name, 'project_puid' => sample70.project.puid }
           ], activity.extended_details.details['cloned_samples_data']
           assert_equal 'group_sample_clone',
                        activity.parameters[:action]
@@ -246,13 +246,13 @@ module Groups
           ).order(created_at: :desc).first
 
           assert_equal 'namespaces_project_namespace.samples.clone', activity.key
-          assert_equal @john_doe, activity.owner
+          assert_equal user, activity.owner
           assert_equal 1, activity.parameters[:cloned_samples_count]
-          assert_equal [{ 'clone_puid' => sample28_clone_puid, 'sample_name' => sample28.name,
-                          'sample_puid' => sample28.puid }],
+          assert_equal [{ 'clone_puid' => sample70_clone_puid, 'sample_name' => sample70.name,
+                          'sample_puid' => sample70.puid }],
                        activity.extended_details.details['cloned_samples_data']
           assert_equal 'sample_clone', activity.parameters[:action]
-          assert_equal @new_project.puid, activity.parameters[:target_project_puid]
+          assert_equal target_project.puid, activity.parameters[:target_project_puid]
 
           # verify old project activity 2
           activity = PublicActivity::Activity.where(
@@ -260,15 +260,13 @@ module Groups
           ).order(created_at: :desc).second
 
           assert_equal 'namespaces_project_namespace.samples.clone', activity.key
-          assert_equal @john_doe, activity.owner
-          assert_equal 2, activity.parameters[:cloned_samples_count]
-          assert_equal [{ 'clone_puid' => sample1_clone_puid, 'sample_name' => @sample1.name,
-                          'sample_puid' => @sample1.puid },
-                        { 'clone_puid' => sample2_clone_puid, 'sample_name' => @sample2.name,
-                          'sample_puid' => @sample2.puid }],
+          assert_equal user, activity.owner
+          assert_equal 1, activity.parameters[:cloned_samples_count]
+          assert_equal [{ 'clone_puid' => sample69_clone_puid, 'sample_name' => sample69.name,
+                          'sample_puid' => sample69.puid }],
                        activity.extended_details.details['cloned_samples_data']
           assert_equal 'sample_clone', activity.parameters[:action]
-          assert_equal @new_project.puid, activity.parameters[:target_project_puid]
+          assert_equal target_project.puid, activity.parameters[:target_project_puid]
 
           # verify target project activity 1
           activity = PublicActivity::Activity.where(
@@ -276,13 +274,14 @@ module Groups
           ).order(created_at: :desc).first
 
           assert_equal 'namespaces_project_namespace.samples.cloned_from', activity.key
-          assert_equal @john_doe, activity.owner
+          assert_equal user, activity.owner
           assert_equal 1, activity.parameters[:cloned_samples_count]
-          assert_equal [{ 'clone_puid' => sample28_clone_puid, 'sample_name' => sample28.name,
-                          'sample_puid' => sample28.puid }],
+          assert_equal [{ 'clone_puid' => sample70_clone_puid, 'sample_name' => sample70.name,
+                          'sample_puid' => sample70.puid }],
                        activity.extended_details.details['cloned_samples_data']
           assert_equal 'sample_clone', activity.parameters[:action]
-          assert_equal projects(:project28).puid, activity.parameters[:source_project_puid]
+          assert_equal projects(:projectSharedGroupSampleActionsMaintainer).puid,
+                       activity.parameters[:source_project_puid]
 
           # verify target project activity 2
           activity = PublicActivity::Activity.where(
@@ -290,15 +289,13 @@ module Groups
           ).order(created_at: :desc).second
 
           assert_equal 'namespaces_project_namespace.samples.cloned_from', activity.key
-          assert_equal @john_doe, activity.owner
-          assert_equal 2, activity.parameters[:cloned_samples_count]
-          assert_equal [{ 'clone_puid' => sample1_clone_puid, 'sample_name' => @sample1.name,
-                          'sample_puid' => @sample1.puid },
-                        { 'clone_puid' => sample2_clone_puid, 'sample_name' => @sample2.name,
-                          'sample_puid' => @sample2.puid }],
+          assert_equal user, activity.owner
+          assert_equal 1, activity.parameters[:cloned_samples_count]
+          assert_equal [{ 'clone_puid' => sample69_clone_puid, 'sample_name' => sample69.name,
+                          'sample_puid' => sample69.puid }],
                        activity.extended_details.details['cloned_samples_data']
           assert_equal 'sample_clone', activity.parameters[:action]
-          assert_equal projects(:project1).puid, activity.parameters[:source_project_puid]
+          assert_equal projects(:projectSharedGroupSampleActionsOwner).puid, activity.parameters[:source_project_puid]
         end
       end
 
