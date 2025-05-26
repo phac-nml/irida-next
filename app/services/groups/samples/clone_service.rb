@@ -31,7 +31,6 @@ module Groups
       def clone_samples(sample_ids, broadcast_target) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
         @cloned_samples_data = { project_data: {}, group_data: [] }
         cloned_sample_ids = {}
-        not_found_sample_ids = []
         authorized_samples = query_authorized_samples(sample_ids)
         total_sample_count = authorized_samples.count
         authorized_samples.each.with_index(1) do |sample, index|
@@ -42,24 +41,8 @@ module Groups
             old_project_puid = sample.project.puid
             add_cloned_sample_data(sample, cloned_sample.puid, old_project_puid)
           end
-        rescue ActiveRecord::RecordNotFound
-          not_found_sample_ids << sample_id
-          next
-        end
 
-        unless not_found_sample_ids.empty?
-          @group.errors.add(:samples,
-                            I18n.t('services.samples.clone.samples_not_found',
-                                   sample_ids: not_found_sample_ids.join(', ')))
-        end
-
-        unless sample_ids.count == authorized_samples.count
-          unauthorized_samples_ids = sample_ids - authorized_samples.pluck(:id)
-          unauthorized_samples_puids = Sample.where(id: unauthorized_samples_ids).pluck(:puid)
-          @group.errors.add(:samples,
-                            I18n.t('services.samples.clone.unauthorized_samples',
-                                   sample_puids: unauthorized_samples_puids.join(', ')))
-        end
+        handle_not_found_sample_ids(sample_ids, authorized_samples) unless sample_ids.count == authorized_samples.count
 
         unless @cloned_samples_data[:project_data].empty?
           update_samples_count if @new_project.parent.group_namespace?
@@ -113,6 +96,31 @@ module Groups
                                    minimum_access_level: Member::AccessLevel::MAINTAINER
                                  })
           .where(id: sample_ids)
+      end
+
+      def handle_not_found_sample_ids(sample_ids, authorized_samples)
+        unauthorized_sample_puids = []
+        invalid_ids = []
+        not_found_sample_ids = sample_ids - authorized_samples.pluck(:id)
+        not_found_sample_ids.each do |sample_id|
+          sample = Sample.find_by(id: sample_id)
+          if sample.nil?
+            invalid_ids << sample_id
+          else
+            unauthorized_sample_puids << Sample.puid
+          end
+        end
+        if unauthorized_sample_puids.count.positive?
+          @group.errors.add(:samples,
+                            I18n.t('services.samples.clone.unauthorized_samples',
+                                   sample_puids: unauthorized_samples_puids.join(', ')))
+        end
+
+        return unless invalid_ids.count.positive?
+
+        @group.errors.add(:samples,
+                          I18n.t('services.samples.clone.samples_not_found',
+                                 sample_ids: not_found_sample_ids.join(', ')))
       end
 
       def update_samples_count
