@@ -23,6 +23,7 @@ module Groups
       @sample31 = samples(:sample31)
 
       Flipper.enable(:progress_bars)
+      Flipper.enable(:group_samples_transfer)
     end
 
     def retrieve_puids

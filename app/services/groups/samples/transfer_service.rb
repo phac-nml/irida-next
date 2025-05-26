@@ -94,22 +94,17 @@ module Groups
                                    sample_ids: not_found_sample_ids.join(', ')))
         end
 
-        if transferred_samples_ids.count.positive?
-          update_namespace_attributes(new_project, transferred_samples_ids)
-          create_activities(transferred_samples_data)
-        end
+        update_samples_count_and_create_activities(transferred_samples_data) if transferred_samples_ids.count.positive?
 
         transferred_samples_ids
       end
 
-      def update_namespace_attributes(new_project, transferred_samples_ids)
-        update_samples_count(new_project, transferred_samples_ids.count)
-      end
-
-      def create_activities(transferred_samples_data) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      def update_samples_count_and_create_activities(transferred_samples_data) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         transferred_samples_data.each do |key, data|
           old_namespace = Namespace.find_by(puid: key)
           new_namespace = Namespace.find_by(puid: data[0][:target_project_puid])
+
+          update_samples_count(old_namespace.project, new_namespace.project, data.size)
 
           ext_details = ExtendedDetail.create!(details: { transferred_samples_count: data.size,
                                                           transferred_samples_data: data })
@@ -165,10 +160,12 @@ module Groups
                                                  activity_type: 'sample_transfer')
       end
 
-      def update_samples_count(new_project, transferred_samples_count)
-        return unless new_project.parent.type == 'Group'
-
-        new_project.parent.update_samples_count_by_transfer_service(new_project, transferred_samples_count)
+      def update_samples_count(old_project, new_project, transferred_samples_count)
+        if old_project.parent.type == 'Group'
+          old_project.parent.update_samples_count_by_transfer_service(new_project, transferred_samples_count)
+        elsif new_project.parent.type == 'Group'
+          new_project.parent.update_samples_count_by_addition_services(transferred_samples_count)
+        end
       end
 
       def namespaces_for_transfer(project_namespace)
