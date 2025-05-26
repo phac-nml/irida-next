@@ -4,7 +4,7 @@ module Groups
   module Samples
     # Controller actions for Project Samples Deletions
     class DeletionsController < Groups::ApplicationController
-      before_action :group
+      before_action :group, :ensure_enabled
       before_action :new_dialog_paths, only: :new
 
       def new
@@ -40,6 +40,10 @@ module Groups
 
       def group
         @group = Group.find_by_full_path(params[:group_id]) # rubocop:disable Rails/DynamicFindBy
+      end
+
+      def ensure_enabled
+        not_found unless Flipper.enabled?(:group_samples_destroy)
       end
 
       def new_dialog_paths
