@@ -10,6 +10,8 @@ module Groups
       @sample2 = samples(:sample2)
       @sample23 = samples(:sample23)
       @namespace = groups(:group_one)
+
+      Flipper.enable(:group_samples_destroy)
     end
 
     test 'should destroy samples' do
