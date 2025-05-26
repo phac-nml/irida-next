@@ -33,6 +33,10 @@ module Groups
         @projects = authorized_scope(Project, type: :relation, as: :group_projects_for_sample_actions,
                                               scope_options: { group: @group })
       end
+
+      def ensure_enabled
+        not_found unless Flipper.enabled?(:group_samples_clone)
+      end
     end
   end
 end
