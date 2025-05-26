@@ -24,6 +24,7 @@ module Groups
 
       Flipper.enable(:progress_bars)
       Flipper.enable(:group_samples_transfer)
+      Flipper.enable(:group_samples_destroy)
     end
 
     def retrieve_puids
