@@ -16,15 +16,6 @@ export default class extends Controller {
     this.#originalCellContent = {};
   }
 
-  connect() {
-    this.idempotentConnect();
-  }
-
-  idempotentConnect() {
-    this.editableCellTargets.forEach(this.editableCellTargetDisconnected, this);
-    this.editableCellTargets.forEach(this.editableCellTargetConnected, this);
-  }
-
   editableCellTargetConnected(element) {
     this.#originalCellContent[this.#elementId(element)] = element.innerText;
     element.addEventListener("blur", this.boundBlur);
