@@ -29,6 +29,10 @@ module ICONS
   # Default library is :phosphor and default variant is :regular unless specified
   DEFINITIONS = {
     # Phosphor Icons (default library)
+    caret_down: { name: 'caret-down', options: {} },
+    caret_up: { name: 'caret-up', options: {} },
+    caret_right: { name: 'caret-right', options: {} },
+    caret_left: { name: 'caret-left', options: {} },
     clipboard: { name: 'clipboard-text', options: {} },
     caret_down: { name: 'caret-down', options: {} },
     caret_up: { name: 'caret-up', options: {} },
@@ -36,6 +40,7 @@ module ICONS
     file: { name: :file, options: {} },
     files: { name: :files, options: {} },
     squares_four: { name: 'squares-four', options: {} },
+    magnifying_glass: { name: 'magnifying-glass', options: {} },
     list_bullets: { name: 'list-bullets', options: {} },
     lock_key: { name: 'lock-key', options: {} },
     stack: { name: :stack, options: {} },
@@ -46,10 +51,12 @@ module ICONS
     question: { name: :question, options: {} },
     sidebar: { name: :sidebar, options: {} },
     sliders_horizontal: { name: 'sliders-horizontal', options: {} },
+    rocket_launch: { name: 'rocket-launch', options: {} },
     ticket: { name: :ticket, options: {} },
     user_circle: { name: 'user-circle', options: {} },
     users: { name: :users, options: {} },
     bank: { name: :bank, options: {} },
+    x: { name: :x, options: {} },
 
     # Heroicons
     beaker: { name: :beaker, options: { library: :heroicons } },

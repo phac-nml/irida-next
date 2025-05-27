@@ -29,7 +29,7 @@
                                  pattern: Irida::PathRegex::PATH_REGEX_STR,
                                  required: true,
                                  title: t(:"projects.edit.advanced.path.help"),
-                                 class: "prefixed" %>
+                                 class: "prefixed rounded-l-none rounded-r-md py-2.5" %>
             </div>
             <%= render "shared/form/field_errors",
             errors: @project.namespace.errors.full_messages_for(:path) %>
@@ -40,7 +40,7 @@
                           turbo_frame: "_top",
                         },
                         class:
-                          "button button--state-destructive button--size-default inline-block" %>
+                          "btn btn-destructive btn-rounded" %>
           </div>
         </div>
       <% end %>

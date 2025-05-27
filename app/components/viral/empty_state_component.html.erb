@@ -46,13 +46,7 @@
       <%= link_to @action_text,
       @action_path,
       method: @action_method,
-      class:
-        class_names(
-          "mt-6 inline-flex items-center justify-center px-6 py-3 text-base font-semibold rounded-xl",
-          "bg-primary-700 hover:bg-primary-800",
-          "dark:bg-primary-600 dark:hover:bg-primary-700",
-          "text-white shadow transition-all duration-200",
-        ),
+      class: "btn btn-primary btn-rounded",
       tabindex: 0,
       role: "button",
       "aria-label": @action_text %>

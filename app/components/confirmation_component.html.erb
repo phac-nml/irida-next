@@ -16,14 +16,14 @@
     </div>
     <div class="dialog--form">
       <form method="dialog">
-        <div class="flex items-center mt-6">
+        <div class="flex items-center mt-6 space-x-2">
           <button
-            class="button button--state-destructive button--size-default mr-2"
+            class="btn btn-destructive btn-rounded"
             value="confirm"
           ><%= t(:"components.confirmation.confirm") %>
           </button>
           <button
-            class="button button--state-default button--size-default"
+            class="btn btn-default btn-rounded"
             formmethod="dialog"
             value="cancel"
           >
@@ -45,16 +45,16 @@
             dark:text-white
           "
         />
-        <div class="flex items-center mt-6">
+        <div class="flex items-center mt-6 space-x-2">
           <button
-            class="mr-2 button button--state-destructive button--size-default"
+            class="btn btn-destructive btn-rounded"
             value="confirm"
             disabled="disabled"
             data-confirmation-target="confirmButton"
           ><%= t(:"components.confirmation.confirm") %>
           </button>
           <button
-            class="button button--state-default button--size-default"
+            class="btn btn-default btn-rounded"
             formmethod="dialog"
             value="cancel"
           >
