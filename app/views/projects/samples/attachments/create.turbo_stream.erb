@@ -7,15 +7,13 @@
       ) %>
     <% end %>
 
-    <turbo-stream action="update" method="morph" target="sample-attachments">
-      <template>
-        <%= render partial: "table",
-        locals: {
-          attachments: @sample.attachments,
-          sample: @sample,
-        } %>
-      </template>
-    </turbo-stream>
+    <%= turbo_stream.replace "sample-attachments", method: :morph do %>
+      <%= render partial: "table",
+      locals: {
+        attachments: @sample.attachments,
+        sample: @sample,
+      } %>
+    <% end %>
   <% else %>
     <%= turbo_stream.append "flashes" do %>
       <%= viral_flash(
