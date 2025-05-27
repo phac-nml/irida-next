@@ -36,7 +36,7 @@
               query: @q,
               search_attribute: :puid_or_file_blob_filename_cont,
               placeholder: t(:".search.placeholder"),
-              url: namespace_project_sample_path(format: :turbo_stream),
+              url: namespace_project_sample_attachments_path(sample_id: @sample.id, format: :turbo_stream),
               data: {
                 controller: "selection",
                 selection_storage_key_value: "files-#{@sample.id}"
