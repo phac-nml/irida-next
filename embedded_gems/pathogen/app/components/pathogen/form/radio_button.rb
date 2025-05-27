@@ -1,32 +1,60 @@
 # frozen_string_literal: true
 
+# 🟢 Pathogen::Form::RadioButtonComponent 🟢
+#
+# 🎯 Purpose:
+#   This file defines a custom, accessible, and beautifully styled radio button component for Rails forms.
+#   - Designed for maximum accessibility (ARIA, labels, help text)
+#   - Uses Tailwind CSS for modern, responsive styling
+#   - Easy to use and extend in your Rails app
+#
+# 🚀 Usage Example:
+#   <%= render Pathogen::Form::RadioButtonComponent.new(
+#     form: form,                      # 📝 Your form builder
+#     attribute: :theme,               # 🏷️  The model attribute
+#     value: "system",                # 💾 The value for this radio
+#     label: "System",                # 🏷️  The label shown to users
+#     help_text: "Theme follows your OS settings." # 💡 Optional help text
+#   ) %>
+#
+# 🧩 Options:
+#   - :label        🏷️   (String)   — The label text shown next to the radio
+#   - :checked      ✅   (Boolean)   — Whether this radio is selected
+#   - :disabled     🚫   (Boolean)   — Whether this radio is disabled
+#   - :required     ❗   (Boolean)   — Whether this radio is required
+#   - :described_by 🗣️   (String)   — ID of element describing this input
+#   - :controls     🎛️   (String)   — ID of element controlled by this input
+#   - :lang         🌐   (String)   — Language code
+#   - :class        🎨   (String)   — Extra CSS classes
+#   - :onchange     🔄   (String)   — JS for onchange event
+#   - :help_text    💡   (String)   — Help text below the label (ARIA described)
+#
+# ♿ Accessibility:
+#   - Associates label and input for screen readers
+#   - Uses aria-describedby for help text
+#   - Keyboard and screen reader friendly
+#   - Visible focus and checked states
+#
+# 🛠️  How it works:
+#   - Renders a radio input and label side-by-side
+#   - Optionally renders help text below the label
+#   - All ARIA and accessibility attributes are set automatically
+#   - Styles are applied using Tailwind CSS utility classes
+#
+# 📚 See also:
+#   - Pathogen::Form::RadioButtonStyles for style helpers
+#
+# ✨ Enjoy accessible, beautiful forms!
+
 module Pathogen
   module Form
-    # A custom radio button component with built-in accessibility features and styling
+    # 🟢 Pathogen::Form::RadioButtonComponent 🟢
     #
-    # @example Basic usage
-    #   <%= render Pathogen::Form::RadioButtonComponent.new(
-    #     form: form,
-    #     attribute: :notification_preference,
-    #     value: "email",
-    #     label: "Email notifications"
-    #   ) %>
+    # This component renders a single radio button with a label and optional help text.
+    # It is designed for accessibility and modern UI using Tailwind CSS.
     #
-    # @example With additional options
-    #   <%= render Pathogen::Form::RadioButtonComponent.new(
-    #     form: form,
-    #     attribute: :notification_preference,
-    #     value: "sms",
-    #     label: "SMS notifications",
-    #     checked: true,
-    #     disabled: false,
-    #     required: true,
-    #     described_by: "sms_help",
-    #     controls: "sms_fields",
-    #     lang: "en",
-    #     class: "custom-class"
-    #   ) %>
-    class RadioButton < ViewComponent::Base
+    # See the top of this file for full usage and options! 🎉
+    class RadioButtonComponent < ViewComponent::Base
       include ActionView::Helpers::TagHelper
       include ActionView::Helpers::FormTagHelper
       include RadioButtonStyles
@@ -60,6 +88,21 @@ module Pathogen
 
       private
 
+      # Extracts and assigns options to instance variables
+      def extract_options!(options)
+        @options = options
+        @label = options.delete(:label)
+        @checked = options.delete(:checked) { false }
+        @disabled = options.delete(:disabled) { false }
+        @required = options.delete(:required) { false }
+        @described_by = options.delete(:described_by)
+        @controls = options.delete(:controls)
+        @lang = options.delete(:lang)
+        @onchange = options.delete(:onchange)
+        @help_text = options.delete(:help_text)
+      end
+
+      # Renders the radio input element
       def radio_button_html
         radio_button_tag(
           "#{@form.object_name}[#{@attribute}]",
@@ -69,12 +112,14 @@ module Pathogen
         )
       end
 
+      # Renders the label and help text stacked vertically
       def label_and_help_html
         tag.div(class: 'flex flex-col') do
           label_html + help_html
         end
       end
 
+      # Renders the label for the radio button
       def label_html
         if @label.present?
           tag.label(@label, for: radio_button_id, class: label_classes)
@@ -83,6 +128,7 @@ module Pathogen
         end
       end
 
+      # Renders the help text below the label, if present
       def help_html
         if @help_text.present?
           tag.p(@help_text, id: help_text_id, class: help_text_classes)
@@ -91,14 +137,17 @@ module Pathogen
         end
       end
 
+      # Generates a unique ID for the help text
       def help_text_id
         @help_text_id ||= "#{radio_button_id}_help"
       end
 
+      # Generates a unique ID for the radio button
       def radio_button_id
         @radio_button_id ||= "#{@form.object_name}_#{@attribute}_#{@value}".gsub(/[\[\]]+/, '_').chomp('_')
       end
 
+      # Returns a hash of HTML attributes for the radio input
       def radio_button_attributes
         describedby = [@described_by, (@help_text.present? ? help_text_id : nil)].compact.join(' ')
         {
@@ -112,6 +161,7 @@ module Pathogen
         }.compact
       end
 
+      # Returns a hash of ARIA attributes for the radio input
       def radio_button_aria_attributes
         {
           label: @label,
@@ -121,20 +171,6 @@ module Pathogen
           controls: @controls,
           checked: @checked.to_s
         }.compact
-      end
-
-      # Extracts and assigns options to instance variables
-      def extract_options!(options)
-        @options = options
-        @label = options.delete(:label)
-        @checked = options.delete(:checked) { false }
-        @disabled = options.delete(:disabled) { false }
-        @required = options.delete(:required) { false }
-        @described_by = options.delete(:described_by)
-        @controls = options.delete(:controls)
-        @lang = options.delete(:lang)
-        @onchange = options.delete(:onchange)
-        @help_text = options.delete(:help_text)
       end
     end
   end
