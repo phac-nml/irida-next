@@ -191,8 +191,7 @@ module Pathogen
           disabled: @disabled.to_s,
           required: @required.to_s,
           describedby: @described_by,
-          controls: @controls,
-          checked: @checked.to_s
+          controls: @controls
         }.compact
       end
     end
