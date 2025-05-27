@@ -31,23 +31,26 @@ module Pathogen
       include ActionView::Helpers::FormTagHelper
       include RadioButtonStyles
 
+      # @param form [ActionView::Helpers::FormBuilder] the form builder
+      # @param attribute [Symbol] the attribute for the radio button
+      # @param value [String] the value for the radio button
+      # @param options [Hash] additional options:
+      #   - :label [String] the label text
+      #   - :checked [Boolean] whether the radio is checked
+      #   - :disabled [Boolean] whether the radio is disabled
+      #   - :required [Boolean] whether the radio is required
+      #   - :invalid [Boolean] whether the radio is invalid
+      #   - :described_by [String] id of element describing this input
+      #   - :controls [String] id of element controlled by this input
+      #   - :lang [String] language code
+      #   - :class [String] additional CSS classes
+      #   - :onchange [String] JS for onchange event
+      #   - :help_text [String] help text rendered below the label
       def initialize(form:, attribute:, value:, **options)
         @form = form
         @attribute = attribute
         @value = value
-        @options = options
-
-        # Extract common options
-        @label = options.delete(:label)
-        @checked = options.delete(:checked) { false }
-        @disabled = options.delete(:disabled) { false }
-        @required = options.delete(:required) { false }
-        @invalid = options.delete(:invalid) { false }
-        @described_by = options.delete(:described_by)
-        @controls = options.delete(:controls)
-        @lang = options.delete(:lang)
-        @onchange = options.delete(:onchange)
-        @help_text = options.delete(:help_text)
+        extract_options!(options)
       end
 
       def call
@@ -116,6 +119,21 @@ module Pathogen
           controls: @controls,
           checked: @checked.to_s
         }.compact
+      end
+
+      # Extracts and assigns options to instance variables
+      def extract_options!(options)
+        @options = options
+        @label = options.delete(:label)
+        @checked = options.delete(:checked) { false }
+        @disabled = options.delete(:disabled) { false }
+        @required = options.delete(:required) { false }
+        @invalid = options.delete(:invalid) { false }
+        @described_by = options.delete(:described_by)
+        @controls = options.delete(:controls)
+        @lang = options.delete(:lang)
+        @onchange = options.delete(:onchange)
+        @help_text = options.delete(:help_text)
       end
     end
   end
