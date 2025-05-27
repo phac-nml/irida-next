@@ -29,6 +29,7 @@ module Pathogen
     class RadioButton < ViewComponent::Base
       include ActionView::Helpers::TagHelper
       include ActionView::Helpers::FormTagHelper
+      include RadioButtonStyles
 
       def initialize(form:, attribute:, value:, **options)
         @form = form
@@ -63,7 +64,7 @@ module Pathogen
           label_html = if @label.present?
                          tag.label(@label, for: radio_button_id, class: label_classes)
                        else
-                         tag.label('[No label provided]', for: radio_button_id, class: label_classes + ' text-red-500')
+                         tag.label('[No label provided]', for: radio_button_id, class: "#{label_classes} text-red-500")
                        end
 
           help_html = if @help_text.present?
@@ -105,48 +106,6 @@ module Pathogen
         }.compact
       end
 
-      def radio_button_classes
-        class_names(
-          @options[:class],
-          # Layout & Sizing
-          'h-5 w-5 shrink-0 mt-0.5',
-          # Shape & Border
-          'rounded-full border-2',
-          # Colors & Background
-          'text-primary-600 bg-white',
-          # Focus States
-          'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2',
-          # Cursor & Interaction
-          'cursor-pointer transition-colors duration-200 ease-in-out',
-          # Checked State
-          'checked:border-primary-500 checked:bg-primary-500',
-          # Hover State
-          'hover:border-primary-500',
-          # Disabled State
-          'disabled:opacity-50 disabled:cursor-not-allowed',
-          'disabled:border-slate-200 disabled:bg-slate-100',
-          # Dark Mode
-          'dark:border-slate-600 dark:bg-slate-700',
-          'dark:checked:bg-primary-600 dark:checked:border-primary-500',
-          'dark:disabled:bg-slate-800 dark:disabled:border-slate-700',
-          'dark:disabled:checked:bg-slate-600',
-          'dark:focus:ring-primary-400'
-        )
-      end
-
-      def label_classes
-        class_names(
-          # Typography
-          'text-sm font-medium text-slate-900',
-          # Cursor
-          'cursor-pointer',
-          # Disabled State
-          'disabled:cursor-not-allowed disabled:opacity-50',
-          # Dark Mode
-          'dark:text-slate-100'
-        )
-      end
-
       def radio_button_aria_attributes
         {
           label: @label,
@@ -157,10 +116,6 @@ module Pathogen
           controls: @controls,
           checked: @checked.to_s
         }.compact
-      end
-
-      def help_text_classes
-        'text-sm text-slate-500 mt-1 dark:text-slate-400'
       end
     end
   end
