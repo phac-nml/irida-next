@@ -29,7 +29,6 @@ module Pathogen
       # @option options [Boolean] :checked Whether the radio button should be checked
       # @option options [Boolean] :disabled Whether the radio button is disabled
       # @option options [Boolean] :required Whether the radio button is required
-      # @option options [Boolean] :invalid Whether the radio button is invalid
       # @option options [String] :described_by ID of the element that describes this radio button
       # @option options [String] :controls ID of the element this radio button controls
       # @option options [String] :lang Language code for the label
@@ -55,7 +54,7 @@ module Pathogen
         }.merge(options)
 
         # Render the component
-        @template.render(Pathogen::Form::RadioButton.new(**component_options))
+        @template.render(Pathogen::Form::RadioButtonComponent.new(**component_options))
       end
     end
   end
