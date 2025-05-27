@@ -55,38 +55,42 @@ module Pathogen
 
       def call
         tag.div(class: 'flex items-start gap-3') do
-          # Generate the radio button HTML with explicit ID
-          radio = radio_button_tag(
-            "#{@form.object_name}[#{@attribute}]",
-            @value,
-            @checked,
-            radio_button_attributes.merge(id: radio_button_id)
-          )
-
-          # Add the label with matching ID
-          label_html = if @label.present?
-                         tag.label(@label, for: radio_button_id, class: label_classes)
-                       else
-                         tag.label('[No label provided]', for: radio_button_id, class: "#{label_classes} text-red-500")
-                       end
-
-          help_html = if @help_text.present?
-                        tag.p(@help_text, id: help_text_id, class: help_text_classes)
-                      else
-                        ''.html_safe
-                      end
-
-          # Wrap label and help text in a div for vertical stacking
-          label_and_help = tag.div(class: 'flex flex-col') do
-            label_html + help_html
-          end
-
-          # Return the combined HTML
-          radio + label_and_help
+          radio_button_html + label_and_help_html
         end
       end
 
       private
+
+      def radio_button_html
+        radio_button_tag(
+          "#{@form.object_name}[#{@attribute}]",
+          @value,
+          @checked,
+          radio_button_attributes.merge(id: radio_button_id)
+        )
+      end
+
+      def label_and_help_html
+        tag.div(class: 'flex flex-col') do
+          label_html + help_html
+        end
+      end
+
+      def label_html
+        if @label.present?
+          tag.label(@label, for: radio_button_id, class: label_classes)
+        else
+          tag.label('[No label provided]', for: radio_button_id, class: "#{label_classes} text-red-500")
+        end
+      end
+
+      def help_html
+        if @help_text.present?
+          tag.p(@help_text, id: help_text_id, class: help_text_classes)
+        else
+          ''.html_safe
+        end
+      end
 
       def help_text_id
         @help_text_id ||= "#{radio_button_id}_help"
