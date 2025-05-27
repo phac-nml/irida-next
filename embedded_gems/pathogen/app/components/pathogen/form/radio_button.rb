@@ -10,24 +10,32 @@
 #
 # 🚀 Usage Example:
 #   <%= render Pathogen::Form::RadioButton.new(
-#     form: form,                      # 📝 Your form builder
-#     attribute: :theme,               # 🏷️  The model attribute
+#     attribute: :theme,               # 🏷️  The model attribute (used for name/id if no form)
 #     value: "system",                # 💾 The value for this radio
 #     label: "System",                # 🏷️  The label shown to users
 #     help_text: "Theme follows your OS settings." # 💡 Optional help text
 #   ) %>
+#   # Or with a form builder:
+#   <%= render Pathogen::Form::RadioButton.new(
+#     form: form,                      # 📝 Your form builder
+#     attribute: :theme,
+#     value: "system",
+#     label: "System"
+#   ) %>
 #
 # 🧩 Options:
-#   - :label        🏷️   (String)   — The label text shown next to the radio
-#   - :checked      ✅   (Boolean)   — Whether this radio is selected
-#   - :disabled     🚫   (Boolean)   — Whether this radio is disabled
-#   - :required     ❗   (Boolean)   — Whether this radio is required
-#   - :described_by 🗣️   (String)   — ID of element describing this input
-#   - :controls     🎛️   (String)   — ID of element controlled by this input
-#   - :lang         🌐   (String)   — Language code
-#   - :class        🎨   (String)   — Extra CSS classes
-#   - :onchange     🔄   (String)   — JS for onchange event
-#   - :help_text    💡   (String)   — Help text below the label (ARIA described)
+#   - :form         📝   (FormBuilder) — Optional. If not provided, input_name is used.
+#   - :input_name   🏷️   (String)     — Optional. Used for input name/id if no form.
+#   - :label        🏷️   (String)     — The label text shown next to the radio
+#   - :checked      ✅   (Boolean)     — Whether this radio is selected
+#   - :disabled     🚫   (Boolean)     — Whether this radio is disabled
+#   - :required     ❗   (Boolean)     — Whether this radio is required
+#   - :described_by 🗣️   (String)     — ID of element describing this input
+#   - :controls     🎛️   (String)     — ID of element controlled by this input
+#   - :lang         🌐   (String)     — Language code
+#   - :class        🎨   (String)     — Extra CSS classes
+#   - :onchange     🔄   (String)     — JS for onchange event
+#   - :help_text    💡   (String)     — Help text below the label (ARIA described)
 #
 # ♿ Accessibility:
 #   - Associates label and input for screen readers
@@ -59,10 +67,11 @@ module Pathogen
       include ActionView::Helpers::FormTagHelper
       include RadioButtonStyles
 
-      # @param form [ActionView::Helpers::FormBuilder] the form builder
+      # @param form [ActionView::Helpers::FormBuilder, nil] the form builder (optional)
       # @param attribute [Symbol] the attribute for the radio button
       # @param value [String] the value for the radio button
       # @param options [Hash] additional options:
+      #   - :input_name [String] input name/id if no form is provided
       #   - :label [String] the label text
       #   - :checked [Boolean] whether the radio is checked
       #   - :disabled [Boolean] whether the radio is disabled
@@ -73,7 +82,7 @@ module Pathogen
       #   - :class [String] additional CSS classes
       #   - :onchange [String] JS for onchange event
       #   - :help_text [String] help text rendered below the label
-      def initialize(form:, attribute:, value:, **options)
+      def initialize(attribute:, value:, form: nil, **options)
         @form = form
         @attribute = attribute
         @value = value
@@ -90,7 +99,8 @@ module Pathogen
 
       # Extracts and assigns options to instance variables
       def extract_options!(options)
-        @options = options
+        @options = options.dup
+        @input_name = options.delete(:input_name)
         @label = options.delete(:label)
         @checked = options.delete(:checked) { false }
         @disabled = options.delete(:disabled) { false }
@@ -100,15 +110,16 @@ module Pathogen
         @lang = options.delete(:lang)
         @onchange = options.delete(:onchange)
         @help_text = options.delete(:help_text)
+        @html_options = options # Remaining options (e.g., data-*)
       end
 
       # Renders the radio input element
       def radio_button_html
         radio_button_tag(
-          "#{@form.object_name}[#{@attribute}]",
+          input_name,
           @value,
           @checked,
-          radio_button_attributes.merge(id: radio_button_id)
+          radio_button_attributes.merge(id: radio_button_id).merge(@html_options)
         )
       end
 
@@ -142,9 +153,22 @@ module Pathogen
         @help_text_id ||= "#{radio_button_id}_help"
       end
 
+      # Determines the input name for the radio button
+      def input_name
+        return @input_name if @input_name.present?
+        return "#{@form.object_name}[#{@attribute}]" if @form
+
+        @attribute.to_s
+      end
+
       # Generates a unique ID for the radio button
       def radio_button_id
-        @radio_button_id ||= "#{@form.object_name}_#{@attribute}_#{@value}".gsub(/[\[\]]+/, '_').chomp('_')
+        base = if @form
+                 "#{@form.object_name}_#{@attribute}_#{@value}"
+               else
+                 "#{input_name}_#{@value}"
+               end
+        base.gsub(/[\[\]]+/, '_').chomp('_')
       end
 
       # Returns a hash of HTML attributes for the radio input
