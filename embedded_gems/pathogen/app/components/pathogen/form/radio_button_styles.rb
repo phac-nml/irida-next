@@ -7,6 +7,7 @@
 # and supports both light and dark modes.
 module Pathogen
   module Form
+    # Provides Tailwind CSS styling helpers for Pathogen radio button components.
     module RadioButtonStyles
       # Generates classes for the radio button input element 🔘
       #
