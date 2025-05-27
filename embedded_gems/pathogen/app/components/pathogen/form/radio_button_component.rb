@@ -90,8 +90,13 @@ module Pathogen
       end
 
       def call
-        tag.div(class: 'flex items-start gap-3') do
-          radio_button_html + label_and_help_html
+        tag.div(class: 'flex flex-col') do
+          tag.div(class: 'flex items-center gap-3') do
+            radio_button_html + label_html
+          end +
+            tag.div(class: 'mt-1 ml-8') do
+              help_html
+            end
         end
       end
 
@@ -110,6 +115,7 @@ module Pathogen
         @lang = options.delete(:lang)
         @onchange = options.delete(:onchange)
         @help_text = options.delete(:help_text)
+        @user_class = options.delete(:class)
         @html_options = options # Remaining options (e.g., data-*)
       end
 
@@ -121,13 +127,6 @@ module Pathogen
           @checked,
           radio_button_attributes.merge(id: radio_button_id).merge(@html_options)
         )
-      end
-
-      # Renders the label and help text stacked vertically
-      def label_and_help_html
-        tag.div(class: 'flex flex-col') do
-          label_html + help_html
-        end
       end
 
       # Renders the label for the radio button
@@ -177,7 +176,7 @@ module Pathogen
         {
           disabled: @disabled,
           required: @required,
-          class: radio_button_classes,
+          class: radio_button_classes(@user_class),
           aria: radio_button_aria_attributes.merge(describedby: describedby.presence),
           role: 'radio',
           tabindex: @disabled ? -1 : 0,

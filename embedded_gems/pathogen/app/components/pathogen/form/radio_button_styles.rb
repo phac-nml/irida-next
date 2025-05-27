@@ -11,6 +11,7 @@ module Pathogen
     module RadioButtonStyles
       # Generates classes for the radio button input element 🔘
       #
+      # @param user_class [String, nil] Additional classes to merge
       # @return [String] Space-separated Tailwind CSS classes
       # @note Includes styles for:
       #   - Layout & dimensions (5x5 with margin)
@@ -20,9 +21,9 @@ module Pathogen
       #   - Smooth transitions
       #   - States: checked, hover, disabled
       #   - Dark mode variants
-      def radio_button_classes
+      def radio_button_classes(user_class = nil)
         class_names(
-          @options[:class],
+          user_class,
           # Layout & Sizing
           'h-5 w-5 shrink-0 mt-0.5',
           # Shape & Border
