@@ -28,8 +28,6 @@ module Pathogen
           'rounded-full border-2',
           # Colors & Background
           'text-primary-600 bg-white',
-          # Focus States
-          'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2',
           # Cursor & Interaction
           'cursor-pointer transition-colors duration-200 ease-in-out',
           # Checked State
@@ -43,8 +41,7 @@ module Pathogen
           'dark:border-slate-600 dark:bg-slate-700',
           'dark:checked:bg-primary-600 dark:checked:border-primary-500',
           'dark:disabled:bg-slate-800 dark:disabled:border-slate-700',
-          'dark:disabled:checked:bg-slate-600',
-          'dark:focus:ring-primary-400'
+          'dark:disabled:checked:bg-slate-600'
         )
       end
 
