@@ -103,6 +103,7 @@ module Pathogen
       private
 
       # Extracts and assigns options to instance variables
+      # rubocop:disable Metrics/AbcSize
       def extract_options!(options)
         @options = options.dup
         @input_name = options.delete(:input_name)
@@ -118,6 +119,8 @@ module Pathogen
         @user_class = options.delete(:class)
         @html_options = options # Remaining options (e.g., data-*)
       end
+
+      # rubocop:enable Metrics/AbcSize
 
       # Renders the radio input element
       def radio_button_html
