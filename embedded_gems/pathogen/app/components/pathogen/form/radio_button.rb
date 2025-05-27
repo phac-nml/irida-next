@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# 🟢 Pathogen::Form::RadioButtonComponent 🟢
+# 🟢 Pathogen::Form::RadioButton 🟢
 #
 # 🎯 Purpose:
 #   This file defines a custom, accessible, and beautifully styled radio button component for Rails forms.
@@ -9,7 +9,7 @@
 #   - Easy to use and extend in your Rails app
 #
 # 🚀 Usage Example:
-#   <%= render Pathogen::Form::RadioButtonComponent.new(
+#   <%= render Pathogen::Form::RadioButton.new(
 #     form: form,                      # 📝 Your form builder
 #     attribute: :theme,               # 🏷️  The model attribute
 #     value: "system",                # 💾 The value for this radio
@@ -48,13 +48,13 @@
 
 module Pathogen
   module Form
-    # 🟢 Pathogen::Form::RadioButtonComponent 🟢
+    # 🟢 Pathogen::Form::RadioButton 🟢
     #
     # This component renders a single radio button with a label and optional help text.
     # It is designed for accessibility and modern UI using Tailwind CSS.
     #
     # See the top of this file for full usage and options! 🎉
-    class RadioButtonComponent < ViewComponent::Base
+    class RadioButton < ViewComponent::Base
       include ActionView::Helpers::TagHelper
       include ActionView::Helpers::FormTagHelper
       include RadioButtonStyles
