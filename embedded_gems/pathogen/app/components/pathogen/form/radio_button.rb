@@ -39,7 +39,6 @@ module Pathogen
       #   - :checked [Boolean] whether the radio is checked
       #   - :disabled [Boolean] whether the radio is disabled
       #   - :required [Boolean] whether the radio is required
-      #   - :invalid [Boolean] whether the radio is invalid
       #   - :described_by [String] id of element describing this input
       #   - :controls [String] id of element controlled by this input
       #   - :lang [String] language code
@@ -118,7 +117,6 @@ module Pathogen
           label: @label,
           disabled: @disabled.to_s,
           required: @required.to_s,
-          invalid: @invalid.to_s,
           describedby: @described_by,
           controls: @controls,
           checked: @checked.to_s
@@ -132,7 +130,6 @@ module Pathogen
         @checked = options.delete(:checked) { false }
         @disabled = options.delete(:disabled) { false }
         @required = options.delete(:required) { false }
-        @invalid = options.delete(:invalid) { false }
         @described_by = options.delete(:described_by)
         @controls = options.delete(:controls)
         @lang = options.delete(:lang)
