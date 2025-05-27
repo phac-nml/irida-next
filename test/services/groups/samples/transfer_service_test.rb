@@ -5,7 +5,7 @@ require 'test_helper'
 module Groups
   module Samples
     class TransferServiceTest < ActiveSupport::TestCase
-      def setup
+      def setup # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         @john_doe = users(:john_doe)
         @jane_doe = users(:jane_doe)
         @joan_doe = users(:joan_doe)
@@ -235,8 +235,10 @@ module Groups
         assert_equal(4, @group12.samples_count)
 
         assert_no_changes -> { @group12.reload.samples_count } do
-          Groups::Samples::TransferService.new(@subgroup12aa, @john_doe).execute(@sample_transfer_params1[:new_project_id],
-                                                                                 @sample_transfer_params1[:sample_ids])
+          Groups::Samples::TransferService.new(@subgroup12aa, @john_doe).execute(
+            @sample_transfer_params1[:new_project_id],
+            @sample_transfer_params1[:sample_ids]
+          )
         end
 
         assert_equal(0, @subgroup12aa.reload.samples_count)
@@ -244,8 +246,10 @@ module Groups
         assert_equal(3, @subgroup12b.reload.samples_count)
 
         assert_no_changes -> { @group12.reload.samples_count } do
-          Groups::Samples::TransferService.new(@subgroup12aa, @john_doe).execute(@sample_transfer_params2[:new_project_id],
-                                                                                 @sample_transfer_params2[:sample_ids])
+          Groups::Samples::TransferService.new(@subgroup12aa, @john_doe).execute(
+            @sample_transfer_params2[:new_project_id],
+            @sample_transfer_params2[:sample_ids]
+          )
         end
 
         assert_equal(0, @subgroup12aa.reload.samples_count)
