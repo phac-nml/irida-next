@@ -2009,6 +2009,7 @@ module Groups
 
       sample1 = samples(:sample1)
       sample2 = samples(:sample2)
+      sample28 = samples(:sample28)
       sample30 = samples(:sample30)
 
       samples.flatten!
@@ -2064,21 +2065,24 @@ module Groups
                                                                              sample_name: sample30.name).gsub(':', '')
       end
 
-      # verify sample1 and 2 transferred, sample 30 did not
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary.one', count: 1, locale: @user.locale))
+      # verify sample1 and 2 transferred, sample 28, sample 30 did not
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
+                                                                           locale: @user.locale))
       assert_no_selector "tr[id='#{dom_id(sample1)}']"
       assert_no_selector "tr[id='#{dom_id(sample2)}']"
       assert_selector "tr[id='#{dom_id(sample30)}']"
+      assert_selector "tr[id='#{dom_id(sample28)}']"
 
       # destination project
       visit group_samples_url(group_three)
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 25,
                                                                            locale: @user.locale))
 
       click_on I18n.t(:'samples.table_component.puid')
 
       assert_selector "tr[id='#{dom_id(sample1)}']"
       assert_selector "tr[id='#{dom_id(sample2)}']"
+      assert_no_selector "tr[id='#{dom_id(sample28)}']"
       assert_no_selector "tr[id='#{dom_id(sample30)}']"
       ### VERIFY END ###
     end

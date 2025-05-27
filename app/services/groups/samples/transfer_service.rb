@@ -8,7 +8,7 @@ module Groups
       SampleExistsInProjectError = Class.new(StandardError)
 
       def execute(new_project_id, sample_ids, broadcast_target = nil)
-        # Authorize if user can transfer samples from the current project
+        # Authorize if user can transfer samples from the current group
         authorize! @group, to: :transfer_sample?
 
         validate(new_project_id, sample_ids)
@@ -45,15 +45,53 @@ module Groups
               I18n.t('services.groups.samples.transfer.maintainer_transfer_not_allowed')
       end
 
+      # Filter the samples that the user has permissions to transfer
+      # from the projects within the group and that exist
+      def filter_sample_ids(sample_ids) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+        samples = Sample.where(id: sample_ids)
+        project_ids = samples.pluck(:project_id).uniq
+        unauthorized_proj_ids = []
+        samples_not_transferrable_ids = []
+
+        projects = Project.where(id: project_ids)
+
+        projects.each do |proj|
+          authorize! proj, to: :transfer_sample?
+        rescue ActionPolicy::Unauthorized
+          unauthorized_proj_ids << proj.id
+          next
+        end
+
+        if unauthorized_proj_ids.length.positive?
+          samples_not_transferrable_ids = samples.where(project_id: unauthorized_proj_ids).pluck(:id)
+          @group.errors.add(:base,
+                            I18n.t('services.groups.samples.transfer.unauthorized',
+                                   sample_ids: samples_not_transferrable_ids.join(', ')))
+        end
+
+        if samples.length != sample_ids.length
+
+          # (params sample_ids) - (unauthorized samples ids) - (samples ids)
+          samples_not_transferrable_ids = sample_ids - samples_not_transferrable_ids - samples.pluck(:id)
+          @group.errors.add(:base,
+                            I18n.t('services.groups.samples.transfer.samples_not_found',
+                                   sample_ids: samples_not_transferrable_ids.join(', ')))
+        end
+
+        return samples.where.not(project_id: unauthorized_proj_ids) if unauthorized_proj_ids.length.positive?
+
+        samples
+      end
+
       def transfer(new_project, sample_ids, broadcast_target) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+        transferrable_samples = filter_sample_ids(sample_ids)
+
         transferred_samples_ids = []
-        not_found_sample_ids = []
         transferred_samples_data = {}
         new_namespaces = namespaces_for_transfer(new_project.namespace)
-        total_sample_count = sample_ids.count
-        sample_ids.each.with_index(1) do |sample_id, index| # rubocop:disable Metrics/BlockLength
+        total_sample_count = transferrable_samples.count
+        transferrable_samples.each.with_index(1) do |sample, index| # rubocop:disable Metrics/BlockLength
           update_progress_bar(index, total_sample_count, broadcast_target)
-          sample = Sample.find(sample_id)
           old_project = sample.project
           old_namespaces = namespaces_for_transfer(old_project.namespace)
 
@@ -63,7 +101,7 @@ module Groups
           end
 
           sample.update!(project_id: new_project.id)
-          transferred_samples_ids << sample_id
+          transferred_samples_ids << sample.id
 
           transferred_samples_data[old_project.puid] ||= []
           transferred_samples_data[old_project.puid] << { sample_name: sample.name, sample_puid: sample.puid,
@@ -74,11 +112,8 @@ module Groups
                                                           target_project_id: new_project.id,
                                                           target_project_puid: new_project.puid }
 
-          old_project.namespace.update_metadata_summary_by_sample_transfer(sample_id,
+          old_project.namespace.update_metadata_summary_by_sample_transfer(sample.id,
                                                                            old_namespaces, new_namespaces)
-        rescue ActiveRecord::RecordNotFound
-          not_found_sample_ids << sample_id
-          next
         rescue ActiveRecord::RecordInvalid
           @group.errors.add(:samples, I18n.t('services.groups.samples.transfer.sample_exists',
                                              sample_name: sample.name, sample_puid: sample.puid))
@@ -86,12 +121,6 @@ module Groups
         rescue Samples::TransferService::SampleExistsInProjectError => e
           @group.errors.add(:samples, e.message)
           next
-        end
-
-        unless not_found_sample_ids.empty?
-          @group.errors.add(:samples,
-                            I18n.t('services.groups.samples.transfer.samples_not_found',
-                                   sample_ids: not_found_sample_ids.join(', ')))
         end
 
         update_samples_count_and_create_activities(transferred_samples_data) if transferred_samples_ids.count.positive?

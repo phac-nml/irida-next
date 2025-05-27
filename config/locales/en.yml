@@ -1935,6 +1935,7 @@ en:
           sample_exists: 'Sample %{sample_puid}: Conflicts with sample named ''%{sample_name}'' in the target project'
           samples_not_found: 'Samples with the following sample ids could not be transferred as they were not found in the source project: %{sample_ids}'
           target_project_duplicate: Sample %{sample_name} already belongs to target project
+          unauthorized: 'Samples with the following sample ids could not be transferred as you are unauthorized to do so for the source project: %{sample_ids}'
       share:
         group_not_found: Group with id %{group_id} to share namespace with cannot be found.
         group_self_reference: Group cannot be shared with itself.

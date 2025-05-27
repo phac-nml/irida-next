@@ -74,6 +74,64 @@ module Groups
         )
       end
 
+      test 'transfer group samples not belonging to group' do
+        new_project = projects(:project32)
+        sample = samples(:group_sample_transfer_sample1)
+
+        sample_transfer_params = { new_project_id: new_project.id,
+                                   sample_ids: [sample.id] }
+
+        assert_no_changes -> { sample.reload.project.id } do
+          Groups::Samples::TransferService.new(@group, @john_doe).execute(
+            sample_transfer_params[:new_project_id],
+            sample_transfer_params[:sample_ids]
+          )
+        end
+
+        assert @group.errors.full_messages.include?(
+          I18n.t('services.groups.samples.transfer.unauthorized', sample_ids: sample.id)
+        )
+      end
+
+      test 'transfer group samples that do not exist' do
+        new_project = projects(:project32)
+
+        sample_transfer_params = { new_project_id: new_project.id,
+                                   sample_ids: ['123'] }
+
+        Groups::Samples::TransferService.new(@group, @john_doe).execute(
+          sample_transfer_params[:new_project_id],
+          sample_transfer_params[:sample_ids]
+        )
+
+        assert @group.errors.full_messages.include?(
+          I18n.t('services.groups.samples.transfer.samples_not_found', sample_ids: '123')
+        )
+      end
+
+      test 'transfer group samples not belonging to group and samples that not exist in same service call' do
+        new_project = projects(:project32)
+        sample = samples(:group_sample_transfer_sample1)
+
+        sample_transfer_params = { new_project_id: new_project.id,
+                                   sample_ids: [sample.id, '123'] }
+
+        assert_no_changes -> { sample.reload.project.id } do
+          Groups::Samples::TransferService.new(@group, @john_doe).execute(
+            sample_transfer_params[:new_project_id],
+            sample_transfer_params[:sample_ids]
+          )
+        end
+
+        assert @group.errors.full_messages.include?(
+          I18n.t('services.groups.samples.transfer.unauthorized', sample_ids: sample.id)
+        )
+
+        assert @group.errors.full_messages.include?(
+          I18n.t('services.groups.samples.transfer.samples_not_found', sample_ids: '123')
+        )
+      end
+
       test 'transfer group samples without specifying details' do
         assert_empty Groups::Samples::TransferService.new(@group, @john_doe).execute(nil, nil)
       end

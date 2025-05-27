@@ -1931,6 +1931,7 @@ fr:
           sample_exists: 'Échantillon %{sample_puid} : Conflit avec l’échantillon nommé ''%{sample_name}'' dans le projet cible'
           samples_not_found: 'Les échantillons avec les identifiants d’échantillon suivants n’ont pas pu être transférés puisqu’ils n’ont pas été trouvés dans le projet source : %{sample_ids}'
           target_project_duplicate: Sample %{sample_name} already belongs to target project
+          unauthorized: 'Samples with the following sample ids could not be transferred as you are unauthorized to do so for the source project: %{sample_ids}'
       share:
         group_not_found: Le groupe avec l’identifiant %{group_id} avec lequel partager l’espace de noms est introuvable.
         group_self_reference: Le groupe ne peut pas être partagé avec lui-même.
