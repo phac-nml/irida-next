@@ -57,7 +57,7 @@ module Viral
         COLORS[@color],
         border,
         # Tailwind classes pertaining to all pill component colors
-        'text-xs font-medium px-2.5 py-0.5 rounded-full inline-flex items-center justify-center',
+        'text-xs font-medium px-2.5 py-0.5 rounded-full inline-flex items-center justify-center grow-0',
         @system_arguments[:classes]
       )
     end
