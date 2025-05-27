@@ -112,7 +112,12 @@
                     } %>
                   <% end %>
                   <% if column == :id %>
-                    <%= attachment.puid %>
+                    <%= highlight(
+                      attachment.puid,
+                      defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
+                        params[:q][:puid_or_file_blob_filename_cont],
+                      highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+                    ) %>
                   <% elsif column == :filename %>
                     <% if @render_individual_attachments %>
                       <div>
@@ -125,12 +130,18 @@
                             <%= viral_icon(name: :document_text, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
                           <% end %>
                           <span>
-                            <%= link_to attachment.file.filename,
-                            rails_blob_path(attachment.file),
+                            <%= link_to rails_blob_path(attachment.file),
                             data: {
                               turbo: false,
                             },
-                            class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+                            class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" do %>
+                              <%= highlight(
+                                attachment.file.filename.to_s,
+                                defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
+                                  params[:q][:puid_or_file_blob_filename_cont],
+                                highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+                              ) %>
+                            <% end %>
                           </span>
                         </div>
                       </div>
@@ -140,23 +151,35 @@
                           <div class="flex items-center mb-4">
                             <%= viral_icon(name: :arrow_right, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
                             <span>
-                              <%= link_to attachment.file.filename,
-                              rails_blob_path(attachment.file),
+                              <%= link_to rails_blob_path(attachment.file),
                               data: {
                                 turbo: false,
                               },
-                              class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+                              class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" do %>
+                                <%= highlight(
+                                  attachment.file.filename.to_s,
+                                  defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
+                                    params[:q][:puid_or_file_blob_filename_cont],
+                                  highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+                                ) %>
+                              <% end %>
                             </span>
                           </div>
                           <div class="flex items-center">
                             <%= viral_icon(name: :arrow_left, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
                             <span>
-                              <%= link_to attachment.associated_attachment.file.filename,
-                              rails_blob_path(attachment.associated_attachment.file),
+                              <%= link_to rails_blob_path(attachment.associated_attachment.file),
                               data: {
                                 turbo: false,
                               },
-                              class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+                              class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" do %>
+                                <%= highlight(
+                                  attachment.associated_attachment.file.filename.to_s,
+                                  defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
+                                    params[:q][:puid_or_file_blob_filename_cont],
+                                  highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+                                ) %>
+                              <% end %>
                             </span>
                           </div>
                         </div>
@@ -165,12 +188,18 @@
                           <div class="flex items-center">
                             <%= viral_icon(name: :document_text, color: :subdued, classes: "h-6 w-6 ml-0 mr-2") %>
                             <span>
-                              <%= link_to attachment.file.filename,
-                              rails_blob_path(attachment.file),
+                              <%= link_to rails_blob_path(attachment.file),
                               data: {
                                 turbo: false,
                               },
-                              class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" %>
+                              class: "text-slate-900 dark:text-slate-100 font-semibold hover:underline" do %>
+                                <%= highlight(
+                                  attachment.file.filename.to_s,
+                                  defined?(params[:q][:puid_or_file_blob_filename_cont]) &&
+                                    params[:q][:puid_or_file_blob_filename_cont],
+                                  highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
+                                ) %>
+                              <% end %>
                             </span>
                           </div>
                         </div>
