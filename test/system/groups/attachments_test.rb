@@ -362,10 +362,10 @@ module Groups
       assert_text 'Displaying 1-2 of 2 items'
 
       within('table tbody') do
-        assert_selector 'tr:first-child td:nth-child(2)', text: 'TestSample_S1_L001_R2_001.fastq.gz'
+        assert_selector 'tr:first-child td:nth-child(2)', text: 'TestSample_S1_L001_R1_001.fastq.gz'
         assert_selector 'tr:first-child td:nth-child(3)', text: 'fastq'
         assert_selector 'tr:first-child td:nth-child(4)', text: 'illumina_pe'
-        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: 'TestSample_S1_L001_R1_001.fastq.gz'
+        assert_selector 'tr:nth-child(2) td:nth-child(2)', text: 'TestSample_S1_L001_R2_001.fastq.gz'
         assert_selector 'tr:nth-child(2) td:nth-child(3)', text: 'fastq'
         assert_selector 'tr:nth-child(2) td:nth-child(4)', text: 'illumina_pe'
       end
