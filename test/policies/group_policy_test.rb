@@ -129,6 +129,10 @@ class GroupPolicyTest < ActiveSupport::TestCase
     assert @policy.apply(:transfer_sample?)
   end
 
+  test '#destroy_sample' do
+    assert @policy.apply(:destroy_sample?)
+  end
+
   test 'scope' do
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 
