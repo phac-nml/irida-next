@@ -45,44 +45,6 @@ module Groups
               I18n.t('services.groups.samples.transfer.maintainer_transfer_not_allowed')
       end
 
-      # Filter the samples that the user has permissions to transfer
-      # from the projects within the group and that exist
-      def filter_sample_ids(sample_ids) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-        samples = Sample.where(id: sample_ids)
-        project_ids = samples.pluck(:project_id).uniq
-        unauthorized_proj_ids = []
-        samples_not_transferrable_ids = []
-
-        projects = Project.where(id: project_ids)
-
-        projects.each do |proj|
-          authorize! proj, to: :transfer_sample?
-        rescue ActionPolicy::Unauthorized
-          unauthorized_proj_ids << proj.id
-          next
-        end
-
-        if unauthorized_proj_ids.length.positive?
-          samples_not_transferrable_ids = samples.where(project_id: unauthorized_proj_ids).pluck(:id)
-          @group.errors.add(:base,
-                            I18n.t('services.groups.samples.transfer.unauthorized',
-                                   sample_ids: samples_not_transferrable_ids.join(', ')))
-        end
-
-        if samples.length != sample_ids.length
-
-          # (params sample_ids) - (unauthorized samples ids) - (samples ids)
-          samples_not_transferrable_ids = sample_ids - samples_not_transferrable_ids - samples.pluck(:id)
-          @group.errors.add(:base,
-                            I18n.t('services.groups.samples.transfer.samples_not_found',
-                                   sample_ids: samples_not_transferrable_ids.join(', ')))
-        end
-
-        return samples.where.not(project_id: unauthorized_proj_ids) if unauthorized_proj_ids.length.positive?
-
-        samples
-      end
-
       def transfer(new_project, sample_ids, broadcast_target) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         transferrable_samples = filter_sample_ids(sample_ids)
 
@@ -126,6 +88,43 @@ module Groups
         update_samples_count_and_create_activities(transferred_samples_data) if transferred_samples_ids.count.positive?
 
         transferred_samples_ids
+      end
+
+      # Filter the samples that the user has permissions to transfer
+      # from the projects within the group and that exist
+      def filter_sample_ids(sample_ids) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+        samples = Sample.where(id: sample_ids)
+        project_ids = samples.pluck(:project_id).uniq
+        unauthorized_proj_ids = []
+        samples_not_transferrable_ids = []
+
+        projects = Project.where(id: project_ids)
+
+        projects.each do |proj|
+          authorize! proj, to: :transfer_sample?
+        rescue ActionPolicy::Unauthorized
+          unauthorized_proj_ids << proj.id
+          next
+        end
+
+        if unauthorized_proj_ids.length.positive?
+          samples_not_transferrable_ids = samples.where(project_id: unauthorized_proj_ids).pluck(:id)
+          @group.errors.add(:base,
+                            I18n.t('services.groups.samples.transfer.unauthorized',
+                                   sample_ids: samples_not_transferrable_ids.join(', ')))
+        end
+
+        if samples.length != sample_ids.length
+          # (params sample_ids) - (unauthorized samples ids) - (samples ids)
+          samples_not_transferrable_ids = sample_ids - samples_not_transferrable_ids - samples.pluck(:id)
+          @group.errors.add(:base,
+                            I18n.t('services.groups.samples.transfer.samples_not_found',
+                                   sample_ids: samples_not_transferrable_ids.join(', ')))
+        end
+
+        return samples.where.not(project_id: unauthorized_proj_ids) if unauthorized_proj_ids.length.positive?
+
+        samples
       end
 
       def update_samples_count_and_create_activities(transferred_samples_data) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
