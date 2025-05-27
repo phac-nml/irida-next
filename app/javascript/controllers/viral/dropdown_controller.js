@@ -9,8 +9,26 @@ export default class extends Controller {
     distance: Number,
   };
 
+  initialize() {
+    this.boundHandleTriggerFocusOut = this.handleTriggerFocusOut.bind(this);
+  }
+
   connect() {
-    this.dropdown = new Dropdown(this.menuTarget, this.triggerTarget, {
+    this.element.setAttribute("data-controller-connected", "true");
+  }
+
+  menuTargetConnected(element) {
+    element.setAttribute("aria-hidden", "true");
+
+    element.addEventListener("focusout", this.boundHandleTriggerFocusOut);
+  }
+
+  menuTargetDisconnected(element) {
+    element.removeEventListener("focusout", this.boundHandleTriggerFocusOut);
+  }
+
+  triggerTargetConnected(element) {
+    this.dropdown = new Dropdown(this.menuTarget, element, {
       triggerType: this.triggerValue,
       offsetSkidding: this.skiddingValue,
       offsetDistance: this.distanceValue,
@@ -27,24 +45,6 @@ export default class extends Controller {
         this.menuTarget.setAttribute("hidden", "hidden");
       },
     });
-
-    this.boundHandleTriggerFocusOut = this.handleTriggerFocusOut.bind(this);
-
-    this.element.setAttribute("data-controller-connected", "true");
-
-    this.menuTarget.setAttribute("aria-hidden", "true");
-
-    this.menuTarget.addEventListener(
-      "focusout",
-      this.boundHandleTriggerFocusOut,
-    );
-  }
-
-  disconnect() {
-    this.menuTarget.removeEventListener(
-      "focusout",
-      this.boundHandleTriggerFocusOut,
-    );
   }
 
   handleTriggerFocusOut(event) {
