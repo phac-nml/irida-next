@@ -29,16 +29,16 @@
                 <th class="pr-3 pl-10.5 py-3 bg-slate-50 dark:bg-slate-700">
                   <%= t(".headers.filename") %>
                 </th>
-                <th class="px-3 py-3">
+                <th class="p-3">
                   <%= t(".headers.format") %>
                 </th>
-                <th class="px-3 py-3">
+                <th class="p-3">
                   <%= t(".headers.type") %>
                 </th>
-                <th class="px-3 py-3">
+                <th class="p-3">
                   <%= t(".headers.size") %>
                 </th>
-                <th class="px-3 py-3">
+                <th class="p-3">
                   <%= t(".headers.created_at") %>
                 </th>
               </tr>
@@ -56,40 +56,37 @@
                     bg-white border-b border-slate-200 dark:bg-slate-800 dark:border-slate-700
                   "
                 >
-                  <td class="px-3 py-3 bg-white dark:bg-slate-800">
+                  <td class="p-3 bg-white dark:bg-slate-800">
                     <%= form.radio_button "attachment_id",
                                       attachment[:id],
+                                      label: attachment[:filename],
                                       checked:
                                         file_selector_params["selected_id"] &&
                                           file_selector_params["selected_id"] == attachment[:id] %>
-                    <label class="cursor-pointer ml-2.5" for="attachment_id_<%= attachment[:id] %>"><%= attachment[:filename] %></label>
                   </td>
-                  <td class="px-3 py-3"><%= viral_pill(
+                  <td class="p-3"><%= viral_pill(
                       text: attachment[:metadata]["format"],
                       color: find_pill_color_for_attachment(attachment, "format"),
                     ) %></td>
-                  <td class="px-3 py-3"><%= viral_pill(
+                  <td class="p-3"><%= viral_pill(
                       text: attachment[:metadata]["type"],
                       color: find_pill_color_for_attachment(attachment, "type"),
                     ) %></td>
-                  <td class="px-3 py-3">
+                  <td class="p-3">
                     <%= number_to_human_size(attachment[:byte_size]) %>
                   </td>
-                  <td class="px-3 py-3">
+                  <td class="p-3">
                     <%= local_time_ago(attachment[:created_at]) %>
                   </td>
                 </tr>
               <% end %>
               <% unless file_selector_params["required_properties"].present? && file_selector_params["required_properties"].include?(file_selector_params["property"]) %>
                 <tr class="bg-white border-b dark:bg-slate-800 dark:border-slate-700">
-                  <td class="px-3 py-3 bg-white dark:bg-slate-800">
+                  <td class="p-3 bg-white dark:bg-slate-800">
                     <%= form.radio_button "attachment_id",
                                       "no_attachment",
+                                      label: t(".no_file"),
                                       checked: file_selector_params["selected_id"].empty? %>
-
-                    <label class="cursor-pointer ml-2.5" for="attachment_id_no_attachment">
-                      <%= t(".no_file") %>
-                    </label>
                   </td>
                 </tr>
               <% end %>
