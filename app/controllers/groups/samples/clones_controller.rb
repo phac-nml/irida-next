@@ -30,8 +30,7 @@ module Groups
       end
 
       def projects
-        @projects = authorized_scope(Project, type: :relation, as: :group_projects_for_sample_actions,
-                                              scope_options: { group: @group })
+        @projects = authorized_scope(Project, type: :relation, as: :manageable)
       end
 
       def ensure_enabled
