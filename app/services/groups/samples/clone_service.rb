@@ -100,7 +100,7 @@ module Groups
       end
 
       def handle_not_found_sample_ids(sample_ids, authorized_samples) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-        unauthorized_sample_puids = []
+        unauthorized_sample_ids = []
         invalid_ids = []
         not_found_sample_ids = sample_ids - authorized_samples.pluck(:id)
         not_found_sample_ids.each do |sample_id|
@@ -108,14 +108,14 @@ module Groups
           if sample.nil?
             invalid_ids << sample_id
           else
-            unauthorized_sample_puids << sample.puid
+            unauthorized_sample_ids << sample_id
           end
         end
 
         if unauthorized_sample_puids.count.positive?
           @group.errors.add(:samples,
                             I18n.t('services.samples.clone.unauthorized_samples',
-                                   sample_puids: unauthorized_sample_puids.join(', ')))
+                                   sample_ids: unauthorized_sample_ids.join(', ')))
         end
 
         return unless invalid_ids.count.positive?
