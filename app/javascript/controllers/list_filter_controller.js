@@ -14,27 +14,13 @@ export default class extends Controller {
    * 🎯 Handles initialization when the tags target element connects to the DOM
    *
    * This method:
-   * 1. Clears any existing tags
-   * 2. Filters out falsy values from filtersValue array
-   * 3. Creates and inserts new tag elements before the input
-   * 4. Updates the filter count display
+   * 1. Creates and inserts new tag elements before the input
+   * 2. Updates the filter count display
    *
    * @param {HTMLElement} target - The tags container element that was connected
    */
   tagsTargetConnected(target) {
-    // Start fresh by clearing existing tags
-    this.clear();
-
-    // Only process valid filter values
-    const validFilters = this.filtersValue.filter(Boolean);
-
-    // Create and insert tags for each valid filter value
-    validFilters.forEach((filterValue) => {
-      const tagElement = this.#formatTag(filterValue);
-      target.insertBefore(tagElement, this.inputTarget);
-    });
-
-    // Update the count display to reflect current filters
+    this.#insertFilterTags(target);
     this.#updateCount();
   }
 
@@ -92,7 +78,8 @@ export default class extends Controller {
       .filter(Boolean)
       .map((tag) => tag.value);
     this.filtersValue = text;
-
+    this.inputTarget.value = "";
+    this.#updateTags();
     this.#updateCount();
   }
 
@@ -122,6 +109,11 @@ export default class extends Controller {
       .filter(Boolean);
   }
 
+  #updateTags() {
+    this.#clearTags();
+    this.#insertFilterTags(this.tagsTarget);
+  }
+
   #clearAndFocus() {
     this.inputTarget.value = "";
     this.inputTarget.focus();
@@ -147,5 +139,13 @@ export default class extends Controller {
       this.countTarget.classList.toggle("hidden", count === 0);
       this.countTarget.classList.toggle("inline-flex", count > 0);
     }
+  }
+
+  #insertFilterTags(target) {
+    this.filtersValue
+      .filter(Boolean)
+      .forEach((sample) =>
+        target.insertBefore(this.#formatTag(sample), this.inputTarget),
+      );
   }
 }
