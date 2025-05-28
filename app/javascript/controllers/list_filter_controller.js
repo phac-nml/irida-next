@@ -10,19 +10,13 @@ export default class extends Controller {
   static outlets = ["selection"];
   static values = { filters: { type: Array, default: [] } };
 
-  connect() {
-    this.idempotentConnect();
-  }
-
-  idempotentConnect() {
+  tagsTargetConnected(target) {
     this.clear();
-
     this.filtersValue
       .filter(Boolean)
       .forEach((sample) =>
-        this.tagsTarget.insertBefore(this.#formatTag(sample), this.inputTarget),
+        target.insertBefore(this.#formatTag(sample), this.inputTarget),
       );
-
     this.#updateCount();
   }
 
