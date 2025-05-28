@@ -14,9 +14,9 @@
       border-slate-300 p-2.5 dark:bg-slate-700 dark:border-slate-600
     "
   >
-    <fieldset class="flex gap-4 items-center" role="group">
+    <div class="flex gap-4 items-center" role="radiogroup">
       <%= form.radio_button name, "true", label: "True", checked: value %>
       <%= form.radio_button name, "false", label: "False", checked: !value %>
-    </fieldset>
+    </div>
   </div>
 </div>
