@@ -1,6 +1,6 @@
-<%= turbo_stream.update "samples_dialog",
-                    partial: "dialog",
-                    locals: {
-                      open: true,
-                      closable: true,
-                    } %>
+<%= render partial: "shared/samples/clones/new",
+locals: {
+  broadcast_target: @broadcast_target,
+  clone_path: namespace_project_samples_clone_path,
+  list_path: list_namespace_project_samples_path(list_class: "sample"),
+} %>

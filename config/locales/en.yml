@@ -8,6 +8,7 @@ en:
       destroy?: You are not authorized to remove the requested resource from this server.
       edit?: You are not authorized to update this resource on this server.
       group:
+        clone_sample?: You are not authorized to copy samples from group %{name} on this server.
         create?: You are not authorized to create a project under group %{name} on this server.
         create_attachment?: You are not authorized to create attachments for group %{name} on this server.
         create_bot_accounts?: You are not authorized to create bot accounts for group %{name} on this server.
@@ -308,6 +309,8 @@ en:
         destroy_html: "%{user} removed project %{href} from group"
         transfer_in_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
         transfer_out_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
+      samples:
+        clone_html: "%{user} copied %{cloned_samples_count} samples to project %{href}"
       subgroups:
         create_html: "%{user} created subgroup %{href}"
         destroy_html: "%{user} removed descendant group %{href}"
@@ -496,12 +499,18 @@ en:
         sample_clone:
           copied_from: Copied From
           copied_to: Copied To
-          source_project_description:
-            one: "%{user} copied 1 sample from project %{source_project_puid}"
-            other: "%{user} copied %{count} samples from project %{source_project_puid}"
-          target_project_description:
-            one: "%{user} copied 1 sample to project %{target_project_puid}"
-            other: "%{user} copied %{count} samples to project %{target_project_puid}"
+          group:
+            target_project_description:
+              one: "%{user} copied 1 sample to project %{target_project_puid}"
+              other: "%{user} copied %{count} samples to project %{target_project_puid}"
+          project:
+            source_project_description:
+              one: "%{user} copied 1 sample from project %{source_project_puid}"
+              other: "%{user} copied %{count} samples from project %{source_project_puid}"
+            target_project_description:
+              one: "%{user} copied 1 sample to project %{target_project_puid}"
+              other: "%{user} copied %{count} samples to project %{target_project_puid}"
+          project_from: Project From
           title: Copied Samples
         sample_destroy:
           description:
@@ -1642,24 +1651,6 @@ en:
             description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
             no_permission_description: You do not have permission to upload files to this sample
             title: No files have been uploaded
-      clones:
-        create:
-          error: 'The following list of samples failed to copy:'
-          no_samples_cloned_error: 'Samples were not copied for the following reasons:'
-          success: Samples were successfully copied.
-        dialog:
-          description:
-            plural: The following COUNT_PLACEHOLDER samples are about to be copied to another project.
-            singular: The following sample is about to be copied to another project.
-            zero: No samples have been selected for copying
-          empty_state: No projects are associated with that name or ID
-          new_project_id: Project to copy samples to
-          no_available_projects: No available projects
-          samples: Samples
-          select_project: Select project
-          spinner_message: Copying samples, this might take a while...
-          submit_button: Submit
-          title: Copy Samples
       create:
         success: Sample was successfully created.
       deletions:
@@ -1975,7 +1966,8 @@ en:
         empty_sample_ids: The sample ids are empty.
         same_project: The source and destination projects are the same. Please select a different destination project.
         sample_exists: 'Sample %{sample_puid}: Conflicts with sample named ''%{sample_name}'' in the target project'
-        samples_not_found: 'Samples with the following sample ids could not be copied as they were not found in the source project: %{sample_ids}'
+        samples_not_found: 'Samples with the following sample ids could not be copied as they were not found in the source namespace: %{sample_ids}'
+        unauthorized_samples: 'You do not have permission to copy the following samples with sample ids: %{sample_ids}'
       metadata:
         empty_metadata: No metadata was received to update sample '%{sample_name}'
         fields:
@@ -2030,6 +2022,26 @@ en:
         new_sample: New sample
         sample_export: Sample export
         transfer: Transfer samples
+      clones:
+        create:
+          error: 'The following list of samples failed to copy:'
+          no_samples_cloned_error: 'Samples were not copied for the following reasons:'
+          success: Samples were successfully copied.
+        dialog:
+          description:
+            plural: The following COUNT_PLACEHOLDER samples are about to be copied to another project.
+            singular: The following sample is about to be copied to another project.
+            zero: No samples have been selected for copying
+          empty_state: No projects are associated with that name or ID
+          new_project_id: Project to copy samples to
+          no_available_projects: No available projects
+          samples: Samples
+          select_project: Select project
+          spinner_message: Copying samples, this might take a while...
+          submit_button: Submit
+          title: Copy Samples
+      errors:
+        ok_button: OK
       metadata:
         editing_field_cell:
           dialog:
@@ -2118,6 +2130,9 @@ en:
           ok_button: OK
           problem_message: "%{path} %{message}"
           problems: Errors were encountered while importing the following samples.
+      success:
+        ok_button: OK
+        success: Success
     workflow_executions:
       destroy_confirmation_dialog:
         description: Are you sure you want to delete this workflow execution?

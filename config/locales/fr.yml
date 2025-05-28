@@ -8,6 +8,7 @@ fr:
       destroy?: Vous n’êtes pas autorisé à supprimer la ressource demandée de ce serveur.
       edit?: Vous n’êtes pas autorisé à mettre à jour cette ressource sur ce serveur.
       group:
+        clone_sample?: You are not authorized to copy samples from group %{name} on this server.
         create?: Vous n’êtes pas autorisé à créer un projet sous le groupe %{name} sur ce serveur.
         create_attachment?: Vous n’êtes pas autorisé à créer des pièces jointes pour le groupe %{name} sur ce serveur.
         create_bot_accounts?: Vous n’êtes pas autorisé à créer des comptes de bots pour le groupe %{name} sur ce serveur.
@@ -308,6 +309,8 @@ fr:
         destroy_html: "%{user} a supprimé le projet %{href} du groupe"
         transfer_in_html: "%{user} a transféré le projet %{href} de l’espace de noms %{old_namespace} vers %{new_namespace}"
         transfer_out_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
+      samples:
+        clone_html: "%{user} copied %{cloned_samples_count} samples to project %{href}"
       subgroups:
         create_html: "%{user} a créé le sous-groupe %{href}"
         destroy_html: "%{user} a supprimé le groupe descendant %{href}"
@@ -496,12 +499,18 @@ fr:
         sample_clone:
           copied_from: Copied From
           copied_to: Copied To
-          source_project_description:
-            one: "%{user} copied 1 sample from project %{source_project_puid}"
-            other: "%{user} copied %{count} samples from project %{source_project_puid}"
-          target_project_description:
-            one: "%{user} copied 1 sample to project %{target_project_puid}"
-            other: "%{user} copied %{count} samples to project %{target_project_puid}"
+          group:
+            target_project_description:
+              one: "%{user} copied 1 sample to project %{target_project_puid}"
+              other: "%{user} copied %{count} samples to project %{target_project_puid}"
+          project:
+            source_project_description:
+              one: "%{user} copied 1 sample from project %{source_project_puid}"
+              other: "%{user} copied %{count} samples from project %{source_project_puid}"
+            target_project_description:
+              one: "%{user} copied 1 sample to project %{target_project_puid}"
+              other: "%{user} copied %{count} samples to project %{target_project_puid}"
+          project_from: Project From
           title: Copied Samples
         sample_destroy:
           description:
@@ -1638,24 +1647,6 @@ fr:
             description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
             no_permission_description: You do not have permission to upload files to this sample
             title: No files have been uploaded
-      clones:
-        create:
-          error: 'La liste suivante des échantillons n’a pas été copiée :'
-          no_samples_cloned_error: 'Les échantillons n’ont pas été copiés pour les raisons suivantes :'
-          success: Les échantillons ont été copiés avec succès.
-        dialog:
-          description:
-            plural: Les échantillons COUNT_PLACEHOLDER suivants sont sur le point d’être copiés dans un autre projet.
-            singular: L’exemple suivant est sur le point d’être copié dans un autre projet.
-            zero: Aucun échantillon n’a été sélectionné pour être copier
-          empty_state: Aucun projet n’est associé à ce nom ou à cet identifiant
-          new_project_id: Projeter de copier les échantillons vers
-          no_available_projects: Aucun projet disponible
-          samples: Échantillons
-          select_project: Sélectionner le projet
-          spinner_message: Copier des échantillons, cela peut prendre un certain temps...
-          submit_button: Envoyer
-          title: Copier des échantillons
       create:
         success: L’échantillon a été créé avec succès.
       deletions:
@@ -1971,7 +1962,8 @@ fr:
         empty_sample_ids: Les identifiants de l’échantillon sont vides.
         same_project: Les projets sources et de destination sont les mêmes. Veuillez sélectionner un autre projet de destination.
         sample_exists: 'Échantillon %{sample_puid} : Conflit avec l’échantillon nommé ''%{sample_name}'' dans le projet cible'
-        samples_not_found: 'Les échantillons avec les identifiants d’échantillon suivants n’ont pas pu être copiés puisqu’ils n’ont pas été trouvés dans le projet source : %{sample_ids}'
+        samples_not_found: 'Les échantillons avec les identifiants d’échantillon suivants n’ont pas pu être copiés puisqu’ils n’ont pas été trouvés dans l’espace de noms source : %{sample_ids}'
+        unauthorized_samples: 'You do not have permission to copy the following samples with sample ids: %{sample_ids}'
       metadata:
         empty_metadata: Aucune métadonnée n’a été reçue pour mettre à jour l’échantillon '%{sample_name}'
         fields:
@@ -2026,6 +2018,26 @@ fr:
         new_sample: Nouvel échantillon
         sample_export: Exportation d’échantillons
         transfer: Transférer des échantillons
+      clones:
+        create:
+          error: 'La liste suivante des échantillons n’a pas été copiée :'
+          no_samples_cloned_error: 'Les échantillons n’ont pas été copiés pour les raisons suivantes :'
+          success: Les échantillons ont été copiés avec succès.
+        dialog:
+          description:
+            plural: Les échantillons COUNT_PLACEHOLDER suivants sont sur le point d’être copiés dans un autre projet.
+            singular: L’exemple suivant est sur le point d’être copié dans un autre projet.
+            zero: Aucun échantillon n’a été sélectionné pour être copier
+          empty_state: Aucun projet n’est associé à ce nom ou à cet identifiant
+          new_project_id: Projeter de copier les échantillons vers
+          no_available_projects: Aucun projet disponible
+          samples: Échantillons
+          select_project: Sélectionner le projet
+          spinner_message: Copier des échantillons, cela peut prendre un certain temps...
+          submit_button: Envoyer
+          title: Copier des échantillons
+      errors:
+        ok_button: OK
       metadata:
         editing_field_cell:
           dialog:
@@ -2114,6 +2126,9 @@ fr:
           ok_button: OK
           problem_message: "%{path} %{message}"
           problems: Errors were encountered while importing the following samples.
+      success:
+        ok_button: OK
+        success: Success
     workflow_executions:
       destroy_confirmation_dialog:
         description: Êtes-vous sûr de vouloir supprimer cette exécution de flux de travail?
