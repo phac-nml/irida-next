@@ -336,7 +336,7 @@ module Dashboard
         find("li[data-value='#{@project2.id}']").click
         click_on I18n.t('shared.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
-        perform_enqueued_jobs only: [::Samples::TransferJob]
+        perform_enqueued_jobs only: [Projects::Samples::TransferJob]
       end
 
       visit dashboard_projects_url

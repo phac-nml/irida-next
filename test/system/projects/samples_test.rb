@@ -490,7 +490,7 @@ module Projects
         click_on I18n.t('shared.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::TransferJob]
+        perform_enqueued_jobs only: [Projects::Samples::TransferJob]
       end
       ### ACTIONS END ###
 
@@ -550,7 +550,7 @@ module Projects
         assert_text I18n.t('shared.progress_bar.in_progress')
         # close button hidden during transfer
         assert_no_selector 'button.dialog--close'
-        perform_enqueued_jobs only: [::Samples::TransferJob]
+        perform_enqueued_jobs only: [Projects::Samples::TransferJob]
         ### VERIFY END ###
       end
     end
@@ -586,7 +586,7 @@ module Projects
         click_on I18n.t('shared.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::TransferJob]
+        perform_enqueued_jobs only: [Projects::Samples::TransferJob]
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -642,7 +642,7 @@ module Projects
         click_on I18n.t('shared.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::TransferJob]
+        perform_enqueued_jobs only: [Projects::Samples::TransferJob]
       end
       ### ACTIONS END ###
 
@@ -746,7 +746,7 @@ module Projects
         click_on I18n.t('shared.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Samples::TransferJob]
+        perform_enqueued_jobs only: [Projects::Samples::TransferJob]
       end
       ### ACTIONS END ###
 

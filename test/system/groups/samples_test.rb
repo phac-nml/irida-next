@@ -2060,6 +2060,9 @@ module Groups
       within('#dialog') do
         # error messages in dialog
         assert_text I18n.t('groups.samples.transfers.create.error')
+
+        assert_text I18n.t('services.groups.samples.transfer.unauthorized', sample_ids: sample28.id.to_s).gsub(':', '')
+
         # colon is removed from translation in UI
         assert_text I18n.t('services.groups.samples.transfer.sample_exists', sample_puid: sample30.puid,
                                                                              sample_name: sample30.name).gsub(':', '')

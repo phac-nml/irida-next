@@ -93,36 +93,35 @@ module Groups
       # Filter the samples that the user has permissions to transfer
       # from the projects within the group and that exist
       def filter_sample_ids(sample_ids) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-        samples = Sample.where(id: sample_ids)
-        project_ids = samples.pluck(:project_id).uniq
-        unauthorized_proj_ids = []
-        samples_not_transferrable_ids = []
+        samples = authorized_scope(Sample, type: :relation, as: :namespace_samples,
+                                           scope_options: { namespace: @group,
+                                                            minimum_access_level: Member::AccessLevel::MAINTAINER })
+                  .where(id: sample_ids)
 
-        projects = Project.where(id: project_ids)
+        unauthorized_sample_ids = []
+        invalid_ids = []
+        not_found_sample_ids = sample_ids - samples.pluck(:id)
 
-        projects.each do |proj|
-          authorize! proj, to: :transfer_sample?
-        rescue ActionPolicy::Unauthorized
-          unauthorized_proj_ids << proj.id
-          next
+        not_found_sample_ids.each do |sample_id|
+          sample = Sample.find_by(id: sample_id)
+          if sample.nil?
+            invalid_ids << sample_id
+          else
+            unauthorized_sample_ids << sample_id
+          end
         end
 
-        if unauthorized_proj_ids.length.positive?
-          samples_not_transferrable_ids = samples.where(project_id: unauthorized_proj_ids).pluck(:id)
-          @group.errors.add(:base,
+        if unauthorized_sample_ids.count.positive?
+          @group.errors.add(:samples,
                             I18n.t('services.groups.samples.transfer.unauthorized',
-                                   sample_ids: samples_not_transferrable_ids.join(', ')))
+                                   sample_ids: unauthorized_sample_ids.join(', ')))
         end
 
-        if samples.length != sample_ids.length
-          # (params sample_ids) - (unauthorized samples ids) - (samples ids)
-          samples_not_transferrable_ids = sample_ids - samples_not_transferrable_ids - samples.pluck(:id)
-          @group.errors.add(:base,
+        if invalid_ids.count.positive?
+          @group.errors.add(:samples,
                             I18n.t('services.groups.samples.transfer.samples_not_found',
-                                   sample_ids: samples_not_transferrable_ids.join(', ')))
+                                   sample_ids: invalid_ids.join(', ')))
         end
-
-        return samples.where.not(project_id: unauthorized_proj_ids) if unauthorized_proj_ids.length.positive?
 
         samples
       end
