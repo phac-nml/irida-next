@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import { formDataToJsonParams, normalizeParams } from "utilities/form";
 
 function preventEscapeListener(event) {
   if (event.key === "Escape") {
@@ -11,6 +12,9 @@ function preventEscapeListener(event) {
 export default class extends Controller {
   static targets = ["workflow", "workflowName", "workflowVersion", "form"];
   static outlets = ["selection"];
+  static values = {
+    fieldName: String,
+  };
 
   connect() {
     document.addEventListener("turbo:submit-end", preventEscapeListener);
@@ -43,6 +47,32 @@ export default class extends Controller {
       .replace("WORKFLOW_NAME_PLACEHOLDER", params.workflowname)
       .replace("WORKFLOW_VERSION_PLACEHOLDER", params.workflowversion);
 
-    this.formTarget.requestSubmit();
+    const formData = new FormData(this.formTarget);
+    const jsonObject = this.#toJson(formData);
+
+    fetch(this.formTarget.action, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "text/vnd.turbo-stream.html",
+      },
+      body: JSON.stringify(jsonObject),
+    })
+      .then((r) => r.text())
+      .then((html) => Turbo.renderStreamMessage(html));
+  }
+
+  #toJson(formData) {
+    let params = formDataToJsonParams(formData);
+
+    // add sample_ids under the fieldNameValue key to the params
+    normalizeParams(
+      params,
+      this.fieldNameValue,
+      this.selectionOutlet.getStoredItems(),
+      0,
+    );
+
+    return params;
   }
 }
