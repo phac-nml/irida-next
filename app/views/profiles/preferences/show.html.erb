@@ -1,13 +1,19 @@
 <%= viral_card(title: t(:'.preferences')) do |card| %>
   <% card.with_section(border_bottom: true, border_top: true) do %>
-    <fieldset class="grid grid-cols-1 gap-4" data-controller="colour-mode">
-      <legend
+    <div
+      role="radiogroup"
+      aria-labelledby="theme-legend"
+      class="grid grid-cols-1 gap-4"
+      data-controller="colour-mode"
+    >
+      <div
+        id="theme-legend"
         class="
           mb-2 text-sm font-semibold text-slate-800 dark:text-white uppercase
         "
       >
         <%= t(".theme_title") %>
-      </legend>
+      </div>
 
       <%= p_radio_button(
         attribute: :color_theme,
@@ -45,7 +51,7 @@
           "colour-mode-target": "light",
         },
       ) %>
-    </fieldset>
+    </div>
   <% end %>
   <% card.with_section do %>
     <%= render "locale_form", user: @user %>
