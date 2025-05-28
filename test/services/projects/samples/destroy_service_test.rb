@@ -22,7 +22,7 @@ module Projects
 
       test 'destroy sample with correct permissions' do
         assert_difference -> { Sample.count } => -1 do
-          ::Projects::Samples::DestroyService.new(@project, @user, { sample: @sample1 }).execute
+          Projects::Samples::DestroyService.new(@project, @user, { sample: @sample1 }).execute
         end
       end
 
@@ -30,7 +30,7 @@ module Projects
         @user = users(:joan_doe)
 
         exception = assert_raises(ActionPolicy::Unauthorized) do
-          ::Projects::Samples::DestroyService.new(@project, @user, { sample: @sample1 }).execute
+          Projects::Samples::DestroyService.new(@project, @user, { sample: @sample1 }).execute
         end
 
         assert_equal ProjectPolicy, exception.policy
@@ -43,7 +43,7 @@ module Projects
       test 'valid authorization to destroy sample' do
         assert_authorized_to(:destroy_sample?, @sample1.project, with: ProjectPolicy,
                                                                  context: { user: @user }) do
-          ::Projects::Samples::DestroyService.new(
+          Projects::Samples::DestroyService.new(
             @project, @user, { sample: @sample1 }
           ).execute
         end
@@ -61,7 +61,7 @@ module Projects
         assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
 
         assert_no_changes -> { @subgroup12b.reload.metadata_summary } do
-          ::Projects::Samples::DestroyService.new(@project31, @user, { sample: @sample34 }).execute
+          Projects::Samples::DestroyService.new(@project31, @user, { sample: @sample34 }).execute
         end
 
         assert_equal({}, @project31.namespace.reload.metadata_summary)
@@ -73,8 +73,8 @@ module Projects
 
       test 'multiple destroy with multiple samples and correct permissions' do
         assert_difference -> { Sample.count } => -3 do
-          ::Projects::Samples::DestroyService.new(@project, @user,
-                                                  { sample_ids: [@sample1.id, @sample2.id, @sample30.id] }).execute
+          Projects::Samples::DestroyService.new(@project, @user,
+                                                { sample_ids: [@sample1.id, @sample2.id, @sample30.id] }).execute
         end
       end
 
@@ -82,8 +82,8 @@ module Projects
         user = users(:joan_doe)
 
         exception = assert_raises(ActionPolicy::Unauthorized) do
-          ::Projects::Samples::DestroyService.new(@project, user,
-                                                  { sample_ids: [@sample1.id, @sample2.id, @sample30.id] }).execute
+          Projects::Samples::DestroyService.new(@project, user,
+                                                { sample_ids: [@sample1.id, @sample2.id, @sample30.id] }).execute
         end
 
         assert_equal ProjectPolicy, exception.policy
@@ -116,8 +116,8 @@ module Projects
         assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12aa.reload.metadata_summary)
 
         assert_no_changes -> { @subgroup12b.reload.metadata_summary } do
-          ::Projects::Samples::DestroyService.new(@project31, @user,
-                                                  { sample_ids: [sample33.id, @sample34.id] }).execute
+          Projects::Samples::DestroyService.new(@project31, @user,
+                                                { sample_ids: [sample33.id, @sample34.id] }).execute
         end
 
         assert_equal({}, @project31.namespace.reload.metadata_summary)
@@ -138,7 +138,7 @@ module Projects
                           -> { @subgroup12a.reload.samples_count } => -1,
                           -> { @subgroup12b.reload.samples_count } => 0,
                           -> { @group12.reload.samples_count } => -1 do
-          ::Projects::Samples::DestroyService.new(@project31, @user, { sample: @sample34 }).execute
+          Projects::Samples::DestroyService.new(@project31, @user, { sample: @sample34 }).execute
         end
       end
 
@@ -155,8 +155,8 @@ module Projects
                           -> { @subgroup12a.reload.samples_count } => -2,
                           -> { @subgroup12b.reload.samples_count } => 0,
                           -> { @group12.reload.samples_count } => -2 do
-          ::Projects::Samples::DestroyService.new(@project31, @user,
-                                                  { sample_ids: [@sample34.id, sample35.id] }).execute
+          Projects::Samples::DestroyService.new(@project31, @user,
+                                                { sample_ids: [@sample34.id, sample35.id] }).execute
         end
       end
     end

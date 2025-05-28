@@ -33,7 +33,7 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    ::Projects::Samples::DestroyService.new(@namespace.project, users(:james_doe), { sample_ids: [@sample.id] }).execute
+    Projects::Samples::DestroyService.new(@namespace.project, users(:james_doe), { sample_ids: [@sample.id] }).execute
 
     activities = @namespace.human_readable_activity(@namespace.retrieve_project_activity).reverse
 

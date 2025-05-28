@@ -28,15 +28,15 @@ module Groups
                           -> { @subgroup12a.reload.samples_count } => -2,
                           -> { @subgroup12b.reload.samples_count } => 0,
                           -> { @group12.reload.samples_count } => -2 do
-          ::Groups::Samples::DestroyService.new(@group12, @user, { sample_ids: [@sample32.id, @sample34.id] }).execute
+          Groups::Samples::DestroyService.new(@group12, @user, { sample_ids: [@sample32.id, @sample34.id] }).execute
         end
       end
 
       test 'activities for successful group deletion' do
         assert_difference -> { Sample.count } => -2,
                           -> { PublicActivity::Activity.count } => 3 do
-          ::Groups::Samples::DestroyService.new(@group12, @user,
-                                                { sample_ids: [@sample32.id, @sample34.id] }).execute
+          Groups::Samples::DestroyService.new(@group12, @user,
+                                              { sample_ids: [@sample32.id, @sample34.id] }).execute
         end
 
         # verify group activity
@@ -49,9 +49,9 @@ module Groups
         assert_equal 2, activity.parameters[:samples_deleted_count]
         assert_equal [
           { 'sample_name' => @sample32.name, 'sample_puid' => @sample32.puid,
-            'project_puid' => @sample32.project.puid },
+            'project_name' => @sample32.project.name, 'project_puid' => @sample32.project.puid },
           { 'sample_name' => @sample34.name, 'sample_puid' => @sample34.puid,
-            'project_puid' => @sample34.project.puid }
+            'project_name' => @sample34.project.name, 'project_puid' => @sample34.project.puid }
         ],
                      activity.extended_details.details['deleted_samples_data']
         assert_equal 'group_samples_destroy', activity.parameters[:action]
@@ -94,8 +94,8 @@ module Groups
                           -> { @project.reload.samples.size } => -1,
                           -> { project28.reload.samples_count } => 0,
                           -> { project25.reload.samples.size } => -1 do
-          ::Groups::Samples::DestroyService.new(@group1, @user,
-                                                { sample_ids: [@sample1.id, sample25.id, sample28] }).execute
+          Groups::Samples::DestroyService.new(@group1, @user,
+                                              { sample_ids: [@sample1.id, sample25.id, sample28] }).execute
         end
       end
 
@@ -109,7 +109,7 @@ module Groups
         assert_difference -> { Sample.count } => -1,
                           -> { shared_group.reload.samples_count } => -1,
                           -> { shared_project.reload.samples.size } => -1 do
-          ::Groups::Samples::DestroyService.new(group, user, { sample_ids: [sample.id] }).execute
+          Groups::Samples::DestroyService.new(group, user, { sample_ids: [sample.id] }).execute
         end
       end
 
@@ -121,8 +121,8 @@ module Groups
 
         assert_difference -> { Sample.count } => -1,
                           -> { project.reload.samples_count } => -1 do
-          ::Groups::Samples::DestroyService.new(group, user,
-                                                { sample_ids: [sample.id] }).execute
+          Groups::Samples::DestroyService.new(group, user,
+                                              { sample_ids: [sample.id] }).execute
         end
       end
 
@@ -130,7 +130,7 @@ module Groups
         user = users(:ryan_doe)
 
         exception = assert_raises(ActionPolicy::Unauthorized) do
-          ::Groups::Samples::DestroyService.new(@group1, user, { sample_ids: [@sample1.id] }).execute
+          Groups::Samples::DestroyService.new(@group1, user, { sample_ids: [@sample1.id] }).execute
         end
 
         assert_equal GroupPolicy, exception.policy
@@ -145,7 +145,7 @@ module Groups
         user = users(:user0)
 
         exception = assert_raises(ActionPolicy::Unauthorized) do
-          ::Groups::Samples::DestroyService.new(group7, user, { sample_ids: [@sample1.id] }).execute
+          Groups::Samples::DestroyService.new(group7, user, { sample_ids: [@sample1.id] }).execute
         end
 
         assert_equal GroupPolicy, exception.policy

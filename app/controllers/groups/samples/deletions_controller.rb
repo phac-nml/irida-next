@@ -19,8 +19,8 @@ module Groups
       def destroy
         samples_to_delete_count = destroy_samples_params['sample_ids'].count
 
-        deleted_samples_count = ::Groups::Samples::DestroyService.new(@group, current_user,
-                                                                      destroy_samples_params).execute
+        deleted_samples_count = Groups::Samples::DestroyService.new(@group, current_user,
+                                                                    destroy_samples_params).execute
 
         # No selected samples deleted
         if deleted_samples_count.zero?
