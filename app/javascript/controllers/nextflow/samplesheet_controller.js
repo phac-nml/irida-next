@@ -652,11 +652,16 @@ export default class extends Controller {
       }, 1000);
     }
 
-    const metadataForm = this.metadataHeaderFormTarget.innerHTML
-      .replace(/HEADER_PLACEHOLDER/g, metadataSamplesheetColumn)
-      .replace(/FIELD_PLACEHOLDER/g, metadataField);
+    const metadataFormContent =
+      this.metadataHeaderFormTarget.content.cloneNode(true);
 
-    this.element.insertAdjacentHTML("beforeend", metadataForm);
+    const filledMetadataForm = this.#appendInputsToMetadataForm(
+      metadataFormContent,
+      metadataField,
+      metadataSamplesheetColumn,
+    );
+
+    this.element.appendChild(filledMetadataForm);
 
     this.element.lastElementChild.addEventListener(
       "turbo:before-fetch-request",
@@ -675,6 +680,48 @@ export default class extends Controller {
 
     this.element.lastElementChild.requestSubmit();
     this.element.lastElementChild.remove();
+  }
+
+  #appendInputsToMetadataForm(metadataFormContent, metadataField, columnName) {
+    const formInputValues = [
+      {
+        name: "format",
+        value: "turbo_stream",
+      },
+      {
+        name: "header",
+        value: columnName,
+      },
+      {
+        name: "field",
+        value: metadataField,
+      },
+    ];
+
+    for (const index in this.#samplesheetAttributes) {
+      const sampleId = this.#samplesheetAttributes[index]["sample_id"];
+      formInputValues.push({
+        name: "sample_ids[]",
+        value: sampleId,
+      });
+    }
+
+    formInputValues.forEach((inputValue) => {
+      metadataFormContent
+        .querySelector("form")
+        .appendChild(this.#createMetadataFormInput(inputValue));
+    });
+
+    return metadataFormContent;
+  }
+
+  #createMetadataFormInput(inputValue) {
+    const input = document.createElement("input");
+    input.setAttribute("autocomplete", "off");
+    input.setAttribute("name", inputValue["name"]);
+    input.setAttribute("value", inputValue["value"]);
+    input.setAttribute("type", "hidden");
+    return input;
   }
 
   #compactFormData() {

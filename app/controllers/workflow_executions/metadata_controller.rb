@@ -8,7 +8,6 @@ module WorkflowExecutions
     def fields
       @samples = Sample.where(id: params[:sample_ids])
       @header = params[:header]
-      @name_format = params[:name_format]
       @field = params[:field]
       @metadata = generate_metadata_for_samplesheet.to_json
       render status: :ok
