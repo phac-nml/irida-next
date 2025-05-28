@@ -156,6 +156,8 @@ module Activities
         assert_selector 'tr > td', text: 'sample 1 puid'
         assert_selector 'tr > td', text: 'INXT_PRJ_AAAAAAAAAA'
         assert_selector 'tr > td', text: 'INXT_PRJ_AAAAAAAAAB'
+        assert_selector 'tr > td', text: 'Project 1'
+        assert_selector 'tr > td', text: 'Project 2'
       end
 
       test 'group import samples activity dialog' do
