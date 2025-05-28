@@ -45,8 +45,11 @@
         <%= form_for(:transfer, url: namespace_project_samples_transfer_path, method: :post,
               data: {
                 controller: "form--hidden-inputs",
-                "form--hidden-inputs-selection-outlet": '#samples-table',
-                "form--hidden-inputs-field-name-value": "transfer[sample_ids][]",
+                controller: "form--json-submission",
+            "form--json-submission-selection-outlet": '#samples-table',
+            "form--json-submission-field-name-value": "transfer[sample_ids][]",
+            "form--json-submission-clear-selection-value": "true",
+            "form--json-submission-target": "form",
               }
             ) do |form| %>
           <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>"/>
@@ -102,7 +105,7 @@
                           class: "button button--size-default button--state-primary",
                           disabled: true,
                           data: {
-                            action: "click->form--hidden-inputs#clearSelection",
+                            action: "click->form--json-submission#submitForm",
                             "viral--select2-target": "submitButton",
                           } %>
             </div>
