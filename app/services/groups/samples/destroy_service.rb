@@ -33,7 +33,7 @@ module Groups
           next unless sample.deleted?
 
           update_metadata_summary(sample)
-          add_deleted_sample_to_data(sample, sample.project.puid)
+          add_deleted_sample_to_data(sample, sample.project.puid, sample.project.name)
         end
 
         create_activities_and_update_samples_count unless @deleted_samples_data[:project_data].empty?
@@ -98,7 +98,7 @@ module Groups
         project_namespace.parent.update_samples_count_by_destroy_service(samples_deleted_count)
       end
 
-      def add_deleted_sample_to_data(sample, project_puid)
+      def add_deleted_sample_to_data(sample, project_puid, project_name)
         if @deleted_samples_data[:project_data].key?(project_puid)
           @deleted_samples_data[:project_data][project_puid] << { sample_name: sample.name, sample_puid: sample.puid }
         else
@@ -106,7 +106,7 @@ module Groups
         end
 
         @deleted_samples_data[:group_data] << { sample_name: sample.name, sample_puid: sample.puid,
-                                                project_puid: project_puid }
+                                                project_puid: project_puid, project_name: project_name }
       end
     end
   end
