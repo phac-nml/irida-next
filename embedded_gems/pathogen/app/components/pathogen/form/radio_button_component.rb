@@ -29,7 +29,6 @@
 #   - :label        🏷️   (String)     — The label text shown next to the radio
 #   - :checked      ✅   (Boolean)     — Whether this radio is selected
 #   - :disabled     🚫   (Boolean)     — Whether this radio is disabled
-#   - :required     ❗   (Boolean)     — Whether this radio is required
 #   - :described_by 🗣️   (String)     — ID of element describing this input
 #   - :controls     🎛️   (String)     — ID of element controlled by this input
 #   - :lang         🌐   (String)     — Language code
@@ -75,7 +74,6 @@ module Pathogen
       #   - :label [String] the label text
       #   - :checked [Boolean] whether the radio is checked
       #   - :disabled [Boolean] whether the radio is disabled
-      #   - :required [Boolean] whether the radio is required
       #   - :described_by [String] id of element describing this input
       #   - :controls [String] id of element controlled by this input
       #   - :lang [String] language code
@@ -103,14 +101,12 @@ module Pathogen
       private
 
       # Extracts and assigns options to instance variables
-      # rubocop:disable Metrics/AbcSize
       def extract_options!(options)
         @options = options.dup
         @input_name = options.delete(:input_name)
         @label = options.delete(:label)
         @checked = options.delete(:checked) { false }
         @disabled = options.delete(:disabled) { false }
-        @required = options.delete(:required) { false }
         @described_by = options.delete(:described_by)
         @controls = options.delete(:controls)
         @lang = options.delete(:lang)
@@ -119,8 +115,6 @@ module Pathogen
         @user_class = options.delete(:class)
         @html_options = options # Remaining options (e.g., data-*)
       end
-
-      # rubocop:enable Metrics/AbcSize
 
       # Renders the radio input element
       def radio_button_html
@@ -178,7 +172,6 @@ module Pathogen
         describedby = [@described_by, (@help_text.present? ? help_text_id : nil)].compact.join(' ')
         {
           disabled: @disabled,
-          required: @required,
           class: radio_button_classes(@user_class),
           aria: radio_button_aria_attributes.merge(describedby: describedby.presence),
           role: 'radio',
@@ -190,9 +183,7 @@ module Pathogen
       # Returns a hash of ARIA attributes for the radio input
       def radio_button_aria_attributes
         {
-          label: @label,
           disabled: @disabled.to_s,
-          required: @required.to_s,
           describedby: @described_by,
           controls: @controls
         }.compact
