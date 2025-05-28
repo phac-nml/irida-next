@@ -10,13 +10,31 @@ export default class extends Controller {
   static outlets = ["selection"];
   static values = { filters: { type: Array, default: [] } };
 
+  /**
+   * 🎯 Handles initialization when the tags target element connects to the DOM
+   *
+   * This method:
+   * 1. Clears any existing tags
+   * 2. Filters out falsy values from filtersValue array
+   * 3. Creates and inserts new tag elements before the input
+   * 4. Updates the filter count display
+   *
+   * @param {HTMLElement} target - The tags container element that was connected
+   */
   tagsTargetConnected(target) {
+    // Start fresh by clearing existing tags
     this.clear();
-    this.filtersValue
-      .filter(Boolean)
-      .forEach((sample) =>
-        target.insertBefore(this.#formatTag(sample), this.inputTarget),
-      );
+
+    // Only process valid filter values
+    const validFilters = this.filtersValue.filter(Boolean);
+
+    // Create and insert tags for each valid filter value
+    validFilters.forEach((filterValue) => {
+      const tagElement = this.#formatTag(filterValue);
+      target.insertBefore(tagElement, this.inputTarget);
+    });
+
+    // Update the count display to reflect current filters
     this.#updateCount();
   }
 
