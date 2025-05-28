@@ -112,7 +112,7 @@ module Groups
           end
         end
 
-        if unauthorized_sample_puids.count.positive?
+        if unauthorized_sample_ids.count.positive?
           @group.errors.add(:samples,
                             I18n.t('services.samples.clone.unauthorized_samples',
                                    sample_ids: unauthorized_sample_ids.join(', ')))
