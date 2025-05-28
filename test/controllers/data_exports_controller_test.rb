@@ -31,7 +31,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_difference('DataExport.count', 1) do
       post data_exports_path(params)
     end
-    assert_response :redirect
+    assert_response :success
   end
 
   test 'should create new analysis export with viable params' do
@@ -44,7 +44,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_difference('DataExport.count', 1) do
       post data_exports_path(params)
     end
-    assert_response :redirect
+    assert_response :success
   end
 
   test 'should create new linelist csv export with viable params' do
@@ -61,7 +61,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_difference('DataExport.count', 1) do
       post data_exports_path(params)
     end
-    assert_response :redirect
+    assert_response :success
   end
 
   test 'should create new linelist xlsx export with viable params' do
@@ -78,7 +78,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
     assert_difference('DataExport.count', 1) do
       post data_exports_path(params)
     end
-    assert_response :redirect
+    assert_response :success
   end
 
   test 'should delete export through destroy action' do
@@ -149,7 +149,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
                              'attachment_formats' => Attachment::FORMAT_REGEX.keys }
       }
     }
-    assert_response :redirect
+    assert_response :success
   end
 
   test 'should create new export with optional name and email params' do
@@ -162,7 +162,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
         name: 'export name'
       }
     }
-    assert_response :redirect
+    assert_response :success
   end
 
   test 'should not create new export without export_type param' do
@@ -316,7 +316,7 @@ class DataExportsControllerTest < ActionDispatch::IntegrationTest
                                   'analysis_type' => 'project' }
            }
          }
-    assert_response :redirect
+    assert_response :success
   end
 
   test 'should not create new analysis export with missing analysis_type' do
