@@ -5,6 +5,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   include BreadcrumbNavigation
   include ListActions
   include Metadata
+  include Turbo::Streams::ActionHelper
 
   before_action :data_export, only: %i[destroy show]
   before_action :data_exports, only: %i[destroy]
@@ -48,17 +49,12 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     @data_export = DataExports::CreateService.new(current_user, data_export_params).execute
 
     if @data_export.errors.any?
-      respond_to do |format|
-        format.turbo_stream do
-          render status: :unprocessable_entity,
-                 locals: { type: 'alert', message: error_message(@data_export),
-                           export_type: data_export_params['export_type'] }
-        end
-      end
+      render status: :unprocessable_entity,
+             locals: { type: 'alert', message: error_message(@data_export),
+                       export_type: data_export_params['export_type'] }
     else
       flash[:success] = t('.success', name: @data_export.name || @data_export.id)
-
-      redirect_to data_export_path(@data_export)
+      render turbo_stream: turbo_stream_action_tag('redirect', location: data_export_path(@data_export))
     end
   end
 
@@ -95,9 +91,9 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   end
 
   def data_export_params
-    params.require(:data_export).permit(:name, :export_type, :email_notification,
-                                        export_parameters: [:linelist_format, :namespace_id, :analysis_type,
-                                                            { ids: [], metadata_fields: [], attachment_formats: [] }])
+    params.expect(data_export: [:name, :export_type, :email_notification,
+                                { export_parameters: [:linelist_format, :namespace_id, :analysis_type,
+                                                      { ids: [], metadata_fields: [], attachment_formats: [] }] }])
   end
 
   def data_export
