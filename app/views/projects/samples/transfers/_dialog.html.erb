@@ -44,12 +44,11 @@
 
         <%= form_for(:transfer, url: namespace_project_samples_transfer_path, method: :post,
               data: {
-                controller: "form--hidden-inputs",
                 controller: "form--json-submission",
-            "form--json-submission-selection-outlet": '#samples-table',
-            "form--json-submission-field-name-value": "transfer[sample_ids][]",
-            "form--json-submission-clear-selection-value": "true",
-            "form--json-submission-target": "form",
+                "form--json-submission-selection-outlet": '#samples-table',
+                "form--json-submission-field-name-value": "transfer[sample_ids][]",
+                "form--json-submission-clear-selection-value": "true",
+                "form--json-submission-target": "form",
               }
             ) do |form| %>
           <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>"/>
