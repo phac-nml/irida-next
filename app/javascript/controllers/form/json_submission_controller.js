@@ -15,9 +15,13 @@ export default class extends Controller {
 
     const formData = new FormData(this.formTarget);
     const jsonObject = this.#toJson(formData);
+    let method = "post";
+    if (formData.get("_method")) {
+      method = formData.get("_method");
+    }
 
     fetch(this.formTarget.action, {
-      method: "POST",
+      method: method,
       headers: {
         "Content-Type": "application/json",
         Accept: "text/vnd.turbo-stream.html",

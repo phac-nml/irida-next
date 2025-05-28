@@ -4,6 +4,8 @@ module Projects
   module Samples
     # Controller actions for Project Samples Deletions
     class DeletionsController < Projects::ApplicationController
+      include Turbo::Streams::ActionHelper
+
       before_action :sample, only: %i[new destroy]
       before_action :new_dialog_partial, only: :new
 
@@ -50,7 +52,7 @@ module Projects
           flash[:success] = t('.success')
         end
 
-        redirect_to namespace_project_samples_path
+        render turbo_stream: turbo_stream_action_tag('redirect', location: namespace_project_samples_path)
       end
 
       private
