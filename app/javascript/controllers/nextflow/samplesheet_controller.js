@@ -683,6 +683,7 @@ export default class extends Controller {
   }
 
   #appendInputsToMetadataForm(metadataFormContent, metadataField, columnName) {
+    // add turbo_stream, which metadata column and the selected metadata field inputs
     const formInputValues = [
       {
         name: "format",
@@ -698,11 +699,11 @@ export default class extends Controller {
       },
     ];
 
+    // add sample ids
     for (const index in this.#samplesheetAttributes) {
-      const sampleId = this.#samplesheetAttributes[index]["sample_id"];
       formInputValues.push({
         name: "sample_ids[]",
-        value: sampleId,
+        value: this.#samplesheetAttributes[index]["sample_id"],
       });
     }
 
