@@ -3,7 +3,6 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   // # indicates private attribute or method
   // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties
-  #storageKey = null;
   #numSelected = 0;
 
   static targets = ["rowSelection", "selectPage", "selected"];
@@ -12,29 +11,25 @@ export default class extends Controller {
   static values = {
     storageKey: {
       type: String,
+      default: `${location.protocol}//${location.host}${location.pathname}`,
     },
     total: Number,
   };
 
   connect() {
-    this.idempotentConnect();
+    this.element.setAttribute("data-controller-connected", "true");
+    this.#updateActionButtons();
+    this.#setSelectPageCheckboxValue();
   }
 
-  idempotentConnect() {
-    this.#storageKey =
-      this.storageKeyValue ||
-      `${location.protocol}//${location.host}${location.pathname}`;
+  rowSelectionTargetConnected(rowCheckbox) {
+    console.log("rowSelectionTargetConnected", this.storageKeyValue);
+    const storedValues = this.getStoredItems();
+    rowCheckbox.checked = storedValues.indexOf(rowCheckbox.value) > -1;
+  }
 
-    this.element.setAttribute("data-controller-connected", "true");
-
-    const storageValue = this.getStoredItems();
-
-    if (storageValue) {
-      this.#numSelected = storageValue.length;
-      this.#updateUI(storageValue);
-    } else {
-      this.save([]);
-    }
+  selectedTargetConnected(target) {
+    target.innerText = this.getStoredItems().length;
   }
 
   togglePage(event) {
@@ -58,6 +53,7 @@ export default class extends Controller {
 
   toggle(event) {
     this.#addOrRemove(event.target.checked, event.target.value);
+    this.selectedTarget.innerText = this.getStoredItems().length;
   }
 
   remove({ params: { id } }) {
@@ -65,26 +61,30 @@ export default class extends Controller {
   }
 
   clear() {
-    sessionStorage.removeItem(this.#storageKey);
+    sessionStorage.removeItem(this.storageKeyValue);
     this.#updateUI([]);
   }
 
   save(storageValue) {
-    sessionStorage.setItem(this.#storageKey, JSON.stringify([...storageValue]));
+    sessionStorage.setItem(
+      this.storageKeyValue,
+      JSON.stringify([...storageValue]),
+    );
     this.#numSelected = storageValue.length;
   }
 
   update(ids) {
     this.save(ids);
+    this.#updateRowSelectionTargets(ids);
     this.#updateUI(ids);
   }
 
   getNumSelected() {
-    return this.#numSelected;
+    return this.getStoredItems().length;
   }
 
   getStoredItems() {
-    return JSON.parse(sessionStorage.getItem(this.#storageKey)) || [];
+    return JSON.parse(sessionStorage.getItem(this.storageKeyValue)) || [];
   }
 
   #addOrRemove(add, storageValue) {
@@ -102,15 +102,15 @@ export default class extends Controller {
   }
 
   #updateUI(ids) {
-    this.rowSelectionTargets.map((row) => {
-      row.checked = ids.indexOf(row.value) > -1;
-    });
-    this.#updateActionButtons(ids.length);
-    this.#updateCounts(ids.length);
+    this.#updateActionButtons();
+    if (this.hasSelectedTarget) {
+      this.selectedTarget.innerText = ids.length;
+    }
     this.#setSelectPageCheckboxValue();
   }
 
-  #updateActionButtons(count) {
+  #updateActionButtons() {
+    const count = this.getNumSelected();
     this.actionButtonOutlets.forEach((outlet) => {
       outlet.setDisabled(count);
     });
@@ -125,9 +125,9 @@ export default class extends Controller {
     }
   }
 
-  #updateCounts(selected) {
-    if (this.hasSelectedTarget) {
-      this.selectedTarget.innerText = selected;
-    }
+  #updateRowSelectionTargets(ids) {
+    this.rowSelectionTargets.map((row) => {
+      row.checked = ids.indexOf(row.value) > -1;
+    });
   }
 }

@@ -186,21 +186,16 @@
             >
               <span>
                 <%= t(".counts.workflow_executions") %>:
-                <strong data-action="turbo:morph-element->selection#idempotentConnect"><%= @pagy.count %></strong>
+                <strong><%= @pagy.count %></strong>
               </span>
               <span>
                 <%= t(".counts.selected") %>:
-                <strong
-                  data-selection-target="selected"
-                  data-action="
-                    turbo:morph-element->selection#idempotentConnect
-                  "
-                >0</strong>
+                <strong data-selection-target="selected">0</strong>
               </span>
             </td>
             <td
               colspan="<%= @columns.count - 3 + (@renders_row_actions ? 1 : 0) %>"
-              class="px-3 py-3 bg-slate-100 dark:bg-slate-900"
+              class="p-3 bg-slate-100 dark:bg-slate-900"
             ></td>
           </tr>
         </tfoot>

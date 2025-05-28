@@ -42,10 +42,17 @@ module Samples
         args[:id] = 'samples-table'
         args[:classes] = class_names(args[:classes], 'overflow-auto relative')
         if @abilities[:select_samples]
-          args[:data] ||= {}
-          args[:data][:controller] = 'selection'
-          args[:data][:'selection-total-value'] = @pagy.count
-          args[:data][:'selection-action-button-outlet'] = '.action-button'
+          args[:data] = {
+            controller: 'selection',
+            'selection-total-value': @pagy.count,
+            'selection-action-button-outlet': '.action-button',
+            'selection-storage-key-value':
+              "#{request.base_url}#{
+                  namespace_project_samples_path(
+                    @namespace.parent, @namespace.project
+                  )
+                }"
+          }
         end
       end
     end

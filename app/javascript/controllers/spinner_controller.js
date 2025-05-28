@@ -12,13 +12,29 @@ export default class extends Controller {
 
   submitStart() {
     document.addEventListener("keydown", preventEscapeListener, true);
-    document.querySelector(".dialog--close").classList.add("hidden");
-    document.querySelector("#spinner").classList.remove("hidden");
+    const closeButton = document.querySelector(".dialog--close");
+    const spinner = document.querySelector("#spinner");
+
+    if (closeButton) {
+      closeButton.classList.add("hidden");
+    }
+
+    if (spinner) {
+      spinner.classList.remove("hidden");
+    }
   }
 
   submitEnd() {
     document.removeEventListener("keydown", preventEscapeListener, true);
-    document.querySelector(".dialog--close").classList.remove("hidden");
-    document.querySelector("#spinner").classList.add("hidden");
+    const closeButton = document.querySelector(".dialog--close");
+    const spinner = document.querySelector("#spinner");
+
+    if (closeButton) {
+      closeButton.classList.remove("hidden");
+    }
+
+    if (spinner) {
+      spinner.classList.add("hidden");
+    }
   }
 }
