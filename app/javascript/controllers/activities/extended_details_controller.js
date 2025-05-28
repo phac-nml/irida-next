@@ -13,6 +13,7 @@ export default class extends Controller {
     "workflowTableRow",
     "importSampleTableRow",
     "groupSampleTransferTableRow",
+    "destroySampleTableRow",
     "listRow",
     "ariaLabels",
     "itemName",
@@ -67,14 +68,14 @@ export default class extends Controller {
       if (this.hasTbodyTarget) {
         if (this.activityTypeValue === "workflow_execution_destroy") {
           this.#generateWorkflowTableRows(indexRangeData);
-        } else if (
-          this.activityTypeValue === "group_import_samples" ||
-          this.activityTypeValue === "group_samples_destroy"
-        ) {
+        } else if (this.activityTypeValue === "group_import_samples") {
           // table row format: SAMPLE_NAME (SAMPLE_PUID) | PROJECT_PUID
           this.#generateSampleAndProjectTableRows(indexRangeData);
         } else if (this.activityTypeValue === "group_sample_transfer") {
           this.#generateGroupSampleTransferTableRows(indexRangeData);
+        } else if (this.activityTypeValue === "group_samples_destroy") {
+          // table row format: SAMPLE_NAME (SAMPLE_PUID) | PROJECT_NAME (PROJECT_PUID)
+          this.#generateSampleAndProjectWithPuidsTableRows(indexRangeData);
         } else {
           this.#generateTableRows(indexRangeData);
         }
@@ -245,6 +246,39 @@ export default class extends Controller {
         };
         updateTextContent(0, data["workflow_name"], workflowNameSelector);
         updateTextContent(1, data["workflow_id"], workflowIdSelector);
+
+        fragment.appendChild(clone);
+      });
+
+      this.tbodyTarget.appendChild(fragment);
+    }
+  }
+
+  #generateSampleAndProjectWithPuidsTableRows(table_data) {
+    if ("content" in document.createElement("template")) {
+      const template = this.destroySampleTableRowTarget;
+      const fragment = document.createDocumentFragment();
+      const sampleNameSelector =
+        "span[data-activities--extended_details-target='sampleName']";
+      const puidSelector = "span:nth-child(2)";
+      const projectNameSelector =
+        "span[data-activities--extended_details-target='projectName']";
+
+      table_data.forEach((data) => {
+        const clone = template.content.cloneNode(true);
+        const tds = clone.querySelectorAll("td");
+
+        const updateTextContent = (tdIndex, name, puid) => {
+          const td = tds[tdIndex];
+          if (tdIndex === 0) {
+            td.querySelector(sampleNameSelector).textContent = name;
+          } else {
+            td.querySelector(projectNameSelector).textContent = name;
+          }
+          td.querySelector(puidSelector).textContent = puid;
+        };
+        updateTextContent(0, data["sample_name"], data["sample_puid"]);
+        updateTextContent(1, data["project_name"], data["project_puid"]);
 
         fragment.appendChild(clone);
       });
