@@ -17,7 +17,7 @@ module Projects
       end
 
       def destroy
-        ::Projects::Samples::DestroyService.new(@project, current_user, { sample: @sample }).execute
+        Projects::Samples::DestroyService.new(@project, current_user, { sample: @sample }).execute
 
         respond_to do |format|
           if @sample.deleted?
@@ -37,8 +37,8 @@ module Projects
       def destroy_multiple
         samples_to_delete_count = destroy_samples_params['sample_ids'].count
 
-        deleted_samples_count = ::Projects::Samples::DestroyService.new(@project, current_user,
-                                                                        destroy_samples_params).execute
+        deleted_samples_count = Projects::Samples::DestroyService.new(@project, current_user,
+                                                                      destroy_samples_params).execute
 
         # No selected samples deleted
         if deleted_samples_count.zero?
