@@ -35,7 +35,7 @@ class UserPolicy < ApplicationPolicy
 
   def update?
     return true if record == user
-    return true if record.admin == true
+    return true if user.admin == true
 
     details[:name] = record.email
     false
