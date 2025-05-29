@@ -1,0 +1,44 @@
+<%= turbo_stream.update("sample_attachments") do %>
+  <%= render Attachments::TableComponent.new(
+    @sample_attachments,
+    @pagy,
+    @q,
+    @sample,
+    nil,
+    @render_individual_attachments,
+    @has_attachments,
+    abilities: {
+      select_attachments: @allowed_to[:update_sample],
+    },
+    row_actions: {
+      destroy: @allowed_to[:destroy_attachment],
+    },
+    empty:
+      if @allowed_to[:update_sample]
+        {
+          icon_name: :document_text,
+          title: t("projects.samples.attachments.table.empty_state.title"),
+          description:
+            t("projects.samples.attachments.table.empty_state.description"),
+          action_text:
+            t("projects.samples.attachments.table.empty_state.action_text"),
+          action_path:
+            new_namespace_project_sample_attachment_path(sample_id: @sample.id),
+          action_method: :get,
+          data: {
+            turbo_frame: "sample_modal",
+            turbo_stream: true,
+          },
+        }
+      else
+        {
+          icon_name: :document_text,
+          title: t("projects.samples.attachments.table.empty_state.title"),
+          description:
+            t(
+              "projects.samples.attachments.table.empty_state.no_permission_description",
+            ),
+        }
+      end,
+  ) %>
+<% end %>

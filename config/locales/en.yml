@@ -1637,11 +1637,15 @@ en:
           error: 'File %{filename} was not removed due to the following errors: %{errors}'
           success: File %{filename} was successfully removed.
         table:
+          deselect_all_button: Deselect all
           empty_state:
             action_text: Upload Files
             description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
             no_permission_description: You do not have permission to upload files to this sample
             title: No files have been uploaded
+          search:
+            placeholder: Filter by PUID or Filename
+          select_all_button: Select all
       clones:
         create:
           error: 'The following list of samples failed to copy:'
@@ -1776,15 +1780,9 @@ en:
         remove_button: Remove
         table_header:
           action: Action
-          created_at: Uploaded
-          filename: Filename
-          format: Format
           key: Key
           last_updated: Last Updated
-          puid: PUID
-          size: Size
           source: Source
-          type: Type
           value: Value
         tabs:
           files: Files

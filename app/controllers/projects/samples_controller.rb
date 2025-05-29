@@ -6,6 +6,7 @@ module Projects
     include Metadata
     include ListActions
     include Storable
+    include SampleAttachment
 
     before_action :sample, only: %i[show edit update view_history_version]
     before_action :current_page
@@ -44,7 +45,7 @@ module Projects
       elsif @tab == 'history'
         @log_data = @sample.log_data_without_changes
       else
-        @sample_attachments = @sample.attachments
+        list_sample_attachments
       end
     end
 

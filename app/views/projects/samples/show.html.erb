@@ -1,3 +1,4 @@
+<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 <%= turbo_frame_tag "sample_modal" %>
 <%= turbo_frame_tag "samples_dialog" %>
 
@@ -68,13 +69,16 @@
             current: active ? "page" : "false",
           },
           role: "tab",
+          data: {
+            "turbo-action": "replace",
+          },
           tabindex: 0 %>
         </li>
       <% end %>
     </ul>
   </nav>
   <section class="flex flex-col min-h-[200px]" data-turbo-temporary>
-    <%= turbo_frame_tag "table-listing", src: namespace_project_sample_path(format: :turbo_stream, tab: @tab || 'files') do %>
+    <%= turbo_frame_tag "table-listing", src: namespace_project_sample_path(format: :turbo_stream, tab: @tab || 'files', **request.query_parameters) do %>
       <% if @tab == "history" %>
         <%= render partial: "shared/loading/history" %>
       <% elsif @tab == "params" %>

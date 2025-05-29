@@ -435,7 +435,7 @@ fr:
       format: Format
       id: PUID
       limit:
-        item: Attachments
+        item: Pièces jointes
       select_page: Sélectionner/Désélectionner les pièces jointes visibles
       type: Type
   auth:
@@ -1633,11 +1633,15 @@ fr:
           error: 'Le fichier %{filename} n’a pas été supprimé en raison des erreurs suivantes : %{errors}'
           success: Le fichier %{filename} a été supprimé avec succès.
         table:
+          deselect_all_button: Désélectionner tout
           empty_state:
             action_text: Upload Files
             description: This sample currently has no attached files. Get started by uploading sequence data, assembly files, or other relevant documents.
             no_permission_description: You do not have permission to upload files to this sample
             title: No files have been uploaded
+          search:
+            placeholder: Filtrer par PUID ou nom de fichier
+          select_all_button: Tout sélectionner
       clones:
         create:
           error: 'La liste suivante des échantillons n’a pas été copiée :'
@@ -1772,15 +1776,9 @@ fr:
         remove_button: Retirer
         table_header:
           action: Mesure
-          created_at: Téléchargé
-          filename: Nom du fichier
-          format: Format
           key: Key
           last_updated: Dernière mise à jour
-          puid: PUID
-          size: Taille
           source: Source
-          type: Type
           value: Valeur
         tabs:
           files: Fichiers
