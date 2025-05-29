@@ -6,9 +6,6 @@ on:
   push:
     branches: [main]
 
-env:
-  INCLUDE_W3C_VALIDATE: true
-
 jobs:
   test:
     timeout-minutes: 20
