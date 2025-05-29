@@ -299,7 +299,7 @@ module Projects
 
       assert_difference -> { WorkflowExecution.count } => -2,
                         -> { SamplesWorkflowExecution.count } => -2 do
-                          delete destroy_multiple_namespace_project_workflow_executions_path(
+                          post destroy_multiple_namespace_project_workflow_executions_path(
                             @namespace,
                             @project,
                             format: :turbo_stream
@@ -317,7 +317,7 @@ module Projects
 
       assert_difference -> { WorkflowExecution.count } => -2,
                         -> { SamplesWorkflowExecution.count } => -2 do
-                          delete destroy_multiple_namespace_project_workflow_executions_path(
+                          post destroy_multiple_namespace_project_workflow_executions_path(
                             @namespace,
                             @project,
                             format: :turbo_stream
@@ -336,7 +336,7 @@ module Projects
       new_workflow = workflow_executions(:automated_example_new)
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
-        delete destroy_multiple_namespace_project_workflow_executions_path(
+        post destroy_multiple_namespace_project_workflow_executions_path(
           @namespace,
           @project,
           format: :turbo_stream
@@ -354,7 +354,7 @@ module Projects
 
       assert_no_difference -> { WorkflowExecution.count },
                            -> { SamplesWorkflowExecution.count } do
-        delete destroy_multiple_namespace_project_workflow_executions_path(
+        post destroy_multiple_namespace_project_workflow_executions_path(
           @namespace,
           @project,
           format: :turbo_stream

@@ -147,38 +147,3 @@ export function normalizeParams(params, name, v, depth) {
 
   return params;
 }
-
-/**
- * Handles response from Turbo submitted form.
- * @param {Response} response - The Response object
- */
-export async function handleFormResponse(response) {
-  const fetchResponse = new Turbo.FetchResponse(response);
-
-  const responseHTML = await fetchResponse.responseHTML;
-  if (responseHTML) {
-    const { statusCode, redirected, contentType } = fetchResponse;
-    if (contentType.startsWith("text/vnd.turbo-stream.html")) {
-      Turbo.renderStreamMessage(responseHTML);
-    } else {
-      const action = getActionForFormSubmission(fetchResponse);
-      const visitOptions = {
-        action,
-        response: { statusCode, responseHTML, redirected },
-      };
-      Turbo.visit(fetchResponse.location, visitOptions);
-    }
-  }
-}
-
-/**
- * Get Turbo action from response
- * @param {Turbo.FetchResponse} response - The FetchResponse object
- * @returns {String} the action for the Turbo visit
- */
-function getActionForFormSubmission(fetchResponse) {
-  const sameLocationRedirect =
-    fetchResponse.redirected &&
-    fetchResponse.location.href === window.location?.href;
-  return sameLocationRedirect ? "replace" : "advance";
-}

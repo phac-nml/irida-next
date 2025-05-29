@@ -43,7 +43,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
           collection do
             get :select
             get :destroy_multiple_confirmation
-            delete :destroy_multiple
+            post :destroy_multiple
             post :list
           end
         end
@@ -63,7 +63,7 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
             resource :file_import, module: :metadata, only: %i[create new]
             resource :spreadsheet_import, only: %i[create new]
             resource :deletion, only: %i[destroy new] do
-              delete :destroy_multiple
+              post :destroy_multiple
             end
           end
         end
