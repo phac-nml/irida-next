@@ -34,7 +34,7 @@
         data-layout-target="expandButtonContainer"
       >
         <button
-          data-action="click->layout#expand"
+          data-action="click->layout#expand:capture"
           class="text-slate-500 navbar-button cursor-pointer"
           aria-label="<%= t(:'general.navbar.expand.aria_label') %>"
         >
@@ -59,10 +59,11 @@
       <div class="<%= @layout %>"><%= body %></div>
     </main>
     <%= render ConfirmationComponent.new %>
+    <div id="flashes" class="fixed flex flex-col top-5 right-6 z-50">
+      <% flash.each do |key, value| %>
+        <%= viral_flash(type: key, data: value) %>
+      <% end %>
+    </div>
   </div>
-</div>
-<div id="flashes" class="fixed flex flex-col top-5 right-6 z-50">
-  <% flash.each do |key, value| %>
-    <%= viral_flash(type: key, data: value) %>
-  <% end %>
+  <div tabindex="0" data-action="focus->layout#handleContentFocus"></div>
 </div>

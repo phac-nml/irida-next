@@ -15,14 +15,6 @@ export default class extends Controller {
     if (localStorage.getItem("layout") === "collapsed") {
       this.collapse();
     }
-
-    this.boundHandleSidebarOverlayClick =
-      this.handleSidebarOverlayClick.bind(this);
-
-    this.sidebarOverlayTarget.addEventListener(
-      "click",
-      this.boundHandleSidebarOverlayClick,
-    );
   }
 
   disconnect() {
@@ -38,19 +30,20 @@ export default class extends Controller {
     localStorage.setItem("layout", "collapsed");
   }
 
-  expand(event) {
+  expand() {
+    this.expandButtonContainerTarget.classList.add("xl:hidden");
     this.layoutContainerTarget.classList.remove("collapsed");
     if (window.innerWidth < this.#convertRemToPixels(80)) {
       this.layoutContainerTarget.classList.remove("max-xl:collapsed");
     }
-    this.expandButtonContainerTarget.classList.add("xl:hidden");
-    if (typeof event !== "undefined") {
-      this.logoTarget.focus();
-    }
     localStorage.setItem("layout", "expanded");
+
+    setTimeout(() => {
+      this.logoTarget.focus();
+    }, 25);
   }
 
-  handleSidebarOverlayClick() {
+  handleContentFocus() {
     if (window.innerWidth < this.#convertRemToPixels(80)) {
       if (
         !this.layoutContainerTarget.classList.contains(
