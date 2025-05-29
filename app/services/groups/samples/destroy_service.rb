@@ -9,7 +9,6 @@ module Groups
       def initialize(group, user = nil, params = {})
         super(user, params)
         @group = group
-        @sample = params[:sample] if params[:sample]
         @sample_ids = params[:sample_ids] if params[:sample_ids]
       end
 
