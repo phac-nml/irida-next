@@ -62,6 +62,12 @@
         <%= render partial: "shared/loading/table" %>
       <% end %>
       <%= turbo_frame_tag "projects_pagination" %>
+    <% else %>
+      <%= render Viral::EmptyStateComponent.new(
+        icon_name: "rectangle_stack",
+        title: t(".no_projects"),
+        description: t(".no_projects_description"),
+      ) %>
     <% end %>
   </div>
 </div>
