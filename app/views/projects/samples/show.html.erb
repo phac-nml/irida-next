@@ -1,3 +1,4 @@
+<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
 <%= turbo_frame_tag "sample_modal" %>
 <%= turbo_frame_tag "samples_dialog" %>
 
@@ -68,6 +69,9 @@
             current: active ? "page" : "false",
           },
           role: "tab",
+          data: {
+            "turbo-action": "replace",
+          },
           tabindex: 0 %>
         </li>
       <% end %>
