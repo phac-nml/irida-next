@@ -34,7 +34,11 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update?
-    true if record == user
+    return true if record == user
+    return true if record.admin == true
+
+    details[:name] = record.email
+    false
   end
 
   def edit_password?
