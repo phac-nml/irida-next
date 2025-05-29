@@ -36,7 +36,7 @@ module Projects
         end
       end
 
-      def destroy_multiple
+      def destroy_multiple # rubocop:disable Metrics/AbcSize
         samples_to_delete_count = destroy_multiple_params['sample_ids'].count
 
         deleted_samples_count = ::Samples::DestroyService.new(@project, current_user, destroy_multiple_params).execute
