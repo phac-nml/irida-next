@@ -441,10 +441,10 @@ export default class extends Controller {
     }
 
     const fileContent = this.fileTemplateTarget.content.cloneNode(true);
-    fileContent.querySelector("a").setAttribute("href", href);
-    fileContent.querySelector("a").id =
-      `${this.#samplesheetAttributes[index]["sample_id"]}_${columnName}`;
-    fileContent.querySelector("a").textContent =
+    const fileLink = fileContent.querySelector("a");
+    fileLink.setAttribute("href", href);
+    fileLink.id = `${this.#samplesheetAttributes[index]["sample_id"]}_${columnName}`;
+    fileLink.textContent =
       this.#samplesheetAttributes[index]["samplesheet_params"][columnName][
         "filename"
       ];
@@ -468,16 +468,18 @@ export default class extends Controller {
       this.textInputTemplateTarget.content.cloneNode(true);
     const name = `workflow_execution[samples_workflow_executions_attributes][${index}][samplesheet_params][${columnName}]`;
     const id = `workflow_execution_samples_workflow_executions_attributes_${index}_samplesheet_params_${columnName}`;
+    const input = textInputContent.querySelector("input");
+    const label = textInputContent.querySelector("label");
 
-    textInputContent.querySelector("input").setAttribute("name", name);
-    textInputContent.querySelector("input").setAttribute("id", id);
+    input.setAttribute("name", name);
+    input.setAttribute("id", id);
 
-    textInputContent.querySelector("label").setAttribute("for", id);
-    textInputContent.querySelector("label").textContent = name;
+    label.setAttribute("for", id);
+    label.textContent = name;
 
     const formValue = this.#retrieveFormData(index, columnName);
     if (formValue) {
-      textInputContent.querySelector("input").value = formValue;
+      input.value = formValue;
     }
 
     cell.appendChild(textInputContent);
@@ -700,17 +702,16 @@ export default class extends Controller {
     ];
 
     // add sample ids
-    for (const index in this.#samplesheetAttributes) {
+    Object.values(this.#samplesheetAttributes).forEach((sample) => {
       formInputValues.push({
         name: "sample_ids[]",
-        value: this.#samplesheetAttributes[index]["sample_id"],
+        value: sample.sample_id,
       });
-    }
+    });
 
+    const form = metadataFormContent.querySelector("form");
     formInputValues.forEach((inputValue) => {
-      metadataFormContent
-        .querySelector("form")
-        .appendChild(this.#createMetadataFormInput(inputValue));
+      form.appendChild(this.#createMetadataFormInput(inputValue));
     });
 
     return metadataFormContent;
