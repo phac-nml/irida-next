@@ -1,3 +1,5 @@
+<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+
 <%= render Viral::PageHeaderComponent.new(title: t(".title")) do |component| %>
   <%= component.with_buttons do %>
     <%= link_to t(".create_project_button"),
@@ -25,6 +27,9 @@
               "inline-block p-4 text-primary-700 border-b-2 border-primary-700 rounded-t-lg active dark:text-primary-500 dark:border-primary-500"
             end
           ),
+        data: {
+          "turbo-action": "replace",
+        },
         aria: {
           current: params[:personal] ? "false" : "page",
         } %>
@@ -40,6 +45,9 @@
               "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
             end
           ),
+        data: {
+          "turbo-action": "replace",
+        },
         aria: {
           current: params[:personal] ? "page" : "false",
         } %>
