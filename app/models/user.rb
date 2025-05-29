@@ -41,6 +41,8 @@ class User < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   delegate :full_path, to: :namespace
 
+  scope :admins, -> { where(admin: true) }
+
   def self.ransackable_attributes(_auth_object = nil)
     %w[first_name last_name email]
   end
