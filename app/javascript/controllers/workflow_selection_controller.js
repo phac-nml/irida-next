@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import { formDataToJsonParams, normalizeParams } from "utilities/form";
+import { handleFormResponse } from "../utilities/form";
 
 function preventEscapeListener(event) {
   if (event.key === "Escape") {
@@ -50,16 +51,16 @@ export default class extends Controller {
     const formData = new FormData(this.formTarget);
     const jsonObject = this.#toJson(formData);
 
-    fetch(this.formTarget.action, {
+    Turbo.fetch(this.formTarget.action, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Accept: "text/vnd.turbo-stream.html",
+        Accept: "text/vnd.turbo-stream.html, text/html, application/xhtml+xml",
       },
+      credentials: "same-origin",
       body: JSON.stringify(jsonObject),
-    })
-      .then((r) => r.text())
-      .then((html) => Turbo.renderStreamMessage(html));
+      redirect: "follow",
+    }).then((response) => handleFormResponse(response));
   }
 
   #toJson(formData) {

@@ -4,8 +4,6 @@ module Projects
   module Samples
     # Controller actions for Project Samples Deletions
     class DeletionsController < Projects::ApplicationController
-      include Turbo::Streams::ActionHelper
-
       before_action :sample, only: %i[new destroy]
       before_action :new_dialog_partial, only: :new
 
@@ -36,7 +34,7 @@ module Projects
         end
       end
 
-      def destroy_multiple # rubocop:disable Metrics/AbcSize
+      def destroy_multiple
         samples_to_delete_count = destroy_multiple_params['sample_ids'].count
 
         deleted_samples_count = ::Samples::DestroyService.new(@project, current_user, destroy_multiple_params).execute
@@ -52,7 +50,7 @@ module Projects
           flash[:success] = t('.success')
         end
 
-        render turbo_stream: turbo_stream_action_tag('redirect', location: namespace_project_samples_path)
+        redirect_to namespace_project_samples_path, status: :see_other
       end
 
       private

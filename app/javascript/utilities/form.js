@@ -6,6 +6,11 @@ export function createHiddenInput(name, value) {
   return element;
 }
 
+/**
+ * Converts FormData to a JSON object with normalized parameters.
+ * @param {FormData} formData - The FormData object to convert
+ * @returns {Object} The normalized JSON parameters
+ */
 export function formDataToJsonParams(formData) {
   let jsonParams = new Object();
 
@@ -16,8 +21,27 @@ export function formDataToJsonParams(formData) {
   return jsonParams;
 }
 
-// Stolen from Rack, converted from Ruby to Javascript
-// https://github.com/rack/rack/blob/e6376927801774e25a3c1e5b977ff2fd2209e799/lib/rack/query_parser.rb#L124
+/**
+ * Custom error class for parameter type errors.
+ */
+export class ParameterTypeError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "ParameterTypeError";
+  }
+}
+
+/**
+ * Normalizes form parameters into a nested object structure.
+ * Stolen from Rack, converted from Ruby to Javascript
+ * https://github.com/rack/rack/blob/e6376927801774e25a3c1e5b977ff2fd2209e799/lib/rack/query_parser.rb#L124
+ * @param {Object} params - The target object to store normalized parameters
+ * @param {string} name - The parameter name to normalize
+ * @param {*} v - The parameter value
+ * @param {number} depth - The current nesting depth
+ * @returns {Object} The normalized parameters object
+ * @throws {ParameterTypeError} When parameter types don't match expected structure
+ */
 export function normalizeParams(params, name, v, depth) {
   let k, after, child_key, start;
 
@@ -28,8 +52,8 @@ export function normalizeParams(params, name, v, depth) {
     // Start of parsing, don't treat [] or [ at start of string specially
     if ((start = name.indexOf("[", 1)) !== -1) {
       // Start of parameter nesting, use part before brackets as key
-      k = name.substr(0, start);
-      after = name.substr(start, name.length);
+      k = name.substring(0, 0 + start);
+      after = name.substring(start, start + name.length);
     } else {
       // Plain parameter with no nesting
       k = name;
@@ -38,11 +62,11 @@ export function normalizeParams(params, name, v, depth) {
   } else if (name.startsWith("[]")) {
     // Array nesting
     k = "[]";
-    after = name.substr(2, name.length);
+    after = name.substring(2, 2 + name.length);
   } else if (name.startsWith("[") && (start = name.indexOf("]", 1)) !== -1) {
     // Hash nesting, use the part inside brackets as the key
-    k = name.substr(1, start - 1);
-    after = name.substr(start + 1, name.length);
+    k = name.substring(1, 1 + start - 1);
+    after = name.substring(start + 1, start + 1 + name.length);
   } else {
     // Probably malformed input, nested but not starting with [
     // treat full name as key for backwards compatibility.
@@ -86,7 +110,7 @@ export function normalizeParams(params, name, v, depth) {
       !!child_key.indexOf("]")
     ) {
       // Handle other nested array parameters
-      child_key = after.substr(2, after.length);
+      child_key = after.substring(2, 2 + after.length);
     }
 
     params[k] ||= [];
@@ -122,4 +146,39 @@ export function normalizeParams(params, name, v, depth) {
   }
 
   return params;
+}
+
+/**
+ * Handles response from Turbo submitted form.
+ * @param {Response} response - The Response object
+ */
+export async function handleFormResponse(response) {
+  const fetchResponse = new Turbo.FetchResponse(response);
+
+  const responseHTML = await fetchResponse.responseHTML;
+  if (responseHTML) {
+    const { statusCode, redirected, contentType } = fetchResponse;
+    if (contentType.startsWith("text/vnd.turbo-stream.html")) {
+      Turbo.renderStreamMessage(responseHTML);
+    } else {
+      const action = getActionForFormSubmission(fetchResponse);
+      const visitOptions = {
+        action,
+        response: { statusCode, responseHTML, redirected },
+      };
+      Turbo.visit(fetchResponse.location, visitOptions);
+    }
+  }
+}
+
+/**
+ * Get Turbo action from response
+ * @param {Turbo.FetchResponse} response - The FetchResponse object
+ * @returns {String} the action for the Turbo visit
+ */
+function getActionForFormSubmission(fetchResponse) {
+  const sameLocationRedirect =
+    fetchResponse.redirected &&
+    fetchResponse.location.href === window.location?.href;
+  return sameLocationRedirect ? "replace" : "advance";
 }

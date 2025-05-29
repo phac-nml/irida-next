@@ -5,7 +5,6 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   include BreadcrumbNavigation
   include ListActions
   include Metadata
-  include Turbo::Streams::ActionHelper
 
   before_action :data_export, only: %i[destroy show]
   before_action :data_exports, only: %i[destroy]
@@ -54,7 +53,7 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
                        export_type: data_export_params['export_type'] }
     else
       flash[:success] = t('.success', name: @data_export.name || @data_export.id)
-      render turbo_stream: turbo_stream_action_tag('redirect', location: data_export_path(@data_export))
+      redirect_to data_export_path(@data_export), status: :see_other
     end
   end
 

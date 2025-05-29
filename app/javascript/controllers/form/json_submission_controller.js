@@ -1,5 +1,9 @@
 import { Controller } from "@hotwired/stimulus";
-import { formDataToJsonParams, normalizeParams } from "utilities/form";
+import {
+  formDataToJsonParams,
+  normalizeParams,
+  handleFormResponse,
+} from "utilities/form";
 
 export default class extends Controller {
   static targets = ["form"];
@@ -18,18 +22,20 @@ export default class extends Controller {
     let method = "post";
     if (formData.get("_method")) {
       method = formData.get("_method");
+      delete jsonObject._method;
     }
 
-    fetch(this.formTarget.action, {
-      method: method,
+    Turbo.fetch(this.formTarget.action, {
+      method: method.toUpperCase(),
       headers: {
         "Content-Type": "application/json",
-        Accept: "text/vnd.turbo-stream.html",
+        Accept: "text/vnd.turbo-stream.html, text/html, application/xhtml+xml",
       },
+      credentials: "same-origin",
       body: JSON.stringify(jsonObject),
+      redirect: "follow",
     })
-      .then((r) => r.text())
-      .then((html) => Turbo.renderStreamMessage(html))
+      .then((response) => handleFormResponse(response))
       .finally(() => {
         if (this.clearSelectionValue) {
           this.selectionOutlet.clear();
