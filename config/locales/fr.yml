@@ -695,6 +695,8 @@ fr:
       index:
         all: Tous
         create_project_button: Nouveau projet
+        no_projects: Aucun projet trouvé
+        no_projects_description: Vous n’avez actuellement aucun projet.
         personal: Personnel
         row:
           samples: Échantillons
