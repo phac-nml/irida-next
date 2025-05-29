@@ -4,7 +4,7 @@ module Groups
   module Samples
     # Service used to Delete Samples
     class DestroyService < BaseService
-      attr_accessor :sample, :sample_ids, :group
+      attr_accessor :sample_ids, :group
 
       def initialize(group, user = nil, params = {})
         super(user, params)
