@@ -1,6 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
 import { formDataToJsonParams, normalizeParams } from "utilities/form";
-import { handleFormResponse } from "../utilities/form";
 
 function preventEscapeListener(event) {
   if (event.key === "Escape") {
@@ -95,7 +94,9 @@ export default class extends Controller {
       credentials: "same-origin",
       body: JSON.stringify(jsonObject),
       redirect: "follow",
-    }).then((response) => handleFormResponse(response));
+    })
+      .then((r) => r.text())
+      .then((html) => Turbo.renderStreamMessage(html));
   }
 
   #toJson(formData) {
