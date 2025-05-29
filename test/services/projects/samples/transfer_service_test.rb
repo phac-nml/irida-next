@@ -147,8 +147,10 @@ module Projects
                      @group12.metadata_summary)
 
         assert_no_changes -> { @group12.reload.metadata_summary } do
-          Projects::Samples::TransferService.new(@project31, @john_doe).execute(@sample_transfer_params1[:new_project_id],
-                                                                                @sample_transfer_params1[:sample_ids])
+          Projects::Samples::TransferService.new(@project31, @john_doe).execute(
+            @sample_transfer_params1[:new_project_id],
+            @sample_transfer_params1[:sample_ids]
+          )
         end
 
         assert_equal({}, @project31.namespace.reload.metadata_summary)
@@ -157,8 +159,10 @@ module Projects
         assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12b.reload.metadata_summary)
 
         assert_no_changes -> { @group12.reload.metadata_summary } do
-          Projects::Samples::TransferService.new(@project30, @john_doe).execute(@sample_transfer_params2[:new_project_id],
-                                                                                @sample_transfer_params2[:sample_ids])
+          Projects::Samples::TransferService.new(@project30, @john_doe).execute(
+            @sample_transfer_params2[:new_project_id],
+            @sample_transfer_params2[:sample_ids]
+          )
         end
 
         assert_equal({}, @project30.namespace.reload.metadata_summary)
@@ -179,8 +183,10 @@ module Projects
         assert_equal(4, @group12.samples_count)
 
         assert_no_changes -> { @group12.reload.samples_count } do
-          Projects::Samples::TransferService.new(@project31, @john_doe).execute(@sample_transfer_params1[:new_project_id],
-                                                                                @sample_transfer_params1[:sample_ids])
+          Projects::Samples::TransferService.new(@project31, @john_doe).execute(
+            @sample_transfer_params1[:new_project_id],
+            @sample_transfer_params1[:sample_ids]
+          )
         end
 
         assert_equal(0, @subgroup12aa.reload.samples_count)
@@ -188,8 +194,10 @@ module Projects
         assert_equal(3, @subgroup12b.reload.samples_count)
 
         assert_no_changes -> { @group12.reload.samples_count } do
-          Projects::Samples::TransferService.new(@project30, @john_doe).execute(@sample_transfer_params2[:new_project_id],
-                                                                                @sample_transfer_params2[:sample_ids])
+          Projects::Samples::TransferService.new(@project30, @john_doe).execute(
+            @sample_transfer_params2[:new_project_id],
+            @sample_transfer_params2[:sample_ids]
+          )
         end
 
         assert_equal(0, @subgroup12aa.reload.samples_count)
