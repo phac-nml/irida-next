@@ -420,34 +420,47 @@ export default class extends Controller {
   }
 
   #insertFileContent(cell, columnName, index) {
-    let href = `/-/workflow_executions/file_selector/new?file_selector%5Battachable_id%5D=${encodeURIComponent(this.#samplesheetAttributes[index]["sample_id"])}&file_selector%5Battachable_type%5D=Sample&file_selector%5Bindex%5D=${index}&file_selector%5Bpattern%5D=${encodeURIComponent(this.#samplesheetProperties[columnName]["pattern"])}&file_selector%5Bproperty%5D=${encodeURIComponent(columnName)}&file_selector%5Bselected_id%5D=${encodeURIComponent(this.#samplesheetAttributes[index]["samplesheet_params"][columnName]["attachment_id"])}&`;
-
-    this.#requiredColumns.forEach((requiredColumn) => {
-      href = href.concat(
-        `file_selector%5Brequired_properties%5D%5B%5D=${encodeURIComponent(requiredColumn)}&`,
-      );
-    });
-
-    // check if the sample column is present and if it's required as it's not added to this.#requiredColumns
-    if (
-      this.#samplesheetProperties.hasOwnProperty("sample") &&
-      this.#samplesheetProperties["sample"]["required"]
-    ) {
-      // add sample if it's required
-      href = href.concat(`file_selector%5Brequired_properties%5D%5B%5D=sample`);
-    } else {
-      // else remove ampersand from last href param
-      href = href.slice(0, -1);
-    }
-
     const fileContent = this.fileTemplateTarget.content.cloneNode(true);
     const fileLink = fileContent.querySelector("a");
+
+    // Build URL parameters
+    const params = new URLSearchParams({
+      "file_selector[attachable_id]":
+        this.#samplesheetAttributes[index].sample_id,
+      "file_selector[attachable_type]": "Sample",
+      "file_selector[index]": index,
+      "file_selector[pattern]": this.#samplesheetProperties[columnName].pattern,
+      "file_selector[property]": columnName,
+      "file_selector[selected_id]":
+        this.#samplesheetAttributes[index].samplesheet_params[columnName]
+          .attachment_id,
+    });
+
+    // Add required properties
+    const requiredProperties = [...this.#requiredColumns];
+
+    // Check if sample column is required
+    if (this.#samplesheetProperties.sample?.required) {
+      requiredProperties.push("sample");
+    }
+
+    // Add required properties to params
+    requiredProperties.forEach((prop) => {
+      params.append("file_selector[required_properties][]", prop);
+    });
+
+    // Set link attributes
+    const href = `/-/workflow_executions/file_selector/new?${params.toString()}`;
+    const linkId = `${this.#samplesheetAttributes[index].sample_id}_${columnName}`;
+    const filename =
+      this.#samplesheetAttributes[index].samplesheet_params[columnName]
+        .filename;
+
     fileLink.setAttribute("href", href);
-    fileLink.id = `${this.#samplesheetAttributes[index]["sample_id"]}_${columnName}`;
-    fileLink.textContent =
-      this.#samplesheetAttributes[index]["samplesheet_params"][columnName][
-        "filename"
-      ];
+    fileLink.id = linkId;
+    fileLink.textContent = filename;
+
+    // Append to cell
     cell.appendChild(fileContent);
   }
 
