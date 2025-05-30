@@ -51,61 +51,12 @@
 #
 # 📚 See also:
 #   - Pathogen::Form::RadioButtonStyles for style helpers
+#   - Pathogen::Form::FormHelpers for common form functionality
 #
 # ✨ Enjoy accessible, beautiful forms!
 
 module Pathogen
   module Form
-    # Generic form helper methods that can be used across form components
-    module FormHelpers
-      def help_text_id
-        @help_text_id ||= "#{input_id}_help"
-      end
-
-      def input_name
-        return @input_name if @input_name.present?
-        return "#{@form.object_name}[#{@attribute}]" if @form
-
-        @attribute.to_s
-      end
-
-      def input_id
-        base = if @form
-                 "#{@form.object_name}_#{@attribute}_#{@value}"
-               else
-                 "#{input_name}_#{@value}"
-               end
-        base.gsub(/[\[\]]+/, '_').chomp('_')
-      end
-
-      def form_attributes
-        describedby = [
-          @described_by,
-          (@help_text.present? ? help_text_id : nil)
-        ].compact.join(' ')
-
-        {
-          disabled: @disabled,
-          class: input_classes(@user_class),
-          aria: aria_attributes.merge(describedby: describedby.presence),
-          tabindex: @disabled ? -1 : 0,
-          onchange: @onchange
-        }.compact
-      end
-
-      def aria_attributes
-        {
-          disabled: @disabled.to_s,
-          describedby: @described_by,
-          controls: @controls
-        }.compact
-      end
-
-      def input_classes(user_class)
-        radio_button_classes(user_class)
-      end
-    end
-
     # 🟢 Pathogen::Form::RadioButtonComponent 🟢
     #
     # This component renders a single radio button with a label and optional help text.
@@ -148,6 +99,11 @@ module Pathogen
               help_html
             end
         end
+      end
+
+      # Satisfy FormHelpers contract for input_classes
+      def input_classes(user_class)
+        radio_button_classes(user_class)
       end
 
       private
