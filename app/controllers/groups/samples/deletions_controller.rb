@@ -16,7 +16,7 @@ module Groups
                                                  }), status: :ok
       end
 
-      def destroy
+      def destroy_multiple
         samples_to_delete_count = destroy_samples_params['sample_ids'].count
 
         deleted_samples_count = Groups::Samples::DestroyService.new(@group, current_user,
@@ -48,7 +48,7 @@ module Groups
 
       def new_dialog_paths
         @list_path = list_group_samples_path(list_class: 'sample')
-        @destroy_path = group_samples_deletion_path(@group)
+        @destroy_path = destroy_multiple_group_samples_deletion_path(@group)
       end
 
       def destroy_samples_params

@@ -54,7 +54,7 @@ constraints(::Constraints::GroupUrlConstrainer.new) do
           resource :spreadsheet_import, only: %i[create new]
           resource :transfer, only: %i[create new]
           resource :deletion, only: %i[new] do
-            post :destroy
+            post :destroy_multiple
           end
         end
       end
