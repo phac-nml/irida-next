@@ -74,7 +74,7 @@ module Pathogen
       # @note Provides subtle, smaller text with appropriate spacing
       #       and dark mode support
       def help_text_classes
-        'text-sm text-slate-500 mt-1 dark:text-slate-400'
+        'text-sm leading-relaxed text-slate-500 mt-1 dark:text-slate-400'
       end
     end
   end
