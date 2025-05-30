@@ -1,9 +1,24 @@
+<%# 🎯 Tab wrapper with presentation role %>
 <%= render Pathogen::BaseComponent.new(**@wrapper_arguments) do %>
+  <%# 🎨 Tab button with proper ARIA attributes %>
   <%= render Pathogen::BaseComponent.new(**@system_arguments) do %>
-    <%= icon %>
+    <%# 🎨 Icon if present %>
+    <% if icon %>
+      <span class="mr-2" aria-hidden="true">
+        <%= icon %>
+      </span>
+    <% end %>
+
+    <%# 📝 Tab text %>
     <span>
       <%= @text %>
     </span>
-    <%= count %>
+
+    <%# 🎯 Count badge if present %>
+    <% if count %>
+      <span aria-hidden="true">
+        <%= count %>
+      </span>
+    <% end %>
   <% end %>
 <% end %>
