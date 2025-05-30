@@ -529,7 +529,6 @@ en:
       navigation_aria_label: Breadcrumb navigation
     clipboard:
       copied: Copied!
-      title: Copy to clipboard
     confirmation:
       cancel: Cancel
       confirm: Confirm
@@ -586,6 +585,8 @@ en:
         number_of_samples: Samples
       samples_title: Samples Recently Updated
       view_more: View more
+    puid:
+      title: 'Copy to clipboard value: %{puid}'
     token:
       copied: Copied!
       copy: Copy to clipboard
