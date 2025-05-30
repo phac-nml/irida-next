@@ -70,14 +70,12 @@
                 <% end %>
               <% end %>
             <% end %>
-            <% if @renders_row_actions %>
-              <%= render_cell(
+            <%= render_cell(
                 tag: 'th',
                 scope: 'col',
                 classes: class_names('px-3 py-3')
               ) do %>
-                <%= t(".actions") %>
-              <% end %>
+              <%= t(".actions") %>
             <% end %>
           </tr>
         </thead>
@@ -217,22 +215,31 @@
                   <% end %>
                 <% end %>
               <% end %>
-              <% if @renders_row_actions %>
-                <%= render_cell(
+              <%= render_cell(
                   tag: 'td',
                   classes: class_names('px-3 py-3 space-x-2')
                 ) do %>
-                  <% if @row_actions[:destroy] %>
-                    <%= link_to(
-                      t(".delete"),
-                      destroy_path(attachment.id),
-                      data: {
-                        turbo_stream: true,
-                      },
-                      class:
-                        "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                    ) %>
-                  <% end %>
+                <% if Flipper.enabled?(:attachments_preview) && attachment.previewable? %>
+                  <%= link_to(
+                    "Preview",
+                    attachment_path(attachment),
+                    data: {
+                      turbo_stream: true,
+                    },
+                    class:
+                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                  ) %>
+                <% end %>
+                <% if @row_actions[:destroy] %>
+                  <%= link_to(
+                    t(".delete"),
+                    destroy_path(attachment.id),
+                    data: {
+                      turbo_stream: true,
+                    },
+                    class:
+                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                  ) %>
                 <% end %>
               <% end %>
             <% end %>

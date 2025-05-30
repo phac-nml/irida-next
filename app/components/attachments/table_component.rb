@@ -17,8 +17,9 @@ module Attachments
       attachments,
       pagy,
       q,
-      sample,
+      sample, # TODO: Consolidate sample, namespace, and workflow_execution to and attachable & attachable_type if needed.
       namespace,
+      workflow_execution,
       render_individual_attachments,
       has_attachments,
       row_actions: false,
@@ -31,13 +32,12 @@ module Attachments
       @q = q
       @sample = sample
       @namespace = namespace
+      @workflow_execution = workflow_execution
       @render_individual_attachments = render_individual_attachments
       @has_attachments = has_attachments
       @abilities = abilities
       @row_actions = row_actions
       @empty = empty
-      # 🚀 Determine if any row actions are enabled for rendering the actions column.
-      @renders_row_actions = @row_actions.any? { |_key, value| value }
       @system_arguments = system_arguments
 
       # 📝 Set the columns to be displayed in the table.
@@ -88,7 +88,7 @@ module Attachments
         group_attachment_new_destroy_path(
           attachment_id:
         )
-      else
+      elsif @namespace.project_namespace?
         namespace_project_attachment_new_destroy_path(
           attachment_id:
         )

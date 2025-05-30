@@ -1,3 +1,23 @@
+<%= render Attachments::TableComponent.new(
+  @attachments,
+  @pagy,
+  @q,
+  nil,
+  nil,
+  @workflow_execution,
+  @render_individual_attachments,
+  @has_attachments,
+  abilities: {
+  },
+  row_actions: {
+  },
+  empty: {
+    icon_name: :document_text,
+    title: "No Files",
+    description: "There are no files associated with this workflow execution.",
+  },
+) %>
+
 <div class="relative overflow-x-auto">
   <table
     id="files-table"
