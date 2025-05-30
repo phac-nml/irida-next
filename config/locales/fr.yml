@@ -1680,16 +1680,6 @@ fr:
           description: Êtes-vous sûr de vouloir supprimer l’échantillon '%{sample_name}'?
           submit_button: Retirer
           title: Supprimer l’échantillon
-        new_multiple_deletions_dialog:
-          description:
-            plural: "Les échantillons COUNT_PLACEHOLDER suivants ont été sélectionnés aux fins de suppression :"
-            singular: "L’échantillon suivant a été sélectionné aux fins de suppression :"
-            zero: Aucun échantillon n’a été sélectionné pour être supprimer
-          loading: Chargement...
-          samples: Échantillons
-          spinner: Suppression des échantillons. Cela peut prendre un certain temps...
-          submit_button: Confirmer
-          title: Supprimer les échantillons
       edit:
         cancel_button: Annuler
         form:
@@ -2032,6 +2022,8 @@ fr:
         spinner: Suppression des échantillons. Cela peut prendre un certain temps...
         submit_button: Confirmer
         title: Supprimer les échantillons
+      errors:
+        ok_button: OK
       metadata:
         editing_field_cell:
           dialog:
