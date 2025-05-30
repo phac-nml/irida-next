@@ -16,7 +16,7 @@ module Groups
 
     test 'should destroy samples' do
       assert_difference('Sample.count', -2) do
-        post group_samples_deletion_path(@namespace),
+        post destroy_multiple_group_samples_deletion_path(@namespace),
              params: {
                destroy_samples: {
                  sample_ids: [@sample1.id, @sample2.id]
@@ -30,7 +30,7 @@ module Groups
 
     test 'should not destroy sample, if it does not belong to the group' do
       assert_no_difference('Sample.count') do
-        post group_samples_deletion_path(@namespace),
+        post destroy_multiple_group_samples_deletion_path(@namespace),
              params: {
                destroy_samples: {
                  sample_ids: [@sample23.id]
@@ -44,7 +44,7 @@ module Groups
       sign_in users(:ryan_doe)
 
       assert_no_difference('Sample.count') do
-        post group_samples_deletion_path(@namespace),
+        post destroy_multiple_group_samples_deletion_path(@namespace),
              params: {
                destroy_samples: {
                  sample_ids: [@sample23.id]
@@ -70,7 +70,7 @@ module Groups
 
     test 'partially deleting multiple samples' do
       assert_difference('Sample.count', -2) do
-        post group_samples_deletion_path(@namespace),
+        post destroy_multiple_group_samples_deletion_path(@namespace),
              params: {
                destroy_samples: {
                  sample_ids: [@sample1.id, @sample2.id, 'invalid_sample_id']
@@ -87,7 +87,7 @@ module Groups
 
     test 'deleting no samples' do
       assert_no_difference('Sample.count') do
-        post group_samples_deletion_path(@namespace),
+        post destroy_multiple_group_samples_deletion_path(@namespace),
              params: {
                destroy_samples: {
                  sample_ids: %w[invalid_sample_id_1 invalid_sample_id_2 invalid_sample_id_3]
@@ -104,7 +104,7 @@ module Groups
       sample66 = samples(:sample66)
 
       assert_no_difference('Sample.count') do
-        post group_samples_deletion_path(@namespace),
+        post destroy_multiple_group_samples_deletion_path(@namespace),
              params: {
                destroy_samples: {
                  sample_ids: [sample65.id, sample66.id]
