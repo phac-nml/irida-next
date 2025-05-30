@@ -55,7 +55,6 @@ module Groups
         export_data: allowed_to?(:export_data?, @group),
         update_sample_metadata: allowed_to?(:update_sample_metadata?, @group),
         import_samples_and_metadata: allowed_to?(:import_samples_and_metadata?, @group),
-        submit_workflow: allowed_to?(:submit_workflow?, @group),
         transfer_sample: allowed_to?(:transfer_sample?, @group),
         destroy_sample: allowed_to?(:destroy_sample?, @group)
       }
