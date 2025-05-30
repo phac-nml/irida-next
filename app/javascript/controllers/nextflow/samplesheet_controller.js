@@ -18,7 +18,7 @@ export default class extends Controller {
     "dropdownTemplate",
     "fileTemplate",
     "metadataTemplate",
-    "textTemplate",
+    "textInputTemplate",
     "previousBtn",
     "nextBtn",
     "pageNum",
@@ -352,7 +352,7 @@ export default class extends Controller {
               this.#insertMetadataContent(cell, columnName, sampleIndex);
               break;
             case "input_cell":
-              this.#insertTextContent(cell, columnName, sampleIndex);
+              this.#insertTextInputContent(cell, columnName, sampleIndex);
               break;
           }
           // add cell content to the row
@@ -382,92 +382,120 @@ export default class extends Controller {
   }
 
   #insertSampleContent(cell, columnName, index) {
-    const sampleContent = this.sampleIdentifierTemplateTarget.innerHTML.replace(
-      /SAMPLE_IDENTIFIER/g,
-      this.#retrieveFormData(index, columnName),
+    const sampleContent =
+      this.sampleIdentifierTemplateTarget.content.cloneNode(true);
+
+    sampleContent.querySelector("div").textContent = this.#retrieveFormData(
+      index,
+      columnName,
     );
-    cell.insertAdjacentHTML("beforeend", sampleContent);
+
+    cell.appendChild(sampleContent);
   }
 
   #insertDropdownContent(cell, columnName, index, options) {
-    const dropdown = this.dropdownTemplateTarget.innerHTML
-      .replace(/INDEX_PLACEHOLDER/g, index)
-      .replace(/COLUMN_NAME_PLACEHOLDER/g, columnName);
+    const name = `workflow_execution[samples_workflow_executions_attributes][${index}][samplesheet_params][${columnName}]`;
+    const id = `workflow_execution_samples_workflow_executions_attributes_${index}_samplesheet_params_${columnName}`;
 
-    cell.insertAdjacentHTML("beforeend", dropdown);
-    let select = cell.lastElementChild;
+    const dropdownContent = this.dropdownTemplateTarget.content.cloneNode(true);
+    dropdownContent
+      .querySelector("select")
+      .setAttribute("aria-label", columnName);
+    dropdownContent.querySelector("select").setAttribute("name", name);
+    dropdownContent.querySelector("select").setAttribute("id", id);
+
     for (let j = 0; j < options.length; j++) {
       let option = document.createElement("option");
       option.value = options[j];
       option.innerHTML = options[j];
-      select.appendChild(option);
+      dropdownContent.querySelector("select").appendChild(option);
     }
 
-    select.value = this.#retrieveFormData(index, columnName);
+    dropdownContent.querySelector("select").value = this.#retrieveFormData(
+      index,
+      columnName,
+    );
+
+    cell.appendChild(dropdownContent);
   }
 
   #insertFileContent(cell, columnName, index) {
-    let pattern = this.#samplesheetProperties[columnName]["pattern"];
-    if (pattern) {
-      // Need to encode pattern so that + is not interpreted as a space, etc.
-      pattern = encodeURIComponent(pattern);
+    const fileContent = this.fileTemplateTarget.content.cloneNode(true);
+    const fileLink = fileContent.querySelector("a");
+
+    // Build URL parameters
+    const params = new URLSearchParams({
+      "file_selector[attachable_id]":
+        this.#samplesheetAttributes[index].sample_id,
+      "file_selector[attachable_type]": "Sample",
+      "file_selector[index]": index,
+      "file_selector[pattern]": this.#samplesheetProperties[columnName].pattern,
+      "file_selector[property]": columnName,
+      "file_selector[selected_id]":
+        this.#samplesheetAttributes[index].samplesheet_params[columnName]
+          .attachment_id,
+    });
+
+    // Add required properties
+    const requiredProperties = [...this.#requiredColumns];
+
+    // Check if sample column is required
+    if (this.#samplesheetProperties.sample?.required) {
+      requiredProperties.push("sample");
     }
 
-    const file = this.fileTemplateTarget.innerHTML
-      .replace(/INDEX_PLACEHOLDER/g, index)
-      .replace(/PROPERTY_PLACEHOLDER/g, columnName)
-      .replace(
-        /ATTACHABLE_ID_PLACEHOLDER/g,
-        this.#samplesheetAttributes[index]["sample_id"],
-      )
-      .replace(/ATTACHABLE_TYPE_PLACEHOLDER/g, "Sample")
-      .replace(
-        /SELECTED_ID_PLACEHOLDER/g,
-        this.#samplesheetAttributes[index]["samplesheet_params"][columnName][
-          "attachment_id"
-        ],
-      )
-      .replace(/PATTERN_PLACEHOLDER/g, pattern)
-      .replace(
-        /FILENAME_PLACEHOLDER/g,
-        this.#samplesheetAttributes[index]["samplesheet_params"][columnName][
-          "filename"
-        ],
-      );
-    cell.insertAdjacentHTML("beforeend", file);
+    // Add required properties to params
+    requiredProperties.forEach((prop) => {
+      params.append("file_selector[required_properties][]", prop);
+    });
+
+    // Set link attributes
+    const href = `/-/workflow_executions/file_selector/new?${params.toString()}`;
+    const linkId = `${this.#samplesheetAttributes[index].sample_id}_${columnName}`;
+    const filename =
+      this.#samplesheetAttributes[index].samplesheet_params[columnName]
+        .filename;
+
+    fileLink.setAttribute("href", href);
+    fileLink.id = linkId;
+    fileLink.textContent = filename;
+
+    // Append to cell
+    cell.appendChild(fileContent);
   }
 
   #insertMetadataContent(cell, columnName, index) {
     const metadataValue = this.#retrieveFormData(index, columnName);
     if (metadataValue) {
-      const metadata = this.metadataTemplateTarget.innerHTML.replace(
-        /METADATA_PLACEHOLDER/g,
-        this.#retrieveFormData(index, columnName),
-      );
-      cell.insertAdjacentHTML("beforeend", metadata);
+      const metadataContent =
+        this.metadataTemplateTarget.content.cloneNode(true);
+      metadataContent.querySelector("span").textContent = metadataValue;
+      cell.appendChild(metadataContent);
     } else {
-      this.#insertTextContent(cell, columnName, index);
+      this.#insertTextInputContent(cell, columnName, index);
     }
   }
 
-  #insertTextContent(cell, columnName, index) {
-    const text = this.textTemplateTarget.innerHTML
-      .replace(
-        /NAME_PLACEHOLDER/g,
-        `workflow_execution[samples_workflow_executions_attributes][${index}][samplesheet_params][${columnName}]`,
-      )
-      .replace(
-        /ID_PLACEHOLDER/g,
-        `workflow_execution_samples_workflow_executions_attributes_${index}_samplesheet_params_${columnName}`,
-      );
+  #insertTextInputContent(cell, columnName, index) {
+    const textInputContent =
+      this.textInputTemplateTarget.content.cloneNode(true);
+    const name = `workflow_execution[samples_workflow_executions_attributes][${index}][samplesheet_params][${columnName}]`;
+    const id = `workflow_execution_samples_workflow_executions_attributes_${index}_samplesheet_params_${columnName}`;
+    const input = textInputContent.querySelector("input");
+    const label = textInputContent.querySelector("label");
 
-    cell.insertAdjacentHTML("beforeend", text);
-    // requery to retrieve HTML node rather than textNode
-    let textCell = cell.lastElementChild;
+    input.setAttribute("name", name);
+    input.setAttribute("id", id);
+
+    label.setAttribute("for", id);
+    label.textContent = name;
+
     const formValue = this.#retrieveFormData(index, columnName);
     if (formValue) {
-      textCell.value = formValue;
+      input.value = formValue;
     }
+
+    cell.appendChild(textInputContent);
   }
 
   #setPagination() {
@@ -639,11 +667,16 @@ export default class extends Controller {
       }, 1000);
     }
 
-    const metadataForm = this.metadataHeaderFormTarget.innerHTML
-      .replace(/HEADER_PLACEHOLDER/g, metadataSamplesheetColumn)
-      .replace(/FIELD_PLACEHOLDER/g, metadataField);
+    const metadataFormContent =
+      this.metadataHeaderFormTarget.content.cloneNode(true);
 
-    this.element.insertAdjacentHTML("beforeend", metadataForm);
+    const filledMetadataForm = this.#appendInputsToMetadataForm(
+      metadataFormContent,
+      metadataField,
+      metadataSamplesheetColumn,
+    );
+
+    this.element.appendChild(filledMetadataForm);
 
     this.element.lastElementChild.addEventListener(
       "turbo:before-fetch-request",
@@ -662,6 +695,48 @@ export default class extends Controller {
 
     this.element.lastElementChild.requestSubmit();
     this.element.lastElementChild.remove();
+  }
+
+  #appendInputsToMetadataForm(metadataFormContent, metadataField, columnName) {
+    // add turbo_stream, which metadata column and the selected metadata field inputs
+    const formInputValues = [
+      {
+        name: "format",
+        value: "turbo_stream",
+      },
+      {
+        name: "header",
+        value: columnName,
+      },
+      {
+        name: "field",
+        value: metadataField,
+      },
+    ];
+
+    // add sample ids
+    Object.values(this.#samplesheetAttributes).forEach((sample) => {
+      formInputValues.push({
+        name: "sample_ids[]",
+        value: sample.sample_id,
+      });
+    });
+
+    const form = metadataFormContent.querySelector("form");
+    formInputValues.forEach((inputValue) => {
+      form.appendChild(this.#createMetadataFormInput(inputValue));
+    });
+
+    return metadataFormContent;
+  }
+
+  #createMetadataFormInput(inputValue) {
+    const input = document.createElement("input");
+    input.setAttribute("autocomplete", "off");
+    input.setAttribute("name", inputValue["name"]);
+    input.setAttribute("value", inputValue["value"]);
+    input.setAttribute("type", "hidden");
+    return input;
   }
 
   #compactFormData() {

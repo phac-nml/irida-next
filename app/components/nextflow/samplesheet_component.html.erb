@@ -115,53 +115,39 @@
 </template>
 
 <template data-nextflow--samplesheet-target="sampleIdentifierTemplate">
-  <div class="p-2.5">
-    SAMPLE_IDENTIFIER
-  </div>
+  <div class="p-2.5"></div>
 </template>
 
 <template data-nextflow--samplesheet-target="dropdownTemplate">
   <select
-    aria-label="COLUMN_NAME_PLACEHOLDER"
     class="
       w-full p-2.5 dark:bg-slate-700 bg-slate-50 border-none dark:border-none
       dark:placeholder-slate-400 text-inherit text-sm cursor-pointer
     "
     data-action="change->nextflow--samplesheet#updateEditableSamplesheetData"
-    name="workflow_execution[samples_workflow_executions_attributes][INDEX_PLACEHOLDER][samplesheet_params][COLUMN_NAME_PLACEHOLDER]"
-    id="workflow_execution_samples_workflow_executions_attributes_INDEX_PLACEHOLDER_samplesheet_params_COLUMN_NAME_PLACEHOLDER"
   >
     <option value="" label=" "></option>
   </select>
 </template>
 
 <template data-nextflow--samplesheet-target="fileTemplate">
-  <%= link_to "FILENAME_PLACEHOLDER",
-  new_workflow_executions_file_selector_path(
-    "file_selector[attachable_id]": "ATTACHABLE_ID_PLACEHOLDER",
-    "file_selector[attachable_type]": "ATTACHABLE_TYPE_PLACEHOLDER",
-    "file_selector[index]": "INDEX_PLACEHOLDER",
-    "file_selector[selected_id]": "SELECTED_ID_PLACEHOLDER",
-    "file_selector[property]": "PROPERTY_PLACEHOLDER",
-    "file_selector[pattern]": "PATTERN_PLACEHOLDER",
-    "file_selector[required_properties]": @required_properties,
-  ),
-  data: {
-    turbo_stream: "true",
-  },
-  id: "ATTACHABLE_ID_PLACEHOLDER_PROPERTY_PLACEHOLDER",
-  class:
-    "block p-2 text-sm border-2 border-transparent cursor-pointer bg-inherit text-inherit focus:relative" %>
+  <a
+    data-turbo-stream="true"
+    class="
+      block p-2 text-sm border-2 border-transparent cursor-pointer bg-inherit
+      text-inherit focus:relative
+    "
+  ></a>
 </template>
 
 <template data-nextflow--samplesheet-target="metadataTemplate">
   <div class="p-2.5 text-nowrap">
-    <span class="h-3.5 inline-block">METADATA_PLACEHOLDER</span>
+    <span class="h-3.5 inline-block"></span>
   </div>
 </template>
 
-<template data-nextflow--samplesheet-target="textTemplate">
-  <label for="ID_PLACEHOLDER" class="sr-only">NAME_PLACEHOLDER</label>
+<template data-nextflow--samplesheet-target="textInputTemplate">
+  <label class="sr-only"></label>
   <input
     class="
       block p-2 text-sm border-2 border-transparent bg-inherit text-inherit w-full
@@ -169,8 +155,6 @@
     "
     data-action="change->nextflow--samplesheet#updateEditableSamplesheetData"
     type="text"
-    name="NAME_PLACEHOLDER"
-    id="ID_PLACEHOLDER"
   />
 </template>
 
@@ -222,24 +206,6 @@
 
 <template data-nextflow--samplesheet-target="metadataHeaderForm">
   <%= form_with url: fields_workflow_executions_metadata_path do |f| %>
-    <%= f.hidden_field :format,
-                   value: "turbo_stream",
-                   id: "field_HEADER_PLACEHOLDER_turbo" %>
-    <%= f.hidden_field :namespace_id,
-                   value: namespace_id,
-                   id: "namespace_HEADER_PLACEHOLDER" %>
-    <%= f.hidden_field :header,
-                   value: "HEADER_PLACEHOLDER",
-                   id: "header_HEADER_PLACEHOLDER" %>
-    <%= f.hidden_field :name_format,
-                   value:
-                     "workflow_execution[samples_workflow_executions_attributes][INDEX][samplesheet_params]",
-                   id: "format_HEADER_PLACEHOLDER" %>
-    <% @samples.each do |sample| %>
-      <%= f.hidden_field "sample_ids[]",
-                     value: sample.id,
-                     id: "sample-#{sample.id}-HEADER_PLACEHOLDER" %>
-    <% end %>
-    <%= f.hidden_field :field, value: "FIELD_PLACEHOLDER" %>
+    <%= f.hidden_field :namespace_id, value: namespace_id %>
   <% end %>
 </template>
