@@ -44,7 +44,7 @@ module Groups
     end
 
     def page_title
-      @title = "#{t(:'groups.sidebar.files')} · #{@group.name}"
+      @title = "#{t(:'groups.sidebar.files')} · #{t(:'shared.group_name', name: @group.name)}"
     end
   end
 end

@@ -216,21 +216,24 @@ module Projects
         @title = "#{t(:'projects.samples.new.title')} · #{@project.name}"
       when 'edit'
         @title = "#{t(:'projects.samples.edit.title')} · #{t(:'activerecord.models.sample.one')} #{@sample.name} · " \
-                 "#{@project.name}"
+                 "#{t(:'shared.project_name', name: @project.name)}"
       when 'show'
         @tab = params[:tab]
         @title = if @tab == 'metadata'
                    "#{t(:'projects.samples.show.tabs.metadata')} · " \
-                     "#{t(:'activerecord.models.sample.one')} #{@sample.name} · #{@project.name}"
+                     "#{t(:'activerecord.models.sample.one')} #{@sample.name} · #{t(:'shared.project_name',
+                                                                                    name: @project.name)}"
                  elsif @tab == 'history'
                    "#{t(:'projects.samples.show.tabs.history')} · " \
-                     "#{t(:'activerecord.models.sample.one')} #{@sample.name} · #{@project.name}"
+                     "#{t(:'activerecord.models.sample.one')} #{@sample.name} · #{t(:'shared.project_name',
+                                                                                    name: @project.name)}"
                  else
                    "#{t(:'projects.samples.show.tabs.files')} · " \
-                     "#{t(:'activerecord.models.sample.one')} #{@sample.name} · #{@project.name}"
+                     "#{t(:'activerecord.models.sample.one')} #{@sample.name} · #{t(:'shared.project_name',
+                                                                                    name: @project.name)}"
                  end
       else
-        @title = "#{t(:'activerecord.models.sample.other')} · #{@project.name}"
+        @title = "#{t(:'activerecord.models.sample.other')} · #{t(:'shared.project_name', name: @project.name)}"
       end
     end
   end

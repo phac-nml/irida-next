@@ -157,7 +157,7 @@ module Projects
 
     def page_title
       @title = "#{t(:'projects.sidebar.automated_workflow_executions')} · #{t(:'projects.edit.title')} · " \
-               "#{@project.name}"
+               "#{t(:'shared.project_name', name: @project.name)}"
     end
   end
 end

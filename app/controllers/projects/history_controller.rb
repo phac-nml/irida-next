@@ -38,7 +38,8 @@ module Projects
     end
 
     def page_title
-      @title = "#{t(:'projects.sidebar.history')} · #{t(:'projects.edit.title')} · #{@project.name}"
+      @title = "#{t(:'projects.sidebar.history')} · #{t(:'projects.edit.title')} · #{t(:'shared.project_name',
+                                                                                       name: @project.name)}"
     end
   end
 end

@@ -101,25 +101,25 @@ module Projects
     def page_title # rubocop:disable Metrics/MethodLength
       case action_name
       when 'index'
-        @title = "#{t(:'general.default_sidebar.workflows')} · #{@project.name}"
+        @title = "#{t(:'general.default_sidebar.workflows')} · #{t(:'shared.project_name', name: @project.name)}"
       when 'show'
         @title = case @tab
                  when 'params'
                    "#{t(:'workflow_executions.show.tabs.params')} · " \
                    "#{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id} · " \
-                   "#{@project.name}"
+                   "#{t(:'shared.project_name', name: @project.name)}"
                  when 'samplesheet'
                    "#{t(:'workflow_executions.show.tabs.samplesheet')} · " \
                    "#{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id} · " \
-                   "#{@project.name}"
+                   "#{t(:'shared.project_name', name: @project.name)}"
                  when 'files'
                    "#{t(:'workflow_executions.show.tabs.files')} · " \
                    "#{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id} · " \
-                   "#{@project.name}"
+                   "#{t(:'shared.project_name', name: @project.name)}"
                  else
                    "#{t(:'workflow_executions.show.tabs.summary')} · " \
                    "#{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id} · " \
-                   "#{@project.name}"
+                   "#{t(:'shared.project_name', name: @project.name)}"
                  end
       end
     end

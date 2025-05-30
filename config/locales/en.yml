@@ -2010,11 +2010,13 @@ en:
     alert:
       list:
         danger: Danger
+    group_name: Group %{name}
     loading:
       samples_list_skeleton:
         loading: Loading...
     progress_bar:
       in_progress: Action in progress. Please do not refresh the page.
+    project_name: Project %{name}
     samples:
       actions_dropdown:
         clone: Copy samples
