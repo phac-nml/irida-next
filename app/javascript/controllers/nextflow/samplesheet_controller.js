@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import { formDataToJsonParams } from "utilities/form";
 
 export default class extends Controller {
   static targets = [
@@ -179,33 +180,23 @@ export default class extends Controller {
         this.#enableErrorState(errorMsg);
       } else {
         this.#combineFormData();
-        fetch(this.urlValue, {
-          method: "POST",
-          body: new URLSearchParams(this.#compactFormData()),
-          credentials: "same-origin",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
+
+        this.formTarget.addEventListener(
+          "turbo:before-fetch-request",
+          (event) => {
+            event.detail.fetchOptions.body = JSON.stringify(
+              formDataToJsonParams(this.#compactFormData()),
+            );
+            event.detail.fetchOptions.headers["Content-Type"] =
+              "application/json";
+
+            event.detail.resume();
           },
-        })
-          .then((response) => {
-            this.#disableProcessingState();
-            if (response.redirected && response.status == "200") {
-              window.location.href = response.url;
-              return null;
-            } else if (response.status == "422") {
-              return response.text();
-            } else {
-              this.#enableErrorState(this.submissionErrorValue);
-              return null;
-            }
-          })
-          .then((data) => {
-            if (data) {
-              let responseElement = document.createElement("div");
-              responseElement.innerHTML = data;
-              document.querySelector("main").appendChild(responseElement);
-            }
-          });
+          {
+            once: true,
+          },
+        );
+        this.formTarget.requestSubmit();
       }
     }, 50);
   }
@@ -653,6 +644,22 @@ export default class extends Controller {
       .replace(/FIELD_PLACEHOLDER/g, metadataField);
 
     this.element.insertAdjacentHTML("beforeend", metadataForm);
+
+    this.element.lastElementChild.addEventListener(
+      "turbo:before-fetch-request",
+      (event) => {
+        event.detail.fetchOptions.body = JSON.stringify(
+          formDataToJsonParams(new FormData(this.element.lastElementChild)),
+        );
+        event.detail.fetchOptions.headers["Content-Type"] = "application/json";
+
+        event.detail.resume();
+      },
+      {
+        once: true,
+      },
+    );
+
     this.element.lastElementChild.requestSubmit();
     this.element.lastElementChild.remove();
   }
