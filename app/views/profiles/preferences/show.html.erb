@@ -5,6 +5,11 @@
       aria-labelledby="theme-legend"
       class="grid grid-cols-1 gap-4"
       data-controller="colour-mode"
+      data-colour-mode-changed-text="<%= t('theme.announcements.changed') %>"
+      data-colour-mode-error-text="<%= t('theme.announcements.error') %>"
+      data-colour-mode-system-text="<%= t('theme.modes.system') %>"
+      data-colour-mode-light-text="<%= t('theme.modes.light') %>"
+      data-colour-mode-dark-text="<%= t('theme.modes.dark') %>"
     >
       <div
         id="theme-legend"
@@ -22,6 +27,7 @@
         label: t(".system_theme"),
         checked: params[:color_theme] == "system",
         help_text: t(".system_desc"),
+        required: true,
         data: {
           action: "change->colour-mode#toggleTheme",
           "colour-mode-target": "system",
@@ -34,6 +40,7 @@
         input_name: "color-theme",
         label: t(".dark_theme"),
         checked: params[:color_theme] == "dark",
+        required: true,
         data: {
           action: "change->colour-mode#toggleTheme",
           "colour-mode-target": "dark",
@@ -46,6 +53,7 @@
         input_name: "color-theme",
         label: t(".light_theme"),
         checked: params[:color_theme] == "light",
+        required: true,
         data: {
           action: "change->colour-mode#toggleTheme",
           "colour-mode-target": "light",
