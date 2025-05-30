@@ -33,7 +33,7 @@ module Groups
           flash[:success] = t('shared.samples.destroy_multiple.success')
         end
 
-        redirect_to group_samples_path
+        redirect_to group_samples_path, status: :see_other
       end
 
       private
@@ -48,7 +48,7 @@ module Groups
 
       def new_dialog_paths
         @list_path = list_group_samples_path(list_class: 'sample')
-        @destroy_path = group_samples_deletion_path
+        @destroy_path = group_samples_deletion_path(@group)
       end
 
       def destroy_samples_params
