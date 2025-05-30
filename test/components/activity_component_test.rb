@@ -68,9 +68,9 @@ class ActivityComponentTest < ViewComponentTestCase
     @activities = group.human_readable_activity(group.retrieve_group_activity).reverse
 
     # Limit set to 10 per page
-    @pagy = Pagy.new(count: 9, page: 1, limit: 10)
+    @pagy = Pagy.new(count: 10, page: 1, limit: 10)
 
-    assert_equal 9, @activities.length
+    assert_equal 10, @activities.length
 
     assert_equal(1, @activities.count { |activity| activity[:key].include?('group.create') })
     assert_equal(1, @activities.count { |activity| activity[:key].include?('group.subgroups.create') })
@@ -80,6 +80,7 @@ class ActivityComponentTest < ViewComponentTestCase
     assert_equal(1, @activities.count { |activity| activity[:key].include?('group.member.create') })
     assert_equal(1, @activities.count { |activity| activity[:key].include?('group.namespace_group_link.create') })
     assert_equal(1, @activities.count { |activity| activity[:key].include?('group.import_samples.create') })
+    assert_equal(1, @activities.count { |activity| activity[:key].include?('group.samples.destroy') })
 
     render_inline ActivityComponent.new(activities: @activities, pagy: @pagy)
 

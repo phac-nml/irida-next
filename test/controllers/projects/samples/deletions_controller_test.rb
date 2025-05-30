@@ -91,12 +91,12 @@ module Projects
       assert_difference('Sample.count', -3) do
         post destroy_multiple_namespace_project_samples_deletion_path(@namespace, @project),
              params: {
-               multiple_deletion: {
+               destroy_samples: {
                  sample_ids: [@sample1.id, sample2.id, sample30.id]
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('projects.samples.deletions.destroy_multiple.success'), flash[:success]
+      assert_equal I18n.t('shared.samples.destroy_multiple.success'), flash[:success]
       assert_response :redirect
       assert_redirected_to namespace_project_samples_path(@namespace, @project)
     end
@@ -107,14 +107,14 @@ module Projects
       assert_difference('Sample.count', -3) do
         post destroy_multiple_namespace_project_samples_deletion_path(@namespace, @project),
              params: {
-               multiple_deletion: {
+               destroy_samples: {
                  sample_ids: [@sample1.id, sample2.id, sample30.id, 'invalid_sample_id']
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('projects.samples.deletions.destroy_multiple.partial_success', deleted: '3/4'),
+      assert_equal I18n.t('shared.samples.destroy_multiple.partial_success', deleted: '3/4'),
                    flash[:success]
-      assert_equal I18n.t('projects.samples.deletions.destroy_multiple.partial_error', not_deleted: '1/4'),
+      assert_equal I18n.t('shared.samples.destroy_multiple.partial_error', not_deleted: '1/4'),
                    flash[:error]
       assert_response :redirect
       assert_redirected_to namespace_project_samples_path(@namespace, @project)
@@ -124,12 +124,12 @@ module Projects
       assert_no_difference('Sample.count') do
         post destroy_multiple_namespace_project_samples_deletion_path(@namespace, @project),
              params: {
-               multiple_deletion: {
+               destroy_samples: {
                  sample_ids: %w[invalid_sample_id_1 invalid_sample_id_2 invalid_sample_id_3]
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('projects.samples.deletions.destroy_multiple.no_deleted_samples'), flash[:error]
+      assert_equal I18n.t('shared.samples.destroy_multiple.no_deleted_samples'), flash[:error]
       assert_response :redirect
       assert_redirected_to namespace_project_samples_path(@namespace, @project)
     end
@@ -142,12 +142,12 @@ module Projects
       assert_no_difference('Sample.count') do
         post destroy_multiple_namespace_project_samples_deletion_path(@namespace, @project),
              params: {
-               multiple_deletion: {
+               destroy_samples: {
                  sample_ids: [sample4.id, sample5.id, sample6.id]
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('projects.samples.deletions.destroy_multiple.no_deleted_samples'), flash[:error]
+      assert_equal I18n.t('shared.samples.destroy_multiple.no_deleted_samples'), flash[:error]
       assert_response :redirect
       assert_redirected_to namespace_project_samples_path(@namespace, @project)
     end
