@@ -190,19 +190,17 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     end
   end
 
-  def page_title # rubocop:disable Metrics/MethodLength
+  def page_title
     @title = case action_name
              when 'index'
-               "#{t(:'general.default_sidebar.data_exports')} · #{current_user.namespace.full_path}"
+               t(:'general.default_sidebar.data_exports').to_s
              when 'show'
                if @tab == 'preview'
-                 "#{t(:'data_exports.show.tabs.preview')} · " \
-                   "#{t(:'data_exports.show.page_title')} #{@data_export.id} · " \
-                   "#{current_user.namespace&.full_path}"
+                 [t(:'data_exports.show.tabs.preview'),
+                  "#{t(:'data_exports.show.page_title')} #{@data_export.id}"].join(' · ')
                else
-                 "#{t(:'data_exports.show.tabs.summary')} · " \
-                   "#{t(:'data_exports.show.page_title')} #{@data_export.id} · " \
-                   "#{current_user.namespace&.full_path}"
+                 [t(:'data_exports.show.tabs.summary'),
+                  "#{t(:'data_exports.show.page_title')} #{@data_export.id}"].join(' · ')
                end
              else
                t(:'general.default_sidebar.data_exports')
