@@ -198,16 +198,16 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   def page_title # rubocop:disable Metrics/MethodLength
     @title = case action_name
              when 'index'
-               "#{t(:'general.default_sidebar.data_exports')} · #{current_user.namespace.full_path}"
+               "#{t(:'general.default_sidebar.data_exports')} · #{current_user.email}"
              when 'show'
                if @tab == 'preview'
                  "#{t(:'data_exports.show.tabs.preview')} · " \
                    "#{t(:'data_exports.show.page_title')} #{@data_export.id} · " \
-                   "#{current_user.namespace&.full_path}"
+                   "#{current_user.email}"
                else
                  "#{t(:'data_exports.show.tabs.summary')} · " \
                    "#{t(:'data_exports.show.page_title')} #{@data_export.id} · " \
-                   "#{current_user.namespace&.full_path}"
+                   "#{current_user.email}"
                end
              else
                t(:'general.default_sidebar.data_exports')

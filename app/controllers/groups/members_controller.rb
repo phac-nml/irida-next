@@ -50,9 +50,9 @@ module Groups
 
     def page_title
       @title = if @tab == 'invited_groups'
-                 "#{t(:'groups.members.index.invited_groups')} · #{@namespace.full_path}"
+                 "#{t(:'groups.members.index.invited_groups')} · #{@namespace.name}"
                else
-                 "#{t(:'groups.sidebar.members')} · #{@namespace.full_path}"
+                 "#{t(:'groups.sidebar.members')} · #{@namespace.name}"
                end
     end
   end

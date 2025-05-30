@@ -131,7 +131,7 @@ module Groups
     end
 
     def page_title
-      @title = "#{t(:'activerecord.models.sample.other')} · #{@group.full_path}"
+      @title = "#{t(:'activerecord.models.sample.other')} · #{@group.name}"
     end
   end
 end

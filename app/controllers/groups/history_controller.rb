@@ -43,7 +43,7 @@ module Groups
     end
 
     def page_title
-      @title = "#{t(:'groups.sidebar.history')} · #{t(:'groups.edit.title')} · #{@group.full_path}"
+      @title = "#{t(:'groups.sidebar.history')} · #{t(:'groups.edit.title')} · #{@group.name}"
     end
   end
 end

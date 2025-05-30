@@ -213,24 +213,24 @@ module Projects
     def page_title # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       case action_name
       when 'new'
-        @title = "#{t(:'projects.samples.new.title')} · #{@project.full_path}"
+        @title = "#{t(:'projects.samples.new.title')} · #{@project.name}"
       when 'edit'
         @title = "#{t(:'projects.samples.edit.title')} · #{t(:'activerecord.models.sample.one')} #{@sample.name} · " \
-                 "#{@project.full_path}"
+                 "#{@project.name}"
       when 'show'
         @tab = params[:tab]
         @title = if @tab == 'metadata'
                    "#{t(:'projects.samples.show.tabs.metadata')} · " \
-                     "#{t(:'activerecord.models.sample.one')} #{@sample.name} · #{@project.full_path}"
+                     "#{t(:'activerecord.models.sample.one')} #{@sample.name} · #{@project.name}"
                  elsif @tab == 'history'
                    "#{t(:'projects.samples.show.tabs.history')} · " \
-                     "#{t(:'activerecord.models.sample.one')} #{@sample.name} · #{@project.full_path}"
+                     "#{t(:'activerecord.models.sample.one')} #{@sample.name} · #{@project.name}"
                  else
                    "#{t(:'projects.samples.show.tabs.files')} · " \
-                     "#{t(:'activerecord.models.sample.one')} #{@sample.name} · #{@project.full_path}"
+                     "#{t(:'activerecord.models.sample.one')} #{@sample.name} · #{@project.name}"
                  end
       else
-        @title = "#{t(:'activerecord.models.sample.other')} · #{@project.full_path}"
+        @title = "#{t(:'activerecord.models.sample.other')} · #{@project.name}"
       end
     end
   end

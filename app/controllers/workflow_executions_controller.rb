@@ -108,28 +108,28 @@ class WorkflowExecutionsController < ApplicationController # rubocop:disable Met
     @destroy_path = destroy_multiple_workflow_executions_path
   end
 
-  def page_title # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def page_title # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     case action_name
     when 'index'
-      @title = "#{t(:'general.default_sidebar.workflows')} · #{current_user.namespace&.full_path}"
+      @title = "#{t(:'general.default_sidebar.workflows')} · #{current_user.email}"
     when 'show'
       @title = case @tab
                when 'params'
                  "#{t(:'workflow_executions.show.tabs.params')} · " \
                  "#{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id} · " \
-                 "#{current_user.namespace&.full_path}"
+                 "#{current_user.email}"
                when 'samplesheet'
                  "#{t(:'workflow_executions.show.tabs.samplesheet')} · " \
                  "#{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id} · " \
-                 "#{current_user.namespace&.full_path}"
+                 "#{current_user.email}"
                when 'files'
                  "#{t(:'workflow_executions.show.tabs.files')} · " \
                  "#{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id} · " \
-                 "#{current_user.namespace&.full_path}"
+                 "#{current_user.email}"
                else
                  "#{t(:'workflow_executions.show.tabs.summary')} · " \
                  "#{t(:'shared.workflow_executions.workflow_execution')} #{@workflow_execution.id} · " \
-                 "#{current_user.namespace&.full_path}"
+                 "#{current_user.email}"
                end
     end
   end
