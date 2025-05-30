@@ -22,7 +22,7 @@ module Profiles
     end
 
     def page_title
-      @title = "#{t(:'profiles.sidebar.account')} · #{current_user.email}"
+      @title = [t(:'profiles.sidebar.account'), current_user.email].join(' · ')
     end
   end
 end

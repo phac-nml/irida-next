@@ -213,27 +213,28 @@ module Projects
     def page_title # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       case action_name
       when 'new'
-        @title = "#{t(:'projects.samples.new.title')} · #{@project.name}"
+        @title = [t(:'projects.samples.new.title'), @project.full_name].join(' · ')
       when 'edit'
-        @title = "#{t(:'projects.samples.edit.title')} · #{t(:'activerecord.models.sample.one')} #{@sample.name} · " \
-                 "#{t(:'shared.project_name', name: @project.name)}"
+        @title = [t(:'projects.samples.edit.title'),
+                  "#{t(:'activerecord.models.sample.one')} #{@sample.name}",
+                  @project.full_name].join(' · ')
       when 'show'
         @tab = params[:tab]
         @title = if @tab == 'metadata'
-                   "#{t(:'projects.samples.show.tabs.metadata')} · " \
-                     "#{t(:'activerecord.models.sample.one')} #{@sample.name} · #{t(:'shared.project_name',
-                                                                                    name: @project.name)}"
+                   [t(:'projects.samples.show.tabs.metadata'),
+                    "#{t(:'activerecord.models.sample.one')} #{@sample.name}",
+                    @project.full_name].join(' · ')
                  elsif @tab == 'history'
-                   "#{t(:'projects.samples.show.tabs.history')} · " \
-                     "#{t(:'activerecord.models.sample.one')} #{@sample.name} · #{t(:'shared.project_name',
-                                                                                    name: @project.name)}"
+                   [t(:'projects.samples.show.tabs.history'),
+                    "#{t(:'activerecord.models.sample.one')} #{@sample.name}",
+                    @project.full_name].join(' · ')
                  else
-                   "#{t(:'projects.samples.show.tabs.files')} · " \
-                     "#{t(:'activerecord.models.sample.one')} #{@sample.name} · #{t(:'shared.project_name',
-                                                                                    name: @project.name)}"
+                   [t(:'projects.samples.show.tabs.files'),
+                    "#{t(:'activerecord.models.sample.one')} #{@sample.name}",
+                    @project.full_name].join(' · ')
                  end
       else
-        @title = "#{t(:'activerecord.models.sample.other')} · #{t(:'shared.project_name', name: @project.name)}"
+        @title = [t(:'activerecord.models.sample.other'), @project.full_name].join(' · ')
       end
     end
   end

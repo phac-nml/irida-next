@@ -42,8 +42,7 @@ module Groups
     end
 
     def page_title
-      @title = "#{t(:'groups.sidebar.metadata_templates')} · #{t(:'groups.edit.title')} · #{t(:'shared.group_name',
-                                                                                              name: @group.name)}"
+      @title = [t(:'groups.sidebar.metadata_templates'), t(:'groups.edit.title'), @group.full_name].join(' · ')
     end
   end
 end

@@ -40,6 +40,6 @@ class ProfilesController < Profiles::ApplicationController
   end
 
   def page_title
-    @title = "#{t(:'profiles.sidebar.profile')} · #{current_user.email}"
+    @title = [t(:'profiles.sidebar.profile'), current_user.email].join(' · ')
   end
 end

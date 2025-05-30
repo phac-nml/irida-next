@@ -2006,13 +2006,11 @@ fr:
     alert:
       list:
         danger: Danger
-    group_name: Groupe %{name}
     loading:
       samples_list_skeleton:
         loading: Chargement...
     progress_bar:
       in_progress: Action in progress. Please do not refresh the page.
-    project_name: Projet %{name}
     samples:
       actions_dropdown:
         clone: Copier des échantillons
