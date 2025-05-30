@@ -185,7 +185,7 @@ export default class extends Controller {
           "turbo:before-fetch-request",
           (event) => {
             event.detail.fetchOptions.body = JSON.stringify(
-              formDataToJsonParams(this.#formData),
+              formDataToJsonParams(this.#compactFormData()),
             );
             event.detail.fetchOptions.headers["Content-Type"] =
               "application/json";
