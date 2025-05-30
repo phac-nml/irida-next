@@ -653,8 +653,13 @@ export default class extends Controller {
       .replace(/FIELD_PLACEHOLDER/g, metadataField);
 
     this.element.insertAdjacentHTML("beforeend", metadataForm);
-    this.element.lastElementChild.requestSubmit();
-    this.element.lastElementChild.remove();
+
+    setTimeout(() => {
+      // wait until form--json-submission controller has connected
+      while (!this.element.lastElementChild.hasAttribute("data-connected")) {}
+      this.element.lastElementChild.requestSubmit();
+      this.element.lastElementChild.remove();
+    }, 100);
   }
 
   #compactFormData() {

@@ -19,6 +19,8 @@ export default class extends Controller {
     );
 
     this.formTarget.addEventListener("turbo:submit-end", this.boundOnSuccess);
+
+    this.element.setAttribute("data-connected", true);
   }
 
   disconnect() {
@@ -50,12 +52,14 @@ export default class extends Controller {
   #toJson(formData) {
     let params = formDataToJsonParams(formData);
 
-    normalizeParams(
-      params,
-      this.fieldNameValue,
-      this.selectionOutlet.getStoredItems(),
-      0,
-    );
+    if (this.hasFieldNameValue && this.hasSelectionOutlet) {
+      normalizeParams(
+        params,
+        this.fieldNameValue,
+        this.selectionOutlet.getStoredItems(),
+        0,
+      );
+    }
 
     return params;
   }
