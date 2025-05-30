@@ -221,7 +221,7 @@
 </template>
 
 <template data-nextflow--samplesheet-target="metadataHeaderForm">
-  <%= form_with url: fields_workflow_executions_metadata_path  do |f| %>
+  <%= form_with url: fields_workflow_executions_metadata_path do |f| %>
     <%= f.hidden_field :format,
                    value: "turbo_stream",
                    id: "field_HEADER_PLACEHOLDER_turbo" %>
