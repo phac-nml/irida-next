@@ -1046,8 +1046,8 @@ en:
           placeholder: Filter by PUID or name
       transfers:
         create:
-          error: "The following list of samples failed to transfer:"
-          no_samples_transferred_error: "Samples were not transferred for the following reasons:"
+          error: 'The following list of samples failed to transfer:'
+          no_samples_transferred_error: 'Samples were not transferred for the following reasons:'
           success: Samples were successfully transferred.
     shared_namespaces:
       index:
@@ -1925,10 +1925,10 @@ en:
           empty_new_project_id: Destination project was not selected.
           empty_sample_ids: The sample ids are empty.
           maintainer_transfer_not_allowed: A maintainer can only transfer samples to other projects within the same hierarchy with a common ancestor
-          sample_exists: "Sample %{sample_puid}: Conflicts with sample named '%{sample_name}' in the target project"
-          samples_not_found: "Samples with the following sample ids could not be transferred as they were not found in the source project: %{sample_ids}"
+          sample_exists: 'Sample %{sample_puid}: Conflicts with sample named ''%{sample_name}'' in the target project'
+          samples_not_found: 'Samples with the following sample ids could not be transferred as they were not found in the source project: %{sample_ids}'
           target_project_duplicate: Sample %{sample_name} already belongs to target project
-          unauthorized: "Samples with the following sample ids could not be transferred as you are not authorized to do so for the source project: %{sample_ids}"
+          unauthorized: 'Samples with the following sample ids could not be transferred as you are not authorized to do so for the source project: %{sample_ids}'
       share:
         group_not_found: Group with id %{group_id} to share namespace with cannot be found.
         group_self_reference: Group cannot be shared with itself.
