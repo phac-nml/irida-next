@@ -5,6 +5,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
   include ListActions
   include NamespacePathHelper
+  include Metadata
 
   included do
     before_action :set_default_tab, only: :show
@@ -64,9 +65,12 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
     case @tab
     when 'files'
-      @samples_workflow_executions = @workflow_execution.samples_workflow_executions
-      @attachments = Attachment.where(attachable: @workflow_execution)
-                               .or(Attachment.where(attachable: @samples_workflow_executions))
+      @render_individual_attachments = filter_requested?
+      all_attachments = load_attachments
+      @has_attachments = all_attachments.count.positive?
+      @q = all_attachments.ransack(params[:q])
+      set_file_default_sort
+      @pagy, @attachments = pagy_with_metadata_sort(@q.result, Attachment)
     when 'params'
       @workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
                                                              @workflow_execution.metadata['workflow_version'],
@@ -187,6 +191,21 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   end
 
   private
+
+  def filter_requested?
+    params.dig(:q, :puid_or_file_blob_filename_cont).present?
+  end
+
+  def load_attachments
+    @samples_workflow_executions = @workflow_execution.samples_workflow_executions
+
+    Attachment.where(attachable: @workflow_execution)
+              .or(Attachment.where(attachable: @samples_workflow_executions))
+  end
+
+  def set_file_default_sort
+    @q.sorts = 'created_at desc' if @q.sorts.empty?
+  end
 
   def workflow_properties
     workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
