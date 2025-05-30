@@ -174,7 +174,6 @@ module Pathogen
           disabled: @disabled,
           class: radio_button_classes(@user_class),
           aria: radio_button_aria_attributes.merge(describedby: describedby.presence),
-          role: 'radio',
           tabindex: @disabled ? -1 : 0,
           onchange: @onchange
         }.compact
