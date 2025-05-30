@@ -1171,6 +1171,14 @@ module WorkflowExecutions
       # select samples
 
       click_button I18n.t(:'projects.samples.index.select_all_button')
+
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 4
+      end
+      within 'tfoot' do
+        assert_selector 'strong[data-selection-target="selected"]', text: 4
+      end
+
       # launch workflow execution dialog
       click_on I18n.t(:'projects.samples.index.workflows.button_sr')
 

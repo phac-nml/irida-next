@@ -645,12 +645,23 @@ export default class extends Controller {
 
     this.element.insertAdjacentHTML("beforeend", metadataForm);
 
-    setTimeout(() => {
-      // wait until form--json-submission controller has connected
-      while (!this.element.lastElementChild.hasAttribute("data-connected")) {}
-      this.element.lastElementChild.requestSubmit();
-      this.element.lastElementChild.remove();
-    }, 100);
+    this.element.lastElementChild.addEventListener(
+      "turbo:before-fetch-request",
+      (event) => {
+        event.detail.fetchOptions.body = JSON.stringify(
+          formDataToJsonParams(new FormData(this.element.lastElementChild)),
+        );
+        event.detail.fetchOptions.headers["Content-Type"] = "application/json";
+
+        event.detail.resume();
+      },
+      {
+        once: true,
+      },
+    );
+
+    this.element.lastElementChild.requestSubmit();
+    this.element.lastElementChild.remove();
   }
 
   #compactFormData() {
