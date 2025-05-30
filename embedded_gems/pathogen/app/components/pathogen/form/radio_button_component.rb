@@ -91,6 +91,8 @@ module Pathogen
       end
 
       def call
+        return radio_button_html if @label.blank?
+
         tag.div(class: 'flex flex-col') do
           tag.div(class: 'flex items-center gap-3') do
             radio_button_html + label_html
@@ -136,11 +138,9 @@ module Pathogen
 
       # Renders the label for the radio button
       def label_html
-        if @label.present?
-          tag.label(@label, for: input_id, class: label_classes)
-        else
-          tag.label('[No label provided]', for: input_id, class: "#{label_classes} text-red-500")
-        end
+        return if @label.blank?
+
+        tag.label(@label, for: input_id, class: label_classes)
       end
 
       # Renders the help text below the label, if present
