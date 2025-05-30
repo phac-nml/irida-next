@@ -19,7 +19,7 @@ module Profiles
       respond_to do |format|
         # Locale is called now rather than from the around_action in app_controller because we need the locale
         # change prior to the success flash so that the flash contains the correct translation
-        updated = @user.update(update_params)
+        updated = Users::UpdateService.new(current_user, @user, false, update_params).execute
         if updated
           I18n.with_locale(current_user.locale) do
             flash[:success] = t('.success')
