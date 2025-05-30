@@ -24,7 +24,7 @@ module Profiles
       assert_redirected_to profile_preferences_path
     end
 
-    test 'shouldn\'t update the users locale with an ivalid locale' do
+    test 'shouldn\'t update the users locale with an invalid locale' do
       sign_in users(:john_doe)
 
       patch profile_preferences_path,

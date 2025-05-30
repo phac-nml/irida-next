@@ -2163,6 +2163,14 @@ fr:
     no_headers: No headers found in file
     unexpected_error: 'An unexpected error occurred while parsing the file: %{error}'
     unknown_file_format: 'Unknown file type: %{extension}'
+  theme:
+    announcements:
+      changed: Theme changed to %{theme} mode
+      error: Failed to change theme. Please try again.
+    modes:
+      dark: Dark
+      light: Light
+      system: System
   time:
     formats:
       abbreviated: "%a %b%e %Y %H:%M"
