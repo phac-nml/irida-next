@@ -107,7 +107,7 @@ module Projects
         assert_equal({ 'metadatafield1' => 1, 'metadatafield2' => 1 }, @subgroup12b.metadata_summary)
         assert_equal({ 'metadatafield1' => 3, 'metadatafield2' => 3 }, @group12.metadata_summary)
 
-        ::Samples::TransferService.new(project30, @user).execute(@project31.id, [sample33.id])
+        Projects::Samples::TransferService.new(project30, @user).execute(@project31.id, [sample33.id])
 
         assert_equal(
           { 'metadatafield1' => 2, 'metadatafield2' => 2 }, @project31.reload.namespace.metadata_summary
