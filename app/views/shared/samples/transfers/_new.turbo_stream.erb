@@ -1,0 +1,9 @@
+<%= turbo_stream.update "samples_dialog",
+                    partial: "shared/samples/transfers/dialog",
+                    locals: {
+                      open: true,
+                      closable: true,
+                      list_samples_path: list_samples_path,
+                      transfer_path: transfer_path,
+                      broadcast_target: broadcast_target,
+                    } %>

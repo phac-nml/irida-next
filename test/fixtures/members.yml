@@ -634,3 +634,15 @@ project_metadata_member_metadata_doe:
   created_by_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectMetadata_namespace, :uuid) %>
   access_level: <%= Member::AccessLevel::OWNER %>
+
+group_sample_transfer_member_mary_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_sample_transfer, :uuid) %>
+  access_level: <%= Member::AccessLevel::OWNER %>
+
+group_sample_transfer_target_member_mary_doe:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
+  created_by_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_sample_transfer_target, :uuid) %>
+  access_level: <%= Member::AccessLevel::OWNER %>

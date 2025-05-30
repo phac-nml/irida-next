@@ -350,3 +350,43 @@ project1_namespace_workflow_execution_destroy:
     }
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
+
+group_sample_transfer_sample_transfer:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_sample_transfer, :uuid) %>
+  key: "group.samples.transfer"
+  parameters:
+    {
+      transferred_samples_count: 3,
+      action: "group_sample_transfer",
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+project_group_sample_transfer_sample_transfer:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project_group_sample_transfer_namespace, :uuid) %>
+  key: "namespaces_project_namespace.samples.transfer"
+  parameters:
+    {
+      transferred_samples_count: 3,
+      target_project_puid: INXT_PRJ_AAAAAAAACD,
+      target_project: "<%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransferTarget, :uuid) %>",
+      action: "sample_transfer",
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+project_group_sample_transfer_target_sample_transfer:
+  trackable_type: "Namespace"
+  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project_group_sample_transfer_target_namespace, :uuid) %>
+  key: "namespaces_project_namespace.import_samples.create"
+  parameters:
+    {
+      transferred_samples_count: 3,
+      source_project_puid: INXT_PRJ_AAAAAAAACC,
+      source_project: "<%= ActiveRecord::FixtureSet.identify(:project_group_sample_transfer_namespace, :uuid) %>",
+      action: "sample_transfer",
+    }
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

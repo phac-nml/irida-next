@@ -584,3 +584,21 @@ metadata_doe_projectMetadata2_namespace:
   metadata_summary:
     { "example_date": 3, "example_float": 3, "example_integer": 3 }
   puid: INXT_PRJ_AAAAAAAACB
+
+project_group_sample_transfer_namespace:
+  <<: *DEFAULTS
+  name: Project Group Sample Transfer
+  path: project-group-sample-transfer
+  description: Project Group Sample Transfer description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_sample_transfer, :uuid) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
+  puid: INXT_PRJ_AAAAAAAACC
+
+project_group_sample_transfer_target_namespace:
+  <<: *DEFAULTS
+  name: Project Group Sample Transfer Target
+  path: project-group-sample-transfer-target
+  description: Project Group Sample Transfer Target description
+  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_sample_transfer_target, :uuid) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
+  puid: INXT_PRJ_AAAAAAAACD

@@ -125,6 +125,10 @@ class GroupPolicyTest < ActiveSupport::TestCase
     assert_not @policy.apply(:destroy_workflow_executions?)
   end
 
+  test '#transfer_sample?' do
+    assert @policy.apply(:transfer_sample?)
+  end
+
   test 'scope' do
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 

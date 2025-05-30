@@ -334,3 +334,13 @@ projectMetadata2:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe_projectMetadata2_namespace, :uuid) %>
   samples_count: 3
+
+projectGroupSampleTransfer:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_group_sample_transfer_namespace, :uuid) %>
+  samples_count: 3
+
+projectGroupSampleTransferTarget:
+  creator_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
+  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_group_sample_transfer_target_namespace, :uuid) %>
+  samples_count: 0

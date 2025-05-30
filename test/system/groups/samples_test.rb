@@ -23,6 +23,7 @@ module Groups
       @sample31 = samples(:sample31)
 
       Flipper.enable(:progress_bars)
+      Flipper.enable(:group_samples_transfer)
     end
 
     def retrieve_puids
@@ -1735,6 +1736,433 @@ module Groups
       assert_text I18n.t('groups.samples.table.no_samples')
 
       assert_no_selector 'button', text: I18n.t(:'shared.samples.actions_dropdown.label')
+    end
+
+    test 'transfer dialog sample listing' do
+      ### SETUP START ###
+      samples = []
+      @group.project_namespaces.map do |pn|
+        samples << pn.project.samples.pluck(:name, :puid)
+      end
+
+      samples.flatten!
+
+      visit group_samples_url(@group)
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      click_button I18n.t(:'groups.samples.index.select_all_button')
+
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
+      end
+
+      within 'tfoot' do
+        assert_text 'Samples: 26'
+        assert_selector 'strong[data-selection-target="selected"]', text: '26'
+      end
+
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      within('#list_selections') do
+        samples.each do |sample|
+          assert_text sample[0]
+          assert_text sample[1]
+        end
+      end
+      ### VERIFY END ###
+    end
+
+    test 'transfer dialog with plural description' do
+      ### SETUP START ###
+      visit group_samples_url(@group)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      click_button I18n.t(:'groups.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 26'
+        assert_selector 'strong[data-selection-target="selected"]', text: '26'
+      end
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      within('#dialog') do
+        assert_text I18n.t('shared.samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER',
+                                                                                       '26')
+      end
+      ### VERIFY END ###
+    end
+
+    test 'transfer dialog with singular description' do
+      ### SETUP START ###
+      visit group_samples_url(@group)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      within '#samples-table table tbody' do
+        all('input[type="checkbox"]')[0].click
+      end
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      within('#dialog') do
+        assert_text I18n.t('shared.samples.transfers.dialog.description.singular')
+      end
+      ### VERIFY END ###
+    end
+
+    test 'transfer samples' do
+      ### SETUP START ###
+      group_three = groups(:group_three)
+      project4 = projects(:project4)
+      samples = []
+      @group.project_namespaces.map do |pn|
+        samples << pn.project.samples.pluck(:name, :puid)
+      end
+
+      samples.flatten!
+
+      visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      # target project has 3 samples prior to transfer
+      visit group_samples_url(group_three)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+
+      visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # select first sample
+      within 'tbody' do
+        first('input[name="sample_ids[]"]').click
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 26 Selected: 1'
+        assert_selector 'strong[data-selection-target="selected"]', text: '1'
+      end
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
+      assert_selector '#dialog'
+      within('#dialog') do
+        within('#list_selections') do
+          # additional asserts to help prevent select2 actions below from flaking
+          assert_text samples[0][0]
+          assert_text samples[0][1]
+        end
+        # select destination project
+        find('input.select2-input').click
+        find("li[data-value='#{project4.id}']").click
+
+        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+        assert_text I18n.t('shared.progress_bar.in_progress')
+
+        perform_enqueued_jobs only: [Groups::Samples::TransferJob]
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      # flash msg
+      assert_text I18n.t('groups.samples.transfers.create.success')
+      click_button I18n.t('shared.samples.success.ok_button')
+
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 25,
+                                                                           locale: @user.locale))
+
+      # destination project received transferred samples
+      visit group_samples_url(group_three)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 4, count: 4,
+                                                                           locale: @user.locale))
+      within '#samples-table table tbody' do
+        assert_text samples[0][0]
+        assert_text samples[0][1]
+      end
+      ### VERIFY END ###
+    end
+
+    test 'dialog close button hidden during transfer samples' do
+      ### SETUP START ###
+      project4 = projects(:project4)
+      samples = []
+      @group.project_namespaces.map do |pn|
+        samples << pn.project.samples.pluck(:name, :puid)
+      end
+
+      samples.flatten!
+      # originating project has 3 samples prior to transfer
+      visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # select all 3 samples
+      click_button I18n.t(:'groups.samples.index.select_all_button')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
+      assert_selector '#dialog'
+      within('#dialog') do
+        # close button available before confirming
+        assert_selector 'button.dialog--close'
+        within('#list_selections') do
+          samples.each do |sample|
+            # additional asserts to help prevent select2 actions below from flaking
+            assert_text sample[0]
+            assert_text sample[1]
+          end
+        end
+        # select destination project
+        find('input.select2-input').click
+        find("li[data-value='#{project4.id}']").click
+        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
+        assert_text I18n.t('shared.progress_bar.in_progress')
+        # close button hidden during transfer
+        assert_no_selector 'button.dialog--close'
+        perform_enqueued_jobs only: [Groups::Samples::TransferJob]
+        ### VERIFY END ###
+      end
+    end
+
+    test 'should not transfer samples with session storage cleared' do
+      ### SETUP START ###
+      project4 = projects(:project4)
+      visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # select samples
+      click_button I18n.t(:'groups.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 26'
+        assert_selector 'strong[data-selection-target="selected"]', text: '26'
+      end
+      # clear localstorage
+      Capybara.execute_script 'sessionStorage.clear()'
+      # launch transfer dialog
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
+
+      assert_selector '#dialog'
+      within('#dialog') do
+        assert_text I18n.t('shared.samples.transfers.dialog.title')
+        find('input.select2-input').click
+        find("li[data-value='#{project4.id}']").click
+        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+        assert_text I18n.t('shared.progress_bar.in_progress')
+
+        perform_enqueued_jobs only: [Groups::Samples::TransferJob]
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
+        # samples listing should no longer appear in dialog
+        assert_no_selector '#list_selections'
+        # error msg displayed in dialog
+        assert_text I18n.t('groups.samples.transfers.create.no_samples_transferred_error')
+      end
+      ### VERIFY END ###
+    end
+
+    test 'transfer samples with and without same name in destination project' do
+      # only samples without a matching name to samples in destination project will transfer
+
+      ### SETUP START ###
+      group_three = groups(:group_three)
+      project4 = projects(:project4)
+      samples = []
+      @group.project_namespaces.map do |pn|
+        samples << pn.project.samples.pluck(:name, :puid)
+      end
+
+      sample1 = samples(:sample1)
+      sample2 = samples(:sample2)
+      sample28 = samples(:sample28)
+      sample30 = samples(:sample30)
+
+      samples.flatten!
+
+      visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+      # target project has 3 samples prior to transfer
+      visit group_samples_url(group_three)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+
+      visit group_samples_url(@group)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 26,
+                                                                           locale: @user.locale))
+
+      ### ACTIONS START ###
+      click_button I18n.t(:'groups.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 20
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 26'
+        assert_selector 'strong[data-selection-target="selected"]', text: '26'
+      end
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
+
+      assert_selector '#dialog'
+      within('#dialog') do
+        within('#list_selections') do
+          samples.each do |sample|
+            # additional asserts to help prevent select2 actions below from flaking
+            assert_text sample[0]
+            assert_text sample[1]
+          end
+        end
+        find('input.select2-input').click
+        find("li[data-value='#{project4.id}']").click
+        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+        assert_text I18n.t('shared.progress_bar.in_progress')
+
+        perform_enqueued_jobs only: [Groups::Samples::TransferJob]
+      end
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      within('#dialog') do
+        # error messages in dialog
+        assert_text I18n.t('groups.samples.transfers.create.error')
+
+        assert_text I18n.t('services.groups.samples.transfer.unauthorized', sample_ids: sample28.id.to_s).gsub(':', '')
+
+        # colon is removed from translation in UI
+        assert_text I18n.t('services.groups.samples.transfer.sample_exists', sample_puid: sample30.puid,
+                                                                             sample_name: sample30.name).gsub(':', '')
+      end
+
+      # verify sample1 and 2 transferred, sample 28, sample 30 did not
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 2, count: 2,
+                                                                           locale: @user.locale))
+      assert_no_selector "tr[id='#{dom_id(sample1)}']"
+      assert_no_selector "tr[id='#{dom_id(sample2)}']"
+      assert_selector "tr[id='#{dom_id(sample30)}']"
+      assert_selector "tr[id='#{dom_id(sample28)}']"
+
+      # destination project
+      visit group_samples_url(group_three)
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 25,
+                                                                           locale: @user.locale))
+
+      click_on I18n.t(:'samples.table_component.puid')
+
+      assert_selector "tr[id='#{dom_id(sample1)}']"
+      assert_selector "tr[id='#{dom_id(sample2)}']"
+      assert_no_selector "tr[id='#{dom_id(sample28)}']"
+      assert_no_selector "tr[id='#{dom_id(sample30)}']"
+      ### VERIFY END ###
+    end
+
+    test 'sample transfer project listing should be empty for maintainer if no other projects in hierarchy' do
+      ### SETUP START ###
+      login_as users(:micha_doe)
+      group_three = groups(:group_three)
+      group_three_proj_namespaces = group_three.project_namespaces
+      total_projects_transfer_to_count = 0
+      group_three_projects = group_three_proj_namespaces.map(&:project)
+
+      visit group_samples_url(group_three)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      click_button I18n.t(:'groups.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
+      ### ACTIONS END ###
+
+      ### VERIFY START ###
+      within('#dialog') do
+        # Only projects within group are visible for maintainer to transfer to
+        find('input.select2-input').click
+        group_three_projects.each do |proj|
+          total_projects_transfer_to_count += 1 if find("li[data-value='#{proj.id}']")
+        end
+
+        assert_equal total_projects_transfer_to_count, group_three_projects.count
+      end
+      ### VERIFY END ###
+    end
+
+    test 'empty state of transfer sample project selection' do
+      ### SETUP START ###
+      group_three = groups(:group_three)
+      visit group_samples_url(group_three)
+      # verify samples table has loaded to prevent flakes
+      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
+                                                                           locale: @user.locale))
+      ### SETUP END ###
+
+      ### ACTIONS START ###
+      # select samples
+      click_button I18n.t(:'groups.samples.index.select_all_button')
+      within 'tbody' do
+        assert_selector 'input[name="sample_ids[]"]:checked', count: 3
+      end
+      within 'tfoot' do
+        assert_text 'Samples: 3'
+        assert_selector 'strong[data-selection-target="selected"]', text: '3'
+      end
+
+      # launch dialog
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      click_button I18n.t('shared.samples.actions_dropdown.transfer')
+      assert_selector '#dialog'
+      within('#dialog') do
+        # fill destination input
+        find('input.select2-input').fill_in with: 'invalid project name or puid'
+        ### ACTIONS END ###
+
+        ### VERIFY START ###
+        assert_text I18n.t('shared.samples.transfers.dialog.empty_state')
+        ### VERIFY END ###
+      end
     end
   end
 end
