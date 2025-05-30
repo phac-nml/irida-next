@@ -35,8 +35,6 @@
 #   - :class        🎨   (String)     — Extra CSS classes
 #   - :onchange     🔄   (String)     — JS for onchange event
 #   - :help_text    💡   (String)     — Help text below the label (ARIA described)
-#   - :required     ⚠️   (Boolean)    — Whether this radio is required
-#   - :invalid      ❌   (Boolean)    — Whether this radio is invalid
 #   - :error_text   🚨   (String)     — Error text to display when invalid
 #
 # ♿ Accessibility:
@@ -44,7 +42,6 @@
 #   - Uses aria-describedby for help text and error messages
 #   - Keyboard and screen reader friendly
 #   - Visible focus and checked states
-#   - Proper ARIA states for required and invalid states
 #
 # 🛠️  How it works:
 #   - Renders a radio input and label side-by-side
@@ -59,6 +56,56 @@
 
 module Pathogen
   module Form
+    # Generic form helper methods that can be used across form components
+    module FormHelpers
+      def help_text_id
+        @help_text_id ||= "#{input_id}_help"
+      end
+
+      def input_name
+        return @input_name if @input_name.present?
+        return "#{@form.object_name}[#{@attribute}]" if @form
+
+        @attribute.to_s
+      end
+
+      def input_id
+        base = if @form
+                 "#{@form.object_name}_#{@attribute}_#{@value}"
+               else
+                 "#{input_name}_#{@value}"
+               end
+        base.gsub(/[\[\]]+/, '_').chomp('_')
+      end
+
+      def form_attributes
+        describedby = [
+          @described_by,
+          (@help_text.present? ? help_text_id : nil)
+        ].compact.join(' ')
+
+        {
+          disabled: @disabled,
+          class: input_classes(@user_class),
+          aria: aria_attributes.merge(describedby: describedby.presence),
+          tabindex: @disabled ? -1 : 0,
+          onchange: @onchange
+        }.compact
+      end
+
+      def aria_attributes
+        {
+          disabled: @disabled.to_s,
+          describedby: @described_by,
+          controls: @controls
+        }.compact
+      end
+
+      def input_classes(user_class)
+        radio_button_classes(user_class)
+      end
+    end
+
     # 🟢 Pathogen::Form::RadioButtonComponent 🟢
     #
     # This component renders a single radio button with a label and optional help text.
@@ -69,6 +116,7 @@ module Pathogen
       include ActionView::Helpers::TagHelper
       include ActionView::Helpers::FormTagHelper
       include RadioButtonStyles
+      include FormHelpers
 
       # @param form [ActionView::Helpers::FormBuilder, nil] the form builder (optional)
       # @param attribute [Symbol] the attribute for the radio button
@@ -84,9 +132,6 @@ module Pathogen
       #   - :class [String] additional CSS classes
       #   - :onchange [String] JS for onchange event
       #   - :help_text [String] help text rendered below the label
-      #   - :required [Boolean] whether the radio is required
-      #   - :invalid [Boolean] whether the radio is invalid
-      #   - :error_text [String] error text to display when invalid
       def initialize(attribute:, value:, form: nil, **options)
         @form = form
         @attribute = attribute
@@ -100,7 +145,7 @@ module Pathogen
             radio_button_html + label_html
           end +
             tag.div(class: 'mt-1 ml-8') do
-              help_html + error_html
+              help_html
             end
         end
       end
@@ -120,9 +165,6 @@ module Pathogen
         @onchange = options.delete(:onchange)
         @help_text = options.delete(:help_text)
         @user_class = options.delete(:class)
-        @required = options.delete(:required) { false }
-        @invalid = options.delete(:invalid) { false }
-        @error_text = options.delete(:error_text)
         @html_options = options # Remaining options (e.g., data-*)
       end
 
@@ -132,16 +174,16 @@ module Pathogen
           input_name,
           @value,
           @checked,
-          radio_button_attributes.merge(id: radio_button_id).merge(@html_options)
+          form_attributes.merge(id: input_id).merge(@html_options)
         )
       end
 
       # Renders the label for the radio button
       def label_html
         if @label.present?
-          tag.label(@label, for: radio_button_id, class: label_classes)
+          tag.label(@label, for: input_id, class: label_classes)
         else
-          tag.label('[No label provided]', for: radio_button_id, class: "#{label_classes} text-red-500")
+          tag.label('[No label provided]', for: input_id, class: "#{label_classes} text-red-500")
         end
       end
 
@@ -152,77 +194,6 @@ module Pathogen
         else
           ''.html_safe
         end
-      end
-
-      # Renders the error text below the label, if present
-      def error_html
-        if @invalid && @error_text.present?
-          tag.p(@error_text, id: error_text_id, class: error_text_classes)
-        else
-          ''.html_safe
-        end
-      end
-
-      # Generates a unique ID for the help text
-      def help_text_id
-        @help_text_id ||= "#{radio_button_id}_help"
-      end
-
-      # Generates a unique ID for the error text
-      def error_text_id
-        @error_text_id ||= "#{radio_button_id}_error"
-      end
-
-      # Determines the input name for the radio button
-      def input_name
-        return @input_name if @input_name.present?
-        return "#{@form.object_name}[#{@attribute}]" if @form
-
-        @attribute.to_s
-      end
-
-      # Generates a unique ID for the radio button
-      def radio_button_id
-        base = if @form
-                 "#{@form.object_name}_#{@attribute}_#{@value}"
-               else
-                 "#{input_name}_#{@value}"
-               end
-        base.gsub(/[\[\]]+/, '_').chomp('_')
-      end
-
-      # Returns a hash of HTML attributes for the radio input
-      def radio_button_attributes
-        describedby = [
-          @described_by,
-          (@help_text.present? ? help_text_id : nil),
-          (@invalid && @error_text.present? ? error_text_id : nil)
-        ].compact.join(' ')
-
-        {
-          disabled: @disabled,
-          required: @required,
-          class: radio_button_classes(@user_class),
-          aria: radio_button_aria_attributes.merge(describedby: describedby.presence),
-          tabindex: @disabled ? -1 : 0,
-          onchange: @onchange
-        }.compact
-      end
-
-      # Returns a hash of ARIA attributes for the radio input
-      def radio_button_aria_attributes
-        {
-          disabled: @disabled.to_s,
-          describedby: @described_by,
-          controls: @controls,
-          invalid: @invalid.to_s,
-          required: @required.to_s
-        }.compact
-      end
-
-      # Returns classes for error text
-      def error_text_classes
-        'text-sm text-red-600 mt-1 dark:text-red-400'
       end
     end
   end
