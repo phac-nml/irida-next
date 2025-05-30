@@ -45,9 +45,8 @@ export default class extends Controller {
   }
 
   amendForm(event) {
-    event.detail.fetchOptions.body = JSON.stringify(
-      this.#toJson(new FormData(this.formTarget)),
-    );
+    const formData = new FormData(this.formTarget);
+    event.detail.fetchOptions.body = JSON.stringify(this.#toJson(formData));
     event.detail.fetchOptions.headers["Content-Type"] = "application/json";
 
     event.detail.resume();
@@ -82,21 +81,7 @@ export default class extends Controller {
       .replace("WORKFLOW_NAME_PLACEHOLDER", params.workflowname)
       .replace("WORKFLOW_VERSION_PLACEHOLDER", params.workflowversion);
 
-    const formData = new FormData(this.formTarget);
-    const jsonObject = this.#toJson(formData);
-
-    Turbo.fetch(this.formTarget.action, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "text/vnd.turbo-stream.html, text/html, application/xhtml+xml",
-      },
-      credentials: "same-origin",
-      body: JSON.stringify(jsonObject),
-      redirect: "follow",
-    })
-      .then((r) => r.text())
-      .then((html) => Turbo.renderStreamMessage(html));
+    this.formTarget.requestSubmit();
   }
 
   #toJson(formData) {
