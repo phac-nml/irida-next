@@ -46,7 +46,8 @@ module Pathogen
       # @return [String] The input name
       def input_name
         return @input_name if @input_name.present?
-        return "#{@form.object_name}[#{@attribute}]" if @form
+
+        return "#{@form.object_name}[#{@attribute}]" if @form && @form.object_name.present?
 
         @attribute.to_s
       end
@@ -54,7 +55,7 @@ module Pathogen
       # Generates a unique ID for the input element
       # @return [String] The input ID
       def input_id
-        base = if @form
+        base = if @form && @form.object_name.present?
                  "#{@form.object_name}_#{@attribute}_#{@value}"
                else
                  "#{input_name}_#{@value}"
