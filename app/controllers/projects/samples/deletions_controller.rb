@@ -50,7 +50,7 @@ module Projects
           flash[:success] = t('.success')
         end
 
-        redirect_to namespace_project_samples_path
+        redirect_to namespace_project_samples_path, status: :see_other
       end
 
       private

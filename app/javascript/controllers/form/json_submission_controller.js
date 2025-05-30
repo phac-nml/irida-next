@@ -1,19 +1,12 @@
 import { Controller } from "@hotwired/stimulus";
 import { formDataToJsonParams, normalizeParams } from "utilities/form";
 
-function preventEscapeListener(event) {
-  if (event.key === "Escape") {
-    event.preventDefault();
-    event.stopPropagation();
-  }
-}
-
-// Connects to data-controller="workflow-selection"
 export default class extends Controller {
-  static targets = ["workflow", "workflowName", "workflowVersion", "form"];
+  static targets = ["form"];
   static outlets = ["selection"];
   static values = {
     fieldName: String,
+    clearSelection: Boolean,
   };
 
   connect() {
@@ -26,8 +19,6 @@ export default class extends Controller {
     );
 
     this.formTarget.addEventListener("turbo:submit-end", this.boundOnSuccess);
-
-    document.addEventListener("turbo:submit-end", preventEscapeListener);
   }
 
   disconnect() {
@@ -40,8 +31,6 @@ export default class extends Controller {
       "turbo:submit-end",
       this.boundOnSuccess,
     );
-
-    this.removeEscapeListener();
   }
 
   amendForm(event) {
@@ -58,36 +47,9 @@ export default class extends Controller {
     }
   }
 
-  removeEscapeListener() {
-    document.removeEventListener("keydown", preventEscapeListener, true);
-  }
-
-  preventClosingDialog() {
-    document.querySelector(".dialog--close").classList.add("hidden");
-    document.addEventListener("keydown", preventEscapeListener, true);
-  }
-
-  selectWorkflow({ params }) {
-    this.preventClosingDialog();
-    this.workflowNameTarget.value = params.workflowname;
-    this.workflowVersionTarget.value = params.workflowversion;
-
-    let spinner = document.getElementById("pipeline-spinner");
-
-    spinner.classList.remove("hidden");
-    // Update the text inside spinner dialog
-    spinner.innerHTML = spinner.innerHTML
-      .replace("COUNT_PLACEHOLDER", this.selectionOutlet.getNumSelected())
-      .replace("WORKFLOW_NAME_PLACEHOLDER", params.workflowname)
-      .replace("WORKFLOW_VERSION_PLACEHOLDER", params.workflowversion);
-
-    this.formTarget.requestSubmit();
-  }
-
   #toJson(formData) {
     let params = formDataToJsonParams(formData);
 
-    // add sample_ids under the fieldNameValue key to the params
     normalizeParams(
       params,
       this.fieldNameValue,
