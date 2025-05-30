@@ -39,7 +39,7 @@
           </ul>
         </div>
       </div>
-      <%= form_for(:destroy, url: @destroy_path,
+      <%= form_for(:destroy, url: @destroy_path, method: :delete,
           data: {
             controller: "form--json-submission",
             "form--json-submission-selection-outlet": '#workflow-executions-table',
