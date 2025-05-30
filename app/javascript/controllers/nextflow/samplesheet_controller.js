@@ -179,6 +179,7 @@ export default class extends Controller {
         this.#enableErrorState(errorMsg);
       } else {
         this.#combineFormData();
+        this.#disableErrorState();
         fetch(this.urlValue, {
           method: "POST",
           body: new URLSearchParams(this.#compactFormData()),
@@ -248,6 +249,11 @@ export default class extends Controller {
   #disableProcessingState() {
     this.submitTarget.disabled = false;
     this.spinnerTarget.classList.add("hidden");
+  }
+
+  #disableErrorState() {
+    this.errorTarget.classList.add("hidden");
+    this.errorMessageTarget.innerHTML = "";
   }
 
   #enableErrorState(message) {

@@ -4,7 +4,7 @@
   <% end %>
 <% end %>
 
-<% if @updated %>
+<% if @workflow_execution.errors.empty? %>
   <%= turbo_stream.update "edit_dialog",
                       partial: "edit_dialog",
                       locals: {
