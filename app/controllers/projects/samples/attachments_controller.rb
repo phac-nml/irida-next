@@ -4,7 +4,6 @@ module Projects
   module Samples
     # Controller actions for Project Samples Attachments
     class AttachmentsController < Projects::Samples::ApplicationController # rubocop:disable Metrics/ClassLength
-      include ::Metadata
       include SampleAttachment
       before_action :attachment, only: %i[destroy]
       before_action :new_destroy_params, only: %i[new_destroy]

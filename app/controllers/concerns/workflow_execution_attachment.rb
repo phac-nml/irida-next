@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
-# Common Sample Attachment Logic
-module SampleAttachment
+# Common Workflow Execution Attachment Logic
+module WorkflowExecutionAttachment
   extend ActiveSupport::Concern
   include Metadata
 
-  def list_sample_attachments
+  def list_workflow_execution_attachments
     @render_individual_attachments = filter_requested?
     all_attachments = load_attachments
     @has_attachments = all_attachments.count.positive?
     @q = all_attachments.ransack(params[:q])
     set_attachment_default_sort
-    @pagy, @sample_attachments = pagy_with_metadata_sort(@q.result, Attachment)
+    @pagy, @attachments = pagy_with_metadata_sort(@q.result, Attachment)
   end
 
   private
@@ -21,11 +21,10 @@ module SampleAttachment
   end
 
   def load_attachments
-    if filter_requested?
-      @sample.attachments.all
-    else
-      @sample.attachments.where.not(Attachment.arel_table[:metadata].contains({ direction: 'reverse' }))
-    end
+    @samples_workflow_executions = @workflow_execution.samples_workflow_executions
+
+    Attachment.where(attachable: @workflow_execution)
+              .or(Attachment.where(attachable: @samples_workflow_executions))
   end
 
   def set_attachment_default_sort

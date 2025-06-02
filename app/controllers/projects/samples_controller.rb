@@ -3,7 +3,6 @@
 module Projects
   # Controller actions for Samples
   class SamplesController < Projects::ApplicationController # rubocop:disable Metrics/ClassLength
-    include Metadata
     include ListActions
     include Storable
     include SampleAttachment
