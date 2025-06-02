@@ -611,7 +611,7 @@ project_group_sample_actions_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_sample_actions, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
-  puid: INXT_PRJ_AAAAAAAACC
+  puid: INXT_PRJ_AAAAAAAACE
 
 project_subgroup_sample_actions_namespace:
   <<: *DEFAULTS
@@ -621,7 +621,7 @@ project_subgroup_sample_actions_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_sample_actions, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
-  puid: INXT_PRJ_AAAAAAAACD
+  puid: INXT_PRJ_AAAAAAAACF
 
 project_shared_group_sample_actions_owner_namespace:
   <<: *DEFAULTS
@@ -631,7 +631,7 @@ project_shared_group_sample_actions_owner_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_owner, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
-  puid: INXT_PRJ_AAAAAAAACE
+  puid: INXT_PRJ_AAAAAAAACG
 
 project_shared_group_sample_actions_maintainer_namespace:
   <<: *DEFAULTS
@@ -641,7 +641,7 @@ project_shared_group_sample_actions_maintainer_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_maintainer, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
-  puid: INXT_PRJ_AAAAAAAACF
+  puid: INXT_PRJ_AAAAAAAACH
 
 project_shared_group_sample_actions_analyst_namespace:
   <<: *DEFAULTS
@@ -651,7 +651,7 @@ project_shared_group_sample_actions_analyst_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_analyst, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
-  puid: INXT_PRJ_AAAAAAAACG
+  puid: INXT_PRJ_AAAAAAAACI
 
 project_shared_group_sample_actions_guest_namespace:
   <<: *DEFAULTS
@@ -661,4 +661,4 @@ project_shared_group_sample_actions_guest_namespace:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_guest, :uuid) %>
   owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
-  puid: INXT_PRJ_AAAAAAAACH
+  puid: INXT_PRJ_AAAAAAAACJ
