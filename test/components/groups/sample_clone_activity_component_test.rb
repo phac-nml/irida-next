@@ -36,8 +36,7 @@ module Groups
 
       assert_text strip_tags(
         I18n.t('activity.group.samples.clone_html', user: @user.email,
-                                                    cloned_samples_count: activity_to_render[:cloned_samples_count],
-                                                    href: activity_to_render[:target_project_puid])
+                                                    cloned_samples_count: activity_to_render[:cloned_samples_count])
       )
       assert_selector 'span', text: 2
 

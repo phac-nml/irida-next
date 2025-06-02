@@ -69,14 +69,14 @@ module Activities
             I18n.t(
               :'components.activity.dialog.sample_clone.group.target_project_description',
               user: @activity_owner,
-              count: @activity.parameters[:cloned_samples_count],
-              target_project_puid: @activity.parameters[:target_project_puid]
+              count: @activity.parameters[:cloned_samples_count]
             )
 
           @data = @extended_details.details['cloned_samples_data'].to_json
           @column_headers = [
             I18n.t(:'components.activity.dialog.sample_clone.project_from'),
             I18n.t(:'components.activity.dialog.sample_clone.copied_from'),
+            I18n.t(:'components.activity.dialog.sample_clone.project_to'),
             I18n.t(:'components.activity.dialog.sample_clone.copied_to')
           ]
 

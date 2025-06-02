@@ -86,8 +86,10 @@ module Groups
                                                                      clone_puid: cloned_puid }]
         end
         @cloned_samples_data[:group_data] << { sample_name: sample.name, sample_puid: sample.puid,
-                                               clone_puid: cloned_puid, project_name: sample.project.name,
-                                               project_puid: old_project_puid }
+                                               clone_puid: cloned_puid, source_project_name: sample.project.name,
+                                               source_project_puid: old_project_puid,
+                                               target_project_name: @new_project.name,
+                                               target_project_puid: @new_project.puid }
       end
 
       def query_authorized_samples(sample_ids)
@@ -176,8 +178,6 @@ module Groups
                                           owner: current_user,
                                           parameters:
                                           {
-                                            target_project_puid: @new_project.puid,
-                                            target_project: @new_project.id,
                                             cloned_samples_count:,
                                             action: 'group_sample_clone'
                                           }
