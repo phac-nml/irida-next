@@ -29,12 +29,14 @@ export default class extends Controller {
         format: this.formatValue,
         orientation: "bottom left",
         autohide: true,
+        minDate: new Date(),
       });
     } else {
       new IridaNextDatepicker(this.datePickerTarget, {
         format: this.formatValue,
         orientation: "bottom left",
         autohide: true,
+        minDate: new Date(),
       });
     }
   }
