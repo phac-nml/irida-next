@@ -221,7 +221,7 @@
                 ) do %>
                 <% if Flipper.enabled?(:attachments_preview) && attachment.previewable? %>
                   <%= link_to(
-                    "Preview",
+                    t(".preview"),
                     attachment_path(attachment),
                     data: {
                       turbo_stream: true,

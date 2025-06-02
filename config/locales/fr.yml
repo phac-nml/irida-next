@@ -439,6 +439,7 @@ fr:
       id: PUID
       limit:
         item: Pièces jointes
+      preview: Aperçu
       select_page: Sélectionner/Désélectionner les pièces jointes visibles
       type: Type
   auth:
@@ -1102,15 +1103,6 @@ fr:
         name_placeholder: Enter workflow execution name (optional)
         submit_button: Submit
         title: Edit workflow execution
-      files:
-        table_header:
-          actions: Mesures
-          created_at: Created At
-          filename: Filename
-          format: Format
-          puid: ID
-          size: Size
-          type: Type
       index:
         create_export_button: Créer une exportation
         deselect_all_button: Désélectionner tout
@@ -1833,15 +1825,6 @@ fr:
         name_placeholder: Entrez le nom d’exécution du flux de travail (facultatif)
         submit_button: Envoyer
         title: Modifier l’exécution automatisée du flux de travail
-      files:
-        table_header:
-          actions: Mesures
-          created_at: Créé à
-          filename: Nom du fichier
-          format: Format
-          puid: ID
-          size: Taille
-          type: Type
       index:
         create_export_button: Créer une exportation
         delete_workflows_button: Delete Workflow Executions
@@ -2213,9 +2196,6 @@ fr:
       no_template: Pas de modèle
       remove_all: Supprimer tout
   workflow_executions:
-    attachment:
-      download: Télécharger
-      preview: Aperçu
     create:
       error_message: 'Les erreurs suivantes ont empêché la création de l’exécution du flux de travail :'
     edit_dialog:
@@ -2242,14 +2222,9 @@ fr:
         select_file: Sélectionner un fichier
         submit_button: Envoyer
     files:
-      table_header:
-        actions: Mesures
-        created_at: Créé à
-        filename: Nom du fichier
-        format: Format
-        puid: ID
-        size: Taille
-        type: Type
+      empty:
+        description: There are no files associated with this workflow execution.
+        title: No Files
     index:
       actions:
         cancel_button: Annuler
