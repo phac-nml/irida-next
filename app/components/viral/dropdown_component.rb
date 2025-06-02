@@ -53,10 +53,11 @@ module Viral
     end
 
     def set_system_arguments
-      @system_arguments = build_system_arguments(@params)
+      @system_arguments = build_system_arguments
       add_tooltip
       add_button_styles
       add_icon_styles
+      add_aria_label
     end
 
     def add_tooltip
@@ -81,9 +82,25 @@ module Viral
       @system_arguments.merge!(system_arguments_for_icon)
     end
 
-    def build_system_arguments(args)
+    def add_aria_label
+      # If we have a label, use it as the aria-label
+      return if @label.present?
+
+      # If we have a tooltip, use it as the aria-label
+      return if @params[:tooltip].present?
+
+      # If we have an icon, use a descriptive label
+      @system_arguments['aria-label'] = if @icon_name.present?
+                                          "#{@icon_name.to_s.humanize} menu"
+                                        else
+                                          # Fallback to a generic label if nothing else is available
+                                          'Menu'
+                                        end
+    end
+
+    def build_system_arguments
       data = build_data_attributes
-      args.merge(
+      {
         id: "dd-#{SecureRandom.hex(10)}",
         data: data,
         tag: :button,
@@ -92,7 +109,7 @@ module Viral
         'aria-expanded': false,
         'aria-haspopup': true,
         'aria-controls': @dd_id
-      )
+      }.merge(@params[:system_arguments] || {})
     end
 
     def build_data_attributes
