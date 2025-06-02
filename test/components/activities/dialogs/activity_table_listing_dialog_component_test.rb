@@ -288,20 +288,22 @@ module Activities
         assert_selector 'p',
                         text: I18n.t(:'components.activity.dialog.sample_clone.group.target_project_description',
                                      user: @user.email,
-                                     count: activity_to_render[:cloned_samples_count],
-                                     target_project_puid: activity_to_render[:target_project_puid])
+                                     count: activity_to_render[:cloned_samples_count])
         assert_selector 'table', count: 1
-        assert_selector 'th', count: 3
+        assert_selector 'th', count: 4
         assert_selector 'tr', count: 3
         assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.sample_clone.project_from').upcase
+        assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.sample_clone.project_to').upcase
         assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.sample_clone.copied_from').upcase
         assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.sample_clone.copied_to').upcase
         assert_selector 'tr > td', text: project1.name
-        assert_selector 'tr > td', text: project1.puid
-        assert_selector 'tr > td', text: sample1.name
+        assert_selector 'tr > td', text: project1.puid, count: 2
+        assert_selector 'tr > td', text: sample1.name, count: 2
         assert_selector 'tr > td', text: sample1.puid
-        assert_selector 'tr > td', text: sample2.name
+        assert_selector 'tr > td', text: sample2.name, count: 2
         assert_selector 'tr > td', text: sample2.puid
+        assert_selector 'tr > td', text: project_namespace.project.name, count: 2
+        assert_selector 'tr > td', text: project_namespace.puid, count: 2
       end
     end
   end

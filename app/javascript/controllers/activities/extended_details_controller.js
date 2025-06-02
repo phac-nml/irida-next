@@ -78,7 +78,7 @@ export default class extends Controller {
           // table row format: SAMPLE_NAME (SAMPLE_PUID) | PROJECT_NAME (PROJECT_PUID)
           this.#generateSampleAndProjectWithPuidsTableRows(indexRangeData);
         } else if (this.activityTypeValue === "group_sample_clone") {
-          this.#generateGroupSampleTableRows(indexRangeData);
+          this.#generateGroupSampleCloneTableRows(indexRangeData);
         } else {
           this.#generateTableRows(indexRangeData);
         }
@@ -374,7 +374,7 @@ export default class extends Controller {
     }
   }
 
-  #generateGroupSampleTableRows(table_data) {
+  #generateGroupSampleCloneTableRows(table_data) {
     if ("content" in document.createElement("template")) {
       const template = this.groupSampleCloneTableRowTarget;
       const fragment = document.createDocumentFragment();
@@ -390,7 +390,7 @@ export default class extends Controller {
 
         const updateTextContent = (tdIndex, sampleName, puid) => {
           const td = tds[tdIndex];
-          if (tdIndex === 0) {
+          if (tdIndex === 0 || tdIndex === 2) {
             td.querySelector(projectIdSelector).textContent = sampleName;
             td.querySelector(puidSelector).textContent = puid;
           } else {
@@ -398,9 +398,18 @@ export default class extends Controller {
             td.querySelector(puidSelector).textContent = puid;
           }
         };
-        updateTextContent(0, data["project_name"], data["project_puid"]);
+        updateTextContent(
+          0,
+          data["source_project_name"],
+          data["source_project_puid"],
+        );
         updateTextContent(1, data["sample_name"], data["sample_puid"]);
-        updateTextContent(2, data["sample_name"], data["clone_puid"]);
+        updateTextContent(
+          2,
+          data["target_project_name"],
+          data["target_project_puid"],
+        );
+        updateTextContent(3, data["sample_name"], data["clone_puid"]);
 
         fragment.appendChild(clone);
       });

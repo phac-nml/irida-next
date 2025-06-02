@@ -233,9 +233,11 @@ module Groups
           assert_equal 2, activity.parameters[:cloned_samples_count]
           assert_equal [
             { 'clone_puid' => sample69_clone_puid, 'sample_name' => sample69.name, 'sample_puid' => sample69.puid,
-              'project_name' => sample69.project.name, 'project_puid' => sample69.project.puid },
+              'source_project_name' => sample69.project.name, 'source_project_puid' => sample69.project.puid,
+              'target_project_name' => target_project.name, 'target_project_puid' => target_project.puid },
             { 'clone_puid' => sample70_clone_puid, 'sample_name' => sample70.name, 'sample_puid' => sample70.puid,
-              'project_name' => sample70.project.name, 'project_puid' => sample70.project.puid }
+              'source_project_name' => sample70.project.name, 'source_project_puid' => sample70.project.puid,
+              'target_project_name' => target_project.name, 'target_project_puid' => target_project.puid }
           ], activity.extended_details.details['cloned_samples_data']
           assert_equal 'group_sample_clone',
                        activity.parameters[:action]
