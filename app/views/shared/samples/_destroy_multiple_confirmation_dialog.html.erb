@@ -7,12 +7,6 @@
     data-infinite-scroll-singular-description-value="<%= t(".description.singular") %>"
     data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
   >
-    <%= form_with(
-        url: @list_path,
-        data: { "infinite-scroll-target": "pageForm" }
-      ) do %>
-      <div data-infinite-scroll-target="pageFormContent"></div>
-    <% end %>
 
     <div class="grid gap-4">
       <p
@@ -37,7 +31,7 @@
         </div>
       </div>
 
-      <%= form_for(:deletion, url: @destroy_path,
+      <%= form_for(:deletion, url: destroy_multiple_samples_deletions_path(@namespace),
             data: {
               controller: "spinner form--json-submission",
               "form--json-submission-selection-outlet": '#samples-table',

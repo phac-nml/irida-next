@@ -42,7 +42,10 @@
             <% if @allowed_to[:destroy_sample] && Flipper.enabled?(:group_samples_destroy) %>
               <% dropdown.with_item(
                 label: t("shared.samples.actions_dropdown.delete_samples"),
-                url: new_samples_deletions_path(namespace_id: @group.id),
+                url: new_samples_deletions_path,
+                params: {
+                  namespace_id: @group.id,
+                },
                 disableable: true,
                 data: {
                   action: "turbo:morph-element->action-button#idempotentConnect ",

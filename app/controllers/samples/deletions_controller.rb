@@ -3,20 +3,27 @@
 module Samples
   # controller for sample deletions
   class DeletionsController < ApplicationController
+    include ListActions
     respond_to :turbo_stream
 
     before_action :namespace
 
     def new
-      puts new
+      authorize! (@namespace.group_namespace? ? @namespace : @namespace.project), to: :destroy_sample?
+    end
+
+    def destroy_multiple
+      puts hi
     end
 
     private
 
     def namespace
+      puts params
       puts hi
-      @namespace = Namespace.find(:namespace_id)
+      @namespace = Namespace.find(params[:namespace_id])
     end
+
     # def sample
     #   @sample = Sample.includes(:project).find_by(id: params[:sample_id]) || not_found
     # end
