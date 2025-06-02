@@ -212,11 +212,11 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   def page_title
     @title = case action_name
              when 'show'
-               "#{t(:'projects.sidebar.details')} · #{@project.full_path}"
+               [t(:'projects.sidebar.details'), @project.full_name].join(' · ')
              when 'activity'
-               "#{t(:'projects.sidebar.activity')} · #{@project.full_path}"
+               [t(:'projects.sidebar.activity'), @project.full_name].join(' · ')
              when 'edit'
-               "#{t(:'projects.sidebar.general')} · #{t(:'projects.edit.title')} · #{@project.full_path}"
+               [t(:'projects.sidebar.general'), t(:'projects.edit.title'), @project.full_name].join(' · ')
              when 'new'
                t(:'projects.new.title')
              else

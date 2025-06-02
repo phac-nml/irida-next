@@ -268,14 +268,14 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     @title = case action_name
              when 'show'
                if @tab == 'shared_namespaces'
-                 "#{t(:'groups.show.tabs.shared_namespaces')} · #{@group.full_path}"
+                 [t(:'groups.show.tabs.shared_namespaces'), @group.full_name].join(' · ')
                else
-                 "#{t(:'groups.show.tabs.subgroups_and_projects')} · #{@group.full_path}"
+                 [t(:'groups.show.tabs.subgroups_and_projects'), @group.full_name].join(' · ')
                end
              when 'activity'
-               "#{t(:'groups.sidebar.activity')} · #{@group.full_path}"
+               [t(:'groups.sidebar.activity'), @group.full_name].join(' · ')
              when 'edit'
-               "#{t(:'groups.sidebar.general')} · #{t(:'groups.edit.title')} · #{@group.full_path}"
+               [t(:'groups.sidebar.general'), t(:'groups.edit.title'), @group.full_name].join(' · ')
              when 'new'
                if @group
                  t(:'groups.new_subgroup.title')
