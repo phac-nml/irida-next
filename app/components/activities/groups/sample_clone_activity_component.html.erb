@@ -1,40 +1,14 @@
 <span>
-  <% namespace = (@activity[:target_project]) %>
-  <% if project_exists(namespace) %>
-    <%= t(
-      "#{@activity[:key]}",
-      user: @activity[:user],
-      href:
-        link_to(
-          namespace_puid(namespace),
-          namespace_project_samples_path(namespace.parent, namespace.project),
-          class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
-        ),
-      cloned_samples_count:
-        content_tag(
-          :span,
-          @activity[:cloned_samples_count],
-          class: "text-slate-800 dark:text-slate-300 font-medium",
-        ),
-    ) %>
-  <% else %>
-    <%= t(
-      "#{@activity[:key]}",
-      user: @activity[:user],
-      cloned_samples_count:
-        content_tag(
-          :span,
-          @activity[:cloned_samples_count],
-          class: "text-slate-800 dark:text-slate-300 font-medium",
-        ),
-      href:
-        content_tag(
-          :span,
-          namespace_puid(namespace),
-          class: "text-slate-800 dark:text-slate-300 font-medium",
-        ),
-    ) %>
-  <% end %>
+  <%= t(
+    "#{@activity[:key]}",
+    user: @activity[:user],
+    cloned_samples_count:
+      content_tag(
+        :span,
+        @activity[:cloned_samples_count],
+        class: "text-slate-800 dark:text-slate-300 font-medium",
+      ),
+  ) %>
   <span class="block">
     <%= link_to(
       t(:"components.activity.more_details"),
