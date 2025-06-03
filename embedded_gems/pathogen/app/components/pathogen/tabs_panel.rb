@@ -3,18 +3,19 @@
 module Pathogen
   # 🎯 TabsPanel Component
   # A fully accessible tab panel implementation following WAI-ARIA Tabs Pattern
+  # Uses Turbo Drive for full page navigation with morphing
   # @see https://www.w3.org/WAI/ARIA/apg/patterns/tabs/
   class TabsPanel < Pathogen::Component
     TAG_DEFAULT = :nav
     TAG_OPTIONS = [TAG_DEFAULT, :div].freeze
 
-    TYPE_DEFAULT = 'default'
-    TYPE_OPTIONS = [TYPE_DEFAULT, 'underline'].freeze
+    TYPE_DEFAULT = 'underline'
+    TYPE_OPTIONS = ['default', TYPE_DEFAULT].freeze
 
     BODY_TAG_DEFAULT = :ul
-    BODY_DEFAULT_CLASSES = 'flex flex-wrap text-sm font-medium text-center ' \
-                           'text-slate-500 border-b border-slate-200 ' \
-                           'dark:border-slate-700 dark:text-slate-400'
+    BODY_DEFAULT_CLASSES = 'flex flex-wrap -mb-px text-sm font-medium text-center ' \
+                           'text-slate-500 border-b border-slate-200 dark:border-slate-700 ' \
+                           'dark:text-slate-400 w-full'
 
     # 📝 Renders individual tab elements with proper ARIA attributes
     renders_many :tabs, lambda { |options = {}|
@@ -22,12 +23,11 @@ module Pathogen
         options.merge(
           selected: options[:selected] || false,
           tab_type: @type,
-          controls: options[:controls] || @id
+          controls: options[:controls] || @id,
+          tablist_id: @id
         )
       )
     }
-
-    renders_many :tabs_contents, 'Pathogen::TabsPanel::TabsContent'
 
     # 🚀 Initialize a new TabsPanel component
     # @param id [String] Unique identifier for the tab panel
@@ -36,25 +36,53 @@ module Pathogen
     # @param type [String] Visual style of the tabs
     # @param body_arguments [Hash] Additional arguments for the tab list container
     # @param system_arguments [Hash] Additional system arguments
-    def initialize(id:, selected_tab:, label: '', tag: TAG_DEFAULT, type: TYPE_DEFAULT, body_arguments: {},
-                   **system_arguments)
+    # rubocop:disable Metrics/ParameterLists
+    def initialize(id:, label: '', tag: TAG_DEFAULT, type: TYPE_DEFAULT, body_arguments: {}, **system_arguments)
       @id = id
+      @tag = tag
       @type = fetch_or_fallback(TYPE_OPTIONS, type, TYPE_DEFAULT)
       @system_arguments = system_arguments
       @body_arguments = body_arguments
-      @selected_tab = selected_tab
+      @label = label
 
-      # 🎨 Set up container attributes
-      @system_arguments[:tag] = fetch_or_fallback(TAG_OPTIONS, tag, TAG_DEFAULT)
+      setup_container_attributes
+      setup_tablist_attributes
+    end
+    # rubocop:enable Metrics/ParameterLists
+
+    private
+
+    def setup_container_attributes
+      @system_arguments[:tag] = fetch_or_fallback(TAG_OPTIONS, @tag, TAG_DEFAULT)
+      @system_arguments[:classes] = class_names(
+        'w-full',
+        @system_arguments[:classes]
+      )
       @system_arguments[:id] = @id
-      @system_arguments[:'aria-label'] = label
+      setup_labeling(@system_arguments)
+    end
 
-      # 🎯 Set up tab list attributes
+    def setup_tablist_attributes
       @body_arguments[:tag] = BODY_TAG_DEFAULT
       @body_arguments[:classes] = class_names(BODY_DEFAULT_CLASSES)
       @body_arguments[:role] = 'tablist'
-      @body_arguments[:'aria-label'] = label
       @body_arguments[:'aria-orientation'] = 'horizontal'
+      setup_labeling(@body_arguments)
+    end
+
+    def setup_labeling(arguments)
+      if @label.present?
+        @label_id = "#{@id}-label"
+        arguments[:'aria-labelledby'] = @label_id
+      else
+        arguments[:'aria-label'] = 'Tabs'
+      end
+    end
+
+    def label_tag
+      return if @label.blank?
+
+      content_tag(:div, @label, id: @label_id, class: 'sr-only')
     end
   end
 end
