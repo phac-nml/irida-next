@@ -6,7 +6,6 @@ module WorkflowExecutionAttachment
   include Metadata
 
   def list_workflow_execution_attachments
-    @render_individual_attachments = filter_requested?
     all_attachments = load_attachments
     @has_attachments = all_attachments.count.positive?
     @q = all_attachments.ransack(params[:q])
@@ -15,10 +14,6 @@ module WorkflowExecutionAttachment
   end
 
   private
-
-  def filter_requested?
-    params.dig(:q, :puid_or_file_blob_filename_cont).present?
-  end
 
   def load_attachments
     @samples_workflow_executions = @workflow_execution.samples_workflow_executions
