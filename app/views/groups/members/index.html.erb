@@ -54,7 +54,7 @@
   <div
     id="groups-details-content"
     role="tabpanel"
-    aria-labelledby="<%= @tab == 'shared_namespaces' ? 'shared_namespaces_tab' : 'subgroups_and_projects_tab' %>"
+    aria-labelledby="<%= @tab == 'invited_groups' ? 'members' : 'members-tab' %>"
   >
     <% if @tab == "invited_groups" %>
       <%= turbo_frame_tag "members", src: group_group_links_path(format: :turbo_stream) do %>
