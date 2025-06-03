@@ -1,0 +1,13 @@
+<%= render TreegridComponent.new do |component| %>
+  <% component.with_row(tabindex: "0") do %>
+    First
+  <% end %>
+
+  <% component.with_row() do %>
+    Second
+  <% end %>
+
+  <% component.with_row() do %>
+    Third
+  <% end %>
+<% end %>
