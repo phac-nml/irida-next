@@ -1,12 +1,14 @@
 <%# 🎯 Tabs Panel Container %>
 <%= render Pathogen::BaseComponent.new(**@system_arguments) do %>
   <%# 🎨 Tab List %>
-  <%= render Pathogen::BaseComponent.new(**@body_arguments) do %>
-    <%# 📝 Individual Tabs %>
-    <% tabs.each do |tab| %>
-      <%= tab %>
+  <nav role="navigation" aria-label="<%= @label.present? ? @label : 'Tabs' %>">
+    <%= render Pathogen::BaseComponent.new(**@body_arguments) do %>
+      <%# 📝 Individual Tabs %>
+      <% tabs.each do |tab| %>
+        <%= tab %>
+      <% end %>
     <% end %>
-  <% end %>
+  </nav>
 
   <%# 🎯 Tab Content Container %>
   <div id="<%= @id %>" class="mt-4" role="tabpanel">
