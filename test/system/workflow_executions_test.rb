@@ -378,6 +378,41 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
     assert_selector 'div.random_seed-param > input[value="1"]'
   end
 
+  test 'can search workflow execution files by puid & filename' do
+    Flipper.enable(:workflow_execution_attachments_searching)
+    visit workflow_execution_path(@workflow_execution3)
+
+    assert_text @workflow_execution3.id
+    assert_text I18n.t(:"workflow_executions.state.#{@workflow_execution3.state}")
+    assert_text @workflow_execution3.metadata['workflow_name']
+    assert_text @workflow_execution3.metadata['workflow_version']
+
+    click_on I18n.t('workflow_executions.show.tabs.files')
+
+    within 'tbody' do
+      assert_text attachments(:samples_workflow_execution_completed_output_attachment).puid
+      assert_text attachments(:workflow_execution_completed_output_attachment).puid
+    end
+
+    fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder'),
+            with: attachments(:samples_workflow_execution_completed_output_attachment).puid
+    find('input.t-search-component').native.send_keys(:return)
+
+    within 'tbody' do
+      assert_text attachments(:samples_workflow_execution_completed_output_attachment).puid
+      assert_no_text attachments(:workflow_execution_completed_output_attachment).puid
+    end
+
+    fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder'),
+            with: attachments(:workflow_execution_completed_output_attachment).file.filename.to_s
+    find('input.t-search-component').native.send_keys(:return)
+
+    within 'tbody' do
+      assert_no_text attachments(:samples_workflow_execution_completed_output_attachment).puid
+      assert_text attachments(:workflow_execution_completed_output_attachment).puid
+    end
+  end
+
   test 'can view workflow execution with samplesheet' do
     visit workflow_execution_path(@workflow_execution1)
 
