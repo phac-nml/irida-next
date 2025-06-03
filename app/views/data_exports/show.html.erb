@@ -44,30 +44,44 @@
 <% end %>
 
 <div class="bg-white dark:bg-slate-800">
-  <div
-    class="
-      flex text-sm font-medium text-center border-b text-slate-500 border-slate-200
-      dark:text-slate-400 dark:border-slate-700
-    "
-  >
-    <%= viral_tabs(id: "data-export-tabs", label: "Tabs") do |tabs| %>
-      <%= tabs.with_tab(
-        url: data_export_path(@data_export, tab: "summary"),
-        selected: @tab == "summary" || @tab == nil) do %>
-        <%= t(:"data_exports.show.tabs.summary") %>
-      <% end %>
+  <div class="flex flex-row">
+    <%= render Pathogen::TabsPanel.new(
+      id: "data-export-tabs",
+      label: t(:"data_exports.show.tabs.title")
+    ) do |tabs| %>
+      <% tabs.with_tab(
+        id: "summary-tab",
+        text: t(:"data_exports.show.tabs.summary"),
+        href: data_export_path(@data_export, tab: "summary"),
+        selected: @tab == "summary" || @tab.nil?,
+        controls: "data-export-content",
+        tablist_id: "data-export-tabs",
+      ) %>
+
       <% if @data_export.status == 'ready' && @data_export.export_type != 'linelist' %>
-        <%= tabs.with_tab(
-          url: data_export_path(@data_export, tab: "preview"),
-          selected: @tab == "preview") do %>
-          <%= t(:"data_exports.show.tabs.preview") %>
-        <% end %>
+        <% tabs.with_tab(
+          id: "preview-tab",
+          text: t(:"data_exports.show.tabs.preview"),
+          href: data_export_path(@data_export, tab: "preview"),
+          selected: @tab == "preview",
+          controls: "data-export-content",
+          tablist_id: "data-export-tabs",
+        ) %>
       <% end %>
     <% end %>
   </div>
-  <% if @tab == "preview" %>
-    <%= render partial: "preview" %>
-  <% else %>
-    <%= render partial: "summary" %>
-  <% end %>
+
+  <%# 🎯 Tab Content %>
+  <div
+    id="data-export-content"
+    class="mt-4"
+    role="tabpanel"
+    aria-labelledby="<%= @tab == 'preview' ? 'preview-tab' : 'summary-tab' %>"
+  >
+    <% if @tab == "preview" %>
+      <%= render partial: "preview" %>
+    <% else %>
+      <%= render partial: "summary" %>
+    <% end %>
+  </div>
 </div>
