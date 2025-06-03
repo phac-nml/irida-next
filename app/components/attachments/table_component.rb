@@ -17,7 +17,7 @@ module Attachments
       attachments,
       pagy,
       q,
-      sample, # TODO: Consolidate sample, namespace, and workflow_execution to and attachable & attachable_type if needed.
+      sample,
       namespace,
       workflow_execution,
       render_individual_attachments,
