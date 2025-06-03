@@ -23,7 +23,7 @@ module Pathogen
         options.merge(
           selected: options[:selected] || false,
           tab_type: @type,
-          controls: options[:controls] || @id,
+          controls: options[:controls],
           tablist_id: @id
         )
       )
@@ -50,10 +50,7 @@ module Pathogen
 
     def setup_container_attributes
       @system_arguments[:tag] = TAG_DEFAULT
-      @system_arguments[:classes] = class_names(
-        'w-full',
-        @system_arguments[:classes]
-      )
+
       @system_arguments[:id] = @id
     end
 
