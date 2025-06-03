@@ -14,38 +14,55 @@ class IridaNextDatepicker extends Datepicker {
 
 export default class extends Controller {
   static targets = ["datePicker"];
-  static values = { format: { type: String, default: "yyyy-mm-dd" } };
+  static values = {
+    format: { type: String, default: "yyyy-mm-dd" },
+    minDate: {
+      type: String,
+      default: null,
+      validator: (value) => {
+        if (!value) return true;
+        const date = new Date(value);
+        return !isNaN(date.getTime());
+      },
+    },
+  };
 
   connect() {
+    const options = {
+      format: this.formatValue,
+      orientation: "bottom left",
+      autohide: true,
+      minDate: this.getMinDate(),
+    };
+
+    if (this.datePickerTarget.dataset.datepickerDialog) {
+      options.container = "#dialog";
+    }
+
+    new IridaNextDatepicker(this.datePickerTarget, options);
+
     if (this.datePickerTarget.dataset.datepickerAutosubmit) {
       this.datePickerTarget.addEventListener("changeDate", (e) =>
         this.handleDateSelected(e),
       );
     }
+  }
 
-    // setting "data-datepicker-nomindate": "true" on a datepicker html element
-    // can be used to if datepicker should allow user to select dates in the past
-    let minDate = new Date();
-    if (this.datePickerTarget.dataset.datepickerNomindate === "true") {
-      minDate = false;
+  /**
+   * Gets the minimum date value, handling null and invalid dates
+   * @returns {Date|null} The minimum date or null if not set/invalid
+   * @private
+   */
+  getMinDate() {
+    if (!this.minDateValue) return null;
+
+    const date = new Date(this.minDateValue);
+    if (isNaN(date.getTime())) {
+      console.warn(`Invalid minDate value: ${this.minDateValue}`);
+      return null;
     }
 
-    if (this.datePickerTarget.dataset.datepickerDialog) {
-      new IridaNextDatepicker(this.datePickerTarget, {
-        container: "#dialog",
-        format: this.formatValue,
-        orientation: "bottom left",
-        autohide: true,
-        minDate: minDate,
-      });
-    } else {
-      new IridaNextDatepicker(this.datePickerTarget, {
-        format: this.formatValue,
-        orientation: "bottom left",
-        autohide: true,
-        minDate: minDate,
-      });
-    }
+    return date;
   }
 
   disconnect() {

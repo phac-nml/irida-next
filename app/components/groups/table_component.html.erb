@@ -99,7 +99,11 @@
           <td class="px-6 py-4">
             <% if @abilities[:update_namespace] && !namespace_group_link_source.key?(:inherited_namespace_path) %>
               <%= form_with( model: namespace_group_link, url: select_group_link_path(namespace_group_link), method: :patch) do |form| %>
-                <div class="form-field datepicker" data-controller="datepicker">
+                <div
+                  class="form-field datepicker"
+                  data-controller="datepicker"
+                  data-datepicker-min-date-value="<%= Date.today + 1.day %>"
+                >
                   <div class="relative max-w-sm">
                     <div
                       class="
