@@ -23,20 +23,27 @@ export default class extends Controller {
       );
     }
 
+    // setting "data-datepicker-nomindate": "true" on a datepicker html element
+    // can be used to if datepicker should allow user to select dates in the past
+    let minDate = new Date();
+    if (this.datePickerTarget.dataset.datepickerNomindate === "true") {
+      minDate = false;
+    }
+
     if (this.datePickerTarget.dataset.datepickerDialog) {
       new IridaNextDatepicker(this.datePickerTarget, {
         container: "#dialog",
         format: this.formatValue,
         orientation: "bottom left",
         autohide: true,
-        minDate: new Date(),
+        minDate: minDate,
       });
     } else {
       new IridaNextDatepicker(this.datePickerTarget, {
         format: this.formatValue,
         orientation: "bottom left",
         autohide: true,
-        minDate: new Date(),
+        minDate: minDate,
       });
     }
   }
