@@ -1,5 +1,5 @@
 <div class="flex flex-row-reverse mb-4">
-  <% if Flipper.enabled?(:sample_attachments_searching) %>
+  <% if Flipper.enabled?(:workflow_execution_attachments_searching) %>
     <%= render SearchComponent.new(
               query: @q,
               search_attribute: :puid_or_file_blob_filename_cont,
