@@ -417,6 +417,16 @@
   }
 }
 
+@utility treegrid-container {
+  --treegrid-padding: 30px;
+
+  & > .treegrid-row {
+    & > div[role="gridcell"] {
+      padding-left: calc((var(--treegrid-level) - 1) * var(--treegrid-padding));
+    }
+  }
+}
+
 @utility namespace-tree-container {
   /*GROUPS LIST TREE*/
   & > .namespace-list-tree > .namespace-entry.has-children:first-child {
