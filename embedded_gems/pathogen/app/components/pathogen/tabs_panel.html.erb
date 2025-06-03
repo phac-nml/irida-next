@@ -8,8 +8,8 @@
     <% end %>
   <% end %>
 
-  <%# 🎯 Tab Panels %>
-  <% tabs_contents.each do |content| %>
+  <%# 🎯 Tab Content Container %>
+  <div id="<%= @id %>" class="mt-4" role="tabpanel">
     <%= content %>
-  <% end %>
+  </div>
 <% end %>
