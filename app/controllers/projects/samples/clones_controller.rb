@@ -17,7 +17,7 @@ module Projects
         new_project_id = clone_params[:new_project_id]
         sample_ids = clone_params[:sample_ids]
 
-        ::Projects::Samples::CloneJob.set(wait_until: 1.second.from_now).perform_later(
+        Projects::Samples::CloneJob.set(wait_until: 1.second.from_now).perform_later(
           @project, current_user, new_project_id, sample_ids, @broadcast_target
         )
 

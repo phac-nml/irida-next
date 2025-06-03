@@ -388,14 +388,14 @@ export default class extends Controller {
         const clone = template.content.cloneNode(true);
         const tds = clone.querySelectorAll("td");
 
-        const updateTextContent = (tdIndex, sampleName, puid) => {
+        const updateTextContent = (tdIndex, objectName, objectPuid) => {
           const td = tds[tdIndex];
           if (tdIndex === 0 || tdIndex === 2) {
-            td.querySelector(projectIdSelector).textContent = sampleName;
-            td.querySelector(puidSelector).textContent = puid;
+            td.querySelector(projectIdSelector).textContent = objectName;
+            td.querySelector(puidSelector).textContent = objectPuid;
           } else {
-            td.querySelector(sampleNameSelector).textContent = sampleName;
-            td.querySelector(puidSelector).textContent = puid;
+            td.querySelector(sampleNameSelector).textContent = objectName;
+            td.querySelector(puidSelector).textContent = objectPuid;
           }
         };
         updateTextContent(

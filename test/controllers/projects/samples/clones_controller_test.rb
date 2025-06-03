@@ -15,7 +15,7 @@ module Projects
       end
 
       test 'should enqueue a Projects::Samples::CloneJob' do
-        assert_enqueued_jobs 1, only: ::Projects::Samples::CloneJob do
+        assert_enqueued_jobs 1, only: Projects::Samples::CloneJob do
           post namespace_project_samples_clone_path(@namespace, @project, format: :turbo_stream),
                params: {
                  clone: {

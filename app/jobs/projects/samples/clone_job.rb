@@ -2,13 +2,13 @@
 
 module Projects
   module Samples
-    # Job used to clone samples
+    # Job used to clone project samples
     class CloneJob < ApplicationJob
       queue_as :default
       queue_with_priority 15
 
       def perform(project, current_user, new_project_id, sample_ids, broadcast_target) # rubocop:disable Metrics/MethodLength
-        @cloned_sample_ids = ::Projects::Samples::CloneService
+        @cloned_sample_ids = Projects::Samples::CloneService
                              .new(project, current_user)
                              .execute(
                                new_project_id,

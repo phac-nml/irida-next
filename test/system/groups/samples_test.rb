@@ -2329,7 +2329,7 @@ module Groups
         click_on I18n.t('shared.samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Groups::Samples::CloneJob]
+        perform_enqueued_jobs only: [Groups::Samples::CloneJob]
       end
       ### ACTIONS END ###
 
@@ -2394,7 +2394,7 @@ module Groups
         assert_text I18n.t('shared.progress_bar.in_progress')
         # close button hidden during cloning
         assert_no_selector 'button.dialog--close'
-        perform_enqueued_jobs only: [::Groups::Samples::CloneJob]
+        perform_enqueued_jobs only: [Groups::Samples::CloneJob]
         ### VERIFY END ###
       end
     end
@@ -2429,7 +2429,7 @@ module Groups
         click_on I18n.t('shared.samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Groups::Samples::CloneJob]
+        perform_enqueued_jobs only: [Groups::Samples::CloneJob]
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -2472,7 +2472,7 @@ module Groups
         click_on I18n.t('shared.samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Groups::Samples::CloneJob]
+        perform_enqueued_jobs only: [Groups::Samples::CloneJob]
         ### ACTIONS END ###
 
         ### VERIFY START ###
@@ -2557,7 +2557,7 @@ module Groups
         click_on I18n.t('shared.samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [::Groups::Samples::CloneJob]
+        perform_enqueued_jobs only: [Groups::Samples::CloneJob]
       end
       ### ACTIONS END ###
 

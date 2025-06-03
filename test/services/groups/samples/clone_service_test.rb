@@ -312,7 +312,7 @@ module Groups
         assert_difference -> { Sample.count } => 1,
                           -> { target_project.reload.samples_count } => 1,
                           -> { group.reload.samples_count } => 1 do
-          ::Groups::Samples::CloneService.new(group, user).execute(target_project.id, [sample.id])
+          Groups::Samples::CloneService.new(group, user).execute(target_project.id, [sample.id])
         end
       end
 
@@ -327,7 +327,7 @@ module Groups
         assert_difference -> { Sample.count } => 0,
                           -> { target_project.reload.samples_count } => 0,
                           -> { group.reload.samples_count } => 0 do
-          ::Groups::Samples::CloneService.new(group, user).execute(target_project.id, [sample.id])
+          Groups::Samples::CloneService.new(group, user).execute(target_project.id, [sample.id])
         end
       end
 
@@ -342,7 +342,7 @@ module Groups
         assert_difference -> { Sample.count } => 1,
                           -> { target_project.reload.samples_count } => 1,
                           -> { group.reload.samples_count } => 1 do
-          ::Groups::Samples::CloneService.new(group, user).execute(target_project.id, [sample.id])
+          Groups::Samples::CloneService.new(group, user).execute(target_project.id, [sample.id])
         end
       end
 
@@ -357,7 +357,7 @@ module Groups
         assert_difference -> { Sample.count } => 0,
                           -> { target_project.reload.samples_count } => 0,
                           -> { group.reload.samples_count } => 0 do
-          ::Groups::Samples::CloneService.new(group, user).execute(target_project.id, [sample.id])
+          Groups::Samples::CloneService.new(group, user).execute(target_project.id, [sample.id])
         end
       end
     end

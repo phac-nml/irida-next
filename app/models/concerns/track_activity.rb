@@ -174,7 +174,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     relation.find_by(puid: puid)
   end
 
-  def transfer_activity_parameters(params, activity) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  def transfer_activity_parameters(params, activity) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity
     if %w[project_namespace_transfer group_namespace_transfer].include?(activity.parameters[:action])
 
       params.merge!({
