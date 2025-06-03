@@ -28,23 +28,43 @@
 <% end %>
 
 <div class="bg-white dark:bg-slate-800">
-  <%= viral_tabs(id: "members-tabs", label: t(:"groups.members.index.tabs.aria_label")) do |tabs| %>
-    <%= tabs.with_tab(url: group_members_path(), selected: @tab != "invited_groups") do %>
-      <%= t(:"groups.members.index.tabs.members") %>
-    <% end %>
-    <%= tabs.with_tab(url: group_members_path(tab: "invited_groups"), selected: @tab == "invited_groups") do %>
-      <%= t(:"groups.members.index.tabs.groups") %>
-    <% end %>
+  <%= render Pathogen::TabsPanel.new(
+    id: "members-tabs",
+    label: t(:"groups.members.index.tabs.aria_label")
+  ) do |tabs| %>
+    <% tabs.with_tab(
+      id: "members-tab",
+      text: t(:"groups.members.index.tabs.members"),
+      href: group_members_path(),
+      selected: @tab != "invited_groups",
+      controls: "members-content",
+      tablist_id: "members-tabs",
+    ) %>
+
+    <% tabs.with_tab(
+      id: "groups-tab",
+      text: t(:"groups.members.index.tabs.groups"),
+      href: group_members_path(tab: "invited_groups"),
+      selected: @tab == "invited_groups",
+      controls: "members-content",
+      tablist_id: "members-tabs",
+    ) %>
   <% end %>
 
-  <% if @tab == "invited_groups" %>
-    <%= turbo_frame_tag "members", src: group_group_links_path(format: :turbo_stream) do %>
-      <%= render partial: "shared/loading/table" %>
+  <div
+    id="groups-details-content"
+    role="tabpanel"
+    aria-labelledby="<%= @tab == 'shared_namespaces' ? 'shared_namespaces_tab' : 'subgroups_and_projects_tab' %>"
+  >
+    <% if @tab == "invited_groups" %>
+      <%= turbo_frame_tag "members", src: group_group_links_path(format: :turbo_stream) do %>
+        <%= render partial: "shared/loading/table" %>
+      <% end %>
+    <% else %>
+      <%= turbo_frame_tag "members", src: group_members_path(format: :turbo_stream) do %>
+        <%= render partial: "shared/loading/table" %>
+      <% end %>
     <% end %>
-  <% else %>
-    <%= turbo_frame_tag "members", src: group_members_path(format: :turbo_stream) do %>
-      <%= render partial: "shared/loading/table" %>
-    <% end %>
-  <% end %>
-  <%= turbo_frame_tag "members_pagination" %>
+    <%= turbo_frame_tag "members_pagination" %>
+  </div>
 </div>
