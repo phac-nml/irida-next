@@ -791,9 +791,9 @@ fr:
       remove_button: Retirer
       remove_button_confirmation: Êtes-vous sûr de vouloir supprimer l’exportation de données '%{name}'?
       tabs:
-        title: Data Export Navigation
         preview: Aperçu
         summary: Résumé
+        title: Data Export Navigation
     status:
       processing: TRAITEMENT
       ready: PRÊT
@@ -1853,6 +1853,8 @@ fr:
         create_export_button: Créer une exportation
         edit_button: Modifier
         remove_button: Retirer
+        tabs:
+          label: Workflow Execution Details
       summary:
         created_at: Créé
         name: Nom
