@@ -6,6 +6,9 @@ module Treegrid
     erb_template <<-ERB
       <%= tag.div(class: "treegrid-row", role: "row", aria: @aria, data: @data, style: @style, tabindex: @tabindex) do %>
         <div role="gridcell" aria-colindex="1">
+          <button class="treegrid-row-toggle" type="button">
+            <%= viral_icon(name: "chevron_right", classes: "size-4") %>
+          </button>
           <%= content %>
         </div>
       <% end %>
