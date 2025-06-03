@@ -1,4 +1,4 @@
-<%= viral_dialog(id: "multiple-deletions-dialog", open: open) do |dialog| %>
+<%= viral_dialog(id: "multiple-deletions-dialog", open: true) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
   <div
     data-controller="infinite-scroll"
@@ -7,7 +7,12 @@
     data-infinite-scroll-singular-description-value="<%= t(".description.singular") %>"
     data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
   >
-
+    <%= form_with(
+        url: list_samples_deletions_path(list_class: 'sample'),
+        data: { "infinite-scroll-target": "pageForm" }
+      ) do %>
+      <div data-infinite-scroll-target="pageFormContent"></div>
+    <% end %>
     <div class="grid gap-4">
       <p
         data-infinite-scroll-target="summary"
@@ -31,11 +36,11 @@
         </div>
       </div>
 
-      <%= form_for(:deletion, url: destroy_multiple_samples_deletions_path(@namespace),
+      <%= form_for(:deletion, url: destroy_multiple_samples_deletions_path(namespace_id: @namespace.id),
             data: {
               controller: "spinner form--json-submission",
               "form--json-submission-selection-outlet": '#samples-table',
-              "form--json-submission-field-name-value": "destroy_samples[sample_ids][]",
+              "form--json-submission-field-name-value": "destroy_multiple[sample_ids][]",
               "form--json-submission-clear-selection-value": "true",
               "form--json-submission-target": "form",
               action:"turbo:submit-start->spinner#submitStart turbo:submit-end->viral--dialog#close",

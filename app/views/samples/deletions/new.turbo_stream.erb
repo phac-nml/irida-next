@@ -1,4 +1,5 @@
-<%= render partial: "shared/samples/destroy_multiple_confirmation_dialog",
-locals: {
-  open: true,
-} %>
+<%= turbo_stream.update "samples_dialog",
+                    partial: @confirmation_dialog,
+                    locals: {
+                      open: true,
+                    } %>

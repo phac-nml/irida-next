@@ -5,7 +5,6 @@ module ListActions
   extend ActiveSupport::Concern
 
   def list
-    puts hi
     @page = params[:page].to_i
     if params[:list_class] == 'sample'
       @samples = Sample.where(id: params[:sample_ids])

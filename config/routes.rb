@@ -33,11 +33,9 @@ Rails.application.routes.draw do
           resource :deletions, only: %i[new] do
             delete :destroy
             post :destroy_multiple
+            post :list
           end
         end
-      end
-      collection do
-        post :list
       end
     end
     resources :attachments, only: %i[show]
