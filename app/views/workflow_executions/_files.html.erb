@@ -1,19 +1,35 @@
-<%= render Attachments::TableComponent.new(
-  @attachments,
-  @pagy,
-  @q,
-  nil,
-  nil,
-  @workflow_execution,
-  @render_individual_attachments,
-  @has_attachments,
-  abilities: {
-  },
-  row_actions: {
-  },
-  empty: {
-    icon_name: :document_text,
-    title: t(".empty.title"),
-    description: t(".empty.description"),
-  },
-) %>
+<div class="flex flex-row-reverse mb-4">
+  <% if Flipper.enabled?(:sample_attachments_searching) %>
+    <%= render SearchComponent.new(
+              query: @q,
+              search_attribute: :puid_or_file_blob_filename_cont,
+              placeholder: t(".search.placeholder"),
+              url: workflow_execution_path(@workflow_execution),
+              ) do %>
+      <%= hidden_field_tag :limit, @pagy.limit %>
+      <%= hidden_field_tag :tab, @tab %>
+    <% end %>
+  <% end %>
+</div>
+
+<%= turbo_frame_tag "workflow_execution_attachments" do %>
+  <%= render Attachments::TableComponent.new(
+    @attachments,
+    @pagy,
+    @q,
+    nil,
+    nil,
+    @workflow_execution,
+    @render_individual_attachments,
+    @has_attachments,
+    abilities: {
+    },
+    row_actions: {
+    },
+    empty: {
+      icon_name: :document_text,
+      title: t(".empty.title"),
+      description: t(".empty.description"),
+    },
+  ) %>
+<% end %>

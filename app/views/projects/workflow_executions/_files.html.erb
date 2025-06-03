@@ -1,3 +1,17 @@
+<div class="flex flex-row-reverse mb-4">
+  <% if Flipper.enabled?(:sample_attachments_searching) %>
+    <%= render SearchComponent.new(
+              query: @q,
+              search_attribute: :puid_or_file_blob_filename_cont,
+              placeholder: t("workflow_executions.files.search.placeholder"),
+              url: namespace_project_workflow_execution_path(@namespace.parent, @namespace.project, @workflow_execution)
+              ) do %>
+      <%= hidden_field_tag :limit, @pagy.limit %>
+      <%= hidden_field_tag :tab, @tab %>
+    <% end %>
+  <% end %>
+</div>
+
 <%= render Attachments::TableComponent.new(
   @attachments,
   @pagy,

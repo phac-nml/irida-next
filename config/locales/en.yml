@@ -2229,6 +2229,8 @@ en:
       empty:
         description: There are no files associated with this workflow execution.
         title: No Files
+      search:
+        placeholder: Filter by PUID or Filename
     index:
       actions:
         cancel_button: Cancel
