@@ -16,28 +16,11 @@
       <% if @allowed_to[:destroy_sample] %>
         <%= link_to(
           t("projects.samples.show.remove_button"),
-          new_samples_deletions_path(sample_id: @sample.id),
-          data: {
-            turbo_method: :delete,
-            turbo_confirm: (t(:"groups.members.index.remove_confirmation")),
-          },
-          aria: {
-            label:
-              (
-                # t(
-                #   :"groups.members.index.actions.link_remove_aria_label",
-                #   member: member.user.email,
-                # )
-        
-              ),
-          },
-          class:
-            "font-medium text-blue-600 underline
-                                                                dark:text-blue-500 hover:no-underline cursor-pointer",
-        ) %>
-        <%= link_to(
-          t("projects.samples.show.remove_button"),
-          new_samples_deletions_path(deletion_type: "single", sample_id: @sample.id),
+          new_samples_deletions_path(
+            namespace_id: @project.namespace.id,
+            deletion_type: "single",
+            sample_id: @sample.id,
+          ),
           data: {
             turbo_stream: true,
           },

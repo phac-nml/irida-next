@@ -1677,13 +1677,6 @@ en:
           title: Copy Samples
       create:
         success: Sample was successfully created.
-      deletions:
-        destroy:
-          success: Sample %{sample_name} was successfully removed from project %{project_name}.
-        new_deletion_dialog:
-          description: Are you sure you want to delete sample '%{sample_name}'?
-          submit_button: Remove
-          title: Delete Sample
       edit:
         cancel_button: Cancel
         form:
@@ -1852,6 +1845,8 @@ en:
         updated_at_desc: Updated At
   samples:
     deletions:
+      destroy:
+        success: Sample %{sample_name} was successfully removed from project %{project_name}.
       destroy_multiple_confirmation_dialog:
         description:
           plural: "The following COUNT_PLACEHOLDER samples have been selected for deletion:"
@@ -1862,6 +1857,10 @@ en:
         spinner: Deleting samples. This may take a while...
         submit_button: Confirm
         title: Delete Samples
+      destroy_single_confirmation_dialog:
+        description: Are you sure you want to delete sample '%{sample_name}'?
+        submit_button: Remove
+        title: Delete Sample
     editable_cell:
       update_success: Metadata was successfully updated
     table_component:

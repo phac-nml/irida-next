@@ -14,9 +14,8 @@ module Projects
       end
 
       def execute
-        puts 'hello123'
         authorize! project, to: :destroy_sample?
-        puts 'hello567'
+
         sample.nil? ? destroy_multiple : destroy_single
       end
 

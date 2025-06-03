@@ -1,0 +1,29 @@
+<%= viral_dialog(open: open, size: :large) do |dialog| %>
+  <% dialog.with_header(title: t(".title")) %>
+  <%= turbo_frame_tag("deletion-alert") %>
+
+  <div
+    data-controller="selection"
+    data-selection-storage-key-value="<%= "#{request.base_url}#{namespace_project_samples_path(@namespace.parent, @namespace.project)}" %>"
+    class="
+      mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400
+    "
+  >
+    <p class="mb-4">
+      <%= t(".description", sample_name: @sample.name) %>
+    </p>
+    <%= form_for(:deletion, url: samples_deletions_path(namespace_id: @namespace.id, sample_id: @sample.id), method: :delete,
+            data: {
+              turbo_frame: "_top",
+            }
+          ) do |form| %>
+      <%= form.submit t(".submit_button"),
+                  class:
+                    "button text-sm px-5 py-2.5 text-white bg-red-700 border-red-800 hover:bg-red-800 dark:bg-red-600 dark:text-white dark:border-red-600 dark:hover:bg-red-700",
+                  data: {
+                    action: "click->selection#remove",
+                    "selection-id-param": @sample.id,
+                  } %>
+    <% end %>
+  </div>
+<% end %>
