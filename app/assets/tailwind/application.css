@@ -424,6 +424,15 @@
     & > div[role="gridcell"] {
       padding-left: calc((var(--treegrid-level) - 1) * var(--treegrid-padding));
     }
+    &[aria-expanded="true"]
+      > div[role="gridcell"]
+      > button.treegrid-row-toggle
+      svg {
+      transform: rotate(90deg);
+    }
+    &:not([aria-expanded]) > div[role="gridcell"] > button.treegrid-row-toggle {
+      visibility: hidden;
+    }
   }
 }
 
