@@ -2,7 +2,7 @@
 
 module Activities
   module Groups
-    # Component for rendering project sample clone activity
+    # Component for rendering group sample clone activity
     class SampleCloneActivityComponent < Component
       def initialize(activity: nil)
         @activity = activity

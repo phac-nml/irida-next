@@ -2,7 +2,7 @@
 
 module Projects
   module Samples
-    # Service used to clone samples
+    # Service used to clone project samples
     class CloneService < BaseProjectService
       CloneError = Class.new(StandardError)
 

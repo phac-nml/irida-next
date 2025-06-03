@@ -2,7 +2,7 @@
 
 module Groups
   module Samples
-    # Service used to clone samples
+    # Service used to clone group samples
     class CloneService < BaseGroupService # rubocop:disable Metrics/ClassLength
       CloneError = Class.new(StandardError)
 
