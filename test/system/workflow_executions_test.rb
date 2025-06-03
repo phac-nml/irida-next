@@ -363,7 +363,8 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
 
     click_on I18n.t('workflow_executions.show.tabs.files')
 
-    assert_text 'FILENAME'
+    assert_text I18n.t('workflow_executions.files.empty.title')
+    assert_text I18n.t('workflow_executions.files.empty.description')
 
     click_on I18n.t('workflow_executions.show.tabs.params')
 

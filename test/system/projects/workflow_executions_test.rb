@@ -349,7 +349,8 @@ module Projects
         click_on I18n.t('workflow_executions.show.tabs.files')
       end
 
-      assert_text 'FILENAME'
+      assert_text I18n.t('workflow_executions.files.empty.title')
+      assert_text I18n.t('workflow_executions.files.empty.description')
 
       click_on I18n.t('workflow_executions.show.tabs.params')
 
@@ -509,7 +510,7 @@ module Projects
       within('table tbody') do
         assert_text attachment.puid
         assert_text attachment.file.filename.to_s
-        assert_text I18n.t('workflow_executions.attachment.preview')
+        assert_text I18n.t('attachments.table_component.preview')
       end
     end
 
