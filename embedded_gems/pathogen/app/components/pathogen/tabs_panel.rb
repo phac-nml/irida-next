@@ -78,6 +78,10 @@ module Pathogen
       @body_arguments[:'aria-orientation'] = 'horizontal'
       @body_arguments[:'aria-label'] = @label if @label.present?
       @body_arguments[:id] = "#{@id}-tablist"
+      @body_arguments[:data] = {
+        controller: 'tabs',
+        tabs_tablist_id_value: @id
+      }
     end
   end
 end
