@@ -37,8 +37,6 @@
       text: t(:"groups.members.index.tabs.members"),
       href: group_members_path(),
       selected: @tab != "invited_groups",
-      controls: "members-content",
-      tablist_id: "members-tabs",
     ) %>
 
     <% tabs.with_tab(
@@ -46,16 +44,8 @@
       text: t(:"groups.members.index.tabs.groups"),
       href: group_members_path(tab: "invited_groups"),
       selected: @tab == "invited_groups",
-      controls: "members-content",
-      tablist_id: "members-tabs",
     ) %>
-  <% end %>
 
-  <div
-    id="groups-details-content"
-    role="tabpanel"
-    aria-labelledby="<%= @tab == 'invited_groups' ? 'members' : 'members-tab' %>"
-  >
     <% if @tab == "invited_groups" %>
       <%= turbo_frame_tag "members", src: group_group_links_path(format: :turbo_stream) do %>
         <%= render partial: "shared/loading/table" %>
@@ -66,5 +56,5 @@
       <% end %>
     <% end %>
     <%= turbo_frame_tag "members_pagination" %>
-  </div>
+  <% end %>
 </div>

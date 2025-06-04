@@ -100,8 +100,6 @@
         tab: "summary",
       ),
     selected: @tab == "summary" || @tab == nil,
-    controls: "workflow-content",
-    tablist_id: "workflow-execution-tabs",
   ) %>
 
   <% tabs.with_tab(
@@ -114,8 +112,6 @@
         tab: "params",
       ),
     selected: @tab == "params",
-    controls: "workflow-content",
-    tablist_id: "workflow-execution-tabs",
   ) %>
 
   <% tabs.with_tab(
@@ -128,8 +124,6 @@
         tab: "samplesheet",
       ),
     selected: @tab == "samplesheet",
-    controls: "workflow-content",
-    tablist_id: "workflow-execution-tabs",
   ) %>
 
   <% tabs.with_tab(
@@ -142,21 +136,8 @@
         tab: "files",
       ),
     selected: @tab == "files",
-    controls: "workflow-content",
-    tablist_id: "workflow-execution-tabs",
   ) %>
-<% end %>
 
-<div
-  id="workflow-content"
-  role="tabpanel"
-  aria-labelledby="<%= case @tab
-    when 'summary', nil then 'summary-tab'
-    when 'params' then 'params-tab'
-    when 'samplesheet' then 'samplesheet-tab'
-    when 'files' then 'files-tab'
-    end %>"
->
   <% if @tab == 'summary' || @tab == nil %>
     <%= render partial: "summary" %>
   <% elsif @tab == 'params' %>
@@ -166,4 +147,4 @@
   <% elsif @tab == 'files' %>
     <%= render partial: "files" %>
   <% end %>
-</div>
+<% end %>
