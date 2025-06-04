@@ -1,0 +1,31 @@
+<%# Edge case: Invalid or missing IDs %>
+<%= render Pathogen::TabsPanel.new(id: "invalid-ids-tabs") do |tabs| %>
+  <% tabs.with_tab(
+    id: "", # Invalid: Empty ID
+    controls: "panel-1",
+    text: "Empty ID",
+    href: "/empty-id",
+  ) %>
+
+  <% tabs.with_tab(
+    id: "tab-2",
+    controls: "", # Invalid: Empty controls
+    text: "Empty Controls",
+    href: "/empty-controls",
+  ) %>
+
+  <% tabs.with_tab(id: "tab-3", controls: "panel-3", text: "Valid", href: "/valid") %>
+<% end %>
+
+<%# Panels %>
+<div id="panel-1" role="tabpanel" aria-labelledby="">
+  <p class="p-4">Panel with empty ID (should not be accessible)</p>
+</div>
+
+<div id="" role="tabpanel" aria-labelledby="tab-2">
+  <p class="p-4">Panel with empty ID (should not be accessible)</p>
+</div>
+
+<div id="panel-3" role="tabpanel" aria-labelledby="tab-3">
+  <p class="p-4">Valid panel (should be accessible)</p>
+</div>

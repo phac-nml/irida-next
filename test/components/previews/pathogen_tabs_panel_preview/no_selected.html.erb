@@ -1,0 +1,21 @@
+<%# Edge case: No selected tab (should select first) %>
+<%= render Pathogen::TabsPanel.new(id: "no-selected-tabs") do |tabs| %>
+  <% tabs.with_tab(id: "tab-1", controls: "panel-1", text: "First", href: "/first") %>
+
+  <% tabs.with_tab(id: "tab-2", controls: "panel-2", text: "Second", href: "/second") %>
+
+  <% tabs.with_tab(id: "tab-3", controls: "panel-3", text: "Third", href: "/third") %>
+<% end %>
+
+<%# Panels %>
+<div id="panel-1" role="tabpanel" aria-labelledby="tab-1">
+  <p class="p-4">First panel content (should be visible by default)</p>
+</div>
+
+<div id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+  <p class="p-4">Second panel content (should be hidden)</p>
+</div>
+
+<div id="panel-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+  <p class="p-4">Third panel content (should be hidden)</p>
+</div>

@@ -1,26 +1,37 @@
-<%= render Pathogen::TabsPanel.new(id: "default-tabs") do |tabs| %>
+<%# Basic tabs with minimal configuration %>
+<%= render Pathogen::TabsPanel.new(id: "basic-tabs") do |tabs| %>
   <% tabs.with_tab(
-    controls: "tab-1",
-    selected: true,
-    href: "#tab-1",
     id: "tab-1",
-    text: "Overview",
+    controls: "panel-1",
+    text: "Home",
+    href: "/home",
+    selected: true,
   ) %>
-  <% tabs.with_tab(controls: "tab-2", href: "#tab-2", id: "tab-2", text: "Details") %>
-  <% tabs.with_tab(controls: "tab-3", href: "#tab-3", id: "tab-3", text: "Settings") %>
 
-  <div id="tab-1" class="p-4">
-    <h3 class="text-lg font-medium">Overview Content</h3>
-    <p class="mt-2">This is the overview tab content.</p>
-  </div>
+  <% tabs.with_tab(
+    id: "tab-2",
+    controls: "panel-2",
+    text: "Profile",
+    href: "/profile",
+  ) %>
 
-  <div id="tab-2" class="p-4 hidden">
-    <h3 class="text-lg font-medium">Details Content</h3>
-    <p class="mt-2">This is the details tab content.</p>
-  </div>
-
-  <div id="tab-3" class="p-4 hidden">
-    <h3 class="text-lg font-medium">Settings Content</h3>
-    <p class="mt-2">This is the settings tab content.</p>
-  </div>
+  <% tabs.with_tab(
+    id: "tab-3",
+    controls: "panel-3",
+    text: "Settings",
+    href: "/settings",
+  ) %>
 <% end %>
+
+<%# Panels %>
+<div id="panel-1" role="tabpanel" aria-labelledby="tab-1">
+  <p class="p-4">Home panel content</p>
+</div>
+
+<div id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+  <p class="p-4">Profile panel content</p>
+</div>
+
+<div id="panel-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+  <p class="p-4">Settings panel content</p>
+</div>
