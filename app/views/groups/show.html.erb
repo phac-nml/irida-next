@@ -85,27 +85,19 @@
         href: group_path(@group),
         text: t(:".tabs.subgroups_and_projects"),
         selected: @tab != "shared_namespaces",
-        controls: "shared_namespaces_panel",
       ) %>
       <% tabs.with_tab(
         id: "shared_namespaces_tab",
         href: group_path(@group, tab: "shared_namespaces"),
         text: t(:".tabs.shared_namespaces"),
         selected: @tab == "shared_namespaces",
-        controls: "subgroups_and_projects_panel",
       ) %>
 
-      <div
-        id="groups-details-content"
-        role="tabpanel"
-        aria-labelledby="<%= @tab == 'shared_namespaces' ? 'shared_namespaces_tab' : 'subgroups_and_projects_tab' %>"
-      >
-        <% if @tab == "shared_namespaces" %>
-          <%= render "groups/shared_namespaces/index", locals: { namespaces: @namespaces } %>
-        <% else %>
-          <%= render "groups/subgroups/index", locals: { namespaces: @namespaces } %>
-        <% end %>
-      </div>
+      <% if @tab == "shared_namespaces" %>
+        <%= render "groups/shared_namespaces/index", locals: { namespaces: @namespaces } %>
+      <% else %>
+        <%= render "groups/subgroups/index", locals: { namespaces: @namespaces } %>
+      <% end %>
 
     <% end %>
 
