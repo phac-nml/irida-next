@@ -1,58 +1,52 @@
-<%# Tabs with custom body content %>
-<%= render Pathogen::TabsPanel.new(id: "custom-tabs") do |tabs| %>
-  <% tabs.with_tab(
-    id: "tab-1",
-    controls: "panel-1",
-    text: "Overview",
-    href: "/overview",
-    selected: true
-  ) do |tab| %>
-    <%= tab.with_icon(icon: "house") %>
-    <span class="ml-2">Overview</span>
-    <%= tab.count { "New" } %>
-  <% end %>
+<%# Navigation with custom body structure %>
+<%= render Pathogen::TabsPanel.new(
+  id: "custom-body-nav",
+  body_arguments: {
+    tag: :div,
+    classes: "flex space-x-4"
+  }
+) do |nav| %>
+  <% nav.with_tab(
+    id: "nav-1",
+    text: "Home",
+    href: "/home",
+    selected: true,
+    wrapper_arguments: {
+      tag: :div,
+      classes: "flex-1",
+    },
+  ) %>
 
-  <% tabs.with_tab(
-    id: "tab-2",
-    controls: "panel-2",
-    text: "Details",
-    href: "/details"
-  ) do |tab| %>
-    <%= tab.with_icon(icon: "info") %>
-    <span class="ml-2">Details</span>
-    <%= tab.count { "2" } %>
-  <% end %>
+  <% nav.with_tab(
+    id: "nav-2",
+    text: "Profile",
+    href: "/profile",
+    wrapper_arguments: {
+      tag: :div,
+      classes: "flex-1",
+    },
+  ) %>
 
-  <% tabs.with_tab(
-    id: "tab-3",
-    controls: "panel-3",
+  <% nav.with_tab(
+    id: "nav-3",
     text: "Settings",
-    href: "/settings"
-  ) do |tab| %>
-    <%= tab.with_icon(icon: "gear") %>
-    <span class="ml-2">Settings</span>
-    <%= tab.count { "1" } %>
-  <% end %>
+    href: "/settings",
+    wrapper_arguments: {
+      tag: :div,
+      classes: "flex-1",
+    },
+  ) %>
 <% end %>
 
-<%# Panels %>
-<div id="panel-1" role="tabpanel" aria-labelledby="tab-1">
-  <div class="p-4">
-    <h3 class="text-lg font-medium">Overview Content</h3>
-    <p class="mt-2">This tab has a custom layout with icon, text, and count.</p>
-  </div>
+<%# Content sections %>
+<div id="home-content" class="p-4">
+  <p>Home content</p>
 </div>
 
-<div id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
-  <div class="p-4">
-    <h3 class="text-lg font-medium">Details Content</h3>
-    <p class="mt-2">This tab has a custom layout with icon, text, and count.</p>
-  </div>
+<div id="profile-content" class="p-4">
+  <p>Profile content</p>
 </div>
 
-<div id="panel-3" role="tabpanel" aria-labelledby="tab-3" hidden>
-  <div class="p-4">
-    <h3 class="text-lg font-medium">Settings Content</h3>
-    <p class="mt-2">This tab has a custom layout with icon, text, and count.</p>
-  </div>
+<div id="settings-content" class="p-4">
+  <p>Settings content</p>
 </div>

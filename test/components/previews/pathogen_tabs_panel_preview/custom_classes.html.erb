@@ -1,41 +1,26 @@
-<%# Edge case: Custom styling classes %>
+<%# Navigation with custom classes %>
 <%= render Pathogen::TabsPanel.new(
-  id: "custom-classes-tabs",
+  id: "custom-nav",
   body_arguments: {
-    class: "bg-slate-100 dark:bg-slate-800 rounded-lg p-2"
+    classes: "bg-slate-100 rounded-lg p-2"
   }
-) do |tabs| %>
-  <% tabs.with_tab(
-    id: "tab-1",
-    controls: "panel-1",
-    text: "Custom Style",
-    href: "/custom",
-    selected: true,
-    system_arguments: {
-      class: "bg-white dark:bg-slate-900 rounded-lg shadow-sm",
-    },
-  ) %>
+) do |nav| %>
+  <% nav.with_tab(id: "nav-1", text: "Home", href: "/home", selected: true) %>
 
-  <% tabs.with_tab(
-    id: "tab-2",
-    controls: "panel-2",
-    text: "Also Custom",
-    href: "/also-custom",
-    system_arguments: {
-      class: "bg-white dark:bg-slate-900 rounded-lg shadow-sm",
-    },
-  ) %>
+  <% nav.with_tab(id: "nav-2", text: "Profile", href: "/profile") %>
+
+  <% nav.with_tab(id: "nav-3", text: "Settings", href: "/settings") %>
 <% end %>
 
-<%# Panels %>
-<div id="panel-1" role="tabpanel" aria-labelledby="tab-1">
-  <div class="p-4 bg-white dark:bg-slate-900 rounded-lg shadow-sm">
-    <p>Custom styled panel content</p>
-  </div>
+<%# Content sections %>
+<div id="home-content" class="p-4">
+  <p>Home content</p>
 </div>
 
-<div id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
-  <div class="p-4 bg-white dark:bg-slate-900 rounded-lg shadow-sm">
-    <p>Custom styled panel content</p>
-  </div>
+<div id="profile-content" class="p-4">
+  <p>Profile content</p>
+</div>
+
+<div id="settings-content" class="p-4">
+  <p>Settings content</p>
 </div>

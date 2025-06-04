@@ -1,39 +1,39 @@
-<%# Edge case: Tabs with long content %>
-<%= render Pathogen::TabsPanel.new(id: "long-content-tabs") do |tabs| %>
-  <% tabs.with_tab(
-    id: "tab-1",
-    controls: "panel-1",
-    text: "Short",
-    href: "/short",
-    selected: true,
-  ) %>
+<%# Navigation with long content %>
+<%= render Pathogen::TabsPanel.new(id: "long-nav") do |nav| %>
+  <% nav.with_tab(id: "nav-1", text: "Home", href: "/home", selected: true) %>
 
-  <% tabs.with_tab(id: "tab-2", controls: "panel-2", text: "Long", href: "/long") %>
+  <% nav.with_tab(id: "nav-2", text: "Profile", href: "/profile") %>
+
+  <% nav.with_tab(id: "nav-3", text: "Settings", href: "/settings") %>
 <% end %>
 
-<%# Panels %>
-<div id="panel-1" role="tabpanel" aria-labelledby="tab-1">
-  <div class="p-4">
-    <h3 class="text-lg font-medium">Short Content</h3>
-    <p class="mt-2">This panel has minimal content.</p>
-  </div>
+<%# Content sections with long content %>
+<div id="home-content" class="p-4">
+  <h2 class="text-xl font-bold mb-4">Home</h2>
+  <p class="mb-4">This is a long content section that demonstrates how the navigation handles
+    content overflow.</p>
+  <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
+    tempor incididunt ut labore et dolore magna aliqua.</p>
+  <p class="mb-4">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+    aliquip ex ea commodo consequat.</p>
 </div>
 
-<div id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
-  <div class="p-4">
-    <h3 class="text-lg font-medium">Long Content</h3>
-    <p class="mt-2">This panel has a lot of content to test scrolling behavior.</p>
-    <% 20.times do |i| %>
-      <div class="my-4 p-4 bg-slate-100 dark:bg-slate-800 rounded">
-        <h4 class="font-medium">Section
-          <%= i + 1 %></h4>
-        <p class="mt-2">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-          ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
-        </p>
-      </div>
-    <% end %>
-  </div>
+<div id="profile-content" class="p-4">
+  <h2 class="text-xl font-bold mb-4">Profile</h2>
+  <p class="mb-4">This is a long content section that demonstrates how the navigation handles
+    content overflow.</p>
+  <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
+    tempor incididunt ut labore et dolore magna aliqua.</p>
+  <p class="mb-4">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+    aliquip ex ea commodo consequat.</p>
+</div>
+
+<div id="settings-content" class="p-4">
+  <h2 class="text-xl font-bold mb-4">Settings</h2>
+  <p class="mb-4">This is a long content section that demonstrates how the navigation handles
+    content overflow.</p>
+  <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
+    tempor incididunt ut labore et dolore magna aliqua.</p>
+  <p class="mb-4">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+    aliquip ex ea commodo consequat.</p>
 </div>
