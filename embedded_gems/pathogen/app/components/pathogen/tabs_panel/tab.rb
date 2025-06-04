@@ -37,14 +37,15 @@ module Pathogen
 
       # 🎨 Renders icon for the tab
       # @return [Pathogen::Icon] The icon component
-      renders_one :icon, Pathogen::Icon
+      renders_one :icon, lambda { |icon: nil|
+        Pathogen::Icon.new(icon: icon, classes: 'size-4 mr-1.5')
+      }
 
       # 🚀 Initialize a new Tab component
       # @param options [Hash] Configuration options for the tab
       # @option options [String] :id Unique identifier for the tab
       # @option options [String] :controls ID of the controlled tab panel
       # @option options [String] :tablist_id ID of the tablist element
-      # @option options [String] :tab_type Visual style of the tab ('default' or 'underline')
       # @option options [Boolean] :selected Whether the tab is selected
       # @option options [String] :text Text content of the tab
       # @option options [String] :href URL for the tab link
@@ -57,7 +58,6 @@ module Pathogen
         @tablist_id = options[:tablist_id]
         @selected = options[:selected] || false
         @text = options[:text].to_s
-        @tab_type = options[:tab_type] || 'default'
         @href = options[:href]
 
         validate_required_options!
@@ -111,36 +111,16 @@ module Pathogen
         @system_arguments[:classes] = generate_tab_classes
       end
 
-      # 🎨 Generate appropriate classes based on tab type and state
+      # 🎨 Generate appropriate classes based on tab state
       # @return [String] The generated CSS classes
       def generate_tab_classes
-        case @tab_type
-        when 'underline'
-          underline_tab_classes
-        else
-          default_tab_classes
-        end
+        underline_tab_classes
       end
 
       # 💅 Base tab classes shared between styles
       # @return [String] The base CSS classes
       def base_tab_classes
         'inline-block p-4 rounded-t-lg font-semibold transition-colors duration-200 ease-in-out'
-      end
-
-      # 💅 Default tab style classes
-      # @return [String] The default tab CSS classes
-      def default_tab_classes
-        base = base_tab_classes
-        if @selected
-          "#{base} bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-white " \
-            'hover:bg-slate-50 hover:text-slate-900 dark:hover:bg-slate-700 dark:hover:text-white ' \
-            'border-b-2 border-slate-900 dark:border-white'
-        else
-          "#{base} text-slate-700 hover:text-slate-900 hover:bg-slate-50 " \
-            'dark:text-slate-200 dark:hover:text-white dark:hover:bg-slate-700 ' \
-            'border-b-2 border-transparent'
-        end
       end
 
       # 💅 Underline tab style classes

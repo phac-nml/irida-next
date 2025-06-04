@@ -2,23 +2,25 @@
 <%= render Pathogen::BaseComponent.new(**@wrapper_arguments) do %>
   <%# 🎨 Tab button with proper ARIA attributes %>
   <%= render Pathogen::BaseComponent.new(**@system_arguments) do %>
-    <%# 🎨 Icon if present %>
-    <% if icon %>
-      <span class="mr-2" aria-hidden="true">
-        <%= icon %>
-      </span>
-    <% end %>
+    <span class="flex items-center">
+      <%# 🎨 Icon if present %>
+      <% if icon %>
+        <span aria-hidden="true">
+          <%= icon %>
+        </span>
+      <% end %>
 
-    <%# 📝 Tab text %>
-    <span>
-      <%= @text %>
+      <%# 📝 Tab text %>
+      <span>
+        <%= @text %>
+      </span>
+
+      <%# 🎯 Count badge if present %>
+      <% if count %>
+        <span aria-hidden="true">
+          <%= count %>
+        </span>
+      <% end %>
     </span>
-
-    <%# 🎯 Count badge if present %>
-    <% if count %>
-      <span aria-hidden="true">
-        <%= count %>
-      </span>
-    <% end %>
   <% end %>
 <% end %>

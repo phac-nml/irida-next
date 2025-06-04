@@ -1,0 +1,47 @@
+<%= render Pathogen::TabsPanel.new(
+  id: "custom-body-tabs",
+  body_arguments: {
+    class: "flex flex-wrap -mb-px text-sm font-medium text-center text-slate-500 border-b border-slate-200 dark:border-slate-700 dark:text-slate-400 w-full bg-slate-50 dark:bg-slate-800 rounded-t-lg"
+  }
+) do |tabs| %>
+  <% tabs.with_tab(
+    controls: "custom-body-tab-1",
+    selected: true,
+    href: "#custom-body-tab-1",
+    id: "custom-body-tab-1",
+    text: "Overview",
+  ) %>
+  <% tabs.with_tab(
+    controls: "custom-body-tab-2",
+    href: "#custom-body-tab-2",
+    id: "custom-body-tab-2",
+    text: "Details",
+  ) %>
+  <% tabs.with_tab(
+    controls: "custom-body-tab-3",
+    href: "#custom-body-tab-3",
+    id: "custom-body-tab-3",
+    text: "Settings",
+  ) %>
+<% end %>
+
+<div id="custom-body-tab-1" class="p-4 bg-white dark:bg-slate-900 rounded-b-lg">
+  <h3 class="text-lg font-medium">Overview Content</h3>
+  <p class="mt-2">This tab panel has a custom body style.</p>
+</div>
+
+<div
+  id="custom-body-tab-2"
+  class="p-4 bg-white dark:bg-slate-900 rounded-b-lg hidden"
+>
+  <h3 class="text-lg font-medium">Details Content</h3>
+  <p class="mt-2">This tab panel has a custom body style.</p>
+</div>
+
+<div
+  id="custom-body-tab-3"
+  class="p-4 bg-white dark:bg-slate-900 rounded-b-lg hidden"
+>
+  <h3 class="text-lg font-medium">Settings Content</h3>
+  <p class="mt-2">This tab panel has a custom body style.</p>
+</div>
