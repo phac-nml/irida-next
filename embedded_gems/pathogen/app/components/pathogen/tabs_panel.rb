@@ -7,7 +7,6 @@ module Pathogen
   class TabsPanel < Pathogen::Component
     # 🔧 Constants
     TAG_DEFAULT = :nav
-    TAG_OPTIONS = [TAG_DEFAULT].freeze
 
     BODY_TAG_DEFAULT = :ul
     BODY_DEFAULT_CLASSES = [
@@ -65,6 +64,7 @@ module Pathogen
       @system_arguments[:tag] = TAG_DEFAULT
       @system_arguments[:id] = @id
       @system_arguments[:'aria-label'] = @label if @label.present?
+      @system_arguments[:class] = 'w-full'
     end
 
     # 🏗️ Sets up list attributes for the navigation
