@@ -15,7 +15,11 @@
     Group B
   <% end %>
 
-  <% component.with_row(expandable: true, expanded: false, posinset: "3", setsize: "3") do %>
+  <% component.with_row(expandable: true, expanded: true, posinset: "3", setsize: "3") do %>
     Group C
+  <% end %>
+
+  <% component.with_row(level: "2", posinset: "1", setsize: "1") do %>
+    Subgroup C
   <% end %>
 <% end %>
