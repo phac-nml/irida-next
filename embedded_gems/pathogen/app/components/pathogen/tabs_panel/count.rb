@@ -6,6 +6,8 @@ module Pathogen
     class Count < Pathogen::Component
       TAG_DEFAULT = :span
 
+      attr_reader :count
+
       def initialize(count: nil, selected: false, **system_arguments)
         @count = count
         @selected = selected

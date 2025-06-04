@@ -34,6 +34,7 @@ module Pathogen
       # @param system_arguments [Hash] Additional arguments for the count component
       # @return [Pathogen::TabsPanel::Count] The count component instance
       renders_one :count, lambda { |count: nil, **system_arguments|
+        @count = count
         Pathogen::TabsPanel::Count.new(
           count: count,
           selected: @selected,
@@ -45,6 +46,7 @@ module Pathogen
       # @param icon [String] The icon name to render
       # @return [Pathogen::Icon] The icon component instance
       renders_one :icon, lambda { |icon: nil|
+        @icon = icon
         Pathogen::Icon.new(icon: icon, classes: 'size-4 mr-1.5')
       }
 
@@ -104,7 +106,6 @@ module Pathogen
           id: @id,
           href: @href,
           'aria-current': @selected ? 'page' : nil,
-          'aria-label': generate_aria_label,
           data: {
             turbo_action: 'replace',
             tabs_target: 'link'
@@ -114,10 +115,8 @@ module Pathogen
 
       # 🏗️ Sets up wrapper element attributes
       def setup_wrapper_attributes
-        @wrapper_arguments.merge!(
-          tag: :li,
-          classes: WRAPPER_CLASSES
-        )
+        @wrapper_arguments[:tag] ||= :li
+        @wrapper_arguments[:classes] ||= WRAPPER_CLASSES
       end
 
       # 🏗️ Sets up visual styling classes
@@ -163,6 +162,12 @@ module Pathogen
             'dark:hover:border-white'
           ].join(' ')
         end
+      end
+
+      # Move ARIA label generation to render time
+      def call
+        @system_arguments[:'aria-label'] = generate_aria_label
+        super
       end
 
       # 🏷️ Generates an accessible label for the tab
