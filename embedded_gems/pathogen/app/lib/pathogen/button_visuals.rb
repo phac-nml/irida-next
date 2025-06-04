@@ -22,7 +22,7 @@ module Pathogen
     end
 
     def icon_visual(args, name)
-      args[:class] = class_names(args[:class], icon_classes, "#{name}_icon")
+      args[:classes] = class_names(args[:class], icon_classes, "#{name}_icon")
       Pathogen::Icon.new(**args)
     end
 
