@@ -46,7 +46,8 @@
 <div class="bg-white dark:bg-slate-800">
   <div class="flex flex-row">
     <%= render Pathogen::TabsPanel.new(
-      id: "data-export-tabs"
+      id: "data-export-tabs",
+      label: t(:"data_exports.show.tabs.title")
     ) do |tabs| %>
       <% tabs.with_tab(
         id: "summary-tab",
