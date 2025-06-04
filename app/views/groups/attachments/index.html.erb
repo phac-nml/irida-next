@@ -30,6 +30,9 @@
         search_attribute: :puid_or_file_blob_filename_cont,
         placeholder: t(:".search.placeholder"),
         url: group_attachments_path(@group),
+        html: {
+          "data-turbo-permanent": "true",
+        }
       ) do %>
           <%= hidden_field_tag :limit, @pagy.limit %>
         <% end %>

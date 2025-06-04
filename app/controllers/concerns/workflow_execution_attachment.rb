@@ -16,10 +16,10 @@ module WorkflowExecutionAttachment
   private
 
   def load_attachments
-    @samples_workflow_executions = @workflow_execution.samples_workflow_executions
+    samples_workflow_executions = @workflow_execution.samples_workflow_executions
 
     Attachment.where(attachable: @workflow_execution)
-              .or(Attachment.where(attachable: @samples_workflow_executions))
+              .or(Attachment.where(attachable: samples_workflow_executions))
   end
 
   def set_attachment_default_sort
