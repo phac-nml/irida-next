@@ -1,0 +1,15 @@
+<%# Edge case: Single tab %>
+<%= render Pathogen::TabsPanel.new(id: "single-tab") do |tabs| %>
+  <% tabs.with_tab(
+    id: "tab-1",
+    controls: "panel-1",
+    text: "Single Tab",
+    href: "/single",
+    selected: true,
+  ) %>
+<% end %>
+
+<%# Panel %>
+<div id="panel-1" role="tabpanel" aria-labelledby="tab-1">
+  <p class="p-4">Single tab panel content</p>
+</div>

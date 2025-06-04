@@ -1,26 +1,43 @@
-<%= render Pathogen::TabsPanel.new(id: "counted-tabs") do |tabs| %>
-  <% tabs.with_tab(controls: "counted-tab-1", selected: true, href: "#counted-tab-1", id: "counted-tab-1", text: "Overview") do |tab| %>
-    <%= tab.with_count(count: 12) %>
+<%# Tabs with count badges %>
+<%= render Pathogen::TabsPanel.new(id: "count-tabs") do |tabs| %>
+  <% tabs.with_tab(
+    id: "tab-1",
+    controls: "panel-1",
+    text: "Inbox",
+    href: "/inbox",
+    selected: true
+  ) do |tab| %>
+    <%= tab.count { "5" } %>
   <% end %>
-  <% tabs.with_tab(controls: "counted-tab-2", href: "#counted-tab-2", id: "counted-tab-2", text: "Details") do |tab| %>
-    <%= tab.with_count(count: 5) %>
+
+  <% tabs.with_tab(
+    id: "tab-2",
+    controls: "panel-2",
+    text: "Sent",
+    href: "/sent"
+  ) do |tab| %>
+    <%= tab.count { "12" } %>
   <% end %>
-  <% tabs.with_tab(controls: "counted-tab-3", href: "#counted-tab-3", id: "counted-tab-3", text: "Settings") do |tab| %>
-    <%= tab.with_count(count: 3) %>
+
+  <% tabs.with_tab(
+    id: "tab-3",
+    controls: "panel-3",
+    text: "Drafts",
+    href: "/drafts"
+  ) do |tab| %>
+    <%= tab.count { "3" } %>
   <% end %>
 <% end %>
 
-<div id="counted-tab-1" class="p-4">
-  <h3 class="text-lg font-medium">Overview Content</h3>
-  <p class="mt-2">This tab shows 12 items.</p>
+<%# Panels %>
+<div id="panel-1" role="tabpanel" aria-labelledby="tab-1">
+  <p class="p-4">Inbox panel content</p>
 </div>
 
-<div id="counted-tab-2" class="p-4 hidden">
-  <h3 class="text-lg font-medium">Details Content</h3>
-  <p class="mt-2">This tab shows 5 items.</p>
+<div id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+  <p class="p-4">Sent panel content</p>
 </div>
 
-<div id="counted-tab-3" class="p-4 hidden">
-  <h3 class="text-lg font-medium">Settings Content</h3>
-  <p class="mt-2">This tab shows 3 items.</p>
+<div id="panel-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+  <p class="p-4">Drafts panel content</p>
 </div>

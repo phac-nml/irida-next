@@ -1,0 +1,31 @@
+<%# Edge case: Many tabs with scrolling %>
+<%= render Pathogen::TabsPanel.new(
+  id: "many-tabs",
+  body_arguments: {
+    class: "overflow-x-auto"
+  }
+) do |tabs| %>
+  <% 10.times do |i| %>
+    <% tabs.with_tab(
+      id: "tab-#{i + 1}",
+      controls: "panel-#{i + 1}",
+      text: "Tab #{i + 1}",
+      href: "/tab-#{i + 1}",
+      selected: i.zero?,
+    ) %>
+  <% end %>
+<% end %>
+
+<%# Panels %>
+<% 10.times do |i| %>
+  <div
+    id="panel-<%= i + 1 %>"
+    role="tabpanel"
+    aria-labelledby="tab-<%= i + 1 %>"
+    <%= "hidden" unless i.zero? %>
+  >
+    <p class="p-4">Panel
+      <%= i + 1 %>
+      content</p>
+  </div>
+<% end %>

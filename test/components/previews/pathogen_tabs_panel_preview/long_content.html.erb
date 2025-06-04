@@ -1,0 +1,39 @@
+<%# Edge case: Tabs with long content %>
+<%= render Pathogen::TabsPanel.new(id: "long-content-tabs") do |tabs| %>
+  <% tabs.with_tab(
+    id: "tab-1",
+    controls: "panel-1",
+    text: "Short",
+    href: "/short",
+    selected: true,
+  ) %>
+
+  <% tabs.with_tab(id: "tab-2", controls: "panel-2", text: "Long", href: "/long") %>
+<% end %>
+
+<%# Panels %>
+<div id="panel-1" role="tabpanel" aria-labelledby="tab-1">
+  <div class="p-4">
+    <h3 class="text-lg font-medium">Short Content</h3>
+    <p class="mt-2">This panel has minimal content.</p>
+  </div>
+</div>
+
+<div id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+  <div class="p-4">
+    <h3 class="text-lg font-medium">Long Content</h3>
+    <p class="mt-2">This panel has a lot of content to test scrolling behavior.</p>
+    <% 20.times do |i| %>
+      <div class="my-4 p-4 bg-slate-100 dark:bg-slate-800 rounded">
+        <h4 class="font-medium">Section
+          <%= i + 1 %></h4>
+        <p class="mt-2">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+          ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat.
+        </p>
+      </div>
+    <% end %>
+  </div>
+</div>

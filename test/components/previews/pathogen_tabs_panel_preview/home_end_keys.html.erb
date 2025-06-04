@@ -1,0 +1,57 @@
+<%# Keyboard navigation with Home/End keys %>
+<%= render Pathogen::TabsPanel.new(
+  id: "home-end-keys-tabs",
+  label: "Navigation with Home/End keys"
+) do |tabs| %>
+  <% tabs.with_tab(
+    id: "tab-1",
+    controls: "panel-1",
+    text: "First",
+    href: "#",
+    selected: true,
+  ) %>
+
+  <% tabs.with_tab(id: "tab-2", controls: "panel-2", text: "Second", href: "#") %>
+
+  <% tabs.with_tab(id: "tab-3", controls: "panel-3", text: "Third", href: "#") %>
+
+  <% tabs.with_tab(id: "tab-4", controls: "panel-4", text: "Fourth", href: "#") %>
+
+  <% tabs.with_tab(id: "tab-5", controls: "panel-5", text: "Fifth", href: "#") %>
+<% end %>
+
+<%# Panels %>
+<div id="panel-1" role="tabpanel" aria-labelledby="tab-1">
+  <div class="p-4">
+    <h3 class="text-lg font-medium">First Panel</h3>
+    <p class="mt-2">Use Home key to jump to first tab</p>
+  </div>
+</div>
+
+<div id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+  <div class="p-4">
+    <h3 class="text-lg font-medium">Second Panel</h3>
+    <p class="mt-2">Use Home/End keys to jump to first/last tab</p>
+  </div>
+</div>
+
+<div id="panel-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+  <div class="p-4">
+    <h3 class="text-lg font-medium">Third Panel</h3>
+    <p class="mt-2">Use Home/End keys to jump to first/last tab</p>
+  </div>
+</div>
+
+<div id="panel-4" role="tabpanel" aria-labelledby="tab-4" hidden>
+  <div class="p-4">
+    <h3 class="text-lg font-medium">Fourth Panel</h3>
+    <p class="mt-2">Use Home/End keys to jump to first/last tab</p>
+  </div>
+</div>
+
+<div id="panel-5" role="tabpanel" aria-labelledby="tab-5" hidden>
+  <div class="p-4">
+    <h3 class="text-lg font-medium">Fifth Panel</h3>
+    <p class="mt-2">Use End key to jump to last tab</p>
+  </div>
+</div>

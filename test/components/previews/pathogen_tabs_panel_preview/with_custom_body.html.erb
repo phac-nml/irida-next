@@ -1,47 +1,58 @@
-<%= render Pathogen::TabsPanel.new(
-  id: "custom-body-tabs",
-  body_arguments: {
-    class: "flex flex-wrap -mb-px text-sm font-medium text-center text-slate-500 border-b border-slate-200 dark:border-slate-700 dark:text-slate-400 w-full bg-slate-50 dark:bg-slate-800 rounded-t-lg"
-  }
-) do |tabs| %>
+<%# Tabs with custom body content %>
+<%= render Pathogen::TabsPanel.new(id: "custom-tabs") do |tabs| %>
   <% tabs.with_tab(
-    controls: "custom-body-tab-1",
-    selected: true,
-    href: "#custom-body-tab-1",
-    id: "custom-body-tab-1",
+    id: "tab-1",
+    controls: "panel-1",
     text: "Overview",
-  ) %>
+    href: "/overview",
+    selected: true
+  ) do |tab| %>
+    <%= tab.with_icon(icon: "house") %>
+    <span class="ml-2">Overview</span>
+    <%= tab.count { "New" } %>
+  <% end %>
+
   <% tabs.with_tab(
-    controls: "custom-body-tab-2",
-    href: "#custom-body-tab-2",
-    id: "custom-body-tab-2",
+    id: "tab-2",
+    controls: "panel-2",
     text: "Details",
-  ) %>
+    href: "/details"
+  ) do |tab| %>
+    <%= tab.with_icon(icon: "info") %>
+    <span class="ml-2">Details</span>
+    <%= tab.count { "2" } %>
+  <% end %>
+
   <% tabs.with_tab(
-    controls: "custom-body-tab-3",
-    href: "#custom-body-tab-3",
-    id: "custom-body-tab-3",
+    id: "tab-3",
+    controls: "panel-3",
     text: "Settings",
-  ) %>
+    href: "/settings"
+  ) do |tab| %>
+    <%= tab.with_icon(icon: "gear") %>
+    <span class="ml-2">Settings</span>
+    <%= tab.count { "1" } %>
+  <% end %>
 <% end %>
 
-<div id="custom-body-tab-1" class="p-4 bg-white dark:bg-slate-900 rounded-b-lg">
-  <h3 class="text-lg font-medium">Overview Content</h3>
-  <p class="mt-2">This tab panel has a custom body style.</p>
+<%# Panels %>
+<div id="panel-1" role="tabpanel" aria-labelledby="tab-1">
+  <div class="p-4">
+    <h3 class="text-lg font-medium">Overview Content</h3>
+    <p class="mt-2">This tab has a custom layout with icon, text, and count.</p>
+  </div>
 </div>
 
-<div
-  id="custom-body-tab-2"
-  class="p-4 bg-white dark:bg-slate-900 rounded-b-lg hidden"
->
-  <h3 class="text-lg font-medium">Details Content</h3>
-  <p class="mt-2">This tab panel has a custom body style.</p>
+<div id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+  <div class="p-4">
+    <h3 class="text-lg font-medium">Details Content</h3>
+    <p class="mt-2">This tab has a custom layout with icon, text, and count.</p>
+  </div>
 </div>
 
-<div
-  id="custom-body-tab-3"
-  class="p-4 bg-white dark:bg-slate-900 rounded-b-lg hidden"
->
-  <h3 class="text-lg font-medium">Settings Content</h3>
-  <p class="mt-2">This tab panel has a custom body style.</p>
+<div id="panel-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+  <div class="p-4">
+    <h3 class="text-lg font-medium">Settings Content</h3>
+    <p class="mt-2">This tab has a custom layout with icon, text, and count.</p>
+  </div>
 </div>

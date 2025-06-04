@@ -1,32 +1,43 @@
+<%# Tabs with icons %>
 <%= render Pathogen::TabsPanel.new(id: "icon-tabs") do |tabs| %>
-  <% tabs.with_tab(controls: "icon-tab-1", selected: true, href: "#icon-tab-1", id: "icon-tab-1", text: "Overview") do |tab| %>
-    <div class="flex items-center">
-      <%= tab.with_icon(icon: "house") %>
-    </div>
+  <% tabs.with_tab(
+    id: "tab-1",
+    controls: "panel-1",
+    text: "Dashboard",
+    href: "/dashboard",
+    selected: true
+  ) do |tab| %>
+    <%= tab.with_icon(icon: "chart-line") %>
   <% end %>
-  <% tabs.with_tab(controls: "icon-tab-2", href: "#icon-tab-2", id: "icon-tab-2", text: "Details") do |tab| %>
-    <div class="flex items-center">
-      <%= tab.with_icon(icon: "newspaper") %>
-    </div>
+
+  <% tabs.with_tab(
+    id: "tab-2",
+    controls: "panel-2",
+    text: "Analytics",
+    href: "/analytics"
+  ) do |tab| %>
+    <%= tab.with_icon(icon: "chart-bar") %>
   <% end %>
-  <% tabs.with_tab(controls: "icon-tab-3", href: "#icon-tab-3", id: "icon-tab-3", text: "Settings") do |tab| %>
-    <div class="flex items-center">
-      <%= tab.with_icon(icon: "gear") %>
-    </div>
+
+  <% tabs.with_tab(
+    id: "tab-3",
+    controls: "panel-3",
+    text: "Reports",
+    href: "/reports"
+  ) do |tab| %>
+    <%= tab.with_icon(icon: "file-text") %>
   <% end %>
 <% end %>
 
-<div id="icon-tab-1" class="p-4">
-  <h3 class="text-lg font-medium">Overview Content</h3>
-  <p class="mt-2">This tab has a house icon.</p>
+<%# Panels %>
+<div id="panel-1" role="tabpanel" aria-labelledby="tab-1">
+  <p class="p-4">Dashboard panel content</p>
 </div>
 
-<div id="icon-tab-2" class="p-4 hidden">
-  <h3 class="text-lg font-medium">Details Content</h3>
-  <p class="mt-2">This tab has an info icon.</p>
+<div id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+  <p class="p-4">Analytics panel content</p>
 </div>
 
-<div id="icon-tab-3" class="p-4 hidden">
-  <h3 class="text-lg font-medium">Settings Content</h3>
-  <p class="mt-2">This tab has a gear icon.</p>
+<div id="panel-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+  <p class="p-4">Reports panel content</p>
 </div>

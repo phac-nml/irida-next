@@ -1,36 +1,40 @@
-<%= render Pathogen::TabsPanel.new(id: "labeled-tabs", label: "Project Navigation") do |tabs| %>
+<%# Tabs with accessibility label %>
+<%= render Pathogen::TabsPanel.new(
+  id: "labeled-tabs",
+  label: "User Account Navigation"
+) do |tabs| %>
   <% tabs.with_tab(
-    controls: "labeled-tab-1",
+    id: "tab-1",
+    controls: "panel-1",
+    text: "Account",
+    href: "/account",
     selected: true,
-    href: "#labeled-tab-1",
-    id: "labeled-tab-1",
-    text: "Overview",
   ) %>
+
   <% tabs.with_tab(
-    controls: "labeled-tab-2",
-    href: "#labeled-tab-2",
-    id: "labeled-tab-2",
-    text: "Details",
+    id: "tab-2",
+    controls: "panel-2",
+    text: "Security",
+    href: "/security",
   ) %>
+
   <% tabs.with_tab(
-    controls: "labeled-tab-3",
-    href: "#labeled-tab-3",
-    id: "labeled-tab-3",
-    text: "Settings",
+    id: "tab-3",
+    controls: "panel-3",
+    text: "Notifications",
+    href: "/notifications",
   ) %>
-
-  <div id="labeled-tab-1" class="p-4">
-    <h3 class="text-lg font-medium">Overview Content</h3>
-    <p class="mt-2">This is the overview tab content with an accessible label.</p>
-  </div>
-
-  <div id="labeled-tab-2" class="p-4 hidden">
-    <h3 class="text-lg font-medium">Details Content</h3>
-    <p class="mt-2">This is the details tab content with an accessible label.</p>
-  </div>
-
-  <div id="labeled-tab-3" class="p-4 hidden">
-    <h3 class="text-lg font-medium">Settings Content</h3>
-    <p class="mt-2">This is the settings tab content with an accessible label.</p>
-  </div>
 <% end %>
+
+<%# Panels %>
+<div id="panel-1" role="tabpanel" aria-labelledby="tab-1">
+  <p class="p-4">Account settings panel content</p>
+</div>
+
+<div id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+  <p class="p-4">Security settings panel content</p>
+</div>
+
+<div id="panel-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+  <p class="p-4">Notification settings panel content</p>
+</div>
