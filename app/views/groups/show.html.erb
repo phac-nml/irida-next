@@ -93,6 +93,16 @@
         selected: @tab == "shared_namespaces",
       ) %>
 
+      <% if @namespaces.present? %>
+        <div class="flex flex-row-reverse mb-2">
+          <%= render SearchComponent.new(query: @q, url: group_path(@group), search_attribute: :name_or_puid_cont, placeholder: t(".search.placeholder")) do %>
+
+            <% if @tab == "shared_namespaces" %>
+              <input type="hidden" name="tab" value="shared_namespaces">
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
       <% if @tab == "shared_namespaces" %>
         <%= render "groups/shared_namespaces/index", locals: { namespaces: @namespaces } %>
       <% else %>
