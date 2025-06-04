@@ -1,0 +1,32 @@
+<%= render Pathogen::TabsPanel.new(id: "icon-tabs") do |tabs| %>
+  <% tabs.with_tab(controls: "icon-tab-1", selected: true, href: "#icon-tab-1", id: "icon-tab-1", text: "Overview") do |tab| %>
+    <div class="flex items-center">
+      <%= tab.with_icon(icon: "house") %>
+    </div>
+  <% end %>
+  <% tabs.with_tab(controls: "icon-tab-2", href: "#icon-tab-2", id: "icon-tab-2", text: "Details") do |tab| %>
+    <div class="flex items-center">
+      <%= tab.with_icon(icon: "newspaper") %>
+    </div>
+  <% end %>
+  <% tabs.with_tab(controls: "icon-tab-3", href: "#icon-tab-3", id: "icon-tab-3", text: "Settings") do |tab| %>
+    <div class="flex items-center">
+      <%= tab.with_icon(icon: "gear") %>
+    </div>
+  <% end %>
+<% end %>
+
+<div id="icon-tab-1" class="p-4">
+  <h3 class="text-lg font-medium">Overview Content</h3>
+  <p class="mt-2">This tab has a house icon.</p>
+</div>
+
+<div id="icon-tab-2" class="p-4 hidden">
+  <h3 class="text-lg font-medium">Details Content</h3>
+  <p class="mt-2">This tab has an info icon.</p>
+</div>
+
+<div id="icon-tab-3" class="p-4 hidden">
+  <h3 class="text-lg font-medium">Settings Content</h3>
+  <p class="mt-2">This tab has a gear icon.</p>
+</div>

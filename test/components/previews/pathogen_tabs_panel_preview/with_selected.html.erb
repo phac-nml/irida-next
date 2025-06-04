@@ -1,0 +1,36 @@
+<%= render Pathogen::TabsPanel.new(id: "selected-tabs") do |tabs| %>
+  <% tabs.with_tab(
+    controls: "selected-tab-1",
+    href: "#selected-tab-1",
+    id: "selected-tab-1",
+    text: "Overview",
+  ) %>
+  <% tabs.with_tab(
+    controls: "selected-tab-2",
+    selected: true,
+    href: "#selected-tab-2",
+    id: "selected-tab-2",
+    text: "Details",
+  ) %>
+  <% tabs.with_tab(
+    controls: "selected-tab-3",
+    href: "#selected-tab-3",
+    id: "selected-tab-3",
+    text: "Settings",
+  ) %>
+<% end %>
+
+<div id="selected-tab-1" class="p-4 hidden">
+  <h3 class="text-lg font-medium">Overview Content</h3>
+  <p class="mt-2">This tab is not selected by default.</p>
+</div>
+
+<div id="selected-tab-2" class="p-4">
+  <h3 class="text-lg font-medium">Details Content</h3>
+  <p class="mt-2">This tab is selected by default.</p>
+</div>
+
+<div id="selected-tab-3" class="p-4 hidden">
+  <h3 class="text-lg font-medium">Settings Content</h3>
+  <p class="mt-2">This tab is not selected by default.</p>
+</div>

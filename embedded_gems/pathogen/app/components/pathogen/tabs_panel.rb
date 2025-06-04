@@ -9,9 +9,6 @@ module Pathogen
     TAG_DEFAULT = :div
     TAG_OPTIONS = [TAG_DEFAULT].freeze
 
-    TYPE_DEFAULT = 'underline'
-    TYPE_OPTIONS = ['default', TYPE_DEFAULT].freeze
-
     BODY_TAG_DEFAULT = :ul
     BODY_DEFAULT_CLASSES = 'flex flex-wrap -mb-px text-sm font-medium text-center ' \
                            'text-slate-500 border-b border-slate-200 dark:border-slate-700 ' \
@@ -22,7 +19,7 @@ module Pathogen
       Pathogen::TabsPanel::Tab.new(
         options.merge(
           selected: options[:selected] || false,
-          tab_type: @type,
+          tab_type: 'underline',
           controls: options[:controls],
           tablist_id: @id
         )
@@ -32,12 +29,10 @@ module Pathogen
     # 🚀 Initialize a new TabsPanel component
     # @param id [String] Unique identifier for the tab panel
     # @param label [String] Accessible label for the tab list
-    # @param type [String] Visual style of the tabs
     # @param body_arguments [Hash] Additional arguments for the tab list container
     # @param system_arguments [Hash] Additional system arguments
-    def initialize(id:, label: '', type: TYPE_DEFAULT, body_arguments: {}, **system_arguments)
+    def initialize(id:, label: '', body_arguments: {}, **system_arguments)
       @id = id
-      @type = fetch_or_fallback(TYPE_OPTIONS, type, TYPE_DEFAULT)
       @system_arguments = system_arguments
       @body_arguments = body_arguments
       @label = label
@@ -50,7 +45,6 @@ module Pathogen
 
     def setup_container_attributes
       @system_arguments[:tag] = TAG_DEFAULT
-
       @system_arguments[:id] = @id
     end
 
