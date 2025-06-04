@@ -119,38 +119,49 @@ export default class extends Controller {
   }
 
   #changeExpanded(doExpand, row) {
-    let currentRowIndex = this.rowTargets.indexOf(row);
-    const currentLevel = this.#getLevel(row);
-    let didChange;
-    let doExpandLevel = [];
-    doExpandLevel[currentLevel + 1] = doExpand;
+    const toggleButton = row.querySelector(".treegrid-row-toggle");
+    debugger;
+    if (toggleButton.hasAttribute("data-toggle-url")) {
+      fetch(toggleButton.getAttribute("data-toggle-url"), {
+        credentials: "same-origin",
+        headers: { Accept: "text/vnd.turbo-stream.html" },
+      })
+        .then((r) => r.text())
+        .then((html) => Turbo.renderStreamMessage(html));
+    } else {
+      let currentRowIndex = this.rowTargets.indexOf(row);
+      const currentLevel = this.#getLevel(row);
+      let didChange;
+      let doExpandLevel = [];
+      doExpandLevel[currentLevel + 1] = doExpand;
 
-    while (++currentRowIndex < this.rowTargets.length) {
-      let nextRow = this.rowTargets[currentRowIndex];
-      let rowLevel = this.#getLevel(nextRow);
-      if (rowLevel <= currentLevel) {
-        break; // Next row is not a level down from current row
-      }
-
-      // Only expand the next level if this level is expanded
-      // and previous level is expanded
-      doExpandLevel[rowLevel + 1] =
-        doExpandLevel[rowLevel] && this.#isExpanded(nextRow);
-      var willHideRow = !doExpandLevel[rowLevel];
-      var isRowHidden = nextRow.classList.contains("hidden");
-
-      if (willHideRow !== isRowHidden) {
-        if (willHideRow) {
-          nextRow.classList.add("hidden");
-        } else {
-          nextRow.classList.remove("hidden");
+      while (++currentRowIndex < this.rowTargets.length) {
+        let nextRow = this.rowTargets[currentRowIndex];
+        let rowLevel = this.#getLevel(nextRow);
+        if (rowLevel <= currentLevel) {
+          break; // Next row is not a level down from current row
         }
-        didChange = true;
+
+        // Only expand the next level if this level is expanded
+        // and previous level is expanded
+        doExpandLevel[rowLevel + 1] =
+          doExpandLevel[rowLevel] && this.#isExpanded(nextRow);
+        var willHideRow = !doExpandLevel[rowLevel];
+        var isRowHidden = nextRow.classList.contains("hidden");
+
+        if (willHideRow !== isRowHidden) {
+          if (willHideRow) {
+            nextRow.classList.add("hidden");
+          } else {
+            nextRow.classList.remove("hidden");
+          }
+          didChange = true;
+        }
       }
-    }
-    if (didChange) {
-      this.#setAriaExpanded(row, doExpand);
-      return true;
+      if (didChange) {
+        this.#setAriaExpanded(row, doExpand);
+        return true;
+      }
     }
   }
 
