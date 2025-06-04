@@ -6,9 +6,7 @@
     href: "/home",
     selected: true,
   ) do |tab| %>
-    <%= tab.count do %>
-      3
-    <% end %>
+    <%= tab.with_count(count: 3) %>
   <% end %>
 
   <% nav.with_tab(
@@ -16,9 +14,7 @@
     text: "Profile",
     href: "/profile",
   ) do |tab| %>
-    <%= tab.count do %>
-      5
-    <% end %>
+    <%= tab.with_count(count: 5) %>
   <% end %>
 
   <% nav.with_tab(
@@ -26,9 +22,7 @@
     text: "Settings",
     href: "/settings",
   ) do |tab| %>
-    <%= tab.count do %>
-      2
-    <% end %>
+    <%= tab.with_count(count: 2) %>
   <% end %>
 <% end %>
 
