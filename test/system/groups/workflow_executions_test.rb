@@ -188,7 +188,7 @@ module Groups
       assert_text @workflow_execution_group_shared1.metadata['workflow_name']
       assert_text @workflow_execution_group_shared1.metadata['workflow_version']
 
-      within %(div[id="workflow-execution-tabs"]) do
+      within %(nav[id="workflow-execution-tabs"]) do
         click_on I18n.t('workflow_executions.show.tabs.files', locale: user.locale)
       end
 
@@ -199,7 +199,7 @@ module Groups
         assert_text I18n.t('attachments.table_component.preview', locale: user.locale)
       end
 
-      within %(div[id="workflow-execution-tabs"]) do
+      within %(nav[id="workflow-execution-tabs"]) do
         click_on I18n.t('workflow_executions.show.tabs.params', locale: user.locale)
       end
 
@@ -268,7 +268,7 @@ module Groups
       assert_no_link I18n.t(:'workflow_executions.show.edit_button')
       assert_no_link I18n.t(:'workflow_executions.show.remove_button')
 
-      within %(div[id="workflow-execution-tabs"]) do
+      within %(nav[id="workflow-execution-tabs"]) do
         click_on I18n.t('workflow_executions.show.tabs.files')
       end
 

@@ -70,15 +70,9 @@ module Pathogen
     # 🏗️ Sets up list attributes for the navigation
     def setup_list_attributes
       @body_arguments[:tag] = @body_arguments[:tag] || BODY_TAG_DEFAULT
-      if @body_arguments[:classes].present?
-        # If custom classes are provided, use them only
-        @body_arguments[:classes] = @body_arguments[:classes]
-      else
-        @body_arguments[:classes] = BODY_DEFAULT_CLASSES
-      end
+      @body_arguments[:classes] = @body_arguments[:classes].presence || BODY_DEFAULT_CLASSES
       @body_arguments[:id] = "#{@id}-list"
       @body_arguments[:data] = {
-        controller: 'tabs',
         tabs_list_id_value: @id
       }
     end
