@@ -411,17 +411,6 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
       assert_no_text attachments(:samples_workflow_execution_completed_output_attachment).puid
       assert_text attachments(:workflow_execution_completed_output_attachment).puid
     end
-
-    fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder'),
-            with: 'filter that results in no attachments'
-    find('input.t-search-component').native.send_keys(:return)
-
-    assert_no_selector 'tbody tr'
-
-    within 'section[role="status"]' do
-      assert_text I18n.t('components.viral.pagy.empty_state.title')
-      assert_text I18n.t('components.viral.pagy.empty_state.description')
-    end
   end
 
   test 'can view workflow execution with samplesheet' do

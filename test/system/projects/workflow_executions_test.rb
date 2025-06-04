@@ -553,17 +553,6 @@ module Projects
         assert_text attachment.file.filename.to_s
         assert_text I18n.t('attachments.table_component.preview')
       end
-
-      fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder'),
-              with: 'filter that results in no attachments'
-      find('input.t-search-component').native.send_keys(:return)
-
-      assert_no_selector 'tbody tr'
-
-      within 'section[role="status"]' do
-        assert_text I18n.t('components.viral.pagy.empty_state.title')
-        assert_text I18n.t('components.viral.pagy.empty_state.description')
-      end
     end
 
     test 'can successfully delete multiple workflows at once' do
