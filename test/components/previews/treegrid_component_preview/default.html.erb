@@ -1,25 +1,25 @@
 <%= render TreegridComponent.new do |component| %>
-  <% component.with_row(tabindex: "0", expandable: true, expanded: true, posinset: "1", setsize: "3") do %>
+  <% component.with_row(tabindex: 0, expandable: true, expanded: true, posinset: 1, setsize: 3) do %>
     Group A
   <% end %>
 
-  <% component.with_row(expandable: true, expanded: true, level: "2", posinset: "1", setsize: "1") do %>
+  <% component.with_row(expandable: true, expanded: true, level: 2, posinset: 1, setsize: 1) do %>
     Subgroup A
   <% end %>
 
-  <% component.with_row(level: "3", posinset: "1", setsize: "1") do %>
+  <% component.with_row(level: 3, posinset: 1, setsize: 1) do %>
     Sub Subgroup A
   <% end %>
 
-  <% component.with_row(posinset: "2", setsize: "3") do %>
+  <% component.with_row(posinset: 2, setsize: 3) do %>
     Group B
   <% end %>
 
-  <% component.with_row(expandable: true, expanded: true, posinset: "3", setsize: "3") do %>
+  <% component.with_row(expandable: true, expanded: false, posinset: 3, setsize: 3) do %>
     Group C
   <% end %>
 
-  <% component.with_row(level: "2", posinset: "1", setsize: "1") do %>
+  <% component.with_row(level: 2, posinset: 1, setsize: 1, classes: "hidden") do %>
     Subgroup C
   <% end %>
 <% end %>
