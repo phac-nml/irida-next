@@ -24,3 +24,9 @@
 <div id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
   <%# Intentionally empty %>
 </div>
+
+<%# Navigation without items %>
+<%= render Pathogen::TabsPanel.new(id: "empty-nav") do |nav| %>
+<% end %>
+
+<%# No content sections %>

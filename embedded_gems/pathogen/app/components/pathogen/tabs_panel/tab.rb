@@ -3,16 +3,12 @@
 module Pathogen
   class TabsPanel
     # 🎯 Tab Component
-    # A fully accessible tab element that follows WAI-ARIA Tabs Pattern guidelines.
-    # Supports keyboard navigation, Turbo Drive integration, and dynamic content updates.
-    #
-    # @see https://www.w3.org/WAI/ARIA/apg/patterns/tabs/
+    # A navigation link component that supports Turbo Drive integration
+    # and dynamic content updates with proper styling and accessibility.
     #
     # @example Basic usage with text
     #   <%= render Pathogen::TabsPanel::Tab.new(
-    #     id: "tab-1",
-    #     controls: "panel-1",
-    #     tablist_id: "tabs",
+    #     id: "nav-1",
     #     text: "Home",
     #     href: "/home",
     #     selected: true
@@ -20,9 +16,7 @@ module Pathogen
     #
     # @example With icon and count badge
     #   <%= render Pathogen::TabsPanel::Tab.new(
-    #     id: "tab-2",
-    #     controls: "panel-2",
-    #     tablist_id: "tabs",
+    #     id: "nav-2",
     #     text: "Notifications",
     #     href: "/notifications"
     #   ) do |tab| %>
@@ -55,8 +49,6 @@ module Pathogen
       # 🚀 Initialize a new Tab component
       # @param options [Hash] Configuration options for the tab
       # @option options [String] :id Unique identifier for the tab
-      # @option options [String] :controls ID of the controlled tab panel
-      # @option options [String] :tablist_id ID of the tablist element
       # @option options [Boolean] :selected Whether the tab is selected
       # @option options [String] :text Text content of the tab
       # @option options [String] :href URL for the tab link
@@ -65,8 +57,6 @@ module Pathogen
       # @raise [ArgumentError] If required options are missing
       def initialize(options = {})
         @id = options[:id]
-        @controls = options[:controls]
-        @tablist_id = options[:tablist_id]
         @selected = options[:selected] || false
         @text = options[:text].to_s
         @href = options[:href]
@@ -81,7 +71,7 @@ module Pathogen
       # 🔍 Validates that all required options are present
       # @raise [ArgumentError] If any required options are missing
       def validate_required_options!
-        required_options = { href: @href, id: @id, controls: @controls, tablist_id: @tablist_id }
+        required_options = { href: @href, id: @id }
         missing_options = required_options.select { |_, value| value.nil? }
 
         return if missing_options.empty?
@@ -98,25 +88,21 @@ module Pathogen
 
       # 🏗️ Sets up all component attributes
       def setup_attributes
-        setup_tab_attributes
+        setup_link_attributes
         setup_wrapper_attributes
         setup_visual_styling
-        setup_keyboard_navigation
       end
 
-      # 🏗️ Sets up tab-specific ARIA attributes and data
-      def setup_tab_attributes
+      # 🏗️ Sets up link-specific attributes and data
+      def setup_link_attributes
         @system_arguments.merge!(
           tag: TAG_DEFAULT,
-          role: 'tab',
           id: @id,
-          'aria-selected': @selected,
-          'aria-controls': @controls,
           href: @href,
+          'aria-current': @selected ? 'page' : nil,
           data: {
             turbo_action: 'replace',
-            tabs_target: 'tab',
-            action: 'click->tabs#select'
+            tabs_target: 'link'
           }
         )
       end
@@ -125,19 +111,13 @@ module Pathogen
       def setup_wrapper_attributes
         @wrapper_arguments.merge!(
           tag: :li,
-          classes: WRAPPER_CLASSES,
-          role: 'presentation'
+          classes: WRAPPER_CLASSES
         )
       end
 
       # 🏗️ Sets up visual styling classes
       def setup_visual_styling
         @system_arguments[:classes] = generate_tab_classes
-      end
-
-      # 🏗️ Sets up keyboard navigation attributes
-      def setup_keyboard_navigation
-        @system_arguments[:tabindex] = @selected ? 0 : -1
       end
 
       # 🎨 Generates appropriate classes based on tab state

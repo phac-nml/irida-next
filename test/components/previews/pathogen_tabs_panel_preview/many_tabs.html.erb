@@ -1,31 +1,33 @@
-<%# Edge case: Many tabs with scrolling %>
-<%= render Pathogen::TabsPanel.new(
-  id: "many-tabs",
-  body_arguments: {
-    class: "overflow-x-auto"
-  }
-) do |tabs| %>
-  <% 10.times do |i| %>
-    <% tabs.with_tab(
-      id: "tab-#{i + 1}",
-      controls: "panel-#{i + 1}",
-      text: "Tab #{i + 1}",
-      href: "/tab-#{i + 1}",
-      selected: i.zero?,
-    ) %>
-  <% end %>
+<%# Navigation with many items %>
+<%= render Pathogen::TabsPanel.new(id: "many-nav") do |nav| %>
+  <% nav.with_tab(id: "nav-1", text: "Home", href: "/home", selected: true) %>
+
+  <% nav.with_tab(id: "nav-2", text: "Profile", href: "/profile") %>
+
+  <% nav.with_tab(id: "nav-3", text: "Settings", href: "/settings") %>
+
+  <% nav.with_tab(id: "nav-4", text: "Messages", href: "/messages") %>
+
+  <% nav.with_tab(id: "nav-5", text: "Notifications", href: "/notifications") %>
 <% end %>
 
-<%# Panels %>
-<% 10.times do |i| %>
-  <div
-    id="panel-<%= i + 1 %>"
-    role="tabpanel"
-    aria-labelledby="tab-<%= i + 1 %>"
-    <%= "hidden" unless i.zero? %>
-  >
-    <p class="p-4">Panel
-      <%= i + 1 %>
-      content</p>
-  </div>
-<% end %>
+<%# Content sections %>
+<div id="home-content" class="p-4">
+  <p>Home content</p>
+</div>
+
+<div id="profile-content" class="p-4">
+  <p>Profile content</p>
+</div>
+
+<div id="settings-content" class="p-4">
+  <p>Settings content</p>
+</div>
+
+<div id="messages-content" class="p-4">
+  <p>Messages content</p>
+</div>
+
+<div id="notifications-content" class="p-4">
+  <p>Notifications content</p>
+</div>

@@ -1,40 +1,24 @@
-<%# Tabs with accessibility label %>
+<%# Navigation with a descriptive label %>
 <%= render Pathogen::TabsPanel.new(
-  id: "labeled-tabs",
-  label: "User Account Navigation"
-) do |tabs| %>
-  <% tabs.with_tab(
-    id: "tab-1",
-    controls: "panel-1",
-    text: "Account",
-    href: "/account",
-    selected: true,
-  ) %>
+  id: "labeled-nav",
+  label: "Main Navigation"
+) do |nav| %>
+  <% nav.with_tab(id: "nav-1", text: "Home", href: "/home", selected: true) %>
 
-  <% tabs.with_tab(
-    id: "tab-2",
-    controls: "panel-2",
-    text: "Security",
-    href: "/security",
-  ) %>
+  <% nav.with_tab(id: "nav-2", text: "Profile", href: "/profile") %>
 
-  <% tabs.with_tab(
-    id: "tab-3",
-    controls: "panel-3",
-    text: "Notifications",
-    href: "/notifications",
-  ) %>
+  <% nav.with_tab(id: "nav-3", text: "Settings", href: "/settings") %>
 <% end %>
 
-<%# Panels %>
-<div id="panel-1" role="tabpanel" aria-labelledby="tab-1">
-  <p class="p-4">Account settings panel content</p>
+<%# Content sections %>
+<div id="home-content" class="p-4">
+  <p>Home content</p>
 </div>
 
-<div id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
-  <p class="p-4">Security settings panel content</p>
+<div id="profile-content" class="p-4">
+  <p>Profile content</p>
 </div>
 
-<div id="panel-3" role="tabpanel" aria-labelledby="tab-3" hidden>
-  <p class="p-4">Notification settings panel content</p>
+<div id="settings-content" class="p-4">
+  <p>Settings content</p>
 </div>

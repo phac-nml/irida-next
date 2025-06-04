@@ -1,43 +1,46 @@
-<%# Tabs with count badges %>
-<%= render Pathogen::TabsPanel.new(id: "count-tabs") do |tabs| %>
-  <% tabs.with_tab(
-    id: "tab-1",
-    controls: "panel-1",
-    text: "Inbox",
-    href: "/inbox",
-    selected: true
+<%# Navigation with count badges %>
+<%= render Pathogen::TabsPanel.new(id: "count-nav") do |nav| %>
+  <% nav.with_tab(
+    id: "nav-1",
+    text: "Home",
+    href: "/home",
+    selected: true,
   ) do |tab| %>
-    <%= tab.count { "5" } %>
+    <%= tab.count do %>
+      3
+    <% end %>
   <% end %>
 
-  <% tabs.with_tab(
-    id: "tab-2",
-    controls: "panel-2",
-    text: "Sent",
-    href: "/sent"
+  <% nav.with_tab(
+    id: "nav-2",
+    text: "Profile",
+    href: "/profile",
   ) do |tab| %>
-    <%= tab.count { "12" } %>
+    <%= tab.count do %>
+      5
+    <% end %>
   <% end %>
 
-  <% tabs.with_tab(
-    id: "tab-3",
-    controls: "panel-3",
-    text: "Drafts",
-    href: "/drafts"
+  <% nav.with_tab(
+    id: "nav-3",
+    text: "Settings",
+    href: "/settings",
   ) do |tab| %>
-    <%= tab.count { "3" } %>
+    <%= tab.count do %>
+      2
+    <% end %>
   <% end %>
 <% end %>
 
-<%# Panels %>
-<div id="panel-1" role="tabpanel" aria-labelledby="tab-1">
-  <p class="p-4">Inbox panel content</p>
+<%# Content sections %>
+<div id="home-content" class="p-4">
+  <p>Home content</p>
 </div>
 
-<div id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
-  <p class="p-4">Sent panel content</p>
+<div id="profile-content" class="p-4">
+  <p>Profile content</p>
 </div>
 
-<div id="panel-3" role="tabpanel" aria-labelledby="tab-3" hidden>
-  <p class="p-4">Drafts panel content</p>
+<div id="settings-content" class="p-4">
+  <p>Settings content</p>
 </div>

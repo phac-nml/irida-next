@@ -1,21 +1,21 @@
-<%# Edge case: No selected tab (should select first) %>
-<%= render Pathogen::TabsPanel.new(id: "no-selected-tabs") do |tabs| %>
-  <% tabs.with_tab(id: "tab-1", controls: "panel-1", text: "First", href: "/first") %>
+<%# Navigation without selected state %>
+<%= render Pathogen::TabsPanel.new(id: "no-selected-nav") do |nav| %>
+  <% nav.with_tab(id: "nav-1", text: "Home", href: "/home") %>
 
-  <% tabs.with_tab(id: "tab-2", controls: "panel-2", text: "Second", href: "/second") %>
+  <% nav.with_tab(id: "nav-2", text: "Profile", href: "/profile") %>
 
-  <% tabs.with_tab(id: "tab-3", controls: "panel-3", text: "Third", href: "/third") %>
+  <% nav.with_tab(id: "nav-3", text: "Settings", href: "/settings") %>
 <% end %>
 
-<%# Panels %>
-<div id="panel-1" role="tabpanel" aria-labelledby="tab-1">
-  <p class="p-4">First panel content (should be visible by default)</p>
+<%# Content sections %>
+<div id="home-content" class="p-4">
+  <p>Home content</p>
 </div>
 
-<div id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
-  <p class="p-4">Second panel content (should be hidden)</p>
+<div id="profile-content" class="p-4">
+  <p>Profile content</p>
 </div>
 
-<div id="panel-3" role="tabpanel" aria-labelledby="tab-3" hidden>
-  <p class="p-4">Third panel content (should be hidden)</p>
+<div id="settings-content" class="p-4">
+  <p>Settings content</p>
 </div>

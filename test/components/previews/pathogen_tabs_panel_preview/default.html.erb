@@ -1,37 +1,21 @@
-<%# Basic tabs with minimal configuration %>
-<%= render Pathogen::TabsPanel.new(id: "basic-tabs") do |tabs| %>
-  <% tabs.with_tab(
-    id: "tab-1",
-    controls: "panel-1",
-    text: "Home",
-    href: "/home",
-    selected: true,
-  ) %>
+<%# Basic navigation with minimal configuration %>
+<%= render Pathogen::TabsPanel.new(id: "basic-nav") do |nav| %>
+  <% nav.with_tab(id: "nav-1", text: "Home", href: "/home", selected: true) %>
 
-  <% tabs.with_tab(
-    id: "tab-2",
-    controls: "panel-2",
-    text: "Profile",
-    href: "/profile",
-  ) %>
+  <% nav.with_tab(id: "nav-2", text: "Profile", href: "/profile") %>
 
-  <% tabs.with_tab(
-    id: "tab-3",
-    controls: "panel-3",
-    text: "Settings",
-    href: "/settings",
-  ) %>
+  <% nav.with_tab(id: "nav-3", text: "Settings", href: "/settings") %>
 <% end %>
 
-<%# Panels %>
-<div id="panel-1" role="tabpanel" aria-labelledby="tab-1">
-  <p class="p-4">Home panel content</p>
+<%# Content sections %>
+<div id="home-content" class="p-4">
+  <p>Home content</p>
 </div>
 
-<div id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
-  <p class="p-4">Profile panel content</p>
+<div id="profile-content" class="p-4">
+  <p>Profile content</p>
 </div>
 
-<div id="panel-3" role="tabpanel" aria-labelledby="tab-3" hidden>
-  <p class="p-4">Settings panel content</p>
+<div id="settings-content" class="p-4">
+  <p>Settings content</p>
 </div>
