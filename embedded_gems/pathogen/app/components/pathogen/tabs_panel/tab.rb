@@ -20,8 +20,8 @@ module Pathogen
     #     text: "Notifications",
     #     href: "/notifications"
     #   ) do |tab| %>
-    #     <%= tab.icon(icon: "bell") %>
-    #     <%= tab.count { "5" } %>
+    #     <%= tab.with_icon(icon: "bell") %>
+    #     <%= tab.with_count(count: 5) %>
     #   <% end %>
     class Tab < Pathogen::Component
       # 🔧 Constants
@@ -30,10 +30,12 @@ module Pathogen
       WRAPPER_CLASSES = 'inline-flex items-center justify-center mr-2'
 
       # 📝 Renders a count badge for the tab
+      # @param count [Integer] The count to display
       # @param system_arguments [Hash] Additional arguments for the count component
       # @return [Pathogen::TabsPanel::Count] The count component instance
-      renders_one :count, lambda { |**system_arguments|
+      renders_one :count, lambda { |count: nil, **system_arguments|
         Pathogen::TabsPanel::Count.new(
+          count: count,
           selected: @selected,
           **system_arguments
         )
@@ -50,7 +52,7 @@ module Pathogen
       # @param options [Hash] Configuration options for the tab
       # @option options [String] :id Unique identifier for the tab
       # @option options [Boolean] :selected Whether the tab is selected
-      # @option options [String] :text Text content of the tab
+      # @option options [String] :text Text content of the tab (required)
       # @option options [String] :href URL for the tab link
       # @option options [Hash] :wrapper_arguments Additional arguments for the wrapper
       # @option options [Hash] :system_arguments Additional system arguments
@@ -60,6 +62,8 @@ module Pathogen
         @selected = options[:selected] || false
         @text = options[:text].to_s
         @href = options[:href]
+        @count = nil
+        @icon = nil
 
         validate_required_options!
         setup_arguments(options)
@@ -71,8 +75,8 @@ module Pathogen
       # 🔍 Validates that all required options are present
       # @raise [ArgumentError] If any required options are missing
       def validate_required_options!
-        required_options = { href: @href, id: @id }
-        missing_options = required_options.select { |_, value| value.nil? }
+        required_options = { href: @href, id: @id, text: @text }
+        missing_options = required_options.select { |_, value| value.blank? }
 
         return if missing_options.empty?
 
@@ -100,6 +104,7 @@ module Pathogen
           id: @id,
           href: @href,
           'aria-current': @selected ? 'page' : nil,
+          'aria-label': generate_aria_label,
           data: {
             turbo_action: 'replace',
             tabs_target: 'link'
@@ -158,6 +163,14 @@ module Pathogen
             'dark:hover:border-white'
           ].join(' ')
         end
+      end
+
+      # 🏷️ Generates an accessible label for the tab
+      # @return [String] The generated ARIA label
+      def generate_aria_label
+        parts = [@text]
+        parts << "with #{@count} items" if @count.present?
+        parts.join(', ')
       end
     end
   end
