@@ -1271,6 +1271,12 @@ en:
   models:
     sample:
       analysis: Analysis
+  namespace_row:
+    contents_component:
+      stats:
+        projects: Projects
+        samples: Samples
+        subnamespaces: Subgroups
   namespace_tree:
     row:
       row_contents_component:

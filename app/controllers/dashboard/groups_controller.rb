@@ -48,6 +48,9 @@ module Dashboard
       @collapsed = params[:collapse] == 'true'
       @group = Group.find(params[:parent_id])
       @depth = params[:depth].to_i
+      @level = params[:level].to_i
+      @posinset = params[:posinset].to_i
+      @setsize = params[:setsize].to_i
       @children = Group.none
       return if @collapsed
 

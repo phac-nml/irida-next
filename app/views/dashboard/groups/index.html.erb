@@ -43,12 +43,13 @@
   </div>
   <% if @groups.any? %>
     <div class="flex flex-col gap-2" id="groups_tree">
-      <%= render NamespaceTreeContainerComponent.new(
-        namespaces: @groups,
-        path: "dashboard_groups_path",
-        render_flat_list: @render_flat_list,
-        icon_size: :medium,
-      ) %>
+      <%= render TreegridComponent.new do |component| %>
+        <% @groups.each_with_index do |group, group_index| %>
+          <%= component.with_row(tabindex: (group_index.zero? ? 0 : -1), expandable: !@render_flat_list && group.children_of_type?(Group.sti_name), posinset: group_index + 1, setsize: @groups.size, button_arguments: {data: {"toggle-url": public_send("dashboard_groups_path", { parent_id: group.id, collapse: false, level: 1, posinset: group_index + 1, setsize: @groups.size })}}, id: dom_id(group)) do %>
+            <%= render NamespaceRow::ContentsComponent.new(namespace: group, icon_size: :medium) %>
+          <% end %>
+        <% end %>
+      <% end %>
       <div class="flex flex-row-reverse">
         <%= render Viral::Pagy::PaginationComponent.new(
           @pagy,
