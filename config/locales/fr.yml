@@ -2007,13 +2007,13 @@ fr:
         new_sample: Nouvel échantillon
         sample_export: Exportation d’échantillons
         transfer: Transférer des échantillons
-      destroy_multiple:
+      destroy_samples:
         no_deleted_samples: Les échantillons sélectionnés n’ont pas pu être supprimés
         partial_error: Les échantillons %{not_deleted} n’ont pas pu être supprimés
         partial_success: Les échantillons %{deleted} ont été supprimés avec succès
         success:
-          one: Successfully deleted 1 sample
-          other: Successfully deleted %{count} samples
+          one: Supprimé avec succès %{count} échantillon
+          other: Supprimé avec succès %{count} échantillons
       destroy_multiple_confirmation_dialog:
         description:
           plural: "Les échantillons COUNT_PLACEHOLDER suivants ont été sélectionnés aux fins de suppression :"

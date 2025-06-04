@@ -2021,7 +2021,7 @@ en:
         new_sample: New sample
         sample_export: Sample export
         transfer: Transfer samples
-      destroy_multiple:
+      destroy_samples:
         no_deleted_samples: Selected samples could not be deleted
         partial_error: "%{not_deleted} samples could not be deleted"
         partial_success: "%{deleted} samples were successfully deleted"
