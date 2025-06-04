@@ -253,6 +253,8 @@ module Groups
               with: 'filter that results in no attachments'
       find('input.t-search-component').native.send_keys(:return)
 
+      assert_no_selector 'tbody tr'
+
       within 'section[role="status"]' do
         assert_text I18n.t('components.viral.pagy.empty_state.title', locale: user.locale)
         assert_text I18n.t('components.viral.pagy.empty_state.description', locale: user.locale)
