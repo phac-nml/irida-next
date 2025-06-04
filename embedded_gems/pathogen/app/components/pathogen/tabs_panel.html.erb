@@ -11,7 +11,7 @@
   </nav>
 
   <%# 🎯 Tab Content Container %>
-  <div id="<%= @id %>" class="mt-4" role="tabpanel">
+  <div id="<%= "#{@id}-content" %>" class="mt-4" role="tabpanel">
     <%= content %>
   </div>
 <% end %>
