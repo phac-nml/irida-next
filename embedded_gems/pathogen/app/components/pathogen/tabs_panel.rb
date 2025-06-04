@@ -67,7 +67,7 @@ module Pathogen
       @system_arguments[:tag] = TAG_DEFAULT
       @system_arguments[:id] = @id
       @system_arguments[:role] = 'tabpanel'
-      @system_arguments[:'aria-labelledby'] = "#{@id}-tablist" if @label.present?
+      @system_arguments[:'aria-labelledby'] = @label.present? ? "#{@id}-tablist" : nil
     end
 
     # 🏗️ Sets up tablist attributes for accessibility
