@@ -12,7 +12,7 @@
     <p class="mb-4">
       <%= t(".description", sample_name: @sample.name) %>
     </p>
-    <%= form_for(:deletion, url: samples_deletions_path(namespace_id: @namespace.id, sample_id: @sample.id), method: :delete,
+    <%= form_for(:deletion, url: destroy_samples_samples_deletions_path(namespace_id: @namespace.id, 'destroy_samples[sample_ids]': [@sample.id]),
             data: {
               turbo_frame: "_top",
             }

@@ -6,28 +6,14 @@ module Samples
     include ListActions
     respond_to :turbo_stream
 
-    before_action :namespace, only: %i[new destroy destroy_multiple]
-    before_action :confirmation_parameters, only: :new
-    before_action :sample, only: %i[new destroy]
+    before_action :namespace, only: %i[new destroy_samples]
+    before_action :confirmation_parameters, :sample, only: :new
 
     def new
       authorize! (@namespace.group_namespace? ? @namespace : @namespace.project), to: :destroy_sample?
     end
 
-    def destroy
-      project_destroy_service({ sample: @sample })
-
-      if @sample.deleted?
-        flash[:success] = t('.success', sample_name: @sample.name, project_name: @namespace.human_name)
-        redirect_to project_redirect_path
-      else
-        render status: :unprocessable_entity,
-               locals: { type: 'alert', message: error_message(@sample) }
-
-      end
-    end
-
-    def destroy_multiple
+    def destroy_samples
       samples_to_delete_count = destroy_samples_params['sample_ids'].count
 
       deleted_samples_count = destroy_service
@@ -40,7 +26,7 @@ module Samples
         set_multi_status_destroy_multiple_message(deleted_samples_count, samples_to_delete_count)
       # All samples deleted successfully
       else
-        flash[:success] = t('shared.samples.destroy_multiple.success')
+        flash[:success] = t('shared.samples.destroy_multiple.success', count: deleted_samples_count)
       end
 
       redirect_to redirect_path, status: :see_other
@@ -61,7 +47,7 @@ module Samples
     end
 
     def destroy_samples_params
-      params.expect(destroy_samples: [:sample_id, { sample_ids: [] }])
+      params.expect(destroy_samples: [{ sample_ids: [] }])
     end
 
     def set_multi_status_destroy_multiple_message(deleted_samples_count, samples_to_delete_count)
@@ -75,12 +61,8 @@ module Samples
       if @namespace.group_namespace?
         Groups::Samples::DestroyService.new(@namespace, current_user, destroy_samples_params).execute
       else
-        project_destroy_service(destroy_samples_params)
+        Projects::Samples::DestroyService.new(@namespace, current_user, destroy_samples_params).execute
       end
-    end
-
-    def project_destroy_service(params)
-      Projects::Samples::DestroyService.new(@namespace.project, current_user, params).execute
     end
 
     def redirect_path
