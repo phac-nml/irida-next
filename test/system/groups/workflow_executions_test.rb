@@ -248,6 +248,15 @@ module Groups
       within 'tbody' do
         assert_text attachments(:workflow_execution_group_shared_output_attachment).puid
       end
+
+      fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder', locale: user.locale),
+              with: 'filter that results in no attachments'
+      find('input.t-search-component').native.send_keys(:return)
+
+      within 'section[role="status"]' do
+        assert_text I18n.t('components.viral.pagy.empty_state.title', locale: user.locale)
+        assert_text I18n.t('components.viral.pagy.empty_state.description', locale: user.locale)
+      end
     end
 
     test 'can view a shared workflow execution that was shared by a different user' do
