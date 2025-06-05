@@ -37,6 +37,8 @@ module Attachments
       @has_attachments = has_attachments
       @abilities = abilities
       @row_actions = row_actions
+      # 🚀 Determine if any row actions are enabled for rendering the actions column.
+      @renders_row_actions = @row_actions.any? { |_key, value| value }
       @empty = empty
       @system_arguments = system_arguments
 

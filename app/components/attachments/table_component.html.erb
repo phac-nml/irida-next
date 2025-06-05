@@ -70,12 +70,14 @@
                 <% end %>
               <% end %>
             <% end %>
-            <%= render_cell(
+            <% if @renders_row_actions %>
+              <%= render_cell(
                 tag: 'th',
                 scope: 'col',
                 classes: class_names('px-3 py-3')
               ) do %>
-              <%= t(".actions") %>
+                <%= t(".actions") %>
+              <% end %>
             <% end %>
           </tr>
         </thead>
@@ -219,7 +221,7 @@
                   tag: 'td',
                   classes: class_names('px-3 py-3 space-x-2')
                 ) do %>
-                <% if Flipper.enabled?(:attachments_preview) && attachment.previewable? %>
+                <% if @row_actions[:preview] && attachment.previewable? %>
                   <%= link_to(
                     t(".preview"),
                     attachment_path(attachment),
@@ -274,7 +276,7 @@
                 </span>
               </td>
               <td
-                colspan="<%= @columns.count - 2 %>"
+                colspan="<%= @columns.count - 3 + (@renders_row_actions ? 1 : 0) %>"
                 class="px-3 py-3 bg-slate-50 dark:bg-slate-900"
               ></td>
             </tr>
