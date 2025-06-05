@@ -335,14 +335,13 @@ module Projects
       click_link I18n.t(:'projects.samples.show.remove_button')
 
       within('dialog[open]') do
-        click_button I18n.t(:'projects.samples.deletions.new_deletion_dialog.submit_button')
+        click_button I18n.t('samples.deletions.destroy_single_confirmation_dialog.submit_button')
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
       # success flash msg
-      assert_text I18n.t('projects.samples.deletions.destroy.success', sample_name: @sample1.name,
-                                                                       project_name: @project.namespace.human_name)
+      assert_text I18n.t('samples.deletions.destroy_samples.success', count: 1)
       # redirected to samples index
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
       # verify samples table has loaded to prevent flakes
@@ -2952,7 +2951,7 @@ module Projects
 
       ### VERIFY START ###
       within('#multiple-deletions-dialog') do
-        assert_text I18n.t('shared.samples.destroy_multiple_confirmation_dialog.description.singular',
+        assert_text I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.description.singular',
                            sample_name: @sample1.name)
       end
       ### VERIFY END ###
@@ -2982,7 +2981,7 @@ module Projects
       ### VERIFY START ###
       within('#multiple-deletions-dialog') do
         assert_text I18n.t(
-          'shared.samples.destroy_multiple_confirmation_dialog.description.plural'
+          'samples.deletions.destroy_multiple_confirmation_dialog.description.plural'
         ).gsub! 'COUNT_PLACEHOLDER', '3'
       end
       ### VERIFY END ###
@@ -3048,13 +3047,13 @@ module Projects
       within('#multiple-deletions-dialog') do
         assert_selector 'form[data-infinite-scroll-target="pageForm"]'
         sleep 1
-        click_button I18n.t('shared.samples.destroy_multiple_confirmation_dialog.submit_button')
+        click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
       # flash msg
-      assert_text I18n.t('shared.samples.destroy_multiple.success')
+      assert_text I18n.t('samples.deletions.destroy_samples.success', count: 3)
 
       # no remaining samples
       within 'section[role="status"]' do

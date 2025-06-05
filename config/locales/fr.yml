@@ -1673,13 +1673,6 @@ fr:
           title: Copier des échantillons
       create:
         success: L’échantillon a été créé avec succès.
-      deletions:
-        destroy:
-          success: L’échantillon %{sample_name} a été retiré avec succès du projet %{project_name}.
-        new_deletion_dialog:
-          description: Êtes-vous sûr de vouloir supprimer l’échantillon '%{sample_name}'?
-          submit_button: Retirer
-          title: Supprimer l’échantillon
       edit:
         cancel_button: Annuler
         form:
@@ -1847,6 +1840,28 @@ fr:
         updated_at_asc: Plus ancien mis à jour
         updated_at_desc: Mis à jour à
   samples:
+    deletions:
+      destroy_multiple_confirmation_dialog:
+        description:
+          plural: "Les échantillons COUNT_PLACEHOLDER suivants ont été sélectionnés aux fins de suppression :"
+          singular: "L’échantillon suivant a été sélectionné aux fins de suppression :"
+          zero: Aucun échantillon n’a été sélectionné pour être supprimer
+        loading: Chargement...
+        samples: Échantillons
+        spinner: Suppression des échantillons. Cela peut prendre un certain temps...
+        submit_button: Confirmer
+        title: Supprimer les échantillons
+      destroy_samples:
+        no_deleted_samples: Les échantillons sélectionnés n’ont pas pu être supprimés
+        partial_error: Les échantillons %{not_deleted} n’ont pas pu être supprimés
+        partial_success: Les échantillons %{deleted} ont été supprimés avec succès
+        success:
+          one: Supprimé avec succès 1 échantillon
+          other: Supprimé avec succès %{count} échantillons
+      destroy_single_confirmation_dialog:
+        description: Êtes-vous sûr de vouloir supprimer l’échantillon '%{sample_name}'?
+        submit_button: Retirer
+        title: Supprimer l’échantillon
     editable_cell:
       update_success: Metadata was successfully updated
     table_component:
@@ -2007,23 +2022,6 @@ fr:
         new_sample: Nouvel échantillon
         sample_export: Exportation d’échantillons
         transfer: Transférer des échantillons
-      destroy_samples:
-        no_deleted_samples: Les échantillons sélectionnés n’ont pas pu être supprimés
-        partial_error: Les échantillons %{not_deleted} n’ont pas pu être supprimés
-        partial_success: Les échantillons %{deleted} ont été supprimés avec succès
-        success:
-          one: Supprimé avec succès %{count} échantillon
-          other: Supprimé avec succès %{count} échantillons
-      destroy_multiple_confirmation_dialog:
-        description:
-          plural: "Les échantillons COUNT_PLACEHOLDER suivants ont été sélectionnés aux fins de suppression :"
-          singular: "L’échantillon suivant a été sélectionné aux fins de suppression :"
-          zero: Aucun échantillon n’a été sélectionné pour être supprimer
-        loading: Chargement...
-        samples: Échantillons
-        spinner: Suppression des échantillons. Cela peut prendre un certain temps...
-        submit_button: Confirmer
-        title: Supprimer les échantillons
       errors:
         ok_button: OK
       metadata:

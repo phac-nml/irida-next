@@ -1845,8 +1845,6 @@ en:
         updated_at_desc: Updated At
   samples:
     deletions:
-      destroy:
-        success: Sample %{sample_name} was successfully removed from project %{project_name}.
       destroy_multiple_confirmation_dialog:
         description:
           plural: "The following COUNT_PLACEHOLDER samples have been selected for deletion:"
@@ -1857,6 +1855,13 @@ en:
         spinner: Deleting samples. This may take a while...
         submit_button: Confirm
         title: Delete Samples
+      destroy_samples:
+        no_deleted_samples: Selected samples could not be deleted
+        partial_error: "%{not_deleted} samples could not be deleted"
+        partial_success: "%{deleted} samples were successfully deleted"
+        success:
+          one: Successfully deleted 1 sample
+          other: Successfully deleted %{count} samples
       destroy_single_confirmation_dialog:
         description: Are you sure you want to delete sample '%{sample_name}'?
         submit_button: Remove

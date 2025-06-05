@@ -28,7 +28,7 @@ module Samples
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('shared.samples.destroy_samples.success', count: 1), flash[:success]
+      assert_equal I18n.t('samples.deletions.destroy_samples.success', count: 1), flash[:success]
       assert_response :redirect
       assert_redirected_to group_samples_path(@group1)
     end
@@ -43,7 +43,7 @@ module Samples
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('shared.samples.destroy_samples.success', count: 2), flash[:success]
+      assert_equal I18n.t('samples.deletions.destroy_samples.success', count: 2), flash[:success]
       assert_response :redirect
       assert_redirected_to group_samples_path(@group1)
     end
@@ -59,7 +59,7 @@ module Samples
              }, as: :turbo_stream
       end
 
-      assert_equal I18n.t('shared.samples.destroy_samples.success', count: 1), flash[:success]
+      assert_equal I18n.t('samples.deletions.destroy_samples.success', count: 1), flash[:success]
       assert_response :redirect
       assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
     end
@@ -74,7 +74,7 @@ module Samples
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('shared.samples.destroy_samples.success', count: 2), flash[:success]
+      assert_equal I18n.t('samples.deletions.destroy_samples.success', count: 2), flash[:success]
       assert_response :redirect
       assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
     end
@@ -89,7 +89,7 @@ module Samples
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('shared.samples.destroy_samples.no_deleted_samples'), flash[:error]
+      assert_equal I18n.t('samples.deletions.destroy_samples.no_deleted_samples'), flash[:error]
       assert_response :redirect
       assert_redirected_to group_samples_path(@group1)
     end
@@ -104,7 +104,7 @@ module Samples
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('shared.samples.destroy_samples.no_deleted_samples'), flash[:error]
+      assert_equal I18n.t('samples.deletions.destroy_samples.no_deleted_samples'), flash[:error]
       assert_response :redirect
       assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
     end
@@ -219,9 +219,9 @@ module Samples
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('shared.samples.destroy_samples.partial_success', deleted: '2/3'),
+      assert_equal I18n.t('samples.deletions.destroy_samples.partial_success', deleted: '2/3'),
                    flash[:success]
-      assert_equal I18n.t('shared.samples.destroy_samples.partial_error', not_deleted: '1/3'),
+      assert_equal I18n.t('samples.deletions.destroy_samples.partial_error', not_deleted: '1/3'),
                    flash[:error]
       assert_response :redirect
       assert_redirected_to group_samples_path(@group1)
@@ -237,9 +237,9 @@ module Samples
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('shared.samples.destroy_samples.partial_success', deleted: '2/3'),
+      assert_equal I18n.t('samples.deletions.destroy_samples.partial_success', deleted: '2/3'),
                    flash[:success]
-      assert_equal I18n.t('shared.samples.destroy_samples.partial_error', not_deleted: '1/3'),
+      assert_equal I18n.t('samples.deletions.destroy_samples.partial_error', not_deleted: '1/3'),
                    flash[:error]
       assert_response :redirect
       assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
@@ -255,7 +255,7 @@ module Samples
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('shared.samples.destroy_samples.no_deleted_samples'), flash[:error]
+      assert_equal I18n.t('samples.deletions.destroy_samples.no_deleted_samples'), flash[:error]
       assert_response :redirect
       assert_redirected_to group_samples_path(@group1)
     end

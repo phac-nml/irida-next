@@ -67,8 +67,7 @@ module Projects
       valid_params = { name: 'new-sample1-name', description: 'new-sample1-description' }
       ::Samples::UpdateService.new(sample, @user, valid_params).execute
 
-      params = { sample: sample }
-      Projects::Samples::DestroyService.new(project_namespace.project, @user, params).execute
+      Projects::Samples::DestroyService.new(project_namespace, @user, { sample_ids: [sample.id] }).execute
 
       activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
 
@@ -94,27 +93,25 @@ module Projects
       project_namespace = namespaces_project_namespaces(:project1_namespace)
       sample = samples(:sample1)
 
-      params = { sample: sample }
-      Projects::Samples::DestroyService.new(project_namespace.project, @user, params).execute
+      Projects::Samples::DestroyService.new(project_namespace, @user, { sample_ids: [sample.id] }).execute
 
       activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
 
       assert_equal(1, activities.count do |activity|
-        activity[:key].include?('project_namespace.samples.destroy_html')
+        activity[:key].include?('namespaces_project_namespace.samples.destroy_multiple')
       end)
 
       activity_to_render = activities.find do |a|
-        a[:key] == 'activity.namespaces_project_namespace.samples.destroy_html'
+        a[:key] == 'activity.namespaces_project_namespace.samples.destroy_multiple_html'
       end
 
       render_inline Activities::Projects::SampleActivityComponent.new(activity: activity_to_render)
 
       assert_text strip_tags(
-        I18n.t('activity.namespaces_project_namespace.samples.destroy_html', user: @user.email,
-                                                                             href: sample.puid)
+        I18n.t('activity.namespaces_project_namespace.samples.destroy_multiple_html', user: @user.email, href: 1)
       )
-      assert_selector 'span',
-                      text: sample.puid
+      assert_selector 'span', text: 1
+      assert_selector 'a', text: I18n.t(:'components.activity.more_details')
     end
 
     test 'multiple sample destroy activity' do
@@ -122,8 +119,7 @@ module Projects
       sample1 = samples(:sample1)
       sample2 = samples(:sample2)
 
-      params = { sample_ids: [sample1.id, sample2.id] }
-      Projects::Samples::DestroyService.new(project_namespace.project, @user, params).execute
+      Projects::Samples::DestroyService.new(project_namespace, @user, { sample_ids: [sample1.id, sample2.id] }).execute
 
       activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
 
@@ -231,7 +227,7 @@ module Projects
 
       ::Attachments::DestroyService.new(sample, attachment, @user).execute
 
-      Projects::Samples::DestroyService.new(project_namespace.project, @user, { sample: sample }).execute
+      Projects::Samples::DestroyService.new(project_namespace, @user, { sample_ids: [sample.id] }).execute
 
       activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
 

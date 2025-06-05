@@ -38,7 +38,6 @@ class BaseSampleDestroyService < BaseService
                                                    samples_deleted_count: deleted_samples_data.size,
                                                    action: 'sample_destroy_multiple'
                                                  }
-
     activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
                                              activity_type: 'sample_destroy_multiple')
   end
