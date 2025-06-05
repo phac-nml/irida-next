@@ -37,7 +37,13 @@
                     label: t(".#{column}"),
                     url: helpers.sorting_url(@q, "puid"),
                     field: "puid",
-                    **(@sample ? {} : { data: { turbo_action: "replace" } }),
+                    **(
+                      if @attachable.instance_of?(Sample)
+                        {}
+                      else
+                        { data: { turbo_action: "replace" } }
+                      end
+                    ),
                   ) %>
                 <% elsif column == :byte_size || column == :filename %>
                   <%= render Ransack::SortComponent.new(
@@ -45,7 +51,13 @@
                     label: t(".#{column}"),
                     url: helpers.sorting_url(@q, "file_blob_#{column}"),
                     field: "file_blob_#{column}",
-                    **(@sample ? {} : { data: { turbo_action: "replace" } }),
+                    **(
+                      if @attachable.instance_of?(Sample)
+                        {}
+                      else
+                        { data: { turbo_action: "replace" } }
+                      end
+                    ),
                   ) %>
                 <% elsif column == :format || column == :type %>
                   <%= render Ransack::SortComponent.new(
@@ -57,7 +69,13 @@
                         URI.encode_www_form_component("metadata_#{column}"),
                       ),
                     field: "metadata_#{column}",
-                    **(@sample ? {} : { data: { turbo_action: "replace" } }),
+                    **(
+                      if @attachable.instance_of?(Sample)
+                        {}
+                      else
+                        { data: { turbo_action: "replace" } }
+                      end
+                    ),
                   ) %>
                 <% else %>
                   <%= render Ransack::SortComponent.new(
@@ -65,7 +83,13 @@
                     label: t(".#{column}"),
                     url: helpers.sorting_url(@q, column),
                     field: column,
-                    **(@sample ? {} : { data: { turbo_action: "replace" } }),
+                    **(
+                      if @attachable.instance_of?(Sample)
+                        {}
+                      else
+                        { data: { turbo_action: "replace" } }
+                      end
+                    ),
                   ) %>
                 <% end %>
               <% end %>
