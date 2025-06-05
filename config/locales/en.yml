@@ -1897,6 +1897,19 @@ en:
         error: 'The following list of samples failed to transfer:'
         no_samples_transferred_error: 'Samples were not transferred for the following reasons:'
         success: Samples were successfully transferred.
+      dialog:
+        description:
+          plural: The following COUNT_PLACEHOLDER samples are about to be transferred, which will result in these samples no longer being accessible in this project. Maintainers can only transfer samples to another project within the same hierarchy.
+          singular: The following sample is about to be transferred, which will result in the sample no longer being accessible in this project. Maintainers can only transfer samples to another project within the same hierarchy.
+          zero: No samples have been selected for transfer
+        empty_state: No projects are associated with that name or ID
+        new_project_id: Project to transfer samples to
+        no_available_projects: No available projects
+        samples: Samples
+        select_project: Select project
+        spinner_message: Transferring samples, this might take a while...
+        submit_button: Submit
+        title: Transfer Samples
   services:
     attachments:
       concatenation:
@@ -2115,20 +2128,6 @@ en:
       success:
         ok_button: OK
         success: Success
-      transfers:
-        dialog:
-          description:
-            plural: The following COUNT_PLACEHOLDER samples are about to be transferred, which will result in these samples no longer being accessible in this project. Maintainers can only transfer samples to another project within the same hierarchy.
-            singular: The following sample is about to be transferred, which will result in the sample no longer being accessible in this project. Maintainers can only transfer samples to another project within the same hierarchy.
-            zero: No samples have been selected for transfer
-          empty_state: No projects are associated with that name or ID
-          new_project_id: Project to transfer samples to
-          no_available_projects: No available projects
-          samples: Samples
-          select_project: Select project
-          spinner_message: Transferring samples, this might take a while...
-          submit_button: Submit
-          title: Transfer Samples
     workflow_executions:
       destroy_confirmation_dialog:
         description: Are you sure you want to delete this workflow execution?

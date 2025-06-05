@@ -1893,6 +1893,19 @@ fr:
         error: 'La liste suivante des échantillons n’a pas été transférée :'
         no_samples_transferred_error: 'Les échantillons n’ont pas été transférés pour les raisons suivantes :'
         success: Les échantillons ont été transférés avec succès.
+      dialog:
+        description:
+          plural: Les échantillons COUNT_PLACEHOLDER suivants sont sur le point d’être transférés, ce qui fera en sorte que ces échantillons ne seront plus accessibles dans le cadre de ce projet. Les responsables ne peuvent transférer des échantillons qu’à un autre projet dans la même hiérarchie.
+          singular: L’échantillon suivant est sur le point d’être transféré, ce qui fera en sorte que l’échantillon ne sera plus accessible dans le cadre de ce projet. Les responsables ne peuvent transférer des échantillons qu’à un autre projet dans la même hiérarchie.
+          zero: Aucun échantillon n’a été sélectionné pour être transféré
+        empty_state: Aucun projet n’est associé à ce nom ou à cet identifiant
+        new_project_id: Projet de transférer les échantillons à
+        no_available_projects: Aucun projet disponible
+        samples: Échantillons
+        select_project: Sélectionner le projet
+        spinner_message: Transférer des échantillons, cela peut prendre un certain temps...
+        submit_button: Envoyer
+        title: Transférer des échantillons
   services:
     attachments:
       concatenation:
@@ -2111,20 +2124,6 @@ fr:
       success:
         ok_button: OK
         success: Réussite
-      transfers:
-        dialog:
-          description:
-            plural: Les échantillons COUNT_PLACEHOLDER suivants sont sur le point d’être transférés, ce qui fera en sorte que ces échantillons ne seront plus accessibles dans le cadre de ce projet. Les responsables ne peuvent transférer des échantillons qu’à un autre projet dans la même hiérarchie.
-            singular: L’échantillon suivant est sur le point d’être transféré, ce qui fera en sorte que l’échantillon ne sera plus accessible dans le cadre de ce projet. Les responsables ne peuvent transférer des échantillons qu’à un autre projet dans la même hiérarchie.
-            zero: Aucun échantillon n’a été sélectionné pour être transféré
-          empty_state: Aucun projet n’est associé à ce nom ou à cet identifiant
-          new_project_id: Projet de transférer les échantillons à
-          no_available_projects: Aucun projet disponible
-          samples: Échantillons
-          select_project: Sélectionner le projet
-          spinner_message: Transférer des échantillons, cela peut prendre un certain temps...
-          submit_button: Envoyer
-          title: Transférer des échantillons
     workflow_executions:
       destroy_confirmation_dialog:
         description: Êtes-vous sûr de vouloir supprimer cette exécution de flux de travail?

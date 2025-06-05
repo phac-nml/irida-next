@@ -169,7 +169,7 @@ module Projects
     end
 
     test 'should list samples' do
-      post list_namespace_project_samples_path(@namespace, @project, format: :turbo_stream), params: {
+      post list_samples_path(format: :turbo_stream), params: {
         page: 1,
         sample_ids: [@sample1.id],
         list_class: 'sample'

@@ -421,8 +421,8 @@ module Projects
 
       ### VERIFY START ###
       within('#dialog') do
-        assert_text I18n.t('shared.samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER',
-                                                                                       '3')
+        assert_text I18n.t('samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER',
+                                                                                '3')
       end
       ### VERIFY END ###
     end
@@ -445,7 +445,7 @@ module Projects
 
       ### VERIFY START ###
       within('#dialog') do
-        assert_text I18n.t('shared.samples.transfers.dialog.description.singular')
+        assert_text I18n.t('samples.transfers.dialog.description.singular')
       end
       ### VERIFY END ###
     end
@@ -487,7 +487,7 @@ module Projects
         # select destination project
         find('input.select2-input').click
         find("li[data-value='#{@project2.id}']").click
-        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+        click_on I18n.t('samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::TransferJob]
@@ -542,7 +542,7 @@ module Projects
         # select destination project
         find('input.select2-input').click
         find("li[data-value='#{@project2.id}']").click
-        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+        click_on I18n.t('samples.transfers.dialog.submit_button')
 
         ### ACTIONS END ###
 
@@ -580,10 +580,10 @@ module Projects
 
       assert_selector '#dialog'
       within('#dialog') do
-        assert_text I18n.t('shared.samples.transfers.dialog.title')
+        assert_text I18n.t('samples.transfers.dialog.title')
         find('input.select2-input').click
         find("li[data-value='#{@project2.id}']").click
-        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+        click_on I18n.t('samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::TransferJob]
@@ -639,7 +639,7 @@ module Projects
         end
         find('input.select2-input').click
         find("li[data-value='#{project25.id}']").click
-        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+        click_on I18n.t('samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::TransferJob]
@@ -698,7 +698,7 @@ module Projects
       ### VERIFY START ###
       within('#dialog') do
         # no available destination projects
-        assert_selector "input[placeholder='#{I18n.t('shared.samples.transfers.dialog.no_available_projects')}']"
+        assert_selector "input[placeholder='#{I18n.t('samples.transfers.dialog.no_available_projects')}']"
       end
       ### VERIFY END ###
     end
@@ -743,7 +743,7 @@ module Projects
         end
         find('input.select2-input').click
         find("li[data-value='#{@project2.id}']").click
-        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+        click_on I18n.t('samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::TransferJob]
@@ -799,7 +799,7 @@ module Projects
         ### ACTIONS END ###
 
         ### VERIFY START ###
-        assert_text I18n.t('shared.samples.transfers.dialog.empty_state')
+        assert_text I18n.t('samples.transfers.dialog.empty_state')
         ### VERIFY END ###
       end
     end

@@ -1803,8 +1803,8 @@ module Groups
 
       ### VERIFY START ###
       within('#dialog') do
-        assert_text I18n.t('shared.samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER',
-                                                                                       '26')
+        assert_text I18n.t('samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER',
+                                                                                '26')
       end
       ### VERIFY END ###
     end
@@ -1827,7 +1827,7 @@ module Groups
 
       ### VERIFY START ###
       within('#dialog') do
-        assert_text I18n.t('shared.samples.transfers.dialog.description.singular')
+        assert_text I18n.t('samples.transfers.dialog.description.singular')
       end
       ### VERIFY END ###
     end
@@ -1879,7 +1879,7 @@ module Groups
         find('input.select2-input').click
         find("li[data-value='#{project4.id}']").click
 
-        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+        click_on I18n.t('samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::TransferJob]
@@ -1939,7 +1939,7 @@ module Groups
         # select destination project
         find('input.select2-input').click
         find("li[data-value='#{project4.id}']").click
-        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+        click_on I18n.t('samples.transfers.dialog.submit_button')
 
         ### ACTIONS END ###
 
@@ -1978,10 +1978,10 @@ module Groups
 
       assert_selector '#dialog'
       within('#dialog') do
-        assert_text I18n.t('shared.samples.transfers.dialog.title')
+        assert_text I18n.t('samples.transfers.dialog.title')
         find('input.select2-input').click
         find("li[data-value='#{project4.id}']").click
-        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+        click_on I18n.t('samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::TransferJob]
@@ -2049,7 +2049,7 @@ module Groups
         end
         find('input.select2-input').click
         find("li[data-value='#{project4.id}']").click
-        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+        click_on I18n.t('samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::TransferJob]
@@ -2160,7 +2160,7 @@ module Groups
         ### ACTIONS END ###
 
         ### VERIFY START ###
-        assert_text I18n.t('shared.samples.transfers.dialog.empty_state')
+        assert_text I18n.t('samples.transfers.dialog.empty_state')
         ### VERIFY END ###
       end
     end
