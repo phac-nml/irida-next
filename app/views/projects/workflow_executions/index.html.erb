@@ -54,8 +54,7 @@
                 ) do |f| %>
         <input type="hidden" name="format" value="turbo_stream"/>
         <input type="hidden" name="select" value="on"/>
-        <%= f.submit t(".select_all_button"),
-                 class: "button button-default button--size-default" %>
+        <%= f.submit t(".select_all_button"), class: "button button-default" %>
       <% end %>
       <%= form_with(
                   url: select_namespace_project_workflow_executions_url,
@@ -63,8 +62,7 @@
                   id: "deselect-all-form" ,
                 ) do |f| %>
         <input type="hidden" name="format" value="turbo_stream"/>
-        <%= f.submit t(".deselect_all_button"),
-                 class: "button button-default button--size-default" %>
+        <%= f.submit t(".deselect_all_button"), class: "button button-default" %>
       <% end %>
     </div>
     <div class="grow-0">
