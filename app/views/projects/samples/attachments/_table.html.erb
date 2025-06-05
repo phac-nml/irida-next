@@ -16,8 +16,7 @@
                 name="q[puid_or_file_blob_filename_cont]"
                 value="<%=params.dig(:q, :puid_or_file_blob_filename_cont)%>"
               >
-              <%= f.submit t(".select_all_button"),
-                       class: "button button-default button--size-default" %>
+              <%= f.submit t(".select_all_button"), class: "button button-default" %>
             <% end %>
             <%= form_with(
                   url: select_namespace_project_sample_attachments_url(sample_id: @sample.id),
@@ -25,8 +24,7 @@
                   id: "deselect-all-form" ,
                 ) do |f| %>
               <input type="hidden" name="format" value="turbo_stream"/>
-              <%= f.submit t(".deselect_all_button"),
-                       class: "button button-default button--size-default" %>
+              <%= f.submit t(".deselect_all_button"), class: "button button-default" %>
             <% end %>
           </div>
         <% end %>
