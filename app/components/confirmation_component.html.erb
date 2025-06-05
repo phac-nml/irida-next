@@ -19,11 +19,7 @@
         <div class="flex items-center mt-6">
           <button class="button button-destructive mr-2" value="confirm"><%= t(:"components.confirmation.confirm") %>
           </button>
-          <button
-            class="button button-default button--size-default"
-            formmethod="dialog"
-            value="cancel"
-          >
+          <button class="button button-default" formmethod="dialog" value="cancel">
             <%= t(:"components.confirmation.cancel") %>
           </button>
         </div>
@@ -44,17 +40,13 @@
         />
         <div class="flex items-center mt-6">
           <button
-            class="mr-2 button button-destructive button--size-default"
+            class="mr-2 button button-destructive"
             value="confirm"
             disabled="disabled"
             data-confirmation-target="confirmButton"
           ><%= t(:"components.confirmation.confirm") %>
           </button>
-          <button
-            class="button button-default button--size-default"
-            formmethod="dialog"
-            value="cancel"
-          >
+          <button class="button button-default" formmethod="dialog" value="cancel">
             <%= t(:"components.confirmation.cancel") %>
           </button>
         </div>
