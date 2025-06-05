@@ -10,7 +10,7 @@
         <%= link_to(
           t("projects.samples.show.edit_button"),
           edit_namespace_project_sample_path(id: @sample.id),
-          class: "button button-default button--size-default",
+          class: "button button-default",
         ) %>
       <% end %>
       <% if @allowed_to[:destroy_sample] %>
