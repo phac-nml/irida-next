@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Base root class for service related classes, scoped by namespace
+# Base sample service root class for sample service related classes, scoped by namespace
 class BaseSampleService < BaseService
   BaseError = Class.new(StandardError)
   attr_accessor :namespace

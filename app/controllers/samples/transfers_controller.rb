@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Samples
   # global controller for sample transfers
   class TransfersController < ApplicationController
