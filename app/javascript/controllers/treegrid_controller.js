@@ -125,7 +125,9 @@ export default class extends Controller {
   #changeExpanded(doExpand, row) {
     const toggleButton = row.querySelector(".treegrid-row-toggle");
     if (toggleButton.hasAttribute("data-toggle-url")) {
-      fetch(toggleButton.getAttribute("data-toggle-url"), {
+      let toggleUrl = new URL(toggleButton.getAttribute("data-toggle-url"));
+      toggleUrl.searchParams.append("tabindex", row.tabIndex);
+      fetch(toggleUrl.href, {
         credentials: "same-origin",
         headers: { Accept: "text/vnd.turbo-stream.html" },
       })
