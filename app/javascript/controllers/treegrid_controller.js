@@ -49,7 +49,11 @@ export default class extends Controller {
       this.#moveToExtremeRow(-1);
     } else if (event.key === "PageDown") {
       this.#moveToExtremeRow(+1);
+    } else {
+      return;
     }
+
+    event.preventDefault();
   }
 
   toggleRow(event) {

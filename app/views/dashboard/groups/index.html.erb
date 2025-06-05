@@ -45,7 +45,7 @@
     <div class="flex flex-col gap-2" id="groups_tree">
       <%= render TreegridComponent.new do |component| %>
         <% @groups.each_with_index do |group, group_index| %>
-          <%= component.with_row(tabindex: (group_index.zero? ? 0 : -1), expandable: !@render_flat_list && group.children_of_type?(Group.sti_name), posinset: group_index + 1, setsize: @groups.size, button_arguments: {data: {"toggle-url": public_send("dashboard_groups_path", { parent_id: group.id, collapse: false, level: 1, posinset: group_index + 1, setsize: @groups.size })}}, id: dom_id(group)) do %>
+          <%= component.with_row(tabindex: (group_index.zero? ? 0 : -1), expandable: !@render_flat_list && group.children_of_type?(Group.sti_name), posinset: group_index + 1, setsize: @groups.size, aria: { label: group.name}, button_arguments: {data: {"toggle-url": public_send("dashboard_groups_path", { parent_id: group.id, collapse: false, level: 1, posinset: group_index + 1, setsize: @groups.size })}}, id: dom_id(group)) do %>
             <%= render NamespaceRow::ContentsComponent.new(namespace: group, icon_size: :medium) %>
           <% end %>
         <% end %>

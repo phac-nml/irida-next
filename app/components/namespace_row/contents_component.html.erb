@@ -1,23 +1,21 @@
-<div class="flex flex-wrap grow items-center space-x-2 space-y-2">
-  <div class="inline-flex flex-wrap font-semibold title items-center space-x-2">
-    <%= viral_icon(name: avatar_icon(), classes: "h-5 w-5 text-slate-400 mr-2") %>
-    <%= viral_avatar(
-      name: @namespace.name,
-      size: @icon_size,
-      colour_string: "#{@namespace.name}-#{@namespace.id}",
-      data: {
-        turbo: false,
-      },
+<div class="flex flex-wrap grow items-center place-content-start gap-2">
+  <%= viral_icon(name: avatar_icon(), classes: "h-5 w-5 text-slate-400 mr-2") %>
+  <%= viral_avatar(
+    name: @namespace.name,
+    size: @icon_size,
+    colour_string: "#{@namespace.name}-#{@namespace.id}",
+    data: {
+      turbo: false,
+    },
+  ) %>
+  <%= link_to namespace_path(@namespace), data: { turbo: false }, class: "hover:underline focus:underline font-semibold dark:text-white" do %>
+    <%= highlight(
+      @namespace.name,
+      defined?(@search_params[:name_or_puid_cont]) &&
+        @search_params[:name_or_puid_cont],
+      highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
     ) %>
-    <%= link_to namespace_path(@namespace), data: { turbo: false }, class: "hover:underline focus:underline" do %>
-      <%= highlight(
-        @namespace.name,
-        defined?(@search_params[:name_or_puid_cont]) &&
-          @search_params[:name_or_puid_cont],
-        highlighter: '<mark class="bg-primary-300 dark:bg-primary-600">\1</mark>',
-      ) %>
-    <% end %>
-  </div>
+  <% end %>
   <div>
     <%= render PuidComponent.new(puid: @namespace.puid) %>
 
