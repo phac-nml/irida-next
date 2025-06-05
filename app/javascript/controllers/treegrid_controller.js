@@ -5,10 +5,12 @@ export default class extends Controller {
 
   initialize() {
     this.boundKeydown = this.keydown.bind(this);
+    this.boundFocusin = this.focusin.bind(this);
   }
 
   connect() {
     this.element.addEventListener("keydown", this.boundKeydown);
+    this.element.addEventListener("focusin", this.boundFocusin);
     this.element.setAttribute("data-controller-connected", "true");
   }
 
@@ -23,9 +25,16 @@ export default class extends Controller {
         !event.ctrlKey &&
         !event.shiftKey
       ) {
-        if (!this.#isExpanded(event.target)) {
+        if (
+          this.#isExpandable(event.target) &&
+          !this.#isExpanded(event.target)
+        ) {
           this.toggleRow(event);
+        } else {
+          this.#navigateRow(+1);
         }
+      } else {
+        this.#navigateRow(+1);
       }
     } else if (event.key === "ArrowLeft") {
       if (
@@ -36,6 +45,8 @@ export default class extends Controller {
         if (this.#isExpanded(event.target)) {
           this.toggleRow(event);
         }
+      } else {
+        this.#navigateRow(-1);
       }
     } else if (event.key === "Home") {
       if (this.rowTargets.includes(event.target) || event.ctrlKey) {
@@ -49,6 +60,8 @@ export default class extends Controller {
       this.#moveToExtremeRow(-1);
     } else if (event.key === "PageDown") {
       this.#moveToExtremeRow(+1);
+    } else if (event.key === "Tab") {
+      this.#handleTab(event);
     } else {
       return;
     }
@@ -56,10 +69,68 @@ export default class extends Controller {
     event.preventDefault();
   }
 
+  #handleTab(event) {
+    const currentRow = this.#getRowWithFocus();
+
+    const focusableElements = this.#getFocusableElements(document);
+    const currentIndex = focusableElements.indexOf(currentRow);
+    let nextElement = null;
+    for (let i = currentIndex + 1; i < focusableElements.length; i++) {
+      if (!this.element.contains(focusableElements[i])) {
+        nextElement = focusableElements[i];
+        break;
+      }
+    }
+    if (nextElement) {
+      nextElement.focus();
+    }
+    event.preventDefault();
+  }
+
+  focusin(event) {
+    if (
+      !this.rowTargets.includes(event.target) &&
+      !this.element.contains(event.relatedTarget)
+    ) {
+      this.rowTargets.filter((row) => parseInt(row.tabIndex) === 0)[0].focus();
+      event.preventDefault();
+    }
+  }
+
   toggleRow(event) {
     const row = this.#getContainingRow(event.target);
 
     this.#changeExpanded(!this.#isExpanded(row), row);
+  }
+
+  #navigateRow(direction) {
+    const currentRow = this.#getRowWithFocus();
+
+    const rowFocusableTargets = this.#getFocusableElements(currentRow);
+
+    const currentIndex = rowFocusableTargets.indexOf(document.activeElement);
+    let newIndex = currentIndex + direction;
+
+    if (newIndex < 0) {
+      currentRow.focus();
+    } else if (newIndex < rowFocusableTargets.length) {
+      rowFocusableTargets[newIndex].focus();
+    }
+  }
+
+  #getFocusableElements(element) {
+    const focusableElements = [
+      ...element.querySelectorAll(
+        'a[href], button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])',
+      ),
+    ].filter(
+      (el) =>
+        !el.hasAttribute("disabled") &&
+        !el.getAttribute("aria-hidden") &&
+        !(parseInt(el.tabIndex) === -1),
+    );
+
+    return focusableElements;
   }
 
   #moveByRow(direction) {
@@ -116,6 +187,10 @@ export default class extends Controller {
 
   #getLevel(row) {
     return row && parseInt(row.getAttribute("aria-level"));
+  }
+
+  #isExpandable(row) {
+    return row.hasAttribute("aria-expanded");
   }
 
   #isExpanded(row) {
