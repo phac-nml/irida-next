@@ -7,9 +7,9 @@ module Viral
 
     STATE_DEFAULT = :default
     STATE_MAPPINGS = {
-      STATE_DEFAULT => 'button--state-default',
-      :primary => 'button--state-primary',
-      :destructive => 'button--state-destructive'
+      STATE_DEFAULT => 'button-default',
+      :primary => 'button-primary',
+      :destructive => 'button-destructive'
     }.freeze
 
     SIZE_DEFAULT = :default

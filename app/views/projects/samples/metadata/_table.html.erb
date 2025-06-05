@@ -17,7 +17,7 @@
               turbo_frame: "sample_modal",
               turbo_stream: true,
             },
-            class: "button button--size-default button--state-default" %>
+            class: "button button-default" %>
             <%= button_to t(".delete_metadata_button"),
             new_namespace_project_sample_metadata_deletion_path(
               @project.namespace.parent,
@@ -31,7 +31,7 @@
               controller: "action-button",
               action_button_required_value: 1,
             },
-            class: "button button--size-default button--state-default action-button" %>
+            class: "button button-default action-button" %>
           </div>
         </div>
       <% end %>

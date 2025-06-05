@@ -17,7 +17,7 @@
         :turbo_stream => true,
       },
       method: :get,
-      class: "button button--state-default button--size-default" %>
+      class: "button button-default" %>
     <% end %>
     <% if @allowed_to[:create_member] %>
       <%= button_to t(:".add"),
@@ -30,8 +30,7 @@
         "turbo-frame" => "new_member_modal",
         :turbo_stream => true,
       },
-      method: :get,
-      class: "button button--state-default button--size-default",
+      class: "button button-primary",
       "aria-label": t(:".actions.button_add_aria_label") %>
     <% end %>
   <% end %>

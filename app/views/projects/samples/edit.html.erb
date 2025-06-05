@@ -22,10 +22,10 @@
           <%= render partial: "form_fields", locals: { form: form, sample: @sample } %>
           <div>
             <%= form.submit t("projects.samples.edit.submit_button"),
-                        class: "button button--state-primary button--size-default mr-1" %>
+                        class: "button button-primary mr-1" %>
             <%= link_to t("projects.samples.edit.cancel_button"),
             namespace_project_sample_path(id: @sample.id),
-            class: "button button--state-default button--size-default" %>
+            class: "button button-default button--size-default" %>
           </div>
         </div>
       <% end %>
