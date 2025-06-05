@@ -138,7 +138,7 @@ module Projects
                           -> { @subgroup12a.reload.samples_count } => -1,
                           -> { @subgroup12b.reload.samples_count } => 0,
                           -> { @group12.reload.samples_count } => -1 do
-          Projects::Samples::DestroyService.new(@project31.namespace, @user, { sample: @sample34 }).execute
+          Projects::Samples::DestroyService.new(@project31.namespace, @user, { sample_ids: [@sample34.id] }).execute
         end
       end
 
