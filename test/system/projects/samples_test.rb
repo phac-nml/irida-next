@@ -490,13 +490,13 @@ module Projects
         click_on I18n.t('shared.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [Projects::Samples::TransferJob]
+        perform_enqueued_jobs only: [::Samples::TransferJob]
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
       # flash msg
-      assert_text I18n.t('projects.samples.transfers.create.success')
+      assert_text I18n.t('samples.transfers.create.success')
       click_button I18n.t('shared.samples.success.ok_button')
       # originating project no longer has samples
       assert_text I18n.t('projects.samples.index.no_samples')
@@ -550,7 +550,7 @@ module Projects
         assert_text I18n.t('shared.progress_bar.in_progress')
         # close button hidden during transfer
         assert_no_selector 'button.dialog--close'
-        perform_enqueued_jobs only: [Projects::Samples::TransferJob]
+        perform_enqueued_jobs only: [::Samples::TransferJob]
         ### VERIFY END ###
       end
     end
@@ -586,14 +586,14 @@ module Projects
         click_on I18n.t('shared.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [Projects::Samples::TransferJob]
+        perform_enqueued_jobs only: [::Samples::TransferJob]
         ### ACTIONS END ###
 
         ### VERIFY START ###
         # samples listing should no longer appear in dialog
         assert_no_selector '#list_selections'
         # error msg displayed in dialog
-        assert_text I18n.t('projects.samples.transfers.create.no_samples_transferred_error')
+        assert_text I18n.t('samples.transfers.create.no_samples_transferred_error')
       end
       ### VERIFY END ###
     end
@@ -642,14 +642,14 @@ module Projects
         click_on I18n.t('shared.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [Projects::Samples::TransferJob]
+        perform_enqueued_jobs only: [::Samples::TransferJob]
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
       within('#dialog') do
         # error messages in dialog
-        assert_text I18n.t('projects.samples.transfers.create.error')
+        assert_text I18n.t('samples.transfers.create.error')
         # colon is removed from translation in UI
         assert_text I18n.t('services.samples.transfer.sample_exists', sample_puid: @sample30.puid,
                                                                       sample_name: @sample30.name).gsub(':', '')
@@ -746,7 +746,7 @@ module Projects
         click_on I18n.t('shared.samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [Projects::Samples::TransferJob]
+        perform_enqueued_jobs only: [::Samples::TransferJob]
       end
       ### ACTIONS END ###
 

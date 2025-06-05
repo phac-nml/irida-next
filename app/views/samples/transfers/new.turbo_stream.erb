@@ -1,0 +1,6 @@
+<%= render partial: "shared/samples/transfers/new",
+locals: {
+  list_samples_path: list_samples_path,
+  transfer_path: samples_transfer_path(namespace_id: @namespace.id),
+  broadcast_target: @broadcast_target,
+} %>

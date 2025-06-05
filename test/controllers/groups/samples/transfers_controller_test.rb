@@ -16,7 +16,7 @@ module Groups
       end
 
       test 'should get new if owner' do
-        get new_group_samples_transfer_path(@group, format: :turbo_stream)
+        get new_samples_transfer_path(namespace_id: @group.id, format: :turbo_stream)
         assert_response :success
       end
 
@@ -24,7 +24,7 @@ module Groups
         user = users(:joan_doe)
         login_as user
 
-        get new_group_samples_transfer_path(@group, format: :turbo_stream)
+        get new_samples_transfer_path(namespace_id: @group.id, format: :turbo_stream)
         assert_response :success
       end
 
@@ -32,13 +32,13 @@ module Groups
         user = users(:ryan_doe)
         login_as user
 
-        get new_group_samples_transfer_path(@group, format: :turbo_stream)
+        get new_samples_transfer_path(namespace_id: @group.id, format: :turbo_stream)
         assert_response :unauthorized
       end
 
-      test 'should enqueue a Groups::Samples::TransferJob' do
-        assert_enqueued_jobs 1, only: Groups::Samples::TransferJob do
-          post group_samples_transfer_path(@group, format: :turbo_stream),
+      test 'should enqueue a Samples::TransferJob' do
+        assert_enqueued_jobs 1, only: ::Samples::TransferJob do
+          post samples_transfer_path(namespace_id: @group.id, format: :turbo_stream),
                params: {
                  transfer: {
                    new_project_id: @project2.id,

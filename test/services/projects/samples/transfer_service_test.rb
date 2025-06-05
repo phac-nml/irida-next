@@ -37,7 +37,7 @@ module Projects
                                     sample_ids: [@sample1.id, @sample2.id] }
 
         assert_changes -> { @sample1.reload.project.id }, to: @new_project.id do
-          Projects::Samples::TransferService.new(@current_project, @john_doe).execute(
+          Projects::Samples::TransferService.new(@current_project.namespace, @john_doe).execute(
             @sample_transfer_params[:new_project_id],
             @sample_transfer_params[:sample_ids]
           )
@@ -49,7 +49,7 @@ module Projects
                                     sample_ids: [@sample1.id, @sample2.id] }
 
         assert_changes -> { @sample1.reload.project.id }, to: @new_project.id do
-          Projects::Samples::TransferService.new(@current_project, @joan_doe).execute(
+          Projects::Samples::TransferService.new(@current_project.namespace, @joan_doe).execute(
             @sample_transfer_params[:new_project_id],
             @sample_transfer_params[:sample_ids]
           )
@@ -63,26 +63,26 @@ module Projects
                                     sample_ids: [@sample1.id, @sample2.id] }
 
         assert_no_changes -> { @sample1.reload.project.id } do
-          Projects::Samples::TransferService.new(@current_project, @joan_doe).execute(
+          Projects::Samples::TransferService.new(@current_project.namespace, @joan_doe).execute(
             @sample_transfer_params[:new_project_id],
             @sample_transfer_params[:sample_ids]
           )
         end
 
-        assert @current_project.errors.full_messages.include?(
+        assert @current_project.namespace.errors.full_messages.include?(
           I18n.t('services.samples.transfer.maintainer_transfer_not_allowed')
         )
       end
 
       test 'transfer project samples without specifying details' do
-        assert_empty Projects::Samples::TransferService.new(@current_project, @john_doe).execute(nil, nil)
+        assert_empty Projects::Samples::TransferService.new(@current_project.namespace, @john_doe).execute(nil, nil)
       end
 
       test 'transfer project samples to existing project' do
         @sample_transfer_params = { new_project_id: @current_project.id,
                                     sample_ids: [@sample1.id, @sample2.id] }
 
-        assert_empty Projects::Samples::TransferService.new(@current_project, @john_doe)
+        assert_empty Projects::Samples::TransferService.new(@current_project.namespace, @john_doe)
                                                        .execute(@sample_transfer_params[:new_project_id],
                                                                 @sample_transfer_params[:sample_ids])
       end
@@ -94,7 +94,7 @@ module Projects
         assert_authorized_to(:transfer_sample?, @current_project,
                              with: ProjectPolicy,
                              context: { user: @john_doe }) do
-          Projects::Samples::TransferService.new(@current_project, @john_doe).execute(
+          Projects::Samples::TransferService.new(@current_project.namespace, @john_doe).execute(
             @sample_transfer_params[:new_project_id],
             @sample_transfer_params[:sample_ids]
           )
@@ -108,7 +108,7 @@ module Projects
         assert_authorized_to(:transfer_sample_into_project?, @new_project,
                              with: ProjectPolicy,
                              context: { user: @john_doe }) do
-          Projects::Samples::TransferService.new(@current_project, @john_doe).execute(
+          Projects::Samples::TransferService.new(@current_project.namespace, @john_doe).execute(
             @sample_transfer_params[:new_project_id],
             @sample_transfer_params[:sample_ids]
           )
@@ -120,7 +120,7 @@ module Projects
                                     sample_ids: [@sample1.id, @sample2.id] }
 
         exception = assert_raises(ActionPolicy::Unauthorized) do
-          Projects::Samples::TransferService.new(@current_project, @jane_doe).execute(
+          Projects::Samples::TransferService.new(@current_project.namespace, @jane_doe).execute(
             @sample_transfer_params[:new_project_id],
             @sample_transfer_params[:sample_ids]
           )
@@ -147,7 +147,7 @@ module Projects
                      @group12.metadata_summary)
 
         assert_no_changes -> { @group12.reload.metadata_summary } do
-          Projects::Samples::TransferService.new(@project31, @john_doe).execute(
+          Projects::Samples::TransferService.new(@project31.namespace, @john_doe).execute(
             @sample_transfer_params1[:new_project_id],
             @sample_transfer_params1[:sample_ids]
           )
@@ -159,7 +159,7 @@ module Projects
         assert_equal({ 'metadatafield1' => 2, 'metadatafield2' => 2 }, @subgroup12b.reload.metadata_summary)
 
         assert_no_changes -> { @group12.reload.metadata_summary } do
-          Projects::Samples::TransferService.new(@project30, @john_doe).execute(
+          Projects::Samples::TransferService.new(@project30.namespace, @john_doe).execute(
             @sample_transfer_params2[:new_project_id],
             @sample_transfer_params2[:sample_ids]
           )
@@ -183,7 +183,7 @@ module Projects
         assert_equal(4, @group12.samples_count)
 
         assert_no_changes -> { @group12.reload.samples_count } do
-          Projects::Samples::TransferService.new(@project31, @john_doe).execute(
+          Projects::Samples::TransferService.new(@project31.namespace, @john_doe).execute(
             @sample_transfer_params1[:new_project_id],
             @sample_transfer_params1[:sample_ids]
           )
@@ -194,7 +194,7 @@ module Projects
         assert_equal(3, @subgroup12b.reload.samples_count)
 
         assert_no_changes -> { @group12.reload.samples_count } do
-          Projects::Samples::TransferService.new(@project30, @john_doe).execute(
+          Projects::Samples::TransferService.new(@project30.namespace, @john_doe).execute(
             @sample_transfer_params2[:new_project_id],
             @sample_transfer_params2[:sample_ids]
           )
@@ -217,7 +217,8 @@ module Projects
                           -> { @subgroup12b.reload.samples_count } => 0,
                           -> { @group12.reload.samples_count } => 1,
                           -> { @john_doe_project2.reload.samples.size } => -1 do
-          Projects::Samples::TransferService.new(@john_doe_project2, @john_doe).execute(@project31.id, [sample24.id])
+          Projects::Samples::TransferService.new(@john_doe_project2.namespace, @john_doe).execute(@project31.id,
+                                                                                                  [sample24.id])
         end
       end
 
@@ -231,8 +232,8 @@ module Projects
                           -> { @subgroup12b.reload.samples_count } => 0,
                           -> { @group12.reload.samples_count } => -2,
                           -> { @john_doe_project2.reload.samples.size } => 2 do
-          Projects::Samples::TransferService.new(@project31, @john_doe).execute(@john_doe_project2.id,
-                                                                                [@sample34.id, @sample35.id])
+          Projects::Samples::TransferService.new(@project31.namespace, @john_doe).execute(@john_doe_project2.id,
+                                                                                          [@sample34.id, @sample35.id])
         end
       end
 
@@ -242,8 +243,8 @@ module Projects
 
         assert_difference -> { @john_doe_project2.reload.samples.size } => -1,
                           -> { john_doe_project3.reload.samples.size } => 1 do
-          Projects::Samples::TransferService.new(@john_doe_project2, @john_doe).execute(john_doe_project3.id,
-                                                                                        [sample24.id])
+          Projects::Samples::TransferService.new(@john_doe_project2.namespace, @john_doe).execute(john_doe_project3.id,
+                                                                                                  [sample24.id])
         end
       end
     end

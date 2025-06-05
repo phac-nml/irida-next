@@ -52,7 +52,10 @@
             <% if @allowed_to[:transfer_sample] %>
               <% dropdown.with_item(
                 label: t("shared.samples.actions_dropdown.transfer"),
-                url: new_namespace_project_samples_transfer_path,
+                url: new_samples_transfer_path,
+                params: {
+                  namespace_id: @project.namespace.id,
+                },
                 disableable: true,
                 data: {
                   action: "turbo:morph-element->action-button#idempotentConnect ",

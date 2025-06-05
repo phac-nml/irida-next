@@ -15,7 +15,7 @@ module Projects
       end
 
       test 'should get new if owner' do
-        get new_namespace_project_samples_transfer_path(@namespace, @project1, format: :turbo_stream)
+        get new_samples_transfer_path(namespace_id: @namespace.id, format: :turbo_stream)
         assert_response :success
       end
 
@@ -23,13 +23,13 @@ module Projects
         user = users(:micha_doe)
         login_as user
 
-        get new_namespace_project_samples_transfer_path(@namespace, @project1)
+        get new_samples_transfer_path(namespace_id: @namespace.id, format: :turbo_stream)
         assert_response :unauthorized
       end
 
-      test 'should enqueue a Projects::Samples::TransferJob' do
-        assert_enqueued_jobs 1, only: Projects::Samples::TransferJob do
-          post namespace_project_samples_transfer_path(@namespace, @project1, format: :turbo_stream),
+      test 'should enqueue a Samples::TransferJob' do
+        assert_enqueued_jobs 1, only: ::Samples::TransferJob do
+          post samples_transfer_path(namespace_id: @namespace.id, format: :turbo_stream),
                params: {
                  transfer: {
                    new_project_id: @project2.id,

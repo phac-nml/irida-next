@@ -31,7 +31,7 @@ class SamplePolicy < ApplicationPolicy
     next relation.none unless Member.effective_access_level(namespace, user) >= minimum_access_level
 
     if namespace.type == Namespaces::ProjectNamespace.sti_name
-      relation.where(project_id: namespace.project.id).select(:id)
+      relation.where(project_id: namespace.project.id)
     elsif namespace.type == Group.sti_name
       relation
         .with(
