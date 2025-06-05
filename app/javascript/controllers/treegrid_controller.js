@@ -120,7 +120,6 @@ export default class extends Controller {
 
   #changeExpanded(doExpand, row) {
     const toggleButton = row.querySelector(".treegrid-row-toggle");
-    debugger;
     if (toggleButton.hasAttribute("data-toggle-url")) {
       fetch(toggleButton.getAttribute("data-toggle-url"), {
         credentials: "same-origin",

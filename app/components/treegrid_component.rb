@@ -3,12 +3,24 @@
 # Treegrid component
 class TreegridComponent < Component
   erb_template <<-ERB
-    <div class="treegrid-container" data-controller="treegrid" aria-role="treegrid" aria-readonly="true">
+    <%= tag.div(**@system_arguments) do %>>
       <% rows.each do |row| %>
         <%= row %>
       <% end %>
-    </div>
+    <% end %>
   ERB
 
   renders_many :rows, Treegrid::RowComponent
+
+  def initialize(**system_arguments)
+    @system_arguments = system_arguments
+
+    @system_arguments[:class] = class_names(@system_arguments[:classes], 'treegrid-container')
+    @system_arguments.delete(:classes)
+    @system_arguments[:role] = 'treegrid'
+    @system_arguments[:aria] ||= {}
+    @system_arguments[:aria][:readonly] = 'true'
+    @system_arguments[:data] ||= {}
+    @system_arguments[:data][:controller] = 'treegrid'
+  end
 end
