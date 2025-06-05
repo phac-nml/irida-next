@@ -292,7 +292,6 @@
   width: 2rem;
   max-height: 100%;
   max-width: 100%;
-  margin: auto;
   @apply flex justify-center align-middle;
 }
 
@@ -421,9 +420,7 @@
   --treegrid-padding: 30px;
 
   & > .treegrid-row {
-    & > div[role="gridcell"] {
-      padding-left: calc((var(--treegrid-level) - 1) * var(--treegrid-padding));
-    }
+    padding-left: calc((var(--treegrid-level) - 1) * var(--treegrid-padding));
     &[aria-expanded="true"]
       > div[role="gridcell"]
       > button.treegrid-row-toggle

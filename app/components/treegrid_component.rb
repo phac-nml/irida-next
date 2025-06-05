@@ -3,7 +3,7 @@
 # Treegrid component
 class TreegridComponent < Component
   erb_template <<-ERB
-    <%= tag.div(**@system_arguments) do %>>
+    <%= tag.div(**@system_arguments) do %>
       <% rows.each do |row| %>
         <%= row %>
       <% end %>
