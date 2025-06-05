@@ -51,6 +51,7 @@ module Dashboard
       @level = params[:level].to_i
       @posinset = params[:posinset].to_i
       @setsize = params[:setsize].to_i
+      @tabindex = params[:tabindex].to_i
       @children = Group.none
       return if @collapsed
 
