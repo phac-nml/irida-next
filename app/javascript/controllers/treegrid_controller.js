@@ -70,13 +70,21 @@ export default class extends Controller {
   }
 
   #handleTab(event) {
+    const direction = event.shiftKey ? -1 : +1;
     const currentRow = this.#getRowWithFocus();
 
     const focusableElements = this.#getFocusableElements(document);
-    const currentIndex = focusableElements.indexOf(currentRow);
+    const currentIndex = focusableElements.indexOf(event.target);
     let nextElement = null;
-    for (let i = currentIndex + 1; i < focusableElements.length; i++) {
-      if (!this.element.contains(focusableElements[i])) {
+    for (
+      let i = currentIndex + direction;
+      i >= 0 && i < focusableElements.length;
+      i += direction
+    ) {
+      if (
+        currentRow.contains(focusableElements[i]) ||
+        !this.element.contains(focusableElements[i])
+      ) {
         nextElement = focusableElements[i];
         break;
       }
@@ -88,6 +96,7 @@ export default class extends Controller {
   }
 
   focusin(event) {
+    // if focusing freshly into the treegrid then focus the focusable row
     if (
       !this.rowTargets.includes(event.target) &&
       !this.element.contains(event.relatedTarget)
@@ -127,7 +136,8 @@ export default class extends Controller {
       (el) =>
         !el.hasAttribute("disabled") &&
         !el.getAttribute("aria-hidden") &&
-        !(parseInt(el.tabIndex) === -1),
+        !(parseInt(el.tabIndex) === -1) &&
+        el.checkVisibility(),
     );
 
     return focusableElements;
