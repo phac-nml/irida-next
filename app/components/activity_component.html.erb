@@ -7,12 +7,11 @@
       <%= render Activities::ListItemComponent.new(activity: activity) %>
     <% end %>
   </ol>
-
   <div id="next_link">
     <% if @pagy.next.present? %>
       <%= button_to t(:"components.activity.load_more"),
       helpers.pagy_url_for(@pagy, @pagy.next),
-      class: "button button--state-default button--size-default" %>
+      class: "button button-default" %>
     <% end %>
   </div>
 </div>

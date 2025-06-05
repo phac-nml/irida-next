@@ -23,7 +23,7 @@
         controller: "action-button",
         action_button_required_value: 1,
       },
-      class: "button button--size-default button--state-default action-button" %>
+      class: "button button-default action-button" %>
       <% if Flipper.enabled?(:delete_multiple_workflows) %>
         <%= button_to t(".delete_workflows_button"),
         destroy_multiple_confirmation_workflow_executions_path,
@@ -34,7 +34,7 @@
           controller: "action-button",
           action_button_required_value: 1,
         },
-        class: "button button--size-default button--state-destructive action-button" %>
+        class: "button button-destructive action-button" %>
       <% end %>
     </div>
   <% end %>
@@ -50,7 +50,7 @@
         <input type="hidden" name="format" value="turbo_stream"/>
         <input type="hidden" name="select" value="on"/>
         <%= f.submit t(".select_all_button"),
-                 class: "button button--state-default button--size-default" %>
+                 class: "button button-default button--size-default" %>
       <% end %>
       <%= form_with(
                   url: select_workflow_executions_url,
@@ -59,7 +59,7 @@
                 ) do |f| %>
         <input type="hidden" name="format" value="turbo_stream"/>
         <%= f.submit t(".deselect_all_button"),
-                 class: "button button--state-default button--size-default" %>
+                 class: "button button-default button--size-default" %>
       <% end %>
     </div>
     <div class="grow-0">
