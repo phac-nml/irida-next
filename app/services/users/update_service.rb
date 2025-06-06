@@ -5,10 +5,10 @@ module Users
   class UpdateService < BaseService
     attr_accessor :user, :user_to_update, :initial_setup
 
-    def initialize(user_to_update, params = {})
-      super(current_user, params)
+    def initialize(user, user_to_update, params = {})
+      super(user, params)
       @user_to_update = user_to_update
-      @initial_setup = params[:initial_setup]
+      @initial_setup = params[:initial_setup] || false
     end
 
     def execute
