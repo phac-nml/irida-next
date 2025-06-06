@@ -30,7 +30,7 @@ class BaseSampleService < BaseService
     return unless @namespace.project.id == new_project_id
 
     raise BaseError,
-          I18n.t('services.samples.transfer.same_project')
+          I18n.t("services.samples.#{action_type}.same_project")
   end
 
   # Filter the samples that the user has permissions to modify/copy

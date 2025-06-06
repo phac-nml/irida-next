@@ -13,7 +13,7 @@ class BaseSampleCloneService < BaseSampleService
 
     authorize_new_project(new_project_id, :clone_sample_into_project?)
     clone_samples(sample_ids, broadcast_target)
-  rescue Samples::CloneService::CloneError => e
+  rescue BaseSampleService::BaseError, BaseSampleCloneService::CloneError => e
     @namespace.errors.add(:base, e.message)
     {}
   end

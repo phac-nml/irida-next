@@ -15,8 +15,8 @@ module Groups
         @sample30 = samples(:sample30)
       end
 
-      test 'not clone samples with empty params' do
-        assert_empty Groups::Samples::CloneService.new(@group, @john_doe).execute(nil, nil)
+      test 'not clone samples with blank new project id' do
+        assert_empty Groups::Samples::CloneService.new(@group, @john_doe).execute('', sample_ids: [@sample1.id])
         assert_equal(@group.errors.full_messages_for(:base).first,
                      I18n.t('services.samples.clone.empty_new_project_id'))
       end

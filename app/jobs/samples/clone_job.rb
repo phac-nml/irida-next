@@ -7,13 +7,11 @@ module Samples
     queue_with_priority 15
 
     def perform(namespace, current_user, new_project_id, sample_ids, broadcast_target) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-      puts 'in job'
       service = if namespace.group_namespace?
                   Groups::Samples::CloneService.new(namespace, current_user)
                 else
                   Projects::Samples::CloneService.new(namespace, current_user)
                 end
-      puts 'start service'
       @cloned_sample_ids = service.execute(
         new_project_id,
         sample_ids,

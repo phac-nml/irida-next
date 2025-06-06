@@ -1843,6 +1843,24 @@ fr:
         updated_at_asc: Plus ancien mis à jour
         updated_at_desc: Mis à jour à
   samples:
+    clones:
+      create:
+        error: "La liste suivante des échantillons n’a pas été copiée :"
+        no_samples_cloned_error: "Les échantillons n’ont pas été copiés pour les raisons suivantes :"
+        success: Les échantillons ont été copiés avec succès.
+      dialog:
+        description:
+          plural: Les échantillons COUNT_PLACEHOLDER suivants sont sur le point d’être copiés dans un autre projet.
+          singular: L’exemple suivant est sur le point d’être copié dans un autre projet.
+          zero: Aucun échantillon n’a été sélectionné pour être copier
+        empty_state: Aucun projet n’est associé à ce nom ou à cet identifiant
+        new_project_id: Projeter de copier les échantillons vers
+        no_available_projects: Aucun projet disponible
+        samples: Échantillons
+        select_project: Sélectionner le projet
+        spinner_message: Copier des échantillons, cela peut prendre un certain temps...
+        submit_button: Envoyer
+        title: Copier des échantillons
     deletions:
       destroy:
         no_deleted_samples: Les échantillons sélectionnés n’ont pas pu être supprimés
@@ -2026,24 +2044,6 @@ fr:
         new_sample: Nouvel échantillon
         sample_export: Exportation d’échantillons
         transfer: Transférer des échantillons
-      clones:
-        create:
-          error: "La liste suivante des échantillons n’a pas été copiée :"
-          no_samples_cloned_error: "Les échantillons n’ont pas été copiés pour les raisons suivantes :"
-          success: Les échantillons ont été copiés avec succès.
-        dialog:
-          description:
-            plural: Les échantillons COUNT_PLACEHOLDER suivants sont sur le point d’être copiés dans un autre projet.
-            singular: L’exemple suivant est sur le point d’être copié dans un autre projet.
-            zero: Aucun échantillon n’a été sélectionné pour être copier
-          empty_state: Aucun projet n’est associé à ce nom ou à cet identifiant
-          new_project_id: Projeter de copier les échantillons vers
-          no_available_projects: Aucun projet disponible
-          samples: Échantillons
-          select_project: Sélectionner le projet
-          spinner_message: Copier des échantillons, cela peut prendre un certain temps...
-          submit_button: Envoyer
-          title: Copier des échantillons
       errors:
         ok_button: OK
       metadata:

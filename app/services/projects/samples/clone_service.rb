@@ -24,9 +24,7 @@ module Projects
         end
 
         if cloned_sample_ids.count.positive?
-          puts 'update sample count'
           update_samples_count(cloned_sample_ids.count) if @new_project.parent.group_namespace?
-          puts 'create activity'
           create_project_level_activity(cloned_samples_data, @namespace)
         end
 

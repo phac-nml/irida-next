@@ -16,7 +16,7 @@ module Groups
       end
 
       test 'should enqueue a Groups::Samples::CloneJob' do
-        assert_enqueued_jobs 1, only: Groups::Samples::CloneJob do
+        assert_enqueued_jobs 1, only: Samples::CloneJob do
           post group_samples_clone_path(@namespace, format: :turbo_stream),
                params: {
                  clone: {
