@@ -12,7 +12,6 @@ class BaseSampleCloneService < BaseSampleService
     @new_project = Project.find_by(id: new_project_id)
 
     authorize_new_project(new_project_id, :clone_sample_into_project?)
-
     clone_samples(sample_ids, broadcast_target)
   rescue Samples::CloneService::CloneError => e
     @namespace.errors.add(:base, e.message)
@@ -33,8 +32,8 @@ class BaseSampleCloneService < BaseSampleService
 
     clone
   rescue ActiveRecord::RecordInvalid
-    @project.errors.add(:samples, I18n.t('services.samples.clone.sample_exists', sample_name: sample.name,
-                                                                                 sample_puid: sample.puid))
+    @namespace.errors.add(:samples, I18n.t('services.samples.clone.sample_exists', sample_name: sample.name,
+                                                                                   sample_puid: sample.puid))
     nil
   end
 
