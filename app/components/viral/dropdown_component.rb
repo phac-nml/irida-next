@@ -74,6 +74,7 @@ module Viral
       add_button_styles
       add_icon_styles
       add_aria_label
+      add_title_attribute
     end
 
     # 💬 Add tooltip as title attribute if present
@@ -81,6 +82,13 @@ module Viral
       return if @params[:tooltip].blank?
 
       @system_arguments[:title] = @params[:tooltip]
+    end
+
+    # 📝 Add title attribute from system arguments if present
+    def add_title_attribute
+      return if @system_arguments[:title].present?
+
+      @system_arguments[:title] = @params[:title] if @params[:title].present?
     end
 
     # 🎨 Add button styles, using custom or default

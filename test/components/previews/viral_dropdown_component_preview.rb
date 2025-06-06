@@ -2,7 +2,8 @@
 
 class ViralDropdownComponentPreview < ViewComponent::Preview
   def default
-    render Viral::DropdownComponent.new(label: 'Organism', aria: { label: 'Organism dropdown list' }) do |dropdown|
+    render Viral::DropdownComponent.new(label: 'Organism', aria: { label: 'Organism dropdown list' },
+                                        title: 'Organisms that really shine') do |dropdown|
       dropdown.with_item(label: 'Aspergillus awamori', url: '#')
       dropdown.with_item(label: 'Bacillus cereus', url: '#')
       dropdown.with_item(label: 'Pseudomonas aeruginosa', url: '#')
