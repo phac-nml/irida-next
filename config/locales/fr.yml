@@ -245,6 +245,7 @@ fr:
               too_short: est trop court (le minimum est de 6 caractères)
             password_confirmation:
               confirmation: ne correspond pas au mot de passe
+          only_admin_account: Cannot remove account as this would leave the application without an administrator user
         workflow_execution:
           invalid_namespace: Ne peut être qu’un groupe ou un projet
           invalid_workflow: Impossible de trouver le flux de travail avec le nom '%{workflow_name}' et la version '%{workflow_version}'
@@ -370,6 +371,10 @@ fr:
         metadata_written_html: Le bot d’automatisation de projet a écrit les métadonnées du pipeline %{href} dans l’échantillon %{sample_href}
         outputs_and_metadata_written_html: Le bot d’automatisation de projet a attaché les sorties du pipeline %{href} et a écrit les métadonnées dans l’échantillon %{sample_href}
         outputs_written_html: Le bot d’automatisation de projet a attaché les sorties du pipeline %{href} dans l’échantillon %{sample_href}
+  admin:
+    initial_setup:
+      update:
+        success: Initial account configured! Please sign in.
   advanced_search_component:
     add_condition_button: Ajouter une condition
     add_group_button: Ajouter un groupe

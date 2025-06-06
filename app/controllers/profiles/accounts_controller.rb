@@ -13,8 +13,14 @@ module Profiles
 
     def destroy
       authorize! @user
+
       @user.destroy
-      redirect_to new_user_session_url
+      if @user.errors.any?
+        flash[:error] = error_message(@user)
+        redirect_to profile_account_path(@user)
+      else
+        redirect_to new_user_session_url
+      end
     end
 
     def current_page
