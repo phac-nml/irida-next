@@ -21,7 +21,7 @@ module Admin
       assert_response :redirect, to: new_user_session_path
     end
 
-    test 'if an account already exists a new one should now be setup as an admin' do
+    test 'if an account already exists a new one should not be setup as an admin' do
       user = User.last
 
       get admin_initial_setup_url(id: user.id, initial_setup: true)
@@ -38,7 +38,7 @@ module Admin
 
       get admin_initial_setup_url(id: '123', initial_setup: true)
 
-      # redirect to dashboard
+      # redirect to new user registration
       assert_response :redirect, to: new_user_registration_path
     end
   end
