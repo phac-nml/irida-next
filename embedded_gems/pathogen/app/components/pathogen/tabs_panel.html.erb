@@ -1,8 +1,15 @@
+<%# 🎯 Tabs Panel Container %>
 <%= render Pathogen::BaseComponent.new(**@system_arguments) do %>
+  <%# 🎨 Tab List %>
   <%= render Pathogen::BaseComponent.new(**@body_arguments) do %>
-
+    <%# 📝 Individual Tabs %>
     <% tabs.each do |tab| %>
       <%= tab %>
     <% end %>
   <% end %>
+
+  <%# 🎯 Tab Content Container %>
+  <section id="<%= "#{@id}-content" %>" class="mt-4">
+    <%= content %>
+  </section>
 <% end %>

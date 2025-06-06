@@ -33,15 +33,16 @@
     "createuser",
     "datetime",
     "describedby",
+    "fieldset",
     "flowbite",
     "headful",
     "irida",
     "keyfile",
+    "labelledby",
     "logfile",
     "micha",
     "nofork",
     "rubocop",
-    "tailwindcss",
-    "fieldset"
+    "tailwindcss"
   ]
 }

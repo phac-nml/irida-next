@@ -1,9 +1,30 @@
+<%# 🎯 Tab wrapper with presentation role %>
 <%= render Pathogen::BaseComponent.new(**@wrapper_arguments) do %>
-  <%= render Pathogen::BaseComponent.new(**@system_arguments) do %>
-    <%= icon %>
-    <span>
-      <%= @text %>
+  <%# 🎨 Tab button with proper ARIA attributes %>
+  <% aria_label_parts = [@text] %>
+  <% aria_label_parts << "with " + count.count.to_s + " items" if count %>
+  <% aria_label = aria_label_parts.join(", ") %>
+  <% system_args = @system_arguments.merge("aria-label": aria_label) %>
+  <%= render Pathogen::BaseComponent.new(**system_args) do %>
+    <span class="flex items-center">
+      <%# 🎨 Icon if present %>
+      <% if icon %>
+        <span aria-hidden="true">
+          <%= icon %>
+        </span>
+      <% end %>
+
+      <%# 📝 Tab text %>
+      <span>
+        <%= @text %>
+      </span>
+
+      <%# 🎯 Count badge if present %>
+      <% if count %>
+        <span aria-hidden="true">
+          <%= count %>
+        </span>
+      <% end %>
     </span>
-    <%= count %>
   <% end %>
 <% end %>

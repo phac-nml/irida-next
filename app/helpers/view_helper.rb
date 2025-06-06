@@ -28,7 +28,6 @@ module ViewHelper
     select2option: 'Viral::Select2OptionComponent',
     select: 'Viral::Form::SelectComponent',
     sortable_lists: 'Viral::SortableListsComponent',
-    tabs: 'Viral::TabsComponent',
     text_input: 'Viral::Form::TextInputComponent',
     tooltip: 'Viral::TooltipComponent'
   }.freeze

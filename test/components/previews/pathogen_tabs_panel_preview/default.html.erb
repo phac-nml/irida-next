@@ -1,5 +1,8 @@
-<%= render Pathogen::TabsPanel.new(id: "default-tabs-panel-id", label: "default tabs panel") do |tabs| %>
-  <%= tabs.with_tab(selected: true, href: "#", text: "Tab 1") %>
-  <%= tabs.with_tab(selected: false, href: "#", text: "Tab 2") %>
-  <%= tabs.with_tab(selected: false, href: "#", text: "Tab 3") %>
+<%# Basic navigation with minimal configuration %>
+<%= render Pathogen::TabsPanel.new(id: "basic-nav") do |nav| %>
+  <% nav.with_tab(id: "nav-1", text: "Home", href: "/home", selected: true) %>
+
+  <% nav.with_tab(id: "nav-2", text: "Profile", href: "/profile") %>
+
+  <% nav.with_tab(id: "nav-3", text: "Settings", href: "/settings") %>
 <% end %>

@@ -1,0 +1,27 @@
+<%# Edge case: All tabs marked as selected (should only show first) %>
+<%= render Pathogen::TabsPanel.new(id: "all-selected-tabs") do |tabs| %>
+  <% tabs.with_tab(
+    id: "tab-1",
+    controls: "panel-1",
+    text: "First",
+    href: "/first",
+    selected: true,
+  ) %>
+
+  <% tabs.with_tab(
+    id: "tab-2",
+    controls: "panel-2",
+    text: "Second",
+    href: "/second",
+    selected: true,
+  ) %>
+
+  <% tabs.with_tab(
+    id: "tab-3",
+    controls: "panel-3",
+    text: "Third",
+    href: "/third",
+    selected: true,
+  ) %>
+
+<% end %>

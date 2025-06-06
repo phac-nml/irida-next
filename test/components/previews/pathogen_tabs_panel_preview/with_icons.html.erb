@@ -1,0 +1,27 @@
+<%# Navigation with icons %>
+<%= render Pathogen::TabsPanel.new(id: "icon-nav") do |nav| %>
+  <% nav.with_tab(
+    id: "nav-1",
+    text: "Home",
+    href: "/home",
+    selected: true,
+  ) do |tab| %>
+    <%= tab.with_icon(icon: "house") %>
+  <% end %>
+
+  <% nav.with_tab(
+    id: "nav-2",
+    text: "Profile",
+    href: "/profile",
+  ) do |tab| %>
+    <%= tab.with_icon(icon: "user") %>
+  <% end %>
+
+  <% nav.with_tab(
+    id: "nav-3",
+    text: "Settings",
+    href: "/settings",
+  ) do |tab| %>
+    <%= tab.with_icon(icon: "gear") %>
+  <% end %>
+<% end %>
