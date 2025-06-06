@@ -4,8 +4,6 @@ module Samples
   # controller for sample deletions
   class DeletionsController < ApplicationController
     include ListActions
-    respond_to :turbo_stream
-
     before_action :namespace, only: %i[new destroy_samples]
     before_action :confirmation_parameters, :sample, only: :new
 

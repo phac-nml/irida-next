@@ -32,9 +32,11 @@ Rails.application.routes.draw do
           resource :transfer, only: %i[create new]
           resource :deletions, only: %i[new] do
             post :destroy_samples
-            post :list
           end
         end
+      end
+      collection do
+        post :list
       end
     end
     resources :attachments, only: %i[show]
