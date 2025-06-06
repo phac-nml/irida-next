@@ -333,11 +333,11 @@
 
 @utility button {
   /* Base styles with WCAG AAA compliance */
-  @apply inline-flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-lg border px-5 py-2.5 text-base font-medium transition-all duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto;
+  @apply inline-flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-lg border px-5 py-2.5 text-sm font-medium transition-all duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto;
 
   /* Ensure focus is always visible */
   &:focus-visible {
-    @apply outline outline-2 outline-offset-2;
+    @apply outline-2 outline-offset-2;
   }
 }
 
