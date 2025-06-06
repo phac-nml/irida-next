@@ -37,7 +37,13 @@
                     label: t(".#{column}"),
                     url: helpers.sorting_url(@q, "puid"),
                     field: "puid",
-                    **(@sample ? {} : { data: { turbo_action: "replace" } }),
+                    **(
+                      if @attachable.instance_of?(Sample)
+                        {}
+                      else
+                        { data: { turbo_action: "replace" } }
+                      end
+                    ),
                   ) %>
                 <% elsif column == :byte_size || column == :filename %>
                   <%= render Ransack::SortComponent.new(
@@ -45,7 +51,13 @@
                     label: t(".#{column}"),
                     url: helpers.sorting_url(@q, "file_blob_#{column}"),
                     field: "file_blob_#{column}",
-                    **(@sample ? {} : { data: { turbo_action: "replace" } }),
+                    **(
+                      if @attachable.instance_of?(Sample)
+                        {}
+                      else
+                        { data: { turbo_action: "replace" } }
+                      end
+                    ),
                   ) %>
                 <% elsif column == :format || column == :type %>
                   <%= render Ransack::SortComponent.new(
@@ -57,7 +69,13 @@
                         URI.encode_www_form_component("metadata_#{column}"),
                       ),
                     field: "metadata_#{column}",
-                    **(@sample ? {} : { data: { turbo_action: "replace" } }),
+                    **(
+                      if @attachable.instance_of?(Sample)
+                        {}
+                      else
+                        { data: { turbo_action: "replace" } }
+                      end
+                    ),
                   ) %>
                 <% else %>
                   <%= render Ransack::SortComponent.new(
@@ -65,7 +83,13 @@
                     label: t(".#{column}"),
                     url: helpers.sorting_url(@q, column),
                     field: column,
-                    **(@sample ? {} : { data: { turbo_action: "replace" } }),
+                    **(
+                      if @attachable.instance_of?(Sample)
+                        {}
+                      else
+                        { data: { turbo_action: "replace" } }
+                      end
+                    ),
                   ) %>
                 <% end %>
               <% end %>
@@ -217,22 +241,31 @@
                   <% end %>
                 <% end %>
               <% end %>
-              <% if @renders_row_actions %>
-                <%= render_cell(
+              <%= render_cell(
                   tag: 'td',
                   classes: class_names('px-3 py-3 space-x-2')
                 ) do %>
-                  <% if @row_actions[:destroy] %>
-                    <%= link_to(
-                      t(".delete"),
-                      destroy_path(attachment.id),
-                      data: {
-                        turbo_stream: true,
-                      },
-                      class:
-                        "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-                    ) %>
-                  <% end %>
+                <% if @row_actions[:preview] && attachment.previewable? %>
+                  <%= link_to(
+                    t(".preview"),
+                    attachment_path(attachment),
+                    data: {
+                      turbo_stream: true,
+                    },
+                    class:
+                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                  ) %>
+                <% end %>
+                <% if @row_actions[:destroy] %>
+                  <%= link_to(
+                    t(".delete"),
+                    destroy_path(attachment.id),
+                    data: {
+                      turbo_stream: true,
+                    },
+                    class:
+                      "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
+                  ) %>
                 <% end %>
               <% end %>
             <% end %>

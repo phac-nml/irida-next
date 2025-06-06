@@ -5,6 +5,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
   include ListActions
   include NamespacePathHelper
+  include WorkflowExecutionAttachment
 
   included do
     before_action :set_default_tab, only: :show
@@ -64,9 +65,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
     case @tab
     when 'files'
-      @samples_workflow_executions = @workflow_execution.samples_workflow_executions
-      @attachments = Attachment.where(attachable: @workflow_execution)
-                               .or(Attachment.where(attachable: @samples_workflow_executions))
+      list_workflow_execution_attachments
     when 'params'
       @workflow = Irida::Pipelines.instance.find_pipeline_by(@workflow_execution.metadata['workflow_name'],
                                                              @workflow_execution.metadata['workflow_version'],

@@ -349,7 +349,8 @@ module Projects
         click_on I18n.t('workflow_executions.show.tabs.files')
       end
 
-      assert_text 'FILENAME'
+      assert_text I18n.t('workflow_executions.files.empty.title')
+      assert_text I18n.t('workflow_executions.files.empty.description')
 
       click_on I18n.t('workflow_executions.show.tabs.params')
 
@@ -509,7 +510,48 @@ module Projects
       within('table tbody') do
         assert_text attachment.puid
         assert_text attachment.file.filename.to_s
-        assert_text I18n.t('workflow_executions.attachment.preview')
+        assert_text I18n.t('attachments.table_component.preview')
+      end
+    end
+
+    test 'can search workflow execution files by puid & filename' do
+      Flipper.enable(:workflow_execution_attachments_searching)
+      workflow_execution = workflow_executions(:workflow_execution_shared2)
+
+      visit namespace_project_workflow_execution_path(@namespace, @project, workflow_execution)
+
+      assert_text workflow_execution.id
+      assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
+      assert_text workflow_execution.metadata['workflow_name']
+      assert_text workflow_execution.metadata['workflow_version']
+
+      within %(div[id="workflow-execution-tabs"]) do
+        click_on I18n.t('workflow_executions.show.tabs.files')
+      end
+
+      attachment = attachments(:workflow_execution_shared_with_project_output_attachment)
+      within 'tbody' do
+        assert_text attachment.puid
+        assert_text attachment.file.filename.to_s
+        assert_text I18n.t('attachments.table_component.preview')
+      end
+
+      fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder'), with: attachment.puid
+      find('input.t-search-component').native.send_keys(:return)
+
+      within 'tbody' do
+        assert_text attachment.puid
+        assert_text attachment.file.filename.to_s
+        assert_text I18n.t('attachments.table_component.preview')
+      end
+
+      fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder'), with: attachment.file.filename.to_s
+      find('input.t-search-component').native.send_keys(:return)
+
+      within 'tbody' do
+        assert_text attachment.puid
+        assert_text attachment.file.filename.to_s
+        assert_text I18n.t('attachments.table_component.preview')
       end
     end
 

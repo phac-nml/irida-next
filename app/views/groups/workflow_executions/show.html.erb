@@ -101,14 +101,16 @@
   <% end %>
 
   <%= tabs.with_tab_content do %>
-    <% if @tab == 'summary' || @tab == nil %>
-      <%= render partial: "summary" %>
-    <% elsif @tab == 'params' %>
-      <%= render partial: "params" %>
-    <% elsif @tab == 'samplesheet' %>
-      <%= render partial: "samplesheet" %>
-    <% elsif @tab == 'files' %>
-      <%= render partial: "files" %>
-    <% end %>
+    <section class="mt-4">
+      <% if @tab == 'summary' || @tab == nil %>
+        <%= render partial: "summary" %>
+      <% elsif @tab == 'params' %>
+        <%= render partial: "params" %>
+      <% elsif @tab == 'samplesheet' %>
+        <%= render partial: "samplesheet" %>
+      <% elsif @tab == 'files' %>
+        <%= render partial: "files" %>
+      <% end %>
+    </section>
   <% end %>
 <% end %>

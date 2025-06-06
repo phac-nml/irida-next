@@ -439,6 +439,7 @@ en:
       id: PUID
       limit:
         item: Attachments
+      preview: Preview
       select_page: Select / Deselect visible attachments
       type: Type
   auth:
@@ -1104,15 +1105,6 @@ en:
         name_placeholder: Enter workflow execution name (optional)
         submit_button: Submit
         title: Edit workflow execution
-      files:
-        table_header:
-          actions: Actions
-          created_at: Created At
-          filename: Filename
-          format: Format
-          puid: ID
-          size: Size
-          type: Type
       index:
         create_export_button: Create Export
         deselect_all_button: Deselect All
@@ -1837,15 +1829,6 @@ en:
         name_placeholder: Enter workflow execution name (optional)
         submit_button: Submit
         title: Edit automated workflow execution
-      files:
-        table_header:
-          actions: Actions
-          created_at: Created At
-          filename: Filename
-          format: Format
-          puid: ID
-          size: Size
-          type: Type
       index:
         create_export_button: Create Export
         delete_workflows_button: Delete Workflow Executions
@@ -2217,9 +2200,6 @@ en:
       no_template: No template
       remove_all: Remove all
   workflow_executions:
-    attachment:
-      download: Download
-      preview: Preview
     create:
       error_message: 'The following errors prevented the Workflow Execution from being created:'
     edit_dialog:
@@ -2246,14 +2226,11 @@ en:
         select_file: Select File
         submit_button: Submit
     files:
-      table_header:
-        actions: Actions
-        created_at: Created At
-        filename: Filename
-        format: Format
-        puid: ID
-        size: Size
-        type: Type
+      empty:
+        description: There are no files associated with this workflow execution.
+        title: No Files
+      search:
+        placeholder: Filter by PUID or Filename
     index:
       actions:
         cancel_button: Cancel

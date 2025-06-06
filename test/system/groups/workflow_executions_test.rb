@@ -196,7 +196,7 @@ module Groups
       within('table tbody') do
         assert_text attachment.puid
         assert_text attachment.file.filename.to_s
-        assert_text I18n.t('workflow_executions.attachment.preview', locale: user.locale)
+        assert_text I18n.t('attachments.table_component.preview', locale: user.locale)
       end
 
       within %(div[id="workflow-execution-tabs"]) do
@@ -211,6 +211,43 @@ module Groups
 
       assert_selector 'div.random_seed-param > span', text: '--random_seed'
       assert_selector 'div.random_seed-param > input[value="1"]'
+    end
+
+    test 'can search workflow execution files by puid & filename' do
+      Flipper.enable(:workflow_execution_attachments_searching)
+      user = users(:joan_doe)
+      login_as user
+
+      visit group_workflow_execution_path(@group, @workflow_execution_group_shared1)
+
+      assert_text @workflow_execution_group_shared1.id
+      assert_text I18n.t(:"workflow_executions.state.#{@workflow_execution_group_shared1.state}", locale: user.locale)
+      assert_text @workflow_execution_group_shared1.metadata['workflow_name']
+      assert_text @workflow_execution_group_shared1.metadata['workflow_version']
+
+      within 'main' do
+        click_on I18n.t('workflow_executions.show.tabs.files', locale: user.locale)
+      end
+
+      within 'tbody' do
+        assert_text attachments(:workflow_execution_group_shared_output_attachment).puid
+      end
+
+      fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder', locale: user.locale),
+              with: attachments(:workflow_execution_group_shared_output_attachment).puid
+      find('input.t-search-component').native.send_keys(:return)
+
+      within 'tbody' do
+        assert_text attachments(:workflow_execution_group_shared_output_attachment).puid
+      end
+
+      fill_in placeholder: I18n.t('workflow_executions.files.search.placeholder', locale: user.locale),
+              with: attachments(:workflow_execution_group_shared_output_attachment).file.filename.to_s
+      find('input.t-search-component').native.send_keys(:return)
+
+      within 'tbody' do
+        assert_text attachments(:workflow_execution_group_shared_output_attachment).puid
+      end
     end
 
     test 'can view a shared workflow execution that was shared by a different user' do
@@ -235,7 +272,8 @@ module Groups
         click_on I18n.t('workflow_executions.show.tabs.files')
       end
 
-      assert_text 'FILENAME'
+      assert_text I18n.t('workflow_executions.files.empty.title')
+      assert_text I18n.t('workflow_executions.files.empty.description')
 
       click_on I18n.t('workflow_executions.show.tabs.params')
 

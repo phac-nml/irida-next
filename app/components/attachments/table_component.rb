@@ -17,8 +17,7 @@ module Attachments
       attachments,
       pagy,
       q,
-      sample,
-      namespace,
+      attachable,
       render_individual_attachments,
       has_attachments,
       row_actions: false,
@@ -29,15 +28,14 @@ module Attachments
       @attachments = attachments
       @pagy = pagy
       @q = q
-      @sample = sample
-      @namespace = namespace
+      @attachable = attachable
       @render_individual_attachments = render_individual_attachments
       @has_attachments = has_attachments
       @abilities = abilities
       @row_actions = row_actions
-      @empty = empty
       # 🚀 Determine if any row actions are enabled for rendering the actions column.
       @renders_row_actions = @row_actions.any? { |_key, value| value }
+      @empty = empty
       @system_arguments = system_arguments
 
       # 📝 Set the columns to be displayed in the table.
@@ -45,7 +43,7 @@ module Attachments
     end
     # rubocop:enable Naming/MethodParameterName,Metrics/ParameterLists
 
-    def system_arguments
+    def system_arguments # rubocop:disable Metrics/AbcSize
       { tag: 'div' }.deep_merge(@system_arguments).tap do |args|
         args[:id] = 'attachments-table'
         args[:classes] = class_names(args[:classes], 'overflow-auto scrollbar')
@@ -54,7 +52,10 @@ module Attachments
           args[:data][:controller] = 'selection'
           args[:data][:'selection-total-value'] = @pagy.count
           args[:data][:'selection-action-button-outlet'] = '.action-button'
-          args[:data][:'selection-storage-key-value'] = "files-#{@sample.id}" if @sample
+          if @attachable.instance_of?(Sample)
+            args[:data][:'selection-storage-key-value'] =
+              "files-#{@attachable.id}"
+          end
         end
       end
     end
@@ -79,16 +80,16 @@ module Attachments
     end
 
     def destroy_path(attachment_id)
-      if @sample
+      if @attachable.instance_of?(Sample)
         namespace_project_sample_attachment_new_destroy_path(
-          sample_id: @sample.id,
+          sample_id: @attachable.id,
           attachment_id:
         )
-      elsif @namespace.group_namespace?
+      elsif @attachable.instance_of?(Group)
         group_attachment_new_destroy_path(
           attachment_id:
         )
-      else
+      elsif @attachable.instance_of?(Namespaces::ProjectNamespace)
         namespace_project_attachment_new_destroy_path(
           attachment_id:
         )

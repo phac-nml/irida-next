@@ -3,13 +3,14 @@
 # Common Sample Attachment Logic
 module SampleAttachment
   extend ActiveSupport::Concern
+  include Metadata
 
   def list_sample_attachments
     @render_individual_attachments = filter_requested?
     all_attachments = load_attachments
     @has_attachments = all_attachments.count.positive?
     @q = all_attachments.ransack(params[:q])
-    set_default_sort
+    set_attachment_default_sort
     @pagy, @sample_attachments = pagy_with_metadata_sort(@q.result, Attachment)
   end
 
@@ -27,7 +28,7 @@ module SampleAttachment
     end
   end
 
-  def set_default_sort
+  def set_attachment_default_sort
     @q.sorts = 'created_at desc' if @q.sorts.empty?
   end
 end
