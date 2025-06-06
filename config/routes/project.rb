@@ -59,7 +59,6 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
         scope module: :samples, as: :samples do
           collection do
             resource :clone, only: %i[create new]
-            resource :transfer, only: %i[create new]
             resource :file_import, module: :metadata, only: %i[create new]
             resource :spreadsheet_import, only: %i[create new]
             resource :deletion, only: %i[destroy new] do
@@ -69,7 +68,6 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
         end
         collection do
           get :select
-          post :list
           post :search
           post :metadata_template
         end

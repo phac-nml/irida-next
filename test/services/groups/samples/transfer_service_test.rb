@@ -70,7 +70,7 @@ module Groups
         end
 
         assert @group.errors.messages_for(:base).first.include?(
-          I18n.t('services.groups.samples.transfer.maintainer_transfer_not_allowed')
+          I18n.t('services.samples.transfer.maintainer_transfer_not_allowed')
         )
       end
 
@@ -89,7 +89,7 @@ module Groups
         end
 
         assert @group.errors.messages_for(:samples).first.include?(
-          I18n.t('services.groups.samples.transfer.unauthorized', sample_ids: sample.id)
+          I18n.t('services.samples.transfer.unauthorized', sample_ids: sample.id)
         )
       end
 
@@ -105,7 +105,7 @@ module Groups
         )
 
         assert @group.errors.messages_for(:samples).first.include?(
-          I18n.t('services.groups.samples.transfer.samples_not_found', sample_ids: '123')
+          I18n.t('services.samples.transfer.samples_not_found', sample_ids: '123')
         )
       end
 
@@ -124,11 +124,11 @@ module Groups
         end
 
         assert @group.errors.messages_for(:samples).include?(
-          I18n.t('services.groups.samples.transfer.unauthorized', sample_ids: sample.id)
+          I18n.t('services.samples.transfer.unauthorized', sample_ids: sample.id)
         )
 
         assert @group.errors.messages_for(:samples).include?(
-          I18n.t('services.groups.samples.transfer.samples_not_found', sample_ids: '123')
+          I18n.t('services.samples.transfer.samples_not_found', sample_ids: '123')
         )
       end
 

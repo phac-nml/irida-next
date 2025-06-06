@@ -2,7 +2,8 @@
 
 # root controller for samples
 class SamplesController < ApplicationController
-  before_action :sample
+  include ListActions
+  before_action :sample, only: %i[show edit]
 
   def show
     authorize! @sample.project, to: :read_sample?

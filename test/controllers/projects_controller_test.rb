@@ -248,7 +248,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     namespace = namespaces_user_namespaces(:john_doe_namespace)
     old_namespace = groups(:group_one)
 
-    post namespace_project_samples_transfer_path(old_namespace, project),
+    post namespace_project_transfer_path(old_namespace, project),
          params: { new_namespace_id: namespace.id }, as: :turbo_stream
 
     assert_response :redirect

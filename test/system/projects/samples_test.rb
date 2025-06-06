@@ -421,8 +421,8 @@ module Projects
 
       ### VERIFY START ###
       within('#dialog') do
-        assert_text I18n.t('shared.samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER',
-                                                                                       '3')
+        assert_text I18n.t('samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER',
+                                                                                '3')
       end
       ### VERIFY END ###
     end
@@ -445,7 +445,7 @@ module Projects
 
       ### VERIFY START ###
       within('#dialog') do
-        assert_text I18n.t('shared.samples.transfers.dialog.description.singular')
+        assert_text I18n.t('samples.transfers.dialog.description.singular')
       end
       ### VERIFY END ###
     end
@@ -487,16 +487,16 @@ module Projects
         # select destination project
         find('input.select2-input').click
         find("li[data-value='#{@project2.id}']").click
-        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+        click_on I18n.t('samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [Projects::Samples::TransferJob]
+        perform_enqueued_jobs only: [::Samples::TransferJob]
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
       # flash msg
-      assert_text I18n.t('projects.samples.transfers.create.success')
+      assert_text I18n.t('samples.transfers.create.success')
       click_button I18n.t('shared.samples.success.ok_button')
       # originating project no longer has samples
       assert_text I18n.t('projects.samples.index.no_samples')
@@ -542,7 +542,7 @@ module Projects
         # select destination project
         find('input.select2-input').click
         find("li[data-value='#{@project2.id}']").click
-        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+        click_on I18n.t('samples.transfers.dialog.submit_button')
 
         ### ACTIONS END ###
 
@@ -550,7 +550,7 @@ module Projects
         assert_text I18n.t('shared.progress_bar.in_progress')
         # close button hidden during transfer
         assert_no_selector 'button.dialog--close'
-        perform_enqueued_jobs only: [Projects::Samples::TransferJob]
+        perform_enqueued_jobs only: [::Samples::TransferJob]
         ### VERIFY END ###
       end
     end
@@ -580,20 +580,20 @@ module Projects
 
       assert_selector '#dialog'
       within('#dialog') do
-        assert_text I18n.t('shared.samples.transfers.dialog.title')
+        assert_text I18n.t('samples.transfers.dialog.title')
         find('input.select2-input').click
         find("li[data-value='#{@project2.id}']").click
-        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+        click_on I18n.t('samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [Projects::Samples::TransferJob]
+        perform_enqueued_jobs only: [::Samples::TransferJob]
         ### ACTIONS END ###
 
         ### VERIFY START ###
         # samples listing should no longer appear in dialog
         assert_no_selector '#list_selections'
         # error msg displayed in dialog
-        assert_text I18n.t('projects.samples.transfers.create.no_samples_transferred_error')
+        assert_text I18n.t('samples.transfers.create.no_samples_transferred_error')
       end
       ### VERIFY END ###
     end
@@ -639,17 +639,17 @@ module Projects
         end
         find('input.select2-input').click
         find("li[data-value='#{project25.id}']").click
-        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+        click_on I18n.t('samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [Projects::Samples::TransferJob]
+        perform_enqueued_jobs only: [::Samples::TransferJob]
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
       within('#dialog') do
         # error messages in dialog
-        assert_text I18n.t('projects.samples.transfers.create.error')
+        assert_text I18n.t('samples.transfers.create.error')
         # colon is removed from translation in UI
         assert_text I18n.t('services.samples.transfer.sample_exists', sample_puid: @sample30.puid,
                                                                       sample_name: @sample30.name).gsub(':', '')
@@ -698,7 +698,7 @@ module Projects
       ### VERIFY START ###
       within('#dialog') do
         # no available destination projects
-        assert_selector "input[placeholder='#{I18n.t('shared.samples.transfers.dialog.no_available_projects')}']"
+        assert_selector "input[placeholder='#{I18n.t('samples.transfers.dialog.no_available_projects')}']"
       end
       ### VERIFY END ###
     end
@@ -743,10 +743,10 @@ module Projects
         end
         find('input.select2-input').click
         find("li[data-value='#{@project2.id}']").click
-        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+        click_on I18n.t('samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [Projects::Samples::TransferJob]
+        perform_enqueued_jobs only: [::Samples::TransferJob]
       end
       ### ACTIONS END ###
 
@@ -799,7 +799,7 @@ module Projects
         ### ACTIONS END ###
 
         ### VERIFY START ###
-        assert_text I18n.t('shared.samples.transfers.dialog.empty_state')
+        assert_text I18n.t('samples.transfers.dialog.empty_state')
         ### VERIFY END ###
       end
     end

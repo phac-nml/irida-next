@@ -233,7 +233,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   scope_for :relation, :project_samples_transferable do |relation, options|
-    obj = options.key?(:group) ? options[:group] : options[:project].namespace
+    obj = options.key?(:group) ? options[:group] : options[:project]
     if Member.effective_access_level(obj, user) == Member::AccessLevel::MAINTAINER
       top_level_ancestor = if obj.project_namespace?
                              obj.parent.self_and_ancestors.find_by(type: Group.sti_name, parent: nil)

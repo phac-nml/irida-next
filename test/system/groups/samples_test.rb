@@ -1803,8 +1803,8 @@ module Groups
 
       ### VERIFY START ###
       within('#dialog') do
-        assert_text I18n.t('shared.samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER',
-                                                                                       '26')
+        assert_text I18n.t('samples.transfers.dialog.description.plural').gsub!('COUNT_PLACEHOLDER',
+                                                                                '26')
       end
       ### VERIFY END ###
     end
@@ -1827,7 +1827,7 @@ module Groups
 
       ### VERIFY START ###
       within('#dialog') do
-        assert_text I18n.t('shared.samples.transfers.dialog.description.singular')
+        assert_text I18n.t('samples.transfers.dialog.description.singular')
       end
       ### VERIFY END ###
     end
@@ -1879,16 +1879,16 @@ module Groups
         find('input.select2-input').click
         find("li[data-value='#{project4.id}']").click
 
-        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+        click_on I18n.t('samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [Groups::Samples::TransferJob]
+        perform_enqueued_jobs only: [::Samples::TransferJob]
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
       # flash msg
-      assert_text I18n.t('groups.samples.transfers.create.success')
+      assert_text I18n.t('samples.transfers.create.success')
       click_button I18n.t('shared.samples.success.ok_button')
 
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 20, count: 25,
@@ -1939,7 +1939,7 @@ module Groups
         # select destination project
         find('input.select2-input').click
         find("li[data-value='#{project4.id}']").click
-        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+        click_on I18n.t('samples.transfers.dialog.submit_button')
 
         ### ACTIONS END ###
 
@@ -1947,7 +1947,7 @@ module Groups
         assert_text I18n.t('shared.progress_bar.in_progress')
         # close button hidden during transfer
         assert_no_selector 'button.dialog--close'
-        perform_enqueued_jobs only: [Groups::Samples::TransferJob]
+        perform_enqueued_jobs only: [::Samples::TransferJob]
         ### VERIFY END ###
       end
     end
@@ -1978,20 +1978,20 @@ module Groups
 
       assert_selector '#dialog'
       within('#dialog') do
-        assert_text I18n.t('shared.samples.transfers.dialog.title')
+        assert_text I18n.t('samples.transfers.dialog.title')
         find('input.select2-input').click
         find("li[data-value='#{project4.id}']").click
-        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+        click_on I18n.t('samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [Groups::Samples::TransferJob]
+        perform_enqueued_jobs only: [::Samples::TransferJob]
         ### ACTIONS END ###
 
         ### VERIFY START ###
         # samples listing should no longer appear in dialog
         assert_no_selector '#list_selections'
         # error msg displayed in dialog
-        assert_text I18n.t('groups.samples.transfers.create.no_samples_transferred_error')
+        assert_text I18n.t('samples.transfers.create.no_samples_transferred_error')
       end
       ### VERIFY END ###
     end
@@ -2049,23 +2049,23 @@ module Groups
         end
         find('input.select2-input').click
         find("li[data-value='#{project4.id}']").click
-        click_on I18n.t('shared.samples.transfers.dialog.submit_button')
+        click_on I18n.t('samples.transfers.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
-        perform_enqueued_jobs only: [Groups::Samples::TransferJob]
+        perform_enqueued_jobs only: [::Samples::TransferJob]
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
       within('#dialog') do
         # error messages in dialog
-        assert_text I18n.t('groups.samples.transfers.create.error')
+        assert_text I18n.t('samples.transfers.create.error')
 
-        assert_text I18n.t('services.groups.samples.transfer.unauthorized', sample_ids: sample28.id.to_s).gsub(':', '')
+        assert_text I18n.t('services.samples.transfer.unauthorized', sample_ids: sample28.id.to_s).gsub(':', '')
 
         # colon is removed from translation in UI
-        assert_text I18n.t('services.groups.samples.transfer.sample_exists', sample_puid: sample30.puid,
-                                                                             sample_name: sample30.name).gsub(':', '')
+        assert_text I18n.t('services.samples.transfer.sample_exists', sample_puid: sample30.puid,
+                                                                      sample_name: sample30.name).gsub(':', '')
       end
 
       # verify sample1 and 2 transferred, sample 28, sample 30 did not
@@ -2160,7 +2160,7 @@ module Groups
         ### ACTIONS END ###
 
         ### VERIFY START ###
-        assert_text I18n.t('shared.samples.transfers.dialog.empty_state')
+        assert_text I18n.t('samples.transfers.dialog.empty_state')
         ### VERIFY END ###
       end
     end

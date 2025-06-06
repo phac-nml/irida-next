@@ -452,6 +452,7 @@ class TransferSamplesMutationTest < ActiveSupport::TestCase
     # check that the failed sample is in the error, and matches the one we expect to fail
     assert_not_empty data['errors']
     assert_equal 1, data['errors'].count
+
     assert data['errors'][0]['message'].include?('Samples with the following sample ids could not be transferred as they were not found in the source project:') # rubocop:disable Layout/LineLength
     expected_failed_sample = project2.samples[0].id
     assert data['errors'][0]['message'].include?(expected_failed_sample)

@@ -27,6 +27,14 @@ Rails.application.routes.draw do
           patch '/', action: :bulk_update
         end
       end
+      scope module: :samples, as: :samples do
+        collection do
+          resource :transfer, only: %i[create new]
+        end
+      end
+      collection do
+        post :list
+      end
     end
     resources :attachments, only: %i[show]
     draw :workflow_executions unless Irida::Pipelines.instance.available_pipelines.empty?
