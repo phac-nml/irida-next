@@ -1,32 +1,49 @@
-<div class="justify-between w-full mb-4 page-header flex flex-wrap">
-  <div class="flex items-center">
-    <% if icon? %>
-      <div class="mr-2"><%= icon %></div>
-    <% end %>
-
-    <div>
-      <% if @id %>
-        <div class="flex items-center space-x-2">
-          <h1
-            class="
-              inline text-2xl font-medium leading-tight text-slate-900 dark:text-white
-            "
-          ><%= title %></h1>
-          <%= render PuidComponent.new(puid: id) %>
-        </div>
-      <% else %>
+<section class="w-full mb-4" role="region">
+  <div
+    class="
+      flex flex-col md:flex-row md:items-center justify-between gap-y-2 md:gap-x-4
+      w-full
+    "
+  >
+    <!-- Left: Icon, Title, Subtitle (stacked on mobile, row on desktop) -->
+    <div class="flex flex-col min-w-0 flex-1 overflow-visible">
+      <div class="flex items-center gap-x-2 min-w-0">
+        <% if icon? %>
+          <div class="flex-shrink-0"><%= icon %></div>
+        <% end %>
         <h1
           class="
-            inline text-2xl font-medium leading-tight text-slate-900 dark:text-white
+            text-2xl font-semibold leading-tight text-slate-900 dark:text-white max-w-full
           "
-        ><%= title %></h1>
-      <% end %>
-      <% if subtitle != nil %>
-        <p class="text-slate-500 dark:text-slate-400"><%= subtitle %></p>
+          id="page-title"
+          title="<%= title %>"
+        >
+          <span class="block md:truncate" aria-hidden="true"><%= title %></span>
+          <span class="sr-only"><%= title %></span>
+        </h1>
+        <% if @id %>
+          <%= render PuidComponent.new(puid: id) %>
+        <% end %>
+      </div>
+      <% if subtitle.present? %>
+        <p
+          class="text-slate-500 dark:text-slate-400 text-base max-w-full mt-1"
+          id="page-subtitle"
+          title="<%= subtitle %>"
+        >
+          <span class="block" aria-hidden="true"><%= subtitle %></span>
+          <span class="sr-only"><%= subtitle %></span>
+        </p>
       <% end %>
     </div>
+    <!-- Right: Action buttons (stacked below on mobile, inline on desktop)
+    -->
+    <div
+      class="
+        flex flex-row items-center space-x-2 flex-none w-full md:w-auto md:self-center
+      "
+    >
+      <%= buttons %>
+    </div>
   </div>
-  <div class=" flex ml-auto space-x-2 whitespace-nowrap">
-    <div class="flex-none"><%= buttons %></div>
-  </div>
-</div>
+</section>
