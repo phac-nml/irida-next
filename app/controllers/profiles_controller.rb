@@ -14,7 +14,7 @@ class ProfilesController < Profiles::ApplicationController
     authorize! @user
 
     respond_to do |format|
-      if Users::UpdateService.new(current_user, @user, false, update_params).execute
+      if Users::UpdateService.new(@user, update_params).execute
         # Sign in the user bypassing validation in case their password changed
         bypass_sign_in(@user)
         flash[:success] = t('.success')
