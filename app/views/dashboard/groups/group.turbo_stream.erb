@@ -1,10 +1,13 @@
 <%= turbo_stream.replace dom_id(@group), method: :morph do %>
-  <%= render NamespaceTree::Row::WithChildrenComponent.new(
-    namespace: @group,
-    children: @children,
-    collapsed: @collapsed,
-    path: "dashboard_groups_path",
-    type: [Group.sti_name],
-    icon_size: :medium,
-  ) %>
+  <%= render Treegrid::RowComponent.new(tabindex: @tabindex, expandable: @group.children_of_type?(Group.sti_name), expanded: true, level: @level, posinset: @posinset, setsize: @setsize, aria: { label: @group.name }, id: dom_id(@group)) do %>
+    <%= render NamespaceRow::ContentsComponent.new(
+      namespace: @group,
+      icon_size: :medium,
+    ) %>
+  <% end %>
+  <% @children.each_with_index do |group, group_index| %>
+    <%= render Treegrid::RowComponent.new(tabindex: -1, expandable: group.children_of_type?(Group.sti_name), level: @level + 1, posinset: group_index + 1, setsize: @children.size, aria: { label: group.name }, button_arguments: {data: {"toggle-url": public_send("dashboard_groups_url", { parent_id: group.id, collapse: false, level: @level + 1, posinset: group_index + 1, setsize: @children.size })}}, id: dom_id(group)) do %>
+      <%= render NamespaceRow::ContentsComponent.new(namespace: group, icon_size: :medium) %>
+    <% end %>
+  <% end %>
 <% end %>
