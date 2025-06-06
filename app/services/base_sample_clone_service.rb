@@ -75,4 +75,8 @@ class BaseSampleCloneService < BaseSampleService
 
     activity.create_activity_extended_detail(extended_detail_id: ext_details.id, activity_type: 'sample_clone')
   end
+
+  def clone_samples
+    raise NotImplementedError
+  end
 end
