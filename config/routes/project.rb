@@ -61,9 +61,6 @@ constraints(::Constraints::ProjectUrlConstrainer.new) do
             resource :clone, only: %i[create new]
             resource :file_import, module: :metadata, only: %i[create new]
             resource :spreadsheet_import, only: %i[create new]
-            resource :deletion, only: %i[destroy new] do
-              post :destroy_multiple
-            end
           end
         end
         collection do

@@ -360,6 +360,7 @@ class GroupTest < ActiveSupport::TestCase
       current_samples_count = group.samples_count
       expected_samples_count = Project.joins(:namespace).where(namespace: { parent_id: group.self_and_descendants })
                                       .select(:samples_count).pluck(:samples_count).sum
+
       assert_equal current_samples_count, expected_samples_count
     end
   end

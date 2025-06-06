@@ -114,6 +114,20 @@
       </tr>
     </template>
 
+    <template
+      id="destroySampleTableRow"
+      data-activities--extended_details-target="destroySampleTableRow"
+    >
+      <tr>
+        <td class="px-3 py-3"><span class="mr-2" data-activities--extended_details-target="sampleName"></span>
+          <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
+        </td>
+        <td class="px-3 py-3"><span class="mr-2" data-activities--extended_details-target="projectName"></span>
+          <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
+        </td>
+      </tr>
+    </template>
+
     <div
       data-activities--extended_details-target="paginationContainer"
       class="flex items-center justify-end mt-4"

@@ -258,7 +258,7 @@ module Dashboard
       click_link I18n.t('projects.samples.show.remove_button')
 
       within('dialog[open]') do
-        click_button I18n.t(:'projects.samples.deletions.new_deletion_dialog.submit_button')
+        click_button I18n.t('samples.deletions.destroy_single_confirmation_dialog.submit_button')
       end
 
       visit dashboard_projects_url

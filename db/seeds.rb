@@ -15,6 +15,7 @@ Flipper.enable(:compose_with_retry)
 Flipper.enable(:sample_attachments_searching)
 Flipper.enable(:group_samples_transfer)
 Flipper.enable(:workflow_execution_attachments_searching)
+Flipper.enable(:group_samples_destroy)
 
 @namespace_group_link_expiry_date = (Time.zone.today + 14).strftime('%Y-%m-%d')
 
