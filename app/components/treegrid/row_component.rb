@@ -34,9 +34,10 @@ module Treegrid
       @button_arguments[:data] ||= {}
       @button_arguments[:data][:action] = 'click->treegrid#toggleRow'
       @button_arguments[:type] = 'button'
-      @button_arguments[:class] =
-        class_names(@button_arguments[:classes],
-                    'treegrid-row-toggle h-8 w-8 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-600 rounded-lg flex items-center justify-center dark:text-white')
+      @button_arguments[:class] = class_names(@button_arguments[:classes],
+                                              'treegrid-row-toggle h-8 w-8 cursor-pointer',
+                                              'hover:bg-slate-100 dark:hover:bg-slate-600',
+                                              'rounded-lg flex items-center justify-center dark:text-white')
       @button_arguments.delete(:classes)
       @button_arguments[:tabindex] = '-1'
 

@@ -14,9 +14,7 @@ module Groups
 
     def render_subgroup
       @group = Group.find(params[:parent_id])
-      @collapsed = params[:collapse] == 'true'
-      @children = @collapsed ? Namespace.none : namespace_children
-      @depth = params[:depth].to_i
+      @children = namespace_children
       @level = params[:level].to_i
       @posinset = params[:posinset].to_i
       @setsize = params[:setsize].to_i
