@@ -13,6 +13,7 @@ export default class extends Controller {
     "workflowTableRow",
     "importSampleTableRow",
     "groupSampleTransferTableRow",
+    "groupSampleCloneTableRow",
     "listRow",
     "ariaLabels",
     "itemName",
@@ -71,6 +72,8 @@ export default class extends Controller {
           this.#generateImportSampleTableRows(indexRangeData);
         } else if (this.activityTypeValue === "group_sample_transfer") {
           this.#generateGroupSampleTransferTableRows(indexRangeData);
+        } else if (this.activityTypeValue === "group_sample_clone") {
+          this.#generateGroupSampleCloneTableRows(indexRangeData);
         } else {
           this.#generateTableRows(indexRangeData);
         }
@@ -325,6 +328,50 @@ export default class extends Controller {
           data["target_project_name"],
           data["target_project_puid"],
         );
+
+        fragment.appendChild(clone);
+      });
+
+      this.tbodyTarget.appendChild(fragment);
+    }
+  }
+
+  #generateGroupSampleCloneTableRows(table_data) {
+    if ("content" in document.createElement("template")) {
+      const template = this.groupSampleCloneTableRowTarget;
+      const fragment = document.createDocumentFragment();
+      const sampleNameSelector =
+        "span[data-activities--extended_details-target='sampleName']";
+      const puidSelector = "span:nth-child(2)";
+      const projectIdSelector =
+        "span[data-activities--extended_details-target='projectId']";
+
+      table_data.forEach((data) => {
+        const clone = template.content.cloneNode(true);
+        const tds = clone.querySelectorAll("td");
+
+        const updateTextContent = (tdIndex, objectName, objectPuid) => {
+          const td = tds[tdIndex];
+          if (tdIndex === 0 || tdIndex === 2) {
+            td.querySelector(projectIdSelector).textContent = objectName;
+            td.querySelector(puidSelector).textContent = objectPuid;
+          } else {
+            td.querySelector(sampleNameSelector).textContent = objectName;
+            td.querySelector(puidSelector).textContent = objectPuid;
+          }
+        };
+        updateTextContent(
+          0,
+          data["source_project_name"],
+          data["source_project_puid"],
+        );
+        updateTextContent(1, data["sample_name"], data["sample_puid"]);
+        updateTextContent(
+          2,
+          data["target_project_name"],
+          data["target_project_puid"],
+        );
+        updateTextContent(3, data["sample_name"], data["clone_puid"]);
 
         fragment.appendChild(clone);
       });

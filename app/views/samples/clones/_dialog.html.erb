@@ -10,7 +10,7 @@
       data-infinite-scroll-plural-description-value="<%= t(".description.plural") %>"
     >
       <%= form_with(
-        url: list_samples_path(list_class: 'sample'),
+        url: list_samples_path(list_class: "sample"),
         data: { "infinite-scroll-target": "pageForm" }
       ) do %>
         <div data-infinite-scroll-target="pageFormContent"></div>
@@ -41,7 +41,7 @@
           </div>
         </div>
 
-        <%= form_for(:clone, url: namespace_project_samples_clone_path, method: :post,
+        <%= form_for(:clone, url: samples_clone_path(namespace_id: @namespace.id), method: :post,
           data: {
             controller: "form--json-submission",
             "form--json-submission-selection-outlet": '#samples-table',
@@ -100,7 +100,10 @@
             </div>
             <div>
               <%= form.submit t(".submit_button"),
-                          class: "button button--size-default button--state-primary" %>
+                          class: "button button--size-default button--state-primary",
+                          data: {
+                            action: "click->form--hidden-inputs#clearSelection",
+                          } %>
             </div>
           </div>
         <% end %>

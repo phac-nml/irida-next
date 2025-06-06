@@ -23,6 +23,7 @@ module Projects
       @subgroup12a = groups(:subgroup_twelve_a)
 
       Flipper.enable(:progress_bars)
+      Flipper.enable(:group_samples_clone)
     end
 
     test 'samples index table' do
@@ -2341,7 +2342,7 @@ module Projects
 
       ### VERIFY START ###
       within('#dialog') do
-        assert_text I18n.t('projects.samples.clones.dialog.description.singular')
+        assert_text I18n.t('samples.clones.dialog.description.singular')
       end
       ### VERIFY END ###
     end
@@ -2370,7 +2371,7 @@ module Projects
       ### VERIFY START ###
       within('#dialog') do
         assert_text I18n.t(
-          'projects.samples.clones.dialog.description.plural'
+          'samples.clones.dialog.description.plural'
         ).gsub! 'COUNT_PLACEHOLDER', '3'
       end
       ### VERIFY END ###
@@ -2445,7 +2446,7 @@ module Projects
         end
         find('input.select2-input').click
         find("li[data-value='#{@project2.id}']").click
-        click_on I18n.t('projects.samples.clones.dialog.submit_button')
+        click_on I18n.t('samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::CloneJob]
@@ -2454,7 +2455,7 @@ module Projects
 
       ### VERIFY START ###
       # flash msg
-      assert_text I18n.t('projects.samples.clones.create.success')
+      assert_text I18n.t('samples.clones.create.success')
       # samples still exist within samples table of originating project
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
                                                                            locale: @user.locale))
@@ -2504,7 +2505,7 @@ module Projects
         end
         find('input.select2-input').click
         find("li[data-value='#{@project2.id}']").click
-        click_on I18n.t('projects.samples.clones.dialog.submit_button')
+        click_on I18n.t('samples.clones.dialog.submit_button')
 
         ### ACTIONS END ###
 
@@ -2542,10 +2543,10 @@ module Projects
 
       assert_selector '#dialog'
       within('#dialog') do
-        assert_text I18n.t('projects.samples.clones.dialog.title')
+        assert_text I18n.t('samples.clones.dialog.title')
         find('input.select2-input').click
         find("li[data-value='#{@project2.id}']").click
-        click_on I18n.t('projects.samples.clones.dialog.submit_button')
+        click_on I18n.t('samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::CloneJob]
@@ -2555,7 +2556,7 @@ module Projects
         # sample listing should not be in error dialog
         assert_no_selector '#list_selections'
         # error msg
-        assert_text I18n.t('projects.samples.clones.create.no_samples_cloned_error')
+        assert_text I18n.t('samples.clones.create.no_samples_cloned_error')
         assert_text I18n.t('services.samples.clone.empty_sample_ids')
         ### VERIFY END ###
       end
@@ -2604,7 +2605,7 @@ module Projects
         end
         find('input.select2-input').click
         find("li[data-value='#{project25.id}']").click
-        click_on I18n.t('projects.samples.clones.dialog.submit_button')
+        click_on I18n.t('samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::CloneJob]
@@ -2612,7 +2613,7 @@ module Projects
 
         ### VERIFY START ###
         # errors that a sample with the same name as sample30 already exists in project25
-        assert_text I18n.t('projects.samples.clones.create.error')
+        assert_text I18n.t('samples.clones.create.error')
         assert_text I18n.t('services.samples.clone.sample_exists', sample_puid: @sample30.puid,
                                                                    sample_name: @sample30.name).gsub(':', '')
         click_on I18n.t('shared.samples.errors.ok_button')
@@ -2655,7 +2656,7 @@ module Projects
         ### ACTIONS END ###
 
         ### VERIFY START ###
-        assert_text I18n.t('projects.samples.clones.dialog.empty_state')
+        assert_text I18n.t('samples.clones.dialog.empty_state')
         ### VERIFY END ###
       end
     end
@@ -2684,7 +2685,7 @@ module Projects
 
       ### VERIFY START ###
       within('#dialog') do
-        assert "input[placeholder='#{I18n.t('projects.samples.clones.dialog.no_available_projects')}']"
+        assert "input[placeholder='#{I18n.t('samples.clones.dialog.no_available_projects')}']"
       end
       ### VERIFY END ###
     end
@@ -2731,7 +2732,7 @@ module Projects
         end
         find('input.select2-input').click
         find("li[data-value='#{@project2.id}']").click
-        click_on I18n.t('projects.samples.clones.dialog.submit_button')
+        click_on I18n.t('samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
 
         perform_enqueued_jobs only: [::Samples::CloneJob]
@@ -2740,7 +2741,7 @@ module Projects
 
       ### VERIFY START ###
       # flash msg
-      assert_text I18n.t('projects.samples.clones.create.success')
+      assert_text I18n.t('samples.clones.create.success')
       # verify no samples selected anymore
       within 'tfoot' do
         assert_text "#{I18n.t('samples.table_component.counts.samples')}: 3"
