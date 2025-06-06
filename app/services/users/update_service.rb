@@ -3,7 +3,7 @@
 module Users
   # Service used to update a user
   class UpdateService < BaseService
-    attr_accessor :user, :user_to_update, :initial_setup
+    attr_accessor :user_to_update, :initial_setup
 
     def initialize(user, user_to_update, params = {})
       super(user, params)

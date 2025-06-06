@@ -9,7 +9,8 @@ module CheckInitialSetup
   end
 
   def in_initial_setup_state?
-    return false unless User.limit(2).count == 1 # Count as much 2 to know if we have exactly one
+    # Count as much 2 to know if we have exactly one
+    return false unless User.limit(2).count == 1
 
     true
   end
