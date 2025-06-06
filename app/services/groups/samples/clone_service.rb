@@ -3,7 +3,7 @@
 module Groups
   module Samples
     # Service used to clone group samples
-    class CloneService < BaseGroupService
+    class CloneService < BaseSampleCloneService
       CloneError = Class.new(StandardError)
 
       private

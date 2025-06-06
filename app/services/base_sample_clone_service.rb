@@ -52,15 +52,15 @@ class BaseSampleCloneService < BaseSampleService
     ext_details = ExtendedDetail.create!(details: { cloned_samples_count: cloned_samples_count,
                                                     cloned_samples_data: cloned_samples_data })
 
-    activity = old_project_namespace.namespace.create_activity key: 'namespaces_project_namespace.samples.clone',
-                                                               owner: current_user,
-                                                               parameters:
-                                                  {
-                                                    target_project_puid: @new_project.puid,
-                                                    target_project: @new_project.id,
-                                                    cloned_samples_count: cloned_samples_count,
-                                                    action: 'sample_clone'
-                                                  }
+    activity = old_project_namespace.create_activity key: 'namespaces_project_namespace.samples.clone',
+                                                     owner: current_user,
+                                                     parameters:
+                                        {
+                                          target_project_puid: @new_project.puid,
+                                          target_project: @new_project.id,
+                                          cloned_samples_count: cloned_samples_count,
+                                          action: 'sample_clone'
+                                        }
 
     activity.create_activity_extended_detail(extended_detail_id: ext_details.id, activity_type: 'sample_clone')
 
@@ -68,8 +68,8 @@ class BaseSampleCloneService < BaseSampleService
                                                       owner: current_user,
                                                       parameters:
                                                       {
-                                                        source_project_puid: @project.puid,
-                                                        source_project: @project.id,
+                                                        source_project_puid: old_project_namespace.puid,
+                                                        source_project: old_project_namespace.project.id,
                                                         cloned_samples_count: cloned_samples_count,
                                                         action: 'sample_clone'
                                                       }

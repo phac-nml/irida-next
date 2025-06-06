@@ -1,0 +1,7 @@
+<%= turbo_stream.update "samples_dialog",
+                    partial: "samples/clones/dialog",
+                    locals: {
+                      open: true,
+                      closable: true,
+                      broadcast_target: @broadcast_target,
+                    } %>
