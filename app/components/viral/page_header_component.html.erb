@@ -16,10 +16,8 @@
             text-2xl font-semibold leading-tight text-slate-900 dark:text-white max-w-full
           "
           id="page-title"
-          title="<%= title %>"
         >
-          <span class="block md:truncate" aria-hidden="true"><%= title %></span>
-          <span class="sr-only"><%= title %></span>
+          <%= title %>
         </h1>
         <% if @id %>
           <%= render PuidComponent.new(puid: id) %>
@@ -29,10 +27,8 @@
         <p
           class="text-slate-500 dark:text-slate-400 text-base max-w-full mt-1"
           id="page-subtitle"
-          title="<%= subtitle %>"
         >
-          <span class="block" aria-hidden="true"><%= subtitle %></span>
-          <span class="sr-only"><%= subtitle %></span>
+          <%= subtitle %>
         </p>
       <% end %>
     </div>
