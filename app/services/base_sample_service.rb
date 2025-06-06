@@ -20,11 +20,15 @@ class BaseSampleService < BaseService
   end
 
   def validate(sample_ids, action_type, new_project_id = nil) # rubocop:disable Metrics/CyclomaticComplexity
+    puts 'hi'
     if !new_project_id.nil? && new_project_id.blank?
       raise BaseError, I18n.t("services.samples.#{action_type}.empty_new_project_id")
     end
+
+    puts 'hello'
     raise BaseError, I18n.t("services.samples.#{action_type}.empty_sample_ids") if sample_ids.blank?
 
+    puts 'hoho'
     return unless !new_project_id.nil? && new_project_id.present? && @namespace.project_namespace?
 
     return unless @namespace.project.id == new_project_id
