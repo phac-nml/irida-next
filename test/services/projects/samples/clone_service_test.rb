@@ -15,40 +15,42 @@ module Projects
         @sample30 = samples(:sample30)
       end
 
-      test 'not clone samples with empty params' do
-        assert_empty Projects::Samples::CloneService.new(@project, @john_doe).execute(nil, nil)
-        assert_equal(@project.errors.full_messages_for(:base).first,
+      test 'not clone samples with blank new project id' do
+        assert_empty Projects::Samples::CloneService.new(@project.namespace, @john_doe)
+                                                    .execute('', sample_ids: [@sample1.id])
+        assert_equal(@project.namespace.errors.full_messages_for(:base).first,
                      I18n.t('services.samples.clone.empty_new_project_id'))
       end
 
       test 'not clone samples with no sample ids' do
         clone_samples_params = { new_project_id: @new_project.id, sample_ids: [] }
-        assert_empty Projects::Samples::CloneService.new(@project, @john_doe).execute(
+        assert_empty Projects::Samples::CloneService.new(@project.namespace, @john_doe).execute(
           clone_samples_params[:new_project_id],
           clone_samples_params[:sample_ids]
         )
-        assert_equal(@project.errors.full_messages_for(:base).first,
+        assert_equal(@project.namespace.errors.full_messages_for(:base).first,
                      I18n.t('services.samples.clone.empty_sample_ids'))
       end
 
-      test 'not clone samples with into same project' do
+      test 'not clone samples into same project' do
         clone_samples_params = { new_project_id: @project.id, sample_ids: [@sample1.id, @sample2.id] }
-        assert_empty Projects::Samples::CloneService.new(@project, @john_doe).execute(
+        assert_empty Projects::Samples::CloneService.new(@project.namespace, @john_doe).execute(
           clone_samples_params[:new_project_id],
           clone_samples_params[:sample_ids]
         )
-        assert_equal(@project.errors.full_messages_for(:base).first,
+
+        assert_equal(@project.namespace.errors.full_messages_for(:base).first,
                      I18n.t('services.samples.clone.same_project'))
       end
 
       test 'not clone samples with not matching sample ids' do
         clone_samples_params = { new_project_id: @new_project.id, sample_ids: ['gid://irida/Sample/not_a_real_id'] }
-        assert_empty Projects::Samples::CloneService.new(@project, @john_doe).execute(
+        assert_empty Projects::Samples::CloneService.new(@project.namespace, @john_doe).execute(
           clone_samples_params[:new_project_id],
           clone_samples_params[:sample_ids]
         )
         assert_equal(I18n.t('services.samples.clone.samples_not_found', sample_ids: 'gid://irida/Sample/not_a_real_id'),
-                     @project.errors.messages_for(:samples).first)
+                     @project.namespace.errors.messages_for(:samples).first)
       end
 
       test 'authorized to clone samples from source project' do
@@ -56,8 +58,9 @@ module Projects
         assert_authorized_to(:clone_sample?, @project,
                              with: ProjectPolicy,
                              context: { user: @john_doe }) do
-          Projects::Samples::CloneService.new(@project, @john_doe).execute(clone_samples_params[:new_project_id],
-                                                                           clone_samples_params[:sample_ids])
+          Projects::Samples::CloneService.new(@project.namespace, @john_doe)
+                                         .execute(clone_samples_params[:new_project_id],
+                                                  clone_samples_params[:sample_ids])
         end
       end
 
@@ -66,8 +69,9 @@ module Projects
         assert_authorized_to(:clone_sample_into_project?, @new_project,
                              with: ProjectPolicy,
                              context: { user: @john_doe }) do
-          Projects::Samples::CloneService.new(@project, @john_doe).execute(clone_samples_params[:new_project_id],
-                                                                           clone_samples_params[:sample_ids])
+          Projects::Samples::CloneService.new(@project.namespace, @john_doe)
+                                         .execute(clone_samples_params[:new_project_id],
+                                                  clone_samples_params[:sample_ids])
         end
       end
 
@@ -77,8 +81,9 @@ module Projects
         assert_authorized_to(:clone_sample_into_project?, @new_project,
                              with: ProjectPolicy,
                              context: { user: joan_doe }) do
-          Projects::Samples::CloneService.new(@project, joan_doe).execute(clone_samples_params[:new_project_id],
-                                                                          clone_samples_params[:sample_ids])
+          Projects::Samples::CloneService.new(@project.namespace, joan_doe)
+                                         .execute(clone_samples_params[:new_project_id],
+                                                  clone_samples_params[:sample_ids])
         end
       end
 
@@ -86,8 +91,9 @@ module Projects
         jane_doe = users(:jane_doe)
         clone_samples_params = { new_project_id: @new_project.id, sample_ids: [@sample1.id, @sample2.id] }
         exception = assert_raises(ActionPolicy::Unauthorized) do
-          Projects::Samples::CloneService.new(@project, jane_doe).execute(clone_samples_params[:new_project_id],
-                                                                          clone_samples_params[:sample_ids])
+          Projects::Samples::CloneService.new(@project.namespace, jane_doe)
+                                         .execute(clone_samples_params[:new_project_id],
+                                                  clone_samples_params[:sample_ids])
         end
         assert_equal ProjectPolicy, exception.policy
         assert_equal :clone_sample?, exception.rule
@@ -100,8 +106,9 @@ module Projects
         ryan_doe = users(:ryan_doe)
         clone_samples_params = { new_project_id: @new_project.id, sample_ids: [@sample1.id, @sample2.id] }
         exception = assert_raises(ActionPolicy::Unauthorized) do
-          Projects::Samples::CloneService.new(@project, ryan_doe).execute(clone_samples_params[:new_project_id],
-                                                                          clone_samples_params[:sample_ids])
+          Projects::Samples::CloneService.new(@project.namespace, ryan_doe)
+                                         .execute(clone_samples_params[:new_project_id],
+                                                  clone_samples_params[:sample_ids])
         end
         assert_equal ProjectPolicy, exception.policy
         assert_equal :clone_sample?, exception.rule
@@ -114,8 +121,9 @@ module Projects
         new_project = projects(:project33)
         clone_samples_params = { new_project_id: new_project.id, sample_ids: [@sample1.id, @sample2.id] }
         exception = assert_raises(ActionPolicy::Unauthorized) do
-          Projects::Samples::CloneService.new(@project, @john_doe).execute(clone_samples_params[:new_project_id],
-                                                                           clone_samples_params[:sample_ids])
+          Projects::Samples::CloneService.new(@project.namespace, @john_doe)
+                                         .execute(clone_samples_params[:new_project_id],
+                                                  clone_samples_params[:sample_ids])
         end
         assert_equal ProjectPolicy, exception.policy
         assert_equal :clone_sample_into_project?, exception.rule
@@ -129,8 +137,9 @@ module Projects
         james_doe = users(:james_doe)
         clone_samples_params = { new_project_id: new_project.id, sample_ids: [@sample1.id, @sample2.id] }
         exception = assert_raises(ActionPolicy::Unauthorized) do
-          Projects::Samples::CloneService.new(@project, james_doe).execute(clone_samples_params[:new_project_id],
-                                                                           clone_samples_params[:sample_ids])
+          Projects::Samples::CloneService.new(@project.namespace, james_doe)
+                                         .execute(clone_samples_params[:new_project_id],
+                                                  clone_samples_params[:sample_ids])
         end
         assert_equal ProjectPolicy, exception.policy
         assert_equal :clone_sample_into_project?, exception.rule
@@ -141,7 +150,7 @@ module Projects
 
       test 'clone samples with permission' do
         clone_samples_params = { new_project_id: @new_project.id, sample_ids: [@sample1.id, @sample2.id] }
-        cloned_sample_ids = Projects::Samples::CloneService.new(@project, @john_doe).execute(
+        cloned_sample_ids = Projects::Samples::CloneService.new(@project.namespace, @john_doe).execute(
           clone_samples_params[:new_project_id],
           clone_samples_params[:sample_ids]
         )
@@ -165,7 +174,7 @@ module Projects
         assert_equal({}, @new_project.namespace.metadata_summary)
         assert_equal({ 'metadatafield1' => 633, 'metadatafield2' => 106 }, @group.metadata_summary)
         clone_samples_params = { new_project_id: @new_project.id, sample_ids: [@sample30.id] }
-        cloned_sample_ids = Projects::Samples::CloneService.new(@project, @john_doe).execute(
+        cloned_sample_ids = Projects::Samples::CloneService.new(@project.namespace, @john_doe).execute(
           clone_samples_params[:new_project_id],
           clone_samples_params[:sample_ids]
         )
@@ -191,12 +200,12 @@ module Projects
       test 'not clone samples with same sample name' do
         new_project = projects(:project34)
         clone_samples_params = { new_project_id: new_project.id, sample_ids: [@sample2.id] }
-        cloned_sample_ids = Projects::Samples::CloneService.new(@project, @john_doe).execute(
+        cloned_sample_ids = Projects::Samples::CloneService.new(@project.namespace, @john_doe).execute(
           clone_samples_params[:new_project_id],
           clone_samples_params[:sample_ids]
         )
         assert_empty cloned_sample_ids
-        assert @project.errors.messages_for(:samples).include?(
+        assert @project.namespace.errors.messages_for(:samples).include?(
           I18n.t('services.samples.clone.sample_exists',
                  sample_name: @sample2.name, sample_puid: @sample2.puid)
         )
@@ -221,7 +230,7 @@ module Projects
                           -> { subgroup12a.reload.samples_count } => 1,
                           -> { subgroup12b.reload.samples_count } => 0,
                           -> { group12.reload.samples_count } => 1 do
-          Projects::Samples::CloneService.new(project30, @john_doe).execute(project31.id, [sample33.id])
+          Projects::Samples::CloneService.new(project30.namespace, @john_doe).execute(project31.id, [sample33.id])
         end
       end
     end
