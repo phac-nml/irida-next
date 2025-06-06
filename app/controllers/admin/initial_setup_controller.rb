@@ -14,11 +14,9 @@ module Admin
       updated = Users::UpdateService.new(current_user, @user,
                                          { admin: true, initial_setup: params[:initial_setup] }).execute
 
-      if updated
-        redirect_to new_user_session_path, notice: I18n.t('admin.initial_setup.update.success')
-      else
-        redirect_to new_user_registration_path
-      end
+      return unless updated
+
+      redirect_to new_user_session_path, notice: I18n.t('admin.initial_setup.update.success')
     end
 
     private
@@ -30,11 +28,11 @@ module Admin
       end
 
       # redirect to root_path to avoid potential redirect loop on sessions_controller
-      redirect_to root_path
+      redirect_to new_user_registration_path
     end
 
     def user
-      @user = User.find(params[:id])
+      @user ||= User.find_by(id: params[:id])
     end
   end
 end
