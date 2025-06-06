@@ -13,7 +13,7 @@
 <% else %>
   <%= turbo_stream.append "clone_samples_dialog_content" do %>
     <%= render SpinnerComponent.new(
-      message: t("shared.samples.clones.dialog.spinner_message"),
+      message: t("samples.clones.dialog.spinner_message"),
     ) %>
   <% end %>
 <% end %>
