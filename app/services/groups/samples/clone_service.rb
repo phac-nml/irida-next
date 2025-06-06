@@ -66,9 +66,9 @@ module Groups
         ext_details = ExtendedDetail.create!(details: { cloned_samples_count:,
                                                         cloned_samples_data: @cloned_samples_data[:group_data] })
 
-        activity = @group.create_activity key: 'group.samples.clone',
-                                          owner: current_user,
-                                          parameters:
+        activity = @namespace.create_activity key: 'group.samples.clone',
+                                              owner: current_user,
+                                              parameters:
                                           {
                                             cloned_samples_count:,
                                             action: 'group_sample_clone'

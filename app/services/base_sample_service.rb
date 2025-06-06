@@ -39,7 +39,6 @@ class BaseSampleService < BaseService
                                        scope_options: { namespace: @namespace,
                                                         minimum_access_level: access_level })
               .where(id: sample_ids)
-
     unauthorized_sample_ids = []
     invalid_ids = []
     not_found_sample_ids = sample_ids - samples.pluck(:id)
@@ -52,7 +51,6 @@ class BaseSampleService < BaseService
         unauthorized_sample_ids << sample_id
       end
     end
-
     # We can combine the invalid_ids and unauthorized_sample_ids at the project level
     # since you can only do actions such as transfer, clone, destroy for samples
     # that are on the project, otherwise we can just return a samples not found message
@@ -65,13 +63,11 @@ class BaseSampleService < BaseService
                             I18n.t("services.samples.#{action_type}.unauthorized",
                                    sample_ids: unauthorized_sample_ids.join(', ')))
     end
-
     if invalid_ids.count.positive?
       @namespace.errors.add(:samples,
                             I18n.t("services.samples.#{action_type}.samples_not_found",
                                    sample_ids: invalid_ids.join(', ')))
     end
-
     samples
   end
 end
