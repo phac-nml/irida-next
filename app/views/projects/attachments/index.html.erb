@@ -29,9 +29,6 @@
         search_attribute: :puid_or_file_blob_filename_cont,
         placeholder: t(:".search.placeholder"),
         url: namespace_project_attachments_path(@project.parent, @project),
-        html: {
-          "data-turbo-permanent": "true",
-        }
       ) do %>
         <%= hidden_field_tag :limit, @pagy.limit %>
       <% end %>

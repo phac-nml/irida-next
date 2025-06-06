@@ -6,7 +6,7 @@
               placeholder: t(".search.placeholder"),
               url: workflow_execution_path(@workflow_execution),
               html: {
-                "data-turbo-permanent": "true",
+                "data-turbo-action": "replace",
               }
             ) do %>
       <%= hidden_field_tag :limit, @pagy.limit %>
