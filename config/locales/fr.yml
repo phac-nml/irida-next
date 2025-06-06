@@ -1386,7 +1386,7 @@ fr:
       table:
         empty:
           description: There are no files associated with this project.
-          title: No Files
+          title: Aucun fichier
     automated_workflow_executions:
       actions:
         delete_button: Supprimer
@@ -2224,7 +2224,7 @@ fr:
     files:
       empty:
         description: There are no files associated with this workflow execution.
-        title: No Files
+        title: Aucun fichier
       search:
         placeholder: Filtrer par PUID ou nom de fichier
     index:

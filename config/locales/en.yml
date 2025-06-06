@@ -854,7 +854,7 @@ en:
       table:
         empty:
           description: There are no files associated with this group.
-          title: Aucun fichier
+          title: No Files
     bots:
       index:
         access_token_section:
