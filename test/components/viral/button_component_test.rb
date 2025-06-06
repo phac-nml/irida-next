@@ -9,7 +9,7 @@ module Viral
         'Basic Button'
       end
 
-      assert_selector 'button.button--state-default' do
+      assert_selector 'button.button-default' do
         assert_text 'Basic Button'
       end
     end
@@ -19,7 +19,7 @@ module Viral
         'Destructive Button'
       end
 
-      assert_selector 'button.button--state-destructive' do
+      assert_selector 'button.button-destructive' do
         assert_text 'Destructive Button'
       end
     end
