@@ -67,4 +67,12 @@ class BaseSampleTransferService < BaseSampleService
       new_project.parent.update_samples_count_by_addition_services(transferred_samples_count)
     end
   end
+
+  def transfer
+    raise NotImplementedError
+  end
+
+  def add_transfer_sample_to_activity_data
+    raise NotImplementedError
+  end
 end
