@@ -1,6 +1,6 @@
 <%= viral_dialog(open: open, size: :large, closable: closable) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
-  <%= turbo_stream_from broadcast_target %>
+  <%= turbo_stream_from @broadcast_target %>
   <%= turbo_frame_tag "transfer_samples_dialog_content" do %>
     <div
       data-controller="infinite-scroll viral--select2"
@@ -42,7 +42,7 @@
           </div>
         </div>
 
-        <%= form_for(:transfer, url: transfer_path, method: :post,
+        <%= form_for(:transfer, url: samples_transfer_path(namespace_id: @namespace.id), method: :post,
               data: {
                 controller: "form--json-submission",
                 "form--json-submission-selection-outlet": '#samples-table',
@@ -51,7 +51,7 @@
                 "form--json-submission-target": "form",
               }
             ) do |form| %>
-          <input type="hidden" name="broadcast_target" value="<%= broadcast_target %>"/>
+          <input type="hidden" name="broadcast_target" value="<%= @broadcast_target %>"/>
           <div class="grid gap-4">
             <div class="form-field">
               <% form_id = "transfer-project-select" %>
