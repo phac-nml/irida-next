@@ -1,12 +1,10 @@
 <% if Flipper.enabled?(:progress_bars) %>
   <%= turbo_stream.update "samples_dialog",
-                      partial: "shared/samples/clones/dialog",
+                      partial: "samples/clones/dialog",
                       locals: {
                         open: true,
-                        clone_path:,
-                        list_path:,
                         closable: false,
-                        broadcast_target:,
+                        broadcast_target: @broadcast_target,
                       } %>
 
   <%= turbo_stream.update "clone_samples_dialog_content" do %>

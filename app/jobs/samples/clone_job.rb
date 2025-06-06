@@ -12,6 +12,7 @@ module Samples
                 else
                   Projects::Samples::CloneService.new(namespace, current_user)
                 end
+
       @cloned_sample_ids = service.execute(
         new_project_id,
         sample_ids,
@@ -25,7 +26,7 @@ module Samples
           partial: 'shared/samples/success',
           locals: {
             type: :success,
-            message: I18n.t('shared.samples.clones.create.success')
+            message: I18n.t('samples.clones.create.success')
           }
         )
       elsif namespace.errors.include?(:samples)
@@ -36,7 +37,7 @@ module Samples
           partial: 'shared/samples/errors',
           locals: {
             type: :alert,
-            message: I18n.t('shared.samples.clones.create.error'),
+            message: I18n.t('samples.clones.create.error'),
             errors: errors
           }
         )
@@ -48,7 +49,7 @@ module Samples
           partial: 'shared/samples/errors',
           locals: {
             type: :alert,
-            message: I18n.t('shared.samples.clones.create.no_samples_cloned_error'),
+            message: I18n.t('samples.clones.create.no_samples_cloned_error'),
             errors: errors
           }
         )
