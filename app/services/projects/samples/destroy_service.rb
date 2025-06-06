@@ -21,10 +21,11 @@ module Projects
         end
 
         deleted_samples_count = samples_deleted_puids.count
-        update_samples_count(@namespace, deleted_samples_count) if @namespace.parent.group_namespace?
+        if deleted_samples_count.positive?
+          update_samples_count(@namespace, deleted_samples_count) if @namespace.parent.group_namespace?
 
-        create_project_activity(@namespace, deleted_samples_data) if deleted_samples_data.size.positive?
-
+          create_project_activity(@namespace, deleted_samples_data)
+        end
         deleted_samples_count
       end
     end
