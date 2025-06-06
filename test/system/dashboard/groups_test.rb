@@ -17,8 +17,8 @@ module Dashboard
 
       assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
 
-      within 'div.groups-list.namespace-list-tree' do
-        assert_selector 'div.namespace-entry', count: 20
+      within 'div.treegrid-container' do
+        assert_selector 'div.treegrid-row', count: 20
         [*('z'..'g')].each do |letter|
           assert_text groups(:"group_#{letter}").name
         end
@@ -26,8 +26,8 @@ module Dashboard
 
       click_on I18n.t(:'viral.pagy.pagination_component.next')
       assert_text I18n.t(:'viral.pagy.pagination_component.previous')
-      within 'div.groups-list.namespace-list-tree' do
-        assert_selector 'div.namespace-entry', count: 6
+      within 'div.treegrid-container' do
+        assert_selector 'div.treegrid-row', count: 6
         [*('f'..'a')].each do |letter|
           assert_text groups(:"group_#{letter}").name
         end
@@ -35,8 +35,8 @@ module Dashboard
 
       click_on I18n.t(:'viral.pagy.pagination_component.previous')
       assert_text I18n.t(:'viral.pagy.pagination_component.next')
-      within 'div.groups-list.namespace-list-tree' do
-        assert_selector 'div.namespace-entry', count: 20
+      within 'div.treegrid-container' do
+        assert_selector 'div.treegrid-row', count: 20
         [*('z'..'g')].each do |letter|
           assert_text groups(:"group_#{letter}").name
         end
@@ -48,8 +48,8 @@ module Dashboard
 
       assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
 
-      within 'div.groups-list.namespace-list-tree' do
-        assert_selector 'div.namespace-entry', count: 20
+      within 'div.treegrid-container' do
+        assert_selector 'div.treegrid-row', count: 20
         [*('z'..'g')].each do |letter|
           assert_text groups(:"group_#{letter}").name
         end
@@ -60,7 +60,7 @@ module Dashboard
       assert_no_text I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
       assert_text I18n.t(:'dashboard.groups.index.sorting.name_desc')
 
-      within 'div.groups-list.namespace-list-tree div.namespace-entry:first-child' do
+      within 'div.treegrid-container div.treegrid-row:first-child' do
         assert_text groups(:group_z).name
       end
     end
@@ -70,8 +70,8 @@ module Dashboard
 
       assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
 
-      within 'div.groups-list.namespace-list-tree' do
-        assert_selector 'div.namespace-entry', count: 20
+      within 'div.treegrid-container' do
+        assert_selector 'div.treegrid-row', count: 20
         [*('z'..'g')].each do |letter|
           assert_text groups(:"group_#{letter}").name
         end
@@ -82,7 +82,7 @@ module Dashboard
       assert_no_text I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
       assert_text I18n.t(:'dashboard.groups.index.sorting.name_asc')
 
-      within 'div.groups-list.namespace-list-tree div.namespace-entry:first-child' do
+      within 'div.treegrid-container div.treegrid-row:first-child' do
         assert_text groups(:group_a).name
       end
     end
@@ -92,8 +92,8 @@ module Dashboard
 
       assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
 
-      within 'div.groups-list.namespace-list-tree' do
-        assert_selector 'div.namespace-entry', count: 20
+      within 'div.treegrid-container' do
+        assert_selector 'div.treegrid-row', count: 20
         [*('z'..'g')].each do |letter|
           assert_text groups(:"group_#{letter}").name
         end
@@ -104,7 +104,7 @@ module Dashboard
       assert_no_text I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
       assert_text I18n.t(:'dashboard.groups.index.sorting.updated_at_desc')
 
-      within 'div.groups-list.namespace-list-tree div.namespace-entry:first-child' do
+      within 'div.treegrid-container div.treegrid-row:first-child' do
         assert_text groups(:group_a).name
       end
     end
@@ -114,8 +114,8 @@ module Dashboard
 
       assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
 
-      within 'div.groups-list.namespace-list-tree' do
-        assert_selector 'div.namespace-entry', count: 20
+      within 'div.treegrid-container' do
+        assert_selector 'div.treegrid-row', count: 20
         [*('z'..'g')].each do |letter|
           assert_text groups(:"group_#{letter}").name
         end
@@ -126,7 +126,7 @@ module Dashboard
       assert_no_text I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
       assert_text I18n.t(:'dashboard.groups.index.sorting.updated_at_asc')
 
-      within 'div.groups-list.namespace-list-tree div.namespace-entry:first-child' do
+      within 'div.treegrid-container div.treegrid-row:first-child' do
         assert_text groups(:group_z).name
       end
     end
@@ -136,8 +136,8 @@ module Dashboard
 
       assert_selector 'h1', text: I18n.t(:'dashboard.groups.index.title')
 
-      within 'div.groups-list.namespace-list-tree' do
-        assert_selector 'div.namespace-entry', count: 20
+      within 'div.treegrid-container' do
+        assert_selector 'div.treegrid-row', count: 20
         [*('z'..'g')].each do |letter|
           assert_text groups(:"group_#{letter}").name
         end
@@ -148,7 +148,7 @@ module Dashboard
       assert_no_text I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
       assert_text I18n.t(:'dashboard.groups.index.sorting.created_at_asc')
 
-      within 'div.groups-list.namespace-list-tree div.namespace-entry:first-child' do
+      within 'div.treegrid-container div.treegrid-row:first-child' do
         assert_text groups(:group_z).name
       end
     end
@@ -159,17 +159,15 @@ module Dashboard
       subgroup1 = groups(:subgroup1)
       visit dashboard_groups_url
 
-      within('div.namespace-tree-container') do
+      within('div.treegrid-container') do
         assert_text group1.name
-        assert_no_selector "div##{dom_id(group1)} div.groups-list.namespace-list-tree"
         assert_no_text subgroup1.name
-        find("div[aria-label=\"#{I18n.t(:'dashboard.groups.index.row_aria_label', name: group1.name)}\"]").click
+        within("div#group_#{group1.id}") do
+          click_on I18n.t(:'components.treegrid.row.expand')
+        end
       end
 
-      within("div#group_#{group1.id}") do
-        assert_text group1.name
-        assert_text subgroup1.name
-      end
+      assert_text subgroup1.name
     end
 
     test 'can create a group from listing page' do

@@ -612,6 +612,10 @@ en:
       copied: Copied!
       copy: Copy to clipboard
       toggle_visible: Toggle visibility
+    treegrid:
+      row:
+        collapse: Collapse
+        expand: Expand
     viral:
       pagy:
         empty_state:

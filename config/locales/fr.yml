@@ -612,6 +612,10 @@ fr:
       copied: Copié!
       copy: Copier dans le presse-papiers
       toggle_visible: Basculer la visibilité
+    treegrid:
+      row:
+        collapse: Développer
+        expand: Réduire
     viral:
       pagy:
         empty_state:
