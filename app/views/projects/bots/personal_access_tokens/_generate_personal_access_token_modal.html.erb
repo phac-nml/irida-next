@@ -29,7 +29,11 @@
 
       </div>
 
-      <div class="form-field datepicker" data-controller="datepicker">
+      <div
+        class="form-field datepicker"
+        data-controller="datepicker"
+        data-datepicker-min-date-value="<%= Date.today + 1.day %>"
+      >
         <%= form.label :expires_at,
                    t(
                      "projects.bots.index.bot_listing.generate_personal_access_token_modal.expires_at",

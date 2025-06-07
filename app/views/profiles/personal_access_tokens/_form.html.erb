@@ -12,6 +12,7 @@
       <div
         class="form-field datepicker <%= 'invalid' if invalid %>"
         data-controller="datepicker"
+        data-datepicker-min-date-value="<%= Date.today + 1.day %>"
       >
         <%= f.label :expires_at %>
         <div class="relative max-w-sm">

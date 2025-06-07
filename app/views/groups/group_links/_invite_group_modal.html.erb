@@ -60,7 +60,11 @@
                         t(:"groups.group_links.index.aria_labels.group_access_level"),
                     } %>
       </div>
-      <div class="form-field datepicker" data-controller="datepicker">
+      <div
+        class="form-field datepicker"
+        data-controller="datepicker"
+        data-datepicker-min-date-value="<%= Date.today + 1.day %>"
+      >
         <%= form.label I18n.t("groups.group_links.new.label.access_expiration") %>
         <div class="relative max-w-sm">
           <div
