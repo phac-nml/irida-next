@@ -35,20 +35,31 @@ module Samples
 
       @columns = columns
     end
+
     # rubocop:enable Metrics/ParameterLists
 
+    # rubocop:disable Metrics/MethodLength
     def system_arguments
       { tag: 'div' }.deep_merge(@system_arguments).tap do |args|
         args[:id] = 'samples-table'
         args[:classes] = class_names(args[:classes], 'overflow-auto relative')
         if @abilities[:select_samples]
-          args[:data] ||= {}
-          args[:data][:controller] = 'selection'
-          args[:data][:'selection-total-value'] = @pagy.count
-          args[:data][:'selection-action-button-outlet'] = '.action-button'
+          args[:data] = {
+            controller: 'selection',
+            'selection-total-value': @pagy.count,
+            'selection-action-button-outlet': '.action-button',
+            'selection-storage-key-value':
+              if @namespace.group_namespace?
+                "#{request.base_url}#{group_samples_path(@namespace)}"
+              else
+                "#{request.base_url}#{namespace_project_samples_path(@namespace.parent, @namespace.project)}"
+              end
+          }
         end
       end
     end
+
+    # rubocop:enable Metrics/MethodLength
 
     def wrapper_arguments
       {
