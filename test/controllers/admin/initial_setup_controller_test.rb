@@ -13,7 +13,7 @@ module Admin
       users = User.all - [@user]
       users.each(&:destroy)
 
-      get admin_initial_setup_url(id: @user.id, initial_setup: true)
+      get admin_initial_setup_url(id: @user.id)
 
       assert @user.reload.admin?
 
@@ -24,7 +24,7 @@ module Admin
     test 'if an account already exists a new one should not be setup as an admin' do
       user = User.last
 
-      get admin_initial_setup_url(id: user.id, initial_setup: true)
+      get admin_initial_setup_url(id: user.id)
 
       assert_not @user.reload.admin?
 
@@ -36,7 +36,7 @@ module Admin
       users = User.all
       users.each(&:destroy)
 
-      get admin_initial_setup_url(id: '123', initial_setup: true)
+      get admin_initial_setup_url(id: '123')
 
       # redirect to new user registration
       assert_response :redirect, to: new_user_registration_path

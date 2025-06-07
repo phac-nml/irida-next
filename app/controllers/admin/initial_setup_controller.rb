@@ -12,7 +12,7 @@ module Admin
 
     def update
       updated = Users::UpdateService.new(current_user, @user,
-                                         { admin: true, initial_setup: params[:initial_setup] }).execute
+                                         { admin: true, initial_setup: true }).execute
 
       return unless updated
 

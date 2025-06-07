@@ -71,7 +71,7 @@ class RegistrationsController < Devise::RegistrationsController
 
   def sign_up(resource_name, resource)
     if in_initial_setup_state?
-      redirect_to admin_initial_setup_url(id: resource.id, initial_setup: true)
+      redirect_to admin_initial_setup_url(id: resource.id)
     else
       sign_in(resource_name, resource)
       respond_with resource, location: after_sign_up_path_for(resource)
