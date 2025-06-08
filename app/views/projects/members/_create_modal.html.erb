@@ -51,7 +51,11 @@
         errors: @new_member.errors.full_messages_for(:access_level) %>
       </div>
 
-      <div class="form-field datepicker" data-controller="datepicker">
+      <div
+        class="form-field datepicker"
+        data-controller="datepicker"
+        data-datepicker-min-date-value="<%= Date.today + 1.day %>"
+      >
         <%= form.label :expires_at %>
         <div class="relative max-w-sm">
           <div
