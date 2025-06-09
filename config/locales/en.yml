@@ -1355,6 +1355,7 @@ en:
         system_theme: System
         theme_title: Colour theme
       update:
+        error: Language could not be updated
         success: Language updated successfully
     show:
       email:

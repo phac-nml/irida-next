@@ -1353,6 +1353,7 @@ fr:
         system_theme: Système
         theme_title: Thème des couleurs
       update:
+        error: Language could not be updated
         success: Langue mise à jour avec succès
     show:
       email:
