@@ -15,18 +15,31 @@
       dark:text-slate-400 dark:border-slate-700
     "
   >
+    <% base_tab_classes =
+      "inline-block p-4 rounded-t-lg font-semibold transition-colors duration-200 ease-in-out" %>
+    <% active_tab_classes =
+      class_names(
+        base_tab_classes,
+        "border-b-2 border-primary-800",
+        "text-slate-900 rounded-t-lg",
+        "active bg-transparent",
+        "dark:border-white dark:text-white",
+      ) %>
+    <% inactive_tab_classes =
+      class_names(
+        base_tab_classes,
+        "border-b-2 border-transparent",
+        "text-slate-700 hover:text-slate-900",
+        "hover:border-slate-700 rounded-t-lg",
+        "dark:text-slate-200 dark:hover:text-white",
+        "dark:hover:border-white",
+      ) %>
+
     <ul class="flex flex-1">
       <li class="mr-2">
         <%= link_to t(".all"),
         dashboard_projects_url(),
-        class:
-          (
-            if params[:personal]
-              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
-            else
-              "inline-block p-4 text-primary-700 border-b-2 border-primary-700 rounded-t-lg active dark:text-primary-500 dark:border-primary-500"
-            end
-          ),
+        class: params[:personal] ? inactive_tab_classes : active_tab_classes,
         data: {
           "turbo-action": "replace",
         },
@@ -37,14 +50,7 @@
       <li class="mr-2">
         <%= link_to t(".personal"),
         dashboard_projects_url(personal: "true"),
-        class:
-          (
-            if params[:personal]
-              "inline-block p-4 text-primary-700 border-b-2 border-primary-700 rounded-t-lg active dark:text-primary-500 dark:border-primary-500"
-            else
-              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
-            end
-          ),
+        class: params[:personal] ? active_tab_classes : inactive_tab_classes,
         data: {
           "turbo-action": "replace",
         },
