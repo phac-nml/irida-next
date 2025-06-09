@@ -23,6 +23,7 @@ module Pathogen
     #     <%= tab.with_icon(icon: "bell") %>
     #     <%= tab.with_count(count: 5) %>
     #   <% end %>
+    # rubocop:disable Metrics/ClassLength
     class Tab < Pathogen::Component
       # 🔧 Constants
       TAG_DEFAULT = :a
@@ -178,5 +179,6 @@ module Pathogen
         parts.join(', ')
       end
     end
+    # rubocop:enable Metrics/ClassLength
   end
 end
