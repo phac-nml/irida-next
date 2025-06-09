@@ -36,11 +36,11 @@
         </div>
       </div>
 
-      <%= form_for(:deletion, url: destroy_samples_samples_deletions_path(namespace_id: @namespace.id),
+      <%= form_for(:deletion, url: samples_deletions_path(namespace_id: @namespace.id),
             data: {
               controller: "spinner form--json-submission",
               "form--json-submission-selection-outlet": '#samples-table',
-              "form--json-submission-field-name-value": "destroy_samples[sample_ids][]",
+              "form--json-submission-field-name-value": "destroy[sample_ids][]",
               "form--json-submission-clear-selection-value": "true",
               "form--json-submission-target": "form",
               action:"turbo:submit-start->spinner#submitStart turbo:submit-end->viral--dialog#close",

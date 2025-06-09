@@ -6,7 +6,7 @@ module Projects
     class DestroyService < BaseSampleDestroyService
       private
 
-      def destroy_samples # rubocop:disable Metrics/AbcSize
+      def destroy_samples # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         samples = Sample.where(id: @sample_ids).where(project_id: @namespace.project.id)
         samples_deleted_puids = []
         deleted_samples_data = []

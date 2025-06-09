@@ -41,4 +41,8 @@ class BaseSampleDestroyService < BaseService
     activity.create_activity_extended_detail(extended_detail_id: ext_details.id,
                                              activity_type: 'sample_destroy_multiple')
   end
+
+  def destroy_samples
+    raise NotImplementedError
+  end
 end

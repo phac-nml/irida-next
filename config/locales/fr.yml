@@ -1841,6 +1841,13 @@ fr:
         updated_at_desc: Mis à jour à
   samples:
     deletions:
+      destroy:
+        no_deleted_samples: Les échantillons sélectionnés n’ont pas pu être supprimés
+        partial_error: Les échantillons %{not_deleted} n’ont pas pu être supprimés
+        partial_success: Les échantillons %{deleted} ont été supprimés avec succès
+        success:
+          one: Supprimé avec succès 1 échantillon
+          other: Supprimé avec succès %{count} échantillons
       destroy_multiple_confirmation_dialog:
         description:
           plural: 'Les échantillons COUNT_PLACEHOLDER suivants ont été sélectionnés aux fins de suppression :'
@@ -1851,13 +1858,6 @@ fr:
         spinner: Suppression des échantillons. Cela peut prendre un certain temps...
         submit_button: Confirmer
         title: Supprimer les échantillons
-      destroy_samples:
-        no_deleted_samples: Les échantillons sélectionnés n’ont pas pu être supprimés
-        partial_error: Les échantillons %{not_deleted} n’ont pas pu être supprimés
-        partial_success: Les échantillons %{deleted} ont été supprimés avec succès
-        success:
-          one: Supprimé avec succès 1 échantillon
-          other: Supprimé avec succès %{count} échantillons
       destroy_single_confirmation_dialog:
         description: Êtes-vous sûr de vouloir supprimer l’échantillon '%{sample_name}'?
         submit_button: Retirer

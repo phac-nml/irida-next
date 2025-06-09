@@ -31,7 +31,7 @@ Rails.application.routes.draw do
         collection do
           resource :transfer, only: %i[create new]
           resource :deletions, only: %i[new] do
-            post :destroy_samples
+            post :destroy
           end
         end
       end

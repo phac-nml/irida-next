@@ -4,15 +4,15 @@ module Samples
   # controller for sample deletions
   class DeletionsController < ApplicationController
     include ListActions
-    before_action :namespace, only: %i[new destroy_samples]
+    before_action :namespace, only: %i[new destroy]
     before_action :confirmation_parameters, :sample, only: :new
 
     def new
       authorize! (@namespace.group_namespace? ? @namespace : @namespace.project), to: :destroy_sample?
     end
 
-    def destroy_samples
-      samples_to_delete_count = destroy_samples_params['sample_ids'].count
+    def destroy
+      samples_to_delete_count = destroy_params['sample_ids'].count
 
       deleted_samples_count = destroy_service
 
@@ -44,22 +44,22 @@ module Samples
       @sample = Sample.find_by(id: params[:sample_id])
     end
 
-    def destroy_samples_params
-      params.expect(destroy_samples: [{ sample_ids: [] }])
+    def destroy_params
+      params.expect(destroy: [{ sample_ids: [] }])
     end
 
     def set_multi_status_destroy_multiple_message(deleted_samples_count, samples_to_delete_count)
-      flash[:success] = t('samples.deletions.destroy_samples.partial_success',
+      flash[:success] = t('samples.deletions.destroy.partial_success',
                           deleted: "#{deleted_samples_count}/#{samples_to_delete_count}")
-      flash[:error] = t('samples.deletions.destroy_samples.partial_error',
+      flash[:error] = t('samples.deletions.destroy.partial_error',
                         not_deleted: "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}")
     end
 
     def destroy_service
       if @namespace.group_namespace?
-        Groups::Samples::DestroyService.new(@namespace, current_user, destroy_samples_params).execute
+        Groups::Samples::DestroyService.new(@namespace, current_user, destroy_params).execute
       else
-        Projects::Samples::DestroyService.new(@namespace, current_user, destroy_samples_params).execute
+        Projects::Samples::DestroyService.new(@namespace, current_user, destroy_params).execute
       end
     end
 

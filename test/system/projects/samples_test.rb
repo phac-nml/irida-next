@@ -341,7 +341,7 @@ module Projects
 
       ### VERIFY START ###
       # success flash msg
-      assert_text I18n.t('samples.deletions.destroy_samples.success', count: 1)
+      assert_text I18n.t('samples.deletions.destroy.success', count: 1)
       # redirected to samples index
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
       # verify samples table has loaded to prevent flakes
@@ -3053,7 +3053,7 @@ module Projects
 
       ### VERIFY START ###
       # flash msg
-      assert_text I18n.t('samples.deletions.destroy_samples.success', count: 3)
+      assert_text I18n.t('samples.deletions.destroy.success', count: 3)
 
       # no remaining samples
       within 'section[role="status"]' do

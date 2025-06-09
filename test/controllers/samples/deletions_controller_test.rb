@@ -20,91 +20,91 @@ module Samples
 
     test 'should destroy single sample at group level' do
       assert_difference('Sample.count', -1) do
-        post destroy_samples_samples_deletions_path,
+        post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
-               destroy_samples: {
+               destroy: {
                  sample_ids: [@sample1.id]
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('samples.deletions.destroy_samples.success', count: 1), flash[:success]
+      assert_equal I18n.t('samples.deletions.destroy.success', count: 1), flash[:success]
       assert_response :redirect
       assert_redirected_to group_samples_path(@group1)
     end
 
     test 'should destroy multiple samples at group level' do
       assert_difference('Sample.count', -2) do
-        post destroy_samples_samples_deletions_path,
+        post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
-               destroy_samples: {
+               destroy: {
                  sample_ids: [@sample1.id, @sample2.id]
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('samples.deletions.destroy_samples.success', count: 2), flash[:success]
+      assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
       assert_response :redirect
       assert_redirected_to group_samples_path(@group1)
     end
 
     test 'should destroy single sample at project level' do
       assert_difference('Sample.count', -1) do
-        post destroy_samples_samples_deletions_path,
+        post samples_deletions_path,
              params: {
                namespace_id: @project1_namespace.id,
-               destroy_samples: {
+               destroy: {
                  sample_ids: [@sample1.id]
                }
              }, as: :turbo_stream
       end
 
-      assert_equal I18n.t('samples.deletions.destroy_samples.success', count: 1), flash[:success]
+      assert_equal I18n.t('samples.deletions.destroy.success', count: 1), flash[:success]
       assert_response :redirect
       assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
     end
 
     test 'should destroy multiple samples at project level' do
       assert_difference('Sample.count', -2) do
-        post destroy_samples_samples_deletions_path,
+        post samples_deletions_path,
              params: {
                namespace_id: @project1_namespace.id,
-               destroy_samples: {
+               destroy: {
                  sample_ids: [@sample1.id, @sample2.id]
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('samples.deletions.destroy_samples.success', count: 2), flash[:success]
+      assert_equal I18n.t('samples.deletions.destroy.success', count: 2), flash[:success]
       assert_response :redirect
       assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
     end
 
     test 'should not destroy sample, if it does not belong to the group' do
       assert_no_difference('Sample.count') do
-        post destroy_samples_samples_deletions_path,
+        post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
-               destroy_samples: {
+               destroy: {
                  sample_ids: [@sample69.id]
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('samples.deletions.destroy_samples.no_deleted_samples'), flash[:error]
+      assert_equal I18n.t('samples.deletions.destroy.no_deleted_samples'), flash[:error]
       assert_response :redirect
       assert_redirected_to group_samples_path(@group1)
     end
 
     test 'should not destroy sample, if it does not belong to the project' do
       assert_no_difference('Sample.count') do
-        post destroy_samples_samples_deletions_path,
+        post samples_deletions_path,
              params: {
                namespace_id: @project1_namespace.id,
-               destroy_samples: {
+               destroy: {
                  sample_ids: [@sample69.id]
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('samples.deletions.destroy_samples.no_deleted_samples'), flash[:error]
+      assert_equal I18n.t('samples.deletions.destroy.no_deleted_samples'), flash[:error]
       assert_response :redirect
       assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
     end
@@ -113,10 +113,10 @@ module Samples
       sign_in users(:joan_doe)
 
       assert_no_difference('Sample.count') do
-        post destroy_samples_samples_deletions_path,
+        post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
-               destroy_samples: {
+               destroy: {
                  sample_ids: [@sample23.id]
                }
              }, as: :turbo_stream
@@ -129,10 +129,10 @@ module Samples
       sign_in users(:joan_doe)
 
       assert_no_difference('Sample.count') do
-        post destroy_samples_samples_deletions_path,
+        post samples_deletions_path,
              params: {
                namespace_id: @project2_namespace.id,
-               destroy_samples: {
+               destroy: {
                  sample_ids: [@sample22.id]
                }
              }, as: :turbo_stream
@@ -211,17 +211,17 @@ module Samples
 
     test 'partially deleting multiple samples at group level' do
       assert_difference('Sample.count', -2) do
-        post destroy_samples_samples_deletions_path,
+        post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
-               destroy_samples: {
+               destroy: {
                  sample_ids: [@sample1.id, @sample2.id, 'invalid_sample_id']
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('samples.deletions.destroy_samples.partial_success', deleted: '2/3'),
+      assert_equal I18n.t('samples.deletions.destroy.partial_success', deleted: '2/3'),
                    flash[:success]
-      assert_equal I18n.t('samples.deletions.destroy_samples.partial_error', not_deleted: '1/3'),
+      assert_equal I18n.t('samples.deletions.destroy.partial_error', not_deleted: '1/3'),
                    flash[:error]
       assert_response :redirect
       assert_redirected_to group_samples_path(@group1)
@@ -229,17 +229,17 @@ module Samples
 
     test 'partially deleting multiple samples at project] level' do
       assert_difference('Sample.count', -2) do
-        post destroy_samples_samples_deletions_path,
+        post samples_deletions_path,
              params: {
                namespace_id: @project1_namespace.id,
-               destroy_samples: {
+               destroy: {
                  sample_ids: [@sample1.id, @sample2.id, 'invalid_sample_id']
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('samples.deletions.destroy_samples.partial_success', deleted: '2/3'),
+      assert_equal I18n.t('samples.deletions.destroy.partial_success', deleted: '2/3'),
                    flash[:success]
-      assert_equal I18n.t('samples.deletions.destroy_samples.partial_error', not_deleted: '1/3'),
+      assert_equal I18n.t('samples.deletions.destroy.partial_error', not_deleted: '1/3'),
                    flash[:error]
       assert_response :redirect
       assert_redirected_to namespace_project_samples_path(@project1_namespace.parent, @project1_namespace.project)
@@ -247,15 +247,15 @@ module Samples
 
     test 'delete no samples at group level' do
       assert_no_difference('Sample.count') do
-        post destroy_samples_samples_deletions_path,
+        post samples_deletions_path,
              params: {
                namespace_id: @group1.id,
-               destroy_samples: {
+               destroy: {
                  sample_ids: %w[invalid_sample_id_1 invalid_sample_id_2 invalid_sample_id_3]
                }
              }, as: :turbo_stream
       end
-      assert_equal I18n.t('samples.deletions.destroy_samples.no_deleted_samples'), flash[:error]
+      assert_equal I18n.t('samples.deletions.destroy.no_deleted_samples'), flash[:error]
       assert_response :redirect
       assert_redirected_to group_samples_path(@group1)
     end
