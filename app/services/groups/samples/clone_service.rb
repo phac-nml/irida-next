@@ -11,7 +11,7 @@ module Groups
       def clone_samples(sample_ids, broadcast_target) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
         @cloned_samples_data = { project_data: {}, group_data: [] }
         cloned_sample_ids = {}
-        filtered_samples = filter_sample_ids(sample_ids, 'clone', Member::AccessLevel::MAINTAINER)
+        filtered_samples = filter_sample_ids(sample_ids, 'clone')
         total_sample_count = filtered_samples.count
         filtered_samples.each.with_index(1) do |sample, index|
           update_progress_bar(index, total_sample_count, broadcast_target)
