@@ -684,7 +684,6 @@ fr:
         create_group_button: Nouveau groupe
         no_groups_description: Aucun groupe trouvé correspondant à votre recherche
         no_groups_title: Aucun groupe trouvé
-        row_aria_label: Voir les sous-groupes %{name}
         search:
           placeholder: Filtrer par PUID ou nom
         sorting:
