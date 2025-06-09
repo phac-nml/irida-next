@@ -15,65 +15,38 @@
       dark:text-slate-400 dark:border-slate-700
     "
   >
-    <% base_tab_classes =
-      "inline-block p-4 rounded-t-lg font-semibold transition-colors duration-200 ease-in-out" %>
-    <% active_tab_classes =
-      class_names(
-        base_tab_classes,
-        "border-b-2 border-primary-800",
-        "text-slate-900 rounded-t-lg",
-        "active bg-transparent",
-        "dark:border-white dark:text-white",
+    <%= render Pathogen::TabsPanel.new(
+      id: "project-sort-dropdown",
+    ) do |tabs_panel| %>
+      <% tabs_panel.with_tab(
+        id: "all",
+        text: t(".all"),
+        href: dashboard_projects_url(),
+        selected: !params[:personal],
       ) %>
-    <% inactive_tab_classes =
-      class_names(
-        base_tab_classes,
-        "border-b-2 border-transparent",
-        "text-slate-700 hover:text-slate-900",
-        "hover:border-slate-700 rounded-t-lg",
-        "dark:text-slate-200 dark:hover:text-white",
-        "dark:hover:border-white",
+      <% tabs_panel.with_tab(
+        id: "personal",
+        text: t(".personal"),
+        href: dashboard_projects_url(personal: "true"),
+        selected: params[:personal],
       ) %>
-
-    <ul class="flex flex-1">
-      <li class="mr-2">
-        <%= link_to t(".all"),
-        dashboard_projects_url(),
-        class: params[:personal] ? inactive_tab_classes : active_tab_classes,
-        data: {
-          "turbo-action": "replace",
-        },
-        aria: {
-          current: params[:personal] ? "false" : "page",
-        } %>
-      </li>
-      <li class="mr-2">
-        <%= link_to t(".personal"),
-        dashboard_projects_url(personal: "true"),
-        class: params[:personal] ? active_tab_classes : inactive_tab_classes,
-        data: {
-          "turbo-action": "replace",
-        },
-        aria: {
-          current: params[:personal] ? "page" : "false",
-        } %>
-      </li>
-    </ul>
-    <%= turbo_frame_tag "project_sort_dropdown" %>
-
-  </div>
-  <div class="flex flex-col">
-    <% if @has_projects %>
-      <%= turbo_frame_tag "projects_list", src: dashboard_projects_url(format: :turbo_stream, **request.query_parameters) do %>
-        <%= render partial: "shared/loading/table" %>
+      <% tabs_panel.with_right_content do %>
+        <%= turbo_frame_tag "project_sort_dropdown" %>
       <% end %>
-      <%= turbo_frame_tag "projects_pagination" %>
-    <% else %>
-      <%= render Viral::EmptyStateComponent.new(
-        icon_name: "rectangle_stack",
-        title: t(".no_projects"),
-        description: t(".no_projects_description"),
-      ) %>
+      <div class="flex flex-col">
+        <% if @has_projects %>
+          <%= turbo_frame_tag "projects_list", src: dashboard_projects_url(format: :turbo_stream, **request.query_parameters) do %>
+            <%= render partial: "shared/loading/table" %>
+          <% end %>
+          <%= turbo_frame_tag "projects_pagination" %>
+        <% else %>
+          <%= render Viral::EmptyStateComponent.new(
+            icon_name: "rectangle_stack",
+            title: t(".no_projects"),
+            description: t(".no_projects_description"),
+          ) %>
+        <% end %>
+      </div>
     <% end %>
   </div>
 </div>
