@@ -40,7 +40,7 @@ module Viral
     #
     # @return [String] The ARIA role.
     def role_attribute
-      type.to_s == 'error' ? 'alert' : 'status'
+      'alert'
     end
 
     # Determines the ARIA live region politeness level based on its type.
@@ -48,7 +48,7 @@ module Viral
     #
     # @return [String] The ARIA live region politeness level.
     def aria_live_attribute
-      type.to_s == 'error' ? 'assertive' : 'polite'
+      'assertive'
     end
 
     # Generates the CSS classes for the icon's container div.

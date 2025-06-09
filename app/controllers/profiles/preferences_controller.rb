@@ -22,8 +22,13 @@ module Profiles
         updated = @user.update(update_params)
         if updated
           I18n.with_locale(current_user.locale) do
-            flash[:success] = t('.success')
-            format.html { redirect_back_or_to profile_preferences_path }
+            format.turbo_stream do
+              render status: :ok, locals: { type: 'success', message: t('.success') }
+            end
+            format.html do
+              flash[:success] = t('.success')
+              redirect_back_or_to profile_preferences_path
+            end
           end
         else
           format.html { render :show, status: :unprocessable_entity, locals: { user: @user } }
