@@ -23,12 +23,14 @@ module Pathogen
       end.join(' ')
 
       # Return a simple, predictable HTML structure for testing
+      # rubocop:disable Rails/OutputSafety
       "<div data-test-selector=\"#{name}\" #{options_str}>Icon: #{name}</div>".html_safe
+      # rubocop:enable Rails/OutputSafety
     end
 
     # 📝 Test: render_icon returns nil for unknown icon key
     test 'returns nil for unknown icon key' do
-      result = render_icon(:non_existent_icon_key_12345)
+      result = render_icon(:non_existent_icon)
       assert_nil(result, 'Should return nil when the icon key is not found in ICONS registry')
     end
 
