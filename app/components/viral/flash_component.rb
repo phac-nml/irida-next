@@ -35,22 +35,6 @@ module Viral
       "toast-#{type}-#{object_id}"
     end
 
-    # Determines the ARIA role for the flash component based on its type.
-    # 'alert' for errors, 'status' for others.
-    #
-    # @return [String] The ARIA role.
-    def role_attribute
-      'alert'
-    end
-
-    # Determines the ARIA live region politeness level based on its type.
-    # 'assertive' for errors, 'polite' for others.
-    #
-    # @return [String] The ARIA live region politeness level.
-    def aria_live_attribute
-      'assertive'
-    end
-
     # Generates the CSS classes for the icon's container div.
     # Classes vary based on the flash message type to provide distinct visual cues.
     #
