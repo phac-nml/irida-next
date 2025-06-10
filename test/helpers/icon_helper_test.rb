@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 # 🚀 Test suite for IconHelper
@@ -83,17 +85,17 @@ class IconHelperTest < ActionView::TestCase
   # 📝 Test: ICONS registry correctly returns icon definitions
   test 'ICONS registry returns correct icon definitions' do
     # Check a few different icon types
-    assert_not_nil(ICONS[:irida_logo], 'ICONS registry should contain irida_logo')
-    assert_not_nil(ICONS[:clipboard], 'ICONS registry should contain clipboard')
-    assert_not_nil(ICONS[:beaker], 'ICONS registry should contain beaker')
+    assert_not_nil(ICON[:irida_logo], 'ICON registry should contain irida_logo')
+    assert_not_nil(ICON[:clipboard], 'ICON registry should contain clipboard')
+    assert_not_nil(ICON[:beaker], 'ICON registry should contain beaker')
 
     # Validate the structure (hash with :name and :options keys)
-    icon_def = ICONS[:beaker]
+    icon_def = ICON[:beaker]
     assert_equal(:beaker, icon_def[:name], 'Icon name should be :beaker')
     assert_equal(:heroicons, icon_def[:options][:library], 'Icon library should be :heroicons')
 
     # Check irida_logo definition
-    icon_def = ICONS[:irida_logo]
+    icon_def = ICON[:irida_logo]
     assert_equal(:beaker, icon_def[:name], 'irida_logo icon name should be :beaker')
     assert_equal(:heroicons, icon_def[:options][:library], 'irida_logo icon library should be :heroicons')
   end
@@ -101,7 +103,7 @@ class IconHelperTest < ActionView::TestCase
   # 📝 Test: private methods work correctly through the public interface
   test 'private methods work correctly through render_icon' do
     # Test resolve_icon_definition through render_icon
-    result = render_icon(ICONS[:clipboard])
+    result = render_icon(ICON[:clipboard])
     assert(result.present?, 'Should handle a direct icon definition hash')
 
     # Test prepare_icon_options through render_icon with various options
