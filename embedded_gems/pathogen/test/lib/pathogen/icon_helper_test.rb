@@ -1,0 +1,142 @@
+# frozen_string_literal: true
+
+require 'test_helper'
+
+# 🚀 Test suite for Pathogen::IconHelper
+# Ensures icons are rendered correctly based on the ICONS registry.
+module Pathogen
+  # Test suite for Pathogen::IconHelper
+  # @see Pathogen::IconHelper
+  class IconHelperTest < ActionView::TestCase
+    include Pathogen::IconHelper
+
+    # Stub the icon method that would normally be provided by a view helper
+    # This simulates what the actual icon helper would return in the application
+    def icon(name, **options)
+      options_str = options.map do |key, value|
+        if value.is_a?(Hash)
+          # Handle nested hashes like data: { foo: 'bar' }
+          value.map { |k, v| "data-#{k}=\"#{v}\"" }.join(' ')
+        else
+          "#{key}=\"#{value}\""
+        end
+      end.join(' ')
+
+      # Return a simple, predictable HTML structure for testing
+      "<div data-test-selector=\"#{name}\" #{options_str}>Icon: #{name}</div>".html_safe
+    end
+
+    # 📝 Test: render_icon returns nil for unknown icon key
+    test 'returns nil for unknown icon key' do
+      result = render_icon(:non_existent_icon_key_12345)
+      assert_nil(result, 'Should return nil when the icon key is not found in ICONS registry')
+    end
+
+    # 📝 Test: rendering a default icon mapping (:irida_logo -> :beaker)
+    test 'renders icon from DEFAULTS mapping' do
+      result = render_icon(:irida_logo)
+      assert(result.present?, 'Should return HTML for irida_logo icon')
+      assert(result.html_safe?, 'Result should be HTML safe')
+
+      # Basic structure validation
+      assert_match(/data-test-selector="beaker"/, result, "Should include the icon name 'beaker' in the output")
+      assert_match(/data-test-selector="irida_logo"/, result,
+                   "Should include the test selector 'irida_logo' in the output")
+    end
+
+    # 📝 Test: rendering a Phosphor icon
+    test 'renders icon from PHOSPHOR set' do
+      result = render_icon(:clipboard)
+      assert(result.present?, 'Should return HTML for clipboard icon')
+      assert(result.html_safe?, 'Result should be HTML safe')
+
+      # Validate that the icon name is included in the output
+      assert_match(/data-test-selector="clipboard-text"/, result,
+                   "Should include the icon name 'clipboard-text' in the output")
+      assert_match(/data-test-selector="clipboard"/, result,
+                   "Should include the test selector 'clipboard' in the output")
+    end
+
+    # 📝 Test: rendering a Heroicon icon
+    test 'renders icon from HEROICONS set' do
+      result = render_icon(:beaker)
+      assert(result.present?, 'Should return HTML for beaker icon')
+      assert(result.html_safe?, 'Result should be HTML safe')
+
+      # Validate that the icon name is included in the output
+      assert_match(/data-test-selector="beaker"/, result,
+                   "Should include both the icon name and test selector 'beaker' in the output")
+    end
+
+    # 📝 Test: rendering an icon with additional CSS classes
+    test 'renders icon with additional CSS classes' do
+      additional_class = 'text-red-500'
+      result = render_icon(:clipboard, class: additional_class)
+
+      assert(result.present?, 'Should return HTML with the additional class')
+      assert_match(/class="#{additional_class}"/, result, 'Rendered HTML should contain the additional class')
+    end
+
+    # 📝 Test: rendering an icon with additional HTML attributes
+    test 'renders icon with additional HTML attributes' do
+      data_testid = 'clipboard-icon'
+      result = render_icon(:clipboard, data: { 'test-selector': data_testid })
+
+      assert result.present?, 'Should return HTML with the additional attributes'
+      assert_match(/data-test-selector="#{data_testid}"/, result, 'Rendered HTML should contain the data attribute')
+    end
+
+    # 📝 Test: ICONS registry correctly returns icon definitions
+    test 'ICONS registry returns correct icon definitions' do
+      # Check a few different icon types
+      assert_not_nil(Pathogen::ICON[:irida_logo], 'ICON registry should contain irida_logo')
+      assert_not_nil(Pathogen::ICON[:clipboard], 'ICON registry should contain clipboard')
+      assert_not_nil(Pathogen::ICON[:beaker], 'ICON registry should contain beaker')
+
+      # Validate the structure (hash with :name and :options keys)
+      icon_def = Pathogen::ICON[:beaker]
+      assert_equal(:beaker, icon_def[:name], 'Icon name should be :beaker')
+      assert_equal(:heroicons, icon_def[:options][:library], 'Icon library should be :heroicons')
+
+      # Check irida_logo definition
+      icon_def = Pathogen::ICON[:irida_logo]
+      assert_equal(:beaker, icon_def[:name], 'irida_logo icon name should be :beaker')
+      assert_equal(:heroicons, icon_def[:options][:library], 'irida_logo icon library should be :heroicons')
+    end
+
+    # 📝 Test: private methods work correctly through the public interface
+    test 'private methods work correctly through render_icon' do
+      # Test resolve_icon_definition through render_icon
+      result = render_icon(Pathogen::ICON[:clipboard])
+      assert(result.present?, 'Should handle a direct icon definition hash')
+
+      # Test prepare_icon_options through render_icon with various options
+      result = render_icon(:clipboard, class: 'custom-class', data: { 'test-selector': 'test' })
+      assert_match(/class="custom-class"/, result, 'Should apply custom class')
+      assert_match(/data-test-selector="test"/, result, 'Should apply data attributes')
+    end
+
+    # 📝 Test: test selectors are added in test environment
+    test 'adds test selectors in test environment' do
+      # The test environment is mocked in the icon method above
+      result = render_icon(:clipboard)
+      assert_match(/data-test-selector="clipboard"/, result, 'Should add test selector in test environment')
+    end
+
+    # 📝 Test: rendering an icon using ICON constant
+    test 'renders icon using ICON constant' do
+      result = render_icon(Pathogen::ICON::CLIPBOARD)
+      assert(result.present?, 'Should return HTML for ICON::CLIPBOARD')
+      assert(result.html_safe?, 'Result should be HTML safe')
+      assert_match(/data-test-selector="clipboard-text"/, result, 'Should include the icon name in the output')
+      assert_match(/data-test-selector="CLIPBOARD"|data-test-selector="clipboard"/i, result,
+                   'Should include a test selector for the icon')
+    end
+
+    test 'ICON constants are available and correct' do
+      assert_equal({ name: 'clipboard-text', options: {} }, Pathogen::ICON::CLIPBOARD)
+      assert_equal({ name: :beaker, options: { library: :heroicons } }, Pathogen::ICON::BEAKER)
+      assert_equal({ name: :beaker, options: { library: :heroicons } }, Pathogen::ICON::IRIDA_LOGO)
+    end
+  end
+end
