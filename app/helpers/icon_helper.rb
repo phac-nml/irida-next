@@ -33,6 +33,7 @@ module ICON
   USER_CIRCLE = { name: 'user-circle', options: {} }.freeze
   USERS = { name: :users, options: {} }.freeze
   BANK = { name: :bank, options: {} }.freeze
+  X = { name: :x, options: {} }.freeze
   # Heroicons
   BEAKER = { name: :beaker, options: { library: :heroicons } }.freeze
   # Named icons
@@ -55,9 +56,6 @@ module ICON
     DEFINITIONS[key.to_sym]
   end
 end
-
-# Backward compatibility: ICONS alias
-ICONS = ICON
 
 # Helper for rendering icons defined in the ICON registry
 module IconHelper
