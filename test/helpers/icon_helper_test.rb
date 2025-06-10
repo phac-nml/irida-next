@@ -74,7 +74,7 @@ class IconHelperTest < ActionView::TestCase
   # 📝 Test: rendering an icon with additional HTML attributes
   test 'renders icon with additional HTML attributes' do
     data_testid = 'clipboard-icon'
-    result = render_icon(:clipboard, data: { "test-selector": data_testid })
+    result = render_icon(:clipboard, data: { 'test-selector': data_testid })
 
     assert result.present?, 'Should return HTML with the additional attributes'
     assert_match(/data-test-selector="#{data_testid}"/, result, 'Rendered HTML should contain the data attribute')
@@ -105,7 +105,7 @@ class IconHelperTest < ActionView::TestCase
     assert(result.present?, 'Should handle a direct icon definition hash')
 
     # Test prepare_icon_options through render_icon with various options
-    result = render_icon(:clipboard, class: 'custom-class', data: { "test-selector": 'test' })
+    result = render_icon(:clipboard, class: 'custom-class', data: { 'test-selector': 'test' })
     assert_match(/class="custom-class"/, result, 'Should apply custom class')
     assert_match(/data-test-selector="test"/, result, 'Should apply data attributes')
   end
@@ -115,5 +115,21 @@ class IconHelperTest < ActionView::TestCase
     # The test environment is mocked in the icon method above
     result = render_icon(:clipboard)
     assert_match(/data-test-selector="clipboard"/, result, 'Should add test selector in test environment')
+  end
+
+  # 📝 Test: rendering an icon using ICON constant
+  test 'renders icon using ICON constant' do
+    result = render_icon(ICON::CLIPBOARD)
+    assert(result.present?, 'Should return HTML for ICON::CLIPBOARD')
+    assert(result.html_safe?, 'Result should be HTML safe')
+    assert_match(/data-test-selector="clipboard-text"/, result, 'Should include the icon name in the output')
+    assert_match(/data-test-selector="CLIPBOARD"|data-test-selector="clipboard"/i, result,
+                 'Should include a test selector for the icon')
+  end
+
+  test 'ICON constants are available and correct' do
+    assert_equal({ name: 'clipboard-text', options: {} }, ICON::CLIPBOARD)
+    assert_equal({ name: :beaker, options: { library: :heroicons } }, ICON::BEAKER)
+    assert_equal({ name: :beaker, options: { library: :heroicons } }, ICON::IRIDA_LOGO)
   end
 end

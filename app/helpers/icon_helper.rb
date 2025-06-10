@@ -1,136 +1,98 @@
 # frozen_string_literal: true
 
-# ICONS: Centralized Icon Registry
+# ICON: Centralized Icon Registry with Constants
 #
-# A simplified, elegant approach to icon management using Rails Designer Icons.
-# Provides a unified interface for referencing icons by semantic names.
+# Provides a unified interface for referencing icons by semantic names as constants.
 #
 # @example Usage in a ViewComponent
-#   = render_icon(:clipboard)
-#   = render_icon(:irida_logo, class: "h-6 w-6")
-#
-# @example Usage with dot notation
-#   = render_icon(ICONS.clipboard)
+#   = render_icon(ICON::CLIPBOARD)
+#   = render_icon(ICON::IRIDA_LOGO, class: "h-6 w-6")
 #
 # @see https://phosphoricons.com/ and https://heroicons.com/
 #
-module ICONS
-  # Icon definitions with semantic names mapping to actual icon names and default options
-  #
-  # Format:
-  # semantic_name: {
-  #   name: 'actual-icon-name',
-  #   options: {
-  #     library: :phosphor|:heroicons,
-  #     variant: :outline|:solid|:duotone, etc.
-  #   }
-  # }
-  #
-  # Default library is :phosphor and default variant is :regular unless specified
-  DEFINITIONS = {
-    # Phosphor Icons (default library)
-    clipboard: { name: 'clipboard-text', options: {} },
-    caret_down: { name: 'caret-down', options: {} },
-    caret_up: { name: 'caret-up', options: {} },
-    clock: { name: 'clock', options: {} },
-    export: { name: :export, options: {} },
-    file: { name: :file, options: {} },
-    files: { name: :files, options: {} },
-    squares_four: { name: 'squares-four', options: {} },
-    list_bullets: { name: 'list-bullets', options: {} },
-    lock_key: { name: 'lock-key', options: {} },
-    stack: { name: :stack, options: {} },
-    flask: { name: :flask, options: {} },
-    terminal_window: { name: 'terminal-window', options: {} },
-    gear_six: { name: 'gear-six', options: {} },
-    info: { name: 'info', options: {} },
-    plus_circle: { name: 'plus-circle', options: {} },
-    question: { name: :question, options: {} },
-    sidebar: { name: :sidebar, options: {} },
-    sliders_horizontal: { name: 'sliders-horizontal', options: {} },
-    ticket: { name: :ticket, options: {} },
-    user_circle: { name: 'user-circle', options: {} },
-    users: { name: :users, options: {} },
-    bank: { name: :bank, options: {} },
+module ICON
+  # Icon definitions as constants
+  CLIPBOARD = { name: 'clipboard-text', options: {} }.freeze
+  CARET_DOWN = { name: 'caret-down', options: {} }.freeze
+  CARET_UP = { name: 'caret-up', options: {} }.freeze
+  EXPORT = { name: :export, options: {} }.freeze
+  FILE = { name: :file, options: {} }.freeze
+  FILES = { name: :files, options: {} }.freeze
+  SQUARES_FOUR = { name: 'squares-four', options: {} }.freeze
+  LIST_BULLETS = { name: 'list-bullets', options: {} }.freeze
+  LOCK_KEY = { name: 'lock-key', options: {} }.freeze
+  STACK = { name: :stack, options: {} }.freeze
+  FLASK = { name: :flask, options: {} }.freeze
+  TERMINAL_WINDOW = { name: 'terminal-window', options: {} }.freeze
+  GEAR_SIX = { name: 'gear-six', options: {} }.freeze
+  PLUS_CIRCLE = { name: 'plus-circle', options: {} }.freeze
+  QUESTION = { name: :question, options: {} }.freeze
+  SIDEBAR = { name: :sidebar, options: {} }.freeze
+  SLIDERS_HORIZONTAL = { name: 'sliders-horizontal', options: {} }.freeze
+  TICKET = { name: :ticket, options: {} }.freeze
+  USER_CIRCLE = { name: 'user-circle', options: {} }.freeze
+  USERS = { name: :users, options: {} }.freeze
+  BANK = { name: :bank, options: {} }.freeze
+  # Heroicons
+  BEAKER = { name: :beaker, options: { library: :heroicons } }.freeze
+  # Named icons
+  IRIDA_LOGO = { name: :beaker, options: { library: :heroicons } }.freeze
+  DETAILS = { name: 'clipboard-text', options: {} }.freeze
+  SAMPLES = { name: :flask, options: {} }.freeze
+  SETTINGS = { name: 'gear-six', options: {} }.freeze
+  PROJECTS = { name: 'stack', options: {} }.freeze
+  GROUPS = { name: 'squares-four', options: {} }.freeze
+  WORKFLOWS = { name: 'terminal-window', options: {} }.freeze
+  DATA_EXPORTS = { name: 'export', options: {} }.freeze
 
-    # Heroicons
-    beaker: { name: :beaker, options: { library: :heroicons } },
+  # Optional: for backward compatibility, provide a lookup hash
+  DEFINITIONS = constants.each_with_object({}) do |const, hash|
+    hash[const.to_s.downcase.to_sym] = const_get(const)
+  end.freeze
 
-    # Named icons
-    irida_logo: { name: :beaker, options: { library: :heroicons } },
-    details: { name: 'clipboard-text', options: {} },
-    samples: { name: :flask, options: {} },
-    settings: { name: 'gear-six', options: {} },
-    projects: { name: 'stack', options: {} },
-    groups: { name: 'squares-four', options: {} },
-    workflows: { name: 'terminal-window', options: {} },
-    data_exports: { name: 'export', options: {} }
-
-  }.freeze
-
-  # Lookup by symbol or string
-  #
-  # @param key [Symbol, String] The icon key to look up
-  # @return [Hash, nil] Icon definition or nil if not found
+  # Lookup by symbol or string (legacy support)
   def self.[](key)
     DEFINITIONS[key.to_sym]
   end
-
-  # Enable dot notation access (e.g., ICONS.clipboard)
-  #
-  # @param method [Symbol] The method name corresponding to the icon key
-  # @return [Hash, nil] Icon definition or nil if not found
-  def self.method_missing(method, *args, &)
-    DEFINITIONS[method] || super
-  end
-
-  # Support respond_to? for dot notation
-  #
-  # @param method [Symbol] The method name to check
-  # @param include_private [Boolean] Whether to include private methods
-  # @return [Boolean] True if the method corresponds to an icon key
-  def self.respond_to_missing?(method, include_private = false)
-    DEFINITIONS.key?(method) || super
-  end
 end
 
-# Helper for rendering icons defined in the ICONS registry
+# Backward compatibility: ICONS alias
+ICONS = ICON
+
+# Helper for rendering icons defined in the ICON registry
 module IconHelper
   # Renders an icon using Rails Designer Icons
   #
-  # @param key [Symbol, Hash] Either a symbol key from ICONS registry or a direct icon definition hash
+  # @param key [Hash, Symbol] Either an ICON constant hash or a symbol key (legacy)
   # @param options [Hash] Additional options to merge with the icon's default options
   # @return [ActiveSupport::SafeBuffer, nil] The HTML for the icon or nil if not found
   #
-  # @example Render using a key
-  #   render_icon(:clipboard)
+  # @example Render using a constant
+  #   render_icon(ICON::CLIPBOARD)
   #
   # @example Render with additional options
-  #   render_icon(:clipboard, class: "h-5 w-5 text-primary-600")
+  #   render_icon(ICON::CLIPBOARD, class: "h-5 w-5 text-primary-600")
   #
-  # @example Render with a direct icon definition
-  #   render_icon(ICONS.clipboard, variant: :duotone)
+  # @example Render with a symbol (legacy)
+  #   render_icon(:clipboard)
   def render_icon(key, **options)
-    # Handle both symbol keys and direct icon definition hashes
     icon_def = resolve_icon_definition(key)
     return nil unless icon_def
 
-    # Extract the icon name and prepare final options
     icon_name = icon_def[:name]
     final_options = prepare_icon_options(icon_def, options, key)
-
-    # Call the Rails Designer Icons helper
     icon(icon_name, **final_options)
   end
 
   private
 
-  # Resolves the icon definition from a key or hash
-  #
-  # @param key [Symbol, Hash] Either a symbol key from ICONS registry or a direct icon definition hash
-  # @return [Hash, nil] The icon definition or nil if not found
+  # Resolves the icon definition from a constant hash or symbol
   def resolve_icon_definition(key)
-    key.is_a?(Hash) ? key : ICONS[key]
+    if key.is_a?(Hash) && key[:name]
+      key
+    elsif key.is_a?(Symbol) || key.is_a?(String)
+      ICON[key]
+    end
   end
 
   # Prepares the final options hash for the icon
@@ -141,17 +103,30 @@ module IconHelper
   # @return [Hash] The final options hash
   def prepare_icon_options(icon_def, user_options, key)
     base_options = icon_def[:options] || {}
-
-    # Merge options, with user options taking precedence
-    final_options = base_options.except(:class).merge(user_options.except(:class))
-
-    # Intelligently merge classes
-    merged_class = class_names(base_options[:class], user_options[:class])
+    final_options = merge_icon_options(base_options, user_options)
+    merged_class = merge_icon_classes(base_options[:class], user_options[:class])
     final_options[:class] = merged_class if merged_class.present?
-
-    # Add test selector in test environment
-    final_options['data-test-selector'] = key.to_s if Rails.env.test? && key.respond_to?(:to_s)
-
+    final_options['data-test-selector'] = build_test_selector(key) if Rails.env.test?
     final_options
+  end
+
+  # Extracted: Merge icon options except :class
+  def merge_icon_options(base_options, user_options)
+    base_options.except(:class).merge(user_options.except(:class))
+  end
+
+  # Extracted: Merge icon classes
+  def merge_icon_classes(base_class, user_class)
+    class_names(base_class, user_class)
+  end
+
+  # Extracted: Build test selector value
+  def build_test_selector(key)
+    if key.is_a?(Hash)
+      const_name = ICON.constants.find { |c| ICON.const_get(c) == key }
+      const_name ? const_name.to_s : key[:name].to_s
+    elsif key.respond_to?(:to_s)
+      key.to_s
+    end
   end
 end
