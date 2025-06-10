@@ -37,7 +37,7 @@ module Pathogen
 
       initializer 'pathogen.view_components' do |app|
         app.config.to_prepare do
-          ActionView::Base.include(Pathogen::IconHelper)
+          ActiveSupport.on_load(:action_view) { include Pathogen::IconHelper }
         end
       end
     end
