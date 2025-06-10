@@ -21,7 +21,7 @@
             data-action="advanced-search#clearForm filters#submit"
             aria-label="<%= t(".clear_aria_label") %>"
           >
-            <%= viral_icon(name: "x_mark", classes: "size-5") %>
+            <%= helpers.render_icon(ICON::X, class: "size-4") %>
           </button>
         </div>
       <% else %>
@@ -138,7 +138,7 @@
         aria-label="<%= t(".remove_condition_aria_label") %>"
         data-action="advanced-search#removeCondition"
       >
-        <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>
+        <%= helpers.render_icon(ICON::X, class: "size-4") %>
       </button>
     </fieldset>
   </template>
