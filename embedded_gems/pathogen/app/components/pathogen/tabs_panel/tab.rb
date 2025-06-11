@@ -145,24 +145,34 @@ module Pathogen
       # @return [String] The underline tab CSS classes
       def underline_tab_classes
         base = base_tab_classes
-        if @selected
-          [
-            base,
-            'border-b-2 border-primary-800',
-            'text-slate-900 rounded-t-lg',
-            'active bg-transparent',
-            'dark:border-white dark:text-white'
-          ].join(' ')
-        else
-          [
-            base,
-            'border-b-2 border-transparent',
-            'text-slate-700 hover:text-slate-900',
-            'hover:border-slate-700 rounded-t-lg',
-            'dark:text-slate-200 dark:hover:text-white',
-            'dark:hover:border-white'
-          ].join(' ')
-        end
+        @selected ? selected_tab_classes(base) : unselected_tab_classes(base)
+      end
+
+      # 💅 Selected tab style classes
+      # @param base [String] Base classes to extend
+      # @return [String] The selected tab CSS classes
+      def selected_tab_classes(base)
+        [
+          base,
+          'border-b-2 border-primary-800',
+          'text-slate-900 rounded-t-lg',
+          'active bg-transparent',
+          'dark:border-white dark:text-white'
+        ].join(' ')
+      end
+
+      # 💅 Unselected tab style classes
+      # @param base [String] Base classes to extend
+      # @return [String] The unselected tab CSS classes
+      def unselected_tab_classes(base)
+        [
+          base,
+          'border-b-2 border-transparent',
+          'text-slate-700 hover:text-slate-900',
+          'hover:border-slate-700 rounded-t-lg',
+          'dark:text-slate-200 dark:hover:text-white',
+          'dark:hover:border-white'
+        ].join(' ')
       end
 
       # Move ARIA label generation to render time
