@@ -820,17 +820,21 @@ en:
     name: IRIDA Next
     navbar:
       account_dropdown:
-        aria_label: Account menu dropdown
+        aria_label: Account menu
         profile: Edit profile
         sign_out: Sign out
+        title: Account
       collapse:
         aria_label: Collapse navigation menu
+        title: Collapse
       expand:
         aria_label: Expand navigation menu
+        title: Expand
       new_dropdown:
-        aria_label: New menu item
+        aria_label: Create menu
         group: Create new group
         project: Create new project
+        title: Create
     opens_in_new_tab: Opens in new tab
     screen_reader:
       close: Close

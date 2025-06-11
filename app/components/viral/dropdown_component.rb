@@ -203,6 +203,8 @@ module Viral
 
     # 🎨 Default system arguments for icon
     def system_arguments_for_icon
+      return { classes: @styles[:button] } if @styles[:button].present?
+
       {
         classes: class_names('viral-dropdown--icon', @system_arguments[:classes])
       }
