@@ -102,7 +102,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     assert_selector 'table tbody tr', count: 7
     within('tbody') do
-      click_link I18n.t('data_exports.index.actions.delete'), match: :first
+      click_button I18n.t('data_exports.index.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
       click_button I18n.t(:'components.confirmation.confirm')
@@ -110,7 +110,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     assert_selector 'table tbody tr', count: 6
     within('tbody') do
-      click_link I18n.t('data_exports.index.actions.delete'), match: :first
+      click_button I18n.t('data_exports.index.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
       click_button I18n.t(:'components.confirmation.confirm')
@@ -118,7 +118,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     assert_selector 'table tbody tr', count: 5
     within('tbody') do
-      click_link I18n.t('data_exports.index.actions.delete'), match: :first
+      click_button I18n.t('data_exports.index.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
       click_button I18n.t(:'components.confirmation.confirm')
@@ -126,7 +126,7 @@ class DataExportsTest < ApplicationSystemTestCase
 
     assert_selector 'table tbody tr', count: 4
     within('tbody') do
-      click_link I18n.t('data_exports.index.actions.delete'), match: :first
+      click_button I18n.t('data_exports.index.actions.delete'), match: :first
     end
     within('#turbo-confirm[open]') do
       click_button I18n.t(:'components.confirmation.confirm')

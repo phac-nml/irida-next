@@ -68,7 +68,7 @@ module Projects
       assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
       assert_selector 'p', text: I18n.t(:'projects.bots.index.subtitle')
 
-      assert_selector 'a', text: I18n.t(:'projects.bots.index.add_new_bot'), count: 1
+      assert_selector 'button', text: I18n.t(:'projects.bots.index.add_new_bot'), count: 1
 
       assert_selector 'tr', count: 0
 
@@ -79,7 +79,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_link I18n.t(:'projects.bots.index.add_new_bot')
+      click_button I18n.t(:'projects.bots.index.add_new_bot')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -118,7 +118,7 @@ module Projects
       assert_selector 'h1', text: I18n.t(:'projects.bots.index.title')
       assert_selector 'p', text: I18n.t(:'projects.bots.index.subtitle')
 
-      assert_selector 'a', text: I18n.t(:'projects.bots.index.add_new_bot'), count: 1
+      assert_selector 'button', text: I18n.t(:'projects.bots.index.add_new_bot'), count: 1
 
       assert_selector 'tr', count: 0
 
@@ -129,7 +129,7 @@ module Projects
       ### SETUP END ###
 
       ### ACTIONS START ###
-      click_link I18n.t(:'projects.bots.index.add_new_bot')
+      click_button I18n.t(:'projects.bots.index.add_new_bot')
 
       assert_selector '#dialog'
       within('#dialog') do
@@ -165,7 +165,7 @@ module Projects
 
       ### ACTIONS START ###
       within('table tbody tr:first-child td:last-child') do
-        click_link I18n.t(:'bots.index.table.actions.destroy')
+        click_button I18n.t(:'bots.index.table.actions.destroy')
       end
 
       assert_selector '#dialog'
@@ -199,7 +199,7 @@ module Projects
 
       ### ACTIONS START ###
       within "tr[id='#{dom_id(@project_bot)}']" do
-        click_link @project_bot_active_tokens.count.to_s
+        click_button @project_bot_active_tokens.count.to_s
       end
       ### ACTIONS END ###
 
@@ -250,7 +250,7 @@ module Projects
 
       ### ACTIONS START ###
       within "tr[id='#{dom_id(@project_bot)}']" do
-        click_link I18n.t('bots.index.table.actions.generate_new_token')
+        click_button I18n.t('bots.index.table.actions.generate_new_token')
       end
 
       # verify dialog rendered
@@ -298,7 +298,7 @@ module Projects
       within "tr[id='#{dom_id(@project_bot)}'] td:nth-child(2)" do
         assert_text initial_token_count.to_s
         # open bot PAT dialog
-        click_link initial_token_count.to_s
+        click_button initial_token_count.to_s
       end
 
       # verify bots token dialog rendered
@@ -311,7 +311,7 @@ module Projects
         end
         # revoke PAT
         within("table tbody tr[id='#{dom_id(token)}']") do
-          click_link I18n.t('personal_access_tokens.table.revoke')
+          click_button I18n.t('personal_access_tokens.table.revoke')
         end
       end
 
@@ -348,7 +348,7 @@ module Projects
       assert_no_selector '#access-token-section div'
       # create new PAT to render PAT panel
       within "tr[id='#{dom_id(@project_bot)}']" do
-        click_link I18n.t('bots.index.table.actions.generate_new_token')
+        click_button I18n.t('bots.index.table.actions.generate_new_token')
       end
 
       # verify dialog rendered
@@ -378,7 +378,7 @@ module Projects
       assert_selector '#bots-table table tbody tr', count: 20
       within "tr[id='#{dom_id(@project_bot)}']" do
         # click active tokens number
-        click_link @project_bot_active_tokens.count.to_s
+        click_button @project_bot_active_tokens.count.to_s
       end
 
       # bot's current PATs dialog
@@ -390,7 +390,7 @@ module Projects
         end
         # revoke a PAT
         within("table tbody tr[id='#{dom_id(@project_bot_active_tokens.first)}']") do
-          click_link I18n.t('personal_access_tokens.table.revoke')
+          click_button I18n.t('personal_access_tokens.table.revoke')
         end
       end
 
@@ -418,7 +418,7 @@ module Projects
       assert_no_selector '#access-token-section div'
       # create new PAT to render PAT panel
       within "table tbody tr[id='#{dom_id(@project_bot)}']" do
-        click_link I18n.t('bots.index.table.actions.generate_new_token')
+        click_button I18n.t('bots.index.table.actions.generate_new_token')
       end
 
       # verify dialog rendered
@@ -449,7 +449,7 @@ module Projects
       assert_selector "#bots-table table tbody tr[id='#{dom_id(@project_bot)}']"
       within("#bots-table table tbody tr[id='#{dom_id(@project_bot)}'] td:nth-child(6)") do
         # destroy bot
-        click_link I18n.t(:'bots.index.table.actions.destroy')
+        click_button I18n.t(:'bots.index.table.actions.destroy')
       end
 
       # confirm destroy bot

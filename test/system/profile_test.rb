@@ -46,7 +46,7 @@ class ProfileTest < ApplicationSystemTestCase
     visit profile_path
     click_link I18n.t(:'profiles.sidebar.account')
 
-    click_link I18n.t(:'profiles.accounts.delete.button')
+    click_button I18n.t(:'profiles.accounts.delete.button')
 
     within('#turbo-confirm[open]') do
       click_on I18n.t(:'components.confirmation.confirm')
@@ -108,7 +108,7 @@ class ProfileTest < ApplicationSystemTestCase
       assert_text token_to_revoke.name
     end
     within %(tr[id="#{dom_id(token_to_revoke)}"]) do
-      click_link I18n.t(:'personal_access_tokens.table.revoke')
+      click_button I18n.t(:'personal_access_tokens.table.revoke')
     end
 
     within('#turbo-confirm[open]') do

@@ -31,35 +31,33 @@
         sticky_key: :right
       ) do |row| %>
       <% unless row.disabled %>
-        <%= link_to(
-          t(:"projects.automated_workflow_executions.actions.edit_button"),
-          edit_namespace_project_automated_workflow_execution_path(
-            @project.parent,
-            @project,
-            row,
-          ),
-          data: {
-            turbo_stream: true,
-          },
-          class:
-            "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-        ) %>
-      <% end %>
-      <%= link_to(
-        t(:"projects.automated_workflow_executions.actions.delete_button"),
-        namespace_project_automated_workflow_execution_path(
+        <%= button_to t(:"projects.automated_workflow_executions.actions.edit_button"),
+        edit_namespace_project_automated_workflow_execution_path(
           @project.parent,
           @project,
           row,
         ),
         data: {
-          turbo_method: :delete,
-          turbo_confirm:
-            t(:"projects.automated_workflow_executions.actions.delete_confirm"),
+          turbo_stream: true,
         },
+        method: :delete,
         class:
-          "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer",
-      ) %>
+          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer" %>
+      <% end %>
+      <%= button_to t(:"projects.automated_workflow_executions.actions.delete_button"),
+      namespace_project_automated_workflow_execution_path(
+        @project.parent,
+        @project,
+        row,
+      ),
+      data: {
+        turbo_method: :delete,
+        turbo_confirm:
+          t(:"projects.automated_workflow_executions.actions.delete_confirm"),
+      },
+      method: :delete,
+      class:
+        "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer" %>
     <% end %>
   <% end %>
 <% else %>

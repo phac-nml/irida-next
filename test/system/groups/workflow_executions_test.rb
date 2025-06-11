@@ -297,7 +297,7 @@ module Groups
       assert_text workflow_execution.id
       assert_text I18n.t(:"workflow_executions.state.#{workflow_execution.state}", locale: user.locale)
 
-      click_link I18n.t(:'groups.workflow_executions.show.cancel_button', locale: user.locale)
+      click_button I18n.t(:'groups.workflow_executions.show.cancel_button', locale: user.locale)
 
       within('#turbo-confirm[open]') do
         click_button I18n.t(:'components.confirmation.confirm', locale: user.locale)
@@ -321,8 +321,8 @@ module Groups
       assert_selector 'h1', text: @workflow_execution_group_shared1.name
       assert_selector 'dt', text: dt_value
 
-      assert_selector 'a', text: I18n.t(:'groups.workflow_executions.show.edit_button', locale: user.locale), count: 1
-      click_link I18n.t(:'groups.workflow_executions.show.edit_button', locale: user.locale)
+      assert_selector 'button', text: I18n.t(:'groups.workflow_executions.show.edit_button', locale: user.locale), count: 1
+      click_button I18n.t(:'groups.workflow_executions.show.edit_button', locale: user.locale)
 
       within('dialog') do
         assert_selector 'h1', text: I18n.t('groups.workflow_executions.edit_dialog.title', locale: user.locale)
@@ -383,7 +383,7 @@ module Groups
 
       visit group_workflow_execution_path(@group, workflow_execution)
 
-      click_link I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
+      click_button I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
 
       within('#turbo-confirm[open]') do
         click_button I18n.t(:'components.confirmation.confirm', locale: user.locale)
@@ -402,7 +402,7 @@ module Groups
 
       visit group_workflow_execution_path(@group, workflow_execution)
 
-      click_link I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
+      click_button I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
 
       within('#turbo-confirm[open]') do
         click_button I18n.t(:'components.confirmation.confirm', locale: user.locale)
@@ -432,7 +432,7 @@ module Groups
 
       visit group_workflow_execution_path(@group, workflow_execution)
 
-      click_link I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
+      click_button I18n.t(:'groups.workflow_executions.show.remove_button', locale: user.locale)
 
       within('#turbo-confirm[open]') do
         click_button I18n.t(:'components.confirmation.confirm', locale: user.locale)

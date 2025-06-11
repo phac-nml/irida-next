@@ -100,8 +100,8 @@ module Projects
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       user_to_add = users(:jane_doe)
 
-      assert_selector 'a', text: I18n.t(:'projects.members.index.add'), count: 1
-      click_link I18n.t(:'projects.members.index.add')
+      assert_selector 'button', text: I18n.t(:'projects.members.index.add'), count: 1
+      click_button I18n.t(:'projects.members.index.add')
 
       within('dialog') do
         assert_selector 'h1', text: I18n.t(:'projects.members.new.title')
@@ -128,7 +128,7 @@ module Projects
       table_row = find(:table_row, { 'Username' => project_member.user.email })
 
       within table_row do
-        click_link I18n.t(:'projects.members.index.remove')
+        click_button I18n.t(:'projects.members.index.remove')
       end
 
       within('#turbo-confirm[open]') do
@@ -150,7 +150,7 @@ module Projects
       table_row = find(:table_row, { 'Username' => project_member.user.email })
 
       within table_row do
-        click_link I18n.t(:'projects.members.index.remove')
+        click_button I18n.t(:'projects.members.index.remove')
       end
 
       within('#turbo-confirm[open]') do
@@ -180,7 +180,7 @@ module Projects
       table_row = find(:table_row, { 'Username' => project_member.user.email })
 
       within table_row do
-        click_link I18n.t(:'projects.members.index.leave_project')
+        click_button I18n.t(:'projects.members.index.leave_project')
       end
 
       within('#turbo-confirm[open]') do
@@ -196,7 +196,7 @@ module Projects
       table_row = find(:table_row, { 'Username' => @user.email })
 
       within table_row do
-        click_link I18n.t(:'projects.members.index.leave_project')
+        click_button I18n.t(:'projects.members.index.leave_project')
       end
 
       within('#turbo-confirm[open]') do
@@ -235,7 +235,7 @@ module Projects
 
       click_link 'Members'
 
-      click_link I18n.t(:'projects.members.index.add')
+      click_button I18n.t(:'projects.members.index.add')
 
       within('dialog') do
         assert_selector 'h1', text: I18n.t(:'projects.members.new.title')
@@ -366,8 +366,8 @@ module Projects
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       user_to_add = namespace_bot.user
 
-      assert_selector 'a', text: I18n.t(:'projects.members.index.add'), count: 1
-      click_link I18n.t(:'projects.members.index.add')
+      assert_selector 'button', text: I18n.t(:'projects.members.index.add'), count: 1
+      click_button I18n.t(:'projects.members.index.add')
 
       within('dialog') do
         assert_selector 'h1', text: I18n.t(:'projects.members.new.title')
@@ -400,8 +400,8 @@ module Projects
       assert_selector 'h1', text: I18n.t(:'projects.members.index.title')
       user_to_add = namespace_bot.user
 
-      assert_selector 'a', text: I18n.t(:'projects.members.index.add'), count: 1
-      click_link I18n.t(:'projects.members.index.add')
+      assert_selector 'button', text: I18n.t(:'projects.members.index.add'), count: 1
+      click_button I18n.t(:'projects.members.index.add')
 
       within('dialog') do
         assert_selector 'h1', text: I18n.t(:'projects.members.new.title')

@@ -95,9 +95,9 @@ module Groups
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
-      assert_selector 'a', text: I18n.t(:'groups.members.index.add'), count: 1
+      assert_selector 'button', text: I18n.t(:'groups.members.index.add'), count: 1
 
-      click_link I18n.t(:'groups.members.index.add')
+      click_button I18n.t(:'groups.members.index.add')
 
       within('dialog') do
         assert_selector 'h1', text: I18n.t(:'groups.members.new.title')
@@ -123,7 +123,7 @@ module Groups
       table_row = find(:table_row, { 'Username' => group_member.user.email })
 
       within table_row do
-        click_link I18n.t(:'groups.members.index.remove')
+        click_button I18n.t(:'groups.members.index.remove')
       end
 
       within('#turbo-confirm[open]') do
@@ -141,7 +141,7 @@ module Groups
       table_row = find(:table_row, { 'Username' => @user.email })
 
       within table_row do
-        click_link I18n.t(:'groups.members.index.leave_group')
+        click_button I18n.t(:'groups.members.index.leave_group')
       end
 
       within('#turbo-confirm[open]') do
@@ -262,9 +262,9 @@ module Groups
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
-      assert_selector 'a', text: I18n.t(:'groups.members.index.add'), count: 1
+      assert_selector 'button', text: I18n.t(:'groups.members.index.add'), count: 1
 
-      click_link I18n.t(:'groups.members.index.add')
+      click_button I18n.t(:'groups.members.index.add')
 
       within('dialog') do
         assert_selector 'h1', text: I18n.t(:'groups.members.new.title')
@@ -293,9 +293,9 @@ module Groups
 
       assert_selector 'h1', text: I18n.t(:'groups.members.index.title')
 
-      assert_selector 'a', text: I18n.t(:'groups.members.index.add'), count: 1
+      assert_selector 'button', text: I18n.t(:'groups.members.index.add'), count: 1
 
-      click_link I18n.t(:'groups.members.index.add')
+      click_button I18n.t(:'groups.members.index.add')
 
       within('dialog') do
         assert_selector 'h1', text: I18n.t(:'groups.members.new.title')

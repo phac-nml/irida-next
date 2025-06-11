@@ -165,7 +165,7 @@ module Groups
 
       ### ACTIONS START ###
       within('table tbody tr:first-child td:last-child') do
-        click_link I18n.t(:'bots.index.table.actions.destroy')
+        click_button I18n.t(:'bots.index.table.actions.destroy')
       end
       assert_selector '#dialog'
       within('#dialog') do
@@ -198,7 +198,7 @@ module Groups
 
       ### ACTIONS START ###
       within "tr[id='#{dom_id(@group_bot)}']" do
-        click_link @group_bot_active_tokens.count.to_s
+        click_button @group_bot_active_tokens.count.to_s
       end
       ### ACTIONS END ###
 
@@ -250,7 +250,7 @@ module Groups
 
       ### ACTIONS START ###
       within "tr[id='#{dom_id(@group_bot)}']" do
-        click_link I18n.t('bots.index.table.actions.generate_new_token')
+        click_button I18n.t('bots.index.table.actions.generate_new_token')
       end
 
       # verify dialog rendered
@@ -296,7 +296,7 @@ module Groups
       within "tr[id='#{dom_id(@group_bot)}']" do
         assert_text initial_token_count.to_s
         # open bot PAT dialog
-        click_link initial_token_count.to_s
+        click_button initial_token_count.to_s
       end
 
       # verify bots token dialog rendered
@@ -309,7 +309,7 @@ module Groups
         end
         # revoke PAT
         within "tr[id='#{dom_id(token)}']" do
-          click_link I18n.t('personal_access_tokens.table.revoke')
+          click_button I18n.t('personal_access_tokens.table.revoke')
         end
       end
 
@@ -346,7 +346,7 @@ module Groups
       assert_no_selector '#access-token-section div'
       # create new PAT to render PAT panel
       within "tr[id='#{dom_id(@group_bot)}']" do
-        click_link I18n.t('bots.index.table.actions.generate_new_token')
+        click_button I18n.t('bots.index.table.actions.generate_new_token')
       end
 
       assert_selector '#dialog'
@@ -374,7 +374,7 @@ module Groups
       assert_selector '#bots-table table tbody tr', count: 20
       within "tr[id='#{dom_id(@group_bot)}']" do
         # click active tokens number
-        click_link @group_bot_active_tokens.count.to_s
+        click_button @group_bot_active_tokens.count.to_s
       end
 
       # bot's current PATs dialog
@@ -386,7 +386,7 @@ module Groups
         end
         # revoke a PAT
         within("table tbody tr[id='#{dom_id(@group_bot_active_tokens.first)}']") do
-          click_link I18n.t('personal_access_tokens.table.revoke')
+          click_button I18n.t('personal_access_tokens.table.revoke')
         end
       end
 
@@ -414,7 +414,7 @@ module Groups
       assert_no_selector '#access-token-section div'
       # create new PAT to render PAT panel
       within "tr[id='#{dom_id(@group_bot)}']" do
-        click_link I18n.t('bots.index.table.actions.generate_new_token')
+        click_button I18n.t('bots.index.table.actions.generate_new_token')
       end
 
       assert_selector '#dialog'
@@ -444,7 +444,7 @@ module Groups
       assert_selector "#bots-table table tbody tr[id='#{dom_id(@group_bot)}']"
       within("#bots-table table tbody tr[id='#{dom_id(@group_bot)}'] td:nth-child(6)") do
         # destroy bot
-        click_link I18n.t(:'bots.index.table.actions.destroy')
+        click_button I18n.t(:'bots.index.table.actions.destroy')
       end
 
       # confirm destroy bot

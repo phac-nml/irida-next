@@ -135,31 +135,32 @@
           </td>
           <td class="px-6 py-4 space-x-2">
             <% if @abilities[:unlink_group] && !namespace_group_link_source.key?(:inherited_namespace_path) %>
-              <%= link_to(
-                t(:"projects.group_links.index.unlink"),
-                select_group_link_path(namespace_group_link),
-                data: {
-                  turbo_method: :delete,
-                  turbo_confirm:
+              <%= button_to t(:"projects.group_links.index.unlink"),
+              select_group_link_path(namespace_group_link),
+              data: {
+                turbo_method: :delete,
+                turbo_confirm:
+                  (
                     t(
-                      :"projects.group_links.index.unlink_confirmation",
+                      :"groups.group_links.index.unlink_confirmation",
                       namespace_name: namespace_group_link.namespace.human_name,
                       group_name: namespace_group_link.group.human_name,
-                    ),
-                  turbo_stream: true,
-                },
-                aria: {
-                  label:
-                    (
-                      t(
-                        :"projects.group_links.index.actions.unlink_aria_label",
-                        member: namespace_group_link.group.name,
-                      )
-                    ),
-                },
-                class:
-                  "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-              ) %>
+                    )
+                  ),
+              },
+              method: :delete,
+              aria: {
+                label:
+                  (
+                    t(
+                      :"groups.group_links.index.actions.unlink_aria_label",
+                      member: namespace_group_link.group.name,
+                    )
+                  ),
+              },
+              class:
+                "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer" %>
+
             <% end %>
           </td>
         <% end %>

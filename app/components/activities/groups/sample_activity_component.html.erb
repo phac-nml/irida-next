@@ -11,15 +11,17 @@
         ),
     ) %>
     <span class="block">
-      <%= link_to(
-        t(:"components.activity.more_details"),
-        activity_path(@activity[:id], dialog_type: "group_import_samples"),
-        data: {
-          turbo_stream: true,
-        },
-        class:
-          "inline-flex items-center justify-center button button--state-default button--size-default dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600",
-      ) %>
+      <%= button_to t(:"components.activity.more_details"),
+      activity_path(@activity[:id]),
+      params: {
+        dialog_type: "group_import_samples",
+      },
+      data: {
+        turbo_stream: true,
+      },
+      method: :get,
+      class:
+        "inline-flex items-center justify-center button button--state-default button--size-default dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600" %>
     </span>
   <% elsif sample_destroy_action %>
     <%= t(

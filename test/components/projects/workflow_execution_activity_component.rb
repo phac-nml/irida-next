@@ -33,7 +33,7 @@ module Projects
         )
       )
 
-      assert_selector 'a', text: I18n.t(:'components.activity.more_details')
+      assert_selector 'button', text: I18n.t(:'components.activity.more_details')
     end
   end
 end

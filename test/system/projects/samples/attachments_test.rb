@@ -62,7 +62,7 @@ module Projects
 
       test 'user with role >= Maintainer should not be able to attach a duplicate file to a Sample' do
         visit namespace_project_sample_url(@namespace, @project, @sample1)
-        assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button')
+        assert_selector 'button', text: I18n.t('projects.samples.show.new_attachment_button')
         click_on I18n.t('projects.samples.show.upload_files')
 
         within('dialog[open]') do
@@ -85,7 +85,7 @@ module Projects
 
       test 'user with role >= Maintainer not be able to upload uncompressed files to a Sample' do
         visit namespace_project_sample_url(@namespace, @project, @sample1)
-        assert_selector 'a', text: I18n.t('projects.samples.show.new_attachment_button')
+        assert_selector 'button', text: I18n.t('projects.samples.show.new_attachment_button')
         click_on I18n.t('projects.samples.show.upload_files')
 
         within('dialog[open]') do
