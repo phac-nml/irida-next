@@ -300,10 +300,10 @@ module Activities
         assert_selector 'tr > td', text: project1.puid, count: 2
         assert_selector 'tr > td', text: sample1.name, count: 2
         assert_selector 'tr > td', text: sample1.puid
-        assert_selector 'tr > td', text: sample2.name, count: 2
-        assert_selector 'tr > td', text: sample2.puid
         assert_selector 'tr > td', text: project_namespace.project.name, count: 2
         assert_selector 'tr > td', text: project_namespace.puid, count: 2
+        assert_selector 'tr > td', text: sample2.name, count: 2
+        assert_selector 'tr > td', text: sample2.puid
       end
     end
   end

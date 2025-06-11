@@ -54,12 +54,12 @@ class BaseSampleCloneService < BaseSampleService
     activity = old_project_namespace.create_activity key: 'namespaces_project_namespace.samples.clone',
                                                      owner: current_user,
                                                      parameters:
-                                        {
-                                          target_project_puid: @new_project.puid,
-                                          target_project: @new_project.id,
-                                          cloned_samples_count: cloned_samples_count,
-                                          action: 'sample_clone'
-                                        }
+                                                     {
+                                                       target_project_puid: @new_project.puid,
+                                                       target_project: @new_project.id,
+                                                       cloned_samples_count: cloned_samples_count,
+                                                       action: 'sample_clone'
+                                                     }
 
     activity.create_activity_extended_detail(extended_detail_id: ext_details.id, activity_type: 'sample_clone')
 
