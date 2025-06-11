@@ -541,7 +541,6 @@ fr:
       navigation_aria_label: Navigation du fil d'Ariane
     clipboard:
       copied: Copié!
-      title: Copier dans le presse-papiers
     confirmation:
       cancel: Annuler
       confirm: Confirmer
@@ -598,6 +597,8 @@ fr:
         number_of_samples: Échantillons
       samples_title: Échantillons récemment mis à jour
       view_more: En savoir plus
+    puid:
+      title: 'Copy to clipboard value: %{puid}'
     token:
       copied: Copié!
       copy: Copier dans le presse-papiers

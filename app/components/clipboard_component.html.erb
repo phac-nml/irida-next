@@ -1,5 +1,5 @@
 <div class="flex items-center" data-controller="clipboard">
-  <span>
+  <span id="<%= button_name %>-content">
     <% if content.present? %>
       <%= content %>
     <% else %>
@@ -8,9 +8,12 @@
   </span>
   <button
     type="button"
-    title="<%= t("components.clipboard.title") %>"
+    id="<%= button_name %>"
+    name="<%= button_name %>"
+    title="<%= title %>"
     data-action="clipboard#copy"
-    aria-label="<%= t("components.clipboard.title") %>"
+    aria-label="<%= title %>"
+    aria-describedby="<%= button_name %>-content"
     data-clipboard-target="button"
     class="<%= button_classes %>"
     value="<%= value %>"
@@ -22,8 +25,10 @@
     ) %>
   </button>
   <div
+    id="<%= button_name %>-tooltip"
     data-clipboard-target="content"
     role="tooltip"
+    aria-live="polite"
     class="
       absolute z-10 invisible inline-block px-3 py-2 text-sm text-white
       transition-opacity bg-green-800 rounded-lg shadow-lg opacity-95 duration-300
