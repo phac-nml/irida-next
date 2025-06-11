@@ -6,8 +6,8 @@ class ChangeDestroySingleSampleActivities < ActiveRecord::Migration[8.0]
     activities = PublicActivity::Activity.where(key: 'namespaces_project_namespace.samples.destroy')
 
     activities.each do |activity|
-      sample = Sample.with_deleted.find_by(puid: sample_puid)
       sample_puid = activity.parameters[:sample_puid]
+      sample = Sample.with_deleted.find_by(puid: sample_puid)
       sample_name = sample.nil? ? 'deleted_sample' : sample.name
 
       ext_details = ExtendedDetail.create!(details: { samples_deleted_count: 1,

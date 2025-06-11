@@ -9,9 +9,11 @@ module Samples
 
     def new
       authorize! (@namespace.group_namespace? ? @namespace : @namespace.project), to: :destroy_sample?
+
+      @broadcast_target = "samples_destroy_#{SecureRandom.uuid}"
     end
 
-    def destroy
+    def destroy # rubocop:disable Metrics/AbcSize
       samples_to_delete_count = destroy_params['sample_ids'].count
 
       deleted_samples_count = destroy_service
@@ -21,7 +23,10 @@ module Samples
         flash[:error] = t('.no_deleted_samples')
       # Partial sample deletion
       elsif deleted_samples_count.positive? && deleted_samples_count != samples_to_delete_count
-        set_multi_status_destroy_multiple_message(deleted_samples_count, samples_to_delete_count)
+        flash[:success] = t('.partial_success',
+                            deleted: "#{deleted_samples_count}/#{samples_to_delete_count}")
+        flash[:error] = t('.partial_error',
+                          not_deleted: "#{samples_to_delete_count - deleted_samples_count}/#{samples_to_delete_count}")
       # All samples deleted successfully
       else
         flash[:success] = t('.success', count: deleted_samples_count)
