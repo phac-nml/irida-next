@@ -34,7 +34,7 @@ module Users
     end
 
     test 'admin can update users' do
-      user = User.all.last
+      user = User.last
       params = { email: 'newemail@email.com', first_name: 'new_first_name', last_name: 'new_last_name' }
 
       assert_changes lambda {
