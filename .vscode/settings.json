@@ -2,6 +2,9 @@
   "[css]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "[erb]": {
+    "editor.defaultFormatter": "elia.erb-formatter"
+  },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },

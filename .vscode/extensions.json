@@ -2,6 +2,7 @@
   "recommendations": [
     "shopify.ruby-lsp",
     "esbenp.prettier-vscode",
-    "streetsidesoftware.code-spell-checker"
+    "streetsidesoftware.code-spell-checker",
+    "elia.erb-formatter"
   ]
 }
