@@ -909,7 +909,8 @@ CREATE TABLE public.users (
     first_name character varying,
     last_name character varying,
     locale character varying DEFAULT 'en'::character varying,
-    user_type integer DEFAULT 0
+    user_type integer DEFAULT 0,
+    admin boolean DEFAULT false NOT NULL
 );
 
 
@@ -2045,6 +2046,7 @@ ALTER TABLE ONLY public.workflow_executions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250529160403'),
 ('20250424155356'),
 ('20250416191422'),
 ('20250414192058'),
