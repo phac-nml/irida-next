@@ -70,7 +70,7 @@
         </div>
       </div>
       <div class="flex flex-col">
-        <%= turbo_frame_tag "members", "data-turbo-temporary": true,
+        <%= turbo_frame_tag "members",
                             src:
                               (
                                 if @tab == "invited_groups"
@@ -104,7 +104,7 @@
             </tbody>
           </table>
         <% end %>
-        <%= turbo_frame_tag "members_pagination", "data-turbo-temporary": true %>
+        <%= turbo_frame_tag "members_pagination" %>
       </div>
     <% end %>
   <% end %>

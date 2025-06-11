@@ -30,8 +30,7 @@ module Groups
     def wrapper_arguments
       {
         tag: 'div',
-        classes: class_names('table-container relative overflow-x-auto'),
-        data: { turbo: :temporary }
+        classes: class_names('table-container relative overflow-x-auto')
       }
     end
 
