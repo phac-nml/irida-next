@@ -972,12 +972,15 @@ fr:
       title: Paramètres
     group_links:
       index:
+        actions:
+          unlink_aria_label: Dissocier l’espace de noms du groupe de boutons %{member}
         aria_labels:
           expires_at: Expiration de l’accès du groupe
           group_access_level: Niveau d’accès du groupe
         empty_state:
           description: Aucun groupe n'a reçu d'accès délégué à ce groupe
           title: Aucun groupe
+        unlink_confirmation: Êtes-vous sûr de vouloir dissocier le groupe %{namespace_name} du groupe %{group_name}?
       new:
         button:
           cancel: Annuler

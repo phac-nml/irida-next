@@ -40,6 +40,7 @@ module Viral
         {
           classes:
           class_names('px-3 py-3 bg-slate-100 dark:bg-slate-900 uppercase',
+                      @system_arguments[:classes],
                       @system_arguments[:sticky_key] && STICKY_CLASSES[@system_arguments[:sticky_key]][:header])
         }
       end
@@ -48,6 +49,7 @@ module Viral
         {
           classes:
           class_names(@system_arguments[:padding],
+                      @system_arguments[:classes],
                       @system_arguments[:sticky_key] && STICKY_CLASSES[@system_arguments[:sticky_key]][:body])
         }
       end

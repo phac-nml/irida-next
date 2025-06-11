@@ -29,8 +29,9 @@ module Activities
 
         visit namespace_project_activity_path(project_namespace.parent, project_namespace.project)
 
-        click_link(I18n.t('components.activity.more_details'),
-                   href: activity_path(activity_to_render[:id], dialog_type: 'samples_destroy').to_s)
+        within("form[action='#{activity_path(activity_to_render[:id])}']") do
+          click_button(I18n.t('components.activity.more_details'))
+        end
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.sample_destroy.title')
 
@@ -60,8 +61,9 @@ module Activities
 
         visit namespace_project_activity_path(project_namespace.parent, project_namespace.project)
 
-        click_link(I18n.t('components.activity.more_details'),
-                   href: activity_path(activity_to_render[:id], dialog_type: 'samples_transfer').to_s)
+        within("form[action='#{activity_path(activity_to_render[:id])}']") do
+          click_button(I18n.t('components.activity.more_details'))
+        end
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.sample_transfer.title')
 
@@ -92,8 +94,9 @@ module Activities
 
         visit namespace_project_activity_path(project_namespace.parent, project_namespace.project)
 
-        click_link(I18n.t('components.activity.more_details'),
-                   href: activity_path(activity_to_render[:id], dialog_type: 'samples_transfer').to_s)
+        within("form[action='#{activity_path(activity_to_render[:id])}']") do
+          click_button(I18n.t('components.activity.more_details'))
+        end
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.sample_transfer.title')
 
@@ -127,8 +130,9 @@ module Activities
         load_more_button = find('button', text: 'Load more')
         click_button 'Load more' if load_more_button
 
-        click_link(I18n.t('components.activity.more_details'),
-                   href: activity_path(activity_to_render[:id], dialog_type: 'project_import_samples').to_s)
+        within("form[action='#{activity_path(activity_to_render[:id])}']") do
+          click_button(I18n.t('components.activity.more_details'))
+        end
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.import_samples.title')
 

@@ -22,7 +22,7 @@ module Projects
         within('ol[data-test-selector="history-component"]') do
           assert_selector 'li', count: 1
 
-          assert_selector 'h2', text: I18n.t(:'components.history.link_text', version: 1)
+          assert_selector 'span', text: I18n.t(:'components.history.link_text', version: 1)
 
           assert_selector 'p', text: I18n.t(:'components.history.created_by', type: 'Sample', user: 'System')
         end

@@ -6,12 +6,13 @@
       <% if @allowed_to[:update_sample] %>
         <div class="flex justify-end items-center mb-4">
           <div class="flex items-center space-x-2">
-            <%= link_to t(".add_metadata"),
+            <%= button_to t(".add_metadata"),
             new_namespace_project_sample_metadata_path(
               @project.namespace.parent,
               @project,
               @sample,
             ),
+            method: :get,
             data: {
               turbo_frame: "sample_modal",
               turbo_stream: true,
@@ -88,44 +89,54 @@
               <td class="px-6 py-4"><%= metadata[:source] %></td>
               <td class="px-6 py-4"><%= local_time_ago(metadata[:last_updated]) %></td>
               <% if @allowed_to[:update_sample] %>
-                <td class="px-6 py-4 space-x-2">
+                <td class="flex justify-start px-6 py-4 space-x-2">
                   <% unless metadata[:source_type] == 'analysis' %>
-                    <%= link_to(
-                      t(:"projects.samples.show.metadata.actions.dropdown.update"),
-                      edit_namespace_project_sample_metadata_path(
-                        @project.namespace.parent,
-                        @project,
-                        @sample,
-                        key: metadata[:key],
-                        value: metadata[:value],
-                      ),
-                      class:
-                        "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer",
-                    ) %>
-                  <% end %>
-                  <%= link_to(
-                    t(:"projects.samples.show.metadata.actions.dropdown.delete"),
-                    namespace_project_sample_metadata_path(
+                    <%= button_to t(:"projects.samples.show.metadata.actions.dropdown.update"),
+                    edit_namespace_project_sample_metadata_path(
                       @project.namespace.parent,
                       @project,
                       @sample,
-                      sample: {
-                        metadata: {
-                          metadata[:key] => "",
-                        },
-                      },
                     ),
-                    data: {
-                      turbo_method: :delete,
-                      turbo_confirm:
-                        t(
-                          :"projects.samples.show.metadata.actions.delete_confirm",
-                          deleted_key: metadata[:key],
-                        ),
+                    params: {
+                      key: metadata[:key],
+                      value: metadata[:value],
                     },
+                    method: :get,
                     class:
-                      "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer",
-                  ) %>
+                      "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer" %>
+                  <% end %>
+                  <%= button_to t(:"projects.samples.show.metadata.actions.dropdown.delete"),
+                  namespace_project_sample_metadata_path(
+                    @project.namespace.parent,
+                    @project,
+                    @sample,
+                  ),
+                  params: {
+                    sample: {
+                      metadata: {
+                        metadata[:key] => "",
+                      },
+                    },
+                  },
+                  data: {
+                    turbo_method: :delete,
+                    turbo_confirm:
+                      t(
+                        :"projects.samples.show.metadata.actions.delete_confirm",
+                        deleted_key: metadata[:key],
+                      ),
+                  },
+                  method: :delete,
+                  aria: {
+                    label:
+                      t(
+                        :"projects.samples.show.metadata.actions.delete_confirm",
+                        deleted_key: metadata[:key],
+                      ),
+                  },
+                  class:
+                    "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer" %>
+
                 </td>
               <% end %>
             </tr>

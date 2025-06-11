@@ -1,7 +1,7 @@
 <%= render Viral::PageHeaderComponent.new(title: t('.title'), subtitle: t('.subtitle')) do |component| %>
   <%= component.with_icon(name: :rocket_launch, classes: "h-14 w-14 text-primary-700") %>
   <%= component.with_buttons do %>
-    <%= link_to t(".add_new_automated_workflow_execution"),
+    <%= button_to t(".add_new_automated_workflow_execution"),
     new_namespace_project_automated_workflow_execution_path(
       @project.parent,
       @project,
@@ -10,6 +10,7 @@
       turbo_frame: "automated_workflow_execution_modal",
       turbo_stream: true,
     },
+    method: :get,
     class:
       "inline-flex items-center justify-center text-sm border cursor-pointer sm:w-auto focus:z-10 text-white bg-primary-700 hover:bg-primary-800 rounded-lg px-5 py-3 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 dark:border-primary-900 dark:hover:bg-primary-700" %>
   <% end %>

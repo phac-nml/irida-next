@@ -32,7 +32,7 @@ module Groups
       visit group_attachments_path(@namespace)
       assert_selector '#attachments-table table tbody tr', count: 2
 
-      assert_selector 'a', text: I18n.t('attachments.dialogs.new_attachment_component.upload_files')
+      assert_selector 'button', text: I18n.t('attachments.dialogs.new_attachment_component.upload_files')
       click_on I18n.t('attachments.dialogs.new_attachment_component.upload_files')
 
       within('dialog') do
