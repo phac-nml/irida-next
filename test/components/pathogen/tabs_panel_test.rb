@@ -121,25 +121,24 @@ module Pathogen
     end
 
     test 'validates required parameters' do
-      assert_raises ArgumentError do
-        Pathogen::TabsPanel.new
-      end
-
-      assert_raises ArgumentError do
-        Pathogen::TabsPanel.new(id: 'test_panel').tap do |nav|
-          nav.with_tab(text: 'Home', href: '/home')
-        end
-      end
-
+      # Test that tab requires text
       assert_raises ArgumentError do
         Pathogen::TabsPanel.new(id: 'test_panel').tap do |nav|
           nav.with_tab(id: 'nav-1', href: '/home')
         end
       end
 
+      # Test that tab requires href
       assert_raises ArgumentError do
         Pathogen::TabsPanel.new(id: 'test_panel').tap do |nav|
           nav.with_tab(id: 'nav-1', text: 'Home')
+        end
+      end
+
+      # Test that tab requires id
+      assert_raises ArgumentError do
+        Pathogen::TabsPanel.new(id: 'test_panel').tap do |nav|
+          nav.with_tab(text: 'Home', href: '/home')
         end
       end
     end
@@ -170,6 +169,14 @@ module Pathogen
 
       assert_selector 'nav[class*="w-full"]'
       assert_selector 'ul[class*="w-full"]'
+    end
+
+    test 'generates unique id when not provided' do
+      tabs_component = Pathogen::TabsPanel.new
+      render_inline(tabs_component)
+
+      assert_selector 'nav[id^="tabs-panel-"]'
+      assert_selector 'ul[id^="tabs-panel-"][id$="-list"]'
     end
   end
 end

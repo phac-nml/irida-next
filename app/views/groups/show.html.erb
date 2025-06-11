@@ -79,7 +79,7 @@
   </section>
 
   <section class="order-2 lg:order-1 flex-grow">
-    <%= render Pathogen::TabsPanel.new(id: "group-details", label: t(:'.tabs.label'), selected_tab: @tab) do |tabs| %>
+    <%= render Pathogen::TabsPanel.new(label: t(:'.tabs.label'), selected_tab: @tab) do |tabs| %>
       <% tabs.with_tab(
         id: "subgroups_and_projects_tab",
         href: group_path(@group),

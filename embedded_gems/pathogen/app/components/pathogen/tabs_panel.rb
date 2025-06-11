@@ -41,34 +41,24 @@ module Pathogen
     renders_one :right_content
 
     # 🚀 Initializes a new TabsPanel component.
-    # @param id [String] A unique identifier for the tabs panel.
     # @param label [String] An accessible label for the navigation (aria-label).
     # @param body_arguments [Hash] HTML attributes for the list container (<ul>).
     # @param system_arguments [Hash] HTML attributes for the main container (<nav>).
-    # @raise [ArgumentError] If the `id` parameter is missing.
-    def initialize(id:, label: '', body_arguments: {}, **system_arguments)
-      @id = id
+    def initialize(label: '', body_arguments: {}, **system_arguments)
       @system_arguments = system_arguments
       @body_arguments = body_arguments
       @label = label
 
-      validate_parameters!
       setup_container_attributes
       setup_list_attributes
     end
 
     private
 
-    # 🔍 Validates that essential parameters are provided.
-    # @raise [ArgumentError] If `id` is blank.
-    def validate_parameters!
-      raise ArgumentError, 'id is required' if @id.blank?
-    end
-
     # 🏗️ Configures HTML attributes for the main <nav> container.
     def setup_container_attributes
       @system_arguments[:tag] = TAG_DEFAULT
-      @system_arguments[:id] = @id
+      @system_arguments[:id] ||= generate_unique_id
       @system_arguments[:'aria-label'] = @label if @label.present?
       @system_arguments[:class] = class_names(
         SYSTEM_DEFAULT_CLASSES,
@@ -84,11 +74,17 @@ module Pathogen
       custom_classes_provided = @body_arguments[:classes].present?
       @body_arguments[:classes] = custom_classes_provided ? @body_arguments[:classes] : BODY_DEFAULT_CLASSES
 
-      @body_arguments[:id] = "#{@id}-list"
+      @body_arguments[:id] = "#{@system_arguments[:id]}-list"
       # Merge data attributes, preserving existing ones.
       @body_arguments[:data] = {
-        tabs_list_id_value: @id
+        tabs_list_id_value: @system_arguments[:id]
       }.merge(@body_arguments[:data] || {})
+    end
+
+    # 🔧 Generates a unique ID for the tabs panel if not provided.
+    # @return [String] A unique identifier for the tabs panel.
+    def generate_unique_id
+      "tabs-panel-#{SecureRandom.hex(4)}"
     end
   end
 end
