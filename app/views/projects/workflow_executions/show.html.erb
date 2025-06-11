@@ -94,8 +94,9 @@
   <% end %>
 <% end %>
 
-<%= render Pathogen::TabsPanel.new(id: "workflow-execution-tabs", label: t(:".tabs.label")) do |tabs| %>
+<%= render Pathogen::TabsPanel.new(label: t(:".tabs.label")) do |tabs| %>
   <% tabs.with_tab(
+    id: "summary-tab",
     text: t(:"workflow_executions.show.tabs.summary"),
     href:
       namespace_project_workflow_execution_path(
@@ -106,7 +107,6 @@
       ),
     selected: @tab == "summary" || @tab == nil,
     controls: "workflow-content",
-    tablist_id: "workflow-execution-tabs",
   ) %>
 
   <% tabs.with_tab(
@@ -121,7 +121,6 @@
       ),
     selected: @tab == "params",
     controls: "workflow-content",
-    tablist_id: "workflow-execution-tabs",
   ) %>
 
   <% tabs.with_tab(
