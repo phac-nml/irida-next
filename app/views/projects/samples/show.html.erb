@@ -77,7 +77,7 @@
       <% end %>
     </ul>
   </nav>
-  <section class="flex flex-col min-h-[200px]" data-turbo-temporary>
+  <section class="flex flex-col min-h-[200px]">
     <%= turbo_frame_tag "table-listing", refresh: "morph", src: namespace_project_sample_path(format: :turbo_stream, tab: @tab || 'files', **request.query_parameters) do %>
       <% if @tab == "history" %>
         <%= render partial: "shared/loading/history" %>

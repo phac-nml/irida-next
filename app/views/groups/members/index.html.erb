@@ -36,15 +36,13 @@
   <% end %>
 
   <% if @tab == "invited_groups" %>
-    <%= turbo_frame_tag "members", "data-turbo-temporary": true,
-                            src: group_group_links_path(format: :turbo_stream) do %>
+    <%= turbo_frame_tag "members", src: group_group_links_path(format: :turbo_stream) do %>
       <%= render partial: "shared/loading/table" %>
     <% end %>
   <% else %>
-    <%= turbo_frame_tag "members", "data-turbo-temporary": true,
-                        src: group_members_path(format: :turbo_stream) do %>
+    <%= turbo_frame_tag "members", src: group_members_path(format: :turbo_stream) do %>
       <%= render partial: "shared/loading/table" %>
     <% end %>
   <% end %>
-  <%= turbo_frame_tag "members_pagination", "data-turbo-temporary": true %>
+  <%= turbo_frame_tag "members_pagination" %>
 </div>

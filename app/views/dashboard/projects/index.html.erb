@@ -8,7 +8,10 @@
 
 <div class="bg-white dark:bg-slate-800">
   <div
-    class="flex text-sm font-medium text-center border-b  text-slate-500 border-slate-200 dark:text-slate-400 dark:border-slate-700"
+    class="
+      flex text-sm font-medium text-center border-b text-slate-500 border-slate-200
+      dark:text-slate-400 dark:border-slate-700
+    "
   >
     <ul class="flex flex-1">
       <li class="mr-2">
@@ -45,7 +48,7 @@
     <%= turbo_frame_tag "project_sort_dropdown" %>
 
   </div>
-  <div class="flex flex-col" data-turbo-temporary>
+  <div class="flex flex-col">
     <% if @has_projects %>
       <%= turbo_frame_tag "projects_list", src: dashboard_projects_url(format: :turbo_stream, **request.query_parameters) do %>
         <%= render partial: "shared/loading/table" %>

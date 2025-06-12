@@ -23,8 +23,7 @@ module Members
     def wrapper_arguments
       {
         tag: 'div',
-        classes: class_names('relative overflow-x-auto'),
-        data: { turbo: :temporary }
+        classes: class_names('relative overflow-x-auto')
       }
     end
 
