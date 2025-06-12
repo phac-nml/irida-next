@@ -29,14 +29,62 @@
         selected: params[:personal],
       ) %>
       <% tabs_panel.with_right_content do %>
-        <%= turbo_frame_tag "project_sort_dropdown" %>
+        <div class="inline-flex space-x-2">
+          <%= render SearchComponent.new(query: @q, url: dashboard_projects_url(**request.query_parameters), search_attribute: :namespace_name_or_namespace_puid_cont, placeholder: t(".search.placeholder")) do %>
+            <% if params[:personal] == 'true' %>
+              <input type="hidden" name="personal" value="true">
+            <% end %>
+          <% end %>
+          <%= render Ransack::SortDropdownComponent.new(
+            @q,
+            "projects",
+            [
+              { name: "updated_at", dir: "desc" },
+              { name: "updated_at", dir: "asc" },
+              { name: "namespace_name", dir: "asc" },
+              { name: "namespace_name", dir: "desc" },
+              { name: "created_at", dir: "desc" },
+              { name: "created_at", dir: "asc" },
+            ],
+          ) %>
+        </div>
       <% end %>
       <div class="flex flex-col">
         <% if @has_projects %>
-          <%= turbo_frame_tag "projects_list", src: dashboard_projects_url(format: :turbo_stream, **request.query_parameters) do %>
-            <%= render partial: "shared/loading/table" %>
-          <% end %>
-          <%= turbo_frame_tag "projects_pagination" %>
+          <table class="min-w-full table-fixed dark:divide-slate-600">
+            <tbody
+              class="
+                bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
+              "
+            >
+              <%= render partial: "shared/project/row", collection: @projects, as: :project %>
+            </tbody>
+          </table>
+          <%= render PaginationComponent.new(
+            info: pagy_info(@pagy),
+            prev_url:
+              (
+                if @pagy.prev
+                  pagy_url_for(@pagy, @pagy.prev).gsub(
+                    "projects.turbo_stream",
+                    "projects",
+                  )
+                else
+                  nil
+                end
+              ),
+            next_url:
+              (
+                if @pagy.next
+                  pagy_url_for(@pagy, @pagy.next).gsub(
+                    "projects.turbo_stream",
+                    "projects",
+                  )
+                else
+                  nil
+                end
+              ),
+          ) %>
         <% else %>
           <%= render Viral::EmptyStateComponent.new(
             icon_name: "rectangle_stack",

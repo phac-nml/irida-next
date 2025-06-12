@@ -12,8 +12,6 @@ module Dashboard
       respond_to do |format|
         format.html do
           @has_projects = @q.result.count.positive?
-        end
-        format.turbo_stream do
           @pagy, @projects = pagy(@q.result)
         end
       end
