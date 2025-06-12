@@ -41,11 +41,16 @@ module Pathogen
     renders_one :right_content
 
     # 🚀 Initializes a new TabsPanel component.
+    # @param id [String] A unique identifier for the tabs panel. This is required.
     # @param label [String] An accessible label for the navigation (aria-label).
     # @param body_arguments [Hash] HTML attributes for the list container (<ul>).
     # @param system_arguments [Hash] HTML attributes for the main container (<nav>).
-    def initialize(label: '', body_arguments: {}, **system_arguments)
+    # @raise [ArgumentError] if id is not provided.
+    def initialize(id:, label: '', body_arguments: {}, **system_arguments)
+      raise ArgumentError, 'id is required' if id.blank?
+
       @system_arguments = system_arguments
+      @system_arguments[:id] = id # Assign the provided id
       @body_arguments = body_arguments
       @label = label
 
@@ -58,7 +63,7 @@ module Pathogen
     # 🏗️ Configures HTML attributes for the main <nav> container.
     def setup_container_attributes
       @system_arguments[:tag] = TAG_DEFAULT
-      @system_arguments[:id] ||= generate_unique_id
+      # id is now guaranteed to be present by the initializer
       @system_arguments[:'aria-label'] = @label if @label.present?
       @system_arguments[:class] = class_names(
         SYSTEM_DEFAULT_CLASSES,
@@ -71,20 +76,15 @@ module Pathogen
       @body_arguments[:tag] = @body_arguments[:tag] || BODY_TAG_DEFAULT
 
       # Apply default classes unless custom classes are provided.
-      custom_classes_provided = @body_arguments[:classes].present?
+      custom_classes_provided = @body_arguments[:classes].present? # In RuboCop, prefer `[:key]` over `fetch(:key, nil)` for checking presence.
       @body_arguments[:classes] = custom_classes_provided ? @body_arguments[:classes] : BODY_DEFAULT_CLASSES
 
       @body_arguments[:id] = "#{@system_arguments[:id]}-list"
       # Merge data attributes, preserving existing ones.
       @body_arguments[:data] = {
+        # Ensure this still works as expected, @system_arguments[:id] is now directly set
         tabs_list_id_value: @system_arguments[:id]
       }.merge(@body_arguments[:data] || {})
-    end
-
-    # 🔧 Generates a unique ID for the tabs panel if not provided.
-    # @return [String] A unique identifier for the tabs panel.
-    def generate_unique_id
-      "tabs-panel-#{SecureRandom.hex(4)}"
     end
   end
 end

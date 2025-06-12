@@ -15,7 +15,7 @@
       dark:text-slate-400 dark:border-slate-700
     "
   >
-    <%= render Pathogen::TabsPanel.new do |tabs_panel| %>
+    <%= render Pathogen::TabsPanel.new(id: "dashboard-projects-tabs") do |tabs_panel| %>
       <% tabs_panel.with_tab(
         id: "all",
         text: t(".all"),

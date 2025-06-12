@@ -170,13 +170,5 @@ module Pathogen
       assert_selector 'nav[class*="w-full"]'
       assert_selector 'ul[class*="w-full"]'
     end
-
-    test 'generates unique id when not provided' do
-      tabs_component = Pathogen::TabsPanel.new
-      render_inline(tabs_component)
-
-      assert_selector 'nav[id^="tabs-panel-"]'
-      assert_selector 'ul[id^="tabs-panel-"][id$="-list"]'
-    end
   end
 end
