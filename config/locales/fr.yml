@@ -914,7 +914,9 @@ fr:
       advanced:
         delete:
           confirm:
-            points_html: '["To prevent accidental actions we ask you to confirm your intention.", "Please type <kbd>%{group}</kbd> to proceed or close this dialog to cancel."]'
+            points_html:
+            - Pour éviter les actions accidentelles, nous vous demandons de confirmer votre intention.
+            - Veuillez taper <kbd>%{group}</kbd> pour continuer ou fermer cette boîte de dialogue pour annuler.
             warning:
               post_html: After you delete a group, you <strong>cannot</strong> restore it or its components.
               pre_html: 'You are about to delete the group <strong>%{group_name}</strong>. This action will also delete:'
