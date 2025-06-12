@@ -604,7 +604,8 @@ fr:
         number_of_members: Membres
         number_of_samples: Échantillons
       samples_title: Échantillons récemment mis à jour
-      view_more: En savoir plus
+      view_more_activity: View more activity
+      view_more_samples: View more samples
     puid:
       title: 'Copy to clipboard value: %{puid}'
     token:

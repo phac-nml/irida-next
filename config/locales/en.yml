@@ -604,7 +604,8 @@ en:
         number_of_members: Members
         number_of_samples: Samples
       samples_title: Samples Recently Updated
-      view_more: View more
+      view_more_activity: View more activity
+      view_more_samples: View more samples
     puid:
       title: 'Copy to clipboard value: %{puid}'
     token:
