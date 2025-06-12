@@ -9,10 +9,7 @@ export default class extends Controller {
   #focusTrap = null;
 
   initialize() {
-    console.log("initialize");
-
-    // const container = document.getElementById("dialog");
-    const container = this.dialogTarget;
+    const container = document.getElementById("dialog--contents");
 
     this.#focusTrap = createFocusTrap(container, {
       onActivate: () => container.classList.add("is-active"),

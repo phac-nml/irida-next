@@ -9,31 +9,33 @@
   <% end %>
   <div style="height: 0px">
     <%= render Viral::BaseComponent.new(tag: :dialog, id: id, classes: [dialog_size], **system_arguments) do %>
-      <% if header.present? %>
-        <%= header %>
-      <% end %>
+      <div id="dialog--contents">
+        <% if header.present? %>
+          <%= header %>
+        <% end %>
 
-      <div class="dialog--section border-t border-slate-200 dark:border-slate-600">
-        <%= content %>
-      </div>
-
-      <% if render_footer? %>
-        <div
-          class="
-            flex items-center p-5 space-x-2 border-t rounded-b-lg border-slate-200
-            dark:border-slate-600
-          "
-        >
-          <% if primary_action? %>
-            <%= primary_action %>
-          <% end %>
-          <% if secondary_actions? %>
-            <% secondary_actions.each do |action| %>
-              <%= action %>
-            <% end %>
-          <% end %>
+        <div class="dialog--section border-t border-slate-200 dark:border-slate-600">
+          <%= content %>
         </div>
-      <% end %>
+
+        <% if render_footer? %>
+          <div
+            class="
+              flex items-center p-5 space-x-2 border-t rounded-b-lg border-slate-200
+              dark:border-slate-600
+            "
+          >
+            <% if primary_action? %>
+              <%= primary_action %>
+            <% end %>
+            <% if secondary_actions? %>
+              <% secondary_actions.each do |action| %>
+                <%= action %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
     <% end %>
   </div>
 <% end %>
