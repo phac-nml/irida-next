@@ -78,14 +78,25 @@
     </ul>
   </nav>
   <section class="flex flex-col min-h-[200px]">
-    <%= turbo_frame_tag "table-listing", refresh: "morph", src: namespace_project_sample_path(format: :turbo_stream, tab: @tab || 'files', **request.query_parameters) do %>
-      <% if @tab == "history" %>
-        <%= render partial: "shared/loading/history" %>
-      <% elsif @tab == "params" %>
-        <%= render partial: "shared/loading/params" %>
-      <% else %>
-        <%= render partial: "shared/loading/table" %>
-      <% end %>
+    <% if @tab == "history" %>
+      <div class="grid gap-4 px-4 py-8">
+        <%= render HistoryComponent.new(
+          data: @log_data.reverse,
+          type: "Sample",
+          url:
+            namespace_project_sample_view_history_version_path(sample_id: @sample.id),
+        ) %>
+      </div>
+    <% elsif @tab == "metadata" %>
+      <%= render partial: "projects/samples/metadata/table",
+      locals: {
+        sample_metadata: @sample_metadata,
+      } %>
+    <% else %>
+      <%= render partial: "projects/samples/attachments/table",
+      locals: {
+        attachments: @sample_attachments,
+      } %>
     <% end %>
   </section>
 </div>
