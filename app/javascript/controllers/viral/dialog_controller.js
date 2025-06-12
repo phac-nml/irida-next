@@ -3,17 +3,14 @@ import { createFocusTrap } from "focus-trap";
 
 export default class extends Controller {
   static targets = ["dialog"];
-
   static values = { open: Boolean };
-
   #focusTrap = null;
 
   initialize() {
-    const container = document.getElementById("dialog--contents");
-
+    const container = this.dialogTarget.querySelector(".dialog--contents");
     this.#focusTrap = createFocusTrap(container, {
-      onActivate: () => container.classList.add("is-active"),
-      onDeactivate: () => container.classList.remove("is-active"),
+      onActivate: () => container.classList.add("focus-trap"),
+      onDeactivate: () => container.classList.remove("focus-trap"),
     });
   }
 

@@ -9,7 +9,7 @@
   <% end %>
   <div style="height: 0px">
     <%= render Viral::BaseComponent.new(tag: :dialog, id: id, classes: [dialog_size], **system_arguments) do %>
-      <div id="dialog--contents">
+      <div class="dialog--contents">
         <% if header.present? %>
           <%= header %>
         <% end %>
