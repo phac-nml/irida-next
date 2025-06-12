@@ -9,7 +9,7 @@ module Viral
       render_inline(Viral::FlashComponent.new(type: :success, data: message))
 
       assert_text message
-      assert_selector "div[role='status'][aria-live='polite'][data-viral--flash-type-value='success']" # Updated ARIA
+      assert_selector "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='success']" # Updated ARIA
       assert_selector 'div.text-green-500.bg-green-100 svg'
       assert_selector 'span.sr-only', text: I18n.t('components.flash.success_icon')
       assert_selector "button[aria-label='#{I18n.t('general.screen_reader.close')}']"
@@ -31,7 +31,7 @@ module Viral
       render_inline(Viral::FlashComponent.new(type: :warning, data: message))
 
       assert_text message
-      assert_selector "div[role='status'][aria-live='polite'][data-viral--flash-type-value='warning']" # Updated ARIA
+      assert_selector "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='warning']" # Updated ARIA
       assert_selector 'div.text-orange-500.bg-orange-100 svg'
       assert_selector 'span.sr-only', text: I18n.t('components.flash.warning_icon')
       assert_selector "button[aria-label='#{I18n.t('general.screen_reader.close')}']"
@@ -42,7 +42,7 @@ module Viral
       render_inline(Viral::FlashComponent.new(type: :info, data: message))
 
       assert_text message
-      assert_selector "div[role='status'][aria-live='polite'][data-viral--flash-type-value='info']" # Updated ARIA
+      assert_selector "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='info']" # Updated ARIA
       assert_selector 'div.text-blue-500.bg-blue-100 svg'
       assert_selector 'span.sr-only', text: I18n.t('components.flash.information_icon')
       assert_selector "button[aria-label='#{I18n.t('general.screen_reader.close')}']"
@@ -53,7 +53,7 @@ module Viral
       render_inline(Viral::FlashComponent.new(type: :notice, data: message))
 
       assert_text message
-      assert_selector "div[role='status'][aria-live='polite'][data-viral--flash-type-value='info']" # Updated ARIA
+      assert_selector "div[role='alert'][aria-live='assertive'][data-viral--flash-type-value='info']" # Updated ARIA
       assert_selector 'div.text-blue-500.bg-blue-100 svg'
       assert_selector 'span.sr-only', text: I18n.t('components.flash.information_icon')
       assert_selector "button[aria-label='#{I18n.t('general.screen_reader.close')}']"

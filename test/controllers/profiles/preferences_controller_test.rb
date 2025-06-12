@@ -24,10 +24,26 @@ module Profiles
       assert_redirected_to profile_preferences_path
     end
 
-    test 'shouldn\'t update the users locale with an ivalid locale' do
+    test 'should update the users locale with a valid locale via turbo_stream' do
+      sign_in users(:john_doe)
+
+      patch profile_preferences_path(format: :turbo_stream),
+            params: { user: { locale: 'fr' } }
+      assert_response :ok
+    end
+
+    test 'shouldn\'t update the users locale with an invalid locale' do
       sign_in users(:john_doe)
 
       patch profile_preferences_path,
+            params: { user: { locale: 'not_a_locale' } }
+      assert_response :unprocessable_entity
+    end
+
+    test 'shouldn\'t update the users locale with an invalid locale via turbo_stream' do
+      sign_in users(:john_doe)
+
+      patch profile_preferences_path(format: :turbo_stream),
             params: { user: { locale: 'not_a_locale' } }
       assert_response :unprocessable_entity
     end
