@@ -1,5 +1,5 @@
 <div id="sample-attachments">
-  <div class="relative overflow-x-auto table-wrapper" data-turbo-temporary>
+  <div class="relative overflow-x-auto table-wrapper">
     <% if @allowed_to[:update_sample] && @has_attachments %>
       <div class="flex items-center mb-4">
         <% if Flipper.enabled?(:sample_attachments_searching) %>

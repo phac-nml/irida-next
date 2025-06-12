@@ -1,5 +1,3 @@
 <%= render Viral::PageHeaderComponent.new(title: t("projects.activity.title")) %>
 
-<div data-turbo-temporary>
-  <%= render ActivityComponent.new(activities: @activities, pagy: @pagy) %>
-</div>
+<%= render ActivityComponent.new(activities: @activities, pagy: @pagy) %>
