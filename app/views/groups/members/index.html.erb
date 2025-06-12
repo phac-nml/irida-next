@@ -46,14 +46,15 @@
     ) %>
 
     <% if @tab == "invited_groups" %>
-      <%= turbo_frame_tag "members", src: group_group_links_path(format: :turbo_stream) do %>
+      <%= turbo_frame_tag "invited_groups", src: group_group_links_path(format: :turbo_stream) do %>
         <%= render partial: "shared/loading/table" %>
       <% end %>
+      <%= turbo_frame_tag "invited_groups_pagination" %>
     <% else %>
       <%= turbo_frame_tag "members", src: group_members_path(format: :turbo_stream) do %>
         <%= render partial: "shared/loading/table" %>
       <% end %>
+      <%= turbo_frame_tag "members_pagination" %>
     <% end %>
-    <%= turbo_frame_tag "members_pagination" %>
   <% end %>
 </div>
