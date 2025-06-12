@@ -1473,7 +1473,9 @@ fr:
       advanced:
         destroy:
           confirm:
-            points_html: '["To prevent accidental actions we ask you to confirm your intention.", "Please type <kbd>%{project}</kbd> to proceed or close this dialog to cancel"]'
+            points_html:
+            - Pour éviter les actions accidentelles, nous vous demandons de confirmer votre intention.
+            - Veuillez taper <kbd>%{project}</kbd> pour continuer ou fermer cette boîte de dialogue pour annuler.
             warning:
               automated_workflows_count: "%{count} automated workflow execution(s)"
               post_html: After you delete a project, you <strong>cannot</strong> restore it or its components.
