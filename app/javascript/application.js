@@ -87,6 +87,7 @@ LocalTime.start();
 ActiveStorage.start();
 
 document.addEventListener("turbo:morph", () => {
+  LocalTime.config.locale = document.documentElement.lang;
   LocalTime.run();
 });
 
