@@ -3,7 +3,7 @@
 module Activities
   module Dialogs
     # Component for rendering extended details table
-    class ActivityTableListingDialogComponent < Component
+    class ActivityTableListingDialogComponent < Component # rubocop:disable Metrics/ClassLength
       attr_accessor :activity, :activity_owner, :activity_type
 
       def initialize(activity: nil, activity_owner: nil)
