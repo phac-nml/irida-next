@@ -64,8 +64,9 @@
       <%= turbo_frame_tag "members", src: namespace_project_members_path(
                                     format: :turbo_stream
                                   ) do %>
-        <%= turbo_frame_tag "members_pagination" %>
+        <%= render partial: "shared/loading/table" %>
       <% end %>
+      <%= turbo_frame_tag "members_pagination" %>
     <% end %>
   <% end %>
 </div>
