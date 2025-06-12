@@ -71,8 +71,9 @@
             <% if @allowed_to[:destroy_sample] %>
               <% dropdown.with_item(
                 label: t("shared.samples.actions_dropdown.delete_samples"),
-                url: new_namespace_project_samples_deletion_path,
+                url: new_samples_deletions_path,
                 params: {
+                  namespace_id: @project.namespace.id,
                   deletion_type: "multiple",
                 },
                 disableable: true,

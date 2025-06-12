@@ -197,17 +197,16 @@ module Projects
     end
 
     test 'User with role < Maintainer does not see new sample button' do
-      user = users(:ryan_doe)
+      user = users(:michelle_doe)
+      project = projects(:project24)
       login_as user
-      visit namespace_project_samples_url(@namespace, @project)
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: user.locale))
+      visit namespace_project_samples_url(project.parent, project)
 
+      click_button I18n.t('shared.samples.actions_dropdown.label')
       assert_no_selector 'button', text: I18n.t('shared.samples.actions_dropdown.new_sample')
     end
 
-    test 'User with role >= Maintainer sees delete samples button' do
+    test 'User with role == Owner sees delete samples button' do
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
       assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
@@ -217,15 +216,14 @@ module Projects
       assert_selector 'button', text: I18n.t('shared.samples.actions_dropdown.delete_samples')
     end
 
-    test 'User with role < Maintainer does not see delete samples button' do
-      user = users(:ryan_doe)
+    test 'User with role < Owner does not see delete samples button' do
+      user = users(:michelle_doe)
+      project = projects(:project24)
       login_as user
-      visit namespace_project_samples_url(@namespace, @project)
-      # verify samples table has loaded to prevent flakes
-      assert_text strip_tags(I18n.t(:'viral.pagy.limit_component.summary', from: 1, to: 3, count: 3,
-                                                                           locale: user.locale))
+      visit namespace_project_samples_url(project.parent, project)
 
-      assert_no_selector 'a', text: I18n.t('shared.samples.actions_dropdown.delete_samples')
+      click_button I18n.t('shared.samples.actions_dropdown.label')
+      assert_no_selector 'button', text: I18n.t('shared.samples.actions_dropdown.delete_samples')
     end
 
     test 'cannot access project samples' do
@@ -337,14 +335,13 @@ module Projects
       click_link I18n.t(:'projects.samples.show.remove_button')
 
       within('dialog[open]') do
-        click_button I18n.t(:'projects.samples.deletions.new_deletion_dialog.submit_button')
+        click_button I18n.t('samples.deletions.destroy_single_confirmation_dialog.submit_button')
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
       # success flash msg
-      assert_text I18n.t('projects.samples.deletions.destroy.success', sample_name: @sample1.name,
-                                                                       project_name: @project.namespace.human_name)
+      assert_text I18n.t('samples.deletions.destroy.success', count: 1)
       # redirected to samples index
       assert_selector 'h1', text: I18n.t(:'projects.samples.index.title'), count: 1
       # verify samples table has loaded to prevent flakes
@@ -2954,7 +2951,7 @@ module Projects
 
       ### VERIFY START ###
       within('#multiple-deletions-dialog') do
-        assert_text I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.description.singular',
+        assert_text I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.description.singular',
                            sample_name: @sample1.name)
       end
       ### VERIFY END ###
@@ -2984,7 +2981,7 @@ module Projects
       ### VERIFY START ###
       within('#multiple-deletions-dialog') do
         assert_text I18n.t(
-          'projects.samples.deletions.new_multiple_deletions_dialog.description.plural'
+          'samples.deletions.destroy_multiple_confirmation_dialog.description.plural'
         ).gsub! 'COUNT_PLACEHOLDER', '3'
       end
       ### VERIFY END ###
@@ -3050,13 +3047,13 @@ module Projects
       within('#multiple-deletions-dialog') do
         assert_selector 'form[data-infinite-scroll-target="pageForm"]'
         sleep 1
-        click_button I18n.t('projects.samples.deletions.new_multiple_deletions_dialog.submit_button')
+        click_button I18n.t('samples.deletions.destroy_multiple_confirmation_dialog.submit_button')
       end
       ### ACTIONS END ###
 
       ### VERIFY START ###
       # flash msg
-      assert_text I18n.t('projects.samples.deletions.destroy_multiple.success')
+      assert_text I18n.t('samples.deletions.destroy.success', count: 3)
 
       # no remaining samples
       within 'section[role="status"]' do

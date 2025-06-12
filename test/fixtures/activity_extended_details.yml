@@ -43,7 +43,14 @@ project1_namespace_import_sample_activity_extended_details:
 group1_namespace_import_sample_activity_extended_details:
   activity: group1_sample_import_create
   extended_detail: group1_namespace_import_sample_create_extended_details
-  activity_type: project_import_samples
+  activity_type: group_import_samples
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+group1_namespace_sample_destroy_activity_extended_details:
+  activity: group1_sample_destroy
+  extended_detail: group1_namespace_sample_destroy_extended_details
+  activity_type: group_samples_destroy
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 

@@ -13,7 +13,6 @@
       ) do %>
       <div data-infinite-scroll-target="pageFormContent"></div>
     <% end %>
-
     <div class="grid gap-4">
       <p
         data-infinite-scroll-target="summary"
@@ -37,11 +36,11 @@
         </div>
       </div>
 
-      <%= form_for(:deletion, url: destroy_multiple_namespace_project_samples_deletion_path,
+      <%= form_for(:deletion, url: samples_deletions_path(namespace_id: @namespace.id),
             data: {
               controller: "spinner form--json-submission",
               "form--json-submission-selection-outlet": '#samples-table',
-              "form--json-submission-field-name-value": "multiple_deletion[sample_ids][]",
+              "form--json-submission-field-name-value": "destroy[sample_ids][]",
               "form--json-submission-clear-selection-value": "true",
               "form--json-submission-target": "form",
               action:"turbo:submit-start->spinner#submitStart turbo:submit-end->viral--dialog#close",

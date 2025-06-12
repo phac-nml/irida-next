@@ -79,6 +79,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     params = group_link_params(activity, params)
     params = transfer_activity_parameters(params, activity)
     params = additional_group_activity_params(params, activity)
+    params = add_bulk_sample_params(params, activity)
 
     transfer_activity_parameters(params, activity)
   end
@@ -269,7 +270,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
   end
 
   def add_bulk_sample_params(params, activity)
-    return params unless activity.parameters[:action] == 'sample_destroy_multiple'
+    return params unless %w[sample_destroy_multiple group_samples_destroy].include?(activity.parameters[:action])
 
     params.merge(
       samples_deleted_count: activity.parameters[:samples_deleted_count]

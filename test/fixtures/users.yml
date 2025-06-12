@@ -226,3 +226,20 @@ mary_doe:
   first_name: Mary
   last_name: Doe
 
+sample_actions_doe:
+  <<: *DEFAULTS
+  email: <%= "sample.actions.doe@localhost" %>
+  first_name: SampleActions
+  last_name: Doe
+
+shared_sample_actions_doe:
+  <<: *DEFAULTS
+  email: <%= "shared.sample.actions.doe@localhost" %>
+  first_name: SharedSampleActions
+  last_name: Doe
+
+subgroup_sample_actions_doe:
+  <<: *DEFAULTS
+  email: <%= "subgroup.sample.actions.doe@localhost" %>
+  first_name: SubgroupSampleActions
+  last_name: Doe

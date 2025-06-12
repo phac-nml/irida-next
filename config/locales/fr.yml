@@ -19,6 +19,7 @@ fr:
         destroy_bot_accounts?: Vous n’êtes pas autorisé à détruire des comptes de bots pour le groupe %{name} sur ce serveur.
         destroy_member?: Vous n’êtes pas autorisé à supprimer des membres sous le groupe %{name} sur ce serveur.
         destroy_metadata_templates?: Vous n’êtes pas autorisé à détruire les modèles de métadonnées pour le groupe %{name} sur ce serveur.
+        destroy_sample?: You are not authorized to remove samples from group %{name} on this server.
         destroy_workflow_executions?: You are not authorized to destroy workflow executions for group %{name} on this server.
         edit?: Vous n’êtes pas autorisé à modifier le groupe %{name} de ce serveur.
         export_data?: Vous n’êtes pas autorisé à exporter des données du projet %{name} sur ce serveur.
@@ -310,6 +311,7 @@ fr:
         transfer_in_html: "%{user} a transféré le projet %{href} de l’espace de noms %{old_namespace} vers %{new_namespace}"
         transfer_out_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
       samples:
+        destroy_html: "%{user} removed %{href} samples from group"
         transfer_html: "%{user} transferred %{transferred_samples_count} samples between projects"
       subgroups:
         create_html: "%{user} a créé le sous-groupe %{href}"
@@ -517,8 +519,14 @@ fr:
           title: Copied Samples
         sample_destroy:
           description:
-            one: "%{user} removed 1 sample from the project"
-            other: "%{user} removed %{count} samples from the project"
+            group:
+              one: "%{user} removed 1 sample from the group"
+              other: "%{user} removed %{count} samples from the group"
+            project:
+              one: "%{user} removed 1 sample from the project"
+              other: "%{user} removed %{count} samples from the project"
+          project: Project
+          sample: Sample
           title: Deleted Samples
         sample_transfer:
           source_project_description:
@@ -1666,28 +1674,6 @@ fr:
           title: Copier des échantillons
       create:
         success: L’échantillon a été créé avec succès.
-      deletions:
-        destroy:
-          success: L’échantillon %{sample_name} a été retiré avec succès du projet %{project_name}.
-        destroy_multiple:
-          no_deleted_samples: Les échantillons sélectionnés n’ont pas pu être supprimés
-          partial_error: Les échantillons %{not_deleted} n’ont pas pu être supprimés
-          partial_success: Les échantillons %{deleted} ont été supprimés avec succès
-          success: Les échantillons ont été supprimés avec succès
-        new_deletion_dialog:
-          description: Êtes-vous sûr de vouloir supprimer l’échantillon '%{sample_name}'?
-          submit_button: Retirer
-          title: Supprimer l’échantillon
-        new_multiple_deletions_dialog:
-          description:
-            plural: 'Les échantillons COUNT_PLACEHOLDER suivants ont été sélectionnés aux fins de suppression :'
-            singular: 'L’échantillon suivant a été sélectionné aux fins de suppression :'
-            zero: Aucun échantillon n’a été sélectionné pour être supprimer
-          loading: Chargement...
-          samples: Échantillons
-          spinner: Suppression des échantillons. Cela peut prendre un certain temps...
-          submit_button: Confirmer
-          title: Supprimer les échantillons
       edit:
         cancel_button: Annuler
         form:
@@ -1855,6 +1841,28 @@ fr:
         updated_at_asc: Plus ancien mis à jour
         updated_at_desc: Mis à jour à
   samples:
+    deletions:
+      destroy:
+        no_deleted_samples: Les échantillons sélectionnés n’ont pas pu être supprimés
+        partial_error: Les échantillons %{not_deleted} n’ont pas pu être supprimés
+        partial_success: Les échantillons %{deleted} ont été supprimés avec succès
+        success:
+          one: Supprimé avec succès 1 échantillon
+          other: Supprimé avec succès %{count} échantillons
+      destroy_multiple_confirmation_dialog:
+        description:
+          plural: 'Les échantillons COUNT_PLACEHOLDER suivants ont été sélectionnés aux fins de suppression :'
+          singular: 'L’échantillon suivant a été sélectionné aux fins de suppression :'
+          zero: Aucun échantillon n’a été sélectionné pour être supprimer
+        loading: Chargement...
+        samples: Échantillons
+        spinner: Suppression des échantillons. Cela peut prendre un certain temps...
+        submit_button: Confirmer
+        title: Supprimer les échantillons
+      destroy_single_confirmation_dialog:
+        description: Êtes-vous sûr de vouloir supprimer l’échantillon '%{sample_name}'?
+        submit_button: Retirer
+        title: Supprimer l’échantillon
     editable_cell:
       update_success: Metadata was successfully updated
     table_component:

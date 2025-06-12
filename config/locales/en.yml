@@ -19,6 +19,7 @@ en:
         destroy_bot_accounts?: You are not authorized to destroy bot accounts for group %{name} on this server.
         destroy_member?: You are not authorized to remove members for group %{name} on this server.
         destroy_metadata_templates?: You are not authorized to destroy metadata templates for group %{name} on this server.
+        destroy_sample?: You are not authorized to remove samples from group %{name} on this server.
         destroy_workflow_executions?: You are not authorized to destroy workflow executions for group %{name} on this server.
         edit?: You are not authorized to modify group %{name} on this server.
         export_data?: You are not authorized to export data from project %{name} on this server.
@@ -310,6 +311,7 @@ en:
         transfer_in_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
         transfer_out_html: "%{user} transferred project %{href} from namespace %{old_namespace} to %{new_namespace}"
       samples:
+        destroy_html: "%{user} removed %{href} samples from group"
         transfer_html: "%{user} transferred %{transferred_samples_count} samples between projects"
       subgroups:
         create_html: "%{user} created subgroup %{href}"
@@ -517,8 +519,14 @@ en:
           title: Copied Samples
         sample_destroy:
           description:
-            one: "%{user} removed 1 sample from the project"
-            other: "%{user} removed %{count} samples from the project"
+            group:
+              one: "%{user} removed 1 sample from the group"
+              other: "%{user} removed %{count} samples from the group"
+            project:
+              one: "%{user} removed 1 sample from the project"
+              other: "%{user} removed %{count} samples from the project"
+          project: Project
+          sample: Sample
           title: Deleted Samples
         sample_transfer:
           source_project_description:
@@ -1670,28 +1678,6 @@ en:
           title: Copy Samples
       create:
         success: Sample was successfully created.
-      deletions:
-        destroy:
-          success: Sample %{sample_name} was successfully removed from project %{project_name}.
-        destroy_multiple:
-          no_deleted_samples: Selected samples could not be deleted
-          partial_error: "%{not_deleted} samples could not be deleted"
-          partial_success: "%{deleted} samples were successfully deleted"
-          success: Samples were successfully deleted
-        new_deletion_dialog:
-          description: Are you sure you want to delete sample '%{sample_name}'?
-          submit_button: Remove
-          title: Delete Sample
-        new_multiple_deletions_dialog:
-          description:
-            plural: 'The following COUNT_PLACEHOLDER samples have been selected for deletion:'
-            singular: 'The following sample has been selected for deletion:'
-            zero: No samples have been selected for deletion
-          loading: Loading...
-          samples: Samples
-          spinner: Deleting samples. This may take a while...
-          submit_button: Confirm
-          title: Delete Samples
       edit:
         cancel_button: Cancel
         form:
@@ -1859,6 +1845,28 @@ en:
         updated_at_asc: Oldest updated
         updated_at_desc: Updated At
   samples:
+    deletions:
+      destroy:
+        no_deleted_samples: Selected samples could not be deleted
+        partial_error: "%{not_deleted} samples could not be deleted"
+        partial_success: "%{deleted} samples were successfully deleted"
+        success:
+          one: Successfully deleted 1 sample
+          other: Successfully deleted %{count} samples
+      destroy_multiple_confirmation_dialog:
+        description:
+          plural: 'The following COUNT_PLACEHOLDER samples have been selected for deletion:'
+          singular: 'The following sample has been selected for deletion:'
+          zero: No samples have been selected for deletion
+        loading: Loading...
+        samples: Samples
+        spinner: Deleting samples. This may take a while...
+        submit_button: Confirm
+        title: Delete Samples
+      destroy_single_confirmation_dialog:
+        description: Are you sure you want to delete sample '%{sample_name}'?
+        submit_button: Remove
+        title: Delete Sample
     editable_cell:
       update_success: Metadata was successfully updated
     table_component:

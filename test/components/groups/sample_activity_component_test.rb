@@ -31,5 +31,34 @@ module Groups
       )
       assert_selector 'span', text: 2
     end
+
+    test 'multiple sample destroy activity' do
+      group = groups(:group_one)
+      sample1 = samples(:sample1)
+      sample2 = samples(:sample2)
+
+      params = { sample_ids: [sample1.id, sample2.id] }
+      Groups::Samples::DestroyService.new(group, @user, params).execute
+
+      activities = group.human_readable_activity(group.retrieve_group_activity).reverse
+
+      assert_equal(2, activities.count do |activity|
+        activity[:key].include?('group.samples.destroy')
+      end)
+
+      activity_to_render = activities.find do |a|
+        a[:key] == 'activity.group.samples.destroy_html'
+      end
+
+      render_inline Activities::Groups::SampleActivityComponent.new(activity: activity_to_render)
+
+      assert_text strip_tags(
+        I18n.t('activity.group.samples.destroy_html', user: @user.email,
+                                                      href: 2)
+      )
+      assert_selector 'span', text: 2
+
+      assert_selector 'a', text: I18n.t(:'components.activity.more_details')
+    end
   end
 end

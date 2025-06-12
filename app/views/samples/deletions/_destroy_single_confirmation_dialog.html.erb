@@ -4,7 +4,7 @@
 
   <div
     data-controller="selection"
-    data-selection-storage-key-value="<%= "#{request.base_url}#{namespace_project_samples_path(@project.namespace.parent, @project)}" %>"
+    data-selection-storage-key-value="<%= "#{request.base_url}#{namespace_project_samples_path(@namespace.parent, @namespace.project)}" %>"
     class="
       mb-4 overflow-x-visible font-normal text-slate-500 dark:text-slate-400
     "
@@ -12,11 +12,9 @@
     <p class="mb-4">
       <%= t(".description", sample_name: @sample.name) %>
     </p>
-    <%= form_for(:deletion, url: namespace_project_samples_deletion_path(sample_id: @sample.id), method: :delete,
+    <%= form_for(:deletion, url: samples_deletions_path(namespace_id: @namespace.id, 'destroy[sample_ids]': [@sample.id]),
             data: {
               turbo_frame: "_top",
-              controller: "spinner",
-              action:"turbo:submit-start->spinner#submitStart turbo:submit-end->viral--dialog#close"
             }
           ) do |form| %>
       <%= form.submit t(".submit_button"),
