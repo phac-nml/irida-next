@@ -741,7 +741,7 @@ DEPENDENCIES
   local_time (~> 3.0, >= 3.0.2)
   logidze
   lookbook (~> 2.1, >= 2.1.1)
-  minitest
+  minitest (~> 5.25, >= 5.25.5)
   omniauth
   omniauth-entra-id
   omniauth-rails_csrf_protection
