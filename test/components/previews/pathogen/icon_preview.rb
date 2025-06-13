@@ -11,6 +11,10 @@ module Pathogen
     # @description Display all available Heroicons in a grid layout
     def heroicons; end
 
+    # @label Named Icons
+    # @description Display all available Named icons in a grid layout
+    def named_icons; end
+
     # @!endgroup
   end
 end
