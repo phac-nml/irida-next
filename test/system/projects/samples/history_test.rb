@@ -19,8 +19,7 @@ module Projects
         @sample1.create_logidze_snapshot!
         visit namespace_project_sample_path(@namespace, @project, @sample1, tab: 'history')
 
-        within('#table-listing') do
-          assert_selector 'ol', count: 1
+        within('ol[data-test-selector="history-component"]') do
           assert_selector 'li', count: 1
 
           assert_selector 'h2', text: I18n.t(:'components.history.link_text', version: 1)
