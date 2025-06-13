@@ -10,7 +10,7 @@ module Pathogen
       <%= render_icon @icon_name, **@system_arguments %>
     ERB
 
-    def initialize(icon: nil, classes: nil)
+    def initialize(icon, **system_arguments)
       @icon_name = icon
       @classes = classes
     end
