@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import { tabbable } from "tabbable";
 
 export default class extends Controller {
   static targets = ["row"];
@@ -73,7 +74,7 @@ export default class extends Controller {
     const direction = event.shiftKey ? -1 : +1;
     const currentRow = this.#getRowWithFocus();
 
-    const focusableElements = this.#getFocusableElements(document);
+    const focusableElements = tabbable(document);
     const currentIndex = focusableElements.indexOf(event.target);
     let nextElement = null;
     for (
@@ -115,7 +116,7 @@ export default class extends Controller {
   #navigateRow(direction) {
     const currentRow = this.#getRowWithFocus();
 
-    const rowFocusableTargets = this.#getFocusableElements(currentRow);
+    const rowFocusableTargets = tabbable(currentRow);
 
     const currentIndex = rowFocusableTargets.indexOf(document.activeElement);
     let newIndex = currentIndex + direction;
@@ -125,22 +126,6 @@ export default class extends Controller {
     } else if (newIndex < rowFocusableTargets.length) {
       rowFocusableTargets[newIndex].focus();
     }
-  }
-
-  #getFocusableElements(element) {
-    const focusableElements = [
-      ...element.querySelectorAll(
-        'a[href], button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])',
-      ),
-    ].filter(
-      (el) =>
-        !el.hasAttribute("disabled") &&
-        !el.getAttribute("aria-hidden") &&
-        !(parseInt(el.tabIndex) === -1) &&
-        el.checkVisibility(),
-    );
-
-    return focusableElements;
   }
 
   #moveByRow(direction) {
