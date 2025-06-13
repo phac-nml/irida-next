@@ -1,0 +1,39 @@
+<div class="p-6">
+  <div
+    class="
+      grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6
+      gap-6 items-stretch
+    "
+  >
+    <% {
+      'CLIPBOARD' => Pathogen::ICON::CLIPBOARD,
+      'CARET_DOWN' => Pathogen::ICON::CARET_DOWN,
+      'CARET_UP' => Pathogen::ICON::CARET_UP,
+      'EXPORT' => Pathogen::ICON::EXPORT,
+      'FILE' => Pathogen::ICON::FILE,
+      'FILES' => Pathogen::ICON::FILES,
+      'SQUARES_FOUR' => Pathogen::ICON::SQUARES_FOUR,
+      'LIST_BULLETS' => Pathogen::ICON::LIST_BULLETS,
+      'LOCK_KEY' => Pathogen::ICON::LOCK_KEY,
+      'STACK' => Pathogen::ICON::STACK,
+      'FLASK' => Pathogen::ICON::FLASK,
+      'TERMINAL_WINDOW' => Pathogen::ICON::TERMINAL_WINDOW,
+      'GEAR_SIX' => Pathogen::ICON::GEAR_SIX,
+      'PLUS_CIRCLE' => Pathogen::ICON::PLUS_CIRCLE,
+      'QUESTION' => Pathogen::ICON::QUESTION,
+      'SIDEBAR' => Pathogen::ICON::SIDEBAR,
+      'SLIDERS_HORIZONTAL' => Pathogen::ICON::SLIDERS_HORIZONTAL,
+      'TICKET' => Pathogen::ICON::TICKET,
+      'USER_CIRCLE' => Pathogen::ICON::USER_CIRCLE,
+      'USERS' => Pathogen::ICON::USERS,
+      'BANK' => Pathogen::ICON::BANK,
+      'X' => Pathogen::ICON::X
+    }.each do |const_name, icon_def| %>
+      <div class="flex flex-col items-center space-y-1 min-w-[10rem] p-2">
+        <%= render Pathogen::Icon.new(icon: icon_def, class: "h-6 w-6 text-slate-500") %>
+        <span class="text-xs text-slate-600 font-medium"><%= icon_def[:name] %></span>
+        <span class="text-xs text-slate-400 font-mono break-all text-center">Pathogen::ICON::<%= const_name %></span>
+      </div>
+    <% end %>
+  </div>
+</div>
