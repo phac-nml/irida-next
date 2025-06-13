@@ -10,19 +10,17 @@ export default class extends Controller {
   static outlets = ["selection"];
   static values = { filters: { type: Array, default: [] } };
 
-  connect() {
-    this.idempotentConnect();
-  }
-
-  idempotentConnect() {
-    this.clear();
-
-    this.filtersValue
-      .filter(Boolean)
-      .forEach((sample) =>
-        this.tagsTarget.insertBefore(this.#formatTag(sample), this.inputTarget),
-      );
-
+  /**
+   * 🎯 Handles initialization when the tags target element connects to the DOM
+   *
+   * This method:
+   * 1. Creates and inserts new tag elements before the input
+   * 2. Updates the filter count display
+   *
+   * @param {HTMLElement} target - The tags container element that was connected
+   */
+  tagsTargetConnected(target) {
+    this.#insertFilterTags(target);
     this.#updateCount();
   }
 
@@ -80,7 +78,8 @@ export default class extends Controller {
       .filter(Boolean)
       .map((tag) => tag.value);
     this.filtersValue = text;
-
+    this.inputTarget.value = "";
+    this.#updateTags();
     this.#updateCount();
   }
 
@@ -110,6 +109,11 @@ export default class extends Controller {
       .filter(Boolean);
   }
 
+  #updateTags() {
+    this.#clearTags();
+    this.#insertFilterTags(this.tagsTarget);
+  }
+
   #clearAndFocus() {
     this.inputTarget.value = "";
     this.inputTarget.focus();
@@ -135,5 +139,13 @@ export default class extends Controller {
       this.countTarget.classList.toggle("hidden", count === 0);
       this.countTarget.classList.toggle("inline-flex", count > 0);
     }
+  }
+
+  #insertFilterTags(target) {
+    this.filtersValue
+      .filter(Boolean)
+      .forEach((sample) =>
+        target.insertBefore(this.#formatTag(sample), this.inputTarget),
+      );
   }
 }
