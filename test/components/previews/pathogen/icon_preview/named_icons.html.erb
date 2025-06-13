@@ -6,7 +6,13 @@
     "
   >
     <% {
-      'BEAKER' => Pathogen::ICON::BEAKER,
+      'DETAILS' => Pathogen::ICON::DETAILS,
+      'SAMPLES' => Pathogen::ICON::SAMPLES,
+      'SETTINGS' => Pathogen::ICON::SETTINGS,
+      'PROJECTS' => Pathogen::ICON::PROJECTS,
+      'GROUPS' => Pathogen::ICON::GROUPS,
+      'WORKFLOWS' => Pathogen::ICON::WORKFLOWS,
+      'DATA_EXPORTS' => Pathogen::ICON::DATA_EXPORTS
     }.each do |const_name, icon_def| %>
       <div class="flex flex-col items-center space-y-1 min-w-[10rem] p-2">
         <%= render Pathogen::Icon.new(icon_def, class: "h-6 w-6 text-slate-500") %>
