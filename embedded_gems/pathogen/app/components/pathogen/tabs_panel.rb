@@ -76,7 +76,7 @@ module Pathogen
       @body_arguments[:tag] = @body_arguments[:tag] || BODY_TAG_DEFAULT
 
       # Apply default classes unless custom classes are provided.
-      custom_classes_provided = @body_arguments[:classes].present? # In RuboCop, prefer `[:key]` over `fetch(:key, nil)` for checking presence.
+      custom_classes_provided = @body_arguments[:classes].present?
       @body_arguments[:classes] = custom_classes_provided ? @body_arguments[:classes] : BODY_DEFAULT_CLASSES
 
       @body_arguments[:id] = "#{@system_arguments[:id]}-list"
