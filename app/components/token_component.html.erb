@@ -40,7 +40,8 @@
     "
   >
     <span data-token-target="initial"><%= t("components.token.copy") %></span>
-    <span data-token-target="copied" class="flex items-center hidden"><%= viral_icon(name: "check", classes: "w-5 h-5") %>
+    <span data-token-target="copied" class="flex items-center hidden">
+      <%= render Pathogen::Icon.new(Pathogen::ICON::CHECK, class: "size-5") %>
       <%= t("components.token.copied") %></span>
   </button>
 <% end %>

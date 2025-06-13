@@ -18,6 +18,7 @@ module Pathogen
     CARET_LEFT = { name: 'caret-left', options: {} }.freeze
     CARET_RIGHT = { name: 'caret-right', options: {} }.freeze
     CARET_UP = { name: 'caret-up', options: {} }.freeze
+    CHECK = { name: 'check', options: {} }.freeze
     CLIPBOARD = { name: 'clipboard-text', options: {} }.freeze
     EXPORT = { name: :export, options: {} }.freeze
     EYE = { name: 'eye', options: {} }.freeze
