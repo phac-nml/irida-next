@@ -76,13 +76,21 @@
         </div>
       </div>
 
-      <div>
+      <div class="my-4">
         <%= form.submit t(:"groups.members.new.add_member_to_group"),
-                    class: "button button--state-primary button--size-default mr-1",
+                    class: "button button--state-primary button--size-default",
                     disabled: true,
                     data: {
                       "viral--select2-target": "submitButton",
                     } %>
+
+        <button
+          type="button"
+          class="button button--size-default button--state-default"
+          data-action="click->viral--dialog#close"
+        >
+          <%= I18n.t(:"groups.members.new.button.cancel") %>
+        </button>
       </div>
     </div>
   <% end %>

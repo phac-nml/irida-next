@@ -18,7 +18,6 @@ module System
       visit('rails/view_components/viral_dialog_component/default')
       within('div[data-controller-connected="true"] dialog') do
         assert_accessible
-
         assert_text 'This is the default dialog'
       end
     end
