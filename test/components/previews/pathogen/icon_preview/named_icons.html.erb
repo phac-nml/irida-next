@@ -1,0 +1,24 @@
+<div class="p-6">
+  <div
+    class="
+      grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6
+      gap-6 items-stretch
+    "
+  >
+    <% {
+      'DETAILS' => Pathogen::ICON::DETAILS,
+      'SAMPLES' => Pathogen::ICON::SAMPLES,
+      'SETTINGS' => Pathogen::ICON::SETTINGS,
+      'PROJECTS' => Pathogen::ICON::PROJECTS,
+      'GROUPS' => Pathogen::ICON::GROUPS,
+      'WORKFLOWS' => Pathogen::ICON::WORKFLOWS,
+      'DATA_EXPORTS' => Pathogen::ICON::DATA_EXPORTS
+    }.each do |const_name, icon_def| %>
+      <div class="flex flex-col items-center space-y-1 min-w-[10rem] p-2">
+        <%= render Pathogen::Icon.new(icon_def, class: "h-6 w-6 text-slate-500") %>
+        <span class="text-xs text-slate-600 font-medium"><%= icon_def[:name] %></span>
+        <span class="text-xs text-slate-400 font-mono break-all text-center">Pathogen::ICON::<%= const_name %></span>
+      </div>
+    <% end %>
+  </div>
+</div>
