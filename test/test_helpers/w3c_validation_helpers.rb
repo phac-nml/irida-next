@@ -85,6 +85,7 @@ module W3cValidationHelpers
     setup_w3c_validator!(use_local: use_local, validator_uri: validator_uri) if !instance_variable_defined?(:@validator)
     arerr = @validator.validate_text(content).errors
     arerr = _may_ignore_autocomplete_errors_for_hidden(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
+    arerr = _ignore_aria_errors_for_div_with_role_row(arerr, "Ignores W3C validation errors for #{name} (#{caller_info}): ")
     assert_empty arerr, "Failed for #{name} (#{caller_info}): W3C-HTML-validation-Errors(Size=#{arerr.size}): ("+arerr.map(&:to_s).join(") (")+")"
   end
 
@@ -163,6 +164,45 @@ module W3cValidationHelpers
       # Example of an Error:
       #   ERROR; line 165: An “input” element with a “type” attribute whose value is “hidden” must not have an “autocomplete” attribute whose value is “on” or “off”
       if /\AERROR\b.+\binput\b[^a-z]+\belement.+\btype\b.+\bhidden\b.+\bautocomplete\b[^a-z]+\battribute\b/i =~ es.to_s
+        removeds << es
+        nil
+      else
+        es
+      end
+    }.compact
+
+  ensure
+    # Records it in Logger
+    if !removeds.empty? && !prefix.blank?
+      Rails.logger.warn(prefix + removeds.map(&:to_s).uniq.inspect)
+    end
+  end
+
+  # Botch fix of W3C validation errors for divs with role="row" inside role="treegrid"
+  #
+  # This routine takes a W3C-validation error object (Array) and
+  # return the same Array where the specific errors are deleted
+  # so that one could still test the other potential errors with the W3C validation.
+  # The said errors are recorded with +logger.warn+ (if +prefix+ is given).
+  #
+  # == References
+  #
+  # * https://github.com/validator/validator/pull/1751
+  # * https://www.w3.org/TR/wai-aria-1.2/#row
+  #
+  # @param errs [Array<W3CValidators::Message>] Output of +@validator.validate_text(response.body).errors+
+  # @param prefix [String] Prefix of the warning message recorded with Logger.
+  #    If empty, no message is recorded in Logger.
+  # @return [Array<String, W3CValidators::Message>]
+  def _ignore_aria_errors_for_div_with_role_row(errs, prefix="")
+    removeds = []
+    errs.map{ |es|
+      # Example of an Error:
+      #   ERROR; line 640: Attribute “aria-posinset” not allowed on element “div” at this point.
+      #   ERROR; line 640: Attribute “aria-setsize” not allowed on element “div” at this point.
+      if (/\AERROR\b.+\baria-(posinset|setsize)\b.*\bnot\b\s\ballowed\b\s\bon\b\s\belement\b.*\bdiv\b/i =~ es.to_s &&
+        /treegrid-row/i =~ es.source
+      )
         removeds << es
         nil
       else
