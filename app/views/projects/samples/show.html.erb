@@ -14,13 +14,15 @@
         ) %>
       <% end %>
       <% if @allowed_to[:destroy_sample] %>
-        <%= link_to(
+        <%= button_to(
           t("projects.samples.show.remove_button"),
-          new_samples_deletions_path(
+          new_samples_deletions_path,
+          params: {
             namespace_id: @project.namespace.id,
             deletion_type: "single",
             sample_id: @sample.id,
-          ),
+          },
+          method: :get,
           data: {
             turbo_stream: true,
           },
