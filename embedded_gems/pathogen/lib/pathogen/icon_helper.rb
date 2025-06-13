@@ -20,6 +20,8 @@ module Pathogen
     CARET_UP = { name: 'caret-up', options: {} }.freeze
     CLIPBOARD = { name: 'clipboard-text', options: {} }.freeze
     EXPORT = { name: :export, options: {} }.freeze
+    EYE = { name: 'eye', options: {} }.freeze
+    EYE_SLASH = { name: 'eye-slash', options: {} }.freeze
     FILE = { name: :file, options: {} }.freeze
     FILE_MAGNIFYING_GLASS = { name: 'file-magnifying-glass', options: {} }.freeze
     FILES = { name: :files, options: {} }.freeze

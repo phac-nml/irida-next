@@ -21,10 +21,13 @@
       aria-label="<%= t(:'components.token.toggle_visible') %>"
     >
       <span data-token-target="hide">
-        <%= viral_icon(name: "eye", classes: "w-5 h-5 text-slate-500 dark:text-slate-400") %>
+        <%= render Pathogen::Icon.new(
+          Pathogen::ICON::EYE,
+          class: "size-5 text-slate-500 dark:text-slate-400",
+        ) %>
       </span>
       <span data-token-target="view" class="flex items-center hidden">
-        <%= viral_icon(name: "eye_slash", classes: "w-5 h-5") %>
+        <%= render Pathogen::Icon.new(Pathogen::ICON::EYE_SLASH, class: "size-5") %>
       </span>
     </button>
   </div>
