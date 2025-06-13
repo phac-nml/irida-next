@@ -47,7 +47,7 @@ class AttachmentsTest < ApplicationSystemTestCase
     visit attachment_path(attachments(:attachmentJSON))
     assert_selector 'h1', text: attachment.file.filename.to_s
     assert_button I18n.t('attachment.show.copy')
-    assert_link I18n.t('attachment.show.download')
+    assert_button I18n.t('attachment.show.download')
 
     assert_selector 'pre', count: 1002
   end

@@ -30,7 +30,7 @@
       <%= button_to t("personal_access_tokens.table.revoke"),
       revoke_path(row),
       data: revoke_data_attributes,
-      method: :get,
+      method: revoke_http_method,
       class:
         "px-3 py-2 bg-white dark:bg-slate-800 font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer" %>
     <% end %>
