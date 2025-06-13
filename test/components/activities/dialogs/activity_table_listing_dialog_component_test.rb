@@ -140,8 +140,9 @@ module Activities
 
         visit group_activity_path(group_namespace)
 
-        click_link(I18n.t('components.activity.more_details'),
-                   href: activity_path(activity_to_render[:id], dialog_type: 'group_samples_destroy').to_s)
+        within("form[action='#{activity_path(activity_to_render[:id])}']") do
+          click_button(I18n.t('components.activity.more_details'))
+        end
 
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.sample_destroy.title')
 

@@ -1,4 +1,4 @@
-<span>
+<section>
   <% if workflow_execution_destroy_action %>
     <%= t(
       "#{@activity[:key]}",
@@ -10,18 +10,16 @@
           class: "text-slate-800 dark:text-slate-300 font-medium",
         ),
     ) %>
-    <span class="block">
-      <%= button_to t(:"components.activity.more_details"),
-      activity_path(@activity[:id]),
-      params: {
-        dialog_type: "workflow_executions_destroy",
-      },
-      data: {
-        turbo_stream: true,
-      },
-      method: :get,
-      class:
-        "inline-flex items-center justify-center button button--state-default button--size-default dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600" %>
-    </span>
+    <%= button_to t(:"components.activity.more_details"),
+    activity_path(@activity[:id]),
+    params: {
+      dialog_type: "workflow_executions_destroy",
+    },
+    data: {
+      turbo_stream: true,
+    },
+    method: :get,
+    class:
+      "inline-flex items-center justify-center button button--state-default button--size-default dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600" %>
   <% end %>
-</span>
+</section>
