@@ -835,14 +835,18 @@ fr:
         aria_label: Menu déroulant du compte
         profile: Modifier le profil
         sign_out: Se déconnecter
+        title: Account
       collapse:
         aria_label: Réduire le menu de navigation
+        title: Collapse
       expand:
         aria_label: Développer le menu de navigation
+        title: Expand
       new_dropdown:
         aria_label: Nouvel élément de menu
         group: Créer un nouveau groupe
         project: Créer un nouveau projet
+        title: Create
     opens_in_new_tab: Opens in new tab
     screen_reader:
       close: Fermer
