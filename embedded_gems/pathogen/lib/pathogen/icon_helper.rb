@@ -13,31 +13,31 @@ module Pathogen
   #
   module ICON
     # Icon definitions as constants
-    CLIPBOARD = { name: 'clipboard-text', options: {} }.freeze
+    BANK = { name: :bank, options: {} }.freeze
     CARET_DOWN = { name: 'caret-down', options: {} }.freeze
     CARET_LEFT = { name: 'caret-left', options: {} }.freeze
     CARET_RIGHT = { name: 'caret-right', options: {} }.freeze
     CARET_UP = { name: 'caret-up', options: {} }.freeze
+    CLIPBOARD = { name: 'clipboard-text', options: {} }.freeze
     EXPORT = { name: :export, options: {} }.freeze
     FILE = { name: :file, options: {} }.freeze
     FILE_MAGNIFYING_GLASS = { name: 'file-magnifying-glass', options: {} }.freeze
     FILES = { name: :files, options: {} }.freeze
-    SQUARES_FOUR = { name: 'squares-four', options: {} }.freeze
+    FLASK = { name: :flask, options: {} }.freeze
+    GEAR_SIX = { name: 'gear-six', options: {} }.freeze
     LIST_BULLETS = { name: 'list-bullets', options: {} }.freeze
     LOCK_KEY = { name: 'lock-key', options: {} }.freeze
     MAGNIFYING_GLASS = { name: 'magnifying-glass', options: {} }.freeze
-    STACK = { name: :stack, options: {} }.freeze
-    FLASK = { name: :flask, options: {} }.freeze
-    TERMINAL_WINDOW = { name: 'terminal-window', options: {} }.freeze
-    GEAR_SIX = { name: 'gear-six', options: {} }.freeze
     PLUS_CIRCLE = { name: 'plus-circle', options: {} }.freeze
     QUESTION = { name: :question, options: {} }.freeze
     SIDEBAR = { name: :sidebar, options: {} }.freeze
     SLIDERS_HORIZONTAL = { name: 'sliders-horizontal', options: {} }.freeze
+    SQUARES_FOUR = { name: 'squares-four', options: {} }.freeze
+    STACK = { name: :stack, options: {} }.freeze
+    TERMINAL_WINDOW = { name: 'terminal-window', options: {} }.freeze
     TICKET = { name: :ticket, options: {} }.freeze
     USER_CIRCLE = { name: 'user-circle', options: {} }.freeze
     USERS = { name: :users, options: {} }.freeze
-    BANK = { name: :bank, options: {} }.freeze
     X = { name: :x, options: {} }.freeze
     # Heroicons
     BEAKER = { name: :beaker, options: { library: :heroicons } }.freeze
