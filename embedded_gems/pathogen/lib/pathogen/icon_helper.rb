@@ -18,6 +18,7 @@ module Pathogen
     CARET_UP = { name: 'caret-up', options: {} }.freeze
     EXPORT = { name: :export, options: {} }.freeze
     FILE = { name: :file, options: {} }.freeze
+    FILE_MAGNIFYING_GLASS = { name: 'file-magnifying-glass', options: {} }.freeze
     FILES = { name: :files, options: {} }.freeze
     SQUARES_FOUR = { name: 'squares-four', options: {} }.freeze
     LIST_BULLETS = { name: 'list-bullets', options: {} }.freeze
