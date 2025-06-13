@@ -40,7 +40,7 @@ module Pathogen
     # Named icons
     IRIDA_LOGO = { name: :beaker, options: { library: :heroicons } }.freeze
     DETAILS = { name: 'clipboard-text', options: {} }.freeze
-    SAMPLES = { name: :flask, options: {} }.freeze
+    SAMPLES = { name: 'test-tube', options: {} }.freeze
     SETTINGS = { name: 'gear-six', options: {} }.freeze
     PROJECTS = { name: 'stack', options: {} }.freeze
     GROUPS = { name: 'squares-four', options: {} }.freeze
