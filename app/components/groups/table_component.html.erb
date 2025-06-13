@@ -135,14 +135,14 @@
           </td>
           <td class="px-6 py-4 space-x-2">
             <% if @abilities[:unlink_group] && !namespace_group_link_source.key?(:inherited_namespace_path) %>
-              <%= button_to t(:"projects.group_links.index.unlink"),
+              <%= button_to t(:"#{namespace_group_link.namespace.type}.group_links.index.unlink"),
               select_group_link_path(namespace_group_link),
               data: {
                 turbo_method: :delete,
                 turbo_confirm:
                   (
                     t(
-                      :"groups.group_links.index.unlink_confirmation",
+                      :"#{namespace_group_link.namespace.type}.group_links.index.unlink_confirmation",
                       namespace_name: namespace_group_link.namespace.human_name,
                       group_name: namespace_group_link.group.human_name,
                     )
@@ -153,7 +153,7 @@
                 label:
                   (
                     t(
-                      :"groups.group_links.index.actions.unlink_aria_label",
+                      :"#{namespace_group_link.namespace.type}.group_links.index.actions.unlink_aria_label",
                       member: namespace_group_link.group.name,
                     )
                   ),

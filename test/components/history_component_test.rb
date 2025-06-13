@@ -30,11 +30,10 @@ class HistoryComponentTest < ViewComponentTestCase
                                        url: '/user_at_email.com/project-1/-/history/new')
 
     assert_selector 'li', count: 3
-    assert_selector 'span', count: 3
     assert_selector 'p', text: 'Project created by user@email.com', count: 1
     assert_selector 'p', text: 'Project modified by user@email.com', count: 2
 
-    assert_selector 'button[action="/user_at_email.com/project-1/-/history/new"]', count: 3
+    assert_selector 'form[action="/user_at_email.com/project-1/-/history/new"]', count: 3
     assert_selector 'button', text: 'Version 3'
     assert_selector 'button', text: 'Version 2'
     assert_selector 'button', text: 'Version 1'
@@ -79,7 +78,6 @@ class HistoryComponentTest < ViewComponentTestCase
     end
 
     assert_selector 'li', count: 6
-    assert_selector 'span', count: 6
     assert_selector 'p', text: 'Sample created by user@email.com', count: 1
     assert_selector 'p', text: 'Sample modified by user@email.com', count: 5
 

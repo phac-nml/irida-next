@@ -59,6 +59,9 @@
         <%= button_to t("groups.workflow_executions.show.edit_button"),
         edit_group_workflow_execution_path(@namespace, @workflow_execution),
         method: :get,
+        data: {
+          turbo_stream: true,
+        },
         class: "button button--state-default button--size-default mr-1" %>
       <% end %>
       <% if @workflow_execution.deletable? && @allowed_to[:destroy] %>
