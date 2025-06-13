@@ -15,6 +15,10 @@ module Pathogen
     # @description Display all available Named icons in a grid layout
     def named_icons; end
 
+    # @label Special Icons
+    # @description Display all special/semantic icons in a grid layout
+    def special_icons; end
+
     # @!endgroup
   end
 end

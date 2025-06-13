@@ -50,6 +50,8 @@ module Pathogen
     GROUPS = { name: 'squares-four', options: {} }.freeze
     WORKFLOWS = { name: 'terminal-window', options: {} }.freeze
     DATA_EXPORTS = { name: 'export', options: {} }.freeze
+    # Special icons
+    LOADING = { name: 'faded-spinner', options: { library: :animated } }.freeze
 
     # Optional: for backward compatibility, provide a lookup hash
     DEFINITIONS = constants.each_with_object({}) do |const, hash|
