@@ -1018,6 +1018,8 @@ en:
         title: Members
       new:
         add_member_to_group: Add member to group
+        button:
+          cancel: Cancel
         description: You are adding a new member to group %{name}
         empty_state: There are no users with the provided email or name
         select_access_level: Select Access Level
@@ -1601,6 +1603,8 @@ en:
         title: Members
       new:
         add_member_to_project: Add member to project
+        button:
+          cancel: Cancel
         description: You are adding a new member to project %{name}
         empty_state: There are no users with the provided email or name
         select_access_level: Select Access Level

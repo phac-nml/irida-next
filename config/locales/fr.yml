@@ -1018,6 +1018,8 @@ fr:
         title: Membres
       new:
         add_member_to_group: Ajouter un membre au groupe
+        button:
+          cancel: Annuler
         description: Vous ajoutez un nouveau membre au groupe %{name}
         empty_state: Il n’y a pas d’utilisateurs avec l’adresse courriel ou le nom fourni
         select_access_level: Sélectionnez le niveau d’accès
@@ -1601,6 +1603,8 @@ fr:
         title: Membres
       new:
         add_member_to_project: Ajouter un membre au projet
+        button:
+          cancel: Annuler
         description: Vous ajoutez un nouveau membre au projet %{name}
         empty_state: Il n’y a pas d’utilisateurs avec l’adresse courriel ou le nom fourni
         select_access_level: Sélectionnez le niveau d’accès

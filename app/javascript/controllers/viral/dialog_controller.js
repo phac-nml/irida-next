@@ -6,15 +6,12 @@ export default class extends Controller {
   static values = { open: Boolean };
   #focusTrap = null;
 
-  initialize() {
-    const container = this.dialogTarget.querySelector(".dialog--contents");
-    this.#focusTrap = createFocusTrap(container, {
-      onActivate: () => container.classList.add("focus-trap"),
-      onDeactivate: () => container.classList.remove("focus-trap"),
-    });
-  }
-
   connect() {
+    this.#focusTrap = createFocusTrap(this.dialogTarget, {
+      onActivate: () => this.dialogTarget.classList.add("focus-trap"),
+      onDeactivate: () => this.dialogTarget.classList.remove("focus-trap"),
+    });
+
     if (this.openValue) this.open();
     this.element.setAttribute("data-controller-connected", "true");
   }
