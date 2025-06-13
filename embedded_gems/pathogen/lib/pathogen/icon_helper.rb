@@ -13,6 +13,8 @@ module Pathogen
   #
   module ICON
     # Icon definitions as constants
+    ARROW_LEFT = { name: 'arrow-left', options: {} }.freeze
+    ARROW_RIGHT = { name: 'arrow-right', options: {} }.freeze
     BANK = { name: :bank, options: {} }.freeze
     CARET_DOWN = { name: 'caret-down', options: {} }.freeze
     CARET_LEFT = { name: 'caret-left', options: {} }.freeze
@@ -24,6 +26,7 @@ module Pathogen
     EYE = { name: 'eye', options: {} }.freeze
     EYE_SLASH = { name: 'eye-slash', options: {} }.freeze
     FILE = { name: :file, options: {} }.freeze
+    FILE_TEXT = { name: 'file-text', options: {} }.freeze
     FILE_MAGNIFYING_GLASS = { name: 'file-magnifying-glass', options: {} }.freeze
     FILES = { name: :files, options: {} }.freeze
     FLASK = { name: :flask, options: {} }.freeze
