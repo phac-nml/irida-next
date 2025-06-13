@@ -22,9 +22,9 @@ module Projects
       visit namespace_project_members_url(@namespace.parent, @namespace.project, tab: 'invited_groups')
       assert_selector 'tr', count: @namespace.shared_with_group_links.of_ancestors.count + header_row_count
 
-      assert_selector 'a', text: I18n.t(:'projects.members.index.invite_group'), count: 1
+      assert_selector 'button', text: I18n.t(:'projects.members.index.invite_group'), count: 1
 
-      click_link I18n.t(:'projects.members.index.invite_group')
+      click_button I18n.t(:'projects.members.index.invite_group')
 
       within('div[data-controller-connected="true"] dialog') do
         assert_selector 'h1', text: I18n.t(:'projects.group_links.new.title')
@@ -57,7 +57,7 @@ module Projects
       table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
 
       within table_row do
-        click_link I18n.t(:'projects.group_links.index.unlink')
+        click_button I18n.t(:'projects.group_links.index.unlink')
       end
 
       within('#turbo-confirm[open]') do
@@ -79,7 +79,7 @@ module Projects
       table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
 
       within table_row do
-        click_link I18n.t(:'projects.group_links.index.unlink')
+        click_button I18n.t(:'projects.group_links.index.unlink')
       end
 
       within('#turbo-confirm[open]') do
@@ -105,7 +105,7 @@ module Projects
       table_row = find(:table_row, { 'Group' => namespace_group_link.group.name })
 
       within table_row do
-        click_link I18n.t(:'projects.group_links.index.unlink')
+        click_button I18n.t(:'projects.group_links.index.unlink')
       end
 
       member_namespace_ids_to_update = @namespace.shared_with_group_links.of_ancestors.pluck(:group_id) +

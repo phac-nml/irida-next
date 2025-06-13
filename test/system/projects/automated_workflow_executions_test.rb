@@ -45,7 +45,7 @@ module Projects
       assert_selector 'p', text: I18n.t(:'projects.automated_workflow_executions.index.subtitle')
 
       assert_selector(
-        'a',
+        'button',
         text: I18n.t(:'projects.automated_workflow_executions.index.add_new_automated_workflow_execution'), count: 1
       )
 
@@ -56,7 +56,7 @@ module Projects
         assert_text I18n.t(:'projects.automated_workflow_executions.table.empty.description')
       end
 
-      click_link I18n.t(:'projects.automated_workflow_executions.index.add_new_automated_workflow_execution')
+      click_button I18n.t(:'projects.automated_workflow_executions.index.add_new_automated_workflow_execution')
 
       within('dialog') do
         assert_selector '.dialog--header',
@@ -82,7 +82,7 @@ module Projects
       assert_selector 'p', text: I18n.t(:'projects.automated_workflow_executions.index.subtitle')
 
       within('table tbody tr:first-child') do
-        click_link I18n.t(:'projects.automated_workflow_executions.actions.delete_button')
+        click_button I18n.t(:'projects.automated_workflow_executions.actions.delete_button')
       end
 
       within('#turbo-confirm[open]') do
@@ -99,7 +99,7 @@ module Projects
       assert_selector 'p', text: I18n.t(:'projects.automated_workflow_executions.index.subtitle')
 
       within('table tbody tr:first-child') do
-        click_link I18n.t(:'projects.automated_workflow_executions.actions.edit_button')
+        click_button I18n.t(:'projects.automated_workflow_executions.actions.edit_button')
       end
 
       within('dialog[open].dialog--size-xl') do

@@ -1,12 +1,13 @@
 <%= render Viral::PageHeaderComponent.new(title: title, subtitle: subtitle) do |component| %>
   <% component.with_buttons do %>
     <% if namespace.metadata_fields.length.positive? && @allowed_to[:create_metadata_templates] %>
-      <%= link_to new_template_button_text,
+      <%= button_to new_template_button_text,
       new_template_url,
       data: {
         "turbo-frame" => "metadata_template_modal",
         :turbo_stream => true,
       },
+      method: :get,
       class: "button button--state-primary button--size-default" %>
     <% end %>
   <% end %>

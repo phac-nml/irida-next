@@ -45,8 +45,9 @@
               <%= hidden_field_tag :limit, @pagy.limit %>
             <% end %>
           <% end %>
-          <%= link_to t("projects.samples.show.new_attachment_button"),
+          <%= button_to t("projects.samples.show.new_attachment_button"),
           new_namespace_project_sample_attachment_path(sample_id: @sample.id),
+          method: :get,
           data: {
             turbo_frame: "sample_modal",
             turbo_stream: true,

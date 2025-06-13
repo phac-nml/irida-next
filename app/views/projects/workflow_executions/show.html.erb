@@ -47,48 +47,45 @@
         <% end %>
       <% end %>
       <% if @workflow_execution.cancellable? && @allowed_to[:cancel] %>
-        <%= link_to(
-          t("projects.workflow_executions.show.cancel_button"),
-          cancel_namespace_project_workflow_execution_path(
-            @namespace.parent,
-            @namespace.project,
-            @workflow_execution.id,
-          ),
-          data: {
-            turbo_method: :put,
-            turbo_confirm:
-              t("projects.workflow_executions.show.cancel_button_confirmation"),
-          },
-          class: "button button--state-default button--size-default mr-1",
-        ) %>
+        <%= button_to t("projects.workflow_executions.show.cancel_button"),
+        cancel_namespace_project_workflow_execution_path(
+          @namespace.parent,
+          @namespace.project,
+          @workflow_execution.id,
+        ),
+        data: {
+          turbo_method: :put,
+          turbo_confirm:
+            t("projects.workflow_executions.show.cancel_button_confirmation"),
+        },
+        method: :put,
+        class: "button button--state-default button--size-default mr-1" %>
       <% end %>
       <% if @allowed_to[:update] %>
-        <%= link_to(
-          t("projects.workflow_executions.show.edit_button"),
-          edit_namespace_project_workflow_execution_path(
-            @namespace.parent,
-            @namespace.project,
-            @workflow_execution,
-          ),
-          data: {
-            turbo_stream: true,
-          },
-          class: "button button--state-default button--size-default mr-1",
-        ) %>
+        <%= button_to t("projects.workflow_executions.show.edit_button"),
+        edit_namespace_project_workflow_execution_path(
+          @namespace.parent,
+          @namespace.project,
+          @workflow_execution,
+        ),
+        data: {
+          turbo_stream: true,
+        },
+        method: :get,
+        class: "button button--state-default button--size-default mr-1" %>
       <% end %>
       <% if @workflow_execution.deletable? && @allowed_to[:destroy] %>
-        <%= link_to(
-          t("projects.workflow_executions.show.remove_button"),
-          destroy_confirmation_namespace_project_workflow_execution_path(
-            @namespace.parent,
-            @namespace.project,
-            @workflow_execution,
-          ),
-          data: {
-            turbo_stream: true,
-          },
-          class: "button button--state-default button--size-default mr-1",
-        ) %>
+        <%= button_to t("projects.workflow_executions.show.remove_button"),
+        destroy_confirmation_namespace_project_workflow_execution_path(
+          @namespace.parent,
+          @namespace.project,
+          @workflow_execution,
+        ),
+        data: {
+          turbo_stream: true,
+        },
+        method: :get,
+        class: "button button--state-default button--size-default mr-1" %>
       <% end %>
     </div>
   <% end %>

@@ -15,14 +15,21 @@
           mb-1 text-sm font-normal leading-none text-slate-500 dark:text-slate-400
         "
       ><%= helpers.local_time(changes[:updated_at], :long) %></span>
-      <h2 class=" text-lg font-semibold text-slate-900 dark:text-white ">
-        <% unless @url.nil? %>
-          <%= link_to t(:"components.history.link_text", version: changes[:version]),
-          path_with_params(@url, { version: changes[:version] }),
-          data: {
-            turbo_stream: true,
-          },
-          class: "text-slate-800 dark:text-white hover:underline" %>
+      <% unless @url.nil? %>
+        <div class="flex justify-start items-center">
+          <%= button_to @url,
+            params: {
+              version: changes[:version],
+            },
+            data: {
+              turbo_stream: true,
+            },
+            method: :get,
+            class: "text-slate-800 dark:text-white hover:underline" do %>
+            <span class="text-xl font-extrabold dark:text-white">
+              <%= t(:"components.history.link_text", version: changes[:version]) %>
+            </span>
+          <% end %>
           <% if index == 0 %>
             <%= viral_pill(
               text: t(:"components.history.latest"),
@@ -30,10 +37,10 @@
               classes: "ml-2",
             ) %>
           <% end %>
-        <% else %>
-          <%= t(:"components.history.link_text", version: changes[:version]) %>
-        <% end %>
-      </h2>
+        </div>
+      <% else %>
+        <span class="text-xl font-extrabold dark:text-white"><%= t(:"components.history.link_text", version: changes[:version]) %></span>
+      <% end %>
 
       <p class="mb-4 text-base font-normal text-slate-500 dark:text-slate-400">
         <% if changes[:version] == 1 %>

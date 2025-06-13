@@ -30,18 +30,13 @@ class HistoryComponentTest < ViewComponentTestCase
                                        url: '/user_at_email.com/project-1/-/history/new')
 
     assert_selector 'li', count: 3
-    assert_selector 'h2', count: 3
     assert_selector 'p', text: 'Project created by user@email.com', count: 1
     assert_selector 'p', text: 'Project modified by user@email.com', count: 2
 
-    assert_selector 'h2', text: 'Version 3'
-    assert_selector 'a[href="/user_at_email.com/project-1/-/history/new?version=3"]', count: 1
-
-    assert_selector 'h2', text: 'Version 2'
-    assert_selector 'a[href="/user_at_email.com/project-1/-/history/new?version=2"]', count: 1
-
-    assert_selector 'h2', text: 'Version 1'
-    assert_selector 'a[href="/user_at_email.com/project-1/-/history/new?version=1"]', count: 1
+    assert_selector 'form[action="/user_at_email.com/project-1/-/history/new"]', count: 3
+    assert_selector 'button', text: 'Version 3'
+    assert_selector 'button', text: 'Version 2'
+    assert_selector 'button', text: 'Version 1'
   end
 
   test 'listing of sample change log versions' do
@@ -83,26 +78,15 @@ class HistoryComponentTest < ViewComponentTestCase
     end
 
     assert_selector 'li', count: 6
-    assert_selector 'h2', count: 6
     assert_selector 'p', text: 'Sample created by user@email.com', count: 1
     assert_selector 'p', text: 'Sample modified by user@email.com', count: 5
 
-    assert_selector 'h2', text: 'Version 6'
-    assert_selector 'a[href="/user_at_email.com/project-1/-/samples/1421/view_history_version?version=6"]', count: 1
-
-    assert_selector 'h2', text: 'Version 5'
-    assert_selector 'a[href="/user_at_email.com/project-1/-/samples/1421/view_history_version?version=5"]', count: 1
-
-    assert_selector 'h2', text: 'Version 4'
-    assert_selector 'a[href="/user_at_email.com/project-1/-/samples/1421/view_history_version?version=4"]', count: 1
-
-    assert_selector 'h2', text: 'Version 3'
-    assert_selector 'a[href="/user_at_email.com/project-1/-/samples/1421/view_history_version?version=3"]', count: 1
-
-    assert_selector 'h2', text: 'Version 2'
-    assert_selector 'a[href="/user_at_email.com/project-1/-/samples/1421/view_history_version?version=2"]', count: 1
-
-    assert_selector 'h2', text: 'Version 1'
-    assert_selector 'a[href="/user_at_email.com/project-1/-/samples/1421/view_history_version?version=1"]', count: 1
+    assert_selector 'form[action="/user_at_email.com/project-1/-/samples/1421/view_history_version"]', count: 6
+    assert_selector 'button', text: 'Version 6'
+    assert_selector 'button', text: 'Version 5'
+    assert_selector 'button', text: 'Version 4'
+    assert_selector 'button', text: 'Version 3'
+    assert_selector 'button', text: 'Version 2'
+    assert_selector 'button', text: 'Version 1'
   end
 end

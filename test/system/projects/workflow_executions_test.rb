@@ -141,8 +141,8 @@ module Projects
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-        assert_link 'Cancel', count: 1
-        click_link 'Cancel'
+        assert_button 'Cancel', count: 1
+        click_button 'Cancel'
       end
 
       assert_text 'Confirmation required'
@@ -213,8 +213,8 @@ module Projects
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"workflow_executions.state.#{@workflow_execution1.state}")
-        assert_link I18n.t(:'workflow_executions.index.actions.delete_button'), count: 1
-        click_link I18n.t(:'workflow_executions.index.actions.delete_button')
+        assert_button I18n.t(:'workflow_executions.index.actions.delete_button'), count: 1
+        click_button I18n.t(:'workflow_executions.index.actions.delete_button')
       end
 
       assert_text I18n.t(:'shared.workflow_executions.destroy_confirmation_dialog.title')
@@ -251,8 +251,8 @@ module Projects
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-        assert_link I18n.t(:'workflow_executions.index.actions.delete_button'), count: 1
-        click_link I18n.t(:'workflow_executions.index.actions.delete_button')
+        assert_button I18n.t(:'workflow_executions.index.actions.delete_button'), count: 1
+        click_button I18n.t(:'workflow_executions.index.actions.delete_button')
       end
 
       assert_text I18n.t(:'shared.workflow_executions.destroy_confirmation_dialog.title')
@@ -291,8 +291,8 @@ module Projects
       within tr do
         assert_selector "td:nth-child(#{@state_col})",
                         text: I18n.t(:"workflow_executions.state.#{workflow_execution.state}")
-        assert_link I18n.t(:'workflow_executions.index.actions.delete_button'), count: 1
-        click_link I18n.t(:'workflow_executions.index.actions.delete_button')
+        assert_button I18n.t(:'workflow_executions.index.actions.delete_button'), count: 1
+        click_button I18n.t(:'workflow_executions.index.actions.delete_button')
       end
 
       assert_text I18n.t(:'shared.workflow_executions.destroy_confirmation_dialog.title')
@@ -381,7 +381,7 @@ module Projects
 
       visit namespace_project_workflow_execution_path(@namespace, @project, @workflow_execution1)
 
-      click_link I18n.t(:'projects.workflow_executions.show.remove_button')
+      click_button I18n.t(:'projects.workflow_executions.show.remove_button')
 
       within('dialog[open]') do
         assert_text I18n.t('shared.workflow_executions.destroy_confirmation_dialog.title')
@@ -465,8 +465,8 @@ module Projects
       ### VERIFY END ###
 
       ### ACTIONS START ###
-      assert_selector 'a', text: I18n.t(:'projects.workflow_executions.show.edit_button', locale: user.locale), count: 1
-      click_link I18n.t(:'projects.workflow_executions.show.edit_button', locale: user.locale)
+      assert_selector 'button', text: I18n.t(:'projects.workflow_executions.show.edit_button', locale: user.locale), count: 1
+      click_button I18n.t(:'projects.workflow_executions.show.edit_button', locale: user.locale)
 
       within('dialog') do
         assert_selector 'h1', text: I18n.t('projects.workflow_executions.edit_dialog.title', locale: user.locale)

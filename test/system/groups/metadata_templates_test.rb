@@ -122,8 +122,8 @@ module Groups
       table_row = find(:table_row, [metadata_template.name])
 
       within table_row do
-        assert_link I18n.t(:'metadata_templates.table_component.remove_button'), count: 1
-        click_link I18n.t(:'metadata_templates.table_component.remove_button')
+        assert_button I18n.t(:'metadata_templates.table_component.remove_button'), count: 1
+        click_button I18n.t(:'metadata_templates.table_component.remove_button')
       end
 
       assert_text I18n.t(
@@ -149,7 +149,7 @@ module Groups
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
       assert_selector 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
 
-      assert_selector 'a', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
+      assert_selector 'button', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
 
       click_on I18n.t('groups.metadata_templates.index.new_button')
 
@@ -204,7 +204,7 @@ module Groups
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
       assert_selector 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
 
-      assert_selector 'a', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
+      assert_selector 'button', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
 
       click_on I18n.t('groups.metadata_templates.index.new_button')
 
@@ -247,7 +247,7 @@ module Groups
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
       assert_selector 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
 
-      assert_selector 'a', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
+      assert_selector 'button', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
 
       click_on I18n.t('groups.metadata_templates.index.new_button')
 
@@ -290,7 +290,7 @@ module Groups
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
       assert_selector 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
 
-      assert_selector 'a', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
+      assert_selector 'button', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
 
       click_on I18n.t('groups.metadata_templates.index.new_button')
 
@@ -378,7 +378,7 @@ module Groups
       assert_selector 'h1', text: I18n.t('groups.metadata_templates.index.title')
       assert_selector 'p', text: I18n.t('groups.metadata_templates.index.subtitle')
 
-      assert_selector 'a', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
+      assert_selector 'button', text: I18n.t('groups.metadata_templates.index.new_button'), count: 1
 
       click_on I18n.t('groups.metadata_templates.index.new_button')
 
@@ -459,8 +459,8 @@ module Groups
       assert_equal 'Group Template0', metadata_template.name
 
       within table_row do
-        assert_link I18n.t(:'metadata_templates.table_component.edit_button'), count: 1
-        click_link I18n.t(:'metadata_templates.table_component.edit_button')
+        assert_button I18n.t(:'metadata_templates.table_component.edit_button'), count: 1
+        click_button I18n.t(:'metadata_templates.table_component.edit_button')
       end
 
       assert_selector '#dialog'

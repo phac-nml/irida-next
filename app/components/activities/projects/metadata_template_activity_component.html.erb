@@ -1,4 +1,4 @@
-<span>
+<section>
   <% if template_exists %>
     <% href =
       link_to(
@@ -19,4 +19,4 @@
   <% end %>
 
   <%= t("#{@activity[:key]}", user: @activity[:user], href: href) %>
-</span>
+</section>

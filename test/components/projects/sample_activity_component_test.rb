@@ -111,7 +111,7 @@ module Projects
         I18n.t('activity.namespaces_project_namespace.samples.destroy_multiple_html', user: @user.email, href: 1)
       )
       assert_selector 'span', text: 1
-      assert_selector 'a', text: I18n.t(:'components.activity.more_details')
+      assert_selector 'button', text: I18n.t(:'components.activity.more_details')
     end
 
     test 'multiple sample destroy activity' do
@@ -139,7 +139,7 @@ module Projects
       )
       assert_selector 'span', text: 2
 
-      assert_selector 'a', text: I18n.t(:'components.activity.more_details')
+      assert_selector 'button', text: I18n.t(:'components.activity.more_details')
     end
 
     test 'sample metadata update activity' do
