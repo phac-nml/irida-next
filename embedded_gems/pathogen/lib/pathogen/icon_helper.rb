@@ -15,6 +15,8 @@ module Pathogen
     # Icon definitions as constants
     CLIPBOARD = { name: 'clipboard-text', options: {} }.freeze
     CARET_DOWN = { name: 'caret-down', options: {} }.freeze
+    CARET_LEFT = { name: 'caret-left', options: {} }.freeze
+    CARET_RIGHT = { name: 'caret-right', options: {} }.freeze
     CARET_UP = { name: 'caret-up', options: {} }.freeze
     EXPORT = { name: :export, options: {} }.freeze
     FILE = { name: :file, options: {} }.freeze
@@ -23,6 +25,7 @@ module Pathogen
     SQUARES_FOUR = { name: 'squares-four', options: {} }.freeze
     LIST_BULLETS = { name: 'list-bullets', options: {} }.freeze
     LOCK_KEY = { name: 'lock-key', options: {} }.freeze
+    MAGNIFYING_GLASS = { name: 'magnifying-glass', options: {} }.freeze
     STACK = { name: :stack, options: {} }.freeze
     FLASK = { name: :flask, options: {} }.freeze
     TERMINAL_WINDOW = { name: 'terminal-window', options: {} }.freeze
