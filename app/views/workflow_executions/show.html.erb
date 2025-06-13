@@ -9,70 +9,67 @@
 <%= render Viral::PageHeaderComponent.new(title: turbo_frame_tag('we_name_header') do @workflow_execution.name.blank? ? @workflow_execution.metadata["workflow_name"] :
    @workflow_execution.name end, id: @workflow_execution.id, id_color: find_pill_color_for_state(@workflow_execution.state)) do |component| %>
   <% component.with_buttons do %>
-    <div class="flex flex-row">
-      <% if @workflow_execution.completed? %>
-        <%= button_to t(".create_export_button"),
-        new_data_export_path,
-        params: {
-          export_type: "analysis",
-          analysis_type: "user",
-          workflow_execution_id: @workflow_execution.id,
-          single_workflow: true,
+    <% if @workflow_execution.completed? %>
+      <%= button_to t(".create_export_button"),
+      new_data_export_path,
+      params: {
+        export_type: "analysis",
+        analysis_type: "user",
+        workflow_execution_id: @workflow_execution.id,
+        single_workflow: true,
+      },
+      method: :get,
+      data: {
+        turbo_stream: true,
+      },
+      class: "button button-default" %>
+    <% else %>
+      <%= button_to t(".create_export_button"),
+      new_data_export_path,
+      params: {
+        export_type: "analysis",
+        analysis_type: "user",
+        workflow_execution_id: @workflow_execution.id,
+        single_workflow: true,
+      },
+      method: :get,
+      data: {
+        turbo_stream: true,
+      },
+      class: "button button-default",
+      disabled: true %>
+    <% end %>
+    <% if @workflow_execution.cancellable? %>
+      <%= link_to(
+        t("workflow_executions.show.cancel_button"),
+        cancel_workflow_execution_path(id: @workflow_execution.id),
+        data: {
+          turbo_method: :put,
+          turbo_confirm: t("workflow_executions.show.cancel_button_confirmation"),
         },
-        method: :get,
+        class: "button button-default",
+      ) %>
+    <% end %>
+    <% if @allowed_to[:update] %>
+      <%= link_to(
+        t("workflow_executions.show.edit_button"),
+        edit_workflow_execution_path(id: @workflow_execution.id),
         data: {
           turbo_stream: true,
         },
-        class: "button button--size-default button--state-default mr-2" %>
-      <% else %>
-        <%= button_to t(".create_export_button"),
-        new_data_export_path,
-        params: {
-          export_type: "analysis",
-          analysis_type: "user",
-          workflow_execution_id: @workflow_execution.id,
-          single_workflow: true,
-        },
-        method: :get,
+        class: "button button-default",
+      ) %>
+    <% end %>
+    <% if @workflow_execution.deletable? %>
+      <%= link_to(
+        t("workflow_executions.show.remove_button"),
+        destroy_confirmation_workflow_execution_path(@workflow_execution),
         data: {
           turbo_stream: true,
         },
-        class:
-          "button button--size-default button--state-default pointer-events-none cursor-not-allowed bg-slate-100 text-slate-600 mr-2 dark:bg-slate-600 dark:text-slate-300",
-        disabled: true %>
-      <% end %>
-      <% if @workflow_execution.cancellable? %>
-        <%= link_to(
-          t("workflow_executions.show.cancel_button"),
-          cancel_workflow_execution_path(id: @workflow_execution.id),
-          data: {
-            turbo_method: :put,
-            turbo_confirm: t("workflow_executions.show.cancel_button_confirmation"),
-          },
-          class: "button button--state-default button--size-default mr-1",
-        ) %>
-      <% end %>
-      <% if @allowed_to[:update] %>
-        <%= link_to(
-          t("workflow_executions.show.edit_button"),
-          edit_workflow_execution_path(id: @workflow_execution.id),
-          data: {
-            turbo_stream: true,
-          },
-          class: "button button--state-default button--size-default mr-1",
-        ) %>
-      <% end %>
-      <% if @workflow_execution.deletable? %>
-        <%= link_to(
-          t("workflow_executions.show.remove_button"),
-          destroy_confirmation_workflow_execution_path(@workflow_execution),
-          data: {
-            turbo_stream: true,
-          },
-          class: "button button--state-default button--size-default mr-1",
-        ) %>
-      <% end %>
-    </div>
+        class: "button button-default",
+      ) %>
+    <% end %>
   <% end %>
 <% end %>
 <%= render Pathogen::TabsPanel.new(id: "workflow-executions-tabs") do |tabs| %>

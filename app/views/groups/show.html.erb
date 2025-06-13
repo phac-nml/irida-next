@@ -12,10 +12,10 @@
     <% if @allowed_to[:create_subgroup_or_project] %>
       <%= link_to t(:"groups.show.create_subgroup_button"),
       new_group_path(parent_id: @group.id),
-      class: "button button--size-default button--state-default" %>
+      class: "button button-default" %>
       <%= link_to t(:"groups.show.create_project_button"),
       new_project_path(group_id: @group.id),
-      class: "button button--size-default button--state-primary ml-2" %>
+      class: "button button-primary ml-2" %>
     <% end %>
   <% end %>
 <% end %>
