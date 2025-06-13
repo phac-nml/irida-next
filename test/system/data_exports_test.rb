@@ -1368,7 +1368,6 @@ class DataExportsTest < ApplicationSystemTestCase
 
     assert_selector 'dl', count: 1
     assert_selector 'div:nth-child(2) dd', text: 'test data export'
-    assert_selector 'div#data-export-tabs'
   end
 
   test 'create analysis export with multiple shared workflow executions from project workflow executions index page' do

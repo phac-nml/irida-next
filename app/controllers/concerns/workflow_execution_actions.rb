@@ -201,7 +201,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
     return if params[:tab].nil?
 
-    redirect_to @workflow_execution, tab: 'summary' unless TABS.include? params[:tab]
+    redirect_to workflow_execution_path unless TABS.include? params[:tab]
 
     @tab = params[:tab]
   end

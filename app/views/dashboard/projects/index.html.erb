@@ -1,3 +1,5 @@
+<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+
 <%= render Viral::PageHeaderComponent.new(title: t(".title")) do |component| %>
   <%= component.with_buttons do %>
     <%= link_to t(".create_project_button"),
@@ -13,47 +15,84 @@
       dark:text-slate-400 dark:border-slate-700
     "
   >
-    <ul class="flex flex-1">
-      <li class="mr-2">
-        <%= link_to t(".all"),
-        dashboard_projects_url(),
-        class:
-          (
-            if params[:personal]
-              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
-            else
-              "inline-block p-4 text-primary-700 border-b-2 border-primary-700 rounded-t-lg active dark:text-primary-500 dark:border-primary-500"
-            end
-          ),
-        aria: {
-          current: params[:personal] ? "false" : "page",
-        } %>
-      </li>
-      <li class="mr-2">
-        <%= link_to t(".personal"),
-        dashboard_projects_url(personal: "true"),
-        class:
-          (
-            if params[:personal]
-              "inline-block p-4 text-primary-700 border-b-2 border-primary-700 rounded-t-lg active dark:text-primary-500 dark:border-primary-500"
-            else
-              "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-slate-600 hover:border-slate-300 dark:hover:text-slate-300"
-            end
-          ),
-        aria: {
-          current: params[:personal] ? "page" : "false",
-        } %>
-      </li>
-    </ul>
-    <%= turbo_frame_tag "project_sort_dropdown" %>
-
-  </div>
-  <div class="flex flex-col">
-    <% if @has_projects %>
-      <%= turbo_frame_tag "projects_list", src: dashboard_projects_url(format: :turbo_stream, **request.query_parameters) do %>
-        <%= render partial: "shared/loading/table" %>
+    <%= render Pathogen::TabsPanel.new(id: "dashboard-projects-tabs") do |tabs_panel| %>
+      <% tabs_panel.with_tab(
+        id: "all",
+        text: t(".all"),
+        href: dashboard_projects_url(),
+        selected: !params[:personal],
+      ) %>
+      <% tabs_panel.with_tab(
+        id: "personal",
+        text: t(".personal"),
+        href: dashboard_projects_url(personal: "true"),
+        selected: params[:personal],
+      ) %>
+      <% tabs_panel.with_right_content do %>
+        <div class="inline-flex space-x-2">
+          <%= render SearchComponent.new(query: @q, url: dashboard_projects_url(**request.query_parameters), search_attribute: :namespace_name_or_namespace_puid_cont, placeholder: t(".search.placeholder")) do %>
+            <% if params[:personal] == 'true' %>
+              <input type="hidden" name="personal" value="true">
+            <% end %>
+          <% end %>
+          <%= render Ransack::SortDropdownComponent.new(
+            @q,
+            "projects",
+            [
+              { name: "updated_at", dir: "desc" },
+              { name: "updated_at", dir: "asc" },
+              { name: "namespace_name", dir: "asc" },
+              { name: "namespace_name", dir: "desc" },
+              { name: "created_at", dir: "desc" },
+              { name: "created_at", dir: "asc" },
+            ],
+          ) %>
+        </div>
       <% end %>
-      <%= turbo_frame_tag "projects_pagination" %>
+      <div class="flex flex-col">
+        <% if @has_projects %>
+          <table class="min-w-full table-fixed dark:divide-slate-600">
+            <tbody
+              class="
+                bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
+              "
+            >
+              <%= render partial: "shared/project/row", collection: @projects, as: :project %>
+            </tbody>
+          </table>
+          <%= render PaginationComponent.new(
+            info: pagy_info(@pagy),
+            prev_url:
+              (
+                if @pagy.prev
+                  pagy_url_for(@pagy, @pagy.prev).gsub(
+                    "projects.turbo_stream",
+                    "projects",
+                  )
+                else
+                  nil
+                end
+              ),
+            next_url:
+              (
+                if @pagy.next
+                  pagy_url_for(@pagy, @pagy.next).gsub(
+                    "projects.turbo_stream",
+                    "projects",
+                  )
+                else
+                  nil
+                end
+              ),
+          ) %>
+        <% else %>
+          <%= render Viral::EmptyStateComponent.new(
+            icon_name: "rectangle_stack",
+            title: t(".no_projects"),
+            description: t(".no_projects_description"),
+          ) %>
+        <% end %>
+      </div>
     <% end %>
   </div>
 </div>

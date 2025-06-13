@@ -345,7 +345,7 @@ module Projects
       assert_text workflow_execution.metadata['workflow_name']
       assert_text workflow_execution.metadata['workflow_version']
 
-      within %(div[id="workflow-execution-tabs"]) do
+      within %(nav[id="workflow-executions-tabs"]) do
         click_on I18n.t('workflow_executions.show.tabs.files')
       end
 
@@ -502,7 +502,7 @@ module Projects
       assert_no_link I18n.t(:'workflow_executions.show.edit_button')
       assert_no_link I18n.t(:'workflow_executions.show.remove_button')
 
-      within %(div[id="workflow-execution-tabs"]) do
+      within %(nav[id="workflow-executions-tabs"]) do
         click_on I18n.t('workflow_executions.show.tabs.files')
       end
 
@@ -525,7 +525,7 @@ module Projects
       assert_text workflow_execution.metadata['workflow_name']
       assert_text workflow_execution.metadata['workflow_version']
 
-      within %(div[id="workflow-execution-tabs"]) do
+      within %(nav[id="workflow-executions-tabs"]) do
         click_on I18n.t('workflow_executions.show.tabs.files')
       end
 

@@ -1,43 +1,90 @@
 # frozen_string_literal: true
 
 module Pathogen
-  # This file defines the Pathogen::TabsPanel component, which is used to render sets of tabs
-  # as well as any inline 'right-side' components (buttons, filter, etc.)
+  # 🎯 TabsPanel Component
+  # Renders a navigation panel with tabs, typically used for section navigation within a page.
+  # Utilizes Turbo Drive for seamless navigation between sections.
   class TabsPanel < Pathogen::Component
+    # 🔧 Default HTML tag for the component's root element.
     TAG_DEFAULT = :nav
-    TAG_OPTIONS = [TAG_DEFAULT, :div].freeze
 
-    TYPE_DEFAULT = 'default'
-    TYPE_OPTIONS = [TYPE_DEFAULT, 'underline'].freeze
+    # 💅 Default CSS classes for the root <nav> element.
+    SYSTEM_DEFAULT_CLASSES = 'w-full'
 
+    # 🔧 Default HTML tag for the list element containing the tabs.
     BODY_TAG_DEFAULT = :ul
-    BODY_DEFAULT_CLASSES = 'flex flex-wrap text-sm font-medium text-center ' \
-                           'text-slate-500 border-b border-slate-200 ' \
-                           'dark:border-slate-700 dark:text-slate-400'
-    renders_many :tabs, lambda { |count: nil, selected: false, **system_arguments|
+    # 💅 Default CSS classes for the <ul> element containing the tabs.
+    BODY_DEFAULT_CLASSES = [
+      'w-full',
+      'flex flex-wrap -mb-px border-b border-slate-200 dark:border-slate-700',
+      'text-sm font-medium text-center',
+      'text-slate-500 dark:text-slate-400'
+    ].join(' ').freeze
+
+    # 📝 Defines and renders individual navigation tabs.
+    # Each tab is an instance of `Pathogen::TabsPanel::Tab`.
+    # @param options [Hash] Configuration options for the tab.
+    # @option options [Boolean] :selected (false) Whether the tab is currently selected.
+    # @option options [String] :href The URL the tab links to.
+    # @return [Pathogen::TabsPanel::Tab] A new tab instance.
+    renders_many :tabs, lambda { |options = {}|
       Pathogen::TabsPanel::Tab.new(
-        selected: selected,
-        tab_type: @type,
-        controls: @id,
-        count: count,
-        **system_arguments
+        options.merge(
+          selected: options[:selected] || false,
+          tab_type: 'underline', # Assumes Tab component handles its specific underline style
+          href: options[:href]
+        )
       )
     }
 
-    # rubocop:disable Metrics/ParameterLists
-    def initialize(id:, label: '', tag: TAG_DEFAULT, type: TYPE_DEFAULT, body_arguments: {}, **system_arguments)
-      @id = id
-      @type = fetch_or_fallback(TYPE_OPTIONS, type, TYPE_DEFAULT)
-      @system_arguments = system_arguments
-      @body_arguments = body_arguments
+    # 🎨 Renders optional content aligned to the right of the tabs.
+    renders_one :right_content
 
-      @system_arguments[:tag] = fetch_or_fallback(TAG_OPTIONS, tag, TAG_DEFAULT)
-      @system_arguments[:id] = @id
-      @body_arguments[:tag] = BODY_TAG_DEFAULT
-      @body_arguments[:classes] = class_names(BODY_DEFAULT_CLASSES)
-      @body_arguments[:role] = 'tablist'
-      @body_arguments[:'aria-label'] = label
+    # 🚀 Initializes a new TabsPanel component.
+    # @param id [String] A unique identifier for the tabs panel. This is required.
+    # @param label [String] An accessible label for the navigation (aria-label).
+    # @param body_arguments [Hash] HTML attributes for the list container (<ul>).
+    # @param system_arguments [Hash] HTML attributes for the main container (<nav>).
+    # @raise [ArgumentError] if id is not provided.
+    def initialize(id:, label: '', body_arguments: {}, **system_arguments)
+      raise ArgumentError, 'id is required' if id.blank?
+
+      @system_arguments = system_arguments
+      @system_arguments[:id] = id # Assign the provided id
+      @body_arguments = body_arguments
+      @label = label
+
+      setup_container_attributes
+      setup_list_attributes
     end
-    # rubocop:enable Metrics/ParameterLists
+
+    private
+
+    # 🏗️ Configures HTML attributes for the main <nav> container.
+    def setup_container_attributes
+      @system_arguments[:tag] = TAG_DEFAULT
+      # id is now guaranteed to be present by the initializer
+      @system_arguments[:'aria-label'] = @label if @label.present?
+      @system_arguments[:class] = class_names(
+        SYSTEM_DEFAULT_CLASSES,
+        @system_arguments[:class]
+      )
+    end
+
+    # 🏗️ Configures HTML attributes for the <ul> list container.
+    def setup_list_attributes
+      @body_arguments[:tag] = @body_arguments[:tag] || BODY_TAG_DEFAULT
+
+      # Apply default classes unless custom classes are provided.
+      custom_classes_provided = @body_arguments[:classes].present?
+      @body_arguments[:classes] = custom_classes_provided ? @body_arguments[:classes] : BODY_DEFAULT_CLASSES
+
+      @body_arguments[:id] = "#{@system_arguments[:id]}-list"
+      # Merge data attributes, preserving existing ones.
+      @body_arguments[:data] = {
+        # Ensure this still works as expected, @system_arguments[:id] is now directly set
+        tabs_list_id_value: @system_arguments[:id]
+      }.merge(@body_arguments[:data] || {})
+    end
   end
 end

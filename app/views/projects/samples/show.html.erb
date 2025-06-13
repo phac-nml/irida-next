@@ -32,60 +32,48 @@
 <% end %>
 
 <div>
-  <nav
-    aria-label="<%= t("projects.samples.show.nav_aria_label") %>"
-    class="border-b border-slate-200 dark:border-slate-700 mb-4"
-  >
-    <ul
-      class="
-        flex flex-row space-x-0 text-sm font-medium text-slate-500 dark:text-slate-400
-      "
-      role="tablist"
-    >
-      <% tab_items = [
-        { key: "files", label: t(:"projects.samples.show.tabs.files") },
-        { key: "metadata", label: t(:"projects.samples.show.tabs.metadata") },
-        { key: "history", label: t(:"projects.samples.show.tabs.history") },
-      ] %>
-      <% tab_items.each_with_index do |item, idx| %>
-        <% active = (@tab == item[:key]) || (@tab.nil? && item[:key] == "files") %>
-        <li role="presentation">
-          <%= link_to item[:label],
-          namespace_project_sample_path(id: @sample.id, tab: item[:key]),
-          class: [
-            "block px-4 py-3 border-b-2 transition-colors duration-150",
-            (
-              if active
-                "border-primary-600 text-primary-700 dark:border-primary-400 dark:text-primary-400 bg-transparent font-semibold"
-              else
-                "border-transparent hover:text-primary-700 hover:border-primary-300 dark:hover:text-primary-300"
-              end
-            ),
-            idx == 0 ? "rounded-tl-lg" : nil,
-            idx == tab_items.size - 1 ? "rounded-tr-lg" : nil,
-          ].compact.join(" "),
-          aria: {
-            selected: active ? "true" : "false",
-            current: active ? "page" : "false",
-          },
-          role: "tab",
-          data: {
-            "turbo-action": "replace",
-          },
-          tabindex: 0 %>
-        </li>
-      <% end %>
-    </ul>
-  </nav>
-  <section class="flex flex-col min-h-[200px]">
-    <%= turbo_frame_tag "table-listing", refresh: "morph", src: namespace_project_sample_path(format: :turbo_stream, tab: @tab || 'files', **request.query_parameters) do %>
-      <% if @tab == "history" %>
-        <%= render partial: "shared/loading/history" %>
-      <% elsif @tab == "params" %>
-        <%= render partial: "shared/loading/params" %>
-      <% else %>
-        <%= render partial: "shared/loading/table" %>
-      <% end %>
-    <% end %>
-  </section>
+  <%= render Pathogen::TabsPanel.new(
+    id: "sample-tabs",
+    label: t("projects.samples.show.nav_aria_label")
+  ) do |tabs| %>
+    <% tabs.with_tab(
+      id: "files-tab",
+      text: t(:"projects.samples.show.tabs.files"),
+      href: namespace_project_sample_path(id: @sample.id, tab: "files"),
+      selected: (@tab == "files") || (@tab.nil?),
+    ) %>
+    <% tabs.with_tab(
+      id: "metadata-tab",
+      text: t(:"projects.samples.show.tabs.metadata"),
+      href: namespace_project_sample_path(id: @sample.id, tab: "metadata"),
+      selected: @tab == "metadata",
+    ) %>
+    <% tabs.with_tab(
+      id: "history-tab",
+      text: t(:"projects.samples.show.tabs.history"),
+      href: namespace_project_sample_path(id: @sample.id, tab: "history"),
+      selected: @tab == "history",
+    ) %>
+  <% end %>
+
+  <% if @tab == "history" %>
+    <div class="grid gap-4 px-4 py-8">
+      <%= render HistoryComponent.new(
+        data: @log_data.reverse,
+        type: "Sample",
+        url:
+          namespace_project_sample_view_history_version_path(sample_id: @sample.id),
+      ) %>
+    </div>
+  <% elsif @tab == "metadata" %>
+    <%= render partial: "projects/samples/metadata/table",
+    locals: {
+      sample_metadata: @sample_metadata,
+    } %>
+  <% else %>
+    <%= render partial: "projects/samples/attachments/table",
+    locals: {
+      attachments: @sample_attachments,
+    } %>
+  <% end %>
 </div>

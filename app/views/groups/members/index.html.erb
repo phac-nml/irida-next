@@ -1,3 +1,5 @@
+<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+
 <%= turbo_frame_tag "new_member_modal" %>
 <%= turbo_frame_tag "member-update-alert" %>
 
@@ -26,23 +28,34 @@
 <% end %>
 
 <div class="bg-white dark:bg-slate-800">
-  <%= viral_tabs(id: "members-tabs", label: t(:"groups.members.index.tabs.aria_label")) do |tabs| %>
-    <%= tabs.with_tab(url: group_members_path(), selected: @tab != "invited_groups") do %>
-      <%= t(:"groups.members.index.tabs.members") %>
-    <% end %>
-    <%= tabs.with_tab(url: group_members_path(tab: "invited_groups"), selected: @tab == "invited_groups") do %>
-      <%= t(:"groups.members.index.tabs.groups") %>
-    <% end %>
-  <% end %>
+  <%= render Pathogen::TabsPanel.new(
+    id: "groups-members-tabs",
+    label: t(:"groups.members.index.tabs.aria_label")
+  ) do |tabs| %>
+    <% tabs.with_tab(
+      id: "members-tab",
+      text: t(:"groups.members.index.tabs.members"),
+      href: group_members_path(),
+      selected: @tab != "invited_groups",
+    ) %>
 
-  <% if @tab == "invited_groups" %>
-    <%= turbo_frame_tag "members", src: group_group_links_path(format: :turbo_stream) do %>
-      <%= render partial: "shared/loading/table" %>
-    <% end %>
-  <% else %>
-    <%= turbo_frame_tag "members", src: group_members_path(format: :turbo_stream) do %>
-      <%= render partial: "shared/loading/table" %>
+    <% tabs.with_tab(
+      id: "groups-tab",
+      text: t(:"groups.members.index.tabs.groups"),
+      href: group_members_path(tab: "invited_groups"),
+      selected: @tab == "invited_groups",
+    ) %>
+
+    <% if @tab == "invited_groups" %>
+      <%= turbo_frame_tag "invited_groups", src: group_group_links_path(format: :turbo_stream) do %>
+        <%= render partial: "shared/loading/table" %>
+      <% end %>
+      <%= turbo_frame_tag "invited_groups_pagination" %>
+    <% else %>
+      <%= turbo_frame_tag "members", src: group_members_path(format: :turbo_stream) do %>
+        <%= render partial: "shared/loading/table" %>
+      <% end %>
+      <%= turbo_frame_tag "members_pagination" %>
     <% end %>
   <% end %>
-  <%= turbo_frame_tag "members_pagination" %>
 </div>

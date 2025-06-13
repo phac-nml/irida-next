@@ -1,3 +1,5 @@
+<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+
 <%= turbo_frame_tag "new_member_modal" %>
 <%= turbo_frame_tag "member-update-alert" %>
 
@@ -34,79 +36,38 @@
 <% end %>
 
 <div class="bg-white dark:bg-slate-800">
-  <%= viral_tabs(id: "project-members", label: t(:"projects.members.index.tabs.aria_label")) do |tabs| %>
-    <%= tabs.with_tab(url: namespace_project_members_path(), selected: @tab != "invited_groups") do %>
-      <%= t(:"projects.members.index.tabs.members") %>
-    <% end %>
-    <%= tabs.with_tab(url: namespace_project_members_path(tab: "invited_groups"), selected: @tab == "invited_groups") do %>
-      <%= t(:"projects.members.index.tabs.groups") %>
-    <% end %>
+  <%= render Pathogen::TabsPanel.new(
+    id: "project-members-tabs",
+    label: t(:"projects.members.index.tabs.aria_label")
+  ) do |tabs| %>
+    <% tabs.with_tab(
+      id: "members-tab",
+      text: t(:"projects.members.index.tabs.members"),
+      href: namespace_project_members_path(),
+      selected: @tab != "invited_groups",
+    ) %>
 
-    <%= tabs.with_tab_content do %>
-      <div class="flex my-2">
-        <div class="grow"></div>
-        <div class="shrink-0">
-          <% if @tab == "invited_groups" %>
-            <%= render SearchComponent.new(
-          query: @q,
-          url: namespace_project_group_links_url(**request.query_parameters),
-          search_attribute: :group_name_cont,
-          placeholder: t(".search.groups.placeholder"),
-        ) do %>
-              <input type="hidden" name="tab" value="invited_groups"/>
-              <input type="hidden" name="format" value="turbo_stream"/>
-            <% end %>
-          <% else %>
-            <%= render SearchComponent.new(
-          query: @q,
-          url: namespace_project_members_url(**request.query_parameters),
-          search_attribute: :user_email_cont,
-          placeholder: t(".search.placeholder"),
-        ) do %>
-              <input type="hidden" name="tab" value=""/>
-              <input type="hidden" name="format" value="turbo_stream"/>
-            <% end %>
-          <% end %>
-        </div>
-      </div>
-      <div class="flex flex-col">
-        <%= turbo_frame_tag "members",
-                            src:
-                              (
-                                if @tab == "invited_groups"
-                                  namespace_project_group_links_path(
+    <% tabs.with_tab(
+      id: "groups-tab",
+      text: t(:"projects.members.index.tabs.groups"),
+      href: namespace_project_members_path(tab: "invited_groups"),
+      selected: @tab == "invited_groups",
+    ) %>
+
+    <% if @tab == "invited_groups" %>
+      <%= turbo_frame_tag "invited_groups", src: namespace_project_group_links_path(
                                     format: :turbo_stream
-                                  )
-                                else
-                                  namespace_project_members_path(
+                                  ) do %>
+        <%= render partial: "shared/loading/table" %>
+      <% end %>
+      <%= turbo_frame_tag "invited_groups_pagination" %>
+    <% else %>
+      <%= turbo_frame_tag "members", src: namespace_project_members_path(
                                     format: :turbo_stream
-                                  )
-                                end
-                              ) do %>
-          <table class="min-w-full table-fixed dark:divide-slate-600">
-            <tbody
-              class="
-                bg-white divide-y divide-slate-200 dark:bg-slate-800 dark:divide-slate-700
-              "
-            >
-              <% 10.times do %>
-                <tr>
-                  <td class="p-4 animate-pulse">
-                    <div class="flex-1 py-1 space-y-6">
-                      <div class="space-y-3">
-                        <div class="w-48 h-2 rounded-sm bg-slate-200"></div>
-                        <div class="w-32 h-2 rounded-sm bg-slate-200"></div>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        <% end %>
-        <%= turbo_frame_tag "members_pagination" %>
-      </div>
+                                  ) do %>
+        <%= render partial: "shared/loading/table" %>
+      <% end %>
+      <%= turbo_frame_tag "members_pagination" %>
     <% end %>
   <% end %>
-
 </div>

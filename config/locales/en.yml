@@ -695,6 +695,8 @@ en:
       index:
         all: All
         create_project_button: New project
+        no_projects: No projects found
+        no_projects_description: You currently have no projects.
         personal: Personal
         row:
           samples: Samples
@@ -791,6 +793,7 @@ en:
       tabs:
         preview: Preview
         summary: Summary
+        title: Data Export Navigation
     status:
       processing: PROCESSING
       ready: READY
@@ -1823,6 +1826,8 @@ en:
         create_export_button: Create Export
         edit_button: Edit
         remove_button: Remove
+        tabs:
+          label: Workflow Execution Details
       summary:
         created_at: Created
         name: Name

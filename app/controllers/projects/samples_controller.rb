@@ -38,6 +38,10 @@ module Projects
 
     def show
       authorize! @sample.project, to: :read_sample?
+
+      redirect_to namespace_project_sample_path unless !params.key?(:tab) || params[:tab].in?(%w[files metadata
+                                                                                                 history])
+
       @tab = params[:tab]
       if @tab == 'metadata'
         @sample_metadata = @sample.metadata_with_provenance

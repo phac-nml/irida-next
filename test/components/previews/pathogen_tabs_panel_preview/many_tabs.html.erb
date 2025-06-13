@@ -1,0 +1,12 @@
+<%# Navigation with many items %>
+<%= render Pathogen::TabsPanel.new(id: "many-nav") do |nav| %>
+  <% nav.with_tab(id: "nav-1", text: "Home", href: "/home", selected: true) %>
+
+  <% nav.with_tab(id: "nav-2", text: "Profile", href: "/profile") %>
+
+  <% nav.with_tab(id: "nav-3", text: "Settings", href: "/settings") %>
+
+  <% nav.with_tab(id: "nav-4", text: "Messages", href: "/messages") %>
+
+  <% nav.with_tab(id: "nav-5", text: "Notifications", href: "/notifications") %>
+<% end %>

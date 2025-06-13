@@ -695,6 +695,8 @@ fr:
       index:
         all: Tous
         create_project_button: Nouveau projet
+        no_projects: Aucun projet trouvé
+        no_projects_description: Vous n’avez actuellement aucun projet.
         personal: Personnel
         row:
           samples: Échantillons
@@ -791,6 +793,7 @@ fr:
       tabs:
         preview: Aperçu
         summary: Résumé
+        title: Data Export Navigation
     status:
       processing: TRAITEMENT
       ready: PRÊT
@@ -1823,6 +1826,8 @@ fr:
         create_export_button: Créer une exportation
         edit_button: Modifier
         remove_button: Retirer
+        tabs:
+          label: Workflow Execution Details
       summary:
         created_at: Créé
         name: Nom

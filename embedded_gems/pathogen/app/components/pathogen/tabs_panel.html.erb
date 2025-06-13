@@ -1,8 +1,41 @@
 <%= render Pathogen::BaseComponent.new(**@system_arguments) do %>
-  <%= render Pathogen::BaseComponent.new(**@body_arguments) do %>
+  <%# Parent flex container: draws border on sm+ screens %>
+  <div
+    class="
+      flex flex-col sm:flex-row sm:items-stretch sm:border-b sm:border-slate-200
+      sm:dark:border-slate-700
+    "
+  >
 
-    <% tabs.each do |tab| %>
-      <%= tab %>
+    <%# Tabs List (ul) %>
+    <%# - sm:border-b-0: Removes its own border on sm+ screens (parent div has it) %>
+    <%# - sm:-mb-px: Allows active tab underline to merge with parent border on sm+ screens %>
+    <%= render Pathogen::BaseComponent.new(
+      **@body_arguments.merge(
+        classes: [@body_arguments[:classes],
+                  'flex-grow min-w-0 sm:border-b-0 sm:-mb-px'].compact.join(' ')
+      )
+    ) do %>
+      <% tabs.each do |tab| %>
+        <%= tab %>
+      <% end %>
     <% end %>
-  <% end %>
+
+    <%# Right Content Area %>
+    <%# - sm:ml-4: Spacing from tabs on sm+ screens %>
+    <%# - sm:-mb-px: Aligns content with parent border on sm+ screens %>
+    <% if right_content? %>
+      <div
+        class="
+          flex items-center shrink-0 mt-3 sm:mt-0 w-full sm:w-auto sm:ml-4 sm:-mb-px
+        "
+      >
+        <%= right_content %>
+      </div>
+    <% end %>
+  </div>
+
+  <section id="<%= "#{@id}-content" %>" class="mt-4">
+    <%= content %>
+  </section>
 <% end %>
