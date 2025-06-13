@@ -12,7 +12,7 @@ module Pathogen
 
     def initialize(icon, **system_arguments)
       @icon_name = icon
-      @classes = classes
+      @system_arguments = system_arguments
     end
   end
 end
