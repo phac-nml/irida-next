@@ -43,6 +43,7 @@ module Pathogen
     STACK = { name: :stack, options: {} }.freeze
     TERMINAL_WINDOW = { name: 'terminal-window', options: {} }.freeze
     TICKET = { name: :ticket, options: {} }.freeze
+    TRANSLATE = { name: 'translate', options: {} }.freeze
     USER_CIRCLE = { name: 'user-circle', options: {} }.freeze
     USERS = { name: :users, options: {} }.freeze
     X = { name: :x, options: {} }.freeze

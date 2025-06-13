@@ -22,9 +22,9 @@
     aria-controls="language-selection-dd-menu"
     aria-expanded="false"
   >
-    <%= viral_icon(
-      name: "language",
-      classes: "w-4 h-4 mr-2 flex-none",
+    <%= render Pathogen::Icon.new(
+      Pathogen::ICON::TRANSLATE,
+      class: "size-4 mr-2 flex-none",
       "aria-hidden": true,
     ) %>
     <span class="text-sm" id="language-selection-dd-label">
