@@ -133,6 +133,10 @@ class GroupPolicyTest < ActiveSupport::TestCase
     assert @policy.apply(:destroy_sample?)
   end
 
+  test '#clone_sample?' do
+    assert @policy.apply(:clone_sample?)
+  end
+
   test 'scope' do
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 

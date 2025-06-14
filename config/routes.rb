@@ -30,6 +30,7 @@ Rails.application.routes.draw do
       scope module: :samples, as: :samples do
         collection do
           resource :transfer, only: %i[create new]
+          resource :clone, only: %i[create new]
           resource :deletions, only: %i[new] do
             post :destroy
           end

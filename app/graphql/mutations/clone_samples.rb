@@ -78,8 +78,8 @@ module Mutations
         next
       end
 
-      samples = Samples::CloneService.new(
-        project, current_user
+      samples = Projects::Samples::CloneService.new(
+        project.namespace, current_user
       ).execute(new_project_id, sample_ids.compact)
 
       prepended_samples = []
@@ -92,8 +92,8 @@ module Mutations
       end
 
       project_user_errors = []
-      if project.errors.count.positive?
-        project_user_errors = project.errors.map do |error|
+      if project.namespace.errors.count.positive?
+        project_user_errors = project.namespace.errors.map do |error|
           {
             path: ['samples', error.attribute.to_s.camelize(:lower)],
             message: error.message

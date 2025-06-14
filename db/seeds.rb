@@ -14,6 +14,7 @@ Flipper.enable(:batch_sample_spreadsheet_import)
 Flipper.enable(:compose_with_retry)
 Flipper.enable(:sample_attachments_searching)
 Flipper.enable(:group_samples_transfer)
+Flipper.enable(:group_samples_clone)
 Flipper.enable(:workflow_execution_attachments_searching)
 Flipper.enable(:group_samples_destroy)
 
