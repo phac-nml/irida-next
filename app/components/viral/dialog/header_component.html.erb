@@ -5,14 +5,14 @@
   <% if closable %>
     <button
       type="button"
-      class="dialog--close"
+      class="dialog--close cursor-pointer"
       data-action="
         <%= system_arguments[:close_action]%>
         click->viral--dialog#close
       "
       aria-label="<%= t(:"components.dialog.close") %>"
     >
-      <%= viral_icon(name: "x_mark", classes: "h-5 w-5") %>
+      <%= render Pathogen::Icon.new(Pathogen::ICON::X, class: "size-5") %>
     </button>
   <% end %>
 <% end %>
