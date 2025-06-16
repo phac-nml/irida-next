@@ -32,26 +32,25 @@ module Dashboard
     end
 
     def handle_turbo_stream
-      toggle_group if toggling_group?
-      render :group if toggling_group?
+      expand_group if expanding_group?
     end
 
     def set_default_sort
       @q.sorts = 'created_at desc' if @q.sorts.empty?
     end
 
-    def toggling_group?
+    def expanding_group?
       params.key? :parent_id
     end
 
-    def toggle_group
-      @collapsed = params[:collapse] == 'true'
+    def expand_group
       @group = Group.find(params[:parent_id])
-      @depth = params[:depth].to_i
-      @children = Group.none
-      return if @collapsed
-
+      @level = params[:level].to_i
+      @posinset = params[:posinset].to_i
+      @setsize = params[:setsize].to_i
+      @tabindex = params[:tabindex].to_i
       @children = @group.children
+      render :group
     end
 
     def authorized_groups

@@ -621,6 +621,10 @@ en:
       copied: Copied!
       copy: Copy to clipboard
       toggle_visible: Toggle visibility
+    treegrid:
+      row:
+        collapse: Collapse
+        expand: Expand
     viral:
       pagy:
         empty_state:
@@ -689,7 +693,6 @@ en:
         create_group_button: New group
         no_groups_description: No groups found matching your search
         no_groups_title: No groups found
-        row_aria_label: See %{name} subgroups
         search:
           placeholder: Filter by PUID or name
         sorting:
@@ -1280,13 +1283,12 @@ en:
   models:
     sample:
       analysis: Analysis
-  namespace_tree:
-    row:
-      row_contents_component:
-        stats:
-          projects: Projects
-          samples: Samples
-          subnamespaces: Subgroups
+  namespace_row:
+    contents_component:
+      stats:
+        projects: Projects
+        samples: Samples
+        subnamespaces: Subgroups
   nextflow:
     samplesheet:
       file_cell_component:

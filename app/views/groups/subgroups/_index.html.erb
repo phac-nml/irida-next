@@ -1,16 +1,23 @@
 <div class="space-y-2">
-
   <% if @namespaces.length > 0 %>
-    <%= render NamespaceTreeContainerComponent.new(
-      namespaces: @namespaces,
-      path: "group_subgroups_path",
-      path_args: {
-        group_id: @group.full_path,
-      },
-      type: [Group.sti_name, Namespaces::ProjectNamespace.sti_name],
-      render_flat_list: @render_flat_list,
-      search_params: @search_params,
-    ) %>
+    <%= render TreegridComponent.new do |component| %>
+      <% @namespaces.each_with_index do |namespace, namespace_index| %>
+        <%= component.with_row(
+          tabindex: (namespace_index.zero? ? 0 : -1),
+          expandable: !@render_flat_list && namespace.children_of_type?([Group.sti_name, Namespaces::ProjectNamespace.sti_name]),
+          posinset: namespace_index + 1,
+          setsize: @namespaces.size,
+          aria: { label: namespace.name},
+          button_arguments: {data: {"toggle-url": public_send("group_subgroups_url", { group_id: @group.full_path, parent_id: namespace.id, collapse: false, level: 1, posinset: namespace_index + 1, setsize: @namespaces.size })}},
+          id: dom_id(namespace)
+        ) do %>
+          <%= render NamespaceRow::ContentsComponent.new(
+            namespace: namespace,
+            icon_size: :medium,
+          ) %>
+        <% end %>
+      <% end %>
+    <% end %>
     <%= render Viral::Pagy::FullComponent.new(@pagy, item: t(".pagy.item")) %>
   <% else %>
     <%= viral_empty(
