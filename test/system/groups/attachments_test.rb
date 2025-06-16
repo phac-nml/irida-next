@@ -255,7 +255,7 @@ module Groups
       within('table tbody') do
         assert_text @attachment1.file.filename.to_s
         assert_text @attachment2.file.filename.to_s
-        click_link I18n.t('attachments.table_component.delete'), match: :first
+        click_button I18n.t('attachments.table_component.delete'), match: :first
       end
 
       within('dialog') do
@@ -267,7 +267,7 @@ module Groups
       within('table tbody') do
         assert_no_text @attachment1.file.filename.to_s
         assert_text @attachment2.file.filename.to_s
-        click_link I18n.t('attachments.table_component.delete'), match: :first
+        click_button I18n.t('attachments.table_component.delete'), match: :first
       end
 
       within('dialog') do
@@ -302,7 +302,7 @@ module Groups
         assert_selector 'tr:first-child td:nth-child(3)', text: 'fastq'
         assert_selector 'tr:first-child td:nth-child(4)', text: 'illumina_pe'
         within('tr:first-child') do
-          click_link I18n.t('attachments.table_component.delete'), match: :first
+          click_button I18n.t('attachments.table_component.delete'), match: :first
         end
       end
 

@@ -980,6 +980,7 @@ fr:
         empty_state:
           description: Aucun groupe n'a reçu d'accès délégué à ce groupe
           title: Aucun groupe
+        unlink: Dissocier
         unlink_confirmation: Êtes-vous sûr de vouloir dissocier le groupe %{namespace_name} du groupe %{group_name}?
       new:
         button:

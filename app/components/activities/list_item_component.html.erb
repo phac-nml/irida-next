@@ -29,6 +29,8 @@
       <%= render Activities::Groups::SampleTransferActivityComponent.new(
         activity: activity,
       ) %>
+    <% elsif sample_clone_action %>
+      <%= render Activities::Groups::SampleCloneActivityComponent.new(activity: activity) %>
     <% elsif member_action %>
       <%= render Activities::MemberActivityComponent.new(activity: activity) %>
     <% elsif project_crud_action %>

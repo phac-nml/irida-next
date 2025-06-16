@@ -980,6 +980,7 @@ en:
         empty_state:
           description: There are no groups that have been delegated access to this group
           title: No groups
+        unlink: Unlink
         unlink_confirmation: Are you sure you want to unlink the group %{namespace_name} with group %{group_name}
       new:
         button:

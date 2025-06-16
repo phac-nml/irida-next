@@ -115,7 +115,7 @@ module Projects
         visit namespace_project_sample_url(@namespace, @project, @sample1)
 
         within('#attachments-table-body') do
-          assert_link text: I18n.t('projects.samples.attachments.attachment.delete'), count: 2
+          assert_button text: I18n.t('projects.samples.attachments.attachment.delete'), count: 2
           click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
         end
 
@@ -159,7 +159,7 @@ module Projects
         within('#sample_attachments') do
           assert_text 'TestSample_S1_L001_R1_001.fastq.gz'
           assert_text 'TestSample_S1_L001_R2_001.fastq.gz'
-          assert_link text: I18n.t('projects.samples.attachments.attachment.delete'), count: 1
+          assert_button text: I18n.t('projects.samples.attachments.attachment.delete'), count: 1
         end
 
         # Destroy paired files
@@ -656,7 +656,7 @@ module Projects
         visit namespace_project_sample_url(@namespace, @project, @sample1)
 
         within('#attachments-table-body') do
-          assert_link text: I18n.t('projects.samples.attachments.attachment.delete'), count: 2
+          assert_button text: I18n.t('projects.samples.attachments.attachment.delete'), count: 2
           all('input[type=checkbox]').each { |checkbox| checkbox.click unless checkbox.checked? }
           click_on I18n.t('projects.samples.attachments.attachment.delete'), match: :first
         end
