@@ -49,7 +49,7 @@ module Treegrid
       @button_arguments[:tabindex] = '-1'
     end
 
-    def set_default_system_arguments(expanded, expandable, tabindex, level, posinset, setsize)
+    def set_default_system_arguments(expanded, expandable, tabindex, level, posinset, setsize) # rubocop:disable Metrics/ParameterLists
       @system_arguments[:aria] = (@system_arguments[:aria] || {}).deep_merge({
                                                                                level: level,
                                                                                posinset: posinset,
