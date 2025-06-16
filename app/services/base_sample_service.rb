@@ -23,6 +23,7 @@ class BaseSampleService < BaseService
     if !new_project_id.nil? && new_project_id.blank?
       raise BaseError, I18n.t("services.samples.#{action_type}.empty_new_project_id")
     end
+
     raise BaseError, I18n.t("services.samples.#{action_type}.empty_sample_ids") if sample_ids.blank?
 
     return unless !new_project_id.nil? && new_project_id.present? && @namespace.project_namespace?
@@ -30,7 +31,7 @@ class BaseSampleService < BaseService
     return unless @namespace.project.id == new_project_id
 
     raise BaseError,
-          I18n.t('services.samples.transfer.same_project')
+          I18n.t("services.samples.#{action_type}.same_project")
   end
 
   # Filter the samples that the user has permissions to modify/copy
@@ -39,7 +40,6 @@ class BaseSampleService < BaseService
                                        scope_options: { namespace: @namespace,
                                                         minimum_access_level: access_level })
               .where(id: sample_ids)
-
     unauthorized_sample_ids = []
     invalid_ids = []
     not_found_sample_ids = sample_ids - samples.pluck(:id)
@@ -52,7 +52,6 @@ class BaseSampleService < BaseService
         unauthorized_sample_ids << sample_id
       end
     end
-
     # We can combine the invalid_ids and unauthorized_sample_ids at the project level
     # since you can only do actions such as transfer, clone, destroy for samples
     # that are on the project, otherwise we can just return a samples not found message
@@ -65,13 +64,11 @@ class BaseSampleService < BaseService
                             I18n.t("services.samples.#{action_type}.unauthorized",
                                    sample_ids: unauthorized_sample_ids.join(', ')))
     end
-
     if invalid_ids.count.positive?
       @namespace.errors.add(:samples,
                             I18n.t("services.samples.#{action_type}.samples_not_found",
                                    sample_ids: invalid_ids.join(', ')))
     end
-
     samples
   end
 end

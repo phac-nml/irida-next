@@ -1,9 +1,10 @@
 <% if Flipper.enabled?(:progress_bars) %>
   <%= turbo_stream.update "samples_dialog",
-                      partial: "dialog",
+                      partial: "samples/clones/dialog",
                       locals: {
                         open: true,
                         closable: false,
+                        broadcast_target: @broadcast_target,
                       } %>
 
   <%= turbo_stream.update "clone_samples_dialog_content" do %>
@@ -12,7 +13,7 @@
 <% else %>
   <%= turbo_stream.append "clone_samples_dialog_content" do %>
     <%= render SpinnerComponent.new(
-      message: t("projects.samples.clones.dialog.spinner_message"),
+      message: t("samples.clones.dialog.spinner_message"),
     ) %>
   <% end %>
 <% end %>

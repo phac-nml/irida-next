@@ -37,7 +37,7 @@ module Activities
 
         within %(div[data-controller="activities--extended_details"][data-controller-connected="true"]) do
           assert_selector 'p',
-                          text: I18n.t(:'components.activity.dialog.sample_clone.target_project_description',
+                          text: I18n.t(:'components.activity.dialog.sample_clone.project.target_project_description',
                                        user: 'System', count: 1,
                                        target_project_puid: 'INXT_PRJ_AAAAAAAAAB')
 
@@ -72,7 +72,7 @@ module Activities
         assert_selector 'h1', text: I18n.t(:'components.activity.dialog.sample_clone.title')
 
         assert_selector 'p',
-                        text: I18n.t(:'components.activity.dialog.sample_clone.source_project_description',
+                        text: I18n.t(:'components.activity.dialog.sample_clone.project.source_project_description',
                                      user: 'System', count: 1,
                                      source_project_puid: 'INXT_PRJ_AAAAAAAAAA')
         assert_selector 'table', count: 1
@@ -253,6 +253,57 @@ module Activities
           assert_selector 'tr:nth-child(3) > td:nth-child(3)', text: 'Project Group Sample Transfer Target'
           assert_selector 'tr:nth-child(3) > td:nth-child(3) > span', text: 'INXT_PRJ_AAAAAAAACD'
         end
+      end
+
+      test 'group clone samples activity dialog' do
+        group = groups(:group_one)
+        project_namespace = namespaces_project_namespaces(:project2_namespace)
+        project1 = projects(:project1)
+        sample1 = samples(:sample1)
+        sample2 = samples(:sample2)
+        ::Groups::Samples::CloneService.new(group, @user)
+                                       .execute(
+                                         project_namespace.project.id,
+                                         [sample1.id, sample2.id],
+                                         nil
+                                       )
+
+        activities = group.human_readable_activity(group.retrieve_group_activity).reverse
+
+        assert_equal(1, activities.count do |activity|
+          activity[:key].include?('group.samples.clone')
+        end)
+
+        activity_to_render = activities.find do |a|
+          a[:key] == 'activity.group.samples.clone_html'
+        end
+
+        visit group_activity_path(group)
+
+        click_link(I18n.t('components.activity.more_details'),
+                   href: activity_path(activity_to_render[:id], dialog_type: 'samples_clone').to_s)
+
+        assert_selector 'h1', text: I18n.t(:'components.activity.dialog.sample_clone.title')
+
+        assert_selector 'p',
+                        text: I18n.t(:'components.activity.dialog.sample_clone.group.target_project_description',
+                                     user: @user.email,
+                                     count: activity_to_render[:cloned_samples_count])
+        assert_selector 'table', count: 1
+        assert_selector 'th', count: 4
+        assert_selector 'tr', count: 3
+        assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.sample_clone.project_from').upcase
+        assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.sample_clone.project_to').upcase
+        assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.sample_clone.copied_from').upcase
+        assert_selector 'tr > th', text: I18n.t(:'components.activity.dialog.sample_clone.copied_to').upcase
+        assert_selector 'tr > td', text: project1.name
+        assert_selector 'tr > td', text: project1.puid, count: 2
+        assert_selector 'tr > td', text: sample1.name, count: 2
+        assert_selector 'tr > td', text: sample1.puid
+        assert_selector 'tr > td', text: project_namespace.project.name, count: 2
+        assert_selector 'tr > td', text: project_namespace.puid, count: 2
+        assert_selector 'tr > td', text: sample2.name, count: 2
+        assert_selector 'tr > td', text: sample2.puid
       end
     end
   end

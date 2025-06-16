@@ -1,22 +1,38 @@
-<div>
-  <%= viral_alert(type:, message:, classes: "mb-4 max-h-50 overflow-y-auto") do %>
-    <ul class="mt-1.5 ml-4 list-disc list-inside">
-      <% errors.each do |error| %>
-        <%- error_parts = error.split(":") %>
-        <%- if error_parts.length > 1 %>
-          <li><%= error_parts[0] %>
-            <ul class="mt-1.5 ml-4 list-disc list-inside">
+<div aria-live="polite">
+  <h2 class="text-lg font-semibold text-red-800">
+    <%= message %>
+  </h2>
+  <ul class="space-y-3 max-h-60 md:max-h-80 overflow-y-auto p-2">
+    <% errors.each do |error| %>
+      <%- error_parts = error.split(":") %>
+      <li
+        class="
+          flex items-start gap-3 bg-red-100 border-l-4 border-red-500 rounded-md px-3 py-2
+          shadow-sm
+        "
+      >
+        <span class="mt-0.5 text-red-600" aria-hidden="true">
+          <%= render_icon(:ph_x_circle, size: "lg", class: "inline align-middle text-red-500") %>
+        </span>
+        <div class="flex-1 min-w-0">
+          <% if error_parts.length > 1 %>
+            <div class="font-semibold text-red-800">
+              <%= error_parts[0] %>
+            </div>
+            <ul class="ml-4 mt-1.5 list-disc list-inside text-sm text-red-700">
               <li><%= error_parts[1] %></li>
             </ul>
-          </li>
-        <% else %>
-          <li><%= error %></li>
-        <% end %>
-      <% end %>
-    </ul>
-  <% end %>
+          <% else %>
+            <div class="text-red-800">
+              <%= error %>
+            </div>
+          <% end %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
 
-  <div>
+  <div class="flex justify-end mt-4">
     <%= viral_button(state: :primary, data: { action: 'click->viral--dialog#close' }) do %>
       <%= t(".ok_button") %>
     <% end %>

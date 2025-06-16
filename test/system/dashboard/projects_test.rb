@@ -13,6 +13,7 @@ module Dashboard
       @sample1 = samples(:sample1)
 
       Flipper.enable(:progress_bars)
+      Flipper.enable(:group_samples_clone)
     end
 
     test 'can see the list of projects' do
@@ -383,19 +384,19 @@ module Dashboard
       click_button I18n.t('shared.samples.actions_dropdown.label')
       click_button I18n.t('shared.samples.actions_dropdown.clone')
 
-      within('div[data-controller-connected="true"] dialog') do
-        assert_text I18n.t('projects.samples.clones.dialog.description.singular')
+      within('#dialog') do
+        assert_text I18n.t('samples.clones.dialog.description.singular')
         within %(turbo-frame[id="list_selections"]) do
           assert_text @sample1.name
         end
         find('input.select2-input').click
         find("li[data-value='#{@project2.id}']").click
 
-        click_on I18n.t('projects.samples.clones.dialog.submit_button')
+        click_on I18n.t('samples.clones.dialog.submit_button')
         assert_text I18n.t('shared.progress_bar.in_progress')
         perform_enqueued_jobs only: [::Samples::CloneJob]
       end
-      assert_text I18n.t('projects.samples.clones.create.success')
+      assert_text I18n.t('samples.clones.create.success')
 
       visit dashboard_projects_url
 

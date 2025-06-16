@@ -174,7 +174,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     relation.find_by(puid: puid)
   end
 
-  def transfer_activity_parameters(params, activity) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  def transfer_activity_parameters(params, activity) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity
     if %w[project_namespace_transfer group_namespace_transfer].include?(activity.parameters[:action])
 
       params.merge!({
@@ -215,6 +215,12 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
                       source_project: get_object_by_id(activity.parameters[:source_project], Project),
                       target_project_puid: activity.parameters[:target_project_puid],
                       target_project: get_object_by_id(activity.parameters[:target_project], Project),
+                      cloned_samples_count: activity.parameters[:cloned_samples_count]
+                    })
+    end
+
+    if activity.parameters[:action] == 'group_sample_clone'
+      params.merge!({
                       cloned_samples_count: activity.parameters[:cloned_samples_count]
                     })
     end
