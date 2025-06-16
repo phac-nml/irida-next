@@ -33,7 +33,7 @@
       <% end %>
     <% end %>
     <% table.with_column(t("bots.index.table.header.actions"),
-        sticky_key: :right, classes: "flex justify-start", row_column_classes: "bg-white w-full dark:bg-slate-800 text-right"
+        classes: "flex justify-start"
       ) do |row| %>
       <% if @abilities[:generate_token] %>
         <%= button_to t("bots.index.table.actions.generate_new_token"),
@@ -46,7 +46,7 @@
           label: t("bots.index.table.actions.generate_new_token_aria_label"),
         },
         class:
-          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer" %>
+          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer mr-2" %>
       <% end %>
       <% if @abilities[:destroy_bot] %>
         <%= button_to t("bots.index.table.actions.destroy"),

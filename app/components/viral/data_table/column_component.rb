@@ -50,7 +50,6 @@ module Viral
           classes:
           class_names(@system_arguments[:padding],
                       @system_arguments[:classes],
-                      @system_arguments[:row_column_classes],
                       @system_arguments[:sticky_key] && STICKY_CLASSES[@system_arguments[:sticky_key]][:body])
         }
       end

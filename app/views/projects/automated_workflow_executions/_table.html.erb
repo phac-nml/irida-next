@@ -28,7 +28,7 @@
       <% end %>
     <% end %>
     <% table.with_column(t(".headers.actions"),
-        sticky_key: :right, classes: "flex justify-start", row_column_classes: "bg-white w-full dark:bg-slate-800 text-right"
+        classes: "flex justify-start"
       ) do |row| %>
       <% unless row.disabled %>
         <%= button_to t(:"projects.automated_workflow_executions.actions.edit_button"),
@@ -42,7 +42,7 @@
         },
         method: :get,
         class:
-          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer" %>
+          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer mr-2" %>
       <% end %>
       <%= button_to t(:"projects.automated_workflow_executions.actions.delete_button"),
       namespace_project_automated_workflow_execution_path(
