@@ -4,13 +4,14 @@
   <% end %>
 
   <% if disclosure.present? %>
+    <% icon_class = "size-4 ml-2" %>
     <% case disclosure %>
     <% when :down %>
-      <%= viral_icon(name: "chevron_down", classes: "ml-2 w-4 h-4") %>
+      <%= render Pathogen::Icon.new(Pathogen::ICON::CARET_DOWN, class: icon_class) %>
     <% when :up %>
-      <%= viral_icon(name: "chevron_up", classes: "ml-2 w-4 h-4") %>
+      <%= render Pathogen::Icon.new(Pathogen::ICON::CARET_UP, class: icon_class) %>
     <% when :right %>
-      <%= viral_icon(name: "chevron_right", classes: "ml-2 w-4 h-4") %>
+      <%= render Pathogen::Icon.new(Pathogen::ICON::CARET_RIGHT, class: icon_class) %>
     <% end %>
   <% end %>
 <% end %>
