@@ -29,7 +29,7 @@ module Treegrid
 
       @button_arguments[:aria] ||= {}
       @button_arguments[:aria][:label] =
-        @expanded ? I18n.t(:'components.treegrid.row.collapse') : I18n.t(:'components.treegrid.row.expand')
+        expandable && expanded ? I18n.t(:'components.treegrid.row.collapse') : I18n.t(:'components.treegrid.row.expand')
       @button_arguments[:aria][:labelledby] = @system_arguments[:id]
       @button_arguments[:data] ||= {}
       @button_arguments[:data][:action] = 'click->treegrid#toggleRow'

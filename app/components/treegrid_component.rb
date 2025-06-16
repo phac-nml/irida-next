@@ -22,5 +22,7 @@ class TreegridComponent < Component
     @system_arguments[:aria][:readonly] = 'true'
     @system_arguments[:data] ||= {}
     @system_arguments[:data][:controller] = 'treegrid'
+    @system_arguments[:data]['treegrid-expand-text-value'] = I18n.t(:'components.treegrid.row.expand')
+    @system_arguments[:data]['treegrid-collapse-text-value'] = I18n.t(:'components.treegrid.row.collapse')
   end
 end

@@ -3,6 +3,10 @@ import { tabbable } from "tabbable";
 
 export default class extends Controller {
   static targets = ["row"];
+  static values = {
+    expandText: String,
+    collapseText: String,
+  };
 
   initialize() {
     this.boundKeydown = this.keydown.bind(this);
@@ -237,6 +241,7 @@ export default class extends Controller {
       }
       if (didChange) {
         this.#setAriaExpanded(row, doExpand);
+        this.#setToggleButtonText(toggleButton, doExpand);
         return true;
       }
     }
@@ -244,5 +249,13 @@ export default class extends Controller {
 
   #setAriaExpanded(row, doExpand) {
     row.setAttribute("aria-expanded", doExpand);
+  }
+
+  #setToggleButtonText(toggleButton, doExpand) {
+    if (doExpand) {
+      toggleButton.setAttribute("aria-label", this.collapseTextValue);
+    } else {
+      toggleButton.setAttribute("aria-label", this.expandTextValue);
+    }
   }
 }
