@@ -34,6 +34,7 @@ module Pathogen
     FILES = { name: :files, options: {} }.freeze
     FLASK = { name: :flask, options: {} }.freeze
     GEAR_SIX = { name: 'gear-six', options: {} }.freeze
+    LIST = { name: :list, options: {} }.freeze
     LIST_BULLETS = { name: 'list-bullets', options: {} }.freeze
     LOCK_KEY = { name: 'lock-key', options: {} }.freeze
     MAGNIFYING_GLASS = { name: 'magnifying-glass', options: {} }.freeze
