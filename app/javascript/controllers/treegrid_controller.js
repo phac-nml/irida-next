@@ -16,6 +16,7 @@ export default class extends Controller {
   }
 
   keydown(event) {
+    console.log("keydown");
     if (event.key === "ArrowDown" && !event.ctrlKey && !event.shiftKey) {
       this.#moveByRow(+1);
     } else if (event.key === "ArrowUp" && !event.ctrlKey && !event.shiftKey) {
@@ -97,8 +98,9 @@ export default class extends Controller {
   }
 
   focusin(event) {
-    // if focusing freshly into the treegrid then focus the focusable row
+    // if focusing freshly into the treegrid via keyboard then focus the focusable row
     if (
+      event.relatedTarget &&
       !this.rowTargets.includes(event.target) &&
       !this.element.contains(event.relatedTarget)
     ) {
