@@ -46,6 +46,7 @@ module Pathogen
     TRANSLATE = { name: 'translate', options: {} }.freeze
     USER_CIRCLE = { name: 'user-circle', options: {} }.freeze
     USERS = { name: :users, options: {} }.freeze
+    WARNING_CIRCLE = { name: 'warning-circle', options: {} }.freeze
     X = { name: :x, options: {} }.freeze
     # Heroicons
     BEAKER = { name: :beaker, options: { library: :heroicons } }.freeze
