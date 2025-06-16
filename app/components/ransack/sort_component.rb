@@ -28,7 +28,7 @@ module Ransack
         return
       end
 
-      @ransack_obj.sorts[0].dir == 'asc' ? 'arrow_up' : 'arrow_down'
+      @ransack_obj.sorts[0].dir == 'asc' ? Pathogen::ICON::ARROW_UP : Pathogen::ICON::ARROW_DOWN
     end
   end
 end
