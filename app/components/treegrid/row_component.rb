@@ -14,7 +14,7 @@ module Treegrid
       <% end %>
     ERB
 
-    def initialize( # rubocop:disable Metrics/ParameterLists,Metrics/AbcSize,Metrics/MethodLength
+    def initialize( # rubocop:disable Metrics/ParameterLists
       expanded: false,
       expandable: false,
       tabindex: -1,
@@ -27,6 +27,13 @@ module Treegrid
       @button_arguments = button_arguments
       @system_arguments = system_arguments
 
+      set_default_button_arguments(expanded, expandable)
+      set_default_system_arguments(expanded, expandable, tabindex, level, posinset, setsize)
+    end
+
+    private
+
+    def set_default_button_arguments(expanded, expandable)
       @button_arguments[:aria] ||= {}
       @button_arguments[:aria][:label] =
         expandable && expanded ? I18n.t(:'components.treegrid.row.collapse') : I18n.t(:'components.treegrid.row.expand')
@@ -40,7 +47,9 @@ module Treegrid
                                               'rounded-lg flex items-center justify-center dark:text-white')
       @button_arguments.delete(:classes)
       @button_arguments[:tabindex] = '-1'
+    end
 
+    def set_default_system_arguments(expanded, expandable, tabindex, level, posinset, setsize)
       @system_arguments[:aria] = (@system_arguments[:aria] || {}).deep_merge({
                                                                                level: level,
                                                                                posinset: posinset,
