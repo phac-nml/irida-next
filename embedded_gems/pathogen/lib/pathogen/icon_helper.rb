@@ -33,6 +33,7 @@ module Pathogen
     FILE_MAGNIFYING_GLASS = { name: 'file-magnifying-glass', options: {} }.freeze
     FILES = { name: :files, options: {} }.freeze
     FLASK = { name: :flask, options: {} }.freeze
+    FOLDER_OPEN = { name: 'folder-open', options: {} }.freeze
     GEAR_SIX = { name: 'gear-six', options: {} }.freeze
     LIST = { name: :list, options: {} }.freeze
     LIST_BULLETS = { name: 'list-bullets', options: {} }.freeze
