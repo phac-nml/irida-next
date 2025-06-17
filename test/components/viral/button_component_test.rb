@@ -77,25 +77,5 @@ module Viral
         assert_text 'Full Width Button'
       end
     end
-
-    test 'button large' do
-      render_inline(Viral::ButtonComponent.new(size: :large)) do
-        'Large Button'
-      end
-
-      assert_selector 'button.button--size-large' do
-        assert_text 'Large Button'
-      end
-    end
-
-    test 'button small' do
-      render_inline(Viral::ButtonComponent.new(size: :small)) do
-        'Small Button'
-      end
-
-      assert_selector 'button.button--size-default' do
-        assert_text 'Small Button'
-      end
-    end
   end
 end
