@@ -33,6 +33,7 @@ export default class extends Controller {
   static values = {
     dataMissingError: { type: String },
     submissionError: { type: String },
+    formError: { type: String },
     url: { type: String },
     noSelectedFile: { type: String },
     processingRequest: { type: String },
@@ -64,6 +65,40 @@ export default class extends Controller {
     "ring-2",
     "ring-primary-500",
     "dark:ring-primary-600",
+  ];
+
+  #form_error_text_css = ["text-red-500"];
+
+  #workflow_execution_name_error_state = [
+    "bg-slate-50",
+    "border",
+    "border-red-500",
+    "text-slate-900",
+    "text-sm",
+    "rounded-lg",
+    "block",
+    "w-full",
+    "p-2.5",
+    "dark:bg-slate-700",
+    "dark:border-slate-600",
+    "dark:placeholder-slate-400",
+    "dark:text-white",
+  ];
+
+  #workflow_execution_name_valid_state = [
+    "bg-slate-50",
+    "border",
+    "border-slate-300",
+    "text-slate-900",
+    "text-sm",
+    "rounded-lg",
+    "block",
+    "w-full",
+    "p-2.5",
+    "dark:bg-slate-700",
+    "dark:border-slate-600",
+    "dark:placeholder-slate-400",
+    "dark:text-white",
   ];
 
   // The samplesheet will use FormData, allowing us to create the inputs of a form without the associated DOM elements.
@@ -169,34 +204,39 @@ export default class extends Controller {
     this.#enableProcessingState(this.processingRequestValue);
     // 50ms timeout allows the browser to update the DOM elements enabling the overlay prior to starting the submission
     setTimeout(() => {
-      let missingData = this.#validateData();
-      if (Object.keys(missingData).length > 0) {
-        this.#disableProcessingState();
-        let errorMsg = this.dataMissingErrorValue;
-        for (const sample in missingData) {
-          errorMsg =
-            errorMsg + `\n - ${sample}: ${missingData[sample].join(", ")}`;
+      let nameValid = this.#validateWorkflowExecutionName();
+      if (nameValid) {
+        let missingData = this.#validateData();
+        if (Object.keys(missingData).length > 0) {
+          this.#disableProcessingState();
+          let errorMsg = this.dataMissingErrorValue;
+          for (const sample in missingData) {
+            errorMsg =
+              errorMsg + `\n - ${sample}: ${missingData[sample].join(", ")}`;
+          }
+          this.#enableErrorState(errorMsg);
+        } else {
+          this.#combineFormData();
+
+          this.formTarget.addEventListener(
+            "turbo:before-fetch-request",
+            (event) => {
+              event.detail.fetchOptions.body = JSON.stringify(
+                formDataToJsonParams(this.#compactFormData()),
+              );
+              event.detail.fetchOptions.headers["Content-Type"] =
+                "application/json";
+
+              event.detail.resume();
+            },
+            {
+              once: true,
+            },
+          );
+          this.formTarget.requestSubmit();
         }
-        this.#enableErrorState(errorMsg);
       } else {
-        this.#combineFormData();
-
-        this.formTarget.addEventListener(
-          "turbo:before-fetch-request",
-          (event) => {
-            event.detail.fetchOptions.body = JSON.stringify(
-              formDataToJsonParams(this.#compactFormData()),
-            );
-            event.detail.fetchOptions.headers["Content-Type"] =
-              "application/json";
-
-            event.detail.resume();
-          },
-          {
-            once: true,
-          },
-        );
-        this.formTarget.requestSubmit();
+        this.#disableProcessingState();
       }
     }, 50);
   }
@@ -753,5 +793,46 @@ export default class extends Controller {
       }
     }
     return compactFormData;
+  }
+
+  #validateWorkflowExecutionName() {
+    let nameHint = document.getElementById("nameHint");
+    let name = document.getElementById("workflow_execution_name");
+    let hasErrors = false;
+
+    if (name.value === "") {
+      hasErrors = true;
+    }
+
+    if (hasErrors) {
+      name.setAttribute("aria-invalid", true);
+      name.setAttribute("aria-describedBy", "nameHint");
+      name.classList.remove(...this.#workflow_execution_name_valid_state);
+      name.classList.add(...this.#workflow_execution_name_error_state);
+      nameHint.style.display = "block";
+      nameHint.classList.add(...this.#form_error_text_css);
+      // populate live region
+      let messageSelector = document.getElementById("message");
+      messageSelector.innerHTML =
+        "<p class='" +
+        this.#form_error_text_css.join(" ") +
+        "'>" +
+        this.formErrorValue +
+        "</p>";
+
+      return false;
+    } else {
+      name.removeAttribute("aria-invalid");
+      name.removeAttribute("aria-describedBy");
+      name.classList.remove(...this.#workflow_execution_name_error_state);
+      name.classList.add(...this.#workflow_execution_name_valid_state);
+      nameHint.style.display = "none";
+      nameHint.classList.remove(...this.#form_error_text_css);
+      // clear live region
+      let messageSelector = document.getElementById("message");
+      messageSelector.innerHTML = "";
+    }
+
+    return true;
   }
 }

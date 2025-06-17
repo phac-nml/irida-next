@@ -7,6 +7,7 @@
   data-nextflow--samplesheet-no-selected-file-value="<%= t("nextflow.samplesheet.file_cell_component.no_selected_file")%>"
   data-nextflow--samplesheet-processing-request-value="<%= t(".processing_request")%>"
   data-nextflow--samplesheet-filtering-samples-value="<%= t(".filtering_samples")%>"
+  data-nextflow--samplesheet-form-error-value="<%= t(".form_error")%>"
   data-action="
     nextflow--file:sendFileData->nextflow--samplesheet#updateFileData
     nextflow--metadata:sendMetadata->nextflow--samplesheet#updateMetadata
@@ -47,6 +48,7 @@
                             value: instance.present? ? instance.name : nil,
                             class:
                               "bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg block w-full p-2.5  dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white" %>
+        <div class="hint" id="nameHint" style="display: none"><%= t(".name.hint") %></div>
       </section>
 
       <%= workflow.hidden_field :namespace_id, value: @namespace_id %>
@@ -135,6 +137,9 @@
         </div>
       <% end %>
     <% end %>
+
+    <div aria-live="assertive" id="message" class="mb-2">
+    </div>
 
     <button
       class="button button-primary"

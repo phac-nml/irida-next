@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # entity class for Sample
-class WorkflowExecution < ApplicationRecord # rubocop:disable Metrics/ClassLength
+class WorkflowExecution < ApplicationRecord
   include MetadataSortable
   METADATA_JSON_SCHEMA = Rails.root.join('config/schemas/workflow_execution_metadata.json')
 
@@ -27,8 +27,7 @@ class WorkflowExecution < ApplicationRecord # rubocop:disable Metrics/ClassLengt
   validates :metadata, presence: true, json: { message: ->(errors) { errors }, schema: METADATA_JSON_SCHEMA }
   validate :validate_namespace
   validate :validate_workflow_available, if: :initial?
-  validates :name, presence: true
-  validate :name, :unique_submitter_namespace
+  validates :name, presence: true, if: -> { !submitter.automation_bot? }
 
   enum :state,
        { initial: 0, prepared: 1, submitted: 2, running: 3, completing: 4, completed: 5, error: 6, canceling: 7,
@@ -95,25 +94,6 @@ class WorkflowExecution < ApplicationRecord # rubocop:disable Metrics/ClassLengt
                I18n.t('activerecord.errors.models.workflow_execution.invalid_workflow',
                       workflow_name: metadata['workflow_name'],
                       workflow_version: metadata['workflow_version']))
-  end
-
-  # This validation ensures that the submitter (non automation bot)
-  # has unique workflow execution names
-  def unique_submitter_namespace # rubocop:disable Metrics/AbcSize
-    return true if submitter.automation_bot? || name.blank? || !name_changed?
-
-    workflow_execution_arel_table = WorkflowExecution.arel_table
-
-    query = workflow_execution_arel_table[:name].eq(name).and(
-      workflow_execution_arel_table[:submitter_id].eq(submitter.id)
-    )
-
-    workflow_execution_name_exists_for_submitter = WorkflowExecution.where(query).exists?
-
-    return unless workflow_execution_name_exists_for_submitter
-
-    errors.add(:base,
-               I18n.t('activerecord.errors.models.workflow_execution.name_not_unique_for_submitter', name: name))
   end
 
   private
