@@ -9,12 +9,13 @@
   ) do |component| %>
     <%= component.with_buttons do %>
       <% if @allowed_to[:create_attachment] %>
-        <%= link_to t(".upload_files"),
+        <%= button_to t(".upload_files"),
         new_group_attachment_path(id: @group.id),
         data: {
           turbo_frame: "attachment_modal",
           turbo_stream: true,
         },
+        method: :get,
         class:
           "inline-flex items-center justify-center w-1/2 text-sm border rounded-lg cursor-pointer sm:w-auto focus:z-10 px-5 py-2.5 bg-white text-slate-900 border-slate-200 hover:bg-slate-100 hover:text-slate-950 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600 dark:hover:text-white dark:hover:bg-slate-700" %>
       <% end %>

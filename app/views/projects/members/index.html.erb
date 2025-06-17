@@ -6,31 +6,36 @@
 <%= render Viral::PageHeaderComponent.new(title: t(:'.title'), subtitle: t(:'.subtitle', namespace_type: @namespace.class.model_name.human, namespace_name: @namespace.name)) do |component| %>
   <% component.with_buttons do %>
     <% if @allowed_to[:link_namespace_with_group] %>
-      <%= link_to I18n.t("projects.members.index.invite_group"),
-      new_namespace_project_group_link_path(
-        @namespace.parent,
-        @namespace.project,
+      <%= button_to I18n.t("projects.members.index.invite_group"),
+      new_namespace_project_group_link_path(@namespace.parent, @namespace.project),
+      params: {
         tab: @tab,
-      ),
+      },
+      method: :get,
       data: {
         "turbo-frame" => "new_member_modal",
         :turbo_stream => true,
       },
+      aria: {
+        label: t(:".actions.button_add_aria_label"),
+      },
       class: "button button--state-default button--size-default" %>
     <% end %>
     <% if @allowed_to[:create_member] %>
-      <%= link_to t(:".add"),
-      new_namespace_project_member_path(
-        @namespace.parent,
-        @namespace.project,
+      <%= button_to t(:".add"),
+      new_namespace_project_member_path(@namespace.parent, @namespace.project),
+      params: {
         tab: @tab,
-      ),
-      data: {
-        turbo_frame: "new_member_modal",
-        turbo_stream: true,
       },
-      class: "button button--state-primary button--size-default",
-      "aria-label": t(:".actions.button_add_aria_label") %>
+      method: :get,
+      data: {
+        "turbo-frame" => "new_member_modal",
+        :turbo_stream => true,
+      },
+      aria: {
+        label: t(:".actions.button_add_aria_label"),
+      },
+      class: "button button--state-default button--size-default" %>
     <% end %>
   <% end %>
 <% end %>

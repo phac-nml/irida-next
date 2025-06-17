@@ -33,7 +33,7 @@ module Projects
       visit namespace_project_attachments_path(@namespace, @project1)
       assert_selector '#attachments-table table tbody tr', count: 2
 
-      assert_selector 'a', text: I18n.t('projects.attachments.index.upload_files')
+      assert_selector 'button', text: I18n.t('projects.attachments.index.upload_files')
       click_on I18n.t('projects.attachments.index.upload_files')
 
       within('dialog') do
@@ -256,7 +256,7 @@ module Projects
       within('table tbody') do
         assert_text @attachment1.file.filename.to_s
         assert_text @attachment2.file.filename.to_s
-        click_link I18n.t('attachments.table_component.delete'), match: :first
+        click_button I18n.t('attachments.table_component.delete'), match: :first
       end
 
       within('dialog') do
@@ -268,7 +268,7 @@ module Projects
       within('table tbody') do
         assert_no_text @attachment1.file.filename.to_s
         assert_text @attachment2.file.filename.to_s
-        click_link I18n.t('attachments.table_component.delete'), match: :first
+        click_button I18n.t('attachments.table_component.delete'), match: :first
       end
 
       within('dialog') do
@@ -303,7 +303,7 @@ module Projects
         assert_selector 'tr:first-child td:nth-child(3)', text: 'fastq'
         assert_selector 'tr:first-child td:nth-child(4)', text: 'illumina_pe'
         within('tr:first-child') do
-          click_link I18n.t('attachments.table_component.delete'), match: :first
+          click_button I18n.t('attachments.table_component.delete'), match: :first
         end
       end
 

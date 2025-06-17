@@ -99,15 +99,14 @@
 
   <td class="px-6 py-4">
     <% if @allowed_to[:destroy_attachment] %>
-      <%= link_to(
-        t(".delete"),
-        namespace_project_sample_attachment_new_destroy_path(
-          sample_id: @sample.id,
-          attachment_id: attachment.id,
-        ),
-        class:
-          "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer",
-      ) %>
+      <%= button_to t(".delete"),
+      namespace_project_sample_attachment_new_destroy_path(
+        sample_id: @sample.id,
+        attachment_id: attachment.id,
+      ),
+      method: :get,
+      class:
+        "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer" %>
     <% end %>
   </td>
 </tr>

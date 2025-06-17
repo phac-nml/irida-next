@@ -49,5 +49,13 @@ module PersonalAccessTokens
         }
       end
     end
+
+    def revoke_http_method
+      if @namespace
+        :get
+      else
+        :delete
+      end
+    end
   end
 end

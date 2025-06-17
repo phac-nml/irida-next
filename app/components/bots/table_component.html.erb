@@ -5,12 +5,14 @@
     <% end %>
     <% table.with_column(t("bots.index.table.header.active_tokens")) do |row| %>
       <% if row.user.personal_access_tokens.active.count.positive? %>
-        <%= link_to row.user.personal_access_tokens.active.count,
+        <%= button_to row.user.personal_access_tokens.active.count,
         bot_tokens_path(row),
         data: {
           turbo_stream: true,
         },
-        class: "font-semibold text-slate-800 dark:text-slate-300 hover:underline" %>
+        method: :get,
+        class:
+          "font-semibold text-slate-800 dark:text-slate-300 hover:underline hover:underline cursor-pointer" %>
       <% else %>
         0
       <% end %>
@@ -31,35 +33,34 @@
       <% end %>
     <% end %>
     <% table.with_column(t("bots.index.table.header.actions"),
-        sticky_key: :right
+        classes: "flex justify-start"
       ) do |row| %>
       <% if @abilities[:generate_token] %>
-        <%= link_to(
-          t("bots.index.table.actions.generate_new_token"),
-          new_token_path(row),
-          data: {
-            turbo_stream: true,
-          },
-          aria: {
-            label: t("bots.index.table.actions.generate_new_token_aria_label"),
-          },
-          class:
-            "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-        ) %>
+        <%= button_to t("bots.index.table.actions.generate_new_token"),
+        new_token_path(row),
+        data: {
+          turbo_stream: true,
+        },
+        method: :get,
+        aria: {
+          label: t("bots.index.table.actions.generate_new_token_aria_label"),
+        },
+        class:
+          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer mr-2" %>
       <% end %>
       <% if @abilities[:destroy_bot] %>
-        <%= link_to(
-          t("bots.index.table.actions.destroy"),
-          destroy_path(row),
-          data: {
-            "turbo-stream": true,
-          },
-          aria: {
-            label: t("bots.index.table.actions.destroy_aria_label"),
-          },
-          class:
-            "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
-        ) %>
+        <%= button_to t("bots.index.table.actions.destroy"),
+        destroy_path(row),
+        data: {
+          turbo_stream: true,
+        },
+        method: :get,
+        aria: {
+          label: t("bots.index.table.actions.destroy_aria_label"),
+        },
+        class:
+          "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer" %>
+
       <% end %>
     <% end %>
   <% end %>

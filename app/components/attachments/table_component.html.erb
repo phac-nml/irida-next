@@ -258,12 +258,13 @@
                     ) %>
                   <% end %>
                   <% if @row_actions[:destroy] %>
-                    <%= link_to(
+                    <%= button_to(
                       t(".delete"),
                       destroy_path(attachment.id),
                       data: {
                         turbo_stream: true,
                       },
+                      method: :get,
                       class:
                         "font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline cursor-pointer",
                     ) %>

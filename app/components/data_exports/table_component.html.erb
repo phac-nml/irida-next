@@ -87,48 +87,48 @@
               </td>
               <td class="px-3 py-3 space-x-2">
                 <% if data_export.status == 'ready' %>
-                  <%= link_to(
-                    t(:"data_exports.index.actions.download"),
-                    rails_blob_path(data_export.file),
-                    data: {
-                      turbo: false,
-                    },
-                    aria: {
-                      label:
-                        (
-                          t(
-                            :"data_exports.index.actions.download_aria_label",
-                            name: data_export.name || data_export.id,
-                          )
-                        ),
-                    },
-                    class:
-                      "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer",
-                  ) %>
-                <% end %>
-                <%= link_to(
-                  t(:"data_exports.index.actions.delete"),
-                  data_export_path(data_export),
+                  <%= button_to t(:"data_exports.index.actions.download"),
+                  rails_blob_path(data_export.file),
                   data: {
-                    turbo_method: :delete,
-                    turbo_confirm:
-                      t(
-                        :"data_exports.index.delete_confirmation",
-                        name: data_export.name || data_export.id,
-                      ),
+                    turbo: false,
                   },
+                  method: :get,
                   aria: {
                     label:
                       (
                         t(
-                          :"data_exports.index.actions.delete_aria_label",
+                          :"data_exports.index.actions.download_aria_label",
                           name: data_export.name || data_export.id,
                         )
                       ),
                   },
                   class:
-                    "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer",
-                ) %>
+                    "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer" %>
+                <% end %>
+                <%= button_to t(:"data_exports.index.actions.delete"),
+                data_export_path(data_export),
+                data: {
+                  turbo_method: :delete,
+                  turbo_confirm:
+                    (
+                      t(
+                        :"data_exports.index.delete_confirmation",
+                        name: data_export.name || data_export.id,
+                      )
+                    ),
+                },
+                method: :delete,
+                aria: {
+                  label:
+                    (
+                      t(
+                        :"data_exports.index.actions.delete_aria_label",
+                        name: data_export.name || data_export.id,
+                      )
+                    ),
+                },
+                class:
+                  "font-medium text-blue-600 underline dark:text-blue-400 hover:no-underline cursor-pointer" %>
               </td>
             <% end %>
           <% end %>

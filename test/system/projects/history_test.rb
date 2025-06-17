@@ -22,7 +22,7 @@ module Projects
         assert_selector 'ol', count: 1
         assert_selector 'li', count: 1
 
-        assert_selector 'h2', text: I18n.t(:'components.history.link_text', version: 1)
+        assert_selector 'span', text: I18n.t(:'components.history.link_text', version: 1)
 
         assert_selector 'p', text: I18n.t(:'components.history.created_by', type: 'Project', user: 'System')
       end

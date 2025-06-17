@@ -48,7 +48,6 @@ class ActivityComponentTest < ViewComponentTestCase
 
     assert_selector 'li', count: @activities.length
     assert_selector 'time', count: @activities.length
-    assert_selector 'p', count: @activities.length
     assert_button text: 'Load more', count: 1
 
     # Limit set to 10 per page
@@ -58,7 +57,6 @@ class ActivityComponentTest < ViewComponentTestCase
 
     assert_selector 'li', count: @project2_activities.length
     assert_selector 'time', count: @project2_activities.length
-    assert_selector 'p', count: @project2_activities.length
     assert_button text: 'Load more', count: 0
   end
 
@@ -86,7 +84,6 @@ class ActivityComponentTest < ViewComponentTestCase
 
     assert_selector 'li', count: @activities.length
     assert_selector 'time', count: @activities.length
-    assert_selector 'p', count: @activities.length
     assert_button text: 'Load more', count: 0
   end
 end

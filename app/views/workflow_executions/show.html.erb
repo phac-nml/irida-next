@@ -42,35 +42,33 @@
         disabled: true %>
       <% end %>
       <% if @workflow_execution.cancellable? %>
-        <%= link_to(
-          t("workflow_executions.show.cancel_button"),
-          cancel_workflow_execution_path(id: @workflow_execution.id),
-          data: {
-            turbo_method: :put,
-            turbo_confirm: t("workflow_executions.show.cancel_button_confirmation"),
-          },
-          class: "button button--state-default button--size-default mr-1",
-        ) %>
+        <%= button_to t("workflow_executions.show.cancel_button"),
+        cancel_workflow_execution_path(id: @workflow_execution.id),
+        data: {
+          turbo_method: :put,
+          turbo_confirm: t("workflow_executions.show.cancel_button_confirmation"),
+        },
+        method: :put,
+        class: "button button--state-default button--size-default mr-1" %>
       <% end %>
       <% if @allowed_to[:update] %>
-        <%= link_to(
-          t("workflow_executions.show.edit_button"),
-          edit_workflow_execution_path(id: @workflow_execution.id),
-          data: {
-            turbo_stream: true,
-          },
-          class: "button button--state-default button--size-default mr-1",
-        ) %>
+        <%= button_to t("workflow_executions.show.edit_button"),
+        edit_workflow_execution_path(id: @workflow_execution.id),
+        data: {
+          turbo_stream: true,
+        },
+        method: :get,
+        class: "button button--state-default button--size-default mr-1" %>
+
       <% end %>
       <% if @workflow_execution.deletable? %>
-        <%= link_to(
-          t("workflow_executions.show.remove_button"),
-          destroy_confirmation_workflow_execution_path(@workflow_execution),
-          data: {
-            turbo_stream: true,
-          },
-          class: "button button--state-default button--size-default mr-1",
-        ) %>
+        <%= button_to t("workflow_executions.show.remove_button"),
+        destroy_confirmation_workflow_execution_path(@workflow_execution),
+        method: :get,
+        data: {
+          turbo_stream: true,
+        },
+        class: "button button--state-default button--size-default mr-1" %>
       <% end %>
     </div>
   <% end %>
