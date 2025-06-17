@@ -66,7 +66,9 @@ export default class extends Controller {
   #focusByKey(event, menuLinks, currentIndex) {
     switch (event.key) {
       case "Escape":
+        event.preventDefault();
         this.triggerTarget.focus();
+        break;
       case "ArrowUp":
       case "ArrowLeft":
         event.preventDefault();
