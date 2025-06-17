@@ -4,10 +4,11 @@
 class PaginationComponent < Component
   attr_reader :prev_url, :next_url, :info
 
-  def initialize(info:, prev_url: nil, next_url: nil, **link_arguments)
+  def initialize(info:, prev_url: nil, next_url: nil, autofocus_link: false, **link_arguments)
     @info = info
     @prev_url = prev_url
     @next_url = next_url
+    @autofocus_link = autofocus_link
     @link_arguments = link_arguments
   end
 
