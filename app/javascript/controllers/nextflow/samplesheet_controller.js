@@ -821,7 +821,7 @@ export default class extends Controller {
       nameHint.style.display = "block";
       nameHint.classList.add(...this.#form_error_text_css);
       // populate live region
-      let messageSelector = document.getElementById("message");
+      let messageSelector = document.getElementById("aria-assertive-message");
       messageSelector.innerHTML =
         "<p class='" +
         this.#form_error_text_css.join(" ") +
@@ -838,7 +838,7 @@ export default class extends Controller {
       nameHint.style.display = "none";
       nameHint.classList.remove(...this.#form_error_text_css);
       // clear live region
-      let messageSelector = document.getElementById("message");
+      let messageSelector = document.getElementById("aria-assertive-message");
       messageSelector.innerHTML = "";
     }
 
