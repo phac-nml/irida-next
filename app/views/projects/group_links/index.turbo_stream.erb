@@ -1,3 +1,5 @@
-<%= turbo_stream.update "invited_groups", partial: "invited_groups" %>
+<%= turbo_stream.update "invited_groups", method: "morph", partial: "invited_groups" %>
 
-<%= turbo_stream.update "invited_groups_pagination", partial: "pagination" %>
+<%= turbo_stream.update "invited_groups_pagination",
+                    method: "morph",
+                    partial: "pagination" %>
