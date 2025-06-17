@@ -38,6 +38,7 @@ export default class extends Controller {
     noSelectedFile: { type: String },
     processingRequest: { type: String },
     filteringSamples: { type: String },
+    automatedWorkflow: { type: Boolean },
   };
 
   #pagination_button_disabled_state = [
@@ -204,7 +205,15 @@ export default class extends Controller {
     this.#enableProcessingState(this.processingRequestValue);
     // 50ms timeout allows the browser to update the DOM elements enabling the overlay prior to starting the submission
     setTimeout(() => {
-      let nameValid = this.#validateWorkflowExecutionName();
+      // By default we set nameValid to true
+      let nameValid = true;
+
+      // If the workflow execution is not an automated workflow execution,
+      // we check to see if the name is valid
+      if (this.automatedWorkflowValue == false) {
+        nameValid = this.#validateWorkflowExecutionName();
+      }
+
       if (nameValid) {
         let missingData = this.#validateData();
         if (Object.keys(missingData).length > 0) {

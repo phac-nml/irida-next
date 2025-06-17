@@ -8,6 +8,7 @@
   data-nextflow--samplesheet-processing-request-value="<%= t(".processing_request")%>"
   data-nextflow--samplesheet-filtering-samples-value="<%= t(".filtering_samples")%>"
   data-nextflow--samplesheet-form-error-value="<%= t(".form_error")%>"
+  data-nextflow--samplesheet-automated-workflow-value="<%= @samples.empty? %>"
   data-action="
     nextflow--file:sendFileData->nextflow--samplesheet#updateFileData
     nextflow--metadata:sendMetadata->nextflow--samplesheet#updateMetadata
