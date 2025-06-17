@@ -34,7 +34,11 @@
     tabindex="-1"
     hidden="hidden"
   >
-    <ul class="py-2 text-sm text-slate-700 dark:text-slate-200" role="menu">
+    <ul
+      class="py-2 text-sm text-slate-700 dark:text-slate-200"
+      role="menu"
+      id="<%=@dd_id%>"
+    >
       <% items.each do |item| %>
         <%= item %>
       <% end %>
