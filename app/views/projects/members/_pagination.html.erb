@@ -4,9 +4,8 @@
     (
       if @pagy.prev
         namespace_project_members_url(
-          @namespace.parent,
-          @namespace.project,
           page: @pagy.prev,
+          q: params[:q]&.to_unsafe_h,
         )
       else
         nil
@@ -16,12 +15,12 @@
     (
       if @pagy.next
         namespace_project_members_url(
-          @namespace.parent,
-          @namespace.project,
           page: @pagy.next,
+          q: params[:q]&.to_unsafe_h,
         )
       else
         nil
       end
     ),
+  autofocus_link: params.key?(:page),
 ) %>

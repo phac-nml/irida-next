@@ -7,6 +7,8 @@
 >
   <% if prev_url %>
     <%= link_to prev_url,
+          id: "prev-page-link",
+          autofocus: next_url.nil? && @autofocus_link,
           **link_arguments,
           class: [
             "flex items-center justify-center rounded-lg border border-slate-300 bg-slate-200 px-4 py-2.5 text-sm font-medium text-slate-700",
@@ -21,6 +23,8 @@
 
   <% if next_url %>
     <%= link_to next_url,
+          id: "next-page-link",
+          autofocus: prev_url.nil? && @autofocus_link,
           **link_arguments,
           class: [
             "flex items-center justify-center rounded-lg border border-slate-300 bg-slate-200 px-4 py-2.5 text-sm font-medium text-slate-700",

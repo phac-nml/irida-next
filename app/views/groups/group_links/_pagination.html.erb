@@ -2,8 +2,21 @@
   <%= render PaginationComponent.new(
     info: pagy_info(@pagy),
     prev_url:
-      (@pagy.prev ? group_group_links_url(@namespace, page: @pagy.prev) : nil),
+      (
+        if @pagy.prev
+          group_group_links_url(page: @pagy.prev, q: params[:q]&.to_unsafe_h)
+        else
+          nil
+        end
+      ),
     next_url:
-      (@pagy.next ? group_group_links_url(@namespace, page: @pagy.next) : nil),
+      (
+        if @pagy.next
+          group_group_links_url(page: @pagy.next, q: params[:q]&.to_unsafe_h)
+        else
+          nil
+        end
+      ),
+    autofocus_link: params.key?(:page),
   ) %>
 <% end %>
