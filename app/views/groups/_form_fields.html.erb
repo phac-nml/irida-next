@@ -40,7 +40,7 @@
           <%= t("activerecord.attributes.group.parent_id") %>
         </label>
         <div class="flex items-center">
-          <%= viral_prefixed_select2(form:, name: :parent_id, id: form_id, selected_value: group.parent.id, placeholder: t(:"groups.new_subgroup.select_group")) do |select| %>
+          <%= viral_prefixed_select2(form:, name: :parent_id, id: form_id, selected_value: group.parent_id, placeholder: t(:"groups.new_subgroup.select_group")) do |select| %>
             <% authorized_namespaces.each do |namespace| %>
               <% select.with_option(
                       value: namespace.id,
