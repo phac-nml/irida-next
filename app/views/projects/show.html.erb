@@ -1,6 +1,7 @@
 <%= render Viral::PageHeaderComponent.new(
   title: @project.name,
-  id: @project.puid
+  id: @project.puid,
+  subtitle: @project.description,
 ) do |header| %>
   <%= header.icon do %>
     <%= viral_avatar(
