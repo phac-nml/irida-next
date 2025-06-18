@@ -104,15 +104,10 @@
     </div>
     <div class="mt-4">
       <%= form.submit t("groups.bots.index.bot_listing.new_bot_modal.submit"),
-                  class:
-                    "text-sm text-white bg-primary-700 hover:bg-primary-800 rounded-lg p-2 dark:text-white dark:bg-primary-600 dark:hover:bg-primary-700 cursor-pointer" %>
+                  class: "button button-primary" %>
       <button
         type="button"
-        class="
-          text-sm text-slate-900 border border-slate-200 bg-white hover:bg-slate-100
-          hover:text-slate-950 rounded-lg p-2 dark:text-white dark:bg-slate-600
-          dark:hover:bg-slate-700
-        "
+        class="button button-default"
         data-action="click->viral--dialog#close"
       >
         <%= t("groups.bots.index.bot_listing.new_bot_modal.cancel") %>
