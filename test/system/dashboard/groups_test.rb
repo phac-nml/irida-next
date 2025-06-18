@@ -78,7 +78,7 @@ module Dashboard
       end
 
       click_on I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
-      click_on I18n.t(:'dashboard.groups.index.sorting.name_asc')
+      click_on I18n.t(:'dashboard.groups.index.sorting.name_asc'), match: :first
       assert_no_text I18n.t(:'dashboard.groups.index.sorting.created_at_desc')
       assert_text I18n.t(:'dashboard.groups.index.sorting.name_asc')
 
