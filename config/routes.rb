@@ -62,6 +62,7 @@ Rails.application.routes.draw do
   draw :user
   draw :project
   draw :activities
+  draw :admin
 
   draw :development
 end

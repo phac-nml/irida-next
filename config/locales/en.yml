@@ -245,6 +245,7 @@ en:
               too_short: is too short (minimum is 6 characters)
             password_confirmation:
               confirmation: doesn't match password
+          only_admin_account: Cannot remove account as this would leave the application without an administrator user
         workflow_execution:
           invalid_namespace: can only be Group or Project
           invalid_workflow: unable to find workflow with name '%{workflow_name}' and version '%{workflow_version}'
@@ -370,6 +371,10 @@ en:
         metadata_written_html: Project automation bot wrote pipeline %{href} metadata to sample %{sample_href}
         outputs_and_metadata_written_html: Project automation bot attached pipeline %{href} outputs and wrote metadata to sample %{sample_href}
         outputs_written_html: Project automation bot attached pipeline %{href} outputs to sample %{sample_href}
+  admin:
+    initial_setup:
+      update:
+        success: Initial account configured! Please sign in.
   advanced_search_component:
     add_condition_button: Add Condition
     add_group_button: Add Group

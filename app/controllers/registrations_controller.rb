@@ -2,6 +2,7 @@
 
 # Devise registrations controller
 class RegistrationsController < Devise::RegistrationsController
+  include CheckInitialSetup
   layout 'devise'
 
   before_action :configure_sign_up_params, :configure_account_update_params
@@ -12,9 +13,25 @@ class RegistrationsController < Devise::RegistrationsController
   # end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    build_resource(sign_up_params)
+    resource.save
+    yield resource if block_given?
+    if resource.persisted?
+      if resource.active_for_authentication?
+        set_flash_message! :notice, :signed_up
+        sign_up(resource_name, resource)
+      else
+        set_flash_message! :notice, :"signed_up_but_#{resource.inactive_message}"
+        expire_data_after_sign_in!
+        respond_with resource, location: after_inactive_sign_up_path_for(resource)
+      end
+    else
+      clean_up_passwords resource
+      set_minimum_password_length
+      respond_with resource
+    end
+  end
 
   # GET /resource/edit
   # def edit
@@ -50,6 +67,15 @@ class RegistrationsController < Devise::RegistrationsController
   # If you have extra params to permit, append them to the sanitizer.
   def configure_account_update_params
     devise_parameter_sanitizer.permit(:account_update, keys: %i[first_name last_name locale])
+  end
+
+  def sign_up(resource_name, resource)
+    if in_initial_setup_state?
+      redirect_to admin_initial_setup_url(id: resource.id)
+    else
+      sign_in(resource_name, resource)
+      respond_with resource, location: after_sign_up_path_for(resource)
+    end
   end
 
   # The path used after sign up.
