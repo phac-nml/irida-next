@@ -2,15 +2,7 @@
   title: @project.name,
   id: @project.puid,
   subtitle: @project.description,
-) do |header| %>
-  <%= header.icon do %>
-    <%= viral_avatar(
-      name: @project.name,
-      colour_string: "#{@project.name}-#{@project.id}",
-      size: :large,
-    ) %>
-  <% end %>
-<% end %>
+) %>
 
 <%= render ProjectDashboardComponent.new(
   activities: @activities,

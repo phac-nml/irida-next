@@ -615,9 +615,12 @@ fr:
         number_of_automated_workflow_executions: Pipelines automatisés
         number_of_members: Membres
         number_of_samples: Échantillons
+        statistics_title: Statistiques du projet
+      main_content_label: Contenu principal du tableau de bord du projet
       samples_title: Échantillons récemment mis à jour
-      view_more_activity: View more activity
-      view_more_samples: View more samples
+      screen_reader_context: 'Tableau de bord du projet: %{project_name}'
+      view_more_activity: Voir plus d'activité
+      view_more_samples: Voir plus d'échantillons
     puid:
       title: 'Copy to clipboard value: %{puid}'
     token:
@@ -1404,7 +1407,8 @@ fr:
       success: Profil mis à jour avec succès
   project_dashboard:
     samples_component:
-      list_aria_label: List of updated samples
+      last_updated_title: 'Dernière mise à jour: %{time}'
+      list_aria_label: Liste des échantillons mis à jour
   projects:
     activity:
       title: Activité du projet

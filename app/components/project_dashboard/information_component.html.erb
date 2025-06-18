@@ -1,43 +1,63 @@
-<p class="py-2 dark:text-slate-300">
-  <% if @project.description && !@project.description.blank? %>
-    <%= @project.description %>
-  <% else %>
-    <%= t(:"components.project_dashboard.information.no_description") %>
-  <% end %>
-</p>
-
-<hr class="h-px my-4 border-0 bg-slate-200 dark:bg-slate-600"/>
-
-<div class="flex flex-row lg:flex-col gap-4">
-  <%= render NamespaceStatisticComponent.new(
-    id_prefix: "samples",
-    icon_name: :flask,
-    label: t(:"components.project_dashboard.information.number_of_samples"),
-    count: @project.samples.count,
-    color_scheme: :blue,
-  ) %>
-
-  <%= render NamespaceStatisticComponent.new(
-    id_prefix: "automated-workflow-executions",
-    icon_name: :terminal_window,
-    label: t(:"components.project_dashboard.information.number_of_automated_workflow_executions"),
-    count: @project.namespace.automated_workflow_executions.count,
-    color_scheme: :teal,
-  ) %>
-
-  <%= render NamespaceStatisticComponent.new(
-    id_prefix: "members",
-    icon_name: :users,
-    label: t(:"components.project_dashboard.information.number_of_members"),
-    count: @project.namespace.project_members.without_automation_bots.count,
-    color_scheme: :indigo,
-  ) %>
+<%# Project description with better text wrapping %>
+<div class="mb-6">
+  <p class="text-slate-700 dark:text-slate-300 leading-relaxed break-words">
+    <% if @project.description && !@project.description.blank? %>
+      <%= @project.description %>
+    <% else %>
+      <em class="text-slate-500 dark:text-slate-400">
+        <%= t(:"components.project_dashboard.information.no_description") %>
+      </em>
+    <% end %>
+  </p>
 </div>
-<%# End of stats container %>
 
-<hr class="h-px my-4 border-0 bg-slate-200 dark:bg-slate-600"/>
+<%# Statistics section with improved responsive layout %>
+<div class="mb-6">
+  <h3 class="sr-only"><%= t(:"components.project_dashboard.information.statistics_title") %></h3>
 
-<p class="py-2 dark:text-slate-300">
-  <span class="font-semibold"><%= t(:"components.project_dashboard.information.created_on") %></span>
-  <span><%= helpers.local_time(@project.created_at, :full_date) %></span>
-</p>
+  <%# Single column stack for all screen sizes to prevent overflow %>
+  <div class="space-y-4">
+    <%= render NamespaceStatisticComponent.new(
+      id_prefix: "samples",
+      icon_name: :flask,
+      label: t(:"components.project_dashboard.information.number_of_samples"),
+      count: @project.samples.count,
+      color_scheme: :blue,
+    ) %>
+
+    <%= render NamespaceStatisticComponent.new(
+      id_prefix: "automated-workflow-executions",
+      icon_name: :terminal_window,
+      label:
+        t(
+          :"components.project_dashboard.information.number_of_automated_workflow_executions",
+        ),
+      count: @project.namespace.automated_workflow_executions.count,
+      color_scheme: :teal,
+    ) %>
+
+    <%= render NamespaceStatisticComponent.new(
+      id_prefix: "members",
+      icon_name: :users,
+      label: t(:"components.project_dashboard.information.number_of_members"),
+      count: @project.namespace.project_members.without_automation_bots.count,
+      color_scheme: :indigo,
+    ) %>
+  </div>
+</div>
+
+<%# Project metadata %>
+<div class=" pt-6 border-t border-slate-200 dark:border-slate-700 ">
+  <dl class="space-y-3">
+    <div>
+      <dt class="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-1">
+        <%= t(:"components.project_dashboard.information.created_on") %>
+      </dt>
+      <dd class="text-slate-800 dark:text-slate-200 break-words">
+        <time datetime="<%= @project.created_at.iso8601 %>">
+          <%= helpers.local_time(@project.created_at, :full_date) %>
+        </time>
+      </dd>
+    </div>
+  </dl>
+</div>
