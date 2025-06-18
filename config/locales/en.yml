@@ -1852,6 +1852,7 @@ en:
           title: No automated pipelines.
   ransack:
     sort_dropdown_component:
+      prefix: Sort by
       sorting:
         created_at_asc: Oldest created
         created_at_desc: Last created
