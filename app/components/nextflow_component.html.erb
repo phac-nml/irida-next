@@ -28,6 +28,25 @@
     <%= text_for(@workflow.description) %>
   </p>
   <%= helpers.turbo_frame_tag "workflow_execution_errors" %>
+  <div
+    role="alert"
+    class="
+      flex items-center hidden p-4 mb-2 text-red-800 border-l-4 border-red-300
+      bg-red-50 dark:text-red-400 dark:bg-slate-800 dark:border-red-800
+    "
+    data-nextflow--samplesheet-target="formFieldError"
+  >
+    <span class="inline shrink-0">
+      <%= viral_icon(name: "exclamation_circle", classes: "w-5 h-5 mr-3 stroke-2") %>
+    </span>
+    <div>
+      <div
+        class="font-medium whitespace-break-spaces"
+        data-nextflow--samplesheet-target="formFieldErrorMessage"
+        aria-live="assertive"
+      ></div>
+    </div>
+  </div>
   <%= form_with url: url, method: (instance.nil? ? :post : :patch),
                 data: { turbo_frame: "_top", "nextflow--samplesheet-target": "form" } do |form| %>
     <input id="submission_turbo" type="hidden" name="format" value="turbo_stream"/>
@@ -138,9 +157,6 @@
         </div>
       <% end %>
     <% end %>
-
-    <div aria-live="assertive" id="aria-assertive-message" class="mb-2">
-    </div>
 
     <button
       class="button button-primary"

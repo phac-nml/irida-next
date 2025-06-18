@@ -8,6 +8,8 @@ export default class extends Controller {
     "error",
     "errorMessage",
     "form",
+    "formFieldError",
+    "formFieldErrorMessage",
     "spinner",
     "workflowAttributes",
     "samplesheetProperties",
@@ -215,6 +217,8 @@ export default class extends Controller {
       }
 
       if (nameValid) {
+        this.#disableFormFieldErrorState();
+
         let missingData = this.#validateData();
         if (Object.keys(missingData).length > 0) {
           this.#disableProcessingState();
@@ -225,6 +229,7 @@ export default class extends Controller {
           }
           this.#enableErrorState(errorMsg);
         } else {
+          this.#disableErrorState();
           this.#combineFormData();
 
           this.formTarget.addEventListener(
@@ -246,6 +251,7 @@ export default class extends Controller {
         }
       } else {
         this.#disableProcessingState();
+        this.#enableFormFieldErrorState(this.formErrorValue);
       }
     }, 50);
   }
@@ -302,6 +308,22 @@ export default class extends Controller {
       behavior: "smooth",
       block: "start",
     });
+  }
+
+  #enableFormFieldErrorState(message) {
+    let a = this.formFieldErrorMessageTarget;
+    console.log(this.formFieldErrorMessageTarget);
+    this.formFieldErrorTarget.classList.remove("hidden");
+    this.formFieldErrorMessageTarget.innerHTML = message;
+    this.formFieldErrorTarget.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+
+  #disableFormFieldErrorState() {
+    this.formFieldErrorTarget.classList.add("hidden");
+    this.formFieldErrorMessageTarget.innerHTML = "";
   }
 
   #setFormData(inputName, inputValue) {
@@ -820,14 +842,6 @@ export default class extends Controller {
       name.classList.add(...this.#workflow_execution_name_error_state);
       nameHint.style.display = "block";
       nameHint.classList.add(...this.#form_error_text_css);
-      // populate live region
-      let messageSelector = document.getElementById("aria-assertive-message");
-      messageSelector.innerHTML =
-        "<p class='" +
-        this.#form_error_text_css.join(" ") +
-        "'>" +
-        this.formErrorValue +
-        "</p>";
 
       return false;
     } else {
@@ -837,9 +851,6 @@ export default class extends Controller {
       name.classList.add(...this.#workflow_execution_name_valid_state);
       nameHint.style.display = "none";
       nameHint.classList.remove(...this.#form_error_text_css);
-      // clear live region
-      let messageSelector = document.getElementById("aria-assertive-message");
-      messageSelector.innerHTML = "";
     }
 
     return true;
