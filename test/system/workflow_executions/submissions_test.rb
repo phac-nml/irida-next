@@ -209,9 +209,10 @@ module WorkflowExecutions
       end
 
       within 'dialog[open].dialog--size-xl' do
-        assert_selector 'div.samplesheet-table' do |table|
-          table.assert_selector '.table-column:first-child .table-td', count: 1
-          table.assert_selector '.table-column:first-child .table-td:first-child', text: sample.puid, count: 1
+        assert_selector 'table'
+        within 'table tbody' do
+          assert_selector 'tr', count: 1
+          assert_selector 'tr:first-child th:first-child', text: sample.puid, count: 1
         end
 
         assert_text I18n.t(:'components.nextflow.update_samples')
@@ -753,6 +754,7 @@ module WorkflowExecutions
 
       ### ACTIONS START ###
       within '#dialog' do
+        find('input#workflow_execution_name').fill_in with: 'TestExecution'
         # verify samples samplesheet loaded
         assert_selector 'table'
         # verify auto selected attachments
