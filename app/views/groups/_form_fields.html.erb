@@ -10,9 +10,20 @@
                   maxlength: 255,
                   pattern: "[a-zA-Z0-9_\\-\\.\\s\\p{Emoji}]+",
                   placeholder: t(:"groups.create.name_placeholder"),
-                  required: true %>
-  <%= render "shared/form/field_errors", errors: group.errors.full_messages_for(:name) %>
-  <p class="field-hint">
+                  required: true,
+                  aria: {
+                    describedby: [
+                      invalid_name ? form.field_id(:name, "error") : nil,
+                      form.field_id(:name, "hint"),
+                    ].join(" "),
+                    invalid: invalid_name,
+                  } %>
+  <%= if invalid_name
+    render "shared/form/field_errors",
+    id: form.field_id(:name, "error"),
+    errors: group.errors.full_messages_for(:name)
+  end %>
+  <p id="<%= form.field_id(:name, "hint") %>" class="field-hint">
     <%== t(:"groups.create.name_help") %>
   </p>
 </div>
@@ -62,13 +73,22 @@
                         minlength: 3,
                         maxlength: 255,
                         pattern: Irida::PathRegex::PATH_REGEX_STR,
-                        required: true %>
-        <%= render "shared/form/field_errors", errors: group.errors.full_messages_for(:path) %>
+                        required: true,
+                        aria: {
+                          describedby: [
+                            invalid_path ? form.field_id(:path, "error") : nil,
+                            form.field_id(:name, "hint"),
+                          ].join(" "),
+                          invalid: invalid_path,
+                        } %>
+        <%= if invalid_path
+          render "shared/form/field_errors",
+          id: form.field_id(:path, "error"),
+          errors: group.errors.full_messages_for(:path)
+        end %>
       </div>
     </div>
-  <% end %>
-
-  <% unless group.parent_id.present? %>
+  <% else %>
     <% invalid_path = group.errors.include?(:path) %>
     <div class="form-field <%= 'invalid' if invalid_path %>">
       <%= form.label :path %>
@@ -77,11 +97,22 @@
                         "slugify-target": "path",
                       },
                       pattern: Irida::PathRegex::PATH_REGEX_STR,
-                      required: true %>
-      <p class="field-hint">
+                      required: true,
+                      aria: {
+                        describedby: [
+                          invalid_path ? form.field_id(:path, "error") : nil,
+                          form.field_id(:path, "hint"),
+                        ],
+                        invalid: invalid_path,
+                      } %>
+      <p id="<%= form.field_id(:path, "hint") %>" class="field-hint">
         <%= t(:"groups.create.path_help") %>
       </p>
-      <%= render "shared/form/field_errors", errors: group.errors.full_messages_for(:path) %>
+      <%= if invalid_path
+        render "shared/form/field_errors",
+        id: form.field_id(:path, "error"),
+        errors: group.errors.full_messages_for(:path)
+      end %>
     </div>
   <% end %>
 <% end %>
@@ -89,7 +120,21 @@
 <% invalid_description = group.errors.include?(:description) %>
 <div class="form-field <%= 'invalid' if invalid_description %>">
   <%= form.label :description %>
-  <%= form.text_area :description %>
-  <%= render "shared/form/field_errors",
-  errors: group.errors.full_messages_for(:description) %>
+  <%= form.text_area :description,
+                 aria: {
+                   describedby:
+                     (
+                       if invalid_description
+                         form.field_id(:description, "error")
+                       else
+                         nil
+                       end
+                     ),
+                   invalid: invalid_description,
+                 } %>
+  <%= if invalid_description
+    render "shared/form/field_errors",
+    id: form.field_id(:description, "error"),
+    errors: group.errors.full_messages_for(:description)
+  end %>
 </div>

@@ -3,7 +3,7 @@
   subtitle: t(:"groups.create.subtitle"),
 ) %>
 <div data-controller="slugify" class="@xl:container">
-  <%= form_with(model: @new_group, url: groups_path, method: :post) do |form| %>
+  <%= form_with(model: @new_group, url: groups_path, method: :post, html: { novalidate: true }) do |form| %>
     <div class="grid gap-4">
 
       <%= render partial: "form_fields",

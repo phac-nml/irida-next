@@ -62,9 +62,9 @@ module Routable
   private
 
   def set_path_errors
-    route_path_errors = errors.delete(:'route.path')
-    route_path_errors&.each do |msg|
-      errors.add(:path, msg)
+    errors.delete(:'route.path')
+    route.errors.group_by_attribute[:path]&.each do |path_error|
+      errors.add(:path, path_error.message) unless errors.of_kind?(:path, path_error.type)
     end
   end
 

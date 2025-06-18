@@ -1,5 +1,6 @@
+<%# locals: (id: nil, errors:) -%>
 <% if defined? errors %>
-  <ul class=" max-w-md text-sm text-slate-500 list-inside dark:text-slate-400 ">
+  <%= tag.ul id: id, class: "max-w-md text-sm text-slate-500 list-inside dark:text-slate-400" do %>
     <% errors.each do |error_message| %>
       <li>
         <%= viral_help_text(state: :error) do %>
@@ -7,5 +8,5 @@
         <% end %>
       </li>
     <% end %>
-  </ul>
+  <% end %>
 <% end %>
