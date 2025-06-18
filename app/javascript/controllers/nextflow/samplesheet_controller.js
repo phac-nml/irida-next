@@ -311,8 +311,6 @@ export default class extends Controller {
   }
 
   #enableFormFieldErrorState(message) {
-    let a = this.formFieldErrorMessageTarget;
-    console.log(this.formFieldErrorMessageTarget);
     this.formFieldErrorTarget.classList.remove("hidden");
     this.formFieldErrorMessageTarget.innerHTML = message;
     this.formFieldErrorTarget.scrollIntoView({
