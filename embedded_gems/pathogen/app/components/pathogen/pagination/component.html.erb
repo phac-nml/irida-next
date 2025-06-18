@@ -25,11 +25,11 @@
           id: "page-size-selector",
           class:
             "
-                                                                                                                                    rounded-lg border border-slate-300 bg-white px-3 py-2 pr-8 text-sm
-                                                                                                                                    text-slate-700 focus:border-primary-500 focus:outline-none focus:ring-1
-                                                                                                                                    focus:ring-primary-500 dark:border-slate-600 dark:bg-slate-800
-                                                                                                                                    dark:text-slate-300 dark:focus:border-primary-500 dark:focus:ring-primary-500
-                                                                                                                                  ",
+                                                                                                                                                                                                                                        rounded-lg border border-slate-300 bg-white px-3 py-2 pr-8 text-sm
+                                                                                                                                                                                                                                        text-slate-700 focus:border-primary-500 focus:outline-none focus:ring-1
+                                                                                                                                                                                                                                        focus:ring-primary-500 dark:border-slate-600 dark:bg-slate-800
+                                                                                                                                                                                                                                        dark:text-slate-300 dark:focus:border-primary-500 dark:focus:ring-primary-500
+                                                                                                                                                                                                                                      ",
           onchange: "this.form.requestSubmit()",
           aria_label: t(".select_page_size") %>
         <% end %>
@@ -58,11 +58,11 @@
             max: pagy.pages,
             class:
               "
-                                                                                                                                                                                        w-20 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm
-                                                                                                                                                                                        text-slate-700 focus:border-primary-500 focus:outline-none focus:ring-1
-                                                                                                                                                                                        focus:ring-primary-500 dark:border-slate-600 dark:bg-slate-800
-                                                                                                                                                                                        dark:text-slate-300 dark:focus:border-primary-500 dark:focus:ring-primary-500
-                                                                                                                                                                                      ",
+                                                                                                                                                                                                                                                                                                                w-20 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm
+                                                                                                                                                                                                                                                                                                                text-slate-700 focus:border-primary-500 focus:outline-none focus:ring-1
+                                                                                                                                                                                                                                                                                                                focus:ring-primary-500 dark:border-slate-600 dark:bg-slate-800
+                                                                                                                                                                                                                                                                                                                dark:text-slate-300 dark:focus:border-primary-500 dark:focus:ring-primary-500
+                                                                                                                                                                                                                                                                                                              ",
             onchange: "this.form.requestSubmit()",
             aria_label: t(".jump_to_page_aria_label") %>
             <span class="text-sm text-slate-700 dark:text-slate-300">
@@ -78,6 +78,24 @@
           <% pagy.series.each_with_index do |item, idx| %>
             <% is_first = idx == 0 %>
             <% is_last = idx == pagy.series.size - 1 %>
+            <% next_is_selected =
+              begin
+                (pagy.series[idx + 1].to_i == pagy.page)
+              rescue StandardError
+                false
+              end %>
+            <% prev_is_selected =
+              begin
+                (pagy.series[idx - 1].to_i == pagy.page)
+              rescue StandardError
+                false
+              end %>
+            <% prev_is_gap =
+              begin
+                (pagy.series[idx - 1] == :gap)
+              rescue StandardError
+                false
+              end %>
             <li>
               <% if (item.is_a?(Integer) || (item.is_a?(String) && item.to_i == pagy.page)) && item.to_i == pagy.page %>
                 <span
@@ -87,7 +105,6 @@
                     border-primary-600 bg-primary-100 text-primary-700 dark:bg-primary-900
                     dark:text-primary-200 font-bold text-sm cursor-default
                     <%= 'rounded-s-lg' if is_first %> <%= 'rounded-e-lg' if is_last %>
-                    <%= 'border-l-0' unless is_first %>
                   "
                 >
                   <%= item %>
@@ -95,18 +112,22 @@
               <% elsif item.is_a?(Integer) || (item.is_a?(String) && item.to_i != pagy.page) %>
                 <%= link_to url_for(params: request.query_parameters.merge(page: item, limit: pagy.vars[:items])),
                   class: "flex items-center justify-center text-slate-700 bg-white border border-slate-300 font-medium text-sm px-4 h-11 hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 dark:hover:text-slate-100
-                    #{'rounded-s-lg' if is_first} #{'rounded-e-lg' if is_last} #{'border-l-0' unless is_first}",
+                    #{'rounded-s-lg' if is_first} #{'rounded-e-lg' if is_last} #{'border-l-0' unless is_first} #{'border-l-0' if prev_is_gap} #{'border-r-0' if next_is_selected}",
                   data: { turbo_stream: 'true' },
                   aria_label: t('.go_to_page', page: item) do %>
                   <%= item %>
                 <% end %>
               <% elsif item == :gap %>
+                <% show_left = is_first || !prev_is_selected %>
+                <% show_right = is_last || !next_is_selected %>
                 <span
                   class="
-                    flex items-center justify-center px-4 h-11 ms-0 leading-tight border
-                    border-slate-300 text-slate-600 bg-slate-100 dark:bg-slate-800
-                    dark:text-slate-400 dark:border-slate-700 cursor-default #{'rounded-s-lg' if
-                    is_first} #{'rounded-e-lg' if is_last} #{'border-l-0' unless is_first}
+                    flex items-center justify-center px-4 h-11 ms-0 leading-tight border-t border-b
+                    border-slate-300 dark:border-slate-700 #{'border-l border-slate-300
+                    dark:border-slate-700' if show_left} #{'border-r border-slate-300
+                    dark:border-slate-700' if show_right} text-slate-600 bg-slate-100
+                    dark:bg-slate-800 dark:text-slate-400 cursor-default #{'rounded-s-lg' if
+                    is_first} #{'rounded-e-lg' if is_last}
                   "
                 >...</span>
               <% end %>
