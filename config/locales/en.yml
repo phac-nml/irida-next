@@ -843,6 +843,8 @@ en:
       projects: Projects
       title: Your work
       workflows: Workflow Executions
+    form:
+      error_notification: 'Please review the problems below:'
     help: Help
     name: IRIDA Next
     navbar:

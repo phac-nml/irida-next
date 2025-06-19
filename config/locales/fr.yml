@@ -843,6 +843,8 @@ fr:
       projects: Projets
       title: Votre travail
       workflows: Exécutions de flux de travail
+    form:
+      error_notification: 'Please review the problems below:'
     help: Aide
     name: IRIDA Next
     navbar:

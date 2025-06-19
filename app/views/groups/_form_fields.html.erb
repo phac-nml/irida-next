@@ -1,3 +1,13 @@
+<%= if group.errors.any?
+  viral_alert(
+    type: "alert",
+    message: I18n.t(:"general.form.error_notification"),
+    aria: {
+      live: "assertive",
+    },
+  )
+end %>
+
 <% invalid_name = group.errors.include?(:name) %>
 <div class="form-field <%= 'invalid' if invalid_name %>">
   <%= form.label :name, required: true %>
