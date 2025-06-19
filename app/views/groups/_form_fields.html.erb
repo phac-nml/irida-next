@@ -1,6 +1,6 @@
 <% invalid_name = group.errors.include?(:name) %>
 <div class="form-field <%= 'invalid' if invalid_name %>">
-  <%= form.label :name %>
+  <%= form.label :name, required: true %>
   <%= form.text_field :name,
                   data: {
                     "slugify-target": "name",
@@ -17,6 +17,7 @@
                       form.field_id(:name, "hint"),
                     ].join(" "),
                     invalid: invalid_name,
+                    required: true,
                   } %>
   <%= if invalid_name
     render "shared/form/field_errors",
@@ -36,6 +37,7 @@
         <label
           for="<%= form_id %>"
           class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
+          required="required"
         >
           <%= t("activerecord.attributes.group.parent_id") %>
         </label>
@@ -65,7 +67,7 @@
       </div>
       <% invalid_path = group.errors.include?(:path) %>
       <div class="form-field <%= 'invalid' if invalid_path %>">
-        <%= form.label :path %>
+        <%= form.label :path, required: true %>
         <%= form.text_field :path,
                         data: {
                           "slugify-target": "path",
@@ -80,6 +82,7 @@
                             form.field_id(:name, "hint"),
                           ].join(" "),
                           invalid: invalid_path,
+                          required: true,
                         } %>
         <%= if invalid_path
           render "shared/form/field_errors",
@@ -91,7 +94,7 @@
   <% else %>
     <% invalid_path = group.errors.include?(:path) %>
     <div class="form-field <%= 'invalid' if invalid_path %>">
-      <%= form.label :path %>
+      <%= form.label :path, required: true %>
       <%= form.text_field :path,
                       data: {
                         "slugify-target": "path",
@@ -104,6 +107,7 @@
                           form.field_id(:path, "hint"),
                         ],
                         invalid: invalid_path,
+                        required: true,
                       } %>
       <p id="<%= form.field_id(:path, "hint") %>" class="field-hint">
         <%= t(:"groups.create.path_help") %>

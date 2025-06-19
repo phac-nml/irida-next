@@ -94,6 +94,11 @@
     @apply mb-1 block text-sm font-medium text-slate-900 dark:text-white;
   }
 
+  & label[required]::after {
+    content: " *" / "";
+    @apply text-red-500;
+  }
+
   & div.field_with_errors {
     @apply block w-full;
   }
