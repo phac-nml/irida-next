@@ -42,7 +42,7 @@ export default class extends Controller {
   #animationFrame = null;
   #PADDING = 32; // Total horizontal padding (16px on each side)
   #CHEVRON_WIDTH = 16; // Width of the chevron separator
-  #MIN_LAST_CRUMB_WIDTH = 100; // Minimum width for the last crumb
+  #TOLERANCE_PERCENTAGE = 0.05; // 5% tolerance before switching to dropdown
 
   /**
    * 🚀 Initialize the breadcrumb controller
@@ -128,6 +128,9 @@ export default class extends Controller {
    */
   async #calculateOptimalLayout() {
     const { crumbs, dropdown } = this.#getLayoutElements();
+    const containerWidth = this.listTarget.clientWidth;
+    const availableWidth = containerWidth - this.#PADDING;
+    const toleranceWidth = containerWidth * this.#TOLERANCE_PERCENTAGE;
 
     // Early exit for minimal breadcrumbs
     if (crumbs.length < 3) {
@@ -135,23 +138,20 @@ export default class extends Controller {
       return;
     }
 
-    // Always show first and last crumbs
-    const firstCrumb = crumbs[0];
-    const lastCrumb = crumbs[crumbs.length - 1];
-    firstCrumb.style.display = "inline-flex";
-    lastCrumb.style.display = "inline-flex";
+    // First show all crumbs to get accurate measurements
+    this.#showAllCrumbs(crumbs, dropdown);
+    await this.#waitForLayout();
 
-    // Hide all middle crumbs
-    const middleCrumbs = crumbs.slice(1, -1);
-    middleCrumbs.forEach((crumb) => {
-      crumb.style.display = "none";
-    });
+    // Calculate total width of all crumbs
+    const totalWidth = this.#calculateTotalWidth(crumbs);
 
-    // Show dropdown
-    dropdown.style.display = "inline-flex";
+    // If everything fits (with tolerance), keep all crumbs visible
+    if (totalWidth <= availableWidth + toleranceWidth) {
+      return; // Already showing all crumbs
+    }
 
-    // Update dropdown content
-    this.#updateDropdownContent(middleCrumbs);
+    // If not everything fits, switch to dropdown mode
+    await this.#applyDropdownLayout(crumbs, dropdown);
   }
 
   /**
@@ -215,5 +215,45 @@ export default class extends Controller {
       menuItem.appendChild(anchor);
       dropdownMenu.appendChild(menuItem);
     });
+  }
+
+  #calculateTotalWidth(crumbs) {
+    let totalWidth = 0;
+    crumbs.forEach((crumb, index) => {
+      // Add chevron width for all except the first crumb
+      if (index > 0) {
+        totalWidth += this.#CHEVRON_WIDTH;
+      }
+      // Add the crumb's width
+      totalWidth += crumb.getBoundingClientRect().width;
+    });
+    return totalWidth;
+  }
+
+  async #applyDropdownLayout(crumbs, dropdown) {
+    // Always show first and last crumbs
+    const firstCrumb = crumbs[0];
+    const lastCrumb = crumbs[crumbs.length - 1];
+    firstCrumb.style.display = "inline-flex";
+    lastCrumb.style.display = "inline-flex";
+
+    // Hide all middle crumbs
+    const middleCrumbs = crumbs.slice(1, -1);
+    middleCrumbs.forEach((crumb) => {
+      crumb.style.display = "none";
+    });
+
+    // Show dropdown
+    dropdown.style.display = "inline-flex";
+
+    // Update dropdown content
+    this.#updateDropdownContent(middleCrumbs);
+  }
+
+  async #waitForLayout() {
+    // Wait for two animation frames to ensure layout is complete
+    await new Promise(resolve => requestAnimationFrame(() =>
+      requestAnimationFrame(resolve)
+    ));
   }
 }
