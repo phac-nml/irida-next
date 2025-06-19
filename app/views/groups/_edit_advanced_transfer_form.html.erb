@@ -50,8 +50,7 @@ data: { turbo_confirm: "", controller: "viral--select2" }) do |form| %>
   </div>
   <div>
     <%= form.submit t("groups.edit.advanced.transfer.submit"),
-                class:
-                  "button button--state-destructive button--size-default inline-block",
+                class: "button button-destructive inline-block",
                 disabled: true,
                 data: {
                   "viral--select2-target": "submitButton",

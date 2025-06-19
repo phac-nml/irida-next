@@ -8,7 +8,7 @@
     <%= render "devise/shared/links" %>
     <%= link_to t(".return_button"),
     new_user_session_path(**params),
-    class: "button button--state-default button--size-default w-full" %>
+    class: "button button-default w-full" %>
   <% else %>
     <%- resource_class.omniauth_providers.each do |provider| %>
       <%= button_to omniauth_authorize_path(resource_name, provider),
@@ -16,7 +16,7 @@
                       turbo: false
                     },
                     params: params,
-                    class: "button button--state-default button--size-default w-full" do %>
+                    class: "button button-default w-full" do %>
         <span class="inline-flex items-center text-center">
           <% if Rails.configuration.auth_config["#{provider}_icon"] %>
             <%= viral_icon(name: "#{provider}_icon", classes: "w-4 h-4 mr-2 -ml-1") %>
@@ -33,6 +33,6 @@
     <% end %>
     <%= link_to t(".local_button"),
     new_user_session_path(local: true, **params),
-    class: "button button--state-default button--size-default w-full" %>
+    class: "button button-default w-full" %>
   <% end %>
 </div>

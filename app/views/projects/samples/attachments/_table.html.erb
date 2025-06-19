@@ -16,8 +16,7 @@
                 name="q[puid_or_file_blob_filename_cont]"
                 value="<%=params.dig(:q, :puid_or_file_blob_filename_cont)%>"
               >
-              <%= f.submit t(".select_all_button"),
-                       class: "button button--state-default button--size-default" %>
+              <%= f.submit t(".select_all_button"), class: "button button-default" %>
             <% end %>
             <%= form_with(
                   url: select_namespace_project_sample_attachments_url(sample_id: @sample.id),
@@ -25,8 +24,7 @@
                   id: "deselect-all-form" ,
                 ) do |f| %>
               <input type="hidden" name="format" value="turbo_stream"/>
-              <%= f.submit t(".deselect_all_button"),
-                       class: "button button--state-default button--size-default" %>
+              <%= f.submit t(".deselect_all_button"), class: "button button-default" %>
             <% end %>
           </div>
         <% end %>
@@ -52,7 +50,7 @@
             turbo_frame: "sample_modal",
             turbo_stream: true,
           },
-          class: "button button--size-default button--state-default" %>
+          class: "button button-default" %>
           <%= button_to t("projects.samples.show.concatenate_button"),
           new_namespace_project_sample_attachments_concatenation_path(
             sample_id: @sample.id,
@@ -64,7 +62,7 @@
             controller: "action-button",
             action_button_required_value: 2,
           },
-          class: "button button--size-default button--state-default action-button" %>
+          class: "button button-default action-button" %>
           <%= button_to t("projects.samples.show.delete_files_button"),
           new_namespace_project_sample_attachments_deletion_path(sample_id: @sample.id),
           method: :get,
@@ -74,7 +72,7 @@
             controller: "action-button",
             action_button_required_value: 1,
           },
-          class: "button button--size-default button--state-default action-button" %>
+          class: "button button-default action-button" %>
         </div>
       </div>
     <% end %>

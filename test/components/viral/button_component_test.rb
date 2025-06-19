@@ -9,7 +9,7 @@ module Viral
         'Basic Button'
       end
 
-      assert_selector 'button.button--state-default' do
+      assert_selector 'button.button-default' do
         assert_text 'Basic Button'
       end
     end
@@ -19,7 +19,7 @@ module Viral
         'Destructive Button'
       end
 
-      assert_selector 'button.button--state-destructive' do
+      assert_selector 'button.button-destructive' do
         assert_text 'Destructive Button'
       end
     end
@@ -75,26 +75,6 @@ module Viral
 
       assert_selector 'button.w-full' do
         assert_text 'Full Width Button'
-      end
-    end
-
-    test 'button large' do
-      render_inline(Viral::ButtonComponent.new(size: :large)) do
-        'Large Button'
-      end
-
-      assert_selector 'button.button--size-large' do
-        assert_text 'Large Button'
-      end
-    end
-
-    test 'button small' do
-      render_inline(Viral::ButtonComponent.new(size: :small)) do
-        'Small Button'
-      end
-
-      assert_selector 'button.button--size-default' do
-        assert_text 'Small Button'
       end
     end
   end

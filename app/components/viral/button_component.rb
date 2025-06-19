@@ -7,22 +7,15 @@ module Viral
 
     STATE_DEFAULT = :default
     STATE_MAPPINGS = {
-      STATE_DEFAULT => 'button--state-default',
-      :primary => 'button--state-primary',
-      :destructive => 'button--state-destructive'
-    }.freeze
-
-    SIZE_DEFAULT = :default
-    SIZE_MAPPINGS = {
-      :small => 'button--size-default',
-      SIZE_DEFAULT => 'button--size-default',
-      :large => 'button--size-large'
+      STATE_DEFAULT => 'button-default',
+      :primary => 'button-primary',
+      :destructive => 'button-destructive'
     }.freeze
 
     DISCLOSURE_DEFAULT = false
     DISCLOSURE_OPTIONS = [true, false, :down, :up, :select, :horizontal_dots].freeze
 
-    def initialize(state: STATE_DEFAULT, size: SIZE_DEFAULT, full_width: false,
+    def initialize(state: STATE_DEFAULT, full_width: false,
                    disclosure: DISCLOSURE_DEFAULT, **system_arguments)
       @disclosure = disclosure
       @disclosure = :down if @disclosure == true
@@ -34,7 +27,6 @@ module Viral
         'button',
         user_defined_classes,
         STATE_MAPPINGS[state],
-        SIZE_MAPPINGS[size],
         'w-full': full_width
       )
     end

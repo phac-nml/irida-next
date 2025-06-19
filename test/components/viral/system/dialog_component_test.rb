@@ -9,8 +9,8 @@ module System
       within('div[data-controller-connected="true"] dialog') do
         assert_accessible
         assert_text 'Confirmation required'
-        assert_selector 'button.button--state-primary', count: 1
-        assert_selector 'button.button--state-default', count: 1
+        assert_selector 'button.button-primary', count: 1
+        assert_selector 'button.button-default', count: 1
       end
     end
 
@@ -50,8 +50,8 @@ module System
       visit('rails/view_components/viral_dialog_component/with_action_buttons')
       within('div[data-controller-connected="true"] dialog') do
         assert_accessible
-        assert_selector 'button.button--state-primary', count: 1
-        assert_selector 'button.button--state-default', count: 1
+        assert_selector 'button.button-primary', count: 1
+        assert_selector 'button.button-default', count: 1
       end
     end
 

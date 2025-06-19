@@ -78,7 +78,7 @@
 
       <div class="my-4">
         <%= form.submit t(:"projects.members.new.add_member_to_project"),
-                    class: "button button--state-primary button--size-default",
+                    class: "button button-primary mr-1",
                     disabled: true,
                     data: {
                       "viral--select2-target": "submitButton",
@@ -86,7 +86,7 @@
 
         <button
           type="button"
-          class="button button--size-default button--state-default"
+          class="button button-default"
           data-action="click->viral--dialog#close"
         >
           <%= I18n.t(:"projects.members.new.button.cancel") %>

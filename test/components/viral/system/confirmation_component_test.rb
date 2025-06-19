@@ -28,11 +28,11 @@ class ConfirmationComponentTest < ApplicationSystemTestCase
   test 'confirmation component with custom value' do
     visit('/rails/view_components/confirmation_component/with_confirm_value')
     click_button 'Delete project'
-    assert_selector 'button.button--state-destructive:disabled'
+    assert_selector 'button.button-destructive:disabled'
     assert_text 'Confirmation required'
     assert_accessible
     find('input').set 'Project X' # TODO: update this to use fill_in
-    assert_selector 'button.button--state-destructive'
+    assert_selector 'button.button-destructive'
     assert_accessible
   end
 end
