@@ -148,7 +148,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   end
 
   def group_params
-    params.require(:group).permit(:name, :path, :description, :parent_id)
+    params.expect(group: %i[name path description parent_id])
   end
 
   def authorized_namespaces
@@ -194,7 +194,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     when 'show', 'edit', 'update', 'activity'
       'groups'
     when 'new', 'create'
-      if params.key?(:parent_id) || params[:commit] == I18n.t(:'groups.new_subgroup.submit')
+      if params.key?(:parent_id) || (params[:group] && params[:group][:parent_id].present?)
         'groups'
       else
         'application'
@@ -234,7 +234,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   def current_page
     @current_page = case action_name
                     when 'new', 'create'
-                      if params.key?(:parent_id) || params[:commit] == I18n.t(:'groups.new_subgroup.submit')
+                      if params.key?(:parent_id) || (params[:group] && params[:group][:parent_id].present?)
                         t(:'groups.sidebar.details')
                       else
                         t(:'general.default_sidebar.groups')
