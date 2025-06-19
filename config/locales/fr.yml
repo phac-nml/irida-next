@@ -222,6 +222,9 @@ fr:
             name:
               blank: Ne peut pas être vide
               taken: A déjà été pris
+            path:
+              invalid_format: can contain only letters, digits, '_', '-', and '.'. Cannot start with '-' or end in '.'.
+              reserved_value: "%{value} is a reserved value."
         namespace_group_link:
           attributes:
             group_access_level:

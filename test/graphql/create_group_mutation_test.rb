@@ -192,7 +192,8 @@ class CreateProjectMutationTest < ActiveSupport::TestCase
     assert_nil data['group']
 
     assert_equal 1, data['errors'].count
-    expected_error = { 'path' => %w[group path], 'message' => 'Namespace Path is not valid' }
+    expected_error = { 'path' => %w[group path],
+                       'message' => I18n.t('activerecord.errors.models.namespace.attributes.path.invalid_format') }
 
     assert_equal expected_error, data['errors'][0]
   end

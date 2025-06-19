@@ -3,8 +3,10 @@
 # Validator for path attribute in Namespaces
 class NamespacePathValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
+    return if value.blank?
+
     unless value =~ self.class.format_regex
-      record.errors.add(attribute, self.class.format_error_message)
+      record.errors.add(attribute, :invalid_format)
       return
     end
 
@@ -13,7 +15,7 @@ class NamespacePathValidator < ActiveModel::EachValidator
 
     return if self.class.valid_path?(full_path)
 
-    record.errors.add(attribute, "#{value} is a reserved name")
+    record.errors.add(attribute, :reserved_value, value: value)
   end
 
   def self.path_regex
@@ -22,10 +24,6 @@ class NamespacePathValidator < ActiveModel::EachValidator
 
   def self.format_regex
     Irida::PathRegex.namespace_format_regex
-  end
-
-  def self.format_error_message
-    'Namespace Path is not valid'
   end
 
   def self.valid_path?(path)
