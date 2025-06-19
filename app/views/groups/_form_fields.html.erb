@@ -10,7 +10,7 @@ end %>
 
 <% invalid_name = group.errors.include?(:name) %>
 <div class="form-field <%= 'invalid' if invalid_name %>">
-  <%= form.label :name, required: true %>
+  <%= form.label :name, data: { required: true } %>
   <%= form.text_field :name,
                   data: {
                     "slugify-target": "name",
@@ -28,7 +28,8 @@ end %>
                     ].join(" "),
                     invalid: invalid_name,
                     required: true,
-                  } %>
+                  },
+                  autofocus: invalid_name %>
   <%= if invalid_name
     render "shared/form/field_errors",
     id: form.field_id(:name, "error"),
@@ -47,7 +48,6 @@ end %>
         <label
           for="<%= form_id %>"
           class="mb-1 block text-sm font-medium text-slate-900 dark:text-white"
-          required="required"
         >
           <%= t("activerecord.attributes.group.parent_id") %>
         </label>
@@ -77,7 +77,7 @@ end %>
       </div>
       <% invalid_path = group.errors.include?(:path) %>
       <div class="form-field <%= 'invalid' if invalid_path %>">
-        <%= form.label :path, required: true %>
+        <%= form.label :path, data: { required: true } %>
         <%= form.text_field :path,
                         data: {
                           "slugify-target": "path",
@@ -93,7 +93,11 @@ end %>
                           ].join(" "),
                           invalid: invalid_path,
                           required: true,
-                        } %>
+                        },
+                        autofocus: invalid_path %>
+        <p id="<%= form.field_id(:path, "hint") %>" class="field-hint">
+          <%= t(:"groups.create.path_help") %>
+        </p>
         <%= if invalid_path
           render "shared/form/field_errors",
           id: form.field_id(:path, "error"),
@@ -104,7 +108,7 @@ end %>
   <% else %>
     <% invalid_path = group.errors.include?(:path) %>
     <div class="form-field <%= 'invalid' if invalid_path %>">
-      <%= form.label :path, required: true %>
+      <%= form.label :path, data: { required: true } %>
       <%= form.text_field :path,
                       data: {
                         "slugify-target": "path",
@@ -118,15 +122,16 @@ end %>
                         ],
                         invalid: invalid_path,
                         required: true,
-                      } %>
-      <p id="<%= form.field_id(:path, "hint") %>" class="field-hint">
-        <%= t(:"groups.create.path_help") %>
-      </p>
+                      },
+                      autofocus: invalid_path %>
       <%= if invalid_path
         render "shared/form/field_errors",
         id: form.field_id(:path, "error"),
         errors: group.errors.full_messages_for(:path)
       end %>
+      <p id="<%= form.field_id(:path, "hint") %>" class="field-hint">
+        <%= t(:"groups.create.path_help") %>
+      </p>
     </div>
   <% end %>
 <% end %>
@@ -145,7 +150,8 @@ end %>
                        end
                      ),
                    invalid: invalid_description,
-                 } %>
+                 },
+                 autofocus: invalid_description %>
   <%= if invalid_description
     render "shared/form/field_errors",
     id: form.field_id(:description, "error"),

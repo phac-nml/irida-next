@@ -94,7 +94,10 @@
     @apply mb-1 block text-sm font-medium text-slate-900 dark:text-white;
   }
 
-  & label[required]::after {
+  /*
+    content separated by / tells the screenreader that the content is blank so that the asterisk is not read out
+  */
+  & label[data-required]::after {
     content: " *" / "";
     @apply text-red-500;
   }
