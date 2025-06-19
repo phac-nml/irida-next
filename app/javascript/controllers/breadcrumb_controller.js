@@ -2,51 +2,62 @@
 import { Controller } from "@hotwired/stimulus";
 
 /**
- * 🍞 Accessible Breadcrumb Controller
+ * 🍞 BreadcrumbController
  *
- * Provides intelligent, responsive breadcrumb navigation that automatically
- * collapses middle items into a dropdown when space is constrained.
+ * A responsive and accessible breadcrumb navigation component that intelligently
+ * manages space constraints by collapsing middle items into a dropdown menu.
  *
  * Features:
- * - 📱 Responsive: Adapts to container width changes
- * - ♿ Accessible: Full keyboard and screen reader support
- * - 🎯 Smart Collapsing: Always shows Home + dropdown + trailing items
- * - 🎨 Smooth Animations: Fade-in/out transitions
- * - 🔧 Maintainable: Clear separation of concerns
+ * - 📱 Responsive layout with dynamic width calculations
+ * - ♿ Full ARIA compliance and keyboard navigation
+ * - 🎯 Smart collapsing with configurable tolerance
+ * - 🔄 Efficient DOM updates and layout calculations
+ * - 🎨 Smooth transitions and animations
  *
  * @example
- * <nav data-controller="breadcrumb" data-breadcrumb-links-value="[...]">
+ * ```html
+ * <nav data-controller="breadcrumb">
  *   <ol data-breadcrumb-target="list">
  *     <li data-breadcrumb-target="crumb">Home</li>
  *     <li data-breadcrumb-target="crumb">Projects</li>
- *     <li data-breadcrumb-target="crumb">My Project</li>
- *     <li data-breadcrumb-target="dropdown">
- *       <button aria-haspopup="true" aria-expanded="false">
- *         <span aria-hidden="true">⋯</span>
- *       </button>
- *       <ul role="menu"></ul>
- *     </li>
+ *     <li data-breadcrumb-target="crumb">Current</li>
  *   </ol>
+ *   <div data-breadcrumb-target="dropdown" role="menu">
+ *     <!-- Dropdown content -->
+ *   </div>
  * </nav>
+ * ```
+ *
+ * @extends {Controller}
  */
 export default class extends Controller {
-  // 🎯 Stimulus targets and values
+  /** @type {string[]} Stimulus targets for DOM elements */
   static targets = ["list", "crumb", "dropdown"];
+
+  /** @type {Object} Stimulus values for data binding */
   static values = { links: Array };
 
-  // 📏 Layout configuration
-  static classes = ["animate"];
-
-  // 🔧 Private properties
+  // Private fields
+  /** @type {Function|null} Bound resize event handler */
   #resizeHandler = null;
+
+  /** @type {number|null} Animation frame ID for layout calculations */
   #animationFrame = null;
-  #PADDING = 32; // Total horizontal padding (16px on each side)
-  #CHEVRON_WIDTH = 16; // Width of the chevron separator
-  #TOLERANCE_PERCENTAGE = 0.05; // 5% tolerance before switching to dropdown
+
+  // Configuration constants
+  /** @type {number} Total horizontal padding in pixels (16px on each side) */
+  #PADDING = 32;
+
+  /** @type {number} Width of chevron separator in pixels */
+  #CHEVRON_WIDTH = 16;
+
+  /** @type {number} Percentage of container width to use as layout tolerance */
+  #TOLERANCE_PERCENTAGE = 0.05;
 
   /**
-   * 🚀 Initialize the breadcrumb controller
+   * Lifecycle: Controller Connection
    * Sets up event listeners and performs initial layout calculation
+   * @returns {void}
    */
   connect() {
     this.#setupEventListeners();
@@ -54,8 +65,9 @@ export default class extends Controller {
   }
 
   /**
-   * 🧹 Clean up resources when controller disconnects
-   * Removes event listeners and cancels pending animations
+   * Lifecycle: Controller Disconnection
+   * Cleans up event listeners and pending animations
+   * @returns {void}
    */
   disconnect() {
     this.#cleanupEventListeners();
@@ -63,23 +75,13 @@ export default class extends Controller {
   }
 
   // ============================================================================
-  // 🎯 PUBLIC METHODS
+  // Event Management
   // ============================================================================
 
   /**
-   * 🔄 Trigger manual layout recalculation
-   * Useful for programmatic updates or testing
-   */
-  recalculate() {
-    this.#performLayout();
-  }
-
-  // ============================================================================
-  // 🔧 PRIVATE SETUP & CLEANUP METHODS
-  // ============================================================================
-
-  /**
-   * 📡 Set up event listeners for responsive behavior
+   * Sets up the resize event listener with passive optimization
+   * @private
+   * @returns {void}
    */
   #setupEventListeners() {
     this.#resizeHandler = this.#performLayout.bind(this);
@@ -87,7 +89,9 @@ export default class extends Controller {
   }
 
   /**
-   * 🧹 Remove event listeners to prevent memory leaks
+   * Removes event listeners and cleans up references
+   * @private
+   * @returns {void}
    */
   #cleanupEventListeners() {
     if (this.#resizeHandler) {
@@ -97,7 +101,9 @@ export default class extends Controller {
   }
 
   /**
-   * ⏹️ Cancel any pending animation frames
+   * Cancels any pending animation frames
+   * @private
+   * @returns {void}
    */
   #cancelPendingAnimations() {
     if (this.#animationFrame) {
@@ -107,24 +113,25 @@ export default class extends Controller {
   }
 
   // ============================================================================
-  // 📐 LAYOUT CALCULATION METHODS
+  // Layout Management
   // ============================================================================
 
   /**
-   * 🎯 Main layout orchestration method
-   * Coordinates the entire breadcrumb layout process
+   * Schedules a layout calculation for the next animation frame
+   * @private
+   * @returns {Promise<void>}
    */
   async #performLayout() {
     this.#cancelPendingAnimations();
-
     this.#animationFrame = requestAnimationFrame(async () => {
       await this.#calculateOptimalLayout();
     });
   }
 
   /**
-   * 🧮 Calculate the optimal breadcrumb layout
-   * Determines which crumbs to show/hide based on available space
+   * Calculates and applies the optimal layout based on available space
+   * @private
+   * @returns {Promise<void>}
    */
   async #calculateOptimalLayout() {
     const { crumbs, dropdown } = this.#getLayoutElements();
@@ -138,33 +145,70 @@ export default class extends Controller {
       return;
     }
 
-    // First show all crumbs to get accurate measurements
+    // Measure total width with all crumbs visible
     this.#showAllCrumbs(crumbs, dropdown);
     await this.#waitForLayout();
-
-    // Calculate total width of all crumbs
     const totalWidth = this.#calculateTotalWidth(crumbs);
 
-    // If everything fits (with tolerance), keep all crumbs visible
+    // Apply appropriate layout based on available space
     if (totalWidth <= availableWidth + toleranceWidth) {
-      return; // Already showing all crumbs
+      return; // Keep all crumbs visible
     }
-
-    // If not everything fits, switch to dropdown mode
     await this.#applyDropdownLayout(crumbs, dropdown);
   }
 
   /**
-   * 🎯 Get all necessary DOM elements for layout calculations
+   * Calculates the total width of all breadcrumbs including separators
+   * @private
+   * @param {Element[]} crumbs - Array of breadcrumb elements
+   * @returns {number} Total width in pixels
    */
-  #getLayoutElements() {
-    const crumbs = this.crumbTargets;
-    const dropdown = this.dropdownTarget;
-    return { crumbs, dropdown };
+  #calculateTotalWidth(crumbs) {
+    return crumbs.reduce((totalWidth, crumb, index) => {
+      const chevronWidth = index > 0 ? this.#CHEVRON_WIDTH : 0;
+      return totalWidth + crumb.getBoundingClientRect().width + chevronWidth;
+    }, 0);
   }
 
   /**
-   * 🎯 Show all crumbs and hide dropdown
+   * Retrieves the DOM elements needed for layout calculations
+   * @private
+   * @returns {{ crumbs: Element[], dropdown: Element }}
+   */
+  #getLayoutElements() {
+    return {
+      crumbs: this.crumbTargets,
+      dropdown: this.dropdownTarget
+    };
+  }
+
+  /**
+   * Applies the dropdown layout by showing first/last items and collapsing middle items
+   * @private
+   * @param {Element[]} crumbs - Array of breadcrumb elements
+   * @param {Element} dropdown - Dropdown menu element
+   * @returns {Promise<void>}
+   */
+  async #applyDropdownLayout(crumbs, dropdown) {
+    const [firstCrumb, ...middleCrumbs] = crumbs;
+    const lastCrumb = middleCrumbs.pop();
+
+    // Show bookend crumbs
+    firstCrumb.style.display = "inline-flex";
+    lastCrumb.style.display = "inline-flex";
+
+    // Hide and process middle crumbs
+    middleCrumbs.forEach(crumb => crumb.style.display = "none");
+    dropdown.style.display = "inline-flex";
+    this.#updateDropdownContent(middleCrumbs);
+  }
+
+  /**
+   * Shows all breadcrumbs and hides the dropdown
+   * @private
+   * @param {Element[]} crumbs - Array of breadcrumb elements
+   * @param {Element} dropdown - Dropdown menu element
+   * @returns {void}
    */
   #showAllCrumbs(crumbs, dropdown) {
     crumbs.forEach((crumb) => (crumb.style.display = "inline-flex"));
@@ -172,88 +216,69 @@ export default class extends Controller {
   }
 
   /**
-   * 📝 Update dropdown content
+   * Waits for layout calculations to complete
+   * @private
+   * @returns {Promise<void>}
+   */
+  async #waitForLayout() {
+    await new Promise(resolve => requestAnimationFrame(() =>
+      requestAnimationFrame(resolve)
+    ));
+  }
+
+  /**
+   * Updates the dropdown menu content with middle breadcrumb items
+   * @private
+   * @param {Element[]} middleCrumbs - Array of middle breadcrumb elements
+   * @returns {void}
    */
   #updateDropdownContent(middleCrumbs) {
     const dropdownMenu = this.dropdownTarget.querySelector('[role="menu"]');
     if (!dropdownMenu) return;
 
-    // Clear existing content
-    while (dropdownMenu.firstChild) {
-      dropdownMenu.removeChild(dropdownMenu.firstChild);
-    }
+    dropdownMenu.innerHTML = ""; // Clear existing content
 
-    // Add menu items for each middle crumb
     middleCrumbs.forEach((crumb, index) => {
       const link = this.linksValue[index + 1]; // +1 to skip home
       if (!link) return;
 
-      const menuItem = document.createElement("li");
-      menuItem.setAttribute("role", "none");
-
-      const anchor = document.createElement("a");
-      anchor.setAttribute("role", "menuitem");
-      anchor.setAttribute("tabindex", "-1");
-      anchor.href = link.path;
-      anchor.textContent = link.name;
-      anchor.title = link.name;
-      anchor.setAttribute("data-turbo-frame", "_top");
-      anchor.className = [
-        "block",
-        "px-4",
-        "py-2",
-        "text-sm",
-        "text-slate-600",
-        "dark:text-slate-400",
-        "hover:bg-slate-100",
-        "dark:hover:bg-slate-700",
-        "focus:outline-none",
-        "focus:bg-slate-200",
-        "dark:focus:bg-slate-800",
-      ].join(" ");
-
-      menuItem.appendChild(anchor);
+      const menuItem = this.#createDropdownMenuItem(link);
       dropdownMenu.appendChild(menuItem);
     });
   }
 
-  #calculateTotalWidth(crumbs) {
-    let totalWidth = 0;
-    crumbs.forEach((crumb, index) => {
-      // Add chevron width for all except the first crumb
-      if (index > 0) {
-        totalWidth += this.#CHEVRON_WIDTH;
-      }
-      // Add the crumb's width
-      totalWidth += crumb.getBoundingClientRect().width;
-    });
-    return totalWidth;
-  }
+  /**
+   * Creates a dropdown menu item with proper accessibility attributes
+   * @private
+   * @param {{ path: string, name: string }} link - Link data for the menu item
+   * @returns {HTMLElement} The created menu item element
+   */
+  #createDropdownMenuItem(link) {
+    const menuItem = document.createElement("li");
+    menuItem.setAttribute("role", "none");
 
-  async #applyDropdownLayout(crumbs, dropdown) {
-    // Always show first and last crumbs
-    const firstCrumb = crumbs[0];
-    const lastCrumb = crumbs[crumbs.length - 1];
-    firstCrumb.style.display = "inline-flex";
-    lastCrumb.style.display = "inline-flex";
+    const anchor = document.createElement("a");
+    anchor.setAttribute("role", "menuitem");
+    anchor.setAttribute("tabindex", "-1");
+    anchor.href = link.path;
+    anchor.textContent = link.name;
+    anchor.title = link.name;
+    anchor.setAttribute("data-turbo-frame", "_top");
+    anchor.className = [
+      "block",
+      "px-4",
+      "py-2",
+      "text-sm",
+      "text-slate-600",
+      "dark:text-slate-400",
+      "hover:bg-slate-100",
+      "dark:hover:bg-slate-700",
+      "focus:outline-none",
+      "focus:bg-slate-200",
+      "dark:focus:bg-slate-800",
+    ].join(" ");
 
-    // Hide all middle crumbs
-    const middleCrumbs = crumbs.slice(1, -1);
-    middleCrumbs.forEach((crumb) => {
-      crumb.style.display = "none";
-    });
-
-    // Show dropdown
-    dropdown.style.display = "inline-flex";
-
-    // Update dropdown content
-    this.#updateDropdownContent(middleCrumbs);
-  }
-
-  async #waitForLayout() {
-    // Wait for two animation frames to ensure layout is complete
-    await new Promise(resolve => requestAnimationFrame(() =>
-      requestAnimationFrame(resolve)
-    ));
+    menuItem.appendChild(anchor);
+    return menuItem;
   }
 }
