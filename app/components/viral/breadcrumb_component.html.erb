@@ -1,38 +1,20 @@
 <nav
   aria-label="<%= I18n.t(:'components.breadcrumb.navigation_aria_label') %>"
-  class="flex items-center h-14 w-full min-w-0"
+  class="h-14 w-full min-w-0"
   data-controller="breadcrumb"
-  data-breadcrumb-links-value='<%= links.map { |l| l.merge(path: URI.join(root_url, l[:path]).to_s) }.to_json %>'
 >
   <ol
     class="
-      grid items-center w-full min-w-0 pr-4 [grid-template-columns:auto_auto_1fr]
-      [grid-template-areas:'home_dropdown_last'] gap-x-1 md:gap-x-3
+      grid items-center h-full w-full min-w-0 pr-4 [grid-template-columns:auto_1fr]
+      [grid-template-areas:'dropdown_last'] gap-x-1 md:gap-x-3
     "
     data-breadcrumb-target="list"
   >
-    <!-- Home crumb -->
-    <li
-      class="inline-flex items-center shrink-0 [grid-area:home]"
-      data-breadcrumb-target="crumb"
-      data-breadcrumb-home="true"
-    >
-      <%= link_to root_url,
-          class: "text-slate-600 dark:text-slate-400 hover:underline py-3 font-normal flex items-center transition", data: { turbo_frame: "_top" },
-          title: t(:"components.breadcrumb.home") do %>
-        <%= render Pathogen::Icon.new(
-          icon: "house",
-          classes: "w-4 h-4 mr-1 text-slate-500 align-middle",
-        ) %>
-      <% end %>
-    </li>
     <!-- Overflow dropdown -->
     <li
       class="inline-flex items-center shrink-0 [grid-area:dropdown]"
       data-breadcrumb-target="dropdown"
-      style="display:none"
     >
-      <span aria-hidden="true" class="mx-1 text-slate-400 select-none">›</span>
       <%= viral_dropdown(
         icon: "ellipsis_horizontal",
         aria: { label: I18n.t(:'components.breadcrumb.dropdown.aria_label') },
