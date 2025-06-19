@@ -6,7 +6,7 @@ module Irida
     module_function
 
     # All routes that appear on the top level must be listed here.
-    # This will make sure that namespaces cannot be greated with these names
+    # This will make sure that namespaces cannot be created with these names
     # as these routes would be masked by the paths already in place.
     TOP_LEVEL_ROUTES = %w[
       -
@@ -15,9 +15,13 @@ module Irida
       500.html
       apple-touch-icon-precomposed.png
       apple-touch-icon.png
+      activities
+      api
       assets
+      console
       dashboard
       favicon.ico
+      graphiql
       groups
       rails
       recede_historical_location
@@ -28,7 +32,7 @@ module Irida
     ].freeze
 
     # All routes for groups and projects will be under `-` this allows
-    # makes namespace validation simplier and more robust. I.E. if we
+    # makes namespace validation simpler and more robust. I.E. if we
     # add a new route under the `/-/` scope instead of directly we do
     # not need to worry about existing namespaces that could conflict
     WILDCARD_ROUTES = %w[

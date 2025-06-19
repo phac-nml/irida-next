@@ -11,7 +11,7 @@ module Groups
     end
 
     def execute # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      authorize! group.parent, to: :create_subgroup? if params[:parent_id]
+      authorize! group.parent, to: :create_subgroup? if params[:parent_id].present?
 
       group.save
 

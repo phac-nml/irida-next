@@ -3,14 +3,14 @@
 # Controller actions for Groups
 class GroupsController < Groups::ApplicationController # rubocop:disable Metrics/ClassLength
   layout :resolve_layout
-  before_action :parent_group, only: %i[new]
+  before_action :parent_group, only: %i[new create]
   before_action :tab, :render_flat_list, only: %i[show]
   before_action :group, only: %i[activity edit show destroy update transfer]
   before_action :authorized_namespaces, except: %i[index show destroy]
   before_action :current_page
   before_action :edit_view_authorizations, only: %i[edit]
   before_action :show_view_authorizations, only: %i[show]
-  before_action :page_title, only: %i[show edit activity new]
+  before_action :page_title, only: %i[show edit activity new create]
 
   def index
     redirect_to dashboard_groups_path
@@ -45,6 +45,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   end
 
   def create
+    @fixed = false
     @new_group = Groups::CreateService.new(current_user, group_params).execute
     if @new_group.persisted?
       flash[:success] = t('.success')
@@ -148,7 +149,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   end
 
   def group_params
-    params.require(:group).permit(:name, :path, :description, :parent_id)
+    params.expect(group: %i[name path description parent_id])
   end
 
   def authorized_namespaces
@@ -194,7 +195,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     when 'show', 'edit', 'update', 'activity'
       'groups'
     when 'new', 'create'
-      if @group
+      if params.key?(:parent_id) || (params[:group] && params[:group][:parent_id].present?)
         'groups'
       else
         'application'
@@ -233,8 +234,8 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def current_page
     @current_page = case action_name
-                    when 'new'
-                      if @group
+                    when 'new', 'create'
+                      if params.key?(:parent_id) || (params[:group] && params[:group][:parent_id].present?)
                         t(:'groups.sidebar.details')
                       else
                         t(:'general.default_sidebar.groups')
@@ -276,7 +277,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
                [t(:'groups.sidebar.activity'), @group.full_name].join(' · ')
              when 'edit'
                [t(:'groups.sidebar.general'), t(:'groups.edit.title'), @group.full_name].join(' · ')
-             when 'new'
+             when 'new', 'create'
                if @group
                  t(:'groups.new_subgroup.title')
                else
