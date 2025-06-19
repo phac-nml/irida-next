@@ -45,6 +45,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   end
 
   def create
+    @fixed = false
     @new_group = Groups::CreateService.new(current_user, group_params).execute
     if @new_group.persisted?
       flash[:success] = t('.success')
