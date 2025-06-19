@@ -10,3 +10,6 @@ import { application } from "controllers/application";
 import { lazyLoadControllersFrom } from "@hotwired/stimulus-loading";
 
 lazyLoadControllersFrom("controllers", application);
+
+import BreadcrumbController from "./breadcrumb_controller";
+application.register("breadcrumb", BreadcrumbController);

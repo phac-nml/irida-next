@@ -42,8 +42,11 @@
           <%= helpers.render_icon :sidebar, class: "size-6" %>
         </button>
       </div>
-      <div class="flex-1 flex items-center h-full pl-2">
-        <turbo-frame id="breadcrumb" class="flex items-center h-full">
+      <div class=" flex-1 flex items-center h-full pl-2 min-w-0 max-w-full ">
+        <turbo-frame
+          id="breadcrumb"
+          class="flex-1 flex items-center h-full min-w-0 max-w-full"
+        >
           <%= breadcrumb %>
         </turbo-frame>
       </div>

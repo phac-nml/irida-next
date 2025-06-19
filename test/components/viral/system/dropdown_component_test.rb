@@ -83,5 +83,25 @@ module System
         assert_text 'Action 1'
       end
     end
+
+    test 'dropdown component with data attributes on items' do
+      visit('/rails/view_components/viral_dropdown_component/with_data_attributes')
+      within('.Viral-Preview > [data-controller-connected="true"]') do
+        assert_text 'Data Attributes Test'
+        click_on 'Data Attributes Test'
+
+        # Check that data attributes are properly rendered
+        first_item = find('a[href="#"]', text: 'Item with Data')
+        assert_equal 'click->test#action', first_item['data-action']
+        assert_equal 'dropdown-item-1', first_item['data-test-id']
+        assert_equal 'Are you sure?', first_item['data-confirm']
+
+        # Check that custom classes are properly merged
+        second_item = find('a[href="#"]', text: 'Another Item')
+        assert_equal 'dropdown-item-2', second_item['data-test-id']
+        assert_equal 'delete', second_item['data-turbo-method']
+        assert second_item[:class].include?('text-red-600'), 'Expected custom class to be applied'
+      end
+    end
   end
 end

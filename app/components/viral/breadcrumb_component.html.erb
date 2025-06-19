@@ -1,54 +1,88 @@
 <nav
   aria-label="<%= I18n.t(:'components.breadcrumb.navigation_aria_label') %>"
-  class="flex items-center h-14"
+  class="flex items-center h-14 w-full min-w-0"
+  data-controller="breadcrumb"
+  data-breadcrumb-links-value='<%= links.map { |l| l.merge(path: URI.join(root_url, l[:path]).to_s) }.to_json %>'
 >
-  <ol class="inline-flex items-center space-x-1 md:space-x-3">
-
-    <% if links.length > 1 %>
-      <li class="max-md:visible md:hidden inline-flex items-center">
-        <%= viral_dropdown(icon: "ellipsis_horizontal", aria: { label: I18n.t(:'components.breadcrumb.dropdown.aria_label') }, styles: { button: "text-slate-500 cursor-pointer" }) do |dropdown| %>
-          <% links.each_with_index do |link, index| %>
-            <% if index < links.length - 1 %>
-              <%# Note: Dropdown items typically don't need aria-current, the final link outside the dropdown handles this %>
-              <% dropdown.with_item(
-                label: link[:name],
-                url: URI.join(root_url, link[:path]).to_s,
-                data: {
-                  turbo_frame: "_top",
-                },
-              ) %>
-            <% end %>
-          <% end %>
+  <ol
+    class="
+      inline-flex items-center space-x-1 md:space-x-3 w-full min-w-0 whitespace-nowrap
+      relative
+    "
+    data-breadcrumb-target="list"
+  >
+    <!-- Home crumb -->
+    <li
+      class="inline-flex items-center shrink-0 relative"
+      data-breadcrumb-target="crumb"
+      data-breadcrumb-home="true"
+    >
+      <%= link_to root_url,
+          class: "text-slate-600 dark:text-slate-400 hover:underline py-3 font-normal flex items-center transition relative", data: { turbo_frame: "_top" },
+          title: t(:"components.breadcrumb.home") do %>
+        <%= render Pathogen::Icon.new(
+          icon: "house",
+          classes: "w-4 h-4 mr-1 text-slate-500 align-middle",
+        ) %>
+      <% end %>
+    </li>
+    <!-- Overflow dropdown -->
+    <li
+      class="inline-flex items-center shrink-0 relative"
+      data-breadcrumb-target="dropdown"
+      style="display:none"
+    >
+      <span aria-hidden="true" class="mx-1 text-slate-400 select-none">›</span>
+      <%= viral_dropdown(
+        icon: "ellipsis_horizontal",
+        aria: { label: I18n.t(:'components.breadcrumb.dropdown.aria_label') },
+        styles: { button: "text-slate-500 cursor-pointer transition relative" }
+      ) do |dropdown| %>
+        <% links.each_with_index do |link, index| %>
+          <% next if index == 0 %>
+          <%= dropdown.with_item(
+            label: "#{link[:name]} - #{link[:path]}",
+            url: URI.join(root_url, link[:path]).to_s,
+            data: {
+              turbo_frame: "_top",
+            },
+          ) %>
         <% end %>
-      </li>
-    <% end %>
-
+      <% end %>
+    </li>
+    <!-- Dynamic breadcrumb items -->
     <% links.each_with_index do |link, index| %>
+      <% next if index == 0 %>
 
       <li
-        class="<%= class_names('inline-flex items-center', 'max-md:hidden md:visible': index <  links.length - 1 ) %>"
+        class="inline-flex items-center shrink-0 min-w-0 relative"
+        data-breadcrumb-target="crumb"
       >
-        <div class="flex items-center">
-          <% if index > 0 %>
-            <%= viral_icon(name: "chevron_right", classes: "w-3 h-3 text-slate-400") %>
-          <% end %>
+        <span aria-hidden="true" class="mx-1 text-slate-400 select-none shrink-0">›</span>
+
+        <% if index == links.length - 1 %>
+          <!-- Current page (last item) -->
+          <span
+            class="
+              text-sm text-slate-900 dark:text-white font-medium py-3 ml-1 md:ml-2
+              text-ellipsis whitespace-nowrap min-w-0 max-w-[200px] md:max-w-[600px]
+              lg:max-w-[800px]
+            "
+            aria-current="page"
+            title="<%= link[:name] %>"
+          >
+            <%= link[:name] %>
+          </span>
+        <% else %>
+          <!-- Navigable link -->
           <%= link_to link[:name],
           URI.join(root_url, link[:path]).to_s,
-          aria: {
-            current: (index == links.length - 1) ? "page" : nil,
-          },
+          class:
+            "text-sm text-slate-600 dark:text-slate-400 hover:underline py-3 font-normal ml-1 md:ml-2 transition truncate max-w-[200px] md:max-w-[300px] block relative",
           data: {
             turbo_frame: "_top",
-          },
-          class:
-            class_names(
-              "text-sm text-slate-600 dark:text-slate-400 hover:underline py-3",
-              "font-normal": index < links.length - 1,
-              "font-medium": index == links.length - 1,
-              "ml-1 md:ml-2": !index.zero?,
-            ) %>
-
-        </div>
+          } %>
+        <% end %>
       </li>
     <% end %>
   </ol>
