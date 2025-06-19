@@ -6,19 +6,19 @@
 >
   <ol
     class="
-      inline-flex items-center space-x-1 md:space-x-3 w-full min-w-0 whitespace-nowrap
-      relative
+      grid items-center w-full min-w-0 pr-4 [grid-template-columns:auto_auto_1fr]
+      [grid-template-areas:'home_dropdown_last'] gap-x-1 md:gap-x-3
     "
     data-breadcrumb-target="list"
   >
     <!-- Home crumb -->
     <li
-      class="inline-flex items-center shrink-0 relative"
+      class="inline-flex items-center shrink-0 [grid-area:home]"
       data-breadcrumb-target="crumb"
       data-breadcrumb-home="true"
     >
       <%= link_to root_url,
-          class: "text-slate-600 dark:text-slate-400 hover:underline py-3 font-normal flex items-center transition relative", data: { turbo_frame: "_top" },
+          class: "text-slate-600 dark:text-slate-400 hover:underline py-3 font-normal flex items-center transition", data: { turbo_frame: "_top" },
           title: t(:"components.breadcrumb.home") do %>
         <%= render Pathogen::Icon.new(
           icon: "house",
@@ -28,7 +28,7 @@
     </li>
     <!-- Overflow dropdown -->
     <li
-      class="inline-flex items-center shrink-0 relative"
+      class="inline-flex items-center shrink-0 [grid-area:dropdown]"
       data-breadcrumb-target="dropdown"
       style="display:none"
     >
@@ -36,7 +36,7 @@
       <%= viral_dropdown(
         icon: "ellipsis_horizontal",
         aria: { label: I18n.t(:'components.breadcrumb.dropdown.aria_label') },
-        styles: { button: "text-slate-500 cursor-pointer transition relative" }
+        styles: { button: "text-slate-500 cursor-pointer transition" }
       ) do |dropdown| %>
         <% links.each_with_index do |link, index| %>
           <% next if index == 0 %>
@@ -55,7 +55,9 @@
       <% next if index == 0 %>
 
       <li
-        class="inline-flex items-center shrink-0 min-w-0 relative"
+        class="
+          inline-flex items-center min-w-0 <%= index == links.length - 1 ? '[grid-area:last]' : '' %>
+        "
         data-breadcrumb-target="crumb"
       >
         <span aria-hidden="true" class="mx-1 text-slate-400 select-none shrink-0">›</span>
@@ -64,9 +66,8 @@
           <!-- Current page (last item) -->
           <span
             class="
-              text-sm text-slate-900 dark:text-white font-medium py-3 ml-1 md:ml-2
-              text-ellipsis whitespace-nowrap min-w-0 max-w-[200px] md:max-w-[600px]
-              lg:max-w-[800px]
+              text-sm text-slate-900 dark:text-white font-medium py-3 ml-1 md:ml-2 truncate
+              min-w-0
             "
             aria-current="page"
             title="<%= link[:name] %>"
@@ -78,7 +79,7 @@
           <%= link_to link[:name],
           URI.join(root_url, link[:path]).to_s,
           class:
-            "text-sm text-slate-600 dark:text-slate-400 hover:underline py-3 font-normal ml-1 md:ml-2 transition truncate max-w-[200px] md:max-w-[300px] block relative",
+            "text-sm text-slate-600 dark:text-slate-400 hover:underline py-3 font-normal ml-1 md:ml-2 transition truncate",
           data: {
             turbo_frame: "_top",
           } %>
