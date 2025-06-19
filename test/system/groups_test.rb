@@ -43,6 +43,10 @@ class GroupsTest < ApplicationSystemTestCase
       click_on I18n.t('groups.create.submit')
     end
 
+    assert_text I18n.t(:'general.form.error_notification')
+
+    assert_selector '#group_name', focused: true
+
     assert_text 'Group name is too short'
     assert_current_path '/-/groups/new'
   end
@@ -55,6 +59,10 @@ class GroupsTest < ApplicationSystemTestCase
       fill_in I18n.t('activerecord.attributes.group.name'), with: group2.name
       click_on I18n.t('groups.create.submit')
     end
+
+    assert_text I18n.t(:'general.form.error_notification')
+
+    assert_selector '#group_name', focused: true
 
     assert_text 'Group name has already been taken'
     assert_current_path '/-/groups/new'
@@ -69,6 +77,10 @@ class GroupsTest < ApplicationSystemTestCase
       click_on I18n.t('groups.create.submit')
     end
 
+    assert_text I18n.t(:'general.form.error_notification')
+
+    assert_selector '#group_description', focused: true
+
     assert_text 'Description is too long'
     assert_current_path '/-/groups/new'
   end
@@ -82,6 +94,10 @@ class GroupsTest < ApplicationSystemTestCase
       fill_in I18n.t('activerecord.attributes.group.path'), with: group2.path
       click_on I18n.t('groups.create.submit')
     end
+
+    assert_text I18n.t(:'general.form.error_notification')
+
+    assert_selector '#group_path', focused: true
 
     assert_text 'Path has already been taken'
     assert_current_path '/-/groups/new'
