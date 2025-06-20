@@ -184,9 +184,8 @@ export default class extends Controller {
    * @private
    */
   #updateDropdown(visibleSet) {
-    const dropdownItems = this.dropdownMenuTarget.querySelectorAll(
-      '[data-breadcrumb-target="dropdownItem"]',
-    );
+    const dropdownItems =
+      this.dropdownMenuTarget.querySelectorAll('[role="menuitem"]');
     let hasHiddenItems = false;
 
     dropdownItems.forEach((item, index) => {
