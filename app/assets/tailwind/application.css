@@ -521,6 +521,18 @@
   strong {
     @apply font-semibold;
   }
+
+  /*
+    Adds a separator before a breadcrumb item if it's not the first one,
+    following the accessible breadcrumb pattern.
+    This targets the link/span within the list item for better vertical alignment.
+  */
+  [data-breadcrumb-target="crumb"]
+    + [data-breadcrumb-target="crumb"]
+    > *::before {
+    content: "›";
+    @apply mx-2 select-none text-slate-400;
+  }
 }
 
 .pagy-nav.pagination {

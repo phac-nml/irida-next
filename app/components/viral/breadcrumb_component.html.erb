@@ -4,7 +4,7 @@
   data-controller="breadcrumb"
 >
   <ol
-    class="flex items-center h-full w-full min-w-0 pr-4 gap-x-1 md:gap-x-3"
+    class="flex items-center h-full w-full min-w-0 pr-4"
     data-breadcrumb-target="list"
   >
     <!-- Overflow dropdown -->
@@ -33,17 +33,11 @@
     </li>
     <!-- Dynamic breadcrumb items -->
     <% links.each_with_index do |link, index| %>
-      <li class="inline-flex items-center shrink-0" data-breadcrumb-target="crumb">
-        <% if index > 0 %>
-          <span aria-hidden="true" class="mx-1 text-slate-400 select-none shrink-0">›</span>
-        <% end %>
-
+      <li class="shrink-0" data-breadcrumb-target="crumb">
         <% if index == links.length - 1 %>
           <!-- Current page (last item) -->
           <span
-            class="
-              text-sm text-slate-900 dark:text-white font-medium py-3 ml-1 md:ml-2
-            "
+            class="text-sm text-slate-900 dark:text-white font-medium py-3"
             aria-current="page"
             title="<%= link[:name] %>"
           >
@@ -54,7 +48,7 @@
           <%= link_to link[:name],
           URI.join(root_url, link[:path]).to_s,
           class:
-            "text-sm text-slate-600 dark:text-slate-400 hover:underline py-3 font-normal ml-1 md:ml-2",
+            "text-sm text-slate-600 dark:text-slate-400 hover:underline py-3 font-normal",
           data: {
             turbo_frame: "_top",
           } %>
