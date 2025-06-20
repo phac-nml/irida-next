@@ -10,7 +10,7 @@
   <% end %>
 
   <%= turbo_stream.update "breadcrumb" do %>
-    <%= render Viral::BreadcrumbComponent.new(context_crumbs: @context_crumbs) %>
+    <%= render Layout::BreadcrumbComponent.new(context_crumbs: @context_crumbs) %>
   <% end %>
 <% end %>
 

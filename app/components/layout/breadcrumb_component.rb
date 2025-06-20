@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Viral
+module Layout
   # Create breadcrumbs for current route
   class BreadcrumbComponent < Component
     attr_reader :links
