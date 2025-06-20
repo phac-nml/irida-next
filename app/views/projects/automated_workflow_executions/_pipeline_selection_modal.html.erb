@@ -6,9 +6,9 @@
         <%= link_to new_namespace_project_automated_workflow_execution_path(@project.parent, @project, workflow_name: workflow.name, workflow_version: workflow.version), class: "group w-full", data: { turbo_stream: true } do %>
           <span class="flex items-center p-4 space-x-4 ws-default hover:bg-primary-600">
             <span class="flex-shrink-0">
-              <%= viral_icon(
-                name: :rocket_launch,
-                classes:
+              <%= pathogen_icon(
+                ICON::ROCKET_LAUNCH,
+                class:
                   "ws-default dark:text-slate-500 group-hover:text-slate-100 group-hover:-rotate-45 transition-rotate-45 group-hover:duration-500 group-hover:ease-in-out",
               ) %>
             </span>
