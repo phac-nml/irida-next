@@ -49,7 +49,7 @@ module Layout
     test 'renders dropdown menu with all but the last link' do
       render_inline(Layout::BreadcrumbComponent.new(links: @links))
 
-      assert_selector 'li[data-breadcrumb-target="dropdownMenu"]', visible: :hidden do
+      assert_selector 'li[data-breadcrumb-target="dropdownMenu"]', visible: :all do
         assert_selector '[role="menuitem"]', count: 2, visible: :all
         assert_selector '[role="menuitem"]', text: 'Home', visible: :all
         assert_selector '[role="menuitem"]', text: 'Projects', visible: :all
