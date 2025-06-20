@@ -4,29 +4,28 @@
   data-controller="breadcrumb"
 >
   <ol
-    class="
-      grid items-center h-full w-full min-w-0 pr-4 [grid-template-columns:auto_1fr]
-      [grid-template-areas:'dropdown_last'] gap-x-1 md:gap-x-3
-    "
+    class="flex items-center h-full w-full min-w-0 pr-4 gap-x-1 md:gap-x-3"
     data-breadcrumb-target="list"
   >
     <!-- Overflow dropdown -->
     <li
-      class="inline-flex items-center shrink-0 [grid-area:dropdown]"
-      data-breadcrumb-target="dropdown"
+      class="shrink-0"
+      data-breadcrumb-target="dropdownMenu"
+      style="display: none;"
     >
       <%= viral_dropdown(
         icon: "ellipsis_horizontal",
         aria: { label: I18n.t(:'components.breadcrumb.dropdown.aria_label') },
-        styles: { button: "text-slate-500 cursor-pointer transition" }
+        styles: { button: "p-3 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg text-slate-500 cursor-pointer transition" }
       ) do |dropdown| %>
         <% links.each_with_index do |link, index| %>
-          <% next if index == 0 %>
+          <% next if index == links.length - 1 %>
           <%= dropdown.with_item(
-            label: "#{link[:name]} - #{link[:path]}",
+            label: link[:name],
             url: URI.join(root_url, link[:path]).to_s,
             data: {
               turbo_frame: "_top",
+              "breadcrumb-target": "dropdownItem",
             },
           ) %>
         <% end %>
@@ -34,22 +33,16 @@
     </li>
     <!-- Dynamic breadcrumb items -->
     <% links.each_with_index do |link, index| %>
-      <% next if index == 0 %>
-
-      <li
-        class="
-          inline-flex items-center min-w-0 <%= index == links.length - 1 ? '[grid-area:last]' : '' %>
-        "
-        data-breadcrumb-target="crumb"
-      >
-        <span aria-hidden="true" class="mx-1 text-slate-400 select-none shrink-0">›</span>
+      <li class="inline-flex items-center shrink-0" data-breadcrumb-target="crumb">
+        <% if index > 0 %>
+          <span aria-hidden="true" class="mx-1 text-slate-400 select-none shrink-0">›</span>
+        <% end %>
 
         <% if index == links.length - 1 %>
           <!-- Current page (last item) -->
           <span
             class="
               text-sm text-slate-900 dark:text-white font-medium py-3 ml-1 md:ml-2 truncate
-              min-w-0
             "
             aria-current="page"
             title="<%= link[:name] %>"
@@ -61,7 +54,7 @@
           <%= link_to link[:name],
           URI.join(root_url, link[:path]).to_s,
           class:
-            "text-sm text-slate-600 dark:text-slate-400 hover:underline py-3 font-normal ml-1 md:ml-2 transition truncate",
+            "text-sm text-slate-600 dark:text-slate-400 hover:underline py-3 font-normal ml-1 md:ml-2 truncate",
           data: {
             turbo_frame: "_top",
           } %>
