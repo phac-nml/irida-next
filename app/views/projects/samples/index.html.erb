@@ -15,7 +15,7 @@
           <%= button_to pipeline_selection_workflow_executions_submissions_path, params: { namespace_id: @project.namespace.id }, method: :get,
         data: { action: "turbo:morph-element->action-button#idempotentConnect ", turbo_stream: true, controller: "action-button", action_button_required_value: 1 },
                   class: "button button-default action-button cursor-pointer" do %>
-            <%= viral_icon(name: :rocket_launch, classes: "w-5 h-5 inline-block") %>
+            <%= pathogen_icon(ICON::ROCKET_LAUNCH, class: "size-5 inline-block") %>
             <span class="ml-2"><%= t(:".workflows.button_sr") %></span>
           <% end %>
         <% end %>
