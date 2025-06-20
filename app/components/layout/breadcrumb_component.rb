@@ -1,28 +1,22 @@
 # frozen_string_literal: true
 
 module Layout
-  # Create breadcrumbs for current route
+  # A breadcrumb component for displaying navigation trails.
   class BreadcrumbComponent < Component
-    attr_reader :links
-
-    def initialize(context_crumbs: nil)
-      @links = validate_context_crumbs(context_crumbs)
-    end
-
-    def render?
-      @links.any?
+    # @param links [Array<Hash>] A list of hashes, each containing a `:name` and `:path`.
+    def initialize(links:)
+      @links = links
+      validate_links!
     end
 
     private
 
-    def validate_context_crumbs(context_crumbs)
-      raise ArgumentError, 'Context crumbs must be an array' unless context_crumbs.is_a?(Array)
+    def validate_links!
+      raise ArgumentError, 'links must be an array' unless @links.is_a?(Array)
+      return if @links.empty?
+      return if @links.all? { |link| link.is_a?(Hash) && link.key?(:name) && link.key?(:path) }
 
-      context_crumbs.each do |crumb|
-        raise ArgumentError, 'Context crumbs must be a hash' unless crumb.is_a?(Hash)
-        raise ArgumentError, 'Context crumbs must have a name' unless crumb.key?(:name)
-        raise ArgumentError, 'Context crumbs must have a path' unless crumb.key?(:path)
-      end
+      raise ArgumentError, 'All links must be hashes with :name and :path keys'
     end
   end
 end

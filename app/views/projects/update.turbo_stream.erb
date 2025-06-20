@@ -10,7 +10,7 @@
   <% end %>
 
   <%= turbo_stream.update "breadcrumb" do %>
-    <%= render Layout::BreadcrumbComponent.new(context_crumbs: @context_crumbs) %>
+    <%= render Layout::BreadcrumbComponent.new(links: @context_crumbs) %>
   <% end %>
 <% end %>
 
