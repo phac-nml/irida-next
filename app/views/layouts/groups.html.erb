@@ -14,27 +14,27 @@
           ) %>
           <%= render section.with_item(
             url: group_samples_path(@group),
-            icon: Pathogen::ICON::SAMPLES,
+            icon: ICON::SAMPLES,
             label: t(:"groups.sidebar.samples"),
             selected: @current_page == t(:"groups.sidebar.samples"),
           ) %>
           <% if allowed_to?(:view_attachments?, @group) %>
             <%= render section.with_item(
               url: group_attachments_path(@group),
-              icon: Pathogen::ICON::FILES,
+              icon: ICON::FILES,
               label: t(:"groups.sidebar.files"),
               selected: @current_page == t(:"groups.sidebar.files"),
             ) %>
           <% end %>
           <%= render section.with_item(
             url: group_members_path(@group),
-            icon: Pathogen::ICON::USERS,
+            icon: ICON::USERS,
             label: t(:"groups.sidebar.members"),
             selected: @current_page == t(:"groups.sidebar.members"),
           ) %>
           <%= render section.with_item(
             url: group_activity_path(@group),
-            icon: Pathogen::ICON::LIST_BULLETS,
+            icon: ICON::LIST_BULLETS,
             label: t(:"groups.sidebar.activity"),
             selected: @current_page == t(:"groups.sidebar.activity"),
           ) %>
@@ -42,7 +42,7 @@
             <% if allowed_to?(:view_workflow_executions?, @group) && @pipelines_enabled %>
               <%= render section.with_item(
                 url: group_workflow_executions_path(@group),
-                icon: Pathogen::ICON::WORKFLOWS,
+                icon: ICON::WORKFLOWS,
                 label: t(:"groups.sidebar.workflow_executions"),
                 selected: @current_page == t(:"groups.sidebar.workflow_executions"),
               ) %>
@@ -51,7 +51,7 @@
           <% if allowed_to?(:update?, @group) %>
             <%= render section.with_multi_level_menu(
               title: t(:"groups.sidebar.settings"),
-              icon: Pathogen::ICON::SETTINGS,
+              icon: ICON::SETTINGS,
               selectable_pages: [
                 t(:"groups.sidebar.general"),
                 t(:"groups.sidebar.bot_accounts"),

@@ -16,7 +16,7 @@
           <% @manifest['children'].each do |project| %>
             <li>
               <div class="flex text-primary-800 dark:text-primary-400">
-                <%= render Pathogen::Icon.new(Pathogen::ICON::FILE_TEXT, class: icon_class) %>
+                <%= pathogen_icon(ICON::FILE_TEXT, class: icon_class) %>
                 <span class="ml-2">
                   <%= link_to project["name"],
                   redirect_data_export_path(identifier: project["name"]),
@@ -30,7 +30,7 @@
                 <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
                   <li>
                     <div class="flex text-purple-800 dark:text-purple-300">
-                      <%= render Pathogen::Icon.new(Pathogen::ICON::FOLDER_OPEN, class: icon_class) %>
+                      <%= pathogen_icon(ICON::FOLDER_OPEN, class: icon_class) %>
                       <span class="ml-2">
                         <%= link_to sample["name"],
                         redirect_data_export_path(identifier: sample["name"]),
@@ -44,7 +44,7 @@
                       <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
                         <li>
                           <div class="flex text-blue-800 dark:text-blue-300">
-                            <%= render Pathogen::Icon.new(Pathogen::ICON::FOLDER_OPEN, class: icon_class) %>
+                            <%= pathogen_icon(ICON::FOLDER_OPEN, class: icon_class) %>
                             <span class="ml-2 text-sm">
                               <%= attachments["name"] %>
                             </span>
@@ -53,7 +53,7 @@
                             <ul class="ps-5 mt-3 space-y-1 list-none list-inside">
                               <li>
                                 <div class="flex text-slate-900 dark:text-white">
-                                  <%= render Pathogen::Icon.new(Pathogen::ICON::FILE_TEXT, class: icon_class) %>
+                                  <%= pathogen_icon(ICON::FILE_TEXT, class: icon_class) %>
                                   <span class="ml-2 text-sm">
                                     <%= attachment["name"] %>
                                   </span>

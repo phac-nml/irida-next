@@ -30,10 +30,7 @@
       >
         <div class="flex items-center">
           <% if index > 0 %>
-            <%= render Pathogen::Icon.new(
-              Pathogen::ICON::CARET_RIGHT,
-              class: "size-3 text-slate-400",
-            ) %>
+            <%= pathogen_icon(ICON::CARET_RIGHT, class: "size-3 text-slate-400") %>
           <% end %>
           <%= link_to link[:name],
           URI.join(root_url, link[:path]).to_s,

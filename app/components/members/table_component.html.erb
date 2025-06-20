@@ -128,8 +128,8 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
                         absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
                       "
                     >
-                      <%= render Pathogen::Icon.new(
-                        Pathogen::ICON::CALENDAR_DOTS,
+                      <%= pathogen_icon(
+                        ICON::CALENDAR_DOTS,
                         class: "size-5 text-slate-500 dark:text-slate-400",
                       ) %>
                     </div>

@@ -24,10 +24,7 @@
             dark:border-slate-900
           "
         >8</span>
-        <%= render Pathogen::Icon.new(
-          Pathogen::ICON::FILE_MAGNIFYING_GLASS,
-          class: "size-5",
-        ) %>
+        <%= pathogen_icon(ICON::FILE_MAGNIFYING_GLASS, class: "size-5") %>
       </button>
     <% end %>
     <% dialog.with_header(title: t(:"components.list_filter.title")) %>

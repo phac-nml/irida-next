@@ -7,11 +7,11 @@
     <% icon_class = "size-4 ml-2" %>
     <% case disclosure %>
     <% when :down %>
-      <%= render Pathogen::Icon.new(Pathogen::ICON::CARET_DOWN, class: icon_class) %>
+      <%= pathogen_icon(ICON::CARET_DOWN, class: icon_class) %>
     <% when :up %>
-      <%= render Pathogen::Icon.new(Pathogen::ICON::CARET_UP, class: icon_class) %>
+      <%= pathogen_icon(ICON::CARET_UP, class: icon_class) %>
     <% when :right %>
-      <%= render Pathogen::Icon.new(Pathogen::ICON::CARET_RIGHT, class: icon_class) %>
+      <%= pathogen_icon(ICON::CARET_RIGHT, class: icon_class) %>
     <% end %>
   <% end %>
 <% end %>

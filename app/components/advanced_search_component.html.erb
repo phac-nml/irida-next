@@ -21,7 +21,7 @@
             data-action="advanced-search#clearForm filters#submit"
             aria-label="<%= t(".clear_aria_label") %>"
           >
-            <%= render Pathogen::Icon.new(Pathogen::ICON::X, class: "size-4") %>
+            <%= pathogen_icon(ICON::X, class: "size-4") %>
           </button>
         </div>
       <% else %>
@@ -138,7 +138,7 @@
         aria-label="<%= t(".remove_condition_aria_label") %>"
         data-action="advanced-search#removeCondition"
       >
-        <%= render Pathogen::Icon.new(Pathogen::ICON::X, class: "size-4") %>
+        <%= pathogen_icon(ICON::X, class: "size-4") %>
       </button>
     </fieldset>
   </template>

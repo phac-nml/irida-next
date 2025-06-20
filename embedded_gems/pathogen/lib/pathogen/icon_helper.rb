@@ -4,10 +4,15 @@ module Pathogen
   # ICON: Centralized Icon Registry with Constants
   #
   # Provides a unified interface for referencing icons by semantic names as constants.
+  # Available globally as ICON:: for convenience (e.g., ICON::ARROW_UP)
   #
   # @example Usage in a ViewComponent
-  #   = render_icon(Pathogen::ICON::CLIPBOARD)
-  #   = render_icon(Pathogen::ICON::IRIDA_LOGO, class: "h-6 w-6")
+  #   = render_icon(ICON::CLIPBOARD)
+  #   = render_icon(ICON::IRIDA_LOGO, class: "h-6 w-6")
+  #
+  # @example Legacy usage (still supported)
+  #   = render_icon(ICON::CLIPBOARD)
+  #   = render_icon(ICON::IRIDA_LOGO, class: "h-6 w-6")
   #
   # @see https://phosphoricons.com/ and https://heroicons.com/
   #
@@ -86,10 +91,13 @@ module Pathogen
     # @return [ActiveSupport::SafeBuffer, nil] The HTML for the icon or nil if not found
     #
     # @example Render using a constant
-    #   render_icon(Pathogen::ICON::CLIPBOARD)
+    #   render_icon(ICON::CLIPBOARD)
     #
     # @example Render with additional options
-    #   render_icon(Pathogen::ICON::CLIPBOARD, class: "h-5 w-5 text-primary-600")
+    #   render_icon(ICON::CLIPBOARD, class: "h-5 w-5 text-primary-600")
+    #
+    # @example Legacy usage with Pathogen namespace
+    #   render_icon(ICON::CLIPBOARD)
     #
     # @example Render with a symbol (legacy)
     #   render_icon(:clipboard)
@@ -151,3 +159,7 @@ module Pathogen
     end
   end
 end
+
+# Define global ICON constant for easier access
+# This allows using ICON::ARROW_UP instead of Pathogen::ICON::ARROW_UP
+ICON = Pathogen::ICON unless defined?(ICON)
