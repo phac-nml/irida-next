@@ -42,9 +42,9 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
   def update # rubocop:disable Metrics/MethodLength
     respond_to do |format|
       format.turbo_stream do
-        @updated = WorkflowExecutions::UpdateService.new(@workflow_execution, current_user,
-                                                         workflow_execution_update_params).execute
-        if @updated
+        WorkflowExecutions::UpdateService.new(@workflow_execution, current_user,
+                                              workflow_execution_update_params).execute
+        if @workflow_execution.errors.empty?
           render status: :ok,
                  locals: { type: 'success',
                            message: t('concerns.workflow_execution_actions.update.success',
@@ -52,8 +52,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
 
         else
           render status: :unprocessable_entity, locals: {
-            type: 'alert', message: t('concerns.workflow_execution_actions.update.error',
-                                      workflow_name: @workflow_execution.metadata['workflow_name'])
+            type: 'alert', message: error_message(@workflow_execution)
           }
         end
       end

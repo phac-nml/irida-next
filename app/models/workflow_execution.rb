@@ -27,8 +27,11 @@ class WorkflowExecution < ApplicationRecord
   validates :metadata, presence: true, json: { message: ->(errors) { errors }, schema: METADATA_JSON_SCHEMA }
   validate :validate_namespace
   validate :validate_workflow_available, if: :initial?
+  validates :name, presence: true, if: -> { !submitter.automation_bot? }
 
-  enum :state, %i[initial prepared submitted running completing completed error canceling canceled]
+  enum :state,
+       { initial: 0, prepared: 1, submitted: 2, running: 3, completing: 4, completed: 5, error: 6, canceling: 7,
+         canceled: 8 }
 
   def send_email
     return unless email_notification

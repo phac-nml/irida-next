@@ -461,7 +461,7 @@ module Projects
       ### VERIFY START ###
       assert_selector 'h1', text: workflow_execution.name
 
-      assert_no_selector 'dt', exact_text: dt_value
+      assert_selector 'dt', exact_text: dt_value
       ### VERIFY END ###
 
       ### ACTIONS START ###

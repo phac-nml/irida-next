@@ -15,6 +15,11 @@ class AutomatedWorkflowExecutionTest < ActiveSupport::TestCase
     assert_not_nil @valid_automated_workflow_execution.name
   end
 
+  test 'valid automated workflow execution without name as it is optional' do
+    @valid_automated_workflow_execution.name = ''
+    assert @valid_automated_workflow_execution.valid?
+  end
+
   test 'invalid metadata' do
     assert_not @invalid_metadata_automated_workflow_execution.valid?
     assert_not_nil @invalid_metadata_automated_workflow_execution.errors[:metadata]
