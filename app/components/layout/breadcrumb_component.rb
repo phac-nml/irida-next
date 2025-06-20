@@ -9,6 +9,10 @@ module Layout
       validate_links!
     end
 
+    def render?
+      !@links.empty?
+    end
+
     private
 
     def validate_links!
