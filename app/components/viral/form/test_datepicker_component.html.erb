@@ -4,30 +4,33 @@
     datepicker datepicker-dropdown dropdown absolute top-0 left-0 z-50 pt-2 active
     block datepicker-orient-bottom datepicker-orient-left
   "
+  data-test-datepicker-min-date-value="<%= min_date%>"
+  data-test-datepicker-selected-date-value="<%= selected_date%>"
 >
   <div
     class="
-      datepicker-picker inline-block rounded-lg bg-white dark:bg-gray-700 shadow-lg
+      datepicker-picker inline-block rounded-lg bg-white dark:bg-slate-700 shadow-lg
       p-4
     "
   ><div class="datepicker-header"><div
         class="
-          datepicker-title bg-white dark:bg-gray-700 dark:text-white px-2 py-3 text-center
-          font-semibold
+          datepicker-title bg-white dark:bg-slate-700 dark:text-white px-2 py-3
+          text-center font-semibold
         "
         style="display: none;"
       ></div>
-      <div class="datepicker-controls flex justify-between mb-2 mr-2"><button
+      <div class="datepicker-controls flex justify-between mb-2">
+        <button
           type="button"
           class="
-            bg-white dark:bg-gray-700 rounded-lg text-gray-500 dark:text-white
-            hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-gray-900
+            bg-white dark:bg-slate-700 rounded-lg text-slate-500 dark:text-white
+            hover:bg-slate-100 dark:hover:bg-slate-600 hover:text-slate-900
             dark:hover:text-white text-lg p-2.5 focus:outline-none focus:ring-2
-            focus:ring-gray-200 prev-btn
+            focus:ring-slate-200 prev-btn mr-2
           "
           data-action="click->test-datepicker#previousMonth"
         ><svg
-            class="w-4 h-4 rtl:rotate-180 text-gray-800 dark:text-white"
+            class="w-4 h-4 rtl:rotate-180 text-slate-800 dark:text-white"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -69,14 +72,14 @@
         <button
           type="button"
           class="
-            bg-white dark:bg-gray-700 rounded-lg text-gray-500 dark:text-white
-            hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-gray-900
+            bg-white dark:bg-slate-700 rounded-lg text-slate-500 dark:text-white
+            hover:bg-slate-100 dark:hover:bg-slate-600 hover:text-slate-900
             dark:hover:text-white text-lg p-2.5 focus:outline-none focus:ring-2
-            focus:ring-gray-200 next-btn ml-2
+            focus:ring-slate-200 next-btn ml-2
           "
           data-action="click->test-datepicker#nextMonth"
         ><svg
-            class="w-4 h-4 rtl:rotate-180 text-gray-800 dark:text-white"
+            class="w-4 h-4 rtl:rotate-180 text-slate-800 dark:text-white"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -96,31 +99,31 @@
           <tr>
             <th
               class="
-                dow text-center h-6 text-sm font-medium text-gray-500 dark:text-gray-400
+                dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
               "
             >Sun</th><th
               class="
-                dow text-center h-6 text-sm font-medium text-gray-500 dark:text-gray-400
+                dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
               "
             >Mon</th><th
               class="
-                dow text-center h-6 text-sm font-medium text-gray-500 dark:text-gray-400
+                dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
               "
             >Tue</th><th
               class="
-                dow text-center h-6 text-sm font-medium text-gray-500 dark:text-gray-400
+                dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
               "
             >Wed</th><th
               class="
-                dow text-center h-6 text-sm font-medium text-gray-500 dark:text-gray-400
+                dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
               "
             >Thu</th><th
               class="
-                dow text-center h-6 text-sm font-medium text-gray-500 dark:text-gray-400
+                dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
               "
             >Fri</th><th
               class="
-                dow text-center h-6 text-sm font-medium text-gray-500 dark:text-gray-400
+                dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
               "
             >Sat</th>
           </tr>
@@ -144,18 +147,18 @@
         >Today</button><button
           type="button"
           class="
-            button clear-btn text-gray-900 dark:text-white bg-white dark:bg-gray-700 border
-            border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600
-            focus:ring-4 focus:ring-blue-300 focus:!ring-primary-300 font-medium rounded-lg
-            text-sm px-5 py-2 text-center w-1/2
+            button clear-btn text-slate-900 dark:text-white bg-white dark:bg-slate-700
+            border border-slate-300 dark:border-slate-600 hover:bg-slate-100
+            dark:hover:bg-slate-600 focus:ring-4 focus:ring-blue-300 focus:!ring-primary-300
+            font-medium rounded-lg text-sm px-5 py-2 text-center w-1/2
           "
         >Clear</button></div></div></div>
 
   <template data-test-datepicker-target="inMonthDateTemplate">
     <td
       class="
-        hover:bg-gray-100 dark:hover:bg-gray-600 leading-9 border-0 rounded-lg
-        cursor-pointer text-center text-gray-900 dark:text-white font-semibold text-sm
+        hover:bg-slate-100 dark:hover:bg-slate-600 leading-9 border-0 rounded-lg
+        cursor-pointer text-center text-slate-900 dark:text-white font-semibold text-sm
         w-8
       "
     ></td>
@@ -164,8 +167,8 @@
   <template data-test-datepicker-target="outOfMonthDateTemplate">
     <td
       class="
-        hover:bg-gray-100 dark:hover:bg-gray-600 leading-9 border-0 rounded-lg
-        cursor-pointer text-center text-gray-500 dark:text-gray-600 font-semibold
+        hover:bg-slate-100 dark:hover:bg-slate-600 leading-9 border-0 rounded-lg
+        cursor-pointer text-center text-slate-500 dark:text-slate-600 font-semibold
         text-sm w-8
       "
     ></td>
@@ -174,9 +177,9 @@
   <template data-test-datepicker-target="disabledDateTemplate">
     <div
       class="
-        datepicker-cell hover:bg-gray-100 dark:hover:bg-gray-600 block flex-1 leading-9
-        border-0 rounded-lg cursor-pointer text-center text-gray-400 dark:text-gray-500
-        font-semibold text-sm day
+        datepicker-cell hover:bg-slate-100 dark:hover:bg-slate-600 block flex-1
+        leading-9 border-0 rounded-lg cursor-pointer text-center text-slate-400
+        dark:text-slate-500 font-semibold text-sm day
       "
     ><s></s></div>
   </template>
