@@ -8,17 +8,7 @@
   ><%= label %></li>
 <% elsif disableable %>
   <li role="menuitem">
-    <% button_arguments =
-      system_arguments.merge(
-        method: :get,
-        params: params,
-        class:
-          class_names(
-            "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white",
-            system_arguments[:class],
-          ),
-      ) %>
-    <%= button_to url, **button_arguments do %>
+    <%= button_to url, method: :get, params: params, class: "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white", **system_arguments do %>
       <% if icon.present? %>
         <span class="grow-0 mr-2"><%= viral_icon(name: icon, color: :subdued, classes: "w-5 h-5") %></span>
       <% end %>
@@ -27,15 +17,7 @@
   </li>
 <% else %>
   <li role="menuitem">
-    <% link_arguments =
-      system_arguments.merge(
-        class:
-          class_names(
-            "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white cursor-pointer",
-            system_arguments[:class],
-          ),
-      ) %>
-    <%= link_to url, **link_arguments do %>
+    <%= link_to url, class: "flex w-full items-center px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white cursor-pointer", **system_arguments do %>
       <% if icon.present? %>
         <span class="grow-0 mr-2"><%= viral_icon(name: icon, color: :subdued, classes: "w-5 h-5") %></span>
       <% end %>
