@@ -42,7 +42,7 @@
             data-metadata--file-import-target="error"
           >
             <span class="inline shrink-0">
-              <%= viral_icon(name: "exclamation_circle", classes: "w-5 h-5 mr-3 stroke-2") %>
+              <%= pathogen_icon(ICON::WARNING_CIRCLE, class: "size-5 mr-3 stroke-2") %>
             </span>
             <div>
               <div class="font-medium whitespace-break-spaces"><%= t(".no_valid_metadata") %></div>
@@ -131,7 +131,7 @@
                   rounded-lg dark:text-blue-200
                 "
               >
-                <%= viral_icon(name: "information_circle_solid", classes: "w-5 h-5") %>
+                <%= pathogen_icon(ICON::INFO, class: "size-5") %>
                 <span class="sr-only"><%= t("components.flash.information_icon") %></span>
               </div>
             <% end %>
