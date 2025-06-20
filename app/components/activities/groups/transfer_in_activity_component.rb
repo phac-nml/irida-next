@@ -15,7 +15,7 @@ module Activities
       def transferred_group_exists
         return false if @activity[:transferred_group].nil?
 
-        !@activity[:transferred_group].deleted? && (@activity[:transferred_group].parent_id == @activity[:group].id)
+        !@activity[:transferred_group].deleted?
       end
     end
   end

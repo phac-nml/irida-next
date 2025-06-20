@@ -16,6 +16,11 @@
           namespace_puid(namespace),
           namespace_project_samples_path(namespace.parent, namespace.project),
           class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
+          title:
+            t(
+              "components.activity.samples.transfer.link_descriptive_text",
+              project_puid: namespace_puid(namespace),
+            ),
         ),
       transferred_samples_count:
         content_tag(
@@ -53,5 +58,7 @@
   },
   method: :get,
   class:
-    "inline-flex items-center justify-center button button-default dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600" %>
+    "inline-flex items-center justify-center button button-default dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600",
+  title:
+    t("components.activity.samples.transfer.more_details.button_descriptive_text") %>
 </section>

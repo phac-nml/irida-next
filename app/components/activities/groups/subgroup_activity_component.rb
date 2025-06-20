@@ -14,7 +14,6 @@ module Activities
 
       def subgroup_exists
         return false if @activity[:created_group].nil?
-        return false if @activity[:created_group].parent != @activity[:group]
 
         !@activity[:created_group].deleted?
       end
