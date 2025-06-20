@@ -1,6 +1,6 @@
 <%= render Viral::BaseComponent.new(tag: 'a', href: url, classes: class_names('inline-flex items-center'), **system_arguments) do %>
   <%= label %>
   <span class="grow-0 ml-2 flex items-center">
-    <%= render Pathogen::Icon.new(icon, class: "size-4 inline-block") %>
+    <%= pathogen_icon(icon, class: "size-4 inline-block") %>
   </span>
 <% end %>

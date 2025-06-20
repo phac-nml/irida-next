@@ -147,14 +147,11 @@
                       <div>
                         <div class="flex items-center">
                           <% if attachment.associated_attachment && attachment.metadata['direction'] == 'forward' %>
-                            <%= render Pathogen::Icon.new(
-                              Pathogen::ICON::ARROW_RIGHT,
-                              class: "size-6 ml-0 mr-2",
-                            ) %>
+                            <%= pathogen_icon(ICON::ARROW_RIGHT, class: "size-6 ml-0 mr-2") %>
                           <% elsif attachment.associated_attachment %>
-                            <%= render Pathogen::Icon.new(Pathogen::ICON::ARROW_LEFT, class: "size-6 ml-0 mr-2") %>
+                            <%= pathogen_icon(ICON::ARROW_LEFT, class: "size-6 ml-0 mr-2") %>
                           <% else %>
-                            <%= render Pathogen::Icon.new(Pathogen::ICON::FILE_TEXT, class: "size-6 ml-0 mr-2") %>
+                            <%= pathogen_icon(ICON::FILE_TEXT, class: "size-6 ml-0 mr-2") %>
                           <% end %>
                           <span>
                             <%= link_to rails_blob_path(attachment.file),
@@ -176,10 +173,7 @@
                       <% if attachment.associated_attachment %>
                         <div>
                           <div class="flex items-center mb-4">
-                            <%= render Pathogen::Icon.new(
-                              Pathogen::ICON::ARROW_RIGHT,
-                              class: "size-6 ml-0 mr-2",
-                            ) %>
+                            <%= pathogen_icon(ICON::ARROW_RIGHT, class: "size-6 ml-0 mr-2") %>
                             <span>
                               <%= link_to rails_blob_path(attachment.file),
                               data: {
@@ -196,7 +190,7 @@
                             </span>
                           </div>
                           <div class="flex items-center">
-                            <%= render Pathogen::Icon.new(Pathogen::ICON::ARROW_LEFT, class: "size-6 ml-0 mr-2") %>
+                            <%= pathogen_icon(ICON::ARROW_LEFT, class: "size-6 ml-0 mr-2") %>
                             <span>
                               <%= link_to rails_blob_path(attachment.associated_attachment.file),
                               data: {
@@ -216,7 +210,7 @@
                       <% else %>
                         <div>
                           <div class="flex items-center">
-                            <%= render Pathogen::Icon.new(Pathogen::ICON::FILE_TEXT, class: "size-6 ml-0 mr-2") %>
+                            <%= pathogen_icon(ICON::FILE_TEXT, class: "size-6 ml-0 mr-2") %>
                             <span>
                               <%= link_to rails_blob_path(attachment.file),
                               data: {

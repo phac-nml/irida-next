@@ -21,13 +21,10 @@
       aria-label="<%= t(:'components.token.toggle_visible') %>"
     >
       <span data-token-target="hide">
-        <%= render Pathogen::Icon.new(
-          Pathogen::ICON::EYE,
-          class: "size-5 text-slate-500 dark:text-slate-400",
-        ) %>
+        <%= pathogen_icon(ICON::EYE, class: "size-5 text-slate-500 dark:text-slate-400") %>
       </span>
       <span data-token-target="view" class="flex items-center hidden">
-        <%= render Pathogen::Icon.new(Pathogen::ICON::EYE_SLASH, class: "size-5") %>
+        <%= pathogen_icon(ICON::EYE_SLASH, class: "size-5") %>
       </span>
     </button>
   </div>
@@ -41,7 +38,7 @@
   >
     <span data-token-target="initial"><%= t("components.token.copy") %></span>
     <span data-token-target="copied" class="flex items-center hidden">
-      <%= render Pathogen::Icon.new(Pathogen::ICON::CHECK, class: "size-5") %>
+      <%= pathogen_icon(ICON::CHECK, class: "size-5") %>
       <%= t("components.token.copied") %></span>
   </button>
 <% end %>

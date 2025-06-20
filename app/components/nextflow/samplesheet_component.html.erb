@@ -26,8 +26,8 @@
           absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
         "
       >
-        <%= render Pathogen::Icon.new(
-          Pathogen::ICON::MAGNIFYING_GLASS,
+        <%= pathogen_icon(
+          ICON::MAGNIFYING_GLASS,
           class: "size-4 text-slate-500 dark:text-slate-400",
         ) %>
       </div>
@@ -42,10 +42,7 @@
     data-nextflow--samplesheet-target="error"
   >
     <span class="inline shrink-0">
-      <%= render Pathogen::Icon.new(
-        Pathogen::ICON::WARNING_CIRCLE,
-        class: "size-4 mr-3 stroke-2",
-      ) %>
+      <%= pathogen_icon(ICON::WARNING_CIRCLE, class: "size-4 mr-3 stroke-2") %>
     </span>
     <div>
       <div

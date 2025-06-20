@@ -18,7 +18,7 @@
           "
           data-layout-target="logo"
         >
-          <%= helpers.render_icon Pathogen::ICON::IRIDA_LOGO,
+          <%= helpers.render_icon ICON::IRIDA_LOGO,
                               class: "size-8 text-primary-600 rotate-12 inline-block" %>
           <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">
             <%= t(:"general.name") %>
@@ -37,9 +37,7 @@
             "
             aria-label="<%= t(:'general.navbar.collapse.aria_label') %>"
           >
-            <%= helpers.render_icon Pathogen::ICON::SIDEBAR,
-                                class: "size-6",
-                                "aria-hidden": "true" %>
+            <%= helpers.render_icon ICON::SIDEBAR, class: "size-6", "aria-hidden": "true" %>
           </button>
           <!-- Add new items -->
           <%= viral_dropdown(icon: "plus", styles: { button: "

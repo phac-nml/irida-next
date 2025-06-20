@@ -1,9 +1,6 @@
 <%= render Viral::BaseComponent.new(tag: "div", **system_arguments) do %>
   <span class="shrink-0 inline">
-    <%= render Pathogen::Icon.new(
-      Pathogen::ICON::WARNING_CIRCLE,
-      class: "size-5 mr-2 stroke-2",
-    ) %>
+    <%= pathogen_icon(ICON::WARNING_CIRCLE, class: "size-5 mr-2 stroke-2") %>
   </span>
   <div>
     <% if message.present? %>

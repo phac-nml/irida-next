@@ -50,8 +50,8 @@
                 aria-controls="<%= "accordion-collapse-body-#{index + 1}" %>"
               >
                 <span><%= key.to_s %></span>
-                <%= render Pathogen::Icon.new(
-                  Pathogen::ICON::CARET_DOWN,
+                <%= pathogen_icon(
+                  ICON::CARET_DOWN,
                   class: class_names("size-4", "rotate-180" => index == 0),
                   "data-collapsible-target": "icon",
                 ) %>
