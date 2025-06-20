@@ -1,7 +1,7 @@
 <%= form_with url: '#' do |form| %>
   <%= viral_prefixed_select(form:, name: "prefixed-select", options: [['Lisbon', 1], ['Madrid', 2]]) do |select| %>
     <%= select.with_prefix do %>
-      <%= viral_icon(name: :exclamation_circle, color: :warning, classes: "h-5 w-5") %>
+      <%= pathogen_icon(ICON::WARNING_CIRCLE, class: "h-5 w-5 text-yellow-500") %>
     <% end %>
   <% end %>
 <% end %>
