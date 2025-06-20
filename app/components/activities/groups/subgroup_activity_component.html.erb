@@ -13,6 +13,11 @@
           @activity[:created_group_puid],
           group_path(@activity[:created_group]),
           class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
+          title:
+            t(
+              "components.activity.subgroups.link_descriptive_text",
+              subgroup_puid: @activity[:created_group_puid],
+            ),
         ) %>
     <% else %>
       <% href =

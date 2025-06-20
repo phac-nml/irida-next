@@ -9,6 +9,8 @@
             @activity[:namespace].project,
           ),
           class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
+          title:
+            t("components.activity.workflow_executions.index.link_descriptive_text"),
         ) %>
     <% else %>
       <% href =
@@ -31,6 +33,11 @@
             @activity[:workflow_id],
           ),
           class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
+          title:
+            t(
+              "components.activity.workflow_executions.show.link_descriptive_text",
+              workflow_id: @activity[:workflow_id],
+            ),
         ) %>
 
       <% sample_href =
@@ -42,6 +49,11 @@
             @activity[:sample_id],
           ),
           class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
+          title:
+            t(
+              "components.activity.samples.link_descriptive_text",
+              sample_puid: @activity[:sample_puid],
+            ),
         ) %>
     <% elsif workflow_execution_exists %>
       <% href =
@@ -53,6 +65,11 @@
             @activity[:workflow_id],
           ),
           class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
+          title:
+            t(
+              "components.activity.workflow_executions.show.link_descriptive_text",
+              workflow_id: @activity[:workflow_id],
+            ),
         ) %>
 
       <% sample_href =
@@ -78,6 +95,11 @@
             @activity[:sample_id],
           ),
           class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
+          title:
+            t(
+              "components.activity.samples.link_descriptive_text",
+              sample_puid: @activity[:sample_puid],
+            ),
         ) %>
     <% else %>
       <% href =

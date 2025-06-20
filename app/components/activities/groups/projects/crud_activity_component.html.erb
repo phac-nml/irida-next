@@ -5,6 +5,11 @@
         @activity[:project_puid],
         namespace_project_path(@activity[:group], @activity[:project].project),
         class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
+        title:
+          t(
+            "components.activity.groups.projects.link_descriptive_text",
+            project_puid: @activity[:project_puid],
+          ),
       ) %>
   <% else %>
     <% href =

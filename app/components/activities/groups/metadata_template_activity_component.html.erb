@@ -5,6 +5,8 @@
         @activity[:template_name],
         group_metadata_templates_path(@activity[:group]),
         class: "text-slate-800 dark:text-slate-300 font-medium hover:underline",
+        title:
+          t("components.activity.metadata_templates.group.link_descriptive_text"),
       ) %>
   <% else %>
     <% href =

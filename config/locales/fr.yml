@@ -553,8 +553,45 @@ fr:
           id: id
           name: name
           title: Deleted Workflow Executions
+      groups:
+        link_descriptive_text: View group page for group with persistent unique identifier %{group_puid}
+        projects:
+          link_descriptive_text: View details page for project with persistent unique identifier %{project_puid}
       load_more: Charger plus
+      members:
+        link_descriptive_text: View members page for %{namespace_type}
+      metadata_templates:
+        group:
+          link_descriptive_text: View metadata templates for group
+        project:
+          link_descriptive_text: View metadata templates for project
       more_details: More details
+      samples:
+        clone:
+          link_descriptive_text: View samples page for project with persistent unique identifier %{project_puid}
+          more_details:
+            button_descriptive_text: View more details for copied samples
+        destroy:
+          more_details:
+            button_descriptive_text: View more details about deleted samples
+        import:
+          more_details:
+            button_descriptive_text: View more details about imported samples
+        link_descriptive_text: View sample details for sample with persistent unique identifier %{sample_puid}
+        transfer:
+          link_descriptive_text: View samples page for project with persistent unique identifier %{project_puid}
+          more_details:
+            button_descriptive_text: View more details for transferred samples
+      subgroups:
+        link_descriptive_text: View subgroup page for subgroup with persistent unique identifier %{subgroup_puid}
+      workflow_executions:
+        destroy:
+          more_details:
+            button_descriptive_text: View more details about deleted workflow executions
+        index:
+          link_descriptive_text: View workflow executions listing for project
+        show:
+          link_descriptive_text: View workflow execution details for workflow execution with id %{workflow_id}
     breadcrumb:
       dropdown:
         aria_label: Breadcrumb dropdown
