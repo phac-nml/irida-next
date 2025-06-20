@@ -83,7 +83,7 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
     end
   end
 
-  test 'renders icon using helpers.render_icon' do
+  test 'renders icon using pathogen_icon' do
     render_inline(NamespaceStatisticComponent.new(
                     id_prefix: 'icon-test',
                     icon_name: 'user_circle',
