@@ -29,6 +29,7 @@ module Pathogen
     CARET_RIGHT = { name: 'caret-right', options: {} }.freeze
     CARET_UP = { name: 'caret-up', options: {} }.freeze
     CHECK = { name: 'check', options: {} }.freeze
+    CHECK_CIRCLE = { name: 'check-circle', options: {} }.freeze
     CLIPBOARD = { name: 'clipboard-text', options: {} }.freeze
     EXPORT = { name: :export, options: {} }.freeze
     EYE = { name: 'eye', options: {} }.freeze
@@ -40,6 +41,7 @@ module Pathogen
     FLASK = { name: :flask, options: {} }.freeze
     FOLDER_OPEN = { name: 'folder-open', options: {} }.freeze
     GEAR_SIX = { name: 'gear-six', options: {} }.freeze
+    INFO = { name: 'info', options: {} }.freeze
     LIST = { name: :list, options: {} }.freeze
     LIST_BULLETS = { name: 'list-bullets', options: {} }.freeze
     LOCK_KEY = { name: 'lock-key', options: {} }.freeze
@@ -57,6 +59,7 @@ module Pathogen
     USERS = { name: :users, options: {} }.freeze
     WARNING_CIRCLE = { name: 'warning-circle', options: {} }.freeze
     X = { name: :x, options: {} }.freeze
+    X_CIRCLE = { name: 'x-circle', options: {} }.freeze
     # Heroicons
     BEAKER = { name: :beaker, options: { library: :heroicons } }.freeze
     # Named icons
