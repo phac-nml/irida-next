@@ -16,7 +16,7 @@ module SortingHelper
                        icon_name: active_sort(ransack_obj, field, dir) ? 'check' : 'blank',
                        prefix:,
                        data: {
-                         turbo_stream: true,
+                         turbo: true,
                          turbo_action: 'replace'
                        },
                        **add_aria_current(ransack_obj, field, dir))
