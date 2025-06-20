@@ -9,7 +9,7 @@ export default class extends Controller {
     "outOfMonthDateTemplate",
     "disabledDateTemplate",
   ];
-  // static values = { item: String };
+  static values = { minDate: String, selectedDate: String };
   #DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   #MONTHS = [
     "January",
@@ -26,6 +26,28 @@ export default class extends Controller {
     "December",
   ];
 
+  #selectedDateClasses = [
+    "bg-primary-700",
+    "text-white",
+    "hover:bg-primary-800",
+    "dark:text-white",
+    "dark:bg-primary-600",
+    "dark:hover:bg-primary-700",
+    "dark:border-primary-900",
+    "dark:hover:bg-primary-700",
+  ];
+
+  #inMonthClasses = [
+    "text-slate-900",
+    "hover:bg-slate-100",
+    "dark:hover:bg-slate-600",
+    "dark:text-white",
+  ];
+
+  #outOfMonthClasses = [];
+
+  #todaysDateClasses = [];
+
   #todaysFullDate = new Date();
   #todaysYear = this.#todaysFullDate.getFullYear();
   #todaysMonthIndex = this.#todaysFullDate.getMonth();
@@ -40,125 +62,201 @@ export default class extends Controller {
 
   idempotentConnect() {
     this.#clearCalendar();
+    // set the month and year inputs
     this.monthTarget.value = this.#MONTHS[this.#selectedMonthIndex];
     this.yearTarget.value = this.#selectedYear;
     this.#loadCalendar();
   }
 
-  #loadCalendar() {
-    let firstWeekLastDate = this.#setupFirstCalendarRow();
-    const nextDateToAdd = firstWeekLastDate + 1;
-    this.#setupRemainingCalendarForCurrentMonth(nextDateToAdd);
-
-    const lastDayOfMonthDay = new Date(
-      `${this.#selectedYear}, ${this.#MONTHS[this.#selectedMonthIndex]}, ${this.#DAYS_IN_MONTH[this.#selectedMonthIndex]}`,
-    ).getDay();
-
-    if (lastDayOfMonthDay != 6) {
-      this.#addNextMonthDates(lastDayOfMonthDay);
-    }
-
-    this.#checkForTodaysDate();
+  #clearCalendar() {
+    this.calendarTarget.innerHTML = "";
   }
 
-  #setupFirstCalendarRow() {
-    const firstDayOfMonthIndex = new Date(
+  #loadCalendar() {
+    // fullCalendar will contain all the current month's dates and any previous/next months dates to 'fill-out' the
+    // first and last week of dates
+    let fullCalendar = [];
+
+    // add last month's dates to fill first week (eg: if the 1st lands on a Tuesday, we'll add Sunday 30th, Monday 31st)
+    fullCalendar.push(...this.#getPreviousMonthsDates());
+    fullCalendar.push(...this.#getThisMonthsDates());
+    fullCalendar.push(
+      ...this.#getNextMonthsDates(fullCalendar[fullCalendar.length - 1]),
+    );
+
+    this.#fillCalendarWithDates(fullCalendar);
+
+    this.#checkForTodaysDateAndSelectedDate();
+  }
+
+  #getPreviousMonthsDates() {
+    let firstDayOfMonthIndex = new Date(
       `${this.#selectedYear}, ${this.#MONTHS[this.#selectedMonthIndex]}, 1`,
     ).getDay();
+    if (firstDayOfMonthIndex === 0) {
+      return [];
+    } else {
+      let lastDate;
 
-    const tableRow = document.createElement("tr");
-    if (firstDayOfMonthIndex != 0) {
-      const lastMonthDaysNumber =
-        this.#DAYS_IN_MONTH[
-          this.#selectedMonthIndex == 0 ? 11 : this.#selectedMonthIndex - 1
-        ];
+      // check previous month's last date
+      if (this.#selectedMonthIndex == 2) {
+        lastDate = this.#checkLeapYear() ? 29 : 28;
+      } else {
+        const previousMonthIndex =
+          this.#selectedMonthIndex == 0 ? 11 : this.#selectedMonthIndex - 1;
+        lastDate = this.#DAYS_IN_MONTH[previousMonthIndex];
+      }
 
-      for (
-        let i = lastMonthDaysNumber - firstDayOfMonthIndex + 1;
-        i < lastMonthDaysNumber + 1;
-        i++
-      ) {
+      // add 1 to starting date to offset real date vs index
+      return this.#getDateRange(lastDate - firstDayOfMonthIndex + 1, lastDate);
+    }
+  }
+
+  // return full range of selected month's dates (1 to last date)
+  #getThisMonthsDates() {
+    let thisMonthsLastDate;
+
+    // if february, check for leap year
+    if (this.#selectedMonthIndex == 1) {
+      thisMonthsLastDate = this.#checkLeapYear() ? 29 : 28;
+    } else {
+      thisMonthsLastDate = this.#DAYS_IN_MONTH[this.#selectedMonthIndex];
+    }
+
+    return this.#getDateRange(1, thisMonthsLastDate);
+  }
+
+  #getNextMonthsDates(thisMonthsLastDate) {
+    let lastDayOfMonthDay = new Date(
+      `${this.#selectedYear}, ${this.#MONTHS[this.#selectedMonthIndex]}, ${thisMonthsLastDate}`,
+    ).getDay();
+
+    // if lastDay == 6, last day is on a saturday and we don't need to fill out the rest of the week
+    if (lastDayOfMonthDay === 6) {
+      return [];
+    } else {
+      // 6 - lastDay and not 7 because of index offset
+      // example: if last date lands on thursday (index = 4), we want 2 more dates (6 - 4), starting from date 1
+      return this.#getDateRange(1, 6 - lastDayOfMonthDay);
+    }
+  }
+
+  #fillCalendarWithDates(dates) {
+    // inCurrentMonth checks which styling of date to use; false = faded text; true = 'normal' text;
+    // this will flip each time we cross date == 1, so a calendar with 30, 31, 1 -> 30, 1, 2.
+    // Flip to true at first 1st (inCurrentMonth == true); flip back at next 1st (inCurrentMonth == false)
+    let inCurrentMonth = false;
+    // relativeMonthPosition flips from previous to next based on similar logic to inCurrentMonth, so we know which
+    // month to add for the 'data-date' attribute
+    let relativeMonthPosition = "previous";
+    // datesAddedCounter incremented each iteration of forEach loop, so every 7 counts (a week), a new tableRow is
+    // created for the calendar table
+    let datesAddedCounter = 1;
+    let tableRow = document.createElement("tr");
+    dates.forEach((date) => {
+      if (date === 1) {
+        inCurrentMonth = !inCurrentMonth;
+        if (!inCurrentMonth) {
+          relativeMonthPosition = "next";
+        }
+      }
+
+      if (inCurrentMonth) {
+        const inMonthDate =
+          this.inMonthDateTemplateTarget.content.cloneNode(true);
+        const tableCell = inMonthDate.querySelector("td");
+        tableCell.innerText = date;
+        tableCell.setAttribute(
+          "data-date",
+          this.#getFormattedStringDate(
+            this.#selectedYear,
+            this.#selectedMonthIndex,
+            date,
+          ),
+        );
+        tableRow.appendChild(inMonthDate);
+      } else {
         const outOfMonthDate =
           this.outOfMonthDateTemplateTarget.content.cloneNode(true);
         const tableCell = outOfMonthDate.querySelector("td");
-        tableCell.innerText = i;
+        tableCell.innerText = date;
         tableCell.setAttribute(
           "data-date",
-          `${this.#MONTHS[this.#selectedMonthIndex]} ${i}, ${this.#selectedYear}`,
+          this.#getFormattedStringDate(
+            this.#selectedYear,
+            this.#getRelativeMonthIndex(relativeMonthPosition),
+            date,
+          ),
         );
         tableRow.appendChild(outOfMonthDate);
       }
-    }
 
-    for (let i = 1; i < 7 - firstDayOfMonthIndex + 1; i++) {
-      const inMonthDate =
-        this.inMonthDateTemplateTarget.content.cloneNode(true);
-      const tableCell = inMonthDate.querySelector("td");
-      tableCell.innerText = i;
-      tableCell.setAttribute(
-        "data-date",
-        `${this.#MONTHS[this.#selectedMonthIndex]} ${i}, ${this.#selectedYear}`,
-      );
-      tableRow.appendChild(inMonthDate);
-    }
-    this.calendarTarget.appendChild(tableRow);
-    return 7 - firstDayOfMonthIndex;
+      if (datesAddedCounter % 7 === 0) {
+        this.calendarTarget.append(tableRow);
+        tableRow = document.createElement("tr");
+      }
+
+      ++datesAddedCounter;
+    });
   }
 
-  #setupRemainingCalendarForCurrentMonth(startingDate) {
-    let tableRow = document.createElement("tr");
-    for (
-      let i = startingDate;
-      i <= this.#DAYS_IN_MONTH[this.#selectedMonthIndex];
-      i++
-    ) {
-      const inMonthDate =
-        this.inMonthDateTemplateTarget.content.cloneNode(true);
-      const tableCell = inMonthDate.querySelector("td");
-      tableCell.innerText = i;
-      tableCell.setAttribute(
-        "data-date",
-        `${this.#MONTHS[this.#selectedMonthIndex]} ${i}, ${this.#selectedYear}`,
-      );
+  // returns date range
+  // startingDate = 27; endingDate = 30; returns [27, 28, 29, 30]
+  #getDateRange = (startingDate, endingDate) => {
+    return Array.from(
+      { length: (endingDate - startingDate) / 1 + 1 },
+      (_, index) => startingDate + index * 1,
+    );
+  };
 
-      tableRow.appendChild(inMonthDate);
+  #checkLeapYear() {
+    return new Date(this.#selectedYear, 1, 29).getDate() === 29;
+  }
 
-      if (
-        (i - (startingDate - 1)) % 7 == 0 ||
-        i == this.#DAYS_IN_MONTH[this.#selectedMonthIndex]
-      ) {
-        this.calendarTarget.appendChild(tableRow);
-        tableRow = document.createElement("tr");
+  #getRelativeMonthIndex(relativePosition) {
+    // if relativePosition === 'previous', check if we're in January to pass back December, else pass previous month
+    if (relativePosition === "previous") {
+      if (this.#selectedMonthIndex === 0) {
+        return 11;
+      } else {
+        return this.#selectedMonthIndex - 1;
+      }
+      //  else, check if we're in December, and pass back January, else pass next month
+    } else {
+      if (this.#selectedMonthIndex === 11) {
+        return 0;
+      } else {
+        return this.#selectedMonthIndex + 1;
       }
     }
   }
 
-  #addNextMonthDates(leftoverSpace) {
-    const lastCalendarRow = this.calendarTarget.lastElementChild;
-    for (let i = 1; i < 7 - leftoverSpace; i++) {
-      const outOfMonthDate =
-        this.outOfMonthDateTemplateTarget.content.cloneNode(true);
-      const tableCell = outOfMonthDate.querySelector("td");
-      tableCell.innerText = i;
-      tableCell.setAttribute(
-        "data-date",
-        `${this.#MONTHS[this.#selectedMonthIndex + 1]} ${i}, ${this.#selectedYear}`,
-      );
-      lastCalendarRow.appendChild(outOfMonthDate);
-    }
+  #getFormattedStringDate(year, monthIndex, date) {
+    // new Date will parse monthIndex into correct month (month index == 0 will return january (ie: month 01))
+    // ISOString returns YYYY-MM-DDTHH:mm:ss.sssZ, so we split off T as we only want YYYY-MM-DD
+    return new Date(year, monthIndex, date).toISOString().split("T")[0];
   }
 
-  #checkForTodaysDate() {
+  #checkForTodaysDateAndSelectedDate() {
     const todaysDate = this.calendarTarget.querySelector(
-      `[data-date='${this.#MONTHS[this.#todaysMonthIndex]} ${this.#todaysDate}, ${this.#todaysYear}']`,
+      `[data-date='${this.#getFormattedStringDate(this.#todaysYear, this.#todaysMonthIndex, this.#todaysDate)}']`,
     );
-    if (todaysDate) {
-      todaysDate.classList.add("text-primary-600");
-    }
-  }
+    console.log(this.selectedDateValue);
+    const selectedDate = this.calendarTarget.querySelector(
+      `[data-date='${this.selectedDateValue}']`,
+    );
 
-  #clearCalendar() {
-    this.calendarTarget.innerHTML = "";
+    // TODO add logic for out of month
+    // maybe add data-attribute in/outmonth?
+    if (selectedDate) {
+      selectedDate.classList.remove(...this.#inMonthClasses);
+      selectedDate.classList.add(...this.#selectedDateClasses);
+    }
+
+    // add logic for todays date
+    // make sure to add logic to check todaysDate = selectedDate
+    if (todaysDate) {
+    }
   }
 
   previousMonth() {
