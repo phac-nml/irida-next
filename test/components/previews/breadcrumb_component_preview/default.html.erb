@@ -1,0 +1,9 @@
+<%= render Layout::BreadcrumbComponent.new(
+  links:
+    route_to_context_crumbs(
+      Route.new(
+        name: "Borrelia burgdorferi / Project Name",
+        path: "group/project",
+      ),
+    ),
+) %>

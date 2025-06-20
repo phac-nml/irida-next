@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ViralBreadcrumbComponentPreview < ViewComponent::Preview
+class BreadcrumbComponentPreview < ViewComponent::Preview
   def default; end
 
   def with_crumbs; end

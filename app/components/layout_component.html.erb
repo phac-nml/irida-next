@@ -28,8 +28,7 @@
     >
       <div
         class="
-          flex flex-row shrink-0 justify-end items-center space-x-1 max-xl:visible
-          xl:hidden mr-1 md:mr-2
+          inline-flex items-center space-x-1 max-xl:visible xl:hidden mr-2
         "
         data-layout-target="expandButtonContainer"
       >
@@ -42,8 +41,8 @@
           <%= helpers.render_icon :sidebar, class: "size-6" %>
         </button>
       </div>
-      <div class="flex-1 flex items-center h-full pl-2">
-        <turbo-frame id="breadcrumb" class="flex items-center h-full">
+      <div class=" flex-1 flex items-center h-full min-w-0 max-w-full ">
+        <turbo-frame id="breadcrumb" class="contents">
           <%= breadcrumb %>
         </turbo-frame>
       </div>
