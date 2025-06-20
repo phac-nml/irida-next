@@ -15,6 +15,7 @@
     >
       <%= viral_dropdown(
         icon: "ellipsis_horizontal",
+        skidding: 75,
         aria: { label: I18n.t(:'components.breadcrumb.dropdown.aria_label') },
         styles: { button: "p-3 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg text-slate-500 cursor-pointer transition" }
       ) do |dropdown| %>
@@ -25,7 +26,6 @@
             url: URI.join(root_url, link[:path]).to_s,
             data: {
               turbo_frame: "_top",
-              "breadcrumb-target": "dropdownItem",
             },
           ) %>
         <% end %>
