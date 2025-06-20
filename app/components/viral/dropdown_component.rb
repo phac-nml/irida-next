@@ -21,7 +21,7 @@ module Viral
     renders_many :items, Dropdown::ItemComponent
 
     # Public: Expose key dropdown configuration
-    attr_reader :distance, :label, :icon_name, :caret, :skidding, :trigger, :tooltip, :styles
+    attr_reader :distance, :label, :icon_name, :caret, :skidding, :trigger, :tooltip, :styles, :prefix
 
     TRIGGER_DEFAULT = :click
     TRIGGER_MAPPINGS = {
@@ -65,6 +65,7 @@ module Viral
         TRIGGER_MAPPINGS[TRIGGER_DEFAULT]
       )
       @dd_id = "dd-#{SecureRandom.hex(10)}"
+      @prefix = @params[:prefix]
     end
 
     # 🛠️ Build and enhance system arguments for the dropdown trigger

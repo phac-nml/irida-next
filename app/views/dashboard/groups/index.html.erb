@@ -1,3 +1,5 @@
+<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+
 <%= render Viral::PageHeaderComponent.new(title: t(".title")) do |component| %>
   <%= component.with_buttons do %>
     <%= link_to t(:".create_group_button"),
@@ -22,22 +24,20 @@
           "data-turbo-permanent": "true",
         },
       ) %>
-      <%= form_for @q, url: dashboard_groups_url, method: :post, html: { method: :post, "data-controller": "filters", "data-turbo": false } do %>
-        <div class="flex flex-row items-center ml-auto space-x-2 font-normal py-1.5">
-          <%= render Ransack::SortDropdownComponent.new(
-            @q,
-            "groups",
-            [
-              { name: "created_at", dir: "desc" },
-              { name: "created_at", dir: "asc" },
-              { name: "name", dir: "asc" },
-              { name: "name", dir: "desc" },
-              { name: "updated_at", dir: "desc" },
-              { name: "updated_at", dir: "asc" },
-            ],
-          ) %>
-        </div>
-      <% end %>
+      <div class="flex flex-row items-center ml-auto space-x-2 font-normal py-1.5">
+        <%= render Ransack::SortDropdownComponent.new(
+          @q,
+          "groups",
+          [
+            { name: "created_at", dir: "desc" },
+            { name: "created_at", dir: "asc" },
+            { name: "name", dir: "asc" },
+            { name: "name", dir: "desc" },
+            { name: "updated_at", dir: "desc" },
+            { name: "updated_at", dir: "asc" },
+          ],
+        ) %>
+      </div>
     </div>
   </div>
   <% if @groups.any? %>
