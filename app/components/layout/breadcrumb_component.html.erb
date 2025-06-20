@@ -2,19 +2,15 @@
 
 <nav
   aria-label="<%= I18n.t(:'components.breadcrumb.navigation_aria_label') %>"
-  class="h-14 w-full min-w-0 overflow-hidden"
+  class="h-14 w-full min-w-0 overflow-hidden pr-2"
   data-controller="breadcrumb"
 >
   <ol
-    class="flex items-center h-full w-full min-w-0 pr-4"
+    class="flex items-center h-full w-full min-w-0"
     data-breadcrumb-target="list"
   >
     <!-- Overflow dropdown -->
-    <li
-      class="shrink-0"
-      data-breadcrumb-target="dropdownMenu"
-      style="display: none;"
-    >
+    <li class="shrink-0 hidden" data-breadcrumb-target="dropdownMenu">
       <%= viral_dropdown(
         icon: "ellipsis_horizontal",
         aria: { label: I18n.t(:'components.breadcrumb.dropdown.aria_label') },
@@ -34,7 +30,7 @@
     </li>
     <!-- Dynamic breadcrumb items -->
     <% @links.each_with_index do |link, index| %>
-      <li class="shrink-0" data-breadcrumb-target="crumb">
+      <li class="whitespace-nowrap" data-breadcrumb-target="crumb">
         <% if index == @links.length - 1 %>
           <!-- Current page (last item) -->
           <span

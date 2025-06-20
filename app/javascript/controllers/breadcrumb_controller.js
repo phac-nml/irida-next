@@ -3,45 +3,45 @@ import { Controller } from "@hotwired/stimulus";
 
 /**
  * @class BreadcrumbController
- * @classdesc 🍞 A responsive breadcrumb controller that intelligently hides
- * and shows breadcrumb items based on the available container width.
+ * @classdesc 🍞 A responsive breadcrumb controller that intelligently manages
+ * breadcrumb visibility based on available container width.
  *
- * This controller implements a robust, two-pass calculation strategy to ensure
- * pixel-perfect responsiveness without visual flicker.
+ * This controller implements a robust, two-pass calculation strategy:
+ * 1. First calculates which breadcrumbs fit without a dropdown
+ * 2. If overflow occurs, recalculates with dropdown width reserved
  *
- * @property {HTMLElement} listTarget - The <ol> element containing the breadcrumbs.
- * @property {HTMLElement} dropdownMenuTarget - The <li> element that contains the overflow dropdown.
+ * The algorithm ensures pixel-perfect responsiveness by temporarily
+ * making all elements visible during measurement calculations.
+ *
+ * @extends {Controller}
+ * @property {HTMLElement} listTarget - The <ol> element containing all breadcrumb items
+ * @property {HTMLElement} dropdownMenuTarget - The <li> element containing the overflow dropdown menu
  */
 export default class extends Controller {
   static targets = ["list", "dropdownMenu"];
 
   /**
-   * The pixel width of the "›" separator between breadcrumbs.
-   * @type {number}
-   * @private
-   */
-  #CHEVRON_WIDTH = 16;
-
-  /**
-   * A small pixel buffer to prevent the breadcrumbs from appearing
-   * too crowded before they collapse into the dropdown.
-   * @type {number}
-   * @private
-   */
-  #WIDTH_BUFFER = 20; // 20px of breathing room
-
-  /**
-   * The observer that triggers recalculation when the element size changes.
+   * ResizeObserver instance that monitors container size changes
+   * and triggers layout recalculation when needed.
    * @type {ResizeObserver|null}
    * @private
    */
   #resizeObserver = null;
 
+  /**
+   * Initializes the controller and sets up the ResizeObserver
+   * to monitor container width changes.
+   * @public
+   */
   connect() {
     this.#resizeObserver = new ResizeObserver(() => this.#updateLayout());
     this.#resizeObserver.observe(this.listTarget);
   }
 
+  /**
+   * Cleans up the ResizeObserver when the controller is disconnected.
+   * @public
+   */
   disconnect() {
     if (this.#resizeObserver) {
       this.#resizeObserver.disconnect();
@@ -51,7 +51,14 @@ export default class extends Controller {
 
   /**
    * Orchestrates the responsive layout calculation and DOM updates.
-   * This is the entry point called by the ResizeObserver.
+   *
+   * This method:
+   * 1. Retrieves all breadcrumb elements
+   * 2. Measures their dimensions
+   * 3. Calculates which items should be visible
+   * 4. Renders the final layout
+   *
+   * Called automatically by the ResizeObserver when container size changes.
    * @private
    */
   #updateLayout() {
@@ -60,7 +67,7 @@ export default class extends Controller {
     );
 
     if (crumbs.length < 2) {
-      this.#updateDropdown(new Set()); // Hide all dropdown items if only 1 crumb
+      this.#updateDropdown(new Set()); // Hide dropdown if insufficient items
       return;
     }
 
@@ -70,43 +77,47 @@ export default class extends Controller {
   }
 
   /**
-   * Measures the widths of all breadcrumbs, the dropdown, and the container.
-   * It temporarily makes all crumbs visible to get accurate measurements without
-   * causing visual flicker by using the `visibility` CSS property.
+   * Measures the dimensions of breadcrumb elements and container.
    *
-   * @param {HTMLElement[]} crumbs - An array of the breadcrumb <li> elements.
-   * @returns {{crumbWidths: number[], dropdownWidth: number, availableWidth: number}}
+   * Temporarily makes all breadcrumbs visible and removes truncation
+   * from the last item to get accurate measurements.
+   *
+   * @param {HTMLElement[]} crumbs - Array of breadcrumb <li> elements
+   * @returns {{crumbWidths: number[], dropdownWidth: number, availableWidth: number}} Measurement data
    * @private
    */
   #measureElements(crumbs) {
-    this.listTarget.style.visibility = "hidden";
     crumbs.forEach((crumb) => {
-      crumb.style.display = "inline-flex";
+      crumb.classList.remove("hidden");
     });
+    const lastCrumbIndex = crumbs.length - 1;
+    const lastCrumb = crumbs[lastCrumbIndex];
+    lastCrumb.classList.remove("truncate");
 
     const crumbWidths = crumbs.map((c) => c.getBoundingClientRect().width);
     const dropdownWidth = this.dropdownMenuTarget.getBoundingClientRect().width;
 
-    this.listTarget.style.visibility = ""; // Restore visibility
-
     return {
       crumbWidths,
       dropdownWidth,
-      availableWidth: this.listTarget.clientWidth,
+      availableWidth: this.listTarget.getBoundingClientRect().width,
     };
   }
 
   /**
-   * Calculates which breadcrumbs can be visible within the available width.
-   * It performs a two-pass calculation:
-   * 1. Assume the dropdown isn't needed and see what fits.
-   * 2. If anything was hidden, recalculate with the dropdown's width included.
+   * Calculates which breadcrumbs can fit within the available width.
    *
-   * @param {object} measurements - The measurement data.
-   * @param {number[]} measurements.crumbWidths - Width of each crumb.
-   * @param {number} measurements.dropdownWidth - Width of the dropdown.
-   * @param {number} measurements.availableWidth - The container's width.
-   * @returns {Set<number>} A Set containing the indices of visible crumbs.
+   * Uses a two-pass algorithm:
+   * 1. First pass: Assumes no dropdown is needed, calculates what fits
+   * 2. Second pass: If overflow detected, recalculates with dropdown width reserved
+   *
+   * Always keeps the last breadcrumb visible as it represents the current page.
+   *
+   * @param {object} measurements - The measurement data object
+   * @param {number[]} measurements.crumbWidths - Width of each breadcrumb element
+   * @param {number} measurements.dropdownWidth - Width of the dropdown menu
+   * @param {number} measurements.availableWidth - Total available container width
+   * @returns {Set<number>} Set containing indices of breadcrumbs that should be visible
    * @private
    */
   #calculateVisibleSet({ crumbWidths, dropdownWidth, availableWidth }) {
@@ -115,8 +126,8 @@ export default class extends Controller {
       let usedWidth = crumbWidths[lastCrumbIndex];
       visibleSet.add(lastCrumbIndex);
       for (let i = lastCrumbIndex - 1; i >= 0; i--) {
-        usedWidth += crumbWidths[i] + this.#CHEVRON_WIDTH;
-        if (usedWidth <= width) {
+        usedWidth += crumbWidths[i];
+        if (usedWidth < width) {
           visibleSet.add(i);
         } else {
           break;
@@ -125,14 +136,11 @@ export default class extends Controller {
     };
 
     const initialVisibleSet = new Set();
-    calculate(availableWidth - this.#WIDTH_BUFFER, initialVisibleSet);
+    calculate(availableWidth, initialVisibleSet);
 
     if (initialVisibleSet.size < crumbWidths.length) {
       const finalVisibleSet = new Set();
-      calculate(
-        availableWidth - dropdownWidth - this.#WIDTH_BUFFER,
-        finalVisibleSet,
-      );
+      calculate(availableWidth - dropdownWidth, finalVisibleSet);
       return finalVisibleSet;
     }
 
@@ -140,16 +148,19 @@ export default class extends Controller {
   }
 
   /**
-   * Applies the calculated layout to the DOM, updating visibility and styles.
+   * Applies the calculated visibility layout to the DOM.
    *
-   * @param {HTMLElement[]} crumbs - An array of the breadcrumb <li> elements.
-   * @param {Set<number>} visibleSet - A Set containing the indices of visible crumbs.
+   * Updates breadcrumb visibility, handles last item truncation when it's
+   * the only visible item, and manages the dropdown menu state.
+   *
+   * @param {HTMLElement[]} crumbs - Array of breadcrumb <li> elements
+   * @param {Set<number>} visibleSet - Set containing indices of visible breadcrumbs
    * @private
    */
   #render(crumbs, visibleSet) {
     // Update visibility of each crumb
     crumbs.forEach((crumb, index) => {
-      crumb.style.display = visibleSet.has(index) ? "inline-flex" : "none";
+      crumb.classList.toggle("hidden", !visibleSet.has(index));
     });
 
     // Handle truncation for the last crumb
@@ -162,9 +173,7 @@ export default class extends Controller {
     if (lastCrumbTextElement) {
       const isOnlyCrumbVisible =
         visibleSet.size === 1 && visibleSet.has(lastCrumbIndex);
-      lastCrumb.classList.toggle("min-w-0", isOnlyCrumbVisible);
-      lastCrumb.classList.toggle("shrink-0", !isOnlyCrumbVisible);
-      lastCrumbTextElement.classList.toggle("truncate", isOnlyCrumbVisible);
+      lastCrumb.classList.toggle("truncate", isOnlyCrumbVisible);
 
       if (isOnlyCrumbVisible) {
         lastCrumbTextElement.setAttribute(
@@ -178,9 +187,12 @@ export default class extends Controller {
   }
 
   /**
-   * Updates the visibility of the dropdown menu and its items.
+   * Updates the dropdown menu visibility and content based on hidden breadcrumbs.
    *
-   * @param {Set<number>} visibleSet - A Set containing the indices of visible crumbs.
+   * Shows dropdown items for breadcrumbs that are hidden in the main navigation.
+   * The dropdown itself is only visible when there are hidden items to display.
+   *
+   * @param {Set<number>} visibleSet - Set containing indices of visible breadcrumbs
    * @private
    */
   #updateDropdown(visibleSet) {
@@ -190,14 +202,13 @@ export default class extends Controller {
 
     dropdownItems.forEach((item, index) => {
       const isVisible = !visibleSet.has(index);
-      item.style.display = isVisible ? "" : "none";
+      item.classList.toggle("hidden", !isVisible);
       if (isVisible) {
         hasHiddenItems = true;
       }
     });
 
-    this.dropdownMenuTarget.style.display = hasHiddenItems
-      ? "inline-flex"
-      : "none";
+    this.dropdownMenuTarget.classList.toggle("hidden", !hasHiddenItems);
+    this.dropdownMenuTarget.classList.toggle("inline-flex", hasHiddenItems);
   }
 }
