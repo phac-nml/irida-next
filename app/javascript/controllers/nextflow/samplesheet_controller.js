@@ -41,6 +41,7 @@ export default class extends Controller {
     processingRequest: { type: String },
     filteringSamples: { type: String },
     automatedWorkflow: { type: Boolean },
+    nameMissing: { type: String },
   };
 
   #pagination_button_disabled_state = [
@@ -825,7 +826,6 @@ export default class extends Controller {
   }
 
   #validateWorkflowExecutionName() {
-    let nameHint = document.getElementById("nameHint");
     let name = document.getElementById("workflow_execution_name");
     let hasErrors = false;
 
@@ -834,23 +834,54 @@ export default class extends Controller {
     }
 
     if (hasErrors) {
-      name.setAttribute("aria-invalid", true);
-      name.setAttribute("aria-describedBy", "nameHint");
-      name.classList.remove(...this.#workflow_execution_name_valid_state);
-      name.classList.add(...this.#workflow_execution_name_error_state);
-      nameHint.style.display = "block";
-      nameHint.classList.add(...this.#form_error_text_css);
-
+      this.#addNameFieldErrorState();
       return false;
     } else {
-      name.removeAttribute("aria-invalid");
-      name.removeAttribute("aria-describedBy");
-      name.classList.remove(...this.#workflow_execution_name_error_state);
-      name.classList.add(...this.#workflow_execution_name_valid_state);
-      nameHint.style.display = "none";
-      nameHint.classList.remove(...this.#form_error_text_css);
+      this.#removeNameFieldErrorState();
     }
 
     return true;
+  }
+
+  #addNameFieldErrorState() {
+    let nameError = document.getElementById(
+      "workflow_execution_name_error",
+    ).lastElementChild;
+    let nameErrorSpan = nameError.getElementsByClassName("grow")[0];
+    let name = document.getElementById("workflow_execution_name");
+    let nameHint = document.getElementById("workflow_execution_name_hint");
+    let nameField = document.getElementById("workflow_execution_name_field");
+
+    name.setAttribute("autofocus", true);
+    name.setAttribute("aria-invalid", true);
+    name.setAttribute("aria-describedBy", "workflow_execution_name_error");
+    name.classList.remove(...this.#workflow_execution_name_valid_state);
+    name.classList.add(...this.#workflow_execution_name_error_state);
+    nameError.classList.remove("hidden");
+    nameErrorSpan.innerHTML = this.nameMissingValue;
+    nameErrorSpan.classList.add(...this.#form_error_text_css);
+    nameHint.classList.add("hidden");
+    nameField.classList.add("invalid");
+  }
+
+  #removeNameFieldErrorState() {
+    let nameError = document.getElementById(
+      "workflow_execution_name_error",
+    ).lastElementChild;
+    let nameErrorSpan = nameError.getElementsByClassName("grow")[0];
+    let name = document.getElementById("workflow_execution_name");
+    let nameHint = document.getElementById("workflow_execution_name_hint");
+    let nameField = document.getElementById("workflow_execution_name_field");
+
+    name.removeAttribute("autofocus", false);
+    name.removeAttribute("aria-invalid");
+    name.removeAttribute("aria-describedBy");
+    name.classList.remove(...this.#workflow_execution_name_error_state);
+    name.classList.add(...this.#workflow_execution_name_valid_state);
+    nameError.classList.add("hidden");
+    nameErrorSpan.innerHTML = "";
+    nameErrorSpan.classList.remove(...this.#form_error_text_css);
+    nameHint.classList.remove("hidden");
+    nameField.classList.remove("invalid");
   }
 }

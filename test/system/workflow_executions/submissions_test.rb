@@ -221,7 +221,7 @@ module WorkflowExecutions
 
         click_button I18n.t('workflow_executions.submissions.create.submit')
 
-        assert_text I18n.t('nextflow_component.name.hint')
+        assert_text I18n.t('nextflow_component.name.error')
       end
     end
 

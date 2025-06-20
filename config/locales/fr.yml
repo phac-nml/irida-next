@@ -1317,13 +1317,12 @@ fr:
   nextflow_component:
     data_missing_error: 'Les échantillons suivants manquent de données requises : '
     filtering_samples: Le filtrage des échantillons peut prendre un certain temps.
-    form_error: Form has errors. Please fix them and submit again.
     name:
+      error: Name is required. Please enter a name for the workflow execution.
       helper: Un nom personnalisé facilitera la recherche à l’avenir.
-      hint: Name is required. Please enter a name for the workflow execution.
       label:
         optional: Nom (facultatif)
-        required: Nom (Obligatoire)
+        required: Nom
     processing_request: Le traitement de votre soumission peut prendre un certain temps.
     processing_samplesheet: Le traitement de la fiche d’échantillonnage peut prendre un certain temps.
     submission_error: Quelque chose s’est mal passé avec la demande de soumission.

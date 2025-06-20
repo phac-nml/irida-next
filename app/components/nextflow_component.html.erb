@@ -7,8 +7,9 @@
   data-nextflow--samplesheet-no-selected-file-value="<%= t("nextflow.samplesheet.file_cell_component.no_selected_file")%>"
   data-nextflow--samplesheet-processing-request-value="<%= t(".processing_request")%>"
   data-nextflow--samplesheet-filtering-samples-value="<%= t(".filtering_samples")%>"
-  data-nextflow--samplesheet-form-error-value="<%= t(".form_error")%>"
+  data-nextflow--samplesheet-form-error-value="<%= t("general.form.error_notification") %>"
   data-nextflow--samplesheet-automated-workflow-value="<%= @samples.empty? %>"
+  data-nextflow--samplesheet-name-missing-value="<%= t(".name.error") %>"
   data-action="
     nextflow--file:sendFileData->nextflow--samplesheet#updateFileData
     nextflow--metadata:sendMetadata->nextflow--samplesheet#updateMetadata
@@ -53,22 +54,33 @@
 
     <%= fields_for :workflow_execution do |workflow| %>
       <section class="mb-4">
-        <%= workflow.label :name, class: "block text-sm font-medium text-slate-900 dark:text-white" do %>
-          <% if @samples.empty? %>
-            <%= t(".name.label.optional") %>
-          <% else %>
-            <%= t(".name.label.required") %>
+        <div id="workflow_execution_name_field" class="form-field">
+          <%= workflow.label :name, class: "block text-sm font-medium text-slate-900 dark:text-white" do %>
+            <% if @samples.empty? %>
+              <%= t(".name.label.optional") %>
+            <% else %>
+              <%= t(".name.label.required") %><span class="text-red-500">
+                *</span>
+            <% end %>
           <% end %>
-        <% end %>
-        <p
-          id="helper-text-explanation"
-          class="mt-1 mb-2 text-sm text-slate-500 dark:text-slate-400"
-        ><%= t(".name.helper") %></p>
-        <%= workflow.text_field :name,
-                            value: instance.present? ? instance.name : nil,
-                            class:
-                              "bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg block w-full p-2.5  dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white" %>
-        <div class="hint" id="nameHint" style="display: none"><%= t(".name.hint") %></div>
+
+          <%= workflow.text_field :name,
+                              value: instance.present? ? instance.name : nil,
+                              aria: {
+                                required: !@samples.empty?,
+                              },
+                              class:
+                                "bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg block w-full p-2.5  dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white" %>
+          <div id="workflow_execution_name_error" class="mt-2 text-sm">
+            <%= viral_help_text(state: :error, classes: "hidden") %>
+          </div>
+          <p
+            id="<%= form.field_id("workflow_execution_name", "hint") %>"
+            class="field-hint"
+          >
+            <%== t(".name.helper") %>
+          </p>
+        </div>
       </section>
 
       <%= workflow.hidden_field :namespace_id, value: @namespace_id %>
