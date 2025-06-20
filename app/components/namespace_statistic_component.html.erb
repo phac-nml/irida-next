@@ -15,8 +15,8 @@
             <%= tailwind_colors[:icon_bg] %> <%= tailwind_colors[:dark_icon_bg] %>
           "
         >
-          <%= helpers.render_icon(
-            ICONS[icon_name.to_sym],
+          <%= pathogen_icon(
+            ICON[icon_name.to_sym],
             class:
               "h-4 w-4 #{tailwind_colors[:icon_text]} #{tailwind_colors[:dark_icon_text]}",
           ) %>
@@ -42,8 +42,8 @@
           mr-2
         "
       >
-        <%= helpers.render_icon(
-          ICONS[icon_name.to_sym],
+        <%= pathogen_icon(
+          ICON[icon_name.to_sym],
           class:
             "h-5 w-5 #{tailwind_colors[:icon_text]} #{tailwind_colors[:dark_icon_text]}",
         ) %>

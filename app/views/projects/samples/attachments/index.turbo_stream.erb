@@ -15,7 +15,7 @@
     empty:
       if @allowed_to[:update_sample]
         {
-          icon_name: :document_text,
+          icon_name: ICON::FILE_TEXT,
           title: t("projects.samples.attachments.table.empty_state.title"),
           description:
             t("projects.samples.attachments.table.empty_state.description"),
@@ -31,7 +31,7 @@
         }
       else
         {
-          icon_name: :document_text,
+          icon_name: ICON::FILE_TEXT,
           title: t("projects.samples.attachments.table.empty_state.title"),
           description:
             t(

@@ -20,7 +20,8 @@ class ViralDropdownComponentPreview < ViewComponent::Preview
   end
 
   def with_icon
-    render Viral::DropdownComponent.new(icon: 'bars_3', aria: { label: 'Organism dropdown list' }) do |dropdown|
+    render Viral::DropdownComponent.new(icon: ICON::PLUS_CIRCLE,
+                                        aria: { label: 'Organism dropdown list' }) do |dropdown|
       dropdown.with_item(label: 'Aspergillus awamori', url: '#')
       dropdown.with_item(label: 'Bacillus cereus', url: '#')
       dropdown.with_item(label: 'Pseudomonas aeruginosa', url: '#')
@@ -28,7 +29,8 @@ class ViralDropdownComponentPreview < ViewComponent::Preview
   end
 
   def with_item_icon
-    render Viral::DropdownComponent.new(icon: 'bars_3', aria: { label: 'Organism Dropdown Menu' }) do |dropdown|
+    render Viral::DropdownComponent.new(icon: ICON::LIST,
+                                        aria: { label: 'Organism Dropdown Menu' }) do |dropdown|
       dropdown.with_item(label: 'Checkmark', url: '#', icon_name: 'check')
       dropdown.with_item(label: 'Inbox', url: '#', icon_name: 'inbox_stack')
     end
@@ -60,7 +62,7 @@ class ViralDropdownComponentPreview < ViewComponent::Preview
 
   def with_icon_and_tooltip
     render Viral::DropdownComponent.new(
-      icon: 'bars_3',
+      icon: ICON::LIST,
       tooltip: 'This is a tooltip!',
       aria: { label: 'Organism dropdown list' }
     ) do |dropdown|

@@ -7,12 +7,12 @@ module Pathogen
   #
   class Icon < Pathogen::Component
     erb_template <<-ERB
-      <%= icon @icon_name, class: @classes %>
+      <%= render_icon @icon_name, **@system_arguments %>
     ERB
 
-    def initialize(icon: nil, classes: nil)
+    def initialize(icon, **system_arguments)
       @icon_name = icon
-      @classes = classes
+      @system_arguments = system_arguments
     end
   end
 end
