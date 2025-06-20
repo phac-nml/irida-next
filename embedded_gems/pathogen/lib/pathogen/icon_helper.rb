@@ -48,6 +48,7 @@ module Pathogen
     MAGNIFYING_GLASS = { name: 'magnifying-glass', options: {} }.freeze
     PLUS_CIRCLE = { name: 'plus-circle', options: {} }.freeze
     QUESTION = { name: :question, options: {} }.freeze
+    ROCKET_LAUNCH = { name: 'rocket-launch', options: {} }.freeze
     SIDEBAR = { name: :sidebar, options: {} }.freeze
     SLIDERS_HORIZONTAL = { name: 'sliders-horizontal', options: {} }.freeze
     SQUARES_FOUR = { name: 'squares-four', options: {} }.freeze
