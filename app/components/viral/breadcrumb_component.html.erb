@@ -1,6 +1,6 @@
 <nav
   aria-label="<%= I18n.t(:'components.breadcrumb.navigation_aria_label') %>"
-  class="h-14 w-full min-w-0"
+  class="h-14 w-full min-w-0 overflow-hidden"
   data-controller="breadcrumb"
 >
   <ol
@@ -42,7 +42,7 @@
           <!-- Current page (last item) -->
           <span
             class="
-              text-sm text-slate-900 dark:text-white font-medium py-3 ml-1 md:ml-2 truncate
+              text-sm text-slate-900 dark:text-white font-medium py-3 ml-1 md:ml-2
             "
             aria-current="page"
             title="<%= link[:name] %>"
@@ -54,7 +54,7 @@
           <%= link_to link[:name],
           URI.join(root_url, link[:path]).to_s,
           class:
-            "text-sm text-slate-600 dark:text-slate-400 hover:underline py-3 font-normal ml-1 md:ml-2 truncate",
+            "text-sm text-slate-600 dark:text-slate-400 hover:underline py-3 font-normal ml-1 md:ml-2",
           data: {
             turbo_frame: "_top",
           } %>
