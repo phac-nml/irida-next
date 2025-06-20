@@ -65,6 +65,14 @@ export default class extends Controller {
 
   #focusByKey(event, menuLinks, currentIndex) {
     switch (event.key) {
+      case "Enter":
+        return document.addEventListener(
+          "turbo:morph",
+          () => {
+            this.triggerTarget.focus();
+          },
+          { once: true },
+        );
       case "Escape":
         event.preventDefault();
         this.triggerTarget.focus();
