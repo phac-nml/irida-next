@@ -440,7 +440,7 @@ module Projects
 
       assert_text 'Displaying 5 items'
       assert_selector 'table tbody tr', count: 5
-      assert_selector 'table thead th:first-child svg.icon-arrow_up'
+      assert_selector 'table thead th:first-child [data-test-selector="sort_icon_asc"]'
       within('table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_james.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
@@ -454,7 +454,7 @@ module Projects
       end
 
       click_on I18n.t('members.table_component.user_email')
-      assert_selector 'table thead th:first-child svg.icon-arrow_down'
+      assert_selector 'table thead th:first-child [data-test-selector="sort_icon_desc"]'
       within('table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_ryan.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
@@ -468,7 +468,7 @@ module Projects
       end
 
       click_on I18n.t('members.table_component.access_level')
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      assert_selector 'table thead th:nth-child(2) [data-test-selector="sort_icon_asc"]'
       within('table tbody') do
         # Ryan is a Guest
         assert_selector 'tr:first-child td:first-child', text: @member_ryan.user.email
@@ -485,7 +485,7 @@ module Projects
       end
 
       click_on I18n.t('members.table_component.access_level')
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
+      assert_selector 'table thead th:nth-child(2) [data-test-selector="sort_icon_desc"]'
       within('table tbody') do
         # John & James are Owners
         assert_selector 'tr:first-child td:first-child', text: /#{@member_james.user.email}|#{@member_john.user.email}/
@@ -502,7 +502,7 @@ module Projects
       end
 
       click_on I18n.t('members.table_component.expires_at')
-      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
+      assert_selector 'table thead th:nth-child(5) [data-test-selector="sort_icon_asc"]'
       within('table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_joan.user.email
         assert_selector 'tr:first-child td:nth-child(2)',

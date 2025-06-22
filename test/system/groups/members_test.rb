@@ -334,7 +334,7 @@ module Groups
 
       assert_text 'Displaying 5 items'
       assert_selector 'table tbody tr', count: 5
-      assert_selector 'table thead th:first-child svg.icon-arrow_up'
+      assert_selector 'table thead th:first-child [data-test-selector="sort_icon_asc"]'
       within('table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_bot.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
@@ -349,7 +349,7 @@ module Groups
 
       sort_link = find('table thead th:nth-child(1) a')
       sort_link.trigger('click')
-      assert_selector 'table thead th:first-child svg.icon-arrow_down'
+      assert_selector 'table thead th:first-child [data-test-selector="sort_icon_desc"]'
       within('table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_ryan.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
@@ -364,7 +364,7 @@ module Groups
 
       sort_link = find('table thead th:nth-child(2) a')
       sort_link.trigger('click')
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_up'
+      assert_selector 'table thead th:nth-child(2) [data-test-selector="sort_icon_asc"]'
       within('table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_ryan.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
@@ -379,7 +379,7 @@ module Groups
 
       sort_link = find('table thead th:nth-child(2) a')
       sort_link.trigger('click')
-      assert_selector 'table thead th:nth-child(2) svg.icon-arrow_down'
+      assert_selector 'table thead th:nth-child(2) [data-test-selector="sort_icon_desc"]'
       within('table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_john.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
@@ -394,7 +394,7 @@ module Groups
 
       sort_link = find('table thead th:nth-child(5) a')
       sort_link.trigger('click')
-      assert_selector 'table thead th:nth-child(5) svg.icon-arrow_up'
+      assert_selector 'table thead th:nth-child(5) [data-test-selector="sort_icon_asc"]'
       within('table tbody') do
         assert_selector 'tr:first-child td:first-child', text: @member_joan.user.email
         assert_selector 'tr:first-child td:nth-child(2)',
