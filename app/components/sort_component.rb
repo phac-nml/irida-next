@@ -17,6 +17,6 @@ class SortComponent < Component
   def icon
     return unless @sort_key.to_s == @field.to_s
 
-    @sort_direction == 'asc' ? ICON::CARET_UP : ICON::CARET_DOWN
+    @sort_direction == 'asc' ? ICON::ARROW_UP : ICON::ARROW_DOWN
   end
 end
