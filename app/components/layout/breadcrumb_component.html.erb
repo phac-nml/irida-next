@@ -19,7 +19,7 @@
           <% next if index == @links.length - 1 %>
           <%= dropdown.with_item(
             label: link[:name],
-            url: link[:path],
+            url: root_path + link[:path],
             data: {
               turbo_frame: "_top",
             },
@@ -42,7 +42,7 @@
         <% else %>
           <!-- Navigable link -->
           <%= link_to link[:name],
-          link[:path],
+          root_path + link[:path],
           class:
             "text-sm text-slate-600 dark:text-slate-400 hover:underline py-3 font-normal",
           data: {
