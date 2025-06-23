@@ -25,4 +25,16 @@ class NextflowComponent < Component
 
     namespace.type
   end
+
+  def label_attributes(condition)
+    attributes = {}
+    if condition
+      attributes[:name] = t('.name.label.required')
+      attributes[:data] = { required: true }
+    else
+      attributes[:name] = t('.name.label.optional')
+      attributes[:data] = {}
+    end
+    attributes
+  end
 end

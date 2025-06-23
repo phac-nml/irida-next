@@ -55,14 +55,12 @@
     <%= fields_for :workflow_execution do |workflow| %>
       <section class="mb-4">
         <div id="workflow_execution_name_field" class="form-field">
-          <%= workflow.label :name, class: "block text-sm font-medium text-slate-900 dark:text-white" do %>
-            <% if @samples.empty? %>
-              <%= t(".name.label.optional") %>
-            <% else %>
-              <%= t(".name.label.required") %><span class="text-red-500">
-                *</span>
-            <% end %>
-          <% end %>
+          <% label = label_attributes(!@samples.empty?) %>
+
+          <%= workflow.label :name,
+                         label[:name],
+                         data: label[:data],
+                         class: "block text-sm font-medium text-slate-900 dark:text-white" %>
 
           <%= workflow.text_field :name,
                               value: instance.present? ? instance.name : nil,
