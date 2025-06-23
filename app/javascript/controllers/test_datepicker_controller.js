@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = [
+    "backButton",
     "month",
     "year",
     "calendar",
@@ -9,7 +10,11 @@ export default class extends Controller {
     "outOfMonthDateTemplate",
     "disabledDateTemplate",
   ];
-  static values = { minDate: String, selectedDate: String };
+  static values = {
+    minDate: String,
+    selectedDate: String,
+    months: Array,
+  };
   #DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   #MONTHS = [
     "January",
@@ -35,6 +40,7 @@ export default class extends Controller {
     "dark:hover:bg-primary-700",
     "dark:border-primary-900",
     "dark:hover:bg-primary-700",
+    "cursor-pointer",
   ];
 
   #inMonthClasses = [
@@ -42,11 +48,33 @@ export default class extends Controller {
     "hover:bg-slate-100",
     "dark:hover:bg-slate-600",
     "dark:text-white",
+    "cursor-pointer",
   ];
 
-  #outOfMonthClasses = [];
+  #outOfMonthClasses = [
+    "hover:bg-slate-100",
+    "dark:hover:bg-slate-600",
+    "text-slate-500",
+    "dark:text-slate-600",
+    "cursor-pointer",
+  ];
 
-  #todaysDateClasses = [];
+  #todaysDateClasses = [
+    "text-primary-700",
+    "bg-slate-100",
+    "hover:bg-slate-200",
+    "dark:bg-slate-600",
+    "dark:hover:bg-slate-500",
+    "dark:text-primary-300",
+    "cursor-pointer",
+  ];
+
+  #disabledDateClasses = [
+    "line-through",
+    "cursor-not-allowed",
+    "text-slate-500",
+    "dark:text-slate-600",
+  ];
 
   #todaysFullDate = new Date();
   #todaysYear = this.#todaysFullDate.getFullYear();
@@ -62,6 +90,8 @@ export default class extends Controller {
 
   idempotentConnect() {
     this.#clearCalendar();
+    // set the months dropdown in case we're in the year of the minimum date
+    this.#setMonths();
     // set the month and year inputs
     this.monthTarget.value = this.#MONTHS[this.#selectedMonthIndex];
     this.yearTarget.value = this.#selectedYear;
@@ -70,6 +100,46 @@ export default class extends Controller {
 
   #clearCalendar() {
     this.calendarTarget.innerHTML = "";
+  }
+
+  #setMonths() {
+    this.monthTarget.innerHTML = "";
+    // if 2025 is #selectedYear and minDate = 2025-06-01, we don't want the dropdown to include Jan -> May
+    // else if we're not in minDates year, add all months
+    if (this.minDateValue && this.minDateValue.includes(this.#selectedYear)) {
+      const minDateMonthIndex = new Date(this.minDateValue).getMonth();
+      for (let i = minDateMonthIndex; i < 12; i++) {
+        this.monthTarget.appendChild(
+          this.#createMonthOption(this.monthsValue[i]),
+        );
+      }
+    } else {
+      this.monthsValue.forEach((month) => {
+        this.monthTarget.appendChild(this.#createMonthOption(month));
+      });
+    }
+  }
+
+  #createMonthOption(month) {
+    let option = document.createElement("option");
+    option.value = month;
+    option.textContent = month;
+    return option;
+  }
+
+  #setBackButton() {
+    // if minimum date exists in the calendar, we're on the first allowable month and want to prevent user from
+    // going to previous months
+    if (this.minDateValue) {
+      const minDateNode = this.calendarTarget.querySelector(
+        `[data-date='${this.minDateValue}']`,
+      );
+      if (minDateNode) {
+        this.backButtonTarget.disabled = true;
+      } else {
+        this.backButtonTarget.disabled = false;
+      }
+    }
   }
 
   #loadCalendar() {
@@ -86,18 +156,20 @@ export default class extends Controller {
 
     this.#fillCalendarWithDates(fullCalendar);
 
-    this.#checkForTodaysDateAndSelectedDate();
+    this.#addStylingToDates();
+    // disable month's 'back' button if we're on first allowable month
+    this.#setBackButton();
   }
 
   #getPreviousMonthsDates() {
     let firstDayOfMonthIndex = new Date(
       `${this.#selectedYear}, ${this.#MONTHS[this.#selectedMonthIndex]}, 1`,
     ).getDay();
+    // if first day lands on Sunday, we don't need to backfill dates
     if (firstDayOfMonthIndex === 0) {
       return [];
     } else {
       let lastDate;
-
       // check previous month's last date
       if (this.#selectedMonthIndex == 2) {
         lastDate = this.#checkLeapYear() ? 29 : 28;
@@ -143,7 +215,7 @@ export default class extends Controller {
 
   #fillCalendarWithDates(dates) {
     // inCurrentMonth checks which styling of date to use; false = faded text; true = 'normal' text;
-    // this will flip each time we cross date == 1, so a calendar with 30, 31, 1 -> 30, 1, 2.
+    // this will flip each time we cross date == 1, so a calendar with 30, 31, 1...30, 1, 2.
     // Flip to true at first 1st (inCurrentMonth == true); flip back at next 1st (inCurrentMonth == false)
     let inCurrentMonth = false;
     // relativeMonthPosition flips from previous to next based on similar logic to inCurrentMonth, so we know which
@@ -201,7 +273,7 @@ export default class extends Controller {
   }
 
   // returns date range
-  // startingDate = 27; endingDate = 30; returns [27, 28, 29, 30]
+  // if startingDate = 27; endingDate = 30; returns [27, 28, 29, 30]
   #getDateRange = (startingDate, endingDate) => {
     return Array.from(
       { length: (endingDate - startingDate) / 1 + 1 },
@@ -237,26 +309,48 @@ export default class extends Controller {
     return new Date(year, monthIndex, date).toISOString().split("T")[0];
   }
 
-  #checkForTodaysDateAndSelectedDate() {
-    const todaysDate = this.calendarTarget.querySelector(
-      `[data-date='${this.#getFormattedStringDate(this.#todaysYear, this.#todaysMonthIndex, this.#todaysDate)}']`,
-    );
-    console.log(this.selectedDateValue);
+  #addStylingToDates() {
+    // the already selected date
     const selectedDate = this.calendarTarget.querySelector(
       `[data-date='${this.selectedDateValue}']`,
     );
+    // today's date
+    const todaysDate = this.calendarTarget.querySelector(
+      `[data-date='${this.#getFormattedStringDate(this.#todaysYear, this.#todaysMonthIndex, this.#todaysDate)}']`,
+    );
 
-    // TODO add logic for out of month
-    // maybe add data-attribute in/outmonth?
+    // minimum date where dates prior will be disabled
+    const minDate = this.calendarTarget.querySelector(
+      `[data-date='${this.minDateValue}']`,
+    );
+
     if (selectedDate) {
-      selectedDate.classList.remove(...this.#inMonthClasses);
-      selectedDate.classList.add(...this.#selectedDateClasses);
+      this.#replaceDateStyling(selectedDate, this.#selectedDateClasses);
     }
 
-    // add logic for todays date
-    // make sure to add logic to check todaysDate = selectedDate
-    if (todaysDate) {
+    // don't need to add 'todaysDate' styling if todaysDate == selectedDate
+    if (todaysDate && selectedDate != todaysDate) {
+      this.#replaceDateStyling(todaysDate, this.#todaysDateClasses);
     }
+
+    if (minDate) {
+      // get all the date nodes within current calendar, and all dates prior the minDate index will be disabled
+      const allDates = Array.from(
+        this.calendarTarget.querySelectorAll("[data-date]"),
+      );
+      for (let i = 0; i < allDates.indexOf(minDate); i++) {
+        this.#replaceDateStyling(allDates[i], this.#disabledDateClasses);
+      }
+    }
+  }
+
+  #replaceDateStyling(date, classes) {
+    if (date.dataset.dateWithinMonthPosition === "inMonth") {
+      date.classList.remove(...this.#inMonthClasses);
+    } else {
+      date.classList.remove(...this.#outOfMonthClasses);
+    }
+    date.classList.add(...classes);
   }
 
   previousMonth() {
@@ -287,6 +381,20 @@ export default class extends Controller {
   }
 
   changeYear() {
+    // if minDate exists, check if user tried to hard type in a year amount earlier than minDate's year
+    if (this.minDateValue) {
+      const minDate = new Date(this.minDateValue);
+      const minYear = minDate.getFullYear();
+      const minMonth = minDate.getMonth();
+      if (this.yearTarget.value <= minYear) {
+        this.yearTarget.value = minYear;
+        // if minDate was 2025-06-01 and user was on January 2026 and changes year to 2025, we want to set the month
+        // to June
+        if (this.#selectedMonthIndex < minMonth) {
+          this.#selectedMonthIndex = minMonth;
+        }
+      }
+    }
     this.#selectedYear = this.yearTarget.value;
     this.idempotentConnect();
   }
