@@ -16,20 +16,6 @@ export default class extends Controller {
     months: Array,
   };
   #DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-  #MONTHS = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
 
   #selectedDateClasses = [
     "bg-primary-700",
@@ -93,7 +79,7 @@ export default class extends Controller {
     // set the months dropdown in case we're in the year of the minimum date
     this.#setMonths();
     // set the month and year inputs
-    this.monthTarget.value = this.#MONTHS[this.#selectedMonthIndex];
+    this.monthTarget.value = this.monthsValue[this.#selectedMonthIndex];
     this.yearTarget.value = this.#selectedYear;
     this.#loadCalendar();
   }
@@ -163,7 +149,7 @@ export default class extends Controller {
 
   #getPreviousMonthsDates() {
     let firstDayOfMonthIndex = new Date(
-      `${this.#selectedYear}, ${this.#MONTHS[this.#selectedMonthIndex]}, 1`,
+      `${this.#selectedYear}, ${this.monthsValue[this.#selectedMonthIndex]}, 1`,
     ).getDay();
     // if first day lands on Sunday, we don't need to backfill dates
     if (firstDayOfMonthIndex === 0) {
@@ -200,7 +186,7 @@ export default class extends Controller {
 
   #getNextMonthsDates(thisMonthsLastDate) {
     let lastDayOfMonthDay = new Date(
-      `${this.#selectedYear}, ${this.#MONTHS[this.#selectedMonthIndex]}, ${thisMonthsLastDate}`,
+      `${this.#selectedYear}, ${this.monthsValue[this.#selectedMonthIndex]}, ${thisMonthsLastDate}`,
     ).getDay();
 
     // if lastDay == 6, last day is on a saturday and we don't need to fill out the rest of the week
@@ -356,7 +342,7 @@ export default class extends Controller {
   previousMonth() {
     this.#selectedMonthIndex =
       this.#selectedMonthIndex == 0 ? 11 : this.#selectedMonthIndex - 1;
-    this.monthTarget.value = this.#MONTHS[this.#selectedMonthIndex];
+    this.monthTarget.value = this.monthsValue[this.#selectedMonthIndex];
 
     if (this.#selectedMonthIndex == 11) {
       --this.#selectedYear;
@@ -367,7 +353,7 @@ export default class extends Controller {
   nextMonth() {
     this.#selectedMonthIndex =
       this.#selectedMonthIndex == 11 ? 0 : this.#selectedMonthIndex + 1;
-    this.monthTarget.value = this.#MONTHS[this.#selectedMonthIndex];
+    this.monthTarget.value = this.monthsValue[this.#selectedMonthIndex];
 
     if (this.#selectedMonthIndex == 0) {
       ++this.#selectedYear;
@@ -376,7 +362,7 @@ export default class extends Controller {
   }
 
   changeMonth() {
-    this.#selectedMonthIndex = this.#MONTHS.indexOf(this.monthTarget.value);
+    this.#selectedMonthIndex = this.monthsValue.indexOf(this.monthTarget.value);
     this.idempotentConnect();
   }
 
