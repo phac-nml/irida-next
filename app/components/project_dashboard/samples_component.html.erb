@@ -1,7 +1,4 @@
-<ol
-  class="space-y-4 @container"
-  aria-label="<%= t('.list_aria_label') %>"
->
+<ol class="space-y-4 @container" aria-label="<%= t('.list_aria_label') %>">
   <%# ♿ Add aria-label for screen reader context %>
   <% samples.each do |sample| %>
     <li class="sample">
@@ -17,37 +14,41 @@
             aria-hidden="true"
             <%# ♿ Hide decorative icon from screen readers %>
             class="
-              p-2 inline-flex items-center justify-center rounded-lg 
-              bg-blue-100 dark:bg-blue-900/30
+              p-2 inline-flex items-center justify-center rounded-lg bg-blue-100
+              dark:bg-blue-900/30
             "
           >
             <%# Icon color - accessible dark blue %>
-            <%= helpers.render_icon(ICONS[:flask], class: "h-4 w-4 text-blue-600 dark:text-blue-400") %>
+            <%= helpers.render_icon(
+              ICONS[:flask],
+              class: "h-4 w-4 text-blue-600 dark:text-blue-400",
+            ) %>
           </span>
         </div>
-        
+
         <%# Content container %>
         <div class="flex-1 min-w-0 space-y-2">
           <%# Sample name with improved wrapping %>
           <div>
-            <h4 class="text-sm font-medium text-slate-900 dark:text-white break-words leading-tight">
-              <%= link_to sample.name, 
-                  sample_path(sample), 
-                  class: "focus:underline focus:outline-none" %>
-            </h4>
+            <%= link_to sample.name,
+            sample_path(sample),
+            class:
+              "focus:underline focus:outline-none text-sm font-medium text-slate-900 dark:text-white break-words leading-tight" %>
           </div>
-          
+
           <%# Metadata row - stacks vertically on small screens/high zoom %>
           <div class="flex flex-col @sm:flex-row @sm:items-center gap-2 @sm:gap-4">
             <%# PUID - allows wrapping %>
             <div class="flex-1 min-w-0">
               <%= render PuidComponent.new(puid: sample.puid, show_clipboard: true) %>
             </div>
-            
+
             <%# Timestamp %>
             <div class="shrink-0">
               <time
-                class="text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap"
+                class="
+                  text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap
+                "
                 datetime="<%= sample.updated_at.iso8601 %>"
                 title="<%= t('.last_updated_title', time: helpers.local_time(sample.updated_at, :full_date)) %>"
               >
