@@ -1,22 +1,9 @@
-<%# Project description with better text wrapping %>
-<div class="mb-6">
-  <p class="text-slate-700 dark:text-slate-300 leading-relaxed break-words">
-    <% if @project.description && !@project.description.blank? %>
-      <%= @project.description %>
-    <% else %>
-      <em class="text-slate-500 dark:text-slate-400">
-        <%= t(:"components.project_dashboard.information.no_description") %>
-      </em>
-    <% end %>
-  </p>
-</div>
-
 <%# Statistics section with improved responsive layout %>
 <div class="mb-6">
   <h3 class="sr-only"><%= t(:"components.project_dashboard.information.statistics_title") %></h3>
 
-  <%# Single column stack for all screen sizes to prevent overflow %>
-  <div class="space-y-4">
+  <%# Grid layout: stacked on small/large screens, side by side on medium screens only %>
+  <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-1 gap-4">
     <%= render NamespaceStatisticComponent.new(
       id_prefix: "samples",
       icon_name: :flask,
