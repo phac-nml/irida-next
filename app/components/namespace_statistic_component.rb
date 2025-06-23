@@ -44,8 +44,8 @@ class NamespaceStatisticComponent < Component
   # @param icon_name [String] Heroicon name (e.g., 'users_solid').
   # @param label [String] Translated label for the statistic (e.g., t('projects.index.total_projects')).
   # @param count [Integer] Statistic value.
-  # @param color_scheme [Symbol] Color scheme (e.g., :blue, :teal). Defaults to slate.
-  def initialize(id_prefix:, icon_name:, label:, count:, color_scheme:)
+  # @param color_scheme [Symbol] Color scheme (e.g., :blue, :teal). Defaults to :default.
+  def initialize(id_prefix:, icon_name:, label:, count:, color_scheme: :default)
     super
     @id_prefix = id_prefix.to_s.parameterize
     @icon_name = icon_name

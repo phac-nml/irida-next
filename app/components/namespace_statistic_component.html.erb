@@ -6,12 +6,43 @@
   role="region"
   aria-labelledby="<%= label_id_unified %>"
 >
-  <%# Unified layout that works at all zoom levels %>
-  <div class="flex items-start gap-3">
+  <%# Mobile layout: icon with tooltip, count %>
+  <div class="md:hidden flex items-center gap-3">
+    <%# Icon with tooltip %>
+    <span
+      id="<%= icon_id_sm %>"
+      class="
+        inline-flex items-center justify-center p-2.5 rounded-lg
+        <%= tailwind_colors[:icon_bg] %> <%= tailwind_colors[:dark_icon_bg] %>
+      "
+      role="img"
+      aria-labelledby="<%= icon_id_sm %>"
+    >
+      <%= helpers.render_icon(
+        icon_name.to_sym,
+        class:
+          "h-5 w-5 #{tailwind_colors[:icon_text]} #{tailwind_colors[:dark_icon_text]}",
+      ) %>
+    </span>
+
+    <%# Count with tooltip %>
+    <span
+      class="
+        text-2xl font-bold text-slate-900 dark:text-slate-100 font-mono tracking-tight
+      "
+      aria-labelledby="<%= icon_id_sm %>"
+      role="tooltip"
+    >
+      <%= number_with_delimiter(count) %>
+    </span>
+  </div>
+
+  <%# Desktop layout: icon, label, count %>
+  <div class="hidden md:flex items-start gap-3">
     <%# Icon %>
     <div class="shrink-0">
       <span
-        id="<%= icon_id_unified %>"
+        id="<%= icon_id_lg %>"
         class="
           inline-flex items-center justify-center p-2.5 rounded-lg
           <%= tailwind_colors[:icon_bg] %> <%= tailwind_colors[:dark_icon_bg] %>
@@ -19,28 +50,33 @@
         aria-hidden="true"
       >
         <%= helpers.render_icon(
-          ICONS[icon_name.to_sym],
-          class: "h-5 w-5 #{tailwind_colors[:icon_text]} #{tailwind_colors[:dark_icon_text]}",
+          icon_name.to_sym,
+          class:
+            "h-5 w-5 #{tailwind_colors[:icon_text]} #{tailwind_colors[:dark_icon_text]}",
         ) %>
       </span>
     </div>
-    
+
     <%# Content %>
     <div class="flex-1 min-w-0">
       <%# Label %>
       <div class="mb-2">
         <h3
-          id="<%= label_id_unified %>"
-          class="text-sm font-medium text-slate-700 dark:text-slate-300 leading-tight break-words"
+          id="<%= label_id_lg %>"
+          class="
+            text-sm font-medium text-slate-700 dark:text-slate-300 leading-tight break-words
+          "
         >
           <%= label %>
         </h3>
       </div>
-      
+
       <%# Count %>
       <div
-        class="text-2xl font-bold text-slate-900 dark:text-slate-100 font-mono tracking-tight"
-        aria-describedby="<%= label_id_unified %>"
+        class="
+          text-2xl font-bold text-slate-900 dark:text-slate-100 font-mono tracking-tight
+        "
+        aria-labelledby="<%= icon_id_lg %> <%= label_id_lg %>"
       >
         <%= number_with_delimiter(count) %>
       </div>

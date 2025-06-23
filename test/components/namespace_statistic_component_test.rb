@@ -17,17 +17,16 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
                     color_scheme: :default
                   ))
 
-    # Mobile: icon, tooltip, count
+    # Mobile: icon, count with tooltip
     assert_selector '.md\\:hidden [id^=total-projects-icon-sm]' # icon span
     assert_selector '.md\\:hidden [id^=total-projects-icon-sm] svg'
-    assert_selector '.md\\:hidden [aria-labelledby^=total-projects-icon-sm]', text: '123'
-    assert_selector '.md\\:hidden [role=tooltip]', visible: :all
-    assert_text label
+    assert_selector '.md\\:hidden [role=tooltip]', text: '123'
+    assert_selector '.md\\:hidden [role=img]'
 
     # Desktop: icon, label, count
-    assert_selector '.md\\:block [id^=total-projects-icon-lg] svg'
-    assert_selector '.md\\:block [id^=total-projects-label-lg]', text: label
-    assert_selector '.md\\:block [aria-labelledby^="total-projects-icon-lg total-projects-label-lg"]', text: '123'
+    assert_selector '.md\\:flex [id^=total-projects-icon-lg] svg'
+    assert_selector '.md\\:flex [id^=total-projects-label-lg]', text: label
+    assert_selector '.md\\:flex [aria-labelledby*="total-projects-icon-lg total-projects-label-lg"]', text: '123'
   end
 
   test 'renders blue color scheme with correct Tailwind classes' do
@@ -114,7 +113,10 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
     assert_selector '[id^=a11y-icon-lg]'
     assert_selector '[id^=a11y-label-lg]'
     # aria-labelledby on count
-    assert_selector '[aria-labelledby^="a11y-icon-lg a11y-label-lg"]'
+    assert_selector '[aria-labelledby*="a11y-icon-lg a11y-label-lg"]'
+    # Mobile tooltip role
+    assert_selector '[role=tooltip]'
+    assert_selector '[role=img]'
   end
 
   test 'internationalization: renders translated label' do
@@ -138,7 +140,7 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
                     count: 10_000_000,
                     color_scheme: :default
                   ))
-    assert_text '10000000'
+    assert_text '10,000,000'
 
     render_inline(NamespaceStatisticComponent.new(
                     id_prefix: 'zero',
@@ -148,5 +150,20 @@ class NamespaceStatisticComponentTest < ViewComponentTestCase
                     color_scheme: :default
                   ))
     assert_text '0'
+  end
+
+  test 'responsive layout: mobile and desktop variants are properly hidden/shown' do
+    render_inline(NamespaceStatisticComponent.new(
+                    id_prefix: 'responsive',
+                    icon_name: 'user_circle',
+                    label: 'Responsive Test',
+                    count: 999,
+                    color_scheme: :default
+                  ))
+
+    # Mobile layout should be hidden on desktop
+    assert_selector '.md\\:hidden'
+    # Desktop layout should be hidden on mobile and flex on desktop
+    assert_selector '.md\\:flex'
   end
 end
