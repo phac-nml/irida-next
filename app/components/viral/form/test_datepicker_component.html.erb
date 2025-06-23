@@ -5,7 +5,8 @@
     block datepicker-orient-bottom datepicker-orient-left
   "
   data-test-datepicker-min-date-value="<%= min_date%>"
-  data-test-datepicker-selected-date-value="<%= selected_date%>"
+  data-test-datepicker-selected-date-value="<%= selected_date %>"
+  data-test-datepicker-months-value="<%= months %>"
 >
   <div
     class="
@@ -23,14 +24,17 @@
         <button
           type="button"
           class="
-            bg-white dark:bg-slate-700 rounded-lg text-slate-500 dark:text-white
-            hover:bg-slate-100 dark:hover:bg-slate-600 hover:text-slate-900
-            dark:hover:text-white text-lg p-2.5 focus:outline-none focus:ring-2
-            focus:ring-slate-200 prev-btn mr-2
+            bg-white dark:bg-slate-700 rounded-lg enabled:text-slate-800
+            enabled:dark:text-white enabled:hover:bg-slate-100
+            enabled:dark:hover:bg-slate-600 enabled:hover:text-slate-900
+            enabled:dark:hover:text-white text-lg p-2.5 focus:outline-none focus:ring-2
+            focus:ring-slate-200 prev-btn mr-2 enabled:cursor-pointer
+            disabled:cursor-not-allowed disabled:text-slate-300
           "
           data-action="click->test-datepicker#previousMonth"
+          data-test-datepicker-target="backButton"
         ><svg
-            class="w-4 h-4 rtl:rotate-180 text-slate-800 dark:text-white"
+            class="w-4 h-4"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -47,39 +51,27 @@
             data-test-datepicker-target="month"
             data-action="change->test-datepicker#changeMonth"
           >
-            <option value="January">January</option>
-            <option value="February">February</option>
-            <option value="March">Mar</option>
-            <option value="April">Apr</option>
-            <option value="May">May</option>
-            <option value="June">Jun</option>
-            <option value="July">July</option>
-            <option value="August">Aug</option>
-            <option value="September">September</option>
-            <option value="October">Oct</option>
-            <option value="November">Nov</option>
-            <option value="December">December</option>
           </select>
           <input
             data-test-datepicker-target="year"
             data-action="change->test-datepicker#changeYear"
             type="number"
             max="9999"
-            min="1"
+            min="<%= min_year %>"
             class="w-22"
           >
         </div>
         <button
           type="button"
           class="
-            bg-white dark:bg-slate-700 rounded-lg text-slate-500 dark:text-white
+            bg-white dark:bg-slate-700 rounded-lg text-slate-800 dark:text-white
             hover:bg-slate-100 dark:hover:bg-slate-600 hover:text-slate-900
             dark:hover:text-white text-lg p-2.5 focus:outline-none focus:ring-2
-            focus:ring-slate-200 next-btn ml-2
+            focus:ring-slate-200 next-btn ml-2 cursor-pointer
           "
           data-action="click->test-datepicker#nextMonth"
         ><svg
-            class="w-4 h-4 rtl:rotate-180 text-slate-800 dark:text-white"
+            class="w-4 h-4 rtl:rotate-180"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -161,6 +153,7 @@
         cursor-pointer text-center text-slate-900 dark:text-white font-semibold text-sm
         w-8
       "
+      data-date-within-month-position="inMonth"
     ></td>
   </template>
 
@@ -171,17 +164,7 @@
         cursor-pointer text-center text-slate-500 dark:text-slate-600 font-semibold
         text-sm w-8
       "
+      data-date-within-month-position="outOfMonth"
     ></td>
   </template>
-
-  <template data-test-datepicker-target="disabledDateTemplate">
-    <div
-      class="
-        datepicker-cell hover:bg-slate-100 dark:hover:bg-slate-600 block flex-1
-        leading-9 border-0 rounded-lg cursor-pointer text-center text-slate-400
-        dark:text-slate-500 font-semibold text-sm day
-      "
-    ><s></s></div>
-  </template>
-
 </div>
