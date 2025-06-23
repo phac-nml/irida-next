@@ -74,7 +74,15 @@ class ViralDropdownComponentPreview < ViewComponent::Preview
       label: 'Data Attributes Test',
       caret: true
     ) do |dropdown|
-      dropdown.with_item(
+      dropdown_items.each { |item| dropdown.with_item(**item) }
+    end
+  end
+
+  private
+
+  def dropdown_items # rubocop:disable Metrics/MethodLength
+    [
+      {
         label: 'Item with Data',
         url: '#',
         data: {
@@ -82,8 +90,8 @@ class ViralDropdownComponentPreview < ViewComponent::Preview
           test_id: 'dropdown-item-1',
           confirm: 'Are you sure?'
         }
-      )
-      dropdown.with_item(
+      },
+      {
         label: 'Another Item',
         url: '#',
         data: {
@@ -91,7 +99,7 @@ class ViralDropdownComponentPreview < ViewComponent::Preview
           turbo_method: 'delete'
         },
         class: 'text-red-600'
-      )
-    end
+      }
+    ]
   end
 end
