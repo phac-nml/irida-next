@@ -991,17 +991,16 @@ en:
         unlink: Unlink
         unlink_confirmation: Are you sure you want to unlink the group %{namespace_name} with group %{group_name}
       new:
+        access_level_hint: Maximum access level to assign to group
         button:
           cancel: Cancel
           submit: Share
         empty_state: No groups are associated with that name or ID
+        group_hint: Select a group to share namespace with
         label:
           access_expiration: Access expiration (optional)
-          group_access_level: Maximum group access level
-          group_id: Group to share namespace with
-        placeholder:
-          search_for_group: Search for group to share namespace with
-          select_access_level: Select access level
+          group_access_level: Access level
+          group_id: Group
         sharing_namespace_with_group: You're sharing group %{name} with a group
         title: Share namespace
     history:
@@ -1021,7 +1020,6 @@ en:
         aria_label: Access Level
       index:
         actions:
-          button_add_aria_label: Add new group member link
           link_leave_group_aria_label: Leave group button
           link_remove_aria_label: Remove group member %{member} link
         add: Add New Member
@@ -1042,14 +1040,15 @@ en:
           members: Members
         title: Members
       new:
+        access_level_hint: Select group access level to assign to user
         add_member_to_group: Add member to group
         button:
           cancel: Cancel
         description: You are adding a new member to group %{name}
         empty_state: There are no users with the provided email or name
-        select_access_level: Select Access Level
-        select_user: Select a User
         title: Add New Member
+        user_hint: Select a user to add to group
+        user_select: User
     metadata_templates:
       index:
         new_button: Add New Template
@@ -1567,18 +1566,17 @@ en:
         unlink: Unlink
         unlink_confirmation: Are you sure you want to unlink the project %{namespace_name} with group %{group_name}
       new:
+        access_level_hint: Maximum access level to assign to group
         button:
           cancel: Cancel
           submit: Share
         empty_state: No groups are associated with that name or ID
+        group_hint: Select a group to share project namespace with
         label:
           access_expiration: Access expiration (optional)
-          group_access_level: Maximum group access level
-          shared_group: Group to share namespace with
-        placeholder:
-          select_access_level: Select access level
-          select_group: Select group
-        sharing_namespace_with_group: You're sharing group %{name} with a group
+          group_access_level: Access level
+          shared_group: Group
+        sharing_namespace_with_group: You're sharing project %{name} with a group
         title: Share namespace
     history:
       index:
@@ -1605,7 +1603,6 @@ en:
           level_40: Maintainer
           level_50: Owner
         actions:
-          button_add_aria_label: Add new project member button
           link_leave_project_aria_label: Leave project link
           link_remove_aria_label: Remove project member %{member} link
         add: Add New Member
@@ -1626,14 +1623,14 @@ en:
           members: Members
         title: Members
       new:
+        access_level_hint: Select project access level to assign to user
         add_member_to_project: Add member to project
         button:
           cancel: Cancel
         description: You are adding a new member to project %{name}
         empty_state: There are no users with the provided email or name
-        select_access_level: Select Access Level
-        select_user: Select a User
         title: Add New Member
+        user_hint: Select a user to add to project
         user_select: User
     metadata_templates:
       index:
