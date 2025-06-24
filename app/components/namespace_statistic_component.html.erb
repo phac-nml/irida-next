@@ -18,8 +18,8 @@
       >
         <%= pathogen_icon(
           ICON[icon_name.to_sym],
-          class:
-            "h-5 w-5 #{tailwind_colors(color_scheme)[:icon_text]} #{tailwind_colors(color_scheme)[:dark_icon_text]}",
+          size: :sm,
+          class: "#{tailwind_colors[:icon_text]} #{tailwind_colors[:dark_icon_text]}",
         ) %>
       </span>
     </div>
