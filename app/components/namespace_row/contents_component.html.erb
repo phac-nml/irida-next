@@ -40,7 +40,8 @@
           "
         >
           <%= pathogen_icon ICON::GROUPS,
-          class: "size-4 mr-0.5 text-amber-700 dark:text-amber-200" %>
+          size: :sm,
+          class: "mr-0.5 text-amber-700 dark:text-amber-200" %>
           <%= @namespace.children.count %>
         </span>
       <% end %>
@@ -52,7 +53,8 @@
           "
         >
           <%= pathogen_icon ICON::PROJECTS,
-          class: "size-4 mr-0.5 text-fuchsia-700 dark:text-fuchsia-200" %>
+          size: :sm,
+          class: "mr-0.5 text-fuchsia-700 dark:text-fuchsia-200" %>
           <%= @namespace.project_namespaces.count %>
         </span>
       <% end %>
@@ -66,7 +68,8 @@
           "
         >
           <%= pathogen_icon ICON::SAMPLES,
-          class: "size-4 mr-0.5 text-blue-700 dark:text-blue-200" %>
+          size: :sm,
+          class: "mr-0.5 text-blue-700 dark:text-blue-200" %>
           <%= @namespace.aggregated_samples_count %>
         </span>
       <% end %>
@@ -82,7 +85,8 @@
           "
         >
           <%= pathogen_icon ICON::SAMPLES,
-          class: "size-4 mr-0.5 text-blue-700 dark:text-blue-200" %>
+          size: :sm,
+          class: "mr-0.5 text-blue-700 dark:text-blue-200" %>
           <%= @namespace.project.samples.size %>
         </span>
       <% end %>
