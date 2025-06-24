@@ -15,6 +15,12 @@ module Pathogen
     # @label Special Icons
     def special_icons; end
 
+    # @label Icon Sizes
+    def icon_sizes; end
+
+    # @label Icon Color Variants
+    def icon_color_variants; end
+
     # @!endgroup
   end
 end
