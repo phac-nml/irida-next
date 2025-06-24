@@ -139,7 +139,10 @@ module Pathogen
       final_options[:class] = merged_class if merged_class.present?
       final_options['data-test-selector'] = build_test_selector(key) if Rails.env.test?
       # Ensure aria-hidden is true unless explicitly set
-      final_options['aria-hidden'] = true unless final_options.key?('aria-hidden') || final_options.key?(:'aria-hidden')
+      unless final_options.key?('aria-hidden') || final_options.key?(:'aria-hidden')
+        final_options['aria-hidden'] =
+          true
+      end
       final_options
     end
 

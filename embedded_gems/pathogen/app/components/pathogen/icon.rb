@@ -7,7 +7,7 @@ module Pathogen
   #   = render Pathogen::Icon.new(:clipboard)
   #
   # @example With variant and custom classes
-  #   = render Pathogen::Icon.new(:clipboard, variant: :primary, class: "h-6 w-6")
+  #   = render Pathogen::Icon.new(:clipboard, variant: :primary, size: nil, class: "size-24")
   #
   class Icon < Pathogen::Component
     # Tailwind color variants for icon text color
@@ -17,8 +17,7 @@ module Pathogen
       primary: 'text-primary-600 dark:text-primary-500',
       success: 'text-green-600 dark:text-green-500',
       warning: 'text-yellow-600 dark:text-yellow-500',
-      danger: 'text-red-600 dark:text-red-500',
-      info: 'text-blue-600 dark:text-blue-500'
+      danger: 'text-red-600 dark:text-red-500'
     }.freeze
 
     SIZES = {
