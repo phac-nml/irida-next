@@ -47,6 +47,7 @@ module Pathogen
     LIST_BULLETS = { name: 'list-bullets', options: {} }.freeze
     LOCK_KEY = { name: 'lock-key', options: {} }.freeze
     MAGNIFYING_GLASS = { name: 'magnifying-glass', options: {} }.freeze
+    PLUS = { name: 'plus', options: {} }.freeze
     PLUS_CIRCLE = { name: 'plus-circle', options: {} }.freeze
     QUESTION = { name: :question, options: {} }.freeze
     ROCKET_LAUNCH = { name: 'rocket-launch', options: {} }.freeze
