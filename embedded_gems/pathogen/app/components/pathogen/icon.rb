@@ -30,7 +30,7 @@ module Pathogen
     # @param icon [Symbol, String] The icon name or key (must be valid in ICON constant)
     # @param color [Symbol] The color variant (default, primary, etc.)
     # @param system_arguments [Hash] Additional HTML/system arguments
-    def initialize(icon, color: nil, size: nil, **system_arguments)
+    def initialize(icon, color: :default, size: :md, **system_arguments)
       @icon_name = icon
       @system_arguments = system_arguments
       @system_arguments[:class] = class_names(
