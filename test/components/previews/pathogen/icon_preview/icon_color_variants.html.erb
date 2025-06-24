@@ -5,11 +5,11 @@
       gap-6 items-stretch
     "
   >
-    <% Pathogen::Icon::VARIANT_CLASSES.each_key do |variant| %>
+    <% Pathogen::Icon::COLORS.each_key do |color| %>
       <div class="flex flex-col items-center space-y-1 min-w-[10rem] p-2">
-        <%= pathogen_icon(ICON::BANK, variant: variant, class: "size-6") %>
-        <span class="text-xs text-slate-600 font-medium"><%= variant %></span>
-        <span class="text-xs text-slate-400 font-mono break-all text-center"><%= Pathogen::Icon::VARIANT_CLASSES[variant] %></span>
+        <%= pathogen_icon(ICON::BANK, color: color, class: "size-6") %>
+        <span class="text-xs text-slate-600 font-medium"><%= color %></span>
+        <span class="text-xs text-slate-400 font-mono break-all text-center"><%= Pathogen::Icon::COLORS[color] %></span>
       </div>
     <% end %>
   </div>

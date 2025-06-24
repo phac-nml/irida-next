@@ -11,7 +11,7 @@ module Pathogen
   #
   class Icon < Pathogen::Component
     # Tailwind color variants for icon text color
-    VARIANT_CLASSES = {
+    COLORS = {
       default: 'text-slate-900 dark:text-slate-100',
       subdued: 'text-slate-400 dark:text-slate-500',
       primary: 'text-primary-600 dark:text-primary-500',
@@ -28,13 +28,13 @@ module Pathogen
     }.freeze
 
     # @param icon [Symbol, String] The icon name or key (must be valid in ICON constant)
-    # @param variant [Symbol] The color variant (default, primary, etc.)
+    # @param color [Symbol] The color variant (default, primary, etc.)
     # @param system_arguments [Hash] Additional HTML/system arguments
-    def initialize(icon, variant: nil, size: nil, **system_arguments)
+    def initialize(icon, color: nil, size: nil, **system_arguments)
       @icon_name = icon
       @system_arguments = system_arguments
       @system_arguments[:class] = class_names(
-        VARIANT_CLASSES[variant] => variant.present?,
+        COLORS[color] => color.present?,
         SIZES[size] => size.present?,
         @system_arguments[:class] => @system_arguments[:class].present?
       )
