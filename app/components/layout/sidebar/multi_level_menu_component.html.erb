@@ -37,9 +37,11 @@
     </span>
     <%= pathogen_icon(
       ICON::CARET_DOWN,
+      size: :sm,
+      color: nil,
       class:
         class_names(
-          "w-4 h-4 transition-transform duration-200 mr-2 flex-shrink-0",
+          "transition-transform duration-200 mr-2 flex-shrink-0",
           { "rotate-180": @selected },
           (
             if @selected

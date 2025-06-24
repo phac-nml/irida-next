@@ -84,7 +84,7 @@ module Layout
         # Only set variant for non-selected items to use duotone
         variant = @selected ? nil : :duotone
 
-        pathogen_icon(@icon, class: icon_classes, variant: variant)
+        pathogen_icon(@icon, size: nil, color: nil, class: icon_classes, variant: variant)
       end
 
       # Determines if the menu should be expanded by default
