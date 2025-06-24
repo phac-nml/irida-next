@@ -33,7 +33,7 @@
             selected: @current_page == t(:"general.default_sidebar.data_exports"),
           ) %>
         <% end %>
-        <% layout.with_breadcrumb(context_crumbs: @context_crumbs || []) %>
+        <% layout.with_breadcrumb(links: @context_crumbs || []) %>
         <% layout.with_language_selection %>
         <% layout.with_body do %>
           <%= yield %>

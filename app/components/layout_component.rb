@@ -6,7 +6,7 @@ class LayoutComponent < Component
 
   renders_one :sidebar, Layout::SidebarComponent
   renders_one :body
-  renders_one :breadcrumb, Viral::BreadcrumbComponent
+  renders_one :breadcrumb, Layout::BreadcrumbComponent
   renders_one :language_selection, Layout::LanguageSelectionComponent
 
   def initialize(user:, fixed: true, **system_arguments)

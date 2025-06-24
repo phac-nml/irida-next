@@ -1,0 +1,22 @@
+<% context_crumbs_from_route =
+  route_to_context_crumbs(
+    Route.new(
+      name: "Borrelia burgdorferi / Project Name",
+      path: "group/project",
+    ),
+  ) %>
+<%= render Layout::BreadcrumbComponent.new(
+  links:
+    context_crumbs_from_route += [
+      { name: "A new group name", path: "/groups" },
+      {
+        name:
+          "This is a really long name that should trigger collapsing into the dropdown for testing",
+        path: "/groups/long",
+      },
+      {
+        name: "Another long name to test overflow and tooltip",
+        path: "/groups/long2",
+      },
+    ],
+) %>

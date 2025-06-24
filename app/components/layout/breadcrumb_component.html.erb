@@ -1,0 +1,55 @@
+<nav
+  aria-label="<%= I18n.t(:'components.breadcrumb.navigation_aria_label') %>"
+  class="h-14 w-full min-w-0 overflow-hidden pr-2"
+  data-controller="breadcrumb"
+>
+  <ol
+    class="flex items-center h-full w-full min-w-0"
+    data-breadcrumb-target="list"
+  >
+    <!-- Overflow dropdown -->
+    <li class="shrink-0 hidden" data-breadcrumb-target="dropdownMenu">
+      <%= viral_dropdown(
+        skidding: 75,
+        icon: "ellipsis_horizontal",
+        aria: { label: I18n.t(:'components.breadcrumb.dropdown.aria_label') },
+        styles: { button: "p-3 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg text-slate-500 cursor-pointer transition" }
+      ) do |dropdown| %>
+        <% @links.each_with_index do |link, index| %>
+          <% next if index == @links.length - 1 %>
+          <%= dropdown.with_item(
+            label: link[:name],
+            url: root_path + link[:path],
+            data: {
+              turbo_frame: "_top",
+            },
+          ) %>
+        <% end %>
+      <% end %>
+    </li>
+    <!-- Dynamic breadcrumb items -->
+    <% @links.each_with_index do |link, index| %>
+      <li class="whitespace-nowrap" data-breadcrumb-target="crumb">
+        <% if index == @links.length - 1 %>
+          <!-- Current page (last item) -->
+          <span
+            class="text-sm text-slate-900 dark:text-white font-medium py-3"
+            aria-current="page"
+            title="<%= link[:name] %>"
+          >
+            <%= link[:name] %>
+          </span>
+        <% else %>
+          <!-- Navigable link -->
+          <%= link_to link[:name],
+          root_path + link[:path],
+          class:
+            "text-sm text-slate-600 dark:text-slate-400 hover:underline py-3 font-normal",
+          data: {
+            turbo_frame: "_top",
+          } %>
+        <% end %>
+      </li>
+    <% end %>
+  </ol>
+</nav>

@@ -67,4 +67,39 @@ class ViralDropdownComponentPreview < ViewComponent::Preview
       dropdown.with_item(label: 'Action 1', url: '#')
     end
   end
+
+  # Preview for dropdown items with data attributes
+  def with_data_attributes
+    render Viral::DropdownComponent.new(
+      label: 'Data Attributes Test',
+      caret: true
+    ) do |dropdown|
+      dropdown_items.each { |item| dropdown.with_item(**item) }
+    end
+  end
+
+  private
+
+  def dropdown_items # rubocop:disable Metrics/MethodLength
+    [
+      {
+        label: 'Item with Data',
+        url: '#',
+        data: {
+          action: 'click->test#action',
+          test_id: 'dropdown-item-1',
+          confirm: 'Are you sure?'
+        }
+      },
+      {
+        label: 'Another Item',
+        url: '#',
+        data: {
+          test_id: 'dropdown-item-2',
+          turbo_method: 'delete'
+        },
+        class: 'text-red-600'
+      }
+    ]
+  end
 end
