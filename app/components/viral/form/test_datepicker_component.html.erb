@@ -1,151 +1,203 @@
 <div
   data-controller="test-datepicker"
-  class="
-    datepicker datepicker-dropdown dropdown absolute top-0 left-0 z-50 pt-2 active
-    block datepicker-orient-bottom datepicker-orient-left
-  "
+  class=""
   data-test-datepicker-min-date-value="<%= min_date%>"
   data-test-datepicker-selected-date-value="<%= selected_date %>"
   data-test-datepicker-months-value="<%= months %>"
 >
-  <div
-    class="
-      datepicker-picker inline-block rounded-lg bg-white dark:bg-slate-700 shadow-lg
-      p-4
-    "
-  ><div class="datepicker-header"><div
+  <div class="form-field datepicker">
+    <label for="bot_expires_at">Token Expiration Date (optional)</label>
+    <div class="relative max-w-sm">
+      <div
         class="
-          datepicker-title bg-white dark:bg-slate-700 dark:text-white px-2 py-3
-          text-center font-semibold
+          absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none
         "
-        style="display: none;"
-      ></div>
-      <div class="datepicker-controls flex justify-between mb-2">
-        <button
-          type="button"
-          class="
-            bg-white dark:bg-slate-700 rounded-lg enabled:text-slate-800
-            enabled:dark:text-white enabled:hover:bg-slate-100
-            enabled:dark:hover:bg-slate-600 enabled:hover:text-slate-900
-            enabled:dark:hover:text-white text-lg p-2.5 focus:outline-none focus:ring-2
-            focus:ring-slate-200 prev-btn mr-2 enabled:cursor-pointer
-            disabled:cursor-not-allowed disabled:text-slate-300
-          "
-          data-action="click->test-datepicker#previousMonth"
-          data-test-datepicker-target="backButton"
-        ><svg
-            class="w-4 h-4"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
+      >
+        <!-- BEGIN app/components/viral/icon_component.html.erb --><span class="dark:text-slate-400 h-5 text-slate-500 viral-icon w-5">
+          <svg
             fill="none"
-            viewBox="0 0 14 10"
-          ><path
-              stroke="currentColor"
+            stroke="currentColor"
+            stroke-width="1.5"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+            class="viral-icon__Svg icon-calendar_days"
+            focusable="false"
+          >
+            <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="2"
-              d="M13 5H1m0 0 4 4M1 5l4-4"
-            ></path></svg></button>
-        <div>
-          <select
-            data-test-datepicker-target="month"
-            data-action="change->test-datepicker#changeMonth"
-          >
-          </select>
-          <input
-            data-test-datepicker-target="year"
-            data-action="change->test-datepicker#changeYear"
-            type="number"
-            max="9999"
-            min="<%= min_year %>"
-            class="w-22"
-          >
+              d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
+            ></path>
+          </svg>
+
+        </span><!-- END app/components/viral/icon_component.html.erb -->
+      </div>
+      <input
+        placeholder="YYYY-MM-DD"
+        autocomplete="off"
+        value=""
+        data-test-datepicker-target="datepickerInput"
+        data-datepicker-dialog="true"
+        type="text"
+        name="bot[expires_at]"
+        id="bot_expires_at"
+        class="datepicker-input"
+      >
+    </div>
+  </div>
+  <template data-test-datepicker-target="calenderTemplate">
+    <div
+      data-test-datepicker-target="calendarComponent"
+      class="
+        datepicker datepicker-dropdown dropdown absolute top-0 left-0 z-50 pt-2 active
+        block datepicker-orient-bottom datepicker-orient-left
+      "
+    >
+      <div
+        class="
+          datepicker-picker inline-block rounded-lg bg-white dark:bg-slate-700 shadow-lg
+          p-4
+        "
+      >
+        <div class="datepicker-header">
+          <div
+            class="
+              datepicker-title bg-white dark:bg-slate-700 dark:text-white px-2 py-3
+              text-center font-semibold
+            "
+            style="display: none;"
+          ></div>
+          <div class="datepicker-controls flex justify-between mb-2">
+            <button
+              type="button"
+              class="
+                bg-white dark:bg-slate-700 rounded-lg enabled:text-slate-800
+                enabled:dark:text-white enabled:hover:bg-slate-100
+                enabled:dark:hover:bg-slate-600 enabled:hover:text-slate-900
+                enabled:dark:hover:text-white text-lg p-2.5 focus:outline-none focus:ring-2
+                focus:ring-slate-200 prev-btn mr-2 enabled:cursor-pointer
+                disabled:cursor-not-allowed disabled:text-slate-300
+              "
+              data-action="click->test-datepicker#previousMonth"
+              data-test-datepicker-target="backButton"
+            ><svg
+                class="w-4 h-4"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 10"
+              ><path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 5H1m0 0 4 4M1 5l4-4"
+                ></path></svg></button>
+            <div>
+              <select
+                data-test-datepicker-target="month"
+                data-action="change->test-datepicker#changeMonth"
+              >
+              </select>
+              <input
+                data-test-datepicker-target="year"
+                data-action="change->test-datepicker#changeYear"
+                type="number"
+                max="9999"
+                min="<%= min_year %>"
+                class="w-22"
+              >
+            </div>
+            <button
+              type="button"
+              class="
+                bg-white dark:bg-slate-700 rounded-lg text-slate-800 dark:text-white
+                hover:bg-slate-100 dark:hover:bg-slate-600 hover:text-slate-900
+                dark:hover:text-white text-lg p-2.5 focus:outline-none focus:ring-2
+                focus:ring-slate-200 next-btn ml-2 cursor-pointer
+              "
+              data-action="click->test-datepicker#nextMonth"
+            ><svg
+                class="w-4 h-4 rtl:rotate-180"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 10"
+              ><path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M1 5h12m0 0L9 1m4 4L9 9"
+                ></path></svg></button>
+          </div>
         </div>
-        <button
-          type="button"
-          class="
-            bg-white dark:bg-slate-700 rounded-lg text-slate-800 dark:text-white
-            hover:bg-slate-100 dark:hover:bg-slate-600 hover:text-slate-900
-            dark:hover:text-white text-lg p-2.5 focus:outline-none focus:ring-2
-            focus:ring-slate-200 next-btn ml-2 cursor-pointer
-          "
-          data-action="click->test-datepicker#nextMonth"
-        ><svg
-            class="w-4 h-4 rtl:rotate-180"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 14 10"
-          ><path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M1 5h12m0 0L9 1m4 4L9 9"
-            ></path></svg></button>
+        <div class="datepicker-main p-1 justify-center">
+          <table class="min-w-full table-fixed">
+            <thead class="mb-1">
+              <tr>
+                <th
+                  class="
+                    dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
+                  "
+                >Sun</th><th
+                  class="
+                    dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
+                  "
+                >Mon</th><th
+                  class="
+                    dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
+                  "
+                >Tue</th><th
+                  class="
+                    dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
+                  "
+                >Wed</th><th
+                  class="
+                    dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
+                  "
+                >Thu</th><th
+                  class="
+                    dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
+                  "
+                >Fri</th><th
+                  class="
+                    dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
+                  "
+                >Sat</th>
+              </tr>
+            </thead>
+            <tbody data-test-datepicker-target="calendar">
+            </tbody>
+          </table>
+        </div>
+        <div class="datepicker-footer">
+          <div class="datepicker-controls flex space-x-2 rtl:space-x-reverse mt-2">
+            <button
+              type="button"
+              class="
+                button today-btn text-white bg-blue-700 !bg-primary-700 dark:bg-blue-600
+                dark:!bg-primary-600 hover:bg-blue-800 hover:!bg-primary-800
+                dark:hover:bg-blue-700 dark:hover:!bg-primary-700 focus:ring-4
+                focus:ring-blue-300 focus:!ring-primary-300 font-medium rounded-lg text-sm px-5
+                py-2 text-center w-1/2
+              "
+              data-action="click->test-datepicker#showToday"
+            >Today</button><button
+              type="button"
+              class="
+                button clear-btn text-slate-900 dark:text-white bg-white dark:bg-slate-700
+                border border-slate-300 dark:border-slate-600 hover:bg-slate-100
+                dark:hover:bg-slate-600 focus:ring-4 focus:ring-blue-300 focus:!ring-primary-300
+                font-medium rounded-lg text-sm px-5 py-2 text-center w-1/2
+              "
+            >Clear</button>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="datepicker-main p-1 justify-center">
-      <table class="min-w-full table-fixed">
-        <thead class="mb-1">
-          <tr>
-            <th
-              class="
-                dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
-              "
-            >Sun</th><th
-              class="
-                dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
-              "
-            >Mon</th><th
-              class="
-                dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
-              "
-            >Tue</th><th
-              class="
-                dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
-              "
-            >Wed</th><th
-              class="
-                dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
-              "
-            >Thu</th><th
-              class="
-                dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
-              "
-            >Fri</th><th
-              class="
-                dow text-center h-6 text-sm font-medium text-slate-500 dark:text-slate-400
-              "
-            >Sat</th>
-          </tr>
-        </thead>
-        <tbody data-test-datepicker-target="calendar">
-        </tbody>
-      </table>
-    </div>
-    <div class="datepicker-footer">
-      <div class="datepicker-controls flex space-x-2 rtl:space-x-reverse mt-2">
-        <button
-          type="button"
-          class="
-            button today-btn text-white bg-blue-700 !bg-primary-700 dark:bg-blue-600
-            dark:!bg-primary-600 hover:bg-blue-800 hover:!bg-primary-800
-            dark:hover:bg-blue-700 dark:hover:!bg-primary-700 focus:ring-4
-            focus:ring-blue-300 focus:!ring-primary-300 font-medium rounded-lg text-sm px-5
-            py-2 text-center w-1/2
-          "
-          data-action="click->test-datepicker#showToday"
-        >Today</button><button
-          type="button"
-          class="
-            button clear-btn text-slate-900 dark:text-white bg-white dark:bg-slate-700
-            border border-slate-300 dark:border-slate-600 hover:bg-slate-100
-            dark:hover:bg-slate-600 focus:ring-4 focus:ring-blue-300 focus:!ring-primary-300
-            font-medium rounded-lg text-sm px-5 py-2 text-center w-1/2
-          "
-        >Clear</button></div></div></div>
-
+  </template>
   <template data-test-datepicker-target="inMonthDateTemplate">
     <td
       class="
