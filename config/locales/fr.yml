@@ -736,8 +736,8 @@ fr:
     groups:
       index:
         create_group_button: Nouveau groupe
-        no_groups_description: Aucun groupe trouvé correspondant à votre recherche
-        no_groups_title: Aucun groupe trouvé
+        no_groups_description: Vous n’avez actuellement aucun groupe.
+        no_groups_title: Aucun groupe
         search:
           placeholder: Filtrer par PUID ou nom
         sorting:

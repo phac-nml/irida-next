@@ -12,6 +12,10 @@ module Dashboard
       @q = all_projects.ransack(params[:q])
       set_default_sort
       @pagy, @projects = pagy(@q.result)
+
+      respond_to do |format|
+        format.html
+      end
     end
 
     private

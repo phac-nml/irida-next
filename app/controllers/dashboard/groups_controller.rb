@@ -8,7 +8,9 @@ module Dashboard
     before_action :page_title
 
     def index
-      @q = build_ransack_query
+      all_groups = authorized_groups
+      @has_groups = all_groups.count.positive?
+      @q = all_groups.ransack(params[:q])
       set_default_sort
       @pagy, @groups = pagy(@q.result.include_route)
       respond_to_format
@@ -18,10 +20,6 @@ module Dashboard
 
     def render_flat_list
       @render_flat_list = params.dig(:q, :name_or_puid_cont).present?
-    end
-
-    def build_ransack_query
-      authorized_groups.ransack(params[:q])
     end
 
     def respond_to_format
