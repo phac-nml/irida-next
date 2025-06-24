@@ -2,19 +2,24 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = [
+    "datepickerInput",
     "backButton",
     "month",
     "year",
     "calendar",
+    "calendarComponent",
+    "calenderTemplate",
     "inMonthDateTemplate",
     "outOfMonthDateTemplate",
     "disabledDateTemplate",
   ];
+
   static values = {
     minDate: String,
     selectedDate: String,
     months: Array,
   };
+
   #DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
   #selectedDateClasses = [
@@ -70,11 +75,58 @@ export default class extends Controller {
   #selectedYear = this.#todaysFullDate.getFullYear();
   #selectedMonthIndex = this.#todaysFullDate.getMonth();
 
+  initialize() {
+    this.boundAddCalenderTemplate = this.addCalenderTemplate.bind(this);
+    this.boundRemoveCalender = this.removeCalendar.bind(this);
+  }
+
   connect() {
+    this.datepickerInputTarget.addEventListener(
+      "focus",
+      this.boundAddCalenderTemplate,
+    );
+
+    // this.datepickerInputTarget.addEventListener(
+    //   "focusout",
+    //   this.boundRemoveCalender,
+    // );
+  }
+
+  addCalenderTemplate() {
+    console.log();
+    const calendar = this.calenderTemplateTarget.content.cloneNode(true);
+    this.element.appendChild(calendar);
+    const inputWindowPosition =
+      this.datepickerInputTarget.getBoundingClientRect();
+    // console.log(calendar);
+    console.log(this.datepickerInputTarget.getBoundingClientRect());
+    this.calendarComponentTarget.style.left = `${inputWindowPosition.left}px`;
+    console.log("height");
+    console.log(window.innerHeight);
+    console.log(inputWindowPosition.top);
+    if (window.innerHeight / inputWindowPosition.top < 2) {
+      console.log("less than 2");
+      this.calendarComponentTarget.style.top = `${inputWindowPosition.top + 38}px`;
+    } else {
+      console.log("more that 2");
+      this.calendarComponentTarget.style.top = `${inputWindowPosition.top - 150}px`;
+    }
+    console.log();
+    // console.log("offsetY: " + ev.offsetY + " height: " + domRect.height);)
     this.idempotentConnect();
   }
 
+  removeCalendar() {
+    if (
+      !document.activeElement === this.datepickerInputTarget ||
+      !document.activeElement === this.calendarComponentTarget
+    );
+    console.log(document.activeElement);
+    this.calendarComponentTarget.remove();
+  }
+
   idempotentConnect() {
+    console.log(document.activeElement);
     this.#clearCalendar();
     // set the months dropdown in case we're in the year of the minimum date
     this.#setMonths();
@@ -232,6 +284,7 @@ export default class extends Controller {
             date,
           ),
         );
+        tableCell.setAttribute("tabindex", "0");
         tableRow.appendChild(inMonthDate);
       } else {
         const outOfMonthDate =
