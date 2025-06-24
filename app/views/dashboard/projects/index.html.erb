@@ -60,37 +60,47 @@
               <%= render partial: "shared/project/row", collection: @projects, as: :project %>
             </tbody>
           </table>
-          <%= render PaginationComponent.new(
-            info: pagy_info(@pagy),
-            prev_url:
-              (
-                if @pagy.prev
-                  pagy_url_for(@pagy, @pagy.prev).gsub(
-                    "projects.turbo_stream",
-                    "projects",
-                  )
-                else
-                  nil
-                end
-              ),
-            next_url:
-              (
-                if @pagy.next
-                  pagy_url_for(@pagy, @pagy.next).gsub(
-                    "projects.turbo_stream",
-                    "projects",
-                  )
-                else
-                  nil
-                end
-              ),
-          ) %>
+          <% if @pagy.vars[:size].positive? && @pagy.count.positive? %>
+            <%= render PaginationComponent.new(
+              info: pagy_info(@pagy),
+              prev_url:
+                (
+                  if @pagy.prev
+                    pagy_url_for(@pagy, @pagy.prev).gsub(
+                      "projects.turbo_stream",
+                      "projects",
+                    )
+                  else
+                    nil
+                  end
+                ),
+              next_url:
+                (
+                  if @pagy.next
+                    pagy_url_for(@pagy, @pagy.next).gsub(
+                      "projects.turbo_stream",
+                      "projects",
+                    )
+                  else
+                    nil
+                  end
+                ),
+            ) %>
+          <% else %>
+            <%= viral_empty(
+              icon_name: :magnifying_glass,
+              title: t("components.viral.pagy.empty_state.title"),
+              description: t("components.viral.pagy.empty_state.description"),
+            ) %>
+          <% end %>
         <% else %>
-          <%= render Viral::EmptyStateComponent.new(
-            icon_name: ICON::PROJECTS,
-            title: t(".no_projects"),
-            description: t(".no_projects_description"),
-          ) %>
+          <div class="empty_state_message">
+            <%= viral_empty(
+              icon_name: ICON::PROJECTS,
+              title: t(".no_projects"),
+              description: t(".no_projects_description"),
+            ) %>
+          </div>
         <% end %>
       </div>
     <% end %>
