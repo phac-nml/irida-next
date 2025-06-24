@@ -7,16 +7,13 @@
 >
   <%= render Viral::BaseComponent.new(tag: :button, **system_arguments) do %>
     <% if icon_name.present? %>
-      <%= pathogen_icon(
-        icon_name,
-        class: class_names("size-6 flex-none", label.present? => "mr-3"),
-      ) %>
+      <%= pathogen_icon(icon_name, class: class_names(label.present? => "mr-3")) %>
     <% end %>
     <% if label.present? %>
       <span class="text-left truncate grow"><%= label %></span>
     <% end %>
     <% if caret %>
-      <%= pathogen_icon(ICON::CARET_DOWN, class: "size-4 ml-2 flex-none") %>
+      <%= pathogen_icon(ICON::CARET_DOWN, size: :sm, class: "ml-2 flex-none") %>
     <% end %>
   <% end %>
   <!-- Dropdown menu -->
