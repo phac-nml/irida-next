@@ -115,6 +115,8 @@ member.access_level <= @access_levels.values.last) && !member_source.key?(:inher
             <% if (member.user != @current_user && @abilities[:update_member] &&
      member.access_level <= @access_levels.values.last) && !member_source.key?(:inherited_namespace_path) %>
               <%= form_with(model: member, url: select_member_path(member), method: :patch) do |form| %>
+
+                <%= viral_test_datepicker(min_date: "2025-06-17", selected_date: "2025-07-04") %>
                 <div
                   class="form-field datepicker"
                   data-controller="datepicker"
