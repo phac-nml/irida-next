@@ -37,7 +37,7 @@ module System
       visit('/rails/view_components/viral_dropdown_component/with_icon')
       within('.Viral-Preview > [data-controller-connected="true"]') do
         assert_no_text 'Organism' # Label is not rendered when only icon is present
-        assert_selector '.viral-dropdown--icon svg' # Assert icon is present
+        assert_selector 'svg.plus-circle-icon' # Assert icon is present
         assert_no_text 'Aspergillus awamori'
         assert_no_text 'Bacillus cereus'
         assert_no_text 'Pseudomonas aeruginosa'
@@ -54,9 +54,8 @@ module System
       within('.Viral-Preview > [data-controller-connected="true"]') do
         find('button[data-viral--dropdown-target="trigger"]').click
         assert_text 'Checkmark'
-        assert_selector 'li svg'
+        assert_selector 'li svg.check-icon'
         assert_text 'Inbox'
-        assert_selector 'li svg'
       end
     end
 
