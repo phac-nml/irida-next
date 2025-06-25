@@ -13,7 +13,7 @@
           <%= button_to pipeline_selection_workflow_executions_submissions_path, params: { namespace_id: @group.id }, method: :get,
         data: { turbo_stream: true, controller: "action-button", action_button_required_value: 1, action: "turbo:morph-element->action-button#idempotentConnect " },
                   class: "button button-default action-button" do %>
-            <%= pathogen_icon(ICON::ROCKET_LAUNCH, class: "size-5 inline-block") %>
+            <%= pathogen_icon(ICON::ROCKET_LAUNCH, size: :sm) %>
             <span class="ml-2"><%= t(".workflows.button_sr") %></span>
           <% end %>
         <% end %>
