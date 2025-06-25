@@ -50,6 +50,7 @@ module Pathogen
     PLUS = { name: 'plus', options: {} }.freeze
     PLUS_CIRCLE = { name: 'plus-circle', options: {} }.freeze
     QUESTION = { name: :question, options: {} }.freeze
+    ROBOT = { name: 'robot', options: {} }.freeze
     ROCKET_LAUNCH = { name: 'rocket-launch', options: {} }.freeze
     SIDEBAR = { name: :sidebar, options: {} }.freeze
     SLIDERS_HORIZONTAL = { name: 'sliders-horizontal', options: {} }.freeze
