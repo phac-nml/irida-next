@@ -137,7 +137,7 @@ module Pathogen
     def prepare_icon_options(icon_def, user_options, key)
       base_options = icon_def[:options] || {}
       final_options = merge_icon_options(base_options, user_options)
-      merged_class = merge_icon_classes(base_options[:class], user_options[:class])
+      merged_class = merge_icon_classes(base_options[:class], user_options[:class], icon_def[:name])
       final_options[:class] = merged_class if merged_class.present?
 
       # Warn and remove data attributes (not allowed on SVG)
@@ -158,8 +158,8 @@ module Pathogen
     end
 
     # Extracted: Merge icon classes
-    def merge_icon_classes(base_class, user_class)
-      class_names(base_class, user_class)
+    def merge_icon_classes(base_class, user_class, icon_name)
+      class_names(base_class, user_class, "#{icon_name}_icon" => !Rails.env.production?)
     end
 
     # Extracted: Build test selector value
